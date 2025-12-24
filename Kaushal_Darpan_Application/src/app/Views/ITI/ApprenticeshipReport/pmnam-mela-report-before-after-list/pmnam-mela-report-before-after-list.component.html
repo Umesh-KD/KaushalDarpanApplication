@@ -4,7 +4,7 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">PMNAM Mela Report List (Before/After)</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="" class="text-sm font-medium text-slate-700">ITI</a>
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a class="text-sm font-medium text-slate-700" aria-current="page">PMNAM Mela Report List</a>
     </div>
@@ -84,7 +84,7 @@
         <div>
 
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearField()">Cancel</button>
         </div>
 
       </div>
@@ -146,10 +146,14 @@
             <th class="text-left">पोर्टल पर पंजीकृत प्रतिष्ठानों की संख्या</th>
             <th class="text-left">पोर्टल पर पंजीकृत प्रतिष्ठानों में सीटों की संख्या</th>
             <th class="text-left">पोर्टल पर नियोंजित शिक्षुओं की संख्या</th>
+            <!--<th class="text-left">Provision of uploading</th>
+            <th class="text-left">PNM Mela Document</th>-->
+
             <!--<th></th>-->
           </tr>
 
         </thead>
+        <!--{{DataList | json}}-->
         <tbody>
           <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
 
@@ -164,6 +168,18 @@
             <td>{{row.EstablishmentsRegisterNoAfter}}</td>
             <td>{{row.NumberofSeatAfter}}</td>
             <td>{{row.NumberofEmployedStudentAfter}}</td>
+            <!--<td>
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.provisionLetterDocument}}"
+                 target="_blank" class="btn bg-primary text-white btn-sm">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+            <td>
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.PNMMelaDocument}}"
+                 target="_blank" class="btn bg-primary text-white btn-sm">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>-->
 
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">

@@ -324,6 +324,12 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     return item.FinancialYearID;
   }
 
+  ClearField() {
+    this.request.DistrictID = 0;
+    this.request.FinancialYearID = 0;
+    this.request.BeforeMonth = 0;
+    this.GetReportAllData();
 
+  }
 
 }

@@ -22,12 +22,13 @@ export class ITIApprenticeshipWorkshopModel {
   public CreatedBy: number = 0;
   public FinancialYearID: number = 0;
   public EndTermID: number = 0;
+  public ZoneID: number = 0;
 
   public QuaterIncreaseEstablishment: string = '';
   public QuaterIncreaseSeat: string = '';
   public QuaterIncreaseStudent: string = '';
-  public Remarks: string = '';
-  public BeforeMonth: number = 0;
+  public Remarks : string = '';
+  public BeforeMonth : number = 0;
 
   public ApprenticeshipWorkshopMembersList: ITIAAA_SSODetailsModel[] = [];
 }

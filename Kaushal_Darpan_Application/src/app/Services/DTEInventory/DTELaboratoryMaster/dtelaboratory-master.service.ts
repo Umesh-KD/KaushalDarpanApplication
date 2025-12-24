@@ -58,8 +58,11 @@ export class DTELaboratoryMasterService {
       ).toPromise();
   }
   
-
-
- 
-
+  public async GetLabDetailsByUserID(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetLabDetailsByUserID", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

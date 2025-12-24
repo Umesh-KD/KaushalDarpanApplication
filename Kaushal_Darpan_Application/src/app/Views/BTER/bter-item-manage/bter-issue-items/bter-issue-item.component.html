@@ -22,8 +22,8 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <div class="flex gap-2">
            <a href="javascript:void(0);" (click)="ShowIssuedItemsList(Items_Details_Issue,0,0)"  class="btn bg-info btn-sm text-white">
-          <i class="ti ti-excel"></i> List of Issued Items
-        </a>
+            <i class="ti ti-excel"></i> List of Issued Items
+          </a>
         </div>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
@@ -80,6 +80,7 @@
           <select class="form-select"
                   [(ngModel)]="Searchrequests.ItemType"
                   (change)="GetItemListType()">
+            <option [value]="2">--- Select ---</option>
             <option [value]="1">Consumable</option>
             <option [value]="0">Permanent</option>
           </select>
@@ -247,6 +248,7 @@
       <button class="btn bg-danger text-white" (click)="cancelSelection()">Cancel</button>
     </div>
 
+    
   </div>
 </div>
 <ng-template #Submit_Details_Issue let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
@@ -305,7 +307,7 @@
               {{ Dis_FileName === '' ? 'No File Choosen' : Dis_FileName }}
               </label>
               <div class="flex">
-              <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + FileName }}"
+              <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + FileName }}"
               *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank">
               <i class="ti ti-eye"></i>
               </a>
@@ -432,8 +434,8 @@
             <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
              <td align="left">
-              <span [ngClass]="item.ConditionOnReturn == 1 ? 'badge-working' : 'badge-notworking'">
-                  {{ item.ConditionOnReturn == 1 ? 'Working' : 'Not Working' }}
+              <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
+                  {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : 'Not Working' }}
                 </span>
             </td> 
             <td align="left">

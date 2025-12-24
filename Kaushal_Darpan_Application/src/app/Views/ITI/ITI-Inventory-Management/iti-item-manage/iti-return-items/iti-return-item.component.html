@@ -18,6 +18,11 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div class="flex gap-2">
+           <a href="javascript:void(0);" (click)="ShowIssuedItemsList(Items_Details_Issue)"  class="btn bg-info btn-sm text-white">
+            <i class="ti ti-excel"></i> List of Returned Items
+          </a>
+        </div>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -94,7 +99,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">
-              <input type="checkbox" (change)="toggleAll($event)" />  select All
+              <input type="checkbox" (change)="toggleAll($event)" />
             </th>
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
@@ -105,19 +110,19 @@
             <th class="text-left">Return Date</th>
             <th class="text-left">Status</th>
             <th class="text-left">Equipment Working</th> 
+            <th class="border p-2">Is Eligible For Auction</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">
-              <input type="checkbox" [(ngModel)]="item.Selected" />
+              <input type="checkbox" [(ngModel)]="item.Selected" *ngIf="item.InvStatus !== 1" />
             </td>
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-            <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">
               <span [ngClass]="{
@@ -128,24 +133,34 @@
               </span>
             </td>
             <td class="border p-2">
-               <div *ngIf="item.Selected; else notSelected">
-                  <label>Equipment Working: <span class="StarMarking">*</span></label>
-                  <!--{{ItemDetailsList[i]?.AuctionStatus |json}}-->
-
-                     <!-- [disabled]="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1"  -->
-                        <!-- [ngClass]="{'bg-gray-200 cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1}"> -->
-                  <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
+              <div *ngIf="item.Selected; else notSelected">
+                <label>Equipment Working: <span class="StarMarking">*</span></label>
+                <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
                   <option value="1">Working</option>
                   <option value="2">Not Working</option>
-                  <option value="3">For Repair</option>
-                  </select>
+                  <!-- <option value="3">For Repair</option> -->
+                </select>
 
-                  <div *ngIf="isSubmitted && !item.equipmentStatus" class="text-danger">
-                  <p>Please select a status.</p>
-                  </div>
+                <div *ngIf="isSubmitted && !item.equipmentStatus" class="text-danger">
+                <p>Please select a status.</p>
                 </div>
-                   
-              </td>
+              </div>
+                  
+            </td>
+            <td class="border p-2">
+              <label *ngIf="item.equipmentStatus == 2">
+                    <ng-container
+                        *ngIf="
+                        item.Selected ;
+                        else notSelected"
+                    >
+                  <input type="checkbox"
+                          name="isOption" [(ngModel)]="item.isOption"
+                          (click)="ItemMasterList[i]?.AuctionStatus === '1' || ItemMasterList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />
+                  Is Auction
+                </ng-container>
+              </label>
+            </td>
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10" class="text-center">
@@ -225,7 +240,73 @@
   </div>
 </ng-template>
 
-
-
-
-<!-- end row -->
+<ng-template #Items_Details_Issue let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+     <div class="card">
+      <div class="card-header flex justify-between  items-center">
+         <b><i class="fa fa-plus">Issue Items</i> </b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup_ReturnHistory()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+            <div class="overflow-x-auto mt-3">
+                <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">SNO</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Item Name</th>
+            <th class="text-left">Equipment Name</th>
+            <th class="text-left">Item Code</th>
+            <th class="text-left">IsConsumable</th>
+            <th class="text-left">Qty</th>
+            <th class="text-left">Issue Date</th>
+            <!-- <th class="text-left">Due Date</th> -->
+            <th class="text-left">Return Date</th>
+            <th class="text-left">Equipment Status on Return</th>
+            <th class="text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ItemMasterList1 | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td align="left">{{ idx+1}}</td>
+            <td align="left">{{ item.Name}}</td>
+            <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.EquipmentName}}</td> 
+            <td align="left">{{ item.ItemCode}}</td> 
+            <td align="left">
+              <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
+                {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+              </span>
+            </td>
+            <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+            <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
+            <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+             <td align="left">
+              <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
+                  {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : 'Not Working' }}
+                </span>
+            </td> 
+            <td align="left">
+              <span [ngClass]="{
+                                 'InvStatus-issued': item.InvStatus === 0,
+                                 'InvStatus-returned': item.InvStatus === 1
+                               }">
+                {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus ===1 ? 'Returned' : 'Unknown' }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="ItemMasterList1?.length==0">
+            <td colspan="10">
+              No Record Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+            </div>
+        </div>
+      </div>
+     </div>
+  </div>
+</ng-template>

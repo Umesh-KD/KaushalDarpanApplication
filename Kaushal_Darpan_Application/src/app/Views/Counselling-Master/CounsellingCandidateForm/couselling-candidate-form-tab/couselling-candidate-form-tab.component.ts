@@ -12,6 +12,7 @@ import { CandidatePersonalDetailsComponent } from '../candidate-personal-details
 import { CandidateDocumentDetailsComponent } from '../candidate-document-details/candidate-document-details.component';
 import { CandidateOptionDetailsComponent } from '../candidate-option-details/candidate-option-details.component';
 import { CandidateFormPreviewComponent } from '../candidate-form-preview/candidate-form-preview.component';
+import { EnumConfigurationType, EnumDepartment } from '../../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-couselling-candidate-form-tab',
@@ -63,10 +64,11 @@ export class CousellingCandidateFormTabComponent {
       // {
       //   window.open(`/StudentJanAadharDetail`, "_self");
       // }
-  
+
       // await this.GetPersonalDetailsById()
       // await this.GetITIJailDateList();
       // await this.GetActiveTabList();
+      await this.GetITIDateList()
     }
   
     ngAfterViewInit(): void {
@@ -167,5 +169,42 @@ export class CousellingCandidateFormTabComponent {
     //   }
     // }
   
-    
+  async GetITIDateList() {
+    try {
+
+      this.dateConfiguration.DepartmentID = EnumDepartment.ITI;
+      this.dateConfiguration.SSOID = this.SSOLoginDataModel.SSOID;
+      await this.dateMasterService.GetDateDataList(this.dateConfiguration)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AdmissionDateList = data['Data'];
+          const today = new Date();
+          const deptID = EnumDepartment.ITI;
+          var activeCourseID: any = [];
+
+          debugger
+         
+            var lnth =
+              this.AdmissionDateList.filter(function (x: any) {
+                return new Date(x.To_Date) > today &&
+                  new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.Counselling && x.DepartmentID == deptID
+              }).length
+            if (lnth <= 0) {
+              this.toastr.warning("Date is not Open")
+              this.router.navigate(['/CandidateApplicationList'])
+            }
+        
+          // var lnth =
+          //   this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
+          // if (lnth <= 0)
+          // {
+          //   this.toastr.warning("Addmission Date is not Open")
+          //   this.router.navigate(['/dashboard'])
+          // }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 }

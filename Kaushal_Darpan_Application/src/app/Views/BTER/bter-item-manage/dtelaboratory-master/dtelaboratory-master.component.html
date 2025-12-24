@@ -61,10 +61,10 @@
           <!-- Technician Dropdown -->
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Technician : <span class="StarMarking">*</span>
+              Lab-Incharge : <span class="StarMarking">*</span>
             </label>
             <select class="form-select" formControlName="staffID">
-              <option [ngValue]="0">-- Technician --</option>
+              <option [ngValue]="0">-- Choose Staff --</option>
               <option *ngFor="let item of staffDDLList" [value]="item.staffID">
                 {{ item.staffName }}
               </option>
@@ -135,7 +135,7 @@
             <th class="text-left">Department</th>
             <th class="text-left">Stream</th>
             <th class="text-left">Laboratory</th>
-            <th class="text-left">Staff/Instructor</th>
+            <th class="text-left">Lab Incharge</th>
             <th class="text-left">Is Active</th>
             <th class="text-center">Action</th>
           </tr>

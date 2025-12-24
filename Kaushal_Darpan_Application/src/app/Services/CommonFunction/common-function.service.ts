@@ -1076,7 +1076,7 @@ export class CommonFunctionService {
 
   public async GetITITradeList() {
 
-    return await this.http.get(this.APIUrl + '/TradeListGetAllData/', this.headersOptions)
+    return await this.http.post(this.APIUrl + '/TradeListGetAllData/' , this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -2085,4 +2085,13 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetZonalID(UserID: number, EndTermID: number = 0) {
+    return await this.http.get(this.APIUrl + '/GetZonalID/' + UserID + '/' + EndTermID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

@@ -69,7 +69,7 @@
             Item Type: <span class="StarMarking">*</span>
           </label>
           <ng-select formControlName="ItemType" [(ngModel)]="request.ItemType" [items]="ItemtypeList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false" (change)="GetTradeDDL()"
                      [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
           </ng-select>
 
@@ -183,6 +183,7 @@
                  class="form-input"
                  formControlName="voucherdate"
                  [(ngModel)]="request.voucherdate"
+                 [max]="todayDate"
                   />
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.voucherdate.errors" class="text-danger">
@@ -257,14 +258,28 @@
         </div>
 
 
-        <div *ngIf="request.ItemType==2" >
+        <!-- <div *ngIf="request.ItemType==2" >
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Trade: <span class="StarMarking">*</span>
           </label>
-          <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="Name"
+          <select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="Name"
                      bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
                      [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
-          </ng-select>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div> -->
+
+        <div *ngIf="request.ItemType==2">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+          <select class="form-select" [(ngModel)]="request.TradeId" formControlName="TradeId">
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
+          </select>
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
             <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
@@ -296,16 +311,17 @@
           <label for="TotalPrice" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Abbreviation: <span class="StarMarking">*</span>
           </label>
-          <input type="text" class="form-input uppercase" id="abbreviation" name="abbreviation" formControlName="abbreviation" [(ngModel)]="request.abbreviation" maxlength="20">
+          <input type="text" class="form-input uppercase" id="abbreviation" name="abbreviation" 
+            formControlName="abbreviation" [(ngModel)]="request.abbreviation" maxlength="20">
 
         </div>
 
         <!-- <div *ngIf="request.ItemType==2"class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3"> -->
-            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3"> 
+        <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3"> 
           <label class="block">IsConsumable </label>
           <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
             <input class="sr-only peer" type="checkbox" id="Active" formControlName="IsConsume"
-                   [(ngModel)]="request.IsConsume">
+                   [(ngModel)]="request.IsConsume" [checked]="request.IsConsume" readonly>
             <span class="toggleIcon">
               <span class="toggleTitle"></span>
             </span>

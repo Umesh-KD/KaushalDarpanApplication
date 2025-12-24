@@ -198,7 +198,7 @@ export class ITIItemsMasterComponent {
   async btnEquipmentsStatus_OnClick(item: any) {
 
     console.log(item)
-    this.Swal2.Confirmation("Are you sure you want ?",
+    this.Swal2.Confirmation("Are you sure you want Approve?",
       async (result: any) => {
         //confirmed
         if (result.isConfirmed) {

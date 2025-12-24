@@ -55,11 +55,22 @@ export class PrincipleDashboardComponent {
       await this.CheckProfileStatus_SELF();
 
       if (this.StaffMasterList.length > 0) {
+        debugger
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == EnumEMProfileStatus.Pending || status == EnumEMProfileStatus.Completed || status == EnumEMProfileStatus.Revert) {
-          this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
-            window.open("/bter-em-add-staff-details", "_Self")
-          }, 'OK', false);
+          if(status == EnumEMProfileStatus.Revert)
+          {
+            this.sweetAlert2.Confirmation("Your Profile Reverted please Complete your profile Again?", async (result: any) => {
+              window.open("/bter-em-add-staff-details", "_Self")
+            }, 'OK', false);
+          }
+          else
+          {
+            this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
+              window.open("/bter-em-add-staff-details", "_Self")
+            }, 'OK', false);
+          }
+
         }
         else {
           await this.CheckProfileStatus();

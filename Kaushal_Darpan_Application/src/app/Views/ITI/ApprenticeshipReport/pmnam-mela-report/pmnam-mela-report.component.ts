@@ -30,11 +30,27 @@ export class PmnamMelaReportComponent {
   public ssoLoginDataModel = new SSOLoginDataModel();
   public obj = new ApprenticeshipReportEntity();
   public DistrictID: number = 0;
+  public FinancialYearID: number = 0;
+  public BeforeMonth: number = 0;
   public id: number = 0;
  
   public DataList: any = [];
   public Table_SearchText: string = '';
   @ViewChild('MyModel_ViewDetails') MyModel_ViewDetails!: TemplateRef<any>;
+  public State: number = -1;
+  public Message: any = [];
+  public ErrorMessage: any = [];
+  public FinYearList: any = [];
+  startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public totalInTableRecord: number = 0;
+  public currentInTablePage: number = 1;
+  public paginatedInTableData: any[] = [];
+  pageInTableSize: string = '50';
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+
+  public totalInTablePage: number = 0;
 
   constructor(
     private modalService: NgbModal,
@@ -59,6 +75,7 @@ export class PmnamMelaReportComponent {
     }
     this.GetAllData();
     this.GetDistrictMatserDDL();
+    this.YearDropdownData('FinancialYear_IIP');
   }
 
 
@@ -114,6 +131,7 @@ export class PmnamMelaReportComponent {
       this.obj = new ApprenticeshipReportEntity();
   }
   async SaveData() {
+    debugger
     if (this.obj.PoliticalEstablishmentscontactedNo == '' || this.obj.PrivateEstablishmentscontactedNo == '' ||
       this.obj.PoliticalEstablishmentspartNo == '' || this.obj.PrivateEstablishmentspartNo == '' ||
       this.obj.CandidatespresentMaleNo == '' || this.obj.CandidatespresentFemaleNo == '' ||
@@ -126,7 +144,13 @@ export class PmnamMelaReportComponent {
     this.obj.DepartmentID = this.ssoLoginDataModel.DepartmentID;
     this.obj.RoleID = this.ssoLoginDataModel.RoleID;
     this.obj.Createdby = this.ssoLoginDataModel.UserID;
-    this.obj.InstituteID = this.ssoLoginDataModel.InstituteID
+    this.obj.InstituteID = this.ssoLoginDataModel.InstituteID;
+    this.obj.PNMMelaDocumentreport = this.obj.PNMMelaDocumentreport;
+    this.obj.provisionLetterDocumentreport = this.obj.provisionLetterDocumentreport;
+    this.obj.PmnamMelaDate = this.obj.PmnamMelaDate;
+    this.obj.FinancialYearID = this.obj.FinancialYearID;
+    this.obj.BeforeMonth = this.obj.BeforeMonth;
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.ApprenticeReportServiceService.Save_PMNUM_Mela_Report(this.obj).then((data: any) => {
@@ -188,6 +212,7 @@ export class PmnamMelaReportComponent {
   }
 
   async ClearAll() {
+    debugger
     this.obj.PoliticalEstablishmentspartNo = '';
     this.obj.PrivateEstablishmentspartNo= '';
     this.obj.PoliticalEstablishmentscontactedNo = '';
@@ -197,6 +222,11 @@ export class PmnamMelaReportComponent {
     this.obj.CandidatessselectedMaleNo = '';
     this.obj.CandidatessselectedFemaleNo = '';
     this.obj.ID = 0;
+    this.obj.PNMMelaDocumentreport = '';
+    this.obj.provisionLetterDocumentreport = '';
+    this.obj.PmnamMelaDate = '';
+    this.obj.BeforeMonth = '';
+    this.obj.FinancialYearID = 0;
   }
 
   async GetAllData() {
@@ -208,8 +238,9 @@ export class PmnamMelaReportComponent {
       } else {
         UserID = this.ssoLoginDataModel.UserID
       }
+
       this.loaderService.requestStarted();
-      await this.ApprenticeReportServiceService.GetAllData(UserID, this.DistrictID).then((data: any) => {
+      await this.ApprenticeReportServiceService.GetAllData(UserID, this.DistrictID, this.FinancialYearID, this.BeforeMonth).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.Data) {
           this.DataList = data.Data;
@@ -226,7 +257,7 @@ export class PmnamMelaReportComponent {
     }
   }
   async EditData(row : any) {
- 
+    debugger;
     this.obj.PoliticalEstablishmentscontactedNo = row.PoliticalEstablishmentscontactedNo;
     this.obj.PrivateEstablishmentscontactedNo = row.PrivateEstablishmentscontactedNo;
     this.obj.PoliticalEstablishmentspartNo = row.PoliticalEstablishmentspartNo;
@@ -236,6 +267,12 @@ export class PmnamMelaReportComponent {
     this.obj.CandidatessselectedMaleNo = row.CandidatessselectedMaleNo;
     this.obj.CandidatessselectedFemaleNo = row.CandidatessselectedFemaleNo;
     this.obj.ID = row.Id;
+    this.obj.PNMMelaDocumentreport = row.PNMMelaDocumentreport;
+    this.obj.provisionLetterDocumentreport = row.provisionLetterDocumentreport;
+    this.obj.PmnamMelaDate = row.PmnamMelaDate;
+    this.obj.FinancialYearID = row.FinancialYearID;
+    this.obj.BeforeMonth = String(row.MonthID);
+
     if (this.obj.ID > 0) {
       this.OpenModalPopup(this.MyModel_ViewDetails);
     }
@@ -271,7 +308,9 @@ export class PmnamMelaReportComponent {
   }
 
   async Reset() {
-    this.DistrictID = 0
+    this.DistrictID = 0;
+      this.FinancialYearID = 0;
+    this.BeforeMonth = 0;
     this.GetAllData()
   }
 
@@ -340,5 +379,112 @@ export class PmnamMelaReportComponent {
     return `file_${timestamp}.${extension}`;
   }
 
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    debugger
+    try {
 
+      this.file = event.target.files[0];
+      if (this.file) {
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "PNMMelaDocreport") {
+                this.obj.PNMMelaDocumentreport = data['Data'][0]["FileName"];
+              }
+
+              else if (Type == "provisionLetterDocureport") {
+                this.obj.provisionLetterDocumentreport = data['Data'][0]["FileName"];
+              }
+
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+  YearDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
+  }
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.DataList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+
+  sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.DataList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
 }

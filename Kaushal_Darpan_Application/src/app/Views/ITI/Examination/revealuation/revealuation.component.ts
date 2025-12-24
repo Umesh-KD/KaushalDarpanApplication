@@ -480,7 +480,7 @@ export class RevealuationComponent {
               }, 200);
             }
           }
-        });
+        },'OK',false);
       }
       else {
         this.toastrService.warning('Payment amount is greater then 0')

@@ -142,7 +142,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">
-              <input type="checkbox" (change)="toggleAll($event)" />  select All
+              <input type="checkbox" (change)="toggleAll($event)" />
             </th>
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
@@ -187,12 +187,7 @@
                 <label>
                       <ng-container
                           *ngIf="
-                          item.Selected &&
-                          (
-                          ItemMasterList[i]?.equipmentStatus === 2 ||
-                          item.equipmentStatus === '2' ||
-                          item.equipmentStatus === 2
-                          );
+                          item.Selected ;
                           else notSelected"
                       >
                       <!-- formControlName="isOption" -->

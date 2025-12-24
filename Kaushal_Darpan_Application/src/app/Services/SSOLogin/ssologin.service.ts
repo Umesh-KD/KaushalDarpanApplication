@@ -172,5 +172,13 @@ export class SSOLoginService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+//region  User Request Data
+  public async BackToSSO() {
+    const headers = { 'content-type': 'application/json' }
+    
+    return await this.http.post(this.APIUrl + '/SSOBackTo', { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

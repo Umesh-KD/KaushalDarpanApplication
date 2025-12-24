@@ -7,7 +7,7 @@ import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel'
 import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDataModel';
 import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { ApplyDuplicateDocument } from '../../Models/BTER/ApplyDuplicateDocDataModel';
+import { ApplyDuplicateDocument, DuplicateDocumentSearch } from '../../Models/BTER/ApplyDuplicateDocDataModel';
 import { error } from 'highcharts';
 
 
@@ -38,6 +38,18 @@ public async GetApplyDuplicateDocumentTypeList() {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetDuplicateDocInstituteWise(searchRequest: DuplicateDocumentSearch) {
+    
+    debugger;
+    var body=JSON.stringify(searchRequest);
+    console.log(body);
+    return await this.http.post(`${this.APIUrl}/GetDuplicateDocInstituteWise`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
 
   public async GetApplyDuplicateDocumentList(searchRequest: ApplyDuplicateDocument) {
     

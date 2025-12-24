@@ -86,7 +86,7 @@
         <table class="table table-border w-full table-auto" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
-              <th class="text-left">Mark</th>
+              <!--<th class="text-left">Mark</th>-->
               <th width="80px" align="left">Sr. No.</th>
               <th class="text-left">Center Name</th>
               <th class="text-left">CC Code</th>
@@ -97,9 +97,9 @@
           </thead>
           <tbody>
             <tr *ngFor="let row of CenterMasterList | tableSearchFilter: Table_SearchText; let idx = index;">
-              <td align="left">
+              <!--<td align="left">
                 <input type="checkbox" name="MarkCheck" [(ngModel)]="row.Marked" (change)="onCheckboxChange(row)" />
-              </td>
+              </td>-->
               <td>{{ idx + 1 }}</td>
               <td>{{ row.CenterName }} </td>
               <td>{{ row.CCCode }} </td>
@@ -158,13 +158,23 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name  <span class="StarMarking">*</span></label>
-          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.InstituteID" (change)="GetTrade('ALL')">
+          <!--<select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.InstituteID" (change)="GetTrade('ALL')">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of FilteredInstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
+          </select>-->
+
+          <ng-select [(ngModel)]="request.InstituteID"
+                   (change)="GetTrade('ALL')"
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of FilteredInstituteList;">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
+
         </div>
 
-        <div class="mb-8">
+        <div class="mb-8 mt-4">
           <label>Select Trade<span class="text-danger">*</span></label>
           <ng-multiselect-dropdown [placeholder]="'Choose Option'"
                                    [settings]="settingsMultiselect"

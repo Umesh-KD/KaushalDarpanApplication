@@ -33,11 +33,11 @@
         </div>
 
         <div>
-          <label for="bankGuaranteeNumber">Bank Guarantee Number:<span class="StarMarking">*</span></label>
-          <input formControlName="bankGuaranteeNumber" class="form-input" type="text" id="bankGuaranteeNumber"
-                 (keypress)="numberOnly($event)" placeholder="Bank Guarantee Number" [(ngModel)]="request.bankGuaranteeNumber">
-          <div *ngIf="isSubmitted && bankGuarantee.get('bankGuaranteeNumber').errors" class="text-danger">
-            <p *ngIf="bankGuarantee.get('bankGuaranteeNumber').errors.required">
+          <label for="BankGuaranteeNumber">Bank Guarantee Number:<span class="StarMarking">*</span></label>
+          <input formControlName="BankGuaranteeNumber" class="form-input" type="text" id="BankGuaranteeNumber"
+                 (keypress)="numberOnly($event)" placeholder="Bank Guarantee Number" [(ngModel)]="request.BankGuaranteeNumber">
+          <div *ngIf="isSubmitted && bankGuarantee.get('BankGuaranteeNumber').errors" class="text-danger">
+            <p *ngIf="bankGuarantee.get('BankGuaranteeNumber').errors.required">
               <i aria-hidden="true"></i>This field is
               required.
             </p>
@@ -93,49 +93,24 @@
           </div>
         </div>
 
-        <!--<div>
-    <label for="fileStudentPhoto">Bank Agreement Document:<span class="StarMarking">*</span></label>
-    <div class="flex fileUploader">
-      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="fileStudentPhoto" formControlName="bankAgreementDocument" type="file" (change)="onFilechange($event,'Photo')">
-      <label for="fileStudentPhoto">
-        <span>Choose File</span>
-        {{request.bankAgreementDocument === '' ? 'No File Choosen' : request.bankAgreementDocument}}
-      </label>
-      <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.bankAgreementDocument}}"
-           *ngIf="this.request.bankAgreementDocument !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-      </div>
-    </div>
-  </div>-->
-
-
-
-
-
-
-
-
-
-
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                 for="bankAgreementDocument">Bank Agreement Document<span class="StarMarking">*</span></label>
+                 for="BankAgreementDocument">Bank Agreement Document<span class="StarMarking">*</span></label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="bankAgreementDocument" formControlName="bankAgreementDocument" type="file" (change)="onFilechange($event,'bankDocument')">
-            <label for="bankAgreementDocument">
+                   id="BankAgreementDocument" formControlName="BankAgreementDocument" type="file" (change)="onFilechange($event,'bankDocument')">
+            <label for="BankAgreementDocument">
               <span>Choose File</span>
-              {{request.bankAgreementDocument === '' ? 'No File Choosen' : request.bankAgreementDocument}}
+              {{request.BankAgreementDocument === '' ? 'No File Choosen' : request.BankAgreementDocument}}
             </label>
             <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.bankAgreementDocument}}"
-                 *ngIf="this.request.bankAgreementDocument !=''"
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.BankAgreementDocument}}"
+                 *ngIf="this.request.BankAgreementDocument !=''"
                  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
             </div>
           </div>
 
-          <div *ngIf="bankGuarantee.controls.bankAgreementDocument.errors" class="text-danger">
+          <div *ngIf="bankGuarantee.controls.BankAgreementDocument.errors" class="text-danger">
             <p>
               <i aria-hidden="true"></i>This field is required .!
             </p>
@@ -150,7 +125,7 @@
 
         <div>
           <label for="remarks">Remark:<span class="StarMarking">*</span></label>
-          <textarea formControlName="remarks" class="form-input" placeholder="remarks" type="text" [(ngModel)]="request.remarks">
+          <textarea formControlName="Remarks" class="form-input" placeholder="remarks" type="text" [(ngModel)]="request.Remarks">
           </textarea>
         </div>
       </div>

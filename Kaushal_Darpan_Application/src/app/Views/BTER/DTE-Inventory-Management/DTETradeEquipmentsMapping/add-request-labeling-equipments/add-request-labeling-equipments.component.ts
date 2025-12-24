@@ -108,7 +108,7 @@ export class AddRequestLabelingEquipmentsComponent {
           Validators.pattern(/^\d{4,}$/) // At least 4 digits
         ]
       ],
-      IdentificationMark: ['', Validators.required],
+      IdentificationMark: [''],
       CampanyName: ['', Validators.required],
     });
 

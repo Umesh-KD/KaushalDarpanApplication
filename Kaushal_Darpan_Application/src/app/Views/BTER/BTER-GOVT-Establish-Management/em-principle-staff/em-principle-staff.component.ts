@@ -64,6 +64,7 @@ export class EMPrincipleStaffComponent {
   public StaffTypeList: any = [];
   public InstituteMasterDDLList: any[] = [];
   public StaffMasterList: any[] = [];
+  public CategoryList: any[] = [];
   public CourseMasterDDL: any[] = [];
   public DesignationMasterDDLList: any = [];
   public GenderList: any = [];
@@ -223,6 +224,7 @@ export class EMPrincipleStaffComponent {
     await this.GetOfficeList();
 
     await this.GetDesignationMasterData();
+    await this.GetCategroyData();
 
     this.approveRequest.WorkOfficeID = 0;
 
@@ -1058,6 +1060,25 @@ async GetTechnicianDll() {
 // Your validation check block
 
 
+async GetCategroyData() {
+  debugger;
+  try {
+    this.loaderService.requestStarted();
+    await this.commonMasterService.DDL_AllCasteCategoryA()
+    .then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.CategoryList = data['Data'];
+    }, (error: any) => console.error(error)
+    );
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+  }
+}
 
 
 
@@ -1067,24 +1088,24 @@ async GetTechnicianDll() {
     this.isApproveSubmitted = true;
     
     if (this.StaffMasterFormGroup.invalid) {
-      // Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
-      //   const control = this.StaffMasterFormGroup.get(key);
-      //   if (control && control.invalid) {
-      //     console.error(`Field '${key}' is invalid.`);
+      Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
+        const control = this.StaffMasterFormGroup.get(key);
+        if (control && control.invalid) {
+          console.error(`Field '${key}' is invalid.`);
 
-      //     if (control.errors) {
-      //       Object.keys(control.errors).forEach(errorKey => {
-      //         // Safely stringify the error value to avoid issues
-      //         const errorValue = control.errors![errorKey];
-      //         const errorMessage = (typeof errorValue === 'string')
-      //           ? errorValue
-      //           : JSON.stringify(errorValue, this.getCircularReplacer());
+          if (control.errors) {
+            Object.keys(control.errors).forEach(errorKey => {
+              // Safely stringify the error value to avoid issues
+              const errorValue = control.errors![errorKey];
+              const errorMessage = (typeof errorValue === 'string')
+                ? errorValue
+                : JSON.stringify(errorValue, this.getCircularReplacer());
 
-      //         /*console.error(`  Error: ${errorKey} - ${errorMessage}`);*/
-      //       });
-      //     }
-      //   }
-      // });
+              /*console.error(`  Error: ${errorKey} - ${errorMessage}`);*/
+            });
+          }
+        }
+      });
 
       // Mark all controls as touched to trigger UI validation messages if any
       this.StaffMasterFormGroup.markAllAsTouched();

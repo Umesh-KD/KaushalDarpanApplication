@@ -20,7 +20,7 @@ import { CounsellingApplicationSearchModel } from '../../Models/CounsellingAppli
 import { EnumStatus } from '../../Common/GlobalConstants';
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 import { GlobalConstants } from '../../Common/GlobalConstants';
-import { ITIRevalRequestStudentDetailsModel } from '../../Models/RevaluationModel';
+import { ITIRevalRequestStudentDetailsModel, StudentOptionItem } from '../../Models/RevaluationModel';
 // import { ITIStudentRevaluationService } from '../../Services/ITIStudentRevaluation/iti-student-revaluation.service';
  import { ITIStudentRevaluationService } from '../../Services/ITI/Examination/iti-student-revaluation.service';
 import { DocumentDetailsService } from '../../Common/document-details';
@@ -291,13 +291,6 @@ export class RevalStudentUpdateDetailsComponent implements OnInit {
         this.searchRequest.SortColumn=this.sortColumn
         this.searchRequest.SortOrder=this.sortOrder 
         this.searchRequest.RevalReqID=rowData.RevalRequestID
-        // if(rowData.StudentID>0)
-        // {
-        //   this.searchRequest.StudentID=rowData.CandidateID
-        // }
-        // else{
-        //   this.searchRequest.StudentID=0
-        // }
         
         this.searchRequest.action="_getRevalDetailsbyRevalReqID"
         // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
@@ -402,6 +395,15 @@ export class RevalStudentUpdateDetailsComponent implements OnInit {
 async SaveUpload_Details (){
 debugger
     try{
+
+         const invalidItem = this.StudentOptionList.find(
+          (x: StudentOptionItem) => !x.UploadedCopy || x.UploadedCopy.trim() === ''
+            );
+          if (invalidItem) {
+            this.toastr.warning('Please upload document for all subjects.');
+            return; 
+          }
+
          this.loaderService.requestStarted();
           
           let obj=new ITIRevalRequestStudentDetailsModel();

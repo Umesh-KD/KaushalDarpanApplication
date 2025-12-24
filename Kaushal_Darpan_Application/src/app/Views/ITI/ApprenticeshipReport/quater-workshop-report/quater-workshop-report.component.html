@@ -1,12 +1,12 @@
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Quarterly Progress Report</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Quarterly progress report by regional officer</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a class="text-sm font-medium text-slate-700" aria-current="page">Quarterly Progress Report</a>
+      <a class="text-sm font-medium text-slate-700" aria-current="page">Quarterly progress report by regional officer</a>
     </div>
   </div>
   <!--<a  routerLink="/PMNAM-MelaReportBeforeAfter" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Add</a>-->
@@ -21,9 +21,25 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
-        <a *ngIf="SSOLoginDataModel.RoleID == 97" (click)="GoToReportEntryPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+        <a *ngIf="SSOLoginDataModel.RoleID == 100" (click)="GoToReportEntryPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            वित्तीय वर्ष <span class="StarMarking">*</span>
+          </label>
+          <select [(ngModel)]="request.FinancialYearID"
+                  class="form-select">
+
+            <option [ngValue]="0">Choose Option</option>
+            <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+                    [ngValue]="item.FinancialYearID">
+              {{ item.FinancialYearName }}
+            </option>
+          </select>
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">त्रैमासिक अवधि  <span class="StarMarking">*</span></label>
           <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.QuaterID">
@@ -39,6 +55,16 @@
 
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
+          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.ZoneID" (change)="GetDistrictMatserDDL()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
+
+
+          </select>
+
+        </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
@@ -52,7 +78,7 @@
         </div>
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearField()">Cancel</button>
         </div>
 
       </div>

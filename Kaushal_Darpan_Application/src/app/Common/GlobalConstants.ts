@@ -98,6 +98,7 @@ export enum EnumRole {
   Secretary_JD_NonEng = 53,
   collegeNodel = 21,
   DTETraing = 16,
+
   ITIPrincipal = 20,
   TITDTETraining = 22,
   ITI_Verifier = 23,
@@ -295,6 +296,7 @@ export enum EnumConfigurationType {
   Reval_GroupCode = 160,
   JailAdmission = 164,
   DirectAdmission = 79,
+  Counselling=167
 }
 
 export enum EnumDepartment {

@@ -230,6 +230,7 @@
             <th class="text-left">Quantity</th>
             <th>Description / Remarks</th>
             <th>Indent Document</th>
+            <th>Status</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -246,9 +247,10 @@
                 {{item.FileName}}
               </a>
             </td>
+            <td align="left">{{ item.EquipmentsStatus}}</td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="(sSOLoginDataModel.OfficeID == 2 && item.EquipmentsStatus == 'Accept') || (sSOLoginDataModel.RoleID == 218 && item.EquipmentsStatus == 'Accept')"
+                <a *ngIf="(sSOLoginDataModel.OfficeID == 2 && item.EquipmentsStatus == 'Requested') || (sSOLoginDataModel.RoleID == 218 && item.EquipmentsStatus == 'Requested')"
                    [routerLink]="['/iti-request-equipments-mapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity,item.OfficeID,item.TE_MappingId,item.FileName]"
                    title="Edit">
                   <i class="ti ti-pencil"></i>

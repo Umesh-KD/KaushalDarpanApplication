@@ -245,7 +245,6 @@ const routes: Routes = [
       { path: 'AddCompany', loadChildren: () => import('./Views/CompanyMaster/add-company-master/add-company-module').then(m => m.CompanyMasterModule), title: 'Add Company' },
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
 
-
       { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
 
       { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
@@ -1264,6 +1263,7 @@ const routes: Routes = [
       { path: 'iti-bank-guarantee', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/Add-ITI-BankGuarantee/ITI-BankGuarantee.module').then(m => m.ITIBankGuaranteeModule) },
       { path: 'iti-bank-guarantee/:id', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/Add-ITI-BankGuarantee/ITI-BankGuarantee.module').then(m => m.ITIBankGuaranteeModule) },
       { path: 'iti-bank-guarantee-list', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/list-iti-bankguarantee/list-iti-bankguarantee.module').then(m => m.listitibankguaranteeModule), title: 'ITI Bank Guarantee List' },
+      { path: 'iti-bank-guarantee-Report', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/report-iti-bankguarantee/report-iti-bankguarantee.module').then(m => m.reportitibankguaranteeModule), title: 'ITI Bank Guarantee Report' },
 
       { path: 'direct-allotment-list8/:id', loadChildren: () => import('./Views/ITI/direct-allotment/direct-allotment-list/direct-allotment-list.module').then(m => m.DirectAllotmentListModule), title: 'direct-allocation-list8' },
       { path: 'direct-allotment-list10/:id', loadChildren: () => import('./Views/ITI/direct-allotment/direct-allotment-list/direct-allotment-list.module').then(m => m.DirectAllotmentListModule), title: 'direct-allocation-list10' },
@@ -1340,18 +1340,18 @@ const routes: Routes = [
       { path: 'staff-management-report', loadChildren: () => import('./Views/Reports/staff-management-reports/staff-management-reports.module').then(m => m.StaffManagementReportsModule), title: 'staff-management-report' },
       { path: 'branch-wise-statistical-reports', loadChildren: () => import('./Views/Reports/bter-branch-wise-statistical-reports/bter-branch-wise-statistical-reports.module').then(m => m.BranchWiseStatisticalReportsModule), title: 'branch-wise-statistical-reports' },
 
-      { path: 'PMNAM-MelaReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report/pmnam-mela-report.module').then(m => m.PmnamMelaReportModule) },
+      { path: 'PMNAM-MelaReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report/pmnam-mela-report.module').then(m => m.PmnamMelaReportModule), title:'PMNUM' },
       { path: 'Workshop-progressReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report/workshop-progress-report.module').then(m => m.WorkshopProgressReportModule) },
 
 
 
       { path: 'NodalWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/nodal-workshop-report/nodal-workshop-report.module').then(m => m.NodalWorkshopReportModule) },
-      { path: 'QuaterWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/quater-workshop-report/quater-workshop-report.module').then(m => m.QuaterWorkshopReportModule) },
+      { path: 'QuaterWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/quater-workshop-report/quater-workshop-report.module').then(m => m.QuaterWorkshopReportModule), title:'Quarterly progress report by regional officer' },
 
       { path: 'ApprenticeshipRegistrationReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/apprenticeship-registration-report/apprenticeship-registration-report.module').then(m => m.ApprenticeshipRegistrationReportModule) },
       { path: 'ApprenticeshipRegistrationReport-list', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/apprenticeship-registration-report-list/apprenticeship-registration-report-list.module').then(m => m.ApprenticeshipRegistrationReportListModule) },
 
-      { path: 'Workshop-progressReport-List', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report-list/workshop-progress-report-list.module').then(m => m.WorkshopProgressReportListModule) },
+      { path: 'Workshop-progressReport-List', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report-list/workshop-progress-report-list.module').then(m => m.WorkshopProgressReportListModule), title:'Workshop Progress Report By AAA' },
 
       { path: 'PaasoutRegistrationReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report/passout-registration-report.module').then(m => m.PassoutRegistrationReportModule) },
 
@@ -1467,9 +1467,10 @@ const routes: Routes = [
       { path: 'tabulation-report', loadChildren: () => import('./Views/BTER/tabulation-report/tabulation-report.module').then(m => m.TabulationReportModule) },
 
       { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
-{ path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
+      { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
       { path: 'bter-lab-master', loadChildren: () => import('./Views/BTER/bter-item-manage/dtelaboratory-master/dtelaboratory-master-module').then(m => m.DteLaboratoryMasterModule) },
       { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
+      { path: 'bter-lab-item-return', loadChildren: () => import('./Views/BTER/bter-item-manage/return-lab-item/return-lab-item.module').then(m => m.ReturnLabItemModule) },
       { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
       { path: 'bter-inventory_Issue-report', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-INV_Issue-report/bter-INV_Issue-report.module').then(m => m.bterINVIssuereportModule) },
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
@@ -1494,6 +1495,7 @@ const routes: Routes = [
       { path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
       { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'update student additional qualification' },
       { path: 'student-additional-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/student-additional-qualification/student-additional-qualification.module').then(m => m.StudentAdditionalQualiModule), title: 'student additional qualification' },
+      { path: 'duplicate-doc', loadChildren: () => import('./Views/duplicate-document/duplicate-document.module').then(m => m.DuplicateDocumentModule), title: 'Duplicate Document' },
      
 
       { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.module').then(m => m.UpdateStudentDetailModule), title: 'update Student Details' },
@@ -1555,7 +1557,7 @@ const routes: Routes = [
       { path: 'ReAttendanceTimeTable', loadChildren: () => import('./Views/BTER/attendance-time-table/ReAssignTimeTable/ReAssignTimeTable.module').then(m => m.ReAssignTimeTableModule), title: 'Re-Student-Attendance' },
       { path: 'CenterRollList', loadChildren: () => import('./Views/ITI/Examination/center-roll-list/center-roll-list.module').then(m => m.CenterRollListModule), title:'Center Roll List' },
 
-
+      { path: 'StudentPaperReport', loadChildren: () => import('./Views/ITI/Examination/student-paper-report/student-paper-report.module').then(m => m.StudentPaperReportModule) },
 
     ]
   },
@@ -1618,7 +1620,7 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
-
+    
     ]
   },
 
@@ -1659,6 +1661,7 @@ const routes: Routes = [
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
+  
   
 
 

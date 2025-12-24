@@ -14,6 +14,7 @@
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute & Branch Details</b>
+        <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, userID)"><i class="ti ti-list"></i></a>               
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
@@ -462,3 +463,73 @@
     </div>
   </div>
 </div>
+
+
+
+<ng-template #MyModel_UserProfileStatusHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+
+        <button class="btn bg-info text-white" (click)="CloseModalProfileStatuslist()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+
+      <div class="card-body">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>User Profile Status  History</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+          </div>
+        </div>
+
+
+        <!--{{UserProfileStatusHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Name</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Remark</th>
+                <th class="text-left">Date</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of UserProfileStatusHistoryList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.DisplayName }}</td>
+                <td align="left">{{ row.UserProfileStatus }}</td>
+                <td align="left">{{ row.Remarks}}</td>
+                <td align="left">{{ row.CreatedDate }}</td>
+
+              </tr>
+              <tr *ngIf="UserProfileStatusHistoryList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalProfileStatuslist()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
+</ng-template>

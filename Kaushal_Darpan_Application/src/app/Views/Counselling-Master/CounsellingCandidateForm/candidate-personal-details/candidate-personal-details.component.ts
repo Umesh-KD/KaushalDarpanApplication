@@ -31,11 +31,19 @@ export class CandidatePersonalDetailsComponent {
   public CategoryAlist: any = []
   public maritalList: any = []
   public DistrictMasterList: any = []
+  public SpouseDistrictMasterList: any = []
 
   public request = new CounsellingApplicationFormDataModel();
   public appRequest = new CounsellingApplicationSearchModel();
   public SSOLoginDataModel = new SSOLoginDataModel()
+public categoryBOptions = [
+  { id: 1, name: 'Widow' },
+  { id: 2, name: 'Divorcee' },
+  { id: 3, name: 'Single Women' },
+  { id: 4, name: 'None of above' }
+];
 
+public filteredCategoryBOptions = [...this.categoryBOptions];
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -73,7 +81,8 @@ export class CandidatePersonalDetailsComponent {
       ReligionID: [{ value: 0 }, [DropdownValidators]],
       NationalityID: [{ value: 0  }, [DropdownValidators]],
       MaritalID: [0, [DropdownValidators]],
-      IsMinority: [{ value: '' }]
+      IsMinority: [{ value: '' }],
+      SpouseDistrictID: [0],
     });
 
     //this.PersonalDetailForm = this.formBuilder.group({
@@ -125,7 +134,7 @@ export class CandidatePersonalDetailsComponent {
     const Designation = this.PersonalDetailForm.get('Designation');
 
 
-   
+   this.filterCategoryB(this.request.MaritalID);
 
 Designation?.disable();
   }
@@ -260,6 +269,7 @@ Designation?.disable();
         if (data.State === EnumStatus.Success) {
           // this.toastr.success(data.Message);
           this.request = data.Data
+        //  this.onSpouseServiceChange(this.request.IsSpouseInSameService);
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
@@ -278,6 +288,7 @@ Designation?.disable();
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DistrictMasterList = data['Data'];
+          this.SpouseDistrictMasterList = data['Data'];
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -296,4 +307,51 @@ Designation?.disable();
       this.PersonalDetailForm.controls['CategoryB_ID'].updateValueAndValidity();
     }
   }
+  filterCategoryB(maritalId: any) {
+     maritalId = Number(maritalId);
+  // Reset selection
+  debugger;
+  this.PersonalDetailForm.get('CategoryB_ID')?.setValue(0);
+
+  if (maritalId == 146) { 
+    // Widow selected
+    this.filteredCategoryBOptions = this.categoryBOptions.filter(x => x.id !== 2);
+  } 
+  else if (maritalId == 64) { 
+    // Divorcee selected
+    this.filteredCategoryBOptions = this.categoryBOptions.filter(x => x.id !== 1);
+  } 
+  else {
+    // Default – show all
+    this.filteredCategoryBOptions = [...this.categoryBOptions];
+  }
+}
+ filterCategoryBByText(maritalText: string) {
+  this.PersonalDetailForm.get('CategoryB_ID')?.setValue(0);
+
+  if (maritalText === 'Widow') {
+    this.filteredCategoryBOptions =
+      this.categoryBOptions.filter(x => x.name !== 'Divorcee');
+  }
+  else if (maritalText === 'Divorcee') {
+    this.filteredCategoryBOptions =
+      this.categoryBOptions.filter(x => x.name !== 'Widow');
+  }
+  else {
+    this.filteredCategoryBOptions = [...this.categoryBOptions];
+  }
+}
+onSpouseServiceChange(isInService?: boolean) {
+  const spouseDistrict = this.PersonalDetailForm.get('SpouseDistrictID');
+
+  if (isInService === true) {
+    spouseDistrict?.setValidators([DropdownValidators]);
+  } else {
+    spouseDistrict?.clearValidators();
+    spouseDistrict?.setValue(0);   // reset value
+  }
+
+  spouseDistrict?.updateValueAndValidity();
+}
+
 }

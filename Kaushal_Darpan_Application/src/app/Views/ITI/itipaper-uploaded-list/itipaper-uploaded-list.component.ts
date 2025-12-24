@@ -262,6 +262,53 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
     this.modalService.dismissAll();
   }
 
+  exportToExcelCenterDetail() {
+    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'CenterID', 'IsDownload','DownloadDate'];
+    const filteredData = this.CenterDtlsList.map(
+      (item: { [key: string]: any }, index: number) => {
+        const filteredItem: any = {
+          SNo: index + 1
+        };
+        Object.keys(item).forEach(key => {
+          if (!unwantedColumns.includes(key)) {
+            filteredItem[key] = item[key];
+          }
+        });
+        return filteredItem;
+      }
+    );
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const colWidths = Object.keys(filteredData[0]).map(key => {
+      let maxLength = key.length;
+      filteredData.forEach(function(row: { [x: string]: any; }) {
+              const cellValue = row[key];
+              if (cellValue !== null && cellValue !== undefined) {
+                  maxLength = Math.max(maxLength, cellValue.toString().length);
+              }
+          });
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+    const range = XLSX.utils.decode_range(ws['!ref']!);
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+      if (!ws[cellAddress]) continue;
+      ws[cellAddress].s = {
+        font: { bold: true }
+      };
+    }
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('en-GB').split('/').join('-');
+    const fileName = `Center_Detail_List_${dateStr}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
+
+
+
+
+
   async DownloadCenterDtlsInExcel(PaperUploadedID: number) {
 
     try {

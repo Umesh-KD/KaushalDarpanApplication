@@ -25,6 +25,7 @@ import { HttpClient } from '@angular/common/http';
 export class QuaterWorkshopReportComponent {
   public DataList: any = []
   public DistrictLisrt: any = []
+  public ZoneList: any = []
   public Table_SearchText: string = '';
   public request = new ITIApprenticeshipWorkshopModel()
   pdfUrl: string | null = null;
@@ -35,6 +36,7 @@ export class QuaterWorkshopReportComponent {
   isOtherDocument: boolean = false
   isError: boolean = false;
   imageSrc: string | null = null;
+  public FinYearList: any = [];
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -58,8 +60,14 @@ export class QuaterWorkshopReportComponent {
 
   async ngOnInit() {
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    
+    
+    await this.GetDivisMatserDDL()
+    await this.GetzonalID()
     await this.GetDistrictMatserDDL()
     this.GetReportAllData();
+    this.YearDropdownData('FinancialYear_IIP');
+
   }
 
 
@@ -83,7 +91,8 @@ export class QuaterWorkshopReportComponent {
 
         Createdby: UserID,
         DistrictID: DistrictID,
-        QuaterID: this.request.QuaterID
+        QuaterID: this.request.QuaterID,
+        FinancialYearID: this.request.FinancialYearID
       };
 
 
@@ -160,7 +169,7 @@ export class QuaterWorkshopReportComponent {
     try {
 
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('DistrictHindi')
+      await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.request.ZoneID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DistrictLisrt = data['Data'];
@@ -177,6 +186,61 @@ export class QuaterWorkshopReportComponent {
       }, 200);
     }
   }
+
+
+
+
+
+  async GetDivisMatserDDL() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('ZoneHindi')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ZoneList = data['Data'];
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetzonalID() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetZonalID(this.SSOLoginDataModel.UserID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.request.ZoneID = data['Data'][0]['DivisionID'];
+          if (this.SSOLoginDataModel.RoleID = 100) {
+            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.request.ZoneID)
+             this.GetDistrictMatserDDL()
+          }
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async openPdfModal(url: string): Promise<void> {
     const ext = url.split('.').pop()?.toLowerCase() || '';
@@ -244,6 +308,22 @@ export class QuaterWorkshopReportComponent {
   onImageError(event: any) {
     event.target.src = 'assets/images/dummyImg.jpg';
   }
+  YearDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
+  }
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
+  }
 
+  ClearField() {
+    this.request.QuaterID = 0;
+    this.request.DistrictID = 0;
+    this.request.FinancialYearID = 0;
+    this.GetReportAllData();
+
+  }
 
 }

@@ -63,6 +63,7 @@ export class AddItiIssueItemComponent {
   public AllInTableSelect: boolean = false;
   public ItemsDataList: any = [];
   public selectedDataList: any[] = [];
+  public ItemMasterList: any[] = [];
   public staff_ID:number =0;
   constructor(
     private toastr: ToastrService,
@@ -74,17 +75,14 @@ export class AddItiIssueItemComponent {
     private modalService: NgbModal,
     private routers: Router,
     private documentDetailsService: DocumentDetailsService,
-    public appsettingConfig: AppsettingService) { }
+    public appsettingConfig: AppsettingService
+  ) { }
 
 
   async ngOnInit() {
-
-    this.AddItemsRequestFormGroup = this.formBuilder.group({
-
-     
+    this.AddItemsRequestFormGroup = this.formBuilder.group({     
       ItemType: ['0', [DropdownValidators]],
       TradeId: ['-1', [DropdownValidators]],
-
     });
 
     /*this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());*/
@@ -94,12 +92,9 @@ export class AddItiIssueItemComponent {
     //await this.ddlStaffMembers();
     //await this.ddlTradeList();
 
-    this.GetStaffDDL()
-    this.GetTradeDDL()
-    //this.GetCategoryDDL()
-
-
-
+    await this.GetStaffDDL()
+    await this.GetTradeDDL()
+    await this.GetCategoryDDL()
   }
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
 
@@ -229,10 +224,10 @@ export class AddItiIssueItemComponent {
       //  return;
       //}
       console.log("ItemType:" + this.Searchrequests.ItemType);
-      this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
-      this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
+      this.Searchrequests.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequests.EquipmentsId = this.Searchrequests.ItemId;
       //this.searchRequest.ActionType="GetConsumeItemListNew";
-      await this.itiInventoryService.GetConsumeItemListNew(this.searchRequest)
+      await this.itiInventoryService.GetConsumeItemListNew(this.Searchrequests)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
@@ -382,13 +377,8 @@ export class AddItiIssueItemComponent {
       this.Searchrequests.TypeName = 'TradeList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
-
       if (data && data.State === EnumStatus.Success) {
-        this.TradeDDLList = [
-          { TradeId: 0, TradeName: 'Choose Trade' },
-          ...data.Data
-        ];
-
+        this.TradeDDLList = data.Data;
         this.Searchrequests.TradeId = 0;
         console.log('Trade list ==>', this.TradeDDLList);
       } else {
@@ -445,10 +435,10 @@ export class AddItiIssueItemComponent {
     }
   }
   onItemToggle(item: any) {
-    
+    debugger
     if (item.Selected) {
       // Add if not already present
-      if (!this.SelectedItems.find(x => x.ItemDetailsId === item.ItemDetailsId)) {
+      if (!this.SelectedItems.find(x => x.ItemId === item.ItemId)) {
         this.SelectedItems.push({
           ItemId: item.ItemId,
           ItemName: item.CampanyName,
@@ -688,7 +678,7 @@ export class AddItiIssueItemComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           //
-          
+          debugger
           if (this.State == EnumStatus.Success) {
               this.FileName = data.Data[0].FileName;
               this.Dis_FileName = data.Data[0].Dis_FileName;
@@ -745,5 +735,41 @@ export class AddItiIssueItemComponent {
       this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
         }
     }
+  }
+
+  async ShowIssuedItemsList(content: any) {    
+     await this.GetAllinventoryIssueHistoryNew();
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'xl', keyboard: true,centered: true});
+    return;
+  }
+
+  async GetAllinventoryIssueHistoryNew() {
+    try {
+      this.loaderService.requestStarted();
+      let Searchrequest: any = {}
+      Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      Searchrequest.ReturnStatus = 0;
+
+      await this.itiInventoryService.GetAllinventoryIssueHistoryNew(Searchrequest)
+        .then((data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.ItemMasterList = data.Data || [];
+          } else {
+            console.error("No data returned from API");
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalPopup_IssueHistory() {
+    this.modalService.dismissAll();
   }
 }

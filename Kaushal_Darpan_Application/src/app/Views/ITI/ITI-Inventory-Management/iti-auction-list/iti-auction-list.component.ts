@@ -124,16 +124,16 @@ export class ITIAuctionListComponent {
   }
 
   async SaveAuctionData() {
-    debugger
-    const selected = this.ItemMasterList.filter((x: any) => x.Selected === true);
+    // debugger
+    // const selected = this.ItemMasterList.filter((x: any) => x.Selected === true);
 
-    selected.forEach((e: any) => {
-      e.Status = this.sSOLoginDataModel.UserID;
-      e.ModifyBy = this.sSOLoginDataModel.UserID;
-    });
+    // selected.forEach((e: any) => {
+    //   e.Status = this.sSOLoginDataModel.UserID;
+    //   e.ModifyBy = this.sSOLoginDataModel.UserID;
+    // });
 
-    this.request.RowsID = selected.map((e: any) => e.ItemDetailsId).join(",");
-    console.log('Get all Ids ==>', this.request.RowsID)
+    // this.request.RowsID = selected.map((e: any) => e.ItemDetailsId).join(",");
+    // console.log('Get all Ids ==>', this.request.RowsID)
 
     try {
       debugger;
@@ -147,12 +147,10 @@ export class ITIAuctionListComponent {
 
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.request.ItemDetailsId = this.ItemDetailsId;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
-
 
       //save
       await this.itiInventoryService.SaveAuctionData(this.request)
@@ -221,17 +219,16 @@ export class ITIAuctionListComponent {
   async ViewandUpdate(content: any, item:any) {
     debugger;
     this.isSubmitted = false;
-    this.ItemDetailsId = item.ItemDetailsId
+    this.request.ItemDetailsId = item.ItemDetailsId
     this.request.isOption = item.IsOption
     this.AvailableQuantity = item.AvailableQuantity
     this.request.AuctionQuantity = item.AvailableQuantity
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
-
   }
 
   CloseModalPopup() {
     this.modalService.dismissAll();
-    //this.requestInv = new TimeTableInvigilatorModel()
+    this.request = new AuctionDetailsModel()
   }
 
   public file!: File;

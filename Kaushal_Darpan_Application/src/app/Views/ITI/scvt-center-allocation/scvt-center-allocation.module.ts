@@ -6,6 +6,7 @@ import { ScvtCenterAllocationComponent } from './scvt-center-allocation.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
     FormsModule,
     ReactiveFormsModule,
     NgMultiSelectDropDownModule.forRoot(),
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
   ]
 })
 export class ScvtCenterAllocationModule { }

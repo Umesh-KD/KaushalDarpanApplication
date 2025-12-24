@@ -27,8 +27,10 @@ export class NodalWorkshopReportComponent {
   public ScholarshipID: number = 0;
   public ID: number = 0;
   public SemesterMasterList: any[] = [];
+  public FinYearList: any[] = [];
   public BranchList: any[] = [];
   public DistrictLisrt: any[] = [];
+  public ZoneList: any[] = [];
   public CategoryList: any[] = [];
   public Isverifed: boolean = false
   public requestSSoApi = new CommonVerifierApiDataModel();
@@ -76,6 +78,7 @@ export class NodalWorkshopReportComponent {
         Remarks: ['', Validators.required],
        
         QuaterID: ['', [DropdownValidators]],
+        FinancialYearID: ['', [DropdownValidators]],
         DistrictID: ['', [DropdownValidators]],
 
 
@@ -93,7 +96,7 @@ export class NodalWorkshopReportComponent {
       this.ScholarshipFormGroup.disable();
     }
     if (
-      this.sSOLoginDataModel.RoleID != 97
+      this.sSOLoginDataModel.RoleID != 100
 
     ) {
       this.ScholarshipFormGroup.disable(); // Disables all form controls
@@ -109,13 +112,69 @@ export class NodalWorkshopReportComponent {
     this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());//student list key
     await this.GetSemesterMatserDDL();
     await this.GetCategoryMatserDDL()
+    await this.GetDivisMatserDDL()
+    await this.GetzonalID()
     await this.GetDistrictMatserDDL()
-
+    this.YearDropdownData('FinancialYear_IIP');
+    
 
     
   }
 
 
+
+
+
+  async GetDivisMatserDDL() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('ZoneHindi')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ZoneList = data['Data'];
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetzonalID() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetZonalID(this.sSOLoginDataModel.UserID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+         
+          if (this.sSOLoginDataModel.RoleID = 100) {
+            this.request.ZoneID = data['Data'][0]['DivisionID'];
+            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.request.ZoneID)
+            this.GetDistrictMatserDDL()
+          }
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   get _ScholarshipFormGroup() { return this.ScholarshipFormGroup.controls; }
 
@@ -172,7 +231,7 @@ export class NodalWorkshopReportComponent {
           }, (error: any) => console.error(error)
           );
       } else {
-        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.sSOLoginDataModel.DepartmentID)
+        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.request.ZoneID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.DistrictLisrt = data['Data'];
@@ -279,6 +338,18 @@ export class NodalWorkshopReportComponent {
   }
 /*  }*/
 
+  YearDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
+  }
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
+  }
+
+
+
   // get detail by id
   async SaveData() {
 
@@ -297,7 +368,7 @@ export class NodalWorkshopReportComponent {
       }
 
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+     // this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
 

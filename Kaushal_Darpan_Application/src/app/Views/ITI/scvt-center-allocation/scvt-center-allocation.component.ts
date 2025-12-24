@@ -215,6 +215,8 @@ export class ScvtCenterAllocationComponent {
     this.searchRequest.TradeID = 0
     this.CenterMasterList = [];
     this.request = new ITICenterAllocationtDataModels();
+    this.TradeList = []
+    this.SelectedInstituteList = []
     this.GetCenterMasterList();
 
 
@@ -637,7 +639,16 @@ export class ScvtCenterAllocationComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
-          this.CenterMasterList = data['Data'];
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State === EnumStatus.Success) {
+            this.toastr.success(this.Message);
+            this.GetCenterCollegeMapList(this.searchRequest.CenterID)
+            this.ResetControl();
+          } else {
+            this.toastr.error(this.ErrorMessage);
+          }
 
           console.log(this.CenterMasterList, "dddddd");
         }, error => console.error(error));

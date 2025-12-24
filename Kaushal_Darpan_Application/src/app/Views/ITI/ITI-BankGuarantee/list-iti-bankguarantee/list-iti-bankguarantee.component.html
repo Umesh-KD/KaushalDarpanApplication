@@ -19,25 +19,60 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a *ngIf="sSOLoginDataModel.RoleID==43" routerLink="/iti-bank-guarantee" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Bank Guarantee</a>
+        <!--*ngIf="sSOLoginDataModel.RoleID==43"-->
+        <a routerLink="/iti-bank-guarantee" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Bank Guarantee</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
 
 
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Name:</label>
-          <input type="text" class="form-input" placeholder="Bank Name" [(ngModel)]="searchRequest.BankName">
+          <input type="text" class="form-input" placeholder="Enter Bank Name" [(ngModel)]="searchRequest.BankName" (ngModelChange)="onBankNameChange($event)">
         </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Guarantee Number:</label>
-          <input type="text" class="form-input" [(ngModel)]="searchRequest.bankGuaranteeNumber">
-        </div>
-
+          <input type="text" class="form-input" placeholder="Enter Bank Guarantee Number" [(ngModel)]="searchRequest.BankGuaranteeNumber">
+        </div>-->
 
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="getTradetblListList()">Search</button>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.status">
+            <option value="0">Pending</option>
+            <option value="1">Active</option>
+            <option value="2">Return</option>
+            
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
+          <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollageId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CollegeMasterList" [value]="item.Id">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            date Wise:
+          </label>
+          <select class="form-select"
+                  [(ngModel)]="searchRequest.dayWise">
+            <option value="0">-- Select Day Wise --</option>
+            <option value="30">30 Day's</option>
+            <option value="15">15 Day's</option>
+            <option value="7">7 Day's</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getbankguaranteeList()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetCancel()">Reset</button>
         </div>
 
@@ -73,37 +108,60 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left">#</th>
-            <th class="text-left">Bank Guarantee Number</th>
-            <th class="text-left">Issue Bank</th>
-            <th class="text-left">Date Of Issue</th>
-            <th class="text-left">Maturity Date</th>
-            <th class="text-left">Duration</th>
-            <th class="text-left">Amount</th>
-            <th class="text-left">Remark</th>
-            <th class="text-left">Bank Agreement Document</th>
-            <th class="text-left">Action</th>
+            <th class="text-center">#</th>
+            <th class="text-center">Bank Guarantee Number</th>
+            <th class="text-center">Bank Name</th>
+            <th class="text-center">College  Name</th>
+            <th class="text-center">Date Of Issue</th>
+            <th class="text-center">Maturity Date</th>
+            <th class="text-center">Duration</th>
+            <th class="text-center">Amount</th>
+            <th class="text-center">Remark</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Bank Agreement Document</th>
+            <th class="text-center">Action</th>
           </tr>
         </thead>
-        <!--{{paginatedInTableData | json}}-->
         <tbody>
           <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText ;let idx=index;">
-            <td>{{(startInTableIndex+1)+idx}}</td>
-            <td>{{item.BankGuaranteeNumber}}</td>
-            <td>{{item.BankName}}</td>
-            <td>{{item.DateOfIssue}}</td>
-            <td>{{item.Maturitydate}}</td>
-            <td>{{item.Duration}}</td>
-            <td>{{item.Amount}}</td>
-            <td>{{item.Remarks}}</td>
+            <td class="text-center">{{(startInTableIndex+1)+idx}}</td>
+            <td class="text-center">{{item.BankGuaranteeNumber}}</td>
+            <td class="text-center">{{item.BankName}}</td>
+            <td class="text-center">{{item.CollageId}}</td>
+            <td class="text-center">{{item.DateOfIssue}}</td>
+            <td class="text-center">{{item.Maturitydate}}</td>
+            <td class="text-center">{{item.Duration}}</td>
+            <td class="text-center">{{item.Amount}}</td>
+            <td class="text-center">{{item.Remarks}}</td>
             <td>
+              <span class="px-2 py-1 rounded text-xs font-semibold"
+                    [ngClass]="
+  item.Status === 1
+    ? 'bg-green-100 text-green-700'
+    : item.Status === 2
+    ? 'bg-red-100 text-red-700'
+    : 'bg-yellow-100 text-yellow-700'
+">
+                {{
+  item.Status === 1
+    ? 'Active'
+    : item.Status === 2
+    ? 'Returned'
+    : 'Pending'
+                }}
+              </span>
+            </td>
+
+            <td class="text-center">
               <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.BankAgreementDocument}}"
                  target="_blank" class="btn bg-primary text-white btn-sm">
                 <i class="ti ti-eye"></i>
               </a>
             </td>
             <td>
-              <a href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
+              </div>
             </td>
           </tr>
         </tbody>
