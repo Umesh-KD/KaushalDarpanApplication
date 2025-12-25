@@ -1663,6 +1663,7 @@ const routes: Routes = [
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
+  { path: 'Views\ITI\Examination\ScvtExamAttendence', loadChildren: () => import('./Views/ITI/Examination/scvt-exam-attendence/scvt-exam-attendence.module').then(m => m.ScvtExamAttendenceModule) },
   
   
 

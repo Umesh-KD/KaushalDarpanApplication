@@ -274,7 +274,7 @@ export class AddItiInvigilatorComponent {
           try {
             //Show Loading
             this.loaderService.requestStarted();
-
+              
             await this.Appointexamierservice.GetInvigilatorList(this.searchrequest)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
