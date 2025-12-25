@@ -1427,6 +1427,8 @@ const routes: Routes = [
       { path: 'NcvtPracticalexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
       { path: '2ndNcvtPracticalexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
 
+      { path: 'ScvtexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
+      { path: '2ndScvtexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
 
 
       { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
