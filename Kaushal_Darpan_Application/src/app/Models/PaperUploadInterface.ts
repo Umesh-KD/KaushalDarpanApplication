@@ -17,6 +17,7 @@ export interface PaperUpload {
   ModifyBy: string;
   ModifyDate: string;
   IPAddress: string;
+
 }
 export interface PaperUploadInterface {
   PaperUploadID: number

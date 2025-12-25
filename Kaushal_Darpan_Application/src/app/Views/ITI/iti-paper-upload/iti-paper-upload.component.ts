@@ -269,11 +269,6 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-
-
-
-
   onPaginationChange(event: PageEvent): void {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1;
@@ -284,16 +279,20 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
   // Simulate the saving of data into the table
   async onSubmit() {
-    const sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    if (this.examForm.valid) {
-      const formData = this.examForm.value as PaperUpload;
 
+
+    const sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    if (this.examForm.valid)
+    {
+      this.examForm.get('Password')?.enable();
+      const formData = this.examForm.value as PaperUpload;
       debugger;
       const Pcode = this.PaperMasterList
         .find(f => f.PaperID == formData.PaperID)
         ?.SubjectCode;
 
-      let obj = {
+      let obj =
+      {
         PaperUploadID: formData.PaperUploadID,
         ExamID: formData.ExamID,
         ExamName: formData.ExamName,
@@ -315,8 +314,8 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         ModifyDate: new Date(),
         PaperCode: Pcode
       };
-
-      try {
+      try
+      {
         await this.apiService.SavePaperUploadData(obj).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.Data == 1) {
@@ -506,11 +505,23 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
   getSteram(event: any): void
   {
-    this.getTradeList(event);
+    this.examForm.get('StreamID')?.setValue(0);
+    this.examForm.get('PaperID')?.setValue(0);
+
+    if (event > 0)
+    {
+      this.getTradeList(event);
+    }
+    else
+    {
+      this.StreamMasterList = [];
+    }
   }
 
 
-  getTradeList(semesterid: number) {
+  getTradeList(semesterid: number)
+  {
+
     this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, 0, 0, semesterid)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

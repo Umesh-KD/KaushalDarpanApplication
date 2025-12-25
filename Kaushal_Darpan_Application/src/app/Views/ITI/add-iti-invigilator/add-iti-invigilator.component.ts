@@ -14,6 +14,7 @@ import { EnumDepartment, EnumStatus } from '../../../Common/GlobalConstants';
 import { AppointmentExaminerDataModel } from '../../../Models/AppointExaminerDataModel';
 import { ItiInvigilatorDatAModel, ItiInvigilatorSearchModel } from '../../../Models/ITI/ItiInvigilatorDataModel';
 import { ITIInvigilatorService } from '../../../Services/ITI/ITIInvigilator/itiinvigilator.service';
+import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 
 
 @Component({
@@ -28,8 +29,8 @@ export class AddItiInvigilatorComponent {
   
 
   @Output() callParentFunction = new EventEmitter<void>();
-
-public TimeTableID:number=0
+  public Isverifed: boolean = false
+  public TimeTableID:number=0
   public isFormSubmitted: boolean = false;
   closeResult: string | undefined;
   public isLoading: boolean = false;
@@ -50,7 +51,13 @@ public TimeTableID:number=0
   public ExaminerSsoidDDL: any = []
   public AppointExamierList: any = []
   public isSubmitted:boolean=false
-/*  public searchRequest = new AppointExaminerSearchModel();*/
+  /*  public searchRequest = new AppointExaminerSearchModel();*/
+  public Post: string = ''
+  public Email: string = ''
+  public MobileNumber: string = ''
+  public Name: string = ''
+  public SSOID: string = ''
+  public requestSSoApi = new CommonVerifierApiDataModel();
   constructor(
     private loaderService: LoaderService,
     private commonMasterService: CommonFunctionService,
@@ -67,11 +74,14 @@ public TimeTableID:number=0
 
     this.AppointExaminerFromGroup = this.formBuilder.group({
 
-      ddlSSOID: ['', [DropdownValidators]],
+     // ddlSSOID: ['', [DropdownValidators]],
       RollNoFrom: ['', [Validators.required]],
       RollNoTo: ['', [Validators.required]],
 
-
+      Name: [''],
+      Email:[''],
+      MobileNumber:[''],
+      SSOID: ['']
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -119,7 +129,7 @@ public TimeTableID:number=0
   //}
 
   async SaveData() {
-
+    debugger
     try {
       this.isSubmitted = true;
       if (this.AppointExaminerFromGroup.invalid) {
@@ -135,6 +145,13 @@ public TimeTableID:number=0
       this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
 
+      this.request.Name = this.AppointExaminerFromGroup.get('Name')?.value
+      this.request.Email = this.AppointExaminerFromGroup.get('Email')?.value
+      this.request.MobileNumber = this.AppointExaminerFromGroup.get('MobileNumber')?.value
+      this.request.SSOID = this.AppointExaminerFromGroup.get('SSOID')?.value
+
+
+      debugger
       //save
       await this.Appointexamierservice.SaveData(this.request)
         .then((data: any) => {
@@ -167,6 +184,8 @@ public TimeTableID:number=0
       }, 200);
     }
   }
+
+
   async GetInvigilatorList() {
     this.AppointExamierList=[]
     this.searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -360,6 +379,66 @@ public TimeTableID:number=0
     }
 
     return true;
+
+  }
+
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
+    debugger
+    this.Isverifed = false
+    if (SSOID == "") {
+      this.toastr.error("Please Enter SSOID");
+      this.SSOID = ''
+      this.MobileNumber = ''
+      this.Email = ''
+      this.Name = ''
+      return;
+    }
+
+    const username = SSOID; // or hardcoded 'SIDDHA.AZAD'
+    const appName = 'madarsa.test';
+    const password = 'Test@1234';
+
+    /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
+
+    this.requestSSoApi.SSOID = username;
+    this.requestSSoApi.appName = appName;
+    this.requestSSoApi.password = password;
+
+
+
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        let response = JSON.parse(JSON.stringify(data));
+        if (response?.Data) {
+
+          let parsedData = JSON.parse(response.Data); // parse string inside Data
+          if (parsedData != null) {
+            this.Name = parsedData.displayName;
+            this.MobileNumber = parsedData.mobile;
+            this.SSOID = parsedData.SSOID;
+            this.Email = parsedData.mailPersonal;
+            this.Isverifed = true
+
+          }
+          else {
+            this.toastr.error("Record Not Found");
+            return;
+          }
+
+          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
 
   }
 

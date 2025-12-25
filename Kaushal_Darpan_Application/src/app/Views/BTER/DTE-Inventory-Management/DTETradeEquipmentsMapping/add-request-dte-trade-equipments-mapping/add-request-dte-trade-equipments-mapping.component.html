@@ -237,7 +237,7 @@
                 || sSOLoginDataModel.RoleID == EnumRole.AdminNon
                 || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Status</th>
             <th>Description / Remarks</th>
-            <th>Indent Document</th>
+            <!-- <th>Indent Document</th> -->
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -270,9 +270,9 @@
               {{ item.PrincipalStatus}}
             </td>
             <td align="left">{{ item.Remarks}}</td>
-            <td align="left"><a *ngIf="item.FileName" href="{{ appsettingConfig.StaticFileRootPathURL + 'IssuesIndent/' + item.FileName }}" class="btn bg-primary text-white m-0" target="_blank">
+            <!-- <td align="left"><a *ngIf="item.FileName" href="{{ appsettingConfig.StaticFileRootPathURL + 'IssuesIndent/' + item.FileName }}" class="btn bg-primary text-white m-0" target="_blank">
   {{item.FileName}}
-</a></td>
+</a></td> -->
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin

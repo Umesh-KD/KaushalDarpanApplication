@@ -29,24 +29,32 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div *ngIf="sSOLoginDataModel.RoleID !== 201 && sSOLoginDataModel.RoleID !== 7 && sSOLoginDataModel.RoleID !== 13">
+        <div *ngIf="sSOLoginDataModel.RoleID !== EnumRole.StoreKeeper && 
+            sSOLoginDataModel.RoleID !== EnumRole.Principal && 
+            sSOLoginDataModel.RoleID !== EnumRole.PrincipalNon &&
+            sSOLoginDataModel.RoleID !== EnumRole.BTER_StoreIncharge">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             College
           </label>
           <select class="form-select"
                   [(ngModel)]="Searchrequest.CollegeId"
-                  [disabled]="sSOLoginDataModel.RoleID === 13 || sSOLoginDataModel.RoleID === 7 || sSOLoginDataModel.RoleID === 2">
+                  [disabled]="sSOLoginDataModel.RoleID === EnumRole.Principal || 
+                    sSOLoginDataModel.RoleID === EnumRole.PrincipalNon || 
+                    sSOLoginDataModel.RoleID === EnumRole.Admin ||
+                    sSOLoginDataModel.RoleID === EnumRole.AdminNon ||
+                    sSOLoginDataModel.RoleID === EnumRole.BTER_StoreIncharge">
             <option [value]="0">Choose Option</option>
             <option *ngFor="let item of CollegeDDLList" [value]="item.InstituteID">
               {{ item.InstituteName }}
             </option>
           </select>
         </div>
-<div>
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item Type:</label>
           <select class="form-select"
                   [(ngModel)]="Searchrequest.ItemType"
                   (change)="GetEquipmentDDL()"> 
+            <option [value]="2">--- All ---</option>
             <option [value]="1">Consumable</option>
             <option [value]="0">Permanent</option>
           </select>
@@ -165,6 +173,7 @@
                   || sSOLoginDataModel.RoleID == EnumRole.AdminNon
                   || sSOLoginDataModel.RoleID == EnumRole.DTELateral
                   || sSOLoginDataModel.RoleID == EnumRole.Principal
+                  || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge
                   || (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.Status == 0)
                   || (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.IsConsume == 1)">
                 {{ item.AvailableQuantity }}
@@ -204,9 +213,10 @@
                         || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
                         || sSOLoginDataModel.RoleID == EnumRole.AdminNon
                         || sSOLoginDataModel.RoleID == EnumRole.DTELateral
-                        || sSOLoginDataModel.RoleID == EnumRole.Principal"
+                        || sSOLoginDataModel.RoleID == EnumRole.Principal
+                        || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge"
                         class="btn btn-sm text-white"
-                        (click)="(item.Status == 0 || item.Status != 2) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
+                        (click)="(item.Status == 0 || !(item.Status == 2)) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
                         [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
                         [title]="item.Status == 1 ? 'Approved' : 'Accept'">
                   {{ item.Status == 0 || item.Status == '0' || item.Status == null ? 'Pending' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted'  : 'Pending' }}
@@ -219,7 +229,8 @@
                         || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
                         || sSOLoginDataModel.RoleID == EnumRole.AdminNon
                         || sSOLoginDataModel.RoleID == EnumRole.DTELateral
-                        || sSOLoginDataModel.RoleID == EnumRole.Principal)
+                        || sSOLoginDataModel.RoleID == EnumRole.Principal
+                        || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge)
                         && (item.Status == '0' || item.Status == null || item.Status != '2')"
                         class="btn btn-sm text-white"
                         (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"

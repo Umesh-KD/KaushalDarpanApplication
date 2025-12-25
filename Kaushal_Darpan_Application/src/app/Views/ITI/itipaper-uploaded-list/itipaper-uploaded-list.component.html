@@ -29,7 +29,6 @@
             </div>
           </div>
         </div>
-
         <div>
           <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Trade </label>
           <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedStream">
@@ -39,7 +38,6 @@
             }
           </select>
         </div>
-
         <div>
           <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Semester/Year</label>
           <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
@@ -90,10 +88,9 @@
 
           <!-- PaperID Column -->
           <!--<ng-container matColumnDef="PaperType">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Paper Type</th>
-            <td mat-cell *matCellDef="let element">{{ element.PaperType }}</td>
-          </ng-container>-->
-
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Paper Type</th>
+    <td mat-cell *matCellDef="let element">{{ element.PaperType }}</td>
+  </ng-container>-->
           <!-- PaperDate Column -->
           <ng-container matColumnDef="PaperDate">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Paper Download Date & Time</th>
@@ -101,11 +98,19 @@
             <td mat-cell *matCellDef="let element"> {{ element.PaperDate | date: 'MMM d, y HH:mm' }} </td>
           </ng-container>
 
+          <ng-container matColumnDef="PaperCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Paper Code</th>
+            <!--<td mat-cell *matCellDef="let element">{{ element.PaperCode }}</td>-->
+          <td mat-cell *matCellDef="let element"> {{ element.PaperCode }} </td>
+          </ng-container>
+
+          
+
           <!-- CenterCode Column -->
           <!--<ng-container matColumnDef="CenterCode">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>CenterCode</th>
-            <td mat-cell *matCellDef="let element">{{ element.CenterCode }}</td>
-          </ng-container>-->
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>CenterCode</th>
+    <td mat-cell *matCellDef="let element">{{ element.CenterCode }}</td>
+  </ng-container>-->
 
           <ng-container matColumnDef="CenterCode">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Center Detail</th>
@@ -187,7 +192,7 @@
     <div class="card">
       <div class="card-header flex justify-between  items-center">
         <b><i class="fa fa-plus"></i> Center Detail</b>
-        <button type="button" class="btn btn-primary" style="margin-left: 625px;" title="Export Center Detail" (click)="exportToExcelCenterDetail()">
+        <button type="button" class="btn btn-primary" style="margin-left:auto;" title="Export Center Detail" (click)="exportToExcelCenterDetail()">
           <i class="fa fa-download"></i> Download
         </button>
         <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
