@@ -194,7 +194,7 @@
             <option value="0">--Choose Room Type--</option>
             <option *ngFor="let item of RoomTypeList" [value]="item.RoomType">{{item.RoomTypeName}}</option>
           </select>
-          <small>(1 Bed, 2 Bed, 3 Bed, 4 Bed)</small>
+          <small>(1 Bed, 2 Bed (sharing), 3 Bed (sharing), 4 Bed (sharing))</small>
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomType.errors" class="text-danger">
             <p *ngIf="!_IIPMasterFormGroup.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
