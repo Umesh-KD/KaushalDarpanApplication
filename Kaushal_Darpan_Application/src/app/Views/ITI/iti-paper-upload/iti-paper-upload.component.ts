@@ -173,6 +173,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     );
     if (this.PaperID > 0) {
       this.getRecordByID(this.PaperID);
+      this.examForm.get('Password')?.disable()
     }
    
   }
@@ -332,7 +333,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       {
         await this.apiService.SavePaperUploadData(obj).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.Data == 1) {
+          if (data.Data == 1 || data.Data == 2) {
             this.toastr.success(data.Message);
             //this.GetAllPaperUploadData();
             this.routers.navigate(['/ITIPaperUploaded-List'])
