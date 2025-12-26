@@ -497,6 +497,15 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  async OnRoute(PaperUploadID: number) {
+    this.routers.navigate(
+      ['/iti-paper-upload'],
+      { queryParams: { PaperUploadID } }
+    );
+  }
+
+
 }
 
 

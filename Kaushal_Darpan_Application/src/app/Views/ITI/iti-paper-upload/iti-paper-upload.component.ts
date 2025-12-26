@@ -57,6 +57,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   isAllSelected = false;   // new addded 18062025
+  public PaperID:number=0
 
   CenterListPaperWise: any[] = [];
   constructor(private fb: FormBuilder,
@@ -68,6 +69,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
     private routers: Router,
+    private Activeroute: ActivatedRoute,
     private documentDetailsService: DocumentDetailsService, private swal: SweetAlert2) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetAllPaperUploadData();
@@ -102,6 +104,9 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       selectedStream: ['all'],
       selectedSemester: ['all'],
     });
+
+
+   
 
     this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
       .then((data: any) => {
@@ -162,7 +167,14 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     //this.filterForm.valueChanges.subscribe((values) => {
     //  this.applyFilter(values);
     //});
-    //this.getRecordByID(3);
+    debugger
+    this.PaperID = Number(
+      this.Activeroute.snapshot.queryParamMap.get('PaperUploadID') ?? 0
+    );
+    if (this.PaperID > 0) {
+      this.getRecordByID(this.PaperID);
+    }
+   
   }
 
   ngAfterViewInit(): void {
@@ -643,7 +655,14 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       {
         data = JSON.parse(JSON.stringify(data));
         this.fillEditData(data.Data[0]);
+        debugger
+        if (!this.documentDetails || this.documentDetails.length === 0) {
+          this.documentDetails = [{} as DocumentDetailsModel];
+        }
 
+        this.documentDetails[0].FileName = data?.Data?.[0]?.FileName ?? '';
+      
+        console.log(this.documentDetails[0].FileName)
       });
     } catch (error) {
       console.error(error);
@@ -651,7 +670,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   }
 
 async  fillEditData(editData: any) {
-    debugger;
+
 
     this.examForm.patchValue({
       SemesterID: editData.SemesterID
@@ -682,7 +701,8 @@ async  fillEditData(editData: any) {
       PaperDate: editData.PaperDate,
       Active: editData.Active,
       CenterCode: this.convertCenterCode(editData.CenterCode),
-       // IMPORTANT for mat-select multiple
+      // IMPORTANT for mat-select multiple
+
     });
   }
 
