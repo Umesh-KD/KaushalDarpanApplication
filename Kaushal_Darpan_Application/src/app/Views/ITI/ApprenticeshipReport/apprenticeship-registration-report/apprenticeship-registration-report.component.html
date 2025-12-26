@@ -96,7 +96,7 @@
               </label>
 
               <div>
-                <input type="number" class="form-input" placeholder="Name of Registration" formControlName="Nameofapprentices">
+                <input type="text" class="form-input" placeholder="Name of Registration" formControlName="Nameofapprentices">
               </div>
               <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Nameofapprentices')?.hasError('required')
                    && ApprenticeshipReportFormGroup.get('Nameofapprentices')?.touched">

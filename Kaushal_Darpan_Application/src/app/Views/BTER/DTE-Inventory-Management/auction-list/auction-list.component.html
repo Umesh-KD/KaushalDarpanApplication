@@ -119,7 +119,7 @@
 
   <div class="card">
     <div class="card-header flex justify-between  items-center">
-      <b><i class="fa fa-plus"></i>Auction  For Not-Working</b>
+      <b><i class="fa fa-plus"></i>Auction For Not-Working</b>
       <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
     </div>
     <div class="card-body">
@@ -150,7 +150,7 @@
             Auction Date : <span class="StarMarking">*</span>
           </label>
           <input class="form-input" formControlName="txtAuctionDate" placeholder="Auction Date" type="date"
-                 id="txtAuctionDate" [(ngModel)]="request.AuctionDate" [attr.min]="minDate">
+                 id="txtAuctionDate" [(ngModel)]="request.AuctionDate" [max]="minDate">
           <div *ngIf="isSubmitted&&_AuctionFormGroup.txtAuctionDate.errors" class="text-danger">
             <p *ngIf="_AuctionFormGroup.txtAuctionDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>

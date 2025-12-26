@@ -103,6 +103,7 @@ export class GuestRoomDetailsComponent {
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
 
   async saveData() {
+    debugger
     this.isSubmitted = true;
 
     if (this.RequestFormGroup.invalid) {
@@ -123,7 +124,7 @@ export class GuestRoomDetailsComponent {
       const allowedQuantity = room?.RoomQuantity ?? 0;
 
       // Check for duplicate room entry based on GuestHouseID, RoomTypeID, and RoomNo
-      const isDuplicate = this.RoomDetailsList.some((room: { GuestHouseID: number; RoomTypeID: number; RoomNo: number; GuestRoomDetailID: number }) =>
+      const isDuplicate = this.RoomDetailsList?.some((room: { GuestHouseID: number; RoomTypeID: number; RoomNo: number; GuestRoomDetailID: number }) =>
         room.GuestHouseID === Number(this.request.GuestHouseID) &&
         room.RoomTypeID === Number(this.request.RoomTypeID) &&
         room.RoomNo === Number(this.request.RoomNo) &&
@@ -136,7 +137,7 @@ export class GuestRoomDetailsComponent {
       }
 
       // Count existing rooms with the same GuestHouseID and RoomTypeID
-      const existingCount = this.RoomDetailsList.filter((room: { GuestHouseID: number; RoomTypeID: number }) =>
+      const existingCount = this.RoomDetailsList?.filter((room: { GuestHouseID: number; RoomTypeID: number }) =>
         room.GuestHouseID === Number(this.request.GuestHouseID) &&
         room.RoomTypeID === Number(this.request.RoomTypeID)
       ).length;
@@ -293,7 +294,7 @@ export class GuestRoomDetailsComponent {
     let RoomTypeList = this.GuestRoomList.filter(
       (x: { GuestHouseID: number }) =>
         x.GuestHouseID === Number(items.GuestHouseID));
-    if (RoomTypeList.length > 0) {
+    if (RoomTypeList?.length > 0) {
       this.RoomTypeList = RoomTypeList;
       this.RequestFormGroup.patchValue({
         guestRoomID: items.GuestHouseID,
@@ -533,7 +534,7 @@ export class GuestRoomDetailsComponent {
       let RoomTypeList = this.GuestRoomList.filter(
         (x: { GuestHouseID: number }) =>
           x.GuestHouseID === Number(this.request.GuestHouseID));
-      if (RoomTypeList.length > 0) {
+      if (RoomTypeList?.length > 0) {
         this.RoomTypeList = RoomTypeList;
       } else {
         this.toastr.warning("Room Type Not Available !")
@@ -571,10 +572,10 @@ export class GuestRoomDetailsComponent {
   getRoomTypeName(type: number): string {
     switch (type) {
       case 172: return '1 Bed';
-      case 173: return '2 Bed';
-      case 174: return '3 Bed';
-      case 175: return '4 Bed';
-      default: return 'Dormitory/Hall';
+      case 173: return '2 Bed (Sharing)';
+      case 174: return '3 Bed (Sharing)';
+      case 175: return '4 Bed (Sharing)';
+      default: return 'Dormitory/Hall (Sharing)';
     }
   }
 }

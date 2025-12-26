@@ -29,9 +29,41 @@
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-2 gap-3">
 
 
+
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID:<span class="StarMarking">*</span> </label>
+                <input class="form-input" type="text" formControlName="SSOID" placeholder="Enter SSOID" [(ngModel)]="SSOID" [ngModelOptions]="{standalone: true}" />
+              </div>
+
+              <div class="items-center ms-4">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SSOIDGetSomeDetails(SSOID)">GetDetails</button>
+
+              </div>
+
+
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name: </label>
+                <input readonly class="form-input" type="text" formControlName="Name" [ngModelOptions]="{standalone: true}" [(ngModel)]="Name" />
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email: </label>
+                <input readonly class="form-input" type="text" formControlName="Email" [ngModelOptions]="{standalone: true}" [(ngModel)]="request.Email" />
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No: </label>
+                <input readonly class="form-input" type="text" formControlName="MobileNumber" [ngModelOptions]="{standalone: true}" [(ngModel)]="MobileNumber" />
+              </div>
+
+
+
+
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No from:  <span class="StarMarking">*</span> </label>
-                <input   (keypress)="numberOnly($event)" type="text" class="form-input" placeholder="Enter Roll No From" formControlName="RollNoFrom" [(ngModel)]="request.RollNoFrom">
+                <input (keypress)="numberOnly($event)" type="text" class="form-input" placeholder="Enter Roll No From" formControlName="RollNoFrom" [(ngModel)]="request.RollNoFrom">
                 <div *ngIf="isSubmitted && _AppointExaminerFromGroup.RollNoFrom.errors" class="text-danger">
                   <p *ngIf="_AppointExaminerFromGroup.RollNoFrom.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -39,7 +71,7 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No To: <span class="StarMarking">*</span></label>
-                <input   (keypress)="numberOnly($event)" type="text" class="form-input" placeholder="Enter Roll No To" formControlName="RollNoTo" [(ngModel)]="request.RollNoTo">
+                <input (keypress)="numberOnly($event)" type="text" class="form-input" placeholder="Enter Roll No To" formControlName="RollNoTo" [(ngModel)]="request.RollNoTo">
 
                 <div *ngIf="isSubmitted && _AppointExaminerFromGroup.RollNoTo.errors" class="text-danger">
                   <p *ngIf="_AppointExaminerFromGroup.RollNoTo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -48,17 +80,6 @@
               </div>
 
 
-              <div>
-                <label>Staff <span class="StarMarking">*</span></label>
-                <select class="form-select" formControlName="ddlSSOID" [(ngModel)]="request.StaffID">
-                  <option value="0">--All--</option>
-                  <option *ngFor="let item of assignedInstitutes" [value]="item.StaffID">{{item.Name}}</option>
-
-                </select>
-                <div *ngIf="isSubmitted && _AppointExaminerFromGroup.ddlSSOID.errors" class="text-danger">
-                  <p *ngIf="!_AppointExaminerFromGroup.ddlSSOID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
-                </div>
-              </div>
 
               <div class="items-center ms-4">
                 <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="SaveData()">Submit</button>

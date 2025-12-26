@@ -27,7 +27,7 @@ export class DTEItemsSearchModel {
   public CollegeId: number = 0;
   public OfficeID: number = 0;
   public StatusID: number = 0;
-  public ItemType: number = 0;
+  public ItemType: number = 2;
   public StaffID?: number = 0;
 }
 
@@ -159,6 +159,8 @@ export class ItemsDetails {
   public TransactionID: number = 0;
   public isOption: boolean=false;
   public AuctionStatus: number = 0;
+  public UsedQuantity?: number = 0;
+  public IssuedId?: number = 0;
 }
 export class itemReturnModel {
   public ItemCount: number = 0;
