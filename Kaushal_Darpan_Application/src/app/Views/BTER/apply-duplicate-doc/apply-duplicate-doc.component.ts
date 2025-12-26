@@ -17,6 +17,13 @@ import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
 import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { ApplyDuplicateDocService } from '../../../Services/ApplyDuplicateDoc/ApplyDuplicateDoc.service';
+import {StudentService} from '../../../Services/Student/student.service';
+import { DownloadMarksheetSearchModel } from '../../../Models/DownloadMarksheetDataModel';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { ReportService } from '../../../Services/Report/report.service';
+import { HttpClient } from '@angular/common/http';
+import { StudentDetailsModel } from '../../../Models/StudentDetailsModel';
+import { StudentSearchModel } from '../../../Models/StudentSearchModel';
 
 @Component({
   selector: 'app-apply-duplicate-doc',
@@ -35,11 +42,13 @@ export class ApplyDuplicateDocComponent implements OnInit {
   public isSubmitted: boolean = false;
   closeResult: string | undefined;
   public request = new ApplyDuplicateDocument();
+  public studentInfo=new StudentSearchModel();
   public DepartmentList: any = [];
   public FeesAmount: any = [];
   public SemesterMasterList: any[] = [];
   public DocumentTypeList: any[] = [];
   public DocumentTypeList1: any[] = [];
+  public SessionList:any[]=[];
   public PaymentDetailtList: any = [];
   public sSOLoginDataModel = new SSOLoginDataModel();
   emitraRequest = new EmitraRequestDetails();
@@ -54,6 +63,9 @@ export class ApplyDuplicateDocComponent implements OnInit {
   public InstituteMasterDDLList: any = [];
   public departmentFlag: string = 'BTER';
   public saveFlag: number=0;
+  public isMarksheet:boolean=false;
+  public isMigration:boolean=false;
+  public downloadReq = new DownloadMarksheetSearchModel();
 
 
   constructor(private fb: FormBuilder,
@@ -68,19 +80,25 @@ export class ApplyDuplicateDocComponent implements OnInit {
     private commonFunctionService: CommonFunctionService,
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
-    private sMSMailService: SMSMailService,) {
-
-  }
+    private sMSMailService: SMSMailService,
+    private reportService: ReportService,
+    public appsettingConfig: AppsettingService,
+    private http: HttpClient,
+    private Student:StudentService
+  )  { }
 
   async ngOnInit() {
     this.GrievanceFormGroup = this.formBuilder.group(
       {
         ddlDocumentID: ['', [DropdownValidators]],
-        SemesterID: ['', [DropdownValidators]],
+        // SemesterID: ['', [DropdownValidators]],
+        SemesterID: [''],
         ddlDepartmentID: ['', [DropdownValidators]],
-        ApplicationNo: [''],
+        ApplicationNo: [{value:'',disabled:true}],  
+        // ApplicationNo: [{ value: '', disabled: true }]
         FeeAmount: [ { value: '', disabled: true }],
         ddlInstituteID: ['', [DropdownValidators]],
+        ddlSessionID:['']
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.StudentName = this.sSOLoginDataModel.DisplayName
@@ -91,6 +109,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     //this.loadDropdownData('QueryFor');
     await this.GetDocumentTypeDDL();
     await this.GetSemesterMatserDDL();
+    await this.GetStudentDataBy_StudID();
 
     await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
      debugger;
@@ -157,14 +176,26 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
   FeeAmount(MasterCode: string): void {
     debugger
+    // 1336 ->marksheet 
+    //1337 -> migration
+    
+    if(this.request.DocumentID==1336)
+    {
+      this.isMarksheet=true;
+      this.isMigration=false;
+    }
+    else{
+      this.isMarksheet=false;
+      this.isMigration=true;
+    }
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
       
       switch (MasterCode) {
         case 'DuplicateDocStudentWise':
           this.FeesAmount = data['Data'];
           this.request.FeeAmount = this.FeesAmount[0].FeeAmount;
-          this.request.ApplicationNo=this.FeesAmount[0].ApplicationNo;
-          this.request.SemesterID=this.FeesAmount[0].SemesterID;
+          // this.request.ApplicationNo=this.FeesAmount[0].ApplicationNo;
+          // this.request.SemesterID=this.FeesAmount[0].SemesterID;
           this.request.ConfigurationTypeID=this.FeesAmount[0].TypeID;
           // this.GrievanceFormGroup.get('FeeAmount')?.setValue(this.FeesAmount[0].FeeAmount);
           // this.GrievanceFormGroup.get('ApplicationNo')?.setValue(this.FeesAmount[0].ApplicationNo);
@@ -174,6 +205,41 @@ export class ApplyDuplicateDocComponent implements OnInit {
           break;
       }
     });
+  }
+
+  async OnSemChange() {
+    debugger
+    // 1336 ->marksheet 
+    //1337 -> migration
+    if(this.request.DocumentID==1336)
+    {
+      this.isMarksheet=true;
+      this.GrievanceFormGroup.get('ddlSessionID')?.setValidators([DropdownValidators]);
+    }
+    else{
+      this.isMarksheet=false;
+      this.GrievanceFormGroup.get('ddlSessionID')?.clearValidators();
+      this.GrievanceFormGroup.get('ddlSessionID')?.reset();
+    }
+    this.GrievanceFormGroup.get('ddlSessionID')?.updateValueAndValidity();
+    
+    if(this.isMarksheet)
+    {
+          // GetStudentDMarshkeetSession(SemesterID: number=0, DepartmentID: number = 0, StudentID: number = 0) 
+        await this.applyDuplicateDocService.GetStudentDMarshkeetSession(this.request.SemesterID ,this.sSOLoginDataModel.StudentID,this.sSOLoginDataModel.DepartmentID).then((data: any) => {       
+            data=JSON.parse(JSON.stringify(data));
+            console.log(data);
+            this.SessionList=data.Data;
+            console.log("sessionlist" ,this.SessionList);
+              // this.FeesAmount = data['Data'];
+              // this.request.FeeAmount = this.FeesAmount[0].FeeAmount;
+              // this.request.ApplicationNo=this.FeesAmount[0].ApplicationNo;
+              // this.request.SemesterID=this.FeesAmount[0].SemesterID;
+              // this.request.ConfigurationTypeID=this.FeesAmount[0].TypeID;
+        });
+
+    }
+
   }
 
     async openModalGenerateOTP(content: any, item: ApplyDuplicateDocument) {
@@ -383,7 +449,10 @@ export class ApplyDuplicateDocComponent implements OnInit {
     }
   }
 
+
+
   async GetSemesterMatserDDL() {
+    debugger;
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.SemesterMaster()
@@ -402,6 +471,42 @@ export class ApplyDuplicateDocComponent implements OnInit {
       }, 200);
     }
   }
+
+
+  async GetStudentDataBy_StudID() {
+    debugger;
+    try {
+      this.studentInfo.StudentID=this.sSOLoginDataModel.StudentID;
+      this.studentInfo.DepartmentID=this.sSOLoginDataModel.DepartmentID;
+      
+      this.loaderService.requestStarted();
+
+      await this.Student.GetStudentDataBy_StudID(this.studentInfo)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          
+          const student = data['Data']?.[0];
+
+          if (student?.ApplicationID) {
+            this.request.ApplicationNo = student.ApplicationID;
+          } else {
+            this.request.ApplicationNo = student?.EnrollmentNo;
+          }
+
+          // this.SemesterMasterList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async GetStudentApplyDuplicateDocumentList() {
     try {
       this.request.StudentID= this.sSOLoginDataModel.StudentID;
@@ -426,6 +531,17 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
   async proceedToSave() {
     debugger
+    if(!this.isMigration){
+      this.GrievanceFormGroup.get('SemesterID')?.setValidators([DropdownValidators]);
+    }
+    else{
+     
+      this.GrievanceFormGroup.get('SemesterID')?.clearValidators();
+      this.GrievanceFormGroup.get('SemesterID')?.reset();
+    }
+
+    this.GrievanceFormGroup.get('SemesterID')?.updateValueAndValidity();
+    
     this.loaderService.requestStarted();
     this.isLoading = true; 
     try {
@@ -435,10 +551,12 @@ export class ApplyDuplicateDocComponent implements OnInit {
        this.request.SemesterID= this.GrievanceFormGroup.value.SemesterID;
        this.request.DepartmentID= this.sSOLoginDataModel.DepartmentID; //this.GrievanceFormGroup.value.ddlDepartmentID;
        this.request.InstituteID= this.GrievanceFormGroup.value.ddlInstituteID;
-       this.request.ApplicationNo= this.GrievanceFormGroup.value.ApplicationNo;
+       this.request.ApplicationNo=  this.request.ApplicationNo;//this.GrievanceFormGroup.value.ApplicationNo;
        this.request.FeeAmount= this.request.FeeAmount; //this.GrievanceFormGroup.value.FeeAmount;
        this.request.createdBy= this.sSOLoginDataModel.UserID;
        this.request.modifyBy= this.sSOLoginDataModel.UserID;
+       this.request.EndTermID=this.sSOLoginDataModel.EndTermID;
+      //  this.request.SessionID=
        this.request.IsActive= true;
        this.request.IsDelete= false;
        this.request.IsPayment= false; 
@@ -476,7 +594,8 @@ export class ApplyDuplicateDocComponent implements OnInit {
     //Set Parameters for emitra
     this.emitraRequest.Amount = Number(this.request.FeeAmount);
     this.emitraRequest.ApplicationIdEnc = this.request.ApplicationID.toString();
-    this.emitraRequest.ServiceID = this.request.ServiceID.toString();
+    this.emitraRequest.ServiceID ="2920";
+    // -- this.request.ServiceID.toString();
     this.emitraRequest.ID = this.request?.UniqueServiceID ?? 0;
     this.emitraRequest.UserName = this.request.StudentName;
     this.emitraRequest.MobileNo = this.request.MobileNo;
@@ -484,8 +603,8 @@ export class ApplyDuplicateDocComponent implements OnInit {
     this.emitraRequest.SemesterID = this.GrievanceFormGroup.value.SemesterID;
     this.emitraRequest.ExamStudentStatus = 0;
     this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
-    this.emitraRequest.DepartmentID = this.request.DepartmentID;
-    this.emitraRequest.CourseTypeID = this.request.CourseTypeID;
+    this.emitraRequest.DepartmentID =  1// this.request.DepartmentID;
+    this.emitraRequest.CourseTypeID =  1 //this.request.CourseTypeID;
     this.emitraRequest.TypeID = EnumConfigurationType.DuplicateDocument;
     this.emitraRequest.FeeFor = EnumFeeFor.DuplicateDocument;
     this.emitraRequest.InstituteIDEnc= this.GrievanceFormGroup.value.ddlInstituteID;
@@ -558,6 +677,117 @@ export class ApplyDuplicateDocComponent implements OnInit {
     document.body.removeChild(form);
   }
 
+
+  // async DownloadMarksheet(row: any) {
+  //   try {
+  //     debugger;
+  //     this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //     this.downloadReq.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
+  //     this.downloadReq.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //     this.downloadReq.StudentID = row.Student_Id;
+  //     this.downloadReq.SemesterID = row.Semester_ID;
+  //     this.downloadReq.ResultTypeID = 1//row.Document_ID;
+  //     this.downloadReq.IsRevised = 0; //row.IsRevised;
+  //     this.downloadReq.IsReval = false ; //row.IsReval;
+  //     console.log(JSON.stringify(this.downloadReq),'SearchRequestData')
+  //     const requestArray = [this.downloadReq];
+  //     this.loaderService.requestStarted();
+
+  //     await this.reportService.DownloadMarksheet(this.downloadReq)
+  //       .then((data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         console.log(data, "Data");
+  //         if (data.State == EnumStatus.Success) {
+  //           this.DownloadFile(data.Data, 'file download');
+  //         }
+  //         else {
+  //           this.toastr.error(data.ErrorMessage)
+  //           //    data.ErrorMessage
+  //         }
+  //       }, (error: any) => console.error(error)
+  //       );
+  //   }
+  //   catch (ex) {
+  //     console.log(ex);
+  //   }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
+
+  async DownloadDuplicateMarksheet(element: any) {
+    debugger;
+    try {
+      this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.downloadReq.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
+      this.downloadReq.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.downloadReq.StudentID = element.Student_Id;
+      this.downloadReq.SemesterID = element.Semester_ID;
+      this.downloadReq.RequestEndTerm=element.RequestEndTerm;
+      
+      this.downloadReq.ResultTypeID = 1 // element.ResultTypeID;
+      this.downloadReq.IsRevised = 0 //element.IsRevised;
+      this.downloadReq.IsReval = false; //element.IsReval;
+      this.loaderService.requestStarted();
+
+      await this.reportService.DownloadDuplicateMarksheet(this.downloadReq)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data, "Data");
+          if (data.State == EnumStatus.Success) {
+            this.DownloadFile(data.Data);
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+            //    data.ErrorMessage
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  // DownloadFile(FileName: string, DownloadfileName: any): void {
+
+  //   const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+  //   // Fetch the file as a blob
+  //   this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+  //     const downloadLink = document.createElement('a');
+  //     const url = window.URL.createObjectURL(blob);
+  //     downloadLink.href = url;
+  //     downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
+  //     downloadLink.click();
+  //     // Clean up the object URL
+  //     window.URL.revokeObjectURL(url);
+  //   });
+  // }
+
+  DownloadFile(fileName: string): void {
+    const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${fileName}`;
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe(blob => {
+      const link = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      link.href = url;
+      link.download = this.generateFileName('pdf');
+      link.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+
+  generateFileName(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    return `file_${timestamp}.${extension}`;
+  }
   //async ShowAllData() {
   //  //this.isSubmitted = true;
   //  //alert(this.sSOLoginDataModel.StudentID);

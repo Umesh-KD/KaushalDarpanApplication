@@ -27,6 +27,7 @@ import { BterAllotmentDocumentListModel } from '../../Models/BterAllotmentReport
 import { StudentAdmitCardDownloadModel } from '../../Models/GenerateRollDataModels';
 import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 import { THTE_DropdownDataModel } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { StudentDetailsModel } from '../../Models/StudentDetailsModel';
 
 
 @Injectable({
@@ -2093,5 +2094,15 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetStudentDataBy_StudID(request:StudentDetailsModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetStudentDataBy_StudID", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
 }

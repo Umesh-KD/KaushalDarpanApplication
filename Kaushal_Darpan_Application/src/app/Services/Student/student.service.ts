@@ -50,6 +50,15 @@ export class StudentService
       ).toPromise();
   }
 
+  public async GetStudentDataBy_StudID(searchRequest: StudentSearchModel)
+  {
+    const body = JSON.stringify(searchRequest);
+ 
+    return await this.http.post(`${this.APIUrl}/GetStudentDataBy_StudID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async GetStudentMeritinfo(searchRequest: StudentSearchModel) {
     const body = JSON.stringify(searchRequest);
