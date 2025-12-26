@@ -145,4 +145,24 @@ export class ITIInvigilatorService {
       ).toPromise();
   }
 
+
+  public async GetTheoryStudentsByRollRangeAsync(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetTheoryStudentsByRollRange`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  public async SaveIsPresentData(updateRequest: any) {
+    var body = JSON.stringify(updateRequest);
+    return await this.http.post(`${this.APIUrl}/SaveIsPresentData/`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 }

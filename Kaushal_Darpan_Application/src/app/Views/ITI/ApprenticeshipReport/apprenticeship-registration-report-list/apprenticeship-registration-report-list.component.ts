@@ -28,6 +28,9 @@ import { ITIApprenticeshipModule } from '../../ITI-Apprenticeship/iti-apprentice
 export class ApprenticeshipRegistrationReportList {
   public TradeList: any = [];
   public DataList: any = [];
+  public FinYearList: any = [];
+  public DistrictLisrt: any = [];
+  public ZoneList: any = [];
   public Table_SearchText: string = '';
   isAllSelected = false;
   @ViewChild(MatSort) sort!: MatSort;
@@ -45,6 +48,12 @@ export class ApprenticeshipRegistrationReportList {
   public sortInTableDirection: string = 'asc';
 
   public totalInTablePage: number = 0;
+  public FinancialYearID:number=0
+  public MonthID:number=0
+  public ZoneID:number=0
+  public DistrictID:number=0
+  public TypeID:number=0
+
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -73,8 +82,11 @@ export class ApprenticeshipRegistrationReportList {
     else {
       this._Userid = this.ssoLoginDataModel.UserID
     }
-
+    await this.GetDivisMatserDDL()
+    await this.GetzonalID()
+    this.GetDistrictMatserDDL();
     this.GetReportAllData();
+    this.YearDropdownData('FinancialYear_IIP');
   }
 
 
@@ -82,12 +94,22 @@ export class ApprenticeshipRegistrationReportList {
     debugger;
     try {
       // this.loaderService.requestStarted();
+      if (this.ssoLoginDataModel.RoleID == 97) {
+        this.DistrictID = this.ssoLoginDataModel.DistrictID
+      }
 
       let obj = {
         EndTermID: this.ssoLoginDataModel.EndTermID,
         DepartmentID: this.ssoLoginDataModel.DepartmentID,
         RoleID: this.ssoLoginDataModel.RoleID,
-        Createdby: this._Userid
+        Createdby: this._Userid,
+        FinancialYearID: this.FinancialYearID,
+        MonthID: this.MonthID,
+        TypeID: this.TypeID,
+        ZoneID: this.ZoneID,
+        DistrictID: this.DistrictID,
+
+
       };
 
 
@@ -200,6 +222,109 @@ export class ApprenticeshipRegistrationReportList {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `file_${timestamp}.${extension}`;
   }
+
+
+  YearDropdownData(MasterCode: string): void {
+    this.CommonService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
+  }
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
+  }
+
+  async Reset() {
+
+  }
+
+  async GetDistrictMatserDDL() {
+    try {
+      if (this.ssoLoginDataModel.RoleID != 97) {
+
+
+        this.loaderService.requestStarted();
+        await this.CommonService.GetCommonMasterData('DistrictHindi', this.ZoneID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+
+          }, (error: any) => console.error(error)
+          );
+
+      } else {
+        await this.CommonService.GetCommonMasterData('NodalDistrict', this.ssoLoginDataModel.DistrictID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+
+          }, (error: any) => console.error(error)
+          );
+      }
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetDivisMatserDDL() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.CommonService.GetCommonMasterData('ZoneHindi')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ZoneList = data['Data'];
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetzonalID() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.CommonService.GetZonalID(this.ssoLoginDataModel.UserID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (this.ssoLoginDataModel.RoleID == 100) {
+            this.ZoneID = data['Data'][0]['DivisionID'];
+            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.ZoneID)
+            this.GetDistrictMatserDDL()
+          }
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
 
   previousInTablePage() {

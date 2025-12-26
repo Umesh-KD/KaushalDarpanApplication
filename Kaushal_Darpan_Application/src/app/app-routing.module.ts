@@ -1,4 +1,4 @@
-
+ 
 import { Title } from '@angular/platform-browser';
 import { RouterModule, Routes, TitleStrategy, RouterStateSnapshot } from '@angular/router';
 import { MasterLayoutComponent } from './Views/Shared/master-layout/master-layout.component';
@@ -1090,7 +1090,7 @@ const routes: Routes = [
       { path: 'iti-published-roll-no', loadChildren: () => import('./Views/ITI/Examination/published-roll-no-iti/published-roll-no-iti.module').then(m => m.PublishedRollNoITIModule), title: 'Published Roll No' },
       { path: 'ITIGovtEMEducationalQualification', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-EducationalQualification/ITI-Govt-EM-EducationalQualification.module').then(m => m.ITIGovtEMEducationalQualificationModule), title: 'ITI Govt EM Educational Qualification' },
       { path: 'ITIGovtEMServiceDetailsOfPersonal', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-ServiceDetailsOfPersonal/ITI-Govt-EM-ServiceDetailsOfPersonal.module').then(m => m.ITIGovtEMServiceDetailsOfPersonalModule), title: 'ITI Govt EM Service Details Of Personal' },
-      /* { path: 'papperSetAssign', loadChildren: () => import('./Views/ITI/itipapper-setter/itipapper-setter.module').then(m => m.ITIPapperSetterModule) }, */
+      /* { path: 'papperSetAssign', loadChildren: () => importt('./Views/ITI/itipapper-setter/itipapper-setter.module').then(m => m.ITIPapperSetterModule) }, */
       { path: 'ITIGovtEMSanctionedPostBasedInstitute', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-SanctionedPostBasedInstitute/ITI-Govt-EM-SanctionedPostBasedInstitute.module').then(m => m.ITIGovtEMSanctionedPostBasedInstituteModule), title: 'ITI Govt EM Sanctioned Post Based Institute ' },
       { path: 'ITIGovtEMSanctionedPostBasedInstituteList', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-SanctionedPostBasedInstituteList/ITI-Govt-EM-SanctionedPostBasedInstituteList.module').then(m => m.ITIGovtEMSanctionedPostBasedInstituteListModule), title: 'ITI Govt EM Sanctioned Post Based Institute ' },
       { path: 'ITIGovtEMZonalOfficeITIPrincipalMaster', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-ZonalOfficeITIPrincipalMaster/ITI-Govt-EM-ZonalOfficeITIPrincipalMaster.module').then(m => m.ITIGovtEMZonalOfficeITIPrincipalMasterModule), title: 'ITI Govt EM Zonal Office ITI Principal' },
@@ -1321,8 +1321,6 @@ const routes: Routes = [
       { path: 'InternalSlidingReport', loadChildren: () => import('./Views/ITI/reports/internal-sliding-report/internal-sliding-report.module').then(m => m.InternalSlidingReportModule), title: 'InternalSlidingReport' },
       { path: 'SwappingReport', loadChildren: () => import('./Views/ITI/reports/swapping-report/swapping-report.module').then(m => m.SwappingReportModule), title: 'SwappingReportForAdmin' },
 
-      { path: 'iti-admin-remunerationInvigilator', loadChildren: () => import('./Views/ITI/iti-admin-remunerationInvigilator-details/iti-admin-remunerationInvigilator-details.module').then(m => m.ItiAdminRemunerationInvigilatorDetailsModule), title: 'iti-admin-remunerationInvigilator-details' },
-
 
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'center-superitendent-exam-report/:id', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
@@ -1427,6 +1425,8 @@ const routes: Routes = [
       { path: 'NcvtPracticalexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
       { path: '2ndNcvtPracticalexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
 
+      { path: 'ScvtexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
+      { path: '2ndScvtexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
 
 
       { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
@@ -1558,6 +1558,14 @@ const routes: Routes = [
       { path: 'CenterRollList', loadChildren: () => import('./Views/ITI/Examination/center-roll-list/center-roll-list.module').then(m => m.CenterRollListModule), title:'Center Roll List' },
 
       { path: 'StudentPaperReport', loadChildren: () => import('./Views/ITI/Examination/student-paper-report/student-paper-report.module').then(m => m.StudentPaperReportModule) },
+      { path: 'ScvtExamAttendence', loadChildren: () => import('./Views/ITI/Examination/scvt-exam-attendence/scvt-exam-attendence.module').then(m => m.ScvtExamAttendenceModule) },
+
+      { path: 'ITIInvigilatorExamList', loadChildren: () => import('./Views/ITI/Examination/invigilator-exam-list/invigilator-exam-list.module').then(m => m.InvigilatorExamListModule) },
+
+
+
+
+
 
     ]
   },
@@ -1661,12 +1669,6 @@ const routes: Routes = [
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
-  
-  
-
-
-
-
 
 
 
@@ -1691,7 +1693,7 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
 }
 @NgModule({
   imports: [
-    //RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, useHash: false,  paramsInheritanceStrategy: 'always' })
+    //RouterModule.forRoot(routes, { prel oadingStrategy: PreloadAllModules, useHash: false,  paramsInheritanceStrategy: 'always' })
 
     RouterModule.forRoot(routes, {
       useHash: false, onSameUrlNavigation: 'reload', paramsInheritanceStrategy: 'always'

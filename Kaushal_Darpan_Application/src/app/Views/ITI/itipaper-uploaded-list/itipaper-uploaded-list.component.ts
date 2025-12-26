@@ -8,7 +8,7 @@ import { ItiTradeService } from "../../../Services/iti-trade/iti-trade.service";
 import { CommonFunctionService } from "../../../Services/CommonFunction/common-function.service";
 import { UploadFileModel } from '../../../Models/UploadFileModel';
 import { DocumentDetailsService } from "../../../Common/document-details";
-import { EnumStatus } from "../../../Common/GlobalConstants";
+import { EnumStatus, GlobalConstants } from "../../../Common/GlobalConstants";
 import { DocumentDetailsModel } from "../../../Models/DocumentDetailsModel";
 import { DeleteDocumentDetailsModel } from '../../../Models/DeleteDocumentDetailsModel';
 import { ToastrService } from "ngx-toastr";
@@ -23,6 +23,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-itipaper-uploaded-list',
@@ -44,7 +45,7 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
   PaperDetailsList: PaperUploadInterface[] = [];
   documentDetails: DocumentDetailsModel[] = [];
   totalRecords: number = 0;
-  pageSize: number = 10; 
+  pageSize: number = 10;
   currentPage: number = 1;
   totalPages: number = 0;
   startInTableIndex: number = 1;
@@ -52,7 +53,7 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
   sSOLoginDataModel!: any;
   startDate = new Date();
   searchRequestPaper = new RequestBaseModel()
-  displayedColumns: string[] = ['SrNo', 'ExamName', 'StreamName', 'SemesterName', 'PaperDate', 'CenterCode'];
+  displayedColumns: string[] = ['SrNo', 'ExamName', 'StreamName',  'PaperCode', 'SemesterName', 'PaperDate', 'CenterCode'];
   dataSource = new MatTableDataSource<PaperUploadInterface>([]);
   filterForm: FormGroup | undefined;
   instituteId: any;
@@ -61,6 +62,8 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
   modalReference: NgbModalRef | undefined;
   public CenterDtlsList: any = [];
   public SSOLoginDataModel_new = new SSOLoginDataModel()
+  public _GlobalConstants = GlobalConstants;
+
   constructor(private fb: FormBuilder,
     private toastr: ToastrService,
     private menuService: MenuService,
@@ -72,7 +75,7 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
     private loaderService: LoaderService,
     private routers: Router,
     private modalService: NgbModal,
-    private documentDetailsService: DocumentDetailsService) {
+    private documentDetailsService: DocumentDetailsService, private swal: SweetAlert2) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.SSOLoginDataModel_new = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetAllPaperUploadData();
@@ -88,9 +91,6 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
       await this.apiService.GetAllPaperUploadData(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.PaperDetailsList = data.Data;
-
-        console.log(this.PaperDetailsList, 'ankit');
-
         this.dataSource = new MatTableDataSource(this.PaperDetailsList);
         this.dataSource.sort = this.sort;
         this.totalRecords = this.PaperDetailsList.length;
@@ -202,9 +202,8 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
     }, 1000);
   }
 
-  applyFilter(values: any): void
-  {
-   
+  applyFilter(values: any): void {
+
     const { searchTerm, selectedStream, selectedSemester } = values;
     let filteredData = this.PaperDetailsList.filter(item => {
       const matchesSearchTerm = item.ExamName.toLowerCase().includes(searchTerm.toLowerCase());
@@ -233,7 +232,7 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
     //sessionStorage.setItem('PaperSetterAssignEditId', '0');
   }
 
-  
+
 
   async ViewCenterDetail(content: any, PaperUploadedID: number) {
     await this.GetCenterDetailByPaperUploadID(PaperUploadedID)
@@ -249,8 +248,7 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
         if (data.Data.length > 0) {
           this.CenterDtlsList = data.Data;
         }
-        else
-        {
+        else {
           this.CenterDtlsList = [];
         }
       });
@@ -263,48 +261,113 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
     this.modalService.dismissAll();
   }
 
+  //exportToExcelCenterDetail() {
+  //  const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'CenterID', 'DownloadDate'];
+  //  const filteredData = this.CenterDtlsList.map(
+  //    (item: { [key: string]: any }, index: number) => {
+  //      const filteredItem: any = {
+  //        SNo: index + 1
+  //      };
+  //      Object.keys(item).forEach(key => {
+  //        if (!unwantedColumns.includes(key)) {
+  //          filteredItem[key] = item[key];
+  //        }
+  //      });
+  //      return filteredItem;
+  //    }
+  //  );
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const colWidths = Object.keys(filteredData[0]).map(key => {
+  //    let maxLength = key.length;
+  //    filteredData.forEach(function(row: { [x: string]: any; }) {
+  //      const cellValue = row[key];
+
+  //      let value = row[key];
+  //      if (key === 'IsDownload') {
+  //        value = value ? 'Yes' : 'No';
+  //      }
+  //            if (cellValue !== null && cellValue !== undefined) {
+  //                maxLength = Math.max(maxLength, cellValue.toString().length);
+  //            }
+  //        });
+  //    return { wch: maxLength + 2 };
+  //  });
+  //  ws['!cols'] = colWidths;
+  //  const range = XLSX.utils.decode_range(ws['!ref']!);
+  //  for (let C = range.s.c; C <= range.e.c; ++C) {
+  //    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+  //    if (!ws[cellAddress]) continue;
+  //    ws[cellAddress].s = {
+  //      font: { bold: true }
+  //    };
+  //  }
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  const today = new Date();
+  //  const dateStr = today.toLocaleDateString('en-GB').split('/').join('-');
+  //  const fileName = `Center_Paper_Donwload_Report_${dateStr}.xlsx`;
+  //  XLSX.writeFile(wb, fileName);
+  //}
+
   exportToExcelCenterDetail() {
-    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'CenterID', 'IsDownload','DownloadDate'];
+    const unwantedColumns = [
+      'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy',
+      'ModifyDate', 'IPAddress', 'CenterID', 'DownloadDate'
+    ];
+
     const filteredData = this.CenterDtlsList.map(
       (item: { [key: string]: any }, index: number) => {
         const filteredItem: any = {
           SNo: index + 1
         };
+
         Object.keys(item).forEach(key => {
           if (!unwantedColumns.includes(key)) {
-            filteredItem[key] = item[key];
+            if (key === 'IsDownload') {
+              filteredItem[key] = item[key] ? 'Yes' : 'No';
+            } else {
+              filteredItem[key] = item[key];
+            }
           }
         });
+
         return filteredItem;
       }
     );
+
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
     const colWidths = Object.keys(filteredData[0]).map(key => {
       let maxLength = key.length;
-      filteredData.forEach(function(row: { [x: string]: any; }) {
-              const cellValue = row[key];
-              if (cellValue !== null && cellValue !== undefined) {
-                  maxLength = Math.max(maxLength, cellValue.toString().length);
-              }
-          });
+
+      filteredData.forEach((row: { [x: string]: any; }) => {
+        const cellValue = row[key];
+        if (cellValue !== null && cellValue !== undefined) {
+          maxLength = Math.max(maxLength, cellValue.toString().length);
+        }
+      });
+
       return { wch: maxLength + 2 };
     });
+
     ws['!cols'] = colWidths;
+
     const range = XLSX.utils.decode_range(ws['!ref']!);
     for (let C = range.s.c; C <= range.e.c; ++C) {
       const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
-      if (!ws[cellAddress]) continue;
-      ws[cellAddress].s = {
-        font: { bold: true }
-      };
+      if (ws[cellAddress]) {
+        ws[cellAddress].s = { font: { bold: true } };
+      }
     }
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
     const today = new Date();
     const dateStr = today.toLocaleDateString('en-GB').split('/').join('-');
-    const fileName = `Center_Detail_List_${dateStr}.xlsx`;
-    XLSX.writeFile(wb, fileName);
+    XLSX.writeFile(wb, `Center_Paper_Donwload_Report_${dateStr}.xlsx`);
   }
+
 
 
 
@@ -322,9 +385,8 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
             this.toastr.error('Center List No Found.');
             return;
           }
-          else
-          {
-            
+          else {
+
             const keys = Object.keys(this.CenterDtlsList[0]);
             const _keys = Object.keys(this.CenterDtlsList[0]).filter(key => key !== 'CenterID');
             const totalColumns = _keys.length + 1;
@@ -344,12 +406,12 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
             <tr>
               <td style="border: 1px solid black; padding: 5px;">${index + 1}</td>
                   ${_keys.map(key => {
-                            let value = item[key];
-                            if (key === 'IsDownload') {
-                              value = value ? 'Yes' : 'No';
-                            }
-                            return `<td style="border: 1px solid black; padding: 5px;">${value ?? ''}</td>`;
-                          }).join('')}
+              let value = item[key];
+              if (key === 'IsDownload') {
+                value = value ? 'Yes' : 'No';
+              }
+              return `<td style="border: 1px solid black; padding: 5px;">${value ?? ''}</td>`;
+            }).join('')}
             </tr>
               `).join('');
 
@@ -383,7 +445,7 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
                </table>
              </body>
              </html>`;
-                         
+
 
             const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
             const url = URL.createObjectURL(blob);
@@ -404,8 +466,46 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  DeletePaperUpload(PaperUploadID: number)
+  {
+    this.swal.Confirmation("Are You sure to delete file?", async (result: any) =>
+    {
+      if (result.isConfirmed)
+      {
+        let obj =
+        {
+          Action: "_DeleteUploadedPapers",
+          PaperUploadID: PaperUploadID
+        };
+        try
+        {
+          await this.apiService.DeletePaperUpload(obj).then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State == EnumStatus.Success) {
+              this.toastr.success('Delete success');
+              this.GetAllPaperUploadData();
+            }
+            else {
+              this.toastr.error('someting went wrong');
+            }
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    });
+  }
+
+  async OnRoute(PaperUploadID: number) {
+    this.routers.navigate(
+      ['/iti-paper-upload'],
+      { queryParams: { PaperUploadID } }
+    );
+  }
 
 
 }
 
-}
+

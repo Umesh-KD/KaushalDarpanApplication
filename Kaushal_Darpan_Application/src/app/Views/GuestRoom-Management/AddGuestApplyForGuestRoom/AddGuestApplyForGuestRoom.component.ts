@@ -513,6 +513,7 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   async GetRoomTypeList() {
+    debugger
     try {
       this.RoomAvailablity = 0;
       this.RoomTypeList = [];
@@ -538,6 +539,7 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   async GetAllRoomSeatList() {
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.guestRoomManagmentService.GuestHouseRoomListForApply(this.searchRequest1)
@@ -545,6 +547,7 @@ export class AddGuestApplyForGuestRoomComponent {
           data = JSON.parse(JSON.stringify(data));
           
           this.GuestRoomList = data['Data'];
+          console.log('Guest Room List ===>',this.GuestRoomList)
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -615,13 +618,16 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   initTable() {
+    debugger
     this.dataSource = new MatTableDataSource(this.GuestRoomApplyList);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.dataSource.filterPredicate = (d: any, filter: string) => {
       const dataStr = Object.values(d).join(' ').toLowerCase();
       return dataStr.includes(filter);
+      
     };
+    console.log('data Source====>',this.dataSource)
   }
 
   applyFilter(event: Event) {
@@ -636,10 +642,10 @@ export class AddGuestApplyForGuestRoomComponent {
   getRoomTypeName(type: number): string {
     switch (type) {
       case 172: return '1 Bed';
-      case 173: return '2 Bed';
-      case 174: return '3 Bed';
-      case 175: return '4 Bed';
-      default: return 'Dormitory/Hall';
+      case 173: return '2 Bed (Sharing)';
+      case 174: return '3 Bed (Sharing)';
+      case 175: return '4 Bed (Sharing)';
+      default: return 'Dormitory/Hall (Sharing)';
     }
   }
 

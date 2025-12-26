@@ -1,3 +1,41 @@
+
+<style>
+  .copy-text {
+    user-select: text;
+    cursor: text;
+  }
+  ::ng-deep .CenterCode.mat-mdc-select {
+    min-height: 45px;
+    height: auto;
+  }
+
+  ::ng-deep .CenterCode .mat-mdc-select-trigger {
+    min-height: 45px;
+    align-items: center;
+  }
+  /* Allow mat-select to grow vertically */
+  .multi-select-expand .mat-select-trigger {
+    height: auto !important;
+    min-height: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* Wrap selected values to next line */
+  .multi-select-expand .mat-select-value {
+    white-space: normal !important;
+    line-height: 1.4;
+  }
+
+  /* Optional: spacing between selected items */
+  .multi-select-expand .mat-select-value-text {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+</style>
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
@@ -30,8 +68,8 @@
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam ID<span class="StarMarking">*</span></label>
-                <select class="form-select form-control" formControlName="ExamID" (change)="onExamChange($event)">
-                  <option value="">Choose option</option>
+                <select class="form-select form-control" formControlName="ExamID" (change)="onExamChange($event.target.value)">
+                  <option value="0">Choose option</option>
                   @for (item of ExamList; track item)
                   {
                   <option [value]="item.ID">{{item.Name}}</option>
@@ -39,27 +77,14 @@
                 </select>
                 <div class="text-danger" *ngIf="examForm.get('ExamID').hasError('required')  && examForm.get('ExamID').touched">This field is required</div>
               </div>
-
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name<span class="StarMarking">*</span></label>
-                <input type="text" placeholder="Search By Paper Name" class="form-input ng-pristine ng-valid ng-touched" formControlName="ExamName" readonly>
+                <input type="text" placeholder="Search By Paper Name" class="form-input ng-pristine ng-valid ng-touched" formControlName="ExamName">
                 <span class="text-danger" *ngIf="examForm.get('ExamName').hasError('required')  && examForm.get('ExamName').touched">This field is required</span>
               </div>
-
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Stream<span class="StarMarking">*</span></label>
-                <select class="form-select form-control" formControlName="StreamID">
-                  <option value="">Choose option</option>
-                  @for (item of StreamMasterList; track item) {
-                  <option [value]="item.ID">{{item.Name}}</option>
-                  }
-                </select>
-                <div class="text-danger" *ngIf="examForm.get('StreamID').hasError('required')  && examForm.get('StreamID').touched">This field is required</div>
-              </div>
-
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
-                <select class="form-select form-control" formControlName="SemesterID">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year/Semester<span class="StarMarking">*</span></label>
+                <select class="form-select form-control" formControlName="SemesterID" (change)="getSteram($event.target.value)">
                   <option value="">Choose option</option>
                   @for (item of SemesterMasterList; track item) {
                   <option [value]="item.SemesterID">{{item.SemesterName}}</option>
@@ -68,61 +93,73 @@
                 <div class="text-danger" *ngIf="examForm.get('SemesterID').hasError('required')  && examForm.get('SemesterID').touched">This field is required</div>
               </div>
 
-              <div style="display:none">
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper ID<span class="StarMarking">*</span></label>
-                <select class="form-select form-control" formControlName="PaperID">
-                  <option value="">Choose option</option>
-                  <option value="1">Paper 1</option>
-                  <option value="2">Paper 2</option>
-                  @for (item of PaperMasterList; track item) {
-                  <option [value]="item.PaperID">{{item.PaperType}}</option>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade<span class="StarMarking"></span></label>
+                <select class="form-select form-control" formControlName="StreamID" (change)="GetTradeWisePapers($event.target.value);seletDeselectCenters($event.target.value)">
+                  <option value="0">ALL</option>
+                  @for (item of StreamMasterList; track item) {
+                  <option [value]="item.ID">{{item.Name}}</option>
                   }
                 </select>
-                <div class="text-danger" *ngIf="examForm.get('PaperID').hasError('required')  && examForm.get('PaperID').touched">This field is required</div>
+                <div class="text-danger" *ngIf="examForm.get('StreamID').hasError('required')  && examForm.get('StreamID').touched">This field is required</div>
               </div>
 
-              <!--<div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Year<span class="StarMarking">*</span></label>
-                <select class="form-select form-control" formControlName="FinancialYearID">
-                  <option value="">Choose option</option>
-                  @for (item of lstAcedmicYear; track item) {
-                  <option *ngFor="let item of lstAcedmicYear;" [value]="item.YearID">
-                    {{ item.FinancialYearName }} ({{ item.TermName }})
-                  </option>
-                  }
-                </select>
-                <div class="text-danger" *ngIf="examForm.get('FinancialYearID').hasError('required') && examForm.get('FinancialYearID').touched">This field is required</div>
-              </div>-->
+
+
 
               <!--<div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper Date<span class="StarMarking">*</span></label>
-                <input type="date" class="form-input" formControlName="PaperDate" />
-                <div class="text-danger" *ngIf="examForm.get('PaperDate').hasError('required') && examForm.get('PaperDate').touched">This field is required</div>
-              </div>-->
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Year<span class="StarMarking">*</span></label>
+      <select class="form-select form-control" formControlName="FinancialYearID">
+        <option value="">Choose option</option>
+        @for (item of lstAcedmicYear; track item) {
+        <option *ngFor="let item of lstAcedmicYear;" [value]="item.YearID">
+          {{ item.FinancialYearName }} ({{ item.TermName }})
+        </option>
+        }
+      </select>
+      <div class="text-danger" *ngIf="examForm.get('FinancialYearID').hasError('required') && examForm.get('FinancialYearID').touched">This field is required</div>
+    </div>-->
+              <!--<div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper Date<span class="StarMarking">*</span></label>
+      <input type="date" class="form-input" formControlName="PaperDate" />
+      <div class="text-danger" *ngIf="examForm.get('PaperDate').hasError('required') && examForm.get('PaperDate').touched">This field is required</div>
+    </div>-->
 
-           
+
             </div>
 
 
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
               <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Password <span class="StarMarking">*</span>
-    </label>
-    <input type="password" placeholder="Enter Password" class="form-input" formControlName="Password">
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Password <span class="StarMarking">*</span>
+      </label>
+      <input type="password" placeholder="Enter Password" class="form-input" formControlName="Password">
 
-    <div *ngIf="examForm.get('Password').touched || examForm.get('Password').dirty">
-      <div *ngIf="examForm.get('Password').hasError('required')">
-        <p class="text-danger">This field is required</p>
+      <div *ngIf="examForm.get('Password').touched || examForm.get('Password').dirty">
+        <div *ngIf="examForm.get('Password').hasError('required')">
+          <p class="text-danger">This field is required</p>
+        </div>
+        <div *ngIf="examForm.get('Password').hasError('pattern')">
+          <p class="text-danger">Password must contain at least one letter and one number</p>
+        </div>
+        <div *ngIf="examForm.get('Password').hasError('minlength')">
+          <p class="text-danger">Password must be at least 8 characters long</p>
+        </div>
       </div>
-      <div *ngIf="examForm.get('Password').hasError('pattern')">
-        <p class="text-danger">Password must contain at least one letter and one number</p>
-      </div>
-      <div *ngIf="examForm.get('Password').hasError('minlength')">
-        <p class="text-danger">Password must be at least 8 characters long</p>
-      </div>
-    </div>
-  </div>-->
+    </div>-->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper<span class="StarMarking">*</span></label>
+                <select class="form-select form-control" formControlName="PaperID" (change)="GetCenterDatapaperWise($event.target.value)">
+                  <option value="0">Choose option</option>
+                  @for (item of PaperMasterList; track item) {
+                  <option [value]="item.PaperID">{{item.SubjectName}}</option>
+                  }
+                </select>
+                <div class="text-danger" *ngIf="examForm.get('PaperID').hasError('required')  && examForm.get('PaperID').touched">This field is required</div>
+              </div>
+
+
               <div>
                 <div>
                   <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PaperDate">Paper Date Time<span class="StarMarking">*</span></label>
@@ -131,9 +168,6 @@
                     This field is required
                   </div>
                 </div>
-
-
-
                 <div>
                   <input matInput hidden formControlName="PaperUploadID" />
                 </div>
@@ -165,12 +199,12 @@
                   <div *ngIf="examForm.get('Password').hasError('required')">
                     <p class="text-danger">This field is required</p>
                   </div>
-                  <div *ngIf="examForm.get('Password').hasError('pattern')">
-                    <p class="text-danger">Password must contain at least one letter and one number</p>
-                  </div>
-                  <div *ngIf="examForm.get('Password').hasError('minlength')">
-                    <p class="text-danger">Password must be at least 8 characters long</p>
-                  </div>
+                  <!--<div *ngIf="examForm.get('Password').hasError('pattern')">
+          <p class="text-danger">Password must contain at least one letter and one number</p>
+        </div>
+        <div *ngIf="examForm.get('Password').hasError('minlength')">
+          <p class="text-danger">Password must be at least 8 characters long</p>
+        </div>-->
                 </div>
               </div>
 
@@ -182,7 +216,7 @@
                 <label for="FileName" class="text-gray-800 text-sm font-medium inline-block mb-2">Paper PDF<span class="StarMarking">*</span></label>
                 <div class="flex fileUploader">
                   <input formControlName="FileName" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                         #fileInput type="file" (change)="UploadDocument($event)"   accept=".pdf,.doc,.docx">
+                         #fileInput type="file" (change)="UploadDocument($event)" accept=".pdf,.doc,.docx">
                   <label for="FileName" (click)="fileInput.click()">
                     <ng-container *ngIf="documentDetails.length > 0">{{documentDetails[0].FileName}}</ng-container>
                     <span>Choose File</span>
@@ -195,24 +229,54 @@
                 </div>
               </div>
 
-              <div class="mt-5">
+              <div class="mt-5" style="display:none">
                 <mat-checkbox formControlName="Active">Active</mat-checkbox>
               </div>
             </div>
             <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6  mb-6 allStatics">
               <div>
-                <label for="FileName" class="text-gray-800 text-sm font-medium inline-block mb-2">Center Code<span class="StarMarking">*</span></label>
-                <mat-select class="form-select form-control CenterCode" formControlName="CenterCode" multiple (selectionChange)="onSelectionChange($event)">
+                <label for="FileName" class="text-gray-800 text-sm font-medium inline-block mb-2">Center Code<span class="StarMarking">*</span></label>&nbsp;
+                <a (click)="getSelectedCenterNames()" ><i class="fa fa-copy"></i> Copy Selected</a>
+
+                <!--<mat-select class="form-select form-control CenterCode" formControlName="CenterCode" multiple (selectionChange)="onSelectionChange($event)">
                   <mat-option [value]="'ALL'">
                     {{ isAllSelected ? 'Unselect All' : 'Select All' }}
                   </mat-option>
                   <mat-option *ngFor="let item of CenterMasterList;" [value]="item.ID">
-                    {{ item.ID }} ({{ item.Name }})
+                    {{ item.Name }}
                   </mat-option>
+                </mat-select>-->
+
+                <mat-select class="form-select form-control CenterCode"
+                            formControlName="CenterCode"
+                            multiple
+                            (selectionChange)="onSelectionChange($event)">
+
+             
+
+                  <mat-option [value]="'ALL'">
+                    {{ isAllSelected ? 'Unselect All' : 'Select All' }}
+                  </mat-option>
+
+                  <mat-option *ngFor="let item of CenterMasterList" [value]="item.ID">
+                    {{ item.Name }}
+                  </mat-option>
+
                 </mat-select>
+
+
+
+
+
                 <div class="text-danger" *ngIf="examForm.get('CenterCode').hasError('required')  && examForm.get('CenterCode').touched">This field is required</div>
               </div>
             </div>
+
+
+   
+
+
+
             <button mat-raised-button color="primary" type="submit" [disabled]="!examForm.valid">Submit</button>
           </form>
 
@@ -222,6 +286,7 @@
     </div>
   </div>
 </div>
+
 <!--<div class="container-fluid">
   <div class="card">
     <div class="card-body p-5">

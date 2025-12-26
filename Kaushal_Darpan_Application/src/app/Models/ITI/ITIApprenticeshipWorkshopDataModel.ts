@@ -29,20 +29,28 @@ export class ITIApprenticeshipWorkshopModel {
   public QuaterIncreaseStudent: string = '';
   public Remarks : string = '';
   public BeforeMonth : number = 0;
-
+  public AdditionalDocument:string=''
+  public DisAdditionalDocument:string=''
   public ApprenticeshipWorkshopMembersList: ITIAAA_SSODetailsModel[] = [];
 }
 
 export class ITIApprenticeshipRegPassOutModel extends RequestBaseModel{
   public ID:number=0
   public InstituteID:number=0
+  public TradeID:number=0
   public UserID:number=0
   public RegDate: string = ''
   public RegCount: string = ''
   public Remarks: string = ''
   public FileName: string = ''
   public Dis_FilePath: string = ''
+  public FatherName: string = ''
+  public PassYear: string = ''
+  public StudentName: string = ''
   public PKID : number = 0
+  public PassIti : number = 0
+  public TradeScheme : number = 0
+  public Aadhar: string = ''
 }
 export class ITIAAA_SSODetailsModel {
   

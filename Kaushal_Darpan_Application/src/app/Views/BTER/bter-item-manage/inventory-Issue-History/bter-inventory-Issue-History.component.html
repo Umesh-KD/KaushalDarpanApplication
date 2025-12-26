@@ -99,7 +99,9 @@
             <th class="text-left">Equipment Name</th>
             <th class="text-left">Item Code</th>
             <th class="text-left">IsConsumable</th>
-            <th class="text-left">Qty</th>
+            <th class="text-left">Issued Quantity</th>
+            <th class="text-left">Used Quantity</th>
+            <th class="text-left">Remaining Quantity</th>
             <th class="text-left">Issue Date</th>
             <!-- <th class="text-left">Due Date</th> -->
             <th class="text-left">Return Date</th>
@@ -120,6 +122,8 @@
               </span>
             </td>
             <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.UsedQuantity}}</td>
+            <td align="left">{{ item.RemainingQuantity}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
