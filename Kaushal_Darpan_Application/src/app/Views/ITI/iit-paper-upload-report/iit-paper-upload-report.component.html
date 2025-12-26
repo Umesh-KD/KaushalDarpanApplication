@@ -1,0 +1,149 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Paper Download Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a  [routerLink]="['/ItiPaperUploadReport']" class="text-sm font-medium text-slate-700" aria-current="page">Center Download Paper Report</a>   <!-- [routerLink]="['/ITI Paper Upload Report']"-->
+    </div>
+  </div>
+
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Group code</label>
+    <select class="form-select" id="GroupID" [(ngModel)]="searchRequest.GroupCodeID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div> -->
+        <!--<div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon
+  || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center:</label>
+          <select class="form-select"
+                  id="StudentExamYear"
+                  [(ngModel)]="searchRequest.CenterID"
+                  (change)="GetITIPaperUpload_Reports()">
+
+            <option value="0">--All--</option>
+            <option *ngFor="let item of CenterDDLlist" [value]="item.ID">{{ item.Name }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper Date:</label>
+          <select class="form-select"
+                  id="PaperDate"
+                  [(ngModel)]="searchRequest.PaperDate"
+                  (change)="GetITIPaperUpload_Reports()">
+            <option value="">--All--</option>
+            <option *ngFor="let item of TimeTableList" [value]="item.ExamDate">{{ item.ExamDate }}</option>
+          </select>
+        </div>
+
+
+        
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Download:</label>
+          <select class="form-select" id="IsPaperDownloadId" [(ngModel)]="searchRequest.IsPaperDownload">
+            <option value="-1">--All--</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+
+        <div >
+          <label class="text-gray-800 text-sm font-medium inline-block ">Search</label>
+          <button type="button" class="btn bg-info text-white mt-2" (click)="GetITIPaperUpload_Reports()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-2" (click)="ResetControl()">Cancel</button>
+        </div>
+
+
+      </div>
+     
+    </div>
+
+
+
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+
+      <button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="Export Center Detail" (click)="exportToExcelCenterDetail()">
+        <i class="fa fa-download"></i> Download
+      </button>
+    </div>
+
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDqropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Exam Name</th>
+            <th class="text-left">Center Code</th>
+            <th class="text-left">Center Name</th>
+            <th class="text-left">Paper Code</th>
+            <th class="text-left">Paper Date</th>
+            <th class="text-left">Semester Name</th>
+            <th class="text-left">CS Name</th>
+            <th class="text-left">MobileNo</th>
+            <th class="text-left">IsPeper Download</th>
+            <th class="text-left">Paper Download Date</th>
+        
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of ITIPaperUploadReportsList  let idx=index;">
+            <td>{{idx+1}}</td>
+            <td align="left">{{row.ExamName}}</td>
+            <td align="left">{{row.CenterCode}}</td>
+            <td align="left">{{row.CenterName}}</td>
+            <td align="left">{{row.PaperCode}}</td>
+            <td align="left">{{row.PaperDate}}</td>
+            <td align="left">{{row.SemesterName}}</td>
+
+            <td align="left">{{row.CenterSuperintendentName}}</td>
+            <td align="left">{{row.MobileNo}}</td>
+
+            <td align="left">{{row.IsPeperDownload}}</td>
+            <td align="left">{{row.PaperDownloadDate}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
