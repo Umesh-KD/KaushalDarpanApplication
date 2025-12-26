@@ -396,7 +396,7 @@ export class ScvtExamAttendenceComponent {
         
       }
       this.TheoryMarksRptDataList.forEach((x:any) => {
-        x.ModifyBy = this.sSOLoginDataModel.UserID;
+        x.UserID = this.sSOLoginDataModel.UserID;
   
         x.isFinalSubmit = false
       });
