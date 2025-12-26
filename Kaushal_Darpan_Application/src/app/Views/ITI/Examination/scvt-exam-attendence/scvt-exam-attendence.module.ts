@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ScvtExamAttendenceRoutingModule } from './scvt-exam-attendence-routing.module';
 import { ScvtExamAttendenceComponent } from './scvt-exam-attendence.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { ScvtExamAttendenceComponent } from './scvt-exam-attendence.component';
   ],
   imports: [
     CommonModule,
-    ScvtExamAttendenceRoutingModule
+    ScvtExamAttendenceRoutingModule,
+    FormsModule
   ]
 })
 export class ScvtExamAttendenceModule { }
