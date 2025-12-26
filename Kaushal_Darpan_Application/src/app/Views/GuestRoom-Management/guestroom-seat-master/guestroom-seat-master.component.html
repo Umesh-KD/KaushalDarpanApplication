@@ -36,10 +36,10 @@
             <option value="0">--Choose Room Type--</option>
             <!--<option *ngFor="let item of RoomTypeList" [value]="item.ID">{{item.Name}}</option>-->
             <option value="172">1 Bed</option>
-            <option value="173">2 Bed</option>
-            <option value="174">3 Bed</option>
-            <option value="175">4 Bed</option>
-            <option value="176">Dormitory/Hall</option>
+            <option value="173">2 Bed (Sharing)</option>
+            <option value="174">3 Bed (Sharing)</option>
+            <option value="175">4 Bed (Sharing)</option>
+            <option value="176">Dormitory/Hall (Sharing)</option>
           </select>
           <small>(1 Bed, 2 Bed, 3 Bed, 4 Bed)</small>
           <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">

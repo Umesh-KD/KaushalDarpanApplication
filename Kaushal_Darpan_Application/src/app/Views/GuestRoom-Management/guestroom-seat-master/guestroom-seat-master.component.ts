@@ -277,6 +277,7 @@ export class GuestRoomSeatMasterComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.GuestRoomList = data['Data'];
+          console.log('Guest Room List', this.GuestRoomList)
         }, error => console.error(error));
     }
     catch (Ex) {
