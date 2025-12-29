@@ -23,7 +23,10 @@
 </div>
 <!--Page Title End-->
 
-<div class="card"  *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal">
+<div class="card"  
+  *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || 
+          sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
+          sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)">
   <div class="card-body p-5">
     <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>{{TE_MappingId>0?'Edit':'Add'}} Request Branch Equipment</b>
@@ -75,7 +78,7 @@
         <div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Quantity: <span class="StarMarking">*</span><span> Unit:1</span>
+              Quantity: <span class="StarMarking">*</span>
             </label>
             <input type="text" placeholder="Quantity" class="form-input" id="txtQuantity" name="Quantity" formControlName="txtQuantity" [(ngModel)]="request.Quantity">
             <div *ngIf="isSubmitted && _RequestFormGroup.txtQuantity.errors" class="text-danger">
@@ -98,7 +101,9 @@
             </div>
           </div>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID != EnumRole.Principal">
+        <div *ngIf="!(sSOLoginDataModel.RoleID == EnumRole.Principal || 
+                      sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge || 
+                      sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)">
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                  for="fileIndentPhoto">Upload Indent Document<span class="StarMarking">*</span></label>
           <div class="flex fileUploader">
@@ -217,9 +222,12 @@
             <th class="text-left">College</th>
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
-            <th class="text-left">Quantity</th>
+            <th class="text-left">Requested Quantity</th>
+            <th class="text-left">Approved Quantity</th>
             <th class="text-left">Remark</th>
-            <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal" class="text-left">Date Of Approval</th>
+            <th *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || 
+                        sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
+                        sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)" class="text-left">Date Of Approval</th>
             <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
@@ -228,14 +236,15 @@
                 || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
                 || sSOLoginDataModel.RoleID == EnumRole.AdminNon
                 || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Date Of Request</th>
-            <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+            <!-- <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
                 || sSOLoginDataModel.RoleID == EnumRole.DTE
                 || sSOLoginDataModel.RoleID == EnumRole.DTENON
                 || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
                 || sSOLoginDataModel.RoleID == EnumRole.AdminNon
-                || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Status</th>
+                || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Status</th> -->
+            <th class="text-left">Status</th>
             <th>Description / Remarks</th>
             <!-- <th>Indent Document</th> -->
             <th class="text-left">Action</th>
@@ -248,8 +257,11 @@
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
             <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.ApprovedQuantity}}</td>
             <td align="left">{{ item.Remark}}</td>
-            <td *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal" align="left">{{ item.DateOfApproval}}</td>
+            <td *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || 
+                        sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
+                        sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)" align="left">{{ item.DateOfApproval}}</td>
             <td *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
                 || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
@@ -260,7 +272,7 @@
                 || sSOLoginDataModel.RoleID == EnumRole.DTELateral" align="left">
               {{ item.DateOfRequest}}
             </td>
-            <td *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
+            <!-- <td *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
                      || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
                      || sSOLoginDataModel.RoleID == EnumRole.DTE
                      || sSOLoginDataModel.RoleID == EnumRole.DTENON
@@ -268,21 +280,23 @@
                      || sSOLoginDataModel.RoleID == EnumRole.AdminNon
                      || sSOLoginDataModel.RoleID == EnumRole.DTELateral" align="left">
               {{ item.PrincipalStatus}}
-            </td>
+            </td> -->
+            <td align="left">{{ item.PrincipalStatus}}</td>
             <td align="left">{{ item.Remarks}}</td>
             <!-- <td align="left"><a *ngIf="item.FileName" href="{{ appsettingConfig.StaticFileRootPathURL + 'IssuesIndent/' + item.FileName }}" class="btn bg-primary text-white m-0" target="_blank">
   {{item.FileName}}
 </a></td> -->
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+                <a *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Admin
                    || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
                    || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
                    || sSOLoginDataModel.RoleID == EnumRole.DTE
                    || sSOLoginDataModel.RoleID == EnumRole.DTENON
                    || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
                    || sSOLoginDataModel.RoleID == EnumRole.AdminNon
-                   || sSOLoginDataModel.RoleID == EnumRole.DTELateral && item.EquipmentsStatus == 'Accept'"
+                   || sSOLoginDataModel.RoleID == EnumRole.DTELateral) 
+                   && item.EquipmentsStatus == 'Requested'"
                    [routerLink]="['/RequestEquipmentsMapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity, item.TE_MappingId,item.FileName]"
                    title="Edit"> <i class="ti ti-pencil"></i></a>
               </div>

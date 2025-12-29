@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1,DTELabMasterModel,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel, DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1, DTELabMasterModel, } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 /*import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';*/
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
@@ -69,9 +69,9 @@ export class AddBterIssueItemComponent {
   AddItemList: DTEItemsSaveModel[] = [];
   public StreamMasterList: any = [];
   public LabMasterList: any = [];
-  public ItemsDataList: any = []; 
+  public ItemsDataList: any = [];
   public selectedDataList: any[] = [];
-  public staff_ID:number =0;
+  public staff_ID: number = 0;
   public ItemMasterList: any = [];
   public ItemMasterList1: any = [];
   public IssuedItemList: any = [];
@@ -102,7 +102,7 @@ export class AddBterIssueItemComponent {
     this.UserID = this.sSOLoginDataModel.UserID;
     this.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.prepareChunkedItems();
-    this.GetMasterData()
+    await this.GetMasterData()
 
   }
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -117,7 +117,7 @@ export class AddBterIssueItemComponent {
   }
 
   async saveData() {
-    
+
     this.submitRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.submitRequest.UserId = this.sSOLoginDataModel.UserID;
@@ -141,7 +141,7 @@ export class AddBterIssueItemComponent {
             this.toastr.success(this.Message)
             this.modalService.dismissAll();
             this.ResetControl();
-           // this.routers.navigate(['/bter-issue-item']);
+            // this.routers.navigate(['/bter-issue-item']);
           }
           else if (this.State == EnumStatus.Warning) {
             this.toastr.warning(this.ErrorMessage)
@@ -164,14 +164,14 @@ export class AddBterIssueItemComponent {
 
   async GetByID(id: number) {
 
-    
+
   }
 
 
   async DGET_Details() {
     try {
       this.loaderService.requestStarted();
-      
+
 
       this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
@@ -242,7 +242,7 @@ export class AddBterIssueItemComponent {
 
 
   ShowSubmit(content: any): void {
-    
+
 
     const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
     if (!anyTeamSelected) {
@@ -267,7 +267,7 @@ export class AddBterIssueItemComponent {
 
 
 
-    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'lg', keyboard: true, centered: true });
 
     return;
   }
@@ -292,7 +292,7 @@ export class AddBterIssueItemComponent {
 
 
   async GetStaffDDL() {
-    
+
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -321,7 +321,7 @@ export class AddBterIssueItemComponent {
   }
 
   async GetCategoryDDL() {
-    
+
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -442,10 +442,10 @@ export class AddBterIssueItemComponent {
 
 
   async GetItemListType() {
-    
+
     try {
       this.loaderService.requestStarted();
-    console.log('Branch Id :'+this.Searchrequests.StreamID  );
+      console.log('Branch Id :' + this.Searchrequests.StreamID);
       const searchdata: DTEItemsSearchModel1 = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
         EndTermID: this.sSOLoginDataModel.EndTermID || 0,
@@ -473,7 +473,7 @@ export class AddBterIssueItemComponent {
       } else {
         this.CategoryDDLList = [];
         this.ItemsDDLList = [];
-        this.SelectedItems=[];
+        this.SelectedItems = [];
       }
     } catch (Ex) {
       console.error("Error in GetItemListType:", Ex);
@@ -484,28 +484,28 @@ export class AddBterIssueItemComponent {
 
 
   async BindItem_list() {
-    
-  try {
-    this.loaderService.requestStarted();
-     ;
-    const searchdata: DTEItemsSearchModel1 = {
-      DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
-      EndTermID: this.sSOLoginDataModel.EndTermID || 0,
-      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
-      RoleID: this.sSOLoginDataModel.RoleID || 0,
-      CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-      ItemType: this.Searchrequests.ItemType || 0,
-      EquipmentsId: this.Searchrequests.ItemCategoryId || 0,
-      OfficeID: 0,
-      StatusID: 0 
-    };
-    await this.bterInventoryService.GetAllItemList(searchdata)
-    .then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.ItemsDDLList = data['Data'];
-       this.SelectedItems = [];
-      console.log("Bind  Item  list", this.ItemsDDLList )
-    }, error => console.error(error));
+
+    try {
+      this.loaderService.requestStarted();
+      ;
+      const searchdata: DTEItemsSearchModel1 = {
+        DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
+        EndTermID: this.sSOLoginDataModel.EndTermID || 0,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
+        RoleID: this.sSOLoginDataModel.RoleID || 0,
+        CollegeId: this.sSOLoginDataModel.InstituteID || 0,
+        ItemType: this.Searchrequests.ItemType || 0,
+        EquipmentsId: this.Searchrequests.ItemCategoryId || 0,
+        OfficeID: 0,
+        StatusID: 0
+      };
+      await this.bterInventoryService.GetAllItemList(searchdata)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ItemsDDLList = data['Data'];
+          this.SelectedItems = [];
+          console.log("Bind  Item  list", this.ItemsDDLList)
+        }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
@@ -533,7 +533,7 @@ export class AddBterIssueItemComponent {
 
 
   onItemToggle(item: any) {
-    
+
     if (item.Selected) {
       // Add if not already present
       if (!this.SelectedItems.find(x => x.ItemId === item.ItemId)) {
@@ -542,7 +542,7 @@ export class AddBterIssueItemComponent {
           ItemName: item.CampanyName,
           ItemCategoryName: item.CategoryName,
           //Quantity: 1, // default
-          Quantity: item.Quantity, 
+          Quantity: item.Quantity,
           FileName: item.FileName || '',
           Dis_FileName: item.Dis_FileName || '',
           EquipmentsId: item.EquipmentsId,
@@ -564,7 +564,7 @@ export class AddBterIssueItemComponent {
   }
 
   async saveSelectedItems() {
-    
+
     if (!this.SelectedItems || this.SelectedItems.length === 0) {
       this.toastr.error("Please select at least one item!");
       return;
@@ -590,21 +590,21 @@ export class AddBterIssueItemComponent {
         element.EndTermID = this.sSOLoginDataModel.EndTermID,
         element.RoleID = this.sSOLoginDataModel.RoleID,
         element.StaffId = this.Searchrequests.staffID,
-        element.StreamID=this.Searchrequests.StreamID,
-        element.LabID=this.Searchrequests.LabID,
-      //element.itemCategoryId = this.Searchrequests.itemCategoryId,
+        element.StreamID = this.Searchrequests.StreamID,
+        element.LabID = this.Searchrequests.LabID,
+        //element.itemCategoryId = this.Searchrequests.itemCategoryId,
         element.itemCategoryId = this.Searchrequests.ItemCategoryId
         || 0;
 
-        
-        element.issuedTo = this.Searchrequests.issuedTo && this.Searchrequests.issuedTo > 0
-          ? this.Searchrequests.issuedTo
-          : null; 
-        element.EquipmentsId = element.EquipmentsId || this.Searchrequests.ItemId || 0;
+
+      element.issuedTo = this.Searchrequests.issuedTo && this.Searchrequests.issuedTo > 0
+        ? this.Searchrequests.issuedTo
+        : null;
+      element.EquipmentsId = element.EquipmentsId || this.Searchrequests.ItemId || 0;
     });
 
     this.AddItemList = this.SelectedItems
-     
+
     try {
       this.loaderService.requestStarted();
 
@@ -618,20 +618,20 @@ export class AddBterIssueItemComponent {
           this.SelectedItems = [];
           this.AddItemList = [];
           this.Searchrequests = {
-              staffID: 0
+            staffID: 0
             , issuedTo: 0
             , ItemId: 0
             , ItemType: 0
             , ItemCategoryId: 0
             , InstituteID: 0
             , TypeName: ''
-            , TradeId:  0
+            , TradeId: 0
             , collageTradeID: 0
             , serialNo: 0
             , departmentID: 0
             , EquipmentsId: 0
             , IssuedId: 0
-            ,StreamID: 0 
+            , StreamID: 0
           };
           this.FileName = '';
           this.Dis_FileName = '';
@@ -646,7 +646,7 @@ export class AddBterIssueItemComponent {
           this.toastr.error(data.ErrorMessage);
         }
       })
-      
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -659,32 +659,32 @@ export class AddBterIssueItemComponent {
   cancelSelection() {
     this.SelectedItems = [];
   }
- validateQuantity(item: any) {
-  // Find the original item from ItemsDDLList
-  const original = this.ItemsDDLList.find((x: any)  => x.ItemId === item.ItemId);
+  validateQuantity(item: any) {
+    // Find the original item from ItemsDDLList
+    const original = this.ItemsDDLList.find((x: any) => x.ItemId === item.ItemId);
 
-  if (original) {
-    const availableQty = original.Quantity;
+    if (original) {
+      const availableQty = original.Quantity;
 
-    if (item.Quantity > availableQty) {
-      alert(`You can’t enter more than available quantity (${availableQty}).`);
-      item.Quantity = availableQty; // Reset to max allowed
-    } else if (item.Quantity < 1) {
-      alert('Quantity must be at least 1.');
-      item.Quantity = 1;
+      if (item.Quantity > availableQty) {
+        alert(`You can’t enter more than available quantity (${availableQty}).`);
+        item.Quantity = availableQty; // Reset to max allowed
+      } else if (item.Quantity < 1) {
+        alert('Quantity must be at least 1.');
+        item.Quantity = 1;
+      }
     }
   }
-}
 
-  async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
-    try { 
+  async UploadDocument(event: any, FileName: any, Dis_FileName: any) {
+    try {
       let uploadModel: UploadFileModel = {
         FileName: FileName ?? "",
         FileExtention: "",
         MinFileSize: "20kb",
         MaxFileSize: "50mb",
-        FolderName:"Students",
-   
+        FolderName: "Students",
+
       }
       await this.documentDetailsService.UploadDocument(event, uploadModel)
         .then((data: any) => {
@@ -692,7 +692,7 @@ export class AddBterIssueItemComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           //
-          
+
           if (this.State == EnumStatus.Success) {
             this.FileName = data.Data[0].FileName;
             this.Dis_FileName = data.Data[0].Dis_FileName;
@@ -714,7 +714,7 @@ export class AddBterIssueItemComponent {
   async DeleteDocument(item: any) {
     try {
       let deleteModel = new DeleteDocumentDetailsModel()
-      deleteModel.FolderName =  "Students";
+      deleteModel.FolderName = "Students";
       deleteModel.FileName = item;
       await this.documentDetailsService.DeleteDocument(deleteModel)
         .then((data: any) => {
@@ -722,9 +722,9 @@ export class AddBterIssueItemComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State != EnumStatus.Error) {
-            
-              this.FileName = '';
-              this.Dis_FileName = '';
+
+            this.FileName = '';
+            this.Dis_FileName = '';
             console.log(this.SelectedItems)
           }
           if (this.State == EnumStatus.Error) {
@@ -749,7 +749,7 @@ export class AddBterIssueItemComponent {
           this.StreamMasterList = data['Data'];
         }, (error: any) => console.error(error));
       this.Searchrequests.StreamID = 0;
-      console.log('Stream Master List',this.StreamMasterList)
+      console.log('Stream Master List', this.StreamMasterList)
     }
     catch (Ex) {
       console.log(Ex);
@@ -760,13 +760,13 @@ export class AddBterIssueItemComponent {
       }, 200);
     }
   }
- async GeLabMasterData() {
+  async GeLabMasterData() {
     try {
       this.loaderService.requestStarted();
-      
-      this.labrequests.Lab_DepartmentId=this.sSOLoginDataModel.DepartmentID;
-      this.labrequests.Lab_BranchId=this.Searchrequests.StreamID;
-      this.labrequests.ActionName='GetLabDataForMaster';
+
+      this.labrequests.Lab_DepartmentId = this.sSOLoginDataModel.DepartmentID;
+      this.labrequests.Lab_BranchId = this.Searchrequests.StreamID;
+      this.labrequests.ActionName = 'GetLabDataForMaster';
       await this.bterInventoryService.GetDTEGetSetLabMaster(this.labrequests)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -774,7 +774,7 @@ export class AddBterIssueItemComponent {
           this.LabMasterList = data['Data'];
         }, (error: any) => console.error(error));
       this.labrequests.Lab_Id = 0;
-      console.log('Stream Master List',this.StreamMasterList)
+      console.log('Stream Master List', this.StreamMasterList)
     }
     catch (Ex) {
       console.log(Ex);
@@ -786,45 +786,45 @@ export class AddBterIssueItemComponent {
     }
   }
   onStaffChange() {
-    
-    this.Searchrequests.ItemType = 0; 
-    this.Searchrequests.ItemCategoryId = 0; 
+
+    this.Searchrequests.ItemType = 2;
+    this.Searchrequests.ItemCategoryId = 0;
     this.CategoryDDLList = [];
     this.ItemsDDLList = [];
-    this.SelectedItems =[];
+    this.SelectedItems = [];
     console.log("Staff changed => reset ItemType & Category");
 
     this.GetItemListType();
-    
+
   }
-  async ShowSubmitIssue(content: any, itemId:any,staffId:any) {
-    
-      this.staff_ID=staffId;
+  async ShowSubmitIssue(content: any, itemId: any, staffId: any) {
+
+    this.staff_ID = staffId;
     const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
-    if ((!anyTeamSelected) && (this.Searchrequests.issuedTo == 2)){
+    if ((!anyTeamSelected) && (this.Searchrequests.issuedTo == 2)) {
       this.toastr.error("Please select at least one Item!");
       return;
     }
 
-    if (this.Searchrequests.staffID == 0 && this.Searchrequests.issuedTo == 2)  {
+    if (this.Searchrequests.staffID == 0 && this.Searchrequests.issuedTo == 2) {
       this.toastr.error("Please select at least one Staff!");
       return;
     }
 
-    console.log('Logs Item ID:'+itemId);
-      await this.bterInventoryService.GetDTEIssueItemListPermanent(itemId).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State === EnumStatus.Success) {
-          this.ItemsDataList = data.Data; 
+    console.log('Logs Item ID:' + itemId);
+    await this.bterInventoryService.GetDTEIssueItemListPermanent(itemId).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State === EnumStatus.Success) {
+        this.ItemsDataList = data.Data;
         this.ItemsDDLList = [];
         this.SelectedItems = [];
-          console.log(this.ItemsDataList);
-           this.BindItem_list();
-        }
-      }); 
+        console.log(this.ItemsDataList);
+        this.BindItem_list();
+      }
+    });
 
 
-    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'lg', keyboard: true, centered: true });
 
     return;
   }
@@ -833,21 +833,21 @@ export class AddBterIssueItemComponent {
     this.ItemsDataList.forEach((item: any) => item.Selected = checked);
   }
   onIssueItemToggle(item: any) {
-  // Only run logic when checkbox is checked
+    // Only run logic when checkbox is checked
     if (item.Selected) {
       // Check both conditions
-      
-      if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {  
-        console.log('✅ Serial item selected:', item); 
+
+      if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {
+        console.log('✅ Serial item selected:', item);
       }
       else {
-      console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
-      this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
-        }
+        console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
+        this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
+      }
     }
   }
   async confirmSubmitNew() {
-  const selectedItems = this.ItemsDataList.filter((x: any) => x.Selected);
+    const selectedItems = this.ItemsDataList.filter((x: any) => x.Selected);
 
     if (selectedItems.length === 0) {
       this.toastr.warning("Please select at least one item to return.", "Warning", {
@@ -860,36 +860,36 @@ export class AddBterIssueItemComponent {
       this.toastr.error('Please upload document');
       return;
     }
-    this.selectedDataList = this.ItemsDataList.filter((item:any) => item.Selected);
-    this.selectedDataList = this.ItemsDataList .filter((item: any) => item.Selected).map((item: any) => ({
+    this.selectedDataList = this.ItemsDataList.filter((item: any) => item.Selected);
+    this.selectedDataList = this.ItemsDataList.filter((item: any) => item.Selected).map((item: any) => ({
       ...item,
       StaffId: this.staff_ID,
-      InstituteID : this.sSOLoginDataModel.InstituteID,
-      EndTermID : this.sSOLoginDataModel.EndTermID,
-      RoleID : this.sSOLoginDataModel.RoleID,  
-      FileName : this.FileName, 
-      Dis_FileName : this.Dis_FileName,
+      InstituteID: this.sSOLoginDataModel.InstituteID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      RoleID: this.sSOLoginDataModel.RoleID,
+      FileName: this.FileName,
+      Dis_FileName: this.Dis_FileName,
     }));
-    console.table(this.selectedDataList); 
-    await this.confirmSubmit(this.selectedDataList); 
+    console.table(this.selectedDataList);
+    await this.confirmSubmit(this.selectedDataList);
   }
   async confirmSubmit(arr: any,) {
-    
+
 
     this.loaderService.requestStarted();
     this.isLoading = true;
-    this.submitRequest.TradeId=this.TradeId,
-    this.submitRequest.StaffId = this.staff_ID,
-    this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID,
-    this.submitRequest.EndTermID = this.sSOLoginDataModel.EndTermID,
-    this.submitRequest.RoleID = this.sSOLoginDataModel.RoleID,
-    this.submitRequest.StaffId = this.Searchrequests.staffID, 
-    this.submitRequest.ItemList = arr; 
+    this.submitRequest.TradeId = this.TradeId,
+      this.submitRequest.StaffId = this.staff_ID,
+      this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID,
+      this.submitRequest.EndTermID = this.sSOLoginDataModel.EndTermID,
+      this.submitRequest.RoleID = this.sSOLoginDataModel.RoleID,
+      this.submitRequest.StaffId = this.Searchrequests.staffID,
+      this.submitRequest.ItemList = arr;
     this.submitRequest.FileName = this.FileName;
-    this.submitRequest.StreamID=this.Searchrequests.StreamID || 0;
-    this.submitRequest.LabID=this.Searchrequests.LabID || 0;
- 
-    console.log('arr: '+arr);
+    this.submitRequest.StreamID = this.Searchrequests.StreamID || 0;
+    this.submitRequest.LabID = this.Searchrequests.LabID || 0;
+
+    console.log('arr: ' + arr);
     try {
       await this.bterInventoryService.GetDTEIssueSubmitPermanent(this.submitRequest)
         .then((data: any) => {
@@ -897,16 +897,15 @@ export class AddBterIssueItemComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State == EnumStatus.Success)
-          {
+          if (this.State == EnumStatus.Success) {
             this.toastr.success("Items issued successfully", "", {
               toastClass: "ngx-toastr my-update-toast"
             });
+            this.Searchrequests = new inventoryIssueHistorySearchModel();
             this.BindItem_list();
             //this.GetAllData();
-           // this.CloseModalPopup();
-          } else if (this.State == EnumStatus.Error)
-          {
+            // this.CloseModalPopup();
+          } else if (this.State == EnumStatus.Error) {
             this.toastr.error("Something went wrong.");
           }
         });
@@ -923,16 +922,16 @@ export class AddBterIssueItemComponent {
     }
   }
   async GetAllDataIssuedItems() {
-    
+
     try {
       this.loaderService.requestStarted();
 
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequests.TradeId = this.Searchrequests.TradeId;
       this.Searchrequests.staffID = this.Searchrequests.staffID;
-      this.Searchrequests.actionName='GetIssueItemList';
+      this.Searchrequests.actionName = 'GetIssueItemList';
       this.Searchrequests.ReturnStatus = 0;
-     // this.Searchrequest.staffID = 1;
+      // this.Searchrequest.staffID = 1;
 
       await this.bterInventoryService.GetAllInventoryIssueReturnItemList(this.Searchrequests)
         .then((data: any) => {
@@ -946,7 +945,7 @@ export class AddBterIssueItemComponent {
             console.error("No data returned from API");
           }
         }, error => console.error(error));
-      console.log('Item Master List ',this.ItemMasterList)
+      console.log('Item Master List ', this.ItemMasterList)
     }
     catch (Ex) {
       console.log(Ex);
@@ -957,11 +956,11 @@ export class AddBterIssueItemComponent {
       }, 200);
     }
   }
-  async ShowIssuedItemsList(content: any, itemId:any,staffId:any) {
-    
-     await this.GetAllDataIssuedItems();
+  async ShowIssuedItemsList(content: any, itemId: any, staffId: any) {
 
-    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'xl', keyboard: true,centered: true});
+    await this.GetAllDataIssuedItems();
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
 
     return;
   }

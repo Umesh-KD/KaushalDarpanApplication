@@ -139,6 +139,7 @@ export class AddStaffInitialDetailsComponent {
 
   async GetOfficeWiselogic() {
     debugger;
+    this.formData.IsGuestStaff = false;
     if (this.formData.OfficeID == 17) {
       this.IsNodalOfficer = true;
       this.IsGuestStaffoffice = false;
@@ -165,7 +166,7 @@ export class AddStaffInitialDetailsComponent {
     debugger
     this.formData.IsGuestStaff = false;
     this.formData.GuestHouseID = 0;
-    this.GetRoleMasterData();
+    // this.GetRoleMasterData();
 
     if (this.formData.IsNodal == true) {
       this.formData.StaffTypeID=30;
@@ -183,18 +184,30 @@ export class AddStaffInitialDetailsComponent {
         (item: any) => item.InstitutionManagementTypeID === 1
       );
       this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
-      this.formData.RoleID = 7;
+      // this.formData.RoleID = 7;
       // 1- govt. 5- pvt
   } else {
       this.formData.IsNodal = false;
       this._AddStaffBasicDetailFromGroup['StaffType'].enable();
       this.AddStaffBasicDetailFromGroup.controls['InstituteID'].clearValidators();
       this.formData.InstituteID = 0;
-      this.formData.RoleID = 0;
+      // this.formData.RoleID = 0;
     }
     this.AddStaffBasicDetailFromGroup.controls['InstituteID'].updateValueAndValidity();
 
   
+  }
+
+  async onRoleChange(){
+    if(this.formData.RoleID==7){
+      this.formData.IsNodal=true;
+      await this.InstituteMasterWiselogic();
+    }
+    else{
+      this.formData.IsNodal=false;
+      await this.InstituteMasterWiselogic();
+  
+    }
   }
 
   async roleBySubDepartment() {
@@ -579,6 +592,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async SaveData() {
+    debugger
     // if (this.AddedZonalList.length == 0) {
     //   this.toastr.error("Please Add At Least One Office");
     //   return;

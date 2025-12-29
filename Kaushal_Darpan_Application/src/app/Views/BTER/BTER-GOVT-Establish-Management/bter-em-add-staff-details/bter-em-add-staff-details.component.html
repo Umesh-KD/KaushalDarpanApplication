@@ -14,7 +14,7 @@
 
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute & Branch Details</b>
-        <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, userID)"><i class="ti ti-list"></i></a>               
+        <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, userID)"><span class="me-2">Status History</span><i class="ti ti-list"></i></a>               
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
@@ -219,11 +219,11 @@
           <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
                  formControlName="EmployeeID" [(ngModel)]="request.EmployeeID" />
 
-          <!--<div *ngIf="isSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
       <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
         <i aria-hidden="true"></i>This field is required .!
       </p>
-    </div>-->
+    </div>
         </div>
 
       </div>

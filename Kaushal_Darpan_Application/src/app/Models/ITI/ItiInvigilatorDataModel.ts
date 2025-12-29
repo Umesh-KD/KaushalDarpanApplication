@@ -18,6 +18,7 @@ export class ItiInvigilatorDatAModel extends RequestBaseModel  {
   public RollNumberFrom?: string = ''
   public RollNumberTo?: string = ''
   public StudentName?: string = ''
+  public StudentList:any=[]
 
 }
 
