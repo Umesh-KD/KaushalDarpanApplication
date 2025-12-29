@@ -46,6 +46,8 @@ export class PrincipalDashboardITIComponent implements OnInit
   public isfeeLoaced: number = 0;
   public IsPendingQual: number = 0;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
+  public Ishowpopup: boolean = false
+  public ExamMessage:string=''
   constructor(private ITIAdminDashboardServiceService: ITIPrincipalDashboardServiceService, private ITIAdminDashboardService: ITIAdminDashboardServiceService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private encryptionService: EncryptionService,
     private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private sweetAlert2: SweetAlert2) {
@@ -54,7 +56,8 @@ export class PrincipalDashboardITIComponent implements OnInit
 
   //Data Load
   async ngOnInit() {
-    if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT) && this.sSOLoginDataModel.SelectedValue == 1) {
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT) && this.sSOLoginDataModel.SelectedValue
+      == 1) {
       await this.CheckProfileStatus();
 
       if (this.sSOLoginDataModel.EmTypeId == 1) {
@@ -91,8 +94,10 @@ export class PrincipalDashboardITIComponent implements OnInit
       }
     } else {
       await this.GetAllData()
-
+      await this.CheckProfileStatus()
     }
+    
+    
   
   }
 
@@ -106,7 +111,12 @@ export class PrincipalDashboardITIComponent implements OnInit
           this.isprofile = data['Data'][0]['IsProfile'];
           this.isfeeLoaced = data['Data'][0]['isFeeLocked'];
           this.IsPendingQual = data['Data'][0]['IsPendingQual'];
-          
+          this.Ishowpopup = data['Data'][0]['Ishowpopup'];
+          this.ExamMessage = data['Data'][0]['ExamMessage'];
+      
+          if (this.Ishowpopup == true) {
+            this.sweetAlert2.Info(`${this.ExamMessage}`)
+          }
         }, (error: any) => console.error(error)
         );
     }
@@ -119,6 +129,9 @@ export class PrincipalDashboardITIComponent implements OnInit
       }, 200);
     }
   }
+
+
+
 
 
   async GetAllData()
