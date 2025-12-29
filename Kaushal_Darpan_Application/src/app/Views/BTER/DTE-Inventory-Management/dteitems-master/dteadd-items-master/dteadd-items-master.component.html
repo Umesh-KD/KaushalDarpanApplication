@@ -180,7 +180,9 @@
                  formControlName="txtQuantity"
                  [max]="maxQty"
                  step="1"
-                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" [(ngModel)]="request.Quantity" (input)="onQuantityInput($event)">
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" 
+                 [(ngModel)]="request.Quantity" 
+                 (input)="onQuantityInput($event)">
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtQuantity.errors" class="text-danger">
             <p *ngIf="_AddItemsRequestFormGroup.txtQuantity.errors.required">

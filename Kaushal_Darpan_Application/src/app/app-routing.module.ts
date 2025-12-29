@@ -794,6 +794,7 @@ const routes: Routes = [
       { path: 'HostelWardenStudentMeritlist', loadChildren: () => import('./Views/Hostel-Management/Hostel-Warden-Student-Merit-list/Hostel-Warden-Student-Merit-list.module').then(m => m.HostelWardenStudentMeritlistModule) },
       { path: 'HostelMeritlist/HostelGenerateMeritlist', loadChildren: () => import('./Views/Hostel-Management/Hostel-Generate-Merit-list/Hostel-Generate-Merit-list.module').then(m => m.HostelGenerateMeritlistModule) },
       { path: 'CorrectedMeritList', loadChildren: () => import('./Views/Hostel-Management/Corrected-Merit-List/Corrected-Merit-List.module').then(m => m.CorrectedMeritListModule) },
+      { path: 'hostel-student-merit-list', loadChildren: () => import('./Views/Hostel-Management/hostel-student-merit-list-warden-view/hostel-student-merit-list-warden-view.module').then(m => m.HostelStudentMeritListWardenViewModule) },
 
       { path: 'RoomAvailabilties', loadChildren: () => import('./Views/Hostel-Management/room-availabilties/room-availabilties.module').then(m => m.RoomAvailabiltiesModule) },
       { path: 'RoomAllotment', loadChildren: () => import('./Views/Hostel-Management/room-allotment/room-allotment.module').then(m => m.RoomAllotmentModule) },
