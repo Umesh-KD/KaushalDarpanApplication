@@ -7,7 +7,7 @@ import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel'
 import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDataModel';
 import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { ApplyDuplicateDocument, DuplicateDocumentSearch } from '../../Models/BTER/ApplyDuplicateDocDataModel';
+import { ApplyDuplicateDocument, DuplicateDoc_Action, DuplicateDocumentSearch } from '../../Models/BTER/ApplyDuplicateDocDataModel';
 import { error } from 'highcharts';
 
 
@@ -80,4 +80,22 @@ public async GetApplyDuplicateDocumentTypeList() {
         catchError(this.handleErrorObservable)
       ).toPromise(); 
   }
+
+  
+  public async Save_DuplicateDocumentAction(request: DuplicateDoc_Action) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/Save_DuplicateDocumentAction", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
+  public async GetStudentDMarshkeetSession(SemesterID: number=0, StudentID: number = 0, DepartmentID: number = 0) {
+    return await this.http.get(`${this.APIUrl}/GetStudentDMarshkeetSession/` + SemesterID + '/' + StudentID + '/' + DepartmentID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

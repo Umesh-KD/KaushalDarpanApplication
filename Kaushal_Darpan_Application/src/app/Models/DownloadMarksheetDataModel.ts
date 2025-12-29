@@ -8,6 +8,7 @@ export class DownloadMarksheetSearchModel {
   public DepartmentID: number = 0
   public StudentID: number = 0
   public EndTermID: number = 0
+  public RequestEndTerm:number=0
   public Eng_NonEngID: number = 0
   public MarksheetPath: string = ''
   public Marksheet: string = ''
@@ -18,6 +19,8 @@ export class DownloadMarksheetSearchModel {
   public IsReval?: boolean = false
   public IsRWHResult?: boolean = false
   public IsLateral?: boolean = false
+
+  public FianancialYearID?:number=0
 }
 
 

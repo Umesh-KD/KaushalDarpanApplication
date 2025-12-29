@@ -66,6 +66,10 @@
             <!-- <th class="text-left" style="width:100px">S.No</th> -->
             <th class="text-left">Student Name</th>
             <th class="text-left">Student ID</th>
+
+            <th class="text-left">Semester</th>
+            <th class="text-left">EnrollmentNo / Application No</th>
+            <th class="text-left">Request Session</th>
             <!-- <th class="text-left">Service ID</th> -->
             <th class="text-left">Fees Amount</th>
             <th class="text-left">Apply For</th>
@@ -78,6 +82,10 @@
             <td>{{idx+1}}</td>
             <td align="left">{{item.UserName}}</td>
             <td align="left">{{item.Student_Id}}</td>
+
+            <td align="left">{{item.SemesterName}}</td>
+            <td align="left">{{item.EnrollmentNo}}</td>
+            <td align="left">{{item.EndTermName}}</td>
             <!-- <td align="left">{{item.ServiceID}}</td> -->
             <td align="left">{{item.FeeAmount}}</td>
             <td align="left">{{item.Name}}</td>
@@ -88,7 +96,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DateOfBirth | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.UIDNumber}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.ErrorDescription}}</td> -->
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+            <td align="center" class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
             
               @if(item.paymentstatus==0)
               {
@@ -96,12 +104,35 @@
               }
               @else
               {
-              <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                <!-- <a [routerLink]="'/EditStudentCorrection'" [queryParams]="{ID:item.StudentID, key:1}" title="Edit"><i class="ti ti-pencil"></i></a> -->
+              <!-- <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
+                <a [routerLink]="'/EditStudentCorrection'" [queryParams]="{ID:item.StudentID, key:1}" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a [routerLink]="" [queryParams]="{ID:item.StudentID, key:1}" title="Edit"><i class="ti ti-pencil"></i></a>
-              </div>
+              </div> -->
+                <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
+                  <a href="javascript:void(0);" title="Action" *ngIf="(item.paymentstatus==1 && (item.Action!='Approved'))" (click)="OnAction(MyModel_Action,item)"><i class="ti ti-check"></i></a>
+                  <a href="javascript:void(0);" *ngIf="(item.Action=='Approved')" title="Download Marksheet" (click)="DownloadDuplicateMarksheet(item)"><i class="ti ti-download"></i></a>
+                  
+                  <!-- <p *ngIf="(item.paymentstatus==1 && item.Action=='Approved')" class="text-center text-success fw-bold">Issued</p>               -->
+                  <!--<a href="javascript:void(0);" title="View & Update Company" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,company.ID)"><i class="ti ti-eye"></i></a>-->
+                  <!-- <a [routerLink]="" [queryParams]="{CompanyID:company.ID,key:3}" title="View & Update Company"> <i class="ti ti-download"></i></a> -->
+                </div>   
               } 
             </td> 
+
+            <!-- testing start  -->
+
+            <!-- <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="row.ProfileStatusID == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
+                <a href="javascript:void(0);" *ngIf="row.RoleID != _EnumRole.GuestFaculty && 
+                          row.RoleID != _EnumRole.ShikshaSambal" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
+                <a *ngIf="row.RoleID != _EnumRole.GuestFaculty && row.ProfileStatusID != 247 &&" href="javascript:void(0);" title="Approve Profile" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)"><i class="ti ti-check"></i></a>                
+              </div>
+            </td> -->
+
+            <!-- test end  -->
+
+
           </tr>
         </tbody>
       </table>
@@ -126,3 +157,58 @@
   </div>
 </div>
 <!-- end row -->
+
+
+
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="formAction" id="formAction" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b><i class="fa fa-plus"></i>&nbsp; Issue Certificate</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mb-8">
+
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issuance Action<span class="StarMarking">*</span></label>
+                <select class="form-select" id="ddlAction" formControlName="ddlAction" [(ngModel)]="requestAction.Action">
+                  <option value="0">--Select--</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Hold">Hold</option>
+                </select>
+                <div *ngIf="isSubmitted&&requestAction.Action=='0'" class="text-danger">
+                  This field is required .!
+                </div>
+              </div>
+            </div>
+            <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3 mt-3">
+              <div>
+                <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
+                <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.ActionRemarks"></textarea>
+                <div *ngIf="isSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
+                  <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+
+
+            </div>
+
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_Issuance()">Submit</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

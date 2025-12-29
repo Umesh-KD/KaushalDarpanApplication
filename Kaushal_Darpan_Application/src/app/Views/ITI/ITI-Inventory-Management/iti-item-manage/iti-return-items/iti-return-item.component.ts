@@ -346,11 +346,8 @@ debugger;
     await this.confirmReturn(this.selectedItemMasterList);
   }
   async confirmReturn(arr: any) {
-    debugger;
-
     this.loaderService.requestStarted();
     this.isLoading = true;
-
     this.submitRequest.StaffId = this.Searchrequest.staffID,
       this.submitRequest.Remarks = this.returnModel.Remarks || '',
       this.submitRequest.ItemCategoryId = 0,
