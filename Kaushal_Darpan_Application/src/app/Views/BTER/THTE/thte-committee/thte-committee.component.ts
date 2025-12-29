@@ -278,7 +278,7 @@ export class THTECommitteeComponent {
     if (!dateStr) return '';
 
     const [datePart] = dateStr.split(' '); // get "20-06-2025"
-    const [day, month, year] = datePart.split('-');
+    const [day, month, year] = datePart.split('/');
 
     return `${year}-${month}-${day}`; // returns "2025-06-20"
   }
