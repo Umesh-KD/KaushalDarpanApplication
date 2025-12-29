@@ -1382,6 +1382,7 @@ export class StudentEnrollmentComponent {
           //success
           if (data.State == EnumStatus.Success) {
             this.PreExamStudentAnnextureData = data['Data'];
+            this.PreExamStudentData = data['Data'];
           }
           else {
             this.toastr.error(data.ErrorMessage);
@@ -1425,8 +1426,7 @@ export class StudentEnrollmentComponent {
     const unwantedColumns = [
       'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate',
       'IPAddress', 'Selected', 'status', 'EndTermID', 'StreamID',
-      'AcademicYearID', 'SemesterID', 'InstituteStreamID',
-      'StudentExamStatus', 'StudentType', 'RollNo', 'InstituteID',
+      'StudentExamStatus', 'StudentType', 'RollNo', 'InstituteID','InstituteStreamID',
       'st_his_StatusId', 'st_his_StatusName', 'st_his_Remark'
     ];
 
