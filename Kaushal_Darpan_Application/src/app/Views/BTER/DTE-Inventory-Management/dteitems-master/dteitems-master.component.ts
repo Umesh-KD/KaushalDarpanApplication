@@ -305,21 +305,22 @@ export class DteItemsMasterComponent {
   }
 
   exportToExcel(): void {
+    
     this.ItemMasterList1 = this.ItemMasterList1.map((item: any) => {
       const updatedItem = {
-        AvailableQuantity: item.AvailableQuantity,
-        CampanyName: item.CampanyName,
-        batchId: item.batchId,
         Code: item.Code,
         CollegeName: item.CollegeName ?? "BTER",
         EquipmentsName: item.EquipmentsName,
+        ItemCategoryName: item.ItemCategoryName,
+        CampanyName: item.CampanyName,
+        batchId: item.batchId,
+        VoucherNumber: item.VoucherNumber,
         IdentificationMark: item.IdentificationMark,
         InitialQuantity: item.InitialQuantity,
-        ItemCategoryName: item.ItemCategoryName,
+        AvailableQuantity: item.AvailableQuantity,
         PricePerUnit: item.PricePerUnit,
-        Status: item.Status == 1 ? "Approved" : "Pending",
         TotalPrice: item.TotalPrice,
-        VoucherNumber: item.VoucherNumber
+        Status: item.Status == 1 ? "Approved" : "Pending",
       };
 
       return updatedItem;

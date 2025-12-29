@@ -94,7 +94,10 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
+      <a href="javascript:void(0);" 
+        (click)="exportToExcel()" 
+        class="btn bg-info btn-sm text-white" 
+        *ngIf="ItemMasterList && ItemMasterList.length > 0">
         <i class="ti ti-excel"></i> Export Excel
       </a>
     </div>
@@ -186,7 +189,7 @@
             <td align="left">{{item.RTS | date}}</td>
             <td align="left">
               <span class="px-2 py-1 rounded text-white"
-                    [ngClass]="item.IsConsume == 1 ? 'bg-green-500' : 'bg-blue-500'">
+                    [ngClass]="item.IsConsume == 1 ? 'bg-blue-500' : 'bg-green-500'">
                 {{ item.IsConsume == 1 ? 'Consumable' : 'Permanent' }}
               </span>
             </td>
