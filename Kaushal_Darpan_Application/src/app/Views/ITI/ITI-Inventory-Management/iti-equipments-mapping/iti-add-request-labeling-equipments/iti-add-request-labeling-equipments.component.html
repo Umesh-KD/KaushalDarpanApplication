@@ -165,7 +165,7 @@
 
         <div>
           <label for="Quantity" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Quantity: <span class="StarMarking">*</span>
+            Requested Quantity: <span class="StarMarking">*</span>
           </label>
 
           <input type="number"
@@ -175,15 +175,9 @@
                  [min]="1"
                  [max]="maxQty"
                  step="1"
-                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" [(ngModel)]="request.Quantity" (input)="onQuantityInput($event)">
-          <!--<input type="number"
-     id="txtQuantity"
-     class="form-input"
-     formControlName="txtQuantity"
-     min="1"
-     [max]="maxQty"
-     step="1"
-     oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" [(ngModel)]="request.Quantity" (ngModelChange)="onQuantityChange($event)">-->
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" 
+                 [(ngModel)]="request.Quantity" 
+                 (input)="onQuantityInput($event)">
           <div *ngIf="isSubmitted && _RequestFormGroup.txtQuantity.errors" class="text-danger">
             <p *ngIf="_RequestFormGroup.txtQuantity.errors.required">
               <i aria-hidden="true"></i>
@@ -197,6 +191,33 @@
           </div>
         </div>
 
+        <div>
+          <label for="Quantity" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Approved Quantity: <span class="StarMarking">*</span>
+          </label>
+
+          <input type="number"
+                 id="ApprovedQuantity"
+                 class="form-input"
+                 formControlName="ApprovedQuantity"
+                 [min]="1"
+                 [max]="maxQty"
+                 step="1"
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" 
+                 [(ngModel)]="request.ApprovedQuantity" 
+                 (input)="onQuantityInput($event)">
+          <div *ngIf="isSubmitted && _RequestFormGroup.ApprovedQuantity.errors" class="text-danger">
+            <p *ngIf="_RequestFormGroup.ApprovedQuantity.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+            <!-- Check for pattern error -->
+            <p *ngIf="_RequestFormGroup.ApprovedQuantity.errors.pattern">
+              <i aria-hidden="true"></i>
+              Only positive numbers are allowed in the Quantity field!
+            </p>
+          </div>
+        </div>
 
         <div>
           <label for="PricePerUnit" class="text-gray-800 text-sm font-medium inline-block mb-2">

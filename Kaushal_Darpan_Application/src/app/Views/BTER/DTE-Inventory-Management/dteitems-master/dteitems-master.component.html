@@ -216,7 +216,7 @@
                         || sSOLoginDataModel.RoleID == EnumRole.Principal
                         || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge"
                         class="btn btn-sm text-white"
-                        (click)="(item.Status == 0 || !(item.Status == 2)) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
+                        (click)="(item.Status == 0) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
                         [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
                         [title]="item.Status == 1 ? 'Approved' : 'Accept'">
                   {{ item.Status == 0 || item.Status == '0' || item.Status == null ? 'Pending' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted'  : 'Pending' }}
@@ -231,7 +231,7 @@
                         || sSOLoginDataModel.RoleID == EnumRole.DTELateral
                         || sSOLoginDataModel.RoleID == EnumRole.Principal
                         || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge)
-                        && (item.Status == '0' || item.Status == null || item.Status != '2')"
+                        && (item.Status == '0' || item.Status == null)"
                         class="btn btn-sm text-white"
                         (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
                         [ngClass]="'bg-revert'"

@@ -105,7 +105,8 @@ export class ITIAddRequestLabelingEquipmentsComponent {
       ddlInstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
       txtTotalPrice: [{ value: '', disabled: false }, [Validators.required]],
       txtPricePerUnit: ['', [Validators.required]],
-      txtQuantity: [{ value: '', disabled: false }, [Validators.required]],
+      txtQuantity: [{ value: '', disabled: true }, [Validators.required]],
+      ApprovedQuantity: [{ value: ''}, [Validators.required]],
       txtVoucherNumber: ['', [Validators.required]],
       IdentificationMark: ['', Validators.required],
       CampanyName: ['', Validators.required],
@@ -155,7 +156,7 @@ export class ITIAddRequestLabelingEquipmentsComponent {
         this.RequestFormGroup.get('ddlEquipmentsId')?.disable();
       } else {
         this.RequestFormGroup.get('ddlInstituteID')?.enable();
-        this.RequestFormGroup.get('txtQuantity')?.enable();
+        // this.RequestFormGroup.get('txtQuantity')?.enable();
         this.RequestFormGroup.get('txtTotalPrice')?.enable();
         this.RequestFormGroup.get('ddlCategoryId')?.enable();
         this.RequestFormGroup.get('ddlEquipmentsId')?.enable();
@@ -189,8 +190,7 @@ export class ITIAddRequestLabelingEquipmentsComponent {
   //New Added
 
   calculateTotalPrice(): void {
-    debugger;
-    const quantity = this.request.Quantity ?? 0;
+    const quantity = this.request.ApprovedQuantity ?? 0;
     const pricePerUnit = this.request.PricePerUnit ?? 0;
     // Calculate total price
     this.request.TotalPrice = quantity * pricePerUnit;
@@ -206,6 +206,19 @@ export class ITIAddRequestLabelingEquipmentsComponent {
     // Update the input field and model
     input.value = numericValue.toString();
     this.request.Quantity = numericValue;
+    // this.calculateTotalPrice();
+  }
+
+  onApprovedQuantityInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/[^0-9]/g, '').slice(0, 4);
+
+    // Clamp the value to min and max if needed
+    const numericValue = Math.max(1, Math.min(Number(value), this.maxQty || Infinity));
+
+    // Update the input field and model
+    input.value = numericValue.toString();
+    this.request.ApprovedQuantity = numericValue;
     this.calculateTotalPrice();
   }
 
@@ -230,8 +243,8 @@ export class ITIAddRequestLabelingEquipmentsComponent {
       this.RequestFormGroup.getRawValue().ddlInstituteID != null &&
       this.RequestFormGroup.value.txtPricePerUnit != null &&
       Number(this.RequestFormGroup.value.txtPricePerUnit) > 0 &&
-      this.RequestFormGroup.getRawValue().txtQuantity != null &&
-      this.RequestFormGroup.getRawValue().txtQuantity > 0 &&
+      this.RequestFormGroup.getRawValue().ApprovedQuantity != null &&
+      this.RequestFormGroup.getRawValue().ApprovedQuantity > 0 &&
       this.RequestFormGroup.getRawValue().txtTotalPrice != null &&
       this.RequestFormGroup.getRawValue().txtTotalPrice > 0 &&
       this.RequestFormGroup.value.txtVoucherNumber != null) {
@@ -262,7 +275,7 @@ export class ITIAddRequestLabelingEquipmentsComponent {
               this.toastr.success(this.Message)
               this.ResetControl();
               
-              this.routers.navigate(['/iti-equipments-mapping']);
+              this.routers.navigate(['/iti-add-request-equipments']);
               //this.GetAllData();
               //if (this.isRequested == true) {
 

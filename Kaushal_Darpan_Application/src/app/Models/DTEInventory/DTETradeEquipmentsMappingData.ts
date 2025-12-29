@@ -4,6 +4,7 @@ export class DTETradeEquipmentsMappingData {
   public CategoryId: number = 0;
   public EquipmentId: number = 0;
   public Quantity: number | null = null;
+  public ApprovedQuantity: number | null = null;
   public ActiveStatus: boolean = true;
   public DeleteStatus: boolean = false;
   public CreatedBy: number = 0;
