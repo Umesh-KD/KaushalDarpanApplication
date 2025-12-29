@@ -134,7 +134,7 @@ export class VerifyAdmitCardComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       this.searchRequest.action = "_GetStatusVerifyAdmidCardListPdf"
       this.searchRequest.PDFType = 2; // 2 for Admit Card List PDF
       
