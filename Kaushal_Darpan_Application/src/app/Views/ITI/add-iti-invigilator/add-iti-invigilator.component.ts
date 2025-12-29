@@ -12,7 +12,7 @@ import { AppointExaminerService } from '../../../Services/AppointExaminer/Appoin
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { EnumDepartment, EnumStatus } from '../../../Common/GlobalConstants';
 import { AppointmentExaminerDataModel } from '../../../Models/AppointExaminerDataModel';
-import { ItiInvigilatorDatAModel, ItiInvigilatorSearchModel } from '../../../Models/ITI/ItiInvigilatorDataModel';
+import { ItiInvigilatorDatAModel, ItiInvigilatorSearchModel, ITITheorySearchModel } from '../../../Models/ITI/ItiInvigilatorDataModel';
 import { ITIInvigilatorService } from '../../../Services/ITI/ITIInvigilator/itiinvigilator.service';
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 
@@ -32,6 +32,7 @@ export class AddItiInvigilatorComponent {
   public Isverifed: boolean = false
   public TimeTableID:number=0
   public isFormSubmitted: boolean = false;
+  public AllInTableSelect: boolean = false;
   closeResult: string | undefined;
   public isLoading: boolean = false;
   public request = new ItiInvigilatorDatAModel();
@@ -49,14 +50,19 @@ export class AddItiInvigilatorComponent {
   public SemesterMasterDDL: any = []
   public CourseMasterDDL: any = []
   public ExaminerSsoidDDL: any = []
+  public StudentList: any = []
   public AppointExamierList: any = []
-  public isSubmitted:boolean=false
+  public isSubmitted: boolean = false
+  public theorylist = new ITITheorySearchModel()
   /*  public searchRequest = new AppointExaminerSearchModel();*/
   public Post: string = ''
   public Email: string = ''
   public MobileNumber: string = ''
+  public SubjectName: string = ''
   public Name: string = ''
   public SSOID: string = ''
+  public SemesterID:number=0
+
   public requestSSoApi = new CommonVerifierApiDataModel();
   constructor(
     private loaderService: LoaderService,
@@ -75,8 +81,8 @@ export class AddItiInvigilatorComponent {
     this.AppointExaminerFromGroup = this.formBuilder.group({
 
      // ddlSSOID: ['', [DropdownValidators]],
-      RollNoFrom: ['', [Validators.required]],
-      RollNoTo: ['', [Validators.required]],
+      //RollNoFrom: ['', [Validators.required]],
+      //RollNoTo: ['', [Validators.required]],
 
       Name: [''],
       Email:[''],
@@ -129,7 +135,7 @@ export class AddItiInvigilatorComponent {
   //}
 
   async SaveData() {
-    debugger
+ 
     try {
       this.isSubmitted = true;
       if (this.AppointExaminerFromGroup.invalid) {
@@ -138,7 +144,11 @@ export class AddItiInvigilatorComponent {
       this.isLoading = true;
 
       this.loaderService.requestStarted();
-
+      this.request.StudentList = []
+      const Isselect = this.StudentList.filter((x: any) => x.Marked == 1)
+      if (Isselect == 0) {
+        this.toastr.warning("Please Select At least one student to be assign")
+      }
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
@@ -149,9 +159,10 @@ export class AddItiInvigilatorComponent {
       this.request.Email = this.AppointExaminerFromGroup.get('Email')?.value
       this.request.MobileNumber = this.AppointExaminerFromGroup.get('MobileNumber')?.value
       this.request.SSOID = this.AppointExaminerFromGroup.get('SSOID')?.value
+      this.request.StudentList = Isselect
 
 
-      debugger
+ 
       //save
       await this.Appointexamierservice.SaveData(this.request)
         .then((data: any) => {
@@ -162,7 +173,7 @@ export class AddItiInvigilatorComponent {
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
 
-            this.GetInvigilatorList();
+            this.GetAllTheoryStudents(this.SubjectName, this.SemesterID);
             this.ResetControls();
 
             // call parent function
@@ -329,8 +340,11 @@ export class AddItiInvigilatorComponent {
 
   async OpenViewApplicationPopup() {
     this.request.TimeTableID = this.TimeTableID
+
     this.GetStaffTypeDDL()
     this.GetInvigilatorList()
+    this.GetAllTheoryStudents(this.SubjectName, this.SemesterID)
+
     this.ViewPopup(this.modal_ViewApplication);
   }
 
@@ -444,4 +458,45 @@ export class AddItiInvigilatorComponent {
 
   }
 
+
+
+  async GetAllTheoryStudents(SubjectName: string, SemesterID: number) {
+
+
+
+
+
+    this.theorylist.EndtermID = this.sSOLoginDataModel.EndTermID
+    this.theorylist.EngNong = this.sSOLoginDataModel.Eng_NonEng
+    this.theorylist.InstituteID = this.sSOLoginDataModel.InstituteID
+    this.theorylist.SubjectName = SubjectName
+    this.theorylist.SemesterID = SemesterID
+    try {
+
+      this.loaderService.requestStarted();
+      await this.Appointexamierservice.GetAllTheoryStudents(this.theorylist)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StudentList = data['Data'];
+
+
+          console.log("StudentList", this.StudentList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  selectInTableAllCheckbox() {
+    this.StudentList.forEach((x:any) => {
+      x.Marked = this.AllInTableSelect;
+    });
+  }
 }

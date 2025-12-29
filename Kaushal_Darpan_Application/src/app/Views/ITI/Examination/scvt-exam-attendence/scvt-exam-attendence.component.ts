@@ -84,9 +84,10 @@ export class ScvtExamAttendenceComponent {
     // if(this.sSOLoginDataModel.RoleID == EnumRole.Examiner) {
     this.searchRequest.SemesterID = Number(sessionStorage.getItem('SemesterID'));
     this.searchRequest.InstituteID = Number(sessionStorage.getItem('InstituteID'));
+ 
     this.searchRequest.SubjectName = sessionStorage.getItem('SubjectName') ?? '';
-    this.searchRequest.RollNoFrom = sessionStorage.getItem('RollNumberFrom') ?? '';
-    this.searchRequest.RollNoTo = sessionStorage.getItem('RollNumberTo') ?? '';
+ 
+    this.searchRequest.InvigilatorID = Number(sessionStorage.getItem('InvigilatorID'));
     //   this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     // }
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
