@@ -143,6 +143,7 @@ export class VerifyRollListComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.action = "_VerifyRollListPdf"
       this.searchRequest.PDFType = 1; // 1 for Roll List PDF
       //if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
