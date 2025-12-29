@@ -401,12 +401,13 @@ export class InvigilatorExamListComponent {
       console.log(ex);
     }
   }
-  async OnRoute(item:any) {
+  async OnRoute(item: any) {
+    debugger
     sessionStorage.setItem('InstituteID', item.InstituteID.toString());
     sessionStorage.setItem('SemesterID', item.SemesterID.toString());
     sessionStorage.setItem('SubjectName', item.SubjectName);
-    sessionStorage.setItem('RollNumberFrom', item.RollNumberFrom);
-    sessionStorage.setItem('RollNumberTo', item.RollNumberTo);
+
+    sessionStorage.setItem('InvigilatorID', item.InvigilatorID);
     this.routers.navigate(['/ScvtExamAttendence']);
   }
 
@@ -421,8 +422,8 @@ export class InvigilatorExamListComponent {
     sessionStorage.setItem('InstituteID', "0");
     sessionStorage.setItem('SemesterID', "0");
     sessionStorage.setItem('SubjectName', "0");
-    sessionStorage.setItem('RollNumberFrom', "0");
-    sessionStorage.setItem('RollNumberTo', "0");
+
+    sessionStorage.setItem('InvigilatorID', "0");
 
   }
 
