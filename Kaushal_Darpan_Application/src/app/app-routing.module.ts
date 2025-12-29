@@ -1,4 +1,4 @@
-
+ 
 import { Title } from '@angular/platform-browser';
 import { RouterModule, Routes, TitleStrategy, RouterStateSnapshot } from '@angular/router';
 import { MasterLayoutComponent } from './Views/Shared/master-layout/master-layout.component';
@@ -1322,8 +1322,6 @@ const routes: Routes = [
       { path: 'InternalSlidingReport', loadChildren: () => import('./Views/ITI/reports/internal-sliding-report/internal-sliding-report.module').then(m => m.InternalSlidingReportModule), title: 'InternalSlidingReport' },
       { path: 'SwappingReport', loadChildren: () => import('./Views/ITI/reports/swapping-report/swapping-report.module').then(m => m.SwappingReportModule), title: 'SwappingReportForAdmin' },
 
-      { path: 'iti-admin-remunerationInvigilator', loadChildren: () => import('./Views/ITI/iti-admin-remunerationInvigilator-details/iti-admin-remunerationInvigilator-details.module').then(m => m.ItiAdminRemunerationInvigilatorDetailsModule), title: 'iti-admin-remunerationInvigilator-details' },
-
 
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'center-superitendent-exam-report/:id', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
@@ -1428,6 +1426,8 @@ const routes: Routes = [
       { path: 'NcvtPracticalexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
       { path: '2ndNcvtPracticalexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
 
+      { path: 'ScvtexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
+      { path: '2ndScvtexamAttendence/:id', loadChildren: () => import('./Views/ITI/ncvt-practicalexam-attendence/ncvt-practicalexam-attendence.module').then(m => m.NcvtPracticalexamAttendenceModule) },
 
 
       { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
@@ -1559,6 +1559,14 @@ const routes: Routes = [
       { path: 'CenterRollList', loadChildren: () => import('./Views/ITI/Examination/center-roll-list/center-roll-list.module').then(m => m.CenterRollListModule), title:'Center Roll List' },
 
       { path: 'StudentPaperReport', loadChildren: () => import('./Views/ITI/Examination/student-paper-report/student-paper-report.module').then(m => m.StudentPaperReportModule) },
+      { path: 'ScvtExamAttendence', loadChildren: () => import('./Views/ITI/Examination/scvt-exam-attendence/scvt-exam-attendence.module').then(m => m.ScvtExamAttendenceModule) },
+
+      { path: 'ITIInvigilatorExamList', loadChildren: () => import('./Views/ITI/Examination/invigilator-exam-list/invigilator-exam-list.module').then(m => m.InvigilatorExamListModule) },
+
+
+
+      { path: 'ItiPaperUploadReport', loadChildren: () => import('./Views/ITI/iit-paper-upload-report/iit-paper-upload-report.module').then(m => m.IitPaperUploadReportModule) },
+
 
     ]
   },
@@ -1662,12 +1670,8 @@ const routes: Routes = [
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
+
   
-  
-
-
-
-
 
 
 
@@ -1692,7 +1696,7 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
 }
 @NgModule({
   imports: [
-    //RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules, useHash: false,  paramsInheritanceStrategy: 'always' })
+    //RouterModule.forRoot(routes, { prel oadingStrategy: PreloadAllModules, useHash: false,  paramsInheritanceStrategy: 'always' })
 
     RouterModule.forRoot(routes, {
       useHash: false, onSameUrlNavigation: 'reload', paramsInheritanceStrategy: 'always'

@@ -240,7 +240,9 @@ export class AddItiInvigilatorComponent {
           data = JSON.parse(JSON.stringify(data));
           this.request = data['Data'][0]
           this.request.InvigilatorID = data['Data'][0]['InvigilatorID']
-
+          this.SSOID = data['Data'][0]['SSOID']
+          this.Name = data['Data'][0]['Name']
+          this.MobileNumber = data['Data'][0]['MobileNumber']
           const btnSave = document.getElementById('btnSave')
           if (btnSave) btnSave.innerHTML = "Update";
           const btnReset = document.getElementById('btnReset')
@@ -272,7 +274,7 @@ export class AddItiInvigilatorComponent {
           try {
             //Show Loading
             this.loaderService.requestStarted();
-
+              
             await this.Appointexamierservice.GetInvigilatorList(this.searchrequest)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));

@@ -116,11 +116,11 @@
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <!--<a href="javascript:void(0)" title="Edit" (click)="onEdit(row.StaffID)"><i class="ti ti-pencil"></i></a>-->
-                  <!--<a (click)="Onroute(row.ExaminerID,2)" title="Assign Practical Subject "><i class="ti ti-plus"></i></a>-->
-                  <!--<a (click)="GetAllTheoryStudents(modal_ViewStudent,row.ExaminerID)" title="View">
+                  <a (click)="Onroute(row.ExaminerID,2)" title="Assign Practical Subject "><i class="ti ti-plus"></i></a>
+                  <a (click)="GetAllTheoryStudents(modal_ViewStudent,row.ExaminerID)" title="View">
                     <i class="ti ti-eye"></i>
-                  </a>-->
-                  <!--<a (click)="Onroute(row.ExaminerID,1)" title="Assign Theory Subject"><i class="ti ti-plus"></i></a>-->
+                  </a>
+                  <a (click)="Onroute(row.ExaminerID,1)" title="Assign Theory Subject"><i class="ti ti-plus"></i></a>
                   <!--<a href="/ITIExaminer?StaffID={{row.ExaminerID}}" title="Edit"><i class="ti ti-pencil"></i></a>-->
                   <a [routerLink]="['/ITIExaminer']" [queryParams]="{ StaffID: row.ExaminerID }" title="Edit"><i class="ti ti-pencil"></i></a>
                   <a href="javascript:void(0)" title="Delete" (click)="btnDeleteOnClick(row.ExaminerID)"><i class="ti ti-trash"></i></a>

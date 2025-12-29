@@ -8,11 +8,16 @@ export class ItiInvigilatorDatAModel extends RequestBaseModel  {
   public InstituteID:number=0
   public StaffID:number=0
   public TimeTableID: number = 0
+  public SemesterID: number = 0
 
   public SSOID?: string = ''
   public Name?: string = ''
   public MobileNumber?: string = ''
   public Email?: string = ''
+  public SubjectName?: string = ''
+  public RollNumberFrom?: string = ''
+  public RollNumberTo?: string = ''
+  public StudentName?: string = ''
 
 }
 

@@ -70,14 +70,6 @@
           </div>
         </div>
 
-        <div  *ngIf="this.IsGuestHouseAdmin != true && IsNodalOfficer==true">
-          <br />
-          <label for="IsNodal" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            <input type="checkbox" id="IsNodal" name="IsNodal"
-                   formControlName="IsNodal" [(ngModel)]="formData.IsNodal" (change)="InstituteMasterWiselogic()"> Add as Principal
-          </label>
-        </div>
-
 
         <div *ngIf="IsGuestStaffoffice==true">
           <br />
@@ -86,6 +78,36 @@
                    formControlName="IsGuestStaff" [(ngModel)]="formData.IsGuestStaff" (change)="GuestHouseMasterWiselogic()"> Add as Guest Staff
           </label>
         </div>
+
+
+        <!-- <div  *ngIf="this.IsGuestHouseAdmin != true && IsNodalOfficer==true">
+          <br />
+          <label for="IsNodal" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            <input type="checkbox" id="IsNodal" name="IsNodal"
+                   formControlName="IsNodal" [(ngModel)]="formData.IsNodal" (change)="InstituteMasterWiselogic()"> Add as Principal
+          </label>
+        </div> -->
+
+          <!--{{RoleMasterList|json}}-->
+
+
+          <div>
+            <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span class="StarMarking">*</span></label>
+            <select class="form-select " name="RoleID" id="RoleID" formControlName="RoleID"
+                    [(ngModel)]="formData.RoleID" (change)="onRoleChange()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of RoleMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.RoleID.errors" class="text-danger">
+              <p *ngIf="!_AddStaffBasicDetailFromGroup.RoleID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div>
+          </div>
+
+
+        
 
         <div *ngIf="this.IsGuestHouseAdmin != true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
@@ -115,21 +137,7 @@
             </p>
           </div>
         </div>
-        <!--{{RoleMasterList|json}}-->
-        <div>
-          <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span class="StarMarking">*</span></label>
-          <select class="form-select " name="RoleID" id="RoleID" formControlName="RoleID"
-                  [(ngModel)]="formData.RoleID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of RoleMasterList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.RoleID.errors" class="text-danger">
-            <p *ngIf="!_AddStaffBasicDetailFromGroup.RoleID.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is
-              required .!
-            </p>
-          </div>
-        </div>
+      
         <div *ngIf="this.IsGuestHouseAdmin != true && formData.IsNodal==true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">

@@ -8,7 +8,7 @@ import { ItiTradeService } from "../../../Services/iti-trade/iti-trade.service";
 import { CommonFunctionService } from "../../../Services/CommonFunction/common-function.service";
 import { UploadFileModel } from '../../../Models/UploadFileModel';
 import { DocumentDetailsService } from "../../../Common/document-details";
-import { EnumStatus } from "../../../Common/GlobalConstants";
+import { EnumStatus, GlobalConstants } from "../../../Common/GlobalConstants";
 import { DocumentDetailsModel } from "../../../Models/DocumentDetailsModel";
 import { DeleteDocumentDetailsModel } from '../../../Models/DeleteDocumentDetailsModel';
 import { ToastrService } from "ngx-toastr";
@@ -62,6 +62,8 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
   modalReference: NgbModalRef | undefined;
   public CenterDtlsList: any = [];
   public SSOLoginDataModel_new = new SSOLoginDataModel()
+  public _GlobalConstants = GlobalConstants;
+
   constructor(private fb: FormBuilder,
     private toastr: ToastrService,
     private menuService: MenuService,
@@ -89,9 +91,6 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
       await this.apiService.GetAllPaperUploadData(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.PaperDetailsList = data.Data;
-
-        console.log(this.PaperDetailsList, 'ankit');
-
         this.dataSource = new MatTableDataSource(this.PaperDetailsList);
         this.dataSource.sort = this.sort;
         this.totalRecords = this.PaperDetailsList.length;
@@ -498,6 +497,15 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  async OnRoute(PaperUploadID: number) {
+    this.routers.navigate(
+      ['/iti-paper-upload'],
+      { queryParams: { PaperUploadID } }
+    );
+  }
+
+
 }
 
 

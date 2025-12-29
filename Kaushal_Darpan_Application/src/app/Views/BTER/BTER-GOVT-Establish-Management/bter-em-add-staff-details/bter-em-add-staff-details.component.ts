@@ -97,7 +97,7 @@ export class BterEMAddStaffDetailsComponent {
 
       MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       SSOID: ['', [Validators.required]],
-      EmployeeID: [''],
+      EmployeeID: ['',[Validators.required]],
 
       CurrentDesignationID: ['', [DropdownValidators]],
       Office: [{ value: 0, disabled: true }],
@@ -496,10 +496,41 @@ export class BterEMAddStaffDetailsComponent {
       this.Addrequest.IsOptional = false
     }
   }
+
+  getCircularReplacer() {
+    const seen = new WeakSet();
+    return (key: string, value: any) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return "[Circular]";
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  }
   async SaveData() {
     debugger
     this.isSubmitted = true;
     if (this.StaffMasterFormGroup.invalid) {
+      Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
+        const control = this.StaffMasterFormGroup.get(key);
+        if (control && control.invalid) {
+          console.error(`Field '${key}' is invalid.`);
+
+          if (control.errors) {
+            Object.keys(control.errors).forEach(errorKey => {
+              // Safely stringify the error value to avoid issues
+              const errorValue = control.errors![errorKey];
+              const errorMessage = (typeof errorValue === 'string')
+                ? errorValue
+                : JSON.stringify(errorValue, this.getCircularReplacer());
+
+              /*console.error(`  Error: ${errorKey} - ${errorMessage}`);*/
+            });
+          }
+        }
+      });
       this.StaffMasterFormGroup.markAllAsTouched();
       return;
     }
@@ -730,6 +761,7 @@ export class BterEMAddStaffDetailsComponent {
         if (response?.Data) {
 
           let parsedData = JSON.parse(response.Data); // parse string inside Data
+          console.log('SSOID',parsedData);
           if (parsedData != null) {
             this.request.EmployeeID = parsedData.employeeNumber;
             this.request.Name = parsedData.displayName;
@@ -752,6 +784,7 @@ export class BterEMAddStaffDetailsComponent {
             //  this.request.DateOfBirth = `${year}-${month}-${day}`; // yyyy-MM-dd format
             //}
 
+            debugger;
             if (parsedData.dateOfBirth) {
               const [dayStr, monthStr, yearStr] = parsedData.dateOfBirth.split('/');
               const day = parseInt(dayStr, 10);
@@ -761,7 +794,7 @@ export class BterEMAddStaffDetailsComponent {
               // Format DateOfBirth as yyyy-MM-dd
               const dob = new Date(year, month - 1, day);
               if(this.request.DateOfBirth==null || this.request.DateOfBirth==undefined){
-                this.request.DateOfBirth = dob.toISOString().split('T')[0]; // yyyy-MM-dd format
+                this.request.DateOfBirth = yearStr+'-'+monthStr+'-'+dayStr; // yyyy-MM-dd format
               }
            
               // Calculate retirement year
