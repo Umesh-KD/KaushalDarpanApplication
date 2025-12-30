@@ -161,6 +161,8 @@ export class BranchSectionCreateComponent {
       StreamID: [0, Validators.required],
       SemesterID: [0, Validators.required],
     });
+    this.EditDataFormGroup.get('StreamName')?.disable();
+
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
@@ -814,6 +816,16 @@ export class BranchSectionCreateComponent {
         data = JSON.parse(JSON.stringify(data));
         this.GetSectionData = data.Data;
         this.GetSectionData = this.GetSectionData.filter((item: any) => item.CreatedBy == this.sSOLoginDataModel.UserID)
+        this.allSections = this.GetSectionData;
+        debugger
+        
+        const usedSectionIds = this.AddStaffSubjectSectionModelList.map(
+          (x: any) => Number(x.SectionID)
+        );
+
+        this.GetSectionData = this.GetSectionData.filter(
+          (item: any) => !usedSectionIds.includes(Number(item.SectionID))
+        );
         this.allSections = this.GetSectionData;
         // this.allSections = data.Data;   // all sections
         // this.GetSectionData = [...this.allSections];
