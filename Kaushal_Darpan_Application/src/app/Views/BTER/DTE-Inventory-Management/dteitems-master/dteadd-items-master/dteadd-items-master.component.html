@@ -160,6 +160,7 @@
                  class="form-input"
                  formControlName="voucherdate"
                  [(ngModel)]="request.voucherdate"
+                 max="{{todayDate}}"
                  />
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.voucherdate.errors" class="text-danger">
@@ -180,7 +181,9 @@
                  formControlName="txtQuantity"
                  [max]="maxQty"
                  step="1"
-                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" [(ngModel)]="request.Quantity" (input)="onQuantityInput($event)">
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" 
+                 [(ngModel)]="request.Quantity" 
+                 (input)="onQuantityInput($event)">
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtQuantity.errors" class="text-danger">
             <p *ngIf="_AddItemsRequestFormGroup.txtQuantity.errors.required">
@@ -273,6 +276,7 @@
                  class="form-input"
                  formControlName="issuedate"
                  [(ngModel)]="request.issuedate"
+                 max="{{todayDate}}"
                  /> 
         </div>
      
@@ -293,6 +297,7 @@
                  class="form-input"
                  formControlName="issuebookfoliodate"
                  [(ngModel)]="request.issuebookfoliodate"
+                 max="{{todayDate}}"
                  /> 
         </div>
          <div>
@@ -306,7 +311,9 @@
                  formControlName="txtQuantityIssued"
                  [max]="maxQty"
                  step="1"
-                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" [(ngModel)]="request.QuantityIssued" (input)="onQuantityChange($event)">
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" 
+                 [(ngModel)]="request.QuantityIssued" 
+                 (input)="onQuantityChange($event)">
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtQuantityIssued.errors" class="text-danger">
             <p *ngIf="_AddItemsRequestFormGroup.txtQuantityIssued.errors.required">

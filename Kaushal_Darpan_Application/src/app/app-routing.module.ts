@@ -794,6 +794,7 @@ const routes: Routes = [
       { path: 'HostelWardenStudentMeritlist', loadChildren: () => import('./Views/Hostel-Management/Hostel-Warden-Student-Merit-list/Hostel-Warden-Student-Merit-list.module').then(m => m.HostelWardenStudentMeritlistModule) },
       { path: 'HostelMeritlist/HostelGenerateMeritlist', loadChildren: () => import('./Views/Hostel-Management/Hostel-Generate-Merit-list/Hostel-Generate-Merit-list.module').then(m => m.HostelGenerateMeritlistModule) },
       { path: 'CorrectedMeritList', loadChildren: () => import('./Views/Hostel-Management/Corrected-Merit-List/Corrected-Merit-List.module').then(m => m.CorrectedMeritListModule) },
+      { path: 'hostel-student-merit-list', loadChildren: () => import('./Views/Hostel-Management/hostel-student-merit-list-warden-view/hostel-student-merit-list-warden-view.module').then(m => m.HostelStudentMeritListWardenViewModule) },
 
       { path: 'RoomAvailabilties', loadChildren: () => import('./Views/Hostel-Management/room-availabilties/room-availabilties.module').then(m => m.RoomAvailabiltiesModule) },
       { path: 'RoomAllotment', loadChildren: () => import('./Views/Hostel-Management/room-allotment/room-allotment.module').then(m => m.RoomAllotmentModule) },
@@ -1488,6 +1489,7 @@ const routes: Routes = [
       {path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
       {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
       {path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details'},
+      { path: 'counselling-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/counselling-candidate-list-report/counselling-candidate-list-report.module').then(m => m.CounsellingCandidateListReportModule), title: 'Alloted Candidate List' },
       
       { path: 'StudentCorrectionMaster', loadChildren: () => import('./Views/StudentDataCorrectionMaster/student-correction-master.module').then(m => m.StudentCorrectionMasterModule), title: 'Student Correction Master' },
       { path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data'},

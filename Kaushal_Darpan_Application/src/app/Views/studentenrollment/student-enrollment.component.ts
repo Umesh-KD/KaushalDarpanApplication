@@ -1364,12 +1364,15 @@ export class StudentEnrollmentComponent {
   }
 
   async GetPreExamStudentAnnexture() {
+    debugger
     try {
       this.isSubmitted = true;
       //session
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.request.FinacialYearID = this.sSOLoginDataModel.FinancialYearID;
+
       //call
       this.loaderService.requestStarted();
       console.log(this.request);
@@ -1379,6 +1382,7 @@ export class StudentEnrollmentComponent {
           //success
           if (data.State == EnumStatus.Success) {
             this.PreExamStudentAnnextureData = data['Data'];
+            this.PreExamStudentData = data['Data'];
           }
           else {
             this.toastr.error(data.ErrorMessage);
@@ -1396,26 +1400,57 @@ export class StudentEnrollmentComponent {
     }
   }
 
+  //exportAnnextureToExcel(): void {
+  //  const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'Selected', 'status',
+  //    'EndTermID', 'StreamID', 'SemesterID', 'StudentType', 'RollNo'
+  //  ];
+  //  const filteredData = this.PreExamStudentData
+  //    .filter((item: any) => item.EnrollmentNo)
+  //    .map((item: any) => {
+  //      const filteredItem: any = {};
+  //      Object.keys(item).forEach(key => {
+  //        if (!unwantedColumns.includes(key)) {
+  //          filteredItem[key] = item[key];
+  //        }
+  //      });
+  //      return filteredItem;
+  //    });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'PreExamStudentAnnextureData.xlsx');
+  //}
+
   exportAnnextureToExcel(): void {
-    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'Selected', 'status',
-      'EndTermID', 'StreamID', 'SemesterID', 'StudentType', 'RollNo'
+    const unwantedColumns = [
+      'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate',
+      'IPAddress', 'Selected', 'status', 'EndTermID', 'StreamID',
+      'StudentExamStatus', 'StudentType', 'RollNo', 'InstituteID','InstituteStreamID',
+      'st_his_StatusId', 'st_his_StatusName', 'st_his_Remark'
     ];
-    const filteredData = this.PreExamStudentData
-      .filter((item: any) => item.EnrollmentNo)
-      .map((item: any) => {
-        const filteredItem: any = {};
-        Object.keys(item).forEach(key => {
-          if (!unwantedColumns.includes(key)) {
-            filteredItem[key] = item[key];
-          }
-        });
-        return filteredItem;
+
+    const filteredData = this.PreExamStudentData.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
       });
+      return filteredItem;
+    });
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    const columnCount = Object.keys(filteredData[0] || {}).length;
+    ws['!cols'] = Array(columnCount).fill({ wch: 20 });
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'PreExamStudentAnnextureData.xlsx');
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    const fileName = `PreExam_Student_Annexture_Data_${formattedDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
   }
 
 

@@ -275,6 +275,7 @@ export class EMPrincipleStaffComponent {
       this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
       await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
+        console.log(data);
         let response = JSON.parse(JSON.stringify(data));
         if (response?.Data) {
 

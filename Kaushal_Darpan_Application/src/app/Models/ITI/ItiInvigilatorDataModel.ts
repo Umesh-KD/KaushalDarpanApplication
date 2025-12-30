@@ -37,5 +37,7 @@ export class ITITheorySearchModel {
   public Action: string = ''
   public EndtermID:number=0
   public EngNong:number=0
+  public InvigilatorID:number=0
+  public UserID:number=0
  
 }

@@ -147,7 +147,8 @@ export class ITIAddItemsMasterComponent {
       //      });
       //    }
       //  });
-      //return;
+      this.toastr.error("Form is invalid, cannot submit")
+      return;
     }
     if (this.request.ItemType == 1) {
       this.request.TradeId = 0
