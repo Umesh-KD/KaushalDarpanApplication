@@ -90,7 +90,16 @@
                     <td>{{item.PaperCode }}</td>
                     <td>{{item.CenterName }}</td>
                     <td>{{item.PaperDate }}</td>
-                    <td>{{item.Password}}</td>
+                    <td>
+
+                      <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                        <a href="javascript:void(0)" (click)="ViewPaperPassword(item.PaperUploadID , item.CenterID)"
+                           title="Download Paper">
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </div>
+
+                    </td>
                     <td>
                       <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                         <a href="javascript:void(0)" (click)="DownaloadExamPaper(item.PaperUploadID , item.CenterID )"

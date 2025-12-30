@@ -111,7 +111,8 @@ export class ExamPaperDownloadComponent
       Userid: this.SSOLoginDataModel.UserID,
       Roleid: this.SSOLoginDataModel.RoleID,
       PaperUploadID: PaperUploadID,
-      CenterID: CenterID
+      CenterID: CenterID,
+      RequestFor: 1
     };
     try {
       this.loaderService.requestStarted();
@@ -131,9 +132,10 @@ export class ExamPaperDownloadComponent
               if (result.isConfirmed)
               {
                 this.UpdatePaperDownloadStatus(obj);
-               
                 const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ITIPaperDownload + "/" + data.Data[0].FileName;
-                try {
+                try
+                {
+
                   window.open(fileUrl, '_blank');
                   setTimeout(function () { window.location.reload(); }, 200)
                 }
@@ -165,6 +167,25 @@ export class ExamPaperDownloadComponent
   }
 
 
+  private triggerDownload(fileUrl: string, newFileName: string): void {
+    try {
+      // Create a temporary anchor element
+      const link = document.createElement('a');
+      link.href = fileUrl;
+
+      // Set the new file name for the download
+      link.download = newFileName;
+
+      // Append the link to the body, trigger the click, then remove the link
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
+
   async UpdatePaperDownloadStatus(objnew :any)
   {
    
@@ -183,6 +204,49 @@ export class ExamPaperDownloadComponent
       this.loaderService.requestEnded();
     }
   }
+
+
+
+  async ViewPaperPassword(PaperUploadID: number, CenterID: number)
+  {
+    let obj = {
+      Userid: this.SSOLoginDataModel.UserID,
+      Roleid: this.SSOLoginDataModel.RoleID,
+      PaperUploadID: PaperUploadID,
+      CenterID: CenterID,
+      RequestFor:2
+    };
+    try
+    {
+      this.loaderService.requestStarted();
+      await this.apiService.PaperDownloadValidationCheck(obj).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.loaderService.requestEnded();
+        if (data.State == EnumStatus.Success && data.Data.length > 0) {
+          if (data.Data[0].Status == 0)
+          {
+            this.swal.Info(data.Data[0].msg);
+          }
+          else if (data.Data[0].Status == 1)
+          {
+            this.swal.Success(data.Data[0].msg);
+          }
+        }
+        else {
+          this.swal.Info('Something went wrong. Please try again later !')
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      this.loaderService.requestEnded();
+    }
+
+
+    // this.swal.Info('date is not open')
+  }
+
+
+
 
 
 }
