@@ -192,7 +192,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td  mat-cell *matCellDef="let row">
-            <div *ngIf="IsAllow==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+            <div *ngIf="row.IsAllow==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
               <a href="javascript:void(0)" (click)="EditDataSection(row)" title="edit">
                 <i class="ti ti-pencil"></i>
               </a>
