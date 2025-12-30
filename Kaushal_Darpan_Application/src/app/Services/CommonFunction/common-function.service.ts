@@ -246,6 +246,15 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+
+  public async StreamMasterHOD(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, SemesterID: number = 0, InstituteId: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/StreamMasterHOD/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + SemesterID + '/' + InstituteId, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async CenterMaster() {
 
     return await this.http.get(this.APIUrl + '/CommonMasterDataByCode/CenterMaster', this.headersOptions)

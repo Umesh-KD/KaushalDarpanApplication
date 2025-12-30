@@ -677,10 +677,10 @@ export class RosteComponent implements OnInit {
     }
 
     // 3. Class cannot exceed 1 hour
-    if (durationMinutes > 60) {
-      this.toastr.warning('Class duration cannot be more than 1 hour.');
-      return;
-    }
+    //if (durationMinutes > 60) {
+    //  this.toastr.warning('Class duration cannot be more than 1 hour.');
+    //  return;
+    //}
 
     // 4. Class must be at least 45 minutes
     if (durationMinutes < 45) {
