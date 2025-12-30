@@ -126,6 +126,8 @@ export class DteAddItemsMasterComponent {
       
     }
     this.request.voucherdate = this.todayDate;
+    this.request.issuebookfoliodate = this.todayDate;
+    this.request.issuedate = this.todayDate;
     
   }
 
