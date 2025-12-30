@@ -56,9 +56,11 @@
               </div>
             </div>
 
-          <div>
+            
+
+          <div *ngIf="!isMigration">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
-            <select class="form-select" id="SemesterID" name="SemesterID" [(ngModel)]="request.SemesterID" formControlName="SemesterID">
+            <select class="form-select" id="SemesterID" name="SemesterID" [(ngModel)]="request.SemesterID" formControlName="SemesterID" (change)="OnSemChange()">
               <!-- <select class="form-select" id="SemesterID" name="SemesterID" formControlName="SemesterID">  -->
               <option value=0>--Choose Option--</option>
               <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
@@ -69,6 +71,20 @@
                 .!
               </p>
             </div>
+          </div>
+
+          <div *ngIf="isMarksheet">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Session <span class="StarMarking">*</span></label>
+            <select class="form-select"  formControlName="ddlSessionID" [(ngModel)]="request.RequestEndTerm">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of SessionList" [value]="item.SessionID">{{item.SessionName}}</option>
+            </select>
+            <!-- <div *ngIf="isSubmitted&&form.ddlSessionID.errors" class="text-danger">
+              <p *ngIf="!form.ddlSessionID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div> -->
           </div>
 
           <div>
@@ -137,8 +153,11 @@
           </div> -->
 
 
+          <!-- <div></div> -->
+          <!-- <div></div> -->
 
-          <div class="card-footer text-center">
+          <!-- class="card-footer text-center" -->
+          <div class="mt-6">
             <!-- <button type="button" class="btn bg-primary text-white" (click)="PayApplicationFees() " ><i class="ti ti-currency-rupee"></i> Pay Now</button> -->
             <button type="button" class="btn bg-primary text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,request)" ><i class="ti ti-currency-rupee"></i> Pay Now </button>
           
@@ -175,10 +194,15 @@
             <th class="text-left" style="width:100px">S.No</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Student ID</th>
+            <th class="text-left">Semester</th>
+            <th class="text-left">EnrollmentNo / Application No</th>
+            <th class="text-left">Request Session</th>
+            
             <!-- <th class="text-left">Service ID</th> -->
             <th class="text-left">Fees Amount</th>
             <th class="text-left">Apply For</th>
             <th class="text-left">Payment Status</th>
+            <th class="text-center">Action</th>
             
           </tr>
         </thead>
@@ -188,10 +212,29 @@
             <td>{{idx+1}}</td>
             <td align="left">{{item.UserName}}</td>
             <td align="left">{{item.Student_Id}}</td>
+
+            <td align="left">{{item.SemesterName}}</td>
+            <td align="left">{{item.EnrollmentNo}}</td>
+            <td align="left">{{item.EndTermName}}</td>
             <!-- <td align="left">{{item.ServiceID}}</td> -->
             <td align="left">{{item.FeeAmount}}</td>
             <td align="left">{{item.Name}}</td>
             <td align="left"> {{ item.paymentstatus === 0 ? 'Pending' : 'Success' }}</td>
+            <td align="center" class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              @if(item.Action!='Approved')
+              {
+                <p class="text-center text-warning"><b>Not Issue yet</b></p>
+              }
+              @else
+              {
+
+                <p class="text-center text-success"><b>Issued</b></p>
+                <p class="text-center text-success"><b>Collect From Selected Department</b></p>
+                <!-- <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
+                   <a href="javascript:void(0);" *ngIf="(item.Action=='Approved')" title="Download Marksheet" (click)="DownloadDuplicateMarksheet(item)"><i class="ti ti-download"></i></a>                             
+                </div>    -->
+              }
+            </td> 
           </tr>
         </tbody>
       </table>

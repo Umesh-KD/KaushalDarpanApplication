@@ -201,8 +201,18 @@ export class bterinventoryIssueHistoryComponent {
       this.toastr.warning("No data available to export.");
       return;
     }
+    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus',];
+    const filteredData = this.ItemMasterList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
 

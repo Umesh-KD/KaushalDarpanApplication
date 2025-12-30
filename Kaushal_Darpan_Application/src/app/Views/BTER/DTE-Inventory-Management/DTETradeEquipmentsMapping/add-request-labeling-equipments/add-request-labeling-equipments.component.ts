@@ -1,29 +1,20 @@
 import { Component } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { GlobalConstants, EnumStatus, EnumDepartment,EnumRole } from '../../../../../Common/GlobalConstants';
-import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
-import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
-import { LoaderService } from '../../../../../Services/Loader/loader.service';
-import { TradeEquipmentsMappingData } from '../../../../../Models/TradeEquipmentsMappingData';
-import { ITITradeDataModels, ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
-import { ItiTradeService } from '../../../../../Services/iti-trade/iti-trade.service';
-import { ItemCategoriesDataModels } from '../../../../../Models/ItemCategoriesDataModels';
-import { EquipmentsDataModels } from '../../../../../Models/EquipmentsDataModels';
-import { DTETradeEquipmentsMappingData } from '../../../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
-import { DTEItemCategoriesDataModels } from '../../../../../Models/DTEInventory/DTEItemCategoriesDataModels';
-import { DTEEquipmentsDataModel } from '../../../../../Models/DTEInventory/DTEEquipmentsDataModel';
-import { DteItemUnitMasterService } from '../../../../../Services/DTEInventory/DTEItemUnitMaster/DTEItemunit-master.service';
-import { DTEEquipmentsMasterService } from '../../../../../Services/DTEInventory/DTEEquipmentsMaster/dteequipments-master.service';
-import { DteItemsMasterService } from '../../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
-import { DTEItemCategoriesMasterService } from '../../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
-import { DteTradeEquipmentsMappingService } from '../../../../../Services/DTEInventory/DTETradeEquipmentsMapping/dtetrade-equipments-mapping.service';
-import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
-import { DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
+import { EnumRole, EnumStatus } from '../../../../../Common/GlobalConstants';
+import { DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTETradeEquipmentsMappingData } from '../../../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
+import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
+import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
+import { DTEEquipmentsMasterService } from '../../../../../Services/DTEInventory/DTEEquipmentsMaster/dteequipments-master.service';
+import { DTEItemCategoriesMasterService } from '../../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
+import { DteItemUnitMasterService } from '../../../../../Services/DTEInventory/DTEItemUnitMaster/DTEItemunit-master.service';
+import { DteTradeEquipmentsMappingService } from '../../../../../Services/DTEInventory/DTETradeEquipmentsMapping/dtetrade-equipments-mapping.service';
+import { LoaderService } from '../../../../../Services/Loader/loader.service';
 
 @Component({
   selector: 'app-add-request-labeling-equipments',
@@ -32,11 +23,7 @@ import { AppsettingService } from '../../../../../Common/appsetting.service';
   standalone: false
 })
 export class AddRequestLabelingEquipmentsComponent {
-  public searchTradeRequest = new ITITradeSearchModel();
   public request = new DTETradeEquipmentsMappingData()
-  public requestTrade = new ITITradeDataModels()
-  public requestCategorie = new DTEItemCategoriesDataModels()
-  public requestEquipments = new DTEEquipmentsDataModel()
   public TE_MappingId: number = 0;
   public ItemCategoryId: number = 0;
   public EquipmentsId: number = 0;
@@ -44,9 +31,6 @@ export class AddRequestLabelingEquipmentsComponent {
   public SearchItemReq = new DTEItemsSearchModel()
   public TradeTypeId: number = 0;
   public RequestFormGroup!: FormGroup;
-  public CategoriesRequestFormGroup!: FormGroup;
-  public EquipmentsRequestFormGroup!: FormGroup;
-  TradegroupForm!: FormGroup;
   public maxQty: number = 0;
   _EnumRole = EnumRole;
   public isRequested: boolean = false;
@@ -72,34 +56,29 @@ export class AddRequestLabelingEquipmentsComponent {
   public InstituteMasterList: any = [];
   public FileName: string = '';
   constructor(
-    private fb: FormBuilder,
     private toastr: ToastrService,
     private itemUnitMasterService: DteItemUnitMasterService,
     private commonFunctionService: CommonFunctionService,
-    private ItiTradeService: ItiTradeService,
     private tradeEquipmentsMappingService: DteTradeEquipmentsMappingService,
     private equipmentsMasterService: DTEEquipmentsMasterService,
-    private itemsMasterService: DteItemsMasterService,
     private itemCategoriesService: DTEItemCategoriesMasterService,
-    private equipmentsService: DTEEquipmentsMasterService,
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private routers: Router,
-    private Swal2: SweetAlert2,
     public appsettingConfig: AppsettingService,
-    private modalService: NgbModal) { }
+  ) { }
 
 
   async ngOnInit() {
-
     this.RequestFormGroup = this.formBuilder.group({
       ddlEquipmentsId: ['', [DropdownValidators]],
       ddlCategoryId: ['', [DropdownValidators]],
       ddlInstituteID: ['', [DropdownValidators]],
       txtTotalPrice: ['', [Validators.required]],
       txtPricePerUnit: ['', [Validators.required]],
-      txtQuantity: ['', [Validators.required]],
+      txtQuantity: [{ value: '', disabled: true }],
+      ApprovedQuantity: ['', [Validators.required]],
       //txtVoucherNumber: ['', [Validators.required]],
       txtVoucherNumber: [
         '',
@@ -128,58 +107,29 @@ export class AddRequestLabelingEquipmentsComponent {
         this.isRequested = true;
       }
       
-      debugger
       this.sSOLoginDataModel =  JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       if (this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTE || this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON || this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier || this.sSOLoginDataModel.RoleID == this._EnumRole.Admin || this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral)  {
         this.RequestFormGroup.get('ddlInstituteID')?.disable();
       }
-
-      
-    });
-   
-    this.CategoriesRequestFormGroup = this.formBuilder.group({
-      ItemCategoryName: ['', [Validators.required, Validators.pattern(GlobalConstants.NameNoNumbersPattern),]],
-    });
-
-
-    this.EquipmentsRequestFormGroup = this.formBuilder.group({
-      txtName: ['', [Validators.required, Validators.pattern(GlobalConstants.NameNoNumbersPattern),]],
-      Specification: ['', Validators.required],
-      UnitId: ['', [DropdownValidators]],
-    });
-
-
-    this.TradegroupForm = this.fb.group({
-      txtTradeName: ['', [ Validators.required,Validators.pattern(GlobalConstants.NameNoNumbersPattern),]],
-      txtTradeCode: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
-      //txtTradeCode: ['', Validators.required],
     });
 
     this.TE_MappingId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
-    
+    if (this.TE_MappingId > 0) {
+      await this.GetByID(this.TE_MappingId);
+    }
     await this.GetCategoryDDL();
     await this.CategoryWiseEquiments();
     await this.GetUnitDDL();
     await this.GetTradeDDL();
-    await this.GetMasterData();
-    if (this.TE_MappingId > 0) {
-      await this.GetByID(this.TE_MappingId);
-    }
+    await this.GetMasterData();    
   }
 
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
-  get _CategoriesRequestFormGroup() { return this.CategoriesRequestFormGroup.controls; }
-  get _EquipmentsRequestFormGroup() { return this.EquipmentsRequestFormGroup.controls; }
-  get _TradeRequestFormGroup() { return this.TradegroupForm.controls; }
 
-  async CategoryWiseEquiments() {
-    
-
+  async CategoryWiseEquiments() { 
     await this.GetEquipmentDDL();
-
-
     const selectedCategoryId = this.RequestFormGroup.get('ddlCategoryId')?.value;
     if (selectedCategoryId && selectedCategoryId > 0) {
       this.request.CategoryId = selectedCategoryId;
@@ -207,7 +157,7 @@ export class AddRequestLabelingEquipmentsComponent {
 
   calculateTotalPrice(): void {
    
-    const quantity = this.request.Quantity ?? 0;
+    const quantity = this.request.ApprovedQuantity ?? 0;
     const pricePerUnit = this.request.PricePerUnit ?? 0;
     // Calculate total price
     this.request.TotalPrice = quantity * pricePerUnit;
@@ -223,16 +173,35 @@ export class AddRequestLabelingEquipmentsComponent {
     // Update the input field and model
     input.value = numericValue.toString();
     this.request.Quantity = numericValue;
+    // this.calculateTotalPrice();
+  }
+  onApprovedQuantityInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/[^0-9]/g, '').slice(0, 4);
+
+    // Clamp the value to min and max if needed
+    const numericValue = Math.max(1, Math.min(Number(value), this.maxQty || Infinity));
+
+    // Update the input field and model
+    input.value = numericValue.toString();
+    this.request.ApprovedQuantity = numericValue;
+    if (
+      this.request &&
+      this.request.ApprovedQuantity != null &&
+      this.request.Quantity != null &&
+      this.request.ApprovedQuantity > this.request.Quantity
+    ) {
+      this.request.ApprovedQuantity = 0;
+      this.toastr.warning('Approved Quantity should not be greater than Quantity');
+      return;
+    }
     this.calculateTotalPrice();
   }
 
   async EquimentsWiseQty() {
-
     const selectedItem = this.EquipmentddlList.find((item: any) => item.ID == this.request.EquipmentId);
     const qty = selectedItem ? selectedItem.Quantity : null;
     this.maxQty = qty
-
-
   }
 
   async saveData() {
@@ -246,8 +215,8 @@ export class AddRequestLabelingEquipmentsComponent {
       this.RequestFormGroup.value.ddlEquipmentsId != null &&      
       this.RequestFormGroup.value.txtPricePerUnit != null &&
       Number(this.RequestFormGroup.value.txtPricePerUnit) > 0 &&
-      this.RequestFormGroup.value.txtQuantity != null &&
-      this.RequestFormGroup.value.txtQuantity > 0 &&
+      this.RequestFormGroup.value.ApprovedQuantity != null &&
+      this.RequestFormGroup.value.ApprovedQuantity > 0 &&
       this.RequestFormGroup.value.txtTotalPrice != null &&
       this.RequestFormGroup.value.txtTotalPrice > 0 &&
       this.RequestFormGroup.value.txtVoucherNumber != null) {
@@ -276,7 +245,7 @@ export class AddRequestLabelingEquipmentsComponent {
               this.toastr.success(this.Message)
               this.ResetControl();
               
-              this.routers.navigate(['/DteTradeEquipmentsMapping']);
+              this.routers.navigate(['/add-request-dte-equipments']);
               //this.GetAllData();
               //if (this.isRequested == true) {
 
@@ -324,6 +293,7 @@ export class AddRequestLabelingEquipmentsComponent {
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
           this.request.IndentDocument = data['Data']["ModifyBy"];
+          this.request.ApprovedQuantity = data['Data']["ApprovedQuantity"];
           console.log(data)
           
           this.RequestFormGroup.patchValue({
@@ -364,13 +334,7 @@ export class AddRequestLabelingEquipmentsComponent {
     this.isSubmitted2 = false;
     this.isSubmitted3 = false;
     this.request = new DTETradeEquipmentsMappingData();
-    this.requestCategorie = new ItemCategoriesDataModels();
-    this.requestEquipments = new EquipmentsDataModels();
-    this.requestTrade = new ITITradeDataModels();
     this.RequestFormGroup.reset();
-    this.CategoriesRequestFormGroup.reset();
-    this.TradegroupForm.reset();
-    this.EquipmentsRequestFormGroup.reset();
   }
 
 
@@ -396,33 +360,6 @@ export class AddRequestLabelingEquipmentsComponent {
       }, 200);
     }
   }
-
-  //async GetEquipmentDDL() {
-
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    this.SearchItemReq.DepartmentID = this.sSOLoginDataModel.DepartmentID
-  //    this.SearchItemReq.CollegeId = this.sSOLoginDataModel.InstituteID;
-  //    this.SearchItemReq.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-  //    this.SearchItemReq.EndTermID = this.sSOLoginDataModel.EndTermID;
-  //    this.SearchItemReq.RoleID = this.sSOLoginDataModel.RoleID;
-  //    await this.equipmentsMasterService.GetAllData(this.SearchItemReq)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        const selectOption = { EquipmentsId: 0, Name: '--Select--' };
-  //        this.EquipmentddlList = [selectOption, ...data['Data']];
-  //        this.EquipmentddlList = this.EquipmentddlList.filter((item: any) => item.ItemCategoryID == this.request.CategoryId)
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
 
   async GetEquipmentDDL() {
     
@@ -458,16 +395,9 @@ export class AddRequestLabelingEquipmentsComponent {
     }
   }
 
-  //CategoryWiseEquiments(): void {
-    
-  //}
-
-
   async GetTradeDDL() {
     try {
       this.loaderService.requestStarted();
-      //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
-      // await this.commonFunctionService.StreamMaster()
       await this.commonFunctionService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           console.log(data)
@@ -507,172 +437,6 @@ export class AddRequestLabelingEquipmentsComponent {
     }
   }
 
-
-  async onEquipmentSubmit(model: any) {
-    try {
-      this.isSubmitted1 = false;
-      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
-  async onCategorySubmit(model: any) {
-    try {
-      this.isSubmitted3 = false;
-      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
-  async onTradeSubmit(model: any) {
-    this.isSubmitted2 = false;
-    try {
-      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
-
-
-  async saveCategoriesData() {
-    this.isSubmitted3 = true;
-    if (this.CategoriesRequestFormGroup.invalid) {
-      return console.log("Form is invalid, cannot submit")
-    }
-    //Show Loading
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-
-    try {
-
-      if (this.ItemCategoryId) {
-        this.requestCategorie.ItemCategoryID = this.ItemCategoryId
-        this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-      } else {
-        this.request.CreatedBy = this.sSOLoginDataModel.UserID;
-      }
-      await this.itemCategoriesService.SaveData(this.requestCategorie)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
-            this.ResetControl();
-            this.GetCategoryDDL();
-            this.closeModal();
-          }
-          else if (this.State == EnumStatus.Error) {
-            this.toastr.error(this.ErrorMessage);
-          }
-        })
-    }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-
-      }, 200);
-    }
-  }
-
-
-  async saveEquipmentsData() {
-    this.isSubmitted1 = true;
-    if (this.EquipmentsRequestFormGroup.invalid) {
-      return console.log("Form is invalid, cannot submit")
-    }
-    //Show Loading
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-
-    try {
-
-      if (this.EquipmentsId) {
-        this.requestEquipments.EquipmentsId = this.EquipmentsId
-        this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-      } else {
-        this.request.CreatedBy = this.sSOLoginDataModel.UserID;
-      }
-      await this.equipmentsService.SaveData(this.requestEquipments)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
-            this.ResetControl();
-            this.GetEquipmentDDL();
-            this.closeModal();
-          }
-          else if (this.State == EnumStatus.Error) {
-            this.toastr.error(this.ErrorMessage);
-          }
-        })
-    }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-
-      }, 200);
-    }
-  }
-
-
-  async saveTradeData() {
-    this.isSubmitted2 = true;
-    //this.isSubmitted = true;
-    if (this.TradegroupForm.invalid) {
-      return console.log("Form is invalid, cannot submit")
-    }
-    //Show Loading
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-    this.requestTrade.TradeTypeId = 1;
-
-    try {
-
-      if (this.TradeId) {
-        this.requestTrade.TradeId = this.TradeId
-        this.requestTrade.ModifyBy = this.sSOLoginDataModel.UserID;
-      } else {
-        this.requestTrade.CreatedBy = this.sSOLoginDataModel.UserID;
-      }
-      await this.ItiTradeService.SaveData(this.requestTrade)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
-            this.ResetControl();
-            this.GetTradeDDL();
-            this.closeModal();
-          }
-          else if (this.State == EnumStatus.Error) {
-            this.toastr.error(this.ErrorMessage);
-          }
-        })
-    }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-
-      }, 200);
-    }
-  }
-
   async GetMasterData() {
     try {
       this.loaderService.requestStarted();
@@ -692,8 +456,6 @@ export class AddRequestLabelingEquipmentsComponent {
       }, 200);
     }
   }
-
-
 
   closeModal() {
     this.modalReference?.close();

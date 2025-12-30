@@ -8,6 +8,7 @@ import { GroupDataModels, GroupSearchModel } from '../../Models/GroupDataModels'
 import { AppsettingService } from '../../Common/appsetting.service';
 import { ITITradeDataModels, ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ITIPlanningBankGuarantee } from '../../Models/ItiPlanningDataModel';
+import { ITIPaperUploadSearchModel } from '../../Models/DocumentDetailsModel';
 @Injectable({
   providedIn: 'root'
 })
@@ -138,4 +139,14 @@ export class ItiTradeService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+ 
+  public async GetITIPaperUpload_Reports(searchRequest: ITIPaperUploadSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetITIPaperUpload_Reports`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

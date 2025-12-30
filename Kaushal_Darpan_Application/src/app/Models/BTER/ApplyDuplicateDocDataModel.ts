@@ -20,6 +20,9 @@ export class ApplyDuplicateDocument {
   public IsDelete: boolean = false;
 
   public ConfigurationTypeID?: number =0;
+  // public SessionID?:number=0;
+  public EndTermID:number=0;
+  public RequestEndTerm:number=0;
 }
 
 
@@ -55,4 +58,22 @@ export class DuplicateDocumentSearch {
 
   public action:string='';
   public Eng_NonEng:number=0;
+}
+
+export class DuplicateDoc_Action {
+  public ID: number = 0;
+  public StudentID: number = 0;
+  public DocumentID: number = 0;
+  public Action: string = '0';
+  public ActionRemarks: string = '';
+  public ActionBy: number = 0;
+  public DepartmentID: number = 0;
+  public ModifyBy: number = 0
+  public RoleID: number = 0
+  public SemesterId:number=0
+  
+  public CourseTypeID: number = 0; 
+  public FianancialYearID:number=0
+  public EndTermID:number=0
+  public RequestEndTerm:number=0
 }

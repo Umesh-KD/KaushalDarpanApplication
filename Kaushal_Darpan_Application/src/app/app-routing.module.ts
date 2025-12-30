@@ -609,6 +609,7 @@ const routes: Routes = [
       { path: 'AddDteTradeEquipmentsMapping', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/adddte-trade-equipments-mapping/adddte-trade-equipments-mapping.-module').then(m => m.AddDteTradeEquipmentsMappingModule) },
       { path: 'AddDteTradeEquipmentsMapping:id', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/adddte-trade-equipments-mapping/adddte-trade-equipments-mapping.-module').then(m => m.AddDteTradeEquipmentsMappingModule) },
       { path: 'RequestEquipmentsMapping/:id/:category/:equipment/:quantity/:mappingid/:indentdoc', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/add-request-labeling-equipments/add-request-labeling-equipments.module').then(m => m.AddRequestLabelingEquipmentsModule) },
+      { path: 'RequestEquipmentsMapping', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/add-request-labeling-equipments/add-request-labeling-equipments.module').then(m => m.AddRequestLabelingEquipmentsModule) },
       { path: 'DteStocks', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/dtestocks-items-list/dtestocks-items-list-module').then(m => m.DteStocksItemsListModule) },
       { path: 'AddDteIssuedItems', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DteIssued&ReturnItems/dteadd-issued-items/dteadd-issued-items-module').then(m => m.DteAddIssuedItemsModule) },
       { path: 'AddDteIssuedItems/:id', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DteIssued&ReturnItems/dteadd-issued-items/dteadd-issued-items-module').then(m => m.DteAddIssuedItemsModule) },
@@ -793,6 +794,7 @@ const routes: Routes = [
       { path: 'HostelWardenStudentMeritlist', loadChildren: () => import('./Views/Hostel-Management/Hostel-Warden-Student-Merit-list/Hostel-Warden-Student-Merit-list.module').then(m => m.HostelWardenStudentMeritlistModule) },
       { path: 'HostelMeritlist/HostelGenerateMeritlist', loadChildren: () => import('./Views/Hostel-Management/Hostel-Generate-Merit-list/Hostel-Generate-Merit-list.module').then(m => m.HostelGenerateMeritlistModule) },
       { path: 'CorrectedMeritList', loadChildren: () => import('./Views/Hostel-Management/Corrected-Merit-List/Corrected-Merit-List.module').then(m => m.CorrectedMeritListModule) },
+      { path: 'hostel-student-merit-list', loadChildren: () => import('./Views/Hostel-Management/hostel-student-merit-list-warden-view/hostel-student-merit-list-warden-view.module').then(m => m.HostelStudentMeritListWardenViewModule) },
 
       { path: 'RoomAvailabilties', loadChildren: () => import('./Views/Hostel-Management/room-availabilties/room-availabilties.module').then(m => m.RoomAvailabiltiesModule) },
       { path: 'RoomAllotment', loadChildren: () => import('./Views/Hostel-Management/room-allotment/room-allotment.module').then(m => m.RoomAllotmentModule) },
@@ -1565,7 +1567,7 @@ const routes: Routes = [
 
 
 
-
+      { path: 'ItiPaperUploadReport', loadChildren: () => import('./Views/ITI/iit-paper-upload-report/iit-paper-upload-report.module').then(m => m.IitPaperUploadReportModule) },
 
 
     ]
@@ -1670,6 +1672,8 @@ const routes: Routes = [
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
+
+  
 
 
 

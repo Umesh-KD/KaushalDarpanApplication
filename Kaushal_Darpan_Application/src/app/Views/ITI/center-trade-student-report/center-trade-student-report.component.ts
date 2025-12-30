@@ -56,18 +56,15 @@ export class CenterTradeStudentReportComponent {
     // if(this.sSOLoginDataModel.RoleID == EnumRole.Examiner) {
     //   this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     // }
-
     if (this.sSOLoginDataModel.RoleID == 99 || this.sSOLoginDataModel.RoleID == 96 || this.sSOLoginDataModel.RoleID == 95 || this.sSOLoginDataModel.RoleID == 90) {
       this.searchRequest.CenterID = this.sSOLoginDataModel.InstituteID
     }
+    this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
 
-    this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     await this.GetMasterData();
     await this.GetItiTrade()
     await this.Centerlist()
     // await this.GetTheoryMarksDetailList();
-
-  
 
     
   }
@@ -76,17 +73,12 @@ export class CenterTradeStudentReportComponent {
     try {
       this.loaderService.requestStarted();
 
-     
-
       await this.commonMasterService.IticenterColleges(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
         , this.searchRequest.CenterID).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.InstituteMasterDDLList = data.Data;
           console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
-        })
-
-    
-
+        });
 
     }
     catch (ex) {

@@ -253,6 +253,7 @@ export class DteAddItemsMasterComponent {
           this.request.IdentificationMark = data['Data']["IdentificationMark"];
           this.request.VoucherNumber = data['Data']["VoucherNumber"];
           this.request.Quantity = data['Data']["Quantity"];
+          this.request.QuantityBalance = data['Data']["Quantity"];
           this.request.PricePerUnit = data['Data']["PricePerUnit"];
           this.request.TotalPrice = data['Data']["TotalPrice"];
           this.request.CreatedBy = data['Data']["CreatedBy"];

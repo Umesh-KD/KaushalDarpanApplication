@@ -20,6 +20,7 @@ import { AppsettingService } from "../../../Common/appsetting.service";
 import { HttpClient } from "@angular/common/http";
 import { RequestBaseModel } from "../../../Models/RequestBaseModel";
 import { ActivatedRoute, Router } from '@angular/router';
+import { SweetAlert2 } from "../../../Common/SweetAlert2";
 
 @Component({
   selector: 'app-iti-paper-upload',
@@ -56,6 +57,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   isAllSelected = false;   // new addded 18062025
+  public PaperID:number=0
 
   CenterListPaperWise: any[] = [];
   constructor(private fb: FormBuilder,
@@ -67,13 +69,15 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
     private routers: Router,
-    private documentDetailsService: DocumentDetailsService) {
+    private Activeroute: ActivatedRoute,
+    private documentDetailsService: DocumentDetailsService, private swal: SweetAlert2) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetAllPaperUploadData();
+
   }
 
-  ngOnInit(): void {
-    
+  async ngOnInit()
+  {
     if (this.sSOLoginDataModel.RoleID == 7) {
       this.displayedColumns.push('Password');
       this.displayedColumns.push('Download');
@@ -81,17 +85,13 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
     this.examForm = this.fb.group({
       PaperUploadID: [null],
-      ExamID: ['', Validators.required],
+      ExamID: ['1', Validators.required],
       ExamName: ['', Validators.required],
       StreamID: ['0'],
       SemesterID: ['', Validators.required],
-      Password: ['', [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
-      ]],
+      Password: ['', [Validators.required]],
       PaperID: ['0', Validators.required],
-     /* FinancialYearID: ['', Validators.required],*/
+    
       FileName: [''],
       PaperDate: ['', Validators.required],
       //CenterCode: [''],   // new comment addded 18062025
@@ -104,6 +104,9 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       selectedStream: ['all'],
       selectedSemester: ['all'],
     });
+
+
+   
 
     this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
       .then((data: any) => {
@@ -134,11 +137,16 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         //this.loaderService.requestEnded();
       }, error => console.error(error));
 
-    this.commonMasterService.GetExamName().then((data: any) =>
+  await  this.commonMasterService.GetExamName().then((data: any) =>
     {
       data = JSON.parse(JSON.stringify(data));
       this.ExamList = data.Data;
     })
+
+
+     this.onExamChange(this.examForm.get("ExamID")?.value);
+
+
 
     this.searchRequestPaper.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequestPaper.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -149,8 +157,6 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         data = JSON.parse(JSON.stringify(data));
         this.CenterMasterList = data['Data'];
       }, (error: any) => console.error(error));
-
-
     //this.PaperMasterService.GetAllPaperUploadData(this.searchRequestPaper)
     //  .then((data: any) => {
     //    data = JSON.parse(JSON.stringify(data));
@@ -161,6 +167,14 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     //this.filterForm.valueChanges.subscribe((values) => {
     //  this.applyFilter(values);
     //});
+    debugger
+    this.PaperID = Number(
+      this.Activeroute.snapshot.queryParamMap.get('PaperUploadID') ?? 0
+    );
+    if (this.PaperID > 0) {
+      this.getRecordByID(this.PaperID);
+      this.examForm.get('Password')?.disable()
+    }
    
   }
 
@@ -208,8 +222,9 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     this.applyFilter(this.filterForm?.value);
   }
 
-  onExamChange(event: any): void {
-    const selectedExam = this.ExamList.find((exam: { ID: any; }) => exam.ID == event.target.value);
+  async onExamChange(event: any) {
+    debugger;
+    const selectedExam = this.ExamList.find((exam: { ID: any; }) => exam.ID == event);
     if (selectedExam) {
       this.examForm.get('ExamName')?.setValue(selectedExam.Name);
     }
@@ -318,7 +333,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       {
         await this.apiService.SavePaperUploadData(obj).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.Data == 1) {
+          if (data.Data == 1 || data.Data == 2) {
             this.toastr.success(data.Message);
             //this.GetAllPaperUploadData();
             this.routers.navigate(['/ITIPaperUploaded-List'])
@@ -613,9 +628,98 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
   }
 
+  getSelectedCenterNames() {
+  
+    const selectedIds = this.examForm.get('CenterCode')?.value || [];
+    console.log()
+
+    navigator.clipboard.writeText(this.CenterMasterList
+      .filter((x: any) => selectedIds.includes(x.ID))
+      .map((x: any) => x.Code)
+      .join(',')).then(() => {
+        // optional success message
+        this.swal.Success('Copied!<br/> Selected centers copied to clipboard',);
+      });
+  }
+
+  async getRecordByID(PaperUploadID: number)
+  {
+   
+
+    let obj =
+    {
+      Action: "_getRecordBYID",
+      PaperUploadID: PaperUploadID
+    };
+    try {
+      await this.apiService.GetTradeWisePapers(obj).then((data: any) =>
+      {
+        data = JSON.parse(JSON.stringify(data));
+        this.fillEditData(data.Data[0]);
+        debugger
+        if (!this.documentDetails || this.documentDetails.length === 0) {
+          this.documentDetails = [{} as DocumentDetailsModel];
+        }
+
+        this.documentDetails[0].FileName = data?.Data?.[0]?.FileName ?? '';
+      
+        console.log(this.documentDetails[0].FileName)
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+async  fillEditData(editData: any) {
 
 
+    this.examForm.patchValue({
+      SemesterID: editData.SemesterID
+    });
+  this.getSteram(editData.SemesterID);
 
+  this.examForm.patchValue({
+    StreamID: editData.StreamID,
+  });
+
+   await this.GetTradeWisePapers(editData.StreamID);
+  await this.seletDeselectCenters(editData.StreamID)
+
+
+  this.examForm.patchValue({
+    PaperID: editData.PaperID
+  });
+
+  this.GetCenterDatapaperWise(editData.PaperID)
+
+    this.examForm.patchValue({
+      PaperUploadID: editData.PaperUploadID,
+      ExamID: editData.ExamID,
+      ExamName: editData.ExamName,
+      SemesterID: editData.SemesterID,
+      Password: editData.Password,
+      //FileName: editData.FileName,
+      PaperDate: editData.PaperDate,
+      Active: editData.Active,
+      CenterCode: this.convertCenterCode(editData.CenterCode),
+      // IMPORTANT for mat-select multiple
+
+    });
+  }
+
+  convertCenterCode(value: any): number[] {
+    if (!value) {
+      return [];
+    }
+    if (Array.isArray(value)) {
+      return value;
+    }
+
+    return value
+      .split(',')
+      .map((x: string) => Number(x.trim()))
+      .filter((x: number) => !isNaN(x));
+  }
 
 
 }

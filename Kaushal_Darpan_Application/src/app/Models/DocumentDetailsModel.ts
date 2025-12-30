@@ -51,3 +51,16 @@ export class Counselling_DocumentDetailsModel {
     public AcademicYearID?: number = 0;
 }
 
+export class ITIPaperUploadSearchModel {
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public SemesterID: number = 0;
+  public TradeID: number = 0;
+  public Action: string = '';
+  public PaperID: number = 0;
+  public PaperUploadID: number = 0;
+  public PaperDate: string = '';
+  public IsPaperDownload: number = 0;
+  public CenterID: number = 0;
+  public PaperCode: string = '';
+}
