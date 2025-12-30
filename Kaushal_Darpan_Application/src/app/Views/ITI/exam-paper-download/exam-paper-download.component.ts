@@ -10,6 +10,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { ItiTradeService } from "../../../Services/iti-trade/iti-trade.service";
 import { EnumApplicationFromStatus, EnumConfigurationType, EnumDepartment, EnumEmitraService, EnumFeeFor, EnumMessageType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { retry } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-exam-paper-download',
@@ -34,7 +35,8 @@ export class ExamPaperDownloadComponent
  
     private appsettingConfig: AppsettingService,
     private routers: Router,
-    private swal: SweetAlert2
+    private swal: SweetAlert2,
+    private http: HttpClient
 
   ) { }
 
@@ -136,6 +138,16 @@ export class ExamPaperDownloadComponent
                 try
                 {
 
+                  this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+                    const downloadLink = document.createElement('a');
+                    const url = window.URL.createObjectURL(blob);
+                    downloadLink.href = url;
+                    downloadLink.download = this.generateFileName('pdf'); // Use DownloadfileName
+                    downloadLink.click();
+                    window.URL.revokeObjectURL(url);
+
+                  });
+
                   window.open(fileUrl, '_blank');
                   setTimeout(function () { window.location.reload(); }, 200)
                 }
@@ -166,6 +178,12 @@ export class ExamPaperDownloadComponent
    // this.swal.Info('date is not open')
   }
 
+  generateFileName(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    const d = 'TimeTableYearly';
+   
+    return `${d}.${extension}`;
+  }
 
   private triggerDownload(fileUrl: string, newFileName: string): void {
     try {
