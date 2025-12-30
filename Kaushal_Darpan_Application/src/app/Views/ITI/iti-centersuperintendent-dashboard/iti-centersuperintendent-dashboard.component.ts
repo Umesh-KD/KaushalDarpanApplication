@@ -12,6 +12,8 @@ import { CopyCheckerRequestModel, ExaminerDashboardModel } from '../../../Models
 import { ExaminerService } from '../../../Services/Examiner/examiner.service';
 import { ExaminerCodeLoginModel } from '../../../Models/ExaminerCodeLoginModel';
 import { ITICenterAllocationService } from '../../../Services/ITICenterAllocation/ItiCenterAllocation.service';
+import { CommonModule } from '@angular/common';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-iti-centersuperintendent-dashboard',
@@ -26,6 +28,7 @@ export class ItiCentersuperintendentDashboardComponent {
 
   public State: number = 0;
   public SuccessMessage: string = '';
+  public AppLink: string = '';
   public ErrorMessage: string = '';
   public ViewExaminerDashboardData: any = [] = [];
   public Table_SearchText: string = "";
@@ -35,7 +38,9 @@ export class ItiCentersuperintendentDashboardComponent {
 
   constructor(private collegeDashDataService: ITICenterAllocationService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal) {
+    private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal,
+    private Commonservice: CommonFunctionService
+  ) {
   }
 
   async ngOnInit() {
@@ -43,6 +48,7 @@ export class ItiCentersuperintendentDashboardComponent {
     //load
 
       await this.GetCopyCheckerDashData();
+    await this.DownloadApp();
     
   }
 
@@ -74,6 +80,32 @@ export class ItiCentersuperintendentDashboardComponent {
       }, 200);
     }
   }
+
+  async DownloadApp() {
+    try {
+
+      //session
+    
+      //call
+      this.loaderService.requestStarted();
+      await this.Commonservice.GetCommonMasterData("DownloadApp")
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AppLink = data['Data'][0]['Link'];
+          console.log(this.ViewExaminerDashboardData, "DashBoo");
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async gotoTheoryMarks() {
     this.routers.navigate(['/TheoryMarks']);

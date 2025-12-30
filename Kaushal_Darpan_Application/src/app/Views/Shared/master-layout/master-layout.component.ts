@@ -60,6 +60,7 @@ export class MasterLayoutComponent implements OnInit {
   isBackdropVisible: boolean = false;
   isMobile$: any;
   searchTerm: string = '';
+  AppLink: string = '';
   filterMenuData!: any;
   isMobileSubscription: Subscription | undefined;
   @ViewChild('htmlElement') htmlElement!: ElementRef;
@@ -199,6 +200,7 @@ export class MasterLayoutComponent implements OnInit {
     }
 
     await this.GetAcedmicYearList();
+    await this.DownloadApp();
     //manage case
     this.EndTermID = this.sSOLoginDataModel.EndTermID;
     //manage for iti
@@ -971,6 +973,35 @@ backtoSignOutNew_17122025() {
     sessionStorage.clear();
   localStorage.clear();
   this.cookieService.deleteAll();
- }
+  }
+
+  async DownloadApp() {
+    try {
+
+      //session
+
+      //call
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.GetCommonMasterData("DownloadApp")
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AppLink = data['Data'][0]['Link'];
+   
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async openAppLink() {
+    window.open(this.AppLink, '_blank');
+  }
 }
 
