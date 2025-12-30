@@ -51,6 +51,7 @@ export class ItiInvigilatorComponent {
   public IsYearly: number = 0
   public isDisabledGrid: boolean = false;
   public isDisabledDOJ: boolean = false;
+  public AllInTableSelect: boolean = false;
   isSubmittedItemDetails: boolean = false;
   public isLoadingExport: boolean = false;
   closeResult: string | undefined;
@@ -575,8 +576,10 @@ export class ItiInvigilatorComponent {
 
 
 
-  openViewApplicationPopup(ID:number) {
+  openViewApplicationPopup(ID: number, SubjectName: string, SemesterID:number) {
     this.childComponent1.TimeTableID = ID;
+    this.childComponent1.SubjectName = SubjectName;
+    this.childComponent1.SemesterID = SemesterID;
     this.childComponent1.OpenViewApplicationPopup();
   }
 

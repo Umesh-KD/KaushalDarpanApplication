@@ -340,12 +340,12 @@ export class AuctionListComponent {
       const updatedItem = {
         CollegeName: item.CollegeName ?? "BTER",
         ItemCategoryName: item.ItemCategoryName,
+        EquipmentsName: item.EquipmentsName,
         EquipmentsCode: item.EquipmentsCode,
         EquipmentWorking: item.EquipmentWorking == 1 ? "Working" : "Not Working",
-        IsOption: item.IsOption,
-        EquipmentsName: item.EquipmentsName,
-        AvailableQuantity: item.AvailableQuantity,
+        IsAuction: item.IsOption,
         InitialQuantity: item.InitialQuantity,
+        AvailableQuantity: item.AvailableQuantity,
         PricePerUnit: item.PricePerUnit,
         TotalPrice: item.TotalPrice,
         AuctionStatus : item.AuctionStatus == 1 ? "Done" : "Pending"

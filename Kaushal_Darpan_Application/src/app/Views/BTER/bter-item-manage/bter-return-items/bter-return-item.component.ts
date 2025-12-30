@@ -216,7 +216,19 @@ export class AddBterReturnItemComponent {
       return;
     }
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
+    const unwantedColumns = ['IssuedId', 'IsConsume', 'ItemId', 'issuedTo', 'equipmentStatus', 'Status_LabIncharge', 'isOption',
+      	'AuctionStatus',	'ItemDetailsId',];
+    const filteredData = this.ItemMasterList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
 

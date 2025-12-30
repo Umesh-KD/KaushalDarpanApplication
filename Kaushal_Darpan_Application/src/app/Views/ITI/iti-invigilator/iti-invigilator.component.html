@@ -106,7 +106,7 @@
                 </a>-->
 
                 <div class="flex">
-                  <a (click)="openViewApplicationPopup(row.TimeTableID)" title="Edit">
+                  <a (click)="openViewApplicationPopup(row.TimeTableID,row.SubjectName,row.SemesterID)" title="Edit">
                     <i class="ti ti-pencil"></i>
                   </a>
                   <a (click)="GetAllTheoryStudents(modal_ViewStudent,row.SubjectName,row.SemesterID)" title="View">

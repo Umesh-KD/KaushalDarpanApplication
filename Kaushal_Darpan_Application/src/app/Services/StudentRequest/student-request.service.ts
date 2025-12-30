@@ -272,4 +272,12 @@ export class StudentRequestService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async HostelStudentMeritListWardenView(searchRequest: StudentRequestDataModal) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/HostelStudentMeritListWardenView`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
