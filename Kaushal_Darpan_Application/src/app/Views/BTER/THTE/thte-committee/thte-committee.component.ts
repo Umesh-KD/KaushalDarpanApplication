@@ -31,6 +31,7 @@ export class THTECommitteeComponent {
   ExamShiftDDL: any = [];
   InstituteMasterDDL: any = [];
   ExaminerDDL: any = [];
+ 
 
   public requestSSoApi = new CommonVerifierApiDataModel();
 
@@ -175,12 +176,17 @@ export class THTECommitteeComponent {
       return
     }
 
-    const IsDuplicate = this.request.InspectionMemberDetails.some((element: any) =>
-      data.Data == element.StaffID
-    );
-    if (IsDuplicate) {
-      this.toastr.error('Already Exists');
-      return;
+    if(data && data.Data){
+      const IsDuplicate = this.request.InspectionMemberDetails.some((element: any) =>
+        data.Data == element.StaffID
+      );
+      if (IsDuplicate && data) {
+        this.toastr.error('Already Exists');
+        return;
+      }
+    }
+    else{
+      return
     }
     
 
@@ -274,6 +280,11 @@ export class THTECommitteeComponent {
     }
   }
 
+
+  async ResetData(){
+    this.request.InspectionMemberDetails=[];
+  }
+
   formatDateToInput(dateStr: string): string {
     if (!dateStr) return '';
 
@@ -350,10 +361,19 @@ export class THTECommitteeComponent {
       this.requestCommitteeStaffSSOIDSearchModel.SSOID = SSOID;
       this.requestCommitteeStaffSSOIDSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-      const data: any = await this.teacherHigherEducationApplicationService
-        .Bter_CommitteeStaffCheckSSOID(this.requestCommitteeStaffSSOIDSearchModel);
+      const username = SSOID; 
+    const appName = 'madarsa.test';
+    const password = 'Test@1234';
+      // let requestSSoApi:any = {};
+      this.requestSSoApi.SSOID = username;
+      this.requestSSoApi.appName = appName;
+      this.requestSSoApi.password = password;
 
-      const response = data?.Data[0];
+      // const data: any = await this.teacherHigherEducationApplicationService
+      //   .Bter_CommitteeStaffCheckSSOID(this.requestCommitteeStaffSSOIDSearchModel);
+      const data: any = await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi);
+      console.log(data);
+      const response = JSON.parse(data?.Data);
       if (!response) {
         this.toastr.error("SSO ID not found. Staff record does not exist.");
         return;
@@ -371,7 +391,7 @@ export class THTECommitteeComponent {
       if (parsedData) {
         this.formData = {
           ...this.formData,
-          Name: parsedData.DisplayName,
+          Name: parsedData.displayName,
           MobileNo: parsedData.mobile,
           EmailID: parsedData.mailPersonal,
           SSOID: SSOID,

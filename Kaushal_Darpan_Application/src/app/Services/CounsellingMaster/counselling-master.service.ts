@@ -8,7 +8,7 @@ import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDat
 import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { AddCollegeWiseScholarshipModel } from '../../Models/CollegeWiseScholarshipModel';
-import { CounsellingAllotmentListModel, CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling } from '../../Models/CounsellingMasterModel';
+import { CounsellingAllotmentListModel, CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling,CounsellingReportListSearchModel } from '../../Models/CounsellingMasterModel';
 import { EditVacancyDataModel } from '../../Models/CounsellingApplicationFormDataModel';
 
 
@@ -154,6 +154,13 @@ export class CounsellingMasterService {
   public async GetAllottedCandidateList_CounsellingReport(searchRequest: CounsellingAllottedListSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllottedCandidateList_CounsellingReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+    public async GetCounselling_GetCandidateDetailsRPT(searchRequest: CounsellingReportListSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/Counselling_GetCandidateDetailsRPT`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -1,0 +1,14 @@
+.allotted-col {
+  width: 280px;          /* adjust as needed */
+  max-width: 280px;
+  white-space: nowrap;  /* prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* show ... if text is long */
+}
+.name-col {
+  width: 200px;          /* adjust as needed */
+  max-width: 200px;
+  white-space: nowrap;  /* prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* show ... if text is long */
+}

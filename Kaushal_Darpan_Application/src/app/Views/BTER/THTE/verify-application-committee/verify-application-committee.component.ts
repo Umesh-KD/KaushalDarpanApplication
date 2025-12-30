@@ -169,7 +169,7 @@ export class VerifyApplicationCommitteeComponent {
 
     let dyMsg = '';
     if(this.status == 1343) {
-      dyMsg = "Accept And Forward To DTE";
+      dyMsg = "Accept And Forward To Principle";
     } else {
       dyMsg = "Reject";
     }
