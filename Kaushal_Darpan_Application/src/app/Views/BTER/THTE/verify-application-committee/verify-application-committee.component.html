@@ -74,11 +74,13 @@
             <span>Choose File</span>
             {{request.Dis_CommitteeDocs === '' ? 'No File Choosen' : request.Dis_CommitteeDocs}}
           </label>
-          <div class="flex">
-            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CommitteeDocs}}"
-               *ngIf="this.request.Dis_CommitteeDocs !=''"
-               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-          </div>
+          @if(this.request.Dis_CommitteeDocs){
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CommitteeDocs}}"
+                 *ngIf="this.request.Dis_CommitteeDocs !='' || this.request.Dis_CommitteeDocs !=null"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          }
         </div>
       </div>
 
@@ -140,9 +142,12 @@
             <td align="left">{{row.AppliedCourseName}}</td>
             <td align="left">{{row.CommitteeName}}</td>
             <td align="left">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <div *ngIf="row.CommitteeDocument !=''" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.CommitteeDocument}}"
-                   *ngIf="row.Dis_CommitteeDocument !=''" target="_blank"><i class="ti ti-eye"></i></a>
+                    target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+              <div *ngIf="row.CommitteeDocument ==''">
+                  <p >Not uploaded yet</p>
               </div>
               <!--{{row.Dis_CommitteeDocument}}-->
             </td>
