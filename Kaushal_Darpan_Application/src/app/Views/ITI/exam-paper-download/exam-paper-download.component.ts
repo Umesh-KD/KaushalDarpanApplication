@@ -107,7 +107,7 @@ export class ExamPaperDownloadComponent
   //  }
   //}
 
-  async DownaloadExamPaper(PaperUploadID : number , CenterID : number)
+  async DownaloadExamPaper(PaperUploadID : number , CenterID : number,SubjectCode:string='',item:any)
   {
     let obj = {
       Userid: this.SSOLoginDataModel.UserID,
@@ -142,14 +142,14 @@ export class ExamPaperDownloadComponent
                     const downloadLink = document.createElement('a');
                     const url = window.URL.createObjectURL(blob);
                     downloadLink.href = url;
-                    downloadLink.download = this.generateFileName('pdf'); // Use DownloadfileName
+                    downloadLink.download = this.generateFileName('pdf', item); // Use DownloadfileName
                     downloadLink.click();
                     window.URL.revokeObjectURL(url);
 
                   });
 
-                  window.open(fileUrl, '_blank');
-                  setTimeout(function () { window.location.reload(); }, 200)
+                  //window.open(fileUrl, '_blank');
+                  //setTimeout(function () { window.location.reload(); }, 200)
                 }
                 catch (ex) {
                   console.log(ex)
@@ -178,11 +178,12 @@ export class ExamPaperDownloadComponent
    // this.swal.Info('date is not open')
   }
 
-  generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    const d = 'TimeTableYearly';
+  generateFileName(extension: string, item: any): string {
    
-    return `${d}.${extension}`;
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    const d = 'Exam';
+   
+    return `${d}${item.SemesterName}${item.PaperCode}.${extension}`;
   }
 
   private triggerDownload(fileUrl: string, newFileName: string): void {
