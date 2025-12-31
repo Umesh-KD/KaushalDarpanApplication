@@ -130,6 +130,7 @@ export class BranchWiseHodComponent {
   }
 
   async PostUserExists() {
+    debugger;
     if (this.SSOIDExists) {
 
       await this.loadData();
