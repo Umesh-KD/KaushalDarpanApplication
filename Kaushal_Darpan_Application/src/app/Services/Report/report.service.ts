@@ -560,6 +560,13 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async DownloadTimeTable1(request: any) {
+    const body = JSON.stringify(request)
+    return this.http.post(`${this.APIUrl}/DownloadTimeTable`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async ItiDownloadTimeTable(tablerequest: ReportBasedModel) {
     const body = JSON.stringify(tablerequest)

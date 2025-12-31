@@ -32,6 +32,7 @@ export class BranchSectionCreateComponent {
   ApprovedTeacherList: any[] = [];
   allSections: any[] = [];
   isSubmitted = false;
+  isEdit = false;
   iSHOD = false;
   IIPMasterFormGroup!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -121,6 +122,10 @@ export class BranchSectionCreateComponent {
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterDDL = data.Data;
+      debugger
+      if (this.SemesterMasterDDL.length > 0) {
+        this.SemesterMasterDDL = this.SemesterMasterDDL.filter((x: any) => x.SemesterID != 7 && x.SemesterID != 8 && x.SemesterID != 9)
+      }
     })
     this.IsBranch = false;
     this.IIPMasterFormGroup = this.formBuilder.group({
@@ -138,6 +143,7 @@ export class BranchSectionCreateComponent {
       studentids: ['']
     });
 
+    this.sectionForm.setControl('sections', this.formBuilder.array([]));
 
 
     this.EditDataFormGroup = this.fb.group({
@@ -155,6 +161,8 @@ export class BranchSectionCreateComponent {
       StreamID: [0, Validators.required],
       SemesterID: [0, Validators.required],
     });
+    this.EditDataFormGroup.get('StreamName')?.disable();
+
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
@@ -163,10 +171,7 @@ export class BranchSectionCreateComponent {
     //  this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng)      
     //  console.log('data ==>', this.StreamMasterDDL)
     //})
-    await this.commonMasterService.SemesterMaster().then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.SemesterMasterDDL = data.Data;
-    })
+  
     this.IsBranch = false;
 
 
@@ -199,6 +204,14 @@ export class BranchSectionCreateComponent {
     return this.formBuilder.group({
       sectionName: [''],
       studentCount: [0]
+    });
+  }
+
+  createSection1(item?: any): FormGroup {
+    debugger
+    return this.formBuilder.group({
+      sectionName: [item?.SectionName || ''],
+      studentCount: [item?.StudentCount || 0]
     });
   }
 
@@ -244,7 +257,7 @@ export class BranchSectionCreateComponent {
     debugger
     const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
 
-    await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+    await this.commonMasterService.StreamMasterHOD(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDL = data.Data;
       //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
@@ -286,7 +299,7 @@ export class BranchSectionCreateComponent {
       (x: { StreamID: number; SemesterID: number }) =>
         x.StreamID === formStreamID && x.SemesterID === formSemesterID
     );
-    if (exists) {
+    if (exists && this.isEdit==false) {
       //this.toastr.warning("Branch Alredy Exists!");
       this.toastr.warning("Section for this branch is already created!");
       return
@@ -488,7 +501,7 @@ export class BranchSectionCreateComponent {
         x.StreamID === formStreamID && x.SemesterID === formSemesterID
     );
 
-    if (exists) {
+    if (exists && this.isEdit == false) {
       //this.toastr.warning("Branch Alredy Exists!");
       this.toastr.warning("Section for this branch is already created!");
       return
@@ -552,8 +565,14 @@ export class BranchSectionCreateComponent {
           this.toastr.success('Section data saved successfully!');
           this.isSubmitted = false;
           this.reset();
+
+
+
+
+           this.loadDropdownData();
+           this.GetBranchHODApplyList();
           this.getData();
-          this.GetBranchHODApplyList();
+          this.isEdit = false
 
           setTimeout(() => {
             window.location.reload();
@@ -760,7 +779,7 @@ export class BranchSectionCreateComponent {
   }
   onBranchChange(selectedValue: any) {
     const streamId = this.IIPMasterFormGroup.get('StreamID')?.value;
-
+    debugger
     this.IsBranch = streamId > 0 ? true : false;
 
     const selectedStream = this.StreamMasterDDL.find((item: any) => item.StreamID == streamId);
@@ -797,6 +816,16 @@ export class BranchSectionCreateComponent {
         data = JSON.parse(JSON.stringify(data));
         this.GetSectionData = data.Data;
         this.GetSectionData = this.GetSectionData.filter((item: any) => item.CreatedBy == this.sSOLoginDataModel.UserID)
+        this.allSections = this.GetSectionData;
+        debugger
+        
+        const usedSectionIds = this.AddStaffSubjectSectionModelList.map(
+          (x: any) => Number(x.SectionID)
+        );
+
+        this.GetSectionData = this.GetSectionData.filter(
+          (item: any) => !usedSectionIds.includes(Number(item.SectionID))
+        );
         this.allSections = this.GetSectionData;
         // this.allSections = data.Data;   // all sections
         // this.GetSectionData = [...this.allSections];
@@ -1088,7 +1117,7 @@ export class BranchSectionCreateComponent {
       this.toastr.warning("Please add at least one subject-section assignment.");
       return;
     }
-
+      
 
     this.PostAttendanceTimeTableList = [];
 
@@ -1255,5 +1284,98 @@ export class BranchSectionCreateComponent {
 
 
   //}
+
+  async DeleteData(item:any) {
+    try {
+     
+      //get all data
+      let obj ={
+        StreamID: item.StreamID,
+        SemesterID: item.SemesterID,
+        InstituteId: this.sSOLoginDataModel.InstituteID,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        Action:'DELETE'
+      }
+      await this.staffMasterService.GetBranchSectionData(obj).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data['Data']));
+        debugger
+        if (data.length > 0) {
+          // this.toastr.success(data.Message)
+          await this.getData();
+          await this.loadDropdownData();
+          await this.GetBranchHODApplyList();
+
+
+
+          await this.loadDropdownData();
+          await this.GetBranchHODApplyList();
+          await this.getData();
+
+
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
+  async EditDataSection(rowData: any) {
+    debugger;
+
+    if (!rowData || !rowData.StreamID) {
+      return;
+    }
+
+
+    this.IIPMasterFormGroup.patchValue({
+      SemesterID: rowData.SemesterID,
+      StreamID: rowData.StreamID,
+ 
+
+      StCount: rowData.TotalStudent,
+      SectionCount: rowData.TheorySectionCount,
+      PracticalSectionCount: rowData.PracticalSectionCount,
+      TutorialSectionCount: rowData.TutorialSectionCount
+    });
+  await  this.SemeIDAcStream()
+
+    this.IIPMasterFormGroup.patchValue({
+      StreamID: rowData.StreamID
+    })
+    this.onBranchChange(rowData.StreamID)
+    const obj = {
+      Action: "GET_BY_ID",
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      StreamID: rowData.StreamID,
+      SemesterID: rowData.SemesterID
+    };
+
+    try {
+      const data: any = await this.staffMasterService.GetBranchSectionData(obj);
+      const rows = data?.Data || [];
+
+      // ✅ Clear existing FormArray
+      this.sections.clear();
+
+      // ✅ Filter by CreatedBy first
+      const filteredRows = rows.filter(
+        (item: any) => item.CreatedBy === this.sSOLoginDataModel.UserID
+      );
+
+      // ✅ Push FormGroup for each row
+      filteredRows.forEach((item: any) => {
+        this.sections.push(this.createSection1(item));
+      });
+
+      this.totalRecord1 = filteredRows.length;
+      this.isEdit=true
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 }

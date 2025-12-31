@@ -595,6 +595,8 @@ export class ItiInvigilatorComponent {
     this.theorylist.InstituteID = this.sSOLoginDataModel.InstituteID
     this.theorylist.SubjectName = SubjectName
     this.theorylist.SemesterID = SemesterID
+    this.theorylist.UserID = this.sSOLoginDataModel.UserID;
+
     try {
 
       this.loaderService.requestStarted();

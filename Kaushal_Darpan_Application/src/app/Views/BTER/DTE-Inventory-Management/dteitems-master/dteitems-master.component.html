@@ -75,7 +75,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Status:
           </label>
-          <select class="form-select" id="searchStatusID" [(ngModel)]="Searchrequest.StatusID">
+          <select class="form-select" id="searchStatusID" [(ngModel)]="Searchrequest.StatusID" (change)="GetAllData()">
             <option value="0">Pending</option>
             <option value="1">Approved</option>
             <option value="2">Revert</option>
@@ -195,9 +195,9 @@
             </td>
             <td align="left">{{item.Remark}}</td>
             <td align="left">{{item.ReceiptBookFolio}}</td>
-            <td align="left">{{item.IssueDate}}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{item.IndentNo}}</td>
-            <td align="left">{{item.IssueBookFolioDate}}</td>
+            <td align="left">{{item.IssueBookFolioDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{item.QuantityIssued}}</td>
             <td align="left">{{item.QuantityBalance}}</td>
             <td align="left">

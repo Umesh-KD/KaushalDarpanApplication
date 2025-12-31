@@ -21,3 +21,6 @@ mat-option {
 li.showChildMenu > ul.MainSubMenu {
   display: block;
 }*/
+.clickable {
+  cursor: pointer;
+}

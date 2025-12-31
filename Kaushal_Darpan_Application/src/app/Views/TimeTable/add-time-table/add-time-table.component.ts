@@ -657,7 +657,7 @@ export class AddTimeTableComponent   {
   async GetStreamMasterList() {
     try {
       this.loaderService.requestStarted();
-      await this.streamService.GetAllData()
+      await this.streamService.GetAllData(this.sSOLoginDataModel.Eng_NonEng)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log("data of BranchMasterList",data)
@@ -1020,14 +1020,15 @@ export class AddTimeTableComponent   {
       })
     })
 
-    this.SelectedSubjectList.map((item: any) => {
+    await this.SelectedSubjectList.map(async (item: any) => {
 
       const paperCodeMatch = item.Name.match(/\((.*?)\)/);
       const paperCode = paperCodeMatch ? paperCodeMatch[1] : '';
 
       const branchCodeMatch = paperCode.match(/[A-Za-z]+/); 
       const branchCode = branchCodeMatch ? branchCodeMatch[0] : '';
-      this.GetStreamMasterList()
+
+      await this.GetStreamMasterList()
       
       const branchNameList = this.BranchMasterList.filter((branch: any) => branch.Code === branchCode)
       console.log(this.BranchMasterList)
