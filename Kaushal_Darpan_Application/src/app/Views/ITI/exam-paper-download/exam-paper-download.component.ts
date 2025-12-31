@@ -180,10 +180,23 @@ export class ExamPaperDownloadComponent
 
   generateFileName(extension: string, item: any): string {
    
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    const d = 'Exam';
    
-    return `${d}${item.SemesterName}${item.PaperCode}.${extension}`;
+
+    const now = new Date();
+
+    const timestamp =
+      now.getFullYear().toString() +
+      String(now.getMonth() + 1).padStart(2, '0') +
+      String(now.getDate()).padStart(2, '0') +
+      '_' +
+      String(now.getHours()).padStart(2, '0') +
+      String(now.getMinutes()).padStart(2, '0');
+
+    // Example: 20251230_1845
+
+    const d = 'Exam';
+   // return `${d}${item.SemesterName}${item.PaperCode}.${extension}`;
+    return `${d}_${item.TradeName.replace(/\s+/g, '')}_${item.SemesterName.replace(/\s+/g, '')}_${item.PaperCode.replace(/\s+/g, '')}_${timestamp}.${extension}`;
   }
 
   private triggerDownload(fileUrl: string, newFileName: string): void {
