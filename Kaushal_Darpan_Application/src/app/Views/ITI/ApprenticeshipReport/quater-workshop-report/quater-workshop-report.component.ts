@@ -338,6 +338,8 @@ export class QuaterWorkshopReportComponent {
     this.request.QuaterID = 0;
     this.request.DistrictID = 0;
     this.request.FinancialYearID = 0;
+    this.request.ZoneID = 0;    this.request.ZoneID = 0;
+
     this.GetReportAllData();
 
   }
