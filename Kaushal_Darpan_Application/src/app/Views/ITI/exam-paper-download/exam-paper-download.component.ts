@@ -10,6 +10,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { ItiTradeService } from "../../../Services/iti-trade/iti-trade.service";
 import { EnumApplicationFromStatus, EnumConfigurationType, EnumDepartment, EnumEmitraService, EnumFeeFor, EnumMessageType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { retry } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-exam-paper-download',
@@ -34,7 +35,8 @@ export class ExamPaperDownloadComponent
  
     private appsettingConfig: AppsettingService,
     private routers: Router,
-    private swal: SweetAlert2
+    private swal: SweetAlert2,
+    private http: HttpClient
 
   ) { }
 
@@ -105,13 +107,14 @@ export class ExamPaperDownloadComponent
   //  }
   //}
 
-  async DownaloadExamPaper(PaperUploadID : number , CenterID : number)
+  async DownaloadExamPaper(PaperUploadID : number , CenterID : number,SubjectCode:string='',item:any)
   {
     let obj = {
       Userid: this.SSOLoginDataModel.UserID,
       Roleid: this.SSOLoginDataModel.RoleID,
       PaperUploadID: PaperUploadID,
-      CenterID: CenterID
+      CenterID: CenterID,
+      RequestFor: 1
     };
     try {
       this.loaderService.requestStarted();
@@ -131,11 +134,22 @@ export class ExamPaperDownloadComponent
               if (result.isConfirmed)
               {
                 this.UpdatePaperDownloadStatus(obj);
-               
                 const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ITIPaperDownload + "/" + data.Data[0].FileName;
-                try {
-                  window.open(fileUrl, '_blank');
-                  setTimeout(function () { window.location.reload(); }, 200)
+                try
+                {
+
+                  this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+                    const downloadLink = document.createElement('a');
+                    const url = window.URL.createObjectURL(blob);
+                    downloadLink.href = url;
+                    downloadLink.download = this.generateFileName('pdf', item); // Use DownloadfileName
+                    downloadLink.click();
+                    window.URL.revokeObjectURL(url);
+
+                  });
+
+                  //window.open(fileUrl, '_blank');
+                  //setTimeout(function () { window.location.reload(); }, 200)
                 }
                 catch (ex) {
                   console.log(ex)
@@ -164,6 +178,45 @@ export class ExamPaperDownloadComponent
    // this.swal.Info('date is not open')
   }
 
+  generateFileName(extension: string, item: any): string {
+   
+   
+
+    const now = new Date();
+
+    const timestamp =
+      now.getFullYear().toString() +
+      String(now.getMonth() + 1).padStart(2, '0') +
+      String(now.getDate()).padStart(2, '0') +
+      '_' +
+      String(now.getHours()).padStart(2, '0') +
+      String(now.getMinutes()).padStart(2, '0');
+
+    // Example: 20251230_1845
+
+    const d = 'Exam';
+   // return `${d}${item.SemesterName}${item.PaperCode}.${extension}`;
+    return `${d}_${item.TradeName.replace(/\s+/g, '')}_${item.SemesterName.replace(/\s+/g, '')}_${item.PaperCode.replace(/\s+/g, '')}_${timestamp}.${extension}`;
+  }
+
+  private triggerDownload(fileUrl: string, newFileName: string): void {
+    try {
+      // Create a temporary anchor element
+      const link = document.createElement('a');
+      link.href = fileUrl;
+
+      // Set the new file name for the download
+      link.download = newFileName;
+
+      // Append the link to the body, trigger the click, then remove the link
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (ex) {
+      console.error(ex);
+    }
+  }
+
 
   async UpdatePaperDownloadStatus(objnew :any)
   {
@@ -183,6 +236,49 @@ export class ExamPaperDownloadComponent
       this.loaderService.requestEnded();
     }
   }
+
+
+
+  async ViewPaperPassword(PaperUploadID: number, CenterID: number)
+  {
+    let obj = {
+      Userid: this.SSOLoginDataModel.UserID,
+      Roleid: this.SSOLoginDataModel.RoleID,
+      PaperUploadID: PaperUploadID,
+      CenterID: CenterID,
+      RequestFor:2
+    };
+    try
+    {
+      this.loaderService.requestStarted();
+      await this.apiService.PaperDownloadValidationCheck(obj).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.loaderService.requestEnded();
+        if (data.State == EnumStatus.Success && data.Data.length > 0) {
+          if (data.Data[0].Status == 0)
+          {
+            this.swal.Info(data.Data[0].msg);
+          }
+          else if (data.Data[0].Status == 1)
+          {
+            this.swal.Success(data.Data[0].msg);
+          }
+        }
+        else {
+          this.swal.Info('Something went wrong. Please try again later !')
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      this.loaderService.requestEnded();
+    }
+
+
+    // this.swal.Info('date is not open')
+  }
+
+
+
 
 
 }

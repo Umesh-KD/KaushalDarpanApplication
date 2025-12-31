@@ -44,6 +44,28 @@
                     </select>
         </div>
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is TSP <span class="StarMarking">*</span></label>
+            <select class="form-select" id="IsTSPID" name="IsTSPID" [(ngModel)]="request.IsTSP" (change)="GetAllottedCandidateList_Counselling()"> 
+                 <!-- (change)="OnchangeTrade()"> -->
+              <option   [ngValue]="-1">--- Choose Option ---</option>
+              <option  [ngValue]="0">NTSP</option>
+              <option  [ngValue]="1">TSP</option>
+            </select>
+          <!-- <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsTSP" [value]="true"
+                      [(ngModel)]="request.IsTSP" (ngModelChange)="onTSPChange($event)"/>
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsTSP" [value]="false"
+                      [(ngModel)]="request.IsTSP" (ngModelChange)="onTSPChange($event)"/>
+              <span>No</span>
+            </label>
+          </div> -->
+        </div>
+        <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllottedCandidateList_Counselling()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
             <i class="ti ti-refresh"></i>
@@ -56,7 +78,9 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-           <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a> 
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToAppointmentPDF()"><i class="ti ti-download"></i> Download Appointment PDF</a> 
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToAppointmentExcel()"><i class="ti ti-download"></i> Download Appointment Excel</a> 
+           <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Allotment Excel</a> 
       </div>
     </div>
 
