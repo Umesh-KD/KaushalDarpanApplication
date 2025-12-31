@@ -130,6 +130,7 @@ export class PaperCountReportComponent implements OnInit {
       { ID: 5, Name: 'Download Institute Subject Branch Wise Student Report Reg' },
       { ID: 6, Name: 'Download Institute Subject Branch Wise Student Report Ex' },
       { ID: 7, Name: 'Download Subject Wise Student Count' },
+      { ID: 8, Name: 'Download Center Subject Paper Count' },
     ];
   }
 
@@ -353,6 +354,7 @@ export class PaperCountReportComponent implements OnInit {
     else if (this.groupForm.value.Type == 5) XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Reg-Report.xlsx');
     else if (this.groupForm.value.Type == 6) XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Ex-Report.xlsx');
     else if (this.groupForm.value.Type == 7) XLSX.writeFile(wb, 'Download-Subject-Wise-Student-Count-Sem-6.xlsx');
+    else if (this.groupForm.value.Type == 8) XLSX.writeFile(wb, 'Download-center_subject_papercount.xlsx');
     else XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');
   }
 
@@ -361,8 +363,8 @@ export class PaperCountReportComponent implements OnInit {
   cities: string[] = [];
   filtersApplied = false;
   
-  async SubmitData() {   
-
+  async SubmitData() {
+    debugger;
     this.CustomizeReportCoulmnDataPush = [];
     try {
      
