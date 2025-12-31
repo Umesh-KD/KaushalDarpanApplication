@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { CounsellingAllotmentListModel, CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling } from '../../../Models/CounsellingMasterModel';
+import { CounsellingAllotmentListModel, CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling,CounsellingAppointmentOrder } from '../../../Models/CounsellingMasterModel';
 import { Counselling_DropdownDataModel } from '../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CounsellingMasterService } from '../../../Services/CounsellingMaster/counselling-master.service';
@@ -29,6 +29,7 @@ export class AllotedCandidateListReportComponent {
 
   sSOLoginDataModel = new SSOLoginDataModel();
   request = new CounsellingAllottedListSearchModel();
+  requestPDF = new CounsellingAppointmentOrder();
   public tradeRequest = new Counselling_DropdownDataModel();
   public editInstituteReq = new EditInstituteDataModel_Counselling();
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
@@ -89,7 +90,7 @@ export class AllotedCandidateListReportComponent {
     async getTradeByDegree(designationId: number) {
     debugger;
     console.log('Designation ID:', designationId);
-
+ this.request.TradeID = 0;
     try {
       this.loaderService.requestStarted();
 
@@ -149,6 +150,7 @@ export class AllotedCandidateListReportComponent {
   async GetAllottedCandidateList_Counselling() {
     try {
       this.request.action="GetAllottedCandidate";
+      this.request.DesignationID=this.searchRequest.DesignationID;
       await this.counsellingMasterService.GetAllottedCandidateList_CounsellingReport(this.request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -285,4 +287,86 @@ export class AllotedCandidateListReportComponent {
       XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
       XLSX.writeFile(wb, 'CounsellingStudents_List.xlsx');
     }
+    async exportToAppointmentPDF() {
+    try { 
+      this.requestPDF.TradeID=this.request.TradeID;
+      this.requestPDF.DesignationID=this.searchRequest.DesignationID;
+      this.requestPDF.IsTSP=this.request.IsTSP;
+       await this.counsellingMasterService.GenerateCounsellingAppointmentOrder(this.requestPDF).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        console.log(data.Data);
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.DownloadFile(data.Data, 'file download');
+          //await this.GetAllottedCandidateList_Counselling();
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  } 
+  async exportToAppointmentExcel() {
+    try { 
+      this.requestPDF.TradeID=this.request.TradeID;
+      this.requestPDF.DesignationID=this.searchRequest.DesignationID;
+      this.requestPDF.IsTSP=this.request.IsTSP;
+       await this.counsellingMasterService.GenerateCounsellingAppointmentOrderExcel(this.requestPDF).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        console.log(data.Data);
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.DownloadFileExcel(data.Data, 'file download');
+          //await this.GetAllottedCandidateList_Counselling();
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  } 
+  DownloadFileExcel(FileName: string, DownloadfileName: any): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('xlsx'); // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+  DownloadFile(FileName: string, DownloadfileName: any): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+  generateFileName(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    return `file_${timestamp}.${extension}`;
+  }
+//   onTSPChange(value: boolean) {
+//   console.log('IsTSP changed to:', value);
+
+//   this.GetAllottedCandidateList_Counselling()
+// }
+
 }

@@ -8,7 +8,7 @@ import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDat
 import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { AddCollegeWiseScholarshipModel } from '../../Models/CollegeWiseScholarshipModel';
-import { CounsellingAllotmentListModel, CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling,CounsellingReportListSearchModel } from '../../Models/CounsellingMasterModel';
+import { CounsellingAllotmentListModel, CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling,CounsellingReportListSearchModel,CounsellingAppointmentOrder } from '../../Models/CounsellingMasterModel';
 import { EditVacancyDataModel } from '../../Models/CounsellingApplicationFormDataModel';
 
 
@@ -161,6 +161,20 @@ export class CounsellingMasterService {
     public async GetCounselling_GetCandidateDetailsRPT(searchRequest: CounsellingReportListSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/Counselling_GetCandidateDetailsRPT`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GenerateCounsellingAppointmentOrder(request: CounsellingAppointmentOrder) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GenerateCounsellingAppointmentOrder`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+public async GenerateCounsellingAppointmentOrderExcel(request: CounsellingAppointmentOrder) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GenerateCounsellingAppointmentOrderExcel`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
