@@ -1569,7 +1569,6 @@ const routes: Routes = [
       { path: 'ITIInvigilatorExamList', loadChildren: () => import('./Views/ITI/Examination/invigilator-exam-list/invigilator-exam-list.module').then(m => m.InvigilatorExamListModule) },
 
 
-
       { path: 'ItiPaperUploadReport', loadChildren: () => import('./Views/ITI/iit-paper-upload-report/iit-paper-upload-report.module').then(m => m.IitPaperUploadReportModule) },
       { path: 'invigilatorattandancereport', loadChildren: () => import('./Views/ITI/invigilator-attandance-report/invigilator-attandance-report.module').then(m => m.InvigilatorAttandanceReportModule) },
 
