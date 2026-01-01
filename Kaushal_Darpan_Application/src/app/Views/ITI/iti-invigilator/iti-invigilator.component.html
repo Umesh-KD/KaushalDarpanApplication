@@ -85,6 +85,7 @@
             <th class="text-left">Exam Shift Time</th>
             <th class="text-left">Year</th>
             <th class="text-left">Subject</th>
+            <td align="left">Total Student</td>
             <th class="text-left">Invigilators</th>
             <th class="text-left">Action</th>
           </tr>
@@ -96,14 +97,15 @@
             <td>{{row.ExamShiftWithTime}}</td>
             <td align="left">{{row.SemesterName}}</td>
             <td align="left">{{row.SubjectName}}</td>
+            <td align="left">{{row.TotalStudent}}</td>
             <td align="left">{{row.Invigilators}}</td>
 
             <td align="left">
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
                 <!--<a href="javascript:void(0);" title="{{sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng  || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge ? 'View': 'Update Invigilator'}}"
-                   (click)="ViewandUpdate(MyModel_ViewDetails,row.TimeTableID)">
-                  <i class="{{sSOLoginDataModel.RoleID == _EnumRole.Admin  || sSOLoginDataModel.RoleID == _EnumRole.AdminNon || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge ? 'ti ti-eye': 'ti ti-pencil'}}"></i>
-                </a>-->
+         (click)="ViewandUpdate(MyModel_ViewDetails,row.TimeTableID)">
+        <i class="{{sSOLoginDataModel.RoleID == _EnumRole.Admin  || sSOLoginDataModel.RoleID == _EnumRole.AdminNon || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge ? 'ti ti-eye': 'ti ti-pencil'}}"></i>
+      </a>-->
 
                 <div class="flex">
                   <a (click)="openViewApplicationPopup(row.TimeTableID,row.SubjectName,row.SemesterID)" title="Edit">

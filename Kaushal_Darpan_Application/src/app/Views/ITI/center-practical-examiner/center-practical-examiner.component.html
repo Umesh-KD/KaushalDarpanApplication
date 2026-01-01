@@ -110,6 +110,7 @@
               <th class="text-left">CC Code</th>
               <th class="text-left">Examiner</th>
               <th class="text-left">Year</th>
+              <th class="text-left">Trade</th>
               <th class="text-left">Subject</th>
               <th class="text-left">Date</th>
 
@@ -131,7 +132,9 @@
 
 
               </td>
-
+              <td>
+                {{row.StreamName}}
+              </td>
               <td>
                 {{row.Subject}}
               </td>
@@ -156,46 +159,44 @@
 
                   <mat-menu #menuAction="matMenu">
                     <!--First Semester-->
-                    <button *ngIf="sSOLoginDataModel.RoleID!=224" mat-menu-item
-                            matTooltip="Download Practical Exam Report" (click)="OnDownloadReport(row.CenterID,row.SemesterID,row.UserID,row.Subject)">
-                      <i class="ti ti-download"></i> Practical Exam Report
-                    </button>
-
+                    <!--<button *ngIf="sSOLoginDataModel.RoleID!=224" mat-menu-item
+                matTooltip="Download Practical Exam Report" (click)="OnDownloadReport(row.CenterID,row.SemesterID,row.UserID,row.Subject)">
+          <i class="ti ti-download"></i> Practical Exam Report
+        </button>-->
                     <!-- Second Semester -->
                     <button mat-menu-item
-                          (click)="OnDownloadAttendenceReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
+                            (click)="OnDownloadAttendenceReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID,row.StreamID)"
                             matTooltip="Dowmload Practical Exam Attendence Report">
                       <i class="ti ti-download"></i> Practical Exam Attendence Report
                     </button>
 
 
-                    <button *ngIf="sSOLoginDataModel.RoleID!=96 && sSOLoginDataModel.RoleID!=224 " mat-menu-item
-                           (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
-                            matTooltip="Dowmload Practical Exam Marks Report">
-                      <i class="ti ti-download"></i> Practical Exam Marks Report
-                    </button>
-
+                    <!--<button *ngIf="sSOLoginDataModel.RoleID!=96 && sSOLoginDataModel.RoleID!=224 " mat-menu-item
+               (click)="OnDownloadMarkingReport(row.CenterID,row.SemesterID,row.UserID,row.Subject,row.InstituteID)"
+                matTooltip="Dowmload Practical Exam Marks Report">
+          <i class="ti ti-download"></i> Practical Exam Marks Report
+        </button>-->
                     <!-- Third Semester -->
                     <!--<button mat-menu-item matTooltip="Unlock Fee" (click)="UnlockFee(iti.Id,iti.FeePdf)">
-    <i [ngClass]="iti.FeePdf == 1 ? 'ti ti-lock-open' : 'ti ti-lock'"></i>
-    {{ iti.FeePdf == 1 ? 'Unlock Fee' : 'Lock Fee' }}
+          <i [ngClass]="iti.FeePdf == 1 ? 'ti ti-lock-open' : 'ti ti-lock'"></i>
+          {{ iti.FeePdf == 1 ? 'Unlock Fee' : 'Lock Fee' }}
 
-  </button>-->
+        </button>-->
                     <!-- Fourth Semester -->
                     <!--<button mat-menu-item (click)="DeleteDataById(iti.Id)"
-          matTooltip="Delete ITI">
-    <i class="ti ti-trash"></i> Delete
-  </button>-->
+                matTooltip="Delete ITI">
+          <i class="ti ti-trash"></i> Delete
+        </button>-->
                     <!-- Fifth Semester -->
                     <!--<button mat-menu-item
-          matTooltip="NCVT Mis">
-    <i class="ti ti-download"></i> NCVT Mis
-  </button>-->
+                matTooltip="NCVT Mis">
+          <i class="ti ti-download"></i> NCVT Mis
+        </button>-->
                     <!-- Sixth Semester -->
                     <!--<button mat-menu-item (click)="ViewandUpdate(MyModel_ViewTrades,iti.Id)"
-          matTooltip="View Trades">
-    <i class="ti ti-eye"></i> View Trades
-  </button>-->
+                matTooltip="View Trades">
+          <i class="ti ti-eye"></i> View Trades
+        </button>-->
                   </mat-menu>
                 </div>
 

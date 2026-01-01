@@ -235,6 +235,7 @@ export class AssignPracticalExaminerComponent {
         CenterAssignedID: 0,
         CenterID: this.SelectCenterMaster.CenterID,
         InsituteID: this.SelectCenterMaster.InstituteID,
+        StreamID: this.SelectCenterMaster.StreamID,
         UserID: this.UserID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         EndTermID: this.sSOLoginDataModel.EndTermID,
@@ -614,13 +615,14 @@ export class AssignPracticalExaminerComponent {
 
   }
 
-  async onGetStudentExamReportlist(model: any, CenterID: number , SemesterID: number) {
+  async onGetStudentExamReportlist(model: any, CenterID: number , SemesterID: number,StreamID:number) {
     debugger
     try {
       this.loaderService.requestStarted();
       //this.searchRequest.ServiceRequestId = ServiceRequestId;
       this.searchRequestExam.CenterID = CenterID;
       this.searchRequestExam.SemesterID = SemesterID;
+      this.searchRequestExam.StreamID = StreamID;
       this.searchRequestExam.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequestExam.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       if (this.sSOLoginDataModel.RoleID == 97) {

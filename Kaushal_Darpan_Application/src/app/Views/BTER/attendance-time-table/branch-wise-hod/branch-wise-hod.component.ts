@@ -42,7 +42,7 @@ export class BranchWiseHodComponent {
   public searchRequest = new GuestApplyForGuestRoomSearchModel();
   public searchRequestGuestStaffProfileSearchModel = new GuestStaffProfileSearchModel()
   displayedColumns: string[] = [
-    'SNo', 'FirstName', 'SSOID', 'MobileNo', 'MailPersonal', 'StreamName', 'InstituteName', 'SemesterName'
+    'SNo', 'FirstName', 'SSOID', 'MobileNo', 'MailPersonal', 'StreamName', 'InstituteName', 'SemesterName','actions'
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -130,6 +130,7 @@ export class BranchWiseHodComponent {
   }
 
   async PostUserExists() {
+    debugger;
     if (this.SSOIDExists) {
 
       await this.loadData();
@@ -172,6 +173,7 @@ export class BranchWiseHodComponent {
   }
 
   async btnDeleteOnClick(item: any) {
+    debugger;
     this.Swal2.Confirmation("Are you sure you want to delete this ?",
       async (result: any) => {
         //confirmed
@@ -180,7 +182,7 @@ export class BranchWiseHodComponent {
             this.request.DeleteStatus = true;
             this.request.ActiveStatus = false;
             this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-            this.request.Action = "SAVE";
+            this.request.Action = "DELETE";
             this.request.ID = item.ID;
             await this.staffMasterService.AllBranchHOD(this.request)
               .then((data: any) => {
@@ -250,7 +252,8 @@ export class BranchWiseHodComponent {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.request.SemesterID = this.IIPMasterFormGroup.value.SemesterID;
-      debugger
+      this.request.CollegeID = this.sSOLoginDataModel.InstituteID
+  
 
       await this.staffMasterService.AllBranchHOD(this.request)
         .then((data: any) => {
@@ -431,4 +434,50 @@ export class BranchWiseHodComponent {
       await this.GetBranchHideList();
     }
   }
+
+  async EditDataSection(rowData: any) {
+    debugger
+    this.SSOIDFormGroup.patchValue({
+      SSOID: rowData.SSOID,
+    
+    });
+
+    const streamIdArray = rowData.StreamID
+      ? rowData.StreamID
+        .toString()
+        .split(',')
+        .map((id: string) => Number(id.trim()))
+      : [];
+    if (rowData.SemesterID = "3,4,5") {
+      rowData.SemesterID = 3
+    }
+
+    else if (rowData.SemesterID = "1,2") {
+      rowData.SemesterID = 1
+    } else {
+      rowData.SemesterID = 6
+    }
+
+    this.IIPMasterFormGroup.patchValue({
+      SemesterID: rowData.SemesterID,
+      StreamIDs: streamIdArray,
+      Name: rowData.DisplayName,
+      MobileNo: rowData.MobileNo
+
+    });
+
+
+    await this.SemesterMaster();
+   
+    this.request.SemesterID = rowData.SemesterID
+    this.request.DisplayName = rowData.DisplayName
+    this.request.MobileNo = rowData.MobileNo
+    this.request.MailPersonal = rowData.MailPersonal
+    this.request.ID = rowData.ID
+   
+    await this.onSemesterChange(this.request.SemesterID);
+  
+
+  }
+
 }

@@ -306,6 +306,13 @@ export class StaffMasterService {
       ).toPromise();
   }
 
+
+  public async DeleteBranchSection(model: any) {
+    return await this.http.post(this.APIUrl + '/DeleteBranchSection', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
 }
 
 

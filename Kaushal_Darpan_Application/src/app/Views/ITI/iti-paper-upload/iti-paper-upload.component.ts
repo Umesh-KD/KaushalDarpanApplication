@@ -146,8 +146,6 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
      this.onExamChange(this.examForm.get("ExamID")?.value);
 
-
-
     this.searchRequestPaper.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequestPaper.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequestPaper.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;

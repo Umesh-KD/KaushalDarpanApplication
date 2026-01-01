@@ -26,4 +26,5 @@ export class BlankReportModel extends RequestBaseModel {
   public CenterID:number=0
   public UserID:number=0
   public DistrictID:number=0
+  public StreamID:number=0
 }
