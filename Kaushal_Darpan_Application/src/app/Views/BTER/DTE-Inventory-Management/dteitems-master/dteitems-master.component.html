@@ -76,9 +76,11 @@
             Status:
           </label>
           <select class="form-select" id="searchStatusID" [(ngModel)]="Searchrequest.StatusID" (change)="GetAllData()">
+            <option value="3">--- All ---</option>
             <option value="0">Pending</option>
             <option value="1">Approved</option>
             <option value="2">Revert</option>
+            
           </select>
         </div>
 
@@ -132,20 +134,20 @@
             <th class="text-left">Batch ID</th>
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
-            <th class="text-left">Initial Quantity</th>
-            <th class="text-left">Available Quantity</th>
-            <th class="text-left">Price Per Unit</th>
-            <th class="text-left">Total Price</th>
-            <th class="text-left">Entry Date</th>
-            <th class="text-left">Consumable Type</th>
-            <th class="text-left">Remarks</th>
+            <th class="text-left">Item Type</th>
             <th class="text-left">Receipt Book Folio</th>
             <th class="text-left">IssueDate</th>
             <th class="text-left">IndentNo</th>
-            <th class="text-left">IssueBookFolioDate</th> 
+            <th class="text-left">IssueBookFolioDate</th>
+            <th class="text-left">Price Per Unit</th>
+            <th class="text-left">Total Price</th>
+            <th class="text-left">Entry Date</th>
+            <th class="text-left">Initial Quantity</th>
+            <th class="text-left">Available Quantity</th>
             <th class="text-left">QuantityIssued</th>
             <th class="text-left">QuantityBalance</th>
             <th class="text-left">Bill Document</th>
+            <th class="text-left">Remarks</th>
             <th class="text-center">Action</th> 
           </tr>
         </thead>
@@ -158,6 +160,19 @@
             <td align="left">{{item.batchId}}</td>
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
+            <td align="left">
+              <span class="px-2 py-1 rounded text-white"
+                    [ngClass]="item.IsConsume == 1 ? 'bg-blue-500' : 'bg-green-500'">
+                {{ item.IsConsume == 1 ? 'Consumable' : 'Permanent' }}
+              </span>
+            </td>
+            <td align="left">{{item.ReceiptBookFolio}}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{item.IndentNo}}</td>
+            <td align="left">{{item.IssueBookFolioDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{item.PricePerUnit}}</td>
+            <td align="left">{{item.TotalPrice}}</td>
+            <td align="left">{{item.RTS | date}}</td>
             <td align="left">{{item.InitialQuantity}}</td>
 
             <td align="left">
@@ -182,22 +197,6 @@
                 {{ item.AvailableQuantity }}
               </span>
             </td>
-
-
-            <td align="left">{{item.PricePerUnit}}</td>
-            <td align="left">{{item.TotalPrice}}</td>
-            <td align="left">{{item.RTS | date}}</td>
-            <td align="left">
-              <span class="px-2 py-1 rounded text-white"
-                    [ngClass]="item.IsConsume == 1 ? 'bg-blue-500' : 'bg-green-500'">
-                {{ item.IsConsume == 1 ? 'Consumable' : 'Permanent' }}
-              </span>
-            </td>
-            <td align="left">{{item.Remark}}</td>
-            <td align="left">{{item.ReceiptBookFolio}}</td>
-            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-            <td align="left">{{item.IndentNo}}</td>
-            <td align="left">{{item.IssueBookFolioDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{item.QuantityIssued}}</td>
             <td align="left">{{item.QuantityBalance}}</td>
             <td align="left">
@@ -206,6 +205,7 @@
               <i class="ti ti-eye"></i>
             </a>
             </td>
+            <td align="left">{{item.Remark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin

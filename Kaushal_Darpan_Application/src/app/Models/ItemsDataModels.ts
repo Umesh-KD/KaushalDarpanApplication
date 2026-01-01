@@ -37,6 +37,7 @@ export class ItemsDataModels {
   public QuantityBalance: number | null = null;
   public BillFileName : string = '';
   public BillFilePath : string = '';
+  public IsRequested: boolean = false;
   
 }
 export class ItemsSearchModel {

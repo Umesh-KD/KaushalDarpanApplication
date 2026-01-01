@@ -91,14 +91,16 @@
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
             <th class="text-left">Item Type</th>
-            <th class="text-left">Initial Quantity</th>
-            <th class="text-left">Available Quantity</th>
             <th class="text-left">Price Per Unit</th>
             <th class="text-left">Total Price</th>
-            <th class="text-left">Auctioned</th>
+            <th class="text-left">Initial Quantity</th>
+            <th class="text-left">Available Quantity</th>
+            <th class="text-left">Issued Quantity</th>
+            
             <th class="text-left">Working</th>
             <th class="text-left">Not Working</th>
             <th class="text-left">Repaired</th>
+            <th class="text-left">Auctioned</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -131,6 +133,8 @@
                 {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
               </span>
             </td>
+            <td align="left">{{item.PricePerUnit}}</td>
+            <td align="left">{{item.TotalPrice}}</td>
             <td align="left">{{item.InitialQuantity}}</td>
             <td align="left">
               @if (item.Status != 0 && item.IsConsumable == 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT) && sSOLoginDataModel.InstituteID == item.InstituteID)
@@ -156,12 +160,12 @@
               </span>
               }
             </td>
-            <td align="left">{{item.PricePerUnit}}</td>
-            <td align="left">{{item.TotalPrice}}</td>
-            <td align="left">{{item.Actioned}}</td>
+            <td align="left">{{item.QuantityIssued}}</td>
+            
             <td align="left">{{item.Working}}</td>
             <td align="left">{{item.NotWorking}}</td>
             <td align="left">{{item.Repaired}}</td>
+            <td align="left">{{item.Actioned}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 

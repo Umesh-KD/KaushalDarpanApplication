@@ -1,27 +1,23 @@
-import { Component } from '@angular/core';
-import { EnumStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
-import { FormGroup } from '@angular/forms';
-import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute, Router } from '@angular/router';
-import { LoaderService } from '../../../../../Services/Loader/loader.service';
-import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
-import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
-import { inventoryIssueHistorySearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
-import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
-import { AppsettingService } from '../../../../../Common/appsetting.service';
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
-
+import * as XLSX from 'xlsx';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { inventoryIssueHistorySearchModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
 
 @Component({
-  selector: 'app-inventory-Issue-History',
-  templateUrl: './inventory-Issue-History.component.html',
-  styleUrls: ['./inventory-Issue-History.component.css'],
-  standalone: false
+  selector: 'app-staff-inventory-details',
+  standalone: false,
+  templateUrl: './staff-inventory-details.component.html',
+  styleUrl: './staff-inventory-details.component.css'
 })
-export class inventoryIssueHistoryComponent {
+export class StaffInventoryDetailsComponent {
   public Searchrequest = new inventoryIssueHistorySearchModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -36,6 +32,7 @@ export class inventoryIssueHistoryComponent {
   public CategoryDDLList: any = [];
   public TradeDDLList: any = [];
   public staffDDLList: any = [];
+  public LabDetailsData: any = [];
   public ItemId: number = 0;
   public UserID: number = 0;
   public today: Date = new Date();
@@ -44,46 +41,40 @@ export class inventoryIssueHistoryComponent {
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
-    private commonFunctionService: CommonFunctionService,
     private loaderService: LoaderService,
     public appsettingConfig: AppsettingService,
     private activatedRoute: ActivatedRoute,
     private routers: Router,
-    private Swal2: SweetAlert2,
-    private itiInventoryService: ITIInventoryService,
-    private modalService: NgbModal,
-    private commonMasterService: CommonFunctionService
+    private bterInventoryService: DteItemsMasterService,
   ) { }
 
   async ngOnInit() {
-
-    if (this.routers.url.includes('iti-staff-inventory-details')) {
+    if (this.routers.url.includes('bter-staff-inventory-details')) {
       this.IsStaff = true;
     }
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
-    
-    await this.GetAllData();
     await this.GetTradeDDL();
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
+    await this.GetAllData();
+    
   }
 
-  async GetAllData() {
+  async GetAllData() {    
     try {
       this.loaderService.requestStarted();
-
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
-      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
       this.Searchrequest.IsStaff = this.IsStaff;
-      this.Searchrequest.ReturnStatus = 2; // for all data
-     // this.Searchrequest.staffID = 1;
-
-      await this.itiInventoryService.GetAllinventoryIssueHistoryNew(this.Searchrequest)
+      this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
+      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      // if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge){
+        
+      // }
+      await this.bterInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
@@ -91,7 +82,6 @@ export class inventoryIssueHistoryComponent {
             this.ErrorMessage = data.ErrorMessage;
             this.ItemMasterList = data.Data || [];
             this.ItemMasterList1 = data.Data || [];
-            console.log(this.ItemMasterList);
           } else {
             console.error("No data returned from API");
           }
@@ -115,7 +105,7 @@ export class inventoryIssueHistoryComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TypeName = 'staffList';
 
-      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
 
       if (data && data.State === EnumStatus.Success) {
         this.staffDDLList = [
@@ -144,7 +134,7 @@ export class inventoryIssueHistoryComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TypeName = 'TradeList';
 
-      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
 
       if (data && data.State === EnumStatus.Success) {
         this.TradeDDLList = [
@@ -173,7 +163,7 @@ export class inventoryIssueHistoryComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TypeName = 'ItemList';
 
-      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
 
       if (data && data.State === EnumStatus.Success) {
         this.CategoryDDLList = [
@@ -202,13 +192,23 @@ export class inventoryIssueHistoryComponent {
   }
 
   exportToExcel(): void {
-    debugger
+    
     if (!this.ItemMasterList || this.ItemMasterList.length === 0) {
       this.toastr.warning("No data available to export.");
       return;
     }
+    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus',];
+    const filteredData = this.ItemMasterList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
 
@@ -233,11 +233,4 @@ export class inventoryIssueHistoryComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
   }
-
-
-  
-  
-
- 
-
 }
