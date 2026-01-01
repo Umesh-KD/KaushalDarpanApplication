@@ -392,9 +392,9 @@ export class EligibleVerificationEnrollNoComponent {
     this.updateInTablePaginatedData();
   }
 
-  //get totalInTableSelected(): number {
-  //  return this.StudentList.filter((x) => x.Selected)?.length;
-  //}
+  get totalInTableSelected(): number {
+    return this.StudentList.filter((x) => x.Selected)?.length;
+  }
 
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
@@ -781,6 +781,7 @@ export class EligibleVerificationEnrollNoComponent {
       this.GeneratedOTP = "";
       this.loaderService.requestStarted();
       //this.sSOLoginDataModel.Mobileno = "7737348604";
+      this.MobileNo = parseInt(this.sSOLoginDataModel.Mobileno);
       await this.sMSMailService.SendMessage(this.sSOLoginDataModel.Mobileno, EnumMessageType.Bter_OTP)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
