@@ -69,6 +69,7 @@ export class ITIExaminerDataModelSearchFilters {
   public SemesterID: number = 0
 
   public Eng_NonEng: number = 0
+  public StreamID: number = 0
 
 
 }
