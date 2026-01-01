@@ -425,44 +425,4 @@ export class DteItemsMasterComponent {
     this.Revertrequest.Remark = '';
     this.isSubmitted = false;
   }
-// async GetItemListType() {
-    
-//     try {
-//       this.loaderService.requestStarted(); 
-//       const searchdata: DTEItemsSearchModel = {
-//         DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
-//         EndTermID: this.sSOLoginDataModel.EndTermID || 0,
-//         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
-//         RoleID: this.sSOLoginDataModel.RoleID || 0,
-//         CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-//         ItemType: this.Searchrequest.ItemType || 0,
-//         EquipmentsId: 0,
-//         OfficeID: 0,
-//         StatusID: 0,
-
-//       };
-
-//       const data: any = await this.dteItemsMasterService.GetItemListType(searchdata);
-
-//       if (data && data.State === EnumStatus.Success) {
-//         this.CategoryDDLList = data.Data.map((x: any) => ({
-//           ItemCategoryID: x.ItemCategoryID,
-//           ItemCategoryName: x.ItemCategoryName
-//         }));
-
-//         this.Searchrequests.ItemCategoryId = 0; // reset
-//         this.ItemsDDLList = []; // reset
-//         this.SelectedItems = [];
-//       } else {
-//         this.CategoryDDLList = [];
-//         this.ItemsDDLList = [];
-//         this.SelectedItems=[];
-//       }
-//     } catch (Ex) {
-//       console.error("Error in GetItemListType:", Ex);
-//     } finally {
-//       this.loaderService.requestEnded();
-//     }
-//   }
-
 }

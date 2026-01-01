@@ -58,14 +58,16 @@ export class bterinventoryIssueHistoryComponent {
   ) { }
 
   async ngOnInit() {
+    // Check if the current route is 'bter-staff-inventory-details'
+    
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
-
-    await this.GetAllData();
     await this.GetTradeDDL();
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
+    await this.GetAllData();
+    
   }
 
   async GetAllData() {    
@@ -74,6 +76,7 @@ export class bterinventoryIssueHistoryComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
+      
       if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge){
         this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
         this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
@@ -238,10 +241,42 @@ export class bterinventoryIssueHistoryComponent {
     return `file_${timestamp}.${extension}`;
   }
 
+  toggleAll(event: any) {
+    const checked = event.target.checked;
+    this.ItemMasterList.forEach((item: any) => {
+      if(item.ConditionOnReturn == 2 && item.IsOption == false) {
+        item.Selected = checked
+      }
+    });
+  }
 
-  
-  
-
- 
-
+  async MarkForAuction () {
+    const selected = this.ItemMasterList.filter((x: any) => x.Selected);
+    if (selected.length === 0) {
+      this.toastr.warning("Please select at least one item to mark for auction.", "Warning", {
+        toastClass: "ngx-toastr my-warning-toast"
+      });
+      return;
+    }
+    
+    try {
+      await this.bterInventoryService.MarkForAuctionSR6(selected).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          if (data.State === EnumStatus.Success) {
+            this.toastr.success(data.Message, 'Success', {
+              toastClass: 'ngx-toastr my-success-toast'
+            });
+            await this.GetAllData();
+          } else {
+            this.toastr.error(data.ErrorMessage, 'Error', {
+              toastClass: 'ngx-toastr my-error-toast'
+            });
+          }
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }

@@ -205,7 +205,8 @@
                  step="1"
                  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" 
                  [(ngModel)]="request.ApprovedQuantity" 
-                 (input)="onQuantityInput($event)">
+                 (input)="onApprovedQuantityInput($event)">
+
           <div *ngIf="isSubmitted && _RequestFormGroup.ApprovedQuantity.errors" class="text-danger">
             <p *ngIf="_RequestFormGroup.ApprovedQuantity.errors.required">
               <i aria-hidden="true"></i>

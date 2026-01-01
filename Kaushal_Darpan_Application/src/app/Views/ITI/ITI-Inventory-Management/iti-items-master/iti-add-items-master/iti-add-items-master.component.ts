@@ -233,6 +233,10 @@ export class ITIAddItemsMasterComponent {
           this.request.ItemType = data['Data']["ItemType"];
           await this.GetTradeDDL();
           this.request.TradeId = data['Data']["TradeId"];
+          this.request.IsRequested = data['Data']["IsRequested"];
+          // if(this.request.IsRequested==true){
+          //   await this.refreshFieldsOnEdit();
+          // }
           this.AddItemsRequestFormGroup.get('TradeId')?.setValue(this.request?.EquipmentsId);
           console.log('GetByID',data)
           // Update UI elements if necessary
@@ -255,7 +259,22 @@ export class ITIAddItemsMasterComponent {
     }
   }
 
- 
+  async refreshFieldsOnEdit() {
+    this.AddItemsRequestFormGroup.get('txtTotalPrice')?.disable();
+    this.AddItemsRequestFormGroup.get('txtPricePerUnit')?.disable();
+    this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
+    this.AddItemsRequestFormGroup.get('txtVoucherNumber')?.disable();
+    this.AddItemsRequestFormGroup.get('UnitId')?.disable();
+    this.AddItemsRequestFormGroup.get('txtItemName')?.disable();
+    this.AddItemsRequestFormGroup.get('txtAbbreviation')?.disable();
+    this.AddItemsRequestFormGroup.get('ItemType')?.disable();
+    this.AddItemsRequestFormGroup.get('CampanyName')?.disable();
+    this.AddItemsRequestFormGroup.get('IdentificationMark')?.disable();
+    this.AddItemsRequestFormGroup.get('ItemCategoryId')?.disable();
+    this.AddItemsRequestFormGroup.get('EquipmentsId')?.disable();
+    this.AddItemsRequestFormGroup.get('TradeId')?.disable();
+    this.AddItemsRequestFormGroup.get('IsConsume')?.disable();
+  }
 
   //async GetTradeDDL() {
   //  try {
