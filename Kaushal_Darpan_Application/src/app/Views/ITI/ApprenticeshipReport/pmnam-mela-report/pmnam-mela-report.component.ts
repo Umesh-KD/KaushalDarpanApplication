@@ -299,6 +299,7 @@ export class PmnamMelaReportComponent {
     this.obj.PmnamMelaDate = '';
     this.obj.BeforeMonth = '';
     this.obj.FinancialYearID = 0;
+    this.obj.ZoneID = 0;
   }
 
   async GetAllData() {

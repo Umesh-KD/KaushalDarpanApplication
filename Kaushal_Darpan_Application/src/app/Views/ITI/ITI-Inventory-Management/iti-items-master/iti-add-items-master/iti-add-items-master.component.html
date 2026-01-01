@@ -31,39 +31,6 @@
     <form [formGroup]="AddItemsRequestFormGroup" (ngSubmit)="saveData()">
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
 
-        <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Category: <span class="StarMarking">*</span>
-    </label>
-    <ng-select formControlName="ItemCategoryId" [(ngModel)]="request.ItemCategoryId" [items]="CategoryDDLList" bindLabel="Name"
-               bindValue="ItemCategoryID" placeholder="--Select--" [searchable]="true" [clearable]="true"
-               [searchFn]="customSearch" (change)="ddlEquipment_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
-    </ng-select>
-
-    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
-      <p *ngIf="!_AddItemsRequestFormGroup.ItemCategoryId.errors.DropdownValidators">
-        <i aria-hidden="true"></i>This field is required.
-      </p>
-    </div>
-  </div>
-
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Equipment: <span class="StarMarking">*</span>
-    </label>
-    <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
-               bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="true" [searchFn]="customSearch"
-               (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
-      <ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
-    </ng-select>
-
-    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
-      <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
-        <i aria-hidden="true"></i>This field is required.
-      </p>
-    </div>
-  </div>-->
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Item Type: <span class="StarMarking">*</span>
@@ -80,6 +47,19 @@
           </div>
         </div>
 
+        <div *ngIf="request.ItemType==2">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+          <select class="form-select" [(ngModel)]="request.TradeId" formControlName="TradeId">
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -257,56 +237,6 @@
           </div>
         </div>
 
-
-        <!-- <div *ngIf="request.ItemType==2" >
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Trade: <span class="StarMarking">*</span>
-          </label>
-          <select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
-                     [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
-          </select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div> -->
-
-        <div *ngIf="request.ItemType==2">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
-          <select class="form-select" [(ngModel)]="request.TradeId" formControlName="TradeId">
-            <option value="0"> --- Select ---</option>
-            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
-          </select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>
-
-
-
-        <!--<div>
-    <label for="Unit" class="text-gray-800 text-sm font-medium inline-block mb-2">
-      Unit: <span class="StarMarking">*</span>
-    </label>
-    <input type="text" class="form-input" id="txtUnit" name="Unit" formControlName="txtUnit"
-           [(ngModel)]="request.Unit">
-    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtUnit.errors" class="text-danger">
-      <p *ngIf="_AddItemsRequestFormGroup.txtUnit.errors.required">
-        <i aria-hidden="true"></i>
-        This field is required .!
-      </p>
-      <p *ngIf="_AddItemsRequestFormGroup.txtUnit.errors.pattern">
-        <i aria-hidden="true"></i>
-        Only positive numbers are allowed in the VoucherNumber field!
-      </p>
-    </div>
-  </div>-->
         <div>
           <label for="TotalPrice" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Abbreviation: <span class="StarMarking">*</span>
@@ -327,10 +257,6 @@
             </span>
           </label>
         </div>
-
-
-
-
       </div>
 
       <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-4">
@@ -342,12 +268,6 @@
         </div>
       </div>
     </form>
-   
-   
-
-
-
-
   </div>
 </div>
 

@@ -336,6 +336,7 @@ export class WorkshopProgressReportListComponent {
     this.DistrictID = 0;
     this.FinancialYearID = 0;
     this.BeforeMonth = 0;
+    this.ZoneID = 0;
     this.GetReportAllData();
 
   }

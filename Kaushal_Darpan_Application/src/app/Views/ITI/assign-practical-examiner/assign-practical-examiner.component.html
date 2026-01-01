@@ -112,6 +112,7 @@
               <th class="text-left">CC Code</th>
               <th class="text-left">Examiner</th>
               <th class="text-left">Year</th>
+              <th class="text-left">Trade</th>
               <th class="text-left">Subject</th>
               <th class="text-left">Date</th>
 
@@ -133,7 +134,9 @@
 
 
               </td>
-
+              <td>
+                {{row.StreamName}}
+              </td>
               <td>
                 {{row.Subject}}
               </td>
@@ -148,11 +151,11 @@
                  Status!=14" class="btn bg-info text-white me-1" (click)="openModal(modal_AddInsitute,row,idx)">
                   {{row.UserID > 0?"Update Examiner":"Assign Examiner"}}
                 </button>
-                <button type="button"  class="btn bg-info text-white me-1" (click)="onGetStudentExamReportlist(MyModel_GetStudentExamReport, row.CenterID , row.SemesterID)">
-                 View
+                <button type="button" class="btn bg-info text-white me-1" (click)="onGetStudentExamReportlist(MyModel_GetStudentExamReport, row.CenterID , row.SemesterID,row.StreamID)">
+                  View
                 </button>
 
-              
+
               </td>
             </tr>
           </tbody>

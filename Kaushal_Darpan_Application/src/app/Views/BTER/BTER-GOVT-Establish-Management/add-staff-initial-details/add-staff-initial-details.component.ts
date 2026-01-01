@@ -454,7 +454,7 @@ export class AddStaffInitialDetailsComponent {
 
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           if (parsedData != null) {
-            this.DuplicateCheck(this.requestSSoApi.SSOID);
+            //this.DuplicateCheck(this.requestSSoApi.SSOID);
             //this.formData.Displayname = parsedData.displayName
             this.isSSOVisible = true;
             this.formData.Name = parsedData.displayName;

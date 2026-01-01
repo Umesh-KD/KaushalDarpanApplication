@@ -12,7 +12,7 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Office Vacancy</b>
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Office Sanctioned Posts</b>
     </div>
 
     <form [formGroup]="AddOfficeVacancyForm">
@@ -261,7 +261,7 @@
             <th>S.No</th>
             <th>Office Name</th>
             <th>Staff Type</th>
-            <th>Institute Name</th>
+            <!-- <th>Institute Name</th> -->
             <th>Designation Name</th>
             <th>Total Seat</th>
             <th>Posted Seat</th>
@@ -275,7 +275,7 @@
             <td class="text-center">{{idx+1}}</td>
             <td>{{ leave.OfficeName }}</td>
             <td>{{ leave.StaffTypeName }}</td>
-            <td>{{ leave.InstituteName }}</td>
+            <!-- <td>{{ leave.InstituteName }}</td> -->
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.TotalSeatID }}</td>
             <td>{{ leave.PostedSeat }}</td>

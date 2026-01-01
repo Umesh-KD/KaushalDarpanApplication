@@ -278,4 +278,12 @@ public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHis
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async MarkForAuctionSR6(itemsList: any[]) {
+    const body = JSON.stringify(itemsList);
+    return await this.http.post(this.APIUrl + '/MarkForAuctionSR6', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

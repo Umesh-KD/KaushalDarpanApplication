@@ -320,7 +320,7 @@ export class CenterPracticalExaminerComponent {
   }
 
 
-  async OnDownloadAttendenceReport(CenterID: number, SemesterID: number, ExaminerID: number, Subject: string,InstituteID:number=0) {
+  async OnDownloadAttendenceReport(CenterID: number, SemesterID: number, ExaminerID: number, Subject: string,InstituteID:number=0,StreamID:number=0) {
 
     this.Reportsearchmodel.DepartmentID = EnumDepartment.ITI;
     this.Reportsearchmodel.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -330,6 +330,7 @@ export class CenterPracticalExaminerComponent {
     this.Reportsearchmodel.UserID = ExaminerID
     this.Reportsearchmodel.CenterID = CenterID
     this.Reportsearchmodel.SemesterID = SemesterID
+    this.Reportsearchmodel.StreamID = StreamID
     this.Reportsearchmodel.SubjectCode = Subject
     if (this.sSOLoginDataModel.RoleID == 97) {
       this.Reportsearchmodel.Eng_NonEng = 1

@@ -26,7 +26,7 @@ export class DTEItemsSearchModel {
   public EquipmentsId: number = 0;
   public CollegeId: number = 0;
   public OfficeID: number = 0;
-  public StatusID: number = 0;
+  public StatusID: number = 3;
   public ItemType: number = 2;
   public StaffID?: number = 0;
 }
@@ -94,6 +94,8 @@ export class inventoryIssueHistorySearchModel {
   public actionName? : string='';
   public UserID? : number = 0;
   public RoleID? : number = 0;
+  public status? : number = 0;
+  public IsStaff? : boolean = false;
 }
 export class inventoryIssueHistoryITISearchModel {
   public InstituteID: number = 0;

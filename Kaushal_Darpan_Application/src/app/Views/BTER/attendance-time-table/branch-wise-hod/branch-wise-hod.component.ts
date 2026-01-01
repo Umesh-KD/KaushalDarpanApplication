@@ -130,6 +130,7 @@ export class BranchWiseHodComponent {
   }
 
   async PostUserExists() {
+    debugger;
     if (this.SSOIDExists) {
 
       await this.loadData();
@@ -172,6 +173,7 @@ export class BranchWiseHodComponent {
   }
 
   async btnDeleteOnClick(item: any) {
+    debugger;
     this.Swal2.Confirmation("Are you sure you want to delete this ?",
       async (result: any) => {
         //confirmed
@@ -180,7 +182,7 @@ export class BranchWiseHodComponent {
             this.request.DeleteStatus = true;
             this.request.ActiveStatus = false;
             this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-            this.request.Action = "SAVE";
+            this.request.Action = "DELETE";
             this.request.ID = item.ID;
             await this.staffMasterService.AllBranchHOD(this.request)
               .then((data: any) => {

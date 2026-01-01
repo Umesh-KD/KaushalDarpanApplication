@@ -750,6 +750,7 @@ export class BterEmDepartmentWiseRequestlistComponent implements OnInit {
   }
 
   async DownloadRelievingLetter(UserID: number) {
+    debugger;
     try {
       this.searchRequestRelieving.UserID = UserID;
       this.loaderService.requestStarted();
