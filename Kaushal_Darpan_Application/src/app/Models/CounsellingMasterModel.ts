@@ -31,6 +31,8 @@ export class CounsellingAllottedListSearchModel {
   public ApplicationNo?: string = '';
   public CandidateName?: string = '';
   public MobileNo?: string = ''; 
+  public IsTSP?: number=-1;
+  public DesignationID?: number = 0
 }
 export class CounsellingReportListSearchModel {
  
@@ -84,7 +86,18 @@ export class EditInstituteDataModel_Counselling {
   public OptionID?: number = 0;
   public AllotmentID?: number = 0;
 }
-
+export class CounsellingAppointmentOrder {
+  public TradeID?: number = 0;
+  public InstituteID?: number = 0;
+  public DesignationID?: number = 0;
+  public CandidateID?: number = 0;
+  public ModifyBy?: number = 0;
+  public OptionID?: number = 0;
+  public AllotmentID?: number = 0;
+  public AllotmentOrderPath?: string='';
+  public AllotmentOrder?: string='';
+  public IsTSP?: number=-1;
+}
 
 export class CounsellingEditImportedCandidateListModel {
  
