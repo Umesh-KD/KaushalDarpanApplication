@@ -1568,7 +1568,7 @@ const routes: Routes = [
 
 
       { path: 'ItiPaperUploadReport', loadChildren: () => import('./Views/ITI/iit-paper-upload-report/iit-paper-upload-report.module').then(m => m.IitPaperUploadReportModule) },
-
+      { path: 'invigilatorattandancereport', loadChildren: () => import('./Views/ITI/invigilator-attandance-report/invigilator-attandance-report.module').then(m => m.InvigilatorAttandanceReportModule) },
 
     ]
   },
@@ -1672,6 +1672,7 @@ const routes: Routes = [
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
+ 
 
   
 
