@@ -1682,6 +1682,12 @@ export class ReportService {
       ).toPromise();
   }
 
+  public async GetTimeTableInWord(tablerequest: ReportBasedModel) {
+    return this.http.post(`${this.APIUrl}/GetTimeTableInWord`, tablerequest, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 
