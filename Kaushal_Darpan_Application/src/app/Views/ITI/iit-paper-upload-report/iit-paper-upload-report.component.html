@@ -33,6 +33,8 @@
         <!--<div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon
   || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
 
+
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center:</label>
           <select class="form-select"
@@ -44,41 +46,49 @@
             <option *ngFor="let item of CenterDDLlist" [value]="item.ID">{{ item.Name }}</option>
           </select>
         </div>
-
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper Date:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year:</label>
           <select class="form-select"
-                  id="PaperDate"
-                  [(ngModel)]="searchRequest.PaperDate"
-                  (change)="GetITIPaperUpload_Reports()">
-            <option value="">--All--</option>
-            <option *ngFor="let item of TimeTableList" [value]="item.ExamDate">{{ item.ExamDate }}</option>
+                  id="SemesterID"
+                  [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">--All--</option>
+            <option value="1">1st Year </option>
+            <option value="2">2nd Year</option>
+
           </select>
         </div>
-
-
         
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper Date:</label>
+            <select class="form-select"
+                    id="PaperDate"
+                    [(ngModel)]="searchRequest.PaperDate"
+                    (change)="GetITIPaperUpload_Reports()">
+              <option value="">--All--</option>
+              <option *ngFor="let item of TimeTableList" [value]="item.ExamDate">{{ item.ExamDate }}</option>
+            </select>
+          </div>
 
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Download:</label>
-          <select class="form-select" id="IsPaperDownloadId" [(ngModel)]="searchRequest.IsPaperDownload">
-            <option value="-1">--All--</option>
-            <option value="0">No</option>
-            <option value="1">Yes</option>
-          </select>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Download:</label>
+            <select class="form-select" id="IsPaperDownloadId" [(ngModel)]="searchRequest.IsPaperDownload">
+              <option value="-1">--All--</option>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          </div>
+
+          <div class="mt-4">
+            <label *ngIf="false" class="text-black text-sm font-medium inline-block">Search</label>
+            <button type="button" class="btn bg-info text-white mt-2" (click)="GetITIPaperUpload_Reports()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-2" (click)="ResetControl()">Cancel</button>
+          </div>
+
+
         </div>
-
-        <div class="mt-4">
-          <label *ngIf="false" class="text-black text-sm font-medium inline-block">Search</label>
-          <button type="button" class="btn bg-info text-white mt-2" (click)="GetITIPaperUpload_Reports()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-2" (click)="ResetControl()">Cancel</button>
-        </div>
-
 
       </div>
-     
-    </div>
 
 
 
@@ -112,8 +122,8 @@
           <tr>
             <th width="80px" align="left">Sr. No.</th>
             <th class="text-left">Exam Name</th>
-            <th class="text-left">Center Code</th>
             <th class="text-left">Center Name</th>
+            <th class="text-left">Trade Name</th>
             <th class="text-left">Paper Code</th>
             <th class="text-left">Paper Date</th>
             <th class="text-left">Semester Name</th>
@@ -121,23 +131,20 @@
             <th class="text-left">MobileNo</th>
             <th class="text-left">IsPeper Download</th>
             <th class="text-left">Paper Download Date</th>
-        
-
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of ITIPaperUploadReportsList  let idx=index;">
             <td>{{idx+1}}</td>
             <td align="left">{{row.ExamName}}</td>
-            <td align="left">{{row.CenterCode}}</td>
             <td align="left">{{row.CenterName}}</td>
+            <td align="left">{{row.StreamName}}</td>
             <td align="left">{{row.PaperCode}}</td>
             <td align="left">{{row.PaperDate}}</td>
-            <td align="left">{{row.SemesterName}}</td>
 
+            <td align="left">{{row.SemesterName}}</td>
             <td align="left">{{row.CenterSuperintendentName}}</td>
             <td align="left">{{row.MobileNo}}</td>
-
             <td align="left">{{row.IsPeperDownload}}</td>
             <td align="left">{{row.PaperDownloadDate}}</td>
           </tr>
