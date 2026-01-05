@@ -1,0 +1,58 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Assigned Exam List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page"> Assigned Exam List</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+<div class="card-body p-5">
+  
+  <!-- Page Title End -->
+  <div class="overflow-x-auto mt-3">
+
+
+
+    <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+        <tr class="text-left">
+          <th>Sr No</th>
+          <th>Center Code</th>
+          <th>Center Name</th>
+          <th>Exam Date & Time</th>
+          <th>Semester</th>
+          <th>Trade Name</th>
+          <th>Subject</th>
+          <th>Total Trainee</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of AssignedExamList | tableSearchFilter:Table_SearchText;let idx=index;">
+          <td>{{ idx+1 }}</td>
+          <td>{{ item.CenterCode }}</td>
+          <td>{{ item.CenterName }}</td>
+          <td>{{ item.ExamDateTime }}</td>
+          <td>{{ item.SemesterName }}</td>
+          <td>{{ item.StreamName }}</td>
+          <td>{{ item.Subject }}</td>
+          <td>{{ item.TotalCheckedCount }}</td>
+          <td>
+            <button type="button" class="btn btn-sm bg-info text-white me-1 ng-star-inserted"> View  <i class="fa fa-chevron-right"></i></button>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+
+  </div>
+  </div>
+  </div>

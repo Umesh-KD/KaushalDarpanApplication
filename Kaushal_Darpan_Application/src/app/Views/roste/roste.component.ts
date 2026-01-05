@@ -155,7 +155,7 @@ export class RosteComponent implements OnInit {
     const GetSemesterID = this.TableForm.get('SemesterID')?.value;
       const GetstreamId = this.TableForm.get('StreamID')?.value;
     const GetSubjectIDId = this.TableForm.get('SubjectID')?.value;
- 
+   this.TableForm.get('StaffID')?.reset();
 
     let obj = {
       InstituteID: this.sSOLoginDataModel.InstituteID,
@@ -665,10 +665,10 @@ export class RosteComponent implements OnInit {
     const durationMinutes = this.getMinutesDiff(newSection.AttendanceStartTime, newSection.AttendanceEndTime);
 
     // 1. Lunch time block
-    if (startNum === 1300 && endNum === 1400) {
-      this.toastr.warning('Entries are not allowed during lunch time (1 PM - 2 PM).');
-      return;
-    }
+    // if (startNum === 1300 && endNum === 1400) {
+    //   this.toastr.warning('Entries are not allowed during lunch time (1 PM - 2 PM).');
+    //   return;
+    // }
 
     // 2. End time cannot be before start time
     if (durationMinutes < 0) {
@@ -810,6 +810,31 @@ export class RosteComponent implements OnInit {
       return;
     }
 
+
+
+    const roomConflict1 = this.AddedSectionList.some((element) => {
+      if (
+        element.DayID !== newSection.DayID ||
+        element.RoomNo !== newSection.RoomNo
+      ) {
+        return false;
+      }
+  
+      const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
+      const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
+  
+      // 🔥 SAME TIME OR OVERLAP
+      return startNum < existingEnd && endNum > existingStart;
+    });
+  
+    if (roomConflict1) {
+      this.toastr.warning(
+        'Same room is already allotted on the same day for the selected time slot.'
+      );
+      return;
+    }
+  
+
     // 9. Full row duplicate check
     const isDuplicate = this.AddedSectionList.some(
       (element: BTERSectionAddDataModel) =>
@@ -828,11 +853,32 @@ export class RosteComponent implements OnInit {
       return;
     }
 
+
+    const isDuplicate2 = this.AddedSectionList.some(
+      (element: BTERSectionAddDataModel) =>
+        element.DayID === newSection.DayID &&
+        element.SemesterID === newSection.SemesterID &&
+        element.StreamID === newSection.StreamID &&
+        element.SubjectID === newSection.SubjectID &&
+        element.StaffID === newSection.StaffID &&
+        JSON.stringify(element.SectionID) === JSON.stringify(newSection.SectionID) &&
+    
+        // 🔥 Time overlap check
+        newSection.AttendanceStartTime < element.AttendanceEndTime &&
+        newSection.AttendanceEndTime > element.AttendanceStartTime
+    );
+    
+    if (isDuplicate2) {
+      this.toastr.warning('This roster entry overlaps with an existing time slot!');
+      return;
+    }
+    
+
     // --- NAME BINDING ---
     newSection.DayName = this.DayList.find((x: any) => x.DayID == newSection.DayID)?.DayName || '';
     newSection.SectionName = this.GetSectionData
-      .filter((x: any) => newSection.SectionID.includes(x.SectionID))
-      .map((x: any) => x.SectionName)
+      .filter((x: any) => newSection.SectionID.includes(x.ID))
+      .map((x: any) => x.Name)
       .join(', ');
     newSection.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newSection.SubjectID)?.Name || '';
     newSection.BranchName = this.StreamMasterDDL.find((x: any) => x.StreamID == newSection.StreamID)?.StreamName || '';
