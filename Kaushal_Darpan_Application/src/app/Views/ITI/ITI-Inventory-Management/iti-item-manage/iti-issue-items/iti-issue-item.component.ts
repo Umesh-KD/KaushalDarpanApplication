@@ -597,7 +597,7 @@ export class AddItiIssueItemComponent {
   const selectedItems = this.ItemsDataList.filter((x: any) => x.Selected);
 
     if (selectedItems.length === 0) {
-      this.toastr.warning("Please select at least one item to return.", "Warning", {
+      this.toastr.warning("Please select at least one item to issue.", "Warning", {
         toastClass: "ngx-toastr my-warning-toast"
       });
       return;
@@ -726,15 +726,16 @@ export class AddItiIssueItemComponent {
   // Only run logic when checkbox is checked
     if (item.Selected) {
       // Check both conditions
-      
-      if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() != '') {  
-        console.log('✅ Serial item selected:', item); 
-      }
-      else {
-        console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
-        this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
-        item.Selected = false;
-      }
+      if(item.IsSerialNo == 1) {
+        if (item.EquipmentsCode && item.EquipmentsCode.trim() != '') {  
+          console.log('✅ Serial item selected:', item); 
+        }
+        else {
+          console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
+          this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
+          item.Selected = false;
+        }
+      }      
     }
   }
 
