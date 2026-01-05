@@ -263,8 +263,9 @@
                 <th class="text-left">Subject Code</th>
 
                 <th class="text-left">Max Marks</th>
-                <th class="text-left">Obtained Marks</th>
+                <!--<th class="text-left">Obtained Marks</th>-->
                 <th class="text-left">Present</th>
+
               </tr>
             </thead>
             <tbody>
@@ -278,7 +279,7 @@
                 <td align="left">{{ row.SubjectCode }}</td>
 
                 <td align="left">{{ row.MaxMarks }}</td>
-                <td align="left">{{ row.ObtainedMarks }}</td>
+                <!--<td align="left">{{ row.ObtainedMarks }}</td>-->
                 <td>
                   <span *ngIf="row.StudentName!=''" [class]="row.IsPresent==true?'fa fa-check text-success':'fa fa-remove text-danger'"></span>
                 </td>

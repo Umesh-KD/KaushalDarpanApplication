@@ -12,6 +12,8 @@ import { ItiExaminerListService } from '../../../Services/ItiExaminerList/iti-ex
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ITITheorySearchModel } from '../../../Models/ITI/ItiInvigilatorDataModel';
+import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.service';
+import { ItiTheoryMarksService } from '../../../Services/ITI/ItiTheoryMarks/Iti-theory-marks.service';
 
 @Component({
   selector: 'app-centers',
@@ -61,6 +63,7 @@ export class ItiExaminerListComponent implements OnInit {
     private routers: Router,
     private _fb: FormBuilder,
     private modalService: NgbModal,
+    private TheoryMarksService: ItiTheoryMarksService,
     private Swal2: SweetAlert2) {
   }
 
@@ -120,7 +123,8 @@ export class ItiExaminerListComponent implements OnInit {
   }
 
   async GetItiExaminerMasterList() {
-    //
+    //thi
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     try {
       this.loaderService.requestStarted();
       console.log("searchrequest", this.searchRequest)
@@ -319,5 +323,72 @@ export class ItiExaminerListComponent implements OnInit {
       }, 200);
     }
   }
+
+
+
+  async RevertBundle(AppointExaminerID: number) {
+
+    this.Swal2.Confirmation("Are you sure want to Lock the Process for this Examiner?", async (result: any) => {
+      //confirmed
+      try {
+        let obj = {
+          AppointExaminerID: AppointExaminerID,
+          Remark: '',
+          FinalSubmit:1
+        }
+        // Call service to save student exam status
+        await this.TheoryMarksService.RevertBundle(obj)
+          .then(async (data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            //
+            if (this.State == EnumStatus.Success) {
+              await this.GetItiExaminerMasterList();
+              this.toastr.success(this.Message)
+            }
+
+
+          })
+      } catch (ex) {
+        console.log(ex);
+        console.log(this.ErrorMessage);
+      }
+    });
+  }
+
+
+  async RevertBundle1(AppointExaminerID: number) {
+
+    this.Swal2.ConfirmationWithRemark("Are you sure want to UnLock the Process for this Examiner?", async (result: any) => {
+      //confirmed
+      try {
+        let obj = {
+          AppointExaminerID: AppointExaminerID,
+          Remark: result,
+          FinalSubmit: 0
+        }
+        // Call service to save student exam status
+        await this.TheoryMarksService.RevertBundle(obj)
+          .then(async (data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            //
+            if (this.State == EnumStatus.Success) {
+              await this.GetItiExaminerMasterList();
+              this.toastr.success(this.Message)
+            }
+
+
+          })
+      } catch (ex) {
+        console.log(ex);
+        console.log(this.ErrorMessage);
+      }
+    });
+  }
+
+
 
 }

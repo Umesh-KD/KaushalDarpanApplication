@@ -9,7 +9,8 @@ import { NavigationEnd, Router } from '@angular/router';
   styleUrls: ['./dashboard.component.css'],
   standalone: false
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit
+{
   public sSOLoginDataModel = new SSOLoginDataModel();
   public _EnumRole = EnumRole;
   constructor(

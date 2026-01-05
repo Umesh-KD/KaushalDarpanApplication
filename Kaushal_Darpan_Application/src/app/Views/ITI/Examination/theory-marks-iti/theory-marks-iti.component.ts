@@ -89,6 +89,16 @@ export class TheoryMarksItiComponent {
     this.ExaminerCodeLoginForm = this.formBuilder.group({
       ExaminerCode: ['', Validators.required],
     });
+
+    debugger
+    this.searchRequest.SemesterID = Number(sessionStorage.getItem('SemesterID'));
+    this.searchRequest.CenterID = Number(sessionStorage.getItem('CenterID'));
+
+    this.searchRequest.SubjectName = sessionStorage.getItem('SubjectName') ?? '';
+
+    this.searchRequest.ExaminerID = Number(sessionStorage.getItem('ExaminerID'));
+    this.searchRequest.StreamID = Number(sessionStorage.getItem('StreamID'));
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
 
@@ -568,7 +578,8 @@ export class TheoryMarksItiComponent {
               this.childComponent.onVerified.subscribe(() => {
                   //this.PublishTimeTable();
 
-                   this.OnSubmit(isFinalSubmit, StudentExamPaperMarksID);
+                this.OnSubmit(isFinalSubmit, StudentExamPaperMarksID);
+                 this.GetTheoryMarksDetailList();
               })
           
         }

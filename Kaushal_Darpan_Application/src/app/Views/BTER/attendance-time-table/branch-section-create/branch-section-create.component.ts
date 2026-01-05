@@ -175,9 +175,9 @@ export class BranchSectionCreateComponent {
     this.IsBranch = false;
 
 
-    await this.getData();
-    await this.loadDropdownData();
-    await this.GetBranchHODApplyList();
+    // await this.getData();
+    // await this.loadDropdownData();
+    // await this.GetBranchHODApplyList();
 
 
 
@@ -187,6 +187,7 @@ export class BranchSectionCreateComponent {
   }
 
   async loadDropdownData() {
+    debugger
     let obj = {
       InstituteID: this.sSOLoginDataModel.InstituteID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
@@ -255,6 +256,14 @@ export class BranchSectionCreateComponent {
 
   async SemeIDAcStream() {
     debugger
+    this.StreamMasterDDL=[];
+    this.IIPMasterFormGroup.get('StreamID')?.setValue(0);
+    this.IIPMasterFormGroup.get('StCount')?.setValue('');
+    this.IIPMasterFormGroup.get('SectionCount')?.setValue('');
+    this.IIPMasterFormGroup.get('PracticalSectionCount')?.setValue('');
+    this.IIPMasterFormGroup.get('TutorialSectionCount')?.setValue('');
+
+
     const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
 
     await this.commonMasterService.StreamMasterHOD(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
@@ -778,6 +787,7 @@ export class BranchSectionCreateComponent {
     }
   }
   onBranchChange(selectedValue: any) {
+    debugger;
     const streamId = this.IIPMasterFormGroup.get('StreamID')?.value;
     debugger
     this.IsBranch = streamId > 0 ? true : false;
@@ -823,10 +833,12 @@ export class BranchSectionCreateComponent {
           (x: any) => Number(x.SectionID)
         );
 
-        this.GetSectionData = this.GetSectionData.filter(
-          (item: any) => !usedSectionIds.includes(Number(item.SectionID))
-        );
-        this.allSections = this.GetSectionData;
+        // this.GetSectionData = this.GetSectionData.filter(
+        //   (item: any) => !usedSectionIds.includes(Number(item.SectionID))
+        // );
+        // this.allSections = this.GetSectionData;
+
+
         // this.allSections = data.Data;   // all sections
         // this.GetSectionData = [...this.allSections];
         //  console.log(this.GetBranchSectionData)
@@ -1194,6 +1206,7 @@ export class BranchSectionCreateComponent {
   //}
 
   async GetAssignedTeacherForSubject_BySecctionID(SectionID: number) {
+    debugger;
     try {
       this.AddStaffSubjectSectionModelList = []
       let obj = {
@@ -1214,6 +1227,7 @@ export class BranchSectionCreateComponent {
   }
 
     async GetAssignedTeacherForSubject(SectionID: number) {
+      debugger;
     try {
       this.AddStaffSubjectAllSectionModelList = []
       let obj = {
@@ -1302,9 +1316,9 @@ export class BranchSectionCreateComponent {
         debugger
         if (data.length > 0) {
           // this.toastr.success(data.Message)
-          await this.getData();
-          await this.loadDropdownData();
-          await this.GetBranchHODApplyList();
+          // await this.getData();
+          // await this.loadDropdownData();
+          // await this.GetBranchHODApplyList();
 
 
 

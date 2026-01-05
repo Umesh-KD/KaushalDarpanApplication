@@ -202,6 +202,7 @@ export enum EnumRole {
   ITI_Placement_Admin=233,
   AdministrartiveStaff=235,
   AdministrartiveStaff2 = 236,
+  ITi_PracticalExaminer = 93
 
 
 }
