@@ -46,14 +46,21 @@ export class ApprenticeshipRegistrationReportList {
   pageInTableSize: string = '50';
   public sortInTableColumn: string = '';
   public sortInTableDirection: string = 'asc';
-
+  public totals: any = [];
   public totalInTablePage: number = 0;
   public FinancialYearID:number=0
   public MonthID:number=0
   public ZoneID:number=0
   public DistrictID:number=0
   public TypeID:number=0
+  includedKeys: string[] = [
+    'NumberofTrainees',
+    '__SKIP_Nameofapprentices__',
+    'Numberofapprentices',
+  
 
+  ];
+  Object = Object;
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -85,8 +92,32 @@ export class ApprenticeshipRegistrationReportList {
     await this.GetDivisMatserDDL()
     await this.GetzonalID()
     this.GetDistrictMatserDDL();
-    this.GetReportAllData();
+ await   this.GetReportAllData();
     this.YearDropdownData('FinancialYear_IIP');
+    await this.calculateDynamicTotals(this.DataList);
+  }
+
+  async calculateDynamicTotals(data: any[]) {
+    this.totals = {};
+
+    // Initialize totals in SAME SEQUENCE
+    this.includedKeys.forEach(key => {
+      this.totals[key] = '';
+    });
+
+    // Sum values
+    data.forEach(row => {
+      this.includedKeys.forEach(key => {
+
+        // Skip placeholder column
+        if (key.startsWith('__SKIP__')) return;
+
+        const value = row[key];
+        if (value !== null && value !== '' && !isNaN(value)) {
+          this.totals[key] = (this.totals[key] || 0) + Number(value);
+        }
+      });
+    });
   }
 
 
@@ -120,6 +151,7 @@ export class ApprenticeshipRegistrationReportList {
           if (data.Data.length > 0) {
             this.DataList = data.Data;
             //this.loadInTable();
+             this.calculateDynamicTotals(this.DataList);
           }
           else {
             this.DataList = [];

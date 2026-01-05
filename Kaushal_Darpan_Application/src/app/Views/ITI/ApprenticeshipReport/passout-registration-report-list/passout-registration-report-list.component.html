@@ -164,7 +164,15 @@
             </td>
 
           </tr>
+          <tr class="font-bold bg-gray-100">
+            <td colspan="3" class="text-center">Total</td>
 
+            <td *ngFor="let key of Object.keys(totals)">
+              {{ totals[key] }}
+            </td>
+
+            <td colspan="3"></td>
+          </tr>
         </tbody>
       </table>
 

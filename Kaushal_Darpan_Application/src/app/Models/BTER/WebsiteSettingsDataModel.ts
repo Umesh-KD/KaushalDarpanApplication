@@ -15,6 +15,7 @@ export class WebsiteSettingDataModel extends RequestBaseModel{
     public DepartmentSubID: number = 0;
     public DUTC_ID?: number = 0
   public IsActive?: boolean = false
+  public IsPrivate?: boolean = false
 
   public LevelID?: number = 0
   public CreatedByRoleID?: number = 0

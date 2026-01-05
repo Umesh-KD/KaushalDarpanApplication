@@ -132,38 +132,37 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th>Sr No</th>
-            <th class="text-left">आवृत्ति</th>
-            <th *ngIf="ssoLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का नाम</th>
-            <!--<th *ngIf="ssoLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का जिला</th>-->
-            <th>संस्थान का नाम</th>
-            <th>पोर्टल पर पंजीकरण करने की तिथि</th>
-            <th>व्यवसाय का नाम</th>
-            <th>व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या</th>
-            <th class="text-left"  colspan="2">पोर्टल पर पंजीकृत किये शिक्षुओं का नाम व पंजीकरण संख्या</th>
+            <th rowspan="2">Sr No</th>
+            <th rowspan="2" class="text-left">आवृत्ति</th>
 
-            <th>दस्तावेज़</th>
-            <th>विविध विवरण</th>
-            <th>कार्रवाई</th>
+            <th *ngIf="ssoLoginDataModel.RoleID != 97" rowspan="2" class="text-left">
+              नोडल अधिकारी का नाम
+            </th>
+
+            <th rowspan="2">संस्थान का नाम</th>
+            <th rowspan="2">पोर्टल पर पंजीकरण करने की तिथि</th>
+            <th rowspan="2">व्यवसाय का नाम</th>
+            <th rowspan="2">व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या</th>
+
+            <!-- PARENT HEADER -->
+            <th colspan="2" class="text-left">
+              पोर्टल पर पंजीकृत किये शिक्षुओं का नाम व पंजीकरण संख्या
+            </th>
+
+            <th rowspan="2">दस्तावेज़</th>
+            <th rowspan="2">विविध विवरण</th>
+            <th rowspan="2">कार्रवाई</th>
           </tr>
+
+          <!-- Row 2 (Child headers) -->
           <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-       
             <th class="text-left whitespace-nowrap">नाम</th>
-            <th class="text-left whitespace-nowrap">प्ष्संख्या</th>
-
-            <th></th>
-            <th></th>
-            <th></th>
+            <th class="text-left whitespace-nowrap">पंजीकरण संख्या</th>
           </tr>
 
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
 
             <td align="left">{{idx+1}}</td>
             <td align="left">{{row.TypeName}}</td>
@@ -172,25 +171,36 @@
             <td>{{row.Nameofinstitute}}</td>
             <td>{{row.Dateofregistration}}</td>
             <td>{{row.BusinessName}}</td>
-            <td>{{row.NumberofTrainees}}</td>
-            <td>{{row.Numberofapprentices}}</td>
-            <td>{{row.Numberofapprentices}}</td>
+            <td class="text-center">{{row.NumberofTrainees}}</td>
+            <td class="text-center">{{row.Nameofapprentices}}</td>
+            <td class="text-center">{{row.Numberofapprentices}}</td>
             <td class="border px-4 py-2">
               <a target="_blank" href="{{ appsettingConfig.StaticFileRootPathURL + '/' + row.NumberOfRegistrationDoc}}">View</a>
             </td>
             <td>{{row.Remarks}}</td>
 
-          <td>
-            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-              <a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
-              <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
-              <a *ngIf="ssoLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
-            </div>
-          </td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+                <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
+                <a *ngIf="ssoLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
 
-        </tr>
+          </tr>
+          <tr class="font-bold bg-gray-100">
+            <!-- Non-numeric columns -->
+            <td colspan="6" class="text-center">Total</td>
 
-      </tbody>
+            <!-- Numeric totals -->
+            <td class="text-center" *ngFor="let key of includedKeys">
+              {{ totals[key] }}
+            </td>
+
+            <!-- Remaining columns -->
+            <td colspan="3"></td>
+          </tr>
+        </tbody>
     </table>
 
 

@@ -33,7 +33,7 @@ export class PmnamMelaReportComponent {
   public FinancialYearID: number = 0;
   public BeforeMonth: number = 0;
   public id: number = 0;
- 
+  public totals: any = [];
   public DataList: any = [];
   public Table_SearchText: string = '';
   @ViewChild('MyModel_ViewDetails') MyModel_ViewDetails!: TemplateRef<any>;
@@ -52,7 +52,18 @@ export class PmnamMelaReportComponent {
   public ZoneList: any = [];
 
   public totalInTablePage: number = 0;
+  includedKeys: string[] = [
+    'PoliticalEstablishmentspartNo',
+    'PrivateEstablishmentspartNo',
+    'PoliticalEstablishmentscontactedNo',
+    'PrivateEstablishmentscontactedNo',
+    'CandidatespresentMaleNo',
+    'CandidatespresentFemaleNo',
+    'CandidatessselectedMaleNo',
+    'CandidatessselectedFemaleNo',
 
+  ];
+  Object = Object;
   constructor(
     private modalService: NgbModal,
     private ApprenticeReportServiceService: ApprenticeReportServiceService,
@@ -79,11 +90,31 @@ export class PmnamMelaReportComponent {
     await this.GetDivisMatserDDL()
     await this.GetzonalID()
     this.GetDistrictMatserDDL();
-    this.GetAllData();
+    await this.GetAllData();
     this.YearDropdownData('FinancialYear_IIP');
+    await this.calculateDynamicTotals(this.DataList);
   }
 
 
+
+  async calculateDynamicTotals(data: any[]) {
+    this.totals = {};
+
+    // Initialize totals in SAME SEQUENCE
+    this.includedKeys.forEach(key => {
+      this.totals[key] = 0;
+    });
+
+    // Sum values
+    data.forEach(row => {
+      this.includedKeys.forEach(key => {
+        const value = row[key];
+        if (value !== null && value !== '' && !isNaN(value)) {
+          this.totals[key] += Number(value);
+        }
+      });
+    });
+  }
 
 
   async GetDivisMatserDDL() {
@@ -318,6 +349,7 @@ export class PmnamMelaReportComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.Data) {
           this.DataList = data.Data;
+          this.calculateDynamicTotals(this.DataList);
           console.log(this.DataList);
         }
 
