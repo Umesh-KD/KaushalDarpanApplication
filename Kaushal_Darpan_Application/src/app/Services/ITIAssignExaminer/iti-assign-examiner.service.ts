@@ -8,6 +8,7 @@ import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataMo
 import { AssignApplicationSearchModel } from '../../Models/DTE_AssignApplicationDataModel';
 import { ItiAssignExaminerSearchModel, ITIExaminerDataModelSearchFilters, ITIPracticalExaminerSearchFilters } from '../../Models/ITI/AssignExaminerDataModel';
 import { ITI_AppointExaminerDetailsModel, ITI_ExaminerDashboardModel } from '../../Models/ITI/ITI_ExaminerDashboard';
+import { ITIAdminDashboardSearchModel } from '../../Models/ITIAdminDashboardDataModel';
 
 
 @Injectable({
@@ -176,6 +177,22 @@ export class ItiAssignExaminerService {
       ).toPromise();
   }
 
+
+  public async GetParcticalExaminerDashboard(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/ParcticalExaminerDashboard", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAssignedCentersAndTimetable(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetAssignedCentersAndTimetable", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 }

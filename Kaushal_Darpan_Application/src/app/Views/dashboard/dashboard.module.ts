@@ -52,6 +52,7 @@ import { IssuetrackerDashboardModule } from '../BTER/IssueTracker-dashboard/issu
 import { dashboardIssueTrackerModule } from '../dashboard-issue-tracker/dashboard-issue-tracker.module';
 import { BTERHODDashboardModule } from '../BTER-HOD-Dashboard/BTER-HOD-Dashboard.module';
 import { ApprenticeshipDirectorNCVTDashboardModule } from '../ITI/iti-ApprenticeshipDirectorNCVTDashboard/iti-ApprenticeshipDirectorNCVTDashboard.module';
+import { PracticalExaminerDashboardModule } from '../ITI/practical-examiner-dashboard/practical-examiner-dashboard.module';
 
 
 /// work here 
@@ -103,11 +104,10 @@ import { ApprenticeshipDirectorNCVTDashboardModule } from '../ITI/iti-Apprentice
     ITSupportDashboardModule,
     StudentSectionInchargeModule,
     ITIInventoryManagementDashboardModule,
-    
-    
-      dashboardIssueTrackerModule,
+    dashboardIssueTrackerModule,
     BTERHODDashboardModule,
-    ApprenticeshipDirectorNCVTDashboardModule
+    ApprenticeshipDirectorNCVTDashboardModule,
+    PracticalExaminerDashboardModule,
   ]
 })
 export class dashboardModule { }
