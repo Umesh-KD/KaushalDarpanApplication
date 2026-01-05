@@ -316,10 +316,14 @@ export class DteItemsMasterComponent {
         batchId: item.batchId,
         VoucherNumber: item.VoucherNumber,
         IdentificationMark: item.IdentificationMark,
-        InitialQuantity: item.InitialQuantity,
-        AvailableQuantity: item.AvailableQuantity,
         PricePerUnit: item.PricePerUnit,
         TotalPrice: item.TotalPrice,
+        InitialQuantity: item.InitialQuantity,
+        Working: item.Working,
+        NotWorking: item.NotWorking,
+        Auctioned: item.Auctioned,
+        AvailableQuantity: item.AvailableQuantity,
+        QuantityIssued: item.QuantityIssued,
         Status: item.Status == 1 ? "Approved" : "Pending",
       };
 
