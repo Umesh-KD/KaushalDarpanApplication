@@ -113,7 +113,7 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 
 <!--BTER END-->
 <!--ITI START-->
-<app-admin-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.DTETraing || this.sSOLoginDataModel.RoleID == 216 || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER  || this.sSOLoginDataModel.RoleID == _EnumRole.ITIZonalOfficer"></app-admin-dashboard-iti>
+<app-admin-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.DTETraing || this.sSOLoginDataModel.RoleID == 216 || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER "></app-admin-dashboard-iti>
 <app-college-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.IITCollegeNodal"></app-college-dashboard-iti>
 <app-principal-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal  || this.sSOLoginDataModel.RoleID == _EnumRole.Principal_NCVT"></app-principal-dashboard-iti>
 <app-iti-teacher-dashboard *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.ITITeacherNonEngNonEng"></app-iti-teacher-dashboard>
@@ -123,9 +123,10 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 <app-itipaper-setter-professor-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIProfessor_SCVT"></app-itipaper-setter-professor-dashboard>   <!--// Professor Role set-->
 <app-iti-inventory-management-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.StoreKeeper_NCVT || this.sSOLoginDataModel.RoleID == _EnumRole.StoreKeeper_SCVT || this.sSOLoginDataModel.RoleID == _EnumRole.DTETrainingT3Purchase"></app-iti-inventory-management-dashboard>
 <app-iti-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITI_Placement_Admin || this.sSOLoginDataModel.RoleID == _EnumRole.ITI_Placement_TPO"></app-iti-placement-dashboard>
-<app-iti-ApprenticeshipDirectorNCVTDashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Apprenticeship"></app-iti-ApprenticeshipDirectorNCVTDashboard>
+<app-iti-ApprenticeshipDirectorNCVTDashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Apprenticeship
+ || this.sSOLoginDataModel.RoleID == _EnumRole.ITIZonalOfficer"></app-iti-ApprenticeshipDirectorNCVTDashboard>
 <!--ITI END-->
 }
 
 
-
+  

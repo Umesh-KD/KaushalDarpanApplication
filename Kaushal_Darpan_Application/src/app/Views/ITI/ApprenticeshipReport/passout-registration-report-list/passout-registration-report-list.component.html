@@ -32,10 +32,11 @@
             <i class=""></i>
             Add new
           </a>
-          <a *ngIf="sSOLoginDataModel.RoleID == 97" (click)="DownloadPassoutApprenticeshipReport()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+          <a *ngIf="sSOLoginDataModel.RoleID == 97 || sSOLoginDataModel.RoleID == 212" (click)="DownloadPassoutApprenticeshipReport()" class="inline-flex items-center btn bg-dark text-white btn-sm">
             <i class=""></i>
             Download Report
           </a>
+  
           <!--<a routerLink="/ChangeExaminer" class="btn bg-info btn-sm text-white">
     <i class="ti ti-refresh"></i>Change Examiner
   </a>-->
@@ -164,7 +165,15 @@
             </td>
 
           </tr>
+          <tr class="font-bold bg-gray-100">
+            <td colspan="3" class="text-center">Total</td>
 
+            <td *ngFor="let key of Object.keys(totals)">
+              {{ totals[key] }}
+            </td>
+
+            <td colspan="3"></td>
+          </tr>
         </tbody>
       </table>
 

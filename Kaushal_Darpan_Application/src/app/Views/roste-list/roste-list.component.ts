@@ -130,6 +130,8 @@ export class RosteListComponent implements OnInit {
     
     this.getMasterData();
    /* this.GetAllRosterDisplay();*/
+
+    this.GetAllRosterDisplay();
     
   }
   get formTable() { return this.TableForm.controls; }
@@ -205,6 +207,7 @@ export class RosteListComponent implements OnInit {
 
 
   async GetAllRosterDisplay() {
+    debugger;
     try {
       if (this.TableForm.invalid) {
         this.toastr.warning("Please select Semester or Stream !")
@@ -215,7 +218,7 @@ export class RosteListComponent implements OnInit {
       const data = JSON.parse(JSON.stringify(response));
       if (data.State === EnumStatus.Success) {
         this.filterData = data.Data;
-        this.filterData = this.filterData.filter((item: any) => item.SemesterID == this.filterModel.SemesterID && item.StreamID == this.filterModel.StreamID)
+        // this.filterData = this.filterData.filter((item: any) => item.SemesterID == this.filterModel.SemesterID && item.StreamID == this.filterModel.StreamID)
 
         //let filteredData = data.Data;
 
@@ -458,6 +461,7 @@ export class RosteListComponent implements OnInit {
 
 
   async GenerateTimetableData(content: any) {
+    debugger;
     this.isSubmitted = true;
     // Open only once, store reference
     this.modalRef1 = this.modalService.open(content, {
@@ -527,6 +531,7 @@ export class RosteListComponent implements OnInit {
   }
 
   async GetRosterDisplay_PDFTimeTablePDF() {
+    debugger
     try {
 
       this.loaderService.requestStarted();

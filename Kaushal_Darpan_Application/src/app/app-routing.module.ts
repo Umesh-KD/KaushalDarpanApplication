@@ -588,10 +588,8 @@ const routes: Routes = [
       { path: 'iti-add-request-equipments', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-request-equipments-mapping/iti-add-request-equipments-mapping.module').then(m => m.ITIAddRequestEquipmentsMappingModule) },
       { path: 'iti-HOD-DTEEquipmentVerifications', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-equipment-verifications-mapping-list/iti-equipment-verifications-mapping-list.module').then(m => m.ITIEquipmentVerificationsMappingListModule) },
       { path: 'iti-auction-list', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-list/iti-auction-list.module').then(m => m.ITIAuctionListModule) },
-
       { path: 'iti-issue-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-issue-items/iti-issue-item.module').then(m => m.AddItiIssueItemModule) },
       { path: 'iti-return-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-return-items/iti-return-item.module').then(m => m.AddItiReturnItemModule) },
-
 
       /*ITI-Inventory-Management-END*/
 
@@ -1570,6 +1568,7 @@ const routes: Routes = [
 
 
       { path: 'ItiPaperUploadReport', loadChildren: () => import('./Views/ITI/iit-paper-upload-report/iit-paper-upload-report.module').then(m => m.IitPaperUploadReportModule) },
+      { path: 'itiPracticalExaminerReport', loadChildren: () => import('./Views/ITI/iti-Practical-Examiner-Report/iti-Practical-Examiner-Report.module').then(m => m.itiPracticalExaminerReportModule), title:'Practical Examiner Report' },
       { path: 'invigilatorattandancereport', loadChildren: () => import('./Views/ITI/invigilator-attandance-report/invigilator-attandance-report.module').then(m => m.InvigilatorAttandanceReportModule) },
       { path: 'practicalexamassigned', loadChildren: () => import('./Views/ITI/practical-exam-assigned/practical-exam-assigned.module').then(m => m.PracticalExamAssignedModule) },
 

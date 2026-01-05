@@ -143,6 +143,9 @@
             <th class="text-left">Total Price</th>
             <th class="text-left">Entry Date</th>
             <th class="text-left">Initial Quantity</th>
+            <th class="text-left">Working</th>
+            <th class="text-left">Not Working</th>
+            <th class="text-left">Auctioned</th>
             <th class="text-left">Available Quantity</th>
             <th class="text-left">QuantityIssued</th>
             <th class="text-left">QuantityBalance</th>
@@ -174,6 +177,9 @@
             <td align="left">{{item.TotalPrice}}</td>
             <td align="left">{{item.RTS | date}}</td>
             <td align="left">{{item.InitialQuantity}}</td>
+            <td align="left">{{item.Working}}</td>
+            <td align="left">{{item.NotWorking}}</td>
+            <td align="left">{{item.Auctioned}}</td>
 
             <td align="left">
               <span style="cursor: pointer; color: blue;" (click)="navigateToEdit(item.ItemId)"

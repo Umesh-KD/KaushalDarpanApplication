@@ -49,8 +49,14 @@ export class PassoutRegistrationReportListComponent {
   pageInTableSize: string = '50';
   public sortInTableColumn: string = '';
   public sortInTableDirection: string = 'asc';
-
+  public totals: any = [];
   public totalInTablePage: number = 0;
+  includedKeys: string[] = [
+    'RegCount',
+
+
+  ];
+  Object = Object;
   constructor(
     private commonMasterService: CommonFunctionService,
     private ScholarshipService: ScholarshipService,
@@ -80,7 +86,8 @@ export class PassoutRegistrationReportListComponent {
    
     //this.getExaminerData();
     //this.getExamMasterList();//grid data
-    this.GetReportAllData();
+  await  this.GetReportAllData();
+    await this.calculateDynamicTotals(this.DataList);
   await  this.GetInstituteList();
   }
   GoToReportEntryPage() {
@@ -95,6 +102,26 @@ export class PassoutRegistrationReportListComponent {
     } else {
       await this.getExamMasterListALL()
     }
+  }
+
+
+  async calculateDynamicTotals(data: any[]) {
+    this.totals = {};
+
+    // Initialize totals in SAME SEQUENCE
+    this.includedKeys.forEach(key => {
+      this.totals[key] = 0;
+    });
+
+    // Sum values
+    data.forEach(row => {
+      this.includedKeys.forEach(key => {
+        const value = row[key];
+        if (value !== null && value !== '' && !isNaN(value)) {
+          this.totals[key] += Number(value);
+        }
+      });
+    });
   }
 
   async getExamMasterList() {
@@ -161,9 +188,11 @@ export class PassoutRegistrationReportListComponent {
           if (data.Data.length > 0) {
             this.DataList = data.Data;
             //this.loadInTable();
+             this.calculateDynamicTotals(this.DataList);
           }
           else {
             this.DataList = [];
+             this.calculateDynamicTotals(this.DataList);
           }
         }, (error: any) => console.error(error)
         );
