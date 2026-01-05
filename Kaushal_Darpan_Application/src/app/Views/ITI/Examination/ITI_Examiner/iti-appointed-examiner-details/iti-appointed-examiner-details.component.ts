@@ -18,7 +18,9 @@ export class ItiAppointedExaminerDetailsComponent {
   public Code: string = ''
   public ExamTypeID: number = 0
   public VerifyCode: string = ''
-  public AppointExaminerID:number=0
+  public RevertRemark: string = ''
+  public AppointExaminerID: number = 0
+  public selectedrow:any
   public searchRequest = new ITI_AppointExaminerDetailsModel()
   public ssoLoginDataModel = new SSOLoginDataModel()
   public AppointedExaminerList: any = []
@@ -34,6 +36,7 @@ export class ItiAppointedExaminerDetailsComponent {
   ) {}
 
   async ngOnInit() {
+    this.GoToReportEntryPage()
     this.ssoLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log("this.ssoLoginDataModel",this.ssoLoginDataModel);
     this.searchRequest.EndTermID = this.ssoLoginDataModel.EndTermID
@@ -57,6 +60,8 @@ export class ItiAppointedExaminerDetailsComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.AppointedExaminerList = data.Data
+          debugger
+          this.RevertRemark = data['Data'][0]['RevertRemark']
           console.log(this.AppointedExaminerList)
         }, (error: any) => console.error(error)
         );
@@ -70,11 +75,13 @@ export class ItiAppointedExaminerDetailsComponent {
     }
   }
 
-  OpenModalPopup(content: any, AppointExaminerID: number, ExaminerCode: string) {
+  OpenModalPopup(content: any, AppointExaminerID: number, ExaminerCode: string,row:any) {
     debugger
     this.Code = ''
     this.AppointExaminerID = 0
-    this.VerifyCode=''
+    this.VerifyCode = ''
+    this.selectedrow = row
+
     this.modalService.open(content, { size: 'sm', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -115,10 +122,30 @@ export class ItiAppointedExaminerDetailsComponent {
 
     if (this.VerifyCode == this.Code) {
       this.CloseModalPopup(true)
-      this.routers.navigate(['Ititheorymarks'], {
-        queryParams: { id: this.AppointExaminerID }
-      });
+      debugger
+      sessionStorage.setItem('CenterID', this.selectedrow.CenterID.toString());
+      sessionStorage.setItem('SemesterID', this.selectedrow.SemesterID.toString());
+      sessionStorage.setItem('SubjectName', this.selectedrow.SubjectName);
+
+      sessionStorage.setItem('ExaminerID', this.selectedrow.ExaminerID);
+      sessionStorage.setItem('StreamID', this.selectedrow.streamID.toString());
+
+      this.routers.navigate(['Ititheorymarks'])
+    
+
     }
+
+   
+
+  }
+
+  GoToReportEntryPage() {
+    sessionStorage.setItem('CenterID', "0");
+    sessionStorage.setItem('SemesterID', "0");
+    sessionStorage.setItem('SubjectName', "0");
+
+    sessionStorage.setItem('ExaminerID', "0");
+    sessionStorage.setItem('StreamID', "0");
 
   }
 

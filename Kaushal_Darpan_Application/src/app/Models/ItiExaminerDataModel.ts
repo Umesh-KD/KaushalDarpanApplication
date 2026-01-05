@@ -67,6 +67,7 @@ export class ItiExaminerSearchModel {
   public Email: string = '';
   public SSOID: string = '';
   public DistrictID: number = 0;
+  public EndTermID: number = 0;
   
 }
 
@@ -102,9 +103,12 @@ export class ITITeacherForExaminerSearchModel extends RequestBaseModel {
   public SubjectType: number = 0
   public StudentCount: number = 0
   public ExaminerID: number = 0
+  public CenterID: number = 0
   public IsTheory: boolean = false  
   public IsPractical: boolean = false
   public SubjectCode:string=''
+  public SubjectName: string = ''
+  public Status:number=0
 }
 
 
