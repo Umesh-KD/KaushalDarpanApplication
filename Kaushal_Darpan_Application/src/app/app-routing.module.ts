@@ -1569,7 +1569,9 @@ const routes: Routes = [
 
       { path: 'ItiPaperUploadReport', loadChildren: () => import('./Views/ITI/iit-paper-upload-report/iit-paper-upload-report.module').then(m => m.IitPaperUploadReportModule) },
       { path: 'itiPracticalExaminerReport', loadChildren: () => import('./Views/ITI/iti-Practical-Examiner-Report/iti-Practical-Examiner-Report.module').then(m => m.itiPracticalExaminerReportModule), title:'Practical Examiner Report' },
+      
       { path: 'invigilatorattandancereport', loadChildren: () => import('./Views/ITI/invigilator-attandance-report/invigilator-attandance-report.module').then(m => m.InvigilatorAttandanceReportModule) },
+      { path: 'itiPracticalExamMarks', loadChildren: () => import('./Views/ITI/iti-Practical-Exam-Marks/iti-Practical-Exam-Marks.module').then(m => m.itiPracticalExamMarksModule), title: 'Practical Exam Marks' },
       { path: 'practicalexamassigned', loadChildren: () => import('./Views/ITI/practical-exam-assigned/practical-exam-assigned.module').then(m => m.PracticalExamAssignedModule) },
 
     ]
