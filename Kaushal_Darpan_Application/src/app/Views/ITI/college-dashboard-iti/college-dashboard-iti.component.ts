@@ -9,6 +9,9 @@ import { ITIAdminDashboardSearchModel } from '../../../Models/ITIAdminDashboardD
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ITIAdminDashboardServiceService } from '../../../Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
+import { DynamicUploadContentApprenticeshipListsModal } from '../../../Models/CampusDetailsWebDataModel';
+import { HomeService } from '../../../Services/Home/home.service';
+import { Home2Service } from '../../../Services/Home2/home2.service';
 
 @Component({
   selector: 'app-college-dashboard-iti',
@@ -25,15 +28,18 @@ export class CollegeDashboardITIComponent {
   public viewAdminDashboardList: StudentExamDetails[] = [];
   public ITIsWithNumberOfFormsList: any = [];
   public ITIsWithNumberOfFormsPriorityList: any = [];
+  public ApprenticeshipList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new ITIAdminDashboardSearchModel();
   public viewAdminDashboardCollegeList: StudentExamDetails[] = [];
-
+  public itiSearchRequest = new DynamicUploadContentApprenticeshipListsModal();
   public viewApplicationCount: StudentExamDetails[] = [];
 
   public DistrictMasterList: any = [];
   constructor(private ITIAdminDashboardServiceService: ITIAdminDashboardServiceService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
+
+    private home2Service: Home2Service,
     private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
   }
@@ -42,6 +48,7 @@ export class CollegeDashboardITIComponent {
   ngOnInit() {
 
     this.GetAllData();
+    this.GetDynamicUploadContentNotificationApprenticeshipList();
   }
 
 
@@ -80,4 +87,31 @@ export class CollegeDashboardITIComponent {
       }, 200);
     }
   }
+
+
+  async GetDynamicUploadContentNotificationApprenticeshipList() {
+
+    this.itiSearchRequest.RoleID = this.sSOLoginDataModel.RoleID
+    try {
+
+      this.itiSearchRequest.Key = 'DynamicUploadShortList';
+      this.loaderService.requestStarted();
+      await this.home2Service.GetDynamicUploadContentApprenticeship(this.itiSearchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ApprenticeshipList = data.Data;
+          console.log('this.ApprenticeshipList ==>', this.ApprenticeshipList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 }

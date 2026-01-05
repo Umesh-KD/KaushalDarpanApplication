@@ -40,11 +40,23 @@ export class PMNAMMelaReportBeforeAfterListComponent {
   _Userid: number = 0;
   public FinYearList: any = [];
   public ZoneList: any = [];
+  public totals: any = [];
   formData: any = {
     FinancialYearID: 0  
   };
   public request = new ITIApprenticeshipWorkshopModel()
+  includedKeys: string[] = [
+    'EstablishmentsRegisterNoBefore',
+    'NumberofSeatBefore',
+    'NumberofEmployedStudentBefore',
+    'PrivateEstablishmentscontactedNo',
+    'EstablishmentsRegisterNoAfter',
+    'NumberofSeatAfter',
+    'NumberofEmployedStudentAfter',
+    
 
+  ];
+  Object = Object;
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -79,10 +91,29 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     await this.GetDivisMatserDDL()
     await this.GetzonalID()
     await this.GetDistrictMatserDDL()
-    this.GetReportAllData();
+   await this.GetReportAllData();
+    await this.calculateDynamicTotals(this.DataList);
   }
 
 
+  async calculateDynamicTotals(data: any[]) {
+    this.totals = {};
+
+    // Initialize totals in SAME SEQUENCE
+    this.includedKeys.forEach(key => {
+      this.totals[key] = 0;
+    });
+
+    // Sum values
+    data.forEach(row => {
+      this.includedKeys.forEach(key => {
+        const value = row[key];
+        if (value !== null && value !== '' && !isNaN(value)) {
+          this.totals[key] += Number(value);
+        }
+      });
+    });
+  }
 
   async GetDivisMatserDDL() {
     try {
@@ -160,6 +191,7 @@ export class PMNAMMelaReportBeforeAfterListComponent {
           if (data.Data.length > 0) {
             this.DataList = data.Data;
             this.loadInTable();
+            this.calculateDynamicTotals(this.DataList);
           }
           else
           {

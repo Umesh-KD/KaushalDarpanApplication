@@ -167,45 +167,53 @@
 
         </thead>
         <!--{{DataList | json}}-->
-        <tbody>
-          <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
+      <tbody>
+        <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
 
-            <td align="left">{{idx+1}}</td>
-            <td *ngIf="SSOLoginDataModel.RoleID != 97">{{row.NodalOfficerName}}</td>
-            <!--<td *ngIf="SSOLoginDataModel.RoleID != 97">{{row.NodalOfficerDistrictName}}</td>-->
-            <td>{{row.BeforeDate1}}</td>
-            <td>{{row.EstablishmentsRegisterNoBefore}}</td>
-            <td>{{row.NumberofSeatBefore}}</td>
-            <td>{{row.NumberofEmployedStudentBefore}}</td>
-            <td>{{row.AfterDate1}}</td>
-            <td>{{row.EstablishmentsRegisterNoAfter}}</td>
-            <td>{{row.NumberofSeatAfter}}</td>
-            <td>{{row.NumberofEmployedStudentAfter}}</td>
-            <!--<td>
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.provisionLetterDocument}}"
-                 target="_blank" class="btn bg-primary text-white btn-sm">
-                <i class="ti ti-eye"></i>
-              </a>
-            </td>
-            <td>
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.PNMMelaDocument}}"
-                 target="_blank" class="btn bg-primary text-white btn-sm">
-                <i class="ti ti-eye"></i>
-              </a>
-            </td>-->
+          <td align="left">{{idx+1}}</td>
+          <td *ngIf="SSOLoginDataModel.RoleID != 97">{{row.NodalOfficerName}}</td>
+          <!--<td *ngIf="SSOLoginDataModel.RoleID != 97">{{row.NodalOfficerDistrictName}}</td>-->
+          <td>{{row.BeforeDate1}}</td>
+          <td>{{row.EstablishmentsRegisterNoBefore}}</td>
+          <td>{{row.NumberofSeatBefore}}</td>
+          <td>{{row.NumberofEmployedStudentBefore}}</td>
+          <td>{{row.AfterDate1}}</td>
+          <td>{{row.EstablishmentsRegisterNoAfter}}</td>
+          <td>{{row.NumberofSeatAfter}}</td>
+          <td>{{row.NumberofEmployedStudentAfter}}</td>
+          <!--<td>
+      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.provisionLetterDocument}}"
+         target="_blank" class="btn bg-primary text-white btn-sm">
+        <i class="ti ti-eye"></i>
+      </a>
+    </td>
+    <td>
+      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.PNMMelaDocument}}"
+         target="_blank" class="btn bg-primary text-white btn-sm">
+        <i class="ti ti-eye"></i>
+      </a>
+    </td>-->
 
-            <td>
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-pencil"></i></a>-->
-                <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="View" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
-                <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
-                <a *ngIf="SSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
-              </div>
-            </td>
+          <td>
+            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-pencil"></i></a>-->
+              <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="View" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+              <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
+              <a *ngIf="SSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+            </div>
+          </td>
 
-          </tr>
+        </tr>
+        <tr class="font-bold bg-gray-100">
+          <td colspan="3" class="text-center">Total</td>
 
-        </tbody>
+          <td *ngFor="let key of Object.keys(totals)">
+            {{ totals[key] === 0 ? '' : totals[key] }}
+          </td>
+
+          <td colspan="3"></td>
+        </tr>
+      </tbody>
       </table>
 
 

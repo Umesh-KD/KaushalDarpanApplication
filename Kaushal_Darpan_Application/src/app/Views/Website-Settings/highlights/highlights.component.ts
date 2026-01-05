@@ -30,7 +30,7 @@ export class HighlightsComponent {
   _EnumDepartment = EnumDepartment;
   DynamicContentData: any = [];
   Table_SearchText: string = '';
-
+  IsPrivate: boolean=false
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -44,8 +44,10 @@ export class HighlightsComponent {
   async ngOnInit() {
     this.HighlightsFromGroup = this.formBuilder.group({
       Title: ['', Validators.required],
+    
       Start_Date: ['',],
       End_Date: ['',],
+      IsPublic: ['',],
       DepartmentSubID: ['', [DropdownValidators]],
       TypeID: ['', [DropdownValidators]],
     });
@@ -77,6 +79,16 @@ export class HighlightsComponent {
   async SaveData() {
     
     this.isFormSubmitted = true;
+    if (this.sSOLoginDataModel.RoleID == 212) {
+      this.HighlightsFromGroup.controls['DepartmentSubID'].clearValidators()
+    } else {
+      this.HighlightsFromGroup.controls['DepartmentSubID']
+        .setValidators([Validators.required]);
+
+    }
+    this.HighlightsFromGroup.controls['DepartmentSubID']
+      .updateValueAndValidity();
+
     if(this.HighlightsFromGroup.invalid){
       this.toastr.error("Please Fill Required Fields")
       return
@@ -199,6 +211,9 @@ export class HighlightsComponent {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      if (this.sSOLoginDataModel.RoleID == 212) {
+        this.request.DepartmentSubID=6
+      }
       await this.websiteSettingsService.GetAllData(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success)
@@ -331,4 +346,15 @@ export class HighlightsComponent {
         }
       });
   }
+
+
+  onClickCheckbox() {
+    this.request.IsPrivate = !this.request.IsPrivate;
+    if (!this.request.IsPrivate) {
+      this.request.IsPrivate = false
+    } else {
+      this.request.IsPrivate = true
+    }
+  }
+
 }

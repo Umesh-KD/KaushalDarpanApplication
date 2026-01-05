@@ -880,6 +880,47 @@ export class TimeTableComponent implements OnInit {
     }
   }
 
+  async DownloadTimeTableInWord() {
+    try {
 
+      this.tablerequest.Action = this.searchRequest.SemesterID == 1 ? '_GetSemester' : '_GetYearly';
+      this.tablerequest.SemesterID = this.searchRequest.SemesterID;
+      this.tablerequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.tablerequest.ExamType = this.searchRequest.SemesterID;
+      this.tablerequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.tablerequest.FileType = 'word'; 
 
+      await this.reportService.GetTimeTableInWord(this.tablerequest)
+        .then((res: any) => {
+          if (res.State == EnumStatus.Success) {
+            this.downloadBase64Word(res.Data, 'timetable.docx');
+          }
+          else if (res.State == EnumStatus.Warning) {
+            this.toastr.warning(res.Message);
+          }
+          else {
+            this.toastr.error(res.Message);
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    } 
+  }
+
+  downloadBase64Word(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  }
 }

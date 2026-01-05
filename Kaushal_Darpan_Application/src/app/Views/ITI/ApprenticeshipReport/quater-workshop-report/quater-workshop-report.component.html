@@ -172,10 +172,10 @@
               <td>{{row.QuaterIncreaseSeat}}</td>
               <td>{{row.QuaterIncreaseStudent}}</td>
               <td class="text-center">
-                <a class="btn bg-success text-white" type="button" title="View"  (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + row.RegisterStudentPdf)">
+                <a class="btn bg-success text-white" type="button" title="View" (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + row.RegisterStudentPdf)">
                   View
                 </a>
-                  
+
               </td>
 
               <td class="text-center">
@@ -195,6 +195,16 @@
               </td>
 
             </tr>
+            <tr class="font-bold bg-gray-100">
+              <td colspan="5" class="text-center">Total</td>
+
+              <td *ngFor="let key of Object.keys(totals)">
+                {{ totals[key] }}
+              </td>
+
+              <td colspan="3"></td>
+            </tr>
+
 
           </tbody>
         </table>
