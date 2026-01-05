@@ -37,7 +37,21 @@ export class QuaterWorkshopReportComponent {
   isError: boolean = false;
   imageSrc: string | null = null;
   public FinYearList: any = [];
+  public totals: any = [];
   public _enumrole = EnumRole
+  includedKeys: string[] = [
+    'BeforeEstablishmentNo',
+    'BeforeEstablishmentSeat',
+    'BeforeStudentCount',
+    'AfterEstablishmentNo',
+    'AfterEstablishmentSeat',
+    'AfterStudentCount',
+    'QuaterIncreaseEstablishment',
+    'QuaterIncreaseSeat',
+    'QuaterIncreaseStudent'
+  ];
+  public excludedKeys = ['ID', 'CenterID', 'SemesterID', 'DistrictID', 'EndTermID', 'QuaterID', 'FinancialYearID', 'ModifyBy','CreatedBy'];
+  Object = Object;
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -66,9 +80,30 @@ export class QuaterWorkshopReportComponent {
     await this.GetDivisMatserDDL()
     await this.GetzonalID()
     await this.GetDistrictMatserDDL()
-    this.GetReportAllData();
+   await this.GetReportAllData();
     this.YearDropdownData('FinancialYear_IIP');
+    await this.calculateDynamicTotals(this.DataList);
 
+  }
+
+
+  async calculateDynamicTotals(data: any[]) {
+    this.totals = {};
+
+    // Initialize totals in SAME SEQUENCE
+    this.includedKeys.forEach(key => {
+      this.totals[key] = 0;
+    });
+
+    // Sum values
+    data.forEach(row => {
+      this.includedKeys.forEach(key => {
+        const value = row[key];
+        if (value !== null && value !== '' && !isNaN(value)) {
+          this.totals[key] += Number(value);
+        }
+      });
+    });
   }
 
 
@@ -106,6 +141,7 @@ export class QuaterWorkshopReportComponent {
           debugger;
           if (data.Data.length > 0) {
             this.DataList = data.Data
+            this.calculateDynamicTotals(this.DataList);
           }
           else {
             this.DataList = [];

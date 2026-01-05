@@ -13,6 +13,8 @@ import { ItiInvigilatorDatAModel, ItiInvigilatorSearchModel, ITITheorySearchMode
 export class ITIInvigilatorService {
 
   readonly APIUrl = this.appsettingConfig.apiURL + "ITIInvigilator";
+  readonly APIUrlPDF = this.appsettingConfig.apiURL + "ITIAllotment";
+
   readonly headersOptions: any;
   constructor(private http: HttpClient, private appsettingConfig: AppsettingService) {
     this.headersOptions = {
@@ -163,6 +165,19 @@ export class ITIInvigilatorService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+ 
+  
 
+
+  public centerWisePresentAbsentReport(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrlPDF}/CenterWisePresentAbsetReport/`, 
+      payload,
+      {
+        responseType: 'blob'   
+      }
+    );
+  }
+  
 
 }

@@ -9,6 +9,7 @@ import { catchError } from 'rxjs/operators';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { CenterStudentSearchModel, ITITheoryMarksSearchModel } from '../../../Models/ITITheoryMarksDataModel';
 import { TheoryMarksSearchModel } from '../../../Models/TheoryMarksDataModels';
+import { ITIPaperUploadSearchModel } from '../../../Models/DocumentDetailsModel';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,15 @@ export class ItiTheoryMarksService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetInviglatorAttandanceRptData(searchRequest: ITIPaperUploadSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInviglatorAttandanceRptData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetCenterStudents(searchRequest: CenterStudentSearchModel) {
     var body = JSON.stringify(searchRequest);

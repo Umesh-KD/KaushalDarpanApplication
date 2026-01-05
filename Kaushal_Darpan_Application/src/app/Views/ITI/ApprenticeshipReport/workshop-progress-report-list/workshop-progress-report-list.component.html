@@ -84,7 +84,7 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला आयोजन करने जिला  <span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला आयोजन करने वाला जिला<span class="StarMarking">*</span></label>
             <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
@@ -141,7 +141,7 @@
               <!--<th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का जिला</th>-->
               <th class="text-left">कार्यशाला की तिथि</th>
               <th class="text-left">कार्यशाला आयोजित करने <br /> वाले जिलें का नाम</th>
-              <th class="text-left">कार्यशाला मे भाग लेने वाले औ.प्र.सं. का नाम </th>
+              <th class="text-left">कार्यशाला मे भाग लेने वाले जिलें का नाम </th>
               <th class="text-left">कार्यशाला भाग लेने वाले प्रतिष्ठानों<br /> का नाम व पता </th>
               <th class="text-left">कार्यशाला मे भाग लेने वाले <br /> प्रतिनिधि का नाम ,पद व मो.नं.</th>
               <th class="text-left">विविध विवरण</th>

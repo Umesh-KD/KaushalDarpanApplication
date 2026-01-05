@@ -727,13 +727,14 @@ export class AddItiIssueItemComponent {
     if (item.Selected) {
       // Check both conditions
       
-      if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {  
+      if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() != '') {  
         console.log('✅ Serial item selected:', item); 
       }
       else {
-      console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
-      this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
-        }
+        console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
+        this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
+        item.Selected = false;
+      }
     }
   }
 

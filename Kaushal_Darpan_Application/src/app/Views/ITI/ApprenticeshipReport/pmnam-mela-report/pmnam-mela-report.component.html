@@ -168,31 +168,40 @@
             </tr>
           </thead>
           <!--{{DataList | json}}-->
-          <tbody>
-            <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index;">
-              <td>{{idx+1}}</td>
-              <td>{{row.Nodal}}</td>
-              <td>{{row.District}}</td>
-              <td>{{row.PoliticalEstablishmentspartNo}}</td>
-              <td>{{row.PrivateEstablishmentspartNo}}</td>
-              <td>{{row.PoliticalEstablishmentscontactedNo}}</td>
-              <td>{{row.PrivateEstablishmentscontactedNo}}</td>
-              <td>{{row.CandidatespresentMaleNo}}</td> <!-- Example binding -->
-              <td>{{row.CandidatespresentFemaleNo}}</td>
-              <td>{{row.CandidatessselectedMaleNo}}</td>
-              <td>{{row.CandidatessselectedFemaleNo}}</td>
-              <td> {{ row.PmnamMelaDate }}</td>
-              <td>
-                <div class="flex align-center justify-center actionBtns">
-                  <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="Edit"><i class="ti ti-pencil"></i></a>-->
-                  <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="view"><i class="ti ti-eye"></i></a>
-                  <a *ngIf="ssoLoginDataModel.RoleID != 97" (click)="EditData(row)" title="view"><i class="ti ti-eye"></i></a>
-                  <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="DeleteData(row)" title="Delete"><i class="ti ti-trash"></i></a>-->
-                </div>
+        <tbody>
+          <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.Nodal}}</td>
+            <td>{{row.District}}</td>
+            <td>{{row.PoliticalEstablishmentspartNo}}</td>
+            <td>{{row.PrivateEstablishmentspartNo}}</td>
+            <td>{{row.PoliticalEstablishmentscontactedNo}}</td>
+            <td>{{row.PrivateEstablishmentscontactedNo}}</td>
+            <td>{{row.CandidatespresentMaleNo}}</td> <!-- Example binding -->
+            <td>{{row.CandidatespresentFemaleNo}}</td>
+            <td>{{row.CandidatessselectedMaleNo}}</td>
+            <td>{{row.CandidatessselectedFemaleNo}}</td>
+            <td> {{ row.PmnamMelaDate }}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+                <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="Edit"><i class="ti ti-pencil"></i></a>-->
+                <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="view"><i class="ti ti-eye"></i></a>
+                <a *ngIf="ssoLoginDataModel.RoleID != 97" (click)="EditData(row)" title="view"><i class="ti ti-eye"></i></a>
+                <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="DeleteData(row)" title="Delete"><i class="ti ti-trash"></i></a>-->
+              </div>
 
-              </td>
-            </tr>
-          </tbody>
+            </td>
+          </tr>
+          <tr class="font-bold bg-gray-100">
+            <td colspan="3" class="text-center">Total</td>
+
+            <td *ngFor="let key of Object.keys(totals)">
+              {{ totals[key] }}
+            </td>
+
+            <td colspan="3"></td>
+          </tr>
+        </tbody>
         </table>
 
         <!--pagination-->
