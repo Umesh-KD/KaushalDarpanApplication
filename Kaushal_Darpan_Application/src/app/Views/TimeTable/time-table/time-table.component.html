@@ -18,7 +18,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a  *ngIf="MapKeyEng == 1 && sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge_NonEng"
+        <a *ngIf="MapKeyEng == 1 && sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge_NonEng"
            routerLink="/addtimetable" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -31,7 +31,7 @@
             <option value="2">Yearly </option>
           </select>
         </div>
-        <div  *ngIf="sSOLoginDataModel.RoleID != _EnumRole.Principal && sSOLoginDataModel.RoleID != _EnumRole.PrincipalNon" >
+        <div *ngIf="sSOLoginDataModel.RoleID != _EnumRole.Principal && sSOLoginDataModel.RoleID != _EnumRole.PrincipalNon">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
             <select class="form-select" id="ddlFilterByStatus" [(ngModel)]="searchRequest.Status" (change)="GetTimeTableList()">
@@ -55,14 +55,14 @@
         </div>
 
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subjects</label>
-    <select class="form-select" id="TimetableSujectId" [(ngModel)]="searchbySubject">
-      <option value="">Choose Option</option>
-      <option *ngFor="let row of SubjectList" [value]="row.SubjectName">{{row.SubjectName}}</option>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subjects</label>
+          <select class="form-select" id="TimetableSujectId" [(ngModel)]="searchbySubject">
+            <option value="">Choose Option</option>
+            <option *ngFor="let row of SubjectList" [value]="row.SubjectName">{{row.SubjectName}}</option>
 
 
-    </select>
-  </div>-->
+          </select>
+        </div>-->
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetTimeTableList()">Search</button>
@@ -88,9 +88,9 @@
           <button class="btn bg-success btn-sm text-white" (click)="DownloadTimeTable1('pdf')">
             Download in PDF
           </button>
-          <!--<button class="btn bg-success btn-sm text-white" (click)="DownloadTimeTable1('word')">
+          <button class="btn bg-success btn-sm text-white" (click)="DownloadTimeTableInWord('word')">
             Download in Word
-          </button>-->
+          </button>
         </div>
         <a *ngIf="ShowPublishpublisButton()" class="btn bg-success btn-sm text-white" (click)="PublishOnAction(MyModel_Action)"><i class="ti ti-checklist"></i>Upload and Publish Time Table</a>
         <!-- <a  class="btn bg-success btn-sm text-white" (click)="PublishOnAction(MyModel_Action)"><i class="ti ti-checklist"></i>Upload and Publish Time Table</a> -->
@@ -132,8 +132,8 @@
 
 
           <tr>
-        
-            <th class="text-left" *ngIf="this.Status==11" >
+
+            <th class="text-left" *ngIf="this.Status==11">
               <input *ngIf="TimeTableList?.length>0" type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
                      [checked]="AllSelect"
                      (change)="checkboxthView_checkboxchange($event.target.checked)">
@@ -157,8 +157,8 @@
         <tbody>
 
           <tr *ngFor="let row of TimeTableList  | tableSearchFilter:Table_SearchText;let idx=index;">
-            <td *ngIf="this.Status==11" >
-              <input  type="checkbox" name="MarkCheck"
+            <td *ngIf="this.Status==11">
+              <input type="checkbox" name="MarkCheck"
                      [(ngModel)]="row.Selected" />
             </td>
             <td>{{idx+1}}</td>
@@ -180,9 +180,9 @@
 
 
                 <!--sSOLoginDataModel.RoleID == _EnumRole.Admin && row.Status==_RollListStatus.Generated || sSOLoginDataModel.RoleID == _EnumRole.Admin && row.Status==_RollListStatus.Reverted
-  || _EnumRole.ExaminationIncharge && row.Status==_RollListStatus.Generated ||  _EnumRole.ExaminationIncharge && row.Status==_RollListStatus.Reverted
-  || sSOLoginDataModel.RoleID == _EnumRole.AdminNon && row.Status==_RollListStatus.Generated"-->
-                <div class="flex" *ngIf="showHideButton(row)" >
+                || _EnumRole.ExaminationIncharge && row.Status==_RollListStatus.Generated ||  _EnumRole.ExaminationIncharge && row.Status==_RollListStatus.Reverted
+                || sSOLoginDataModel.RoleID == _EnumRole.AdminNon && row.Status==_RollListStatus.Generated"-->
+                <div class="flex" *ngIf="showHideButton(row)">
                   <a [routerLink]="'/addtimetable'" [queryParams]="{id: row.TimeTableID}" title="Edit">
                     <i class="ti ti-pencil"></i>
                   </a>
@@ -206,7 +206,7 @@
 </div>
 
 <ng-template #MyModel_ViewDetails let-modal
-  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
@@ -215,7 +215,7 @@
       </div>
       <div class="card-body">
         <div class="mb-8">
-          
+
           <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3"
            *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
             <form [formGroup]="InvigilatorFormGroup">
@@ -238,7 +238,7 @@
               </button>
             </div>
           </div>-->
-        
+
           <div class="overflow-x-auto mt-3">
 
             <table class="table table-border w-full table-auto" cellpadding="5">
@@ -282,50 +282,50 @@
 
 <ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
- 
-      <div class="card">
-        <div class="card-header flex justify-between  items-center">
-          <b><i class="fa fa-plus"></i>&nbsp;Upload & Publish Time Table</b>
-          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
-        </div>
-        <div class="card-body">
-          <div class="mb-8">
 
-            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Upload & Publish Time Table</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
 
-              <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                       for="fileStudentPhoto">Time Table Pdf</label>
-                <div class="flex fileUploader">
-                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                         id="fileStudentPhoto" type="file" (change)="onFilechange($event,'TimeTablePdf')">
-                  <label for="fileStudentPhoto">
-                    <span>Choose File</span>
-                    {{Dis_TimeTablePdf === '' ? 'No File Choosen' : Dis_TimeTablePdf}}
-                  </label>
-                  <div class="flex">
-                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + TimeTablePdf}}"
-                       *ngIf="this.TimeTablePdf!=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                 
-                  </div>
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     for="fileStudentPhoto">Time Table Pdf</label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="fileStudentPhoto" type="file" (change)="onFilechange($event,'TimeTablePdf')">
+                <label for="fileStudentPhoto">
+                  <span>Choose File</span>
+                  {{Dis_TimeTablePdf === '' ? 'No File Choosen' : Dis_TimeTablePdf}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + TimeTablePdf}}"
+                     *ngIf="this.TimeTablePdf!=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
                 </div>
               </div>
             </div>
-            <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3 mt-3">
-             
+          </div>
+          <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3 mt-3">
 
 
-            </div>
 
-            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          </div>
 
-              <div class="text-center mt-4">
-                <button *ngIf="TimeTableList?.length > 0" class="btn bg-success text-white" (click)="DownloadTimeTable()" type="button"> Publish (Time List)</button>
-              </div>
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div class="text-center mt-4">
+              <button *ngIf="TimeTableList?.length > 0" class="btn bg-success text-white" (click)="DownloadTimeTable()" type="button"> Publish (Time List)</button>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
   </div>
 </ng-template>

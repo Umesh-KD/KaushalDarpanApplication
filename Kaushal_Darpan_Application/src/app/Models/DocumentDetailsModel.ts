@@ -63,4 +63,5 @@ export class ITIPaperUploadSearchModel {
   public IsPaperDownload: number = 0;
   public CenterID: number = 0;
   public PaperCode: string = '';
+  public IsPresentAbsent: number = -1;
 }
