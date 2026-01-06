@@ -1574,6 +1574,9 @@ const routes: Routes = [
       { path: 'itiPracticalExamMarks', loadChildren: () => import('./Views/ITI/iti-Practical-Exam-Marks/iti-Practical-Exam-Marks.module').then(m => m.itiPracticalExamMarksModule), title: 'Practical Exam Marks' },
       { path: 'practicalexamassigned', loadChildren: () => import('./Views/ITI/practical-exam-assigned/practical-exam-assigned.module').then(m => m.PracticalExamAssignedModule) },
 
+
+      { path: 'ExaminerDashboard', loadChildren: () => import('./Views/ITI/practical-examiner-dashboard/practical-examiner-dashboard.module').then(m => m.PracticalExaminerDashboardModule), title: 'Practical examiner dashboard ' },
+
     ]
   },
 

@@ -5,7 +5,7 @@
 
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Reports</a>
+      <a [routerLink]="['/practicalexamassigned']" class="text-sm font-medium text-slate-700">Assigned Exam List</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a [routerLink]="['/itiPracticalExamMarks']" class="text-sm font-medium text-slate-700" aria-current="page">Practical Exam Marks</a>
 
@@ -13,7 +13,7 @@
 
     </div>
   </div>
-  <a class="inline-flex items-center btn bg-dark text-white btn-sm">
+  <a  [routerLink]="['/practicalexamassigned']" class="inline-flex items-center btn bg-dark text-white btn-sm">
     <i class="ti ti-chevron-left"></i>
     Back
   </a>
@@ -86,7 +86,7 @@
          (click)="ViewandEdit(MyModel_ViewDetails, row)">
         <i class="ti ti-pencil"></i>
       </a>-->
-                  <a href="javascript:void(0);"
+                  <a *ngIf="row.IsShowEditButton==1" href="javascript:void(0);"
                      (click)="ViewandEdit(MyModel_ViewDetails, row)">
                     <i class="ti ti-pencil"></i>
                   </a>

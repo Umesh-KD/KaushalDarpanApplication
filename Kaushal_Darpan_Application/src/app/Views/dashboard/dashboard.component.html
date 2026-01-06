@@ -67,7 +67,7 @@
                      ">
 </app-iti-staff-dashboard>
 
-<app-practical-examiner-dashboard *ngIF="this.sSOLoginDataModel.RoleID== _EnumRole.ITi_PracticalExaminer"></app-practical-examiner-dashboard>
+<app-practical-examiner-dashboard *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.ITi_PracticalExaminer"></app-practical-examiner-dashboard>
 
 
 

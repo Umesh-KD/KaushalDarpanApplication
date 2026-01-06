@@ -15,6 +15,7 @@ import { ReportService } from '../../../Services/Report/report.service';
 import { ITIExaminerDataModel, ITIExamMarksDataModel, ITIStudentExamMarksDataModel } from '../../../Models/DocumentDetailsModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-iti-Practical-Exam-Marks',
@@ -64,6 +65,7 @@ export class itiPracticalExamMarksComponent {
     private http: HttpClient,
     private centerAllocationService: ITICenterAllocationService,
     private apiService: ItiTradeService,
+    private route: ActivatedRoute
   ) { }
 
   async ngOnInit() {
@@ -84,13 +86,28 @@ export class itiPracticalExamMarksComponent {
            
     })
 
+
+
+
+      this.route.queryParams.subscribe(params => {
+        this.ExaminerDataRequest.CenterID = params['CenterID'] ? +params['CenterID'] : 0;
+        this.ExaminerDataRequest.SemesterID = params['SemesterID'] ? +params['SemesterID'] : 0;
+        this.ExaminerDataRequest.StreamID = params['StreamID'] ? +params['StreamID'] : 0;
+      });
+   
+
     await this.GetPracticalExamMarksList();
    
   }
   get _ExamMarksGroup() { return this.ExamMarksGroup.controls; }
 
   async GetPracticalExamMarksList() {
-    
+
+    this.ExaminerDataRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.ExaminerDataRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    ;
+
+
     try {
       this.loaderService.requestStarted();
       await this.apiService.GetStudentExamReportForITI(this.ExaminerDataRequest)
@@ -143,15 +160,18 @@ export class itiPracticalExamMarksComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State = EnumStatus.Success) {
+          if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
-            this.toastr.success(this.Message);
+          
             this.ExamMarksGroup.reset();
             this.CloseModalPopup();
             this.GetPracticalExamMarksList();
           }
-          else {
-            this.toastr.error(this.ErrorMessage)
+          else
+          {
+            this.toastr.warning(this.Message??this.ErrorMessage
+            );
+      
           }
 
         })
