@@ -1533,6 +1533,17 @@ export class ReportService {
       ).toPromise();
   }
 
+  public async GetQuarterlyProgress(obj: any) {
+
+    var body = JSON.stringify(obj);
+    console.log(body);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + "/QuarterlyProgressReport", body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetApprenticeship(obj: any) {
 
     var body = JSON.stringify(obj);
