@@ -75,5 +75,6 @@ export class CenterStudentSearchModel extends RequestBaseModel {
   public ExaminerCode: string = '';
   public SSOID: string = ''
   public SubjectType: string = ''
-  public StudentName:string=''
+  public StudentName: string = ''
+  public SubjectName: string = ''
 }
