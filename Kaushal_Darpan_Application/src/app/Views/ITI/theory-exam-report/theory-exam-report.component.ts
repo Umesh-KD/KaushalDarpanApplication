@@ -11,6 +11,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ItiTheoryMarksService } from '../../../Services/ITI/ItiTheoryMarks/Iti-theory-marks.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-theory-exam-report',
@@ -27,6 +28,7 @@ export class TheoryExamReportComponent {
   public SemesterMasterList: any = [];
   public Branchlist: any = [];
   public InstituteMasterDDLList: any = [];
+  modalReference: NgbModalRef | undefined;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -39,6 +41,7 @@ export class TheoryExamReportComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public student: any;
   //end table feature default
 
   constructor(
@@ -47,7 +50,7 @@ export class TheoryExamReportComponent {
     private commonMasterService: CommonFunctionService,
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
-    private http: HttpClient) {
+    private http: HttpClient, private modalService: NgbModal) {
   }
 
   async ngOnInit() {
@@ -55,11 +58,26 @@ export class TheoryExamReportComponent {
     // if(this.sSOLoginDataModel.RoleID == EnumRole.Examiner) {
     //   this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     // }
+    this.student = {
+      Name: 'Ravi Kumar',
+      EnrollmentNo: 'ITI2024/00123',
+      FatherName: 'Suresh Kumar',
+      TradeName: 'Electrician',
+      Semester: '2nd',
+      PhotoUrl: 'assets/images/student.jpg',
+      JobCardImageUrl: 'assets/images/jobcard.jpg',
+      JobCardNo: 'JC-458796'
+    };
+
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     await this.GetMasterData();
     await this.GetItiTrade()
     // await this.GetTheoryMarksDetailList();
   }
+
+
+
+
 
   async GetMasterData() {
     try {
@@ -350,4 +368,13 @@ export class TheoryExamReportComponent {
     return `file_${timestamp}.${extension}`;
   }
 
+  async ViewStudentDetails(content: any, row: any)
+  {
+    this.student = row;
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+  }
+  CloseModalPopup()
+  {
+    this.modalService.dismissAll();
+  }
 }
