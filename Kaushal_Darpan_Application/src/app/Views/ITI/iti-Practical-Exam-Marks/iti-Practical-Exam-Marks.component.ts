@@ -212,7 +212,8 @@ export class itiPracticalExamMarksComponent {
       'ModifyDate', 'IPAddress', 'CenterID', 'DownloadDate', 'Password', 'FileName',
       'EndTermID', 'InstituteID', 'CourseType', 'StudentExamID', 'SemesterID',
       'StudentTypeID', 'SubjectId', 'isAllow', 'StudentExamID1', 'IsChecked',
-      'Latitude', 'Longitude', 'JobCardImage'
+      'Latitude', 'Longitude', 'JobCardImage', 'FatherName', 'StudentType', 'InstituteName', 'DOB', 'SubjectCode',
+      'MaxMarks', 'MinMarks', 'IsPresent', 'IsShowEditButton','StudentExamPaperMarksID'
     ];
 
     const filteredData = this.ExaminerDataList.map(
