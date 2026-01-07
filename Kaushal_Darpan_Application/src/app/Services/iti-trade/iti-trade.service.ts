@@ -8,7 +8,7 @@ import { GroupDataModels, GroupSearchModel } from '../../Models/GroupDataModels'
 import { AppsettingService } from '../../Common/appsetting.service';
 import { ITITradeDataModels, ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ITIPlanningBankGuarantee } from '../../Models/ItiPlanningDataModel';
-import { ITIPaperUploadSearchModel } from '../../Models/DocumentDetailsModel';
+import { ITIExaminerDataModel, ITIPaperUploadSearchModel, ITIStudentExamMarksDataModel } from '../../Models/DocumentDetailsModel';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +16,7 @@ export class ItiTradeService {
   
 
   readonly APIUrl = this.appsettingConfig.apiURL + "ITIMaster";
+  readonly APIUrlPE = this.appsettingConfig.apiURL + "ITIPracticalExaminer";
   readonly headersOptions: any;
   constructor(private http: HttpClient, private appsettingConfig: AppsettingService) {
     this.headersOptions = {
@@ -144,6 +145,25 @@ export class ItiTradeService {
   public async GetITIPaperUpload_Reports(searchRequest: ITIPaperUploadSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetITIPaperUpload_Reports`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetStudentExamReportForITI(ExaminerDataRequest: ITIExaminerDataModel) {
+    
+    var body = JSON.stringify(ExaminerDataRequest);
+    return await this.http.post(`${this.APIUrlPE}/GetStudentExamReportForITI`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async UpdateStudentExamMarksDataWeb(request: ITIStudentExamMarksDataModel) {
+    debugger
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrlPE}/UpdateStudentExamMarksDataWeb`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
