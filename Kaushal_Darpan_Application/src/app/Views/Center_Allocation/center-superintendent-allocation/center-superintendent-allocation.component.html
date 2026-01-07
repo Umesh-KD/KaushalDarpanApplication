@@ -127,7 +127,7 @@ GetStatusCenterSuperintendentData?.Status === 14"
                 </div>
               </td>
               <td>
-                <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng) &&
+                <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge_NonEng) &&
                   GetStatusCenterSuperintendentData?.Status !== 12 &&
                  GetStatusCenterSuperintendentData?.Status !== 13 &&
                  GetStatusCenterSuperintendentData?.Status !== 14" class="btn bg-info text-white me-1" (click)="openModal(modal_AddInsitute,row,idx)">

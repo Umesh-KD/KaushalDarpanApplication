@@ -141,6 +141,9 @@ export class TheoryExamReportComponent {
       //   this.searchRequest.ExaminerCode = this.ExaminerCode
       // }
       // this.searchRequest.GroupCodeID = this.TheoryMarksDashBoardCount[0].GroupCodeID;
+      if (this.searchRequest.SubjectType != 'T') {
+        this.searchRequest.SubjectName=""
+      }
       // //call
       this.loaderService.requestStarted();
 

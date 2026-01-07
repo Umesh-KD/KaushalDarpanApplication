@@ -215,15 +215,19 @@ export class InternalPracticalStudentComponent implements OnInit {
   isAllChecked(): boolean {
 
     if (this.InternalPracticalID == 2) {
-           var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      // var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
       this.Allstudentcheck = isallcheck
-      return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true && item.IsDetain == false);
+      // return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true && item.IsDetain == false);
+      return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true);
  
     } else if (this.InternalPracticalID == 1) {
-      var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      // var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
       this.Allstudentcheck = isallcheck
       // console.log(this.Allstudentcheck)
-      return this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      // return this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      return this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
 
     } else {
       return false
@@ -288,6 +292,11 @@ export class InternalPracticalStudentComponent implements OnInit {
             this.toastr.error('Max Marks cannot be less than Marks Obtained');
             return;
           }
+        }
+
+        if (x.IsPresentInternalAssisment == 3 && x.IsDetain == false && x.MaxInternalAssisment !== 0 && x.ObtainedInternalAssisment !== 0) {
+          this.toastr.error('For Detained students, marks must be 0.');
+          return;
         }
 
         if (x.MaxInternalAssisment < x.ObtainedInternalAssisment) {
@@ -530,9 +539,10 @@ export class InternalPracticalStudentComponent implements OnInit {
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.TheoryMarksList.forEach(x => {
-      if(!x.IsDetain) {
-        x.Marked = this.AllInTableSelect;
-      }
+      // if(!x.IsDetain) {
+      //   x.Marked = this.AllInTableSelect;
+      // }
+      x.Marked = this.AllInTableSelect;
     });
   }
   //checked single (replace org. list here)
@@ -550,7 +560,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
 
   async onStatusPracticalAssesmentChange(dOC: any, isGetAll: boolean = false) {
-    
+    debugger
 
     if (this.paginatedInTableData.some((x: any) => x.IsPresentInternalAssisment == 4)) {
       this.isAnyUFMSelected = true
@@ -592,7 +602,7 @@ export class InternalPracticalStudentComponent implements OnInit {
     }
 
     if(isGetAll == false && dOC.IsPresentPractical != 1) {
-      // dOC.ObtainedPractical = 0;
+      dOC.ObtainedPractical = 0;
     }
     /*  this.Isremarkshow = this.request.VerificationDocumentDetailList.some((x: any) => x.Status == EnumVerificationAction.Revert);*/
   }

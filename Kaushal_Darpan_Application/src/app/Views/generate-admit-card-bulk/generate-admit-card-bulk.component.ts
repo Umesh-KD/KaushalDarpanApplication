@@ -30,12 +30,16 @@ export class GenerateAdmitCardBulkComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequest.SemesterID = Number(this.activatedRoute.snapshot.queryParamMap.get('semid') ?? 0);
     this.searchRequest.InstituteID = Number(this.activatedRoute.snapshot.queryParamMap.get('instID') ?? 0);
+
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
-    this.GetSemesterName(this.searchRequest.SemesterID);
-    this.GetAllData();
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+
+    // load
+    await this.GetSemesterName(this.searchRequest.SemesterID);
+    await this.GetAllData();
   }
 
   async GetAllData() {

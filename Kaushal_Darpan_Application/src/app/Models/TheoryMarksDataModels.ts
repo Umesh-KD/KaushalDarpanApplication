@@ -66,6 +66,7 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public ExaminerCode: string = '';
   public SSOID: string = ''
   public SubjectType: string = ''
+  public SubjectName: string = ''
 
 
 

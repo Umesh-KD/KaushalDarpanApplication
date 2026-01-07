@@ -432,6 +432,7 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     this.request.DistrictID = 0;
     this.request.FinancialYearID = 0;
     this.request.BeforeMonth = 0;
+    this.request.ZoneID = 0;
     this.GetReportAllData();
 
   }

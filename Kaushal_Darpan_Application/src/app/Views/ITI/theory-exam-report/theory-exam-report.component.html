@@ -37,7 +37,7 @@
           </select>
         </div> -->
         <!--<div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon
-        || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
+  || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
         <div>
 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
@@ -79,13 +79,29 @@
             <option value="">--All--</option>
             <!--<option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>-->
             <option *ngIf="sSOLoginDataModel.Eng_NonEng==2" value="A">Formative Assesment</option>
-            /o
             <option value="P">Practical</option>
             <option *ngIf="sSOLoginDataModel.Eng_NonEng==2" value="T">Theory</option>
 
           </select>
         </div>
 
+        <div *ngIf="searchRequest.SubjectType=='T'">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Subject <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select"  id="SubjectName" [(ngModel)]="searchRequest.SubjectName">
+            <option value="">--Select--</option>
+            <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-I">Paper-I Trade Theory</option>
+            <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-II">Paper-II Employablility Skills</option>
+            <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-III">Paper-III Workshop Calculation & Science</option>
+            <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-IV">Paper-IV Engineering Drawing</option>
+         
+     
+
+            <!-- <option *ngFor="let item of SubjectMasterDDLList" [value]="item.ID">{{item.ID}} {{item.Name}}</option> -->
+          </select>
+        
+        </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Trainee Roll No.: </label>
