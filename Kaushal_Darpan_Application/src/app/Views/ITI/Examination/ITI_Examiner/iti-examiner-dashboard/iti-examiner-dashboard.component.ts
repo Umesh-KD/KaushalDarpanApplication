@@ -5,6 +5,9 @@ import { ITI_ExaminerDashboardModel } from '../../../../../Models/ITI/ITI_Examin
 import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { ItiExaminerService } from '../../../../../Services/ItiExaminer/iti-examiner.service';
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
+import { EncryptionService } from '../../../../../Services/EncryptionService/encryption-service.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-iti-examiner-dashboard',
@@ -24,11 +27,15 @@ export class ItiExaminerDashboardComponent {
   public staffDashSearchReq = new ITI_ExaminerDashboardModel()
   _EnumRole = EnumRole;
 
+
   constructor(
     private itiExaminerService: ItiExaminerService,
  
     private loaderService: LoaderService,
-    private sweetAlert2: SweetAlert2
+    private sweetAlert2: SweetAlert2,
+    private encryptionService: EncryptionService,
+    private router: Router
+
    
   ) {}
 
@@ -46,8 +53,12 @@ export class ItiExaminerDashboardComponent {
          {
            this.sweetAlert2.Confirmation("Your Profile Is not completed please updaet your profile?", async (result: any) =>
            {
-            
-             window.open("/ITIExaminer?StaffID=" + this.StaffMasterList[0].ExaminerID, "_Self")
+             window.open(
+               `/ITIExaminer?StaffID=${encodeURIComponent(
+                 this.encryptParameter(this.StaffMasterList[0].ExaminerID)
+               )}`,
+               '_self'
+             );
            }, 'OK', false);
          }
        }
@@ -58,6 +69,12 @@ export class ItiExaminerDashboardComponent {
      await this.GetAllData();
      
   }
+
+  encryptParameter(param: any) {
+    return this.encryptionService.encryptData(param);
+  }
+
+
   async GetAllData() {
  
     // this.staffDashSearchReq.InvigilatorAppointmentID = Number(this.activatedRoute.snapshot.queryParamMap.get("InvigilatorAppointmentID") ?? 0);
