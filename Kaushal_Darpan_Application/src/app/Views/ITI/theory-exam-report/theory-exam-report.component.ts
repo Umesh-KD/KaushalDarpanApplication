@@ -26,6 +26,7 @@ export class TheoryExamReportComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   public TheoryMarksRptDataList: any = [];
   public SemesterMasterList: any = [];
+  public StudentDetailsModelList: any = [];
   public Branchlist: any = [];
   public InstituteMasterDDLList: any = [];
   modalReference: NgbModalRef | undefined;
@@ -377,4 +378,25 @@ export class TheoryExamReportComponent {
   {
     this.modalService.dismissAll();
   }
+
+  async ViewHistory(content: any, row: any) {
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+
+    await this.TheoryMarksService.GetTheoryMarksRptHistory(row.StudentExamPaperMarksID)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+
+        this.StudentDetailsModelList = data['Data'];
+
+        //table feature load
+
+        //end table feature load
+      }, (error: any) => console.error(error));
+
+  }
+
+
+
+
 }

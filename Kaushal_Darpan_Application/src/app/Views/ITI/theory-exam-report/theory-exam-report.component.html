@@ -37,7 +37,7 @@
           </select>
         </div> -->
         <!--<div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon
-  || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
+        || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
         <div>
 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
@@ -53,7 +53,8 @@
             <option value="0">--All--</option>
             <!--<option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>-->
             <option [value]="1">1st Year</option>
-            <option [value]="2">2nd Year<
+            <option [value]="2">
+              2nd Year<
             </option>
 
             r<
@@ -89,18 +90,18 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Subject <span class="StarMarking">*</span>
           </label>
-          <select class="form-select"  id="SubjectName" [(ngModel)]="searchRequest.SubjectName">
+          <select class="form-select" id="SubjectName" [(ngModel)]="searchRequest.SubjectName">
             <option value="">--Select--</option>
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-I">Paper-I Trade Theory</option>
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-II">Paper-II Employablility Skills</option>
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-III">Paper-III Workshop Calculation & Science</option>
             <option *ngIf="this.sSOLoginDataModel.Eng_NonEng==2" value="Paper-IV">Paper-IV Engineering Drawing</option>
-         
-     
+
+
 
             <!-- <option *ngFor="let item of SubjectMasterDDLList" [value]="item.ID">{{item.ID}} {{item.Name}}</option> -->
           </select>
-        
+
         </div>
 
         <div>
@@ -204,7 +205,12 @@
                    (click)="ViewStudentDetails(MyModel_ViewDetails, row)">
                   <i class="ti ti-list"></i>
                 </a>
+                <a href="javascript:void(0);" title="View History"
+                   (click)="ViewHistory(modal_StudentStatusHistory, row)">
+                  <i class="ti ti-eye"></i>
+                </a>
               </div>
+
             </td>
 
           </tr>
@@ -319,7 +325,6 @@
               <a>
                 <!--JobCardImage,
                 FileName-->
-        
                 <!--<img class="bi-image img-border table-responsive" src="https://kdhteapi.rajasthan.gov.in/api/StaticFiles/ITIPracticalExam/Jan072026111027100342.jpg" />-->
                 <img class="bi-image img-border table-responsive" [src]="appsettingConfig.StaticFileRootPathURL+'/'+'ITIPracticalExam'+'/'+student.FileName" />
               </a>
@@ -353,3 +358,48 @@
 
 </ng-template>
 
+
+<ng-template #modal_StudentStatusHistory let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-xl"><i class="fa fa-list"></i>&nbsp;Trainee Marks History</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+              <tr class="text-left">
+                <th>Sr. No.</th>
+                <th>Student Name</th>
+                <th>Roll No</th>
+                <th>Subject Name</th>
+                <th>Obtain Marks</th>
+                
+                <th>Update By</th>
+                <th>Update Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of StudentDetailsModelList; let idx=index;  ">
+                <td>{{idx+1}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.StudentName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.RollNo}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.SubjectName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.ObtainedMarks}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.SSOID}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.ModifyDate}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>

@@ -56,6 +56,7 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public UserID: number = 0;
   public UserAdditionalID: number = 0;
 
+
   public RollNo: string = '';
   public InternalPracticalID: number = 0;
   public GroupCodeID: number = 0;
