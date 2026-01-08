@@ -79,6 +79,7 @@ export class AppointITIExaminerComponent {
     this.ExaminerID = Number(this.activatedRoute.snapshot.queryParamMap.get('ExaminerID') ?? 0)
     this.searchRequest.ExaminerID = this.ExaminerID
     this.getSemesterMasterList();
+    this.getStreamMasterList();
 /*    this.getStreamMasterList();*/
 
     this.Centerlist()
