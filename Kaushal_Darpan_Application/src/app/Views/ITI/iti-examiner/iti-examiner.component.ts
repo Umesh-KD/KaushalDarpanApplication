@@ -7,13 +7,14 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 //import { ActivatedRoute } from '@angular/router';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ItiExaminerDataModel, ItiExaminerSearchModel } from '../../../Models/ItiExaminerDataModel';
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
+import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
 
 
 
@@ -45,6 +46,9 @@ export class ItiExaminerComponent {
   public GenderList: any = [];
   public StaffID: number | null = null;
 
+  public _EnumRole = EnumRole;
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -56,14 +60,25 @@ export class ItiExaminerComponent {
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private Swal2: SweetAlert2,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private encryptionService: EncryptionService,
+
   ) { }
 
 
-  async ngOnInit() {
+
+
+  async ngOnInit()
+  {
+    this.StaffID = Number(this.decryptParameter(this.routers.snapshot.queryParamMap.get("StaffID")) ?? 0);
+    if (this.StaffID)
+    {
+      this.isUpdate = true
+    }
     
     this.examinerForm = this.fb.group({
-      txtSSOID: ['', Validators.required],
+      // txtSSOID: ['', Validators.required],
+      txtSSOID: [{ value: '', disabled: this.isUpdate }, Validators.required],
       txtName: [{ value: '', disabled: true }, Validators.required],
       txtFatherName: ['', Validators.required],
       txtDateOfBirth: ['', Validators.required],
@@ -98,23 +113,14 @@ export class ItiExaminerComponent {
 
     this.ExaminerId = Number(this.route.snapshot.queryParamMap.get('id')?.toString());
 
-    
 
-    //this.request.UserID = this.sSOLoginDataModel.UserID;
-    //await this.loadInstituteDetails();
-    //if (this.ExaminerId) {
-    //  await this.GetByID(this.ExaminerId)
-    //}
-
-    //await this.GetByID(this.request.StaffID)
-
-    this.StaffID = Number(this.routers.snapshot.queryParamMap.get("StaffID") ?? 0);
-
-    if (this.StaffID) {
-      await this.GetByID(this.StaffID)
-      this.isUpdate = true
-    }
+    await this.GetByID(this.StaffID)
    
+  }
+
+
+  decryptParameter(param: any) {
+    return this.encryptionService.decryptData(param);
   }
 
   async GetDistrictMasterList() {
@@ -186,9 +192,8 @@ export class ItiExaminerComponent {
   //  }
   //}
 
-  async GetStreamMasterList() {
-    
-    
+  async GetStreamMasterList()
+  {
     
     try {
       this.loaderService.requestStarted();
@@ -244,8 +249,16 @@ export class ItiExaminerComponent {
           if (this.State == EnumStatus.Success)
           {
             this.ResetControl();
-            this.toastr.success(this.Message)
-            this.router.navigate(['/ITIExaminerList']);
+            this.toastr.success(this.Message);
+            if (this.sSOLoginDataModel.RoleID == EnumRole.ITIExaminer_SCVT)
+            {
+              this.router.navigate(['/dashboard']);
+            }
+            else
+            {
+
+              this.router.navigate(['/ITIExaminerList']);
+            }
 
           }
           else {

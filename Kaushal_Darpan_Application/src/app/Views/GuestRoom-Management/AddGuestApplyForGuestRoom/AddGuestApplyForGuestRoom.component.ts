@@ -3,7 +3,7 @@ import { GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, Gue
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { GuestRoomManagmentService} from '../../../Services/GuestRoomManagment/GuestRoomManagment.service';
+import { GuestRoomManagmentService } from '../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { EnumStatus } from '../../../Common/GlobalConstants';
@@ -37,7 +37,7 @@ export class AddGuestApplyForGuestRoomComponent {
   public SSOIDFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public mincampusDate: string = '';
-  public GuestRoomApplyList : any[]=[]
+  public GuestRoomApplyList: any[] = []
   public searchRequest = new GuestApplyForGuestRoomSearchModel();
   public searchRequest1 = new GuestRoomSeatSearchModel();
   public searchRequestGuestStaffProfileSearchModel = new GuestStaffProfileSearchModel()
@@ -59,12 +59,12 @@ export class AddGuestApplyForGuestRoomComponent {
 
   constructor(
     private appsettingConfig: AppsettingService,
-    private commonMasterService: CommonFunctionService, 
+    private commonMasterService: CommonFunctionService,
     private guestRoomManagmentService: GuestRoomManagmentService,
-    private toastr: ToastrService, 
-    private loaderService: LoaderService, 
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
     private formBuilder: FormBuilder,
-    private Swal2: SweetAlert2, 
+    private Swal2: SweetAlert2,
     private routers: Router,
   ) { }
 
@@ -104,7 +104,7 @@ export class AddGuestApplyForGuestRoomComponent {
     await this.GetGuestRoomNameList();
   }
 
-  async loadData() {    
+  async loadData() {
     const today = new Date();
     this.todayDate = this.formatDate(today);
     this.request.FromDate = this.formatDate(today);
@@ -206,7 +206,7 @@ export class AddGuestApplyForGuestRoomComponent {
     return `${year}-${month}-${day}`;
   }
 
-  minToDate: string = this.todayDate; 
+  minToDate: string = this.todayDate;
 
   // Helper function to format time as HH:mm
   formatTime(hours: number, minutes: number): string {
@@ -225,7 +225,7 @@ export class AddGuestApplyForGuestRoomComponent {
   ToTime(hours: number, minutes: number): string {
     return `${('0' + hours).slice(-2)}:${('0' + minutes).slice(-2)}`;
   }
- 
+
   async GetGuestRoomApplyList() {
     try {
       this.loaderService.requestStarted();
@@ -235,7 +235,7 @@ export class AddGuestApplyForGuestRoomComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
-     
+
       await this.guestRoomManagmentService.GetAllGuestApplyForGuestRoomList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -298,7 +298,7 @@ export class AddGuestApplyForGuestRoomComponent {
           }
         }
       });
-    
+
   }
 
   // get detail by id
@@ -308,10 +308,10 @@ export class AddGuestApplyForGuestRoomComponent {
       if (this.IIPMasterFormGroup.invalid) {
         return
       }
-      if (this.request.GuestHouseID == 0 ) {
+      if (this.request.GuestHouseID == 0) {
         this.toastr.warning("Guest House Name is requird !");
         return
-      } else if (this.request.RoomType == 0 ) {
+      } else if (this.request.RoomType == 0) {
         this.toastr.warning("Guest House Room Type is requird !");
         return
       } else if (this.request.RoomQuantity == 0) {
@@ -337,8 +337,8 @@ export class AddGuestApplyForGuestRoomComponent {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          
-          if (this.State == 1) {             
+
+          if (this.State == 1) {
             this.toastr.success(this.Message)
             this.ResetControls();
             this.loadData();
@@ -346,7 +346,7 @@ export class AddGuestApplyForGuestRoomComponent {
             this.RoomAvailablity = 0;
             this.isSubmitted = false;
           }
-          
+
           else {
             this.toastr.error(this.ErrorMessage)
           }
@@ -367,51 +367,48 @@ export class AddGuestApplyForGuestRoomComponent {
   public file!: File;
   async onFilechange(event: any, Type: string) {
     try {
-      
+
       this.file = event.target.files[0];
       if (this.file) {
-        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png') {
-        
+        if (this.file.type == 'image/jpeg'
+          || this.file.type == 'image/jpg'
+          || this.file.type == 'image/png'
+          || this.file.type == 'application/pdf'
+        ) {
           if (this.file.size > 2000000) {
             this.toastr.error('Select less then 2MB File')
             return
           }
-          
         }
         else {
           this.toastr.error('Select Only jpeg/jpg/png file')
           return
         }
-        
+
         this.loaderService.requestStarted();
 
         await this.commonMasterService.UploadDocument(this.file)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
 
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
-
-            if (this.State == EnumStatus.Success) {
+            if (data.State == EnumStatus.Success) {
               if (Type == "Photo") {
                 this.request.Dis_EmpIDCardPhoto = data['Data'][0]["Dis_FileName"];
                 this.request.EmpIDCardPhoto = data['Data'][0]["FileName"];
-
-              }
-              if (Type == "Photo1") {
+              } else if (Type == "IDProofPhoto") {
                 this.request.Dis_IDProofPhoto = data['Data'][0]["Dis_FileName"];
                 this.request.IDProofPhoto = data['Data'][0]["FileName"];
+              } else if (Type == "PurposeDocPhoto") {
+                this.request.Dis_PurposeDocPhoto = data['Data'][0]["Dis_FileName"];
+                this.request.PurposeDocPhoto = data['Data'][0]["FileName"];
               }
-
-            
               event.target.value = null;
             }
-            if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage)
+            else if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
             }
-            else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.ErrorMessage)
+            else {
+              this.toastr.warning(data.ErrorMessage)
             }
           });
       }
@@ -420,9 +417,9 @@ export class AddGuestApplyForGuestRoomComponent {
       console.log(Ex);
     }
     finally {
-     
+
       this.loaderService.requestEnded();
-     
+
     }
   }
 
@@ -520,7 +517,7 @@ export class AddGuestApplyForGuestRoomComponent {
       this.request.SeatCapacity = 0;
       this.request.RoomQuantity = 0;
       let RoomTypeList = this.GuestRoomList.filter(
-        (x: { GuestHouseID: number}) =>
+        (x: { GuestHouseID: number }) =>
           x.GuestHouseID === Number(this.request.GuestHouseID));
       if (RoomTypeList.length > 0) {
         this.RoomTypeList = RoomTypeList;
@@ -545,9 +542,9 @@ export class AddGuestApplyForGuestRoomComponent {
       await this.guestRoomManagmentService.GuestHouseRoomListForApply(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          
+
           this.GuestRoomList = data['Data'];
-          console.log('Guest Room List ===>',this.GuestRoomList)
+          console.log('Guest Room List ===>', this.GuestRoomList)
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -605,7 +602,7 @@ export class AddGuestApplyForGuestRoomComponent {
       } else {
         this.toastr.warning("Room Type Not Available !")
       }
-      
+
     }
     catch (Ex) {
       console.log(Ex);
@@ -625,9 +622,9 @@ export class AddGuestApplyForGuestRoomComponent {
     this.dataSource.filterPredicate = (d: any, filter: string) => {
       const dataStr = Object.values(d).join(' ').toLowerCase();
       return dataStr.includes(filter);
-      
+
     };
-    console.log('data Source====>',this.dataSource)
+    console.log('data Source====>', this.dataSource)
   }
 
   applyFilter(event: Event) {

@@ -11,6 +11,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ItiTheoryMarksService } from '../../../Services/ITI/ItiTheoryMarks/Iti-theory-marks.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-theory-exam-report',
@@ -25,8 +26,10 @@ export class TheoryExamReportComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   public TheoryMarksRptDataList: any = [];
   public SemesterMasterList: any = [];
+  public StudentDetailsModelList: any = [];
   public Branchlist: any = [];
   public InstituteMasterDDLList: any = [];
+  modalReference: NgbModalRef | undefined;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -39,6 +42,7 @@ export class TheoryExamReportComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public student: any;
   //end table feature default
 
   constructor(
@@ -47,7 +51,7 @@ export class TheoryExamReportComponent {
     private commonMasterService: CommonFunctionService,
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
-    private http: HttpClient) {
+    private http: HttpClient, private modalService: NgbModal) {
   }
 
   async ngOnInit() {
@@ -55,11 +59,26 @@ export class TheoryExamReportComponent {
     // if(this.sSOLoginDataModel.RoleID == EnumRole.Examiner) {
     //   this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     // }
+    this.student = {
+      Name: 'Ravi Kumar',
+      EnrollmentNo: 'ITI2024/00123',
+      FatherName: 'Suresh Kumar',
+      TradeName: 'Electrician',
+      Semester: '2nd',
+      PhotoUrl: 'assets/images/student.jpg',
+      JobCardImageUrl: 'assets/images/jobcard.jpg',
+      JobCardNo: 'JC-458796'
+    };
+
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
     await this.GetMasterData();
     await this.GetItiTrade()
     // await this.GetTheoryMarksDetailList();
   }
+
+
+
+
 
   async GetMasterData() {
     try {
@@ -123,6 +142,9 @@ export class TheoryExamReportComponent {
       //   this.searchRequest.ExaminerCode = this.ExaminerCode
       // }
       // this.searchRequest.GroupCodeID = this.TheoryMarksDashBoardCount[0].GroupCodeID;
+      if (this.searchRequest.SubjectType != 'T') {
+        this.searchRequest.SubjectName=""
+      }
       // //call
       this.loaderService.requestStarted();
 
@@ -294,7 +316,7 @@ export class TheoryExamReportComponent {
   //}
   exportToExcel(): void {
     const unwantedColumns = [
-      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass'
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass', "FileName","JobCardImage"
     ];
 
     const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
@@ -346,5 +368,35 @@ export class TheoryExamReportComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `file_${timestamp}.${extension}`;
   }
+
+  async ViewStudentDetails(content: any, row: any)
+  {
+    this.student = row;
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+  }
+  CloseModalPopup()
+  {
+    this.modalService.dismissAll();
+  }
+
+  async ViewHistory(content: any, row: any) {
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+
+    await this.TheoryMarksService.GetTheoryMarksRptHistory(row.StudentExamPaperMarksID)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+
+        this.StudentDetailsModelList = data['Data'];
+
+        //table feature load
+
+        //end table feature load
+      }, (error: any) => console.error(error));
+
+  }
+
+
+
 
 }

@@ -201,4 +201,13 @@ export class ItiExaminerService {
       ).toPromise();
   }
 
+
+  public async CheckExaminerProfileCompleted(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/CheckExaminerProfileCompleted`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

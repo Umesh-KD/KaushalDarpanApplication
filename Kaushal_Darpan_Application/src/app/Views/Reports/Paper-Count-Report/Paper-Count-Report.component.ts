@@ -124,13 +124,15 @@ export class PaperCountReportComponent implements OnInit {
 
   async loadReportType() {
     this.ReportTypelist = [
+      { ID: 0, Name: 'Download Institute Subject Branch Wise Student Report  (Reg,Ex)' },
       { ID: 2, Name: 'Download Branch and Subject Wise Student Report (Reg,Ex)' },
       { ID: 1, Name: 'Download Institute and Subject Wise Student Report  (Reg,Ex)' },
-      { ID: 0, Name: 'Download Institute Subject Branch Wise Student Report  (Reg,Ex)' },
+     
       { ID: 5, Name: 'Download Institute Subject Branch Wise Student Report Reg' },
       { ID: 6, Name: 'Download Institute Subject Branch Wise Student Report Ex' },
       { ID: 7, Name: 'Download Subject Wise Student Count' },
       { ID: 8, Name: 'Download Center Subject Paper Count' },
+      { ID: 9, Name: 'Download Center Subject Papercount Examination' },
     ];
   }
 
@@ -355,6 +357,7 @@ export class PaperCountReportComponent implements OnInit {
     else if (this.groupForm.value.Type == 6) XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Ex-Report.xlsx');
     else if (this.groupForm.value.Type == 7) XLSX.writeFile(wb, 'Download-Subject-Wise-Student-Count-Sem-6.xlsx');
     else if (this.groupForm.value.Type == 8) XLSX.writeFile(wb, 'Download-center_subject_papercount.xlsx');
+    else if (this.groupForm.value.Type == 9) XLSX.writeFile(wb, 'Download_center_subject_papercount_examination.xlsx');
     else XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');
   }
 
@@ -385,6 +388,12 @@ export class PaperCountReportComponent implements OnInit {
       this.requestData.CasteCategoryID = 0;
       this.requestData.Type = !isNaN(Number(this.groupForm.value.Type)) ? Number(this.groupForm.value.Type) : 0;
       this.requestData.action ='_Institue_Branch_Subject_Student_Count_Sem_Wise'
+
+      //if (this.requestData.Type === 0) {
+      //  this.requestData.action = '_get_center_subject_papercount_enrollment';
+      //} else {
+      //  this.requestData.action = '_Institue_Branch_Subject_Student_Count_Sem_Wise';
+      //}
 
         try {
           await this.reportService.GetPaperCountCustomizeReportColumnsAndList(this.requestData)

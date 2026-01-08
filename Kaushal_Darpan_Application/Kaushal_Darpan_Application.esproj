@@ -83,6 +83,7 @@
     <Folder Include="src\app\Services\BterStudentJoinStatus\" />
     <Folder Include="src\app\Services\BridgeCourse\" />
     <Folder Include="src\app\Services\NewFolder1\" />
+    <Folder Include="src\app\Services\PracticalExminer\" />
     <Folder Include="src\app\Services\Projects\" />
     <Folder Include="src\app\Services\NewFolder\" />
     <Folder Include="src\app\Services\Student Centered Activites\" />

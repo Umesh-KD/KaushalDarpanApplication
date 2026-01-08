@@ -98,4 +98,12 @@ export class ItiTheoryMarksService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetTheoryMarksRptHistory(StudentExamPaperMarksID:number=0) {
+
+    return await this.http.get(`${this.APIUrl}/GetTheoryMarksRptHistory` + '/'+StudentExamPaperMarksID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

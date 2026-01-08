@@ -32,6 +32,7 @@ export class AppointITIExaminerComponent {
   public SubjectMasterDDLList: any[] = [];
   public StaffForExaminerList: ItiAssignStudentExaminer[] = [];
   public DesignationMasterList: any[] = [];
+  public CenterDDLlist: any[] = [];
   public TradeTypeDDLList: any[] = [];
   public ExamList: any[] = [];
   public Table_SearchText: any = '';
@@ -78,9 +79,11 @@ export class AppointITIExaminerComponent {
     this.ExaminerID = Number(this.activatedRoute.snapshot.queryParamMap.get('ExaminerID') ?? 0)
     this.searchRequest.ExaminerID = this.ExaminerID
     this.getSemesterMasterList();
+    this.getStreamMasterList();
 /*    this.getStreamMasterList();*/
 
-    this.getInstituteMasterList()
+    this.Centerlist()
+    this.GetMasterData()
 /*    this.getSubjectMasterList()*/
   /*  this.getExamMasterList()*//*  this.getExamMasterList()*/
     this.getTradeType()
@@ -144,14 +147,54 @@ export class AppointITIExaminerComponent {
   }
 
 
-
-  async getInstituteMasterList() {
+  async GetMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetITICenterDDL( this.sSOLoginDataModel.EndTermID).then((data: any) => {
+
+      await this.commonMasterService.IticenterColleges(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
+        , this.searchRequest.CenterID).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.InstituteMasterDDLList = data.Data;
+          console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+        });
+
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  //async getInstituteMasterList() {
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.commonMasterService.Iticollege(this.sSOLoginDataModel.EndTermID).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      this.InstituteMasterDDLList = data.Data;
+  //      console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+  //    })
+  //  } catch (error) {
+  //    console.error(error);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
+  async getStreamMasterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID, this.searchRequest.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDLList = data.Data;
-        console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+        this.StreamMasterDDLList = data.Data;
+        console.log("StreamMasterDDLList", this.StreamMasterDDLList);
       })
     } catch (error) {
       console.error(error);
@@ -163,17 +206,19 @@ export class AppointITIExaminerComponent {
   }
 
 
-  async getStreamMasterList() {
+  async Centerlist() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.searchRequest.TradeType, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      await this.commonMasterService.GetCommonMasterData('IticenterList', this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.StreamMasterDDLList = data.Data;
-        console.log("StreamMasterDDLList", this.StreamMasterDDLList);
+        this.CenterDDLlist = data.Data;
+        console.log("CenterDDLlist", this.CenterDDLlist);
       })
-    } catch (error) {
-      console.error(error);
-    } finally {
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
@@ -250,6 +295,7 @@ export class AppointITIExaminerComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.ExaminerID = this.ExaminerID;
       if (this.searchRequest.SubjectType == 1) {
         this.searchRequest.IsPractical = false
         this.searchRequest.IsTheory = true
@@ -262,6 +308,7 @@ export class AppointITIExaminerComponent {
         data = JSON.parse(JSON.stringify(data));
         
         this.StaffForExaminerList = data.Data;
+
         
         console.log("this.StaffForExaminerList", this.StaffForExaminerList)
       })

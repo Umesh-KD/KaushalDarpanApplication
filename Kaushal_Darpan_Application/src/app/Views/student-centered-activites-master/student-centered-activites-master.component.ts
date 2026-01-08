@@ -396,9 +396,10 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.GradeList.forEach(x => {
-      if (!x.IsDetain) {
-        x.Marked = this.AllInTableSelect;
-      }
+      // if (!x.IsDetain) {
+      //   x.Marked = this.AllInTableSelect;
+      // }
+      x.Marked = this.AllInTableSelect;
     });
   }  //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {

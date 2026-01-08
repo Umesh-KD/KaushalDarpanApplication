@@ -63,11 +63,19 @@
     </div> -->
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex items-center gap-3 mb-2">
+        <p *ngIf="RevertRemark!=''" class="text-sm font-semibold text-gray-700 m-0">
+          <b><span class="text-danger">Please ReSubmit the Marks</span> </b><br>
+          <b>Remark:<span class="text-danger">{{RevertRemark}} </span> </b>
+        </p>
+
+
+      </div>
       <div class="flex justify-end flex-wrap items-center">
-          <a routerLink="/dashboard" class="inline-flex items-center btn bg-dark text-white btn-sm">
-            <i class="ti ti-chevron-left"></i> Back
+        <a routerLink="/dashboard" class="inline-flex items-center btn bg-dark text-white btn-sm">
+          <i class="ti ti-chevron-left"></i> Back
         </a>
-        </div>
+      </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -123,7 +131,7 @@
           <a [routerLink]="'/PracticalAssesment'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
       }-->
 
-                <a (click)="OpenModalPopup(MyModel_ExaminerCodeLogin,row.AppointExaminerID,row.ExaminerCode)" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+                <a (click)="OpenModalPopup(MyModel_ExaminerCodeLogin,row.AppointExaminerID,row.ExaminerCode,row)" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
 
 
               </div>

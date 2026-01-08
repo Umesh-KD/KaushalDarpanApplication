@@ -154,7 +154,9 @@
               <!-- <input type="checkbox"
                      [checked]="row.Marked"
                      (change)="toggleCheckbox(row)"> -->
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked" [disabled]="row.IsDetain || isfinalsubmit"
+              <!-- <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked" [disabled]="row.IsDetain || isfinalsubmit"
+                  #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"> -->
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked" [disabled]="isfinalsubmit"
                   #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
             </td>
             <td align="left">{{row.SubjectCode}}</td>
@@ -182,23 +184,27 @@
               </div>
             </td>
             <td *ngIf="IsView" align="left">
-              <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
+              <!-- <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
               <select *ngIf="!row.IsDetain" class="form-select" id="IsPresentInternalAssisment" [disabled]="!row.Marked"
+               [(ngModel)]="row.IsPresentInternalAssisment"  (change)="onStatusPracticalAssesmentChange(row)"> -->
+              <select class="form-select" id="IsPresentInternalAssisment" [disabled]="!row.Marked"
                [(ngModel)]="row.IsPresentInternalAssisment"  (change)="onStatusPracticalAssesmentChange(row)">
                 <option value="0">Absent</option>
                 <option value="1">Present</option>
-                <!-- <option value="3">Detained</option>
-                <option value="4">UFM</option> -->
+                <option value="3">Detained</option>
+                <!-- <option value="4">UFM</option> -->
               </select>
             </td>
             <td *ngIf="!IsView" align="left">
-              <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
+              <!-- <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
               <select *ngIf="!row.IsDetain" class="form-select" id="IsIsPresentPractical" [disabled]="!row.Marked"
+               [(ngModel)]="row.IsPresentPractical" (change)="onStatusPracticalChange(row)"> -->
+              <select class="form-select" id="IsIsPresentPractical" [disabled]="!row.Marked"
                [(ngModel)]="row.IsPresentPractical" (change)="onStatusPracticalChange(row)">
                 <option value="0">Absent</option>
                 <option value="1">Present</option>
-                <!-- <option value="3">Detained</option>
-                <option value="4">UFM</option> -->
+                <option value="3">Detained</option>
+                <!-- <option value="4">UFM</option> -->
               </select>
             </td>
 

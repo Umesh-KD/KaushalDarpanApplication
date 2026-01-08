@@ -47,12 +47,14 @@ export class ITITheoryMarksSearchModel extends RequestBaseModel {
   public SubjectID: number = 0;
   public MarkEnter: number = 0;
   public RollNo: string = '';
+  public SubjectName: string = '';
   public InternalPracticalID: number = 0;
   public GroupCodeID: number = 0;
   public InstituteID: number = 0;
   public IsConfirmed: boolean = false;
   public ExaminerID: number = 0
   public AppointExaminerID: number = 0
+  public CenterID: number = 0
 }
 export class CenterStudentSearchModel extends RequestBaseModel {
   public SemesterID: number = 0;
@@ -73,5 +75,6 @@ export class CenterStudentSearchModel extends RequestBaseModel {
   public ExaminerCode: string = '';
   public SSOID: string = ''
   public SubjectType: string = ''
-  public StudentName:string=''
+  public StudentName: string = ''
+  public SubjectName: string = ''
 }

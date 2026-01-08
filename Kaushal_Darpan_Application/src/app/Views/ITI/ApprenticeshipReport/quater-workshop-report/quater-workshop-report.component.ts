@@ -15,6 +15,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { ITIApprenticeshipWorkshopModel } from '../../../../Models/ITI/ITIApprenticeshipWorkshopDataModel';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
+import { ReportService } from '../../../../Services/Report/report.service';
 
 @Component({
   selector: 'app-quater-workshop-report',
@@ -30,6 +31,7 @@ export class QuaterWorkshopReportComponent {
   public request = new ITIApprenticeshipWorkshopModel()
   pdfUrl: string | null = null;
   safePdfUrl: SafeResourceUrl | null = null;
+  public searchRequest = new ITIApprenticeshipWorkshopModel();
   showPdfModal: boolean = false;
   isPdf: boolean = false;
   isImage: boolean = false;
@@ -63,6 +65,7 @@ export class QuaterWorkshopReportComponent {
     private routers: Router,
     private ApprenticeShipRPTService: ApprenticeReportServiceService,
     private Swal2: SweetAlert2,
+    private reportService: ReportService,
     private commonMasterService: CommonFunctionService,
     private sanitizer: DomSanitizer,
     private http: HttpClient,
@@ -197,6 +200,52 @@ export class QuaterWorkshopReportComponent {
         }
       });
   }
+
+  async DownloadQuarterlyProgressReport() {
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.GetQuarterlyProgress(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log("DownloadQuarterlyProgressReport", data);
+          if (data.State === EnumStatus.Success) {
+            // this.toastr.success(data.Message);
+            this.DownloadFile(data.Data);
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  DownloadFile(FileName: string): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+  generateFileName(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    return `file_${timestamp}.${extension}`;
+  }
+
 
   GoToReportEntryPage() {
     sessionStorage.setItem('WorkshopID', '0');
@@ -379,5 +428,7 @@ export class QuaterWorkshopReportComponent {
     this.GetReportAllData();
 
   }
+
+
 
 }

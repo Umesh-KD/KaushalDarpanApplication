@@ -65,8 +65,11 @@
                      || this.sSOLoginDataModel.RoleID == _EnumRole.ITIGovtGuestRoomWarden
                      ||this.sSOLoginDataModel.RoleID == _EnumRole.ITIStaff
                      ">
-
 </app-iti-staff-dashboard>
+
+<app-practical-examiner-dashboard *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.ITi_PracticalExaminer"></app-practical-examiner-dashboard>
+
+
 
 
 <!--<app-BTER-HOD-Dashboard *ngIf="sSOLoginDataModel.RoleID == _EnumRole.HOD_Eng||sSOLoginDataModel.RoleID == _EnumRole.HOD_NonEng"></app-BTER-HOD-Dashboard>-->

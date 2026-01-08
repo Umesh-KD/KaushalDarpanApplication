@@ -23,7 +23,8 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <div class="flex gap-2">
-           <a href="javascript:void(0);" (click)="ShowIssuedItemsList(Items_Details_Issue)"  class="btn bg-info btn-sm text-white">
+          <a href="javascript:void(0);" (click)="ShowIssuedItemsList(Items_Details_Issue)"
+            class="btn bg-info btn-sm text-white">
             <i class="ti ti-excel"></i> List of Issued Items
           </a>
         </div>
@@ -32,8 +33,8 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
-          <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID"
-                  (change)="GetTradeDDL()" required #staffRef="ngModel">
+          <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID" (change)="GetTradeDDL()"
+            required #staffRef="ngModel">
             <option *ngFor="let item of staffDDLList" [value]="item.staffID">
               {{ item.staffName }}
             </option>
@@ -45,8 +46,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
-          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequests.TradeId"
-            (change)="GetCategoryDDL()">
+          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequests.TradeId" (change)="GetCategoryDDL()">
             <option value="0"> --- Choose Trade --- </option>
             <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
               {{ item.TradeName }}
@@ -55,9 +55,8 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item Type:</label>
-          <select class="form-select"
-                  [(ngModel)]="Searchrequests.ItemType" (change)="GetCategoryDDL()">
-                  <!-- (change)="GetItemListType()"> -->
+          <select class="form-select" [(ngModel)]="Searchrequests.ItemType" (change)="GetCategoryDDL()">
+            <!-- (change)="GetItemListType()"> -->
             <option [value]="1">Consumable</option>
             <option [value]="0">Permanent</option>
           </select>
@@ -65,18 +64,19 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
           <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequests.ItemId" (change)="DGET_Details()">
-            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId" >
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
               {{ item.ItemCategoryName }}
             </option>
           </select>
         </div>
         <div>
           <button type="button" class="btn bg-info text-white mt-6">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset"
+            (click)="ResetControl()">Cancel</button>
         </div>
       </div>
     </div>
- <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results - Select/Item Name/Quantity</b>
       <!--<div class="flex justify-end flex-wrap items-center">
       <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="ShowSubmit(Submit_Details)">Issue Items</a>
@@ -93,8 +93,8 @@
           {{ row.CampanyName }}-({{ row.Quantity }})
         </label>
       </div>
-    </div> 
-    <div class="mt-6" >
+    </div>
+    <div class="mt-6">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Selected Items List</b>
       </div>
@@ -112,14 +112,12 @@
             <td>{{ item.ItemCategoryName }}</td>
             <td>{{ item.ItemName }}</td>
             <td *ngIf="Searchrequests.ItemType == 1">
-              <input type="number"
-                     class="form-input"
-                     [(ngModel)]="item.Quantity"
-                     min="1"
-                     placeholder="Enter Qty" (change)="validateQuantity(item)">
+              <input type="number" class="form-input" [(ngModel)]="item.Quantity" min="1" placeholder="Enter Qty"
+                (change)="validateQuantity(item)">
             </td>
             <td *ngIf="Searchrequests.ItemType == 0">
-                 <span style="cursor: pointer; color: blue;" (click)="ShowSubmitIssue(Submit_Details_Issue,item.ItemId,Searchrequests.staffID)">
+              <span style="cursor: pointer; color: blue;"
+                (click)="ShowSubmitIssue(Submit_Details_Issue,item.ItemId,Searchrequests.staffID)">
                 {{item.Quantity}}
               </span>
             </td>
@@ -130,23 +128,23 @@
         </tbody>
       </table>
       <div *ngIf="SelectedItems?.length > 0 && Searchrequests.ItemType == 1">
-        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-               for="fileStudentPhoto">Upload Document</label>
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileStudentPhoto">Upload
+          Document</label>
         <div class="flex fileUploader">
-          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                 id="fileStudentPhoto" type="file"
-                 (change)="UploadDocument($event, FileName, Dis_FileName)">
+          <input
+            class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+            id="fileStudentPhoto" type="file" (change)="UploadDocument($event, FileName, Dis_FileName)">
           <label for="fileStudentPhoto">
             <span>Choose File</span>
             {{ Dis_FileName === '' ? 'No File Choosen' : Dis_FileName }}
           </label>
           <div class="flex">
-            <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + FileName }}"
-               *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank">
+            <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + FileName }}" *ngIf="this.FileName!=''"
+              class="btn bg-primary text-white m-0" target="_blank">
               <i class="ti ti-eye"></i>
             </a>
-            <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-               *ngIf="this.FileName!=''" (click)="DeleteDocument(FileName)">
+            <a href="javascript:void(0);" class="btn bg-danger text-white m-0" *ngIf="this.FileName!=''"
+              (click)="DeleteDocument(FileName)">
               <i class="ti ti-trash"></i>
             </a>
           </div>
@@ -155,95 +153,14 @@
     </div>
 
     <div class="mt-4" *ngIf="SelectedItems?.length > 0 && Searchrequests.ItemType == 1">
-       <button class="btn bg-info text-white me-2" (click)="saveSelectedItems()">Save</button>
+      <button class="btn bg-info text-white me-2" (click)="saveSelectedItems()">Save</button>
       <!--<button class="btn bg-danger text-white" (click)="cancelSelection()">Cancel</button> -->
     </div>
   </div>
 </div>
 
-<ng-template #Submit_Details_Issue let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
-  <div class="modal-content">
-    <div class="card">
-      <div class="card-header flex justify-between  items-center">
-         <b><i class="fa fa-plus">Issue Items</i> </b>
-          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
-      </div>
-       <div class="card-body">
-          <div class="mb-8">
-            <!-- <form>
-            </form> -->
-            <div class="overflow-x-auto mt-3">
-              <table class="table table-border w-full table-auto" cellpadding="5">
-                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-                  <tr>
-                    <th class="text-left">
-                    <input type="checkbox" (change)="toggleAll($event)" />  select All</th>
-                    <th class="text-left">SNO</th>
-                    <th class="text-left">Item Category</th>
-                    <th class="text-left">Item Name</th>
-                    <th class="text-left">Compnay Name</th>
-                    <th class="text-left">Item Code</th>
-                    <th class="text-left">Qty</th> 
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of ItemsDataList | tableSearchFilter:Table_SearchText; let idx=index;">
-                    <td align="left">
-                    <input type="checkbox" [(ngModel)]="item.Selected" (change)="onIssueItemToggle(item)"/>
-                    </td>
-                    <td align="left">{{ idx+1}}</td>
-                    <td align="left">{{ item.ItemCategoryName}}</td>
-                    <td align="left">{{ item.EquipmentName}}</td>
-                    <td align="left">{{ item.CampanyName}}</td>
-                    <td align="left">{{ item.ItemCode}}</td>
-                    <td align="left">{{ item.IssueQuantity}}</td>    
-                    </tr>
-                    <tr *ngIf="ItemsDataList?.length==0">
-                    <td colspan="10" class="text-center">
-                      No Record Found
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                for="fileStudentPhoto">Upload Document</label>
-              <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-              id="fileStudentPhoto" type="file"
-              (change)="UploadDocument($event, FileName, Dis_FileName)">
-              <label for="fileStudentPhoto">
-              <span>Choose File</span>
-              {{ Dis_FileName === '' ? 'No File Choosen' : Dis_FileName }}
-              </label>
-              <div class="flex">
-              <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + FileName }}"
-              *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank">
-              <i class="ti ti-eye"></i>
-              </a>
-              <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-              *ngIf="this.FileName!=''" (click)="DeleteDocument(FileName)">
-              <i class="ti ti-trash"></i>
-              </a>
-              </div>
-              </div>
-              </div>
-            </div>
-              <div class="mt-4">
-              <button class="btn bg-info text-white me-2" (click)="confirmSubmitNew()">Save</button>
-              <!--<button class="btn bg-danger text-white" (click)="cancelSelection()">Cancel</button> -->
-              </div>
-          </div>
-       </div>
-      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-      </div>
-    </div>
-  </div>
-</ng-template>
-
-
-<ng-template #Submit_Details let-modal
-             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<ng-template #Submit_Details_Issue let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
@@ -252,7 +169,90 @@
       </div>
       <div class="card-body">
         <div class="mb-8">
-          <form >
+          <!-- <form>
+            </form> -->
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">
+                    <input type="checkbox" (change)="toggleAll($event)" /> select All
+                  </th>
+                  <th class="text-left">SNO</th>
+                  <th class="text-left">Item Category</th>
+                  <th class="text-left">Item Name</th>
+                  <th class="text-left">Compnay Name</th>
+                  <th class="text-left">Item Code</th>
+                  <th class="text-left">Qty</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of ItemsDataList | tableSearchFilter:Table_SearchText; let idx=index;">
+                  <td align="left">
+                    <input type="checkbox" [(ngModel)]="item.Selected" (change)="onIssueItemToggle(item)" />
+                  </td>
+                  <td align="left">{{ idx+1}}</td>
+                  <td align="left">{{ item.ItemCategoryName}}</td>
+                  <td align="left">{{ item.EquipmentName}}</td>
+                  <td align="left">{{ item.CampanyName}}</td>
+                  <td align="left">{{ item.ItemCode}}</td>
+                  <td align="left">{{ item.IssueQuantity}}</td>
+                </tr>
+                <tr *ngIf="ItemsDataList?.length==0">
+                  <td colspan="10" class="text-center">
+                    No Record Found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileStudentPhoto">Upload
+                Document</label>
+              <div class="flex fileUploader">
+                <input
+                  class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  id="fileStudentPhoto" type="file" (change)="UploadDocument($event, FileName, Dis_FileName)">
+                <label for="fileStudentPhoto">
+                  <span>Choose File</span>
+                  {{ Dis_FileName === '' ? 'No File Choosen' : Dis_FileName }}
+                </label>
+                <div class="flex">
+                  <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + FileName }}"
+                    *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
+                  <a href="javascript:void(0);" class="btn bg-danger text-white m-0" *ngIf="this.FileName!=''"
+                    (click)="DeleteDocument(FileName)">
+                    <i class="ti ti-trash"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4">
+            <button class="btn bg-info text-white me-2" (click)="confirmSubmitNew()">Save</button>
+            <!--<button class="btn bg-danger text-white" (click)="cancelSelection()">Cancel</button> -->
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #Submit_Details let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus">Issue Items</i> </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <form>
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
               <input type="hidden" class="form-input" [(ngModel)]="submitRequest.StaffId" name="StaffId">
@@ -298,75 +298,75 @@
   </div>
 </ng-template>
 
-<ng-template #Items_Details_Issue let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<ng-template #Items_Details_Issue let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
-     <div class="card">
+    <div class="card">
       <div class="card-header flex justify-between  items-center">
-         <b><i class="fa fa-plus">Issue Items</i> </b>
-          <button class="btn bg-info text-white" (click)="CloseModalPopup_IssueHistory()"><i class="ti ti-x"></i></button>
+        <b><i class="fa fa-plus">Issue Items</i> </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup_IssueHistory()"><i class="ti ti-x"></i></button>
       </div>
       <div class="card-body">
         <div class="mb-8">
-            <div class="overflow-x-auto mt-3">
-                <table class="table table-border w-full table-auto" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-          <tr>
-            <th class="text-left">SNO</th>
-            <th class="text-left">Name</th>
-            <th class="text-left">Item Name</th>
-            <th class="text-left">Equipment Name</th>
-            <th class="text-left">Item Code</th>
-            <th class="text-left">Item Type</th>
-            <th class="text-left">Qty</th>
-            <th class="text-left">Issue Date</th>
-            <!-- <th class="text-left">Due Date</th> -->
-            <th class="text-left">Return Date</th>
-            <th class="text-left">Equipment Status on Return</th>
-            <th class="text-left">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td align="left">{{ idx+1}}</td>
-            <td align="left">{{ item.Name}}</td>
-            <td align="left">{{ item.ItemCategoryName}}</td>
-            <td align="left">{{ item.EquipmentName}}</td> 
-            <td align="left">{{ item.ItemCode}}</td> 
-            <td align="left">
-              <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
-                {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
-              </span>
-            </td>
-            <td align="left">{{ item.Quantity}}</td>
-            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-            <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
-            <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
-             <td align="left">
-              <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
-                  {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : 'Not Working' }}
-                </span>
-            </td> 
-            <td align="left">
-              <span [ngClass]="{
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">SNO</th>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Item Name</th>
+                  <th class="text-left">Equipment Name</th>
+                  <th class="text-left">Item Code</th>
+                  <th class="text-left">Item Type</th>
+                  <th class="text-left">Qty</th>
+                  <th class="text-left">Issue Date</th>
+                  <!-- <th class="text-left">Due Date</th> -->
+                  <th class="text-left">Return Date</th>
+                  <th class="text-left">Equipment Status on Return</th>
+                  <th class="text-left">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
+                  <td align="left">{{ idx+1}}</td>
+                  <td align="left">{{ item.Name}}</td>
+                  <td align="left">{{ item.ItemCategoryName}}</td>
+                  <td align="left">{{ item.EquipmentName}}</td>
+                  <td align="left">{{ item.ItemCode}}</td>
+                  <td align="left">
+                    <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
+                      {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+                    </span>
+                  </td>
+                  <td align="left">{{ item.Quantity}}</td>
+                  <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+                  <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
+                  <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+                  <td align="left">
+                    <span
+                      [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
+                      {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : 'Not Working' }}
+                    </span>
+                  </td>
+                  <td align="left">
+                    <span [ngClass]="{
                                  'InvStatus-issued': item.InvStatus === 0,
                                  'InvStatus-returned': item.InvStatus === 1
                                }">
-                {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus ===1 ? 'Returned' : 'Unknown' }}
-              </span>
-            </td>
-          </tr>
-          <tr *ngIf="ItemMasterList?.length==0">
-            <td colspan="10">
-              No Record Found
-            </td>
-          </tr>
-        </tbody>
-      </table>
-            </div>
+                      {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus ===1 ? 'Returned' : 'Unknown' }}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="ItemMasterList?.length==0">
+                  <td colspan="10">
+                    No Record Found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-     </div>
+    </div>
   </div>
 </ng-template>
-
-

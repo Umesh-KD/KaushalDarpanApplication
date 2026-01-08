@@ -245,6 +245,25 @@
           </div>
         </div>
 
+        <div *ngIf="request.Purpose != 0">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"
+                 for="PurposeDocPhoto">
+            {{request.Purpose == 1 ? 'Private (Application)' : request.Purpose == 2 ? 'On Duty Documents' : 'Training Documents'}} Upload:
+          </label>
+          <div class="flex fileUploader">
+            <input id="PurposeDocPhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   type="file" (change)="onFilechange($event,'PurposeDocPhoto')">
+            <label for="PurposeDocPhoto">
+              <span>Choose File</span>
+              {{request.Dis_PurposeDocPhoto === '' ? 'No File Choosen' : request.Dis_PurposeDocPhoto}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.PurposeDocPhoto}}" *ngIf="this.request.PurposeDocPhoto !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+        </div>
+
         <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Reason
@@ -252,6 +271,27 @@
           <input type="text" class="form-input" placeholder="Enter Reason" name="Reason"
                  [(ngModel)]="request.Reason" formControlName="Reason">
         </div> -->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"
+                 for="IDProofPhoto">
+            Valid Photo ID / Address ID such as Aadhar / Passport / Licence:
+          </label>
+          <div class="flex fileUploader">
+            <input id="IDProofPhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   type="file" (change)="onFilechange($event,'IDProofPhoto')">
+            <label for="IDProofPhoto">
+              <span>Choose File</span>
+              {{request.Dis_IDProofPhoto === '' ? 'No File Choosen' : request.Dis_IDProofPhoto}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.IDProofPhoto}}" *ngIf="this.request.IDProofPhoto !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+        </div>
+
+
       </div>
 
       <div class="flex justify-center">

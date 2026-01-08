@@ -136,7 +136,9 @@
     [checked]="row.Marked"
     (change)="toggleCheckbox(row)"> -->
 
-              <input [disabled]="row.IsDetain || isfinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
+              <!-- <input [disabled]="row.IsDetain || isfinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"> -->
+              <input [disabled]="isfinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
             </td>
             <td align="left">{{row.SubjectCode}}</td>
@@ -157,20 +159,24 @@
                   <option value="57">B</option>
                   <option value="58">C</option>
                 </select>
-                <button *ngIf="!row.IsDetain" class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
-                 (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
+                <!-- <button *ngIf="!row.IsDetain" class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
+                 (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button> -->
+                <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
+                  (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
               </div>
             </td>
 
             <td  align="left">
-              <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
-              <select *ngIf="!row.IsDetain" class="form-select" id="IsPresentTheory" placeholder="Choose" [disabled]="!row.Marked"
+              <!-- <span class="text-red-500" *ngIf="row.IsDetain">Detained</span> -->
+              <!-- <select *ngIf="!row.IsDetain" class="form-select" id="IsPresentTheory" placeholder="Choose" [disabled]="!row.Marked"
+               [(ngModel)]="row.IsPresentStudentCenteredActivity" (change)="onStatusChange(row)"> -->
+              <select class="form-select" id="IsPresentTheory" placeholder="Choose" [disabled]="!row.Marked"
                [(ngModel)]="row.IsPresentStudentCenteredActivity" (change)="onStatusChange(row)">
                 <!--<option value="">Choose Option</option>-->
                 <option value="0">Absent</option>
                 <option value="1">Present</option>
-                <!-- <option value="3">Detained</option>
-                <option value="4">UFM</option> -->
+                <option value="3">Detained</option>
+                <!-- <option value="4">UFM</option> -->
               </select>
             </td>
 
