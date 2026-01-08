@@ -210,4 +210,13 @@ export class ItiExaminerService {
       ).toPromise();
   }
 
+  public async RemoveStudent(searchRequest: any)
+  {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/RemoveStudent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

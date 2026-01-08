@@ -15,6 +15,8 @@ import { ITITheorySearchModel } from '../../../Models/ITI/ItiInvigilatorDataMode
 import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.service';
 import { ItiTheoryMarksService } from '../../../Services/ITI/ItiTheoryMarks/Iti-theory-marks.service';
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
+import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
+import { ItiExaminerService } from '../../../Services/ItiExaminer/iti-examiner.service';
 
 @Component({
   selector: 'app-centers',
@@ -70,6 +72,8 @@ export class ItiExaminerListComponent implements OnInit {
     private _fb: FormBuilder,
     private modalService: NgbModal,
     private TheoryMarksService: ItiTheoryMarksService,
+    private encryptionService: EncryptionService,
+    private itiexaminerservice: ItiExaminerService,
     private Swal2: SweetAlert2) {
   }
 
@@ -313,28 +317,43 @@ export class ItiExaminerListComponent implements OnInit {
       }
     );
     this.theorylist.ExaminerID = ExaminerID
-    this.theorylist.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.theorylist.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.getStudentDetails(ExaminerID);
+   
+  }
+
+
+
+  async getStudentDetails(ExaminerID: number)
+  {
+
     try {
 
-      this.loaderService.requestStarted();
-      await this.ItiExaminerListService.GetTeacherForExaminerById(this.theorylist)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.StudentList = data['Data'];
+      this.theorylist.ExaminerID = ExaminerID
+      this.theorylist.EndTermID = this.sSOLoginDataModel.EndTermID
 
 
-          console.log("StudentList", this.StudentList)
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
+    this.loaderService.requestStarted();
+    await this.ItiExaminerListService.GetTeacherForExaminerById(this.theorylist)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StudentList = data['Data'];
+
+
+        console.log("StudentList", this.StudentList)
+      }, error => console.error(error));
   }
+  catch (Ex) {
+    console.log(Ex);
+  }
+  finally {
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+  }
+
+}
+
 
 
 
@@ -547,4 +566,67 @@ export class ItiExaminerListComponent implements OnInit {
       this.toastr.error('Failed to open modal. Please try again.');
     }
   }
+
+
+  encryptParameter(param: any) {
+    return this.encryptionService.encryptData(param);
+  }
+  encodeURIComponent(value: string) {
+    return window.encodeURIComponent(value);
+  }
+
+
+
+  async RemoveStudent(row: any)
+  {
+    var body = {
+      StudentExamPaperMarksID: row.StudentExamPaperID,
+      ExaminerID: row.ExaminerID
+    }
+    this.Swal2.Confirmation("Are you sure you want to delete this ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            //Show Loading
+            this.loaderService.requestStarted
+            await this.itiexaminerservice.RemoveStudent(body)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                console.log(data);
+
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
+
+                if (this.State == EnumStatus.Success)
+                {
+                  this.toastr.success(this.Message)
+
+                  this.getStudentDetails(row.ExaminerID);
+                }
+                else {
+                  this.toastr.error(this.ErrorMessage)
+                }
+
+              }, (error: any) => console.error(error)
+              );
+          }
+          catch (ex) {
+            console.log(ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+        }
+      });
+  }
+
+
+
+
+
+
 }

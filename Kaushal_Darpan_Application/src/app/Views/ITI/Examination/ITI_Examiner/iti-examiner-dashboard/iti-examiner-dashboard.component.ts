@@ -67,16 +67,13 @@ export class ItiExaminerDashboardComponent {
 
       }
      await this.GetAllData();
-     
   }
 
   encryptParameter(param: any) {
     return this.encryptionService.encryptData(param);
   }
 
-
   async GetAllData() {
- 
     // this.staffDashSearchReq.InvigilatorAppointmentID = Number(this.activatedRoute.snapshot.queryParamMap.get("InvigilatorAppointmentID") ?? 0);
     try {
 
@@ -128,5 +125,10 @@ export class ItiExaminerDashboardComponent {
          this.loaderService.requestEnded();
        }, 200);
      }
-   }
+  }
+
+
+
+
+
 }

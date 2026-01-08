@@ -265,7 +265,10 @@ export class BranchSectionCreateComponent {
 
 
     const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
-
+    // StreamMasterwithcount
+    // StreamMasterHOD
+    // await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+         
     await this.commonMasterService.StreamMasterHOD(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDL = data.Data;
