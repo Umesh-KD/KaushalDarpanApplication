@@ -195,3 +195,19 @@ export class StatusChangeGuestModel {
 }
 
 
+
+export class GuestHousePaymentDataModel {
+  public GuestHouseID: number = 0;
+  public DepartmentID: number = 0;
+  public CreatedBy: number = 0;
+  public IPAddress?: string | null;
+  public IsPayment: number = 0;
+  public RoomQuantity: number = 0;
+  public RoomFee: number = 0;
+  public UserID?: number | null;
+  public item?: number | null;
+  public UniqueServiceID: number = 2;
+  public IsActive: boolean = false;
+  public IsDelete: boolean = false;
+}
+

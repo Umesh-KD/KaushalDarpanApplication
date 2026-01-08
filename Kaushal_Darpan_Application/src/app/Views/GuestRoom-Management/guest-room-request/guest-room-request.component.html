@@ -77,7 +77,7 @@
             <th class="text-left">To Date/Time</th>
             <th class="text-left">Status</th>
             <th class="text-left">Remark</th>
-            <th class="text-center" style="width:150px">Action</th>
+            <th class="text-center" style="width:220px">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -94,35 +94,42 @@
             <td align="left">{{item.StatusName}}</td>
             <td align="left">{{item.Remark}}</td>
             <td align="center">
+              <div class="d-flex flex-column gap-2">
+                <button type="button"
+                        class="bg-info btn text-white btn-sm"
+                        (click)="onSubmit(modal_SubmitReq, item)"
+                        *ngIf="item.Status < 217 && (sSOLoginDataModel.RoleID ==_EnumRole.GuestHouseIncharge)">
+                  Approve/Reject
+                </button>
 
-              <button type="button"
-                 class="bg-info btn text-white btn-sm" 
-                 (click)="onSubmit(modal_SubmitReq, item)" 
-                 *ngIf="item.Status < 217 && (sSOLoginDataModel.RoleID ==_EnumRole.GuestHouseIncharge)">
-                 Approve/Reject
-              </button>
+                <button type="button"
+                        class="bg-info btn text-white btn-sm"
+                        (click)="onSubmit(modal_SubmitReq, item)"
+                        *ngIf="item.Status === 217 && (sSOLoginDataModel.RoleID ==_EnumRole.GuestHouseAdmin)">
+                  Approve/Reject
+                </button>
 
-              <button type="button"
-                 class="bg-info btn text-white btn-sm" 
-                 (click)="onSubmit(modal_SubmitReq, item)" 
-                 *ngIf="item.Status === 217 && (sSOLoginDataModel.RoleID ==_EnumRole.GuestHouseAdmin)">
-                 Approve/Reject
-              </button>
+                <button type="button"
+                        class="bg-success btn text-white btn-sm"
+                        (click)="CheckIn(item)"
+                        *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
+                  Check In
+                </button>
 
-              <button type="button"
-                 class="bg-success btn text-white btn-sm" 
-                 (click)="CheckIn(item)" 
-                 *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
-                 Check In
-              </button>
+                <button type="button"
+                        class="bg-warning btn text-dark btn-sm"
+                        (click)="CheckIn(item)"
+                        *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
+                  Check Out
+                </button>
 
-              <button type="button" 
-                 class="bg-warning btn text-dark btn-sm" 
-                 (click)="CheckIn(item)" 
-                 *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
-                 Check Out
-              </button>
 
+                <button type="button" class="btn btn-sm bg-primary text-white mt-2"
+                        *ngIf="item.Status === 1339 || item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden"
+                        (click)="openModalGenerateOTP(modal_GenrateOTP,item)">
+                  <i class="ti ti-currency-rupee"></i> Pay Now
+                </button>
+                </div>
             </td>
           </tr>
         </tbody>
@@ -179,3 +186,32 @@
 </ng-template>
 
 <!-- end row -->
+
+
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-comment"></i>&nbsp; OTP verification for Payment
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
