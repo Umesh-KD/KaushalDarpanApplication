@@ -68,13 +68,48 @@ export class ItiExaminerComponent {
 
 
 
-  async ngOnInit()
-  {
-    this.StaffID = Number(this.decryptParameter(this.routers.snapshot.queryParamMap.get("StaffID")) ?? 0);
-    if (this.StaffID)
-    {
-      this.isUpdate = true
+  async ngOnInit() {
+
+
+
+    //this.StaffID = Number(this.decryptParameter(this.routers.snapshot.queryParamMap.get("StaffID")) ?? 0);
+    //if (this.StaffID)
+    //{
+
+    //  this.isUpdate = true
+     
+    //}
+
+
+    const encryptedId = this.routers.snapshot.queryParamMap.get("StaffID");
+
+    if (!encryptedId) {
+      // No parameter → redirect
+      this.router.navigate(['/notfound']);
+    } else {
+      try {
+        // Decode first, then decrypt
+        const decodedId = decodeURIComponent(encryptedId);
+        const staffId = this.decryptParameter(decodedId);
+
+        this.StaffID = Number(staffId);
+
+        if (!this.StaffID || isNaN(this.StaffID)) {
+          // Invalid decrypted value → redirect
+          this.router.navigate(['/notfound']);
+        } else {
+          this.isUpdate = true;
+        }
+
+      } catch (error) {
+        console.error('Decryption failed:', error);
+        this.router.navigate(['/notfound']); // Malformed UTF-8 or other decryption error
+      }
     }
+
+
+
+
     
     this.examinerForm = this.fb.group({
       // txtSSOID: ['', Validators.required],
@@ -384,5 +419,6 @@ export class ItiExaminerComponent {
       }, 200);
     }
   }
+
 
 }

@@ -136,7 +136,11 @@
                   </a>
                   <a (click)="Onroute(row.ExaminerID,1)" title="Assign Theory Subject"><i class="ti ti-plus"></i></a>
                   <!--<a href="/ITIExaminer?StaffID={{row.ExaminerID}}" title="Edit"><i class="ti ti-pencil"></i></a>-->
-                  <a [routerLink]="['/ITIExaminer']" [queryParams]="{ StaffID: row.ExaminerID }" title="Edit"><i class="ti ti-pencil"></i></a>
+                  <!--<a [routerLink]="['/ITIExaminer']" [queryParams]="{ StaffID: encryptParameter(row.ExaminerID) }" title="Edit"><i class="ti ti-pencil"></i></a>-->
+                  <a [routerLink]="['/ITIExaminer']"
+                     [queryParams]="{ StaffID: encodeURIComponent(encryptParameter(row.ExaminerID)) }">
+                    <i class="ti ti-pencil"></i>
+                  </a>
                   <!--<a href="javascript:void(0)" title="Delete" (click)="btnDeleteOnClick(row.ExaminerID)"><i class="ti ti-trash"></i></a>-->
                   <!--<a href="javascript:void(0)" title="Revert Application" (click)="btnRevertOnClick(row.ExaminerID)"><i class="ti ti-arrow-back-up-double"></i></a>-->
                   <a *ngIf="row.IsAllFinalSubmitted === 0 && row.AssignedCount > 0" (click)="RevertBundle(row.ExaminerID)" title="View">
@@ -148,6 +152,9 @@
                 </div>
               </td>
 
+            </tr>
+            <tr *ngIf="ItiExaminerMasterList?.length == 0">
+              <td colspan="10" class="text-center">No record found</td>
             </tr>
 
 
@@ -204,7 +211,7 @@
                 <th class="text-left">Checking Status</th>
                 <!--<th class="text-left"></th>-->
                 <!--<th class="text-left">Invigilators</th>-->
-                <!--<th class="text-left">Action</th>-->
+                <th class="text-left">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -222,7 +229,20 @@
                   <span [class]="row.IsChecked==true?'fa fa-check text-success':'fa fa-remove text-danger'"></span>
 
                 </td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
+                    <a (click)="RemoveStudent(row)" title="View">
+                      <i class="ti ti-trash"></i>
+                    </a>
+                  </div>
+
+                </td>
+
+              </tr>
+         
+              <tr *ngIf="StudentList?.length == 0">
+                <td colspan="10" class="text-center">No record found</td>
               </tr>
             </tbody>
           </table>
