@@ -68,16 +68,12 @@ export class ItiExaminerComponent {
 
 
 
-  async ngOnInit() {
-
-
-
+  async ngOnInit()
+  {
     this.StaffID = Number(this.decryptParameter(this.routers.snapshot.queryParamMap.get("StaffID")) ?? 0);
     if (this.StaffID)
     {
-
       this.isUpdate = true
-     
     }
     
     this.examinerForm = this.fb.group({
