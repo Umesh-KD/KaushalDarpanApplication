@@ -315,7 +315,7 @@ export class TheoryExamReportComponent {
   //}
   exportToExcel(): void {
     const unwantedColumns = [
-      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass'
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass', "FileName","JobCardImage"
     ];
 
     const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
