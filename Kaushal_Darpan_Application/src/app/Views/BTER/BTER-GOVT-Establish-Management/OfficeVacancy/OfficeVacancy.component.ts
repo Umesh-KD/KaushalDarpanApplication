@@ -43,6 +43,7 @@ export class OfficeVacancyComponent implements OnInit {
   public ITIGovtEMOFFICERSList: any[] = [];
   public OfficeList: any[] = [];
   public PostList: any = [];
+  public BugetHeadList:any=[];
   public StaffTypeList: any[] = []
   public sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
@@ -96,7 +97,8 @@ export class OfficeVacancyComponent implements OnInit {
       StaffTypeID: [0, [DropdownValidators]],
       DesignationID: [0, [DropdownValidators]],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
-      Comments: ['']
+      Comments: [''],
+      BugetHeadID: [0, [DropdownValidators]]
     });
 
     this.groupForm = this.formBuilder.group({
@@ -107,6 +109,12 @@ export class OfficeVacancyComponent implements OnInit {
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
       Comments: ['']
     });
+
+    this.BugetHeadList = [
+      { ID: 1, Name: 'State Plan Budget' },
+      { ID: 2, Name: 'Center Plan Budget' },
+      { ID: 3, Name: 'Unplanned Budget' }
+    ];
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
@@ -190,6 +198,7 @@ export class OfficeVacancyComponent implements OnInit {
     const vacancyData: OfficeVacancyModel = {
       Comments: formValues.Comments,
       DesignationID: formValues.DesignationID,
+      BugetHeadID:formValues.BugetHeadID || 0,
       InstituteID: formValues.InstituteID || 0,  // fallback if null
       OfficeID: formValues.OfficeID,
       StaffTypeID: formValues.StaffTypeID,
@@ -590,6 +599,7 @@ console.log(this.formData.DesignationID);
         const vacancyData: OfficeVacancyModel = {
           Comments: formValues.Comments,
           DesignationID: formValues.DesignationID,
+          BugetHeadID:formValues.BugetHeadID || 0,
           InstituteID: formValues.InstituteID || 0,  // fallback if null
           OfficeID: formValues.OfficeID,
           StaffTypeID: formValues.StaffTypeID,
