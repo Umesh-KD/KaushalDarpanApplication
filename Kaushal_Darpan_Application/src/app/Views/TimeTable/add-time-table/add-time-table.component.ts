@@ -812,7 +812,7 @@ export class AddTimeTableComponent   {
       return;
     }
     if (this.request.BranchSubjectDataModel == null || this.request.BranchSubjectDataModel?.length == 0) {
-      this.toastr.error('Please Add Atleaste one subject')
+      this.toastr.error('Please Add at least one subject')
       return;
     }
 

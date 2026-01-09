@@ -6,6 +6,8 @@ import { AppointITIExaminerComponent } from './appoint-itiexaminer.component';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { FormsModule } from '@angular/forms';
+import { MaterialModule } from '../../../material.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
@@ -17,7 +19,10 @@ import { FormsModule } from '@angular/forms';
     AppointITIExaminerRoutingModule,
     FormsModule,
     LoaderModule,
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    MaterialModule,
+    NgxMatSelectSearchModule
+
   ]
 })
 export class AppointITIExaminerModule { }

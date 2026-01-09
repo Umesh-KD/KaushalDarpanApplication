@@ -32,11 +32,6 @@
           Add new
         </a>
 
-        <a *ngIf="sSOLoginDataModel.RoleID == 97" (click)="DownloadFresherApprenticeshipReport()" class="inline-flex items-center btn bg-dark text-white btn-sm">
-          <i class=""></i>
-          Download Report
-        </a>
-
 
         <!--<a routerLink="/ChangeExaminer" class="btn bg-info btn-sm text-white">
     <i class="ti ti-refresh"></i>Change Examiner
@@ -101,11 +96,16 @@
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
+      <a *ngIf="sSOLoginDataModel.RoleID == 97 || sSOLoginDataModel.RoleID == 212" (click)="DownloadFresherApprenticeshipReport()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+        <i class=""></i>
+        Download Report
+      </a>
+
       <!--<div class="flex justify-end flex-wrap items-center">
-        <a routerLink="" class="inline-flex items-center btn bg-dark text-white btn-sm">
-          <i class="ti ti-chevron-left"></i> Back
-        </a>
-      </div>-->
+    <a routerLink="" class="inline-flex items-center btn bg-dark text-white btn-sm">
+      <i class="ti ti-chevron-left"></i> Back
+    </a>
+  </div>-->
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">

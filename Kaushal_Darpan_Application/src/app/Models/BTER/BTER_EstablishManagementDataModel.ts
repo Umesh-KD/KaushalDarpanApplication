@@ -531,6 +531,7 @@ export class OfficeVacancyModel {
   public PlanningID: number = 0;
   public InstituteID: number = 0;
   public DesignationID: number = 0;
+  public BugetHeadID?:number=0;
   public TotalSeatID: number = 0;
   public RemainingSeatID: number = 0;
   public StaffTypeID: number = 0;

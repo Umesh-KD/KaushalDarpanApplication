@@ -1,13 +1,14 @@
 <!-- Page Title Start -->
 
+
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Examiner ITI' : 'Add Examiner ITI' }}</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Create Examiner ITI</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">
+        {{ sSOLoginDataModel.RoleID === _EnumRole.ITIExaminer_SCVT ? 'Dashboard' : 'Masters' }}
+      </a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
         {{
@@ -16,11 +17,30 @@
       </a>
     </div>
   </div>
+
+  @if (sSOLoginDataModel.RoleID === _EnumRole.ITIExaminer_SCVT)
+  {
+  <a routerLink="/dashboard" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+  }
+  @else
+  {
   <a routerLink="/ITIExaminerList" class="inline-flex items-center btn bg-dark text-white btn-sm">
     <i class="ti ti-chevron-left"></i>
     Back
   </a>
+
+  }
+
+
+
+
+
 </div>
+
+
 <!-- Page Title End -->
 
 <div class="card">
@@ -35,7 +55,7 @@
           <label for="SSOID">SSOID: <span class="StarMarking">*</span></label>
           <input formControlName="txtSSOID" class="form-input" placeholder="Enter SSO ID" type="text" id="ssoid"
                  [(ngModel)]="request.SSOID">
-          <div>
+          <div *ngIf="!isUpdate">
             <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="getSSODetailsBySSOID(request.SSOID)">GetDetails</button>
           </div>
           <div *ngIf="isSubmitted && examinerForm.get('txtSSOID').errors" class="text-danger">

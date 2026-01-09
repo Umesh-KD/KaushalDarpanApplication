@@ -34,8 +34,10 @@ export class DownloadRollNumberListComponent implements OnInit
     this.searchRequest.SemesterID = Number(this.activatedRoute.snapshot.queryParamMap.get('semid') ?? 0);
     this.searchRequest.InstituteID = Number(this.activatedRoute.snapshot.queryParamMap.get('instID') ?? 0);
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-    this.GetSemesterName(this.searchRequest.SemesterID);
-    this.GetAllData();
+
+    // load
+    await this.GetSemesterName(this.searchRequest.SemesterID);
+    await this.GetAllData();
   }
 
   async GetAllData()
@@ -43,6 +45,10 @@ export class DownloadRollNumberListComponent implements OnInit
     this.listDownloadnRollNoModel = []
     try {
       this.loaderService.requestStarted();
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      // call
       await this.getRollService.GetGenerateRollDataForPrint( this.searchRequest )
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

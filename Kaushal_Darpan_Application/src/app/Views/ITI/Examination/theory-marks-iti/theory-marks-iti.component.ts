@@ -600,6 +600,13 @@ export class TheoryMarksItiComponent {
 
   }
   
+  async back() {
+    this.routers.navigate([
+      '/iti-appointed-examiner-details',
+      this.searchRequest.ExaminerID,
+      1
+    ]);
+  }
 
 
 

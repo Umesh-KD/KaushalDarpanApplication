@@ -45,7 +45,7 @@ export class ItiExaminerListService {
       ).toPromise();
   }
 
-  public async SaveData(request: ItiExaminerDataModel) {
+  public async SaveData(request: any) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/SaveData', request, this.headersOptions)
       .pipe(

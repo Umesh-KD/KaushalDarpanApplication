@@ -120,6 +120,7 @@ export class BranchWiseHodComponent {
           if (data['State'] === 1) {
             this.toastr.success(data.Message);
             this.SSOIDExists = true;
+            this.PostUserExists();
           } else {
             this.toastr.warning(data.Message);
             this.SSOIDExists = false;
@@ -179,8 +180,13 @@ export class BranchWiseHodComponent {
         //confirmed
         if (result.isConfirmed) {
           try {
-            this.request.DeleteStatus = true;
-            this.request.ActiveStatus = false;
+            // this.request.DeleteStatus = true;
+            // this.request.ActiveStatus = false;
+            this.request.StreamID = 0;
+            this.request.StreamIDs = this.IIPMasterFormGroup.value.StreamIDs?.join(',');
+            this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+            this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+            this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
             this.request.ModifyBy = this.sSOLoginDataModel.UserID;
             this.request.Action = "DELETE";
             this.request.ID = item.ID;
@@ -194,6 +200,7 @@ export class BranchWiseHodComponent {
                 this.totalRecord = data['Data'].length;
                 this.initTable();
                 this.ResetControls();
+                this.GetBranchHODApplyList();
               }, error => console.error(error));
           }
           catch (ex) {
@@ -266,6 +273,8 @@ export class BranchWiseHodComponent {
 
           this.initTable();
           this.ResetControls();
+          this.GetBranchHODApplyList();
+
           if (data.State === EnumStatus.Success) {
             this.toastr.success('Data saved successfully!');
           }

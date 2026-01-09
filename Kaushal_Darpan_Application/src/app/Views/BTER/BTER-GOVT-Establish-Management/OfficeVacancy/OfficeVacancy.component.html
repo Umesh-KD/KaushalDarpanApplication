@@ -54,6 +54,14 @@
           </select>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.BugetHeadID" formControlName="BugetHeadID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
         <!-- Total Seat -->
         <div>
           <label for="TotalSeatID">Total Seat <span class="StarMarking">*</span></label>
