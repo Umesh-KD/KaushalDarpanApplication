@@ -66,6 +66,11 @@ export class CreateGuestRoomSeatDataModel {
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;
   public RoomStatus: number = 0;
+  public ExtraCharges?: number = 0;
+  public BedFee_Training?: number = 0;
+  public BedFee_OnDuty?: number = 0;
+  public BedFee_Private?: number = 0;
+  public CoolingFacilities?: number = 0;
 }
 
 export class GuestRoomSeatSearchModel {
@@ -145,6 +150,7 @@ export class GuestApplyForGuestRoomDataModel {
   public Purpose: number = 0;
   public PurposeDocPhoto: string = '';
   public Dis_PurposeDocPhoto: string = '';
+  public IsForSelf?: boolean = false;
 }
 
 export class GuestApplyForGuestRoomSearchModel {
@@ -159,6 +165,7 @@ export class GuestApplyForGuestRoomSearchModel {
   public ModifyBy: number = 0;
   public RoleID: number = 0;
   public Status: number = 0;
+  public IsForSelf?: boolean = false;
 }
 
 export class GuestStaffProfileSearchModel {

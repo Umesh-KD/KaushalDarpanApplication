@@ -554,6 +554,7 @@ export class GuestRoomDetailsComponent {
     this.dataSource = new MatTableDataSource(this.RoomDetailsList);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    // this.paginator.pageSize = 50;
     this.dataSource.filterPredicate = (d: any, filter: string) => {
       const dataStr = Object.values(d).join(' ').toLowerCase();
       return dataStr.includes(filter);

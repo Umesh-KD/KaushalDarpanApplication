@@ -17,7 +17,7 @@
       <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Guest Room Type / Seats / No. of Rooms' : 'Add Guest Room Type / Seats/ No. of Rooms' }}</b>
     </div>
     <form [formGroup]="groupForm" (ngSubmit)="saveData()">
-      <div class="grid 2xl:grid-cols-5 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="grid 2xl:grid-cols-5 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-6">
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>
           <select formControlName="ddlGuestHouseID" class="form-select" id="GuestHouseID" [(ngModel)]="request.GuestHouseID">
@@ -82,8 +82,21 @@
           </div>
         </div>
 
-
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Cooling Facilities: <span class="StarMarking">*</span></label>
+          <select class="form-select" id="CoolingFacilities" formControlName="CoolingFacilities" [(ngModel)]="request.CoolingFacilities">
+            <option value="0">Choose Option</option>
+            <option value="1">AC</option>
+            <option value="2">Non-AC/Cooler</option>
+            <option value="3">Fan</option>
+          </select>
+
+          <div *ngIf="isSubmitted && groupForm.controls.CoolingFacilities.errors" class="text-danger">
+            <p *ngIf="!_groupForm.CoolingFacilities.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fees <span class="StarMarking">*</span></label>
           <input formControlName="txtRoomFee" class="form-input" type="text" id="RoomFee" placeholder="Enter Room Fees"
                  [(ngModel)]="request.RoomFee" (keypress)="validateNumber($event)" maxlength="6">
@@ -96,6 +109,60 @@
             Room fee cannot be zero!
           </div>
           <div *ngIf="groupForm.controls.txtRoomFee.hasError('pattern') && groupForm.controls.txtRoomFee.touched"
+               class="text-danger">
+            Only numbers are allowed!
+          </div>
+        </div> -->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Fees(For Training) <span class="StarMarking">*</span></label>
+          <input formControlName="BedFee_Training" class="form-input" type="text" id="BedFee_Training" placeholder="Enter Room Fees"
+                 [(ngModel)]="request.BedFee_Training" (keypress)="validateNumber($event)" maxlength="6">
+          <div *ngIf="groupForm.controls.BedFee_Training.hasError('required') && groupForm.controls.BedFee_Training.touched"
+               class="text-danger">
+            This field is required!
+          </div>
+          <div *ngIf="groupForm.controls.BedFee_Training.hasError('min') && groupForm.controls.BedFee_Training.touched"
+               class="text-danger">
+            Bed fee cannot be zero!
+          </div>
+          <div *ngIf="groupForm.controls.BedFee_Training.hasError('pattern') && groupForm.controls.BedFee_Training.touched"
+               class="text-danger">
+            Only numbers are allowed!
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Fees(For On-Duty) <span class="StarMarking">*</span></label>
+          <input formControlName="BedFee_OnDuty" class="form-input" type="text" id="BedFee_OnDuty" placeholder="Enter Room Fees"
+                 [(ngModel)]="request.BedFee_OnDuty" (keypress)="validateNumber($event)" maxlength="6">
+          <div *ngIf="groupForm.controls.BedFee_OnDuty.hasError('required') && groupForm.controls.BedFee_OnDuty.touched"
+               class="text-danger">
+            This field is required!
+          </div>
+          <div *ngIf="groupForm.controls.BedFee_OnDuty.hasError('min') && groupForm.controls.BedFee_OnDuty.touched"
+               class="text-danger">
+            Bed fee cannot be zero!
+          </div>
+          <div *ngIf="groupForm.controls.BedFee_OnDuty.hasError('pattern') && groupForm.controls.BedFee_OnDuty.touched"
+               class="text-danger">
+            Only numbers are allowed!
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Fees(For Private) <span class="StarMarking">*</span></label>
+          <input formControlName="BedFee_Private" class="form-input" type="text" id="BedFee_Private" placeholder="Enter Room Fees"
+                 [(ngModel)]="request.BedFee_Private" (keypress)="validateNumber($event)" maxlength="6">
+          <div *ngIf="groupForm.controls.BedFee_Private.hasError('required') && groupForm.controls.BedFee_Private.touched"
+               class="text-danger">
+            This field is required!
+          </div>
+          <div *ngIf="groupForm.controls.BedFee_Private.hasError('min') && groupForm.controls.BedFee_Private.touched"
+               class="text-danger">
+            Bed fee cannot be zero!
+          </div>
+          <div *ngIf="groupForm.controls.BedFee_Private.hasError('pattern') && groupForm.controls.BedFee_Private.touched"
                class="text-danger">
             Only numbers are allowed!
           </div>
@@ -138,7 +205,10 @@
             <th class="text-left">Room Type</th>
             <th class="text-left">Seat Capacity</th>
             <th class="text-left">Room Quantity</th>
-            <th class="text-left">Room Fee</th>
+            <th class="text-left">Cooling Facility</th>
+            <th class="text-left">Bed Fee(Training)</th>
+            <th class="text-left">Bed Fee(On-Duty)</th>
+            <th class="text-left">Bed Fee(Private)</th>
             <th class="text-left">Room Status</th>
             <th style="width:125px;">Action</th>
           </tr>
@@ -150,7 +220,10 @@
             <td>{{item.RoomTypeName}}</td>
             <td>{{item.SeatCapacity}}</td>
             <td>{{item.RoomQuantity}}</td>
-            <td>{{item.FeePerBad}}</td>
+            <td>{{item.CoolingFacilities_str}}</td>
+            <td>{{item.BedFee_Training}}</td>
+            <td>{{item.BedFee_OnDuty}}</td>
+            <td>{{item.BedFee_Private}}</td>
             <td>{{item.RoomStatus_str}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">

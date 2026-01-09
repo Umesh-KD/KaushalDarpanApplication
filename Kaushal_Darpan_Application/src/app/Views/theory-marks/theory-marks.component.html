@@ -353,8 +353,13 @@
               <td align="left">
                 <div class="flex">
                   <!--<input class="form-input" style="width:100px" type="text" (keypress) = "numberOnly($event)" [disabled]="!row.Marked" id="txtObtainedTheory" [(ngModel)]="row.ObtainedTheory">-->
-                  <input  class="form-input" style="width:100px" type="text" (keypress)="numberOnly($event)" [readonly]="row.IsPresentTheory==0" tabindex="{{idx}}" 
-                     [disabled]="!row.Marked || row.IsPresentTheory==0" id="txtObtainedTheory" [(ngModel)]="row.ObtainedTheory" (keydown)="onTabPress($event, idx)">
+                  <input  class="form-input" style="width:100px" type="text" tabindex="{{idx}}" id="txtObtainedTheory"
+                    (keypress)="numberOnly($event)" 
+                    [readonly]="row.IsPresentTheory==0" 
+                    [disabled]="!row.Marked || row.IsPresentTheory==0"  
+                    [(ngModel)]="row.ObtainedTheory" 
+                    (keydown.tab)="onTabPress($event, idx)" 
+                    (keydown)="allowOnlyPositiveNumbers($event)">
                   <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
                 </div>
               </td>

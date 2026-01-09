@@ -73,8 +73,10 @@
             <th class="text-left" style="width:100px">#</th>
             <th class="text-left">Request Applier Information</th>
             <th class="text-left">Employee ID</th>
+            <th class="text-left">Purpose</th>
             <th class="text-left">From Date/Time</th>
             <th class="text-left">To Date/Time</th>
+            <th class="text-left">Room Type</th>
             <th class="text-left">Status</th>
             <th class="text-left">Remark</th>
             <th class="text-center" style="width:150px">Action</th>
@@ -89,8 +91,10 @@
               <span class="block">College - {{item.InstituteName}}</span>
             </td>
             <td align="left"><a title="View Employee" href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.EmplDCardPhoto}}" target="_blank">{{item.EmpID}}</a> </td>
+            <td align="left">{{item.Purpose_str}}</td>
             <td align="left">{{item.FromDate}} {{item.FromTime}}</td>
             <td align="left">{{item.ToDate}} {{item.ToTime}}</td>
+            <td align="left">{{item.RoomType_str}}</td>
             <td align="left">{{item.StatusName}}</td>
             <td align="left">{{item.Remark}}</td>
             <td align="center">
@@ -111,14 +115,14 @@
 
               <button type="button"
                  class="bg-success btn text-white btn-sm" 
-                 (click)="CheckIn(item)" 
+                 (click)="openOTPModal_CheckIn(item)" 
                  *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                  Check In
               </button>
 
               <button type="button" 
                  class="bg-warning btn text-dark btn-sm" 
-                 (click)="CheckIn(item)" 
+                 (click)="openOTPModal_CheckOut(item)" 
                  *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                  Check Out
               </button>
@@ -179,3 +183,4 @@
 </ng-template>
 
 <!-- end row -->
+<app-otpmodal #otpModal></app-otpmodal>

@@ -1,23 +1,22 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { AddGuestApplyForGuestRoomComponent } from './AddGuestApplyForGuestRoom.component';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { MaterialModule } from '../../../material.module';
-import { Routes, RouterModule } from '@angular/router';
 import { OTPModalModule } from '../../otpmodal/otpmodal.module';
-import { AddGuestApplyForGuestRoomRoutingModule } from './AddGuestApplyForGuestRoom-routing.module';
+import { WardenApplyForGuestRoomComponent } from './warden-apply-for-guest-room.component';
+import { WardenApplyForGuestRoomRoutingModule } from './warden-apply-for-guest-room-routing.module';
 
 @NgModule({
   declarations: [
-    AddGuestApplyForGuestRoomComponent
+    WardenApplyForGuestRoomComponent
   ],
   imports: [
     CommonModule, MaterialModule, 
     FormsModule, ReactiveFormsModule,  LoaderModule, TableSearchFilterModule,
-    AddGuestApplyForGuestRoomRoutingModule,
+    WardenApplyForGuestRoomRoutingModule,
     OTPModalModule
   ]
 })
-export class AddGuestApplyForGuestRoomModule { }
+export class WardenApplyForGuestRoomModule { }

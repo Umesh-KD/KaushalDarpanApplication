@@ -286,9 +286,7 @@ const routes: Routes = [
       { path: 'StudentFailedFees', loadChildren: () => import('./Views/Student/paid-fees/paid-fees.module').then(m => m.PaidFeesModule), title: 'Student Paid Fees' },
       { path: 'StudentProfile', loadChildren: () => import('./Views/Student/student-profile/student-profile.module').then(m => m.StudentProfileModule), title: 'Student Profile' },
       { path: 'studentprofiledownload', loadChildren: () => import('./Views/Student/student-profile-download/student-profile-download.module').then(m => m.StudentProfileDownloadModule), title: 'Student Profile' },
-      {
-        path: 'StudentSsoMapping', loadChildren: () => import('./Views/Student/student-sso-mapping/student-sso-mapping.module').then(m => m.StudentSsoMappingModule), title: 'Student SSO Mapping'
-      },
+      {path: 'StudentSsoMapping', loadChildren: () => import('./Views/Student/student-sso-mapping/student-sso-mapping.module').then(m => m.StudentSsoMappingModule), title: 'Student SSO Mapping'},
 
       { path: 'CandidateSsoMapping', loadChildren: () => import('./Views/Counselling-Master/candidate-sso-mapping-module/candidate-sso-mapping-module.module').then(m => m.CandidateSsoMappingModuleModule) },
 
@@ -869,6 +867,7 @@ const routes: Routes = [
       { path: 'guest-house-room-seat-master', loadChildren: () => import('./Views/GuestRoom-Management/guestroom-seat-master/guestroom-seat-master.module').then(m => m.GuestRoomSeatMasterModule), title: 'Room Seat Master' },
       { path: 'guestroomrequest', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-request/guest-room-request.module').then(m => m.GuestRoomRequestModule) },
       { path: 'guestroomreport', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-report/guest-room-report.module').then(m => m.GuestRoomReportModule) },
+      { path: 'guest-room-apply-warden', loadChildren: () => import('./Views/GuestRoom-Management/warden-apply-for-guest-room/warden-apply-for-guest-room.module').then(m => m.WardenApplyForGuestRoomModule), title: 'Warden Apply For GuestRoom' },
 
       { path: 'CenterAndSubjectWiseReport', loadChildren: () => import('./Views/Reports/Center-And-Subject-Wise-Report/Center-And-Subject-Wise-Report.module').then(m => m.CenterAndSubjectWiseReportModule), title: 'Center-And-Subject-Wise-Report' },
 

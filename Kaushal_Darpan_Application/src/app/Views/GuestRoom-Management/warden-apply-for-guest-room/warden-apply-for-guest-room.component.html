@@ -12,12 +12,12 @@
 
 <div class="card">
   <div class="card-body p-5">
-    <!-- <form [formGroup]="SSOIDFormGroup" class="mb-3" (ngSubmit)="PostUserExists()" *ngIf="SSOIDFormGroup">
+    <form [formGroup]="SSOIDFormGroup" class="mb-3" (ngSubmit)="PostUserExists()" *ngIf="SSOIDFormGroup">
       <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
         <div class="mb-3">
           <label for="SSOID" class="form-label">SSOID</label>
           <div class="input-group check-box-custom">
-            <input formControlName="SSOID" class="form-input" placeholder="Enter SSOID" (keyup)="CheckUserExists($event)" aria-describedby="basic-addon3 basic-addon4" />
+            <input formControlName="SSOID" class="form-input" placeholder="Enter SSOID"  aria-describedby="basic-addon3 basic-addon4" />
             <span *ngIf="SSOIDExists != null" class="input-group-text {{SSOIDExists?'text-success':'text-danger'}}"><i class="fa {{SSOIDExists?'fa-check':'fa-close'}}"></i></span>
           </div>
 
@@ -31,9 +31,9 @@
           </div>
         </div>
       </div>
-    </form> -->
+    </form>
 
-    <form [formGroup]="IIPMasterFormGroup" class="form-horizontal" *ngIf="IIPMasterFormGroup">
+    <form [formGroup]="IIPMasterFormGroup" class="form-horizontal" *ngIf="IIPMasterFormGroup && IsShowForm">
 
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Guest Apply For Guest Room</b>
@@ -373,7 +373,7 @@
 
           <ng-container matColumnDef="RoomType">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-            <td mat-cell *matCellDef="let row">{{ getRoomTypeName(row.RoomType) }}</td>
+            <td mat-cell *matCellDef="let row">{{ row.RoomType_str }}</td>
           </ng-container>
 
           <ng-container matColumnDef="RoomFee">

@@ -16,6 +16,7 @@ import * as XLSX from 'xlsx';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-guest-room-request',
@@ -51,6 +52,7 @@ export class GuestRoomRequestComponent {
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -195,6 +197,32 @@ export class GuestRoomRequestComponent {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+  }
+
+  async openOTPModal_CheckIn(userSubmitData: any) {
+    this.childComponent.MobileNo = userSubmitData.MobileNo
+
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+
+    // do work
+    await this.CheckIn(userSubmitData);
+  }
+
+  async openOTPModal_CheckOut(userSubmitData: any) {
+    this.childComponent.MobileNo = userSubmitData.MobileNo
+
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+
+    // do work
+    await this.CheckIn(userSubmitData);
   }
 
   CloseModal() {

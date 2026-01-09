@@ -17,12 +17,12 @@ import { DropdownValidators } from '../../../Services/CustomValidators/custom-va
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
-  selector: 'app-AddGuestApplyForGuestRoom',
+  selector: 'app-warden-apply-for-guest-room',
   standalone: false,
-  templateUrl: './AddGuestApplyForGuestRoom.component.html',
-  styleUrl: './AddGuestApplyForGuestRoom.component.css'
+  templateUrl: './warden-apply-for-guest-room.component.html',
+  styleUrl: './warden-apply-for-guest-room.component.css'
 })
-export class AddGuestApplyForGuestRoomComponent {
+export class WardenApplyForGuestRoomComponent {
   public ID: number = 0;
   public request = new GuestApplyForGuestRoomDataModel()
   public isLoading: boolean = false;
@@ -48,6 +48,7 @@ export class AddGuestApplyForGuestRoomComponent {
   public GuestRoomNameList: any = [];
   public RoomTypeList: any = [];
   public RoomAvailablity: number = 0;
+  public IsShowForm: boolean = false;
   _EnumRole = EnumRole;
   displayedColumns: string[] = [
     'SNo', 'RequestName', 'InstituteName', 'DepartmentName',
@@ -72,11 +73,6 @@ export class AddGuestApplyForGuestRoomComponent {
   ) { }
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
-    this.searchRequestGuestStaffProfileSearchModel.RoleID = this.sSOLoginDataModel.RoleID;
-    this.searchRequestGuestStaffProfileSearchModel.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.SSOIDFormGroup = this.formBuilder.group({
       SSOID: ['', Validators.required]
     });
@@ -100,7 +96,11 @@ export class AddGuestApplyForGuestRoomComponent {
         txtSeatCapacity: ['', Validators.required],
         txtRoomQuantity: ['', Validators.required]
       });
-    await this.PostUserExists();
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
+    
     await this.loadData();
     await this.GetGuestRoomApplyList();
     await this.GetAllRoomSeatList();
@@ -147,44 +147,35 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   async PostUserExists() {
-    // if (this.SSOIDExists) {    
-    //   await this.loadData();
-    //   await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
-    //     .then((data: any) => {
-    //       data = JSON.parse(JSON.stringify(data));
-    //       this.State = data['State'];
-    //       this.Message = data['Message'];
-    //       this.ErrorMessage = data['ErrorMessage'];
-    //       this.request.CollegeID = data['Data'];
-    //       this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
-    //       this.request.InstituteName = data['Data'][0]['InstituteName'];
-    //       this.request.CollegeID = data['Data'][0]['InstituteID'];
-    //       this.request.DisplayName = data['Data'][0]['DisplayName'];
-    //       this.request.FirstName = data['Data'][0]['DisplayName'];
-    //       this.request.State = data['Data'][0]['StateName'];
-    //       this.request.PostalCode = data['Data'][0]['Pincode'];
-    //       this.request.TelephoneNumber = data['Data'][0]['MobileNumber'];
-    //       this.request.MailPersonal = data['Data'][0]['Email'];
-    //       this.request.MobileNo = data['Data'][0]['MobileNumber'];
-    //       this.request.PostalAddress = data['Data'][0]['Address'];
-    //     }, error => console.error(error));
-    //   this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-    //   this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    // } else {
-    //   this.toastr.warning("Not Exists SSOID");
-    // }  
-
-    this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
-    this.request.CollegeID = this.sSOLoginDataModel.InstituteID;
-    this.request.InstituteName = this.sSOLoginDataModel.InstituteName;
-    this.request.DisplayName = this.sSOLoginDataModel.DisplayName;
-    this.request.FirstName = this.sSOLoginDataModel.DisplayName;
-    this.request.State = this.sSOLoginDataModel.State;
-    this.request.PostalCode = this.sSOLoginDataModel.Postalcode;
-    this.request.TelephoneNumber = this.sSOLoginDataModel.Telephonenumber;
-    this.request.MailPersonal = this.sSOLoginDataModel.Mailpersonal;
-    this.request.MobileNo = this.sSOLoginDataModel.Mobileno;
-    this.request.PostalAddress = this.sSOLoginDataModel.Postaladdress;
+    try {
+      this.searchRequestGuestStaffProfileSearchModel.SSOID = this.SSOIDFormGroup.get('SSOID')?.value;
+      await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if(data.State === EnumStatus.Success) {
+            this.IsShowForm = true;
+            this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
+            this.request.InstituteName = data['Data'][0]['InstituteName'];
+            this.request.CollegeID = data['Data'][0]['InstituteID'];
+            this.request.DisplayName = data['Data'][0]['DisplayName'];
+            this.request.FirstName = data['Data'][0]['DisplayName'];
+            this.request.State = data['Data'][0]['StateName'];
+            this.request.PostalCode = data['Data'][0]['Pincode'];
+            this.request.TelephoneNumber = data['Data'][0]['MobileNumber'];
+            this.request.MailPersonal = data['Data'][0]['Email'];
+            this.request.MobileNo = data['Data'][0]['MobileNumber'];
+            this.request.PostalAddress = data['Data'][0]['Address'];
+            this.request.UserID = data['Data'][0]['UserID'];
+            this.request.RequestSSOID = data['Data'][0]['SSOID'];
+          } else if(data.State === EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage);
+          } else {
+            this.toastr.warning(data.Message);
+          }
+        }, error => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   onFromDateChange() {
@@ -238,7 +229,7 @@ export class AddGuestApplyForGuestRoomComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
-      this.searchRequest.IsForSelf = true;
+      this.searchRequest.IsForSelf = false;
 
       await this.guestRoomManagmentService.GetAllGuestApplyForGuestRoomList(this.searchRequest)
         .then((data: any) => {
@@ -270,7 +261,6 @@ export class AddGuestApplyForGuestRoomComponent {
             item.DeleteStatus = true;
             item.ActiveStatus = false;
             item.ModifyBy = this.sSOLoginDataModel.UserID;
-
             await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(item)
               .then((data: any) => {
                 data = JSON.parse(JSON.stringify(data));
@@ -344,12 +334,13 @@ export class AddGuestApplyForGuestRoomComponent {
 
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.request.UserID = this.sSOLoginDataModel.UserID;
+      // this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.Status = 215;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
       this.request.IsForSelf = false;
+      // this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
+
       //save
       await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(this.request)
         .then((data: any) => {
@@ -665,5 +656,4 @@ export class AddGuestApplyForGuestRoomComponent {
       default: return 'Dormitory/Hall (Sharing)';
     }
   }
-
 }
