@@ -142,6 +142,12 @@ export class ViewVerifyRollListComponent {
   }
 
   async GetAllData() {
+    if(this.Status==0)
+{
+return;
+
+}
+else{
     debugger
     try {
 
@@ -152,6 +158,7 @@ export class ViewVerifyRollListComponent {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.action = "_VerifyRollListPdfOnlyAdmin"
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.Status=this.Status;
       if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
 
         this.searchRequest.Status = 13;
@@ -213,6 +220,7 @@ export class ViewVerifyRollListComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
   }
 
   async downloadData(request: DownloadnRollNoModel[]) {

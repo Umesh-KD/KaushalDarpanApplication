@@ -250,11 +250,17 @@ export class GuestRoomManagmentService {
       ).toPromise();
   }
 
-
-
   public async SaveGuestRoomPayment(searchRequest: GuestHousePaymentDataModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/SaveGuestRoomPayment`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GuestHouse_Dropdowns(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GuestHouse_Dropdowns`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

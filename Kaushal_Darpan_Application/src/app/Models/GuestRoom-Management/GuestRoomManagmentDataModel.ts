@@ -148,6 +148,7 @@ export class GuestApplyForGuestRoomDataModel {
   public EndTermID: number = 0;
   public RequestSSOID: string = '';
   public Purpose: number = 0;
+  public CoolingFacilities: number = 0;
   public PurposeDocPhoto: string = '';
   public Dis_PurposeDocPhoto: string = '';
   public IsForSelf?: boolean = false;

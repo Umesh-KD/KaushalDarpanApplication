@@ -87,8 +87,8 @@
           <select class="form-select" id="CoolingFacilities" formControlName="CoolingFacilities" [(ngModel)]="request.CoolingFacilities">
             <option value="0">Choose Option</option>
             <option value="1">AC</option>
-            <option value="2">Non-AC/Cooler</option>
-            <option value="3">Fan</option>
+            <option value="2">Non-AC</option>
+            <!-- <option value="3">Fan</option> -->
           </select>
 
           <div *ngIf="isSubmitted && groupForm.controls.CoolingFacilities.errors" class="text-danger">
