@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TheoryMarksSearchModel } from '../../Models/TheoryMarksDataModels';
+import { TheoryMarksSearchModel, UnlockInternalMarksModel, updateUnlockInternalMarksModel } from '../../Models/TheoryMarksDataModels';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { RoleMasterDataModel, UserRoleRightsDataModel } from '../../Models/RoleMasterDataModel';
@@ -54,6 +54,22 @@ export class InternalPracticalStudentService {
   public async UpdateSaveDataInternal_Admin(selectedList: any[], InternalPracticalID: number): Promise<any> {
     const body = JSON.stringify(selectedList);
     return this.http.post(`${this.APIUrl}/UpdateSaveDataInternal_Admin/${InternalPracticalID}`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllUnlockInternalMarksList(searchRequest: UnlockInternalMarksModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllUnlockInternalMarksList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UnlockInternalMarks(searchRequest: updateUnlockInternalMarksModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/UnlockInternalMarks`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

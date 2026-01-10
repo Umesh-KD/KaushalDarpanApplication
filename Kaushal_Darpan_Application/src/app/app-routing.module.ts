@@ -1575,7 +1575,8 @@ const routes: Routes = [
 
 
       { path: 'ExaminerDashboard', loadChildren: () => import('./Views/ITI/practical-examiner-dashboard/practical-examiner-dashboard.module').then(m => m.PracticalExaminerDashboardModule), title: 'Practical examiner dashboard ' },
-
+      { path: 'ScholarshipAPIData', loadChildren: () => import('./Views/BTER/bter-Scholarship-API-Data/bter-Scholarship-API-Data.module').then(m => m.bterScholarshipAPIDataModule), title: 'Scholarship API Data' },
+      { path: 'UnlockInternalMarks', loadChildren: () => import('./Views/BTER/Unlock-Internal-Marks/Unlock-Internal-Marks.module').then(m => m.UnlockInternalMarksModule), title: 'Unlock Internal Marks' },
     ]
   },
 
