@@ -98,7 +98,7 @@
             </td>
             <td align="left">
               <!--[disabled]="!row.Marked"-->
-              <select class="form-select" id="IsPresentTheory" [(ngModel)]="row.IsPresentTheory" (change)="ChangeStatus(row)">
+              <select [disabled]="row.Isshowdropdown==0" class="form-select" id="IsPresentTheory" [(ngModel)]="row.IsPresentTheory" (change)="ChangeStatus(row)">
                 <option value="">Choose Option</option>
                 <option value="0">Absent</option>
                 <option value="1">Present</option>

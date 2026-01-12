@@ -124,7 +124,7 @@
             <td>{{row.checkedcount}}</td>
             <!--<td>{{row.checkedcount}}</td>-->
             <td>
-              <div class="flex align-center justify-center actionBtns w-auto"
+              <div *ngIf="row.IsAllow==1" class="flex align-center justify-center actionBtns w-auto"
                    style="width:auto !important">
                 <!--@if(this.ExamTypeID==1) {
        <a [routerLink]="'/Ititheorymarks'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
