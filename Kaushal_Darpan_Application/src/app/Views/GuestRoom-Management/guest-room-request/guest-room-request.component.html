@@ -73,10 +73,13 @@
             <th class="text-left" style="width:100px">#</th>
             <th class="text-left">Request Applier Information</th>
             <th class="text-left">Employee ID</th>
-            <th class="text-left">Purpose</th>
             <th class="text-left">From Date/Time</th>
             <th class="text-left">To Date/Time</th>
+            <th class="text-left">Guest House Name</th>
+            <th class="text-left">Purpose</th>
             <th class="text-left">Room Type</th>
+            <th class="text-left">Cooling Facilities</th>
+            <th class="text-left">Room Fee</th>
             <th class="text-left">Status</th>
             <th class="text-left">Remark</th>
             <th class="text-center" style="width:220px">Action</th>
@@ -91,10 +94,14 @@
               <span class="block">College - {{item.InstituteName}}</span>
             </td>
             <td align="left"><a title="View Employee" href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.EmplDCardPhoto}}" target="_blank">{{item.EmpID}}</a> </td>
-            <td align="left">{{item.Purpose_str}}</td>
+            
             <td align="left">{{item.FromDate}} {{item.FromTime}}</td>
             <td align="left">{{item.ToDate}} {{item.ToTime}}</td>
+            <td align="left">{{item.GuestHouseName}}</td>
+            <td align="left">{{item.Purpose_str}}</td>
             <td align="left">{{item.RoomType_str}}</td>
+            <td align="left">{{item.CoolingFacilities_Str}}</td>
+            <td align="left">{{item.RoomFee}}</td>
             <td align="left">{{item.StatusName}}</td>
             <td align="left">{{item.Remark}}</td>
             <td align="center">
@@ -115,7 +122,7 @@
 
               <button type="button"
                  class="bg-success btn text-white btn-sm" 
-                 (click)="openOTPModal_CheckIn(item)" 
+                 (click)="openModal_CheckIn(modal_CheckIn, item)" 
                  *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                  Check In
               </button>
@@ -129,7 +136,7 @@
 
 
                 <button type="button" class="btn btn-sm bg-primary text-white mt-2"
-                        *ngIf="item.Status === 1339 || item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden"
+                        *ngIf="(item.Status === 1339 || item.Status === 220) && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden"
                         (click)="openModalGenerateOTP(modal_GenrateOTP,item)">
                   <i class="ti ti-currency-rupee"></i> Pay Now
                 </button>
@@ -220,3 +227,62 @@
   </div>
 </ng-template>
 <app-otpmodal #otpModal></app-otpmodal>
+
+<ng-template #modal_CheckIn let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Check-In <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal_CheckIn()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="CheckInFormGroup">
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3 mb-6">
+            <div class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <tr>
+                  <td>Name</td>
+                  <td>{{request.RequestName}}</td>
+                </tr>
+                <tr>
+                  <td>College Name</td>
+                  <td>{{request.InstituteName}}</td>
+                </tr>
+                <tr>
+                  <td>Purpose</td>
+                  <td>{{request.Purpose_str}}</td>
+                </tr>
+                <tr>
+                  <td>Gender</td>
+                  <td>{{request.Gender_str}}</td>
+                </tr>
+              </table>
+            </div>
+          </div>         
+
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Room No <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="checkInRequest.GuestRoomDetailID" formControlName="GuestRoomDetailID">
+                <option value="0" selected="">--Choose Option--</option>
+                <option *ngFor="let item of RoomNoList" [value]="item.GuestRoomDetailID">{{item.RoomNo}}</option>
+              </select>
+              <div *ngIf="isCheckedIn && _CheckInFormGroup.controls.GuestRoomDetailID.errors" class="text-danger">
+                <p *ngIf="!_CheckInFormGroup.controls.GuestRoomDetailID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            
+          </div>
+        </div> <!-- Close this div here for card-body -->
+        <div class="card-footer text-center">
+          <button type="button" (click)="updateReqStatus()" class="btn bg-success text-white btn-sm">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
