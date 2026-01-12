@@ -30,6 +30,46 @@
           <input type="text" class="form-input" id="RequestId" [(ngModel)]="ScholarshipAPIRequest.RequestId" placeholder="Enter Request Type">
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Equipment: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="EquipmentId" [(ngModel)]="ScholarshipAPIRequest.CollegeType">
+            <option value="">Choose Option</option>
+            <option value="1">ITI</option>
+            <option value="2">BTER</option>
+
+          </select>
+        </div>
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <ng-select [(ngModel)]="ScholarshipAPIRequest.InstituteID"
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of scholarshipRequestList;">
+              <ng-option [value]="item.collegeCode">{{item.collegeName}}</ng-option>
+            </ng-container>
+          </ng-select>
+
+        </div>
+
+
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <ng-select [(ngModel)]="ScholarshipAPIRequest.InstituteID"
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of InstituteMasterList;">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
+
+        </div>-->
+
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" id="searchButton" (click)="GetPracticalExamMarksList()">Search</button>
@@ -46,9 +86,9 @@
         <!--<button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="Export Center Detail" (click)="exportToExcelExamMarksData()" >
       <i class="fa fa-download"></i> Download
     </button>-->
-        <button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="ScholarshipAPI Data">
+        <!--<button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="ScholarshipAPI Data">
           <i class="fa fa-download"></i> Download
-        </button>
+        </button>-->
       </div>
 
 

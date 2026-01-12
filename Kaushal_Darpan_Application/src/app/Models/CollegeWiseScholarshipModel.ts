@@ -67,7 +67,9 @@ export class AddCollegeWiseScholarshipModel{
 }
 
 export class ScholarshipApiDataModel {
-  public RequestType = '';
-  public CollegeType = '';
-  public RequestId = '';
+  public RequestType: string = '';
+  public CollegeType: string = '';
+  public RequestId: string = '';
+  public InstituteID: number = 0;
+  public collegeCode: string = '';
 }
