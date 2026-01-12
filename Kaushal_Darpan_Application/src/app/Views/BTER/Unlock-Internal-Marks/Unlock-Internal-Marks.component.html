@@ -25,35 +25,34 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
-          <select class="form-select" id="SemesterId" >
-            <option value="0">Choose Option</option>
-           
-          </select>
-        </div>
-
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By {{titleDDLBranchTrade}}</label>
-          <select class="form-select" id="BrachId"
-                  [(ngModel)]="Searchrequest.BrachId">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+          <select class="form-select" id="SemesterId">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of BrachDDLList" [value]="item.StreamID">{{item.StreamName}}</option>
-          </select>
-        </div>
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
-          <select class="form-select" id="status"
-                  [(ngModel)]="Searchrequest.status" (change)="GetReportData()">
-            <option value="0">--- All ---</option>
-            <option *ngFor="let item of HostelStatusList" [value]="item.StatusID">{{item.StatusName}}</option>
           </select>
         </div>-->
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <ng-select [(ngModel)]="UnlockInternalMarksRequest.InstituteID"
+                     
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of InstituteMasterList;">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
+
+        </div>
+
+
+
+
+
+        <div>
           <button type="button" class="btn bg-info text-white mt-6" id="searchButton" (click)="GetUnlockInternalMarksList()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" id="cancelButton">Cancel</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="cancelButton" (click)="btn_Clear()">Cancel</button>
         </div>
       </div>
 
@@ -67,9 +66,9 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
         <div class="flex justify-end flex-wrap items-center">
-          <button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="ScholarshipAPI Data">
+          <!--<button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="ScholarshipAPI Data">
             <i class="fa fa-download"></i> Download
-          </button>
+          </button>-->
         </div>
       </div>
 
@@ -114,15 +113,15 @@
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
-                  <button type="button" class="bg-info btn text-white btn-sm" (click)="SCAMarkUnlock(2)">
+                  <button type="button" class="bg-info btn text-white btn-sm" (click)="SCAMarkUnlock(row, 2, 'IA Mark')">
                     IA Mark Unlock
                   </button>
 
-                  <button type="button" class="bg-success btn text-white btn-sm" (click)="SCAMarkUnlock(1)">
+                  <button type="button" class="bg-success btn text-white btn-sm" (click)="SCAMarkUnlock(row, 1, 'Practical Mark')">
                     Practical Mark Unlock
                   </button>
 
-                  <button type="button" class="bg-warning btn text-dark btn-sm" (click)="SCAMarkUnlock(3)">
+                  <button type="button" class="bg-warning btn text-dark btn-sm" (click)="SCAMarkUnlock(row, 3, 'SCA Mark')">
                     SCA Mark Unlock
                   </button>
                 </div>
