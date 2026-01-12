@@ -580,18 +580,18 @@ export class ItiCollegeReportComponent {
         //  this.toastr.error('Invalid file name. Please remove special characters from file');
         //  return;
         //}
-        // Type validation
-        if (['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'].includes(this.file.type)) {
-          // Size validation
-          if (this.file.size > 2000000) {
-            this.toastr.error('Select less than 2MB File');
-            return;
-          }
-        }
-        else {
-          this.toastr.error('Select Only jpeg/jpg/png file');
-          return;
-        }
+        //// Type validation
+        //if (['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'].includes(this.file.type)) {
+        //  // Size validation
+        //  if (this.file.size > 2000000) {
+        //    this.toastr.error('Select less than 2MB File');
+        //    return;
+        //  }
+        //}
+        //else {
+        //  this.toastr.error('Select Only jpeg/jpg/png file');
+        //  return;
+        //}
 
         //if (this.file.name.split('.').length > 2)
         //{

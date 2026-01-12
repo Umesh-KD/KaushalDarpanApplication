@@ -62,13 +62,40 @@ export class GuestRoomSeatMasterComponent {
       ddlGuestHouseID: [0, [DropdownValidators]],
       txtRoomType: [0, [DropdownValidators]],
       RoomStatus: [0, [DropdownValidators]],
-      txtRoomFee: [null,
+      CoolingFacilities: [0, [DropdownValidators]],
+      // txtRoomFee: [null,
+      //   [
+      //     Validators.required,
+      //     Validators.pattern(/^(?!0)\d+$/), 
+      //     Validators.min(1),              
+      //     this.zeroNotAllowed.bind(this)  
+      //   ]],
+
+      BedFee_Training: [null,
         [
           Validators.required,
           Validators.pattern(/^(?!0)\d+$/), 
           Validators.min(1),              
           this.zeroNotAllowed.bind(this)  
         ]],
+
+      BedFee_OnDuty: [null,
+        [
+          Validators.required,
+          Validators.pattern(/^(?!0)\d+$/), 
+          Validators.min(1),              
+          this.zeroNotAllowed.bind(this)  
+        ]],
+
+      BedFee_Private: [null,
+        [
+          Validators.required,
+          Validators.pattern(/^(?!0)\d+$/), 
+          Validators.min(1),              
+          this.zeroNotAllowed.bind(this)  
+        ]],
+
+      ExtraCharges: [0],
       txtSeatCapacity: [{ value: '', disabled: true }, Validators.required],
       txtRoomQuantity: [
         null,
@@ -193,14 +220,7 @@ export class GuestRoomSeatMasterComponent {
     this.isSubmitted = true;
 
     if (this.groupForm.invalid) {
-      console.log("error");
-      return;
-    }
-
-    // Check if Room Fee is 0
-    if (this.request.RoomFee == 0) {
-      this.toastr.warning("Room Fee is required!");
-      console.log("error");
+      console.log("Please fill all required fields");
       return;
     }
 
@@ -295,17 +315,15 @@ export class GuestRoomSeatMasterComponent {
       this.loaderService.requestStarted();
       await this._GuestRoomManagmentService.GetByGRSMasterID(id).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if (data.Data !== null) {
-          this.request.GRSMasterID = data.Data.GRSMasterID;
-          this.request.GuestHouseID = data.Data.GuestHouseID;
-          this.request.RoomType = data.Data.RoomType;
-          this.request.SeatCapacity = data.Data.SeatCapacity;
-          this.request.RoomQuantity = data.Data.RoomQuantity;
-          this.request.RoomFee = data.Data.RoomFee;
+        if(data.State === EnumStatus.Success) {
+          this.request = data.Data;
           this.GRSMasterID = data.Data.GRSMasterID;
           this.isUpdate = true;
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
         }
-        console.log(this.request, "request")
       });
     } catch (error) {
       console.error(error);

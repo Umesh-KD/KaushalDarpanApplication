@@ -17,12 +17,12 @@ import { DropdownValidators } from '../../../Services/CustomValidators/custom-va
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
-  selector: 'app-AddGuestApplyForGuestRoom',
+  selector: 'app-warden-apply-for-guest-room',
   standalone: false,
-  templateUrl: './AddGuestApplyForGuestRoom.component.html',
-  styleUrl: './AddGuestApplyForGuestRoom.component.css'
+  templateUrl: './warden-apply-for-guest-room.component.html',
+  styleUrl: './warden-apply-for-guest-room.component.css'
 })
-export class AddGuestApplyForGuestRoomComponent {
+export class WardenApplyForGuestRoomComponent {
   public ID: number = 0;
   public request = new GuestApplyForGuestRoomDataModel()
   public isLoading: boolean = false;
@@ -48,6 +48,7 @@ export class AddGuestApplyForGuestRoomComponent {
   public GuestRoomNameList: any = [];
   public RoomTypeList: any = [];
   public RoomAvailablity: number = 0;
+  public IsShowForm: boolean = false;
   _EnumRole = EnumRole;
   displayedColumns: string[] = [
     'SNo', 'RequestName', 'InstituteName', 'DepartmentName',
@@ -72,7 +73,6 @@ export class AddGuestApplyForGuestRoomComponent {
   ) { }
 
   async ngOnInit() {
-    
     this.SSOIDFormGroup = this.formBuilder.group({
       SSOID: ['', Validators.required]
     });
@@ -92,21 +92,15 @@ export class AddGuestApplyForGuestRoomComponent {
         txtRoomFee: [{ value: '', disabled: true }, Validators.required],
         ddlGuestHouseID: ['', Validators.required],
         Purpose: ['', [DropdownValidators]],
-        CoolingFacilities: ['', [DropdownValidators]],
         txtRoomType: ['', Validators.required],
         txtSeatCapacity: ['', Validators.required],
-        txtRoomQuantity: [{ value: '', disabled: true }, Validators.required]
+        txtRoomQuantity: ['', Validators.required]
       });
-
-    this.request.RoomQuantity = 1;
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
-    this.searchRequestGuestStaffProfileSearchModel.RoleID = this.sSOLoginDataModel.RoleID;
-    this.searchRequestGuestStaffProfileSearchModel.InstituteID = this.sSOLoginDataModel.InstituteID;
-
-    await this.PostUserExists();
+    
     await this.loadData();
     await this.GetGuestRoomApplyList();
     await this.GetAllRoomSeatList();
@@ -153,44 +147,35 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   async PostUserExists() {
-    // if (this.SSOIDExists) {    
-    //   await this.loadData();
-    //   await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
-    //     .then((data: any) => {
-    //       data = JSON.parse(JSON.stringify(data));
-    //       this.State = data['State'];
-    //       this.Message = data['Message'];
-    //       this.ErrorMessage = data['ErrorMessage'];
-    //       this.request.CollegeID = data['Data'];
-    //       this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
-    //       this.request.InstituteName = data['Data'][0]['InstituteName'];
-    //       this.request.CollegeID = data['Data'][0]['InstituteID'];
-    //       this.request.DisplayName = data['Data'][0]['DisplayName'];
-    //       this.request.FirstName = data['Data'][0]['DisplayName'];
-    //       this.request.State = data['Data'][0]['StateName'];
-    //       this.request.PostalCode = data['Data'][0]['Pincode'];
-    //       this.request.TelephoneNumber = data['Data'][0]['MobileNumber'];
-    //       this.request.MailPersonal = data['Data'][0]['Email'];
-    //       this.request.MobileNo = data['Data'][0]['MobileNumber'];
-    //       this.request.PostalAddress = data['Data'][0]['Address'];
-    //     }, error => console.error(error));
-    //   this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-    //   this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    // } else {
-    //   this.toastr.warning("Not Exists SSOID");
-    // }  
-
-    this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
-    this.request.CollegeID = this.sSOLoginDataModel.InstituteID;
-    this.request.InstituteName = this.sSOLoginDataModel.InstituteName;
-    this.request.DisplayName = this.sSOLoginDataModel.DisplayName;
-    this.request.FirstName = this.sSOLoginDataModel.DisplayName;
-    this.request.State = this.sSOLoginDataModel.State;
-    this.request.PostalCode = this.sSOLoginDataModel.Postalcode;
-    this.request.TelephoneNumber = this.sSOLoginDataModel.Telephonenumber;
-    this.request.MailPersonal = this.sSOLoginDataModel.Mailpersonal;
-    this.request.MobileNo = this.sSOLoginDataModel.Mobileno;
-    this.request.PostalAddress = this.sSOLoginDataModel.Postaladdress;
+    try {
+      this.searchRequestGuestStaffProfileSearchModel.SSOID = this.SSOIDFormGroup.get('SSOID')?.value;
+      await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if(data.State === EnumStatus.Success) {
+            this.IsShowForm = true;
+            this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
+            this.request.InstituteName = data['Data'][0]['InstituteName'];
+            this.request.CollegeID = data['Data'][0]['InstituteID'];
+            this.request.DisplayName = data['Data'][0]['DisplayName'];
+            this.request.FirstName = data['Data'][0]['DisplayName'];
+            this.request.State = data['Data'][0]['StateName'];
+            this.request.PostalCode = data['Data'][0]['Pincode'];
+            this.request.TelephoneNumber = data['Data'][0]['MobileNumber'];
+            this.request.MailPersonal = data['Data'][0]['Email'];
+            this.request.MobileNo = data['Data'][0]['MobileNumber'];
+            this.request.PostalAddress = data['Data'][0]['Address'];
+            this.request.UserID = data['Data'][0]['UserID'];
+            this.request.RequestSSOID = data['Data'][0]['SSOID'];
+          } else if(data.State === EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage);
+          } else {
+            this.toastr.warning(data.Message);
+          }
+        }, error => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   onFromDateChange() {
@@ -244,7 +229,7 @@ export class AddGuestApplyForGuestRoomComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
-      this.searchRequest.IsForSelf = true;
+      this.searchRequest.IsForSelf = false;
 
       await this.guestRoomManagmentService.GetAllGuestApplyForGuestRoomList(this.searchRequest)
         .then((data: any) => {
@@ -276,7 +261,6 @@ export class AddGuestApplyForGuestRoomComponent {
             item.DeleteStatus = true;
             item.ActiveStatus = false;
             item.ModifyBy = this.sSOLoginDataModel.UserID;
-
             await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(item)
               .then((data: any) => {
                 data = JSON.parse(JSON.stringify(data));
@@ -350,12 +334,13 @@ export class AddGuestApplyForGuestRoomComponent {
 
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.request.UserID = this.sSOLoginDataModel.UserID;
+      // this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.Status = 215;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
       this.request.IsForSelf = false;
+      // this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
+
       //save
       await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(this.request)
         .then((data: any) => {
@@ -460,8 +445,7 @@ export class AddGuestApplyForGuestRoomComponent {
 
   async changeSeats() {
     debugger
-    await this.SetBedPrice();
-    this.request.RoomQuantity = 1;
+    this.request.RoomQuantity = 0;
     // 1. Parse request start and end using correct parser
     const requestedStart = this.parseCustomDate1(this.request.FromDate, this.request.FromTime + ":00");
     const requestedEnd = this.parseCustomDate1(this.request.ToDate, this.request.ToTime + ":00");
@@ -537,6 +521,7 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   async GetRoomTypeList() {
+    debugger
     try {
       this.RoomAvailablity = 0;
       this.RoomTypeList = [];
@@ -589,6 +574,9 @@ export class AddGuestApplyForGuestRoomComponent {
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
           this.GuestRoomNameList = data['Data'];
         }, error => console.error(error));
     }
@@ -668,29 +656,4 @@ export class AddGuestApplyForGuestRoomComponent {
       default: return 'Dormitory/Hall (Sharing)';
     }
   }
-
-  async GetRoomTypeListData() {
-    this.request.RoomFee = 0;
-    try {
-      var dropdownReq: any = {}
-      dropdownReq.Purpose = this.request.Purpose
-      dropdownReq.GuestHouseID = this.request.GuestHouseID
-      dropdownReq.CoolingFacilities = this.request.CoolingFacilities
-      dropdownReq.action = "GetRoomType";
-
-      await this.guestRoomManagmentService.GuestHouse_Dropdowns(dropdownReq).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.RoomTypeList = data['Data'];
-      })
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  async SetBedPrice() {
-    this.request.RoomFee = this.RoomTypeList.filter((x: { RoomType: number }) => x.RoomType == this.request.RoomType)[0].RoomFee
-    console.log("RoomFee",this.request.RoomFee)
-  }
-
-  
 }

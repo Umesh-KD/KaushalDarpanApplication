@@ -788,5 +788,24 @@ export class TheoryMarksComponent implements OnInit {
     }
   }
 
+  allowOnlyPositiveNumbers(event: KeyboardEvent) {
+    const allowedKeys = [
+      'Backspace',
+      'Tab',
+      'ArrowLeft',
+      'ArrowRight',
+      'Delete'
+    ];
+
+    if (
+      allowedKeys.includes(event.key) ||
+      (event.key >= '0' && event.key <= '9')
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+  }
+
 }
 
