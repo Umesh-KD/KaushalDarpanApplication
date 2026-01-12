@@ -87,7 +87,7 @@
               <option value="0">Choose Option</option>
               <option value="1">AC</option>
               <option value="2">Non-AC/Cooler</option>
-              <option value="2">Fan</option>
+              <option value="3">Fan</option>
             </select>
             <div *ngIf="isSubmitted && _RequestFormGroup.coolingFacilities.errors" class="text-danger">
               <p *ngIf="!_RequestFormGroup.coolingFacilities.errors.DropdownValidators">
@@ -249,7 +249,7 @@
       <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord == 0">
         No Record Found
       </div>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      <mat-paginator [pageSizeOptions]="[50, 100, 500]" showFirstLastButtons></mat-paginator>
     </div>    
     
   </div>
