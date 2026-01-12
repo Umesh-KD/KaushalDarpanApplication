@@ -44,21 +44,9 @@
 
 
 
+        
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-          <ng-select [(ngModel)]="ScholarshipAPIRequest.InstituteID"
-                     [clearable]="false">
-            <ng-option [value]="0" selected>--All--</ng-option>
-            <ng-container *ngFor="let item of scholarshipRequestList;">
-              <ng-option [value]="item.collegeCode">{{item.collegeName}}</ng-option>
-            </ng-container>
-          </ng-select>
-
-        </div>
-
-
-
-        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
           <ng-select [(ngModel)]="ScholarshipAPIRequest.InstituteID"
                      [clearable]="false">
@@ -68,7 +56,7 @@
             </ng-container>
           </ng-select>
 
-        </div>-->
+        </div>
 
 
         <div>

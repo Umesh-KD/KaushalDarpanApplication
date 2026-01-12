@@ -47,13 +47,13 @@ export class AddGuestApplyForGuestRoomComponent {
   public GuestRoomList: any = [];
   public GuestRoomNameList: any = [];
   public RoomTypeList: any = [];
+  public GenderList: any = []
   public RoomAvailablity: number = 0;
   _EnumRole = EnumRole;
   displayedColumns: string[] = [
-    'SNo', 'RequestName', 'InstituteName', 'DepartmentName',
-    'FromDateTime', 'ToDateTime', 'Purpose_str', 'StatusName',
-    'Remark', 'GuestHouseName', 'RoomQuantity', 'RoomType',
-    'RoomFee', 'CheckinCheckout', 'Action'
+    'SNo', 'RequestName', 'InstituteName', 'DepartmentName', 'FromDateTime', 'ToDateTime',
+    'GuestHouseName', 'Purpose_str','RoomType', 'CoolingFacilities_Str', 'RoomFee', 
+    'StatusName', 'Remark', 'CheckinCheckout', 'Action'
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -92,6 +92,7 @@ export class AddGuestApplyForGuestRoomComponent {
         txtRoomFee: [{ value: '', disabled: true }, Validators.required],
         ddlGuestHouseID: ['', Validators.required],
         Purpose: ['', [DropdownValidators]],
+        GenderId: ['', [DropdownValidators]],
         CoolingFacilities: ['', [DropdownValidators]],
         txtRoomType: ['', Validators.required],
         txtSeatCapacity: ['', Validators.required],
@@ -106,6 +107,7 @@ export class AddGuestApplyForGuestRoomComponent {
     this.searchRequestGuestStaffProfileSearchModel.RoleID = this.sSOLoginDataModel.RoleID;
     this.searchRequestGuestStaffProfileSearchModel.InstituteID = this.sSOLoginDataModel.InstituteID;
 
+    await this.GetGenderList();
     await this.PostUserExists();
     await this.loadData();
     await this.GetGuestRoomApplyList();
@@ -129,9 +131,21 @@ export class AddGuestApplyForGuestRoomComponent {
     this.request.ToTime = this.formatTime(hours, minutes);
   }
 
-
   get _IIPMasterFormGroup() { return this.IIPMasterFormGroup.controls; }
   get _SSOIDFormGroup() { return this.SSOIDFormGroup.controls; }
+
+  async GetGenderList() {
+    try {
+      await this.commonMasterService.GetCommonMasterData('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+        }, (error: any) => console.error(error)
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async CheckUserExists(SSOID: any) {
     if (SSOID.target.value != null) {
@@ -355,7 +369,7 @@ export class AddGuestApplyForGuestRoomComponent {
       this.request.Status = 215;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
-      this.request.IsForSelf = false;
+      this.request.IsForSelf = true;
       //save
       await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(this.request)
         .then((data: any) => {

@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, GuestHousePaymentDataModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { CheckInDataModel, GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, GuestHousePaymentDataModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { MatPaginator } from '@angular/material/paginator';
@@ -34,6 +34,7 @@ export class GuestRoomRequestComponent {
 
   GrievanceFormGroup!: FormGroup;
   groupForm!: FormGroup;
+  CheckInFormGroup!: FormGroup;
   GFID: number | null = null;
   isUpdate: boolean = false;
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -44,11 +45,14 @@ export class GuestRoomRequestComponent {
   ErrorMessage: any = [];
   isLoading: boolean = false;
   isSubmitted: boolean = false;
+  isCheckedIn: boolean = false;
   request = new GuestApplyForGuestRoomDataModel()
+  checkInRequest = new CheckInDataModel()
   approveRequest = new GuestApplyForGuestRoomDataModel()
   searchRequest = new GuestApplyForGuestRoomSearchModel();
   RequestList: any = [];
   statusList: any = [];
+  RoomNoList: any = [];
   filteredStatusList: any = [];
   modalReference: NgbModalRef | undefined;
   GetStatusID: number = 0;
@@ -99,7 +103,9 @@ export class GuestRoomRequestComponent {
       ddlStatus: [1, [DropdownValidators]],
       txtRemark: ['', Validators.required]
     });
-
+    this.CheckInFormGroup = this.fb.group({
+      GuestRoomDetailID: ['', [DropdownValidators]]
+    });
     
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GuestRequestList();
@@ -113,6 +119,8 @@ export class GuestRoomRequestComponent {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     
   }
+
+  get _CheckInFormGroup() { return this.CheckInFormGroup.controls; }
   
   async commonMaster() {
     try {
@@ -140,7 +148,6 @@ export class GuestRoomRequestComponent {
   }
 
   async GuestRequestList() {
-    debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
@@ -265,40 +272,30 @@ export class GuestRoomRequestComponent {
   }
 
   async updateReqStatus() {
-    this.isSubmitted = true;
-    if (this.groupForm.invalid) {
-      return console.log("error")
+    this.isCheckedIn = true;
+    if (this.CheckInFormGroup.invalid) {
+      this.toastr.error("Please enter required fields !");
+      return
     }
-    this.loaderService.requestStarted();
-    this.isLoading = true;
 
     try {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       await this._GuestRoomManagmentService.updateReqStatus(this.request)
         .then(async (data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          if (this.State == EnumStatus.Success) {
-            this.CloseModal();
+          if (data.State == EnumStatus.Success) {
+            this.CloseModal_CheckIn();
             this.GuestRequestList();
           }
-          else if (this.State == EnumStatus.Warning) {
-            this.toastr.warning(this.Message)
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message)
           }
           else {
-            this.toastr.error(this.ErrorMessage)
+            this.toastr.error(data.ErrorMessage)
           }
         })
     }
     catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-
-      }, 200);
-    }
+    
   }
 
   async ReqApproveByAdmin() {
@@ -366,7 +363,6 @@ export class GuestRoomRequestComponent {
 
   public isFormSubmitted: boolean = false;
   async openModalGenerateOTP(content: any, item: GuestHousePaymentDataModel) {
-    debugger
     this.isFormSubmitted = true;
     this.OTP = '';
     this.MobileNo = GlobalConstants.DefaultMobileNo.length > 0 ? GlobalConstants.DefaultMobileNo : '9529820615'; 
@@ -393,7 +389,6 @@ export class GuestRoomRequestComponent {
 
   async SendOTP(isResend?: boolean) {
     try {
-      debugger
       this.GeneratedOTP = "";
       await this.sMSMailService.SendMessage(this.MobileNo, "OTP")
         .then((data: any) => {
@@ -454,7 +449,6 @@ export class GuestRoomRequestComponent {
   }
    
   async VerifyOTP() {
-    debugger
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
         const errors: any[] = [];
@@ -482,13 +476,10 @@ export class GuestRoomRequestComponent {
   }
 
   async PayApplicationFees() {
-    debugger;
     await this.proceedToSave();
-    debugger
     if (this.saveFlag == 0) {
       return;
     }
-    debugger
     this.emitraRequest = new EmitraRequestDetails();
     //Set Parameters for emitra
     this.emitraRequest.Amount = Number(this.otpRequest.RoomFee);
@@ -503,13 +494,10 @@ export class GuestRoomRequestComponent {
       this.emitraRequest.IsKiosk = true;
     }
 
-    debugger;
-
     this.loaderService.requestStarted();
     try {
       await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
         .then(async (data: any) => {
-          debugger;
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
           this.Message = data['Message'];
@@ -539,10 +527,8 @@ export class GuestRoomRequestComponent {
 
   // vivek start
   async proceedToSave() {
-    debugger
     this.isLoading = true;
     try {
-      debugger;
 
       this.otpRequest.CreatedBy = this.sSOLoginDataModel.UserID;
       this.otpRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -553,7 +539,6 @@ export class GuestRoomRequestComponent {
 
       await this._GuestRoomManagmentService.SaveGuestRoomPayment(this.otpRequest)
         .then(async (data: any) => {
-          debugger;
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
           this.Message = data['Message'];
@@ -605,6 +590,40 @@ export class GuestRoomRequestComponent {
     document.body.removeChild(form);
   }
 
+  async openModal_CheckIn(model: any, userSubmitData: any) {
+    try {
+      this.request = { ...userSubmitData };
+      this.request.Status = 0;
+      this.request.Remark = '';
+      await this.GetRoomTypeListData(this.request);
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
 
+  async GetRoomTypeListData(request: any) {
+    this.request.RoomFee = 0;
+    try {
+      var dropdownReq: any = {}
+      dropdownReq.GuestHouseID = request.GuestHouseID
+      dropdownReq.CoolingFacilities = request.CoolingFacilities
+      dropdownReq.RoomType = request.RoomType
+      dropdownReq.action = "GetRoomForAllotment";
 
+      await this._GuestRoomManagmentService.GuestHouse_Dropdowns(dropdownReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoomNoList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  CloseModal_CheckIn() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.isCheckedIn = false;
+    this.checkInRequest = new CheckInDataModel();
+  }
 }

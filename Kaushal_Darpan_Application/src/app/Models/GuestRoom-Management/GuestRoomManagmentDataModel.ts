@@ -152,6 +152,8 @@ export class GuestApplyForGuestRoomDataModel {
   public PurposeDocPhoto: string = '';
   public Dis_PurposeDocPhoto: string = '';
   public IsForSelf?: boolean = false;
+  public GenderId?: number = 0;
+  public GuestRoomDetailID?: number = 0;
 }
 
 export class GuestApplyForGuestRoomSearchModel {
@@ -219,3 +221,10 @@ export class GuestHousePaymentDataModel {
   public IsDelete: boolean = false;
 }
 
+export class CheckInDataModel {
+  public GuestRoomDetailID?: number = 0
+  public GuestHouseID?: number = 0;
+  public AllotmentStatus?: number = 0;
+  public GuestReqID?: number = 0;
+  public UserID?: number = 0;
+}

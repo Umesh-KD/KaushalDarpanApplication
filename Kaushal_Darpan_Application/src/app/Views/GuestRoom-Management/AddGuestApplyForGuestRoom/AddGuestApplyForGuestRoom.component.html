@@ -79,7 +79,6 @@
           </div>
         </div>
 
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Mail ID<span class="StarMarking">*</span>
@@ -88,6 +87,19 @@
                  [(ngModel)]="request.MailPersonal" formControlName="MailPersonal" >
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.MailPersonal.errors" class="form-text text-danger">
             <p *ngIf="_IIPMasterFormGroup.MailPersonal.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Gender:<span class="StarMarking" style="display:none;">*</span>
+        </label>
+          <select class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="request.GenderId">
+            <option value="0" selected>--Select Gender--</option>
+            <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.GenderId.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.GenderId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
           </div>
         </div>
 
@@ -354,9 +366,29 @@
             <td mat-cell *matCellDef="let row">{{ row.ToDate }} {{ row.ToTime }}</td>
           </ng-container>
 
+          <ng-container matColumnDef="GuestHouseName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest Room Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
+          </ng-container>
+
           <ng-container matColumnDef="Purpose_str">
             <th mat-header-cell *matHeaderCellDef>Purpose</th>
             <td mat-cell *matCellDef="let row">{{ row.Purpose_str }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="RoomType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Type</th>
+            <td mat-cell *matCellDef="let row">{{ row.RoomType_str }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="CoolingFacilities_Str">
+            <th mat-header-cell *matHeaderCellDef>Cooling Facilities</th>
+            <td mat-cell *matCellDef="let row">{{ row.CoolingFacilities_Str }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="RoomFee">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Fee</th>
+            <td mat-cell *matCellDef="let row">{{ row.RoomFee }}</td>
           </ng-container>
 
           <ng-container matColumnDef="StatusName">
@@ -369,25 +401,10 @@
             <td mat-cell *matCellDef="let row">{{ row.Remark }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="GuestHouseName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest Room Name</th>
-            <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomQuantity">
+          <!-- <ng-container matColumnDef="RoomQuantity">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty</th>
             <td mat-cell *matCellDef="let row">{{ row.RoomQuantity }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomType">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-            <td mat-cell *matCellDef="let row">{{ getRoomTypeName(row.RoomType) }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomFee">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fee</th>
-            <td mat-cell *matCellDef="let row">{{ row.RoomFee }}</td>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="CheckinCheckout">
             <th mat-header-cell *matHeaderCellDef>Check-In/Out</th>
