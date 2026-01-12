@@ -92,7 +92,7 @@ export class TheoryMarksItiComponent {
 
     debugger
     this.searchRequest.SemesterID = Number(sessionStorage.getItem('SemesterID'));
-    this.searchRequest.CenterID = Number(sessionStorage.getItem('CenterID'));
+/*    this.searchRequest.CenterID = Number(sessionStorage.getItem('CenterID'));*/
 
     this.searchRequest.SubjectName = sessionStorage.getItem('SubjectName') ?? '';
 

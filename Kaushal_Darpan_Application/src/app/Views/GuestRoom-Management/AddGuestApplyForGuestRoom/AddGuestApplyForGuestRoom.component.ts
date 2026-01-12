@@ -6,7 +6,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { GuestRoomManagmentService } from '../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { Router } from '@angular/router';
 import { AppsettingService } from '../../../Common/appsetting.service';
@@ -14,6 +14,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-AddGuestApplyForGuestRoom',
@@ -46,16 +47,18 @@ export class AddGuestApplyForGuestRoomComponent {
   public GuestRoomList: any = [];
   public GuestRoomNameList: any = [];
   public RoomTypeList: any = [];
+  public GenderList: any = []
   public RoomAvailablity: number = 0;
+  _EnumRole = EnumRole;
   displayedColumns: string[] = [
-    'SNo', 'RequestName', 'InstituteName', 'DepartmentName',
-    'FromDateTime', 'ToDateTime', 'Purpose_str', 'StatusName',
-    'Remark', 'GuestHouseName', 'RoomQuantity', 'RoomType',
-    'RoomFee', 'CheckinCheckout', 'Action'
+    'SNo', 'RequestName', 'InstituteName', 'DepartmentName', 'FromDateTime', 'ToDateTime',
+    'GuestHouseName', 'Purpose_str','RoomType', 'CoolingFacilities_Str', 'RoomFee', 
+    'StatusName', 'Remark', 'CheckinCheckout', 'Action'
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   constructor(
     private appsettingConfig: AppsettingService,
@@ -69,11 +72,7 @@ export class AddGuestApplyForGuestRoomComponent {
   ) { }
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
-    this.searchRequestGuestStaffProfileSearchModel.RoleID = this.sSOLoginDataModel.RoleID;
-    this.searchRequestGuestStaffProfileSearchModel.InstituteID = this.sSOLoginDataModel.InstituteID;
+    
     this.SSOIDFormGroup = this.formBuilder.group({
       SSOID: ['', Validators.required]
     });
@@ -93,10 +92,22 @@ export class AddGuestApplyForGuestRoomComponent {
         txtRoomFee: [{ value: '', disabled: true }, Validators.required],
         ddlGuestHouseID: ['', Validators.required],
         Purpose: ['', [DropdownValidators]],
+        GenderId: ['', [DropdownValidators]],
+        CoolingFacilities: ['', [DropdownValidators]],
         txtRoomType: ['', Validators.required],
         txtSeatCapacity: ['', Validators.required],
-        txtRoomQuantity: ['', Validators.required]
+        txtRoomQuantity: [{ value: '', disabled: true }, Validators.required]
       });
+
+    this.request.RoomQuantity = 1;
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
+    this.searchRequestGuestStaffProfileSearchModel.RoleID = this.sSOLoginDataModel.RoleID;
+    this.searchRequestGuestStaffProfileSearchModel.InstituteID = this.sSOLoginDataModel.InstituteID;
+
+    await this.GetGenderList();
     await this.PostUserExists();
     await this.loadData();
     await this.GetGuestRoomApplyList();
@@ -120,9 +131,21 @@ export class AddGuestApplyForGuestRoomComponent {
     this.request.ToTime = this.formatTime(hours, minutes);
   }
 
-
   get _IIPMasterFormGroup() { return this.IIPMasterFormGroup.controls; }
   get _SSOIDFormGroup() { return this.SSOIDFormGroup.controls; }
+
+  async GetGenderList() {
+    try {
+      await this.commonMasterService.GetCommonMasterData('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+        }, (error: any) => console.error(error)
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async CheckUserExists(SSOID: any) {
     if (SSOID.target.value != null) {
@@ -235,6 +258,7 @@ export class AddGuestApplyForGuestRoomComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+      this.searchRequest.IsForSelf = true;
 
       await this.guestRoomManagmentService.GetAllGuestApplyForGuestRoomList(this.searchRequest)
         .then((data: any) => {
@@ -266,6 +290,7 @@ export class AddGuestApplyForGuestRoomComponent {
             item.DeleteStatus = true;
             item.ActiveStatus = false;
             item.ModifyBy = this.sSOLoginDataModel.UserID;
+
             await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(item)
               .then((data: any) => {
                 data = JSON.parse(JSON.stringify(data));
@@ -301,23 +326,38 @@ export class AddGuestApplyForGuestRoomComponent {
 
   }
 
+  async openOTPModal_Apply() {
+    this.isSubmitted = true;
+    if (this.IIPMasterFormGroup.invalid) {
+      this.toastr.error("Please enter required fields !");
+      return
+    }
+    if (this.request.GuestHouseID == 0) {
+      this.toastr.warning("Guest House Name is requird !");
+      return
+    } else if (this.request.RoomType == 0) {
+      this.toastr.warning("Guest House Room Type is requird !");
+      return
+    } else if (this.request.RoomQuantity == 0) {
+      this.toastr.warning("Guest House Room Quantity is requird !");
+      return
+    }
+
+    this.childComponent.MobileNo = this.request.MobileNo
+
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+
+    // do work
+    await this.SaveData();
+  }
+
   // get detail by id
   async SaveData() {
-    try {
-      this.isSubmitted = true;
-      if (this.IIPMasterFormGroup.invalid) {
-        return
-      }
-      if (this.request.GuestHouseID == 0) {
-        this.toastr.warning("Guest House Name is requird !");
-        return
-      } else if (this.request.RoomType == 0) {
-        this.toastr.warning("Guest House Room Type is requird !");
-        return
-      } else if (this.request.RoomQuantity == 0) {
-        this.toastr.warning("Guest House Room Quantity is requird !");
-        return
-      }
+    try {      
       this.isLoading = true;
 
       this.loaderService.requestStarted();
@@ -329,7 +369,7 @@ export class AddGuestApplyForGuestRoomComponent {
       this.request.Status = 215;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
-
+      this.request.IsForSelf = true;
       //save
       await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(this.request)
         .then((data: any) => {
@@ -434,7 +474,8 @@ export class AddGuestApplyForGuestRoomComponent {
 
   async changeSeats() {
     debugger
-    this.request.RoomQuantity = 0;
+    await this.SetBedPrice();
+    this.request.RoomQuantity = 1;
     // 1. Parse request start and end using correct parser
     const requestedStart = this.parseCustomDate1(this.request.FromDate, this.request.FromTime + ":00");
     const requestedEnd = this.parseCustomDate1(this.request.ToDate, this.request.ToTime + ":00");
@@ -510,7 +551,6 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   async GetRoomTypeList() {
-    debugger
     try {
       this.RoomAvailablity = 0;
       this.RoomTypeList = [];
@@ -563,9 +603,6 @@ export class AddGuestApplyForGuestRoomComponent {
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.GuestRoomNameList = data['Data'];
         }, error => console.error(error));
     }
@@ -646,4 +683,28 @@ export class AddGuestApplyForGuestRoomComponent {
     }
   }
 
+  async GetRoomTypeListData() {
+    this.request.RoomFee = 0;
+    try {
+      var dropdownReq: any = {}
+      dropdownReq.Purpose = this.request.Purpose
+      dropdownReq.GuestHouseID = this.request.GuestHouseID
+      dropdownReq.CoolingFacilities = this.request.CoolingFacilities
+      dropdownReq.action = "GetRoomType";
+
+      await this.guestRoomManagmentService.GuestHouse_Dropdowns(dropdownReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoomTypeList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async SetBedPrice() {
+    this.request.RoomFee = this.RoomTypeList.filter((x: { RoomType: number }) => x.RoomType == this.request.RoomType)[0].RoomFee
+    console.log("RoomFee",this.request.RoomFee)
+  }
+
+  
 }

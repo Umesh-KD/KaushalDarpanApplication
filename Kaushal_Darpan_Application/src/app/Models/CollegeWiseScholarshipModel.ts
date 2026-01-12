@@ -65,3 +65,11 @@ export class AddCollegeWiseScholarshipModel{
   public InstituteID :number=0;
  public ScholarshipMode : string='';
 }
+
+export class ScholarshipApiDataModel {
+  public RequestType: string = '';
+  public CollegeType: string = '';
+  public RequestId: string = '';
+  public InstituteID: number = 0;
+  public collegeCode: string = '';
+}

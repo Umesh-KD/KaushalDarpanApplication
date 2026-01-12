@@ -42,7 +42,7 @@ export class ITIPrincipalDispatchGroupComponent {
   public request = new ITIDispatchSearchModel();
   
 
-  public UpdateFileHandover = new ITIUpdateFileHandovertoExaminerByPrincipalModel();
+  public UpdateFileHandover: any = {};
   public UserID: number = 0;
   public StaffID: number = 0
   isInstituteDisabled: boolean = false; // Set true to disable
@@ -65,7 +65,7 @@ export class ITIPrincipalDispatchGroupComponent {
   @ViewChild('MyModel_ReplayQuery') MyModel_ReplayQuery: any;
   public searchRequestRDLC = new ITI_DispatchAdmin_ByExaminer_RptSearchModel();
   public SearchDDLValue: number = 0;
-  public RequpdateStatus = new ITI_DispatchBundelNoSendToTheAdminByTheExaminerUpdate;
+  public RequpdateStatus: any = {}
   public SubmitTypeID: number = 0;
   public DashBoardStatuID: number = -1
 
@@ -337,16 +337,26 @@ export class ITIPrincipalDispatchGroupComponent {
    
     const selectedItems = this.GroupList.filter((item: any) => item.selected === true);
 
-    this.RequpdateStatus.ExaminerCode = selectedItems
-      .map((item: any) => item.ExaminerCode)
-      .join(',');
+    //this.RequpdateStatus.ExaminerCode = selectedItems
+    //  .map((item: any) => item.ExaminerCode)
+    //  .join(',');
 
-    this.RequpdateStatus.Status = this._DispatchDDlValue.HandOverToExaminerByPrincipal
-    this.RequpdateStatus.AppointExaminerID = selectedItems.length > 0 ? selectedItems[0].AppointExaminerID : null;
+    //this.RequpdateStatus.Status = this._DispatchDDlValue.HandOverToExaminerByPrincipal
+    //this.RequpdateStatus.AppointExaminerID = selectedItems.length > 0 ? selectedItems[0].AppointExaminerID : null;
+    //this.RequpdateStatus.ExaminerID = selectedItems.length > 0 ? selectedItems[0].ExaminerID : null;
+    //this.RequpdateStatus.TradeID = selectedItems.length > 0 ? selectedItems[0].TradeID: null;
+    //this.RequpdateStatus.SemesterID = selectedItems.length > 0 ? selectedItems[0].SemesterID : null;
+    //this.RequpdateStatus.SemesterID = selectedItems.length > 0 ? selectedItems[0].SemesterID : null;
 
-    this.RequpdateStatus.ModifyBy = this.sSOLoginDataModel.UserID;
+    this.GroupCheckSelectdList = selectedItems
 
-    this.GroupCheckSelectdList = [this.RequpdateStatus];
+    this.GroupCheckSelectdList.forEach((e) => {
+      e.DispatchGroupFileName = this.UpdateFileHandover.FileName,
+        e.DueDate = this.UpdateFileHandover.DueDate,
+        e.Remark = this.UpdateFileHandover.Remark
+}
+    )
+    /*this.GroupCheckSelectdList = [this.RequpdateStatus];*/
     debugger
     try {
       await this.DispatchService.UpdateBundleHandovertoExaminerByPrincipal(this.GroupCheckSelectdList).then(
@@ -431,7 +441,10 @@ export class ITIPrincipalDispatchGroupComponent {
     this.SubmitTypeID = 1;
     /* this.queryRequest = new CitizenSuggestionQueryModel();*/
    /* this.QueryReqFormGroup.reset();*/
-    await this.openOTP();
+    await this.childComponent.OpenOTPPopup();
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+    await this.CheckOtpAfterSave()
     
     
   }
@@ -458,25 +471,26 @@ export class ITIPrincipalDispatchGroupComponent {
     try {
       this.file = event.target.files[0];
       if (this.file) {
-        if (
-          this.file.type == 'image/jpeg' ||
-          this.file.type == 'image/jpg' ||
-          this.file.type == 'image/png'
-        ) {
-          //size validation
-          if (this.file.size > 2000000) {
-            this.toastr.error('Select less then 2MB File');
-            return;
-          }
-          //if (this.file.size < 100000) {
-          //  this.toastr.error('Select more then 100kb File')
-          //  return
-          //}
-        } else {
-          // type validation
-          this.toastr.error('Select Only jpeg/jpg/png file');
-          return;
-        }
+        //if (
+        //  this.file.type == 'image/jpeg' ||
+        //  this.file.type == 'image/jpg' ||
+        //  this.file.type == 'image/png'
+        //) {
+        //  //size validation
+        //  if (this.file.size > 2000000) {
+        //    this.toastr.error('Select less then 2MB File');     
+        //    return;
+        //  }
+          
+        //  //if (this.file.size < 100000) {
+        //  //  this.toastr.error('Select more then 100kb File')
+        //  //  return
+        //  //}
+        //} else {
+        //  // type validation
+        //  this.toastr.error('Select Only jpeg/jpg/png file');
+        //  return;
+        //}
         // upload to server folder
         this.loaderService.requestStarted();
 

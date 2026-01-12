@@ -61,7 +61,7 @@
             Name<span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input" placeholder="Enter Display Name" name="DisplayName"
-                 [(ngModel)]="request.DisplayName" formControlName="DisplayName" readonly>
+                 [(ngModel)]="request.DisplayName" formControlName="DisplayName" [readonly]="sSOLoginDataModel.RoleID!=_EnumRole.GuestRoomWarden">
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.DisplayName.errors" class="form-text text-danger">
             <p *ngIf="_IIPMasterFormGroup.DisplayName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
@@ -73,12 +73,11 @@
 
           </label>
           <input type="text" class="form-input" placeholder="Enter Mobile No" name="MobileNo"
-                 [(ngModel)]="request.MobileNo" formControlName="MobileNo">
+                 [(ngModel)]="request.MobileNo" formControlName="MobileNo" [readonly]="sSOLoginDataModel.RoleID!=_EnumRole.GuestRoomWarden">
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.MobileNo.errors" class="form-text text-danger">
             <p *ngIf="_IIPMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
         </div>
-
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -88,6 +87,19 @@
                  [(ngModel)]="request.MailPersonal" formControlName="MailPersonal" >
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.MailPersonal.errors" class="form-text text-danger">
             <p *ngIf="_IIPMasterFormGroup.MailPersonal.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Gender:<span class="StarMarking" style="display:none;">*</span>
+        </label>
+          <select class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="request.GenderId">
+            <option value="0" selected>--Select Gender--</option>
+            <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.GenderId.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.GenderId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
           </div>
         </div>
 
@@ -178,8 +190,20 @@
           </div>
         </div>
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Purpose<span class="StarMarking">*</span></label>
+          <select formControlName="Purpose" class="form-select" [(ngModel)]="request.Purpose" (change)="GetRoomTypeListData()">
+            <option value="0">--Select--</option>
+            <option value="1">Private</option>
+            <option value="2">On Duty</option>
+            <option value="3">Training</option>
+          </select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.Purpose.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.Purpose.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name<span class="StarMarking">*</span></label>
-          <select formControlName="ddlGuestHouseID" class="form-select" [(ngModel)]="request.GuestHouseID" (change)="GetRoomTypeList()">
+          <select formControlName="ddlGuestHouseID" class="form-select" [(ngModel)]="request.GuestHouseID" (change)="GetRoomTypeListData()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of GuestRoomNameList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -187,6 +211,23 @@
             <p *ngIf="!_IIPMasterFormGroup.ddlGuestHouseID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Cooling Facilities: <span class="StarMarking">*</span></label>
+          <select class="form-select" id="CoolingFacilities" 
+            formControlName="CoolingFacilities" 
+            [(ngModel)]="request.CoolingFacilities"
+            (change)="GetRoomTypeListData()">
+            <option value="0">Choose Option</option>
+            <option value="1">AC</option>
+            <option value="2">Non-AC</option>
+            <!-- <option value="3">Fan</option> -->
+          </select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.CoolingFacilities.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.CoolingFacilities.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type<span class="StarMarking">*</span></label>
           <select formControlName="txtRoomType" class="form-input" type="text" placeholder="Enter Room Type"
@@ -209,39 +250,26 @@
           </div>
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Availability<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Availability<span class="StarMarking">*</span></label>
           <div class="alert p-2 alert-warning">{{RoomAvailablity}}</div>
 
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Quantity<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Quantity<span class="StarMarking">*</span></label>
           <input formControlName="txtRoomQuantity" class="form-input" type="text" placeholder="Enter Room Quantity"
-                 [(ngModel)]="request.RoomQuantity" (keyup)="getRoomPrice()">
+                 [(ngModel)]="request.RoomQuantity">
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomQuantity.errors" class="text-danger">
             <p *ngIf="_IIPMasterFormGroup.txtRoomQuantity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fees<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Fees<span class="StarMarking">*</span></label>
           <input formControlName="txtRoomFee" class="form-input" type="text" placeholder="Enter Room Fees"
                  [(ngModel)]="request.RoomFee">
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomFee.errors" class="text-danger">
             <p *ngIf="_IIPMasterFormGroup.txtRoomFee.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Purpose<span class="StarMarking">*</span></label>
-          <select formControlName="Purpose" class="form-select" [(ngModel)]="request.Purpose">
-            <option value="0">--Select--</option>
-            <option value="1">Private</option>
-            <option value="2">On Duty</option>
-            <option value="3">Training</option>
-          </select>
-          <div *ngIf="isSubmitted && _IIPMasterFormGroup.Purpose.errors" class="text-danger">
-            <p *ngIf="!_IIPMasterFormGroup.Purpose.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
         </div>
 
@@ -263,14 +291,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Reason
-          </label>
-          <input type="text" class="form-input" placeholder="Enter Reason" name="Reason"
-                 [(ngModel)]="request.Reason" formControlName="Reason">
-        </div> -->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"
@@ -295,7 +315,7 @@
       </div>
 
       <div class="flex justify-center">
-        <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="openOTPModal_Apply()">Submit</button>
         <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
           <i class="ti ti-refresh"></i> Reset
         </button>
@@ -346,9 +366,29 @@
             <td mat-cell *matCellDef="let row">{{ row.ToDate }} {{ row.ToTime }}</td>
           </ng-container>
 
+          <ng-container matColumnDef="GuestHouseName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest Room Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
+          </ng-container>
+
           <ng-container matColumnDef="Purpose_str">
             <th mat-header-cell *matHeaderCellDef>Purpose</th>
             <td mat-cell *matCellDef="let row">{{ row.Purpose_str }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="RoomType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Type</th>
+            <td mat-cell *matCellDef="let row">{{ row.RoomType_str }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="CoolingFacilities_Str">
+            <th mat-header-cell *matHeaderCellDef>Cooling Facilities</th>
+            <td mat-cell *matCellDef="let row">{{ row.CoolingFacilities_Str }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="RoomFee">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Fee</th>
+            <td mat-cell *matCellDef="let row">{{ row.RoomFee }}</td>
           </ng-container>
 
           <ng-container matColumnDef="StatusName">
@@ -361,25 +401,10 @@
             <td mat-cell *matCellDef="let row">{{ row.Remark }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="GuestHouseName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest Room Name</th>
-            <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomQuantity">
+          <!-- <ng-container matColumnDef="RoomQuantity">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty</th>
             <td mat-cell *matCellDef="let row">{{ row.RoomQuantity }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomType">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-            <td mat-cell *matCellDef="let row">{{ getRoomTypeName(row.RoomType) }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomFee">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fee</th>
-            <td mat-cell *matCellDef="let row">{{ row.RoomFee }}</td>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="CheckinCheckout">
             <th mat-header-cell *matHeaderCellDef>Check-In/Out</th>
@@ -410,3 +435,5 @@
     </div>    
   </div>
 </div>
+
+<app-otpmodal #otpModal></app-otpmodal>

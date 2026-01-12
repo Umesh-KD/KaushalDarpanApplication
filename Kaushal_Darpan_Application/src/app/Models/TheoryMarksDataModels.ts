@@ -258,3 +258,31 @@ export class ReportedStudentReport {
   public AcademicYearID: number = 0;
 
 }
+
+
+
+
+export class UnlockInternalMarksModel {
+  public InstituteID = 0;
+  public InstituteCode?: string;
+  public InstitutionDGTCode?: string;
+  public InstituteNameEnglish?: string;
+  public InstituteNameHindi?: string;
+  public SSOID?: string;
+  public Email?: string;
+  public FaxNumber?: string;
+  public TypeID = 0;
+  public InstituteID_Old?: number;
+  public DepartmentID = 0;
+  public FinancialYearID = 0;
+  public Capacity = 0;
+
+}
+
+export class updateUnlockInternalMarksModel {
+  public TypeID: number = 0;
+  public ModifyBy: number = 0;
+  public InstituteID: number = 0;
+  public EndTermID: number = 0;
+
+}

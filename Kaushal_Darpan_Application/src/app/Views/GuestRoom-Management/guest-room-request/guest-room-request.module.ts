@@ -6,16 +6,19 @@ import { LoaderModule } from '../../Shared/loader/loader.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
+import { GuestRoomRequestRoutingModule } from './guest-room-request-routing.module';
+import { OTPModalModule } from '../../otpmodal/otpmodal.module';
 
-const routes: Routes = [{ path: '', component: GuestRoomRequestComponent }];
 
 @NgModule({
   declarations: [
     GuestRoomRequestComponent
   ],
   imports: [
-    CommonModule, RouterModule.forChild(routes), MaterialModule,
-    FormsModule, ReactiveFormsModule, LoaderModule, TableSearchFilterModule
+    CommonModule, MaterialModule,
+    FormsModule, ReactiveFormsModule, LoaderModule, TableSearchFilterModule,
+    GuestRoomRequestRoutingModule,
+    OTPModalModule
   ]
 })
 export class GuestRoomRequestModule { }

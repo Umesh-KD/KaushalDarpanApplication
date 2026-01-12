@@ -7,7 +7,7 @@ import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel'
 import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDataModel';
 import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { AddCollegeWiseScholarshipModel } from '../../Models/CollegeWiseScholarshipModel';
+import { AddCollegeWiseScholarshipModel, ScholarshipApiDataModel } from '../../Models/CollegeWiseScholarshipModel';
 
 
 @Injectable({
@@ -153,5 +153,14 @@ export class CollegeWiseScholarshipService {
   //     ).toPromise();
   // }
 
+
+  // vivek 
+  public async GetScholarship1(data: ScholarshipApiDataModel) {
+    var body = JSON.stringify(data);
+    return await this.http.post(`${this.APIUrl}/GetScholarship1`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

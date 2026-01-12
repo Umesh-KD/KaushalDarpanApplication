@@ -16,6 +16,7 @@ import { ItiExaminerService } from '../../../Services/ItiExaminer/iti-examiner.s
 import { ItiAssignStudentExaminer, ItiExaminerDataModel, ITITeacherForExaminerSearchModel } from '../../../Models/ItiExaminerDataModel';
 import { CommonDDLSubjectCodeMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
 import { SweetAlert2 } from '../../../Common/SweetAlert2'
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-appoint-itiexaminer',
@@ -37,9 +38,21 @@ export class AppointITIExaminerComponent {
   public ExamList: any[] = [];
   public Table_SearchText: any = '';
   public AllSelect: boolean = false;
+  public isAllSelected: boolean = false;
+  public isAllSelected1: boolean = false;
+  public isAllSelected2: boolean = false;
+  selectedCenters: any[] = [];   // ngModel binding
+ 
+  selectedInstitute: any[] = [];   // ngModel binding
+  selectedTrade: any[] = [];   // ngModel binding
+  filteredCenterList: any[] = [];   // ngModel binding
+  filteredInstituteList: any[] = [];   // ngModel binding
+  filteredTradeList: any[] = [];   // ngModel binding
   // public request = new HrMasterDataModel()
   public ExaminerID:number=0
-
+  centerSearchText = '';
+  InstituteSearchText = '';
+  TradeSearchText = '';
   public _enumDepartment = EnumDepartment
   public AppointExaminer = new ItiExaminerDataModel();
   public isSubmitted: boolean = false;
@@ -151,10 +164,11 @@ export class AppointITIExaminerComponent {
     try {
       this.loaderService.requestStarted();
 
-      await this.commonMasterService.IticenterColleges(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
+      await this.commonMasterService.Iticollege(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
         , this.searchRequest.CenterID).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.InstituteMasterDDLList = data.Data;
+          this.filteredInstituteList = this.InstituteMasterDDLList
           console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
         });
 
@@ -193,7 +207,8 @@ export class AppointITIExaminerComponent {
       await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng,
         this.sSOLoginDataModel.EndTermID, this.searchRequest.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.StreamMasterDDLList = data.Data;
+          this.StreamMasterDDLList = data.Data;
+          this.filteredTradeList = this.StreamMasterDDLList
         console.log("StreamMasterDDLList", this.StreamMasterDDLList);
       })
     } catch (error) {
@@ -204,6 +219,25 @@ export class AppointITIExaminerComponent {
       }, 200);
     }
   }
+  filterCenters() {
+    const search = this.centerSearchText.toLowerCase();
+    this.filteredCenterList = this.CenterDDLlist.filter((x: any) =>
+      x.Name.toLowerCase().includes(search)
+    );
+  }
+  filterInstitute() {
+    const search = this.InstituteSearchText.toLowerCase();
+    this.filteredInstituteList = this.InstituteMasterDDLList.filter((x: any) =>
+      x.InstituteName.toLowerCase().includes(search)
+    );
+  }
+
+  filterTrade() {
+    const search = this.TradeSearchText.toLowerCase();
+    this.filteredTradeList = this.StreamMasterDDLList.filter((x: any) =>
+      x.Name.toLowerCase().includes(search)
+    );
+  }
 
 
   async Centerlist() {
@@ -212,6 +246,7 @@ export class AppointITIExaminerComponent {
       await this.commonMasterService.GetCommonMasterData('IticenterList', this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.CenterDDLlist = data.Data;
+        this.filteredCenterList = this.CenterDDLlist;
         console.log("CenterDDLlist", this.CenterDDLlist);
       })
     }
@@ -304,6 +339,12 @@ export class AppointITIExaminerComponent {
         this.searchRequest.IsTheory = false
        }
       //
+      this.searchRequest.selectedCenters =
+        this.selectedCenters?.length ? this.selectedCenters.join(',') : '';
+      this.searchRequest.selectedInstitute =
+        this.selectedInstitute?.length ? this.selectedInstitute.join(',') : '';
+      this.searchRequest.selectedTrade =
+        this.selectedTrade?.length ? this.selectedTrade.join(',') : '';
       await this.examinerservice.GetTeacherForExaminer(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         
@@ -414,6 +455,12 @@ export class AppointITIExaminerComponent {
     this.AppointExaminer = new ItiExaminerDataModel();
     this.SubjectMasterDDLList = [];
     this.StaffForExaminerList = [];
+    this.selectedCenters = [];
+    this.selectedInstitute = [];
+    this.selectedTrade = [];
+    this.isAllSelected=false
+    this.isAllSelected1=false
+    this.isAllSelected2=false
   }
 
   @ViewChild('content') content: ElementRef | any;
@@ -608,5 +655,57 @@ export class AppointITIExaminerComponent {
         }
       }
     });
+  }
+
+  onSelectionChange(event: any): void {
+    const value = event.value;
+
+    if (value.includes('ALL')) {
+      if (this.isAllSelected) {
+        this.isAllSelected = false;
+        this.selectedCenters = [];
+      } else {
+        this.isAllSelected = true;
+        this.selectedCenters = this.CenterDDLlist.map((x: any) => x.ID);
+      }
+    } else {
+      this.isAllSelected = false;
+      this.selectedCenters = value;
+    }
+  }
+
+
+  onSelectionChange1(event: any): void {
+    const value = event.value;
+
+    if (value.includes('ALL')) {
+      if (this.isAllSelected1) {
+        this.isAllSelected1 = false;
+        this.selectedInstitute = [];
+      } else {
+        this.isAllSelected1 = true;
+        this.selectedInstitute = this.InstituteMasterDDLList.map((x: any) => x.InstituteID);
+      }
+    } else {
+      this.isAllSelected1 = false;
+      this.selectedInstitute = value;
+    }
+  }
+
+  onSelectionChange2(event: any): void {
+    const value = event.value;
+
+    if (value.includes('ALL')) {
+      if (this.isAllSelected2) {
+        this.isAllSelected2 = false;
+        this.selectedTrade = [];
+      } else {
+        this.isAllSelected2 = true;
+        this.selectedTrade = this.StreamMasterDDLList.map((x: any) => x.ID);
+      }
+    } else {
+      this.isAllSelected2 = false;
+      this.selectedTrade = value;
+    }
   }
 }

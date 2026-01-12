@@ -1,3 +1,9 @@
+<style>
+  .selectboader {
+      border:1px solid #ddd !important;
+  }
+</style>
+
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
@@ -27,25 +33,103 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center:</label>
-          <select class="form-select"
-                  id="StudentExamYear"
-                  [(ngModel)]="searchRequest.CenterID"
-                  (change)="GetMasterData()">
+          <!--<select class="form-select"
+          id="StudentExamYear"
+          [(ngModel)]="searchRequest.CenterID"
+          (change)="GetMasterData()">
 
-            <option value="0">--All--</option>
-            <option *ngFor="let item of CenterDDLlist" [value]="item.ID">{{ item.Name }}</option>
-          </select>
+    <option value="0">--All--</option>
+    <option *ngFor="let item of CenterDDLlist" [value]="item.ID">{{ item.Name }}</option>
+  </select>-->
+          <!--<mat-select class="form-select form-control CenterCode border"
+              multiple
+              [(ngModel)]="selectedCenters"
+              (selectionChange)="onSelectionChange($event)"
+              name="CenterIDs">
+
+    <mat-option *ngIf="CenterDDLlist?.length > 0" [value]="'ALL'">
+      {{ isAllSelected ? 'Unselect All' : 'Select All' }}
+    </mat-option>
+
+    <mat-option *ngFor="let item of CenterDDLlist"
+                [value]="item.ID"
+                [disabled]="isAllSelected">
+      {{ item.Name }}
+    </mat-option>
+
+  </mat-select>-->
+
+          <mat-select class="form-select form-control CenterCode border selectboader"
+                      multiple
+                      [(ngModel)]="selectedCenters"
+                      (selectionChange)="onSelectionChange($event)"
+                      name="CenterIDs">
+
+            <!-- 🔍 Search box -->
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="centerSearchText"
+                                     (ngModelChange)="filterCenters()"
+                                     placeholderLabel="Search Center..."
+                                     noEntriesFoundLabel="No center found">
+              </ngx-mat-select-search>
+            </mat-option>
+
+            <!-- Select / Unselect All -->
+            <mat-option *ngIf="CenterDDLlist?.length > 0" [value]="'ALL'">
+              {{ isAllSelected ? 'Unselect All' : 'Select All' }}
+            </mat-option>
+
+            <!-- Center list -->
+            <mat-option *ngFor="let item of filteredCenterList"
+                        [value]="item.ID"
+                        [disabled]="isAllSelected">
+              {{ item.Name }}
+            </mat-option>
+
+          </mat-select>
+
+
         </div>
 
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
-          <select class="form-select" id="InstituteID" [(ngModel)]="searchRequest.InstituteID" (change)="getStreamMasterList()">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
-              {{item.InstituteName}}
-            </option>
-          </select>
+          <!--<select class="form-select" id="InstituteID" [(ngModel)]="searchRequest.InstituteID" (change)="getStreamMasterList()">
+    <option value="0">--Select--</option>
+    <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+      {{item.InstituteName}}
+    </option>
+  </select>-->
+
+          <mat-select class="form-select form-control CenterCode border selectboader"
+                      multiple
+                      [(ngModel)]="selectedInstitute"
+                      (selectionChange)="onSelectionChange1($event)"
+                      name="ItiIDs">
+
+            <!-- 🔍 Search box -->
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="InstituteSearchText"
+                                     (ngModelChange)="filterInstitute()"
+                                     placeholderLabel="Search Iti..."
+                                     noEntriesFoundLabel="No center found">
+              </ngx-mat-select-search>
+            </mat-option>
+
+            <!-- Select / Unselect All -->
+            <mat-option *ngIf="InstituteMasterDDLList?.length > 0" [value]="'ALL'">
+              {{ isAllSelected1 ? 'Unselect All' : 'Select All' }}
+            </mat-option>
+
+            <!-- Center list -->
+            <mat-option *ngFor="let item of filteredInstituteList"
+                        [value]="item.InstituteID"
+                        [disabled]="isAllSelected1">
+              {{ item.InstituteName }}
+            </mat-option>
+
+          </mat-select>
+
         </div>
 
 
@@ -73,15 +157,46 @@
         <!--commonsubject(yes/no)-->
         <!--commonsubject(DB)-->
         <!--branch-->
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name</label>
-          <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID" (change)="ddlStream_Change()">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of StreamMasterDDLList" [value]="item.ID">
-              {{item.Name}}
-            </option>
-          </select>
-        </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name</label>
+        <!--<select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID" (change)="ddlStream_Change()">
+    <option value="0">--Select--</option>
+    <option *ngFor="let item of StreamMasterDDLList" [value]="item.ID">
+      {{item.Name}}
+    </option>
+  </select>-->
+
+        <mat-select class="form-select form-control CenterCode border selectboader"
+                    multiple
+                    [(ngModel)]="selectedTrade"
+                    (selectionChange)="onSelectionChange2($event)"
+                    name="TradeIDs">
+
+          <!-- 🔍 Search box -->
+          <mat-option>
+            <ngx-mat-select-search [(ngModel)]="TradeSearchText"
+                                   (ngModelChange)="filterTrade()"
+                                   placeholderLabel="Search Trade..."
+                                   noEntriesFoundLabel="No center found">
+            </ngx-mat-select-search>
+          </mat-option>
+
+          <!-- Select / Unselect All -->
+          <mat-option *ngIf="StreamMasterDDLList?.length > 0" [value]="'ALL'">
+            {{ isAllSelected2 ? 'Unselect All' : 'Select All' }}
+          </mat-option>
+
+          <!-- Center list -->
+          <mat-option *ngFor="let item of filteredTradeList"
+                      [value]="item.ID"
+                      [disabled]="isAllSelected2">
+            {{ item.Name }}
+          </mat-option>
+
+        </mat-select>
+
+
+      </div>
         <!--subject-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject</label>

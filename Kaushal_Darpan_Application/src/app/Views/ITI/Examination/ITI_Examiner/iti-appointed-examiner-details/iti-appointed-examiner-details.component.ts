@@ -123,7 +123,7 @@ export class ItiAppointedExaminerDetailsComponent {
     if (this.VerifyCode == this.Code) {
       this.CloseModalPopup(true)
       debugger
-      sessionStorage.setItem('CenterID', this.selectedrow.CenterID.toString());
+  
       sessionStorage.setItem('SemesterID', this.selectedrow.SemesterID.toString());
       sessionStorage.setItem('SubjectName', this.selectedrow.SubjectName);
 

@@ -7,6 +7,7 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../material.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
@@ -19,7 +20,9 @@ import { MaterialModule } from '../../../material.module';
     FormsModule,
     LoaderModule,
     TableSearchFilterModule,
-    MaterialModule
+    MaterialModule,
+    NgxMatSelectSearchModule
+
   ]
 })
 export class AppointITIExaminerModule { }

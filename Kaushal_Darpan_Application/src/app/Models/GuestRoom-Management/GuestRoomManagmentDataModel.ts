@@ -66,6 +66,11 @@ export class CreateGuestRoomSeatDataModel {
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;
   public RoomStatus: number = 0;
+  public ExtraCharges?: number = 0;
+  public BedFee_Training?: number = 0;
+  public BedFee_OnDuty?: number = 0;
+  public BedFee_Private?: number = 0;
+  public CoolingFacilities?: number = 0;
 }
 
 export class GuestRoomSeatSearchModel {
@@ -143,8 +148,12 @@ export class GuestApplyForGuestRoomDataModel {
   public EndTermID: number = 0;
   public RequestSSOID: string = '';
   public Purpose: number = 0;
+  public CoolingFacilities: number = 0;
   public PurposeDocPhoto: string = '';
   public Dis_PurposeDocPhoto: string = '';
+  public IsForSelf?: boolean = false;
+  public GenderId?: number = 0;
+  public GuestRoomDetailID?: number = 0;
 }
 
 export class GuestApplyForGuestRoomSearchModel {
@@ -159,6 +168,7 @@ export class GuestApplyForGuestRoomSearchModel {
   public ModifyBy: number = 0;
   public RoleID: number = 0;
   public Status: number = 0;
+  public IsForSelf?: boolean = false;
 }
 
 export class GuestStaffProfileSearchModel {
@@ -195,3 +205,26 @@ export class StatusChangeGuestModel {
 }
 
 
+
+export class GuestHousePaymentDataModel {
+  public GuestHouseID: number = 0;
+  public DepartmentID: number = 0;
+  public CreatedBy: number = 0;
+  public IPAddress?: string | null;
+  public IsPayment: number = 0;
+  public RoomQuantity: number = 0;
+  public RoomFee: number = 0;
+  public UserID?: number | null;
+  public item?: number | null;
+  public UniqueServiceID: number = 2;
+  public IsActive: boolean = false;
+  public IsDelete: boolean = false;
+}
+
+export class CheckInDataModel {
+  public GuestRoomDetailID?: number = 0
+  public GuestHouseID?: number = 0;
+  public AllotmentStatus?: number = 0;
+  public GuestReqID?: number = 0;
+  public UserID?: number = 0;
+}

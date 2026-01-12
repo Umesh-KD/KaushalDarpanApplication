@@ -134,7 +134,7 @@ export class ITIDispatchSuperintendentFormComponent implements OnInit {
 
     this.SearchBundelrequest.CCCode = this.activatedRoute.snapshot.queryParamMap.get('CCCode') || '';
     this.SearchBundelrequest.SubjectCode = this.activatedRoute.snapshot.queryParamMap.get('SubjectCode') || '';
-    this.SearchBundelrequest.BranchCode = this.activatedRoute.snapshot.queryParamMap.get('BranchCode') || '';
+  /*  this.SearchBundelrequest.BranchCode = this.activatedRoute.snapshot.queryParamMap.get('BranchCode') || '';*/
     this.SearchBundelrequest.ExamShift = this.activatedRoute.snapshot.queryParamMap.get('ExamShift') || '0';
 
     

@@ -108,7 +108,10 @@ export class ITITeacherForExaminerSearchModel extends RequestBaseModel {
   public IsPractical: boolean = false
   public SubjectCode:string=''
   public SubjectName: string = ''
-  public Status:number=0
+  public Status: number = 0
+  public selectedCenters :string=''
+  public selectedInstitute :string=''
+  public selectedTrade :string=''
 }
 
 
