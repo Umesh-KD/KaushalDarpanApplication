@@ -263,20 +263,19 @@ export class ReportedStudentReport {
 
 
 export class UnlockInternalMarksModel {
-  public instituteID = 0;
-  public instituteCode?: string;
-  public institutionDGTCode?: string;
-  public instituteNameEnglish?: string;
-  public instituteNameHindi?: string;
-  public ssoID?: string;
-  public email?: string;
-  public faxNumber?: string;
-  public typeID = 0;
-  public instituteID_Old?: number;
-  public departmentID = 0;
-  public financialYearID = 0;
- 
-  public capacity = 0;
+  public InstituteID = 0;
+  public InstituteCode?: string;
+  public InstitutionDGTCode?: string;
+  public InstituteNameEnglish?: string;
+  public InstituteNameHindi?: string;
+  public SSOID?: string;
+  public Email?: string;
+  public FaxNumber?: string;
+  public TypeID = 0;
+  public InstituteID_Old?: number;
+  public DepartmentID = 0;
+  public FinancialYearID = 0;
+  public Capacity = 0;
 
 }
 

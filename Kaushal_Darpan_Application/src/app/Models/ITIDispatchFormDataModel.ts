@@ -207,6 +207,10 @@ export class ITICheckDateDispatchSearchModel {
 export class ITIUpdateFileHandovertoExaminerByPrincipalModel {
 
   public AppointExaminerID: number = 0;
+  public TotalStudent: number = 0;
+  public SemesterID: number = 0;
+  public TradeID: number = 0;
+  public ExaminerID: number = 0;
   public FileName: string = '';
   public Remark: string = '';
   public Dis_File: string = '';
@@ -214,6 +218,7 @@ export class ITIUpdateFileHandovertoExaminerByPrincipalModel {
   public ExaminerCode: string = '';
   public Status: number = 0;
   public DueDate: string='';
+  public SubjectCode: string='';
 }
 
 export class ITICompanyDispatchMasterModel {

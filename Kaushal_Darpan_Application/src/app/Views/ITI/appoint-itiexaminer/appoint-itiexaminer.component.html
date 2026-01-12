@@ -1,3 +1,9 @@
+<style>
+  .selectboader {
+      border:1px solid #ddd !important;
+  }
+</style>
+
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
@@ -53,7 +59,7 @@
 
   </mat-select>-->
 
-          <mat-select class="form-select form-control CenterCode border"
+          <mat-select class="form-select form-control CenterCode border selectboader"
                       multiple
                       [(ngModel)]="selectedCenters"
                       (selectionChange)="onSelectionChange($event)"
@@ -95,7 +101,7 @@
     </option>
   </select>-->
 
-          <mat-select class="form-select form-control CenterCode border"
+          <mat-select class="form-select form-control CenterCode border selectboader"
                       multiple
                       [(ngModel)]="selectedInstitute"
                       (selectionChange)="onSelectionChange1($event)"
@@ -160,7 +166,7 @@
     </option>
   </select>-->
 
-        <mat-select class="form-select form-control CenterCode border"
+        <mat-select class="form-select form-control CenterCode border selectboader"
                     multiple
                     [(ngModel)]="selectedTrade"
                     (selectionChange)="onSelectionChange2($event)"

@@ -99,12 +99,14 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr No</th>
-            <th class="text-left">CCode</th>
+            <!--<th class="text-left">CCode</th>-->
             <th class="text-left">Trade Name</th>
             <th class="text-left">Semester/Year Name</th>
             <th class="text-left">Subject Name</th>
+            <th class="text-left">Examiner Code</th>
             <th class="text-left">Total Student</th>
             <th class="text-left">Total Checked</th>
+ 
             <!--<th class="text-left">Assigned Date</th>-->
             <th class="text-center">Action</th>
 
@@ -112,17 +114,22 @@
 
         </thead>
         <tbody>
+        <tbody>
+        <tbody>
+        <tbody>
           <tr *ngFor="let row of AppointedExaminerList; let idx=index; ">
             <td align="left">{{idx+1}}</td>
-            <td>{{row.CenterCode}}</td>
+            <!--<td>{{row.CenterCode}}</td>-->
             <td>{{row.StreamName}}</td>
             <td>{{row.SemesterName}}</td>
             <td>{{row.SubjectName}}</td>
+            <td>{{row.ExaminerCode}}</td>
             <td>{{row.AssignedCount}}</td>
+            <td>{{row.checkedcount}}</td>
             <td>{{row.checkedcount}}</td>
             <!--<td>{{row.checkedcount}}</td>-->
             <td>
-              <div class="flex align-center justify-center actionBtns w-auto"
+              <div *ngIf="row.IsAllow==1" class="flex align-center justify-center actionBtns w-auto"
                    style="width:auto !important">
                 <!--@if(this.ExamTypeID==1) {
        <a [routerLink]="'/Ititheorymarks'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>

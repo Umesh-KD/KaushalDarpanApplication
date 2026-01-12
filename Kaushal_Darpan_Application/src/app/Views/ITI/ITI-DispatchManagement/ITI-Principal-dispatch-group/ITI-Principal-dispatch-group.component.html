@@ -122,11 +122,14 @@
             <th class="text-left">Sr No</th>
             <th class="text-left">Examiner Name</th>
             <th class="text-left">Examiner Code</th>
-            <th class="text-left" >RollNo From</th>
-            <th class="text-left">RollNo To</th>
+            <th class="text-left" >Trade</th>
+            <th class="text-left" >Subject</th>
+            <th class="text-left" >Year</th>
+            <th class="text-left" >Total</th>
+            <!--<th class="text-left">RollNo To</th>-->
             <th class="text-left">Due Date</th>
             <th class="text-left">Remark</th>
-            <th class="text-left">Challan No</th>
+            <!--<th class="text-left">Challan No</th>-->
             <th class="text-left">Dispatch Date</th>
             <th class="text-left">File</th>
             <th class="text-center">Action</th>
@@ -142,11 +145,13 @@
             <td align="left">{{idx+1}}</td>
             <td>{{row.ExaminerName}}</td>
             <td>{{row.ExaminerCode}}</td>
-            <td>{{row.RollNo_From}}</td>
-            <td>{{row.RollNo_To}}</td>
+            <td>{{row.StreamName}}</td>
+            <td>{{row.SubjectName}}</td>
+            <td>{{row.SemesterName}}</td>
+            <td>{{row.TotalStudent}}</td>
             <td>{{row.DueDate}}</td>
             <td>{{row.Remark}}</td>
-            <td>{{row.ChallanNo}}</td>
+          
             <td>{{row.DispatchDate}}</td>
             <td>
             <a *ngIf="row.DispatchGroupFileName != null && row.DispatchGroupFileName != ''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.DispatchGroupFileName}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
@@ -213,7 +218,7 @@
                   {{UpdateFileHandover.FileName === '' ? 'No File Choosen' : UpdateFileHandover.FileName}}
                 </label>
                 <div class="flex">
-                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + UpdateFileHandover.FileName}}" *ngIf="UpdateFileHandover.ReplayAttachment !=''"
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + UpdateFileHandover.FileName}}" *ngIf="UpdateFileHandover.FileName !=''"
                      class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
                 </div>
@@ -226,7 +231,7 @@
         </div>
       </form>
       <div class="card-footer text-center">
-        <button type="button" class="btn bg-info text-white mt-6" (click)="SubmitDataq()">Submit</button>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="CloseModalPopup1()">Submit</button>
         <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopupNotOterFuncton()">Cancel</button>
       </div>
 
