@@ -256,6 +256,10 @@
                   <td>Gender</td>
                   <td>{{request.Gender_str}}</td>
                 </tr>
+                <tr>
+                  <td>Room Type</td>
+                  <td>{{request.RoomType_str}}</td>
+                </tr>
               </table>
             </div>
           </div>         
@@ -268,7 +272,7 @@
               </label>
               <select class="form-select" [(ngModel)]="checkInRequest.GuestRoomDetailID" formControlName="GuestRoomDetailID">
                 <option value="0" selected="">--Choose Option--</option>
-                <option *ngFor="let item of RoomNoList" [value]="item.GuestRoomDetailID">{{item.RoomNo}}</option>
+                <option *ngFor="let item of RoomNoList" [value]="item.GuestRoomDetailID">{{item.RoomNo}} (Remaining Bed-{{item.RemainingBed}})</option>
               </select>
               <div *ngIf="isCheckedIn && _CheckInFormGroup.controls.GuestRoomDetailID.errors" class="text-danger">
                 <p *ngIf="!_CheckInFormGroup.controls.GuestRoomDetailID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
@@ -278,7 +282,7 @@
           </div>
         </div> <!-- Close this div here for card-body -->
         <div class="card-footer text-center">
-          <button type="button" (click)="updateReqStatus()" class="btn bg-success text-white btn-sm">
+          <button type="button" (click)="openOTPModal_CheckIn()" class="btn bg-success text-white btn-sm">
             Submit
           </button>
         </div>
