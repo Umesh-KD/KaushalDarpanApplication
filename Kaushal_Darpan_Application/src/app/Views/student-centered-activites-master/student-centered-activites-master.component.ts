@@ -188,6 +188,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       // **Filter Present and UFM Students Separately**
       let presentStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 1);
       let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
+      let detainStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 3);
 
        if (StudentExamPaperMarksID == 0 && isFinalSubmit == false) {
          let presentStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 1);
@@ -203,7 +204,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       }
 
       // **Validation for Present Students**
-      if (presentStudents.length == 0 && ufmStudents.length == 0 && isFinalSubmit==false) {
+      if (presentStudents.length == 0 && ufmStudents.length == 0 && isFinalSubmit==false && detainStudents.length == 0) {
         this.toastr.warning('Please mark students as Present or UFM before saving.');
         return;
       }
@@ -399,10 +400,10 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.GradeList.forEach(x => {
-      // if (!x.IsDetain) {
-      //   x.Marked = this.AllInTableSelect;
-      // }
-      x.Marked = this.AllInTableSelect;
+      if (!x.IsDetain) {
+        x.Marked = this.AllInTableSelect;
+      }
+      // x.Marked = this.AllInTableSelect;
     });
   }  //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
