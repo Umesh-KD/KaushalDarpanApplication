@@ -21,7 +21,7 @@
                 <label for="inputState" class="form-label">Branch</label>
                 <select id="inputState" class="form-select" formControlName="BranchId" (change)="PerformSearch()">
                   <option value="0" selected>Choose...</option>
-                  <option *ngFor="let item of TradeList" [value]="item.TradeId">{{item.TradeName}}</option>
+                  <option *ngFor="let item of TradeList" [value]="item.ID">{{item.Name}}</option>
                 </select>
               </div>
 

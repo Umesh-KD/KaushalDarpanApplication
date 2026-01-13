@@ -44,6 +44,7 @@ export class ITIAllPostComponent implements OnInit {
     await this.GetITIAllData();
     //await this.GetAllPlacementCompany();
     this.itihomeService.GetITITradeList().then((data: any) => {
+      debugger
       data = JSON.parse(JSON.stringify(data));
       this.TradeList = data['Data'];
       // console.log(data);
