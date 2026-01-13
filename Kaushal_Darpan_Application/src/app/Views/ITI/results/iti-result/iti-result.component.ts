@@ -697,14 +697,14 @@ export class ITIResultComponent {
     this.getCurrentResultResult();
   }
 
-  async GetITIStudent_Marksheet(rollNo:any) {
+  async GetITIStudent_Marksheet(row:any) {
 
     try {
 
       this.loaderService.requestStarted();
       const MarksheetSearch = new StudentMarksheetSearchModel();
       MarksheetSearch.EndTermID = this.sSOLoginDataModel.EndTermID;
-      MarksheetSearch.RollNo = rollNo;
+      MarksheetSearch.RollNo = row.RollNo;
       MarksheetSearch.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
       await this.reportService.GetITIStudent_Marksheet(MarksheetSearch)
         .then((data: any) => {
@@ -727,7 +727,7 @@ export class ITIResultComponent {
             const blobUrl = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = `StudentMarksheet_${rollNo}.pdf`;
+            link.download = `StudentMarksheet_${row.StudentName?.replace(/\s+/g, '_') ?? ''}_${row.RollNo}.pdf`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
