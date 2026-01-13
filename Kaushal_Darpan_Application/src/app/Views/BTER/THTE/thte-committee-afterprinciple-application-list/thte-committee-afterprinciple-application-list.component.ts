@@ -63,12 +63,13 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
   }
 
   async GetMasterData() {
+    debugger;
     try {
       this.dropdownRequest.action = "GetStatusDDL"
       await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StatusListDDL = data['Data'];
-        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1343 || x.ID == 1344)
+        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1343 || x.ID == 1344 || x.ID == 1345)
         this.UpdateStatusListDDL = data['Data'];
         this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1344)
       })

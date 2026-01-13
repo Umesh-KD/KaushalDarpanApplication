@@ -155,24 +155,29 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Institute</label>
-          <select class="form-select" name="appliedInstitute" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" formControlName="appliedInstitute">
+          <!-- <select class="form-select" name="appliedInstitute" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" formControlName="appliedInstitute">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
-          <div *ngIf="isSubmitted&&_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors" class="text-danger">
+          </select> -->
+
+          <!-- <div *ngIf="isSubmitted&&_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors" class="text-danger">
             <p *ngIf="!_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors.DropdownValidators">
               <i aria-hidden="true"></i>This
               field is required .!
             </p>
+          </div> -->
+
+
+          <input class="form-input" type="text" name="appliedInstitute"
+          formControlName="appliedInstitute" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" />
+
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors" class="text-danger">
+            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
           </div>
-          <!--<input class="form-input" type="text" name="appliedInstitute"
-    formControlName="appliedInstitute" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" />-->
-          <!--<div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors" class="text-danger">
-      <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors.DropdownValidators">
-        <i aria-hidden="true"></i>
-        This field is required!
-      </p>
-    </div>-->
+
         </div>
 
 
