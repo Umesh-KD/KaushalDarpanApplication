@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { EnumStatus } from '../../Common/GlobalConstants';
@@ -29,6 +29,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
+  public isStatus: number = 0;
   public isSubmitted: boolean = false;
   public SemesterMasterList: any = [];
   public Branchlist: any[] = [];
@@ -67,14 +68,28 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   constructor(private commonMasterService: CommonFunctionService,
     private SCAService: StudentCenteredActivitesService, private toastr: ToastrService,
     private loaderService: LoaderService, private router: ActivatedRoute,
+    private route:Router,
+  
     private modalService: NgbModal, private Swal2: SweetAlert2, private streamMasterService: StreamMasterService, private appsettingConfig: AppsettingService,
-    private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef) {
+    private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef,
+    private activatedRoute: ActivatedRoute,) {
   }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
+     this.isStatus = Number(
+        this.activatedRoute.snapshot.paramMap.get('Status')
+      );
+   
+      console.log(this.isStatus); // 2
+      if(this.isStatus==4)
+      {
+        this.route.navigate(['/scactivities']);
+      }
+    
+  
     await this.GetMasterData();
     await this.GetGradeList();
 

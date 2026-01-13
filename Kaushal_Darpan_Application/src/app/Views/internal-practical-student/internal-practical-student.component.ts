@@ -85,8 +85,15 @@ export class InternalPracticalStudentComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
-
+    debugger
     this.InternalPracticalID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    if(this.InternalPracticalID==null || this.InternalPracticalID==0 || Number.isNaN(this.InternalPracticalID)){
+      this.InternalPracticalID = Number(
+        this.activatedRoute.snapshot.paramMap.get('Status')
+      );
+   
+      console.log(this.InternalPracticalID); // 2
+    }
     console.log(this.InternalPracticalID)
     if (this.InternalPracticalID == 2) {
       this.IsView = true;
