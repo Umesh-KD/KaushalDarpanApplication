@@ -138,24 +138,27 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       await this.SCAService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.GradeList = data['Data'];
-          console.log(this.GradeList, "TheoryMarks")
-          this.GradeList.forEach((x: any) => {
-            if (x.IsSCAChecked == false) {
-              x.IsPresentStudentCenteredActivity = 1
-            }
-          })
-          var isfinalsubmit = this.GradeList.filter(x => x.isFinalSubmit == true)
-          if (isfinalsubmit.length > 0) {
-            this.isfinalsubmit = true
-            this.AllInTableSelect = false
-          } 
-          //table feature load
-          this.loadInTable();
-          //end table feature load
+          if(data.Data[0].IsOpen === 0) {
+            this.toastr.warning(data.Data[0].Message)
+          } else {
+            this.GradeList = data['Data'];
+            console.log(this.GradeList, "TheoryMarks")
+            this.GradeList.forEach((x: any) => {
+              if (x.IsSCAChecked == false) {
+                x.IsPresentStudentCenteredActivity = 1
+              }
+            })
+            var isfinalsubmit = this.GradeList.filter(x => x.isFinalSubmit == true)
+            if (isfinalsubmit.length > 0) {
+              this.isfinalsubmit = true
+              this.AllInTableSelect = false
+            } 
+            //table feature load
+            this.loadInTable();
+            //end table feature load
+          }
+
+          
         }, error => console.error(error));
     }
     catch (Ex) {
