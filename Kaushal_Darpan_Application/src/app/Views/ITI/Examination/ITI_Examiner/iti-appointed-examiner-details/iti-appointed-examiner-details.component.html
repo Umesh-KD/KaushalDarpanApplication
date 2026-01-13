@@ -138,7 +138,11 @@
           <a [routerLink]="'/PracticalAssesment'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
       }-->
 
-                <a (click)="OpenModalPopup(MyModel_ExaminerCodeLogin,row.AppointExaminerID,row.ExaminerCode,row)" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+                <a (click)="OpenModalPopup(MyModel_ExaminerCodeLogin,row.AppointExaminerID,row.ExaminerCode,row)" href="javascript:void(0);" title="edit">
+                <i class="ti ti-clipboard-check"></i>
+
+
+                </a>
 
 
               </div>

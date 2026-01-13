@@ -169,37 +169,38 @@ export class InternalPracticalStudentComponent implements OnInit {
       await this.InternalPracticalStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.TheoryMarksList = data['Data'];
-          console.log(this.TheoryMarksList, "TheoryMarks")
+          if(data.Data[0].IsOpen === 0) {
+            this.toastr.warning(data.Data[0].Message)
+          } else {
+            this.TheoryMarksList = data['Data'];
+            if(this.InternalPracticalID == 2){
+              this.TheoryMarksList.forEach((x: any) => {
+                this.onStatusPracticalAssesmentChange(x, true)
+                if (x.IsInternalAssesmentCheckecd == false) {
+                  x.IsPresentInternalAssisment = 1
+                }
+              })
+            } else if (this.InternalPracticalID == 1) {
+              this.TheoryMarksList.forEach((x: any) => {
+                this.onStatusPracticalChange(x, true)
+                if (x.IsPracticalChecked == false) {
+                  x.IsPresentPractical = 1
+                }
+              })
+            }
 
-          if(this.InternalPracticalID == 2){
-            this.TheoryMarksList.forEach((x: any) => {
-              this.onStatusPracticalAssesmentChange(x, true)
-              if (x.IsInternalAssesmentCheckecd == false) {
-                x.IsPresentInternalAssisment = 1
-              }
-            })
-          } else if (this.InternalPracticalID == 1) {
-            this.TheoryMarksList.forEach((x: any) => {
-              this.onStatusPracticalChange(x, true)
-              if (x.IsPracticalChecked == false) {
-                x.IsPresentPractical = 1
-              }
-            })
+
+            var isfinalsubmit = this.TheoryMarksList.filter(x => x.isFinalSubmit == true)
+            if (isfinalsubmit.length > 0) {
+              this.isfinalsubmit = true
+            }
+
+            //table feature load
+            this.loadInTable();
+            //end table feature load
           }
 
-
-          var isfinalsubmit = this.TheoryMarksList.filter(x => x.isFinalSubmit == true)
-          if (isfinalsubmit.length > 0) {
-            this.isfinalsubmit = true
-          }
-
-          //table feature load
-          this.loadInTable();
-          //end table feature load
+          
         }, error => console.error(error));
     }
     catch (Ex) {
