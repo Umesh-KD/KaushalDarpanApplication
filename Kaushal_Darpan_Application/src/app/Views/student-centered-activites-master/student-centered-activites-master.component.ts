@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { TheoryMarksSearchModel, TheoryMarksDataModels } from '../../Models/TheoryMarksDataModels';
@@ -63,6 +63,8 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   public isAnyUFMSelected: boolean = false;
   public totalInTableRecord: number = 0;
   public DocumentList: DocumentDetailsModel[] = []
+  public _EnumRole = EnumRole;
+  public InstituteMasterDDLList: any = []
   //end table feature default
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -82,6 +84,9 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
      this.isStatus = Number(
         this.activatedRoute.snapshot.paramMap.get('Status')
       );
+      if(this.isStatus==0 || this.isStatus==null ||Number.isNaN(this.isStatus)){
+        this.isStatus= Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+      }
    
       console.log(this.isStatus); // 2
       if(this.isStatus==4)
@@ -108,6 +113,12 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.SemesterMasterList = data['Data'];
         }, error => console.error(error));
+        
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDLList = data.Data;
+        console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+      })
     }
     catch (ex) {
       console.log(ex);
@@ -140,10 +151,15 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   }
 
   async GetGradeList() {
+    debugger;
     this.AllInTableSelect = false;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     try {
-      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
+      if(!this.searchRequest.InstituteID)
+      {
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
+      }
+      
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
