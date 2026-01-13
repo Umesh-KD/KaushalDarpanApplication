@@ -103,7 +103,9 @@ export class ViewVerifyRollListComponent {
     this.UserID = this.sSOLoginDataModel.UserID;
     this.MobileNo = Number(this.sSOLoginDataModel.Mobileno ?? 0)
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
+      || this.sSOLoginDataModel.RoleID == EnumRole.Invigilator || this.sSOLoginDataModel.RoleID == EnumRole.Invigilator_NonEng
+    ) {
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.insDisabled = true;
     }
@@ -136,96 +138,101 @@ export class ViewVerifyRollListComponent {
   }
 
   async ResetFilter() {
-    this.searchRequest.InstituteID = 0 
+    this.searchRequest.InstituteID = 0
     this.searchRequest.SemesterID = 0
     this.GetAllData()
   }
 
   async GetAllData() {
-    if(this.Status==0)
-{
-return;
+    if (this.Status == 0) {
+      return;
 
-}
-else{
-    debugger
-    try {
-
-      this.VerifyRollList = [];
-      //session
-      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      this.searchRequest.action = "_VerifyRollListPdfOnlyAdmin"
-      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.searchRequest.Status=this.Status;
-      if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
-
-        this.searchRequest.Status = 13;
-      }
-      // else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge && this.Status == EnumEnrollNoStatus.Forwarded || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng && this.Status == EnumEnrollNoStatus.Forwarded) {
-      //  this.searchRequest.IsExaminationVerified = false
-      //  this.searchRequest.action = "_VerifyRollListPdfReportExaminer"
-      //  this.searchRequest.Status = this.Status
-
-      //} else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge && this.Status == EnumEnrollNoStatus.Verified || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng && this.Status == EnumEnrollNoStatus.Verified) {
-      //  this.searchRequest.IsExaminationVerified = true
-      //  this.searchRequest.action = "_VerifyRollListPdfReportExaminer"
-      //} else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge && this.Status == EnumEnrollNoStatus.Reverted || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng && this.Status == EnumEnrollNoStatus.Reverted) {
-      //  this.searchRequest.Status = this.Status
-
-      //} else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge && this.Status == EnumEnrollNoStatus.Published || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng && this.Status == EnumEnrollNoStatus.Published) {
-      //  this.searchRequest.Status = this.Status
-      
-      //}
-
-
-
-      //else if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar && this.Status == EnumEnrollNoStatus.Forwarded || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng && this.Status == EnumEnrollNoStatus.Forwarded) {
-      //  this.searchRequest.IsRegistrarVerified = false
-      //  this.searchRequest.action = "_VerifyRollListPdfReportRegistrar"
-      //  this.searchRequest.Status = this.Status
-
-      //} else if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar && this.Status == EnumEnrollNoStatus.Verified || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng && this.Status == EnumEnrollNoStatus.Verified) {
-      //  this.searchRequest.IsRegistrarVerified = true
-      //  this.searchRequest.action = "_VerifyRollListPdfReportRegistrar"
-      //  /*     this.searchRequest.Status = this.Status*/
-      //} else if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar && this.Status == EnumEnrollNoStatus.Reverted || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng && this.Status == EnumEnrollNoStatus.Reverted) {
-      //  this.searchRequest.Status = this.Status
-      //} else if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar && this.Status == EnumEnrollNoStatus.Published || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng && this.Status == EnumEnrollNoStatus.Published) {
-      //  this.searchRequest.Status = this.Status
-      //}
-
-      this.loaderService.requestStarted();
-      //call
-      await this.GetRollService.VerifyRollListPdf(this.searchRequest).then(
-        (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-
-          if (data.State == EnumStatus.Success) {
-            this.VerifyRollList = data['Data'];
-
-            if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
-              this.VerifyRollList = this.VerifyRollList.filter(x => x.Status != 0)
-            }
-     /*       this.GetVerifyRollData();*/
-          }
-        },
-        (error: any) => console.error(error)
-      );
-    } catch (ex) {
-      console.log(ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
-  }
+    else {
+      debugger
+      try {
+
+        this.VerifyRollList = [];
+        //session
+        this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+        this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+        this.searchRequest.action = "_VerifyRollListPdfOnlyAdmin"
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+        this.searchRequest.Status = this.Status;
+        if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
+
+          this.searchRequest.Status = 13;
+        }
+
+        if(this.sSOLoginDataModel.RoleID == EnumRole.Invigilator || this.sSOLoginDataModel.RoleID == EnumRole.Invigilator_NonEng){
+          this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+          this.searchRequest.action = "_VerifyRollListPdfCS"
+        }
+
+        // else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge && this.Status == EnumEnrollNoStatus.Forwarded || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng && this.Status == EnumEnrollNoStatus.Forwarded) {
+        //  this.searchRequest.IsExaminationVerified = false
+        //  this.searchRequest.action = "_VerifyRollListPdfReportExaminer"
+        //  this.searchRequest.Status = this.Status
+
+        //} else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge && this.Status == EnumEnrollNoStatus.Verified || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng && this.Status == EnumEnrollNoStatus.Verified) {
+        //  this.searchRequest.IsExaminationVerified = true
+        //  this.searchRequest.action = "_VerifyRollListPdfReportExaminer"
+        //} else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge && this.Status == EnumEnrollNoStatus.Reverted || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng && this.Status == EnumEnrollNoStatus.Reverted) {
+        //  this.searchRequest.Status = this.Status
+
+        //} else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge && this.Status == EnumEnrollNoStatus.Published || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng && this.Status == EnumEnrollNoStatus.Published) {
+        //  this.searchRequest.Status = this.Status
+
+        //}
+
+
+
+        //else if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar && this.Status == EnumEnrollNoStatus.Forwarded || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng && this.Status == EnumEnrollNoStatus.Forwarded) {
+        //  this.searchRequest.IsRegistrarVerified = false
+        //  this.searchRequest.action = "_VerifyRollListPdfReportRegistrar"
+        //  this.searchRequest.Status = this.Status
+
+        //} else if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar && this.Status == EnumEnrollNoStatus.Verified || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng && this.Status == EnumEnrollNoStatus.Verified) {
+        //  this.searchRequest.IsRegistrarVerified = true
+        //  this.searchRequest.action = "_VerifyRollListPdfReportRegistrar"
+        //  /*     this.searchRequest.Status = this.Status*/
+        //} else if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar && this.Status == EnumEnrollNoStatus.Reverted || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng && this.Status == EnumEnrollNoStatus.Reverted) {
+        //  this.searchRequest.Status = this.Status
+        //} else if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar && this.Status == EnumEnrollNoStatus.Published || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng && this.Status == EnumEnrollNoStatus.Published) {
+        //  this.searchRequest.Status = this.Status
+        //}
+
+        this.loaderService.requestStarted();
+        //call
+        await this.GetRollService.VerifyRollListPdf(this.searchRequest).then(
+          (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              this.VerifyRollList = data['Data'];
+
+              if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
+                this.VerifyRollList = this.VerifyRollList.filter(x => x.Status != 0)
+              }
+              /*       this.GetVerifyRollData();*/
+            }
+          },
+          (error: any) => console.error(error)
+        );
+      } catch (ex) {
+        console.log(ex);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
   }
 
   async downloadData(request: DownloadnRollNoModel[]) {
     try {
-      
+
       request.forEach(e => e.DepartmentID = this.sSOLoginDataModel.DepartmentID)
       this.loaderService.requestStarted();
       await this.reportService.DownloadStudentRollNumber(request)
@@ -291,11 +298,11 @@ else{
       this.SearchReqForEnroll.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.SearchReqForEnroll.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.SearchReqForEnroll.action = "_GetStatusVerifyAdmidCardListPdf"
-        
- 
-/*      this.SearchReqForEnroll.Status = EnumEnrollNoStatus.Forwarded;*/
+
+
+      /*      this.SearchReqForEnroll.Status = EnumEnrollNoStatus.Forwarded;*/
       this.SearchReqForEnroll.PDFType = 1;
-/*      this.SearchReqForEnroll.ModuleID = 2;*/
+      /*      this.SearchReqForEnroll.ModuleID = 2;*/
 
       this.loaderService.requestStarted();
       //call
@@ -321,7 +328,7 @@ else{
   }
 
   ShowHideButtons(status: number) {
-    
+
     this.Enrollnostatus = status;
     if (status == EnumEnrollNoStatus.Generated) {
       this.ShowForwardedButton = true;
@@ -343,11 +350,10 @@ else{
     }
   }
 
- 
+
 
   async SaveApplicationWorkFlow(Action: number) {
-    try
-    {
+    try {
       //session
 
       //if (Action == EnumEnrollNoStatus.Verified) {
@@ -358,7 +364,7 @@ else{
       //    }
       //  }
       //}
-     
+
       var Selected: VerifyRollNumberList[] = []
 
       if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon ||
@@ -373,17 +379,17 @@ else{
         }
 
       }
-      
+
       if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon || Action == EnumEnrollNoStatus.Reverted || Action == EnumEnrollNoStatus.Verified
-      
+
       ) {
         Selected = this.VerifyRollList.filter(e => e.Selected == true)
-      } else{
+      } else {
         Selected = this.VerifyRollList
       }
 
-     
-   
+
+
 
 
       if (this.sSOLoginDataModel.RoleID == EnumRole.Admin && Action == EnumEnrollNoStatus.Forwarded || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon && Action == EnumEnrollNoStatus.Forwarded) {
@@ -425,17 +431,17 @@ else{
         })
       }
       if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng) {
-         Selected.forEach(e => {
+        Selected.forEach(e => {
           e.UserID = this.sSOLoginDataModel.UserID,
             e.Status = Action,
             e.EndTermID = this.sSOLoginDataModel.EndTermID,
             e.RoleID = this.sSOLoginDataModel.RoleID
           e.ModuleID = 3,
-         
+
             e.IsRegistrarVerified = this.IsRegistrarVerified
 
         })
-      
+
       }
 
       if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
@@ -472,7 +478,7 @@ else{
       }
       /*      this.SearchReqForEnroll.action = "_GenerateRollNumbers"*/
 
-      
+
 
 
       this.loaderService.requestStarted();
@@ -482,11 +488,10 @@ else{
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          if (this.State == EnumStatus.Success)
-          {
+          if (this.State == EnumStatus.Success) {
             this.toastrService.success(this.Message)
             /*    this.CloseOTPModal()*/
-        
+
             this.CloseOTPModal()
             /*            this.toastrService.success(data.Message)*/
             this.GetAllData()
@@ -494,9 +499,8 @@ else{
             this.VerifyRollList.forEach(item => item.Selected = false);
 
 
-     
-          } else
-          {
+
+          } else {
             this.toastrService.error(data.ErrorMessage)
           }
         },
@@ -511,12 +515,10 @@ else{
     }
   }
 
-  VerifyRollNumber()
-  {
+  VerifyRollNumber() {
 
     if (this.ddlRollListStatus > 0) {
-      if (this.ddlRollListStatus == EnumEnrollNoStatus.Reverted)
-      {
+      if (this.ddlRollListStatus == EnumEnrollNoStatus.Reverted) {
         this.Swal2.Confirmation("Are you sure you want to revert Roll list?", async (result: any) => {
           // Check if the user confirmed the action
           if (result.isConfirmed) {
@@ -591,12 +593,10 @@ else{
 
 
 
-  async VerifyOTP()
-  {
+  async VerifyOTP() {
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
-        try
-        {
+        try {
           //Call Function
           this.SaveApplicationWorkFlow(EnumEnrollNoStatus.Verified);
 
@@ -692,8 +692,7 @@ else{
 
 
   //Start Section Model
-  async openModalGenerateOTP(content: any)
-  {
+  async openModalGenerateOTP(content: any) {
     const isAnySelected = this.VerifyRollList.some(x => x.Selected)
     //if (!isAnySelected) {
     //  this.toastrService.error('Please select at least one College!');
@@ -706,7 +705,7 @@ else{
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-  
+
     this.SendOTP();
   }
 
