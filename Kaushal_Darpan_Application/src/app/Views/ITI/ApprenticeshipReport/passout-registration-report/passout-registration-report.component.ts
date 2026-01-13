@@ -351,7 +351,7 @@ export class PassoutRegistrationReportComponent {
   }
 
   async SampleexportExcelDataYearly() {
-
+    debugger
     try {
       this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
