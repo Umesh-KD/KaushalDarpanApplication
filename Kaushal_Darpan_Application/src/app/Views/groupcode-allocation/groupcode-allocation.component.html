@@ -37,6 +37,16 @@
             <option *ngFor="let item of SemestarMasterDDLList" [value]="item.SemesterID">{{item.SemesterName}}</option>
           </select>
         </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.schemeId" >
+            <option value="0">Select Scheme</option>
+            <option value="1347">old scheme</option>
+            <option value="1348">New scheme</option>
+            
+            
+          </select>
+        </div>
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
@@ -50,7 +60,7 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> List For Select</b>
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center gap-3">
         <select id="ddlConter" class="form-select  couterDropDown me-2">
           <option value="50">50</option>
           <option value="100">100</option>
@@ -58,8 +68,10 @@
           <option value="1000">1000</option>
         </select>
         <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+
+        <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
       </div>
-    </div>
+      </div>
 
 
 

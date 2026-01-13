@@ -1,0 +1,9 @@
+::ng-deep .my-save-toast {
+  background-color: #22c55e !important; /* green */
+  color: #fff !important;
+}
+
+::ng-deep .my-update-toast {
+  background-color: #3b82f6 !important; /* blue */
+  color: #fff !important;
+}

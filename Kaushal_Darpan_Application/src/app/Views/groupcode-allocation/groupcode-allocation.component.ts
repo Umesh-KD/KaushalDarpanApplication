@@ -15,6 +15,7 @@ import { CommonSerialMasterRequestModel } from '../../Models/CommonSerialMasterR
 import { CommonSerialMasterResponseModel } from '../../Models/CommonSerialMasterResponseModel';
 import { CommonDDLCommonSubjectModel } from '../../Models/CommonDDLCommonSubjectModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class GroupcodeAllocationComponent {
   public SerialMasterDataList: CommonSerialMasterResponseModel[] = [];
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public DataExcel: any = [];
   constructor(private commonMasterService: CommonFunctionService,
     private router: Router,
     private toastr: ToastrService,
@@ -86,10 +88,13 @@ export class GroupcodeAllocationComponent {
   }
 
   async GetAllData() {
+    debugger
     try {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      //this.searchRequest.schemeId = this.searchRequest.schemeId;
+      debugger
       await this.groupcodeAllocationService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -196,5 +201,107 @@ export class GroupcodeAllocationComponent {
       }, (error: any) => console.error(error)
       );
   }
+
+
+  async exportExcelData() {
+    debugger;
+    try {
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+
+      await this.groupcodeAllocationService.GetAllData(this.searchRequest)
+        .then((data: any) => {
+
+          data = JSON.parse(JSON.stringify(data));
+
+          if (data.State !== EnumStatus.Success) {
+            this.toastr.error(data.ErrorMessage);
+            return;
+          }
+
+          this.DataExcel = data.Data || [];
+
+          if (!this.DataExcel || this.DataExcel.length === 0) {
+            this.toastr.error("No data available for export.");
+            return;
+          }
+
+          const unwantedColumns = [
+            "SubjectName", "DepartmentID", "Eng_NonEng", "EndTermID",
+            "TermPart", "ModifyBy", "IPAddress", "RoleID",
+            "StartValue", "GroupCodeID", "SemesterId", "CommonSubjectID"
+          ];
+
+          
+          const filteredData = this.DataExcel.map((item: any) => {
+            const filteredItem: any = {};
+            Object.keys(item).forEach(key => {
+              if (!unwantedColumns.includes(key)) {
+                filteredItem[key] = item[key];
+              }
+            });
+            return filteredItem;
+          });
+
+          if (filteredData.length === 0) {
+            this.toastr.error("No columns left after filtering.");
+            return;
+          }
+
+          
+          const excelDataWithSNo = filteredData.map((item: any, index: number) => ({
+            SNo: index + 1,
+            ...item
+          }));
+
+          
+          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelDataWithSNo);
+
+          const keys = Object.keys(excelDataWithSNo[0]);
+          const MIN_WIDTH = 8;
+          const PADDING = 2;
+
+          
+          const columnWidths = keys.map(key => {
+            let maxLength = key.length;
+
+            for (let i = 0; i < excelDataWithSNo.length; i++) {
+              const cellVal = excelDataWithSNo[i][key];
+              const text = cellVal == null ? "" : String(cellVal);
+              maxLength = Math.max(maxLength, text.length);
+            }
+
+            return { wch: Math.max(MIN_WIDTH, maxLength + PADDING) };
+          });
+
+          ws['!cols'] = columnWidths;
+
+          
+          const wb: XLSX.WorkBook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+          const now = new Date();
+          const fileName = `GroupCodeAllocation_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.xlsx`;
+
+          XLSX.writeFile(wb, fileName);
+        },
+          (error: any) => {
+            console.error(error);
+            this.toastr.error("Export failed. See console for details.");
+          });
+
+    } catch (ex) {
+      console.error(ex);
+      this.toastr.error("Unexpected error during export.");
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
 
 }
