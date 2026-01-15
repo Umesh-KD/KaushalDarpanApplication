@@ -199,6 +199,7 @@ export class BlankReportComponent {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.loaderService.requestStarted();
       
       
@@ -291,5 +292,14 @@ export class BlankReportComponent {
     const branchCode = this.getBranchCode(this.request.BranchID);      // e.g. CI
   
     return `13A_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}.${extension}`;
+  }
+
+  async onBranchChange() {
+    this.request.ExamDate = '';
+    this.request.SemesterID = 0;
+    this.request.ShiftID = 0;
+    this.request.SubjectID = 0;
+    this.request.SubjectCode = '';
+    this.request.ExamCategoryID = 0;
   }
 }

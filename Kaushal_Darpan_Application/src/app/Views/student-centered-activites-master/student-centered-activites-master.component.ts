@@ -212,6 +212,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   }
 
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
+    debugger
     try {
       this.loaderService.requestStarted();
       
@@ -227,11 +228,13 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
        } else {
          let presentStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 1 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
          let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
+         let detainStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 3 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
     }
 
       if (isFinalSubmit == true) {
         let presentStudents = this.GradeList.filter(x =>  x.IsPresentStudentCenteredActivity == 1);
         let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
+        let detainStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 3 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
       }
 
       // **Validation for Present Students**
@@ -277,7 +280,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       console.log("Filtered UFM Students", ufmStudents);
 
       // **Combine both present and UFM students for submission**
-      let finalSubmissionList = [...presentStudents, ...ufmStudents];
+      let finalSubmissionList = [...presentStudents, ...ufmStudents, ...detainStudents];
 
       finalSubmissionList.forEach(x => {
         x.IsSCAChecked = true; // Marking them for submission
