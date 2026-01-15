@@ -73,3 +73,14 @@ export class ScholarshipApiDataModel {
   public InstituteID: number = 0;
   public collegeCode: string = '';
 }
+
+export class ScholarshipApiSearchDataModel {
+
+  public CollegeType: string = '';
+
+  public CollegeCode: string = '';
+
+  public DepartmentID: number = 0
+
+  public AcademicYear:number=0
+}

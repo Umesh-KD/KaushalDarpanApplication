@@ -21,35 +21,30 @@
 
     <div class="mb-8">
 
+
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Fetch Api Data</b>
+      </div>
+
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Request
+            Request Type
           </label>
-          <input type="text" class="form-input" id="RequestId" [(ngModel)]="ScholarshipAPIRequest.RequestId" placeholder="Enter Request Type">
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Equipment: <span class="StarMarking">*</span>
-          </label>
-          <select class="form-select" id="EquipmentId" [(ngModel)]="ScholarshipAPIRequest.CollegeType">
+          <select class="form-select" id="EquipmentId" [(ngModel)]="ScholarshipAPIRequest.RequestType">
             <option value="">Choose Option</option>
-            <option value="1">ITI</option>
-            <option value="2">BTER</option>
+            <option value="College_Code">College Type</option>
+            <option value="Janaadhaar_Aadhaar">Student Type </option>
+
 
           </select>
         </div>
 
 
-
-        
-
-        <div>
+        <div *ngIf="ScholarshipAPIRequest.RequestType=='College_Code'">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
           <ng-select [(ngModel)]="ScholarshipAPIRequest.InstituteID"
-                     [clearable]="false">
+                     [clearable]="false" (change)="Onchangecollege()">
             <ng-option [value]="0" selected>--All--</ng-option>
             <ng-container *ngFor="let item of InstituteMasterList;">
               <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
@@ -60,11 +55,70 @@
 
 
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" id="searchButton" (click)="GetPracticalExamMarksList()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" id="cancelButton">Cancel</button>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Request
+          </label>
+          <input [disabled]="ScholarshipAPIRequest.RequestType=='College_Code'" type="text" class="form-input" id="RequestId" [(ngModel)]="ScholarshipAPIRequest.RequestId" placeholder="Enter Request Type">
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" id="searchButton" (click)="GetPracticalExamMarksList()">Fetch</button>
+          <!--<button type="button" class="btn bg-danger text-white mt-6" id="cancelButton">Cancel</button>-->
         </div>
       </div>
 
+
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">
+        <b class="text-1xl-5">Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            College Type
+          </label>
+          <select class="form-select" id="EquipmentId" [(ngModel)]="searchrequest.CollegeType">
+            <option value="">Choose Option</option>
+            <option value="Govt">Govt</option>
+            <option value="Private">Private</option>
+
+
+          </select>
+        </div>
+
+
+  
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            College Code
+          </label>
+          <input  type="text" class="form-input" id="RequestId" [(ngModel)]="searchrequest.CollegeCode" placeholder="Enter College Code">
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" id="searchButton" (click)="GetDataAll()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="cancelButton"  (click)="Cancel()">Cancel</button>
+        </div>
+      </div>
     </div>
 
 
@@ -82,12 +136,12 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div class="">
-          <select id="ddlConter" class="form-select  couterDqropDown">
+          <!--<select id="ddlConter" class="form-select  couterDqropDown">
             <option value="50">50</option>
             <option value="100">100</option>
             <option value="500">500</option>
             <option value="1000">1000</option>
-          </select>
+          </select>-->
         </div>
         <div class=""></div>
         <div class=""></div>
@@ -103,29 +157,29 @@
               <th class="text-left">College Name</th>
               <th class="text-left">Scholarship Amount</th>
               <th class="text-left">College Type</th>
-              <th class="text-left">Action</th>
+              <!--<th class="text-left">Action</th>-->
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let row of scholarshipRequestList  let idx=index;">
               <td>{{idx+1}}</td>
-              <td align="left">{{row.traineeName}}</td>
-              <td align="left">{{row.collegeCode}}</td>
-              <td align="left">{{row.collegeName}}</td>
-              <td align="left">{{row.scholarshipAmount}}</td>
-              <td align="left">{{row.collegeType}}</td>
+              <td align="left">{{row.TraineeName}}</td>
+              <td align="left">{{row.CollegeCode}}</td>
+              <td align="left">{{row.CollegeName}}</td>
+              <td align="left">{{row.ScholarshipAmount}}</td>
+              <td align="left">{{row.CollegeType}}</td>
 
-              <td>
-                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <!--<td>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">-->
                   <!--<a *ngIf="row.IsShowEditButton==1" href="javascript:void(0);"
                  (click)="ViewandEdit(MyModel_ViewDetails, row)">
                 <i class="ti ti-pencil"></i>
               </a>-->
-                  <a href="javascript:void(0);">
+                  <!--<a href="javascript:void(0);">
                     <i class="ti ti-view"></i>
                   </a>
                 </div>
-              </td>
+              </td>-->
             </tr>
 
           </tbody>

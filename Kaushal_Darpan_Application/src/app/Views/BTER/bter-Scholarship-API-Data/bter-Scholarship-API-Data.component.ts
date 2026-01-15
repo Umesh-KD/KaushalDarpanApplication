@@ -16,7 +16,7 @@ import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute } from '@angular/router';
 import { CollegeWiseScholarshipService } from '../../../Services/CollegeWiseScholarship/college-wise-scholarship.service';
-import { AddCollegeWiseScholarshipModel, ScholarshipApiDataModel } from '../../../Models/CollegeWiseScholarshipModel';
+import { AddCollegeWiseScholarshipModel, ScholarshipApiDataModel, ScholarshipApiSearchDataModel } from '../../../Models/CollegeWiseScholarshipModel';
 
 @Component({
   selector: 'app-bter-Scholarship-API-Data',
@@ -44,6 +44,7 @@ export class bterScholarshipAPIDataComponent {
   public Table_SearchText: string = '';
   public SearchTimeTableList: any = []
   ScholarshipAPIRequest = new ScholarshipApiDataModel();
+  searchrequest = new ScholarshipApiSearchDataModel();
   sSOLoginDataModel = new SSOLoginDataModel();
   public tablerequest: any = [];
   public InstituteMasterList: any = [];
@@ -69,8 +70,9 @@ export class bterScholarshipAPIDataComponent {
   async ngOnInit() {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetPracticalExamMarksList();
+
     await this.InstituteMaster();
+    
 
   }
  
@@ -104,12 +106,21 @@ export class bterScholarshipAPIDataComponent {
 
 
   async GetPracticalExamMarksList() {
-    debugger
-    this.ScholarshipAPIRequest.CollegeType = this.ScholarshipAPIRequest.CollegeType
+
+    if (this.sSOLoginDataModel.DepartmentID == 1) {
+      this.ScholarshipAPIRequest.CollegeType = 'BTER'
+    } else {
+      this.ScholarshipAPIRequest.CollegeType = 'ITI'
+    }
+ 
     //this.ScholarshipAPIRequest.CollegeType = String(this.sSOLoginDataModel.DepartmentID);
-    this.ScholarshipAPIRequest.RequestId = this.ScholarshipAPIRequest.RequestId;
-    this.ScholarshipAPIRequest.collegeCode = this.ScholarshipAPIRequest.collegeCode;
-    this.ScholarshipAPIRequest.RequestType = 'Janaadhaar_Aadhaar';
+    //this.ScholarshipAPIRequest.RequestId = this.ScholarshipAPIRequest.RequestId;
+    //this.ScholarshipAPIRequest.collegeCode = this.ScholarshipAPIRequest.collegeCode;
+/*    this.ScholarshipAPIRequest.RequestType = 'Janaadhaar_Aadhaar';*/
+    if (this.ScholarshipAPIRequest.RequestId == '') {
+      this.ScholarshipAPIRequest.RequestId="0"
+    }
+    
 
     try {
       this.loaderService.requestStarted();
@@ -118,9 +129,12 @@ export class bterScholarshipAPIDataComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data && data.Data && Array.isArray(data.Data.data)) {
-            this.scholarshipRequestList = data.Data.data;
+/*            this.scholarshipRequestList = data.Data.data;*/
+            this.toastr.success("Fetch Succesfully")
+           
           } else {
-            this.scholarshipRequestList = [];
+            /*      this.scholarshipRequestList = [];*/
+            this.toastr.error("Error in Fetching Data")
           }
           console.log('API Response ===>', data);
 
@@ -138,4 +152,57 @@ export class bterScholarshipAPIDataComponent {
   }
 
 
+
+  async GetDataAll() {
+
+    this.searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+
+    //this.ScholarshipAPIRequest.CollegeType = String(this.sSOLoginDataModel.DepartmentID);
+    //this.ScholarshipAPIRequest.RequestId = this.ScholarshipAPIRequest.RequestId;
+    //this.ScholarshipAPIRequest.collegeCode = this.ScholarshipAPIRequest.collegeCode;
+    /*    this.ScholarshipAPIRequest.RequestType = 'Janaadhaar_Aadhaar';*/
+   
+
+
+    try {
+      this.loaderService.requestStarted();
+
+      await this.CollegeWiseScholarship.GetAllData(this.searchrequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data && data.Data ) {
+            /*            this.scholarshipRequestList = data.Data.data;*/
+            this.toastr.success("Fetch Succesfully")
+            this.scholarshipRequestList=data.Data
+          } else {
+            /*      this.scholarshipRequestList = [];*/
+            this.toastr.error("Error in Fetching Data")
+          }
+          console.log('API Response ===>', data);
+
+        }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async Onchangecollege() {
+    this.ScholarshipAPIRequest.RequestId="0"
+    this.ScholarshipAPIRequest.RequestId = this.InstituteMasterList.find((e: any) => e.InstituteID == this.ScholarshipAPIRequest.InstituteID)?.InstituteCode
+  }
+
+
+  async Cancel() {
+    this.searchrequest = new ScholarshipApiSearchDataModel()
+    this.scholarshipRequestList=[]
+  }
 }
