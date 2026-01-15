@@ -101,7 +101,8 @@ export class TeacherHigherEducationApplicationComponent {
       dOB: [{ value: '', disabled: true }, [Validators.required]],
       joiningDate: [{ value: '', disabled: true }, [Validators.required]],
       appliedCourse: ['', [DropdownValidators]],
-      appliedInstitute: ['', [DropdownValidators]],
+      // appliedInstitute: ['', [DropdownValidators]],
+      appliedInstitute: ['',[Validators.required]],
       pHDStatus: ['', [Validators.required]],
       appliedInstituteDistance: ['', [Validators.required]],
       appliedInstituteCategory: ['', [DropdownValidators]],
@@ -112,7 +113,7 @@ export class TeacherHigherEducationApplicationComponent {
     this.ButtonText = "Save";
     //session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute = "0";
+    this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute = "";
     //load data
     await this.GetPersonalDetailByUserID();
     await this.GetAllAppliedCoursesDDL();

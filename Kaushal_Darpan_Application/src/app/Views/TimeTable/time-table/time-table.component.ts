@@ -790,7 +790,7 @@ export class TimeTableComponent implements OnInit {
     console.log(this.TimeTableList,"asfdadfasd")
     if (this.TimeTableList?.length > 0) {
 
-      const allVerify = this.TimeTableList.every((f: any) => f.Status == EnumEnrollNoStatus.Verified && f.TimeTableStatus == EnumEnrollNoStatus.Generated)
+      const allVerify = this.TimeTableList.every((f: any) => f.Status == EnumEnrollNoStatus.Verified && (f.TimeTableStatus == EnumEnrollNoStatus.Generated || f.TimeTableStatus == EnumEnrollNoStatus.Verified))
       if (allVerify && this.sSOLoginDataModel.RoleID == EnumRole.Admin || allVerify && this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
         return true;
       }

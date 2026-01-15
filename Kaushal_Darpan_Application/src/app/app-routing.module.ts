@@ -269,6 +269,8 @@ const routes: Routes = [
       { path: 'roomsmaster', loadChildren: () => import('./Views/Rooms/rooms-master/rooms-master.module').then(m => m.RoomsMasterModule), title: 'Room Master' },
       { path: 'addrooms', loadChildren: () => import('./Views/Rooms/add-rooms/add-rooms.module').then(m => m.AddRoomsModule), title: 'Add Room' },
       { path: 'scactivities', loadChildren: () => import('./Views/student-centered-activites-master/student-centered-activites.module').then(m => m.StudentCenteredActivitesModule), title: 'Student Centered Activites' },
+      { path: 'scactivities/:Status', loadChildren: () => import('./Views/student-centered-activites-master/student-centered-activites.module').then(m => m.StudentCenteredActivitesModule), title: 'Student Centered Activites' },
+     
       //{ path: 'addexam', loadChildren: () => import('./Views/Exam Master/add-exam/add-exam.module').then(m => m.AddExamModule) },
 
       { path: 'setexamattendance', loadChildren: () => import('./Views/SetExamAttendance/set-exam-attendance/set-exam-attendance.module').then(m => m.SetExamAttendanceModule), title: 'Set Exam Attendance' },
@@ -295,6 +297,8 @@ const routes: Routes = [
       { path: 'TheoryMarks', loadChildren: () => import('./Views/theory-marks/theory-marks.module').then(m => m.theorymarksModule), title: 'Theory Marks' },
 
       { path: 'InternalPracticalStudent', loadChildren: () => import('./Views/internal-practical-student/internal-practical-student.module').then(m => m.InternalPracticalStudentModule), title: 'Internal Practical Student' },
+      { path: 'InternalPracticalStudent/:Status', loadChildren: () => import('./Views/internal-practical-student/internal-practical-student.module').then(m => m.InternalPracticalStudentModule), title: 'Internal Practical Student' },
+      
       { path: 'InternalAssessmentStudents', loadChildren: () => import('./Views/internal-practical-student/internal-practical-student.module').then(m => m.InternalPracticalStudentModule), title: 'Internal Practical Student' },
       { path: 'GenerateRollnumber', loadChildren: () => import('./Views/generate-roll/generate-roll.module').then(m => m.GenerateRollModule), title: 'Generate Rollnumber' },
       { path: 'published-roll-no', loadChildren: () => import('./Views/published-roll-no/published-roll-no.module').then(m => m.PublishedRollNoModule), title: 'Published Roll No' },
@@ -1486,6 +1490,7 @@ const routes: Routes = [
       { path: 'CandidateApplicationList', loadChildren: () => import('./Views/Counselling-Master/candidate-application-list/candidate-application-list.module').then(m => m.CandidateApplicationListModule) },
       { path: 'alloted-candidate-list', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list/alloted-candidate-list.module').then(m => m.AllotedCandidateListModule), title: 'Alloted Candidate List' },
       { path: 'alloted-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list-report/alloted-candidate-list-report.module').then(m => m.AllotedCandidateListReportModule), title: 'Alloted Candidate List' },
+      { path: 'candidate-allotment-report', loadChildren: () => import('./Views/Counselling-Master/candidate-allotment-report/candidate-allotment-report.module').then(m => m.CandidateAllotmentListReportModule), title: 'Candidate Allotment List' },
       {path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
       {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
       {path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details'},
@@ -1577,6 +1582,8 @@ const routes: Routes = [
       { path: 'ExaminerDashboard', loadChildren: () => import('./Views/ITI/practical-examiner-dashboard/practical-examiner-dashboard.module').then(m => m.PracticalExaminerDashboardModule), title: 'Practical examiner dashboard ' },
       { path: 'ScholarshipAPIData', loadChildren: () => import('./Views/BTER/bter-Scholarship-API-Data/bter-Scholarship-API-Data.module').then(m => m.bterScholarshipAPIDataModule), title: 'Scholarship API Data' },
       { path: 'UnlockInternalMarks', loadChildren: () => import('./Views/BTER/Unlock-Internal-Marks/Unlock-Internal-Marks.module').then(m => m.UnlockInternalMarksModule), title: 'Unlock Internal Marks' },
+      { path: 'surveyperform', loadChildren: () => import('./Views/ITI/iti_survey-perform/iti_survey-perform.module').then(m => m.ITIsurveyperformModule), title: 'ITI Survey Perform' },
+     
     ]
   },
 

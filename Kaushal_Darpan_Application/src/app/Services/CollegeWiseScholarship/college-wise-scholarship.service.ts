@@ -154,7 +154,6 @@ export class CollegeWiseScholarshipService {
   // }
 
 
-  // vivek 
   public async GetScholarship1(data: ScholarshipApiDataModel) {
     var body = JSON.stringify(data);
     return await this.http.post(`${this.APIUrl}/GetScholarship1`, body, this.headersOptions)

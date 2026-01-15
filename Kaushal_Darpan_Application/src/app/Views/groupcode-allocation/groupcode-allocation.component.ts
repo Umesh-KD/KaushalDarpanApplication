@@ -15,6 +15,7 @@ import { CommonSerialMasterRequestModel } from '../../Models/CommonSerialMasterR
 import { CommonSerialMasterResponseModel } from '../../Models/CommonSerialMasterResponseModel';
 import { CommonDDLCommonSubjectModel } from '../../Models/CommonDDLCommonSubjectModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class GroupcodeAllocationComponent {
   public SerialMasterDataList: CommonSerialMasterResponseModel[] = [];
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public DataExcel: any = [];
   constructor(private commonMasterService: CommonFunctionService,
     private router: Router,
     private toastr: ToastrService,
@@ -86,10 +88,13 @@ export class GroupcodeAllocationComponent {
   }
 
   async GetAllData() {
+    debugger
     try {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      //this.searchRequest.schemeId = this.searchRequest.schemeId;
+      debugger
       await this.groupcodeAllocationService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -196,5 +201,101 @@ export class GroupcodeAllocationComponent {
       }, (error: any) => console.error(error)
       );
   }
+
+
+  
+
+  async exportExcelData() {
+    debugger;
+    try {
+      // Prepare request
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+
+      this.loaderService.requestStarted();
+
+      const data: any = await this.groupcodeAllocationService.GetAllData(this.searchRequest);
+
+      if (data.State !== EnumStatus.Success) {
+        this.toastr.error(data.ErrorMessage);
+        return;
+      }
+
+      const DataExcel = data.Data || [];
+
+      if (!DataExcel || DataExcel.length === 0) {
+        this.toastr.error("No data available for export.");
+        return;
+      }
+
+      const unwantedColumns = [
+        "SubjectName", "DepartmentID", "Eng_NonEng", "EndTermID",
+        "TermPart", "ModifyBy", "IPAddress", "RoleID",
+        "StartValue", "GroupCodeID", "SemesterId", "CommonSubjectID"
+      ];
+
+      const filteredData = DataExcel.map((item: any) => {
+        const obj: any = {};
+        Object.keys(item).forEach(key => {
+          if (!unwantedColumns.includes(key)) {
+            obj[key] = item[key];
+          }
+        });
+        return obj;
+      });
+
+      const headerMap = [
+        { header: 'S No', key: 'SNo' },
+        { header: 'Semester Name', key: 'SemesterName' },
+        { header: 'Group Code', key: 'GroupCode' },
+        { header: 'Total', key: 'Total' },
+        { header: 'Common Subject Name', key: 'CommonSubjectName' },
+        { header: 'Subject Code', key: 'SubjectCode' }
+      ];
+
+      const excelData = filteredData.map((item: any, index: number) => {
+        const row: any = {};
+        headerMap.forEach(h => {
+          row[h.header] = h.key === 'SNo' ? index + 1 : (item[h.key] ?? '');
+        });
+        return row;
+      });
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+
+      const MIN_WIDTH = 10;
+      const PADDING = 2;
+
+      ws['!cols'] = headerMap.map(h => {
+        let maxLength = h.header.length;
+        excelData.forEach((row: any) => {
+          const text = row[h.header] == null ? '' : String(row[h.header]);
+          maxLength = Math.max(maxLength, text.length);
+        });
+        return { wch: Math.max(MIN_WIDTH, maxLength + PADDING) };
+      });
+
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'GroupCodeAllocation');
+
+      const now = new Date();
+      const fileName = `GroupCodeAllocation_${now.getFullYear()}-${String(
+        now.getMonth() + 1
+      ).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.xlsx`;
+
+      XLSX.writeFile(wb, fileName);
+
+    } catch (ex) {
+      console.error(ex);
+      this.toastr.error("Unexpected error during export.");
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
+
+
 
 }

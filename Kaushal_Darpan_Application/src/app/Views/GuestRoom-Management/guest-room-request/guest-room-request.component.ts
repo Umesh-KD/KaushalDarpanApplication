@@ -203,7 +203,8 @@ export class GuestRoomRequestComponent {
       }
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-
+      this.request.GuestRoomDetailID = this.checkInRequest.GuestRoomDetailID;
+      debugger
       try {
         this.request.ModifyBy = this.sSOLoginDataModel.UserID;
         await this._GuestRoomManagmentService.updateReqStatusCheckInOut(this.request)
@@ -237,8 +238,8 @@ export class GuestRoomRequestComponent {
     }
   }
 
-  async openOTPModal_CheckIn(userSubmitData: any) {
-    this.childComponent.MobileNo = userSubmitData.MobileNo
+  async openOTPModal_CheckIn() {
+    this.childComponent.MobileNo = this.request.MobileNo
 
     // await for open model
     await this.childComponent.OpenOTPPopup();
@@ -247,7 +248,7 @@ export class GuestRoomRequestComponent {
     await this.childComponent.waitForVerification();
 
     // do work
-    await this.CheckIn(userSubmitData);
+    await this.CheckIn(this.request);
   }
 
   async openOTPModal_CheckOut(userSubmitData: any) {
@@ -273,7 +274,7 @@ export class GuestRoomRequestComponent {
 
   async updateReqStatus() {
     this.isCheckedIn = true;
-    if (this.CheckInFormGroup.invalid) {
+    if (this.groupForm.invalid) {
       this.toastr.error("Please enter required fields !");
       return
     }
@@ -283,6 +284,8 @@ export class GuestRoomRequestComponent {
       await this._GuestRoomManagmentService.updateReqStatus(this.request)
         .then(async (data: any) => {
           if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.CloseModal();
             this.CloseModal_CheckIn();
             this.GuestRequestList();
           }
@@ -525,7 +528,6 @@ export class GuestRoomRequestComponent {
     }
   }
 
-  // vivek start
   async proceedToSave() {
     this.isLoading = true;
     try {
@@ -593,8 +595,6 @@ export class GuestRoomRequestComponent {
   async openModal_CheckIn(model: any, userSubmitData: any) {
     try {
       this.request = { ...userSubmitData };
-      this.request.Status = 0;
-      this.request.Remark = '';
       await this.GetRoomTypeListData(this.request);
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
     } catch (error) {
@@ -603,12 +603,13 @@ export class GuestRoomRequestComponent {
   }
 
   async GetRoomTypeListData(request: any) {
-    this.request.RoomFee = 0;
     try {
       var dropdownReq: any = {}
       dropdownReq.GuestHouseID = request.GuestHouseID
       dropdownReq.CoolingFacilities = request.CoolingFacilities
       dropdownReq.RoomType = request.RoomType
+      dropdownReq.GenderId = request.GenderId
+
       dropdownReq.action = "GetRoomForAllotment";
 
       await this._GuestRoomManagmentService.GuestHouse_Dropdowns(dropdownReq).then(async (data: any) => {

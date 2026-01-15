@@ -189,13 +189,15 @@ export class ItiCertificateComponent implements OnInit {
   }
 
 
-  async Download() {
-
-    try {
-
+  async Download(row: any)
+  {
+    try
+    {
       this.loaderService.requestStarted();      
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.EnrollmentNo = row.EnrollmentNo;
+
       await this.ReportServices.ITIStateTradeCertificateReport(this.searchRequest)
         .then((data: any) => {
           this.State = data['State'];

@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { TheoryMarksSearchModel, TheoryMarksDataModels } from '../../Models/TheoryMarksDataModels';
@@ -29,6 +29,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
+  public isStatus: number = 0;
   public isSubmitted: boolean = false;
   public SemesterMasterList: any = [];
   public Branchlist: any[] = [];
@@ -62,19 +63,38 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   public isAnyUFMSelected: boolean = false;
   public totalInTableRecord: number = 0;
   public DocumentList: DocumentDetailsModel[] = []
+  public _EnumRole = EnumRole;
+  public InstituteMasterDDLList: any = []
   //end table feature default
 
   constructor(private commonMasterService: CommonFunctionService,
     private SCAService: StudentCenteredActivitesService, private toastr: ToastrService,
     private loaderService: LoaderService, private router: ActivatedRoute,
+    private route:Router,
+  
     private modalService: NgbModal, private Swal2: SweetAlert2, private streamMasterService: StreamMasterService, private appsettingConfig: AppsettingService,
-    private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef) {
+    private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef,
+    private activatedRoute: ActivatedRoute,) {
   }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
+     this.isStatus = Number(
+        this.activatedRoute.snapshot.paramMap.get('Status')
+      );
+      if(this.isStatus==0 || this.isStatus==null ||Number.isNaN(this.isStatus)){
+        this.isStatus= Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+      }
+   
+      console.log(this.isStatus); // 2
+      if(this.isStatus==4)
+      {
+        this.route.navigate(['/scactivities']);
+      }
+    
+  
     await this.GetMasterData();
     await this.GetGradeList();
 
@@ -93,6 +113,12 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.SemesterMasterList = data['Data'];
         }, error => console.error(error));
+        
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDLList = data.Data;
+        console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+      })
     }
     catch (ex) {
       console.log(ex);
@@ -125,10 +151,15 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   }
 
   async GetGradeList() {
+    debugger;
     this.AllInTableSelect = false;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     try {
-      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
+      if(!this.searchRequest.InstituteID)
+      {
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
+      }
+      
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -138,24 +169,27 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       await this.SCAService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.GradeList = data['Data'];
-          console.log(this.GradeList, "TheoryMarks")
-          this.GradeList.forEach((x: any) => {
-            if (x.IsSCAChecked == false) {
-              x.IsPresentStudentCenteredActivity = 1
-            }
-          })
-          var isfinalsubmit = this.GradeList.filter(x => x.isFinalSubmit == true)
-          if (isfinalsubmit.length > 0) {
-            this.isfinalsubmit = true
-            this.AllInTableSelect = false
-          } 
-          //table feature load
-          this.loadInTable();
-          //end table feature load
+          if(data.Data[0].IsOpen === 0) {
+            this.toastr.warning(data.Data[0].Message)
+          } else {
+            this.GradeList = data['Data'];
+            console.log(this.GradeList, "TheoryMarks")
+            this.GradeList.forEach((x: any) => {
+              if (x.IsSCAChecked == false) {
+                x.IsPresentStudentCenteredActivity = 1
+              }
+            })
+            var isfinalsubmit = this.GradeList.filter(x => x.isFinalSubmit == true)
+            if (isfinalsubmit.length > 0) {
+              this.isfinalsubmit = true
+              this.AllInTableSelect = false
+            } 
+            //table feature load
+            this.loadInTable();
+            //end table feature load
+          }
+
+          
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -185,6 +219,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       // **Filter Present and UFM Students Separately**
       let presentStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 1);
       let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
+      let detainStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 3);
 
        if (StudentExamPaperMarksID == 0 && isFinalSubmit == false) {
          let presentStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 1);
@@ -200,7 +235,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       }
 
       // **Validation for Present Students**
-      if (presentStudents.length == 0 && ufmStudents.length == 0 && isFinalSubmit==false) {
+      if (presentStudents.length == 0 && ufmStudents.length == 0 && isFinalSubmit==false && detainStudents.length == 0) {
         this.toastr.warning('Please mark students as Present or UFM before saving.');
         return;
       }
@@ -396,10 +431,10 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.GradeList.forEach(x => {
-      // if (!x.IsDetain) {
-      //   x.Marked = this.AllInTableSelect;
-      // }
-      x.Marked = this.AllInTableSelect;
+      if (!x.IsDetain) {
+        x.Marked = this.AllInTableSelect;
+      }
+      // x.Marked = this.AllInTableSelect;
     });
   }  //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
