@@ -38,8 +38,9 @@ export class InvigilatorSearchModel extends RequestBaseModel {
   public InstituteID: number = 0
   public ModifyBy: number = 0
   public UserID: number = 0
-  public ExamDate?: string = ''
+  public ExamDate?: String | null=null;
   public ShiftID?: number = 0
+  public SemesterID?:number=0
 }
 
 export class UnlockExamAttendanceDataModel extends RequestBaseModel {
