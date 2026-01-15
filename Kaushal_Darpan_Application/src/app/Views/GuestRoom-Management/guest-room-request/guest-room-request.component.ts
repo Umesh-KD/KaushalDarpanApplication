@@ -528,7 +528,6 @@ export class GuestRoomRequestComponent {
     }
   }
 
-  // vivek start
   async proceedToSave() {
     this.isLoading = true;
     try {

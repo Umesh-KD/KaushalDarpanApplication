@@ -85,8 +85,15 @@ export class InternalPracticalStudentComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
-
+    debugger
     this.InternalPracticalID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    if(this.InternalPracticalID==null || this.InternalPracticalID==0 || Number.isNaN(this.InternalPracticalID)){
+      this.InternalPracticalID = Number(
+        this.activatedRoute.snapshot.paramMap.get('Status')
+      );
+   
+      console.log(this.InternalPracticalID); // 2
+    }
     console.log(this.InternalPracticalID)
     if (this.InternalPracticalID == 2) {
       this.IsView = true;
@@ -169,37 +176,38 @@ export class InternalPracticalStudentComponent implements OnInit {
       await this.InternalPracticalStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.TheoryMarksList = data['Data'];
-          console.log(this.TheoryMarksList, "TheoryMarks")
+          if(data.Data[0].IsOpen === 0) {
+            this.toastr.warning(data.Data[0].Message)
+          } else {
+            this.TheoryMarksList = data['Data'];
+            if(this.InternalPracticalID == 2){
+              this.TheoryMarksList.forEach((x: any) => {
+                this.onStatusPracticalAssesmentChange(x, true)
+                if (x.IsInternalAssesmentCheckecd == false) {
+                  x.IsPresentInternalAssisment = 1
+                }
+              })
+            } else if (this.InternalPracticalID == 1) {
+              this.TheoryMarksList.forEach((x: any) => {
+                this.onStatusPracticalChange(x, true)
+                if (x.IsPracticalChecked == false) {
+                  x.IsPresentPractical = 1
+                }
+              })
+            }
 
-          if(this.InternalPracticalID == 2){
-            this.TheoryMarksList.forEach((x: any) => {
-              this.onStatusPracticalAssesmentChange(x, true)
-              if (x.IsInternalAssesmentCheckecd == false) {
-                x.IsPresentInternalAssisment = 1
-              }
-            })
-          } else if (this.InternalPracticalID == 1) {
-            this.TheoryMarksList.forEach((x: any) => {
-              this.onStatusPracticalChange(x, true)
-              if (x.IsPracticalChecked == false) {
-                x.IsPresentPractical = 1
-              }
-            })
+
+            var isfinalsubmit = this.TheoryMarksList.filter(x => x.isFinalSubmit == true)
+            if (isfinalsubmit.length > 0) {
+              this.isfinalsubmit = true
+            }
+
+            //table feature load
+            this.loadInTable();
+            //end table feature load
           }
 
-
-          var isfinalsubmit = this.TheoryMarksList.filter(x => x.isFinalSubmit == true)
-          if (isfinalsubmit.length > 0) {
-            this.isfinalsubmit = true
-          }
-
-          //table feature load
-          this.loadInTable();
-          //end table feature load
+          
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -215,19 +223,19 @@ export class InternalPracticalStudentComponent implements OnInit {
   isAllChecked(): boolean {
 
     if (this.InternalPracticalID == 2) {
-      // var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
-      var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
+      var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      // var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
       this.Allstudentcheck = isallcheck
-      // return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true && item.IsDetain == false);
-      return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true);
+      return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true && item.IsDetain == false);
+      // return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true);
  
     } else if (this.InternalPracticalID == 1) {
-      // var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
-      var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
+      var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      // var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
       this.Allstudentcheck = isallcheck
       // console.log(this.Allstudentcheck)
-      // return this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
-      return this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
+      return this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
+      // return this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
 
     } else {
       return false
@@ -539,10 +547,10 @@ export class InternalPracticalStudentComponent implements OnInit {
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.TheoryMarksList.forEach(x => {
-      // if(!x.IsDetain) {
-      //   x.Marked = this.AllInTableSelect;
-      // }
-      x.Marked = this.AllInTableSelect;
+      if(!x.IsDetain) {
+        x.Marked = this.AllInTableSelect;
+      }
+      // x.Marked = this.AllInTableSelect;
     });
   }
   //checked single (replace org. list here)

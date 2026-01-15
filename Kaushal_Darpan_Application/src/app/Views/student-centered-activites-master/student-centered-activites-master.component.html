@@ -15,22 +15,31 @@
 
 <div class="card">
   <div class="card-body p-5">
-    <!-- <div class="mb-8">
+    <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b> -->
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <!--<a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
-      <!-- </div>
+      </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div>
+        
+        <div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div>
+
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester:</label>
           <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.SemesterID">
             <option value="0">--All--</option>
             <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
           </select>
-        </div>
+        </div> -->
 
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Branch:<span class="StarMarking">*</span>
           </label>
@@ -39,30 +48,29 @@
             <option value="0">--All--</option>
             <option *ngFor="let item of Branchlist" [value]="item.StreamID">{{item.StreamName}}</option>
           </select>
-        </div>
+        </div> -->
 
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No.: </label>
           <input class="form-input" placeholder="Roll Number" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
-        </div>
+        </div> -->
 
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Grade Entered: </label>
           <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
             <option value="0">--All--</option>
             <option value="1">Grade Pending</option>
             <option value="2">Grade Entered</option>
           </select>
-        </div>
+        </div> -->
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetGradeList()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
         </div>
       </div>
+    </div>
 
-
-    </div> -->
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
@@ -136,10 +144,10 @@
     [checked]="row.Marked"
     (change)="toggleCheckbox(row)"> -->
 
-              <!-- <input [disabled]="row.IsDetain || isfinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
-                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"> -->
-              <input [disabled]="isfinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
+              <input [disabled]="row.IsDetain || isfinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+              <!-- <input [disabled]="isfinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"> -->
             </td>
             <td align="left">{{row.SubjectCode}}</td>
             <td align="left">{{row.StudentName}}</td>
@@ -159,19 +167,19 @@
                   <option value="57">B</option>
                   <option value="58">C</option>
                 </select>
-                <!-- <button *ngIf="!row.IsDetain" class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
-                 (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button> -->
-                <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
-                  (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
+                <button *ngIf="!row.IsDetain" class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
+                 (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
+                <!-- <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
+                  (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button> -->
               </div>
             </td>
 
             <td  align="left">
-              <!-- <span class="text-red-500" *ngIf="row.IsDetain">Detained</span> -->
-              <!-- <select *ngIf="!row.IsDetain" class="form-select" id="IsPresentTheory" placeholder="Choose" [disabled]="!row.Marked"
-               [(ngModel)]="row.IsPresentStudentCenteredActivity" (change)="onStatusChange(row)"> -->
-              <select class="form-select" id="IsPresentTheory" placeholder="Choose" [disabled]="!row.Marked"
+              <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
+              <select *ngIf="!row.IsDetain" class="form-select" id="IsPresentTheory" placeholder="Choose" [disabled]="!row.Marked"
                [(ngModel)]="row.IsPresentStudentCenteredActivity" (change)="onStatusChange(row)">
+              <!-- <select class="form-select" id="IsPresentTheory" placeholder="Choose" [disabled]="!row.Marked"
+               [(ngModel)]="row.IsPresentStudentCenteredActivity" (change)="onStatusChange(row)"> -->
                 <!--<option value="">Choose Option</option>-->
                 <option value="0">Absent</option>
                 <option value="1">Present</option>

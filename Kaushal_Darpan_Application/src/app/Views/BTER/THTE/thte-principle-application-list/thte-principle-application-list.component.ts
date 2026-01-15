@@ -104,6 +104,7 @@ export class THTEPrincipleApplicationListComponent {
   }
 
   async updateStatusRemark() {
+    debugger
     let anySelected = this.ApplicationListData.some((x: any) => x.Selected === true)
     if (!anySelected) {
       this.toastr.warning('Please select at least one record.');
