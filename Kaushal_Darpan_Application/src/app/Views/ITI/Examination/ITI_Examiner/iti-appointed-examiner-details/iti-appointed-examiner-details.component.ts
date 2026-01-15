@@ -41,7 +41,8 @@ export class ItiAppointedExaminerDetailsComponent {
     console.log("this.ssoLoginDataModel",this.ssoLoginDataModel);
     this.searchRequest.EndTermID = this.ssoLoginDataModel.EndTermID
     
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe(params =>
+    {
       this.ExaminerID = Number(params.get('id'));
       this.ExamTypeID = Number(params.get('status'));
       console.log('URL Param:', this.ExaminerID);

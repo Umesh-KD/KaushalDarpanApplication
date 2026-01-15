@@ -7,7 +7,7 @@ import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel'
 import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDataModel';
 import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { AddCollegeWiseScholarshipModel, ScholarshipApiDataModel } from '../../Models/CollegeWiseScholarshipModel';
+import { AddCollegeWiseScholarshipModel, ScholarshipApiDataModel, ScholarshipApiSearchDataModel } from '../../Models/CollegeWiseScholarshipModel';
 
 
 @Injectable({
@@ -154,7 +154,6 @@ export class CollegeWiseScholarshipService {
   // }
 
 
-  // vivek 
   public async GetScholarship1(data: ScholarshipApiDataModel) {
     var body = JSON.stringify(data);
     return await this.http.post(`${this.APIUrl}/GetScholarship1`, body, this.headersOptions)
@@ -162,5 +161,11 @@ export class CollegeWiseScholarshipService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+  public async GetAllData(data: ScholarshipApiSearchDataModel) {
+    var body = JSON.stringify(data);
+    return await this.http.post(`${this.APIUrl}/GetAllData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

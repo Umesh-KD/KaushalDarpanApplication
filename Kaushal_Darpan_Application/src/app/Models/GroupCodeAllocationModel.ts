@@ -6,6 +6,7 @@ export class GroupCodeAllocationSearchModel extends RequestBaseModel {
   public SemesterId: number = 0;
   public PartitionSize: number = 0;
   public CommonSubjectYesNo: number = 0;
+  public schemeId: number = 0;
 }
 export class GroupCodeAllocationAddEditModel extends ResponseBaseModel {
   public GroupCodeID: number = 0; // pk  
