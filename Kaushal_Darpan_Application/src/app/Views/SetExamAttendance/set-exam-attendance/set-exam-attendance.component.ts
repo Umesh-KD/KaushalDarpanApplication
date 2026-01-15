@@ -67,6 +67,9 @@ export class SetExamAttendanceComponent implements OnInit {
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
+  StreamMasterDDL: any = [];
+  public StudentList: any[] = [];
+
   public currentInTablePage: number = 1;
   public pageInTableSize: string = "50";
   public totalInTablePage: number = 0;
@@ -104,6 +107,12 @@ export class SetExamAttendanceComponent implements OnInit {
     this.searchRequest.TimeTableID = Number(this.activatedRoute.snapshot.queryParamMap.get("id") ?? 0);
     this.searchRequest.InstituteID = Number(this.activatedRoute.snapshot.queryParamMap.get("InstituteID") ?? 0);
 
+    await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.StreamMasterDDL = data.Data;
+      //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+      // split
+    })
     this.getExamStudentData();
   }
 
@@ -145,12 +154,37 @@ export class SetExamAttendanceComponent implements OnInit {
     }
   }
 
+  async onBranchChange(selectedValue: any) {
+    // debugger;
+    // const streamId = this.IIPMasterFormGroup.get('StreamID')?.value;
+    // debugger
+    // this.IsBranch = streamId > 0 ? true : false;
+
+    // const selectedStream = this.StreamMasterDDL.find((item: any) => item.StreamID == streamId);
+
+    // if (selectedStream) {
+    //   const totalStudent = selectedStream.TotalStudent;
+    //   this.IIPMasterFormGroup.get('StCount')?.patchValue(totalStudent);
+    //   console.log('Total students:', totalStudent);
+    // } else {
+    //   console.log('No stream found for selected StreamID');
+    // }
+    await this.getExamStudentData();
+  }
+
+
+
   async getExamStudentData() {
+    debugger;
+    this.searchRequest.InvigilatorAppointmentID = this.sSOLoginDataModel.UserID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-    this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+    this.searchRequest.TimeTableID = Number(this.activatedRoute.snapshot.queryParamMap.get("id") ?? 0);
+    this.searchRequest.InstituteID = Number(this.activatedRoute.snapshot.queryParamMap.get("InstituteID") ?? 0);
+
     
     try {
       this.loaderService.requestStarted();
@@ -214,6 +248,7 @@ export class SetExamAttendanceComponent implements OnInit {
     this.searchRequest = new SetExamAttendanceSearchModel();
     this.SubjectMasterDDL = [];
     this.attendanceFormData = [];
+    await this.getExamStudentData();
   }
 
   async onFilechange(event: any, Type: string, row: any) {

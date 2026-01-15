@@ -11,6 +11,7 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { SetExamAttendanceService } from '../../../Services/SetExamAttendance/set-exam-attendance.service';
 import { SetExamAttendanceModel, SetExamAttendanceSearchModel } from '../../../Models/SetExamAttendanceDataModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 
 
@@ -32,6 +33,7 @@ export class InvigilatorExamListComponent implements OnInit {
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
   public StaffMasterList: any = [];
+  public SemesterList:any=[];
 
   public _GlobalConstants: any = GlobalConstants;
 
@@ -44,13 +46,42 @@ export class InvigilatorExamListComponent implements OnInit {
     this.searchRequest.action = "_getListForInvigilator";
     this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     await this.getAllData();
+    await this.semesterData();
   }
   constructor(private loaderService: LoaderService, private setExamAttendanceService: SetExamAttendanceService,
     private invigilatorAppointmentService: InvigilatorAppointmentService, private modalService: NgbModal,
-    private staffMasterService: StaffMasterService, private Swal2: SweetAlert2, public appsettingConfig: AppsettingService) {
+    private staffMasterService: StaffMasterService, private Swal2: SweetAlert2, public appsettingConfig: AppsettingService,private commonMasterService: CommonFunctionService
+  ) {
+  }
+
+
+  async semesterData(){
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.SemesterList(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SemesterList = data.Data;     
+      }, error => console.error(error))
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+   
+  }
+
+  async ClearSearchData(){
+    this.searchRequest.SemesterID=0;
+    this.searchRequest.ExamDate=null;
+    await this.getAllData();
   }
 
   async getAllData() {
+    debugger;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
