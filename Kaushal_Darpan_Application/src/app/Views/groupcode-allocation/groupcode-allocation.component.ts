@@ -203,103 +203,97 @@ export class GroupcodeAllocationComponent {
   }
 
 
+  
+
   async exportExcelData() {
     debugger;
     try {
+      // Prepare request
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
 
-      await this.groupcodeAllocationService.GetAllData(this.searchRequest)
-        .then((data: any) => {
+      this.loaderService.requestStarted();
 
-          data = JSON.parse(JSON.stringify(data));
+      const data: any = await this.groupcodeAllocationService.GetAllData(this.searchRequest);
 
-          if (data.State !== EnumStatus.Success) {
-            this.toastr.error(data.ErrorMessage);
-            return;
+      if (data.State !== EnumStatus.Success) {
+        this.toastr.error(data.ErrorMessage);
+        return;
+      }
+
+      const DataExcel = data.Data || [];
+
+      if (!DataExcel || DataExcel.length === 0) {
+        this.toastr.error("No data available for export.");
+        return;
+      }
+
+      const unwantedColumns = [
+        "SubjectName", "DepartmentID", "Eng_NonEng", "EndTermID",
+        "TermPart", "ModifyBy", "IPAddress", "RoleID",
+        "StartValue", "GroupCodeID", "SemesterId", "CommonSubjectID"
+      ];
+
+      const filteredData = DataExcel.map((item: any) => {
+        const obj: any = {};
+        Object.keys(item).forEach(key => {
+          if (!unwantedColumns.includes(key)) {
+            obj[key] = item[key];
           }
+        });
+        return obj;
+      });
 
-          this.DataExcel = data.Data || [];
+      const headerMap = [
+        { header: 'S No', key: 'SNo' },
+        { header: 'Semester Name', key: 'SemesterName' },
+        { header: 'Group Code', key: 'GroupCode' },
+        { header: 'Total', key: 'Total' },
+        { header: 'Common Subject Name', key: 'CommonSubjectName' },
+        { header: 'Subject Code', key: 'SubjectCode' }
+      ];
 
-          if (!this.DataExcel || this.DataExcel.length === 0) {
-            this.toastr.error("No data available for export.");
-            return;
-          }
+      const excelData = filteredData.map((item: any, index: number) => {
+        const row: any = {};
+        headerMap.forEach(h => {
+          row[h.header] = h.key === 'SNo' ? index + 1 : (item[h.key] ?? '');
+        });
+        return row;
+      });
 
-          const unwantedColumns = [
-            "SubjectName", "DepartmentID", "Eng_NonEng", "EndTermID",
-            "TermPart", "ModifyBy", "IPAddress", "RoleID",
-            "StartValue", "GroupCodeID", "SemesterId", "CommonSubjectID"
-          ];
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
 
-          
-          const filteredData = this.DataExcel.map((item: any) => {
-            const filteredItem: any = {};
-            Object.keys(item).forEach(key => {
-              if (!unwantedColumns.includes(key)) {
-                filteredItem[key] = item[key];
-              }
-            });
-            return filteredItem;
-          });
+      const MIN_WIDTH = 10;
+      const PADDING = 2;
 
-          if (filteredData.length === 0) {
-            this.toastr.error("No columns left after filtering.");
-            return;
-          }
+      ws['!cols'] = headerMap.map(h => {
+        let maxLength = h.header.length;
+        excelData.forEach((row: any) => {
+          const text = row[h.header] == null ? '' : String(row[h.header]);
+          maxLength = Math.max(maxLength, text.length);
+        });
+        return { wch: Math.max(MIN_WIDTH, maxLength + PADDING) };
+      });
 
-          
-          const excelDataWithSNo = filteredData.map((item: any, index: number) => ({
-            SNo: index + 1,
-            ...item
-          }));
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'GroupCodeAllocation');
 
-          
-          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelDataWithSNo);
+      const now = new Date();
+      const fileName = `GroupCodeAllocation_${now.getFullYear()}-${String(
+        now.getMonth() + 1
+      ).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.xlsx`;
 
-          const keys = Object.keys(excelDataWithSNo[0]);
-          const MIN_WIDTH = 8;
-          const PADDING = 2;
-
-          
-          const columnWidths = keys.map(key => {
-            let maxLength = key.length;
-
-            for (let i = 0; i < excelDataWithSNo.length; i++) {
-              const cellVal = excelDataWithSNo[i][key];
-              const text = cellVal == null ? "" : String(cellVal);
-              maxLength = Math.max(maxLength, text.length);
-            }
-
-            return { wch: Math.max(MIN_WIDTH, maxLength + PADDING) };
-          });
-
-          ws['!cols'] = columnWidths;
-
-          
-          const wb: XLSX.WorkBook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-          const now = new Date();
-          const fileName = `GroupCodeAllocation_${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.xlsx`;
-
-          XLSX.writeFile(wb, fileName);
-        },
-          (error: any) => {
-            console.error(error);
-            this.toastr.error("Export failed. See console for details.");
-          });
+      XLSX.writeFile(wb, fileName);
 
     } catch (ex) {
       console.error(ex);
       this.toastr.error("Unexpected error during export.");
     } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+      this.loaderService.requestEnded();
     }
   }
+
 
 
 
