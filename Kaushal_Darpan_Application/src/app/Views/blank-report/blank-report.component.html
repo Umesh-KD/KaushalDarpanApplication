@@ -16,7 +16,7 @@
           <!-- First Row -->
           <div class="w-50">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch: <span class="StarMarking">*</span></label>
-            <select class="form-select text-sm w-full py-2 px-3" id="ddlBranch" placeholderName="Please Select" formControlName="ddlBranch" [(ngModel)]="request.BranchID">
+            <select class="form-select text-sm w-full py-2 px-3" id="ddlBranch" placeholderName="Please Select" formControlName="ddlBranch" [(ngModel)]="request.BranchID" (change)="onBranchChange()">
               <option value="0">--Select--</option>
               <option *ngFor="let item of BranchDDLList" [value]="item.StreamID">{{item.StreamName}}</option>
             </select>

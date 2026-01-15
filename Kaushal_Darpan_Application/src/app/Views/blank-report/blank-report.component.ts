@@ -199,6 +199,7 @@ export class BlankReportComponent {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.loaderService.requestStarted();
       
       await this.reportService.BlankReport(this.request)
@@ -248,5 +249,14 @@ export class BlankReportComponent {
   generateFileName(extension: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
+  }
+
+  async onBranchChange() {
+    this.request.ExamDate = '';
+    this.request.SemesterID = 0;
+    this.request.ShiftID = 0;
+    this.request.SubjectID = 0;
+    this.request.SubjectCode = '';
+    this.request.ExamCategoryID = 0;
   }
 }
