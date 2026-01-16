@@ -152,6 +152,8 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
 
   async GetGradeList() {
     debugger;
+    // this.GradeList=[];
+    this.paginatedInTableData=[];
     this.AllInTableSelect = false;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     try {
