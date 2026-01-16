@@ -45,6 +45,7 @@ export class InvigilatorExamListComponent implements OnInit {
     await this.CheckProfileStatus();
     this.searchRequest.action = "_getListForInvigilator";
     this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
     await this.getAllData();
     await this.semesterData();
   }
