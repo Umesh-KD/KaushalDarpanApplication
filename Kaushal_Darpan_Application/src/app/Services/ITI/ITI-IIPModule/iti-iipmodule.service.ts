@@ -4,6 +4,7 @@ import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { IDfFundDetailsModel, IDfFundSearchDetailsModel } from '../../../Models/ITI/IDfFundDetailsModel';
 import { ITI_IIPManageDataModel, ITI_IIPManageSearchModel, IIPManageFundSearchModel, IMCFundRevenue } from '../../../Models/ITI/ITI_IIPManageDataModel';
+import { ITIApprWorkerSurveyPerformModel } from '../../../Models/ITI/surveyperformaModel';
 
 @Injectable({
   providedIn: 'root'
@@ -200,6 +201,17 @@ export class ITIIIPManageService {
   public async GetAllIMCFundDataforReport(request: IIPManageFundSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetAllIMCFundDataforReport`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async SavesurveyperformaReport(request: ITIApprWorkerSurveyPerformModel) {
+    debugger
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/SavesurveyperformaReport`, body, this.headersOptions1)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
