@@ -82,15 +82,17 @@ export class ItiAppointedExaminerDetailsComponent {
     this.AppointExaminerID = 0
     this.VerifyCode = ''
     this.selectedrow = row
-
-    this.modalService.open(content, { size: 'sm', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    //this.modalService.open(content, { size: 'sm', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+    //  this.closeResult = `Closed with: ${result}`;
+    //}, (reason) => {
+    //  this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    //});
 
     this.AppointExaminerID = AppointExaminerID
     this.VerifyCode = ExaminerCode
+    this.Code = ExaminerCode;
+
+    this.openPageAfterExaminerLogin()
 
   }
   CloseModalPopup(isNavigate: boolean) {
@@ -121,7 +123,8 @@ export class ItiAppointedExaminerDetailsComponent {
     }
 
 
-    if (this.VerifyCode == this.Code) {
+    if (this.VerifyCode == this.Code)
+    {
       this.CloseModalPopup(true)
       debugger
   
