@@ -92,7 +92,7 @@
                     <td align="left">{{row.ShiftTime}}</td>
                     <td align="left">
                         <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
-                          <a href="javascript:void(0);" title="View Details" (click)="onDownload(row)">
+                          <a *ngIf="row.IsLocked" href="javascript:void(0);" title="View Details" (click)="onDownload(row)">
                             <i class="ti ti-download"></i></a>
 
                         </div>

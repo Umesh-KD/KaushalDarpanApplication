@@ -316,7 +316,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Joining Date: <span class="StarMarking">*</span>
               </label>
-              <input type="date" class="form-input" [(ngModel)]="RequestUpdateStatus.JoiningDate" formControlName="txtJoiningDate">
+              <input type="date" class="form-input" [(ngModel)]="RequestUpdateStatus.JoiningDate" formControlName="txtJoiningDate" [min]="lastworkingDate">
               <div *ngIf="isSubmitted && groupForm.controls.txtJoiningDate.errors" class="text-danger">
                 <p *ngIf="groupForm.controls.txtJoiningDate.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
               </div>

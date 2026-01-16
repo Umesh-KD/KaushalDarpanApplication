@@ -12,6 +12,34 @@
 
 <div class="card">
   <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!-- <a [routerLink]="'/AddItiCompanyMaster'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a> -->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <!-- (change)="onBranchChange($event)" -->
+      <div> 
+        <!-- (change)="onBranchChange($event)" -->
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+        <ng-select  [clearable]="false" class="w-full"  [(ngModel)]="searchRequest.StreamID" >
+          <ng-option [value]="0">--Select Branch--</ng-option>
+          <ng-option *ngFor="let item of StreamMasterDDL" [value]="item.StreamID">
+            {{ item.StreamName }}
+          </ng-option>
+        </ng-select>
+      </div>
+      <div>        
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getExamStudentData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Student List</b>
       <div class="flex justify-end flex-wrap items-center" *ngIf="sSOLoginDataModel">
@@ -29,6 +57,7 @@
           <option value="1000">1000</option>
         </select>
       </div>
+      
       <div class="">
       </div>
       <div class="">
