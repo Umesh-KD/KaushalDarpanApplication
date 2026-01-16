@@ -24,7 +24,7 @@ export class AttendanceRpt13BDataModel extends RequestBaseModel {
   public RollNumber?: string = ''
   public SubjectID?: number = 0
   public UserID?: number = 0
-
+ public BranchCode?:string=''
 }
 
 export class AttendanceRpt23DataModel extends RequestBaseModel {

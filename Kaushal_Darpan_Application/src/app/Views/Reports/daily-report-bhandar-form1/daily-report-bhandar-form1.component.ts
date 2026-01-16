@@ -20,6 +20,7 @@ export class DailyReportBhandarForm1Component {
   public sSOLoginDataModel = new SSOLoginDataModel()
   public request = new AttendanceRpt13BDataModel()
   public TableData: any = []
+  public SemesterMasterList: any = []
   // @ViewChild(OTPModuleComponent) childComponent!: OTPModuleComponent;
 
   constructor(
@@ -57,12 +58,20 @@ export class DailyReportBhandarForm1Component {
         this.ExamShiftDDL = data.Data;
       })
 
+      await this.commonMasterService.SemesterMaster()
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SemesterMasterList = data['Data'];
+        this.SemesterMasterList = this.SemesterMasterList.filter((item: any) => ![7, 8, 9].includes(item.SemesterID));
+      }, (error: any) => console.error(error));
+
     } catch (error) {
       console.error(error);
     }
   }
 
   async onDownload(row: any) {
+    debugger
     try {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -102,8 +111,22 @@ export class DailyReportBhandarForm1Component {
     });
   }
   generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+    // const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    // return `file_${timestamp}.${extension}`;
+    if (!this.request.ExamDate) {
+      this.toastr.error('Exam Date not selected');
+      return '';
+    }
+
+    const datePart = this.request.ExamDate.split('T')[0]; // "2025-12-16
+
+    const [yyyy, mm, dd] = datePart.split('-');
+    const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
+    
+    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  
+    const semestercode = this.getSemesterCode(this.request.SemesterID); 
+
+    return `CS_Diary_${formattedDate}_${instituteCode}_${semestercode}.${extension}`;
   }
 
   async DailyReportBhandarForm() {
@@ -125,4 +148,19 @@ export class DailyReportBhandarForm1Component {
       console.log(error)
     }
   }
+
+
+  getSemesterCode(semesterId: number): string {
+    debugger
+    const semester = this.SemesterMasterList.find(
+      (s: any) => s.SemesterID === Number(semesterId)
+    );
+    return semester ? semester.SemesterName.charAt(0) : '';
+  }
+
+  getInstituteCode(instituteName: string): string {
+    // Extract text before "-"
+    return instituteName.split('-')[0].trim();
+  }
+ 
 }
