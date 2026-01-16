@@ -188,6 +188,7 @@
         <div class="mb-8">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i> Student List</b>
+            <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
           </div>
 
 
@@ -201,6 +202,7 @@
 
               <tr>
                 <th width="80px" align="left">Sr. No.</th>
+                <th class="text-left">Trade</th>
                 <th class="text-left">Institute Name</th>
                 <th class="text-left">Center Name</th>
                 <th class="text-left">Student Name</th>
@@ -214,10 +216,12 @@
                 <th class="text-left">Action</th>
               </tr>
             </thead>
+            
             <tbody>
 
               <tr *ngFor="let row of StudentList let idx=index;">
                 <td>{{idx+1}}</td>
+                <td>{{row.StreamName }}</td>
                 <td>{{row.InstituteName}}</td>
                 <td align="left">{{row.CenterName }}</td>
                 <td align="left">{{row.StudentName}}</td>
@@ -240,7 +244,7 @@
                 </td>
 
               </tr>
-         
+
               <tr *ngIf="StudentList?.length == 0">
                 <td colspan="10" class="text-center">No record found</td>
               </tr>

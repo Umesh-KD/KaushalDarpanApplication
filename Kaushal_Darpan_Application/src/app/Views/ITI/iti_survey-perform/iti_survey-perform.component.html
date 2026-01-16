@@ -8,9 +8,12 @@
       <a class="text-sm font-medium text-slate-700" aria-current="page">Survey Perform</a>
     </div>
   </div>
+
   <!--<a [routerLink]="['/IDFFundDetailList']" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>-->
+
 </div>
 
+<!--<div class="card" *ngIf="RoleID === 90">-->
 <div class="card">
   <div class="card-body p-5">
     <form #instituteForm="ngForm" (ngSubmit)="onSubmit(instituteForm)" novalidate>
@@ -20,84 +23,80 @@
         </div>
 
         <!-- Row 1 -->
-        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-         
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-5">
+
 
           <!-- Principal Name -->
           <div>
             <label>Name of Establishment<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.PrincipalName" name="principalName"
+            <input [(ngModel)]="formData.nameofEstablishment" name="nameofEstablishment"
                    class="form-input" placeholder="Name of Establishment"
-                   type="text" required minlength="3" #principalName="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="principalName.invalid && (principalName.dirty || principalName.touched || principalName.instituteForm || instituteForm.submitted)">
-              <div *ngIf="principalName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="principalName.errors?.['minlength']">कम से कम 3 अक्षर होने चाहिए</div>
+                   type="text" required minlength="3" #nameofEstablishment="ngModel">
+            <div class="text-red-500 text-sm" *ngIf="nameofEstablishment.invalid && (nameofEstablishment.dirty || nameofEstablishment.touched || nameofEstablishment.instituteForm || instituteForm.submitted)">
+              <div *ngIf="nameofEstablishment.errors?.['required']">Enter Name of Establishment</div>
+             
             </div>
           </div>
           <div>
             <label>Name of Designation<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.PrincipalName" name="principalName"
+            <input [(ngModel)]="formData.nameofDesignation" name="nameofDesignation"
                    class="form-input" placeholder="Name of Designation"
-                   type="text" required minlength="3" #principalName="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="principalName.invalid && (principalName.dirty || principalName.touched || principalName.instituteForm || instituteForm.submitted)">
-              <div *ngIf="principalName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="principalName.errors?.['minlength']">कम से कम 3 अक्षर होने चाहिए</div>
+                   type="text" required minlength="3" #nameofDesignation="ngModel">
+            <div class="text-red-500 text-sm" *ngIf="nameofDesignation.invalid && (nameofDesignation.dirty || nameofDesignation.touched || nameofDesignation.instituteForm || instituteForm.submitted)">
+              <div *ngIf="nameofDesignation.errors?.['required']">Enter Name of Designation</div>
             </div>
           </div>
           <div>
             <label>Head of Establishment Address<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.PrincipalName" name="principalName"
+            <input [(ngModel)]="formData.headofEstablishmentAddress" name="headofEstablishmentAddress"
                    class="form-input" placeholder="Head of Establishment Address"
-                   type="text" required minlength="3" #principalName="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="principalName.invalid && (principalName.dirty || principalName.touched || principalName.instituteForm || instituteForm.submitted)">
-              <div *ngIf="principalName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="principalName.errors?.['minlength']">कम से कम 3 अक्षर होने चाहिए</div>
+                   type="text" required minlength="3" #headofEstablishmentAddress="ngModel">
+            <div class="text-red-500 text-sm" *ngIf="headofEstablishmentAddress.invalid && (headofEstablishmentAddress.dirty || headofEstablishmentAddress.touched || headofEstablishmentAddress.instituteForm || instituteForm.submitted)">
+              <div *ngIf="headofEstablishmentAddress.errors?.['required']">Enter Head of Establishment Address</div>
             </div>
           </div>
           <div>
             <label>Nature Of Business<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.PrincipalName" name="principalName"
+            <input [(ngModel)]="formData.natureOfBusiness" name="natureOfBusiness"
                    class="form-input" placeholder="Nature Of Business"
-                   type="text" required minlength="3" #principalName="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="principalName.invalid && (principalName.dirty || principalName.touched || principalName.instituteForm || instituteForm.submitted)">
-              <div *ngIf="principalName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="principalName.errors?.['minlength']">कम से कम 3 अक्षर होने चाहिए</div>
+                   type="text" required minlength="3" #natureOfBusiness="ngModel">
+            <div class="text-red-500 text-sm" *ngIf="natureOfBusiness.invalid && (natureOfBusiness.dirty || natureOfBusiness.touched || natureOfBusiness.instituteForm || instituteForm.submitted)">
+              <div *ngIf="natureOfBusiness.errors?.['required']">Enter Nature Of Business</div>
             </div>
           </div>
           <div>
             <label>Total No Person Employeed<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.PrincipalName" name="principalName"
+            <input [(ngModel)]="formData.totalNoPersonEmployeed" name="totalNoPersonEmployeed"
                    class="form-input" placeholder="Total No Person Employeed"
-                   type="text" required minlength="3" #principalName="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="principalName.invalid && (principalName.dirty || principalName.touched || principalName.instituteForm || instituteForm.submitted)">
-              <div *ngIf="principalName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="principalName.errors?.['minlength']">कम से कम 3 अक्षर होने चाहिए</div>
+                   type="text" required minlength="3" #totalNoPersonEmployeed="ngModel">
+            <div class="text-red-500 text-sm" *ngIf="totalNoPersonEmployeed.invalid && (totalNoPersonEmployeed.dirty || totalNoPersonEmployeed.touched || totalNoPersonEmployeed.instituteForm || instituteForm.submitted)">
+              <div *ngIf="totalNoPersonEmployeed.errors?.['required']">Enter Total No Person Employeed</div>
             </div>
           </div>
           <div>
             <label>Basic Traning Facility<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.PrincipalName" name="principalName"
+            <input [(ngModel)]="formData.basicTraningFacility" name="basicTraningFacility"
                    class="form-input" placeholder="Basic Traning Facility"
-                   type="text" required minlength="3" #principalName="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="principalName.invalid && (principalName.dirty || principalName.touched || principalName.instituteForm || instituteForm.submitted)">
-              <div *ngIf="principalName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="principalName.errors?.['minlength']">कम से कम 3 अक्षर होने चाहिए</div>
+                   type="text" required minlength="3" #basicTraningFacility="ngModel">
+            <div class="text-red-500 text-sm" *ngIf="basicTraningFacility.invalid && (basicTraningFacility.dirty || basicTraningFacility.touched || basicTraningFacility.instituteForm || instituteForm.submitted)">
+              <div *ngIf="basicTraningFacility.errors?.['required']">Enter Basic Traning Facility</div>
             </div>
           </div>
           <div>
             <label>Distribution Of Worker<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.PrincipalName" name="principalName"
+            <input [(ngModel)]="formData.distributionofWorker" name="distributionofWorker"
                    class="form-input" placeholder="Distribution of Worker"
-                   type="text" required minlength="3" #principalName="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="principalName.invalid && (principalName.dirty || principalName.touched || principalName.instituteForm || instituteForm.submitted)">
-              <div *ngIf="principalName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="principalName.errors?.['minlength']">कम से कम 3 अक्षर होने चाहिए</div>
+                   type="text" required minlength="3" #distributionofWorker="ngModel">
+            <div class="text-red-500 text-sm" *ngIf="distributionofWorker.invalid && (distributionofWorker.dirty || distributionofWorker.touched || distributionofWorker.instituteForm || instituteForm.submitted)">
+              <div *ngIf="distributionofWorker.errors?.['required']">Enter Distribution of Worker</div>
             </div>
           </div>
 
         </div>
-       
 
+        <div class="flex justify-between items-center p-3 py-2 bg-light mt-8">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Survey Performa</b>
+        </div>
         <table class="table-auto w-full border border-gray-300">
           <thead>
             <tr class="bg-gray-100">
@@ -108,67 +107,78 @@
               <th class="p-2 border">Fully skilled worker</th>
               <th class="p-2 border">Total worker</th>
               <th class="p-2 border">Remark</th>
+              <th class="p-2 border">Action</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr *ngFor="let item of formData.OtherDepositList; let i = index">
+            <tr *ngFor="let item of formData.OtherITIWorkerDesignationTrade; let i = index">
               <!-- Head Name -->
               <td class="p-2 border">
                 <span>{{i+1}}</span>
               </td>
               <td class="p-2 border">
-                <input [(ngModel)]="formData.OtherDepositList[i].HeadName"
-                       name="headname{{i}}"
+                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].designationTradeID"
+                       name="designationTradeID{{i}}"
                        class="form-input w-full"
                        placeholder="Designation Trade"
-                       required #headName="ngModel">
-                <div class="text-red-500 text-sm" *ngIf="headName.invalid && (headName.dirty || headName.touched || instituteForm.submitted)">
-                  <div *ngIf="headName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
+                       required #designationTradeID="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="designationTradeID.invalid && (designationTradeID.dirty || designationTradeID.touched || instituteForm.submitted)">
+                  <div *ngIf="designationTradeID.errors?.['required']">Enter Designation Trade</div>
                 </div>
               </td>
               <td class="p-2 border">
-                <input [(ngModel)]="formData.OtherDepositList[i].HeadName"
-                       name="headname{{i}}"
+                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].ncoNumberWorkers"
+                       name="ncoNumberWorkers{{i}}"
                        class="form-input w-full"
                        placeholder="NCO No Worker"
-                       required #headName="ngModel">
-                <div class="text-red-500 text-sm" *ngIf="headName.invalid && (headName.dirty || headName.touched || instituteForm.submitted)">
-                  <div *ngIf="headName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
+                       required #ncoNumberWorkers="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="ncoNumberWorkers.invalid && (ncoNumberWorkers.dirty || ncoNumberWorkers.touched || instituteForm.submitted)">
+                  <div *ngIf="ncoNumberWorkers.errors?.['required']">Enter NCO No Worker</div>
                 </div>
               </td>
               <td class="p-2 border">
-                <input [(ngModel)]="formData.OtherDepositList[i].HeadName"
-                       name="headname{{i}}"
+                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].lessSkilledWorker"
+                       name="lessSkilledWorker{{i}}"
                        class="form-input w-full"
                        placeholder="Less skilled worker"
-                       required #headName="ngModel">
-                <div class="text-red-500 text-sm" *ngIf="headName.invalid && (headName.dirty || headName.touched || instituteForm.submitted)">
-                  <div *ngIf="headName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
+                       required #lessSkilledWorker="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="lessSkilledWorker.invalid && (lessSkilledWorker.dirty || lessSkilledWorker.touched || instituteForm.submitted)">
+                  <div *ngIf="lessSkilledWorker.errors?.['required']">Enter Less skilled worker</div>
                 </div>
               </td>
               <td class="p-2 border">
-                <input [(ngModel)]="formData.OtherDepositList[i].HeadName"
-                       name="headname{{i}}"
+                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].fullySkilledWorker"
+                       name="fullySkilledWorker{{i}}"
                        class="form-input w-full"
                        placeholder="Fully skilled worker"
-                       required #headName="ngModel">
-                <div class="text-red-500 text-sm" *ngIf="headName.invalid && (headName.dirty || headName.touched || instituteForm.submitted)">
-                  <div *ngIf="headName.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
+                       required #fullySkilledWorker="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="fullySkilledWorker.invalid && (fullySkilledWorker.dirty || fullySkilledWorker.touched || instituteForm.submitted)">
+                  <div *ngIf="fullySkilledWorker.errors?.['required']">Enter Fully skilled worker</div>
                 </div>
               </td>
 
               <!-- Received Amount -->
               <td class="p-2 border">
-                <input [(ngModel)]="formData.OtherDepositList[i].ReceivedAmount"
-                       name="otherReceivedAmount{{i}}" (ngModelChange)="calculationdata()"
+                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].totalWorker"
+                       name="totalWorker{{i}}"
                        class="form-input w-full"
                        placeholder="Total worker"
-                       type="number"
-                       required min="0" #otherReceivedAmount="ngModel">
-                <div class="text-red-500 text-sm" *ngIf="otherReceivedAmount.invalid && (otherReceivedAmount.dirty || otherReceivedAmount.touched || instituteForm.submitted)">
-                  <div *ngIf="otherReceivedAmount.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-                  <div *ngIf="otherReceivedAmount.errors?.['min']">0 से अधिक होना चाहिए</div>
+                      
+                       required min="0" #totalWorker="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="totalWorker.invalid && (totalWorker.dirty || totalWorker.touched || instituteForm.submitted)">
+                  <div *ngIf="totalWorker.errors?.['required']">Enter Total worker</div>
+                  <div *ngIf="totalWorker.errors?.['min']">must be greater than 0</div>
+                </div>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].remark"
+                       name="remark{{i}}"
+                       class="form-input w-full"
+                       placeholder="Remark"
+                       required min="0" #remark="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="remark.invalid && (remark.dirty || remark.touched || instituteForm.submitted)">
+                  <div *ngIf="remark.errors?.['required']">Enter Remark</div>
                 </div>
               </td>
 
@@ -177,65 +187,223 @@
                 <button type="button"
                         *ngIf="i != 0"
                         class="btn bg-danger text-white btn-sm"
-                        (click)="removeDeposit(i)">
+                        (click)="removeWorkerDesignationTrade(i)">
                   <span class="fa fa-remove"></span>&nbsp; Remove
                 </button>
-
-                <button *ngIf="i == 0" type="button" class="btn btn-sm bg-info text-white" (click)="addDeposit()"><span class="fa fa-plus"></span>Add More</button>
-
+                <button *ngIf="i == 0" type="button" class="btn btn-sm bg-info text-white" (click)="addWorkerDesignationTrade()"><span class="fa fa-plus"></span>Add More</button>
               </td>
+
             </tr>
           </tbody>
-
-          <!-- Footer Row for Total -->
-          <!--<tfoot>
-            <tr class="bg-gray-200 font-bold">
-              <td></td>
-              <td class="p-2 border text-right">कुल योग</td>
-              <td class="p-2 border">
-                {{ getTotalReceivedAmount() }}
-              </td>
-
-              <td class="p-2 border"></td>
-            </tr>
-          </tfoot>-->
         </table>
 
 
-       
-        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4">
-          <div>
-            <label>त्रैमास में आई.डी.एफ. नियम 6 के तहत व्यय की गई राशि<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.Expense" name="expense"
-                   class="form-input" placeholder="राशि" type="number" (ngModelChange)="calculationdata()"
-                   required min="0" #expense="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="expense.invalid && (expense.dirty || expense.touched)">
-              <div *ngIf="expense.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="expense.errors?.['min']">0 से अधिक होना चाहिए</div>
-            </div>
-          </div>
-
-          <div>
-            <label>त्रैमास की अन्तिम तारीख को शुद्ध राशि<span class="StarMarking">*</span></label>
-            <input [(ngModel)]="formData.ClosingBalance" name="closingBalance"
-                   class="form-input" placeholder="शुद्ध राशि" type="number" disabled="disabled"
-                   required min="0" #closingBalance="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="closingBalance.invalid && (closingBalance.dirty || closingBalance.touched)">
-              <div *ngIf="closingBalance.errors?.['required']">यह फ़ील्ड अनिवार्य है</div>
-              <div *ngIf="closingBalance.errors?.['min']">0 से अधिक होना चाहिए</div>
-            </div>
-          </div>
-
-          <div>
-            <label>अन्य कोई विवरण</label>
-            <input [(ngModel)]="formData.Remark" name="remark"
-                   class="form-input" placeholder="अन्य कोई विवरण"
-                   minlength="3" #remark="ngModel">
-            <div class="text-red-500 text-sm" *ngIf="remark.invalid && (remark.dirty || remark.touched)">
-              <div *ngIf="remark.errors?.['minlength']">कम से कम 3 अक्षर होने चाहिए</div>
-            </div>
-          </div>
+        <div class="flex justify-between items-center p-3 py-2 bg-light mt-8">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Survey Performa</b>
         </div>
+        <table class="table-auto w-full border border-gray-300">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="p-2 border">SNo</th>
+              <th class="p-2 border">Trade Traning</th>
+              <th class="p-2 border">Duration Of Last Survey</th>
+              <th class="p-2 border">Number Of Seats Located</th>
+              <th class="p-2 border">Number Actually Undergoing traning</th>
+             
+              <th class="p-2 border">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let item of formData.OtherITIApprWorkerDetailsOfExistingApprenticeship; let i = index">
+              <!-- Head Name -->
+              <td class="p-2 border">
+                <span>{{i+1}}</span>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetailsOfExistingApprenticeship[i].tradeTraning"
+                       name="tradeTraning{{i}}"
+                       class="form-input w-full"
+                       placeholder="Trade Traning"
+                       required #tradeTraning="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="tradeTraning.invalid && (tradeTraning.dirty || tradeTraning.touched || instituteForm.submitted)">
+                  <div *ngIf="tradeTraning.errors?.['required']">Enter Trade Traning</div>
+                </div>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetailsOfExistingApprenticeship[i].durationofLastSurvey"
+                       name="durationofLastSurvey{{i}}"
+                       class="form-input w-full"
+                       placeholder="Duration Of Last Survey"
+                       required #durationofLastSurvey="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="durationofLastSurvey.invalid && (durationofLastSurvey.dirty || durationofLastSurvey.touched || instituteForm.submitted)">
+                  <div *ngIf="durationofLastSurvey.errors?.['required']">Enter Duration Of Last Survey</div>
+                </div>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetailsOfExistingApprenticeship[i].numberOfSeatsLocated"
+                       name="numberOfSeatsLocated{{i}}"
+                       class="form-input w-full"
+                       placeholder="Number Of Seats Located"
+                       required #numberOfSeatsLocated="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="numberOfSeatsLocated.invalid && (numberOfSeatsLocated.dirty || numberOfSeatsLocated.touched || instituteForm.submitted)">
+                  <div *ngIf="numberOfSeatsLocated.errors?.['required']">Enter Number Of Seats Located</div>
+                </div>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetailsOfExistingApprenticeship[i].numberActuallyUndergoingTraning"
+                       name="numberActuallyUndergoingTraning{{i}}"
+                       class="form-input w-full"
+                       placeholder="Number Actually Undergoing traning"
+                       required #numberActuallyUndergoingTraning="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="numberActuallyUndergoingTraning.invalid && (numberActuallyUndergoingTraning.dirty || numberActuallyUndergoingTraning.touched || instituteForm.submitted)">
+                  <div *ngIf="numberActuallyUndergoingTraning.errors?.['required']">Number Actually Undergoing traning</div>
+                </div>
+              </td>
+              
+              <!-- Action -->
+              <td class="p-2 border text-center">
+                <button type="button"
+                        *ngIf="i != 0"
+                        class="btn bg-danger text-white btn-sm"
+                        (click)="removeDeposit(i)">
+                  <span class="fa fa-remove"></span>&nbsp; Remove
+                </button>
+                <button *ngIf="i == 0" type="button" class="btn btn-sm bg-info text-white" (click)="addWorkerDetailsOfExistingApprenticeship()"><span class="fa fa-plus"></span>Add More</button>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+
+
+        <div class="flex justify-between items-center p-3 py-2 bg-light mt-8">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Survey Performa</b>
+        </div>
+
+
+        <table class="table-auto w-full border border-gray-300">
+          <thead>
+            <tr class="bg-gray-100 text-center">
+              <th rowspan="2" class="p-2 border">S.No</th>
+              <th rowspan="2" class="p-2 border">Trade</th>
+              <th rowspan="2" class="p-2 border">Duration of Training</th>
+              <th rowspan="2" class="p-2 border">Number of Seats Sanctioned</th>
+              <th colspan="4" class="p-2 border">
+                Number Actually Undergoing Training
+              </th>
+              <th rowspan="2" class="p-2 border">Action</th>
+            </tr>
+
+            <tr class="bg-gray-100 text-center">
+              <th class="p-2 border">Deginate</th>
+              <th class="p-2 border">Optional</th>
+              <th class="p-2 border">NATS</th>
+              <th class="p-2 border">Fresher</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+          <tbody>
+            <tr *ngFor="let item of formData.OtherITIApprWorkerDetalisOffacilities; let i = index">
+              <!-- Head Name -->
+              <td class="p-2 border">
+                <span>{{i+1}}</span>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].durationOfTraning"
+                       name="durationOfTraning{{i}}"
+                       class="form-input w-full"
+                       placeholder="Trade"
+                       required #durationOfTraning="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="durationOfTraning.invalid && (durationOfTraning.dirty || durationOfTraning.touched || instituteForm.submitted)">
+                  <div *ngIf="durationOfTraning.errors?.['required']">Enter Trade</div>
+                </div>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].durationOfTraning"
+                       name="durationOfTraning{{i}}"
+                       class="form-input w-full"
+                       placeholder="Number Of Seats Sanctioned"
+                       required #durationOfTraning="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="durationOfTraning.invalid && (durationOfTraning.dirty || durationOfTraning.touched || instituteForm.submitted)">
+                  <div *ngIf="durationOfTraning.errors?.['required']">Number Of Seats Sanctioned</div>
+                </div>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].numberOfSeatsSanctioned"
+                       name="numberOfSeatsSanctioned{{i}}"
+                       class="form-input w-full"
+                       placeholder="Duration Of Traning"
+                       required #numberOfSeatsSanctioned="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="numberOfSeatsSanctioned.invalid && (numberOfSeatsSanctioned.dirty || numberOfSeatsSanctioned.touched || instituteForm.submitted)">
+                  <div *ngIf="numberOfSeatsSanctioned.errors?.['required']">Duration Of Traning</div>
+                </div>
+              </td>
+
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].naut_Deginate"
+                       name="naut_Deginate{{i}}"
+                       class="form-input w-full"
+                       placeholder="Deginate"
+                       required #naut_Deginate="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="naut_Deginate.invalid && (naut_Deginate.dirty || naut_Deginate.touched || instituteForm.submitted)">
+                  <div *ngIf="naut_Deginate.errors?.['required']">Enter Deginate</div>
+                </div>
+              </td>
+
+              <!-- Received Amount -->
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].naut_Optional"
+                       name="naut_Optional{{i}}"
+                       class="form-input w-full"
+                       placeholder="Optional"
+                       required min="0" #naut_Optional="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="naut_Optional.invalid && (naut_Optional.dirty || naut_Optional.touched || instituteForm.submitted)">
+                  <div *ngIf="naut_Optional.errors?.['required']">Enter Optional</div>
+                </div>
+              </td>
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].naut_NATS"
+                       name="naut_NATS{{i}}"
+                       class="form-input w-full"
+                       placeholder="NATS"
+                       required min="0" #naut_NATS="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="naut_NATS.invalid && (naut_NATS.dirty || naut_NATS.touched || instituteForm.submitted)">
+                  <div *ngIf="naut_NATS.errors?.['required']">Emter NATS</div>
+                </div>
+              </td>
+
+              <td class="p-2 border">
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].naut_Fresher"
+                       name="naut_Fresher{{i}}"
+                       class="form-input w-full"
+                       placeholder="Fresher"
+                       required min="0" #naut_Fresher="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="naut_Fresher.invalid && (naut_Fresher.dirty || naut_Fresher.touched || instituteForm.submitted)">
+                  <div *ngIf="naut_Fresher.errors?.['required']">Enter Fresher</div>
+                </div>
+              </td>
+
+              <!-- Action -->
+              <td class="p-2 border text-center">
+                <button type="button"
+                        *ngIf="i != 0"
+                        class="btn bg-danger text-white btn-sm"
+                        (click)="removeApprWorkerDetalisOffacilities(i)">
+                  <span class="fa fa-remove"></span>&nbsp; Remove
+                </button>
+                <button *ngIf="i == 0" type="button" class="btn btn-sm bg-info text-white" (click)="addWorkerDetalisOffacilities()"><span class="fa fa-plus"></span>Add More</button>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+
+
+
+
 
         <!-- Submit -->
         <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
