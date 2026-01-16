@@ -179,6 +179,7 @@
               <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th>Max Marks</th>
+            <th>Examiner Name</th>
             <th>Marks Obtained</th>
             <th>Attendence</th>
             <th>View Details</th>
@@ -195,6 +196,7 @@
             <td align="left">{{row.StreamName}}</td>
             <td align="left">{{row.SubjectName}}</td>
             <td align="left">{{ row.MaxTheory }}</td>
+            <td align="left">{{ row.ExaminerName }}</td>
             <td align="left">{{ row.ObtainedTheory }}</td>
             <td align="left">{{ row.Attendence }}</td>
 

@@ -44,7 +44,7 @@ export class ItiTradeWiseResultComponent implements OnInit {
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
-  public pageInTableSize: string = "50";
+  public pageInTableSize: string = "500";
   public totalInTablePage: number = 0;
   public sortInTableColumn: string = '';
   public sortInTableDirection: string = 'asc';
@@ -282,9 +282,21 @@ export class ItiTradeWiseResultComponent implements OnInit {
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
+            const now = new Date();
+
+            const dateTime =
+              now.getFullYear().toString() +
+              String(now.getMonth() + 1).padStart(2, '0') +
+              String(now.getDate()).padStart(2, '0') + '_' +
+              String(now.getHours()).padStart(2, '0') +
+              String(now.getMinutes()).padStart(2, '0') +
+              String(now.getSeconds()).padStart(2, '0');
+
+
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'TradeWiseResult.pdf';
+            link.download = `TradeWiseResult_${dateTime}.pdf`;
+
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -305,6 +317,24 @@ export class ItiTradeWiseResultComponent implements OnInit {
       }, 200);
     }
   }
+
+
+  get totalPassStudent(): number {
+    return this.paginatedInTableData
+      ?.reduce((sum: number, r: any) => sum + (+r.PassStudent || 0), 0);
+  }
+
+  get totalFailStudent(): number {
+    return this.paginatedInTableData
+      ?.reduce((sum: number, r: any) => sum + (+r.FailStudent || 0), 0);
+  }
+
+  get totalRegisteredStudent(): number {
+    return this.paginatedInTableData
+      ?.reduce((sum: number, r: any) => sum + (+r.TotalRegisteredStudent || 0), 0);
+  }
+
+
 
 
 

@@ -378,7 +378,7 @@ export class TheoryMarksItiComponent {
   exportToExcel(): void {
     const unwantedColumns = [
       'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID'
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID', 'Isshowdropdown', 'ExaminerID',  'IsFinalSubmit', 'IsChecked'
     ];
     const filteredData = this.TheoryMarksDetailList.map((item: any) => {
       const filteredItem: any = {};
@@ -394,6 +394,10 @@ export class TheoryMarksItiComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'StudentsData.xlsx');
   }
+
+
+
+
 
   //table feature
   //checked all (replace org. list here)

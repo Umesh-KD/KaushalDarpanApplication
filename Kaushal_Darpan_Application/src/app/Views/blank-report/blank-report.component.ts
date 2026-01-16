@@ -189,7 +189,7 @@ export class BlankReportComponent {
   }
 
   async DownloadDataList() {
-    
+    debugger
     //if (this._ExamFormGroup.invalid)
     //{
     //  return;
@@ -279,17 +279,26 @@ export class BlankReportComponent {
     // return `file_${timestamp}.${extension}`;
 
     debugger;
-    const today = new Date();
-    const dd = String(today.getDate()).padStart(2, '0');
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const yyyy = today.getFullYear();
+    // const today = new Date();
+    // const dd = String(today.getDate()).padStart(2, '0');
+    // const mm = String(today.getMonth() + 1).padStart(2, '0');
+    // const yyyy = today.getFullYear();
   
-    const formattedDate = `${dd}${mm}${yyyy}`; // 22012026
+    // const formattedDate = `${dd}${mm}${yyyy}`; // 22012026
 
+      if (!this.request.ExamDate) {
+        this.toastr.error('Exam Date not selected');
+        return '';
+      }
 
-    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  // e.g. 009
-    const semestercode = this.getSemesterCode(this.request.SemesterID); // e.g. 1
-    const branchCode = this.getBranchCode(this.request.BranchID);      // e.g. CI
+      const datePart = this.request.ExamDate.split('T')[0]; // "2025-12-16
+
+      const [yyyy, mm, dd] = datePart.split('-');
+      const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
+      
+    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  
+    const semestercode = this.getSemesterCode(this.request.SemesterID); 
+    const branchCode = this.getBranchCode(this.request.BranchID);    
   
     return `13A_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}.${extension}`;
   }

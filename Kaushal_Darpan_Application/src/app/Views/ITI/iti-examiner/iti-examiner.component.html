@@ -139,7 +139,7 @@
 
 
         <div>
-          <label for="CenterAddress">Address: <span class="StarMarking">*</span></label>
+          <label for="CenterAddress">Address: </label>
           <input formControlName="txtAddress" class="form-input" type="text" id="address" placeholder="Enter Address"
                  [(ngModel)]="request.Address">
           <div *ngIf="isSubmitted && examinerForm.get('txtAddress').errors" class="text-danger">
@@ -161,7 +161,7 @@
 
 
         <div>
-          <label for="Bhamashah">Bhamashah Number: <span class="StarMarking">*</span></label>
+          <label for="Bhamashah">Bhamashah Number: </label>
           <input formControlName="txtBhamashahNo" class="form-input" type="text" id="BhamashahNo"
                  placeholder="Enter Bhamashah Number" [(ngModel)]="request.BhamashahNumber">
           <div *ngIf="isSubmitted && examinerForm.get('txtBhamashahNo').errors" class="text-danger">
@@ -184,7 +184,7 @@
         </div>
 
         <div>
-          <label for="Education Qualification">Education Qualification: <span class="StarMarking">*</span></label>
+          <label for="Education Qualification">Education Qualification: </label>
           <input formControlName="txtHigherQualificationID" class="form-input" type="text" id="HigherQualificationID"
                  placeholder="Enter Education Qualification" [(ngModel)]="request.EducationQualification">
           <div *ngIf="isSubmitted && examinerForm.get('txtHigherQualificationID').errors" class="text-danger">
@@ -196,7 +196,7 @@
 
 
         <div>
-          <label>Branch/Trade<span class="StarMarking">*</span></label>
+          <label>Branch/Trade</label>
           <select formControlName="ddlStreamID" class="form-select" id="StreamID" [(ngModel)]="request.Branch_Trade">
             <option value="0">--Select--</option>
             <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">{{item.StreamName}}</option>
@@ -223,7 +223,7 @@
 
 
         <div>
-          <label for="PostingPlace">Posting Place: <span class="StarMarking">*</span></label>
+          <label for="PostingPlace">Posting Place: </label>
           <input formControlName="txtPostingPlace" class="form-input" type="text" id="PostingPlace" placeholder="Enter Posting Place"
                  [(ngModel)]="request.PostingPlace">
           <div *ngIf="isSubmitted && examinerForm.get('txtPostingPlace').errors" class="text-danger">

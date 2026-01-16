@@ -100,9 +100,9 @@
           <tr>
             <th width="80px" align="left">Sr. No.</th>
             <th align="left">Trade Name</th>
-            <th align="left">Pass Student</th>
-            <th align="left">Fail Student</th>
-            <th align="left">Total Registered Student</th>
+            <th align="left">Pass Trainee</th>
+            <th align="left">Fail Trainee</th>
+            <th align="left">Total Trainee</th>
             <!--<th align="center" width="200">Action</th>-->
           </tr>
         </thead>
@@ -113,22 +113,30 @@
             <td>{{row.PassStudent}}</td>
             <td>{{row.FailStudent}}</td>
             <td>{{row.TotalRegisteredStudent}}</td>
-
             <!--<td align="left">
 
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
 
-                <a href="javascript:void(0);" title="Certificate" (click)="Download()"><i class="ti ti-download"></i></a>-->
-                <!--<a href="javascript:void(0);" title="Certificate" (click)="TestDownload()"><i class="ti ti-download"></i></a>-->
+        <a href="javascript:void(0);" title="Certificate" (click)="Download()"><i class="ti ti-download"></i></a>-->
+            <!--<a href="javascript:void(0);" title="Certificate" (click)="TestDownload()"><i class="ti ti-download"></i></a>-->
+            <!--</div>
 
-              <!--</div>
-
-            </td>-->
+      </td>-->
 
           </tr>
+
+
           <tr *ngIf="paginatedInTableData?.length==0"><td colspan="8">No Record Found</td></tr>
         </tbody>
+        <tfoot *ngIf="paginatedInTableData?.length > 0">
+          <tr class="font-bold bg-light">
+            <td colspan="2" class="text-right">Total</td>
+            <td>{{ totalPassStudent }}</td>
+            <td>{{ totalFailStudent }}</td>
+            <td>{{ totalRegisteredStudent }}</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>

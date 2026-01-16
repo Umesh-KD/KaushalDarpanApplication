@@ -43,11 +43,33 @@ export class GroupCodeAddEditModel extends ResponseBaseModel {
 // group code detail
 export class GroupCodeDetailAddEditModel {
   public PageNumber: number = 0;
-  public GroupCodeDetailID: number = 0;//pk
-  public GroupCodeID: number = 0;//fk
+  public GroupCodeDetailID: number = 0;
+  public GroupCodeID: number = 0;
   public StudentID: number = 0;
   public StudentExamID: number = 0;
   public StudentExamPaperID: number = 0;
   public StudentExamPaperMarksID: number = 0;
 }
+
+
+export class GroupCodeAllocationReportModel {
+  public groupCodeID: number = 0;
+  public semesterId: number = 0;
+  public semesterName: string = '';
+  public groupCode: number= 0;
+  public total: number= 0;
+  public startValue: number = 0;
+  public commonSubjectID: number = 0;
+  public commonSubjectName: string = '';
+  public subjectCode: string = '';
+  public subjectName: string = '';
+  public action: string = '';
+  public schemeid: number = 0;
+  public isPresentTotal: number = 0;
+  public centergroupcode: string = '';
+  public endTerm: string = '';
+  public examName: string = '';
+}
+
+
 

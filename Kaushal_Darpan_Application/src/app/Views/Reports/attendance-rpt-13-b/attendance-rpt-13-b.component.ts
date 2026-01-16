@@ -102,8 +102,34 @@ export class AttendanceRpt13BComponent {
       window.URL.revokeObjectURL(url);
     });
   }
+
+  getSemesterCode(semesterId: number): string {
+    debugger
+    return semesterId ? semesterId.toString() : '';
+  }
+  getInstituteCode(instituteName: string): string {
+    // Extract text before "-"
+    return instituteName.split('-')[0].trim();
+  }
+
   generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+    // const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    // return `file_${timestamp}.${extension}`;
+
+    debugger
+    if (!this.request.ExamDate) {
+      this.toastr.error('Exam Date not selected');
+      return '';
+    }
+
+    const datePart = this.request.ExamDate.split('T')[0]; // "2025-12-16
+
+    const [yyyy, mm, dd] = datePart.split('-');
+    const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
+    
+    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName); 
+  
+    return `Attendance_13_B_${formattedDate}_${instituteCode}`;
+
   }
 }
