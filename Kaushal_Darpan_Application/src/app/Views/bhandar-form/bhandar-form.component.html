@@ -1,0 +1,94 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Bhandar Form</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Examination</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/" class="text-sm font-medium text-slate-700" aria-current="page">Bhandar Form</a>
+
+    </div>
+  </div>
+
+  <!--<div class="btn bg-dark btn-sm text-white">
+    <a routerLink="/ApplicationList">
+      <i class="ti ti-chevron-left"></i> Back
+    </a>
+  </div>-->
+
+
+</div>
+<div class="mb-8">
+ 
+
+    <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6">
+      <div>
+        <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          Mohar (प्रयुक्त अक्षर मोहर) <span class="StarMarking">*</span>
+        </label>
+        <select class="form-select" id="ddlState" name="State"  [(ngModel)]="request.MoharID">
+
+
+          <option value="0">Select Mohar (प्रयुक्त अक्षर मोहर)</option>
+          <option value="1">Mohar 1</option>
+          <option value="2">Mohar 2</option>
+
+        </select>
+        <!--<div *ngIf="isSubmitted && _BhandarForm.MoharID.errors" class="text-danger">
+          <p *ngIf="!_BhandarForm.MoharID.errors.DropdownValidators">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+
+        </div>-->
+      </div>
+
+
+
+
+    </div>
+
+
+    <div>
+      <p>
+        उपरोक्त परीक्षा की उत्तर पुस्तिका अच्छी तरह मोहर बंद करके कूरियर
+        कम्पनी को बंडल प्राप्ति रसीद दिनांक
+        <input type="text" class="form-control d-inline w-25 mx-2"  [(ngModel)]="request.UserName" />
+        द्वारा सुपुर्द कर दी गई है।
+      </p>
+
+
+
+
+
+      <p>अनुपस्थित विद्यार्थियों का विवरण पत्र संलग्न है।</p>
+      <p>आज निम्न वैकल्पिक ड्यूटी पर थे :</p>
+
+    </div>
+
+
+
+
+
+  <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6 mt-4">
+
+    <form [formGroup]="BhandarForm" id="AddressDetailsFormGroup" class="form-horizontal">
+
+      <div>
+        <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          व्यक्ति का नाम <span class="StarMarking">*</span>
+        </label>
+        <input type="text" class="form-input" id="txtAddressLine1" placeholder="Enter Name"
+               name="Name" formControlName="Name" [(ngModel)]="request.Name">
+
+        <div *ngIf="isSubmitted && _BhandarForm.Name.errors" class="text-danger">
+    <p *ngIf="!_BhandarForm.Name.errors.required">
+      <i aria-hidden="true"></i> This field is
+      required.!
+    </p>
+
+  </div>
+      </div>
+      </form>
+  </div>
+  </div>
