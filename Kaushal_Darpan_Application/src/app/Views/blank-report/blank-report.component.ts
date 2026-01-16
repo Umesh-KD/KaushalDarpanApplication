@@ -199,12 +199,13 @@ export class BlankReportComponent {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.loaderService.requestStarted();
+      
       
       await this.reportService.BlankReport(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
           if (data.State == EnumStatus.Success) {
             this.DownloadFile(data.Data, 'file download');
           } else if (data.State == 3) {
@@ -245,8 +246,60 @@ export class BlankReportComponent {
     });
   }
 
+  getSemesterCode(semesterId: number): string {
+    debugger
+    const semester = this.SemesterMasterList.find(
+      (s: any) => s.SemesterID === Number(semesterId)
+    );
+  
+    // Take first character from "1st Semester", "2nd Semester", etc.
+    return semester ? semester.SemesterName.charAt(0) : '';
+    // return semester ? semester.SemesterName.match(/\d/)?.[0] ?? '' : '';
+  }
+  getBranchCode(streamId: number): string {
+    debugger
+    const stream = this.BranchDDLList.find(
+      (s:any) => s.StreamID === Number(streamId)
+    );
+  
+    // Extract text inside first ()
+    return stream
+      ? stream.StreamName.match(/\(([^)]+)\)/)?.[1] ?? ''
+      : '';
+  }
+
+  getInstituteCode(instituteName: string): string {
+    // Extract text before "-"
+    return instituteName.split('-')[0].trim();
+  }
+  
+
   generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
-    return `file_${timestamp}.${extension}`;
+    // const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    // return `file_${timestamp}.${extension}`;
+
+    debugger;
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const yyyy = today.getFullYear();
+  
+    const formattedDate = `${dd}${mm}${yyyy}`; // 22012026
+
+
+    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  // e.g. 009
+    const semestercode = this.getSemesterCode(this.request.SemesterID); // e.g. 1
+    const branchCode = this.getBranchCode(this.request.BranchID);      // e.g. CI
+  
+    return `13A_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}.${extension}`;
+  }
+
+  async onBranchChange() {
+    this.request.ExamDate = '';
+    this.request.SemesterID = 0;
+    this.request.ShiftID = 0;
+    this.request.SubjectID = 0;
+    this.request.SubjectCode = '';
+    this.request.ExamCategoryID = 0;
   }
 }

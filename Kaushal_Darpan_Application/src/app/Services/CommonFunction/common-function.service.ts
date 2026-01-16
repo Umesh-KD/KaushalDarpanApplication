@@ -255,6 +255,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async SemesterList(DepartmentID: number=0) {
+
+    return await this.http.get(this.APIUrl + '/SemesterList/'  + DepartmentID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async CenterMaster() {
 
     return await this.http.get(this.APIUrl + '/CommonMasterDataByCode/CenterMaster', this.headersOptions)

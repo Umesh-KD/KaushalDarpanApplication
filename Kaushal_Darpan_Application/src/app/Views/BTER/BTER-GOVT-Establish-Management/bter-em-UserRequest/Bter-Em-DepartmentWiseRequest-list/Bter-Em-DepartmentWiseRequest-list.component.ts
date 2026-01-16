@@ -109,6 +109,8 @@ export class BterEmDepartmentWiseRequestlistComponent implements OnInit {
   public totalInTableRecord: number = 0;
   public today: string = '';
   public showJoiningStatusColumn: boolean = false;
+  public lastworkingDate:string ='';
+  public joiningDate:string='';
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -326,17 +328,10 @@ export class BterEmDepartmentWiseRequestlistComponent implements OnInit {
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
 
 
-     
-      
-     
-
       //const lastWorkingDateControl = this.groupForm.get('txtLastworkingDate');
-
       //if (!lastWorkingDateControl) {
       //  return;
       //}
-
-
       //if (this.searchRequest.RequestType == 1) 
       //  {
       //  if (this.RequestUpdateStatus.StatusIDs === 247) {
@@ -344,13 +339,8 @@ export class BterEmDepartmentWiseRequestlistComponent implements OnInit {
       //  } else {
       //    lastWorkingDateControl.clearValidators();
       //  }
-
       //  lastWorkingDateControl.updateValueAndValidity();
       //}
-
-
-
-
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -544,15 +534,23 @@ export class BterEmDepartmentWiseRequestlistComponent implements OnInit {
   }
 
   async updateReqStatus() {
+
     debugger
-
-
     this.isSubmitted = true;
     if (this.groupForm.invalid) {
       return console.log("error")
     }
     this.loaderService.requestStarted();
     this.isLoading = true;
+
+        // store last working date safely
+        this.lastworkingDate =  this.convertToDate(this.RowlistData.LastWorkingDate)
+
+        this.joiningDate=this.convertToDate(this.RequestUpdateStatus.JoiningDate);
+    if(this.lastworkingDate>this.joiningDate){
+      this.toastr.error("Joining Date Cannot be Less than User's Lastworking Date");
+      return
+    }
 
     try {
       this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
@@ -666,13 +664,40 @@ export class BterEmDepartmentWiseRequestlistComponent implements OnInit {
     this.modalReference?.close();
     this.isSubmitted = false;
   }
-  async onSubmitJoiningRequest(model: any, userSubmitData: any) {
 
+  convertToDate(dateStr: string): string {
+    if (!dateStr) return '';
+
+    // Already in YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+      return dateStr;
+    }
+  
+    // DD-MM-YYYY → YYYY-MM-DD
+    if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+      const [dd, mm, yyyy] = dateStr.split('-');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+  
+    // Invalid format
+    return '';
+  }
+
+
+
+  async onSubmitJoiningRequest(model: any, userSubmitData: any) {
+    debugger
     try {
       this.RowlistData = { ...userSubmitData };
       console.log(this.RequestUpdateStatus, "modal");
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
 
+            
+    // store last working date safely
+    this.lastworkingDate = userSubmitData?.LastWorkingDate
+    ? this.convertToDate(userSubmitData.LastWorkingDate)
+    : '';
+    console.log(this.lastworkingDate);
       //const txtJoiningDateControl = this.groupForm.get('txtJoiningDate');
 
       //if (!txtJoiningDateControl) {
