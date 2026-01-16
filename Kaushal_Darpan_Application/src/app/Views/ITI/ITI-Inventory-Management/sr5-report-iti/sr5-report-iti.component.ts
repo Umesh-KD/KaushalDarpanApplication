@@ -82,7 +82,7 @@ export class SR5ReportITIComponent {
       this.Searchrequest.ReturnStatus = 2; // for all data
      // this.Searchrequest.staffID = 1;
 
-      await this.itiInventoryService.GetAllinventoryIssueHistoryNew(this.Searchrequest)
+      await this.itiInventoryService.GetSR5ReportData_ITI_INV(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
