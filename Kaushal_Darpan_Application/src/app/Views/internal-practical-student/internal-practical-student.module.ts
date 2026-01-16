@@ -6,6 +6,7 @@ import { InternalPracticalStudentComponent } from './internal-practical-student.
 import { LoaderModule } from '../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { InternalPracticalStudentRoutingModule } from './internal-practical-student.routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,7 @@ import { InternalPracticalStudentRoutingModule } from './internal-practical-stud
   ],
   imports: [
     CommonModule, InternalPracticalStudentRoutingModule,
-     FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule
+     FormsModule, ReactiveFormsModule, CommonModule,NgSelectModule, LoaderModule, TableSearchFilterModule
   ]
 })
 export class InternalPracticalStudentModule { }

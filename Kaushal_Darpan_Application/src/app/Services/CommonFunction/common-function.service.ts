@@ -1601,6 +1601,13 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number) {
+    return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 
   public async DDL_PostMaster() {

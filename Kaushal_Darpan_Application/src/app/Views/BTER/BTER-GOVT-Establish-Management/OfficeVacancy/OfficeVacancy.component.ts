@@ -376,6 +376,13 @@ export class OfficeVacancyComponent implements OnInit {
           this.OfficeList = data['Data'];
           console.log(this.OfficeList, "OfficeList");
         }, error => console.error(error));
+
+        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList = data['Data'];
+          console.log(this.OfficeList, "OfficeList");
+        }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
