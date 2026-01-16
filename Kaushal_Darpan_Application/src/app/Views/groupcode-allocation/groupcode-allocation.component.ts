@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
-import { GroupCodeAllocationAddEditModel, GroupCodeAllocationSearchModel } from '../../Models/GroupCodeAllocationModel';
+import { GroupCodeAllocationAddEditModel, GroupCodeAllocationReportModel, GroupCodeAllocationSearchModel } from '../../Models/GroupCodeAllocationModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { CommonSerialMasterResponseModel } from '../../Models/CommonSerialMaster
 import { CommonDDLCommonSubjectModel } from '../../Models/CommonDDLCommonSubjectModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
+import { ReportService } from '../../Services/Report/report.service';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class GroupcodeAllocationComponent {
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
   public DataExcel: any = [];
+  public GroupCodeMasterReportlist = new GroupCodeAllocationReportModel();
   constructor(private commonMasterService: CommonFunctionService,
     private router: Router,
     private toastr: ToastrService,
@@ -50,7 +52,8 @@ export class GroupcodeAllocationComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private groupcodeAllocationService: GroupcodeAllocationService,
-    private Swal2: SweetAlert2
+    private Swal2: SweetAlert2,
+    private ReportData: ReportService
   ) {
   }
 
@@ -294,6 +297,42 @@ export class GroupcodeAllocationComponent {
     }
   }
 
+  
+  async downloadGroupCodeMasterReport() {
+
+    debugger
+
+    //this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
+
+    this.ReportData.GroupCodeMasterReportDownload(this.GroupCodeMasterReportlist)
+      .subscribe({
+        next: (blob: Blob) => {
+
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `Center_Wise_Present_Absent_Report_${dateTime}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
+  }
 
 
 
