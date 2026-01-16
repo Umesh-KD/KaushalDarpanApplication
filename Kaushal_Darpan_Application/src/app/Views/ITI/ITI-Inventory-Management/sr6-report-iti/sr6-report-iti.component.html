@@ -2,12 +2,12 @@
 <app-loader></app-loader>
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Inventory Issue History</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Inventory SR6 Report</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI Inventory</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory Issue History</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI Inventory SR5 Report</a>
     </div>
   </div>
 </div>
@@ -21,20 +21,14 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div *ngIf="IsStaff == false">
+        <!-- <div *ngIf="IsStaff == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
-          <!--<select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-                (change)="GetTradeDDL()">
-          <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-            {{ item.staffName }}
-          </option>
-        </select>-->
           <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
             </option>
           </select>
-        </div>
+        </div> -->
 
         <div *ngIf="IsStaff == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
@@ -93,49 +87,26 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left">SNO</th>
-            <th class="text-left">Name</th>
-            <th class="text-left">Item Category Name</th>
-            <th class="text-left">Equipment Name</th>
-            <th class="text-left">Item Code</th>
-            <th class="text-left">Item Type</th>
-            <th class="text-left">Qty</th>
-            <th class="text-left">Issue Date</th>
-            <!-- <th class="text-left">Due Date</th> -->
-            <th class="text-left">Return Date</th>
-            <th class="text-left">Equipment Status on Return</th>
-            <th class="text-left">Status</th>
+            <th class="text-left">Item no</th>
+            <th class="text-left">Particulars of stores</th>
+            <th class="text-left">Quantity/weight</th>
+            <th class="text-left">Book value original purchase price</th>
+            <th class="text-left">Condition</th>
+            <th class="text-left">Year of purchase</th>
+            <th class="text-left">Mode of disposal (sale, public auction or otherwise)</th>
+            <th class="text-left">Orders of the authority for disposal</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">{{ idx+1}}</td>
-            <td align="left">{{ item.Name}}</td>
-            <td align="left">{{ item.ItemCategoryName}}</td>
-            <td align="left">{{ item.EquipmentName}}</td> 
-            <td align="left">{{ item.ItemCode}}</td> 
-            <td align="left">
-              <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
-                {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
-              </span>
-            </td>
+            <td align="left">{{ item.Particulars_of_stores}}</td>
             <td align="left">{{ item.Quantity}}</td>
-            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-            <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
-            <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td> 
-            <td align="left">
-                <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0  ? 'badge-working' : item.ConditionOnReturn == 2 ? 'badge-notworking' : 'badge-forrepair'">
-                  {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : item.ConditionOnReturn == 2 ?  'Not Working' : 'For Repair' }}
-                </span>
-            </td> 
-            <td align="left">
-              <span [ngClass]="{
-                                 'InvStatus-issued': item.InvStatus === 0,
-                                 'InvStatus-returned': item.InvStatus === 1
-                               }">
-                {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus === 1 ? 'Returned' : 'Unknown' }}
-              </span>
-            </td>
+            <td align="left">{{ item.Purchase_price}}</td> 
+            <td align="left">{{ item.Present_condition}}</td> 
+            <td align="left">{{ item.Year_of_purchase}}</td> 
+            <td align="left">{{ item.Any_suggestion_of_disposal}}</td> 
+            <td align="left">{{ item.Orders_of_the_authority_for_disposal}}</td> 
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10">

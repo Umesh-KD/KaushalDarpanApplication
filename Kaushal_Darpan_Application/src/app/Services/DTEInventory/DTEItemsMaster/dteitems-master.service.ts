@@ -286,4 +286,20 @@ public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHis
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async Get_SR5_ReportData(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/Get_SR5_ReportData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async Get_SR6_ReportData(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/Get_SR6_ReportData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

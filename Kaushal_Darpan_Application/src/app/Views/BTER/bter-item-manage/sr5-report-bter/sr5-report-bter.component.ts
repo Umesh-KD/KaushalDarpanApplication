@@ -80,7 +80,7 @@ export class SR5ReportBTERComponent {
         this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
         this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       }
-      await this.bterInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
+      await this.bterInventoryService.Get_SR5_ReportData(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
