@@ -50,6 +50,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   public fullAssessmentStudents: any = []
   public fullMarksStudents: any = []
   public InstituteMasterDDLList: any = []
+  public StreamMasterDDL:any=[];
   public _EnumRole = EnumRole;
 
   //table feature default
@@ -126,6 +127,13 @@ export class InternalPracticalStudentComponent implements OnInit {
         this.InstituteMasterDDLList = data.Data;
         console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
       })
+
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterDDL = data.Data;
+        //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+        // split
+      })
     }
     catch (ex) {
       console.log(ex);
@@ -160,6 +168,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   async GetTheoryMarksList() {
     try {
+      // this.TheoryMarksList=[];
       this.AllInTableSelect = false;
       this.isSubmitted = true;
       if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng) {
@@ -438,6 +447,7 @@ export class InternalPracticalStudentComponent implements OnInit {
     this.searchRequest.StudentID = 0;
     this.searchRequest.SubjectID = 0;
     this.searchRequest.RollNo = '',
+    this.searchRequest.InstituteID=0;
       this.TheoryMarksList = [];
 
   }

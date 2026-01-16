@@ -1699,6 +1699,19 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+
+  public GroupCodeMasterReportDownload(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/GetGroupCodeMasterReport/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 }
 
 

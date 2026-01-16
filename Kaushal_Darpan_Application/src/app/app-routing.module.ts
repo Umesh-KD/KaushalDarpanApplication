@@ -592,6 +592,8 @@ const routes: Routes = [
       { path: 'iti-auction-list', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-list/iti-auction-list.module').then(m => m.ITIAuctionListModule) },
       { path: 'iti-issue-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-issue-items/iti-issue-item.module').then(m => m.AddItiIssueItemModule) },
       { path: 'iti-return-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-return-items/iti-return-item.module').then(m => m.AddItiReturnItemModule) },
+      { path: 'iti-sr5-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/sr5-report-iti/sr5-report-iti.module').then(m => m.SR5ReportITIModule), title: 'ITI SR5 Report' },
+      { path: 'iti-sr6-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/sr6-report-iti/sr6-report-iti.module').then(m => m.SR6ReportITIModule), title: 'ITI SR6 Report' },
 
       /*ITI-Inventory-Management-END*/
 
@@ -620,6 +622,8 @@ const routes: Routes = [
       { path: 'add-request-dte-equipments', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/add-request-dte-trade-equipments-mapping/add-request-dte-trade-equipments-mapping.module').then(m => m.AddRequestDteTradeEquipmentsMappingModule) },
       { path: 'HOD-DTEEquipmentVerifications', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/DTEEquipmentVerifications-mapping-list/DTEEquipmentVerifications-mapping-list-module').then(m => m.DTEEquipmentVerificationsMappingListModule) },
       { path: 'Auction-List', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/auction-list/auction-list.module').then(m => m.AuctionListModule) },
+      { path: 'bter-sr5-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr5-report-bter/sr5-report-bter.module').then(m => m.SR5ReportBTERModule), title: 'SR5 Report' },
+      { path: 'bter-sr6-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr6-report-bter/sr6-report-bter.module').then(m => m.SR6ReportBTERModule), title: 'SR6 Report'  },
       /*BTER-DTE-Inventory-Management*/
 
       { path: 'Itisca', loadChildren: () => import('./Views/ITI/Examination/student-center-activity/student-center-activity.module').then(m => m.StudentCenterActivityModule) },

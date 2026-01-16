@@ -78,8 +78,10 @@ export class Rpt33Component {
     const [day, month, year] = dateStr.split('-');
     return `${year}-${month}-${day}`;  // '2025-05-15'
   }
+  
 
   async onDownload(row: any) {
+    debugger
     const formattedDate = this.formatDateToISO(row.ExamDate);
     try {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
@@ -90,6 +92,7 @@ export class Rpt33Component {
       this.request.SubjectCode = row.PaperCode;
       this.request.ShiftID = row.ExamShift;
       this.request.ExamDate = formattedDate;
+      this.request.BranchCode=row.BranchCode;
       
 
       await this.reportService.Report33(this.request).then((data: any) => {
@@ -141,8 +144,55 @@ export class Rpt33Component {
       window.URL.revokeObjectURL(url);
     });
   }
-  generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+
+  getSemesterCode(semesterId: number): string {
+    debugger
+    const semester = this.SemesterMasterDDL.find(
+      (s: any) => s.SemesterID === Number(semesterId)
+    );
+  
+    // Take first character from "1st Semester", "2nd Semester", etc.
+    return semester ? semester.SemesterName.charAt(0) : '';
+    // return semester ? semester.SemesterName.match(/\d/)?.[0] ?? '' : '';
   }
+  getBranchCode(streamId: number): string {
+    debugger
+    const stream = this.StreamMasterDDL.find(
+      (s:any) => s.StreamID === Number(streamId)
+    );
+  
+    return stream
+      ? stream.StreamName.match(/\(([^)]+)\)/)?.[1] ?? ''
+      : '';
+  }
+
+  getInstituteCode(instituteName: string): string {
+    return instituteName.split('-')[0].trim();
+  }
+  
+
+  generateFileName(extension: string): string {
+    // const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    // return `file_${timestamp}.${extension}`;
+    debugger
+    if (!this.request.ExamDate) {
+      this.toastr.error('Exam Date not selected');
+      return '';
+    }
+    
+    const datePart = this.request.ExamDate.split('T')[0]; // "2025-12-16
+
+    const [yyyy, mm, dd] = datePart.split('-');
+    const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
+         
+    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  
+    const semestercode = this.getSemesterCode(this.request.SemesterID); 
+    const branchCode = this.request.BranchCode;    
+    const papercode=this.request.SubjectCode;
+  
+    return `13A_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}_${papercode}.${extension}`;
+
+  }
+
+ 
 }

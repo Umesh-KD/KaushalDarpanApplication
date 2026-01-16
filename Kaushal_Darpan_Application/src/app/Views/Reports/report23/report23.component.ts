@@ -145,6 +145,7 @@ export class Report23Component {
   }
 
   async onSubmit() {
+    debugger
     this.isSubmitted = true;
     if(this.Report23Form.invalid){
       this.toastr.error("Please fill all the required fields")
@@ -187,8 +188,23 @@ export class Report23Component {
   }
 
   generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+    // const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    // return `file_${timestamp}.${extension}`;
+    if (!this.request.ExamDate) {
+      this.toastr.error('Exam Date not selected');
+      return '';
+    }
+
+    const datePart = this.request.ExamDate.split('T')[0]; // "2025-12-16
+
+    const [yyyy, mm, dd] = datePart.split('-');
+    const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
+    
+    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  
+    const semestercode = this.getSemesterCode(this.request.SemesterID); 
+    const branchCode = this.getBranchCode(this.request.StreamID);    
+
+    return `23_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}.${extension}`;
   }
 
   onResetControl() {
@@ -199,4 +215,33 @@ export class Report23Component {
     this.request.ShiftID = 0;
     this.request.ExamCategoryID = 0
   }
+
+
+  getSemesterCode(semesterId: number): string {
+    debugger
+    const semester = this.SemesterMasterDDLList.find(
+      (s: any) => s.SemesterID === Number(semesterId)
+    );
+  
+    // Take first character from "1st Semester", "2nd Semester", etc.
+    return semester ? semester.SemesterName.charAt(0) : '';
+    // return semester ? semester.SemesterName.match(/\d/)?.[0] ?? '' : '';
+  }
+  getBranchCode(streamId?: number): string {
+    debugger
+    const stream = this.StreamMasterDDLList.find(
+      (s:any) => s.StreamID === Number(streamId)
+    );
+  
+    // Extract text inside first ()
+    return stream
+      ? stream.StreamName.match(/\(([^)]+)\)/)?.[1] ?? ''
+      : '';
+  }
+
+  getInstituteCode(instituteName: string): string {
+    // Extract text before "-"
+    return instituteName.split('-')[0].trim();
+  }
+  
 }

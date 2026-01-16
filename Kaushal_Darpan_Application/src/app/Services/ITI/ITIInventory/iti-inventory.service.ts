@@ -536,4 +536,20 @@ export class ITIInventoryService {
           catchError(this.handleErrorObservable)
         ).toPromise();
     }
+
+  public async GetSR5ReportData_ITI_INV(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetSR5ReportData_ITI_INV`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetSR6ReportData_ITI_INV(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetSR6ReportData_ITI_INV`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
