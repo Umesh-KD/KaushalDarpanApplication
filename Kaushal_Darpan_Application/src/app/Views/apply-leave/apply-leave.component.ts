@@ -66,7 +66,7 @@ export class ApplyLeaveComponent {
     this.LeaveMasterFormGroup.get('TotalDays')?.disable()
     await this.GetCompanyMatserDDL();
     await this.GetLeaveTypeFSF();
-
+    this.setTodayDate();
 
     //edit
     if (this.ID > 0) {
@@ -98,6 +98,15 @@ export class ApplyLeaveComponent {
   GotoCommonSubject(): void {
     this.routers.navigate(['/commonsubjects']);
   }
+
+  setTodayDate(): void {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    this.today = `${year}-${month}-${day}`;
+  }
+
 
   // get semestar ddl
   async GetCompanyMatserDDL() {
@@ -178,10 +187,14 @@ export class ApplyLeaveComponent {
 
   // get detail by id
   async SaveData() {
-
+debugger
     try {
       this.isSubmitted = true;
       if (this.LeaveMasterFormGroup.invalid) {
+        return
+      }
+      if(this.request.From_Date>this.request.To_Date){
+        this.toastr.warning("From Date cannot be greater than To Date");
         return
       }
       this.isLoading = true;
