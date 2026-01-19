@@ -1508,7 +1508,7 @@ const routes: Routes = [
       { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'update student additional qualification' },
       { path: 'student-additional-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/student-additional-qualification/student-additional-qualification.module').then(m => m.StudentAdditionalQualiModule), title: 'student additional qualification' },
       { path: 'duplicate-doc', loadChildren: () => import('./Views/duplicate-document/duplicate-document.module').then(m => m.DuplicateDocumentModule), title: 'Duplicate Document' },
-     
+      { path: 'appoint-examiner-Report', loadChildren: () => import('./Views/ITI/iti-appoint-examiner-report/iti-appoint-examiner-report.module').then(m => m.AppointexaminerreportModule), title: 'Appoint Examiner Report' },
 
       { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.module').then(m => m.UpdateStudentDetailModule), title: 'update Student Details' },
 

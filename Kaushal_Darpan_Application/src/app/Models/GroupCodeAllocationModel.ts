@@ -54,7 +54,8 @@ export class GroupCodeDetailAddEditModel {
 
 export class GroupCodeAllocationReportModel {
   public groupCodeID: number = 0;
-  public semesterId: number = 0;
+  public SemesterId: number = 0;
+  public DepartmentID: number = 0;
   public semesterName: string = '';
   public groupCode: number= 0;
   public total: number= 0;
@@ -67,8 +68,9 @@ export class GroupCodeAllocationReportModel {
   public schemeid: number = 0;
   public isPresentTotal: number = 0;
   public centergroupcode: string = '';
-  public endTerm: string = '';
+  public EndTermID: number = 0;
   public examName: string = '';
+  public Eng_NonEng: number = 0;
 }
 
 
