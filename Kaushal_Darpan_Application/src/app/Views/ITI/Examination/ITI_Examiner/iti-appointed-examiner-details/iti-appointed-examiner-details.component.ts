@@ -6,6 +6,7 @@ import { ITI_AppointExaminerDetailsModel } from '../../../../../Models/ITI/ITI_E
 import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { ITITeacherForExaminerSearchModel } from '../../../../../Models/ItiExaminerDataModel';
 
 @Component({
   selector: 'app-iti-appointed-examiner-details',
@@ -22,6 +23,7 @@ export class ItiAppointedExaminerDetailsComponent {
   public AppointExaminerID: number = 0
   public selectedrow:any
   public searchRequest = new ITI_AppointExaminerDetailsModel()
+  public Request = new ITITeacherForExaminerSearchModel()
   public ssoLoginDataModel = new SSOLoginDataModel()
   public AppointedExaminerList: any = []
   @ViewChild('MyModel_ExaminerCodeLogin') MyModel_ExaminerCodeLogin: ElementRef | any;
@@ -152,5 +154,49 @@ export class ItiAppointedExaminerDetailsComponent {
     sessionStorage.setItem('StreamID', "0");
 
   }
+
+
+
+  async downloadCenterWiseReport(item:any) {
+    debugger
+
+    this.Request.DepartmentID = this.ssoLoginDataModel.DepartmentID;
+    this.Request.StreamID = item?.streamID
+    this.Request.ExaminerID = item?.ExaminerID
+    this.Request.EndTermID = this.ssoLoginDataModel.EndTermID;
+    this.Request.SubjectCode = item?.SubjectCode;
+    this.Request.sSOID = this.ssoLoginDataModel.SSOID;
+    this.Request.SemesterID = item.SemesterID;
+
+
+    await this.itiExaminerService.TeacherForExaminerReportDewnloadPdf(this.Request)
+      .subscribe({
+        next: (blob: Blob) => {
+
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `Teacher_For_Examiner_Report_${dateTime}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
+  }
+
 
 }

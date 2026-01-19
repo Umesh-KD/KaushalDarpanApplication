@@ -50,9 +50,8 @@
           </div>
 
 
-
-          <div>
-            <!-- IsHeadQuarter checkbox -->
+        <!-- IsHeadQuarter checkbox -->
+          <div>   
             <label class="inline-flex items-center">
               <input type="checkbox" [(ngModel)]="request.IsHeadQuarter" formControlName="IsHeadQuarter" class="form-checkbox" />
               <span class="ml-2 text-gray-800 text-sm font-medium">Is Head Quarter</span>
@@ -74,7 +73,7 @@
           <div>
             <label>To Date <span class="StarMarking">*</span> </label>
             <input type="date" class="form-input" id="txtToDate" formControlName="txtToDate"
-                   [(ngModel)]="request.To_Date" (change)="calculateDays()" />
+                   [(ngModel)]="request.To_Date" (change)="calculateDays()" [min]="today" />
             <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtToDate.errors"
                  class="text-danger">
               <p *ngIf="_LeaveMasterFormGroup.txtToDate.errors.required">

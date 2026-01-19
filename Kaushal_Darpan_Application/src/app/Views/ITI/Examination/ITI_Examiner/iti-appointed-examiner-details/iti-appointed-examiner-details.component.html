@@ -132,17 +132,25 @@
               <div *ngIf="row.IsAllow==1" class="flex align-center justify-center actionBtns w-auto"
                    style="width:auto !important">
                 <!--@if(this.ExamTypeID==1) {
-       <a [routerLink]="'/Ititheorymarks'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
-      }
-      @if(this.ExamTypeID==2) {
-          <a [routerLink]="'/PracticalAssesment'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
-      }-->
+   <a [routerLink]="'/Ititheorymarks'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+  }
+  @if(this.ExamTypeID==2) {
+      <a [routerLink]="'/PracticalAssesment'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+  }-->
 
                 <a (click)="OpenModalPopup(MyModel_ExaminerCodeLogin,row.AppointExaminerID,row.ExaminerCode,row)" href="javascript:void(0);" title="edit">
-                <i class="ti ti-clipboard-check"></i>
+                  <i class="ti ti-clipboard-check"></i>
 
 
                 </a>
+
+
+                <!--<a (click)="downloadCenterWiseReport(row.SubjectName,row.SemesterID)" title="Download Trade Wise Report">-->
+                <a (click)="downloadCenterWiseReport(row)" title="Download Trade Wise Report">
+                  <i class="ti ti-download"></i>
+                </a>
+
+
 
 
               </div>
