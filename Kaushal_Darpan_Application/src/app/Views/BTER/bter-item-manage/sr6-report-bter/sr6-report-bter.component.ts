@@ -279,7 +279,7 @@ export class SR6ReportBTERComponent {
     }
   }
 
-  async Download_SR5ReportData_pdf_BTER() {
+  async DownloadSR6ReportData_pdf_BTER() {
     try {
       this.loaderService.requestStarted();
 
@@ -292,7 +292,7 @@ export class SR6ReportBTERComponent {
       this.Searchrequest.ReturnStatus = 2; // for all data
      // this.Searchrequest.staffID = 1;
 
-      await this.bterInventoryService.Download_SR5ReportData_pdf_BTER(this.Searchrequest)
+      await this.bterInventoryService.DownloadSR6ReportData_pdf_BTER(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.DownloadFile_sr5(data.Data);
