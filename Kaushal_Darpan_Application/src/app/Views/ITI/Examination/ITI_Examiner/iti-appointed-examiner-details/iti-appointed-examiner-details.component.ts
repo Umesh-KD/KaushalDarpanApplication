@@ -157,14 +157,18 @@ export class ItiAppointedExaminerDetailsComponent {
 
 
 
-  async downloadCenterWiseReport() {
+  async downloadCenterWiseReport(item:any) {
     debugger
 
     this.Request.DepartmentID = this.ssoLoginDataModel.DepartmentID;
-    this.Request.StreamID = this.Request.StreamID
-    this.Request.ExaminerID = this.Request.ExaminerID
+    this.Request.StreamID = item?.streamID
+    this.Request.ExaminerID = item?.ExaminerID
     this.Request.EndTermID = this.ssoLoginDataModel.EndTermID;
-    this.Request.PaperID = this.Request.PaperID
+    this.Request.SubjectCode = item?.SubjectCode;
+    this.Request.sSOID = this.ssoLoginDataModel.SSOID;
+    this.Request.SemesterID = item.SemesterID;
+
+
     await this.itiExaminerService.TeacherForExaminerReportDewnloadPdf(this.Request)
       .subscribe({
         next: (blob: Blob) => {
