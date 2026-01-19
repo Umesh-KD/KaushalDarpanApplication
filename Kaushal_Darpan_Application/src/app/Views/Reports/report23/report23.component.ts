@@ -12,6 +12,7 @@ import { AttendanceRpt23DataModel } from '../../../Models/ReportBasedDataModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { EnumRole, GlobalConstants } from '../../../Common/GlobalConstants';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-report23',
@@ -32,6 +33,7 @@ export class Report23Component {
   centerSearchReq = new RequestBaseModel();
   _EnumRole = EnumRole;
   public InstituteMasterDDLList: any = []
+  CenterId: number = 0
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -42,6 +44,7 @@ export class Report23Component {
     private modalService: NgbModal,
     private fb: FormBuilder,
     private loaderService: LoaderService,
+    private activatedRoute: ActivatedRoute,
   ) {}
 
   async ngOnInit() {
@@ -53,6 +56,7 @@ export class Report23Component {
       StreamID: ['',[DropdownValidators]],
       InstituteID: [''],
     })
+    this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     this.GetExamShiftData();
@@ -156,6 +160,10 @@ export class Report23Component {
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
     if(this.sSOLoginDataModel.RoleID == EnumRole.Invigilator || this.sSOLoginDataModel.RoleID == EnumRole.Invigilator_NonEng){
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
+    }
+
+    if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+      this.request.InstituteID = this.CenterId;
     }
     
     try {
