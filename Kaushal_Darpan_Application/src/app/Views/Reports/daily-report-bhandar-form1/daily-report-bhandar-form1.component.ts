@@ -4,10 +4,11 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { AttendanceRpt13BDataModel } from '../../../Models/ReportBasedDataModel';
 import { ReportService } from '../../../Services/Report/report.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-daily-report-bhandar-form1',
@@ -21,6 +22,7 @@ export class DailyReportBhandarForm1Component {
   public request = new AttendanceRpt13BDataModel()
   public TableData: any = []
   public SemesterMasterList: any = []
+  CenterId: number= 0
   // @ViewChild(OTPModuleComponent) childComponent!: OTPModuleComponent;
 
   constructor(
@@ -30,9 +32,11 @@ export class DailyReportBhandarForm1Component {
     private http: HttpClient,
     private toastr: ToastrService,
     private modalService: NgbModal,
+    private activatedRoute: ActivatedRoute,
   ) {}
 
   async ngOnInit() {
+    this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     this.getMasterData();
@@ -81,6 +85,9 @@ export class DailyReportBhandarForm1Component {
       this.request.ExamDate = row.ExamDate;
       this.request.ShiftID = row.ShiftID;
       this.request.SemesterID = row.SemesterID;
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+        this.request.InstituteID = this.CenterId;
+      }
 
       // this.request.StudentExamType = 78
       await this.reportService.DailyReport_BhandarForm1(this.request).then((data: any) => {
@@ -136,6 +143,9 @@ export class DailyReportBhandarForm1Component {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.UserID = this.sSOLoginDataModel.UserID
       this.request.RoleID = this.sSOLoginDataModel.RoleID
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+        this.request.InstituteID = this.CenterId;
+      }
       await this.reportService.DailyReportBhandarForm(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
