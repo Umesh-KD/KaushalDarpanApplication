@@ -228,4 +228,13 @@ export class ItiExaminerService {
       ).toPromise();
   }
 
+  public TeacherForExaminerReportDewnloadPdf(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/TeacherForExaminerReportDewnloadPdf/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 }
