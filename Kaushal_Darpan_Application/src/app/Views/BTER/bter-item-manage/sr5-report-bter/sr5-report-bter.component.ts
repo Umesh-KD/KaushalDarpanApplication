@@ -278,4 +278,51 @@ export class SR5ReportBTERComponent {
       console.error(error);
     }
   }
+
+  async Download_SR5ReportData_pdf_BTER() {
+    try {
+      this.loaderService.requestStarted();
+
+      this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
+      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.Searchrequest.TradeId = this.Searchrequest.TradeId;
+      this.Searchrequest.staffID = this.Searchrequest.staffID;
+      this.Searchrequest.ReturnStatus = 2; // for all data
+     // this.Searchrequest.staffID = 1;
+
+      await this.bterInventoryService.Download_SR5ReportData_pdf_BTER(this.Searchrequest)
+        .then((data: any) => {
+          if (data) {
+            this.DownloadFile_sr5(data.Data);
+            console.log(this.ItemMasterList);
+          } else {
+            console.error("No data returned from API");
+          }
+        }, error => console.error(error));
+      console.log('Item Master List ',this.ItemMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  DownloadFile_sr5(FileName: string): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
 }

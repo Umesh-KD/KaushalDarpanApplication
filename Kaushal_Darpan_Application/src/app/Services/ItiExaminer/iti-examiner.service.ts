@@ -72,6 +72,7 @@ export class ItiExaminerService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+ 
 
   public async SaveExaminerData(request: ItiExaminerDataModel) {
     var body = JSON.stringify(request);
@@ -214,6 +215,14 @@ export class ItiExaminerService {
   {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/RemoveStudent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetTeacherForExaminerReport(searchRequest: ITITeacherForExaminerSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetTeacherForExaminerReport`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
