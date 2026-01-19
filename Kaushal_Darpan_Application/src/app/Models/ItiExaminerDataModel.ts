@@ -113,6 +113,7 @@ export class ITITeacherForExaminerSearchModel extends RequestBaseModel {
   public selectedInstitute :string=''
   public selectedTrade: string = ''
   public sSOID: string = ''
+  public PaperID: number = 0
 }
 
 
