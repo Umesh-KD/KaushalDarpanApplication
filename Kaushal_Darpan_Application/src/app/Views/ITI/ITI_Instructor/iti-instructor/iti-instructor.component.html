@@ -108,7 +108,7 @@
             <td>{{ item.Category }}</td>
             <td>{{ item.Mobile }}</td>
             <td>{{ item.Email }}</td>
-            <td>{{ item.IsAssign === 1 ? 'Assigned' : 'Not Assigned' }}</td>
+            <td>{{ item.IsAssign == 1 ? 'Assigned' : 'Not Assigned' }}</td>
 
             <td class="text-center">
               <button *ngIf="item.IsAssign != 1 && sSOLoginDataModel.RoleID==20 || item.IsAssign != 1 && sSOLoginDataModel.RoleID==43"
