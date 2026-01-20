@@ -380,8 +380,8 @@ export class OfficeVacancyComponent implements OnInit {
         await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.OfficeList = data['Data'];
-          console.log(this.OfficeList, "OfficeList");
+          this.BugetHeadList = data['Data'];
+          console.log(this.BugetHeadList, "BugetHeadList");
         }, error => console.error(error));
     }
     catch (Ex) {

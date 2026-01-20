@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ItiExaminerDataModel, ItiExaminerSearchModel, ITITeacherForExaminerSearchModels } from '../../../Models/ItiExaminerDataModel';
+import { ItiExaminerDataModel, ItiExaminerSearchModel, ITITeacherForExaminerSearchModel, ITITeacherForExaminerSearchModels } from '../../../Models/ItiExaminerDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -53,6 +53,7 @@ export class ItiExaminerListComponent implements OnInit {
   public StudentList: any = [];
   private modalRef: any;
   public theorylist = new ITITeacherForExaminerSearchModels();
+  public requestpdf = new ITITeacherForExaminerSearchModel();
 
   Email: string = ''
   MobileNumber: string = ''
@@ -690,6 +691,41 @@ export class ItiExaminerListComponent implements OnInit {
     }
 
 
+  async downloadCenterWiseReport(item: any) {
+    debugger
+
+    this.requestpdf.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.requestpdf.sSOID = item?.SSOID
+    this.requestpdf.ExaminerID = item?.ExaminerID
+    this.requestpdf.EndTermID = this.sSOLoginDataModel.EndTermID;
+
+    await this.itiexaminerservice.TeacherForExaminerReportDewnloadPdf(this.requestpdf)
+      .subscribe({
+        next: (blob: Blob) => {
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `Teacher_For_Examiner_Report_${dateTime}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
+  }
 
 
 }

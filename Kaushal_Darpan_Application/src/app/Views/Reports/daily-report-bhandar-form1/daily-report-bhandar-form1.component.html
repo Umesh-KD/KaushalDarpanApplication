@@ -91,11 +91,15 @@
                     <td>{{row.ExamDate |date:'dd-MM-yyyy'}}</td>
                     <td align="left">{{row.ShiftTime}}</td>
                     <td align="left">
-                        <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
-                          <a *ngIf="row.IsLocked" href="javascript:void(0);" title="View Details" (click)="onDownload(row)">
-                            <i class="ti ti-download"></i></a>
+                      <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                        <a *ngIf="row.IsLocked" href="javascript:void(0);" title="View Details" (click)="onDownload(row)">
+                          <i class="ti ti-download"></i>
+                        </a>
+                        <a  href="javascript:void(0);" title="View Details" (click)="onRoute(row)">
+                          <i class="ti ti-pencil"></i>
+                        </a>
 
-                        </div>
+                      </div>
                     </td>
                 </tr>
                 </tbody>

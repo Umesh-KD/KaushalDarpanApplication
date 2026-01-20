@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-daily-report-bhandar-form1',
@@ -33,6 +34,7 @@ export class DailyReportBhandarForm1Component {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -172,5 +174,28 @@ export class DailyReportBhandarForm1Component {
     // Extract text before "-"
     return instituteName.split('-')[0].trim();
   }
- 
+
+  async onRoute(row: any) {
+    debugger
+    sessionStorage.setItem('SemesterID', row.SemesterID.toString());
+    sessionStorage.setItem('CenterID', row.CenterID);
+
+    sessionStorage.setItem('ExamDate', row.ExamDate);
+    sessionStorage.setItem('ShiftID', row.ShiftID.toString());
+
+    this.router.navigate(['BhandarForm'])
+  }
+
+  GoToBhandarForm(row: any) {
+
+    // Reset first (empty values)
+    sessionStorage.setItem('SemesterID', '0');
+    sessionStorage.setItem('CenterID', '0');
+    sessionStorage.setItem('ExamDate', '');
+    sessionStorage.setItem('ShiftID', '0');
+
+    // Navigate
+    this.router.navigate(['daily-report-bhandar-form1']);
+  }
+
 }
