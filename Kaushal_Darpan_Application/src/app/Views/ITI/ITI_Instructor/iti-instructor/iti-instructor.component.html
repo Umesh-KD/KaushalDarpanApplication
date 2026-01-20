@@ -108,15 +108,16 @@
             <td>{{ item.Category }}</td>
             <td>{{ item.Mobile }}</td>
             <td>{{ item.Email }}</td>
-            <td>{{ item.AssignStatus }}</td>
-            <td class="text-center">  
-              <button *ngIf="item.AssignStatus != 'Assigned'"
+            <td>{{ item.IsAssign === 1 ? 'Assigned' : 'Not Assigned' }}</td>
+
+            <td class="text-center">
+              <button *ngIf="item.IsAssign != 1 && sSOLoginDataModel.RoleID==20 || item.IsAssign != 1 && sSOLoginDataModel.RoleID==43"
                       (click)="onAssign(modal_ItiInstructorPopup,item.Uid)"
                       title="Assign"
                       class="p-1">
                 <i class="ti ti-pencil"></i>
               </button>
-              <button (click)="onViewDetail(item.Uid)" title="View Detail">
+              <button *ngIf=" sSOLoginDataModel.RoleID==16" (click)="onViewDetail(item.Uid)" title="View Detail">
                 <i class="ti ti-eye"></i>
               </button>
             </td>
