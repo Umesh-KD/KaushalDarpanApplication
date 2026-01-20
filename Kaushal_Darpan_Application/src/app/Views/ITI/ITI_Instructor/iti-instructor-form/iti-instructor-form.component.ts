@@ -52,6 +52,7 @@ export class ItiInstructorFormComponent {
   public isSSOVisible: boolean = false;
   public isEmp: boolean = false;
   public showAadhaar: boolean = false;
+  public sameAsPermanent: boolean = false;
   public IsCITScertified: boolean = false;
   public showJanAadhaar: boolean = false;
   public ResidenceList: any = []
@@ -261,7 +262,8 @@ export class ItiInstructorFormComponent {
       PropUrbanRural: [''],
       City: ['', Validators.required],
       villageID: [''],
-      PermanentDocument: [''],   // aad new 19/11/2025
+      sameAsPermanent: [false],
+      PermanentDocument: ['', Validators.required],   // aad new 19/11/2025
 
 
       // Correspondence Address
@@ -301,7 +303,7 @@ export class ItiInstructorFormComponent {
       Employer_Address: [''],
       Tan_No: [''],
       Aadhar: ['', Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)],
-      AadharDocument: [''],   /// aad new 19/11/2025
+      AadharDocument: ['', Validators.required],   /// aad new 19/11/2025
       JanAadhar: [''],
       Employment_From: [''],
       Employment_To: [''],
@@ -615,7 +617,7 @@ export class ItiInstructorFormComponent {
       Education_Percentage: MarksTypeID === '0' ? this.educationRequest.Education_Percentage : null,
       Education_Subjects: this.educationRequest.Education_Subjects,
       Education_Year: this.educationRequest.Education_Year,
-      EduQualificationName: EduQualificationName[0].QualificationName,
+      EduQualificationName: EduQualificationName[0]?.QualificationName,
       EduOtherExaminationPassed: this.educationRequest.EduOtherExaminationPassed,
       MarksTypeID: MarksTypeID,
       MarkTypeName: MarksTypeID === '0' ? 'Percentage' : 'CGPA'
@@ -927,10 +929,10 @@ export class ItiInstructorFormComponent {
       this.toastr.warning("Please Add Janaadhar Number ")
       return
     }
-    if (this.request.IsDomicile == true && this.IsJANVerify == false) {
-      this.toastr.warning("Please Verify or Add Valid JanAadhar ")
-      return
-    }
+    //if (this.request.IsDomicile == true && this.IsJANVerify == false) {
+    //  this.toastr.warning("Please Verify or Add Valid JanAadhar ")
+    //  return
+    //}
     if (this.request.ddlState != '6') {
       this.InstructorForm.controls['PropTehsilID'].clearAsyncValidators()
       this.InstructorForm.controls['Correspondence_PropTehsilID'].clearAsyncValidators()
@@ -1544,7 +1546,7 @@ export class ItiInstructorFormComponent {
     });
   }
 
-  sameAsPermanent: boolean = true;
+
 
  //async onCopyCorrespondenceToggle() {
  //   if (this.sameAsPermanent) {
@@ -1593,6 +1595,13 @@ export class ItiInstructorFormComponent {
 
 
   toggleAddress(event: Event) {
+
+
+    this.sameAsPermanent = !this.sameAsPermanent;
+    if (!this.sameAsPermanent) {
+      this.sameAsPermanent = false
+    }
+
     this.sameAsPermanent = (event.target as HTMLInputElement).checked;
 
     if (this.sameAsPermanent) {

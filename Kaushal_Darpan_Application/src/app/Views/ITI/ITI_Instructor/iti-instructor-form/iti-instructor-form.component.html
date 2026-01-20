@@ -33,12 +33,12 @@
 
 
                 </div>
-                <div *ngIf="_InstructorForm.Uid.errors" class="text-danger">
+                <!--<div *ngIf="_InstructorForm.Uid.errors" class="text-danger">
                   <p *ngIf="!_InstructorForm.Uid.errors">
                     <i aria-hidden="true"></i>This field is required .!
                   </p>
 
-                </div>
+                </div>-->
               </div>
 
             </div>
@@ -93,13 +93,13 @@
                 </div>
               </div>
 
-              <div *ngIf="this.request.IsDomicile == true">
+              <!--<div *ngIf="this.request.IsDomicile == true">
                 <button *ngIf="showAadhaar" type="submit"
                         class="btn bg-info py-2 px-4 text-white"
                         (click)="GetDetailsByJanAadhaar()">
                   Verify
                 </button>
-              </div>
+              </div>-->
 
 
               <div>
@@ -128,7 +128,7 @@
               </div>
 
 
-              <div *ngIf="IsShowDrop && !IsShow" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="formGroupGetDetailsByJanadhar">
+              <!--<div *ngIf="IsShowDrop && !IsShow" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="formGroupGetDetailsByJanadhar">
 
                 <div>
                   <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -145,7 +145,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div>-->
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Instructor <span class="StarMarking">*</span></label>
@@ -352,7 +352,7 @@
                 </label>
                 <select class="form-select" id="ddlState" name="State" [(ngModel)]="this.request.ddlState" formControlName="ddlState" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}"
                         (change)="ddlState_Change()">
-                  <option *ngIf="InstructorForm.controls['ddlState'].value === '' || InstructorForm.controls['ddlState'].value === '0'" value="0">--Select--</option>
+                  <option value="0">--Select--</option>
                   <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
                 </select>
 
@@ -445,6 +445,8 @@
                 <input id="sameAsPermanent"
                        type="checkbox"
                        class="form-checkbox"
+                       [checked]="sameAsPermanent" 
+                       formControlName="sameAsPermanent"
                        [(ngModel)]="sameAsPermanent"
                        (change)="toggleAddress($event)" />
                 <label for="sameAsPermanent" class="text-sm">Same as Permanent Address</label>
@@ -492,7 +494,7 @@
                 <select class="form-select" id="Correspondence_State" name="Correspondence_State" [ngModel]="request.Correspondence_ddlState" formControlName="Correspondence_ddlState"
                         (change)="ddlState_Change2()" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
 
-                  <option *ngIf="InstructorForm.controls['Correspondence_ddlState'].value === '' || InstructorForm.controls['Correspondence_ddlState'].value === '0'" value="">--Select--</option>
+                  <option  value="">--Select--</option>
                   <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
                 </select>
 
@@ -608,7 +610,7 @@
                     </option>
                   </select>
 
-                  <div *ngIf="isSubmitted && _EducationForm.controls.EduQualificationName?.errors" class="text-danger">
+                  <div *ngIf="isSubmitted && _EducationForm.EduQualificationName?.errors" class="text-danger">
                     <p>This field is required .!</p>
                   </div>
                 </div>
