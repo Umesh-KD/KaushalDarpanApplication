@@ -149,6 +149,11 @@
                   <a *ngIf="row.IsAllFinalSubmitted === 1 &&  row.AssignedCount > 0" (click)="RevertBundle1(row.ExaminerID)" title="View">
                     <i class="ti ti-lock-open"></i>
                   </a>
+
+                  <a (click)="downloadCenterWiseReport(row)" title="Download Trade Wise Report">
+                    <i class="ti ti-download"></i>
+                  </a>
+
                 </div>
               </td>
 

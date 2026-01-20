@@ -220,7 +220,7 @@
                      id="txtRequestDate"
                      name="txtRequestDate"
                      formControlName="txtRequestDate"
-                     [(ngModel)]="request.RequestDate">
+                     [(ngModel)]="request.RequestDate" [min]="today">
               <div *ngIf="isSubmitted&&_groupForm.txtRequestDate.errors" class="text-danger">
                 <p *ngIf="_groupForm.txtRequestDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>

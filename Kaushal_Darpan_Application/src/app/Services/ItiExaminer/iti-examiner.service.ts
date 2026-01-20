@@ -72,6 +72,7 @@ export class ItiExaminerService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+ 
 
   public async SaveExaminerData(request: ItiExaminerDataModel) {
     var body = JSON.stringify(request);
@@ -219,4 +220,21 @@ export class ItiExaminerService {
       ).toPromise();
   }
 
+  public async GetTeacherForExaminerReport(searchRequest: ITITeacherForExaminerSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetTeacherForExaminerReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public TeacherForExaminerReportDewnloadPdf(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/TeacherForExaminerReportDewnloadPdf/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 }

@@ -9,7 +9,7 @@ import { ExamMasterService } from '../../Services/ExamMaster/exam-master.service
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { BlankReportModel, ExamMasterDataModel } from '../../Models/ExamMasterDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2'
-import { EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { ReportService } from '../../Services/Report/report.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
@@ -51,6 +51,7 @@ export class BlankReportComponent {
   public ExamFormGroup!: FormGroup;
   filteredSemesterList = [...this.SemesterMasterList];
   public BranchDDLList: any = [];
+  CenterId: number = 0;
   
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -81,6 +82,7 @@ export class BlankReportComponent {
         ddlExamCategoryID: ['', [DropdownValidators]]
 
       })
+    this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
     this.GetExamShift();
     this.GetMasterData();
     this.loadDropdownData('Branch');
@@ -202,7 +204,10 @@ export class BlankReportComponent {
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.loaderService.requestStarted();
       
-      
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+        this.request.InstituteID = this.CenterId;
+      }
+
       await this.reportService.BlankReport(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

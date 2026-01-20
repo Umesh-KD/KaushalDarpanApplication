@@ -302,8 +302,13 @@ export class GroupcodeAllocationComponent {
 
     debugger
 
-    //this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
+    this.GroupCodeMasterReportlist.SemesterId = this.searchRequest.SemesterId
+    this.GroupCodeMasterReportlist.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.GroupCodeMasterReportlist.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.GroupCodeMasterReportlist.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.GroupCodeMasterReportlist.schemeid = this.searchRequest.schemeId
+    this.GroupCodeMasterReportlist.action =  "_getAllData";
 
     this.ReportData.GroupCodeMasterReportDownload(this.GroupCodeMasterReportlist)
       .subscribe({
