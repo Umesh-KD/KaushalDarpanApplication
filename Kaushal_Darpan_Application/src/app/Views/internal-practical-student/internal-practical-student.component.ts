@@ -578,7 +578,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
 
   async onStatusPracticalAssesmentChange(dOC: any, isGetAll: boolean = false) {
-    debugger
+    //debugger
 
     if (this.paginatedInTableData.some((x: any) => x.IsPresentInternalAssisment == 4)) {
       this.isAnyUFMSelected = true
