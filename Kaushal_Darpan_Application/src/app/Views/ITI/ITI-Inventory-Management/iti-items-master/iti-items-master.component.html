@@ -109,6 +109,7 @@
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
             <th class="text-left">Item Type</th>
+            <th class="text-left">Item For</th>
             <th class="text-left">Price Per Unit</th>
             <th class="text-left">Total Price</th>
             <th class="text-left">Initial Quantity</th>
@@ -150,6 +151,7 @@
                 {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
               </span>
             </td>
+            <td align="left">{{item.ItemFor}}</td>
             <td align="left">{{item.PricePerUnit}}</td>
             <td align="left">{{item.TotalPrice}}</td>
             <td align="left">{{item.InitialQuantity}}</td>

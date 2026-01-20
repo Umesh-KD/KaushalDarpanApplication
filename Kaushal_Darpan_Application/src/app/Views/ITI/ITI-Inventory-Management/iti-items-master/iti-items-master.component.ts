@@ -44,6 +44,7 @@ export class ITIItemsMasterComponent {
   public EquipmentsDDLList: any = [];
   public TradeDDLList: any = [];
   public CollegeDDLList: any = [];
+  public ItemtypeList:any[]=[];
   EnumRole = EnumRole;
   public request = new ItemsDataModels();
   constructor(
@@ -60,6 +61,7 @@ export class ITIItemsMasterComponent {
   async ngOnInit() {
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.ItemtypeList = [{ID:0,Name:'Select'}, { ID: 1, Name: 'Building' }, {ID:2,Name:'Trade'}];
     this.UserID = this.sSOLoginDataModel.UserID;    
     console.log('Role:'+this.sSOLoginDataModel.RoleID)
     await this.GetEquipmentDDL();
@@ -190,7 +192,7 @@ export class ITIItemsMasterComponent {
 
   async ResetControl() {
     this.isSubmitted = false;
-    this.Searchrequest = new ItemsSearchModel();
+    this.Searchrequest = new DTEItemsSearchModel();
     this.ID = 0;
     await this.GetAllData();
   }

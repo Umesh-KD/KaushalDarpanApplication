@@ -28,6 +28,7 @@ export class DTEItemsSearchModel {
   public OfficeID: number = 0;
   public StatusID: number = 3;
   public ItemType: number = 2;
+  public ItemFor?: number = 0;
   public StaffID?: number = 0;
 }
 
