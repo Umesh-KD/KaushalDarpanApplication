@@ -24,6 +24,7 @@ export class BhandarFormComponent {
   public isSubmitted: boolean = false
   public request = new AddBhandarFormDataModel()
   public ExamDate: string = ''
+  public ExamDate1: string = ''
   public ShiftID: number = 0
   public CenterID: number = 0
   public SemesterID: number = 0
@@ -71,7 +72,7 @@ export class BhandarFormComponent {
         ExamNo: ['', Validators.required],
         StudentNo: ['', Validators.required],
         FromDutyTime: ['', Validators.required],
-        Size: ['', Validators.required],
+        Size: ['', ],
         ToDutyTime: ['', Validators.required],
 
 
@@ -79,8 +80,13 @@ export class BhandarFormComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.SemesterID = Number(sessionStorage.getItem('SemesterID'));
     /*    this.searchRequest.CenterID = Number(sessionStorage.getItem('CenterID'));*/
-
+   
     this.ExamDate = sessionStorage.getItem('ExamDate') ?? '';
+    const datePart = this.ExamDate.split('T')[0]; // 2025-12-16
+    const [year, month, day] = datePart.split('-');
+
+    this.ExamDate1 = `${day}-${month}-${year.slice(2)}`;
+
 
     this.CenterID = Number(sessionStorage.getItem('CenterID'));
     this.ShiftID = Number(sessionStorage.getItem('ShiftID'));
