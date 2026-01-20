@@ -1696,6 +1696,7 @@ const routes: Routes = [
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
   { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
+  { path: 'Views\ITI\AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
   
  
   

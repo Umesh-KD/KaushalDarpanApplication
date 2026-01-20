@@ -29,6 +29,7 @@ import { ITIGovtEMStaffMaster } from "../../../../Services/ITIGovtEMStaffMaster/
 import { CommonVerifierApiDataModel } from "../../../../Models/PublicInfoDataModel";
 import { ITICollegeTradeSearchModel } from "../../../../Models/ITI/SeatIntakeDataModel";
 import { ItiSeatIntakeService } from "../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service";
+import { ItiTradeSearchModel } from "../../../../Models/CommonMasterDataModel";
 @Component({
   selector: 'app-marksheet',
   standalone: false,
@@ -47,6 +48,7 @@ export class ItiInstructorComponent{
   public StaffLevelChildList: any = [];
   public searchRequestITi = new ITICollegeTradeSearchModel();
   sSOLoginDataModel: any;
+  public traderequest = new ItiTradeSearchModel()
   searchForm!: FormGroup;
   public _EnumRole = EnumRole
   public InstructorSearch = new ITI_InstructorDataSearchModel();
@@ -686,8 +688,9 @@ export class ItiInstructorComponent{
   async GetBranchesMasterData() {
 
     try {
+      this.traderequest.CollegeID = this.sSOLoginDataModel.InstituteID
       this.loaderService.requestStarted();
-      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+      await this.commonMasterService.GetCollegeTradeMaster(this.traderequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.BranchesMasterList = data.Data;
         console.log("StreamMasterList", this.BranchesMasterList);
