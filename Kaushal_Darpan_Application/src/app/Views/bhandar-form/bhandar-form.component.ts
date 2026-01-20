@@ -121,7 +121,7 @@ export class BhandarFormComponent {
           if (this.request.BhandarStudentModel != null && this.request.BhandarStudentModel != undefined) {
             this.ItemList1 = this.request.BhandarStudentModel.filter((e:any)=>e.Type==1)
             this.ItemList2 = this.request.BhandarStudentModel.filter((e:any)=>e.Type==2)
-            this.ItemList3 = this.request.BhandarStudentModel.filter((e:any)=>e.Type==3)
+       /*     this.ItemList3 = this.request.BhandarStudentModel.filter((e:any)=>e.Type==3)*/
           }
          
           Object.keys(this.request).forEach((key) => {
