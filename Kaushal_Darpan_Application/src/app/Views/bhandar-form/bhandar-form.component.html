@@ -15,32 +15,60 @@
       <i class="ti ti-chevron-left"></i> Back
     </a>
   </div>-->
-
+  <div>
+    <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+  </div>
 
 </div>
-<div class="mb-8">
- 
+<div class="card-body p-5">
+  <div class="mb-8">
+
 
     <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6">
       <div>
         <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
-          Mohar (प्रयुक्त अक्षर मोहर) <span class="StarMarking">*</span>
+          <strong>Mohar (प्रयुक्त अक्षर मोहर)</strong> <span class="StarMarking">*</span>
         </label>
-        <select class="form-select" id="ddlState" name="State"  [(ngModel)]="request.MoharID">
+        <select class="form-select" id="ddlState" name="State" [(ngModel)]="request.MoharID">
 
 
-          <option value="0">Select Mohar (प्रयुक्त अक्षर मोहर)</option>
-          <option value="1">Mohar 1</option>
-          <option value="2">Mohar 2</option>
+          <option value="">Select Mohar (प्रयुक्त अक्षर मोहर)</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="H">H</option>
+          <option value="I">I</option>
+          <option value="J">J</option>
+          <option value="K">K</option>
+          <option value="L">L</option>
+          <option value="M">M</option>
+          <option value="N">N</option>
+          <option value="O">O</option>
+          <option value="P">P</option>
+          <option value="Q">Q</option>
+          <option value="R">R</option>
+          <option value="S">S</option>
+          <option value="T">T</option>
+          <option value="U">U</option>
+          <option value="V">V</option>
+          <option value="W">W</option>
+          <option value="X">X</option>
+          <option value="Y">Y</option>
+          <option value="Z">Z</option>
+
 
         </select>
         <!--<div *ngIf="isSubmitted && _BhandarForm.MoharID.errors" class="text-danger">
-          <p *ngIf="!_BhandarForm.MoharID.errors.DropdownValidators">
-            <i aria-hidden="true"></i> This field is
-            required.!
-          </p>
+        <p *ngIf="!_BhandarForm.MoharID.errors.DropdownValidators">
+          <i aria-hidden="true"></i> This field is
+          required.!
+        </p>
 
-        </div>-->
+      </div>-->
       </div>
 
     </div>
@@ -50,7 +78,7 @@
       <p>
         उपरोक्त परीक्षा की उत्तर पुस्तिका अच्छी तरह मोहर बंद करके कूरियर
         कम्पनी को बंडल प्राप्ति रसीद दिनांक
-        <input type="text" class="form-control d-inline w-25 mx-2"  [(ngModel)]="request.UserName" />
+        <input type="text" class="form-control d-inline w-25 mx-2 py-0" [(ngModel)]="request.UserName" />
         द्वारा सुपुर्द कर दी गई है।
       </p>
 
@@ -67,25 +95,410 @@
 
 
 
-  <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6 mt-4">
+    <div class="mt-6">
+      <form [formGroup]="BhandarForm" id="AddressDetailsFormGroup" class="form-horizontal mt-4">
+        <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6 mt-4">
+          <div>
+            <label for="txtAddressLine1" class="text-gray-900 text-sm font-medium inline-block mb-2">
+              <strong>व्यक्ति का नाम</strong> <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input " id="txtAddressLine1"
+                   name="Name" formControlName="Name" [(ngModel)]="request.Name">
 
-    <form [formGroup]="BhandarForm" id="AddressDetailsFormGroup" class="form-horizontal">
+            <div *ngIf="isSubmitted && _BhandarForm.Name.errors" class="text-danger">
+              <p *ngIf="_BhandarForm.Name.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+
+            </div>
+          </div>
+
+          <div>
+            <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              <strong> परीक्षा कक्ष संख्या </strong> <span class="StarMarking">*</span>
+            </label>
+            <input (keypress)="numberOnly($event)" type="text" class="form-input" id="txtAddressLine1"
+                   name="Name" formControlName="ExamNo" [(ngModel)]="request.ExamNo">
+
+            <div *ngIf="isSubmitted && _BhandarForm.ExamNo.errors" class="text-danger">
+              <p *ngIf="_BhandarForm.ExamNo.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+
+            </div>
+          </div>
+
+          <!--<div>
+          <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            विद्यार्थियों की संख्य <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="txtAddressLine1"
+                 name="Name" formControlName="StudentNo" [(ngModel)]="request.StudentNo">
+
+          <div *ngIf="isSubmitted && _BhandarForm.StudentNo.errors" class="text-danger">
+            <p *ngIf="_BhandarForm.StudentNo.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+
+          </div>
+        </div>-->
+
+
+          <div>
+            <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              <strong> विद्यार्थियों की संख्य </strong> <span class="StarMarking">*</span>
+            </label>
+            <input (keypress)="numberOnly($event)" type="text" class="form-input" id="txtAddressLine1"
+                   name="Name" formControlName="StudentNo" [(ngModel)]="request.StudentNo">
+
+            <div *ngIf="isSubmitted && _BhandarForm.StudentNo.errors" class="text-danger">
+              <p *ngIf="_BhandarForm.StudentNo.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+
+            </div>
+          </div>
+
+          <div>
+            <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              <strong> ड्यूटी समय से </strong><span class="StarMarking">*</span>
+            </label>
+            <input type="time" class="form-input" id="txtAddressLine1"
+                   name="Name" formControlName="FromDutyTime" [(ngModel)]="request.FromDutyTime" placeholder="hh:mm AM/PM">
+
+            <div *ngIf="isSubmitted && _BhandarForm.FromDutyTime.errors" class="text-danger">
+              <p *ngIf="_BhandarForm.FromDutyTime.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+
+            </div>
+          </div>
+
+          <div>
+            <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              <strong>  तक </strong><span class="StarMarking">*</span>
+            </label>
+            <input type="time" class="form-input" id="txtAddressLine1"
+                   [min]="request.FromDutyTime" name="Name" formControlName="ToDutyTime" [(ngModel)]="request.ToDutyTime" placeholder="hh:mm AM/PM">
+
+            <div *ngIf="isSubmitted && _BhandarForm.ToDutyTime.errors" class="text-danger">
+              <p *ngIf="_BhandarForm.ToDutyTime.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+
+            </div>
+          </div>
+
+
+          <div>
+            <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              <strong> साइज </strong><span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" id="txtAddressLine1"
+                   name="Name" formControlName="Size" [(ngModel)]="request.Size">
+
+            <div *ngIf="isSubmitted && _BhandarForm.Size.errors" class="text-danger">
+              <p *ngIf="_BhandarForm.Size.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button type="button" class="btn  bg-primary  text-white" (click)="Addnew()">Add New</button>
+          </div>
+
+        </div>
+
+
+
+      </form>
+
+
+
+
+    </div>
+
+    <div *ngIf="request.BhandarDetailsModel?.length>0" class="overflow-auto">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>S.No</th>
+            <th>व्यक्ति का नाम</th>
+            <th>परीक्षा कक्ष संख्या</th>
+
+            <th>विद्यार्थियों की संख्य</th>
+            <th>ड्यूटी समय से</th>
+            <th>तक </th>
+            <th>साइज </th>
+            <th>Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of request.BhandarDetailsModel; let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td class="text-center">{{row.Name}}</td>
+            <td class="text-center">{{row.ExamNo}}</td>
+            <td class="text-center">{{row.StudentNo}}</td>
+            <td class="text-center">{{row.FromDutyTime}}</td>
+            <td class="text-center">{{row.ToDutyTime}}</td>
+            <td class="text-center">{{row.Size}}</td>
+
+            <td class="text-center">
+
+
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="section-title ">
+      2. बिना अनुमति परीक्षा में बैठने गये परीक्षार्थी
+    </div>
+    <div class="grid xl:grid-cols-4 gap-2 mb-6 mt-4">
+      <div>
+        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+               name="Name" [(ngModel)]="RollNo1" placeholder="रोल नंबर लिखें">
+
+      </div>
 
       <div>
-        <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
-          व्यक्ति का नाम <span class="StarMarking">*</span>
-        </label>
-        <input type="text" class="form-input" id="txtAddressLine1" placeholder="Enter Name"
-               name="Name" formControlName="Name" [(ngModel)]="request.Name">
+        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+               name="Name" [(ngModel)]="Time1" placeholder="समय लिखें">
 
-        <div *ngIf="isSubmitted && _BhandarForm.Name.errors" class="text-danger">
-    <p *ngIf="!_BhandarForm.Name.errors.required">
-      <i aria-hidden="true"></i> This field is
-      required.!
-    </p>
-
-  </div>
       </div>
-      </form>
+
+      <!--<div class="col-md-4">
+      <input type="text" class="form-control" placeholder="समय लिखें" />
+    </div>-->
+      <div class=" ">
+        <button type="button" class="btn  bg-primary  text-white" (click)="Addnew1()">Add New</button>
+      </div>
+    </div>
+    <div class="grid xl:grid-cols-2 gap-2 mb-6 mt-4" *ngIf="ItemList1.length>0">
+      <table class="w-full table-border mt-4" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>Sr No</th>
+            <th>रोल नंबर</th>
+            <th>समय लिखें</th>
+
+            <th>Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of ItemList1; let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td class="text-center">{{row.RollNo}}</td>
+            <td class="text-center">{{row.Time}}</td>
+
+
+            <td class="text-center">
+
+
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="section-title ">
+      3.अनुमति-पत्र की प्रतिलिपि से परीक्षा में बैठने गये परीक्षार्थी
+    </div>
+    <div class="grid xl:grid-cols-4 gap-2 mb-6 mt-4">
+      <div>
+        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+               name="Name" [(ngModel)]="RollNo2" placeholder="रोल नंबर लिखें">
+
+      </div>
+
+      <div>
+        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+               name="Name" [(ngModel)]="Time2" placeholder="समय लिखें">
+
+      </div>
+
+      <!--<div class="col-md-4">
+      <input type="text" class="form-control" placeholder="समय लिखें" />
+    </div>-->
+      <div class="col-md-4">
+        <button type="button" class="btn  bg-primary  text-white" (click)="Addnew2()">Add New</button>
+      </div>
+    </div>
+    <div class="grid xl:grid-cols-2 gap-2 mb-6 mt-4" *ngIf="ItemList2.length>0">
+      <table class="w-full table-border mt-4" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>Sr No</th>
+            <th>रोल नंबर</th>
+            <th>समय लिखें</th>
+
+            <th>Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of ItemList2; let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+
+            <td class="text-center">{{row.RollNo}}</td>
+            <td class="text-center">{{row.Time}}</td>
+
+            <td class="text-center">
+
+
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-title ">
+      4. अनुचित कार्य (U.F.M) करते पकड़े गये परीक्षार्थी
+    </div>
+    <div class="grid xl:grid-cols-4 gap-2 mb-6 mt-4">
+      <div>
+        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+               name="Name" [(ngModel)]="RollNo3" placeholder="रोल नंबर लिखें">
+
+      </div>
+
+      <div>
+        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+               name="Name" [(ngModel)]="Time3" placeholder="समय लिखें">
+
+      </div>
+
+      <!--<div class="col-md-4">
+      <input type="text" class="form-control" placeholder="समय लिखें" />
+    </div>-->
+      <div class="col-md-4">
+        <button type="button" class="btn  bg-primary  text-white" (click)="Addnew3()">Add New</button>
+      </div>
+    </div>
+    <div class="grid xl:grid-cols-2 gap-2 mb-6 mt-4" *ngIf="ItemList3.length>0">
+      <table class="w-full table-border mt-4" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>Sr No</th>
+            <th>रोल नंबर</th>
+            <th>समय लिखें</th>
+
+            <th>Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of ItemList3; let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td class="text-center">{{row.RollNo}}</td>
+            <td class="text-center">{{row.Time}}</td>
+
+            <td class="text-center">
+
+
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+    <div class="grid xl:grid-cols-3 gap-2 mb-6 mt-4">
+      <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+        <strong>अन्य विवरण (यदि कोई हो)</strong>
+      </label>
+      <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+             name="Name" [(ngModel)]="request.Remark" placeholder="अन्य विवरण लिखें">
+    </div>
+    <div class="grid xl:grid-cols-3 gap-2 mb-6 mt-4">
+      <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+        <strong>किसी भी परीक्षार्थी के परीक्षा में नहीं बैठने की सूरत में प्रश्न-पत्र का बंडल खोला गया अथवा नहीं खोला गया</strong> <span class="StarMarking">*</span>
+      </label>
+      <div class="flex me-4">
+        <label class="flex me-4">
+          <input class="me-2"
+                 type="radio"
+                 name="IsOpen"
+                 [value]="true"
+                 [(ngModel)]="request.IsOpen" />
+          Yes
+        </label>
+
+        <label class="flex ms-2">
+          <input class="me-2"
+                 type="radio"
+                 name="IsOpen"
+                 [value]="false"
+                 [(ngModel)]="request.IsOpen" />
+          No
+        </label>
+
+
+      </div>
+    </div>
+    <div class="grid xl:grid-cols-3 gap-2 mb-6 mt-4">
+      <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+        <strong>Upload image file of signature of Centre Superintendent (अधीक्षक)</strong> <span class="StarMarking">*</span>
+      </label>
+      <div class="flex fileUploader">
+        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+               id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+        <label for="fileStudentPhoto">
+          <span>Choose File</span>
+          {{request.DisFileName === '' ? 'No File Choosen' : request.DisFileName}}
+        </label>
+        <div class="flex">
+          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}"
+             *ngIf="this.request.FileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+          <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+           (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+          <i class="ti ti-trash"></i>
+        </a>-->
+        </div>
+      </div>
+    </div>
+    <div class=" text-center">
+      <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+      <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>-->
+    </div>
   </div>
-  </div>
+  
+</div>
