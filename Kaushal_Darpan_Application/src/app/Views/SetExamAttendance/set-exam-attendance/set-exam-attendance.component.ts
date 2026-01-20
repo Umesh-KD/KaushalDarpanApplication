@@ -46,6 +46,8 @@ export class SetExamAttendanceComponent implements OnInit {
   public isLocked: boolean = false ;
 
   public students: any = [];
+  public temp_students: any = [];
+  public TimeTableBranchesList: any = [];
   public file!: File;
   public isSubmitted: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -71,7 +73,7 @@ export class SetExamAttendanceComponent implements OnInit {
   public StudentList: any[] = [];
 
   public currentInTablePage: number = 1;
-  public pageInTableSize: string = "50";
+  public pageInTableSize: string = "1000";
   public totalInTablePage: number = 0;
   public sortInTableColumn: string = '';
   public sortInTableDirection: string = 'asc';
@@ -113,7 +115,8 @@ export class SetExamAttendanceComponent implements OnInit {
       //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
       // split
     })
-    this.getExamStudentData();
+    // this.getExamStudentData();
+    await this.GetTimeTableBranchesData();
   }
 
   onUfmChange(student: any) {
@@ -243,6 +246,40 @@ export class SetExamAttendanceComponent implements OnInit {
     }
   }
 
+  async GetTimeTableBranchesData() {
+    this.searchRequest.InvigilatorAppointmentID = this.sSOLoginDataModel.UserID
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+    this.searchRequest.TimeTableID = Number(this.activatedRoute.snapshot.queryParamMap.get("id") ?? 0);
+    this.searchRequest.InstituteID = Number(this.activatedRoute.snapshot.queryParamMap.get("InstituteID") ?? 0);
+    
+    try {
+      this.loaderService.requestStarted();
+
+      await this.setExamAttendanceService.GetTimeTableBranchesData(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success){
+          this.TimeTableBranchesList = data.Data
+        } else {
+          this.TimeTableBranchesList = []
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async onBranchClick(branch: any) {
+    this.searchRequest.StreamID = branch
+    await this.getExamStudentData();
+  }
 
   async ClearSearchData() {
     this.searchRequest = new SetExamAttendanceSearchModel();
@@ -360,7 +397,8 @@ export class SetExamAttendanceComponent implements OnInit {
 
           if (this.State = EnumStatus.Success) {
             this.toastr.success(this.Message)
-            window.location.href ='/InvigilatorExamList'
+            // window.location.href ='/InvigilatorExamList'
+            window.location.reload();
             this.ResetControls();
           }
           else {
