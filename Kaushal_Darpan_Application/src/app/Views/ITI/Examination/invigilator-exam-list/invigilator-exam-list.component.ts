@@ -73,7 +73,7 @@ export class InvigilatorExamListComponent {
 
   async ngOnInit() {
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.GetStudentDetails();
+    await this.GetStudentDetails();
   }
 
 

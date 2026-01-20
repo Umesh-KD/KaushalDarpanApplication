@@ -4,13 +4,14 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { AttendanceRpt13BDataModel } from '../../../Models/ReportBasedDataModel';
 import { ReportService } from '../../../Services/Report/report.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-attendance-rpt-13-b',
@@ -24,6 +25,7 @@ export class AttendanceRpt13BComponent {
   public request = new AttendanceRpt13BDataModel()
   Report13BForm!: FormGroup;
   isSubmitted: boolean = false
+  CenterId: number = 0
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -33,6 +35,7 @@ export class AttendanceRpt13BComponent {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private fb: FormBuilder,
+    private activateRoute: ActivatedRoute
   ) {}
 
   async ngOnInit() {
@@ -41,6 +44,7 @@ export class AttendanceRpt13BComponent {
       ShiftID: ['',[DropdownValidators]],
       ExamCategoryID: ['',[DropdownValidators]],
     })
+    this.CenterId = Number( this.activateRoute.snapshot.queryParamMap.get('centerid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     this.getMasterData();
@@ -72,8 +76,11 @@ export class AttendanceRpt13BComponent {
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.RoleID = this.sSOLoginDataModel.RoleID
-      this.request.StudentExamType = 78
+      this.request.StudentExamType = this.request.ExamCategoryID
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+        this.request.InstituteID = this.CenterId
+      }
       await this.reportService.AttendanceReport13B(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         console.log("AttendanceReport13B data",data)

@@ -46,6 +46,7 @@ export class SetExamAttendanceComponent implements OnInit {
   public isLocked: boolean = false ;
 
   public students: any = [];
+  public temp_students: any = [];
   public file!: File;
   public isSubmitted: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -71,7 +72,7 @@ export class SetExamAttendanceComponent implements OnInit {
   public StudentList: any[] = [];
 
   public currentInTablePage: number = 1;
-  public pageInTableSize: string = "50";
+  public pageInTableSize: string = "1000";
   public totalInTablePage: number = 0;
   public sortInTableColumn: string = '';
   public sortInTableDirection: string = 'asc';
@@ -241,6 +242,43 @@ export class SetExamAttendanceComponent implements OnInit {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async localFilterChange() {
+    this.temp_students = this.students
+    this.temp_students = this.temp_students.filter((x: any) => x.StreamID == this.searchRequest.StreamID || this.searchRequest.StreamID==0);
+    this.attendanceFormData = this.temp_students.map((student: any) =>
+      {
+        const attendanceModel = new SetExamAttendanceModel();
+        attendanceModel.StudentName = student.StudentName;
+        attendanceModel.StudentRollNo = student.StudentRollNo;
+        attendanceModel.StudentID = student.StudentID; // assuming StudentID is available
+        attendanceModel.ActiveStatus = student.Status === 'Active';
+        attendanceModel.FinancialYearID = student.FinancialYearID;
+        attendanceModel.InstituteID = student.InstituteID;
+        attendanceModel.SemesterID = student.SemesterId;
+        attendanceModel.SubjectID = student.SubjectID;
+        attendanceModel.PaperID = student.PaperID;
+        attendanceModel.StreamID = student.StreamID;
+        attendanceModel.IsDetain = student.IsDetain;
+        attendanceModel.IsPresent = student.IsPresent;
+        attendanceModel.IsUFM = student.IsUFM;
+        attendanceModel.IsDetain = student.IsDetain;
+        attendanceModel.IsDetain = student.IsDetain 
+        attendanceModel.StudentExamPaperID = student.StudentExamPaperID;
+        attendanceModel.StreamName = student.StreamName;
+        attendanceModel.SubjectName = student.SubjectName;
+        attendanceModel.StudentExamID = student.StudentExamID;
+        attendanceModel.UFMDocument = student.UFMDocument;
+        attendanceModel.Dis_UFMDocument = student.Dis_UFMDocument;
+        attendanceModel.rowclass = student.rowclass;
+        attendanceModel.isFinalSubmit = student.isFinalSubmit;
+        this.onUfmChange(student);
+        return attendanceModel;
+      });
+
+    this.loadInTable();
+
   }
 
 

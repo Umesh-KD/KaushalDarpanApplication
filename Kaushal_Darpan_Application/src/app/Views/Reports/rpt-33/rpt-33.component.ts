@@ -4,10 +4,11 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { AttendanceRpt13BDataModel } from '../../../Models/ReportBasedDataModel';
 import { ReportService } from '../../../Services/Report/report.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-rpt-33',
@@ -23,6 +24,7 @@ export class Rpt33Component {
   public SemesterMasterDDL: any = []
   public TableData: any = []
   // @ViewChild(OTPModuleComponent) childComponent!: OTPModuleComponent;
+  CenterId: number= 0
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -31,9 +33,11 @@ export class Rpt33Component {
     private http: HttpClient,
     private toastr: ToastrService,
     private modalService: NgbModal,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   async ngOnInit() {
+    this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     this.request.UserID = this.sSOLoginDataModel.UserID
@@ -94,6 +98,9 @@ export class Rpt33Component {
       this.request.ExamDate = formattedDate;
       this.request.BranchCode=row.BranchCode;
       
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+        this.request.InstituteID = this.CenterId;
+      }
 
       await this.reportService.Report33(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

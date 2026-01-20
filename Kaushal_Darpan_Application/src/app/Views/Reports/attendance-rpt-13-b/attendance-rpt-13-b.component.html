@@ -45,8 +45,8 @@
                       <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Category</label>
                       <select class="form-select" [(ngModel)]="request.ExamCategoryID" formControlName="ExamCategoryID" >
                           <option value="0">Choose Option</option>
-                          <option value="1">Main</option>
-                          <option value="2">Special</option>
+                          <option value="78">Main</option>
+                          <option value="77">Special</option>
                       </select>
                       <div *ngIf="isSubmitted && report13BForm.ExamCategoryID.errors" class="text-danger">
                         <p *ngIf="!report13BForm.ExamCategoryID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>

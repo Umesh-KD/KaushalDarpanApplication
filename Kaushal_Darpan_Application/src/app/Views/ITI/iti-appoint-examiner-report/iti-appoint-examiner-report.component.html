@@ -22,8 +22,10 @@
 
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
-        <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download PDF</a>
-        <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
+        <div>
+          <a href="javascript:void(0)" (click)="downloadCenterWiseReport()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download PDF</a>
+          <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download Excel</a>
+        </div>
       </div>
 
 

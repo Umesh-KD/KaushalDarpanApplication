@@ -1,0 +1,42 @@
+.form-input {
+  border: 1px solid #ccc;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+  .form-input:focus {
+    border: 2px solid #1976d2;
+    box-shadow: 0 0 4px rgba(25, 118, 210, 0.5);
+    outline: none;
+  }
+/* Remove extra spacing between label and field */
+.time-field mat-form-field {
+  margin-top: 0 !important;
+}
+
+/* Label styling */
+.time-label {
+  font-weight: 500;
+  margin-bottom: 2px; /* tight spacing */
+  font-size: 14px;
+}
+
+/* Compact input height */
+.compact-time .mat-mdc-text-field-wrapper {
+  height: 36px;
+}
+
+.compact-time .mat-mdc-form-field-infix {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  min-height: unset;
+}
+
+.compact-time .mat-mdc-input-element {
+  padding: 0 10px !important;
+  font-size: 14px;
+}
+.section-title {
+  font-weight: 600;
+  margin-top: 40px;
+
+}

@@ -9,11 +9,15 @@
     <BuildCommand>ng build</BuildCommand>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="src\app\Services\NewFolder1\**" />
+    <None Remove="src\app\Services\NewFolder\**" />
     <None Remove="src\app\Views\industryInstitutePartnership-validation\**" />
     <None Remove="src\app\Views\ITI\ITI-Inventory-Management\Issued&amp;ReturnItems\**" />
     <None Remove="src\app\Views\Report-View\**" />
     <None Remove="src\app\Views\role-menu-right\**" />
     <None Remove="src\app\Views\Views\**" />
+    <TypeScriptConfiguration Remove="src\app\Services\NewFolder1\**" />
+    <TypeScriptConfiguration Remove="src\app\Services\NewFolder\**" />
     <TypeScriptConfiguration Remove="src\app\Views\industryInstitutePartnership-validation\**" />
     <TypeScriptConfiguration Remove="src\app\Views\ITI\ITI-Inventory-Management\Issued&amp;ReturnItems\**" />
     <TypeScriptConfiguration Remove="src\app\Views\Report-View\**" />
@@ -82,10 +86,8 @@
     <Folder Include="src\app\Services\ItidocumentScrutiny\" />
     <Folder Include="src\app\Services\BterStudentJoinStatus\" />
     <Folder Include="src\app\Services\BridgeCourse\" />
-    <Folder Include="src\app\Services\NewFolder1\" />
-    <Folder Include="src\app\Services\PracticalExminer\" />
+    <Folder Include="src\app\Services\BhandarForm\" />
     <Folder Include="src\app\Services\Projects\" />
-    <Folder Include="src\app\Services\NewFolder\" />
     <Folder Include="src\app\Services\Student Centered Activites\" />
     <Folder Include="src\app\Services\PlacementReport\" />
     <Folder Include="src\app\Services\SubjectCategory\" />
