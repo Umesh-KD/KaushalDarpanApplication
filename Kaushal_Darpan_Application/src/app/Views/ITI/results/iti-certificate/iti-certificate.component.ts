@@ -187,8 +187,6 @@ export class ItiCertificateComponent implements OnInit {
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.StudentList.length;
   }
-
-
   async Download(row: any)
   {
     try
@@ -205,7 +203,8 @@ export class ItiCertificateComponent implements OnInit {
           this.ErrorMessage = data['ErrorMessage'];
           data = JSON.parse(JSON.stringify(data));
 
-          if (data && data.Data) {
+          if (data && data.Data)
+          {
             const base64 = data.Data;
 
             const byteCharacters = atob(base64);
