@@ -1712,6 +1712,19 @@ export class ReportService {
       }
     );
   }
+
+  public GroupCodeMasterReportBranchwiseDownload(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/GetGroupCodeMasterReportBranchwise/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
+
+
+
 }
 
 

@@ -1587,6 +1587,7 @@ const routes: Routes = [
       { path: 'ScholarshipAPIData', loadChildren: () => import('./Views/BTER/bter-Scholarship-API-Data/bter-Scholarship-API-Data.module').then(m => m.bterScholarshipAPIDataModule), title: 'Scholarship API Data' },
       { path: 'UnlockInternalMarks', loadChildren: () => import('./Views/BTER/Unlock-Internal-Marks/Unlock-Internal-Marks.module').then(m => m.UnlockInternalMarksModule), title: 'Unlock Internal Marks' },
       { path: 'surveyperform', loadChildren: () => import('./Views/ITI/iti_survey-perform/iti_survey-perform.module').then(m => m.ITIsurveyperformModule), title: 'ITI Survey Perform' },
+      { path: 'surveyperform-List', loadChildren: () => import('./Views/ITI/iti_survey-perform_List/iti_survey-perform_List.module').then(m => m.ITIsurveyperformListModule), title: 'ITI Survey Perform' },
 
       { path: 'theoryexaminerreport', loadChildren: () => import('../Views/ITI/theory-examiner-report/theory-examiner-report.module').then(m => m.TheoryExaminerReportModule) },
      

@@ -41,11 +41,18 @@ export class ITIApprWorkerDetailsOfExistingApprenticeshipModel {
 export class ITIApprWorkerDetalisOffacilitiesModel {
   public detalisOffacilitiesTradeID: number = 0;
   public surveyPerformID: number = 0;
+  public Trade: string = '';
   public durationOfTraning: number = 0;
   public numberOfSeatsSanctioned: number = 0;
   public naut_Deginate: string = '';
   public naut_Optional: string = '';
   public naut_NATS: string = '';
   public naut_Fresher: string = '';
+
+}
+export class GetAllsurveyperformaReportModel {
+ 
+  public surveyPerformID: number = 0;
+  
 
 }
