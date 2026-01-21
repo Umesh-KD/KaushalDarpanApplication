@@ -19,6 +19,34 @@
 
 <div class="card">
   <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-map"></i> Enter Search Criteria</b>
+      <!--<a routerLink="/ItiInstructorForm" class="inline-flex items-right btn bg-info text-white btn-sm"><i class="ti ti-plus"></i>Add Instructor</a>-->
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+      <!-- Search By ssoid or uid -->
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSOID / UID</label>
+        <input class="form-input" type="text" id="Uid" [(ngModel)]="instructorRequest.Uid" placeholder="SSOID / UID">
+
+      </div>
+
+
+      <!-- Search By college name -->
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By name</label>
+        <input class="form-input" type="text" id="Name" [(ngModel)]="instructorRequest.Name" placeholder="Name">
+      </div>
+
+      <div>
+        <button class="btn bg-info text-white mt-6 me-1" type="submit" (click)="GetItiInstructorDatas()"><i class="ti ti-search"></i>Search</button>
+        <button class="btn bg-danger text-white mt-6" type="button" (click)="onResetClick()"><i class="ti ti-refresh"></i> Reset</button>
+      </div>
+    </div>
+
   </div>
  
   <div class="card-body p-5" style="min-height:400px;">
@@ -55,9 +83,13 @@
             <th class="text-left">Name</th>
             <th class="text-left">DOB</th>
             <th class="text-left">Gender</th>
-            <th class="text-left">Category</th>
+
             <th class="text-left">Mobile</th>
             <th class="text-left">Email</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">Trade</th>
+            <th class="text-left">Shift</th>
+            <th class="text-left">Unit</th>
             <th class="text-left">Status</th> 
           </tr>
         </thead>
@@ -67,9 +99,13 @@
             <td>{{ item.Name }}</td>
             <td>{{ item.Dob | date: 'dd/MM/yyyy' }}</td>
             <td>{{ item.Gender }}</td>
-            <td>{{ item.Category }}</td>
+           
             <td>{{ item.Mobile }}</td>
             <td>{{ item.Email }}</td>
+            <td>{{ item.CollegeName }}</td>
+            <td>{{ item.TradeName }}</td>
+            <td>{{ item.Shift }}</td>
+            <td>{{ item.UnitNo }}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
                 <!--<label class="block">Status</label>-->

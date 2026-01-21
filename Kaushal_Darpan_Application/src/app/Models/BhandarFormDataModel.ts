@@ -3,6 +3,7 @@ export class AddBhandarFormDataModel {
   public BhandarID: number = 0
   public EndtermID: number = 0
   public ShiftID: number = 0
+  public ShiftID_choosen: number = 0
   public CenterID: number = 0
   public SemesterID: number = 0
   public UserID: number = 0

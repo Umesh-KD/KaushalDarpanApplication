@@ -989,5 +989,6 @@ export class ItiInstructorCollegeComponent{
     });
   }
 
+  async GetItiInstructorDatas() {}
 }
 

@@ -212,6 +212,8 @@ export class ITI_InstructorGridDataSearchModel {
 
 export class ITI_InstructorDataAssignSearchModel {
   public DepartmentID?: string = '';
+  public Uid?: string = '';
+  public Name?: string = '';
   public CollegeId?: number = 0;
 
 }

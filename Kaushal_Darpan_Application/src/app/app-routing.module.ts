@@ -1587,6 +1587,7 @@ const routes: Routes = [
       { path: 'ScholarshipAPIData', loadChildren: () => import('./Views/BTER/bter-Scholarship-API-Data/bter-Scholarship-API-Data.module').then(m => m.bterScholarshipAPIDataModule), title: 'Scholarship API Data' },
       { path: 'UnlockInternalMarks', loadChildren: () => import('./Views/BTER/Unlock-Internal-Marks/Unlock-Internal-Marks.module').then(m => m.UnlockInternalMarksModule), title: 'Unlock Internal Marks' },
       { path: 'surveyperform', loadChildren: () => import('./Views/ITI/iti_survey-perform/iti_survey-perform.module').then(m => m.ITIsurveyperformModule), title: 'ITI Survey Perform' },
+      { path: 'surveyperform-List', loadChildren: () => import('./Views/ITI/iti_survey-perform_List/iti_survey-perform_List.module').then(m => m.ITIsurveyperformListModule), title: 'ITI Survey Perform' },
 
       { path: 'theoryexaminerreport', loadChildren: () => import('../Views/ITI/theory-examiner-report/theory-examiner-report.module').then(m => m.TheoryExaminerReportModule) },
      
@@ -1696,6 +1697,7 @@ const routes: Routes = [
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
   { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
+  { path: 'Views\ITI\AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
   
  
   
