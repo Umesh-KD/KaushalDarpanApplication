@@ -322,7 +322,7 @@ export class GroupcodeAllocationComponent {
             ('0' + now.getHours()).slice(-2) +
             ('0' + now.getMinutes()).slice(-2);
 
-          const fileName = `Center_Wise_Present_Absent_Report_${dateTime}.pdf`;
+          const fileName = `Group_Code_Master_Report_${dateTime}.pdf`;
 
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');

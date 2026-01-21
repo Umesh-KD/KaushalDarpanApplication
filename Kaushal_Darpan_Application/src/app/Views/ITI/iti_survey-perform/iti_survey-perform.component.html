@@ -8,8 +8,7 @@
       <a class="text-sm font-medium text-slate-700" aria-current="page">Survey Perform</a>
     </div>
   </div>
-
-  <!--<a [routerLink]="['/IDFFundDetailList']" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>-->
+<a [routerLink]="['/surveyperform-List']" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
 
 </div>
 
@@ -68,7 +67,7 @@
             <label>Total No Person Employeed<span class="StarMarking">*</span></label>
             <input [(ngModel)]="formData.totalNoPersonEmployeed" name="totalNoPersonEmployeed"
                    class="form-input" placeholder="Total No Person Employeed"
-                   type="text" required minlength="3" #totalNoPersonEmployeed="ngModel">
+                   type="number" required minlength="3" #totalNoPersonEmployeed="ngModel">
             <div class="text-red-500 text-sm" *ngIf="totalNoPersonEmployeed.invalid && (totalNoPersonEmployeed.dirty || totalNoPersonEmployeed.touched || totalNoPersonEmployeed.instituteForm || instituteForm.submitted)">
               <div *ngIf="totalNoPersonEmployeed.errors?.['required']">Enter Total No Person Employeed</div>
             </div>
@@ -101,7 +100,7 @@
           <thead>
             <tr class="bg-gray-100">
               <th class="p-2 border">SNo</th>
-              <th class="p-2 border">Designation Trade</th>
+              <!--<th class="p-2 border">Designation Trade</th>-->
               <th class="p-2 border">NCO No Worker</th>
               <th class="p-2 border">Less skilled worker</th>
               <th class="p-2 border">Fully skilled worker</th>
@@ -117,7 +116,7 @@
               <td class="p-2 border">
                 <span>{{i+1}}</span>
               </td>
-              <td class="p-2 border">
+              <!--<td class="p-2 border">
                 <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].designationTradeID"
                        name="designationTradeID{{i}}"
                        class="form-input w-full"
@@ -126,13 +125,13 @@
                 <div class="text-red-500 text-sm" *ngIf="designationTradeID.invalid && (designationTradeID.dirty || designationTradeID.touched || instituteForm.submitted)">
                   <div *ngIf="designationTradeID.errors?.['required']">Enter Designation Trade</div>
                 </div>
-              </td>
+              </td>-->
               <td class="p-2 border">
                 <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].ncoNumberWorkers"
                        name="ncoNumberWorkers{{i}}"
                        class="form-input w-full"
                        placeholder="NCO No Worker"
-                       required #ncoNumberWorkers="ngModel">
+                       required #ncoNumberWorkers="ngModel" type="number">
                 <div class="text-red-500 text-sm" *ngIf="ncoNumberWorkers.invalid && (ncoNumberWorkers.dirty || ncoNumberWorkers.touched || instituteForm.submitted)">
                   <div *ngIf="ncoNumberWorkers.errors?.['required']">Enter NCO No Worker</div>
                 </div>
@@ -142,13 +141,13 @@
                        name="lessSkilledWorker{{i}}"
                        class="form-input w-full"
                        placeholder="Less skilled worker"
-                       required #lessSkilledWorker="ngModel">
+                       required #lessSkilledWorker="ngModel" type="number">
                 <div class="text-red-500 text-sm" *ngIf="lessSkilledWorker.invalid && (lessSkilledWorker.dirty || lessSkilledWorker.touched || instituteForm.submitted)">
                   <div *ngIf="lessSkilledWorker.errors?.['required']">Enter Less skilled worker</div>
                 </div>
               </td>
               <td class="p-2 border">
-                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].fullySkilledWorker"
+                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].fullySkilledWorker" type="number"
                        name="fullySkilledWorker{{i}}"
                        class="form-input w-full"
                        placeholder="Fully skilled worker"
@@ -160,7 +159,7 @@
 
               <!-- Received Amount -->
               <td class="p-2 border">
-                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].totalWorker"
+                <input [(ngModel)]="formData.OtherITIWorkerDesignationTrade[i].totalWorker" type="number"
                        name="totalWorker{{i}}"
                        class="form-input w-full"
                        placeholder="Total worker"
@@ -245,7 +244,7 @@
                        name="numberOfSeatsLocated{{i}}"
                        class="form-input w-full"
                        placeholder="Number Of Seats Located"
-                       required #numberOfSeatsLocated="ngModel">
+                       required #numberOfSeatsLocated="ngModel" type="number">
                 <div class="text-red-500 text-sm" *ngIf="numberOfSeatsLocated.invalid && (numberOfSeatsLocated.dirty || numberOfSeatsLocated.touched || instituteForm.submitted)">
                   <div *ngIf="numberOfSeatsLocated.errors?.['required']">Enter Number Of Seats Located</div>
                 </div>
@@ -255,7 +254,7 @@
                        name="numberActuallyUndergoingTraning{{i}}"
                        class="form-input w-full"
                        placeholder="Number Actually Undergoing traning"
-                       required #numberActuallyUndergoingTraning="ngModel">
+                       required #numberActuallyUndergoingTraning="ngModel" type="number">
                 <div class="text-red-500 text-sm" *ngIf="numberActuallyUndergoingTraning.invalid && (numberActuallyUndergoingTraning.dirty || numberActuallyUndergoingTraning.touched || instituteForm.submitted)">
                   <div *ngIf="numberActuallyUndergoingTraning.errors?.['required']">Number Actually Undergoing traning</div>
                 </div>
@@ -266,7 +265,7 @@
                 <button type="button"
                         *ngIf="i != 0"
                         class="btn bg-danger text-white btn-sm"
-                        (click)="removeDeposit(i)">
+                        (click)="removeWorkerDetailsOfExistingApprenticeship(i)">
                   <span class="fa fa-remove"></span>&nbsp; Remove
                 </button>
                 <button *ngIf="i == 0" type="button" class="btn btn-sm bg-info text-white" (click)="addWorkerDetailsOfExistingApprenticeship()"><span class="fa fa-plus"></span>Add More</button>
@@ -312,13 +311,13 @@
                 <span>{{i+1}}</span>
               </td>
               <td class="p-2 border">
-                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].durationOfTraning"
-                       name="durationOfTraning{{i}}"
+                <input [(ngModel)]="formData.OtherITIApprWorkerDetalisOffacilities[i].Trade"
+                       name="Trade{{i}}"
                        class="form-input w-full"
                        placeholder="Trade"
-                       required #durationOfTraning="ngModel">
-                <div class="text-red-500 text-sm" *ngIf="durationOfTraning.invalid && (durationOfTraning.dirty || durationOfTraning.touched || instituteForm.submitted)">
-                  <div *ngIf="durationOfTraning.errors?.['required']">Enter Trade</div>
+                       required #Trade="ngModel">
+                <div class="text-red-500 text-sm" *ngIf="Trade.invalid && (Trade.dirty || Trade.touched || instituteForm.submitted)">
+                  <div *ngIf="Trade.errors?.['required']">Enter Trade</div>
                 </div>
               </td>
               <td class="p-2 border">
@@ -326,7 +325,7 @@
                        name="durationOfTraning{{i}}"
                        class="form-input w-full"
                        placeholder="Number Of Seats Sanctioned"
-                       required #durationOfTraning="ngModel">
+                       required #durationOfTraning="ngModel" type="number">
                 <div class="text-red-500 text-sm" *ngIf="durationOfTraning.invalid && (durationOfTraning.dirty || durationOfTraning.touched || instituteForm.submitted)">
                   <div *ngIf="durationOfTraning.errors?.['required']">Number Of Seats Sanctioned</div>
                 </div>
@@ -336,7 +335,7 @@
                        name="numberOfSeatsSanctioned{{i}}"
                        class="form-input w-full"
                        placeholder="Duration Of Traning"
-                       required #numberOfSeatsSanctioned="ngModel">
+                       required #numberOfSeatsSanctioned="ngModel" type="number">
                 <div class="text-red-500 text-sm" *ngIf="numberOfSeatsSanctioned.invalid && (numberOfSeatsSanctioned.dirty || numberOfSeatsSanctioned.touched || instituteForm.submitted)">
                   <div *ngIf="numberOfSeatsSanctioned.errors?.['required']">Duration Of Traning</div>
                 </div>
