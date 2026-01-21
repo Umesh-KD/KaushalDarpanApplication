@@ -71,7 +71,7 @@ export class BhandarFormComponent {
         ExamNo: ['', Validators.required],
         StudentNo: ['', Validators.required],
         FromDutyTime: ['', Validators.required],
-        Size: ['', Validators.required],
+        Size: [''],
         ToDutyTime: ['', Validators.required],
 
 
@@ -320,7 +320,7 @@ export class BhandarFormComponent {
     }
   }
   async SaveData() {
-
+debugger
     if (this.request.MoharID == '') {
       this.toastr.warning("Please Select Valid Mohar")
       return

@@ -14,7 +14,7 @@ export class AddBhandarFormDataModel {
   public StudentNo: string = ''
   public FromDutyTime: string = ''
   public ToDutyTime: string = ''
-  public Size: string = ''
+  public Size?: string = ''
   public Remark: string = ''
   public DisFileName: string = ''
   public FileName: string = ''

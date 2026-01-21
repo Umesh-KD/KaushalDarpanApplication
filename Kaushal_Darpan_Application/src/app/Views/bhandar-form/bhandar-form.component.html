@@ -149,7 +149,7 @@
 
           <div>
             <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
-              <strong> विद्यार्थियों की संख्य </strong> <span class="StarMarking">*</span>
+              <strong> विद्यार्थियों की संख्या  </strong> <span class="StarMarking">*</span>
             </label>
             <input (keypress)="numberOnly($event)" type="text" class="form-input" id="txtAddressLine1"
                    name="Name" formControlName="StudentNo" [(ngModel)]="request.StudentNo">
@@ -198,9 +198,10 @@
 
           <div>
             <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
-              <strong> साइज </strong><span class="StarMarking">*</span>
+              <strong> साइज </strong>
+              <!-- <span class="StarMarking">*</span> -->
             </label>
-            <input type="text" class="form-input" id="txtAddressLine1"
+            <input (keypress)="numberOnly($event)" type="text" class="form-input" id="txtAddressLine1"
                    name="Name" formControlName="Size" [(ngModel)]="request.Size">
 
             <div *ngIf="isSubmitted && _BhandarForm.Size.errors" class="text-danger">
@@ -236,7 +237,7 @@
             <th>व्यक्ति का नाम</th>
             <th>परीक्षा कक्ष संख्या</th>
 
-            <th>विद्यार्थियों की संख्य</th>
+            <th>विद्यार्थियों की संख्या </th>
             <th>ड्यूटी समय से</th>
             <th>तक </th>
             <th>साइज </th>
@@ -270,11 +271,11 @@
 
 
     <div class="section-title ">
-      2. बिना अनुमति परीक्षा में बैठने गये परीक्षार्थी
+      2. बिना अनुमति-पत्र परीक्षा में बैठने गये परीक्षार्थी
     </div>
     <div class="grid xl:grid-cols-4 gap-2 mb-6 mt-4">
       <div>
-        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+        <input (keypress)="numberOnly($event)" type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
                name="Name" [(ngModel)]="RollNo1" placeholder="रोल नंबर लिखें">
 
       </div>
@@ -332,7 +333,7 @@
     </div>
     <div class="grid xl:grid-cols-4 gap-2 mb-6 mt-4">
       <div>
-        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+        <input (keypress)="numberOnly($event)" type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
                name="Name" [(ngModel)]="RollNo2" placeholder="रोल नंबर लिखें">
 
       </div>
@@ -389,7 +390,7 @@
     </div>
     <div class="grid xl:grid-cols-4 gap-2 mb-6 mt-4">
       <div>
-        <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
+        <input (keypress)="numberOnly($event)" type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
                name="Name" [(ngModel)]="RollNo3" placeholder="रोल नंबर लिखें">
 
       </div>

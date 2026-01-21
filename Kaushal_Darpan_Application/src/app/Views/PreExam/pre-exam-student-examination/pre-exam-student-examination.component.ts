@@ -2523,6 +2523,7 @@ export class PreExamStudentExaminationComponent {
   }
 
   async exportAnnexureMainToExcel() {
+    debugger
     try {
       this.isSubmitted = true;
       //session
@@ -2729,6 +2730,7 @@ export class PreExamStudentExaminationComponent {
   }
 
   async GetPreExamStudentForExcel() {
+    debugger
     try {
       //session
       this.PreExamStudentDataForExcel = []
