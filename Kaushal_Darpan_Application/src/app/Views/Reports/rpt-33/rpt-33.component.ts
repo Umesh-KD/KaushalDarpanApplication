@@ -197,7 +197,7 @@ export class Rpt33Component {
     const branchCode = this.request.BranchCode;    
     const papercode=this.request.SubjectCode;
   
-    return `13A_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}_${papercode}.${extension}`;
+    return `33_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}_${papercode}.${extension}`;
 
   }
 
