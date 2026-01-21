@@ -95,7 +95,7 @@
                         <a *ngIf="row.IsLocked" href="javascript:void(0);" title="View Details" (click)="onDownload(row)">
                           <i class="ti ti-download"></i>
                         </a>
-                        <a  href="javascript:void(0);" title="View Details" (click)="onRoute(row)">
+                        <a  href="javascript:void(0);" title="View Details" (click)="onRoute(row)" *ngIf="row.BhandarFormLocked == 0">
                           <i class="ti ti-pencil"></i>
                         </a>
 

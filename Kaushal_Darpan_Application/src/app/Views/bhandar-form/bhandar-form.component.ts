@@ -73,7 +73,7 @@ export class BhandarFormComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.SemesterID = Number(sessionStorage.getItem('SemesterID'));
     /*    this.searchRequest.CenterID = Number(sessionStorage.getItem('CenterID'));*/
-   debugger
+    
     this.ExamDate = sessionStorage.getItem('ExamDate') ?? '';
     const datePart = this.ExamDate.split('T')[0]; // 2025-12-16
     const [year, month, day] = datePart.split('-');
@@ -115,7 +115,7 @@ export class BhandarFormComponent {
  
       //session
 
-      debugger
+       
       //call
       this.request.CenterID = this.CenterID
       this.request.ExamDate = this.ExamDate
@@ -126,7 +126,7 @@ export class BhandarFormComponent {
       await this.ApplicationService.GetByID(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger
+           debugger
           this.request = data['Data'];
      
           if (this.request.BhandarStudentModel != null && this.request.BhandarStudentModel != undefined) {
@@ -168,6 +168,7 @@ export class BhandarFormComponent {
     if (this.BhandarForm.invalid) {
       return
     }
+    debugger
     // 3️⃣ Convert AM/PM to minutes for comparison
     // const fromMinutes = this.convertToMinutes(this.request.FromDutyTime);
     // const toMinutes = this.convertToMinutes(this.request.ToDutyTime);
@@ -179,6 +180,9 @@ export class BhandarFormComponent {
     if (!this.request.BhandarDetailsModel) {
       this.request.BhandarDetailsModel=[]
     }
+    let Shift_str = this.ExamShiftDDL.find(
+      (shift: any) => shift.ShiftID == this.request.ShiftID_choosen
+    )?.ExamShiftWithTime || '';
     this.request.BhandarDetailsModel.push({
       Name: this.request.Name,
       ExamNo: this.request.ExamNo,
@@ -186,7 +190,8 @@ export class BhandarFormComponent {
       // FromDutyTime: this.request.FromDutyTime,
       // ToDutyTime: this.request.ToDutyTime,
       Size: this.request.Size,
-      ShiftID: this.request.ShiftID_choosen
+      ShiftID: this.request.ShiftID_choosen,
+      Shift_str: Shift_str
     })
     this.request.Name = '';
     this.request.ExamNo = '';
@@ -294,7 +299,7 @@ export class BhandarFormComponent {
   public file!: File;
   async onFilechange(event: any, Type: string) {
     try {
-      debugger;
+       ;
       this.file = event.target.files[0];
       if (this.file) {
 
