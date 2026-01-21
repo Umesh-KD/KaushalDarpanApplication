@@ -339,6 +339,46 @@ export class GroupcodeAllocationComponent {
       });
   }
 
+  async downloadGroupCodeMasterReportBranchwise() {
+
+    debugger
+
+
+    this.GroupCodeMasterReportlist.SemesterId = this.searchRequest.SemesterId
+    this.GroupCodeMasterReportlist.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.GroupCodeMasterReportlist.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.GroupCodeMasterReportlist.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.GroupCodeMasterReportlist.schemeid = this.searchRequest.schemeId
+    this.GroupCodeMasterReportlist.action = "_getAllData";
+
+    this.ReportData.GroupCodeMasterReportBranchwiseDownload(this.GroupCodeMasterReportlist)
+      .subscribe({
+        next: (blob: Blob) => {
+
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `Group_Report_Branchwise${dateTime}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
+  }
 
 
 
