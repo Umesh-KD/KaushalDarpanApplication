@@ -62,4 +62,11 @@ export class SetExamAttendanceService {
       ).toPromise();
   }
 
+  public async GetTimeTableBranchesData(searchRequest: SetExamAttendanceSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetTimeTableBranchesData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

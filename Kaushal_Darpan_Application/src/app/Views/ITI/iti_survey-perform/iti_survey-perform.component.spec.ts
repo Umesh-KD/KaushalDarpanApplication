@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ITIsurveyperformComponent } from './iti_survey-perform.component';
 
-describe('IDFFundDetailsComponent', () => {
+describe('ITIsurveyperformComponent', () => {
   let component: ITIsurveyperformComponent;
   let fixture: ComponentFixture<ITIsurveyperformComponent>;
 

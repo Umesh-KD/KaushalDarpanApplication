@@ -121,7 +121,7 @@
              Bill Number: <span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input" id="txtVoucherNumber" name="VoucherNumber" formControlName="txtVoucherNumber"
-                 [(ngModel)]="request.VoucherNumber" maxlength="4">
+                 [(ngModel)]="request.VoucherNumber" maxlength="12">
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtVoucherNumber.errors" class="text-danger">
             <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.required">

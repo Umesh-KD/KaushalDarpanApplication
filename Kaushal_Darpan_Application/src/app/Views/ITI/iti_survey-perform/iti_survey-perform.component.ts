@@ -45,7 +45,8 @@ export class ITIsurveyperformComponent implements OnInit
     private route: ActivatedRoute,
     private loaderService: LoaderService,
     private _ITIIIPManageService: ITIIIPManageService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
    
   )
   {
@@ -60,9 +61,7 @@ export class ITIsurveyperformComponent implements OnInit
 
   
 
-  addDeposit() {
-   
-  }
+  // Add Functions
 
   addWorkerDesignationTrade()
   {
@@ -76,21 +75,27 @@ export class ITIsurveyperformComponent implements OnInit
   {
     this.formData.OtherITIApprWorkerDetalisOffacilities.push(new ITIApprWorkerDetalisOffacilitiesModel());
   }
+  // end Add Functions
 
 
-
-  removeWorkerDetailsOfExistingApprenticeship(index: number)
-  {
-    this.formData.OtherITIWorkerDesignationTrade.splice(index, 1);
-  }
+  // Remove Functions
   removeWorkerDesignationTrade(index: number)
   {
+    debugger
+    this.formData.OtherITIWorkerDesignationTrade.splice(index, 1);
+    
+  }
+  removeWorkerDetailsOfExistingApprenticeship(index: number) {
+    debugger
     this.formData.OtherITIApprWorkerDetailsOfExistingApprenticeship.splice(index, 1);
   }
   removeApprWorkerDetalisOffacilities(index: number)
   {
+    debugger
     this.formData.OtherITIApprWorkerDetalisOffacilities.splice(index, 1);
   }
+  // end Remove Functions
+
 
   async onSubmit(form: any)
   {
@@ -123,7 +128,8 @@ export class ITIsurveyperformComponent implements OnInit
                 toastClass: "ngx-toastr my-update-toast"
               });
             }
-                    
+            //redirect
+            this.router.navigate(['/surveyperform-List']);
 
           } else if (this.State == EnumStatus.Error)
           {
@@ -143,34 +149,6 @@ export class ITIsurveyperformComponent implements OnInit
     }
   }
 
-
-  
-
-
-  
-
-
-
-
-  //loadDropdownData(MasterCode: string): void {
-  //  this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
-  //    switch (MasterCode)
-  //    {
-  //      case 'FinancialYear_IIP':
-  //        this.FinYearList = data['Data'];
-  //        break;
-  //      case 'FinancialYear_QTR':
-  //        this.FinancialYear_QTR = data['Data'];
-  //        break;
-
-
-          
-
-  //      default:
-  //        break;
-  //    }
-  //  });
-  //}
 
 }
 
