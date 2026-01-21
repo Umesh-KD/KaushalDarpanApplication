@@ -40,6 +40,7 @@ export class BhandarFormComponent {
   ItemList1:any=[]
   ItemList2:any=[]
   ItemList3: any = []
+  ExamShiftDDL: any = []
   public State: number = 0;
   public key: number = 0;
   public Message: string = '';
@@ -58,38 +59,30 @@ export class BhandarFormComponent {
   ) { }
 
   async ngOnInit() {
-
-
-
-
-
-    this.BhandarForm = this.formBuilder.group(
-      {
-
-
+    this.BhandarForm = this.formBuilder.group({
        /* MoharID: ['', [DropdownValidators]],*/
         Name: ['', Validators.required],
         ExamNo: ['', Validators.required],
         StudentNo: ['', Validators.required],
-        FromDutyTime: ['', Validators.required],
+        // FromDutyTime: ['', Validators.required],
         Size: ['', ],
-        ToDutyTime: ['', Validators.required],
-
+        // ToDutyTime: ['', Validators.required],
+        ShiftID_choosen: ['', [DropdownValidators]],
 
       });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.SemesterID = Number(sessionStorage.getItem('SemesterID'));
     /*    this.searchRequest.CenterID = Number(sessionStorage.getItem('CenterID'));*/
-   
+   debugger
     this.ExamDate = sessionStorage.getItem('ExamDate') ?? '';
     const datePart = this.ExamDate.split('T')[0]; // 2025-12-16
     const [year, month, day] = datePart.split('-');
 
-    this.ExamDate1 = `${day}-${month}-${year.slice(2)}`;
-
+    this.ExamDate1 = `${day}-${month}-${year}`;
 
     this.CenterID = Number(sessionStorage.getItem('CenterID'));
     this.ShiftID = Number(sessionStorage.getItem('ShiftID'));
+    await this.getMasterData();
     await this.GetTheoryMarksDetailList()
 
   }
@@ -103,6 +96,18 @@ export class BhandarFormComponent {
 
 
   get _BhandarForm() { return this.BhandarForm.controls; }
+
+  async getMasterData() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetExamShift().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.ExamShiftDDL = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    } 
+  }
 
   //
   async GetTheoryMarksDetailList() {
@@ -164,13 +169,13 @@ export class BhandarFormComponent {
       return
     }
     // 3️⃣ Convert AM/PM to minutes for comparison
-    const fromMinutes = this.convertToMinutes(this.request.FromDutyTime);
-    const toMinutes = this.convertToMinutes(this.request.ToDutyTime);
+    // const fromMinutes = this.convertToMinutes(this.request.FromDutyTime);
+    // const toMinutes = this.convertToMinutes(this.request.ToDutyTime);
 
-    if (toMinutes < fromMinutes) {
-      alert("To Duty Time cannot be earlier than From Duty Time!");
-      return;
-    }
+    // if (toMinutes < fromMinutes) {
+    //   alert("To Duty Time cannot be earlier than From Duty Time!");
+    //   return;
+    // }
     if (!this.request.BhandarDetailsModel) {
       this.request.BhandarDetailsModel=[]
     }
@@ -178,9 +183,10 @@ export class BhandarFormComponent {
       Name: this.request.Name,
       ExamNo: this.request.ExamNo,
       StudentNo: this.request.StudentNo,
-      FromDutyTime: this.request.FromDutyTime,
-      ToDutyTime: this.request.ToDutyTime,
-      Size: this.request.Size
+      // FromDutyTime: this.request.FromDutyTime,
+      // ToDutyTime: this.request.ToDutyTime,
+      Size: this.request.Size,
+      ShiftID: this.request.ShiftID_choosen
     })
     this.request.Name = '';
     this.request.ExamNo = '';
@@ -188,6 +194,7 @@ export class BhandarFormComponent {
     this.request.FromDutyTime = '';
     this.request.ToDutyTime = '';
     this.request.Size = '';
+    this.request.ShiftID_choosen = 0;
 
     this.isSubmitted=false
   }
@@ -228,6 +235,14 @@ export class BhandarFormComponent {
     this.Time1 = '',
       this.RollNo1=''
 
+  }
+
+  deleteRow1(index: number): void {
+    this.ItemList1.splice(index, 1);
+  }
+
+  deleteRow2(index: number): void {
+    this.ItemList2.splice(index, 1);
   }
 
   async Addnew2() {

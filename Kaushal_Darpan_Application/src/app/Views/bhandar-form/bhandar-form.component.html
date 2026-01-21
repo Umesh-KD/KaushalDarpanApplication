@@ -165,21 +165,22 @@
 
           <div>
             <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
-              <strong> ड्यूटी समय से </strong><span class="StarMarking">*</span>
+              <strong> ड्यूटी समय </strong><span class="StarMarking">*</span>
             </label>
-            <input type="time" class="form-input" id="txtAddressLine1"
-                   name="Name" formControlName="FromDutyTime" [(ngModel)]="request.FromDutyTime" placeholder="hh:mm AM/PM">
+            <select class="form-select" [(ngModel)]="request.ShiftID_choosen" >
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ExamShiftDDL" [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</option>
+            </select>
 
-            <div *ngIf="isSubmitted && _BhandarForm.FromDutyTime.errors" class="text-danger">
-              <p *ngIf="_BhandarForm.FromDutyTime.errors.required">
+            <div *ngIf="isSubmitted && _BhandarForm.ShiftID_choosen.errors" class="text-danger">
+              <p *ngIf="!_BhandarForm.ShiftID_choosen.errors.DropdownValidators">
                 <i aria-hidden="true"></i> This field is
                 required.!
               </p>
-
             </div>
           </div>
 
-          <div>
+          <!-- <div>
             <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
               <strong>  तक </strong><span class="StarMarking">*</span>
             </label>
@@ -193,7 +194,7 @@
               </p>
 
             </div>
-          </div>
+          </div> -->
 
 
           <div>
@@ -275,8 +276,8 @@
     <div class="grid xl:grid-cols-4 gap-2 mb-6 mt-4">
       <div>
         <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
-               name="Name" [(ngModel)]="RollNo1" placeholder="रोल नंबर लिखें">
-
+          name="Name" [(ngModel)]="RollNo1" placeholder="रोल नंबर लिखें"
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
       </div>
 
       <div>
@@ -295,15 +296,12 @@
     <div class="grid xl:grid-cols-2 gap-2 mb-6 mt-4" *ngIf="ItemList1.length>0">
       <table class="w-full table-border mt-4" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-
           <tr>
             <th>Sr No</th>
             <th>रोल नंबर</th>
             <th>समय लिखें</th>
-
             <th>Action</th>
           </tr>
-
         </thead>
 
         <tbody>
@@ -311,15 +309,10 @@
             <td class="text-center">{{idx+1}}</td>
             <td class="text-center">{{row.RollNo}}</td>
             <td class="text-center">{{row.Time}}</td>
-
-
             <td class="text-center">
-
-
-              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow1(idx)">
                 <i class="ti ti-trash"></i>
               </button>
-
             </td>
           </tr>
         </tbody>
@@ -333,14 +326,13 @@
     <div class="grid xl:grid-cols-4 gap-2 mb-6 mt-4">
       <div>
         <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
-               name="Name" [(ngModel)]="RollNo2" placeholder="रोल नंबर लिखें">
-
+          name="Name" [(ngModel)]="RollNo2" placeholder="रोल नंबर लिखें"
+          oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
       </div>
 
       <div>
         <input type="text" class="form-input w-40  text-sm" id="txtAddressLine1"
                name="Name" [(ngModel)]="Time2" placeholder="समय लिखें">
-
       </div>
 
       <!--<div class="col-md-4">
@@ -353,31 +345,23 @@
     <div class="grid xl:grid-cols-2 gap-2 mb-6 mt-4" *ngIf="ItemList2.length>0">
       <table class="w-full table-border mt-4" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-
           <tr>
             <th>Sr No</th>
             <th>रोल नंबर</th>
             <th>समय लिखें</th>
-
             <th>Action</th>
           </tr>
-
         </thead>
 
         <tbody>
           <tr *ngFor="let row of ItemList2; let idx = index">
             <td class="text-center">{{idx+1}}</td>
-
             <td class="text-center">{{row.RollNo}}</td>
             <td class="text-center">{{row.Time}}</td>
-
             <td class="text-center">
-
-
-              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow2(idx)">
                 <i class="ti ti-trash"></i>
               </button>
-
             </td>
           </tr>
         </tbody>
