@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { GroupcodeAllocationService } from '../../Services/groupcode-allocation/groupcode-allocation.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumConfigurationType, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { RequestBaseModel } from '../../Models/RequestBaseModel';
 import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel } from '../../Models/CommonDDLSubjectMasterModel';
 import { CommonSerialMasterRequestModel } from '../../Models/CommonSerialMasterRequestModel';
@@ -17,6 +17,9 @@ import { CommonDDLCommonSubjectModel } from '../../Models/CommonDDLCommonSubject
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ReportService } from '../../Services/Report/report.service';
+import { AppsettingService } from '../../Common/appsetting.service';
+import { HttpClient } from '@angular/common/http';
+//import { EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 
 
 @Component({
@@ -53,7 +56,10 @@ export class GroupcodeAllocationComponent {
     private activatedRoute: ActivatedRoute,
     private groupcodeAllocationService: GroupcodeAllocationService,
     private Swal2: SweetAlert2,
-    private ReportData: ReportService
+    private ReportData: ReportService,
+    private appsettingConfig: AppsettingService,
+    private http: HttpClient,
+    private reportService: ReportService
   ) {
   }
 
@@ -380,6 +386,51 @@ export class GroupcodeAllocationComponent {
       });
   }
 
+
+
+  async downloadExamLetterReport() {
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.ExamLetterReport(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log("DownloadExamLetterReport", data)
+          if (data.State === EnumStatus.Success) {
+            // this.toastr.success(data.Message);
+            this.DownloadFile(data.Data)
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  DownloadFile(FileName: string): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+  generateFileName(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    return `file_${timestamp}.${extension}`;
+  }
 
 
 }
