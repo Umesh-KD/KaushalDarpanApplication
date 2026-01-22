@@ -69,4 +69,12 @@ export class SetExamAttendanceService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetBlankReportData_Admin(searchRequest: SetExamAttendanceSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetBlankReportData_Admin`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
