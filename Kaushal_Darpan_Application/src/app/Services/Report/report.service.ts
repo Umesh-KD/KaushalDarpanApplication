@@ -1724,6 +1724,20 @@ export class ReportService {
   }
 
 
+  public async ExamLetterReport(obj: any) {
+
+    var body = JSON.stringify(obj);
+    console.log(body);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + "/GetExamLetterReport", body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+
 
 }
 
