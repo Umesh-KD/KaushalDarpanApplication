@@ -135,3 +135,17 @@ export class ItiAssignStudentExaminer extends RequestBaseModel {
   public IsTheory: boolean = false
   public IsPractical: boolean = false
 }
+
+
+export class ITIExaminerUploadFilesModel {
+  UploadedID: number = 0;
+  ExaminerID: number = 0;
+  FileName: string = '';
+  displayFileName: string = '';
+  EndTermID: number = 0;
+  UserID: number = 0;
+  SSOID: string = '';
+  Remarks: string = '';
+  Action: string = '';
+}
+

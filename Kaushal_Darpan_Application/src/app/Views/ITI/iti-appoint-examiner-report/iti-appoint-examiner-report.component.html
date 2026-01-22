@@ -1,6 +1,6 @@
 <style>
   .selectboader {
-      border:1px solid #ddd !important;
+    border: 1px solid #ddd !important;
   }
 </style>
 
@@ -25,6 +25,11 @@
         <div>
           <a href="javascript:void(0)" (click)="downloadCenterWiseReport()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download PDF</a>
           <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download Excel</a>
+          <!--<a href="javascript:void(0)" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile)" title="View" ><i class="ti ti-eye"></i></a>-->
+          <button class="btn bg-info text-white" type="button"
+                  (click)="SaveExaminerUploadFileRequest(MyModel_ReplayQuery)">
+            Examiner Upload File
+          </button>
         </div>
       </div>
 
@@ -71,3 +76,76 @@
   </div>
 </div>
 
+<ng-template #MyModel_ReplayQuery let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto">
+
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i> Examiner Upload File</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <form [formGroup]="uploaddataFormGroup" id="uploaddataFormGroup">
+        <div class="card-body">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-3">
+
+            <!-- Attachments -->
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     for="ExaminerUploadFile">Attachments <span class="StarMarking">*</span></label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="ExaminerUploadFile" type="file" (change)="onFilechange($event,'UploadFile')">
+                <label for="ExaminerUploadFile">
+                  <span>Choose File</span>
+                  {{ExaminerUploadFileRequest.FileName === '' ? 'No File Choosen' : ExaminerUploadFileRequest.FileName}}
+                </label>
+                <div class="flex">
+
+                  <a *ngIf="ExaminerUploadFileRequest.FileName"
+                     [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/ExaminerUploadFile/' + ExaminerUploadFileRequest.FileName"  class="btn bg-primary text-white m-0" target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Remark -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input"
+                        placeholder="Remark "
+                        formControlName="Remarks"></textarea>
+              <!--<div *ngIf="isSubmitted && ExaminerUploadFileRequest.get('Remarks')?.errors" class="text-danger">
+                <p *ngIf="ExaminerUploadFileRequest.get('Remarks')?.hasError('required')">
+                  This field is required.!
+                </p>
+              </div>-->
+
+            </div>
+
+
+
+          </div>
+        </div>
+      </form>
+
+      <div class="card-footer text-center">
+        <button type="button"
+                class="btn bg-info text-white mt-6 mr-3"
+                (click)="SaveExaminerUploadFileRequestData()">
+          Submit
+        </button>
+        <button type="button"
+                class="btn bg-danger text-white mt-6"
+                (click)="CloseModalPopup()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
