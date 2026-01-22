@@ -41,8 +41,8 @@ export class Rpt33Component {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     this.request.UserID = this.sSOLoginDataModel.UserID
-    this.getMasterData();
-    this.GetRport33Data()
+    await this.getMasterData();
+    await this.GetRport33Data()
   }
 
   // openOTP(MobileNo: any) {
@@ -121,7 +121,8 @@ export class Rpt33Component {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-      this.request.StudentExamType = 78
+      this.request.StudentExamType = this.request.ShiftID
+      this.request.RoleID = this.sSOLoginDataModel.RoleID
 
       
       await this.reportService.GetRport33Data(this.request).then((data: any) => {
