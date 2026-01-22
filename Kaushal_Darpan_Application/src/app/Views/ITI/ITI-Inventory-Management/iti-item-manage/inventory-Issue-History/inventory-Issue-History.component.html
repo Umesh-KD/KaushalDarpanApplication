@@ -28,11 +28,19 @@
           <option *ngFor="let item of staffDDLList" [value]="item.staffID">
             {{ item.staffName }}
           </option>
-        </select>-->
+          </select>-->
           <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
             </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+          <select class="form-select" [(ngModel)]="Searchrequest.TradeId" formControlName="TradeId">
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
           </select>
         </div>
 
