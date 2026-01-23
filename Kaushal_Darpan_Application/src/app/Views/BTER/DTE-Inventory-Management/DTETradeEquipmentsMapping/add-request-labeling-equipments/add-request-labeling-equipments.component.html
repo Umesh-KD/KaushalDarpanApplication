@@ -109,6 +109,17 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Specification: <span class="StarMarking">*</span>
+          </label><br/>
+         <!-- <span>{{Specification}}</span> -->
+          <textarea class="form-input" id="Specification" formControlName="Specification" [(ngModel)]="request.Specification"></textarea>
+          <div *ngIf="isSubmitted && _RequestFormGroup.Specification.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+
+        <div>
           <label for="VoucherNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
             VoucherNumber: <span class="StarMarking">*</span>
           </label>

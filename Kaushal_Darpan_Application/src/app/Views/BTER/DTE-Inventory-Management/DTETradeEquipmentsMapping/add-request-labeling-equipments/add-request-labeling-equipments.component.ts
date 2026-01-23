@@ -79,6 +79,7 @@ export class AddRequestLabelingEquipmentsComponent {
       txtPricePerUnit: ['', [Validators.required]],
       txtQuantity: [{ value: '', disabled: true }],
       ApprovedQuantity: ['', [Validators.required]],
+      Specification: ['', [Validators.required]],
       //txtVoucherNumber: ['', [Validators.required]],
       txtVoucherNumber: [
         '',
