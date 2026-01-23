@@ -96,6 +96,10 @@ export class AuctionDetailsModel {
   public Eng_NonEng: number = 0;
   public RoleID: number = 0;
   public RowsID: string = '';
+  public Authority_forAuctionOrder?: string = '';
+  public ModeOfDisposal?: string = '';
+  public Remark?: string = '';
+  public ApproximateCost?: number = 0;
 }
 
 export class inventoryIssueHistorySearchModel {
