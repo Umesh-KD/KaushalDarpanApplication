@@ -180,7 +180,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Orders of the authority for disposal
           </label>
-          <input type="number" class="form-input" id="AuctionQuantity" formControlName="AuctionQuantity"
+          <input type="test" class="form-input" id="AuctionQuantity" formControlName="AuctionQuantity"
                  [(ngModel)]="request.AuctionQuantity" (keyup)="validateAuctionQuantity($event)">
           <div *ngIf="isSubmitted&&_AuctionFormGroup.AuctionQuantity.errors" class="text-danger">
             <p *ngIf="_AuctionFormGroup.AuctionQuantity.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
