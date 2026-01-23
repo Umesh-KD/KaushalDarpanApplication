@@ -59,7 +59,7 @@ export class DteEquipmentsMasterComponent {
 
     this.EquipmentsRequestFormGroup = this.formBuilder.group({
       txtName: ['', Validators.required],
-      Specification: ['', Validators.required],
+      // Specification: ['', Validators.required],
       UnitId: ['', [DropdownValidators]],
       itemCategoryId: ['', [DropdownValidators]],
       IsConsumable: [false],

@@ -111,6 +111,7 @@ export class DteAddItemsMasterComponent {
       txtQuantityIssued: ['0'],
       txtQuantityBalance: [''],
       BillDocument: ['', Validators.required],
+      Specification: ['', Validators.required],
     });
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -263,6 +264,7 @@ export class DteAddItemsMasterComponent {
           this.request.IsConsume = data['Data']["IsConsume"];
           this.request.BillFileName=data['Data']["BillFileName"];
           this.request.BillFilePath=data['Data']["BillFilePath"];
+          this.request.Specification=data['Data']["Specification"];
           this.FileName=data['Data']["BillFileName"];
           this.FilePath=data['Data']["BillFilePath"];
           this.Dis_FileName=data['Data']["BillFileName"];

@@ -300,9 +300,19 @@ export class BhandarFormComponent {
   async onFilechange(event: any, Type: string) {
     try {
        ;
+      debugger
+      
+
       this.file = event.target.files[0];
       if (this.file) {
 
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg') {
+          console.log("")
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg file')
+          return
+        }
         // upload to server folder
         this.loaderService.requestStarted();
 

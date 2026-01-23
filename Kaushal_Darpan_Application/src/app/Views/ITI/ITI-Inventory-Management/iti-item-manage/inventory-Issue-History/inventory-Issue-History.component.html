@@ -36,13 +36,13 @@
           </select>
         </div>
 
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
           <select class="form-select" [(ngModel)]="Searchrequest.TradeId">
             <option value="0"> --- Select ---</option>
             <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
           </select>
-        </div>
+        </div> -->
 
         <div *ngIf="IsStaff == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
