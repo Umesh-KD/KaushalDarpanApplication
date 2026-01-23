@@ -135,17 +135,6 @@
         <tbody>
           <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
-            <!--@if(item.InstituteID == 0 && item.OfficeID == 2){
-            <td align="left">
-              DTE training: T2 (establishment)
-            </td>
-            }
-            @if(item.InstituteID == 0 && item.OfficeID == 1){
-            <td align="left">
-              RCVT ADMIN
-            </td>
-            }
-            @else if(item.InstituteID > 0){-->
             @if(this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
             <td align="left">
               {{item.CollegeName}}
