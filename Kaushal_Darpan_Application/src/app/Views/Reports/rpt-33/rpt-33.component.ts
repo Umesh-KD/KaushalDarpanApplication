@@ -4,7 +4,7 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { AttendanceRpt13BDataModel } from '../../../Models/ReportBasedDataModel';
 import { ReportService } from '../../../Services/Report/report.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants ,EnumStudentExamType} from '../../../Common/GlobalConstants';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -27,6 +27,7 @@ export class Rpt33Component {
   // @ViewChild(OTPModuleComponent) childComponent!: OTPModuleComponent;
   CenterId: number= 0
   examDate_pdf: any
+  public _EnumStudentExamType = EnumStudentExamType;
 
   constructor(
     private commonMasterService: CommonFunctionService,
