@@ -54,6 +54,7 @@ export class BlankReportComponent {
   filteredSemesterList = [...this.SemesterMasterList];
   public BranchDDLList: any = [];
   CenterId: number = 0;
+  CSId: number = 0;
   public searchRequest = new SetExamAttendanceSearchModel();
   public BlankReportDataList_admin: any = [];
   _EnumRole = EnumRole
@@ -104,6 +105,7 @@ export class BlankReportComponent {
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
+    this.CSId = Number( this.activatedRoute.snapshot.queryParamMap.get('csid'));
     await this.GetExamShift();
     await this.GetMasterData();
     this.loadDropdownData('Branch');

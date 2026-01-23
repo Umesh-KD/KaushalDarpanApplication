@@ -26,6 +26,7 @@ export class Rpt33Component {
   public TableData: any = []
   // @ViewChild(OTPModuleComponent) childComponent!: OTPModuleComponent;
   CenterId: number= 0
+  CSId: number= 0
   examDate_pdf: any
   public _EnumStudentExamType = EnumStudentExamType;
 
@@ -41,9 +42,12 @@ export class Rpt33Component {
 
   async ngOnInit() {
     this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
+    this.CSId = Number( this.activatedRoute.snapshot.queryParamMap.get('csid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     this.request.UserID = this.sSOLoginDataModel.UserID
+
+    
     await this.getMasterData();
     await this.GetRport33Data()
   }
@@ -105,9 +109,17 @@ export class Rpt33Component {
       this.downloadRequest.BranchCode=row.BranchCode;
       this.downloadRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.downloadRequest.UserID = this.sSOLoginDataModel.UserID
-      
-      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
-        request.InstituteID = this.CenterId;
+
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+        || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD_NonEng)
+        && this.CenterId > 0
+      ) {
+        this.downloadRequest.InstituteID = this.CenterId;
+        this.downloadRequest.UserID = this.CSId
       }
 
       await this.reportService.Report33(this.downloadRequest).then((data: any) => {
@@ -132,7 +144,17 @@ export class Rpt33Component {
       this.request.StudentExamType = this.request.ShiftID
       this.request.RoleID = this.sSOLoginDataModel.RoleID
 
-      
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+        || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD_NonEng)
+        && this.CenterId > 0
+      ) {
+        this.request.InstituteID = this.CenterId
+        this.request.UserID = this.CSId
+      }      
       await this.reportService.GetRport33Data(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
