@@ -64,8 +64,8 @@
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Category</label>
                     <select class="form-select" [(ngModel)]="request.ExamCategoryID" >
                         <option value="0">--- All ---</option>
-                        <option value="_EnumStudentExamType.Main">Main</option>
-                        <option value="_EnumStudentExamType.Special">Special</option>
+                        <option value="{{_EnumStudentExamType.Main}}">Main</option>
+                        <option value="{{_EnumStudentExamType.Special}}">Special</option>
                     </select>
                 </div>
 
