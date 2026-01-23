@@ -41,7 +41,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
-          <select class="form-select" [(ngModel)]="Searchrequest.TradeId" formControlName="TradeId">
+          <select class="form-select" [(ngModel)]="Searchrequest.TradeId">
             <option value="0"> --- Select ---</option>
             <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
           </select>
@@ -151,8 +151,8 @@
               {{item.CollegeName}}
             </td>
             }
-            <td align="left">{{item.TradeName}}</td>        
-            <td align="left">{{item.ItemFor}}</td>        
+            <td align="left">{{item.ItemFor}}</td>   
+            <td align="left">{{item.TradeName}}</td> 
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
              <td align="left">

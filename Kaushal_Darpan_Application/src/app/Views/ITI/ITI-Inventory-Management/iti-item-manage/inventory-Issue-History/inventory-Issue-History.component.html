@@ -38,7 +38,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
-          <select class="form-select" [(ngModel)]="Searchrequest.TradeId" formControlName="TradeId">
+          <select class="form-select" [(ngModel)]="Searchrequest.TradeId">
             <option value="0"> --- Select ---</option>
             <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
           </select>
@@ -103,6 +103,7 @@
           <tr>
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
+            <th class="text-left">Building/Trade</th>
             <th class="text-left">Item Category Name</th>
             <th class="text-left">Equipment Name</th>
             <th class="text-left">Item Code</th>
@@ -119,6 +120,7 @@
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
+            <td align="left">{{ item.TradeName}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.EquipmentName}}</td> 
             <td align="left">{{ item.ItemCode}}</td> 

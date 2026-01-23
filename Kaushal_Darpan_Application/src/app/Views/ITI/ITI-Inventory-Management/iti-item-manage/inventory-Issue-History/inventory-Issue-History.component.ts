@@ -147,12 +147,7 @@ export class inventoryIssueHistoryComponent {
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
 
       if (data && data.State === EnumStatus.Success) {
-        this.TradeDDLList = [
-          { TradeId: 0, TradeName: 'Choose Trade' }, 
-          ...data.Data
-        ];
-
-        this.Searchrequest.TradeId = 0;
+        this.TradeDDLList = data.Data
        // console.log('Trade list ==>', this.TradeDDLList);
       } else {
         this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];

@@ -113,22 +113,29 @@ export class ITIItemsMasterComponent {
   }
 
   async GetTradeDDL() {
+    
     try {
       this.loaderService.requestStarted();
-      await this.commonFunctionService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          const selectOption = { StreamID: 0, StreamName: '--Select--' };
-          this.TradeDDLList = [selectOption, ...data['Data']];
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+
+      let Searchrequest: any = {}
+
+      Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      Searchrequest.TypeName = 'TradeList';
+
+      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(Searchrequest);
+
+      if (data && data.State === EnumStatus.Success) {
+        this.TradeDDLList = data.Data
+       // console.log('Trade list ==>', this.TradeDDLList);
+      } else {
+        this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];
+        this.Searchrequest.TradeId = 0;
+        this.toastr.error(data?.ErrorMessage || 'No trade found.');
+      }
+    } catch (Ex) {
+      console.log('Error in GetTradeDDL:', Ex);
+    } finally {
+      setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
 
