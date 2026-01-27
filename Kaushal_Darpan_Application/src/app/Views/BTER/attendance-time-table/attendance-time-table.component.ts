@@ -491,7 +491,7 @@ export class AttendanceTimeTableComponent implements OnInit {
       //this.clearValidationErrors();
     }
   }
-  //AttendanceData(rowData: any) {
+  // AttendanceData(rowData: any) {
   //  if (rowData) {
   //    const routePath =
   //      rowData.ATType === 0
@@ -508,7 +508,7 @@ export class AttendanceTimeTableComponent implements OnInit {
   //      ]);
   //    }
   //  }
-  //}
+  // }
 
   AttendanceData(rowData: any) {
     if (rowData != null && rowData != undefined) {

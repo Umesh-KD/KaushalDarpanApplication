@@ -787,6 +787,15 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  
+  public async getStudBasicDetailsEnrollmentWise( EnrollmentNo:string , DepartmentID:number) {
+    debugger
+    return await this.http.post(`${this.APIUrl}/getStudBasicDetailsEnrollmentWise/${EnrollmentNo}/${DepartmentID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async DistrictMaster_StateIDWise(StateID: number) {
 
     return await this.http.get(this.APIUrl + '/DistrictMaster_StateIDWise/' + StateID, this.headersOptions)

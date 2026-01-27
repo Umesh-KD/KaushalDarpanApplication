@@ -88,6 +88,8 @@ export class AddStudentEmployementComponent implements OnInit {
         ddlSalaryType: ['',Validators.required],      // stipend / ctc / salary
         SalaryAmount: ['', Validators.required],
 
+        StudentName: [{ value: '', disabled: true }],
+        StudFatherName: [{ value: '', disabled: true }]
 
       });
 
@@ -101,6 +103,7 @@ export class AddStudentEmployementComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
     // this.flag=Number(this.activatedRoute.snapshot.queryParamMap.get('flag')?.toString());
+
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
     this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());//student list key
     await this.GetMaterData()
@@ -109,6 +112,10 @@ export class AddStudentEmployementComponent implements OnInit {
     if (this.ID > 0) {
       this.searchRequest.AID = this.ID;
       await this.GetStudentEmployementData();
+      if (this.request.EnrollmentNo) {
+        await this.getStudBasicDetails(this.request.EnrollmentNo);
+      }
+      
     }
   }
   get _EmployementDetailFormGroup() { return this.EmployementDetailFormGroup.controls; }
@@ -129,6 +136,30 @@ export class AddStudentEmployementComponent implements OnInit {
       }
     });
   }
+
+  async getStudBasicDetails(EnrollmentNo:string){
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.getStudBasicDetailsEnrollmentWise(EnrollmentNo,this.sSOLoginDataModel.DepartmentID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.request.StudentName=data['Data'][0].StudentName;
+          this.request.StudFatherName=data['Data'][0].FatherName;
+          console.log(data['Data']);
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  
 
   async GetMaterData() {
     try {
@@ -188,6 +219,8 @@ export class AddStudentEmployementComponent implements OnInit {
       }, 200);
     }
   }
+
+  
 
 
   // get detail by id
@@ -335,6 +368,7 @@ export class AddStudentEmployementComponent implements OnInit {
           this.request.StudentID = this.sSOLoginDataModel.StudentID;
         }
         this.request.InstituteID=this.sSOLoginDataModel.InstituteID;
+
 
        
 

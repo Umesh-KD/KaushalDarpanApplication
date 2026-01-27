@@ -139,7 +139,7 @@
                 <th class="text-left">Name </th>
                 <th class="text-left">Mobile</th>
                 <th class="text-left">Email Name   </th>
-                <th class="text-left">SSOID </th>
+                <!-- <th class="text-left">SSOID </th> -->
               </tr>
             </thead>
             <tbody>
@@ -154,7 +154,7 @@
                 <td class="text-left">{{row.HR_Name}} </td>
                 <td class="text-left">{{row.HR_MobileNo}}</td>
                 <td class="text-left">{{row.HR_Email}}</td>
-                <td class="text-left">{{row.HR_SSOID}}</td>
+                <!-- <td class="text-left">{{row.HR_SSOID}}</td> -->
 
 
               </tr>
@@ -300,8 +300,7 @@
                 </p>
               </div>
             </div>
-
-            <div>
+            <!-- <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Back papers allowed</label>
               <select formControlName="ddlNoofBackPapersAllowed" class="form-select" id="ddlNoofBackPapersAllowed"
                       [(ngModel)]="request_EligibilityCriteriaModel.NoofBackPapersAllowed">
@@ -313,10 +312,10 @@
                 <option value="5">5</option>
                 <option value="6">6</option>
               </select>
-              <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlNoofBackPapersAllowed.errors" class="text-danger">
-      <p *ngIf="!form_Eligibility.ddlNoofBackPapersAllowed.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-    </div>-->
-            </div>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlNoofBackPapersAllowed.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlNoofBackPapersAllowed.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div> -->
             <div>
               <div class="grid 2xl:grid-cols-2 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
                 <div>
@@ -427,7 +426,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Amount<span class="StarMarking">*</span>
+                Basic Salary<span class="StarMarking">*</span>
               </label>
               <input type="text" class="form-input" id="txtCTC" formControlName="txtCTC"
                      [(ngModel)]="request_EligibilityCriteriaModel.CTC" (input)="checkValue($event)">
@@ -464,7 +463,7 @@
                 <option value="">-- Select --</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
-                <option value="Male and Female Both">Both</option>
+                <option value="Male and Female Both" selected>Both</option>
               </select>
               <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlGender.errors" class="text-danger">
                 <p *ngIf="!form_Eligibility.ddlGender.errors.DropdownValidators">
@@ -496,7 +495,7 @@
                 <option value="0">--Select--</option>
                 <option value="State Level Pool Campus">State Level Pool Campus</option>
                 <option value="Division Level Pool Campus">Division Level Pool Campus</option>
-                <option value="Institute Level Campus">Institute Level Campus</option>
+                <option value="Institute Level Campus" selected>Institute Level Campus</option>
               </select>
 
               <div *ngIf="isSubmittedItemDetails&&request_EligibilityCriteriaModel.CampusType=='0'" class="text-danger">
@@ -555,7 +554,7 @@
               </select>
             </div>
 
-            <div>
+            <!-- <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 No Of Interview Round 
               </label>
@@ -569,7 +568,7 @@
                 <option value="5">5</option>
                 <option value="6">6</option>
               </select>
-            </div>
+            </div> -->
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -601,6 +600,24 @@
 
             </div>
 
+          <!-- start location of appointment  -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Appointment Location : <span class="StarMarking">*</span>
+              </label>
+              <textarea formControlName="txtappointmentLocation" class="form-input" placeholder="Enter Appointment Location"
+                        maxlength="500" type="text" id="txtappointmentLocation" [(ngModel)]="request_EligibilityCriteriaModel.appointmentLocation"></textarea>
+              <!-- <div *ngIf="isSubmitted&&form.txtappointmentLocation.errors" class="text-danger">
+                <p *ngIf="form.txtappointmentLocation.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div> -->
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtappointmentLocation.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.txtappointmentLocation.errors.required">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+          <!-- end  location of appointment  -->
 
 
           </div>
@@ -670,19 +687,20 @@
                   <th class="text-left">8<sup>th</sup>%(min)</th>
                   <th class="text-left">10<sup>th</sup>%(min)</th>
                   <th class="text-left">12<sup>th</sup>%(min)</th>
-                  <th class="text-left">Diploma%(min)</th>
-                  <th class="text-left">Back papers allowed</th>
+                  <th class="text-left">ITI %(min)</th>
+                  <!-- <th class="text-left">Back papers allowed</th> -->
                   <th class="text-left">Age Allowed (Born Between) From - To</th>
                   <th class="text-left">Hiring Role</th>
                   <th class="text-center">Positions</th>
                   <th class="text-center">Salary/Stipend/CTC</th>
-                  <th class="text-center">Amount</th>
+                  <th class="text-center">Basic Salary</th>
                   <th class="text-center">Salary Remark</th>
                   <th class="text-center">Gender</th>
                   <th class="text-center">Other Benefit</th>
                   <th class="text-center">Campus Type</th>
                   <th class="text-center">Interview Type</th>
-                  <th class="text-center">Interview Round</th>
+                  <th class="text-center">Appointment Location</th>
+                  <!-- <th class="text-center">Interview Round</th> -->
                   <th class="text-center">Action</th>
                 </tr>
               </thead>
@@ -700,11 +718,7 @@
                   <td>{{ row.MinPre_10 == 1 ? 'Any (%)' : row.MinPre_10 }}</td>
                   <td>{{ row.MinPre_12 == 1 ? 'Any (%)' : row.MinPre_12 }}</td>
                   <td>{{ row.MinPre_Diploma == 1 ? 'Any (%)' : row.MinPre_Diploma }}</td>
-
-
-
-
-                  <td>{{row.NoofBackPapersAllowed}}</td>
+                  <!-- <td>{{row.NoofBackPapersAllowed}}</td> -->
                   <td>{{row.Dis_AgeAllowedFrom}}-{{row.Dis_AgeAllowedTo}}</td>
                   <td>{{row.HiringRoleName}}</td>
                   <td>{{row.NoofPositions}}</td>
@@ -715,7 +729,8 @@
                   <td>{{row.OtherBenefit}}</td>
                   <td>{{row.CampusType}}</td>
                   <td>{{row.InterviewType}}</td>
-                  <td>{{row.NoOfInterviewRound}}</td>
+                  <td>{{row.appointmentLocation}}</td>
+                  <!-- <td>{{row.NoOfInterviewRound}}</td> -->
                   <td align="center">
                     <div class="flex align-center justify-center actionBtns" style="width:auto !important">
                       <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnRowDelete_OnClick(row)">
@@ -837,7 +852,9 @@
                 </a>-->
                 </div>
               </div>
-            </div>
+          </div>
+
+     
         </div>
         <div>
           <input formControlName="txtMarked" type="checkbox"

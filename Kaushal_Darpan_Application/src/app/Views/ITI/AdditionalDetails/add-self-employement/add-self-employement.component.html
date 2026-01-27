@@ -18,7 +18,6 @@
 </div>
 
 
-
   <div class="card">
     <div class="card-body p-5">
       <div class="mb-8">
@@ -37,9 +36,37 @@
                 Enrollment No. <span class="StarMarking">*</span>
               </label>
               <input type="text" class="form-input" placeholder="Enter Enrollment No" id="EnrollmentNo" name="EnrollmentNo"
-                    [(ngModel)]="request.EnrollmentNo" formControlName="EnrollmentNo">
+                    [(ngModel)]="request.EnrollmentNo" formControlName="EnrollmentNo" (input)="getStudBasicDetails($event.target.value)">
               <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.EnrollmentNo.errors" class="text-danger">
                 <p *ngIf="_EmployementDetailFormGroup.EnrollmentNo.errors?.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Student Name <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input"  id="StudentName" name="StudentName"
+                    [(ngModel)]="request.StudentName" formControlName="StudentName">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.StudentName.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.StudentName.errors?.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+            
+            <div *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Student Father's Name <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input"  id="StudFatherName" name="StudFatherName"
+                    [(ngModel)]="request.StudFatherName" formControlName="StudFatherName">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.StudFatherName.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.StudFatherName.errors?.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
                 </p>
@@ -237,6 +264,9 @@
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
                   <tr>
                     <th>Sr No</th>
+                    <th *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">Enrollment</th>
+                    <th *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">Student Name</th>
+                    <th *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">Student Father's Name</th>
                     <th>Company's Type</th>
                     <th>Company's Name</th>
                     <th>Address</th>
@@ -250,6 +280,9 @@
                 <tbody>
                   <tr *ngFor="let row of ListEmployementDetails; let idx=index;" >
                     <td class="text-center">{{idx+1}}</td>
+                    <td class="text-center" *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">{{row.EnrollmentNo}}</td>
+                    <td class="text-center" *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">{{row.StudentName}}</td>
+                    <td class="text-center" *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">{{row.StudFatherName}}</td>
                     <td class="text-center">{{row.CompanyType}}</td>
                     <td class="text-center">{{row.CompanyName}}</td>
                     <td class="text-center">{{row.CompanyAddress}}</td>
