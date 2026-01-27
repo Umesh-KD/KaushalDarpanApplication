@@ -216,6 +216,7 @@ export class GuestHousePaymentDataModel {
   public RoomFee: number = 0;
   public UserID?: number | null;
   public item?: number | null;
+  public GuestReqID?: number = 0;
   public UniqueServiceID: number = 2;
   public IsActive: boolean = false;
   public IsDelete: boolean = false;
