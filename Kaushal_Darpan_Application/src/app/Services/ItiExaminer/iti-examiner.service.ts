@@ -247,6 +247,7 @@ export class ItiExaminerService {
       ).toPromise();
   }
 
+
   public async ITIExaminerUploadFilesByAction(request: ITIExaminerUploadFilesModel) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/ITIExaminerUploadFilesByAction`, body, this.headersOptions)
