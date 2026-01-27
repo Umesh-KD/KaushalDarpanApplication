@@ -700,9 +700,9 @@ export class CommonFunctionService {
 
 
 
-  public async GetCampusPostMasterDDL(DepartmentID: number = 0) {
+  public async GetCampusPostMasterDDL(DepartmentID: number = 0,CreatedBy:number=0) {
 
-    return await this.http.get(`${this.APIUrl}/GetCampusPostMasterDDL/${DepartmentID}`, this.headersOptions)
+    return await this.http.get(`${this.APIUrl}/GetCampusPostMasterDDL/${DepartmentID}/${CreatedBy}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
