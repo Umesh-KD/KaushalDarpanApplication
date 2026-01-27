@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -13,11 +13,13 @@ import { ExaminerService } from '../../../Services/Examiner/examiner.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { StaffMasterService } from '../../../Services/StaffMaster/staff-master.service';
 import { ItiExaminerService } from '../../../Services/ItiExaminer/iti-examiner.service';
-import { ItiAssignStudentExaminer, ItiExaminerDataModel, ITITeacherForExaminerSearchModel } from '../../../Models/ItiExaminerDataModel';
+import { ItiAssignStudentExaminer, ItiExaminerDataModel, ITIExaminerUploadFilesModel, ITITeacherForExaminerSearchModel } from '../../../Models/ItiExaminerDataModel';
 import { CommonDDLSubjectCodeMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
 import { SweetAlert2 } from '../../../Common/SweetAlert2'
 import { MatSelectChange } from '@angular/material/select';
 import * as XLSX from 'xlsx';
+import { UploadFileModel } from '../../../Models/UploadFileModel';
+import { AppsettingService } from '../../../Common/appsetting.service';
 @Component({
   selector: 'app-iti-appoint-examiner-report',
   templateUrl: './iti-appoint-examiner-report.component.html',
@@ -38,10 +40,12 @@ export class AppointexaminerreportComponent {
   public isSubmitted: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new ITITeacherForExaminerSearchModel();
+  public ExaminerUploadFileRequest = new ITIExaminerUploadFilesModel()
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
-
+  private modalRef!: NgbModalRef;
+  public uploaddataFormGroup!: FormGroup;
   constructor(
     private examinerservice: ItiExaminerService,
     private toastr: ToastrService,
@@ -51,7 +55,9 @@ export class AppointexaminerreportComponent {
     private routers: Router,
     private modalService: NgbModal,
     private staffMasterService: StaffMasterService,
-    private Swal2: SweetAlert2
+    private Swal2: SweetAlert2,
+    private appsettingConfig: AppsettingService,
+    private commonMasterService: CommonFunctionService
 
   ) { }
 
@@ -60,11 +66,14 @@ export class AppointexaminerreportComponent {
     console.log(this.sSOLoginDataModel);
 
     this.getStaffForExaminerData();
+    this.uploaddataFormGroup = this.formBuilder.group({
+      Remarks: ['', Validators.required]
+    });
 
   }
 
   async getStaffForExaminerData() {
-    debugger
+    
     try {
 
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -211,6 +220,183 @@ export class AppointexaminerreportComponent {
           alert('Failed to download report');
         }
       });
+  }
+
+  SaveExaminerUploadFileRequest(content: any) {
+    debugger
+    this.uploaddataFormGroup.reset();
+    this.ITIExaminerUploadFilesByAction()
+
+    debugger
+    this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static', centered: true });
+  }
+
+  CloseModalPopup() {
+    this.isSubmitted = false;
+    this.ExaminerUploadFileRequest = new ITIExaminerUploadFilesModel();
+    this.uploaddataFormGroup.reset();
+
+    this.modalService.dismissAll();
+  }
+
+
+  async ITIExaminerUploadFilesByAction() {
+    debugger
+
+    this.isSubmitted = true;
+    this.ExaminerUploadFileRequest.SSOID = this.sSOLoginDataModel.SSOID;    
+    this.ExaminerUploadFileRequest.EndTermID = this.sSOLoginDataModel.EndTermID;    
+    this.ExaminerUploadFileRequest.Action = "GetbyID";    
+    debugger
+    try {
+     
+      this.loaderService.requestStarted();
+      debugger
+
+      this.examinerservice.ITIExaminerUploadFilesByAction(this.ExaminerUploadFileRequest)
+          .then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            if (this.State == EnumStatus.Success)
+            {
+
+              const record = data?.Data?.[0];
+
+              if (record) {
+                this.ExaminerUploadFileRequest = record;
+
+                this.uploaddataFormGroup.patchValue({
+                  Remarks: record.Remarks || ''
+                });
+              }
+
+              //this.ExaminerUploadFileRequest = data['Data'][0];
+              //this.uploaddataFormGroup.patchValue({
+              //  Remarks: this.ExaminerUploadFileRequest.Remarks ?? ''
+              //});
+              //this.toastr.success(data.Message);
+            }
+            else
+            {
+              this.toastr.error(this.ErrorMessage);
+            }
+          });
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
+  async SaveExaminerUploadFileRequestData() {
+    debugger
+    this.isSubmitted = true;
+    
+    if (this.uploaddataFormGroup.invalid) {
+      this.toastr.error('Please fill all required fields.');
+      return;
+    }
+
+    if (!this.ExaminerUploadFileRequest.FileName || this.ExaminerUploadFileRequest.FileName === '') {
+      this.toastr.error('Please upload the required document.');
+      return;
+    }
+
+    this.ExaminerUploadFileRequest.UploadedID = this.ExaminerUploadFileRequest.UploadedID;
+    this.ExaminerUploadFileRequest.UserID = this.sSOLoginDataModel.UserID;
+    this.ExaminerUploadFileRequest.SSOID = this.sSOLoginDataModel.SSOID;
+    this.ExaminerUploadFileRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.ExaminerUploadFileRequest.ExaminerID = this.ExaminerUploadFileRequest.ExaminerID;
+    this.ExaminerUploadFileRequest.Action = "Insert";
+    this.ExaminerUploadFileRequest.Remarks = this.uploaddataFormGroup.get('Remarks')?.value;
+    debugger
+    try {
+      this.isSubmitted = true;
+      if (this.uploaddataFormGroup.invalid) {
+        console.log('Form is invalid');
+        return;
+      }
+      this.loaderService.requestStarted();
+      debugger
+      this.examinerservice.ITIExaminerUploadFiles(this.ExaminerUploadFileRequest)
+          .then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            if (this.State == EnumStatus.Success) {
+              this.toastr.success(data.Message);
+              this.CloseModalPopup();
+              this.getStaffForExaminerData();
+             
+            } else {
+              this.toastr.error(this.ErrorMessage);
+            }
+          });
+     
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
+
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+
+        if (this.file.size > 2000000) {
+          this.toastr.error('Select less then 2MB File');
+          return;
+        }
+        this.loaderService.requestStarted();
+
+        let uploadModel = new UploadFileModel();
+
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = "ITI/ExaminerUploadFile";
+
+
+        await this.commonMasterService
+          .UploadDocument(this.file, uploadModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == 'UploadFile') {
+
+                this.ExaminerUploadFileRequest.FileName =
+                  data['Data'][0]['FileName'];
+              }
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage);
+            } else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage);
+            }
+          });
+      }
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
   }
 
 }

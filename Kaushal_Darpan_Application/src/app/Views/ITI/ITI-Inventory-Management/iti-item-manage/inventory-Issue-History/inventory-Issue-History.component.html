@@ -2,12 +2,12 @@
 <app-loader></app-loader>
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Inventory Issue History</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Inventory Item Issue History</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory Issue History</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory Item Issue History</a>
     </div>
   </div>
 </div>
@@ -28,13 +28,21 @@
           <option *ngFor="let item of staffDDLList" [value]="item.staffID">
             {{ item.staffName }}
           </option>
-        </select>-->
+          </select>-->
           <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
             </option>
           </select>
         </div>
+
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+          <select class="form-select" [(ngModel)]="Searchrequest.TradeId">
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
+          </select>
+        </div> -->
 
         <div *ngIf="IsStaff == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
@@ -95,6 +103,7 @@
           <tr>
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
+            <th class="text-left">Building/Trade</th>
             <th class="text-left">Item Category Name</th>
             <th class="text-left">Equipment Name</th>
             <th class="text-left">Item Code</th>
@@ -111,6 +120,7 @@
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
+            <td align="left">{{ item.TradeName}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.EquipmentName}}</td> 
             <td align="left">{{ item.ItemCode}}</td> 

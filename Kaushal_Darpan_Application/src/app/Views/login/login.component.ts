@@ -7,7 +7,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { SSOLoginService } from '../../Services/SSOLogin/ssologin.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EnumStatus, EnumRole } from '../../Common/GlobalConstants';
+import { EnumStatus, EnumRole, EnumDepartment } from '../../Common/GlobalConstants';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { UserRequestModel } from '../../Models/UserRequestDataModel';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
@@ -50,6 +50,9 @@ export class LoginComponent implements OnInit {
   UserRequestFormGroup!: FormGroup;
   isLoginSuccessful: boolean = true;
   public _EnumRole = EnumRole;
+
+  public _EnumDepartment = EnumDepartment;
+  public DepartmentID: number = 0;
 
 
   constructor(private activatedRoute: ActivatedRoute, private sSOLoginService: SSOLoginService,
@@ -129,6 +132,7 @@ export class LoginComponent implements OnInit {
   get form() { return this.LoginForm.controls; }
 
   @ViewChild('content') content: ElementRef | any;
+  @ViewChild('modal_MultiDepartment') modal_MultiDepartment: any;
 
   open(content: any, BookingId: string) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -269,21 +273,19 @@ export class LoginComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-
-
   async Login() {
-
-
+    //debugger
     this.isSubmitted = true;
     if (this.LoginForm.invalid) {
       return;
     }
-    //if (this.Department != 1) {
-    //  return;
-    //}
+
     this.loaderService.requestStarted();
+
     try {
-      await this.sSOLoginService.login(this.UserName, this.Password).subscribe({
+
+      // login
+      await this.sSOLoginService.login(this.UserName, this.Password, this.DepartmentID).subscribe({
         next: (data) => {
           data = JSON.parse(JSON.stringify(data.body));
           this.State = data['State'];
@@ -313,12 +315,10 @@ export class LoginComponent implements OnInit {
             //set cookie
             this.cookieService.set('LoginStatus', "OK");
 
-            if (this.sSOLoginDataModel.RoleID == this._EnumRole.CandidateRole)
-            {
+            if (this.sSOLoginDataModel.RoleID == this._EnumRole.CandidateRole) {
               this.routers.navigate(['/CandidateApplicationList']);
             }
-            else
-            {
+            else {
               //redirect
               //window.open('/dashboard', "_self");
               this.routers.navigate(['/dashboard']);
@@ -346,10 +346,6 @@ export class LoginComponent implements OnInit {
       }, 200);
     }
   }
-
-
-
-
 
   async CheckUserExists() {
     ;
@@ -396,9 +392,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
-
-
   SSOLogin_Dummy(apiUrl: string) {
     var form = document.createElement("form");
     form.method = "POST";
@@ -412,7 +405,6 @@ export class LoginComponent implements OnInit {
     document.body.appendChild(form);
     form.submit();
   }
-
 
   EmitraLOgin_Dummy(apiUrl: string) {
     var form = document.createElement("form");
@@ -428,16 +420,69 @@ export class LoginComponent implements OnInit {
     form.submit();
   }
 
-
-
-
-
-
   GotoPassword() {
     if (this.UserName != '') {
       const txtPassword = document.getElementById('txtPassword')
       if (txtPassword) txtPassword.focus();
     }
   }
+
+  async BeforeLogin() {
+    //debugger
+    this.isSubmitted = true;
+    if (this.LoginForm.invalid) {
+      return;
+    }
+    try {
+      // check and get multiple department of user
+      await this.sSOLoginService.CheckMultiDepartUser(this.UserName, this.Password)
+        .then(async (res: any) => {
+          if (res.State == EnumStatus.Success) {
+            const SSOID = res.Data?.SSOID;
+            const UserIDs = res.Data?.UserIDs;
+            const DepartmentIDs = res.Data?.DepartmentIDs;
+            if (DepartmentIDs.split(',').length == 1) { // run as it is
+              await this.Login();
+            }
+            else {// choose department
+              // show department selection popup and choose departmentid
+              this.openUserDepartmentModal(this.modal_MultiDepartment);
+            }
+          }
+          else { // any invalid
+            this.toastr.error(res.Message);
+            console.error(res.ErrorMessage);
+          }
+        }, error => console.error(error)
+        );
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  // multi department modal
+  async openUserDepartmentModal(content: any) {
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  CloseUserDepartmentModal() {
+    this.modalService.dismissAll();
+  }
+  // end multi department modal
+
+  async SetUserDepartmentAndProceed(item: any) {
+    this.DepartmentID = item;
+    this.CloseUserDepartmentModal();
+    await this.Login(); // login with departmentid
+  }
+
+
 }
 

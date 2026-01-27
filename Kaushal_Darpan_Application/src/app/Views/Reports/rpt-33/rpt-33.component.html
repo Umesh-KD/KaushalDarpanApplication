@@ -24,7 +24,7 @@
               <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Shift</label>
                     <select class="form-select" [(ngModel)]="request.ShiftID" >
-                        <option value="0">Choose Option</option>
+                        <option value="0">--- All ---</option>
                         <option *ngFor="let item of ExamShiftDDL" [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</option>
                     </select>
                 </div>
@@ -32,7 +32,7 @@
                 <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
                     <select class="form-select" [(ngModel)]="request.StreamID" >
-                        <option value="0">Choose Option</option>
+                        <option value="0">--- All ---</option>
                         <option *ngFor="let item of StreamMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
                     </select>
                 </div>
@@ -51,28 +51,28 @@
                     <input type="text" class="form-input" placeholder="Enter Transaction ID" [(ngModel)]="request.RollNumber"/>
                 </div>
 
-                <div>
+                <!--<div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">All Status</label>
                     <select class="form-select" [(ngModel)]="request.Status" >
                         <option value="0">Choose Option</option>
                         <option *ngFor="let item of ExamShiftDDL" [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</option>
                     </select>
-                </div>
+                </div>-->
 
                 
                 <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Category</label>
                     <select class="form-select" [(ngModel)]="request.ExamCategoryID" >
-                        <option value="0">Choose Option</option>
-                        <option value="1">Main</option>
-                        <option value="2">Special</option>
+                        <option value="0">--- All ---</option>
+                        <option value="{{_EnumStudentExamType.Main}}">Main</option>
+                        <option value="{{_EnumStudentExamType.Special}}">Special</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
                     <select class="form-select" [(ngModel)]="request.SemesterID" >
-                        <option value="0">Choose Option</option>
+                        <option value="0">--- All ---</option>
                         <option *ngFor="let item of SemesterMasterDDL" [value]="item.SemesterID">{{item.SemesterName}}</option>
                     </select>
                 </div>

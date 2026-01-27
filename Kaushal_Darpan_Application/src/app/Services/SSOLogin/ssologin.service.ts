@@ -23,9 +23,9 @@ export class SSOLoginService {
     return throwError(error);
   }
 
-  public async GetSSOUserDetails(SearchRecordID: string) {
+  public async GetSSOUserDetails(SearchRecordID: string, DepartmentID: number = 0) {
     const headers = { 'content-type': 'application/json' }
-    return await this.http.get(this.APIUrl + '/GetSSOUserDetails/' + SearchRecordID, { 'headers': headers, observe: 'response' })
+    return await this.http.get(`${this.APIUrl}/GetSSOUserDetails/${SearchRecordID}/${DepartmentID}`, { 'headers': headers, observe: 'response' })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -40,17 +40,19 @@ export class SSOLoginService {
       ).toPromise();
   }
 
-  public async Login(SSOID: string, Password: string) {
-    const headers = { 'content-type': 'application/json' } 
-    return await this.http.get(this.APIUrl + '/Login/' + SSOID + "/" + Password, { 'headers': headers, observe: 'response' })
+  public async Login(SSOID: string, Password: string, DepartmentID: number = 0) {
+    const headers = { 'content-type': 'application/json' }
+    const body = { UserName: SSOID, Password: Password, DepartmentID: DepartmentID }
+    return await this.http.post(`${this.APIUrl}/Login`, body, { 'headers': headers, observe: 'response' })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
-  login(SSOID: string, Password: string): Observable<any> {
-    const headers = { 'content-type': 'application/json' } 
-    return this.http.get<any>(this.apiUrl + '/Login/' + SSOID + "/" + Password, { 'headers': headers, observe: 'response' })
+  login(SSOID: string, Password: string, DepartmentID: number = 0): Observable<any> {
+    const headers = { 'content-type': 'application/json' }
+    const body = { UserName: SSOID, Password: Password, DepartmentID: DepartmentID }
+    return this.http.post<any>(`${this.apiUrl}/Login`, body, { 'headers': headers, observe: 'response' })
       .pipe(
         tap(response => {
           // Store the token in localStorage or sessionStorage
@@ -101,21 +103,20 @@ export class SSOLoginService {
   }
 
 
-  public async UpdateStudentUserType(request: UpdateStudentDetailsModel)
-  {
+  public async UpdateStudentUserType(request: UpdateStudentDetailsModel) {
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/UpdateStudentUserType/', body, { 'headers': headers })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
-  } 
- 
+  }
+
   //#endregion User Request Data
 
   public async StudentLogin(SSOID: string) {
     const headers = { 'content-type': 'application/json' }
-    return await this.http.get(this.APIUrl + '/StudentLogin/' + SSOID , { 'headers': headers, observe: 'response' })
+    return await this.http.get(this.APIUrl + '/StudentLogin/' + SSOID, { 'headers': headers, observe: 'response' })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -129,8 +130,7 @@ export class SSOLoginService {
       ).toPromise();
   }
 
-  public async ItiCollegeMap(CollegeCode: string, Password: string)
-  {
+  public async ItiCollegeMap(CollegeCode: string, Password: string) {
     const headers = { 'content-type': 'application/json' }
     return await this.http.get(this.APIUrl + '/ItiCollegeMap/' + CollegeCode + "/" + Password, { 'headers': headers })
       .pipe(
@@ -162,7 +162,7 @@ export class SSOLoginService {
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
-  } 
+  }
 
   public async GetAcadmicYearListBySessionTypeID(request: RequestBaseModel) {
     const headers = { 'content-type': 'application/json' }
@@ -172,11 +172,29 @@ export class SSOLoginService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-//region  User Request Data
+  //region  User Request Data
   public async BackToSSO() {
     const headers = { 'content-type': 'application/json' }
-    
+
     return await this.http.post(this.APIUrl + '/SSOBackTo', { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async CheckMultiDepartUser(SSOID: string, Pass: string) {
+    const headers = { 'content-type': 'application/json' }
+    const body = { UserName: SSOID, Password: Pass }
+    return await this.http.post(`${this.APIUrl}/CheckMultiDepartUser`, body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async CheckMultiDepartUserBySearchRecordID(SearchRecordID: string) {
+    const headers = { 'content-type': 'application/json' }
+    const body = { SearchRecordID: SearchRecordID }
+    return await this.http.get(`${this.APIUrl}/CheckMultiDepartUserBySearchRecordID/${SearchRecordID}`, { 'headers': headers })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

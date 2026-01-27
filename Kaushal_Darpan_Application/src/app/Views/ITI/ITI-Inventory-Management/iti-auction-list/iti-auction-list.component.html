@@ -2,7 +2,13 @@
 <app-loader></app-loader>
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Auction Not Working List</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Auction List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI Inventory</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI Auction List</a>
+    </div>
   </div>
 </div>
 <!-- Page Title End -->
@@ -72,7 +78,7 @@
             <th class="text-left">Equipment</th>
             <th class="text-left">Equipment Code</th>
             <th class="text-left">Equipment Working Non-Working</th>
-            <th class="text-left">Available Quantity</th>
+            <th class="text-left">Quantity</th>
             <th class="text-left">Price Per Unit</th>
             <th class="text-left">Is Auction</th>
             <th class="text-center">Action</th>
@@ -172,6 +178,54 @@
                  [(ngModel)]="request.AuctionQuantity" (keyup)="validateAuctionQuantity($event)">
           <div *ngIf="isSubmitted&&_AuctionFormGroup.AuctionQuantity.errors" class="text-danger">
             <p *ngIf="_AuctionFormGroup.AuctionQuantity.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Approximate Cost
+          </label>
+          <input type="text" class="form-input" id="ApproximateCost" formControlName="ApproximateCost"
+                 [(ngModel)]="request.ApproximateCost">
+          <div *ngIf="isSubmitted&&_AuctionFormGroup.ApproximateCost.errors" class="text-danger">
+            <p *ngIf="_AuctionFormGroup.ApproximateCost.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Orders of the authority for disposal
+          </label>
+          <input type="test" class="form-input" id="Authority_forAuctionOrder" formControlName="Authority_forAuctionOrder"
+                 [(ngModel)]="request.Authority_forAuctionOrder">
+          <div *ngIf="isSubmitted&&_AuctionFormGroup.Authority_forAuctionOrder.errors" class="text-danger">
+            <p *ngIf="_AuctionFormGroup.Authority_forAuctionOrder.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Mode of Disposal
+          </label>
+          <input type="text" class="form-input" id="ModeOfDisposal" formControlName="ModeOfDisposal"
+                 [(ngModel)]="request.ModeOfDisposal">
+          <div *ngIf="isSubmitted&&_AuctionFormGroup.ModeOfDisposal.errors" class="text-danger">
+            <p *ngIf="_AuctionFormGroup.ModeOfDisposal.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Remarks
+          </label>
+          <input type="text" class="form-input" id="Remarks" formControlName="Remarks"
+                 [(ngModel)]="request.Remarks">
+          <div *ngIf="isSubmitted&&_AuctionFormGroup.Remarks.errors" class="text-danger">
+            <p *ngIf="_AuctionFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
 
         </div>

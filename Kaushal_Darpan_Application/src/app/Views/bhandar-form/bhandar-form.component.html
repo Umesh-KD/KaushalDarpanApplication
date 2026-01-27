@@ -59,8 +59,6 @@
           <option value="X">X</option>
           <option value="Y">Y</option>
           <option value="Z">Z</option>
-
-
         </select>
         <!--<div *ngIf="isSubmitted && _BhandarForm.MoharID.errors" class="text-danger">
         <p *ngIf="!_BhandarForm.MoharID.errors.DropdownValidators">
@@ -70,7 +68,6 @@
 
       </div>-->
       </div>
-
     </div>
 
 
@@ -81,19 +78,9 @@
         <input disabled type="text" class="form-control d-inline w-25 mx-2 py-0" [(ngModel)]="ExamDate1" />
         द्वारा सुपुर्द कर दी गई है।
       </p>
-
-
-
-
-
       <p>अनुपस्थित विद्यार्थियों का विवरण पत्र संलग्न है।</p>
       <p>आज निम्न वैकल्पिक ड्यूटी पर थे :</p>
-
     </div>
-
-
-
-
 
     <div class="mt-6">
       <form [formGroup]="BhandarForm" id="AddressDetailsFormGroup" class="form-horizontal mt-4">
@@ -167,7 +154,7 @@
             <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
               <strong> ड्यूटी समय </strong><span class="StarMarking">*</span>
             </label>
-            <select class="form-select" [(ngModel)]="request.ShiftID_choosen" >
+            <select class="form-select" [(ngModel)]="request.ShiftID_choosen" formControlName="ShiftID_choosen">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of ExamShiftDDL" [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</option>
             </select>
@@ -238,9 +225,9 @@
             <th>व्यक्ति का नाम</th>
             <th>परीक्षा कक्ष संख्या</th>
 
-            <th>विद्यार्थियों की संख्या </th>
-            <th>ड्यूटी समय से</th>
-            <th>तक </th>
+            <th>विद्यार्थियों की संख्या</th>
+            <th>ड्यूटी समय</th>
+            <!-- <th>तक </th> -->
             <th>साइज </th>
             <th>Action</th>
           </tr>
@@ -253,8 +240,9 @@
             <td class="text-center">{{row.Name}}</td>
             <td class="text-center">{{row.ExamNo}}</td>
             <td class="text-center">{{row.StudentNo}}</td>
-            <td class="text-center">{{row.FromDutyTime}}</td>
-            <td class="text-center">{{row.ToDutyTime}}</td>
+            <td class="text-center">{{row.Shift_str}}</td>
+            <!-- <td class="text-center">{{row.FromDutyTime}}</td>
+            <td class="text-center">{{row.ToDutyTime}}</td> -->
             <td class="text-center">{{row.Size}}</td>
 
             <td class="text-center">

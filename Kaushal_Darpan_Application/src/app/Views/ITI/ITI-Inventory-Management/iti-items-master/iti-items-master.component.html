@@ -2,12 +2,12 @@
 <app-loader></app-loader>
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Items Master</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Stock Register</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI Inventory</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Items Master</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI Stock Register</a>
     </div>
   </div>
 </div>
@@ -36,6 +36,14 @@
           <select class="form-select" [(ngModel)]="Searchrequest.CollegeId"  [disabled]="Searchrequest.CollegeId != 0">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of CollegeDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+          <select class="form-select" [(ngModel)]="Searchrequest.TradeId">
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
           </select>
         </div>
 
@@ -106,10 +114,12 @@
              @if(this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
             <th class="text-left">Institute / Building Name</th>
              }
+            <th class="text-left">Item For</th>
+            <th class="text-left">Trade Name</th>
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
             <th class="text-left">Item Type</th>
-            <th class="text-left">Item For</th>
+            
             <th class="text-left">Price Per Unit</th>
             <th class="text-left">Total Price</th>
             <th class="text-left">Initial Quantity</th>
@@ -125,25 +135,13 @@
         <tbody>
           <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
-            <!--@if(item.InstituteID == 0 && item.OfficeID == 2){
-            <td align="left">
-              DTE training: T2 (establishment)
-            </td>
-            }
-            @if(item.InstituteID == 0 && item.OfficeID == 1){
-            <td align="left">
-              RCVT ADMIN
-            </td>
-            }
-            @else if(item.InstituteID > 0){-->
             @if(this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
             <td align="left">
               {{item.CollegeName}}
             </td>
             }
-            
-            <!--}-->
-
+            <td align="left">{{item.ItemFor}}</td>   
+            <td align="left">{{item.TradeName}}</td> 
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
              <td align="left">
@@ -151,7 +149,7 @@
                 {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
               </span>
             </td>
-            <td align="left">{{item.ItemFor}}</td>
+            
             <td align="left">{{item.PricePerUnit}}</td>
             <td align="left">{{item.TotalPrice}}</td>
             <td align="left">{{item.InitialQuantity}}</td>

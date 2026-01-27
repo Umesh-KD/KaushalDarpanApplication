@@ -68,7 +68,7 @@
           <i class="ti ti-eye"></i>Order Center Superintendent
         </button>
         <button *ngIf="this.CenterMasterList?.length > 0 &&  GetStatusCenterSuperintendentData?.Status === 13 ||
-GetStatusCenterSuperintendentData?.Status === 14"
+            GetStatusCenterSuperintendentData?.Status === 14"
                 type="button" class="btn bg-info text-white me-1"
                 (click)="downloadPDF('view')">
           <i class="ti ti-eye"></i>Final Order Center Superintendent
@@ -141,21 +141,21 @@ GetStatusCenterSuperintendentData?.Status === 14"
                   <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng)"
                     class="btn bg-info text-white me-1" 
                     [routerLink]="['/BlankReport']"
-                    [queryParams]="{ centerid: row.InstituteID }"
+                    [queryParams]="{ centerid: row.InstituteID, csid: row.UserID }"
                     target="_blank"
                     > 13A (Blank) Report
                   </button>
                   <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng)"
                     class="btn bg-info text-white me-1" 
                     [routerLink]="['/attendance-rpt-13b']"
-                    [queryParams]="{ centerid: row.InstituteID }"
+                    [queryParams]="{ centerid: row.InstituteID , csid: row.UserID }"
                     target="_blank"
                     > 13B Report
                   </button>
                   <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng)"
                     class="btn bg-info text-white me-1" 
                     [routerLink]="['/rpt-33']"
-                    [queryParams]="{ centerid: row.InstituteID }"
+                    [queryParams]="{ centerid: row.InstituteID, csid: row.UserID  }"
                     target="_blank"
                     > Report 33
                   </button>
@@ -163,7 +163,7 @@ GetStatusCenterSuperintendentData?.Status === 14"
                   <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng)"
                     class="btn bg-info text-white me-1" 
                     [routerLink]="['/report-23']"
-                    [queryParams]="{ centerid: row.InstituteID }"
+                    [queryParams]="{ centerid: row.InstituteID, csid: row.UserID  }"
                     target="_blank"
                     > Report 23
                   </button>
@@ -171,7 +171,7 @@ GetStatusCenterSuperintendentData?.Status === 14"
                   <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng)"
                     class="btn bg-info text-white me-1" 
                     [routerLink]="['/daily-report-bhandar-form1']"
-                    [queryParams]="{ centerid: row.InstituteID }"
+                    [queryParams]="{ centerid: row.InstituteID, csid: row.UserID  }"
                     target="_blank"
                     > C.S. Diary (Bhandar Form)
                   </button>
