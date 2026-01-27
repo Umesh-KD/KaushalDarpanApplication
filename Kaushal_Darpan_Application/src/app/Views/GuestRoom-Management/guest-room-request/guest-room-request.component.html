@@ -79,8 +79,9 @@
             <th class="text-left">Purpose</th>
             <th class="text-left">Room Type</th>
             <th class="text-left">Cooling Facilities</th>
-            <th class="text-left">Room Fee</th>
+            <th class="text-left">Room Fee(per day)</th>
             <th class="text-left">Status</th>
+            <th class="text-left">Payment Status</th>
             <th class="text-left">Remark</th>
             <th class="text-center" style="width:220px">Action</th>
           </tr>
@@ -103,6 +104,7 @@
             <td align="left">{{item.CoolingFacilities_Str}}</td>
             <td align="left">{{item.RoomFee}}</td>
             <td align="left">{{item.StatusName}}</td>
+            <td align="left">{{item.PaymentStatus_str}}</td>
             <td align="left">{{item.Remark}}</td>
             <td align="center">
               <div class="d-flex flex-column gap-2">
@@ -120,27 +122,27 @@
                   Approve/Reject
                 </button>
 
-              <button type="button"
-                 class="bg-success btn text-white btn-sm" 
-                 (click)="openModal_CheckIn(modal_CheckIn, item)" 
-                 *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
-                 Check In
-              </button>
+                <button type="button"
+                  class="bg-success btn text-white btn-sm" 
+                  (click)="openModal_CheckIn(modal_CheckIn, item)" 
+                  *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
+                  Check In
+                </button>
 
-              <button type="button" 
-                 class="bg-warning btn text-dark btn-sm" 
-                 (click)="openOTPModal_CheckOut(item)" 
-                 *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
-                 Check Out
-              </button>
+                <button type="button" 
+                  class="bg-warning btn text-dark btn-sm" 
+                  (click)="openOTPModal_CheckOut(item)" 
+                  *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
+                  Check Out
+                </button>
 
 
                 <button type="button" class="btn btn-sm bg-primary text-white mt-2"
-                        *ngIf="(item.Status === 1339 || item.Status === 220) && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden"
+                        *ngIf="(item.Status === 1339 || item.Status === 220) && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden  && item.PaymentStatus == 0"
                         (click)="openModalGenerateOTP(modal_GenrateOTP,item)">
                   <i class="ti ti-currency-rupee"></i> Pay Now
                 </button>
-                </div>
+              </div>
             </td>
           </tr>
         </tbody>

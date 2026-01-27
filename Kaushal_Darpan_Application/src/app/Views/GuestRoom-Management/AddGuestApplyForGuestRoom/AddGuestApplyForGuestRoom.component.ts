@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, GuestRoomSeatSearchModel, GuestStaffProfileSearchModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, GuestHousePaymentDataModel, GuestRoomSeatSearchModel, GuestStaffProfileSearchModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { GuestRoomManagmentService } from '../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, EnumUserType } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { Router } from '@angular/router';
 import { AppsettingService } from '../../../Common/appsetting.service';
@@ -15,6 +15,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
+import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 
 @Component({
   selector: 'app-AddGuestApplyForGuestRoom',
@@ -49,6 +51,12 @@ export class AddGuestApplyForGuestRoomComponent {
   public RoomTypeList: any = [];
   public GenderList: any = []
   public RoomAvailablity: number = 0;
+  public saveFlag: number = 0;
+
+  emitraRequest = new EmitraRequestDetails();
+  public otpRequest = new GuestHousePaymentDataModel();
+  public PaymentDetailtList: any = [];
+
   _EnumRole = EnumRole;
   displayedColumns: string[] = [
     'SNo', 'RequestName', 'InstituteName', 'DepartmentName', 'FromDateTime', 'ToDateTime',
@@ -69,6 +77,7 @@ export class AddGuestApplyForGuestRoomComponent {
     private formBuilder: FormBuilder,
     private Swal2: SweetAlert2,
     private routers: Router,
+    private emitraPaymentService: EmitraPaymentService,
   ) { }
 
   async ngOnInit() {
@@ -167,33 +176,6 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   async PostUserExists() {
-    // if (this.SSOIDExists) {    
-    //   await this.loadData();
-    //   await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
-    //     .then((data: any) => {
-    //       data = JSON.parse(JSON.stringify(data));
-    //       this.State = data['State'];
-    //       this.Message = data['Message'];
-    //       this.ErrorMessage = data['ErrorMessage'];
-    //       this.request.CollegeID = data['Data'];
-    //       this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
-    //       this.request.InstituteName = data['Data'][0]['InstituteName'];
-    //       this.request.CollegeID = data['Data'][0]['InstituteID'];
-    //       this.request.DisplayName = data['Data'][0]['DisplayName'];
-    //       this.request.FirstName = data['Data'][0]['DisplayName'];
-    //       this.request.State = data['Data'][0]['StateName'];
-    //       this.request.PostalCode = data['Data'][0]['Pincode'];
-    //       this.request.TelephoneNumber = data['Data'][0]['MobileNumber'];
-    //       this.request.MailPersonal = data['Data'][0]['Email'];
-    //       this.request.MobileNo = data['Data'][0]['MobileNumber'];
-    //       this.request.PostalAddress = data['Data'][0]['Address'];
-    //     }, error => console.error(error));
-    //   this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-    //   this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    // } else {
-    //   this.toastr.warning("Not Exists SSOID");
-    // }  
-
     this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
     this.request.CollegeID = this.sSOLoginDataModel.InstituteID;
     this.request.InstituteName = this.sSOLoginDataModel.InstituteName;
@@ -652,7 +634,6 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   initTable() {
-    debugger
     this.dataSource = new MatTableDataSource(this.GuestRoomApplyList);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
@@ -661,7 +642,6 @@ export class AddGuestApplyForGuestRoomComponent {
       return dataStr.includes(filter);
 
     };
-    console.log('data Source====>', this.dataSource)
   }
 
   applyFilter(event: Event) {
@@ -706,5 +686,111 @@ export class AddGuestApplyForGuestRoomComponent {
     console.log("RoomFee",this.request.RoomFee)
   }
 
+  async PayApplicationFees(item: any) {
+    this.otpRequest = item;
+    await this.proceedToSave();
+    if (this.saveFlag == 0) {
+      return;
+    }
+    this.emitraRequest = new EmitraRequestDetails();
+    //Set Parameters for emitra
+    this.emitraRequest.Amount = Number(this.otpRequest.RoomFee);
+    this.emitraRequest.ServiceID = "2920";
+    this.emitraRequest.ID = this.otpRequest?.UniqueServiceID ?? 0;
+    this.emitraRequest.MobileNo = item.MobileNo
+    this.emitraRequest.SsoID = item.SSOID;
+    this.emitraRequest.DepartmentID = 1// this.request.DepartmentID;
+    this.emitraRequest.CourseTypeID = 1 //this.request.CourseTypeID;
   
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Student || this.sSOLoginDataModel.UserType == EnumUserType.KIOSK) {
+      this.emitraRequest.IsKiosk = true;
+    }
+
+    this.loaderService.requestStarted();
+    try {
+      await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+
+            this.PaymentDetailtList = data;
+            await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+          }
+          else {
+            let displayMessage = this.Message ?? this.ErrorMessage;
+            this.toastr.error(displayMessage)
+          }
+        })
+    }
+    catch (ex) {
+
+      console.log(ex)
+
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async proceedToSave() {
+    this.isLoading = true;
+    try {
+
+      this.otpRequest.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.otpRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.otpRequest.GuestHouseID = this.otpRequest.GuestHouseID;
+      // this.otpRequest.RoomFee = this.otpRequest.RoomFee;
+      this.otpRequest.IsActive = true;
+      this.otpRequest.IsDelete = false;
+
+      await this.guestRoomManagmentService.SaveGuestRoomPayment(this.otpRequest)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.saveFlag = 1;
+          }
+        })
+
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
+
+  RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any) {
+
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", pServiceURL);
+
+    //Hidden Encripted Data
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", "ENCDATA");
+    hiddenField.setAttribute("value", pENCDATA);
+    form.appendChild(hiddenField);
+
+    //Hidden Service ID
+    var hiddenFieldService = document.createElement("input");
+    hiddenFieldService.setAttribute("type", "hidden");
+    hiddenFieldService.setAttribute("name", "SERVICEID");
+    hiddenFieldService.setAttribute("value", this.emitraRequest.ServiceID);
+    form.appendChild(hiddenFieldService);
+    //Hidden Service ID
+    var MERCHANTCODE = document.createElement("input");
+    MERCHANTCODE.setAttribute("type", "hidden");
+    MERCHANTCODE.setAttribute("name", "MERCHANTCODE");
+    MERCHANTCODE.setAttribute("value", pMERCHANTCODE);
+    form.appendChild(MERCHANTCODE);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
 }

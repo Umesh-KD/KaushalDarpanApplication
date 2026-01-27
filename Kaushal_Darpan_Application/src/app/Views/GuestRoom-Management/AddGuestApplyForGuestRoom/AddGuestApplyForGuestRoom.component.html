@@ -265,7 +265,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Fees<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Fees(per day)<span class="StarMarking">*</span></label>
           <input formControlName="txtRoomFee" class="form-input" type="text" placeholder="Enter Room Fees"
                  [(ngModel)]="request.RoomFee">
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomFee.errors" class="text-danger">
@@ -387,7 +387,7 @@
           </ng-container>
           
           <ng-container matColumnDef="RoomFee">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Fee</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Payable Amount</th>
             <td mat-cell *matCellDef="let row">{{ row.RoomFee }}</td>
           </ng-container>
 
@@ -414,9 +414,15 @@
           <ng-container matColumnDef="Action">
             <th mat-header-cell *matHeaderCellDef>Action</th>
             <td mat-cell *matCellDef="let row">
-              <div *ngIf="row.StatusName === 'Pending'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete" *ngIf="row.StatusName == 'Pending'">
                   <i class="ti ti-trash"></i>
+                </a>
+
+                <a title="Pay" href="javascript:void(0)"
+                  (click)="PayApplicationFees(row)" 
+                  *ngIf="row.StatusID == 1339 && row.PaymentStatus == 0">
+                  <i class="ti ti-currency-rupee"></i>
                 </a>
               </div>
             </td>
