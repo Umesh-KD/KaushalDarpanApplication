@@ -35,6 +35,7 @@
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
             <option value="Hold">Hold</option>
+            <option value="Unlock">Unlocked</option>
           </select>
         </div>
         <!-- <div>
@@ -129,7 +130,9 @@
             <td>{{row.Status}}</td>
             <td align="center">
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                <a href="javascript:void(0);" title="Campus On Action" *ngIf="(row.Status=='Pending' || row.Status=='Hold')" (click)="CampusOnPostAction(MyModel_Action,row.PostID)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="Campus On Action" *ngIf="(row.Status=='Pending' || row.Status=='Hold' || row.Status=='Unlock')" (click)="CampusOnPostAction(MyModel_Action,row.PostID)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="Campus On Action" *ngIf="(row.Status=='Approved')" (click)="CampusOnPostAction(MyModel_Action1,row.PostID)"><i class="ti ti-lock-open"></i></a>
+                
                 <!-- <a href="javascript:void(0);" title="View & Update Campus" *ngIf="(row.Status=='Pending' || row.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,row.PostID)"><i class="ti ti-eye"></i></a> -->
               </div>
             </td>
@@ -160,6 +163,58 @@
                   <option value="Approved">Approved</option>
                   <option value="Rejected">Rejected</option>
                   <option value="Hold">Hold</option>
+                  <!-- <option value="Unlock">Unlock</option> -->
+                </select>
+                <div *ngIf="isSubmitted&&requestAction.Action=='0'" class="text-danger">
+                  This field is required .!
+                </div>
+              </div>
+            </div>
+            <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3">
+              <div>
+                <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
+                <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.ActionRemarks"></textarea>
+                <div *ngIf="isSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
+                  <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+
+
+            </div>
+
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_ApprovedCampus()">Submit</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+<ng-template #MyModel_Action1 let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="formAction" id="formAction" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Campus On Action</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mb-8">
+
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Action<span class="StarMarking">*</span></label>
+                <select class="form-select" id="ddlAction" formControlName="ddlAction" [(ngModel)]="requestAction.Action">
+                  <option value="0">--Select--</option>
+                  <option value="Unlock">Unlock</option>
                 </select>
                 <div *ngIf="isSubmitted&&requestAction.Action=='0'" class="text-danger">
                   This field is required .!

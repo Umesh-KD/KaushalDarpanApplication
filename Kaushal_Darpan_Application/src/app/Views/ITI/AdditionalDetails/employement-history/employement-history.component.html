@@ -82,6 +82,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
               <th class="text-left">Sr No</th>
+              <th class="text-left">EnrollmentNo</th>
               <th class="text-left">Company's Name</th>
               <th class="text-left">Company's Type</th>
               <th class="text-left">Address</th>
@@ -99,6 +100,7 @@
         <tbody>
           <tr *ngFor="let row of StudEmployementList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EnrollmentNo}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyType}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyAddress}}</td>

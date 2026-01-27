@@ -9,7 +9,7 @@ import { FormBuilder } from '@angular/forms';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 import { ItiExaminerListService } from '../../../Services/ItiExaminerList/iti-examiner-list.service';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ITITheorySearchModel } from '../../../Models/ITI/ItiInvigilatorDataModel';
 import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.service';
@@ -17,6 +17,8 @@ import { ItiTheoryMarksService } from '../../../Services/ITI/ItiTheoryMarks/Iti-
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
 import { ItiExaminerService } from '../../../Services/ItiExaminer/iti-examiner.service';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-centers',
@@ -75,6 +77,8 @@ export class ItiExaminerListComponent implements OnInit {
     private TheoryMarksService: ItiTheoryMarksService,
     private encryptionService: EncryptionService,
     private itiexaminerservice: ItiExaminerService,
+    private appsettingConfig: AppsettingService,
+    private http: HttpClient,
     private Swal2: SweetAlert2) {
   }
 
@@ -727,5 +731,22 @@ export class ItiExaminerListComponent implements OnInit {
       });
   }
 
+
+  downloadExaminerSignPdf(item: any): void {
+    debugger
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + "ITI" + "/" + 'ExaminerUploadFile' + "/" + item;
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('pdf');
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+  generateFileName(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); 
+    return `file_${timestamp}.${extension}`;
+  }
 
 }

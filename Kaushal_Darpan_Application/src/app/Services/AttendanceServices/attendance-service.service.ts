@@ -133,4 +133,10 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
+
+  public async GetAssignedLCStream(model: PostAttendanceTimeTable) {
+    return await this.http.post(this.APIUrl + '/GetAssignedLCStream', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
 }

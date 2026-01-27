@@ -124,7 +124,7 @@
 
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
                 <a href="javascript:void(0);"  (click)="openModal(modal_Open,row.PostID)" id="btnEdit" *ngIf="(row.Status=='Approved')" title="Edit"><i class="ti ti-eye"></i></a>
-                <a [routerLink]="['/AddItiCampusPost']" [queryParams]="{ id: row.PostID }" id="btnEdit" *ngIf="(row.Status=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a [routerLink]="['/AddItiCampusPost']" [queryParams]="{ id: row.PostID }" id="btnEdit" *ngIf="(row.Status=='Pending' || row.Status=='Unlock')" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" id="btnDelete" *ngIf="(row.Status=='Pending')" title="Delete" (click)="btnDelete_OnClick(row.PostID)"><i class="ti ti-trash"></i></a>
 
               </div>

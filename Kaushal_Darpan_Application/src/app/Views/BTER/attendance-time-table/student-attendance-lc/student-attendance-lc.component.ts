@@ -232,7 +232,7 @@ export class StudentAttendanceLComponent implements OnInit {
 
 
   async GetStudentAttandanceTimeDDL() {
-    
+    debugger
     await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
 
@@ -330,6 +330,7 @@ export class StudentAttendanceLComponent implements OnInit {
 
 
   async GetStaffLeaveAllData() {
+    debugger
     try {
       debugger
       const rawStart = this.From_Date;

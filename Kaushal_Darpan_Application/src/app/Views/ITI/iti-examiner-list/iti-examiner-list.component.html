@@ -154,6 +154,10 @@
                     <i class="ti ti-download"></i>
                   </a>
 
+                  <a *ngIf="row.signedDoc !== null && row.signedDoc !== ''" (click)="downloadExaminerSignPdf(row.signedDoc)" title="Download Examiner Sign Pdf">
+                    <i class="ti ti-download"></i>
+                  </a>
+
                 </div>
               </td>
 

@@ -13,6 +13,8 @@ import { ItiCompanyMasterService } from '../../../../Services/ITI/ItiCompanyMast
 import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { DocumentDetailsService } from '../../../../Common/document-details';
 
 
 @Component({
@@ -39,7 +41,10 @@ export class AddItiCompanyMasterComponent implements OnInit {
 
   constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: ItiCompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute,public appsettingConfig: AppsettingService, private routers: Router, private modalService: NgbModal) {
+    private activatedRoute: ActivatedRoute,public appsettingConfig: AppsettingService,
+     private routers: Router, private modalService: NgbModal,
+     private documentDetailsService: DocumentDetailsService
+    ) {
 
   }
 
@@ -60,6 +65,8 @@ export class AddItiCompanyMasterComponent implements OnInit {
         HRName: ['', Validators.required],
         EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
         MobileNo: ['', Validators.required],
+
+        CompanyRegNo:['',Validators.required]
       });
 
 
@@ -168,6 +175,8 @@ export class AddItiCompanyMasterComponent implements OnInit {
           this.request = data['Data'];
           this.request.Dis_CompanyName = data['Data']['Dis_Name'];
           this.request.CompanyPhoto = data['Data']['Logo'];
+          this.request.UploadedDoc=data['Data']['UploadedDoc'];
+          this.request.Dis_UploadedDoc=data['Data']['Dis_UploadedDoc'];
           this.ddlState_Change();
           this.request.DistrictID = data['Data']["DistrictID"];
           console.log(this.request, "request");
@@ -233,13 +242,17 @@ export class AddItiCompanyMasterComponent implements OnInit {
     }
   }
 
+
+
+
   public file!: File;
   async onFilechange(event: any, Type: string) {
+    debugger
     try {
 
       this.file = event.target.files[0];
       if (this.file) {
-        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png') {
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' ) {
           //size validation
           if (this.file.size > 2000000) {
             this.toastr.error('Select less then 2MB File')
@@ -334,10 +347,110 @@ export class AddItiCompanyMasterComponent implements OnInit {
     }
   }
 
+  public file1!: File;
+  async onDocchange(event: any, Type: string) {
+    debugger
+    try {
 
+      this.file1 = event.target.files[0];
+      if (this.file1) {
+        if (this.file1.type == 'image/jpeg' || this.file1.type == 'image/jpg' || this.file1.type == 'image/png' || this.file1.type=='application/pdf') {
+          //size validation
+          if (this.file1.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+          //if (this.file.size < 100000) {
+          //  this.toastr.error('Select more then 100kb File')
+          //  return
+          //}
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png/pdf file')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
 
+        await this.commonMasterService.UploadDocument(this.file1)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
 
-  // reset
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "Photo") {
+                this.request.Dis_UploadedDoc = data['Data'][0]["Dis_FileName"];
+                this.request.UploadedDoc = data['Data'][0]["FileName"];
+
+              }
+              //else if (Type == "Sign") {
+              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+              //}
+              /*              item.FilePath = data['Data'][0]["FilePath"];*/
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+  
+  // async UploadDocument(event: any, item: any) {
+  //   try {
+  //     //upload model
+  //     let uploadModel = new UploadFileModel();
+  //     uploadModel.FileExtention = item.FileExtention ?? "";
+  //     uploadModel.MinFileSize = item.MinFileSize ?? "";
+  //     uploadModel.MaxFileSize = item.MaxFileSize ?? "";
+  //     uploadModel.FolderName = item.FolderName ?? "";
+  //     //call
+  //     await this.documentDetailsService.UploadDocument(event, uploadModel)
+  //       .then((data: any) => {
+  //         this.State = data['State'];
+  //         this.Message = data['Message'];
+  //         this.ErrorMessage = data['ErrorMessage'];
+  //         //
+  //         if (this.State == EnumStatus.Success) {
+  //           //add/update document in js list
+  //           const index = this.request.RecheckDocumentModel.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
+  //           if (index !== -1) {
+  //             this.request.RecheckDocumentModel[index].FileName = data.Data[0].FileName;
+  //             this.request.RecheckDocumentModel[index].Dis_FileName = data.Data[0].Dis_FileName;
+  //           }
+  //           console.log(this.request.RecheckDocumentModel)
+  //           //reset file type
+  //           event.target.value = null;
+  //         }
+  //         if (this.State == EnumStatus.Error) {
+  //           this.toastr.error(this.ErrorMessage)
+  //         }
+  //         else if (this.State == EnumStatus.Warning) {
+  //           this.toastr.warning(this.ErrorMessage)
+  //         }
+  //       });
+  //   }
+  //   catch (Ex) {
+  //     console.log(Ex);
+  //   }
+  // }
+  
   ResetControls() {
     this.request = new ItiCompanyMasterDataModels();
 
