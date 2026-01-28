@@ -331,5 +331,9 @@ export class downloadITIResultComponent {
     });
   }
 
+  openDatePicker(event: any) {
+    event.target.showPicker();
+  }
+
 
 }
