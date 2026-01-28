@@ -881,6 +881,7 @@ const routes: Routes = [
       { path: 'SchlorshipList', loadChildren: () => import('./Views/scholarship-list/scholarship-list.module').then(m => m.ScholarshipListModule) },
       { path: 'AddSchlorship', loadChildren: () => import('./Views/add-scholarship-list/add-scholarship-list.module').then(m => m.AddScholarshipListModule) },
       
+      { path: 'CreateGuestHouse', loadChildren: () => import('./Views/added-guest-house/added-guest-house.module').then(m => m.AddedGuestHouseModule) },
       { path: 'create-guest-house', loadChildren: () => import('./Views/GuestRoom-Management/Create-GuestRoom/Create-GuestRoom.module').then(m => m.CreateGuestRoomModule), title: 'Create GuestRoom' },
       { path: 'guest-room-details', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-details/guest-room-details.module').then(m => m.GuestRoomDetailsModule) },
       { path: 'guest-room-details/:id', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-details/guest-room-details.module').then(m => m.GuestRoomDetailsModule) },
@@ -890,6 +891,8 @@ const routes: Routes = [
       { path: 'guestroomrequest', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-request/guest-room-request.module').then(m => m.GuestRoomRequestModule) },
       { path: 'guestroomreport', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-report/guest-room-report.module').then(m => m.GuestRoomReportModule) },
       { path: 'guest-room-apply-warden', loadChildren: () => import('./Views/GuestRoom-Management/warden-apply-for-guest-room/warden-apply-for-guest-room.module').then(m => m.WardenApplyForGuestRoomModule), title: 'Warden Apply For GuestRoom' },
+      { path: 'guest-room-availability', loadChildren: () => import('./Views/GuestRoom-Management/room-availability/room-availability.module').then(m => m.RoomAvailabilityModule), title: 'Guest Room Availability' },
+      { path: 'guestroomrequest/:Status', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-request/guest-room-request.module').then(m => m.GuestRoomRequestModule) },
 
       { path: 'CenterAndSubjectWiseReport', loadChildren: () => import('./Views/Reports/Center-And-Subject-Wise-Report/Center-And-Subject-Wise-Report.module').then(m => m.CenterAndSubjectWiseReportModule), title: 'Center-And-Subject-Wise-Report' },
 
@@ -1102,8 +1105,7 @@ const routes: Routes = [
 
       { path: 'iti-govt-office', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-Office/ITI-Govt-Office-routing.module').then(m => m.ITIGovtOfficeRoutingModule), title: 'ITI-Govt-Office' },
       { path: 'CollegeLoginInfoMaster', loadChildren: () => import('./Views/college-login-info-master/college-login-info-master.module').then(m => m.CollegeLoginInfoMasterModule) },
-      { path: 'guestroomrequest/:Status', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-request/guest-room-request.module').then(m => m.GuestRoomRequestModule) },
-
+      
       { path: 'iti-govt-post', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-Post/ITI-Govt-Post-routing.module').then(m => m.ITIGovtPostRoutingModule), title: 'ITI-Govt-Post' },
       { path: 'ITIGovtEMZonalOfficeMaster', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-ZonalOfficeMaster/ITI-Govt-EM-ZonalOfficeMaster.module').then(m => m.ITIGovtEMZonalOfficeMasterModule), title: 'ITI Govt EM Zonal Office ' },
       { path: 'ITIGovtEMStaffProfile', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-StaffProfile/ITI-Govt-EM-StaffProfile.module').then(m => m.ITIGovtEMStaffProfileModule), title: 'ITI Govt EM StaffProfile' },
@@ -1169,7 +1171,6 @@ const routes: Routes = [
       { path: 'ITI-DispatchSuperintendentDetailsList', loadChildren: () => import('./Views/ITI/ITI-DispatchManagement/ITI-DispatchSuperintendentDetailsList/ITI-DispatchSuperintendentDetailsList.module').then(m => m.ITIDispatchSuperintendentDetailsListModule), title: 'ITI Dispatch Superintendent Details List' },
       { path: 'ITI-DispatchSuperintendentList', loadChildren: () => import('./Views/ITI/ITI-DispatchManagement/ITI-DispatchSuperintendentList/ITI-DispatchSuperintendentList.module').then(m => m.ITIDispatchSuperintendentListModule), title: 'ITI Dispatch Superintendent List' },
 
-      { path: 'CreateGuestHouse', loadChildren: () => import('./Views/added-guest-house/added-guest-house.module').then(m => m.AddedGuestHouseModule) },
       { path: 'nodal-officer-exminer-report-list', loadChildren: () => import('./Views/ITI/nodal-officer-exminer-report-list/nodal-officer-exminer-report-list.module').then(m => m.NodalOfficerExminerReportListModule) },
       { path: 'ITI-DispatchToInstitute', loadChildren: () => import('./Views/ITI/ITI-DispatchManagement/ITI-Dispatch-to-institute/ITI-Dispatch-to-institute.module').then(m => m.ITIDispatchToInstituteModule) },
       { path: 'nodal-officer-exminer-report/:id', loadChildren: () => import('./Views/ITI/nodal-officer-exminer-report/nodal-officer-exminer-report.module').then(m => m.NodalOfficerExminerReportModule) },

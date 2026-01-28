@@ -457,6 +457,7 @@ export class AddGuestApplyForGuestRoomComponent {
   async changeSeats() {
     debugger
     await this.SetBedPrice();
+    await this.checkRoomAvailability();
     this.request.RoomQuantity = 1;
     // 1. Parse request start and end using correct parser
     const requestedStart = this.parseCustomDate1(this.request.FromDate, this.request.FromTime + ":00");
@@ -486,12 +487,12 @@ export class AddGuestApplyForGuestRoomComponent {
       .reduce((sum: number, item: any) => sum + item.RoomQuantity, 0);
 
     // 5. Calculate availability
-    this.RoomAvailablity = totalRoomQuantity - totalBookedQuantity;
+    // this.RoomAvailablity = totalRoomQuantity - totalBookedQuantity;
 
     // 6. Show warning if no availability
-    if (this.RoomAvailablity <= 0) {
-      this.toastr.warning("Room Type Not Available!");
-    }
+    // if (this.RoomAvailablity <= 0) {
+    //   this.toastr.warning("Room Type Not Available!");
+    // }
 
 
 
@@ -519,6 +520,39 @@ export class AddGuestApplyForGuestRoomComponent {
     //else {
     //  this.groupForm.get('txtSeatCapacity')?.disable();
     //}
+  }
+
+  async checkRoomAvailability() {
+    if ((this.request?.GenderId ?? 0) == 0) {
+      this.toastr.warning("Select gender for Room Availability")
+      return
+    } else if((this.request?.GuestHouseID ?? 0) == 0) {
+      this.toastr.warning("Select Guest House for Room Availability")
+      return
+    } else if((this.request?.RoomType ?? 0) == 0) {
+      this.toastr.warning("Select Room Type for Room Availability")
+      return
+    } else if ((this.request?.CoolingFacilities ?? 0) == 0) {
+      this.toastr.warning("Select Cooling Facilities for Room Availability")
+      return
+    }
+
+    try {
+      var dropdownReq: any = {}
+      dropdownReq.Purpose = this.request.Purpose
+      dropdownReq.GuestHouseID = this.request.GuestHouseID
+      dropdownReq.CoolingFacilities = this.request.CoolingFacilities
+      dropdownReq.GenderId = this.request.GenderId
+      dropdownReq.RoomType = this.request.RoomType
+      dropdownReq.action = "GetRoomAvailability";
+
+      await this.guestRoomManagmentService.GuestHouse_Dropdowns(dropdownReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoomAvailablity=data.Data[0].AvailableBed
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // Helper: safe parser for 'DD-MM-YYYY' and 'HH:mm:ss'
@@ -665,6 +699,8 @@ export class AddGuestApplyForGuestRoomComponent {
 
   async GetRoomTypeListData() {
     this.request.RoomFee = 0;
+    this.request.SeatCapacity = 0
+    this.RoomAvailablity = 0;
     try {
       var dropdownReq: any = {}
       dropdownReq.Purpose = this.request.Purpose
@@ -792,5 +828,9 @@ export class AddGuestApplyForGuestRoomComponent {
     document.body.appendChild(form);
     form.submit();
     document.body.removeChild(form);
+  }
+
+  async onGenderChange() {
+    await this.checkRoomAvailability();
   }
 }

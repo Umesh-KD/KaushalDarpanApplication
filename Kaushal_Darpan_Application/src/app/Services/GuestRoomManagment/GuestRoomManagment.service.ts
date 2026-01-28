@@ -265,4 +265,12 @@ export class GuestRoomManagmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetGuestHouseRoomAvailabilityData(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetGuestHouseRoomAvailabilityData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
