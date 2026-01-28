@@ -33,6 +33,7 @@ import { RelievingLetterSearchModel } from '../../Models/ITI/UserRequestModel';
 import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataModels';
 import { TabulationReportSearchModel } from '../../models/bter/TabulationReportModel';
 import { CollegesWiseExaminationRptSearchModel } from '../../Models/CollegesWiseExaminationRptsModel';
+import { StudentItiResultModel } from '../../Models/StudentSearchModel';
 
 
 
@@ -1737,6 +1738,14 @@ export class ReportService {
 
 
 
+
+  public async GetITIStudent_Result(searchRequest: StudentItiResultModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetITIStudent_MarksheetList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 }

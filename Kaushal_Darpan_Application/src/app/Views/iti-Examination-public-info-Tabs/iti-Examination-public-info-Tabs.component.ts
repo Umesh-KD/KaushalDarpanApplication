@@ -20,6 +20,7 @@ import { ItiGeneralInstructionsComponent } from '../itipublic-info-tabs/iti-gene
 import { ItiCollegeSearchComponent } from '../ITI/results/iti-college-search/iti-college-search.component';
 import { RevealuationComponent } from '../ITI/Examination/revealuation/revealuation.component';
 import { KnowRevealuationITIComponent } from '../ITI/Examination/know-revealuation-iti/know-revealuation-iti.component';
+import { downloadITIResultComponent } from '../itipublic-info-tabs/download-ITI-Result/download-ITI-Result.component';
 //import { ItiAdmissionComponent } from './iti-admission/iti-admission.component';
 //import { KnowMeritITIComponent } from './know-merit-iti/know-merit-iti.component';
 //import { UpwardMomentITIComponent } from './upward-moment-iti/upward-moment-iti.component';
@@ -85,8 +86,9 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
   async LoadTabs() {
     this.tabs = [] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>; DepartmentID: number; CourseTypeId: number, Enable: boolean, HasLink: boolean, Link: string }[];
    
-    this.tabs.push({ TabName: 'Apply for ITI Revealuation', TabNameHI: 'पुनर्मूल्यांकन हेतु आवेदन करें', TabIcon: 'ti ti-license', component: RevealuationComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
-    this.tabs.push({ TabName: 'Know your Revaluation Appication No', TabNameHI: 'Know your Revaluation Appication No', TabIcon: 'ti ti-license', component: KnowRevealuationITIComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
+    //this.tabs.push({ TabName: 'Apply for ITI Revealuation', TabNameHI: 'पुनर्मूल्यांकन हेतु आवेदन करें', TabIcon: 'ti ti-license', component: RevealuationComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
+    //this.tabs.push({ TabName: 'Know your Revaluation Appication No', TabNameHI: 'Know your Revaluation Appication No', TabIcon: 'ti ti-license', component: KnowRevealuationITIComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
+    this.tabs.push({ TabName: 'Download ITI Result', TabNameHI: 'आईटीआई परिणाम डाउनलोड करें', TabIcon: 'ti ti-license', component: downloadITIResultComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
    
 
   }
@@ -96,22 +98,49 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
     this.CourseId = Number(this.routers.snapshot.queryParamMap.get('courseid'));
     this.CourseId = isNaN(this.CourseId) ? 0 : this.CourseId;
     this.ChangeDepartment();
-    this.loadComponent(this.selectedTabIndex, (this.CourseId > 0 ? this.CourseId : this.tabs[0].CourseTypeId), this.tabs[0].TabName, this.tabs[0].TabNameHi);
+    this.loadComponent(this.selectedTabIndex, (this.CourseId > 0 ? this.CourseId : this.tabs[0]?.CourseTypeId), this.tabs[0]?.TabName, this.tabs[0]?.TabNameHi);
     this.cdr.detectChanges();
 
   }
 
 
-  public async ChangeDepartment(DepartmentID: number = 1) {
+  //public async ChangeDepartment(DepartmentID: number = 1) {
+  //  this.CourseId = Number(this.routers.snapshot.queryParamMap.get('courseid'));
+  //  this.CourseId = isNaN(this.CourseId) ? 0 : this.CourseId;
+  //  this.selectedTabIndex = 0
+  //  this.LoadTabs();
+  //  this.tabs = this.tabs.filter((f: any) => f.DepartmentID == DepartmentID);
+  //  await this.loadComponent(this.selectedTabIndex, (this.CourseId > 0 ? this.CourseId : this.tabs[0]?.CourseTypeId), this.tabs[0]?.TabName, this.tabs[0]?.TabNameHi);
+  //  this.cdr.detectChanges();
+  //  this.DepartmentID = DepartmentID
+  //}
+
+
+  public async ChangeDepartment(DepartmentID: number = this.DepartmentID) {
     this.CourseId = Number(this.routers.snapshot.queryParamMap.get('courseid'));
     this.CourseId = isNaN(this.CourseId) ? 0 : this.CourseId;
-    this.selectedTabIndex = 0
+
+    this.selectedTabIndex = 0;
     this.LoadTabs();
+
     this.tabs = this.tabs.filter((f: any) => f.DepartmentID == DepartmentID);
-    await this.loadComponent(this.selectedTabIndex, (this.CourseId > 0 ? this.CourseId : this.tabs[0].CourseTypeId), this.tabs[0].TabName, this.tabs[0].TabNameHi);
+
+    if (!this.tabs.length) {
+      console.error('No tabs found for DepartmentID:', DepartmentID);
+      return;
+    }
+
+    await this.loadComponent(
+      this.selectedTabIndex,
+      (this.CourseId > 0 ? this.CourseId : this.tabs[0].CourseTypeId),
+      this.tabs[0].TabName,
+      this.tabs[0].TabNameHI
+    );
+
     this.cdr.detectChanges();
-    this.DepartmentID = DepartmentID
+    this.DepartmentID = DepartmentID;
   }
+
 
   //Handles tab selection
   public selectTab(index: number, CourseTypeId: number, CourseTypeName: string, CourseTypeNameHi: string): void {
@@ -148,31 +177,46 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
 
 
   // Dynamically loads the selected component
-  public async loadComponent(index: number, CourseTypeId: number, CourseTypeName: string, CourseTypeNameHi: string) {
-    debugger;
-    const component = this.tabs[index].component;
+  //public async loadComponent(index: number, CourseTypeId: number, CourseTypeName: string, CourseTypeNameHi: string) {
+  //  debugger;
+  //  const component = this.tabs[index]?.component;
 
+
+  //  const factory = this.resolver.resolveComponentFactory(component);
+  //  this.tabContent.clear();
+
+
+  //  const componentRef = this.tabContent.createComponent(factory);
+  //  const instance = componentRef.instance as any;
+
+  //  //componentRef.instance.DepartmentId = CourseTypeId;
+
+  //  (componentRef.instance as any).CourseTypeId = CourseTypeId;
+  //  (componentRef.instance as any).CourseTypeName = CourseTypeName;
+  //  (componentRef.instance as any).CourseTypeNameHi = CourseTypeNameHi;
+  //  (componentRef.instance as any).FinancialYearName = this.sessionData.FinancialYearName.toString().substring(0, 4);
+  //  instance.TypeId = this.TypeId; // 👈 Pass @Input TypeId here
+
+  //  (componentRef.instance as any).tabChange?.subscribe((targetIndex: number) => {
+  //    this.selectTab(targetIndex, CourseTypeId, CourseTypeName, CourseTypeNameHi);
+  //    //this.departmentId
+  //  });
+  //}
+
+
+  public async loadComponent(index: number, CourseTypeId: number, CourseTypeName: string, CourseTypeNameHi: string) {
+    const component = this.tabs[index]?.component;
+
+    if (!component) {
+      console.error('Component is undefined for tab index:', index, this.tabs);
+      return;
+    }
 
     const factory = this.resolver.resolveComponentFactory(component);
     this.tabContent.clear();
-
-
     const componentRef = this.tabContent.createComponent(factory);
-    const instance = componentRef.instance as any;
-
-    //componentRef.instance.DepartmentId = CourseTypeId;
-
-    (componentRef.instance as any).CourseTypeId = CourseTypeId;
-    (componentRef.instance as any).CourseTypeName = CourseTypeName;
-    (componentRef.instance as any).CourseTypeNameHi = CourseTypeNameHi;
-    (componentRef.instance as any).FinancialYearName = this.sessionData.FinancialYearName.toString().substring(0, 4);
-    instance.TypeId = this.TypeId; // 👈 Pass @Input TypeId here
-
-    (componentRef.instance as any).tabChange?.subscribe((targetIndex: number) => {
-      this.selectTab(targetIndex, CourseTypeId, CourseTypeName, CourseTypeNameHi);
-      //this.departmentId
-    });
   }
+
 
     
 
