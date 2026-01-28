@@ -1,0 +1,132 @@
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent"  *ngIf="!isOnStatus">
+  <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
+    <div class="row">
+      <div class="col-lg-12 mb-4 mt-2 text-center">
+        <div class="col-md-12">
+          <h3>Coming Soon....</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="p-5">
+    <div class="card bg-light mb-4">
+      <div class="card-body text-center">
+
+        <h3 class="m-0"> आईटीआई परिणाम डाउनलोड करें (Download ITI Result) </h3>
+      </div>
+    </div>
+
+    <form [formGroup]="itiResultform">
+      <div class="row">
+
+       
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+          <label class="form-label">End Term: <span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="ID" [(ngModel)]="itiResultRequest.ID">
+            <option value="0">-- Select End Term --</option>
+            <option *ngFor="let item of EndTermList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _itiResultform.ID.errors" class="text-danger">
+            <p *ngIf="_itiResultform.ID.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+
+
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+          <label class="form-label">Roll No: <span class="StarMarking">*</span></label>
+          <input type="text" class="form-control" (keypress)="numberOnly($event)" placeholder="Enter  Roll No."
+                 formControlName="RollNo" [(ngModel)]="itiResultRequest.RollNo">
+          <div *ngIf="isSubmitted && _itiResultform.RollNo.errors" class="text-danger">
+            <p *ngIf="_itiResultform.RollNo.errors.required">
+              This field is required.!
+            </p>
+          </div>
+
+        </div>
+
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+          <label class="form-label">Date of Birth: <span class="StarMarking">*</span></label>
+          <input type="date" class="form-control" placeholder="Enter Select DOB" [max]="maxDate"
+                 formControlName="DOB" [(ngModel)]="itiResultRequest.DOB">
+          <div *ngIf="isSubmitted && _itiResultform.DOB.errors" class="text-danger">
+            <p *ngIf="_itiResultform.DOB.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+          <button type="button" class="btn btn-info text-white" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
+
+          <button type="button" class="btn btn-danger mx-1" (click)="onReset()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="mt-3" *ngIf="isShowGrid">
+      <h3 class="mb-1">Trainee Info:</h3>
+
+      <div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="text-left">Sr. No.</th>
+              <th class="text-left">Trainee Name</th>
+              <th class="text-left">Father Name </th>
+              <th class="text-left">Trade Name </th>
+              <th class="text-left">RollNo</th>
+              <th class="text-left">DOB</th>
+              <th style="width:8%;" class="text-left">Max Marks</th>
+              <th class="text-left">Min Marks</th>
+              <th class="text-left">Obtained Marks</th>
+              <th class="text-left">Result</th>
+              <th>Download</th>
+
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of itiResultData; let idx = index;">
+              <td>{{ idx + 1 }}</td>
+              <td>{{ row.StudentName }}</td>
+              <td>{{ row.FatherName }}</td>
+              <td>{{ row.TradeName }}</td>
+              <td>{{ row.RollNo }}</td>
+              <td>{{ row.DOB }}</td>
+              <td>{{ row.MaxMarks }}</td>
+              <td>{{ row.MinMarks }}</td>
+              <td>{{ row.ObtainedMarks }}</td>
+              <td>{{ row.Result }}</td>
+             
+              <td align="center">
+                <a class="download-btn btn btn-info btn-sm" href="javascript:void(0);" title="Download Marksheet"
+                   (click)="GetITIStudent_Marksheet(row.EnrollmentNo)">
+                  <i class="ti ti-download"></i>
+                </a>
+
+                <a class="download-btn btn btn-info btn-sm" href="javascript:void(0);" title="Download SCVT Certificate"
+                   (click)="DownloadSCVTCertificate(row.EnrollmentNo)">
+                  <i class="ti ti-download"></i>
+                </a>
+              </td>
+            </tr>
+             <tr *ngIf="itiResultData?.length === 0">
+              <td colspan="15"> No records found</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -31,3 +31,12 @@ export class StudentMarksheetSearchModel {
   public PassFailID: number = 0
   public TradeScheme: number = 0
 }
+export class StudentITIResultSearchModel {
+  public RollNo?: string = ''
+  public DOB?: string = ''
+  public EndTermID: number = 0
+  public ExamYearID: number = 0
+  public PassFailID: number = 0
+  public TradeScheme: number = 0
+  public SemesterID: number = 0;
+}
