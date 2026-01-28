@@ -29,7 +29,6 @@
            ||this.sSOLoginDataModel.RoleID == _EnumRole.Teacher
 					 || this.sSOLoginDataModel.RoleID == _EnumRole.Invigilator_NonEng
            || this.sSOLoginDataModel.RoleID == _EnumRole.TeacherNon
-
            ||this.sSOLoginDataModel.RoleID == _EnumRole.BterClerk
            ||this.sSOLoginDataModel.RoleID == _EnumRole.BterAccountant
            ||this.sSOLoginDataModel.RoleID == _EnumRole.BterAAO
@@ -43,6 +42,7 @@
                      "></app-staff-dashboard>
 <!--||this.sSOLoginDataModel.RoleID == _EnumRole.HOD_Eng-->
 <!--||this.sSOLoginDataModel.RoleID == _EnumRole.223-->
+<!-- this.sSOLoginDataModel.RoleID == _EnumRole.TPO -->
 
 <app-iti-staff-dashboard *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 || this.sSOLoginDataModel.RoleID == _EnumRole.ITILabIncharge
