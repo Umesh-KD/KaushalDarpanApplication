@@ -22,6 +22,18 @@
           <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Hr Details</b>
         </div>
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.PlacementCompanyID" formControlName="PlacementCompanyID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of CompanyMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _HrMasterFormGroup.PlacementCompanyID.errors" class="text-danger">
+              <p *ngIf="!_HrMasterFormGroup.PlacementCompanyID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name <span class="StarMarking">*</span></label>
             <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="request.Name" formControlName="Name">
@@ -60,18 +72,6 @@
                   <i aria-hidden="true"></i> Mobile number must be 10 digits!
                 </p>
               </div>
-          </div>
-
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company  <span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.PlacementCompanyID" formControlName="PlacementCompanyID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of CompanyMasterDDLList" [value]="item.ID">{{item.Name}}</option>
-            </select>
-            <div *ngIf="isSubmitted && _HrMasterFormGroup.PlacementCompanyID.errors" class="text-danger">
-              <p *ngIf="!_HrMasterFormGroup.PlacementCompanyID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
           </div>
 
 
