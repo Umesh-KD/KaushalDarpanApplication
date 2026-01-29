@@ -37,6 +37,7 @@ export class ItemsDataModels {
   public QuantityBalance: number | null = null;
   public BillFileName : string = '';
   public BillFilePath : string = '';
+  public Specification? : string = '';
   public IsRequested: boolean = false;
   
 }
@@ -96,6 +97,10 @@ export class AuctionDetailsModel {
   public Eng_NonEng: number = 0;
   public RoleID: number = 0;
   public RowsID: string = '';
+  public Authority_forAuctionOrder?: string = '';
+  public ModeOfDisposal?: string = '';
+  public Remark?: string = '';
+  public ApproximateCost?: number = 0;
 }
 
 export class inventoryIssueHistorySearchModel {

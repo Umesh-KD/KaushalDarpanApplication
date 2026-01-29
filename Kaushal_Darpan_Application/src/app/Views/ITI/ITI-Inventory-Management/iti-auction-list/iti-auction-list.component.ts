@@ -71,7 +71,10 @@ export class ITIAuctionListComponent {
     this.AuctionFormGroup = this.formBuilder.group({
       AuctionQuantity: ['', Validators.required],
       txtAuctionDate: ['', Validators.required],
-      //txtAuctionDate: ['', Validators.required],
+      Authority_forAuctionOrder: ['', Validators.required],
+      ModeOfDisposal: ['', Validators.required],
+      Remarks: ['', Validators.required],
+      ApproximateCost: ['', Validators.required],
     })
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));

@@ -236,6 +236,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async Stream_InstituteIdWise(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0,InstituteID:number=0,AcademicYearID:number=0) {
+
+    return await this.http.get(this.APIUrl + '/Stream_InstituteIdWise/' + DepartmentID + '/' + StreamType + '/' + EndTermId +'/'+InstituteID +'/' + AcademicYearID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 
   public async StreamMasterwithcount(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, SemesterID: number = 0, InstituteId: number = 0) {
@@ -692,9 +700,9 @@ export class CommonFunctionService {
 
 
 
-  public async GetCampusPostMasterDDL(DepartmentID: number = 0) {
+  public async GetCampusPostMasterDDL(DepartmentID: number = 0,CreatedBy:number=0) {
 
-    return await this.http.get(`${this.APIUrl}/GetCampusPostMasterDDL/${DepartmentID}`, this.headersOptions)
+    return await this.http.get(`${this.APIUrl}/GetCampusPostMasterDDL/${DepartmentID}/${CreatedBy}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -774,6 +782,15 @@ export class CommonFunctionService {
 
   public async GetStateMaster() {
     return await this.http.get(this.APIUrl + '/GetStateMaster/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
+  public async getStudBasicDetailsEnrollmentWise( EnrollmentNo:string , DepartmentID:number) {
+    debugger
+    return await this.http.post(`${this.APIUrl}/getStudBasicDetailsEnrollmentWise/${EnrollmentNo}/${DepartmentID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

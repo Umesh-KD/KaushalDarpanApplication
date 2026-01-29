@@ -2,6 +2,7 @@ export class ItiCompanyMasterDataModels {
   public ID: number = 0
   public Name: string = ''
   public Website: string = ''
+  public CompanyRegNo:string=''
   public StateID: number = 0
   public DistrictID: number = 0
   public RoleID: number = 0
@@ -9,6 +10,8 @@ export class ItiCompanyMasterDataModels {
   public Address: string = ''
   public CompanyPhoto: string = '';
   public Dis_CompanyName: string = '';
+  public UploadedDoc:string=''
+  public Dis_UploadedDoc:string=''
   public ActiveStatus: boolean = true;
   public DeleteStatus: boolean = false;
   public ModifyBy: number = 0

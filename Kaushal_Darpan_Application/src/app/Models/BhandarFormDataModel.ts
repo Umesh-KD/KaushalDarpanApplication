@@ -3,6 +3,7 @@ export class AddBhandarFormDataModel {
   public BhandarID: number = 0
   public EndtermID: number = 0
   public ShiftID: number = 0
+  public ShiftID_choosen: number = 0
   public CenterID: number = 0
   public SemesterID: number = 0
   public UserID: number = 0
@@ -14,7 +15,7 @@ export class AddBhandarFormDataModel {
   public StudentNo: string = ''
   public FromDutyTime: string = ''
   public ToDutyTime: string = ''
-  public Size: string = ''
+  public Size?: string = ''
   public Remark: string = ''
   public DisFileName: string = ''
   public FileName: string = ''

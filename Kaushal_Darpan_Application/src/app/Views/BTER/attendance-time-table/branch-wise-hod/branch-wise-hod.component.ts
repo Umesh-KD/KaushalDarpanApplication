@@ -430,10 +430,12 @@ export class BranchWiseHodComponent {
     debugger
     if (this.request.SemesterID && this.request.SemesterID != 0) {
       debugger
-      await this.commonMasterService.StreamMaster(
+      await this.commonMasterService.Stream_InstituteIdWise(
         this.sSOLoginDataModel.DepartmentID,
         this.sSOLoginDataModel.Eng_NonEng,
-        this.sSOLoginDataModel.EndTermID
+        this.sSOLoginDataModel.EndTermID,
+        this.sSOLoginDataModel.InstituteID,
+        this.sSOLoginDataModel.FinancialYearID
       ).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;

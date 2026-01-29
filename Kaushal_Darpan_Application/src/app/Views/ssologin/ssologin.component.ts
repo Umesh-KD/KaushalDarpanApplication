@@ -6,7 +6,7 @@ import { SSOLandingDataDataModel, SSOLoginDataModel, UpdateStudentDetailsModel }
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { SSOLoginService } from '../../Services/SSOLogin/ssologin.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
-import { EnumRole, EnumStatus, EnumUserType, GlobalConstants } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, EnumUserType, GlobalConstants, EnumDepartment } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { UserRequestService } from '../../Services/UserRequest/user-request.service';
@@ -24,7 +24,7 @@ import { SweetAlert2 } from '../../Common/SweetAlert2';
 
 export class SSOLoginComponent implements OnInit, AfterViewInit {
   LoginType: any = "1";
-  Username: any;
+  Username: any; // searchrecordid
   LoginRoleType: any;
   sSOLoginDataModel = new SSOLoginDataModel();
   sSOLandingDataDataModel = new SSOLandingDataDataModel();
@@ -33,13 +33,17 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
   public Message: any = [];
   public ErrorMessage: any = [];
   public SSOjson: any = [];
+
+  public _EnumDepartment = EnumDepartment;
+  public DepartmentID: number = 0;
+
   //Modal Boostrap
   //Modal Boostrap
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
 
   @ViewChild('modal_UserLoginType') modal_GenrateOTP: any;
-
+  @ViewChild('modal_MultiDepartment') modal_MultiDepartment: any;
 
 
   constructor(private activatedRoute: ActivatedRoute, private sSOLoginService: SSOLoginService, private toastr: ToastrService, private loaderService: LoaderService, private router: ActivatedRoute, private routers: Router, private cdRef: ChangeDetectorRef, private commonMasterService: CommonFunctionService, private cookieService: CookieService, private appsettingConfig: AppsettingService, private modalService: NgbModal, private Swal2: SweetAlert2) { }
@@ -69,17 +73,17 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
       }
     }
     console.log("Username", this.Username);
-    await this.Citizenlogin(this.Username);
+    //await this.Citizenlogin(this.Username);
+    await this.BeforeLogin();
 
     setTimeout(() => {
-
       this.loaderService.requestEnded();
     }, 200);
 
   }
 
   async Citizenlogin(Loginssoid: string) {
-
+    //debugger
     try {
       this.sSOLandingDataDataModel.Username = Loginssoid;
       this.sSOLandingDataDataModel.LoginType = '-999';
@@ -91,7 +95,7 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
         return;
       }
       console.log("Loginssoid2", Loginssoid);
-      await this.sSOLoginService.GetSSOUserDetails(Loginssoid)
+      await this.sSOLoginService.GetSSOUserDetails(Loginssoid, this.DepartmentID)
         .then(async (res: any) => {
           console.log("authtoken", res.headers.get('x-authtoken'));
           localStorage.setItem('authtoken', res.headers.get('x-authtoken'));
@@ -211,6 +215,60 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
     }
 
 
+  }
+
+  // check multi user department and login
+  async BeforeLogin() {
+    //debugger
+    try {
+      // check and get multiple department of user
+      await this.sSOLoginService.CheckMultiDepartUserBySearchRecordID(this.Username)
+        .then(async (res: any) => {
+          if (res.State == EnumStatus.Success) {
+            const SSOID = res.Data?.SSOID;
+            const UserIDs = res.Data?.UserIDs;
+            const DepartmentIDs = res.Data?.DepartmentIDs;
+            if (DepartmentIDs.split(',').length == 1) { // run as it is
+              await this.Citizenlogin(this.Username);
+            }
+            else {// choose department
+              // show department selection popup and choose departmentid
+              this.openUserDepartmentModal(this.modal_MultiDepartment);
+            }
+          }
+          else { // any invalid
+            this.toastr.error(res.Message);
+            console.error(res.ErrorMessage);
+          }
+        }, error => console.error(error)
+        );
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  // multi department modal
+  async openUserDepartmentModal(content: any) {
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  CloseUserDepartmentModal() {
+    this.modalService.dismissAll();
+  }
+  // end multi department modal
+
+  async SetUserDepartmentAndProceed(item: any) {
+    //debugger
+    this.DepartmentID = item;
+    this.CloseUserDepartmentModal();
+    await this.Citizenlogin(this.Username); // login with departmentid
   }
 
 }

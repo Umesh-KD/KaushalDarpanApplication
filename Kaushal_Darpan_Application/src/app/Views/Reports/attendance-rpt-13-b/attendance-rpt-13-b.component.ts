@@ -26,6 +26,7 @@ export class AttendanceRpt13BComponent {
   Report13BForm!: FormGroup;
   isSubmitted: boolean = false
   CenterId: number = 0
+  CSId: number = 0
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -45,6 +46,7 @@ export class AttendanceRpt13BComponent {
       ExamCategoryID: ['',[DropdownValidators]],
     })
     this.CenterId = Number( this.activateRoute.snapshot.queryParamMap.get('centerid'));
+    this.CSId = Number( this.activateRoute.snapshot.queryParamMap.get('csid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     this.getMasterData();
@@ -78,7 +80,15 @@ export class AttendanceRpt13BComponent {
       this.request.RoleID = this.sSOLoginDataModel.RoleID
       this.request.StudentExamType = this.request.ExamCategoryID
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
-      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+      
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+        || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD_NonEng)
+        && this.CenterId > 0
+      ) {
         this.request.InstituteID = this.CenterId
       }
       await this.reportService.AttendanceReport13B(this.request).then((data: any) => {

@@ -106,9 +106,37 @@
                 Enrollment No. <span class="StarMarking">*</span>
               </label>
               <input type="text" class="form-input" placeholder="Enter Enrollment No" id="EnrollmentNo" name="EnrollmentNo"
-                    [(ngModel)]="request.EnrollmentNo" formControlName="EnrollmentNo">
+                    [(ngModel)]="request.EnrollmentNo" formControlName="EnrollmentNo" (input)="getStudBasicDetails($event.target.value)">
               <div *ngIf="isqualificationformSubmitted && _QualificationForm.EnrollmentNo.errors" class="text-danger">
                 <p *ngIf="_QualificationForm.EnrollmentNo.errors?.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="isTPO">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Student Name<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="StudentName" name="StudentName"
+                    [(ngModel)]="request.StudentName" formControlName="StudentName">
+              <div *ngIf="isqualificationformSubmitted && _QualificationForm.StudentName.errors" class="text-danger">
+                <p *ngIf="_QualificationForm.StudentName.errors?.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="isTPO">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Student Father's Name <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input"  id="StudFatherName" name="StudFatherName"
+                    [(ngModel)]="request.StudFatherName" formControlName="StudFatherName">
+              <div *ngIf="isqualificationformSubmitted && _QualificationForm.StudFatherName.errors" class="text-danger">
+                <p *ngIf="_QualificationForm.StudFatherName.errors?.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
                 </p>
@@ -264,6 +292,7 @@
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
                   <tr>
                     <th>Sr No</th>
+                    <th *ngIf="isTPO">EnrollmentNo</th>
                     <th>Qulaification</th>
                     <!-- <th>Board</th> -->
                     <th>Year Of Passing</th>
@@ -276,6 +305,7 @@
                 <tbody>
                   <tr *ngFor="let row of qualificationList; let idx=index;" >
                     <td class="text-center">{{idx+1}}</td>
+                    <td class="text-center" *ngIf="isTPO">{{row.EnrollmentNo}}</td>
                     <td class="text-center">{{row.Qualification}}</td>
                     <!-- <td class="text-center">{{row.BoardName}}</td> -->
                     <td class="text-center">{{row.PassingID}}</td>

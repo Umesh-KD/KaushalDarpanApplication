@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, GuestRoomSeatSearchModel, GuestStaffProfileSearchModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, GuestHousePaymentDataModel, GuestRoomSeatSearchModel, GuestStaffProfileSearchModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { GuestRoomManagmentService } from '../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, EnumUserType } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { Router } from '@angular/router';
 import { AppsettingService } from '../../../Common/appsetting.service';
@@ -15,6 +15,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
+import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 
 @Component({
   selector: 'app-warden-apply-for-guest-room',
@@ -47,14 +49,20 @@ export class WardenApplyForGuestRoomComponent {
   public GuestRoomList: any = [];
   public GuestRoomNameList: any = [];
   public RoomTypeList: any = [];
+  public GenderList: any = [];
   public RoomAvailablity: number = 0;
   public IsShowForm: boolean = false;
   _EnumRole = EnumRole;
+
+  public saveFlag: number = 0;
+  emitraRequest = new EmitraRequestDetails();
+  public otpRequest = new GuestHousePaymentDataModel();
+  public PaymentDetailtList: any = [];
+
   displayedColumns: string[] = [
-    'SNo', 'RequestName', 'InstituteName', 'DepartmentName',
-    'FromDateTime', 'ToDateTime', 'Purpose_str', 'StatusName',
-    'Remark', 'GuestHouseName', 'RoomQuantity', 'RoomType',
-    'RoomFee', 'CheckinCheckout', 'Action'
+    'SNo', 'RequestName', 'InstituteName', 'DepartmentName', 'FromDateTime', 'ToDateTime',
+    'GuestHouseName', 'Purpose_str','RoomType', 'CoolingFacilities_Str', 'RoomFee', 
+    'StatusName', 'Remark', 'CheckinCheckout', 'Action'
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -70,6 +78,7 @@ export class WardenApplyForGuestRoomComponent {
     private formBuilder: FormBuilder,
     private Swal2: SweetAlert2,
     private routers: Router,
+    private emitraPaymentService: EmitraPaymentService,
   ) { }
 
   async ngOnInit() {
@@ -92,15 +101,18 @@ export class WardenApplyForGuestRoomComponent {
         txtRoomFee: [{ value: '', disabled: true }, Validators.required],
         ddlGuestHouseID: ['', Validators.required],
         Purpose: ['', [DropdownValidators]],
+        GenderId: ['', [DropdownValidators]],
+        CoolingFacilities: ['', [DropdownValidators]],
         txtRoomType: ['', Validators.required],
         txtSeatCapacity: ['', Validators.required],
-        txtRoomQuantity: ['', Validators.required]
+        txtRoomQuantity: [{ value: '', disabled: true }, Validators.required]
       });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
     
+    await this.GetGenderList();
     await this.loadData();
     await this.GetGuestRoomApplyList();
     await this.GetAllRoomSeatList();
@@ -126,6 +138,19 @@ export class WardenApplyForGuestRoomComponent {
 
   get _IIPMasterFormGroup() { return this.IIPMasterFormGroup.controls; }
   get _SSOIDFormGroup() { return this.SSOIDFormGroup.controls; }
+
+  async GetGenderList() {
+    try {
+      await this.commonMasterService.GetCommonMasterData('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+        }, (error: any) => console.error(error)
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async CheckUserExists(SSOID: any) {
     if (SSOID.target.value != null) {
@@ -445,7 +470,9 @@ export class WardenApplyForGuestRoomComponent {
 
   async changeSeats() {
     debugger
-    this.request.RoomQuantity = 0;
+    await this.SetBedPrice();
+    await this.checkRoomAvailability();
+    this.request.RoomQuantity = 1;
     // 1. Parse request start and end using correct parser
     const requestedStart = this.parseCustomDate1(this.request.FromDate, this.request.FromTime + ":00");
     const requestedEnd = this.parseCustomDate1(this.request.ToDate, this.request.ToTime + ":00");
@@ -474,12 +501,12 @@ export class WardenApplyForGuestRoomComponent {
       .reduce((sum: number, item: any) => sum + item.RoomQuantity, 0);
 
     // 5. Calculate availability
-    this.RoomAvailablity = totalRoomQuantity - totalBookedQuantity;
+    // this.RoomAvailablity = totalRoomQuantity - totalBookedQuantity;
 
     // 6. Show warning if no availability
-    if (this.RoomAvailablity <= 0) {
-      this.toastr.warning("Room Type Not Available!");
-    }
+    // if (this.RoomAvailablity <= 0) {
+    //   this.toastr.warning("Room Type Not Available!");
+    // }
 
 
 
@@ -507,6 +534,39 @@ export class WardenApplyForGuestRoomComponent {
     //else {
     //  this.groupForm.get('txtSeatCapacity')?.disable();
     //}
+  }
+
+  async checkRoomAvailability() {
+    if ((this.request?.GenderId ?? 0) == 0) {
+      this.toastr.warning("Select gender for Room Availability")
+      return
+    } else if((this.request?.GuestHouseID ?? 0) == 0) {
+      this.toastr.warning("Select Guest House for Room Availability")
+      return
+    } else if((this.request?.RoomType ?? 0) == 0) {
+      this.toastr.warning("Select Room Type for Room Availability")
+      return
+    } else if ((this.request?.CoolingFacilities ?? 0) == 0) {
+      this.toastr.warning("Select Cooling Facilities for Room Availability")
+      return
+    }
+
+    try {
+      var dropdownReq: any = {}
+      dropdownReq.Purpose = this.request.Purpose
+      dropdownReq.GuestHouseID = this.request.GuestHouseID
+      dropdownReq.CoolingFacilities = this.request.CoolingFacilities
+      dropdownReq.GenderId = this.request.GenderId
+      dropdownReq.RoomType = this.request.RoomType
+      dropdownReq.action = "GetRoomAvailability";
+
+      await this.guestRoomManagmentService.GuestHouse_Dropdowns(dropdownReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoomAvailablity=data.Data[0].AvailableBed
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // Helper: safe parser for 'DD-MM-YYYY' and 'HH:mm:ss'
@@ -655,5 +715,142 @@ export class WardenApplyForGuestRoomComponent {
       case 175: return '4 Bed (Sharing)';
       default: return 'Dormitory/Hall (Sharing)';
     }
+  }
+
+  async GetRoomTypeListData() {
+    this.request.RoomFee = 0;
+    this.request.SeatCapacity = 0
+    this.RoomAvailablity = 0;
+    try {
+      var dropdownReq: any = {}
+      dropdownReq.Purpose = this.request.Purpose
+      dropdownReq.GuestHouseID = this.request.GuestHouseID
+      dropdownReq.CoolingFacilities = this.request.CoolingFacilities
+      dropdownReq.action = "GetRoomType";
+
+      await this.guestRoomManagmentService.GuestHouse_Dropdowns(dropdownReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoomTypeList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async SetBedPrice() {
+    this.request.RoomFee = this.RoomTypeList.filter((x: { RoomType: number }) => x.RoomType == this.request.RoomType)[0].RoomFee
+    console.log("RoomFee",this.request.RoomFee)
+  }
+
+  async PayApplicationFees(item: any) {
+    this.otpRequest = item;
+    await this.proceedToSave();
+    if (this.saveFlag == 0) {
+      return;
+    }
+    this.emitraRequest = new EmitraRequestDetails();
+    //Set Parameters for emitra
+    this.emitraRequest.Amount = Number(this.otpRequest.RoomFee);
+    this.emitraRequest.ServiceID = "2920";
+    this.emitraRequest.ID = this.otpRequest?.UniqueServiceID ?? 0;
+    this.emitraRequest.MobileNo = item.MobileNo
+    this.emitraRequest.SsoID = item.SSOID;
+    this.emitraRequest.DepartmentID = 1// this.request.DepartmentID;
+    this.emitraRequest.CourseTypeID = 1 //this.request.CourseTypeID;
+  
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Student || this.sSOLoginDataModel.UserType == EnumUserType.KIOSK) {
+      this.emitraRequest.IsKiosk = true;
+    }
+
+    this.loaderService.requestStarted();
+    try {
+      await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+
+            this.PaymentDetailtList = data;
+            await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+          }
+          else {
+            let displayMessage = this.Message ?? this.ErrorMessage;
+            this.toastr.error(displayMessage)
+          }
+        })
+    }
+    catch (ex) {
+
+      console.log(ex)
+
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async proceedToSave() {
+    this.isLoading = true;
+    try {
+
+      this.otpRequest.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.otpRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.otpRequest.GuestHouseID = this.otpRequest.GuestHouseID;
+      // this.otpRequest.RoomFee = this.otpRequest.RoomFee;
+      this.otpRequest.IsActive = true;
+      this.otpRequest.IsDelete = false;
+
+      await this.guestRoomManagmentService.SaveGuestRoomPayment(this.otpRequest)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.saveFlag = 1;
+          }
+        })
+
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
+
+  RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any) {
+
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", pServiceURL);
+
+    //Hidden Encripted Data
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", "ENCDATA");
+    hiddenField.setAttribute("value", pENCDATA);
+    form.appendChild(hiddenField);
+
+    //Hidden Service ID
+    var hiddenFieldService = document.createElement("input");
+    hiddenFieldService.setAttribute("type", "hidden");
+    hiddenFieldService.setAttribute("name", "SERVICEID");
+    hiddenFieldService.setAttribute("value", this.emitraRequest.ServiceID);
+    form.appendChild(hiddenFieldService);
+    //Hidden Service ID
+    var MERCHANTCODE = document.createElement("input");
+    MERCHANTCODE.setAttribute("type", "hidden");
+    MERCHANTCODE.setAttribute("name", "MERCHANTCODE");
+    MERCHANTCODE.setAttribute("value", pMERCHANTCODE);
+    form.appendChild(MERCHANTCODE);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+
+  async onGenderChange() {
+    await this.checkRoomAvailability();
   }
 }

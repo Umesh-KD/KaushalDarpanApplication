@@ -151,8 +151,8 @@ export class ItiCampusPostComponent implements OnInit {
       txtCampusToDate: ['', Validators.required],
       txtCampusToTime: [''],
       txtCampusAddress: ['', Validators.required],
-      txtMarked: [false, Validators.requiredTrue]
-
+      txtMarked: [false, Validators.requiredTrue],
+   
     });
 
     this.EligibilityCriteriaForm = this.formBuilder.group({
@@ -167,7 +167,7 @@ export class ItiCampusPostComponent implements OnInit {
       ddlMinPre_12: [''],
       ddlMinPre_Diploma: [''],
       //ddlNoofBackPapersAllowed: ['', [DropdownValidators]],
-      ddlNoofBackPapersAllowed: [''],
+      // ddlNoofBackPapersAllowed: [''],
 
       txtAgeAllowedFrom: ['', Validators.required],
       txtAgeAllowedTo: ['', Validators.required],
@@ -176,15 +176,18 @@ export class ItiCampusPostComponent implements OnInit {
       txtNoofPositions: ['', Validators.required],
       txtCTC: ['', Validators.required],
       txtSalaryRemark: [''],
-      ddlGender: ['',Validators.required],
+      ddlGender: ['Male and Female Both',Validators.required],
       txtOtherBenefit: [''],
-      ddlCampusType: ['',Validators.required],
+      ddlCampusType: [{ value: 'Institute Level Campus', disabled: true },Validators.required],
       divisionId: ['0'],
-      instituteId:['0'],
+      instituteId:[{ value: '0', disabled: true }],
       ddlInterviewType: [''],
       ddlEligibleInstitutes: ['', [DropdownValidators]],
-      ddlNoOfInterviewRound: [''],
+      // ddlNoOfInterviewRound: [''],
+      txtappointmentLocation:['', Validators.required]
+
     });
+
 
     // await this.GetStreamType();
     this.request.EligibilityCriteriaModel = [];
@@ -192,6 +195,11 @@ export class ItiCampusPostComponent implements OnInit {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.UserID = this.sSOLoginDataModel.UserID;
+
+    this.request_EligibilityCriteriaModel.Gender = 'Male and Female Both';
+    this.request_EligibilityCriteriaModel.CampusType='Institute Level Campus';
+    this.request_EligibilityCriteriaModel.InstituteId=this.sSOLoginDataModel.InstituteID;
+
     /*this.GetNameWiseData(this.request.CompanyID);*/
     await this.GetMaterData();
     await this.loadDropdownData('CompanyType')
@@ -599,7 +607,7 @@ debugger
 
       this.request.PostSSOID = this.sSOLoginDataModel.SSOID;
       // this.request.PostCollegeID = this.sSOLoginDataModel.InstituteID;
-      this.request.PostCollegeID = 1;
+      this.request.PostCollegeID = this.sSOLoginDataModel.InstituteID;
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
@@ -746,11 +754,12 @@ debugger
             InstituteId:this.request_EligibilityCriteriaModel.InstituteId,
             // SelectedInstituteID:this.request_EligibilityCriteriaModel.InstituteId,
             // SelectedDivisionID:this.request_EligibilityCriteriaModel.divisionId
+            appointmentLocation:this.request_EligibilityCriteriaModel.appointmentLocation
           }
         );
         this.BranchList = [];
         this.request_EligibilityCriteriaModel.divisionId=0;
-        this.request_EligibilityCriteriaModel.InstituteId=0;
+        // this.request_EligibilityCriteriaModel.InstituteId=0;
       })
 
       console.log("this.request_EligibilityCriteriaModel", this.request_EligibilityCriteriaModel)
@@ -1145,7 +1154,7 @@ debugger
 
   changeEligibleInstitute(){
     // this.BranchList = [];
-    this.request_EligibilityCriteriaModel.InstituteId=0;
+    // this.request_EligibilityCriteriaModel.InstituteId=0;
     let typeId = this.request_EligibilityCriteriaModel.EligibleInstitutesID;
     this.institueList = this.copyOfinstitueList.filter((ins:any)=>{
       debugger

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { ItiAssignStudentExaminer, ItiExaminerDataModel, ITITeacherForExaminerSearchModel } from '../../Models/ItiExaminerDataModel';
+import { ItiAssignStudentExaminer, ItiExaminerDataModel, ITIExaminerUploadFilesModel, ITITeacherForExaminerSearchModel } from '../../Models/ItiExaminerDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { TeacherForExaminerSearchModel } from '../../Models/ExaminerDataModel';
 import { ITI_AppointExaminerDetailsModel, ITI_ExaminerDashboardModel } from '../../Models/ITI/ITI_ExaminerDashboard';
@@ -237,4 +237,23 @@ export class ItiExaminerService {
       }
     );
   }
+
+
+  public async ITIExaminerUploadFiles(request: ITIExaminerUploadFilesModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/ITIExaminerUploadFiles`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async ITIExaminerUploadFilesByAction(request: ITIExaminerUploadFilesModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/ITIExaminerUploadFilesByAction`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

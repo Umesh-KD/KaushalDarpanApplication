@@ -34,6 +34,7 @@ export class Report23Component {
   _EnumRole = EnumRole;
   public InstituteMasterDDLList: any = []
   CenterId: number = 0
+  CSId: number = 0
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -57,6 +58,7 @@ export class Report23Component {
       InstituteID: [''],
     })
     this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
+    this.CSId = Number( this.activatedRoute.snapshot.queryParamMap.get('csid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     this.GetExamShiftData();
@@ -162,8 +164,16 @@ export class Report23Component {
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     }
 
-    if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+    if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+      || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
+      || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
+      || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
+      || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD
+      || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD_NonEng)
+      && this.CenterId > 0
+    ) {
       this.request.InstituteID = this.CenterId;
+      // this.request.UserID = this.CSId
     }
     
     try {

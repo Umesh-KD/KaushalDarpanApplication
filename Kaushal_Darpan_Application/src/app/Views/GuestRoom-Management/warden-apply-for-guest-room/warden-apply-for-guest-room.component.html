@@ -92,6 +92,19 @@
         </div>
 
         <div>
+          <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Gender:<span class="StarMarking" style="display:none;">*</span>
+          </label>
+          <select class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="request.GenderId" (change)="onGenderChange()">
+            <option value="0" selected>--Select Gender--</option>
+            <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.GenderId.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.GenderId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Postal Address<!--<span class="StarMarking">*</span>-->
           </label>
@@ -177,9 +190,23 @@
             </div>
           </div>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Purpose<span class="StarMarking">*</span></label>
+          <select formControlName="Purpose" class="form-select" [(ngModel)]="request.Purpose" (change)="GetRoomTypeListData()">
+            <option value="0">--Select--</option>
+            <option value="1">Private</option>
+            <option value="2">On Duty</option>
+            <option value="3">Training</option>
+          </select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.Purpose.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.Purpose.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name<span class="StarMarking">*</span></label>
-          <select formControlName="ddlGuestHouseID" class="form-select" [(ngModel)]="request.GuestHouseID" (change)="GetRoomTypeList()">
+          <select formControlName="ddlGuestHouseID" class="form-select" [(ngModel)]="request.GuestHouseID" (change)="GetRoomTypeListData()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of GuestRoomNameList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -187,6 +214,23 @@
             <p *ngIf="!_IIPMasterFormGroup.ddlGuestHouseID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Cooling Facilities: <span class="StarMarking">*</span></label>
+          <select class="form-select" id="CoolingFacilities" 
+            formControlName="CoolingFacilities" 
+            [(ngModel)]="request.CoolingFacilities"
+            (change)="GetRoomTypeListData()">
+            <option value="0">Choose Option</option>
+            <option value="1">AC</option>
+            <option value="2">Non-AC</option>
+            <!-- <option value="3">Fan</option> -->
+          </select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.CoolingFacilities.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.CoolingFacilities.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type<span class="StarMarking">*</span></label>
           <select formControlName="txtRoomType" class="form-input" type="text" placeholder="Enter Room Type"
@@ -209,39 +253,26 @@
           </div>
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Availability<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Availability<span class="StarMarking">*</span></label>
           <div class="alert p-2 alert-warning">{{RoomAvailablity}}</div>
 
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Quantity<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Quantity<span class="StarMarking">*</span></label>
           <input formControlName="txtRoomQuantity" class="form-input" type="text" placeholder="Enter Room Quantity"
-                 [(ngModel)]="request.RoomQuantity" (keyup)="getRoomPrice()">
+                 [(ngModel)]="request.RoomQuantity">
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomQuantity.errors" class="text-danger">
             <p *ngIf="_IIPMasterFormGroup.txtRoomQuantity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fees<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fees(per day)<span class="StarMarking">*</span></label>
           <input formControlName="txtRoomFee" class="form-input" type="text" placeholder="Enter Room Fees"
                  [(ngModel)]="request.RoomFee">
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomFee.errors" class="text-danger">
             <p *ngIf="_IIPMasterFormGroup.txtRoomFee.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Purpose<span class="StarMarking">*</span></label>
-          <select formControlName="Purpose" class="form-select" [(ngModel)]="request.Purpose">
-            <option value="0">--Select--</option>
-            <option value="1">Private</option>
-            <option value="2">On Duty</option>
-            <option value="3">Training</option>
-          </select>
-          <div *ngIf="isSubmitted && _IIPMasterFormGroup.Purpose.errors" class="text-danger">
-            <p *ngIf="!_IIPMasterFormGroup.Purpose.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
         </div>
 
@@ -263,14 +294,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Reason
-          </label>
-          <input type="text" class="form-input" placeholder="Enter Reason" name="Reason"
-                 [(ngModel)]="request.Reason" formControlName="Reason">
-        </div> -->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"
@@ -346,9 +369,29 @@
             <td mat-cell *matCellDef="let row">{{ row.ToDate }} {{ row.ToTime }}</td>
           </ng-container>
 
+          <ng-container matColumnDef="GuestHouseName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest Room Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
+          </ng-container>
+
           <ng-container matColumnDef="Purpose_str">
             <th mat-header-cell *matHeaderCellDef>Purpose</th>
             <td mat-cell *matCellDef="let row">{{ row.Purpose_str }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="RoomType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Type</th>
+            <td mat-cell *matCellDef="let row">{{ row.RoomType_str }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="CoolingFacilities_Str">
+            <th mat-header-cell *matHeaderCellDef>Cooling Facilities</th>
+            <td mat-cell *matCellDef="let row">{{ row.CoolingFacilities_Str }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="RoomFee">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Payable Amount</th>
+            <td mat-cell *matCellDef="let row">{{ row.RoomFee }}</td>
           </ng-container>
 
           <ng-container matColumnDef="StatusName">
@@ -361,25 +404,10 @@
             <td mat-cell *matCellDef="let row">{{ row.Remark }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="GuestHouseName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest Room Name</th>
-            <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomQuantity">
+          <!-- <ng-container matColumnDef="RoomQuantity">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty</th>
             <td mat-cell *matCellDef="let row">{{ row.RoomQuantity }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomType">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-            <td mat-cell *matCellDef="let row">{{ row.RoomType_str }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="RoomFee">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fee</th>
-            <td mat-cell *matCellDef="let row">{{ row.RoomFee }}</td>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="CheckinCheckout">
             <th mat-header-cell *matHeaderCellDef>Check-In/Out</th>
@@ -389,9 +417,15 @@
           <ng-container matColumnDef="Action">
             <th mat-header-cell *matHeaderCellDef>Action</th>
             <td mat-cell *matCellDef="let row">
-              <div *ngIf="row.StatusName === 'Pending'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete" *ngIf="row.StatusName == 'Pending'">
                   <i class="ti ti-trash"></i>
+                </a>
+
+                <a title="Pay" href="javascript:void(0)"
+                  (click)="PayApplicationFees(row)" 
+                  *ngIf="row.StatusID == 1339 && row.PaymentStatus == 0">
+                  <i class="ti ti-currency-rupee"></i>
                 </a>
               </div>
             </td>

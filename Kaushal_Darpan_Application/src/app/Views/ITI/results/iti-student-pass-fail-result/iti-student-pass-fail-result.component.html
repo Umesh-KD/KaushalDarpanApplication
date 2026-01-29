@@ -74,7 +74,7 @@
 
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
       <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+        <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
@@ -128,7 +128,7 @@
               <td align="left">
                 <div class="flex " style="justify-content:center;">
                   <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                    <a class="actionBtns" href="javascript:void(0);" title="Download Marksheet" (click)="GetITIStudent_Marksheet(item.EnrollmentNo)"><i class="ti ti-download"></i></a>
+                    <a class="actionBtns" href="javascript:void(0);" title="Download Marksheet" (click)="GetITIStudent_Marksheet(row.EnrollmentNo)"><i class="ti ti-download"></i></a>
                   </div>
                   <div *ngIf="row.IsConsolidatedMarkSheet==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a href="javascript:void(0);" title="Download Consolidated Marksheet" (click)="ConsolidatedDownload(item.EnrollmentNo)"><i class="ti ti-download"></i></a>

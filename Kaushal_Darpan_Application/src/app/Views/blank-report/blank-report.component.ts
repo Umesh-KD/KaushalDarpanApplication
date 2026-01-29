@@ -14,6 +14,8 @@ import { ReportService } from '../../Services/Report/report.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
+import { SetExamAttendanceService } from '../../Services/SetExamAttendance/set-exam-attendance.service';
+import { SetExamAttendanceSearchModel } from '../../Models/SetExamAttendanceDataModel';
 @Component({
   selector: 'app-blank-report',
   standalone: false,
@@ -52,6 +54,26 @@ export class BlankReportComponent {
   filteredSemesterList = [...this.SemesterMasterList];
   public BranchDDLList: any = [];
   CenterId: number = 0;
+  CSId: number = 0;
+  public searchRequest = new SetExamAttendanceSearchModel();
+  public BlankReportDataList_admin: any = [];
+  _EnumRole = EnumRole
+  _GlobalConstants = GlobalConstants
+
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  StreamMasterDDL: any = [];
+  public StudentList: any[] = [];
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "1000";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
   
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -66,14 +88,13 @@ export class BlankReportComponent {
     private Swal2: SweetAlert2,
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
+    private setExamAttendanceService: SetExamAttendanceService,
   ) {
 
   }
   get _ExamFormGroup() { return this.ExamFormGroup.controls; }
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.ExamFormGroup = this.fb.group(
-      {
+    this.ExamFormGroup = this.fb.group({
         ddlBranch: ['', [DropdownValidators]],
         DateID: [''],
         StudentExamYear: ['', [DropdownValidators]],
@@ -82,18 +103,27 @@ export class BlankReportComponent {
         ddlExamCategoryID: ['', [DropdownValidators]]
 
       })
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
-    this.GetExamShift();
-    this.GetMasterData();
+    this.CSId = Number( this.activatedRoute.snapshot.queryParamMap.get('csid'));
+    await this.GetExamShift();
+    await this.GetMasterData();
     this.loadDropdownData('Branch');
     this.loadDropdownData('Semester');
     this.loadDropdownData('ResultExamType');
-    this.GetTradeDDL();
-  
+    await this.GetTradeDDL();
+
+    if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+      || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
+      || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
+      || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
+      || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD
+      || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD_NonEng)
+      && this.CenterId > 0
+    ) {
+      await this.GetBlankReportData_Admin();
+    }
   }
-
-
-
 
   async GetTradeDDL() {
     try {
@@ -316,4 +346,128 @@ export class BlankReportComponent {
     this.request.SubjectCode = '';
     this.request.ExamCategoryID = 0;
   }
+
+  async GetBlankReportData_Admin() {
+    this.searchRequest.InvigilatorAppointmentID = this.sSOLoginDataModel.UserID
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+
+    if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+      || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
+      || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
+      || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
+      || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD
+      || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD_NonEng)
+      && this.CenterId > 0
+    ) {
+      this.searchRequest.InstituteID = this.CenterId
+      this.searchRequest.InstituteId = this.CenterId
+    }
+    
+    try {
+      this.loaderService.requestStarted();
+
+      await this.setExamAttendanceService.GetBlankReportData_Admin(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success){
+          this.BlankReportDataList_admin = data.Data
+          this.loadInTable();
+        } else {
+          this.BlankReportDataList_admin = []
+          this.loadInTable();
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  //table feature
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org.list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.BlankReportDataList_admin].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org.list here)
+  sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.BlankReportDataList_admin] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main 
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.BlankReportDataList_admin.length;
+  }
+  // (replace org.list here)
+  // get totalInTableSelected(): number {
+  //   return this.BlankReportDataList_admin.length;
+  // }
+  // get sortInTableDirectionAero(): string {
+  //   return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  // }
+  // end table feature
 }

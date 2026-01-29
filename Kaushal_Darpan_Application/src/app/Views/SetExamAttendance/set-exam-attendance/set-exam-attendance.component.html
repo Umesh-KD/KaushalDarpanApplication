@@ -177,10 +177,13 @@
     <!--end pagination-->
 
 
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4">
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4" *ngIf="paginatedInTableData?.length > 0">
       <div class="flex fileUploader mt-3 mb-3 py-2">
         <input class="form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-               id="filemarksheetPhoto" type="file" (change)="onFilechange($event, 'attendance', $event)">
+          id="filemarksheetPhoto" 
+          type="file" 
+          (change)="onFilechange($event, 'attendance', $event)"
+          [disabled]="isLocked">
         <label for="filemarksheetPhoto">
           <span>Choose File</span>
           <!-- Access AttendancePhoto of each student -->
@@ -194,8 +197,10 @@
           </a>
 
           <!--<a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL  + Dis_AttendancePhotoName}}" class="btn bg-primary text-white m-0"><i class="ti ti-eye"></i></a>-->
-          <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-             (click)="DeleteImage(AttendancePhoto, 'attendance')" *ngIf="AttendancePhoto != ''">
+          <a href="javascript:void(0);" 
+            class="btn bg-danger text-white m-0"
+            (click)="DeleteImage(AttendancePhoto, 'attendance')" 
+            *ngIf="AttendancePhoto != '' && !isLocked">
             <i class="ti ti-trash"></i>
           </a>
         </div>
@@ -205,8 +210,11 @@
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
 
       <div class="text-center">
-        <button class="btn bg-success text-white" type="button" *ngIf="!isLocked" (click)="LockandSubmit()"
-                [disabled]="!isFileUploaded">
+        <button type="button"
+          class="btn bg-success text-white"  
+          *ngIf="!isLocked && paginatedInTableData?.length > 0" 
+          (click)="LockandSubmit()"
+          [disabled]="!isFileUploaded">
           Lock & Submit
         </button>
         <a routerLink="/InvigilatorExamList" class="btn bg-danger text-white" type="button">Back</a>

@@ -1,0 +1,28 @@
+.download-btn {
+  font-size: 14px; /* make icon small */
+  margin: 0 6px; /* space between buttons */
+  padding: 4px;
+  cursor: pointer;
+}
+
+  .download-btn i {
+    font-size: 14px;
+  }
+
+
+.customEditorStyle {
+  background-color: lightyellow;
+  padding: 10px;
+  border: solid 1px #a0a0a5;
+  line-height: 30px;
+  font-family: Arial, sans-serif;
+}
+
+#pdfTable {
+  border: solid 1px #a0a0a5 !important;
+  padding: 20px;
+}
+
+.StarMarking {
+  color: red;
+}

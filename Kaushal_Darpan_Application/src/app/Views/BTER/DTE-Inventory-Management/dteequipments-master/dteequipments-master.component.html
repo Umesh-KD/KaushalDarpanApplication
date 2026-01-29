@@ -99,7 +99,7 @@
             </label>
           </div>
 
-          <div>
+          <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Specification <span class="StarMarking">*</span>
             </label>
@@ -107,7 +107,7 @@
             <div *ngIf="isSubmitted && _EquipmentsRequestFormGroup.Specification.errors?.required" class="text-danger">
               <p>This field is required!</p>
             </div>
-          </div>
+          </div> -->
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="saveData()">Submit</button>
@@ -145,7 +145,7 @@
             <th class="text-left">Category</th>
             <th class="text-left">Name</th>
             <th class="text-left">IsConsumable</th>
-            <th class="text-left">Specification</th>
+            <!-- <th class="text-left">Specification</th> -->
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -161,7 +161,7 @@
               </span>
             </td>
 
-            <td align="left">{{item.Specification}}</td>
+            <!-- <td align="left">{{item.Specification}}</td> -->
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0)" (click)="btnEdit_OnClick(item.EquipmentsId)" title="Edit"><i class="ti ti-pencil"></i></a>

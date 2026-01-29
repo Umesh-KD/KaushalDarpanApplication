@@ -123,8 +123,11 @@ export class UpdateStudentQualificationComponent implements OnInit {
         ddlBoardID: ['', [DropdownValidators]],
         ddlPassyear: ['', [DropdownValidators]],
         ddlMarksType: ['', [DropdownValidators]],
-      });
+        StudentName: [{ value: '', disabled: true }],
+        StudFatherName: [{ value: '', disabled: true }]
 
+      });
+      debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     if (this.sSOLoginDataModel.UserType == EnumUserType.STUDENT || this.sSOLoginDataModel.UserType == EnumUserType.CITIZEN )
     {
@@ -176,7 +179,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
     if(this.sSOLoginDataModel.RoleID==EnumRole.ITI_Placement_TPO){
         this.isTPO=true;
          this.sSOLoginDataModel.StudentID = this.StudantCourseList[0]?.StudentID;
-          this.sSOLoginDataModel.DepartmentID = this.StudantCourseList[0]?.DepartmentID;
+          this.sSOLoginDataModel.DepartmentID =this.sSOLoginDataModel.DepartmentID;
           localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
           this.IsShowDashboard = true;
           //changes 
@@ -196,6 +199,9 @@ export class UpdateStudentQualificationComponent implements OnInit {
    
     if(this.ID!=0 && this.ID!=null && !Number.isNaN(this.ID)){
        this.req.StudentQualificationID=this.ID;
+       if (this.request.EnrollmentNo) {
+        await this.getStudBasicDetails(this.request.EnrollmentNo);
+      }
     }
     else{
        this.req.StudentQualificationID=0;
@@ -234,6 +240,29 @@ export class UpdateStudentQualificationComponent implements OnInit {
       }
     });
   }
+  async getStudBasicDetails(EnrollmentNo:string){
+    debugger;
+    try {
+ 
+      this.loaderService.requestStarted();
+      await this.commonMasterService.getStudBasicDetailsEnrollmentWise(EnrollmentNo,this.sSOLoginDataModel.DepartmentID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.request.StudentName=data['Data'][0].StudentName;
+          this.request.StudFatherName=data['Data'][0].FatherName;
+          console.log(data['Data']);
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
 
     async GetStudentAdditionalQualiDataByID() {

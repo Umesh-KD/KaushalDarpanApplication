@@ -4,7 +4,7 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { AttendanceRpt13BDataModel } from '../../../Models/ReportBasedDataModel';
 import { ReportService } from '../../../Services/Report/report.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants ,EnumStudentExamType} from '../../../Common/GlobalConstants';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -20,11 +20,15 @@ export class Rpt33Component {
   public ExamShiftDDL: any = []
   public sSOLoginDataModel = new SSOLoginDataModel()
   public request = new AttendanceRpt13BDataModel()
+  public downloadRequest = new AttendanceRpt13BDataModel()
   public StreamMasterDDL: any = []
   public SemesterMasterDDL: any = []
   public TableData: any = []
   // @ViewChild(OTPModuleComponent) childComponent!: OTPModuleComponent;
   CenterId: number= 0
+  CSId: number= 0
+  examDate_pdf: any
+  public _EnumStudentExamType = EnumStudentExamType;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -38,11 +42,14 @@ export class Rpt33Component {
 
   async ngOnInit() {
     this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
+    this.CSId = Number( this.activatedRoute.snapshot.queryParamMap.get('csid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     this.request.UserID = this.sSOLoginDataModel.UserID
-    this.getMasterData();
-    this.GetRport33Data()
+
+    
+    await this.getMasterData();
+    await this.GetRport33Data()
   }
 
   // openOTP(MobileNo: any) {
@@ -85,24 +92,37 @@ export class Rpt33Component {
   
 
   async onDownload(row: any) {
-    debugger
+     
     const formattedDate = this.formatDateToISO(row.ExamDate);
     try {
-      this.request.EndTermID = this.sSOLoginDataModel.EndTermID
-      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
-      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-      this.request.SemesterID = row.semesterid;
-      this.request.SubjectID = row.SubjectId;
-      this.request.SubjectCode = row.PaperCode;
-      this.request.ShiftID = row.ExamShift;
-      this.request.ExamDate = formattedDate;
-      this.request.BranchCode=row.BranchCode;
-      
-      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
-        this.request.InstituteID = this.CenterId;
+
+      let request: any = {}
+
+      this.downloadRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.downloadRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.downloadRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.downloadRequest.SemesterID = row.semesterid;
+      this.downloadRequest.SubjectID = row.SubjectId;
+      this.downloadRequest.SubjectCode = row.PaperCode;
+      this.downloadRequest.ShiftID = row.ExamShift;
+      this.downloadRequest.ExamDate = formattedDate;
+      this.downloadRequest.BranchCode=row.BranchCode;
+      this.downloadRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.downloadRequest.UserID = this.sSOLoginDataModel.UserID
+
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+        || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD_NonEng)
+        && this.CenterId > 0
+      ) {
+        this.downloadRequest.InstituteID = this.CenterId;
+        this.downloadRequest.UserID = this.CSId
       }
 
-      await this.reportService.Report33(this.request).then((data: any) => {
+      await this.reportService.Report33(this.downloadRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.DownloadFile(data.Data)
@@ -121,9 +141,20 @@ export class Rpt33Component {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-      this.request.StudentExamType = 78
+      this.request.StudentExamType = this.request.ShiftID
+      this.request.RoleID = this.sSOLoginDataModel.RoleID
 
-      
+      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+        || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
+        || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD
+        || this.sSOLoginDataModel.RoleID === EnumRole.Secretary_JD_NonEng)
+        && this.CenterId > 0
+      ) {
+        this.request.InstituteID = this.CenterId
+        this.request.UserID = this.CSId
+      }      
       await this.reportService.GetRport33Data(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
@@ -153,7 +184,7 @@ export class Rpt33Component {
   }
 
   getSemesterCode(semesterId: number): string {
-    debugger
+     
     const semester = this.SemesterMasterDDL.find(
       (s: any) => s.SemesterID === Number(semesterId)
     );
@@ -163,7 +194,7 @@ export class Rpt33Component {
     // return semester ? semester.SemesterName.match(/\d/)?.[0] ?? '' : '';
   }
   getBranchCode(streamId: number): string {
-    debugger
+     
     const stream = this.StreamMasterDDL.find(
       (s:any) => s.StreamID === Number(streamId)
     );
@@ -181,23 +212,24 @@ export class Rpt33Component {
   generateFileName(extension: string): string {
     // const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     // return `file_${timestamp}.${extension}`;
-    debugger
-    if (!this.request.ExamDate) {
+     
+    this.examDate_pdf 
+    if (!this.downloadRequest.ExamDate ) {
       this.toastr.error('Exam Date not selected');
       return '';
     }
     
-    const datePart = this.request.ExamDate.split('T')[0]; // "2025-12-16
+    const datePart = this.downloadRequest.ExamDate.split('T')[0]; // "2025-12-16
 
     const [yyyy, mm, dd] = datePart.split('-');
     const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
          
     const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  
-    const semestercode = this.getSemesterCode(this.request.SemesterID); 
-    const branchCode = this.request.BranchCode;    
-    const papercode=this.request.SubjectCode;
+    const semestercode = this.getSemesterCode(this.downloadRequest.SemesterID); 
+    const branchCode = this.downloadRequest.BranchCode;    
+    const papercode=this.downloadRequest.SubjectCode;
   
-    return `13A_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}_${papercode}.${extension}`;
+    return `33_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}_${papercode}.${extension}`;
 
   }
 

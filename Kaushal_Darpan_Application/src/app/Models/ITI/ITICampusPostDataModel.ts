@@ -42,6 +42,7 @@ export class ItiCampusPostMasterModel {
   public CampusPostType:number=0;
   public EligibilityCriteriaModel: ItiCampusPostMaster_EligibilityCriteriaModel[] = [];
 }
+
 export class ItiCampusPostMaster_EligibilityCriteriaModel {
   public AID: number = 0;
   public PostID: number = 0;
@@ -79,6 +80,7 @@ export class ItiCampusPostMaster_EligibilityCriteriaModel {
   public EligibleInstitutesID: number = 0;
   public EligibleInstitutesName: string = '';
    public SalaryName: string ='';
+   public appointmentLocation:string='';
 }
 
 export class ItiCampusPostMaster_Action {

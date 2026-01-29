@@ -66,3 +66,49 @@
   </div>
 </ng-template>
 
+<!-- multi department -->
+<ng-template #modal_MultiDepartment let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Please Select Department </b>
+        <button class="btn bg-info text-white" (click)="CloseUserDepartmentModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="p-6">
+
+          <div class="grid xl:grid-cols-12 loginBox">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <tr>
+                <th>
+                  Department
+                </th>
+                <th>
+                  Action
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  BTER
+                </td>
+                <td>
+                  <a href="javascript:void(0);" class="btn bg-info btn-sm text-white text-center c-pointer" (click)="SetUserDepartmentAndProceed(_EnumDepartment.BTER)">Proceed <i class="ti ti-chevron-right"></i></a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  ITI
+                </td>
+                <td>
+                  <a href="javascript:void(0);" class="btn bg-info btn-sm text-white text-center c-pointer" (click)="SetUserDepartmentAndProceed(_EnumDepartment.ITI)">Proceed <i class="ti ti-chevron-right"></i></a>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

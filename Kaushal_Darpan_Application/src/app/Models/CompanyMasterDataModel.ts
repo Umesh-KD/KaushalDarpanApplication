@@ -168,5 +168,7 @@ export class StudentEmploymentDetailsModel {
   public IPAddress: string = '';
 
   public DepartmentID: number = 0;
+  public StudentName:string='';
+  public StudFatherName:string='';
 
 }

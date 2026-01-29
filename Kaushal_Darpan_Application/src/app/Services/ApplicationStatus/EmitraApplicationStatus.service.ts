@@ -4,7 +4,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { StudentSearchModel } from '../../Models/StudentSearchModel';
+import { StudentItiResultModel, StudentSearchModel } from '../../Models/StudentSearchModel';
 import { VerificationDocumentDetailList } from '../../Models/StudentVerificationDataModel';
 import { DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
 
@@ -72,6 +72,16 @@ export class ApplicationStatusService {
   public async AddQualificationDetails(searchRequest: StudentSearchModel) {
     const body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/AddQualificationDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+// main method
+  public async GetStudent_ITI_Result(searchRequest: StudentItiResultModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStudent_ITI_Result`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

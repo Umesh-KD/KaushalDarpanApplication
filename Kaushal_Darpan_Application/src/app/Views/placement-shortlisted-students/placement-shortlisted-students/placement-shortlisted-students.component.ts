@@ -80,9 +80,10 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   get form() { return this.PlacementShortListStudentForm.controls; }
   //
   async GetCampusPostMasterDDL() {
+    debugger
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCampusPostMasterDDL(this.sSOLoginDataModel.DepartmentID)
+      await this.commonMasterService.GetCampusPostMasterDDL(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusMasterList = data['Data'];

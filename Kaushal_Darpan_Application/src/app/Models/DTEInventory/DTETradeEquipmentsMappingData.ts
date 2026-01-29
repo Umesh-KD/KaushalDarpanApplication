@@ -23,6 +23,7 @@ export class DTETradeEquipmentsMappingData {
   public CompanyName: string = '';
   public IndentDocument: string = '';
   public Remarks: string = '';
+  public Specification?: string = '';
 }
 
 export class DTESearchTradeEquipmentsMapping {
