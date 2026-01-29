@@ -60,7 +60,7 @@ export class ITIsurveyperformListComponent implements OnInit
   }
 
   async GetAllsurveyperformaList() {
-    debugger;
+    
     try {
       const res: any = await this._ITIIIPManageService
         .GetAllsurveyperformaList(this.searchRequest);
@@ -81,6 +81,50 @@ export class ITIsurveyperformListComponent implements OnInit
       console.error(error);
       this.surveyperformaList = [];
     }
+  }
+
+
+  async downloadCenterWiseReport(SurveyPerformID: number) {
+    debugger
+
+    //this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    //this.theorylist.EndtermID = this.sSOLoginDataModel.EndTermID
+    //this.theorylist.EngNong = this.sSOLoginDataModel.Eng_NonEng
+    //this.theorylist.InstituteID = this.sSOLoginDataModel.InstituteID
+    //this.theorylist.SubjectName = SubjectName
+    //this.theorylist.SemesterID = SemesterID
+    //this.theorylist.UserID = this.sSOLoginDataModel.UserID;
+    var d = {
+      SurveyPerformID: SurveyPerformID
+    }
+
+    this._ITIIIPManageService.surveyperformaReportDownload(d)
+      .subscribe({
+        next: (blob: Blob) => {
+
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `Seurvay_Performa_Report_${dateTime}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
   }
 
 
