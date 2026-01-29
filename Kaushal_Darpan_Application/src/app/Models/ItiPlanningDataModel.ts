@@ -83,7 +83,8 @@ export class ITI_PlanningCollegesModel {
   public ElectricalRemark:string=''
   public AffilationStatus:string=''
   public AffilationRemark:string=''
-  public Remarks:string=''
+  public Remarks: string = ''
+  public FinancialYearID :number=0
 }
 
 export class ItiAffiliationList {

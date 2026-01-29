@@ -1006,7 +1006,8 @@ export class ItiPlanningComponent {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
       this.request.CollegeId = this.sSOLoginDataModel.InstituteID
-      this.request.Status=Status
+      this.request.Status = Status
+      this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
       //save
       await this.ApplicationService.SaveDataPlanning(this.request)
         .then((data: any) => {
