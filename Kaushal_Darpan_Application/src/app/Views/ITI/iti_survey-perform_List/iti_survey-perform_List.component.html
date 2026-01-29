@@ -41,8 +41,6 @@
             </tr>
           </thead>
 
-
-         
           <tbody>
             <tr *ngFor="let row of surveyperformaList | tableSearchFilter:Table_SearchText; let idx=index;">
 
@@ -52,15 +50,18 @@
               <td>{{row.NatureOfBusiness}}</td>
               <td>{{row.TotalNoPersonEmployeed}}</td>
               <td>
-
-                action
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a (click)="downloadCenterWiseReport(row.SurveyPerformID)" title="Download Trade Wise Report">
+                    <i class="ti ti-download"></i>
+                  </a>
+                </div>
               </td>
 
             </tr>
 
           </tbody>
         </table>
-      </div>
+    </div>
     </div>
 
   </div>
