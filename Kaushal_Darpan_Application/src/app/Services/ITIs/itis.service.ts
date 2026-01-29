@@ -153,7 +153,7 @@ export class ITIsService {
       ).toPromise();
   }
 
-  public async SaveItiworkflow(request: ItiVerificationModel) {
+  public async SaveItiworkflow(request: any) {
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/SaveItiworkflow`, body, this.headersOptions)
