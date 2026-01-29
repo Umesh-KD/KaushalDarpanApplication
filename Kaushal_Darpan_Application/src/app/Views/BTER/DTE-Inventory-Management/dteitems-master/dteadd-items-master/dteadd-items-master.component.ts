@@ -80,21 +80,7 @@ export class DteAddItemsMasterComponent {
       txtTotalPrice: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
       txtPricePerUnit: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
       txtQuantity: ['', [Validators.required]],
-      //txtVoucherNumber: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
-      // txtVoucherNumber: [
-      //   '',
-      //   [
-      //     Validators.required,
-      //     Validators.pattern(/^\d{6,}$/) // At least 6 digits
-      //   ]
-      // ],
-      txtVoucherNumber: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^\d+$/) // fewer than 6 digits
-        ]
-      ],
+      txtVoucherNumber: ['', [Validators.required]],
       //IdentificationMark: ['', Validators.required], //Made Non-Mandatory  Date 01 Dec 2025
       IdentificationMark: [''],
       CampanyName: ['', Validators.required],
