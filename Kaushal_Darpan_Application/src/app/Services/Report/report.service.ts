@@ -34,6 +34,7 @@ import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataMo
 import { TabulationReportSearchModel } from '../../models/bter/TabulationReportModel';
 import { CollegesWiseExaminationRptSearchModel } from '../../Models/CollegesWiseExaminationRptsModel';
 import { StudentItiResultModel } from '../../Models/StudentSearchModel';
+import { InternalMarksReportCollegeWiseSearchModel } from '../../Models/CompanyMasterDataModel';
 
 
 
@@ -1748,6 +1749,13 @@ export class ReportService {
   }
 
 
+  public async GetInternalAssessmentStudentReport(searchRequest: InternalMarksReportCollegeWiseSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInternalAssessmentStudentReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 
