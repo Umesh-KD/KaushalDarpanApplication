@@ -126,6 +126,8 @@ export class ItiPlanningComponent {
         ddlInstituteCategoryId: ['', [DropdownValidators]],
         ddlManagementType: [{ value: '', disabled: true }],
         Remarks: [''],
+        ManagementStatus: [''],
+        ManagementRemark: [''],
         ddlState: ['', [DropdownValidators]],
         ddlDistrict: ['', [DropdownValidators]],
         TrustSociety: ['', [DropdownValidators]],
@@ -143,6 +145,10 @@ export class ItiPlanningComponent {
       ContactNo: ['', [Validators.required, Validators.pattern(GlobalConstants.MobileNumberPattern)]],
       LastElectionValidUpTo: [''],
       LastElectionDate: [''],
+      TrustMemberRemark: [''],
+
+      TrustMemberStatus: [''],
+ 
       PostID: ['', [DropdownValidators]],
 
     })
@@ -157,6 +163,12 @@ export class ItiPlanningComponent {
       InstituteRegOffice: ['', Validators.required],
       PlotHouseBuildingNo: ['', Validators.required],
       AreaLocalitySector: [''],
+      AddressStatus: [''],
+      AddressRemark: [''],
+      ContactStatus: [''],
+      ContactRemark: [''],
+      ElectricalStatus: [''],
+      ElectricalRemark: [''],
       StreetRoadLane: [''],
       Latitude: ['', Validators.required],
       Longitude: ['', Validators.required],
@@ -200,7 +212,8 @@ export class ItiPlanningComponent {
       EffectFrom: ['', Validators.required],
       SerialNo: ['', Validators.required],
       PageNo: ['', Validators.required],
-
+      AffilationStatus:[''],
+      AffilationRemark:[''],
 
 
     })
@@ -263,7 +276,17 @@ export class ItiPlanningComponent {
       this.AddressFormGroup.disable(); // Disables all form controls
       this.NewReportFormGroup.controls['LastElectionDate'].disable()
       this.NewReportFormGroup.controls['LastElectionValidUpTo'].disable()
+      this.ReportForm.controls['ManagementStatus'].enable()
+      this.ReportForm.controls['ManagementRemark'].enable()
+      this.AddressFormGroup.controls['AddressStatus'].enable()
+      this.AddressFormGroup.controls['AddressRemark'].enable()
+      this.AddressFormGroup.controls['ContactRemark'].enable()
+      this.AddressFormGroup.controls['ContactStatus'].enable()
+      this.AddressFormGroup.controls['ElectricalStatus'].enable()
+      this.AddressFormGroup.controls['ElectricalRemark'].enable()
     }
+
+  
 
     
 
@@ -276,6 +299,62 @@ export class ItiPlanningComponent {
       }
       
     }
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal && this.Type != 1 ||
+      this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT && this.Type != 1) {
+      if (this.request.ManagementStatus == 'Approved') {
+        this.ReportForm.disable()
+      }
+      if (this.request.TrustMemberStatus == 'Approved') {
+        this.NewReportFormGroup.disable()
+      }
+
+      if (this.request.AddressStatus == 'Approved') {
+        this.AddressFormGroup.controls['OwnerShipID'].disable()
+        this.AddressFormGroup.controls['AgreementLeaseDate'].disable()
+        this.AddressFormGroup.controls['ValidUpToLeaseDate'].disable()
+        this.AddressFormGroup.controls['InstituteRegOffice'].disable()
+        this.AddressFormGroup.controls['ddlState'].disable()
+        this.AddressFormGroup.controls['ddlDistrict'].disable()
+        this.AddressFormGroup.controls['PlotHouseBuildingNo'].disable()
+        this.AddressFormGroup.controls['StreetRoadLane'].disable()
+        this.AddressFormGroup.controls['AreaLocalitySector'].disable()
+        this.AddressFormGroup.controls['LandMark'].disable()
+        this.AddressFormGroup.controls['InstituteDivisionID'].disable()
+        this.AddressFormGroup.controls['InstituteDistrictID'].disable()
+        this.AddressFormGroup.controls['InstituteSubDivisionID'].disable()
+        this.AddressFormGroup.controls['PropTehsilID'].disable()
+        this.AddressFormGroup.controls['PropUrbanRural'].disable()
+        this.AddressFormGroup.controls['PanchayatSamiti'].disable()
+        this.AddressFormGroup.controls['GramPanchayatSamiti'].disable()
+        this.AddressFormGroup.controls['village'].disable()
+        this.AddressFormGroup.controls['CityID'].disable()
+        this.AddressFormGroup.controls['AdministrativeBodyId'].disable()
+        this.AddressFormGroup.controls['Ward'].disable()
+        this.AddressFormGroup.controls['KhasraKhataNo'].disable()
+        this.AddressFormGroup.controls['BighaYard'].disable()
+        this.AddressFormGroup.controls['Latitude'].disable()
+        this.AddressFormGroup.controls['Longitude'].disable()
+      }
+      if (this.request.ContactStatus == 'Approved') {
+        this.AddressFormGroup.controls['ContactNo'].disable()
+        this.AddressFormGroup.controls['ContactNo'].disable()
+        this.AddressFormGroup.controls['Email'].disable()
+        this.AddressFormGroup.controls['AlternateEmail'].disable()
+        this.AddressFormGroup.controls['Website'].disable()
+      }
+      if (this.request.ElectricalStatus == 'Approved') {
+        this.AddressFormGroup.controls['ConsumerName'].disable()
+        this.AddressFormGroup.controls['KNo'].disable()
+        this.AddressFormGroup.controls['ConnectionType'].disable()
+        this.AddressFormGroup.controls['SanctionLoad'].disable()
+        this.AddressFormGroup.controls['ContractDemand'].disable()
+        this.AddressFormGroup.controls['DISCOM'].disable()
+        this.AddressFormGroup.controls['SubDivOffice'].disable()
+      }
+
+    }
+
     //this.request.IsNewCollege = 1
     this.GetInstituteCategoryList();
     this.GetManagmentType();
@@ -796,6 +875,9 @@ export class ItiPlanningComponent {
   async SaveData(Status:number=0) {
    
 
+ 
+
+
     this.nonItiValidator()
 
    
@@ -884,7 +966,8 @@ export class ItiPlanningComponent {
         this.request.AgreementLeaseDate = ''
         this.request.ValidUpToLeaseDate = ''
         this.request.InstituteRegOffice = ''
-        this.request.InstituteDistrictID = 0
+        this.request.InstituteStateID = 0
+        this.request.PropDistrictID = 0
         //this.request.AgreementFileName = ''
         //this.request.AgreementDisFileName = ''
       }
@@ -924,7 +1007,8 @@ export class ItiPlanningComponent {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
       this.request.CollegeId = this.sSOLoginDataModel.InstituteID
-      this.request.Status=Status
+      this.request.Status = Status
+      this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
       //save
       await this.ApplicationService.SaveDataPlanning(this.request)
         .then((data: any) => {
@@ -1064,6 +1148,7 @@ export class ItiPlanningComponent {
         this.request.InstituteDivisionID = parsedData['Data']["InstituteDivisionID"]
         await this.ddlDivision_Change()
         this.request.PropDistrictID = parsedData['Data']["PropDistrictID"]
+   
         await this.ddlDistrict_Change()
         this.request.InstituteSubDivisionID = parsedData['Data']["InstituteSubDivisionID"]
         this.request.PropTehsilID = parsedData['Data']["PropTehsilID"]
@@ -1072,7 +1157,8 @@ export class ItiPlanningComponent {
         if (this.request.PropUrbanRural == 76) {
           await this.GetGramPanchayatSamiti();
         }
-        
+        debugger
+        this.request.InstituteDistrictID = parsedData['Data']["InstituteDistrictID"]
       }
       //// Assign default values for null or undefined fields
       Object.keys(this.request).forEach((key) => {
@@ -1572,15 +1658,123 @@ export class ItiPlanningComponent {
 
   async SaveData_ApprovedCampus()
   {
+
+
+  
+
+
     this.nonApproveValidator();
 
     this.isSubmitted = true;
 
-    if (this.formAction.invalid) {
+    //if (this.formAction.invalid) {
+    //  return
+    //}
+
+    if (this.request.ManagementStatus == '') {
+      this.toastr.warning("Please Select Status For  Management Details Section")
+      return
+
+    }
+    if (this.request.ManagementStatus == 'Not Approved' && this.request.ManagementRemark== '') {
+      this.toastr.warning("Please Write Remarks For  Management Details Section")
       return
     }
+    if (this.request.ManagementStatus == 'Approved') {
+      this.request.ManagementRemark=''
+    }
 
-    this.requestAction.UserID = this.sSOLoginDataModel.UserID;
+    if (this.request.AddressStatus == '') {
+      this.toastr.warning("Please Select Status For  Address Details Section")
+      return
+
+    }
+    if (this.request.AddressStatus == 'Not Approved' && this.request.AddressRemark == '') {
+      this.toastr.warning("Please Write Remarks For  Address Details Section")
+      return
+    }
+    if (this.request.AddressStatus == 'Approved') {
+      this.request.AddressRemark = ''
+    }
+
+    if (this.request.ContactStatus == '') {
+      this.toastr.warning("Please Select Status For  Address Details Section")
+      return
+
+    }
+    if (this.request.ContactStatus == 'Not Approved' && this.request.ContactRemark == '') {
+      this.toastr.warning("Please Write Remarks For  Contact Details Section")
+      return
+    }
+    if (this.request.ContactStatus == 'Approved') {
+      this.request.ContactRemark = ''
+    }
+
+    if (this.request.ElectricalStatus == '') {
+      this.toastr.warning("Please Select Status For  Electrical load  Details Section")
+      return
+
+    }
+    if (this.request.ElectricalStatus == 'Not Approved' && this.request.ElectricalRemark == '') {
+      this.toastr.warning("Please Write Remarks For  Electrical load  Details Section")
+      return
+    }
+    if (this.request.ElectricalStatus == 'Approved') {
+      this.request.ContactRemark = ''
+    }
+
+
+    if (this.request.TrustMemberStatus == '' && this.request.ItiMembersModel?.length>0) {
+      this.toastr.warning("Please Select Status For ITI MembersList Section")
+      return
+
+    }
+    if (this.request.TrustMemberStatus == 'Not Approved' && this.request.TrustMemberRemark == '' && this.request.ItiMembersModel?.length > 0) {
+      this.toastr.warning("Please Write Remarks For  ITI MembersList Section")
+      return
+    }
+    if (this.request.TrustMemberStatus == 'Approved') {
+      this.request.TrustMemberRemark = ''
+    }
+
+
+    if (this.request.AffilationStatus == '' && this.request.ItiAffiliationList?.length > 0) {
+      this.toastr.warning("Please Select Status For ITI Affiliation List Section")
+      return
+
+    }
+    if (this.request.AffilationStatus == 'Not Approved' && this.request.AffilationRemark == '' && this.request.ItiAffiliationList?.length > 0) {
+      this.toastr.warning("Please Write Remarks For  ITI Affiliation List Section")
+      return
+    }
+    if (this.request.AffilationStatus == 'Approved') {
+      this.request.AffilationRemark = ''
+    }
+
+    if (this.request.AffilationStatus == 'Not Approved' || this.request.AddressStatus == 'Not Approved'
+      || this.request.ContactStatus == 'Not Approved' || this.request.ManagementStatus == 'Not Approved'
+      || this.request.TrustMemberStatus == 'Not Approved' || this.request.ElectricalStatus == 'Not Approved'
+    ) {
+      this.request.Status = 4
+      const remarks = [
+        this.request.AddressRemark,
+        this.request.ManagementRemark,
+        this.request.ContactRemark,
+        this.request.AffilationRemark,
+        this.request.TrustMemberRemark,
+        this.request.ElectricalRemark
+      ];
+
+      this.request.Remarks = remarks
+        .filter(r => r?.trim())
+        .join(', ');
+
+    } else {
+      this.request.Status=1
+    }
+
+
+    this.request.ModifyBy = this.sSOLoginDataModel.UserID;
 
     //Show Loading
    
@@ -1588,7 +1782,7 @@ export class ItiPlanningComponent {
 
     this.loaderService.requestStarted();
     try {
-      await this.ApplicationService.SaveItiworkflow(this.requestAction)
+      await this.ApplicationService.SaveItiworkflow(this.request)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];

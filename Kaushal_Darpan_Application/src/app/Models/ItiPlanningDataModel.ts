@@ -70,7 +70,21 @@ export class ITI_PlanningCollegesModel {
   public CourseTypeID?: number = 0;
   public Status: number = 0;
   public ItiAffiliationList: ItiAffiliationList[]=[]
-  public ItiMembersModel: ItiMembersModel[]=[]
+  public ItiMembersModel: ItiMembersModel[] = []
+  public ManagementStatus:string=''
+  public ManagementRemark:string=''
+  public TrustMemberStatus?:string=''
+  public TrustMemberRemark:string=''
+  public AddressStatus?:string=''
+  public AddressRemark:string=''
+  public ContactStatus:string=''
+  public ContactRemark:string=''
+  public ElectricalStatus:string=''
+  public ElectricalRemark:string=''
+  public AffilationStatus:string=''
+  public AffilationRemark:string=''
+  public Remarks: string = ''
+  public FinancialYearID :number=0
 }
 
 export class ItiAffiliationList {
