@@ -966,7 +966,8 @@ export class ItiPlanningComponent {
         this.request.AgreementLeaseDate = ''
         this.request.ValidUpToLeaseDate = ''
         this.request.InstituteRegOffice = ''
-        this.request.InstituteDistrictID = 0
+        this.request.InstituteStateID = 0
+        this.request.PropDistrictID = 0
         //this.request.AgreementFileName = ''
         //this.request.AgreementDisFileName = ''
       }
@@ -1147,6 +1148,7 @@ export class ItiPlanningComponent {
         this.request.InstituteDivisionID = parsedData['Data']["InstituteDivisionID"]
         await this.ddlDivision_Change()
         this.request.PropDistrictID = parsedData['Data']["PropDistrictID"]
+   
         await this.ddlDistrict_Change()
         this.request.InstituteSubDivisionID = parsedData['Data']["InstituteSubDivisionID"]
         this.request.PropTehsilID = parsedData['Data']["PropTehsilID"]
@@ -1155,7 +1157,8 @@ export class ItiPlanningComponent {
         if (this.request.PropUrbanRural == 76) {
           await this.GetGramPanchayatSamiti();
         }
-        
+        debugger
+        this.request.InstituteDistrictID = parsedData['Data']["InstituteDistrictID"]
       }
       //// Assign default values for null or undefined fields
       Object.keys(this.request).forEach((key) => {
