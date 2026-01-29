@@ -1756,6 +1756,35 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public GetsampleAnnexture32(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/GetSampleAnnexture/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
+
+
+
+  public async UploadAnnexture32(request: any) {
+    var body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/UploadAnnexture32`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetUploadAnnexture32(request: any) {
+    var body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetUploadAnnexture32`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 

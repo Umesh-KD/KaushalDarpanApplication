@@ -66,5 +66,6 @@ export class AnnexureDataModel {
   public EndTermID: number = 0;
   public StudentExamType: number = 0;
   public InstitueID: number = 0;
+  
       
 } 

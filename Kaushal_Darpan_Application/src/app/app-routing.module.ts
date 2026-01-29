@@ -1596,6 +1596,9 @@ const routes: Routes = [
       { path: 'theoryexaminerreport', loadChildren: () => import('../Views/ITI/theory-examiner-report/theory-examiner-report.module').then(m => m.TheoryExaminerReportModule) },
      
       { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
+      { path: 'UploadAnnexture32', loadChildren: () => import('./Views/upload-annexture32/upload-annexture32.module').then(m => m.UploadAnnexture32Module) },
+      { path: 'UploadAnnexture32List', loadChildren: () => import('./Views/upload-annexture32-list/upload-annexture32-list.module').then(m => m.UploadAnnexture32ListModule) },
+
 
 
     ]
@@ -1702,8 +1705,7 @@ const routes: Routes = [
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
   { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
   { path: 'Views\ITI\AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
-  
- 
+
   
   
  
