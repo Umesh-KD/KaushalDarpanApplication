@@ -226,7 +226,15 @@ export class ITIIIPManageService {
       ).toPromise();
   }
 
-
+  public surveyperformaReportDownload(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/surveyperformaReportDownload/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 
 
 }
