@@ -220,8 +220,17 @@ export class AddExaminerComponent implements OnInit {
   async ddlStream_Change() {
     try {
       this.loaderService.requestStarted();
-      this.SubjectMasterDDLList=[]
-      await this.commonMasterService.SubjectMaster_StreamIDWise(this.searchRequest.StreamID, this.sSOLoginDataModel.DepartmentID, this.searchRequest.SemesterID,)
+      this.SubjectMasterDDLList = [];
+      this.CommonSubjectDDLList = [];
+
+      // if common subject
+      if (this.CommonSubjectYesNo == 2 && this.searchRequest.SemesterID > 0) {//yes
+        await this.GetCommonSubjectDDL();
+        return;
+      }
+
+      // else
+      await this.commonMasterService.SubjectMaster_StreamIDWise(this.searchRequest.StreamID, this.sSOLoginDataModel.DepartmentID, this.searchRequest.SemesterID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.SubjectMasterDDLList = data.Data;
@@ -436,7 +445,7 @@ export class AddExaminerComponent implements OnInit {
       const select = document.getElementById('CommonSubjectYesNo') as HTMLSelectElement;
       const value = Number(select.value);
 
-      if (value == 2 && this.searchRequest.SemesterID == 0) {
+      if (value == 2 && this.searchRequest.SemesterID == 0) {//yes
         select.value = '1';
         this.CommonSubjectYesNo = 1;
         this.toastr.warning("Please select semester!");
