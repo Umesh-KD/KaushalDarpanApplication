@@ -202,11 +202,29 @@ export class CFormComponent implements OnInit {
       this.toastr.error("Please select Year");
       return;
     }
-    //if (this.searchRequest.ExamType == 0) {
-    //  this.toastr.error("Please select Exam Type");
-    //  return;
-    //}
+    if (this.searchRequest.ExamType == 0) {
+      this.toastr.error("Please select Exam Type");
+      return;
+    }
+    let yearText = '';
+    if (this.searchRequest.SemesterID == 1) {
+      yearText = '1stYear';
+    } else if (this.searchRequest.SemesterID == 2) {
+      yearText = '2ndYear';
+    } else {
+      yearText = `Year${this.searchRequest.SemesterID}`;
+    }
 
+    // 🔹 Exam type text
+    let examTypeText = '';
+    if (this.searchRequest.ExamType == 1) {
+      examTypeText = 'eng';
+    } else if (this.searchRequest.ExamType == 2) {
+      examTypeText = 'noneng';
+    } else {
+      examTypeText = 'all';
+    }
+    const fileName = `C_Form_Report_${yearText}_${examTypeText}.pdf`;
     try {
 
       this.loaderService.requestStarted();
@@ -238,7 +256,7 @@ export class CFormComponent implements OnInit {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'C_Form_Report.pdf';
+            link.download = fileName;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
