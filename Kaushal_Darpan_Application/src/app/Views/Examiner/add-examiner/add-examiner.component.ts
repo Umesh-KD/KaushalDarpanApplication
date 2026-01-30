@@ -65,14 +65,14 @@ export class AddExaminerComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log(this.sSOLoginDataModel);
-    this.getSemesterMasterList();
+    await this.getSemesterMasterList();
     await this.ExaminationSchemeChange()
-    this.getStreamMasterList();
-    this.GetCommonSubjectDDL()
-    this.getInstituteMasterList()
-    this.getSubjectMasterList()
-    this.getExamMasterList()
-    this.getDesignationMasterList()
+    await this.getStreamMasterList();
+    //await this.GetCommonSubjectDDL()
+    await this.getInstituteMasterList()
+    await this.getSubjectMasterList()
+    await this.getExamMasterList()
+    await this.getDesignationMasterList()
 
   }
   get _AppointExaminerFormGroup() { return this.AppointExaminerFormGroup.controls; }
@@ -430,11 +430,23 @@ export class AddExaminerComponent implements OnInit {
   }
 
   async GetCommonSubjectDDL() {
+    //debugger
     try {
-      if (this.CommonSubjectYesNo == 1 || this.searchRequest.SemesterID == 0) {//no
+      this.StaffForExaminerList = [];
+      const select = document.getElementById('CommonSubjectYesNo') as HTMLSelectElement;
+      const value = Number(select.value);
+
+      if (value == 2 && this.searchRequest.SemesterID == 0) {
+        select.value = '1';
+        this.CommonSubjectYesNo = 1;
+        this.toastr.warning("Please select semester!");
+        return;
+      }
+      if (value == 1 || this.searchRequest.SemesterID == 0) {//no
         this.CommonSubjectDDLList = [];
         return;
       }
+
       this.commonDDLCommonSubjectModel.SemesterID = this.searchRequest.SemesterID;
       this.commonDDLCommonSubjectModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.commonDDLCommonSubjectModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
