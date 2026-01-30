@@ -215,7 +215,6 @@ export class CFormComponent implements OnInit {
       yearText = `Year${this.searchRequest.SemesterID}`;
     }
 
-    // 🔹 Exam type text
     let examTypeText = '';
     if (this.searchRequest.ExamType == 1) {
       examTypeText = 'eng';
