@@ -1064,13 +1064,17 @@ export class CampusPostComponent implements OnInit {
     let minAge = 0;
     let maxAge = 0;
 
+    let minAgeObj: { years: number; months: number } | null = null;
+    let maxAgeObj: { years: number; months: number } | null = null;
+
+
     if (fromDateStr) {
       const fromDate = new Date(fromDateStr);
 
       if (!isNaN(fromDate.getTime())) {
         minAge = today.getFullYear() - fromDate.getFullYear();
         const monthDiff = today.getMonth() - fromDate.getMonth();
-
+        minAgeObj = this.calculateYearsMonths(fromDate, today);
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < fromDate.getDate())) {
           minAge--;
         }
@@ -1087,7 +1091,7 @@ export class CampusPostComponent implements OnInit {
       if (!isNaN(toDate.getTime())) {
         maxAge = today.getFullYear() - toDate.getFullYear();
         const monthDiff = today.getMonth() - toDate.getMonth();
-
+        maxAgeObj = this.calculateYearsMonths(toDate, today);
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < toDate.getDate())) {
           maxAge--;
         }
@@ -1098,19 +1102,6 @@ export class CampusPostComponent implements OnInit {
       }
     }
 
-    //// ✅ Correct Validation: From Age should not be GREATER than To Age
-    //if (fromDateStr && toDateStr) {
-    //  const fromDate = new Date(fromDateStr);
-    //  const toDate = new Date(toDateStr);
-
-    //  if (fromDate > toDate) { // 🔥 Corrected here
-    //    this.toastr.warning('Error: "From Age" cannot be greater than "To Age"!');
-    //    this.calculatedAge = '';
-    //    return;
-    //  }
-    //}
-
-    // Now you have minAge and maxAge!
     if (minAge === 0 && maxAge === 0) {
       // alert('Warning: Both minimum and maximum ages are zero!');
       this.calculatedAge = '';
@@ -1119,6 +1110,34 @@ export class CampusPostComponent implements OnInit {
       this.MinAge = maxAge
       this.MaxAge = minAge
     }
+
+    // --------------------------------------
+    if (
+      (!minAgeObj || (minAgeObj.years === 0 && minAgeObj.months === 0)) &&
+      (!maxAgeObj || (maxAgeObj.years === 0 && maxAgeObj.months === 0))
+    ) {
+      this.calculatedAge = '';
+      return;
+    }
+
+    this.MinAge = maxAgeObj?.years ?? 0;
+    this.MaxAge = minAgeObj?.years ?? 0;
+  
+    // Display format: 18y 5m to 17y 4m
+    const maxAgeText = maxAgeObj
+      ? `${maxAgeObj.years}y ${maxAgeObj.months}m`
+      : '';
+  
+    const minAgeText = minAgeObj
+      ? `${minAgeObj.years}y ${minAgeObj.months}m`
+      : '';
+  
+    this.calculatedAge = `${maxAgeText} to ${minAgeText}`;
+  
+    // Keep your min date validation
+    this.minDate = fromDateStr;
+
+    // --------------------------------------------
 
     console.log('Calculated Age Range:', this.calculatedAge);
 
@@ -1130,6 +1149,25 @@ export class CampusPostComponent implements OnInit {
 
 
 
+  private calculateYearsMonths(dob: Date, today: Date): { years: number; months: number } {
+    let years = today.getFullYear() - dob.getFullYear();
+    let months = today.getMonth() - dob.getMonth();
+  
+    // Adjust months & years based on day
+    if (today.getDate() < dob.getDate()) {
+      months--;
+    }
+  
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+  
+    return {
+      years: Math.max(years, 0),
+      months: Math.max(months, 0)
+    };
+  }
 
 
 

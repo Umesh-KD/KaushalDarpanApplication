@@ -187,24 +187,81 @@ export class ItiCertificateComponent implements OnInit {
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.StudentList.length;
   }
-  async Download(row: any)
-  {
-    try
-    {
-      this.loaderService.requestStarted();      
+
+  //async Download(row: any)
+  //{
+  //  debugger
+  //  try
+  //  {
+  //    this.loaderService.requestStarted();
+  //    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    this.searchRequest.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+  //    this.searchRequest.EnrollmentNo = row.EnrollmentNo;
+
+  //    await this.ReportServices.ITIStateTradeCertificateReport(this.searchRequest)
+  //      .then((data: any) => {
+  //        this.State = data['State'];
+  //        this.Message = data['Message'];
+  //        this.ErrorMessage = data['ErrorMessage'];
+  //        data = JSON.parse(JSON.stringify(data));
+
+  //        if (data && data.Data)
+  //        {
+  //          const base64 = data.Data;
+
+  //          const byteCharacters = atob(base64);
+  //          const byteNumbers = new Array(byteCharacters.length);
+  //          for (let i = 0; i < byteCharacters.length; i++) {
+  //            byteNumbers[i] = byteCharacters.charCodeAt(i);
+  //          }
+
+  //          const byteArray = new Uint8Array(byteNumbers);
+  //          const blob = new Blob([byteArray], { type: 'application/pdf' });
+  //          const blobUrl = URL.createObjectURL(blob);
+
+  //          const link = document.createElement('a');
+  //          link.href = blobUrl;
+  //          link.download = 'Certificate.pdf';
+  //          document.body.appendChild(link);
+  //          link.click();
+  //          document.body.removeChild(link);
+  //          URL.revokeObjectURL(blobUrl);
+  //        } else {
+  //          this.toastr.error(this.Message)
+  //        }
+  //      }, (error: any) => {
+  //        console.error(error);
+  //        this.toastr.error(this.ErrorMessage)
+  //      });
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
+  async Download(row: any) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.EnrollmentNo = row.EnrollmentNo;
 
       await this.ReportServices.ITIStateTradeCertificateReport(this.searchRequest)
         .then((data: any) => {
+
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           data = JSON.parse(JSON.stringify(data));
 
-          if (data && data.Data)
-          {
+          if (data && data.Data) {
             const base64 = data.Data;
 
             const byteCharacters = atob(base64);
@@ -217,24 +274,41 @@ export class ItiCertificateComponent implements OnInit {
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
+            const rollNo = row.RollNo ?? 'NA';
+
+            const today = new Date();
+            const now = new Date();
+            const dateStr = today.getFullYear() + '_' +
+              ('0' + (today.getMonth() + 1)).slice(-2) + '_' +
+              ('0' + today.getDate()).slice(-2);
+
+            const timeStr = ('0' + now.getHours()).slice(-2) + '_' +
+              ('0' + now.getMinutes()).slice(-2) + '_' +
+              ('0' + now.getSeconds()).slice(-2);
+
+            const fileName = `Certificate_${rollNo}_${dateStr}_${timeStr}.pdf`;
+
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'Certificate.pdf';
+            link.download = fileName;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(blobUrl);
-          } else {
-            this.toastr.error(this.Message)
+          }
+          else {
+            this.toastr.error(this.Message);
           }
         }, (error: any) => {
           console.error(error);
-          this.toastr.error(this.ErrorMessage)
+          this.toastr.error(this.ErrorMessage);
         });
 
-    } catch (Ex) {
+    }
+    catch (Ex) {
       console.log(Ex);
-    } finally {
+    }
+    finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
@@ -242,8 +316,9 @@ export class ItiCertificateComponent implements OnInit {
   }
 
 
-  async TestDownload() {
 
+  async TestDownload() {
+    debugger
     try {
 
       this.loaderService.requestStarted();
@@ -256,7 +331,7 @@ export class ItiCertificateComponent implements OnInit {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           data = JSON.parse(JSON.stringify(data));
-
+          
           if (data && data.Data) {
             const base64 = data.Data;
 

@@ -44,7 +44,7 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
             <select  class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
               <option value="0">--Select--</option>
-              <option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.Name}}</option>
+              <option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.StreamName}}</option>
             </select>
         </div>
         <div>

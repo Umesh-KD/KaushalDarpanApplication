@@ -22,52 +22,102 @@
       <form [formGroup]="SeatIntakeSearchFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">District:</label>
+    <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID">
+      <option value="0">---Choose District---</option>
+      <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div>-->
+
+
+
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
-            <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID">
-              <option value="0">---Choose District---</option>
-              <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
-            </select>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
+            <ng-select [(ngModel)]="searchRequest.DistrictID"
+                       formControlName="ddlDistrict"
+                       [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of DistrictList;">
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-container>
+            </ng-select>
           </div>
+
+
+
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By College Type:
+              College Type:
             </label>
             <select (change)="GetTradeAndColleges()" class="form-select" formControlName="ddlCollegeType" [(ngModel)]="searchRequest.CollegeTypeID">
               <option value="0">---Choose College Type---</option>
               <option *ngFor="let item of ManagmentTypeList" value="{{item.InstitutionManagementTypeID}}">{{item.InstitutionManagementType}}</option>
             </select>
           </div>
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      College:
+    </label>
+    <select class="form-select" formControlName="ddlCollege" [(ngModel)]="searchRequest.CollegeID">
+      <option value="0">---Choose College---</option>
+      <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
+    </select>
+  </div>-->
+
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By College:
-            </label>
-            <select class="form-select" formControlName="ddlCollege" [(ngModel)]="searchRequest.CollegeID">
-              <option value="0">---Choose College---</option>
-              <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
-            </select>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College:</label>
+            <ng-select [(ngModel)]="searchRequest.CollegeID"
+                       formControlName="ddlCollege"
+                       [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of ItiCollegesListAll;">
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-container>
+            </ng-select>
           </div>
+
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Institution Category:
+              Institution Category:
             </label>
             <select class="form-select" formControlName="ddlInstitutionCategory" [(ngModel)]="searchRequest.InstituteCategoryID">
               <option value="0">---Choose Option---</option>
               <option *ngFor="let item of InstituteCategoryList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
-          <div>
+
+
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Trade:
+              Trade:
             </label>
             <select class="form-select" formControlName="ddlTrade" [(ngModel)]="searchRequest.TradeID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
             </select>
+          </div>-->
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
+            <ng-select [(ngModel)]="searchRequest.TradeID"
+                       formControlName="ddlTrade"
+                       [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of ItiTradeListAll;">
+                <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
+              </ng-container>
+            </ng-select>
           </div>
+
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Trade Scheme:
+              Trade Scheme:
             </label>
             <select class="form-select" formControlName="ddlTradeScheme" [(ngModel)]="searchRequest.TradeSchemeID">
               <option value="0">Choose Option</option>
@@ -76,7 +126,7 @@
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Remark:
+              Remark:
             </label>
             <select class="form-select" formControlName="ddlRemark" [(ngModel)]="searchRequest.RemarkID">
               <option value="0">Choose Option</option>
@@ -85,45 +135,44 @@
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Shift:
+              Shift:
             </label>
-            <input type="text" class="form-input" placeholder="Search By Shift" formControlName="txtShift" [(ngModel)]="searchRequest.Shift">
+            <input type="text" class="form-input" placeholder="Shift" formControlName="txtShift" [(ngModel)]="searchRequest.Shift">
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Unit No:
+              Unit No:
             </label>
-            <input type="text" class="form-input" placeholder="Search By Unit No" formControlName="txtUnitNo" [(ngModel)]="searchRequest.UnitNo">
+            <input type="text" class="form-input" placeholder="Unit No" formControlName="txtUnitNo" [(ngModel)]="searchRequest.UnitNo">
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Sanctioned:
+              Sanctioned:
             </label>
             <select class="form-select" formControlName="ddlSanctioned" [(ngModel)]="searchRequest.SanctionedID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of SanctionedList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Status:
-            </label>
-            <select class="form-select" formControlName="ddlStatus" [(ngModel)]="searchRequest.StatusID">
-              <!--<option value="2">Choose Option</option>-->
-              <option value="2">All</option>
-              <option value="1">Active</option>
-              <option value="0">Inactive</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
-            <input type="text" class="form-input" formControlName="CollegeCode" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
-            <input type="text" class="form-input" formControlName="TradeCode" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
-          </div>
+          <!--<div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Status:
+  </label>
+  <select class="form-select" formControlName="ddlStatus" [(ngModel)]="searchRequest.StatusID">-->
+          <!--<option value="2">Choose Option</option>-->
+          <!--<option value="2">All</option>
+      <option value="1">Active</option>
+      <option value="0">Inactive</option>
+    </select>
+  </div>-->
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
+    <input type="text" class="form-input" formControlName="CollegeCode" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
+  </div>
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+    <input type="text" class="form-input" formControlName="TradeCode" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+  </div>-->
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch() ">Search</button>

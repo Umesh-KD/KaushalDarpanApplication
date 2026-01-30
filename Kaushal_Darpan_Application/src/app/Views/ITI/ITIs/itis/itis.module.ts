@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { MaterialModule } from '../../../../material.module';
+import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 
@@ -21,6 +23,8 @@ import { MaterialModule } from '../../../../material.module';
     LoaderModule,
     TableSearchFilterModule,
     MaterialModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
   ]
 })
 export class ITIsModule { }

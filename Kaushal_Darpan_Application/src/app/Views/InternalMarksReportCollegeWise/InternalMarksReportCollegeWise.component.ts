@@ -2,26 +2,28 @@ import { Component, OnInit } from '@angular/core';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { CompanyMasterService } from '../../Services/CompanyMaster/company-master.service.ts';
+import { ReportService } from '../../Services/Report/report.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
-import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../Models/CompanyMasterDataModel';
+import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel, InternalMarksReportCollegeWiseSearchModel } from '../../Models/CompanyMasterDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EnumRole } from '../../Common/GlobalConstants';
+// import { EnumRole } from '../../Common/GlobalConstants';
 import { StreamMasterService } from '../../Services/BranchesMaster/branches-master.service';
+import { EnumStatus, EnumRole } from '../../Common/GlobalConstants';
 @Component({
-    selector: 'eligible-student-list-master',
-    templateUrl: './eligible-student-list-master.component.html',
-    styleUrls: ['./eligible-student-list-master.component.css'],
+    selector: 'InternalMarksReportCollegeWise',
+    templateUrl: './InternalMarksReportCollegeWise.component.html',
+    styleUrls: ['./InternalMarksReportCollegeWise.component.css'],
     standalone: false
 })
-export class EligibleStudentListMasterComponent implements OnInit {
+export class InternalMarksReportCollegeWiseComponent implements OnInit {
   public StudentList: any = [];
   public SessionYearList: any = [];
   public InstituteMasterDDLList: any = [];
   public Table_SearchText: string = "";
-  public searchRequest = new EligibleStudentListMasterSearchModel();
+  public searchRequest = new InternalMarksReportCollegeWiseSearchModel();
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
@@ -44,10 +46,11 @@ export class EligibleStudentListMasterComponent implements OnInit {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
+  public SemesterMasterList: any = [];
 
   constructor(
     private commonMasterService: CommonFunctionService, 
-    private companyMasterService: CompanyMasterService,
+    private ReportService: ReportService,
     private toastr: ToastrService, 
     private loaderService: LoaderService, 
     private Swal2: SweetAlert2, 
@@ -60,11 +63,10 @@ export class EligibleStudentListMasterComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetSessionYear();
     await this.GetInstituteList();
-    // await this.GetBranchList();
-    await this.GetStreamMasterInstituteWise();
-    this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+    await this.GetBranchList();
+    // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
     
-    await this.GetEligibleStudentListData(1);
+    // await this.GetEligibleStudentListData(1);
   }
 
 
@@ -123,6 +125,13 @@ export class EligibleStudentListMasterComponent implements OnInit {
         this.BranchList = data['Data'];
         console.log(this.BranchList, "BranchList")
       });
+
+      await this.commonMasterService.SemesterMaster(1)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SemesterMasterList = data['Data'];
+      }, (error: any) => console.error(error));
+
     } catch (Ex) {
       console.log(Ex);
     } finally {
@@ -133,30 +142,6 @@ export class EligibleStudentListMasterComponent implements OnInit {
   }
 
 
-  async GetStreamMasterInstituteWise() {
-    try {
-      this.loaderService.requestStarted();
-      await this.commonMasterService.Stream_InstituteIdWise(
-        this.sSOLoginDataModel.DepartmentID,
-        this.sSOLoginDataModel.Eng_NonEng,
-        this.sSOLoginDataModel.EndTermID,
-        this.sSOLoginDataModel.InstituteID,
-        this.sSOLoginDataModel.FinancialYearID
-      ).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.BranchList = data.Data;
-      });
-
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
 
   async GetEligibleStudentListData(i:any) {
     debugger
@@ -184,23 +169,23 @@ export class EligibleStudentListMasterComponent implements OnInit {
       this.searchRequest.PageSize=this.pageSize
       this.searchRequest.SortColumn=this.sortColumn
       this.searchRequest.SortOrder=this.sortOrder
-
-      this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
-      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       
       if(this.sSOLoginDataModel.RoleID === EnumRole.TPO) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       }
       this.loaderService.requestStarted();
-      await this.companyMasterService.GetEligibleStudentListData(this.searchRequest).then((data: any) => {
+      await this.ReportService.GetInternalAssessmentStudentReport(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.StudentList = data.Data;
-
-        this.totalRecord=this.StudentList[0]?.TotalRecords;
-        this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
-
-        console.log(this.StudentList)
+        if (data.State == EnumStatus.Success) {    
+          this.toastr.success(data.Message);
+        }
+        else if (data.State == EnumStatus.Warning) {
+          this.toastr.error(data.Message);
+        }
+        else {
+          this.toastr.error(data.ErrorMessage);
+        }
       }, (error: any) => console.error(error))
     }
     catch (ex) {
@@ -213,13 +198,11 @@ export class EligibleStudentListMasterComponent implements OnInit {
     }
   }
 
-  // get all data
+  
+  
   async ClearSearchData() {
-    this.searchRequest.Name = '';
-    this.searchRequest.Status = '0';
     this.searchRequest.StreamID = 0;
     this.searchRequest.InstituteID = 0;
-    this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
     this.searchRequest.PageNumber = this.pageNo;
     this.searchRequest.PageSize = this.pageSize;
     await this.GetEligibleStudentListData(1);
@@ -228,42 +211,42 @@ export class EligibleStudentListMasterComponent implements OnInit {
 
 
 
-  async DeleteById(ID: number) {
-    this.Swal2.Confirmation("Do you want to delete?",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            //Show Loading
-            this.loaderService.requestStarted();
+  // async DeleteById(ID: number) {
+  //   this.Swal2.Confirmation("Do you want to delete?",
+  //     async (result: any) => {
+  //       //confirmed
+  //       if (result.isConfirmed) {
+  //         try {
+  //           //Show Loading
+  //           this.loaderService.requestStarted();
 
-            await this.companyMasterService.DeleteById(ID, this.sSOLoginDataModel.UserID)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                console.log(data);
+  //           await this.companyMasterService.DeleteById(ID, this.sSOLoginDataModel.UserID)
+  //             .then(async (data: any) => {
+  //               data = JSON.parse(JSON.stringify(data));
+  //               console.log(data);
 
-                if (!data.State) {
-                  this.toastr.success(data.Message)
-                  await this.GetEligibleStudentListData(1);
-                }
-                else {
-                  this.toastr.error(data.ErrorMessage)
-                }
+  //               if (!data.State) {
+  //                 this.toastr.success(data.Message)
+  //                 await this.GetEligibleStudentListData(1);
+  //               }
+  //               else {
+  //                 this.toastr.error(data.ErrorMessage)
+  //               }
 
-              }, (error: any) => console.error(error)
-              );
-          }
-          catch (ex) {
-            console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
-        }
-      });
-  }
+  //             }, (error: any) => console.error(error)
+  //             );
+  //         }
+  //         catch (ex) {
+  //           console.log(ex);
+  //         }
+  //         finally {
+  //           setTimeout(() => {
+  //             this.loaderService.requestEnded();
+  //           }, 200);
+  //         }
+  //       }
+  //     });
+  // }
 
 
 
@@ -289,8 +272,8 @@ export class EligibleStudentListMasterComponent implements OnInit {
   }
   previousData() {
     if (this.pageNo > 1) {
-      //this.pageNo = this.pageNo - 1;
-      this.GetEligibleStudentListData(3)
+      
+      // this.GetEligibleStudentListData(3)
     }
   }
 

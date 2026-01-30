@@ -833,17 +833,16 @@ export class AddBterIssueItemComponent {
     this.ItemsDataList.forEach((item: any) => item.Selected = checked);
   }
   onIssueItemToggle(item: any) {
-    // Only run logic when checkbox is checked
     if (item.Selected) {
-      // Check both conditions
-
-      if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {
-        console.log('✅ Serial item selected:', item);
-      }
-      else {
-        console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
-        this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
-      }
+      if(item.IsSerialNo == 1){
+        if (item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {
+          console.log('✅ Serial item selected:', item);
+        }
+        else {
+          console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
+          this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
+        }
+      }      
     }
   }
   async confirmSubmitNew() {
