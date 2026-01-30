@@ -6,4 +6,5 @@ export class ITICollegeStudentMarksheetSearchModel {
   public RollNumber: string = ''
   public ExamYearID: number = 0
   public TradeScheme: number = 0
+  public SemesterID: number = 0
 }

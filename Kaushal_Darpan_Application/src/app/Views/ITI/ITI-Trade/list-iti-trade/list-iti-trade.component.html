@@ -24,16 +24,16 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Name:</label>
-          <input type="text" class="form-input" placeholder="Search By Trade Name" [(ngModel)]="searchRequest.TradeName">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name:</label>
+          <input type="text" class="form-input" placeholder="Trade Name" [(ngModel)]="searchRequest.TradeName">
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
-          <input type="text" class="form-input" placeholder="Search By Trade Code" [(ngModel)]="searchRequest.TradeCode">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Code:</label>
+          <input type="text" class="form-input" placeholder="Trade Code" [(ngModel)]="searchRequest.TradeCode">
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Level:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Level:</label>
           <select class="form-select" [(ngModel)]="searchRequest.TradeLevelId">
             <option value="0">Choose Option</option>
             <option value="8">8th</option>
@@ -43,7 +43,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Type:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Type:</label>
           <select [disabled]="sSOLoginDataModel.RoleID!=16" class="form-select" [(ngModel)]="searchRequest.TradeTypeId">
             <option value="0">Choose Option</option>
             <option value="1">NCVT</option>
@@ -55,11 +55,11 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Duration:</label>
-          <input type="text" class="form-input" placeholder="Search By Trade Duration" [(ngModel)]="searchRequest.DurationYear">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Duration:</label>
+          <input type="text" class="form-input" placeholder="Trade Duration" [(ngModel)]="searchRequest.DurationYear">
         </div>
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Search By Status:</label>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status:</label>
     <select class="form-select" [(ngModel)]="searchRequest.CenterCode">
       <option value="">Choose Option</option>
       <option value="1">Active</option>
@@ -109,11 +109,11 @@
             <th class="text-left">Trade Type</th>
             <th class="text-left">Trade Level</th>
             <th class="text-left">Duration</th>
-            <th class="text-left">Min Age Limit</th>
-            <th class="text-left">Min Percentage In Science</th>
-            <th class="text-left">Min Percentage In Math</th>
+            <!--<th class="text-left">Min Age Limit</th>-->
+            <!--<th class="text-left">Min Percentage In Science</th>-->
+            <!--<th class="text-left">Min Percentage In Math</th>-->
             <th class="text-left">Sanctioned Seats</th>
-            <th class="text-left">Entry Qualification</th>
+            <!--<th class="text-left">Entry Qualification</th>-->
             <!--<th class="text-left">Status</th>-->
             <!--<th class="text-left">Active/Inactive Remark</th>-->
             <th class="text-center">Action</th>
@@ -127,11 +127,11 @@
             <td>{{item.CourseTypeName}}</td>
             <td>{{item.TradeLevelId}}</td>
             <td>{{item.DurationYear}}</td>
-            <td align="left">{{item.MinAgeLimit}}</td>
-            <td align="left">{{item.MinPercentageInScience}}</td>
-            <td align="left">{{item.MinPercentageInMath}}</td>
+            <!--<td align="left">{{item.MinAgeLimit}}</td>-->
+            <!--<td align="left">{{item.MinPercentageInScience}}</td>-->
+            <!--<td align="left">{{item.MinPercentageInMath}}</td>-->
             <td>{{item.NoOfSanctionedSeats}}</td>
-            <td>{{item.QualificationDetails}}</td>
+            <!--<td>{{item.QualificationDetails}}</td>-->
             <!--<td>{{item.ActiveStatus}}</td>-->
             <!--<td>1</td>-->
             <td>

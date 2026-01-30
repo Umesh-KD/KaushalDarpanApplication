@@ -27,6 +27,15 @@
           <option value="2">Fail Student</option>
         </select>
       </div>
+      <div>
+        <label>Semester / Year</label>
+        <select class="form-select me-3" [(ngModel)]="requestPassFailModel.SemesterID">
+          <option value="0">All</option>
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+        </select>
+      </div>
+
 
       <div>
         <label class="">
@@ -98,7 +107,9 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th width="80px" align="left">Sr. No.</th>
+
               <th class="text-left">Student Name</th>
+              <th class="text-left">Sermester/Year</th>
               <th class="text-left">StudentType</th>
               <th class="text-left">Enrollment</th>
               <th class="text-left">Roll Number</th>
@@ -114,8 +125,12 @@
           <tbody>
 
             <tr *ngFor="let row of paginatedInTableData  | tableSearchFilter:Table_SearchText;let idx=index;">
-              <td>{{(startInTableIndex+1)+idx}}</td>
+              <td>
+                {{(startInTableIndex+1)+idx}}
+              </td>
+
               <td align="left">{{row.StudentName}}</td>
+              <td align="left">{{row.SemesterName}}</td>
               <td align="left">{{row.StudentType}}</td>
               <td align="left">{{row.enrollment}}</td>
               <td>{{row.RollNo}}</td>
@@ -128,13 +143,13 @@
               <td align="left">
                 <div class="flex " style="justify-content:center;">
                   <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                    <a class="actionBtns" href="javascript:void(0);" title="Download Marksheet" (click)="GetITIStudent_Marksheet(row.EnrollmentNo)"><i class="ti ti-download"></i></a>
+                    <a  class="actionBtns" title="Download Marksheet" (click)="GetITIStudent_Marksheet(row)"><i class="ti ti-download"></i></a>
                   </div>
                   <div *ngIf="row.IsConsolidatedMarkSheet==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                    <a href="javascript:void(0);" title="Download Consolidated Marksheet" (click)="ConsolidatedDownload(item.EnrollmentNo)"><i class="ti ti-download"></i></a>
+                    <a  title="Download Consolidated Marksheet" (click)="ConsolidatedDownload(item.EnrollmentNo)"><i class="ti ti-download"></i></a>
                   </div>
                   <div *ngIf="row.certificate_number!=''" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                    <a href="javascript:void(0);" title="Download SCVT Certificate" (click)="DownloadSCVTCertificate(item.EnrollmentNo)"><i class="ti ti-download"></i></a>
+                    <a  title="Download SCVT Certificate" (click)="DownloadSCVTCertificate(item.EnrollmentNo)"><i class="ti ti-download"></i></a>
                   </div>
                 </div>
               </td>

@@ -155,10 +155,16 @@
               </label>
               <select class="form-select" formControlName="ddlTradeScheme" [(ngModel)]="request.TradeSchemeID">
                 <option value="0">Choose Option</option>
-                <option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>
+                <option value="1">NCVT</option>
+                <option value="2">SCVT</option>
+                <option value="3">NCVT (Women Only)</option>
+                <option value="4">SCVT (Women Only)</option>
+
+                <!--<option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>-->
               </select>
               <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlTradeScheme.errors" class="text-danger">
                 <p *ngIf="!_SeatIntakeFormGroup.ddlTradeScheme.errors.DropdownValidators">
+                  da
                   <i aria-hidden="true"></i>This field is required .!
                 </p>
               </div>
@@ -183,27 +189,26 @@
               </div>
             </div>
 
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Student Admission in Last Acadmic Year:<span class="StarMarking">*</span>
-              </label>
-              <!--<select class="form-select" formControlName="ddlLastSession" [(ngModel)]="request.LastSession">
-      <option value="0">Choose Option</option>
-      <option *ngFor="let item of FinancialYearList" value="{{item.FinancialYearID}}">{{item.FinancialYearName}}</option>
-    </select>-->
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Student Admission in Last Acadmic Year:<span class="StarMarking">*</span>
+    </label>-->
+            <!--<select class="form-select" formControlName="ddlLastSession" [(ngModel)]="request.LastSession">
+    <option value="0">Choose Option</option>
+    <option *ngFor="let item of FinancialYearList" value="{{item.FinancialYearID}}">{{item.FinancialYearName}}</option>
+  </select>-->
+            <!--<select class="form-select" formControlName="ddlLastSession" [(ngModel)]="request.LastSession">
+      <option value="0">No</option>
+      <option value="1">Yes</option>
+    </select>
 
-              <select class="form-select" formControlName="ddlLastSession" [(ngModel)]="request.LastSession">
-                <option value="0">No</option>
-                <option value="1">Yes</option>
-              </select>
+    <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlLastSession.errors" class="text-danger">
+      <p *ngIf="!_SeatIntakeFormGroup.ddlLastSession.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
 
-              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlLastSession.errors" class="text-danger">
-                <p *ngIf="!_SeatIntakeFormGroup.ddlLastSession.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>This field is required .!
-                </p>
-              </div>
-
-            </div>
+  </div>-->
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -218,7 +223,7 @@
               </div>
             </div>
 
-           
+
 
 
             <div>
@@ -228,6 +233,19 @@
               <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="OrderDate" [(ngModel)]="request.OrderDate">
               <div *ngIf="isSubmitted && _SeatIntakeFormGroup.OrderDate.errors" class="text-danger">
                 <p *ngIf="_SeatIntakeFormGroup.OrderDate.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                With Effect Date: <span class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" placeholder="Enter Unit No"  formControlName="weDate" [(ngModel)]="request.weDate">
+              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.weDate.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.weDate.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
                 </p>
