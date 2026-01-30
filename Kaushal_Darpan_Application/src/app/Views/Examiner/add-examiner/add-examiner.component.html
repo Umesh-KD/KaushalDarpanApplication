@@ -129,6 +129,7 @@
             <!--<th class="text-left">DOJ</th>-->
             <th class="text-left">Mobile</th>
             <th class="text-left">Email</th>
+            <th class="text-left">Assigned Group Code</th>
             <th class="text-Center">Action</th>
           </tr>
         </thead>
@@ -145,6 +146,7 @@
             <!--<td>{{staff.DateOfJoining | date: 'dd/MM/yyyy'}}</td>-->
             <td>{{staff.MobileNumber}}</td>
             <td>{{staff.Email}}</td>
+            <td>{{staff.AssignGroupCode}}</td>
             <td>
               <button class="btn bg-info text-white" type="button"
                       (click)="ViewandUpdate(MyModel_UpdateExaminer,staff.StaffID,staff.StaffSubjectId)">
