@@ -137,6 +137,7 @@ export class ITICollageTradeComponent {
   async getITITrade() {
 
     try {
+      this.searchRequest.TradeID=0
       this.searchRequest.Action = "_ITITrade";
       this.loaderService.requestStarted();
       await this.ITICollegeTradeService.getITITrade(this.searchRequest)
