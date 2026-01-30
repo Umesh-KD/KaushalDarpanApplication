@@ -68,6 +68,7 @@ export class CFormComponent implements OnInit {
   Table_SearchText: string = '';
   ReportData: any = [];
   TradeList: any = [];
+  public ExamName:string=''
   public searchRequest = new DownloadMarksheetSearchModel();
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -175,6 +176,7 @@ export class CFormComponent implements OnInit {
           this.toastr.success("Result Generated Successfully");
           this.ReportData = data.Data.Table1; // Assuming data.Data contains the result data
           debugger;
+
           //var Trade = data.Data.filter(function (x: any) {  }).select(x=>x.TradeName);
           //this.TradeList.push() 
          // this.TradeList = data.Data.Table1[0];

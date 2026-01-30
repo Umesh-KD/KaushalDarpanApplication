@@ -57,6 +57,7 @@ export class AddSeatIntakesComponent implements OnInit {
         ddlTrade: ['', [DropdownValidators]],
         txtShift: ['', Validators.required],
         ddlLastSession: [''],
+        weDate: ['', Validators.required],
         ddlRemark: ['', [DropdownValidators]],
         ddlTradeScheme: ['', [DropdownValidators]],
         txtUnitNo: ['', Validators.required],
@@ -237,11 +238,14 @@ export class AddSeatIntakesComponent implements OnInit {
       await this.ItiSeatIntakeService.GetByID(id).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.request = data.Data;
+
+        
         this.SeatIntakeFormGroup.get('ddlCollege')?.disable();
         this.SeatIntakeFormGroup.get('ddlTradeLevel')?.disable();
         this.SeatIntakeFormGroup.get('ddlTrade')?.disable();
         console.log(this.request, "request")
-         this.OnTradeSchemechange()
+        this.OnTradeSchemechange()
+        this.request.TradeSchemeID = data['Data']['TradeSchemeID']
       });
     } catch (error) {
       console.error(error);
