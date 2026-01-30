@@ -202,10 +202,10 @@ export class CFormComponent implements OnInit {
       this.toastr.error("Please select Year");
       return;
     }
-    if (this.searchRequest.ExamType == 0) {
-      this.toastr.error("Please select Exam Type");
-      return;
-    }
+    //if (this.searchRequest.ExamType == 0) {
+    //  this.toastr.error("Please select Exam Type");
+    //  return;
+    //}
 
     try {
 
