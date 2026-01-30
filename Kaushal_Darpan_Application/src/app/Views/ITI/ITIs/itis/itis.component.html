@@ -24,23 +24,29 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Zone:</label>
-          <select class="form-select" [(ngModel)]="searchrequest.ZoneID">
-            <option value="0">Choose Option</option>
-            <option value="1">ABC</option>
-            <option value="2">DEF</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone:</label>
+    <select class="form-select" [(ngModel)]="searchrequest.ZoneID">
+      <option value="0">Choose Option</option>
+      <option value="1">ABC</option>
+      <option value="2">DEF</option>
+    </select>
+  </div> -->
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
-          <select class="form-select w-full" name="ddlDistrictID" [(ngModel)]="searchrequest.DistrictID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of Districtlist" [value]="item.ID">{{item.Name}}</option>
-          </select>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
+          <ng-select [(ngModel)]="searchrequest.DistrictID"
+                     [clearable]="false">
+            <ng-option [value]="0" selected>Choose Option</ng-option>
+            <ng-container *ngFor="let item of Districtlist;">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
+
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By ITI Name: <span class="StarMarking">*</span>
+            ITI Name: <span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input" placeholder="Enter Name:" [(ngModel)]="searchrequest.Name">
           <div *ngIf="isSubmitted && groupForm.controls.txtName.errors" class="text-danger">
@@ -49,44 +55,52 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By ITI Code: <span class="StarMarking">*</span>
+            ITI Code: <span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input" placeholder="Enter Name:" [(ngModel)]="searchrequest.ItiCode">
           <div *ngIf="isSubmitted && groupForm.controls.txtName.errors" class="text-danger">
             <p *ngIf="groupForm.controls.txtName.errors.required">This field is required .!</p>
           </div>
         </div>
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Trade:
-          </label>
-          <select class="form-select w-full" name="ddlTrade" [(ngModel)]="searchrequest.TradeID">
-            <option value="0" disabled selected hidden>Choose Option</option>
-            <option *ngFor="let item of ItiTradeList" [value]="item.Id">{{item.TradeName}}</option>
-          </select>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
+          <ng-select [(ngModel)]="searchrequest.TradeID"
+                     [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of ItiTradeList;">
+              <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
+
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Block/Tehsil:
-          </label>
-          <select class="form-select w-full" name="ddlTehsilID" [(ngModel)]="searchrequest.TehsilID">
-            <option value="0" disabled selected hidden>Choose Option</option>
-            <option *ngFor="let item of Tehsillist" [value]="item.ID">{{item.Name}}</option>
-          </select>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Block/Tehsil:</label>
+          <ng-select [(ngModel)]="searchrequest.TehsilID"
+                     [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of Tehsillist;">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
+
+
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Fee Status:
+            Fee Status:
           </label>
           <select class="form-select" [(ngModel)]="searchrequest.FeeStatus">
             <option value="-1">ALL</option>
-            <option value="1" >Entered</option>
+            <option value="1">Entered</option>
             <option value="0">Not Entered</option>
           </select>
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By ITI Type:
+            ITI Type:
           </label>
           <select class="form-select" [(ngModel)]="searchrequest.ITItypeID">
             <option value="0">Choose Option</option>
@@ -96,26 +110,26 @@
           </select>
         </div>
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Exam Type:
-          </label>
-          <select class="form-select w-full" name="ddlTradeScheme" [(ngModel)]="searchrequest.ExamTypeId">
-            <option value="0" hidden>Choose Option</option>
-            <option *ngFor="let item of ITITradeSchemeList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Exam Type:
+    </label>
+    <select class="form-select w-full" name="ddlTradeScheme" [(ngModel)]="searchrequest.ExamTypeId">
+      <option value="0" hidden>Choose Option</option>
+      <option *ngFor="let item of ITITradeSchemeList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div> -->
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Course:
-          </label>
-          <select class="form-select" id="CourseType" [(ngModel)]="searchrequest.CourseID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of CourseTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Course:
+    </label>
+    <select class="form-select" id="CourseType" [(ngModel)]="searchrequest.CourseID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of CourseTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
+    </select>
+  </div> -->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Status:
+            Status:
           </label>
           <select class="form-select" [(ngModel)]="searchrequest.Status">
             <option value="-1">ALL</option>
@@ -124,15 +138,15 @@
           </select>
         </div>
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Exam System:
-          </label>
-          <select class="form-select" [(ngModel)]="searchrequest.ExamSystemId">
-            <option value="0">Choose Option</option>
-            <option value="1">A</option>
-            <option value="2">B</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Exam System:
+    </label>
+    <select class="form-select" [(ngModel)]="searchrequest.ExamSystemId">
+      <option value="0">Choose Option</option>
+      <option value="1">A</option>
+      <option value="2">B</option>
+    </select>
+  </div> -->
 
       </div>
       <div class="text-center mb-2">

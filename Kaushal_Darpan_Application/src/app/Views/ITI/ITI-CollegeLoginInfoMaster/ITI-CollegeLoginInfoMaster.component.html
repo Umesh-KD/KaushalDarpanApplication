@@ -24,17 +24,27 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">District:</label>
+    <select class="form-select w-full" name="ddlDistrictID" [(ngModel)]="requestCollege.DistrictID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of Districtlist" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div>-->
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
-          <select class="form-select w-full" name="ddlDistrictID" [(ngModel)]="requestCollege.DistrictID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of Districtlist" [value]="item.ID">{{item.Name}}</option>
-          </select>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
+          <ng-select [(ngModel)]="requestCollege.DistrictID" name="ddlDistrictID"[clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of Districtlist">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
-          <input type="text" class="form-input" [(ngModel)]="requestCollege.CollegeCode" placeholder="Search By College Code:">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">College Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="requestCollege.CollegeCode" placeholder="College Code:">
         </div>
 
         <div>
@@ -50,8 +60,8 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By SSO ID:</label>
-          <input type="text" class="form-input" [(ngModel)]="requestCollege.SSOID" placeholder="Search By SSO ID">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID:</label>
+          <input type="text" class="form-input" [(ngModel)]="requestCollege.SSOID" placeholder="SSO ID">
         </div>
 
         <div>
