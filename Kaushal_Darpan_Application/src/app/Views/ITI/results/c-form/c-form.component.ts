@@ -113,6 +113,7 @@ export class CFormComponent implements OnInit {
     this.resultGenerateForm = this.fb.group({
       selectedSemester: ['all'],
       SemesterID: [0, [DropdownValidators]],
+
       ExamType: [0, [DropdownValidators]]
     });
     this.resultReGenerateForm = this.fb.group({
@@ -155,10 +156,10 @@ export class CFormComponent implements OnInit {
       this.toastr.error("Please select Year");
       return;
     }
-    if (this.searchRequest.ExamType == 0) {
-      this.toastr.error("Please select Exam Type");
-      return;
-    }
+    //if (this.searchRequest.ExamType == 0) {
+    //  this.toastr.error("Please select Exam Type");
+    //  return;
+    //}
     try {
       this.loaderService.requestStarted();
       this.requestModel.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
