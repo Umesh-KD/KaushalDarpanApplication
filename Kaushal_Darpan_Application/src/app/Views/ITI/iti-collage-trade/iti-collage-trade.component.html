@@ -36,35 +36,58 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Type:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">College Type:</label>
           <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId" (change)="getITICollege()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By College:
+            College:
           </label>
           <select class="form-select" [(ngModel)]="searchRequest.CollegeID" (change)="getITITrade()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
           </select>
+        </div>-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College:</label>
+          <ng-select [(ngModel)]="searchRequest.CollegeID" (change)="getITITrade()" [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of ListITICollegeByManagement">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Trade:
+    </label>
+    <select class="form-select" [(ngModel)]="searchRequest.TradeID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div>-->
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
+          <ng-select [(ngModel)]="searchRequest.TradeID"
+                     [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of ListITITrade">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+        </div>
+
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Trade:
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.TradeID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Trade Scheme:
+            Trade Scheme:
           </label>
           <select class="form-select" [(ngModel)]="searchRequest.TradeSchemeId">
             <option value="0">Choose Option</option>
@@ -72,16 +95,16 @@
           </select>
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
-          <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">College Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="College Code:">
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
-          <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Trade Code">
         </div>
         <!--<div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Search By Fee Status:
+      Fee Status:
     </label>
     <select class="form-select" [(ngModel)]="searchRequest.FeeStatus">
       <option value="0">Choose Option</option>
@@ -91,7 +114,7 @@
   </div>-->
         <!--<div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Search By Status:
+      Status:
     </label>
     <select class="form-select" [(ngModel)]="ActiveStatusModel">
       <option value="0">--Choose Option--</option>

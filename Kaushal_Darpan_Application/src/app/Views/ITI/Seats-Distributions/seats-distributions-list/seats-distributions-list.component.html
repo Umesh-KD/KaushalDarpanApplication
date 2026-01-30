@@ -21,16 +21,22 @@
         <a routerLink="/AddSeatsDistributions" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+       
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Remark:</label>
-          <select class="form-select" [(ngModel)]="searchRequest.remark">
-            <option value="0">--Select Option--</option>
-            <option *ngFor="let item of RemarkMasterList" [value]="item.ID">{{item.Name}}</option>
-          </select>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Remark:</label>
+          <ng-select [(ngModel)]="searchRequest.remark"
+                     [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of RemarkMasterList">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
+
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By  Total Seat:</label>
-          <input type="text" class="form-input" [(ngModel)]="searchRequest.total_seats" placeholder="Search By  Total Seat">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Seat:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.total_seats" placeholder="Total Seat">
         </div>
 
         <div>

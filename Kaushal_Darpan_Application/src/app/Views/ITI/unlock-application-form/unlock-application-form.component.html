@@ -25,49 +25,60 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application ID</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application ID</label>
           <input type="text" class="form-input" placeholder="Application ID" id="ApplicationID" [(ngModel)]="searchRequest.ApplicationID">
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Applicant Name</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applicant Name</label>
           <input type="text" class="form-input" placeholder="Applicant Name" id="StudentName" [(ngModel)]="searchRequest.StudentName">
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Mobile Number</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile Number</label>
           <input type="text" class="form-input" placeholder="Mobile Number" id="MobileNo" [(ngModel)]="searchRequest.MobileNumber">
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Gender:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender:</label>
           <select class="form-select" [(ngModel)]="searchRequest.Gender">
             <option value="0">Choose Option</option>
             <option *ngFor="let row of GenderList" [value]="row.ID">{{row.Name}}</option>
           </select>
         </div>
 
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">District:</label>mlk
+    <select class="form-select" [(ngModel)]="searchRequest.DistrictID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let row of DistrictList" [value]="row.ID">{{row.Name}}</option>
+    </select>
+  </div>-->
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
-          <select class="form-select" [(ngModel)]="searchRequest.DistrictID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let row of DistrictList" [value]="row.ID">{{row.Name}}</option>
-          </select>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
+          <ng-select [(ngModel)]="searchRequest.DistrictID" [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let row of DistrictList">
+              <ng-option [value]="row.ID">{{row.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
-        
+
         <!-- ------------------------------------------------------------------------------------------------------------------------------------------ -->
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category A:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category A:</label>
           <select class="form-select" [(ngModel)]="searchRequest.CategoryA">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">
+              {{item.CasteCategoryName}}
             </option>
           </select>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category B:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category B:</label>
           <select class="form-select" [(ngModel)]="searchRequest.CategoryB">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of CategoryBlist" value="{{item.ID}}">{{item.Name}}</option>
@@ -75,7 +86,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category C:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category C:</label>
           <select class="form-select" [(ngModel)]="searchRequest.CategoryC">
             <option value="0">Choose Option</option>
             <!--<option *ngFor="let item of category_CList" value="{{item.ID}}">{{item.Name}}</option>-->
@@ -83,34 +94,33 @@
             <option value="69">Physically Handicapped (PH)</option>
             <option value="70">None</option>
 
-            </select>
-
-            <!--bindings={
-  "ng-reflect-ng-for-of": "[object Object],[object Object"
-
           </select>
-        </div>-->
 
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category D:</label>
-          <select class="form-select" [(ngModel)]="searchRequest.CategoryD">
-            <option value="0">Choose Option</option>-->
-            <!-- <option *ngFor="let row of DistrictList" [value]="row.ID">{{row.Name}}</option> -->
-            <!--</select>
-  </div>-->
+          <!--bindings={
+    "ng-reflect-ng-for-of": "[object Object],[object Object"
+
+            </select>
+          </div>-->
+          <!--<div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category D:</label>
+      <select class="form-select" [(ngModel)]="searchRequest.CategoryD">
+        <option value="0">Choose Option</option>-->
+          <!-- <option *ngFor="let row of DistrictList" [value]="row.ID">{{row.Name}}</option> -->
+          <!--</select>
+    </div>-->
 
 
-</div>
-      <div>
-        <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData(1)">Search</button>
-        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">
-          <i class="ti ti-refresh"></i>
-          Reset
-        </button>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+
       </div>
-
-
-    </div>
 
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">

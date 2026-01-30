@@ -246,7 +246,7 @@ const routes: Routes = [
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
 
       { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
-
+  
       { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
       { path: 'ITICollegeWiseScholarship', loadChildren: () => import('./Views/ITI/ITIcollege-wise-scholarship/iticollege-wise-scholarship.module').then(m => m.ITICollegeWiseScholarshipModule), title: 'ITI CollegeWise Scholarship' },
       { path: 'CollegeWiseScholarshipReport', loadChildren: () => import('./Views/college-wise-scholarship-report/college-wise-scholarship-report.module').then(m => m.CollegeWiseScholarshipReportModule), title: 'CollegeWise Scholarship Report' },
@@ -1523,7 +1523,8 @@ const routes: Routes = [
 
       {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
       { path: 'jan-aadhar-detail', loadChildren: () => import('./Views/new-jan-aadhar/new-jan-aadhar.module').then(m => m.JanAadharDetailModule), title: 'Jan AAdhar Detail Details' },
-      
+      { path: 'InternalMarksReportCollegeWise', loadChildren: () => import('./Views/InternalMarksReportCollegeWise/InternalMarksReportCollegeWise.module').then(m => m.InternalMarksReportCollegeWiseModule), title: 'InternalMarksReportCollegeWise' },
+
 
 
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },

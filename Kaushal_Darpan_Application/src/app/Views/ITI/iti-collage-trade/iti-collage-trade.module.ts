@@ -6,6 +6,8 @@ import { ITICollageTradeComponent } from './iti-collage-trade.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
+import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -18,7 +20,9 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
     FormsModule,
     LoaderModule,
     ReactiveFormsModule,
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    NgMultiSelectDropDownModule.forRoot(),
+    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
   ]
 })
 export class ITICollageTradeModule { }

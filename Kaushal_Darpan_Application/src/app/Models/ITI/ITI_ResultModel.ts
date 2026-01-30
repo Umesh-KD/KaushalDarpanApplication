@@ -21,6 +21,7 @@ export class ItiGetPassFailResultDataModel {
   public StudentType: number = 0;
   public EnrollmentNo: number = 0;
   public TradeId: number = 0;
+  public SemesterID: number = 0;
 }
 
 export class ITIStateTradeCertificateSearchModel {
