@@ -222,6 +222,7 @@ export class AddExaminerComponent implements OnInit {
       this.loaderService.requestStarted();
       this.SubjectMasterDDLList = [];
       this.CommonSubjectDDLList = [];
+      this.searchRequest.CommonSubjectID = 0;
 
       // if common subject
       if (this.CommonSubjectYesNo == 2 && this.searchRequest.SemesterID > 0) {//yes
@@ -441,6 +442,7 @@ export class AddExaminerComponent implements OnInit {
   async GetCommonSubjectDDL() {
     //debugger
     try {
+      this.searchRequest.CommonSubjectID = 0;
       this.StaffForExaminerList = [];
       const select = document.getElementById('CommonSubjectYesNo') as HTMLSelectElement;
       const value = Number(select.value);

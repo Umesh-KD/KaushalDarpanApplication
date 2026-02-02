@@ -23,6 +23,8 @@ export class ITIsDataModels {
   public SeatIntakes: ITISeatIntakesModel[] = [];
   public CourseTypeID: number = 0;
   public IPAddress: string = '';
+  public CampusID: number = 0
+  public IsCampus: boolean = false
 }
 
 
@@ -43,6 +45,9 @@ export class ITIsSearchModel {
   public ItiCode: string = ''
   public CourseTypeID: number = 0
   public InstituteID: number = 0
+  public DgetCode: string = ''
+  public CampusID: number = 0
+  public IsCampus: string = "-1"
 
 
 }

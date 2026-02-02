@@ -67,6 +67,7 @@ export class ITIsComponent implements OnInit {
   collegesemrequest = new CollegeMasterSearchModel();
   public Type1List: any = []
   public Type2List: any = []
+  public govCollegeList: any = [];
   _GlobalConstants = GlobalConstants;
 
   public SemesterDetails: any[] = [];//copy of main data
@@ -118,7 +119,7 @@ export class ITIsComponent implements OnInit {
     this.GetAllData();
 
     await this.GetPrintRollAdmitCardSetting();
-
+    this.loadDropdownData('GovtIti')
   }
 
  
@@ -237,6 +238,7 @@ export class ITIsComponent implements OnInit {
   }
 
   async GetAllData() {
+    debugger
     this.searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchrequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
     this.searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -754,7 +756,24 @@ export class ITIsComponent implements OnInit {
       );
   }
 
-
+  loadDropdownData(MasterCode: string): void {
+    
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      switch (MasterCode) {
+        case 'GovtIti':
+          this.govCollegeList = data['Data'];
+          console.log("govCollegeList ==>", this.govCollegeList)
+          break;
+        default:
+          break;
+      }
+    });
+  }
+  onCampusChange(value: boolean) {
+    if (!value) {
+      this.request.CampusID = 0;
+    }
+  }
 
 
 

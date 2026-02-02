@@ -1,0 +1,114 @@
+<!--Page Title Start-->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Update Minimum Required Item</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI Inventory</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page"> Add/Update Minimum Required Item </a>
+    </div>
+  </div>
+  <a [routerLink]="['/iti-min-required-item']" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+<!--Page Title End-->
+
+
+<div class="card" style=" overflow: visible;">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add/Update Required Item</b>
+    </div>
+    <form [formGroup]="AddItemsRequestFormGroup">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+          <select class="form-select" [(ngModel)]="request.TradeId" formControlName="TradeId">
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Category: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" 
+            [(ngModel)]="request.ItemCategoryId" 
+            formControlName="ItemCategoryId" 
+            (change)="ddlEquipment_Change()">
+
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">{{item.Name}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.ItemCategoryId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Equipment: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="request.EquipmentsId" formControlName="EquipmentsId">
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of EquipmentsDDLList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Quantity" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Required Quantity: <span class="StarMarking">*</span>
+          </label>
+
+          <input type="text"
+                 id="RequiredQuantity"
+                 class="form-input"
+                 formControlName="RequiredQuantity"
+                 [min]="1"
+                 [max]="maxQty"
+                 step="1"
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,3)" [(ngModel)]="request.RequiredQuantity" (input)="onQuantityInput($event)">
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.RequiredQuantity.errors" class="text-danger">
+            <p *ngIf="_AddItemsRequestFormGroup.RequiredQuantity.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+            <p *ngIf="_AddItemsRequestFormGroup.RequiredQuantity.errors.pattern">
+              <i aria-hidden="true"></i>
+              Only positive numbers are allowed in the Quantity field!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-4">
+        <div class="text-center">
+          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveMinRequiredItems_ITI_INV()">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

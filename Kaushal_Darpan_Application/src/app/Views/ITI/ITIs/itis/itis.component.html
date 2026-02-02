@@ -53,6 +53,14 @@
             <p *ngIf="groupForm.controls.txtName.errors.required">This field is required .!</p>
           </div>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            DGET Code:
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Name:" [(ngModel)]="searchrequest.DgetCode">
+
+        </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             ITI Code: <span class="StarMarking">*</span>
@@ -88,16 +96,16 @@
 
 
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Fee Status:
-          </label>
-          <select class="form-select" [(ngModel)]="searchrequest.FeeStatus">
-            <option value="-1">ALL</option>
-            <option value="1">Entered</option>
-            <option value="0">Not Entered</option>
-          </select>
-        </div>
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Fee Status:
+    </label>
+    <select class="form-select" [(ngModel)]="searchrequest.FeeStatus">
+      <option value="-1">ALL</option>
+      <option value="1">Entered</option>
+      <option value="0">Not Entered</option>
+    </select>
+  </div>-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             ITI Type:
@@ -148,6 +156,38 @@
     </select>
   </div> -->
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Is Campus:
+          </label>
+
+          <select class="form-select"
+                  [(ngModel)]="searchrequest.IsCampus">
+            <option [value]="-1">All</option>
+            <option [value]="0">No</option>
+            <option [value]="1">Yes</option>
+          </select>
+
+         
+        </div>
+
+        <!-- College dropdown only when Yes -->
+        <div *ngIf="searchrequest.IsCampus == '1'">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            College:
+          </label>
+
+          <ng-select [(ngModel)]="searchrequest.CampusID"
+                     [clearable]="false"
+                     [ngModelOptions]="{standalone: true}">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of govCollegeList">
+              <ng-option [value]="item.ID">{{ item.Name }}</ng-option>
+            </ng-container>
+          </ng-select>
+        </div>
+
+
       </div>
       <div class="text-center mb-2">
         <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
@@ -184,24 +224,27 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">S No</th>
-            <th class="text-left">Name</th>
-            <th class="text-left">Email</th>
-            <th class="text-left">SSO</th>
+            <!--<th class="text-left">Name</th>-->
+            <th class="text-left">ITI Name Code</th>
+            <th class="text-left">DGET Code</th>
+            <th class="text-left">Campus</th>
             <th *ngIf="sSOLoginDataModel.RoleID!=_EnumRole.DTETraing">Roll List / Admit Card</th>
-            <th class="text-left">Fee Status</th>
-            <th class="text-left">Modified</th>
+            <!--<th class="text-left">Fee Status</th>-->
+            <!--<th class="text-left">Modified</th>-->
             <th class="text-left">Status</th>
             <th class="text-left">Active/Inactive Remark</th>
-            <th *ngIf="sSOLoginDataModel.RoleID!=42 && sSOLoginDataModel.RoleID!=22"  class="text-center">Action</th>
+            <th *ngIf="sSOLoginDataModel.RoleID!=42 && sSOLoginDataModel.RoleID!=22" class="text-center">Action</th>
           </tr>
         </thead>
+        <!--{{paginatedInTableData | json}}-->
         <tbody>
           <tr *ngFor="let iti of paginatedInTableData | tableSearchFilter:Table_SearchText ; let i = index">
             <td align="left">{{ (startInTableIndex+1)+i}}</td>
-            <td align="left">{{ iti.CollegeName }}</td>
-            <td align="left">{{ iti.Email }}</td>
-            <td align="left">{{ iti.Ssoid }}</td>
-            <td align="center" *ngIf="sSOLoginDataModel.RoleID!=_EnumRole.DTETraing" >
+            <!--<td align="left">{{ iti.CollegeName }}</td>-->
+          <td align="left">{{iti.CodeAndName}}</td>
+          <td align="left">{{iti.DgetCode}}</td>
+          <td align="left">{{ iti.campusName }}</td>
+            <td align="center" *ngIf="sSOLoginDataModel.RoleID!=_EnumRole.DTETraing">
               <div class="flex">
                 <button class="dropdown mr-1" mat-raised-button [matMenuTriggerFor]="menu" style="width: 105px; padding: 5px;">
                   Roll List <i class="ti ti-chevron-down"></i>
@@ -212,7 +255,7 @@
 
                   @if(sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal || sSOLoginDataModel.RoleID == 43)
                   {
-
+                    
 
                   <a *ngFor="let sem of Type1List"
                      mat-menu-item
@@ -242,17 +285,16 @@
                   </button>
                   <!--Third Semester-->
                   <!--<button mat-menu-item [routerLink]="'/ITIDownloadRollNoList'"
-                          [queryParams]="{ semid: 3, instID: iti.Id }"
-                          matTooltip="Roll List Third Semester">
-                    <i class="ti ti-download"></i> Third Semester
-                  </button>
-                  Fourth Semester
-                  <button mat-menu-item [routerLink]="'/ITIDownloadRollNoList'"
-                          [queryParams]="{ semid: 4, instID: iti.Id }"
-                          matTooltip="Roll List Fourth Semester">
-                    <i class="ti ti-download"></i> Fourth Semester
-                  </button>-->
-
+                    [queryParams]="{ semid: 3, instID: iti.Id }"
+                    matTooltip="Roll List Third Semester">
+              <i class="ti ti-download"></i> Third Semester
+            </button>
+            Fourth Semester
+            <button mat-menu-item [routerLink]="'/ITIDownloadRollNoList'"
+                    [queryParams]="{ semid: 4, instID: iti.Id }"
+                    matTooltip="Roll List Fourth Semester">
+              <i class="ti ti-download"></i> Fourth Semester
+            </button>-->
                   }
 
 
@@ -291,28 +333,28 @@
                     <i class="ti ti-download"></i> Second Year Main
                   </button>
                   <!--Third Semester
-                  <button mat-menu-item [routerLink]="'/ITIGenerateAdmitCard'"
-                          [queryParams]="{ semid: 3, instID: iti.Id }"
-                          matTooltip="Admit Cards Third Semester">
-                    <i class="ti ti-download"></i> Third Semester Main
-                  </button>-->
+            <button mat-menu-item [routerLink]="'/ITIGenerateAdmitCard'"
+                    [queryParams]="{ semid: 3, instID: iti.Id }"
+                    matTooltip="Admit Cards Third Semester">
+              <i class="ti ti-download"></i> Third Semester Main
+            </button>-->
                   <!--Fourth Semester-->
                   <!--<button mat-menu-item [routerLink]="'/ITIGenerateAdmitCard'"
-                          [queryParams]="{ semid: 4, instID: iti.Id }"
-                          matTooltip="Admit Cards Fourth Semester">
-                    <i class="ti ti-download"></i> Fourth Semester Main
-                  </button>-->
+                    [queryParams]="{ semid: 4, instID: iti.Id }"
+                    matTooltip="Admit Cards Fourth Semester">
+              <i class="ti ti-download"></i> Fourth Semester Main
+            </button>-->
                   }
 
                 </mat-menu>
               </div>
             </td>
-            <td align="left">
-              <span [class.text-red]="iti.Status === 0" [class.text-green]="iti.Status === 1">
-                {{ iti.FeePdf !== 0 ? 'Fee Completed' : 'Fee Pending' }}
-              </span>
-            </td>
-            <td align="left">{{ iti.ModifyDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+            <!--<td align="left">
+        <span [class.text-red]="iti.Status === 0" [class.text-green]="iti.Status === 1">
+          {{ iti.FeePdf !== 0 ? 'Fee Completed' : 'Fee Pending' }}
+        </span>
+      </td>-->
+            <!--<td align="left">{{ iti.ModifyDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>-->
 
 
             <td class="left">
@@ -330,8 +372,8 @@
             <td [innerHtml]="iti.RemarkForStatus"></td>
 
 
-            <td *ngIf="sSOLoginDataModel.RoleID!=42 && sSOLoginDataModel.RoleID!=22 && sSOLoginDataModel.RoleID!=20 && sSOLoginDataModel.RoleID!=43"  align="center">
-              <div  class="flex">
+            <td *ngIf="sSOLoginDataModel.RoleID!=42 && sSOLoginDataModel.RoleID!=22 && sSOLoginDataModel.RoleID!=20 && sSOLoginDataModel.RoleID!=43" align="center">
+              <div class="flex">
 
                 <button class="dropdown mr-1" mat-raised-button [matMenuTriggerFor]="menuAction" style="width: 105px; padding: 5px;">
                   ACTION <i class="ti ti-chevron-down"></i>
@@ -383,8 +425,6 @@
             </td>
           </tr>
         </tbody>
-
-
       </table>
 
     </div>

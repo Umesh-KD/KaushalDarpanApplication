@@ -594,9 +594,12 @@ const routes: Routes = [
       { path: 'iti-return-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-return-items/iti-return-item.module').then(m => m.AddItiReturnItemModule) },
       { path: 'iti-sr5-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/sr5-report-iti/sr5-report-iti.module').then(m => m.SR5ReportITIModule), title: 'ITI SR5 Report' },
       { path: 'iti-sr6-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/sr6-report-iti/sr6-report-iti.module').then(m => m.SR6ReportITIModule), title: 'ITI SR6 Report' },
+      { path: 'add-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/add-min-required-trade-items/add-min-required-trade-items.module').then(m => m.AddMinRequiredTradeItemsModule), title: 'Add Min Required Items' },
+      { path: 'iti-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/min-required-trade-items/min-required-trade-items.module').then(m => m.MinRequiredTradeItemsModule), title: 'ITI Min Required Items' },
       
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
       { path: 'inventory-Issue-History', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
+      { path: 'allotted-item-details', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
       { path: 'iti-staff-inventory-details', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
       { path: 'iti-auction-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-report/iti-auction-report.module').then(m => m.itiauctionreportModule) },
 
