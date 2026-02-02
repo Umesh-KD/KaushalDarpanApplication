@@ -363,6 +363,7 @@
                   <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
                 </div>
               </td>
+              <!--  -->
               <td align="left">
                 <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
                 <span class="text-red-500" *ngIf="row.IsUFM">UFM</span>

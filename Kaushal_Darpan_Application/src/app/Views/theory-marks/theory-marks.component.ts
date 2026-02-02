@@ -43,6 +43,7 @@ export class TheoryMarksComponent implements OnInit {
   isSubmittedItemDetails: boolean = false;
   public isLoadingExport: boolean = false;
   public IsConfirmed: boolean = false;
+  public IsFeedbackSubmit: boolean = false;
   public tbl_txtSearch: string = '';
   public isModalOpen = false;
   isListVisible: boolean = false;
@@ -204,19 +205,15 @@ export class TheoryMarksComponent implements OnInit {
       await this.TheoryMarksService.GetTheoryMarksDetailList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.TheoryMarksDetailList = data['Data'];
-          this.TheoryMarksDetailList.map((x: any) => {
+            this.TheoryMarksDetailList = data['Data'];
+            this.TheoryMarksDetailList.map((x: any) => {
             this.onStatusThoryMarks(x);
           })
-
-          console.log("TheoryMarksDetailList", this.TheoryMarksDetailList);
 
           this.TheoryMarksDetailList.forEach(x => {
             if (x.IsChecked == false) {
               x.IsPresentTheory = 1
+              x.ObtainedTheory= ''
             }
           })
 
@@ -267,8 +264,8 @@ export class TheoryMarksComponent implements OnInit {
   }
 
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
-
     // try {
+    debugger
     this.loaderService.requestStarted();
     
     this.TheoryMarksDetailList.forEach((item: any) => {
@@ -297,30 +294,40 @@ export class TheoryMarksComponent implements OnInit {
     if (isFinalSubmit == true) {
       var filtered = this.TheoryMarksDetailList
     }
+
+    let markNotEntered = filtered.filter(x => x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '');
+    if(markNotEntered.length > 0) {
+      this.toastr.error('Please enter marks for present student! first!');
+      return
+    }
     
     // Iterate over each filtered item for validation
     for (let x of filtered) {
 
       // If the student is marked as "Absent" (IsPresentTheory = 0), validate marks
-      if (x.IsPresentTheory == 0) {
+      if (x.IsPresentTheory === 0) {
         // Ensure marks are 0 when absent (MaxTheory and ObtainedTheory should be 0 for absent students)
-        if (x.ObtainedTheory != 0) {
+        if (x.ObtainedTheory !== 0) {
           this.toastr.error('Please Enter 0 for absent student!');
           return;
         }
       }
 
       // If the student is marked as "Present" (IsPresentTheory = 1), ensure that marks are entered
-      if (x.IsPresentTheory == 1) {
+      if (x.IsPresentTheory === 1) {
         // If no marks are entered, show the "Please enter marks" message
-        if (x.ObtainedTheory == null || x.ObtainedTheory == undefined || x.ObtainedTheory == '') {
+        if (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '') {
           this.toastr.error('Please enter marks for present student!');
           return;
         }
 
         // Ensure the mark is either 0 or greater than 0 but not more than MaxTheory
         if (x.ObtainedTheory === 0) {
-          this.toastr.warning('Marks are 0 for this student, proceed if this is intentional.');
+          this.Swal2.Confirmation(`Marks are 0 for this student, proceed if this is intentional.:<br>`, async (result: any) => {
+            if (!result.isConfirmed) {
+              return;
+            }
+          })
         } else if (x.ObtainedTheory > x.MaxTheory) {
           this.toastr.error('Marks must be between 0 and Max Theory marks!');
           return;
@@ -340,7 +347,7 @@ export class TheoryMarksComponent implements OnInit {
     filtered.forEach(x => {
       x.IsChecked = true,
       x.isFinalSubmit = isFinalSubmit
-    })
+    })    
 
     this.perfactStudents = filtered.filter(x => x.ObtainedTheory == x.MaxTheory);
     console.log("this.perfactStudents", this.perfactStudents);
@@ -348,6 +355,7 @@ export class TheoryMarksComponent implements OnInit {
       this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for Roll Number:<br> ${this.perfactStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
            await this.SaveData(filtered)
+
         }
       })
     } else {
@@ -366,7 +374,7 @@ export class TheoryMarksComponent implements OnInit {
           console.log("data on save", data);
 
           if (this.State == EnumStatus.Success) {
-            
+            this.IsFeedbackSubmit = true
             this.toastr.success(this.Message);
             if (array.length > 1) {
               await this.GetTheoryMarksDetailList();
@@ -468,9 +476,9 @@ export class TheoryMarksComponent implements OnInit {
   }
   CloseModalFeedboackPopup(isNavigate: boolean) {
     this.modalService.dismissAll();
-    if (isNavigate) {
-      this.routers.navigate(['/dashboard']);
-    }
+    // if (isNavigate) {
+    //   this.routers.navigate(['/dashboard']);
+    // }
   }
 
   private getDismissReason(reason: any): string {
@@ -484,34 +492,37 @@ export class TheoryMarksComponent implements OnInit {
   }
 
   async FeedbackSubmit() {
-    try {
-      this.loaderService.requestStarted();
-      this.feedbackRequest.GroupCodeID = this.examinerCodeLoginModel.GroupCodeID;
-      this.feedbackRequest.ExaminerCode = this.examinerCodeLoginModel.ExaminerCode;
+    await this.OnSubmit(0, true);
+    if(this.IsFeedbackSubmit) {
+      try {
+        this.loaderService.requestStarted();
+        this.feedbackRequest.GroupCodeID = this.examinerCodeLoginModel.GroupCodeID;
+        this.feedbackRequest.ExaminerCode = this.examinerCodeLoginModel.ExaminerCode;
 
-      this.feedbackRequest.UserID = this.sSOLoginDataModel.UserID;
-      this.feedbackRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.feedbackRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      this.feedbackRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        this.feedbackRequest.UserID = this.sSOLoginDataModel.UserID;
+        this.feedbackRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+        this.feedbackRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+        this.feedbackRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-      await this.TheoryMarksService.FeedbackSubmit(this.feedbackRequest).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          this.CloseModalFeedboackPopup(true);
-          await this.OnSubmit(0, true);
-        } else {
-          this.toastr.error(data.ErrorMessage); 
-        }
-      })
-      
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setTimeout (() => {
-        this.loaderService.requestEnded();
-      }, 200)
-    }
+        await this.TheoryMarksService.FeedbackSubmit(this.feedbackRequest).then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.CloseModalFeedboackPopup(true);
+            this.routers.navigate(['/dashboard']);
+          } else {
+            this.toastr.error(data.ErrorMessage); 
+          }
+        })
+        
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setTimeout (() => {
+          this.loaderService.requestEnded();
+        }, 200)
+      }
+    }    
   }
   async openPageAfterExaminerLogin() {
     try {
@@ -705,8 +716,7 @@ export class TheoryMarksComponent implements OnInit {
     }
 
     if(dOC.IsPresentTheory == 0) {
-      dOC.ObtainedTheory = 0;
-
+      dOC.ObtainedTheory = '';
     }
 
   }
