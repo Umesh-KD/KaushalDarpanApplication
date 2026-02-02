@@ -38,7 +38,7 @@ export class ItiTradeService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+  
   public async SaveData(request: ITITradeDataModels) {
     var body = JSON.stringify(request);
 
@@ -168,5 +168,14 @@ export class ItiTradeService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async getTradeList(searchRequest: ITITradeSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/getTradeList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }
