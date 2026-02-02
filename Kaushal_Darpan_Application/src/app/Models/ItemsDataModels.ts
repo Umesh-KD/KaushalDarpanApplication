@@ -115,3 +115,22 @@ export class inventoryIssueHistorySearchModel {
   public ItemCategoryID: number = 0;
   public StreamID: number = 0;
 }
+
+export class AddMinRequiredItemDataModel {
+  public RequiredItemId?: number = 0;
+  public TradeId?: number = 0;
+  public ItemCategoryId?: number = 0;
+  public EquipmentsId?: number = 0;
+  public UnitId?: number = 0;
+  public RequiredQuantity?: number = 0;
+  public ModifyBy?: number = 0;
+}
+
+export class MinRequiredItemSearchModel {
+  public RequiredItemId?: number = 0;
+  public TradeId?: number = 0;
+  public ItemCategoryId?: number = 0;
+  public EquipmentsId?: number = 0;
+  public CollegeId?: number = 0;
+  public Action?: string = '';
+}
