@@ -28,6 +28,7 @@ import { StudentAdmitCardDownloadModel } from '../../Models/GenerateRollDataMode
 import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 import { THTE_DropdownDataModel } from '../../Models/TeacherHigherEducationApplicationDataModel';
 import { StudentDetailsModel } from '../../Models/StudentDetailsModel';
+import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 
 
 @Injectable({
@@ -2144,6 +2145,13 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-
+  public async TradeAndCodeList(SearchRequest: ITITradeSearchModel) {
+    var body = JSON.stringify(SearchRequest);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + '/TradeListGetAllData', body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }
