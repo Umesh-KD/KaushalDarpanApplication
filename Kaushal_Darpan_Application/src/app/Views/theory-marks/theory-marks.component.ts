@@ -211,7 +211,7 @@ export class TheoryMarksComponent implements OnInit {
           })
 
           this.TheoryMarksDetailList.forEach(x => {
-            if (x.IsChecked == false) {
+            if (x.IsChecked === false) {
               x.IsPresentTheory = 1
               x.ObtainedTheory= ''
             }
@@ -716,7 +716,7 @@ export class TheoryMarksComponent implements OnInit {
     }
 
     if(dOC.IsPresentTheory == 0) {
-      dOC.ObtainedTheory = '';
+      dOC.ObtainedTheory = 0;
     }
 
   }
