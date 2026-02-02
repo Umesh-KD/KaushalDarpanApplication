@@ -91,6 +91,7 @@ export class AddStaffInitialDetailsComponent {
    
     await this.GetStaffTypeData();
 
+
     
   }
 
@@ -136,6 +137,38 @@ export class AddStaffInitialDetailsComponent {
     }
   }
 
+
+  // get sectioned post validation 
+  async GetSanctionedOfficeVacancy() {
+    debugger;
+    this.formData.OfficeID = 0;
+    try {
+      this.loaderService.requestStarted();
+      // ITIGovtEMStaffMasterService.GetSanctionedOfficeVacancy
+      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList = data['Data'];
+          if (this.sSOLoginDataModel.RoleID == 194) {
+            this.OfficeList = this.OfficeList.filter(x => x.ID == 19);
+          }
+          if (this.sSOLoginDataModel.RoleID == 50) {
+            this.OfficeList = this.OfficeList.filter(x => x.ID == 18);
+          }
+          this.OfficeList = this.OfficeList.filter((item: any) => item.ID != 21);
+
+          console.log(this.OfficeList, "OfficeList")          
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async GetOfficeWiselogic() {
     debugger;
@@ -613,6 +646,7 @@ export class AddStaffInitialDetailsComponent {
     this.formData.ModifyBy = this.sSOLoginDataModel.UserID;
     this.formData.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
     this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.formData.EndTermID=this.sSOLoginDataModel.EndTermID;
 
     try {
       this.loaderService.requestStarted();

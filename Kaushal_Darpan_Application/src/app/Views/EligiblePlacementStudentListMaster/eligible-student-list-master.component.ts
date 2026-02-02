@@ -60,7 +60,8 @@ export class EligibleStudentListMasterComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetSessionYear();
     await this.GetInstituteList();
-    await this.GetBranchList();
+    // await this.GetBranchList();
+    await this.GetStreamMasterInstituteWise();
     this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
     
     await this.GetEligibleStudentListData(1);
@@ -125,6 +126,32 @@ export class EligibleStudentListMasterComponent implements OnInit {
     } catch (Ex) {
       console.log(Ex);
     } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetStreamMasterInstituteWise() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.Stream_InstituteIdWise(
+        this.sSOLoginDataModel.DepartmentID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID,
+        this.sSOLoginDataModel.InstituteID,
+        this.sSOLoginDataModel.FinancialYearID
+      ).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.BranchList = data.Data;
+      });
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);

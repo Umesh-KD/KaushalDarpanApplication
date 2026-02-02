@@ -534,8 +534,8 @@ export class BterEMAddStaffDetailsComponent {
       this.StaffMasterFormGroup.markAllAsTouched();
       return;
     }
-
-    if (this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher || this.sSOLoginDataModel.RoleID === this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID === this._EnumRole.ShikshaSambal) {
+    // this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher || 
+    if (this.sSOLoginDataModel.RoleID === this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID === this._EnumRole.ShikshaSambal) {
       const hasSubjects = this.staffDetailsFormData.StaffSubjectListModel?.length > 0;
       if (!hasSubjects) {
         this.toastr.warning('Please enter subject details for the teacher !');

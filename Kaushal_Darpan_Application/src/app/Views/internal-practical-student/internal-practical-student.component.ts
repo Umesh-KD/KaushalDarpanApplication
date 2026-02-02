@@ -168,7 +168,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   async GetTheoryMarksList() {
     try {
-      // this.TheoryMarksList=[];
+       this.TheoryMarksList=[];
       this.AllInTableSelect = false;
       this.isSubmitted = true;
       if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng) {

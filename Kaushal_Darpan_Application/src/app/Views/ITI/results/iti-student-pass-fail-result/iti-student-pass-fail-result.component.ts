@@ -485,7 +485,7 @@ export class itiStudentPassFailResultComponent {
       this.loaderService.requestStarted();
       const MarksheetSearch = new StudentMarksheetSearchModel();
       MarksheetSearch.EndTermID = this.sSOLoginDataModel.EndTermID;
-      MarksheetSearch.RollNo = rollNo;
+      MarksheetSearch.RollNo = rollNo.RollNo;
       MarksheetSearch.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
       await this.ReportServices.GetITIStudent_Marksheet(MarksheetSearch)
         .then((data: any) => {

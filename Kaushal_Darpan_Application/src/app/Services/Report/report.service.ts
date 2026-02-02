@@ -34,6 +34,7 @@ import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataMo
 import { TabulationReportSearchModel } from '../../models/bter/TabulationReportModel';
 import { CollegesWiseExaminationRptSearchModel } from '../../Models/CollegesWiseExaminationRptsModel';
 import { StudentItiResultModel } from '../../Models/StudentSearchModel';
+import { InternalMarksReportCollegeWiseSearchModel } from '../../Models/CompanyMasterDataModel';
 
 
 
@@ -1747,6 +1748,42 @@ export class ReportService {
       ).toPromise();
   }
 
+
+  public async GetInternalAssessmentStudentReport(searchRequest: InternalMarksReportCollegeWiseSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInternalAssessmentStudentReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public GetsampleAnnexture32(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/GetSampleAnnexture/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
+
+
+
+  public async UploadAnnexture32(request: any) {
+    var body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/UploadAnnexture32`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetUploadAnnexture32(request: any) {
+    var body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetUploadAnnexture32`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }
 

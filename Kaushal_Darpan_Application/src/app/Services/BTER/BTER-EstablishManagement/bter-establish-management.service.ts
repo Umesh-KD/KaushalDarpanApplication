@@ -288,6 +288,14 @@ export class BTEREstablishManagementService {
   }
 
 
+  // public async GetSanctionedOfficeVacancy(DepartmentID: number = 0,EndTermID:number=0) {
+  //   return await this.http.post(this.APIUrl+"/GetSanctionedOfficeVacancy/"+DepartmentID+"/"+EndTermID, this.headersOptions)
+  //     .pipe(
+  //       catchError(this.handleErrorObservable)
+  //     ).toPromise();
+  // }
+
+
   public async DeleteOfficeVacancy(request: OfficeVacancyModel) {
     var body = JSON.stringify(request);
 

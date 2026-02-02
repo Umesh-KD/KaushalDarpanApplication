@@ -451,7 +451,7 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span class="StarMarking">*</span> </label>
-                <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
+                <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
                        formControlName="EmployeeID" [(ngModel)]="approveRequest.EmployeeID" />
 
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
@@ -880,7 +880,7 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark (If any) </label>
-                <textarea autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOId" id="Remark"
+                <textarea autocomplete="off" class="form-input " placeholder="Enter Remark" value="12dfgdf" name="SSOId" id="Remark"
                           formControlName="Remark" [(ngModel)]="approveRequest.Remark">
                 </textarea>
               </div>

@@ -5,7 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { CommonSubjectMasterSearchModel } from '../../Models/CommonSubjectMasterSearchModel';
 import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel';
 import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDataModel';
-import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action, PlacementStudentListSearchModel } from '../../Models/CompanyMasterDataModel';
+import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action, InternalMarksReportCollegeWiseSearchModel, PlacementStudentListSearchModel } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 
@@ -141,6 +141,7 @@ export class CompanyMasterService {
   //       catchError(this.handleErrorObservable)
   //     ).toPromise();
   // }
+
 
 
 }

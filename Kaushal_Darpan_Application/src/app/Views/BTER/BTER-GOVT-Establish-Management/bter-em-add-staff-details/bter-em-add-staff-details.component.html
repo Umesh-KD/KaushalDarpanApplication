@@ -180,7 +180,7 @@
         </div>
 
         <div *ngIf=" this.IsOterFacultyTech == false"> 
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the College<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the Current Institute<span class="StarMarking">*</span></label>
           <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement"
                  formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" (click)="openDatePicker($event)" />
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
@@ -302,11 +302,11 @@
         </div>
 
       </div>
-
-      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Teacher">
+      <!-- *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal" -->
+      <div  class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" *ngIf="sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Subjects</b>
       </div>
-      <form [formGroup]="AddsubjectFormGroup" *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
+      <form [formGroup]="AddsubjectFormGroup" *ngIf="sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Type<span class="StarMarking">*</span></label>
