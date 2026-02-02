@@ -40,6 +40,7 @@ export class inventoryIssueHistoryComponent {
   public UserID: number = 0;
   public today: Date = new Date();
   public IsStaff: boolean = false;
+  public IsForAllottedItems: boolean = false;
 
   constructor(
     private toastr: ToastrService,
@@ -59,6 +60,8 @@ export class inventoryIssueHistoryComponent {
 
     if (this.routers.url.includes('iti-staff-inventory-details')) {
       this.IsStaff = true;
+    } else if (this.routers.url.includes('allotted-item-details')) {
+      this.IsForAllottedItems = true;
     }
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -80,7 +83,12 @@ export class inventoryIssueHistoryComponent {
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
       this.Searchrequest.IsStaff = this.IsStaff;
-      this.Searchrequest.ReturnStatus = 2; // for all data
+      if(this.IsForAllottedItems){
+        this.Searchrequest.ReturnStatus = 0;
+      } else {
+        this.Searchrequest.ReturnStatus = 2; // for all data
+      }
+      
      // this.Searchrequest.staffID = 1;
 
       await this.itiInventoryService.GetAllinventoryIssueHistoryNew(this.Searchrequest)

@@ -61,6 +61,7 @@ export class AddItiTradeComponent implements OnInit {
 
       txtTradeCode: ['', Validators.required],
       txtQualificationDetails: ['', Validators.required],
+      txtSyllabuslink: [''],
 
 
       ddlTradeTypeId: ['', [DropdownValidators]],

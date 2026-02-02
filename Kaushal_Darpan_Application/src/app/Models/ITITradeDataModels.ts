@@ -22,6 +22,7 @@ export class ITITradeDataModels {
   public CreatedBy: number = 0;
   public DepartmentID: number = 0;
   public IsAdmission: boolean = false;
+  public Syllabuslink: string = '';
 
 }
 
@@ -35,6 +36,7 @@ export class ITITradeSearchModel {
   public ActiveStatus: boolean = true;
   public CourseTypeID?: number = 0;
   public IsAddmission: boolean = false;
+  public action: string = ''
 
 
 }

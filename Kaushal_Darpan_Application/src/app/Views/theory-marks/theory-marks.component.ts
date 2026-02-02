@@ -302,18 +302,18 @@ export class TheoryMarksComponent implements OnInit {
     for (let x of filtered) {
 
       // If the student is marked as "Absent" (IsPresentTheory = 0), validate marks
-      if (x.IsPresentTheory === 0) {
+      if (x.IsPresentTheory == 0) {
         // Ensure marks are 0 when absent (MaxTheory and ObtainedTheory should be 0 for absent students)
-        if (x.ObtainedTheory !== 0) {
+        if (x.ObtainedTheory != 0) {
           this.toastr.error('Please Enter 0 for absent student!');
           return;
         }
       }
 
       // If the student is marked as "Present" (IsPresentTheory = 1), ensure that marks are entered
-      if (x.IsPresentTheory === 1) {
+      if (x.IsPresentTheory == 1) {
         // If no marks are entered, show the "Please enter marks" message
-        if (x.ObtainedTheory === null || x.ObtainedTheory === undefined) {
+        if (x.ObtainedTheory == null || x.ObtainedTheory == undefined || x.ObtainedTheory == '') {
           this.toastr.error('Please enter marks for present student!');
           return;
         }
@@ -321,7 +321,7 @@ export class TheoryMarksComponent implements OnInit {
         // Ensure the mark is either 0 or greater than 0 but not more than MaxTheory
         if (x.ObtainedTheory === 0) {
           this.toastr.warning('Marks are 0 for this student, proceed if this is intentional.');
-        } else if (x.ObtainedTheory <= 0 || x.ObtainedTheory > x.MaxTheory) {
+        } else if (x.ObtainedTheory > x.MaxTheory) {
           this.toastr.error('Marks must be between 0 and Max Theory marks!');
           return;
         }

@@ -10,7 +10,7 @@ import { DTEItemUnitModel } from '../../../Models/DTEInventory/DTEItemUnitModel'
 import { DTEInventoryDashboardDataModel } from '../../../Models/DTEInventory/DTEInventoryDashboardDataModel';
 import { DTEIssuedSearchModel, DTEReturnItemSearchModel, DTEIssuedItemDataModel, DTEStoksSearchModel, ReturnDteItemDataModel } from '../../../Models/DTEInventory/DTEIssuedItemDataModel';
 import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, itemReturnModel, ItemsIssueReturnModels, inventoryIssueHistoryITISearchModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
-import { AuctionDetailsModel, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
+import { AddMinRequiredItemDataModel, AuctionDetailsModel, ItemsDetailsInterface, MinRequiredItemSearchModel } from '../../../Models/ItemsDataModels';
 
 @Injectable({
   providedIn: 'root'
@@ -564,6 +564,30 @@ export class ITIInventoryService {
   public async DownloadSR6ReportData_pdf(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/DownloadSR6ReportData_pdf`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveMinRequiredItems_ITI_INV(request: AddMinRequiredItemDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveMinRequiredItems_ITI_INV`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
+  public async GetMinRequiredItem_ITI_INV(request: MinRequiredItemSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetMinRequiredItem_ITI_INV`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteMinRequiredItem_ITI_INV(request: AddMinRequiredItemDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeleteMinRequiredItem_ITI_INV`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

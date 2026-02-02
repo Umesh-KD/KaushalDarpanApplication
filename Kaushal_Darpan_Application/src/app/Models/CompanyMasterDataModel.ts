@@ -183,10 +183,9 @@ export class InternalMarksReportCollegeWiseSearchModel {
   public StreamID?:number=0
   public Type?:number=0
   public SchemeID?:number=0
-
+  public TypeID?:number=0
   public PageSize: number = 50
   public PageNumber: number = 1
-
   public SortOrder: string = '';
   public SortColumn: string = '';
   
