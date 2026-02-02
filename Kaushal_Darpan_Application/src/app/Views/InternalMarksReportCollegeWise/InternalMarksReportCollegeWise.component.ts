@@ -12,6 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 // import { EnumRole } from '../../Common/GlobalConstants';
 import { StreamMasterService } from '../../Services/BranchesMaster/branches-master.service';
 import { EnumStatus, EnumRole } from '../../Common/GlobalConstants';
+import { AppsettingService } from '../../Common/appsetting.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'InternalMarksReportCollegeWise',
     templateUrl: './InternalMarksReportCollegeWise.component.html',
@@ -47,16 +49,21 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
   public SemesterMasterList: any = [];
+  public IAStudentReportlist = new InternalMarksReportCollegeWiseSearchModel();
 
   constructor(
     private commonMasterService: CommonFunctionService, 
     private ReportService: ReportService,
+    private ReportData: ReportService,
     private toastr: ToastrService, 
     private loaderService: LoaderService, 
     private Swal2: SweetAlert2, 
     private Router: Router, 
     private branchservice: StreamMasterService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private http: HttpClient,
+    private appsettingConfig: AppsettingService
+
   ) { }
 
   async ngOnInit() {
@@ -170,6 +177,8 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
       this.searchRequest.SortColumn=this.sortColumn
       this.searchRequest.SortOrder=this.sortOrder
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       
       if(this.sSOLoginDataModel.RoleID === EnumRole.TPO) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
@@ -304,5 +313,47 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   //   this.sortOrder = this.sortOrder == "" ? "ASC" : (this.sortOrder == "ASC" ? "DESC" : "ASC");
   //   // this.GetEligibleStudentListData(1);
   // }
+
+
+  async downloadIAStudentReport() {
+    debugger
+    this.IAStudentReportlist.SemesterID = this.searchRequest.SemesterID
+    this.IAStudentReportlist.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.IAStudentReportlist.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.IAStudentReportlist.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.IAStudentReportlist.SchemeID = this.searchRequest.SchemeID
+    this.IAStudentReportlist.TypeID = this.searchRequest.TypeID
+    this.IAStudentReportlist.StreamID = this.searchRequest.StreamID
+    this.IAStudentReportlist.InstituteID = this.searchRequest.InstituteID
+
+    this.ReportData.IAStudentReportDownload(this.IAStudentReportlist)
+      .subscribe({
+        next: (blob: Blob) => {
+
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `IAStudentReport${dateTime}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
+  }
+
 
 }

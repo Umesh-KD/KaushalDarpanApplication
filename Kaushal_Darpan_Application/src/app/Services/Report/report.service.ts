@@ -1725,6 +1725,15 @@ export class ReportService {
     );
   }
 
+  public IAStudentReportDownload(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/GetInternalAssessmentStudentReport/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 
   public async ExamLetterReport(obj: any) {
 
