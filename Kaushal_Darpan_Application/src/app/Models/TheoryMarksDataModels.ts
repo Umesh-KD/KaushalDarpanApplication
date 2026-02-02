@@ -9,7 +9,7 @@ export class TheoryMarksDataModels {
   public RollNo: string = '';
   public StudentID: number = 0;
   public StreamID: number = 0;
-  public ObtainedTheory: number | null = 0;
+  public ObtainedTheory: any = '';
   public IsPresentTheory: number = 1;
   public SubjectID: number = 0;
   public MaxTheory: number = 0;

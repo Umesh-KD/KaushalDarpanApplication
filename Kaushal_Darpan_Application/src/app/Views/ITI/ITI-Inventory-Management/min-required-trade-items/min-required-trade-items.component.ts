@@ -212,4 +212,46 @@ export class MinRequiredTradeItemsComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
   }
+
+  exportToExcel(): void {
+    const unwantedColumns = ['RequiredItemId', 'EquipmentsId', 'IsConsumable'];
+
+    const columnOrder = ['TradeName', 'ItemCategoryName', 'ItemType', 'ItemName',
+      'RequiredQuantity', 'AvailableQty', 'Dificiency'
+    ];
+
+    const filteredData = this.ItemMasterList.map((item: any) => {
+      const row: any = {};
+
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
+        }
+      });
+
+      return row;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData, {
+      header: columnOrder
+    });
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const now = new Date();
+    const dateTime =
+      now.getFullYear().toString() +
+      (now.getMonth() + 1).toString().padStart(2, '0') +
+      now.getDate().toString().padStart(2, '0') +
+      '_' +
+      now.getHours().toString().padStart(2, '0') +
+      now.getMinutes().toString().padStart(2, '0') +
+      now.getSeconds().toString().padStart(2, '0');
+
+    const fileName = `MinRequiredItemsList_${dateTime}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+  }
+
 }
