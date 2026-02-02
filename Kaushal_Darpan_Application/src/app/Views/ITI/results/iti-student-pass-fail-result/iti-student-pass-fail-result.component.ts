@@ -573,12 +573,14 @@ export class itiStudentPassFailResultComponent {
     }
   }
 
-  async ConsolidatedDownload(EnrollmentNo: any) {
+  async ConsolidatedDownload(item: any)
+  {
 
-    try {
-
+    try
+    {
+      debugger;
       this.loaderService.requestStarted();
-      this.searchRequestConsolidated.EnrollmentNo = EnrollmentNo;
+      this.searchRequestConsolidated.EnrollmentNo = item.enrollment;
       this.searchRequestConsolidated.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequestConsolidated.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
       await this.ReportServices.ITIMarksheetConsolidated(this.searchRequestConsolidated)
@@ -603,7 +605,7 @@ export class itiStudentPassFailResultComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = EnrollmentNo+'_consolidated_marksheet.pdf';
+            link.download = item.enrollment +'_consolidated_marksheet.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
