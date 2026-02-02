@@ -15,10 +15,10 @@ import { EnumStatus, EnumRole } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 @Component({
-    selector: 'InternalMarksReportCollegeWise',
-    templateUrl: './InternalMarksReportCollegeWise.component.html',
-    styleUrls: ['./InternalMarksReportCollegeWise.component.css'],
-    standalone: false
+  selector: 'InternalMarksReportCollegeWise',
+  templateUrl: './InternalMarksReportCollegeWise.component.html',
+  styleUrls: ['./InternalMarksReportCollegeWise.component.css'],
+  standalone: false
 })
 export class InternalMarksReportCollegeWiseComponent implements OnInit {
   public StudentList: any = [];
@@ -31,12 +31,12 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   public ApprovedStatus: string = "0";
   _EnumRole = EnumRole;
 
-  public BranchList:any[]=[];
-  public CampusPostID:number=0;
+  public BranchList: any[] = [];
+  public CampusPostID: number = 0;
 
   // pagination
-   pageNo: any = 1;
-   pageSize: any = 50;
+  pageNo: any = 1;
+  pageSize: any = 50;
   isPre: boolean = false;
   isNext: boolean = false;
   totalRecord: any = 0;
@@ -52,13 +52,13 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   public IAStudentReportlist = new InternalMarksReportCollegeWiseSearchModel();
 
   constructor(
-    private commonMasterService: CommonFunctionService, 
+    private commonMasterService: CommonFunctionService,
     private ReportService: ReportService,
     private ReportData: ReportService,
-    private toastr: ToastrService, 
-    private loaderService: LoaderService, 
-    private Swal2: SweetAlert2, 
-    private Router: Router, 
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private Swal2: SweetAlert2,
+    private Router: Router,
     private branchservice: StreamMasterService,
     private router: ActivatedRoute,
     private http: HttpClient,
@@ -68,11 +68,15 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    // set college
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+
     await this.GetSessionYear();
     await this.GetInstituteList();
     await this.GetBranchList();
     // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
-    
+
     // await this.GetEligibleStudentListData(1);
   }
 
@@ -81,7 +85,7 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'MobileNo', 'Email'
     ];
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
@@ -120,24 +124,27 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   // }
 
 
-    async GetBranchList() {
-      debugger;
+  async GetBranchList() {
+    //debugger;
     try {
       this.loaderService.requestStarted();
-      await this.branchservice.GetAllData().then((data: any) => {
+
+      await this.commonMasterService.Stream_InstituteIdWise(
+        this.sSOLoginDataModel.DepartmentID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID,
+        this.sSOLoginDataModel.InstituteID,
+        this.sSOLoginDataModel.FinancialYearID
+      ).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.State = data['State'];
-        this.Message = data['Message'];
-        this.ErrorMessage = data['ErrorMessage'];
-        this.BranchList = data['Data'];
-        console.log(this.BranchList, "BranchList")
+        this.BranchList = data.Data;
       });
 
       await this.commonMasterService.SemesterMaster(1)
-      .then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.SemesterMasterList = data['Data'];
-      }, (error: any) => console.error(error));
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.SemesterMasterList = data['Data'];
+        }, (error: any) => console.error(error));
 
     } catch (Ex) {
       console.log(Ex);
@@ -150,43 +157,43 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
 
 
 
-  async GetEligibleStudentListData(i:any) {
-    debugger
+  async GetEligibleStudentListData(i: any) {
+    //debugger
     console.log(i);
-    if(i==1){
-      this.pageNo=1;
+    if (i == 1) {
+      this.pageNo = 1;
     }
-    else if(i==2){
+    else if (i == 2) {
       // if (this.totalRecord > (this.pageNo * this.pageSize)) {
-        this.pageNo++;
+      this.pageNo++;
       // }
     }
-    else if(i==3){
+    else if (i == 3) {
       if (this.pageNo > 1) {
         this.pageNo--;
       }
     }
-    else{
-      this.pageNo=i>0?i:1;
+    else {
+      this.pageNo = i > 0 ? i : 1;
     }
 
     try {
 
-      this.searchRequest.PageNumber=this.pageNo
-      this.searchRequest.PageSize=this.pageSize
-      this.searchRequest.SortColumn=this.sortColumn
-      this.searchRequest.SortOrder=this.sortOrder
+      this.searchRequest.PageNumber = this.pageNo
+      this.searchRequest.PageSize = this.pageSize
+      this.searchRequest.SortColumn = this.sortColumn
+      this.searchRequest.SortOrder = this.sortOrder
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      
-      if(this.sSOLoginDataModel.RoleID === EnumRole.TPO) {
+
+      if (this.sSOLoginDataModel.RoleID === EnumRole.TPO) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       }
       this.loaderService.requestStarted();
       await this.ReportService.GetInternalAssessmentStudentReport(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success) {    
+        if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
         }
         else if (data.State == EnumStatus.Warning) {
@@ -207,8 +214,8 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
     }
   }
 
-  
-  
+
+
   async ClearSearchData() {
     this.searchRequest.StreamID = 0;
     this.searchRequest.InstituteID = 0;
@@ -261,7 +268,7 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
 
   // pagination start
 
-   totalShowData: any = 0
+  totalShowData: any = 0
   pageSizeChange(event: any): void {
     ;
     this.pageNo = 1;
@@ -281,7 +288,7 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   }
   previousData() {
     if (this.pageNo > 1) {
-      
+
       // this.GetEligibleStudentListData(3)
     }
   }
@@ -316,7 +323,16 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
 
 
   async downloadIAStudentReport() {
-    debugger
+    //debugger
+    // validation
+    if (this.searchRequest.InstituteID == 0
+      || this.searchRequest.SemesterID == 0
+      || this.searchRequest.TypeID == 0) {
+      this.toastr.warning("Please choose the required field!")
+      return;
+    }
+
+    //debugger
     this.IAStudentReportlist.SemesterID = this.searchRequest.SemesterID
     this.IAStudentReportlist.EndTermID = this.sSOLoginDataModel.EndTermID
     this.IAStudentReportlist.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -325,35 +341,53 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
     this.IAStudentReportlist.TypeID = this.searchRequest.TypeID
     this.IAStudentReportlist.StreamID = this.searchRequest.StreamID
     this.IAStudentReportlist.InstituteID = this.searchRequest.InstituteID
+    this.IAStudentReportlist.TermPart = this.sSOLoginDataModel.TermPart;
 
-    this.ReportData.IAStudentReportDownload(this.IAStudentReportlist)
-      .subscribe({
-        next: (blob: Blob) => {
+    // strteamids
+    if (this.IAStudentReportlist.StreamID == 0) {
+      this.IAStudentReportlist.StreamIDs = this.BranchList.map(x => x.StreamID).join(',');
+    }
 
-          const now = new Date();
-          const dateTime =
-            now.getFullYear().toString() +
-            ('0' + (now.getMonth() + 1)).slice(-2) +
-            ('0' + now.getDate()).slice(-2) + '_' +
-            ('0' + now.getHours()).slice(-2) +
-            ('0' + now.getMinutes()).slice(-2);
-
-          const fileName = `IAStudentReport${dateTime}.pdf`;
-
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = fileName;
-          a.click();
-
-          window.URL.revokeObjectURL(url);
-        },
-        error: (err) => {
-          console.error(err);
-          alert('Failed to download report');
+    await this.ReportData.IAStudentReportDownload(this.IAStudentReportlist)
+      .then((res: any) => {
+        //debugger
+        if (res.State == EnumStatus.Success) {
+          var pdfname = "report";
+          if (this.IAStudentReportlist.TypeID == 1) {
+            pdfname = "Practical_Report.pdf";
+          }
+          else if (this.IAStudentReportlist.TypeID == 2) {
+            pdfname = "Internal_Assessment_Report.pdf";
+          }
+          else if (this.IAStudentReportlist.TypeID == 3) {
+            pdfname = "SCA_Report.pdf";
+          }
+          this.downloadBase64PDF(res.Data, pdfname);
         }
-      });
+        else if (res.State == EnumStatus.Warning) {
+          this.toastr.warning(res.Message);
+        }
+        else {
+          this.toastr.error(res.Message);
+        }
+      }, (error: any) => console.error(error));
   }
 
+  downloadBase64PDF(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  }
 
 }
