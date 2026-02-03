@@ -107,7 +107,7 @@ export class ListItiTradeComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.TradetblList = data['Data'];
-
+          console.log('Grid Trade Data List ===>',this.TradetblList)
           this.loadInTable();
         }, error => console.error(error));
     }

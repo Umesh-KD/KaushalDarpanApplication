@@ -489,19 +489,73 @@ export class itiStudentPassFailResultComponent {
     this.searchData();
   }
 
+  //async GetITIStudent_Marksheet(rollNo: any) {
+
+  //  try {
+
+  //    this.loaderService.requestStarted();
+  //    const MarksheetSearch = new StudentMarksheetSearchModel();
+  //    MarksheetSearch.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    MarksheetSearch.RollNo = rollNo.RollNo;
+  //    MarksheetSearch.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+  //    await this.ReportServices.GetITIStudent_Marksheet(MarksheetSearch)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        debugger
+  //        if (data && data.Data) {
+  //          const base64 = data.Data;
+
+  //          const byteCharacters = atob(base64);
+  //          const byteNumbers = new Array(byteCharacters.length);
+  //          for (let i = 0; i < byteCharacters.length; i++) {
+  //            byteNumbers[i] = byteCharacters.charCodeAt(i);
+  //          }
+
+  //          const byteArray = new Uint8Array(byteNumbers);
+  //          const blob = new Blob([byteArray], { type: 'application/pdf' });
+  //          const blobUrl = URL.createObjectURL(blob);
+
+  //          const link = document.createElement('a');
+  //          link.href = blobUrl;
+  //          link.download = 'StudentMarksheet.pdf';
+  //          document.body.appendChild(link);
+  //          link.click();
+  //          document.body.removeChild(link);
+  //          URL.revokeObjectURL(blobUrl);
+  //        } else {
+  //          this.toastr.error(data['Message'])
+  //        }
+  //      }, (error: any) => {
+  //        console.error(error);
+  //        this.toastr.error(error)
+  //      });
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
+
   async GetITIStudent_Marksheet(rollNo: any) {
 
     try {
-
       this.loaderService.requestStarted();
+
       const MarksheetSearch = new StudentMarksheetSearchModel();
       MarksheetSearch.EndTermID = this.sSOLoginDataModel.EndTermID;
       MarksheetSearch.RollNo = rollNo.RollNo;
       MarksheetSearch.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+
       await this.ReportServices.GetITIStudent_Marksheet(MarksheetSearch)
         .then((data: any) => {
+
           data = JSON.parse(JSON.stringify(data));
-          debugger
+
           if (data && data.Data) {
             const base64 = data.Data;
 
@@ -515,19 +569,30 @@ export class itiStudentPassFailResultComponent {
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
+            // Naming of the download report
+            const enrollmentNo = rollNo.enrollment || rollNo.enrollment;
+            const semesterName = (rollNo.SemesterName || '')
+              .trim()
+              .replace(/\s+/g, '_');            
+            const today = new Date().toISOString().split('T')[0];
+            const fileName = `StudentMarksheet_${enrollmentNo}_${semesterName}_${today}.pdf`;
+            // end
+
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'StudentMarksheet.pdf';
+            link.download = fileName;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(blobUrl);
+
           } else {
-            this.toastr.error(data['Message'])
+            this.toastr.error(data['Message']);
           }
+
         }, (error: any) => {
           console.error(error);
-          this.toastr.error(error)
+          this.toastr.error(error);
         });
 
     } catch (Ex) {
@@ -538,6 +603,7 @@ export class itiStudentPassFailResultComponent {
       }, 200);
     }
   }
+
 
 
   async GetITICollegeStudent_Marksheet() {

@@ -256,6 +256,7 @@ export class AddItiTradeComponent implements OnInit {
           this.request.QualificationDetails = data['Data']["QualificationDetails"];
           this.request.OnlyForWomen = data['Data']["OnlyForWomen"];
           this.request.NoOfSemesters = data['Data']["NoOfSemesters"];
+          this.request.Syllabuslink = data['Data']["Syllabuslink"];
          
 
           // Update UI elements if necessary

@@ -135,9 +135,9 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Syllabus link on Trade list</label>
-              <input type="number" class="form-input" placeholder="Enter Syllabus link" [(ngModel)]="request.Syllabuslink" formControlName="txtSyllabuslink">
-              <div *ngIf="isSubmitted && groupForm.controls.txtQualificationDetails.errors" class="text-danger">
-                <p *ngIf="groupForm.controls.txtQualificationDetails.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              <input type="text" class="form-input" placeholder="Enter Syllabus link" [(ngModel)]="request.Syllabuslink" formControlName="txtSyllabuslink">
+              <div *ngIf="isSubmitted && groupForm.controls.txtSyllabuslink.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtSyllabuslink.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
               </div>
             </div>
             <div>
