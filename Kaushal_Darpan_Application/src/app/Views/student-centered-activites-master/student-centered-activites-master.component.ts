@@ -151,7 +151,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   }
 
   async GetGradeList() {
-    debugger;
+    //debugger;
     // this.GradeList=[];
     this.paginatedInTableData=[];
     this.AllInTableSelect = false;
@@ -171,7 +171,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       await this.SCAService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if(data.Data[0].IsOpen === 0) {
+          if(data.Data[0].IsOpen == 0) {
             this.toastr.warning(data.Data[0].Message)
           } else {
             this.GradeList = data['Data'];
@@ -214,21 +214,21 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   }
 
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       
 
       // **Filter Present and UFM Students Separately**
-      let presentStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 1);
+      let presentStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 1);
       let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
-      let detainStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 3);
+      let detainStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 3);
 
        if (StudentExamPaperMarksID == 0 && isFinalSubmit == false) {
-         let presentStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 1);
+         let presentStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 1);
          let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
        } else {
-         let presentStudents = this.GradeList.filter(x => x.Marked === true && x.IsPresentStudentCenteredActivity == 1 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
+         let presentStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 1 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
          let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
          let detainStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 3 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
     }
@@ -249,8 +249,9 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
 
       for (let student of presentStudents) {
         // **Check for missing grades**
-        if (!student.ObtainedStudentCenteredActivity || student.ObtainedStudentCenteredActivity === 0) {
-          this.toastr.warning(`Please enter a grade for student ${student.StudentID}.`);
+        //debugger
+        if (!student.ObtainedStudentCenteredActivity || student.ObtainedStudentCenteredActivity == 0) {
+          this.toastr.warning(`Please enter a grade for student ${student.StudentName}.`);
           return;
         } else {
           gradeFound = true; // At least one grade found
@@ -263,8 +264,8 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       // **Validation for UFM Students**
       for (let student of ufmStudents) {
         // Ensure that a document is uploaded for UFM cases
-        if (!student.UFMDocument || student.UFMDocument.trim() === '') {
-          this.toastr.warning(`Please upload a document for UFM student ${student.StudentID}.`);
+        if (!student.UFMDocument || student.UFMDocument.trim() == '') {
+          this.toastr.warning(`Please upload a document for UFM student ${student.StudentName}.`);
           return;
         }
 
@@ -296,7 +297,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State === EnumStatus.Success) {
+          if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message);
             if (finalSubmissionList.length > 1) {
               await this.GetGradeList();
@@ -444,7 +445,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   }  //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
     // Find the row in the GradeList and update only that row
-    const rowIndex = this.GradeList.findIndex(x => x === item);
+    const rowIndex = this.GradeList.findIndex(x => x == item);
     if (rowIndex !== -1) {
       this.GradeList[rowIndex].Marked = isSelected;
     }
