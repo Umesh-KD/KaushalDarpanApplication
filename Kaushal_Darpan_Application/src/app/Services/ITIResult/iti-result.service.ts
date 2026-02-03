@@ -107,4 +107,22 @@ export class ITIResultService {
       ).toPromise();
   }
 
+
+  // vivek
+  public async GetCFormConsolidatedReport(requestObj: ItiGetResultDataModel) {
+    var body = JSON.stringify(requestObj);
+    return await this.http.post(`${this.APIUrl}/GetCFormConsolidatedReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async DownloadCFormConsolidatedReport(requestObj: ItiGetResultDataModel) {
+    var body = JSON.stringify(requestObj);
+    return await this.http.post(`${this.APIUrl}/DownloadCFormConsolidatedReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
