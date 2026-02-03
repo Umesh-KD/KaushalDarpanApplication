@@ -112,8 +112,8 @@
       <div *ngFor="let row of ItemsDDLList; let idx = index">
         <!--<label class="d-block">Select/Item Name/Quantity</label>-->
         <label>
-          <input type="checkbox" [(ngModel)]="row.Selected" (change)="onItemToggle(row)" class="mr-1">
-          {{ row.CampanyName }}-({{ row.Quantity }})
+          <input type="checkbox" [(ngModel)]="row.Selected" (change)="onItemToggle1(row)" class="mr-1">
+          {{ row.CompanyName }}-({{ row.Quantity }})
         </label>
       </div>
     </div>
@@ -190,15 +190,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of SelectedItems; let i = index">
-            <td>{{ item.ItemCategoryName }}</td>
-            <td>{{ item.ItemName }}</td>
-            <td *ngIf="Searchrequests.ItemType == 1">
+            <td class="text-center">{{ item.ItemCategoryName }}</td>
+            <td class="text-center">{{ item.ItemName }}</td>
+            <td class="text-center" *ngIf="Searchrequests.ItemType == 1">
               <input type="number" class="form-input" [(ngModel)]="item.Quantity" min="1" placeholder="Enter Qty"
                 (change)="validateQuantity(item)">
             </td>
-            <td *ngIf="Searchrequests.ItemType == 0">
+            <td class="text-center" *ngIf="Searchrequests.ItemType == 0">
               <span style="cursor: pointer; color: blue;"
-                (click)="ShowSubmitIssue(Submit_Details_Issue,item.ItemId,Searchrequests.staffID)">
+                (click)="ShowSubmitIssue(Submit_Details_Issue, item)">
                 {{item.Quantity}}
               </span>
             </td>
@@ -261,13 +261,14 @@
               <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                 <tr>
                   <th class="text-left">
-                    <input type="checkbox" (change)="toggleAll($event)" /> select All
+                    <input type="checkbox" (change)="toggleAll($event)" />
                   </th>
                   <th class="text-left">SNO</th>
                   <th class="text-left">Item Category</th>
                   <th class="text-left">Item Name</th>
                   <th class="text-left">Compnay Name</th>
-                  <th class="text-left">Item Code</th>
+                  <th class="text-left">Equipment Code</th>
+                  <th class="text-left">Item Specification</th>
                   <th class="text-left">Qty</th>
                 </tr>
               </thead>
@@ -280,7 +281,8 @@
                   <td align="left">{{ item.ItemCategoryName}}</td>
                   <td align="left">{{ item.EquipmentName}}</td>
                   <td align="left">{{ item.CampanyName}}</td>
-                  <td align="left">{{ item.ItemCode}}</td>
+                  <td align="left">{{ item.EquipmentsCode}}</td>
+                  <td align="left">{{ item.ItemSpecification}}</td>
                   <td align="left">{{ item.IssueQuantity}}</td>
                 </tr>
                 <tr *ngIf="ItemsDataList?.length==0">
@@ -290,30 +292,41 @@
                 </tr>
               </tbody>
             </table>
-            <div>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileStudentPhoto">Indent
-                Document Upload<span class="StarMarking">*</span></label>
-              <div class="flex fileUploader">
-                <input
-                  class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="fileStudentPhoto" type="file" (change)="UploadDocument($event, FileName, Dis_FileName)">
-                <label for="fileStudentPhoto">
-                  <span>Choose File</span>
-                  {{ Dis_FileName === '' ? 'No File Choosen' : Dis_FileName }}
-                </label>
-                <div class="flex">
-                  <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + FileName }}"
-                    *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank">
-                    <i class="ti ti-eye"></i>
-                  </a>
-                  <a href="javascript:void(0);" class="btn bg-danger text-white m-0" *ngIf="this.FileName!=''"
-                    (click)="DeleteDocument(FileName)">
-                    <i class="ti ti-trash"></i>
-                  </a>
-                  <span class="text-danger text-sm" *ngIf="isFileError">
-                    Indent Document Upload is required
-                  </span>
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-6">
+              <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileStudentPhoto">Indent
+                  Document Upload<span class="StarMarking">*</span></label>
+                <div class="flex fileUploader">
+                  <input
+                    class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="fileStudentPhoto" type="file" (change)="UploadDocument($event, FileName, Dis_FileName)">
+                  <label for="fileStudentPhoto">
+                    <span>Choose File</span>
+                    {{ Dis_FileName === '' ? 'No File Choosen' : Dis_FileName }}
+                  </label>
+                  <div class="flex">
+                    <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + FileName }}"
+                      *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank">
+                      <i class="ti ti-eye"></i>
+                    </a>
+                    <a href="javascript:void(0);" class="btn bg-danger text-white m-0" *ngIf="this.FileName!=''"
+                      (click)="DeleteDocument(FileName)">
+                      <i class="ti ti-trash"></i>
+                    </a>
+                    <span class="text-danger text-sm" *ngIf="isFileError">
+                      Indent Document Upload is required
+                    </span>
+                  </div>
                 </div>
+              </div>
+
+              <div>
+                <label for="IndentNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Indent No: <span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="IndentNo" name="IndentNo"
+                      [(ngModel)]="submitRequest.IndentNo" maxlength="12" required>
+                      
               </div>
             </div>
           </div>
@@ -402,13 +415,13 @@
                 <tr>
                   <th class="text-left">SNO</th>
                   <th class="text-left">Name</th>
+                  <th class="text-left">Item Type</th>
                   <th class="text-left">Item Name</th>
                   <th class="text-left">Equipment Name</th>
-                  <th class="text-left">Item Code</th>
-                  <th class="text-left">Item Type</th>
+                  <th class="text-left">Item Code</th>                  
                   <th class="text-left">Qty</th>
                   <th class="text-left">Issue Date</th>
-                  <!-- <th class="text-left">Due Date</th> -->
+                  <th class="text-left">Indent No</th>
                   <th class="text-left">Return Date</th>
                   <th class="text-left">Equipment Status on Return</th>
                   <th class="text-left">Status</th>
@@ -418,17 +431,17 @@
                 <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
                   <td align="left">{{ idx+1}}</td>
                   <td align="left">{{ item.Name}}</td>
-                  <td align="left">{{ item.ItemCategoryName}}</td>
-                  <td align="left">{{ item.EquipmentName}}</td>
-                  <td align="left">{{ item.ItemCode}}</td>
                   <td align="left">
                     <span [ngClass]="item.IsConsumable == 1 ? 'badge-permanent' : 'badge-consumable'">
                       {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
                     </span>
                   </td>
+                  <td align="left">{{ item.ItemCategoryName}}</td>
+                  <td align="left">{{ item.EquipmentName}}</td>
+                  <td align="left">{{ item.ItemCode}}</td>                  
                   <td align="left">{{ item.Quantity}}</td>
                   <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-                  <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
+                  <td align="left">{{ item.IndentNo}}</td>
                   <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
                   <td align="left">
                     <span

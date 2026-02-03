@@ -1,0 +1,46 @@
+  import { Component } from '@angular/core';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ITI_PlanningCollegesModel, ITI_PlanningCollegesSearchModel, ItiVerificationModel } from '../../../Models/ItiPlanningDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { ITIsService } from '../../../Services/ITIs/itis.service';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { ToastrService } from 'ngx-toastr';
+import { ItiPlanningComponent } from '../iti-planning/iti-planning.component';
+import { ItiCollegesSearchModel } from '../../../Models/CommonMasterDataModel';
+import { ActivatedRoute } from '@angular/router';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+
+
+@Component({
+  selector: 'app-iti-Dashboard',
+  standalone: false,
+  templateUrl: './iti-Dashboard.component.html',
+  styleUrl: './iti-Dashboard.component.css'
+})
+export class itiDashboardComponent {
+
+  sSOLoginDataModel = new SSOLoginDataModel();
+  public Table_SearchText: string = "";
+  modalReference: NgbModalRef | undefined;
+  closeResult: string | undefined;
+  public request = new ITI_PlanningCollegesSearchModel()
+
+  constructor(private commonMasterService: CommonFunctionService, private campusPostService: ITIsService, private loaderService: LoaderService,
+    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private activeroute: ActivatedRoute) {
+  }
+
+  async ngOnInit()
+  {
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+  }
+
+
+
+
+}

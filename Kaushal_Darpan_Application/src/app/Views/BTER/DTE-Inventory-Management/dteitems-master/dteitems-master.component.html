@@ -180,10 +180,6 @@
             <td align="left">{{item.TotalPrice}}</td>
             <td align="left">{{item.IndentNo}}</td>
             <td align="left">{{item.IssueBookFolioDate | date:'dd-MM-yyyy' }}</td>
-
-            <!-- <td align="left">{{item.batchId}}</td>
-            
-            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{item.Working}}</td>
             <td align="left">{{item.NotWorking}}</td>
             <td align="left">{{item.Auctioned}}</td>
@@ -210,7 +206,13 @@
                 {{ item.AvailableQuantity }}
               </span>
             </td>
-            <td align="left">{{item.QuantityIssued}}</td>
+            <td align="left">{{item.QuantityIssued > 0 ? '' : item.QuantityIssued}}
+              <span style="cursor: pointer; color: blue;"
+                (click)="ShowIssueItemList(IssueItemList_Modal, item)"
+                *ngIf="item.Status == 1 && item.IsConsume == 0 && item.QuantityIssued > 0">
+                {{ item.QuantityIssued }}
+              </span>
+            </td>
             <td align="left">
                <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + item.BillFilePath }}"
                *ngIf="item.BillFileName" class="btn bg-primary text-white m-0" target="_blank">
@@ -307,3 +309,74 @@
   </div>
 </ng-template>
 
+<ng-template #IssueItemList_Modal let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus">Issue Items</i> </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">SNO</th>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Item Type</th>
+                  <th class="text-left">Item Name</th>
+                  <th class="text-left">Equipment Name</th>
+                  <th class="text-left">Equipment Code</th>                  
+                  <th class="text-left">Qty</th>
+                  <th class="text-left">Issue Date</th>
+                  <th class="text-left">Indent No</th>
+                  <th class="text-left">Equipment Status on Return</th>
+                  <th class="text-left">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of IssuedItemList; let idx=index;">
+                  <td align="left">{{ idx+1}}</td>
+                  <td align="left">{{ item.Name}}</td>
+                  <td align="left">
+                    <span [ngClass]="item.IsConsumable == 1 ? 'badge-permanent' : 'badge-consumable'">
+                      {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+                    </span>
+                  </td>
+                  <td align="left">{{ item.ItemCategoryName}}</td>
+                  <td align="left">{{ item.EquipmentName}}</td>
+                  <td align="left">{{ item.EquipmentsCode}}</td>
+                  
+                  <td align="left">{{ item.Quantity}}</td>
+                  <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+                  <td align="left">{{ item.IndentNo}}</td>
+                  <td align="left">
+                    <span
+                      [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
+                      {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : 'Not Working' }}
+                    </span>
+                  </td>
+                  <td align="left">
+                    <span [ngClass]="{
+                                 'InvStatus-issued': item.InvStatus === 0,
+                                 'InvStatus-returned': item.InvStatus === 1
+                               }">
+                      {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus ===1 ? 'Returned' : 'Unknown' }}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="ItemMasterList?.length==0">
+                  <td colspan="10">
+                    No Record Found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

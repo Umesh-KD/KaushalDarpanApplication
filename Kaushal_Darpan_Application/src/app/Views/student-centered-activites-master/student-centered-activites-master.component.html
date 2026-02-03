@@ -7,7 +7,7 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a  routerLink="/PracticalStudents" class="text-sm font-medium text-slate-700" aria-current="page">Student Centered Activites</a>
+      <a  routerLink="/PracticalStudents" class="text-sm font-medium text-slate-700" aria-current="page">Student Centered Activities</a>
     </div>
   </div>
 </div>
@@ -26,12 +26,11 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
           <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID"
-          [disabled]="
+                  [disabled]="
           sSOLoginDataModel?.RoleID === _EnumRole.HOD_Eng ||
           sSOLoginDataModel?.RoleID === _EnumRole.HOD_NonEng ||
           sSOLoginDataModel?.RoleID === _EnumRole.Principal ||
-          sSOLoginDataModel?.RoleID === _EnumRole.PrincipalNon"
-          >
+          sSOLoginDataModel?.RoleID === _EnumRole.PrincipalNon">
             <option value="0">--All--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
@@ -47,7 +46,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Branch:<span class="StarMarking">*</span>
+            Branch:
           </label>
           <select class="form-select" id="ddlBranch"
                   [(ngModel)]="searchRequest.StreamID">
@@ -57,18 +56,29 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No./Name/Subject: </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Marks Status:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.CheckedStatus">
+            <option value="-1">--All--</option>
+            <option value="0">Pending</option>
+            <option value="1">Entered</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No. / Name / Subject: </label>
           <input class="form-input" placeholder="Roll Number" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
         </div>
 
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Grade Entered: </label>
-          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
-            <option value="0">--All--</option>
-            <option value="1">Grade Pending</option>
-            <option value="2">Grade Entered</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Grade Entered: </label>
+    <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
+      <option value="0">--All--</option>
+      <option value="1">Grade Pending</option>
+      <option value="2">Grade Entered</option>
+    </select>
+  </div> -->
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetGradeList()">Search</button>
@@ -77,10 +87,11 @@
       </div>
     </div>
 
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+    <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
-    </div>
+    </div>-->
+
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
         <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">

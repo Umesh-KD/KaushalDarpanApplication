@@ -143,14 +143,14 @@
               <td align="left">{{row.Total_MaxMarks}}</td>
               <td align="left">{{row.Total_Marks}}</td>
               <td align="left">
-                <div class="flex " style="justify-content:center;">
+                <div class="flex " style="justify-content:center;" *ngIf="row.IsShowDownloadBtn==1 || this.sSOLoginDataModel.RoleID==_EnumRole.ITI_ResultAdmin">
                   <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a  class="actionBtns" title="Download Marksheet" (click)="GetITIStudent_Marksheet(row)"><i class="ti ti-download"></i></a>
                   </div>
-                  <div *ngIf="row.IsConsolidatedMarkSheet==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <div *ngIf="row.IsConsolidatedMarkSheet==1 && row.Result==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a  title="Download Consolidated Marksheet" (click)="ConsolidatedDownload(row)"><i class="ti ti-download"></i></a>
                   </div>
-                  <div *ngIf="row.certificate_number!=''" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <div *ngIf="row.certificate_number!=''  && row.Result==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a  title="Download SCVT Certificate" (click)="DownloadSCVTCertificate(row.enrollment)"><i class="ti ti-download"></i></a>
                   </div>
                 </div>

@@ -104,6 +104,7 @@
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
             <th class="text-left">Item</th>
+            <th class="text-left">Equipment Code</th>
             <th class="text-left">Qty</th>
             <th class="text-left">Issue Date</th>
             <!-- <th class="text-left">Due Date</th> -->
@@ -121,6 +122,7 @@
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.EquipmentsCode}}</td>
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
@@ -257,7 +259,7 @@
             <th class="text-left">Name</th>
             <th class="text-left">Item Name</th>
             <th class="text-left">Equipment Name</th>
-            <th class="text-left">Item Code</th>
+            <th class="text-left">Equipment Code</th>
             <th class="text-left">Item Type</th>
             <th class="text-left">Qty</th>
             <th class="text-left">Issue Date</th>
@@ -273,7 +275,7 @@
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.EquipmentName}}</td> 
-            <td align="left">{{ item.ItemCode}}</td> 
+            <td align="left">{{ item.EquipmentsCode}}</td> 
             <td align="left">
               <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
                 {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}

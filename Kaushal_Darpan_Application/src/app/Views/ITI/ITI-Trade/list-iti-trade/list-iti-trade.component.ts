@@ -107,7 +107,7 @@ export class ListItiTradeComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.TradetblList = data['Data'];
-
+          console.log('Grid Trade Data List ===>',this.TradetblList)
           this.loadInTable();
         }, error => console.error(error));
     }
@@ -297,5 +297,17 @@ export class ListItiTradeComponent {
     }
   }
 
+  onSearchChange() {
+    debugger
+
+    if (this.Table_SearchText == '') {
+      this.pageInTableSize = "50"; // reset pagination
+      this.loadInTable();
+    }
+    else {
+      this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
+      this.loadInTable();
+    }
+  }
 
 }

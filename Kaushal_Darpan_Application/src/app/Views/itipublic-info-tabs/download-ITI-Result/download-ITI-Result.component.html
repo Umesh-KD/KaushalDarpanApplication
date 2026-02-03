@@ -1,4 +1,4 @@
-<div class="tab-content bg-white p-2 rounded border" id="myTabContent"  *ngIf="!isOnStatus">
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent" *ngIf="!isOnStatus">
   <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
     <div class="row">
       <div class="col-lg-12 mb-4 mt-2 text-center">
@@ -22,7 +22,7 @@
     <form [formGroup]="itiResultform">
       <div class="row">
 
-       
+
         <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
           <label class="form-label">End Term: <span class="StarMarking">*</span></label>
           <select class="form-select" formControlName="ID" [(ngModel)]="itiResultRequest.ID">
@@ -53,7 +53,7 @@
 
         <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
           <label class="form-label">Date of Birth: <span class="StarMarking">*</span></label>
-          <input type="date" class="form-control" placeholder="Enter Select DOB" [max]="maxDate" (click)="openDatePicker($event)"
+          <input type="date" class="form-control" placeholder="Enter Select DOB" [max]="maxDate"
                  formControlName="DOB" [(ngModel)]="itiResultRequest.DOB">
           <div *ngIf="isSubmitted && _itiResultform.DOB.errors" class="text-danger">
             <p *ngIf="_itiResultform.DOB.errors.required">
@@ -106,20 +106,17 @@
               <td>{{ row.MinMarks }}</td>
               <td>{{ row.ObtainedMarks }}</td>
               <td>{{ row.Result }}</td>
-             
               <td align="center">
-                <a class="download-btn btn btn-info btn-xs" href="javascript:void(0);" title="Download Marksheet"
-                   (click)="GetITIStudent_Marksheet(row.EnrollmentNo)">
-                  <i class="ti ti-download"></i>
-                </a>
-
-                <a class="download-btn btn btn-info btn-xs" href="javascript:void(0);" title="Download SCVT Certificate"
-                   (click)="DownloadSCVTCertificate(row.EnrollmentNo)">
-                  <i class="ti ti-download"></i>
-                </a>
+                <div class="flex " style="justify-content:center;" *ngIf="row.IsShowDownloadBtn==1">
+                  <a class="download-btn btn btn-info btn-xs" title="Download Marksheet" (click)="GetITIStudent_Marksheet(row.EnrollmentNo)"><i class="ti ti-download"></i></a>
+                  <a *ngIf="row.IsConsolidatedMarkSheet==1 && row.ResultFlag==1" class="download-btn btn btn-info btn-xs" title="Download Consolidated Marksheet" (click)="ConsolidatedDownload(row)"><i class="ti ti-download"></i></a>
+                  <a *ngIf="row.certificate_number!=''  && row.ResultFlag==1" class="download-btn btn btn-info btn-xs" title="Download SCVT Certificate" (click)="DownloadSCVTCertificate(row.enrollment)"><i class="ti ti-download"></i></a>
+                </div>
               </td>
+
+
             </tr>
-             <tr *ngIf="itiResultData?.length === 0">
+            <tr *ngIf="itiResultData?.length === 0">
               <td colspan="15"> No records found</td>
             </tr>
           </tbody>
