@@ -210,22 +210,28 @@ export class AddBterReturnItemComponent {
   }
 
   exportToExcel(): void {
-    debugger
     if (!this.ItemMasterList || this.ItemMasterList.length === 0) {
       this.toastr.warning("No data available to export.");
       return;
     }
 
     const unwantedColumns = ['IssuedId', 'IsConsume', 'ItemId', 'issuedTo', 'equipmentStatus', 'Status_LabIncharge', 'isOption',
-      	'AuctionStatus',	'ItemDetailsId',];
+      'AuctionStatus',	'ItemDetailsId', 'ItemCode'
+    ];
+
+    const columnOrder = ['Name', 'ItemCategoryName', 'ItemTypeName', 'EquipmentsCode',
+      'ItemStatus', 'Quantity', 'UsedQuantity', 'RemainingQunatity', 'ReturnIssueDate'
+    ];
+
     const filteredData = this.ItemMasterList.map((item: any) => {
-      const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
+      const row: any = {};
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
         }
       });
-      return filteredItem;
+
+      return row;
     });
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);

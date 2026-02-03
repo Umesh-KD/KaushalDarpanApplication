@@ -885,6 +885,12 @@ export class AddBterIssueItemComponent {
       this.toastr.error('Please upload document');
       return;
     }
+    
+    if(this.submitRequest.IndentNo == null || this.submitRequest.IndentNo == '' || this.submitRequest.IndentNo == undefined){
+      this.toastr.error('Please enter Indent No');
+      return;
+    }
+
     this.selectedDataList = this.ItemsDataList.filter((item: any) => item.Selected);
     this.selectedDataList = this.ItemsDataList.filter((item: any) => item.Selected).map((item: any) => ({
       ...item,
@@ -899,17 +905,15 @@ export class AddBterIssueItemComponent {
     await this.confirmSubmit(this.selectedDataList);
   }
   async confirmSubmit(arr: any,) {
-
-
     this.loaderService.requestStarted();
     this.isLoading = true;
     this.submitRequest.TradeId = this.TradeId,
-      this.submitRequest.StaffId = this.staff_ID,
-      this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID,
-      this.submitRequest.EndTermID = this.sSOLoginDataModel.EndTermID,
-      this.submitRequest.RoleID = this.sSOLoginDataModel.RoleID,
-      this.submitRequest.StaffId = this.Searchrequests.staffID,
-      this.submitRequest.ItemList = arr;
+    this.submitRequest.StaffId = this.staff_ID,
+    this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID,
+    this.submitRequest.EndTermID = this.sSOLoginDataModel.EndTermID,
+    this.submitRequest.RoleID = this.sSOLoginDataModel.RoleID,
+    this.submitRequest.StaffId = this.Searchrequests.staffID,
+    this.submitRequest.ItemList = arr;
     this.submitRequest.FileName = this.FileName;
     this.submitRequest.StreamID = this.Searchrequests.StreamID || 0;
     this.submitRequest.LabID = this.Searchrequests.LabID || 0;
@@ -918,11 +922,8 @@ export class AddBterIssueItemComponent {
     try {
       await this.bterInventoryService.GetDTEIssueSubmitPermanent(this.submitRequest)
         .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State == EnumStatus.Success) {
+          if (data.State == EnumStatus.Success) {
             this.toastr.success("Items issued successfully", "", {
               toastClass: "ngx-toastr my-update-toast"
             });
@@ -930,7 +931,7 @@ export class AddBterIssueItemComponent {
             this.BindItem_list();
             //this.GetAllData();
             // this.CloseModalPopup();
-          } else if (this.State == EnumStatus.Error) {
+          } else if (data.State == EnumStatus.Error) {
             this.toastr.error("Something went wrong.");
           }
         });

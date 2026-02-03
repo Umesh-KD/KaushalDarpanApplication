@@ -204,15 +204,21 @@ export class bterinventoryIssueHistoryComponent {
       this.toastr.warning("No data available to export.");
       return;
     }
-    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus',];
+    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'ItemCode', 'IsOption'];
+
+    const columnOrder = ['Name', 'ItemCategoryName', 'ItemType', 'EquipmentName',
+      'EquipmentsCode', 'IndentNo', 'Quantity', 'UsedQuantity', 'RemainingQuantity', 'IssueDate', 'ReturnDate'
+    ];
+
     const filteredData = this.ItemMasterList.map((item: any) => {
-      const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
+      const row: any = {};
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
         }
       });
-      return filteredItem;
+
+      return row;
     });
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);

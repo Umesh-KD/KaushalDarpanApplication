@@ -307,35 +307,34 @@ export class DteItemsMasterComponent {
   }
 
   exportToExcel(): void {
-    
-    this.ItemMasterList1 = this.ItemMasterList1.map((item: any) => {
-      const updatedItem = {
-        Code: item.Code,
-        CollegeName: item.CollegeName ?? "BTER",
-        EquipmentsName: item.EquipmentsName,
-        ItemCategoryName: item.ItemCategoryName,
-        CampanyName: item.CampanyName,
-        batchId: item.batchId,
-        VoucherNumber: item.VoucherNumber,
-        IdentificationMark: item.IdentificationMark,
-        PricePerUnit: item.PricePerUnit,
-        TotalPrice: item.TotalPrice,
-        InitialQuantity: item.InitialQuantity,
-        Working: item.Working,
-        NotWorking: item.NotWorking,
-        Auctioned: item.Auctioned,
-        AvailableQuantity: item.AvailableQuantity,
-        QuantityIssued: item.QuantityIssued,
-        Status: item.Status == 1 ? "Approved" : "Pending",
-      };
+    if (!this.ItemMasterList1 || this.ItemMasterList1.length === 0) {
+      this.toastr.warning("No data available to export.");
+      return;
+    }
+    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'ItemCode', 'IsOption', 'Code'];
 
-      return updatedItem;
+    const columnOrder = ['CollegeName', 'ItemCategoryName', 'EquipmentsName', 'CampanyName',
+      'batchId', 'VoucherNumber', 'IdentificationMark', 'PricePerUnit', 'TotalPrice', 'InitialQuantity',
+      'Working', 'NotWorking', 'Auctioned', 'AvailableQuantity', 'QuantityIssued', 'Status'
+    ];
+
+    const filteredData = this.ItemMasterList1.map((item: any) => {
+      const row: any = {};
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
+        }
+      });
+
+      return row;
     });
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList1);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
   }
 
   DownloadFile(FileName: string, DownloadfileName: string): void {

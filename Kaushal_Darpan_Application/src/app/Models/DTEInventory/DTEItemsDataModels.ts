@@ -149,6 +149,7 @@ export class ItemsIssueReturnModels extends RequestBaseModel {
   public ItemList: ItemsDetails[] = [];
   public LabID?: number=0;
   public StreamID?: number=0;
+  public IndentNo?: string = '';
 }
 
 
