@@ -7,6 +7,8 @@ import { StaffMasterSearchModel } from '../../Models/StaffMasterDataModel';
 import { StaffMasterService } from '../../Services/StaffMaster/staff-master.service';
 import { EnumEMProfileStatus, EnumRole } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
+import { MenuFreezeService } from '../../Services/menu-freeze/menu-freeze.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-secretary-jd-confidential-dashboard',
@@ -26,6 +28,8 @@ export class SecretaryJdConfidentialDashboardComponent {
     private SecretaryJDDashboardService: SecretaryJDDashboardService,
     private staffMasterService: StaffMasterService,
     private sweetAlert2: SweetAlert2,
+    private menuFreeze: MenuFreezeService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
@@ -37,9 +41,10 @@ export class SecretaryJdConfidentialDashboardComponent {
       if (this.StaffMasterList.length > 0) {
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == EnumEMProfileStatus.Pending) {
-          
+          this.menuFreeze.freezeMenus();
           this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
-              window.open("/bter-em-add-staff-details", "_Self")
+              // window.open("/bter-em-add-staff-details", "_Self")
+              this.router.navigateByUrl('/bter-em-add-staff-details');
               }, 'OK', false);
         }
       }

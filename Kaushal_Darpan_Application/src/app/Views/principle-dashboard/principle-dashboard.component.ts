@@ -12,6 +12,7 @@ import { EnumEMProfileStatus, EnumRole } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { StaffMasterSearchModel } from '../../Models/StaffMasterDataModel';
 import { StaffMasterService } from '../../Services/StaffMaster/staff-master.service';
+import { MenuFreezeService } from '../../Services/menu-freeze/menu-freeze.service';
 
 @Component({
   selector: 'app-principle-dashboard',
@@ -44,6 +45,8 @@ export class PrincipleDashboardComponent {
     private collegeMasterService: CollegeMasterService,
     private sweetAlert2: SweetAlert2,
     private staffMasterService: StaffMasterService,
+    private menuFreeze: MenuFreezeService,
+    private router: Router
   ) { }
 
   async ngOnInit() {
@@ -58,21 +61,25 @@ export class PrincipleDashboardComponent {
         debugger
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == EnumEMProfileStatus.Pending || status == EnumEMProfileStatus.Completed || status == EnumEMProfileStatus.Revert) {
+          this.menuFreeze.freezeMenus();
           if(status == EnumEMProfileStatus.Revert)
           {
             this.sweetAlert2.Confirmation("Your Profile Reverted please Complete your profile Again?", async (result: any) => {
-              window.open("/bter-em-add-staff-details", "_Self")
+              // window.open("/bter-em-add-staff-details", "_Self")
+              this.router.navigateByUrl('/bter-em-add-staff-details');
             }, 'OK', false);
           }
           else
           {
             this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
-              window.open("/bter-em-add-staff-details", "_Self")
+              // window.open("/bter-em-add-staff-details", "_Self")
+              this.router.navigateByUrl('/bter-em-add-staff-details');
             }, 'OK', false);
           }
 
         }
         else {
+          
           await this.CheckProfileStatus();
           if (this.isProfileComplete == false) {
             this.sweetAlert2.Confirmation("College Profile Is not completed please Complete college profile?", async (result: any) => {
