@@ -110,9 +110,9 @@ export class cFormConsolidatedComponent implements OnInit {
     });
     this.resultGenerateForm = this.fb.group({
       selectedSemester: ['all'],
-      SemesterID: [0, [DropdownValidators]],
+      SemesterID: [2, [DropdownValidators]],
 
-      ExamType: [0, [DropdownValidators]]
+      ExamType: [2, [DropdownValidators]]
     });
     this.resultReGenerateForm = this.fb.group({
       selectedSemester: ['all']
