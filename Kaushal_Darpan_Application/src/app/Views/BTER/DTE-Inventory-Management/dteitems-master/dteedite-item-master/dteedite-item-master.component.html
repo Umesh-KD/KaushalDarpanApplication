@@ -70,7 +70,7 @@
               <th class="border p-2">Item</th>
 
               <th class="border p-2">EquipmentCode</th>
-              <th class="border p-2" *ngIf="dnone==true">ItemDetailsId</th>
+              <!-- <th class="border p-2" *ngIf="dnone==true">ItemDetailsId</th> -->
               <th class="border p-2">EquipmentWorking</th>
               <th class="border p-2">Is Eligible For Auction</th>
             </tr>
@@ -83,9 +83,9 @@
                 {{ ItemDetailsList[i]?.ItemCode || ItemDetailsList[i]?.ItemName || 'N/A' }}
               </td>
 
-              <td class="border p-2" *ngIf="dnone == true">
+              <!-- <td class="border p-2" *ngIf="dnone == true">
                 {{ ItemDetailsList[i].ItemDetailsId }}
-              </td>
+              </td> -->
 
               <td class="border p-2">
                 <label>Equipment Code: <span class="StarMarking">*</span></label>

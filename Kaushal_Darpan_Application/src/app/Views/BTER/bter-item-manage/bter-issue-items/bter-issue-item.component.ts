@@ -558,6 +558,31 @@ export class AddBterIssueItemComponent {
     }
   }
 
+  onItemToggle1(item: any) {
+    if (item.Selected) {
+      // Add if not already present
+      if (!this.SelectedItems.find(x => x.ItemCategoryId == item.ItemCategoryId && x.EquipmentsId == item.EquipmentsId)) {
+        this.SelectedItems.push({
+          ItemName: item.CompanyName,
+          ItemCategoryName: item.CategoryName,
+          Quantity: item.Quantity,
+          FileName: item.FileName || '',
+          Dis_FileName: item.Dis_FileName || '',
+          EquipmentsId: item.EquipmentsId,
+          issuedTo: item.IssueTo,
+          ItemCategoryId: item.ItemCategoryId,
+        });
+        this.FileName = ''
+        this.Dis_FileName = ''
+      }
+    } else {
+      // Remove if unchecked
+      this.SelectedItems = this.SelectedItems.filter(x => 
+        !(x.ItemCategoryId == item.ItemCategoryId && x.EquipmentsId == item.EquipmentsId)
+      );
+    }
+  }
+
   removeSelectedItem(index: number) {
     const removedItem = this.SelectedItems[index];
     this.SelectedItems.splice(index, 1);
@@ -797,9 +822,9 @@ export class AddBterIssueItemComponent {
     this.GetItemListType();
 
   }
-  async ShowSubmitIssue(content: any, itemId: any, staffId: any) {
+  async ShowSubmitIssue(content: any, row: any) {
 
-    this.staff_ID = staffId;
+    this.staff_ID = this.Searchrequests.staffID;
     const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
     if ((!anyTeamSelected) && (this.Searchrequests.issuedTo == 2)) {
       this.toastr.error("Please select at least one Item!");
@@ -811,8 +836,9 @@ export class AddBterIssueItemComponent {
       return;
     }
 
-    console.log('Logs Item ID:' + itemId);
-    await this.bterInventoryService.GetDTEIssueItemListPermanent(itemId).then((data: any) => {
+    console.log('Logs Item ID:' + row.ItemId);
+
+    await this.bterInventoryService.GetDTEIssueItemListPermanent(row.EquipmentsId, row.ItemCategoryId).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       if (data.State === EnumStatus.Success) {
         this.ItemsDataList = data.Data;
