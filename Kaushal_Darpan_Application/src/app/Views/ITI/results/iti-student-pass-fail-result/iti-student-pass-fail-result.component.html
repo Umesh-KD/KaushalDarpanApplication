@@ -143,7 +143,7 @@
               <td align="left">{{row.Total_MaxMarks}}</td>
               <td align="left">{{row.Total_Marks}}</td>
               <td align="left">
-                <div class="flex " style="justify-content:center;">
+                <div class="flex " style="justify-content:center;" *ngIf="row.IsShowDownloadBtn==1 || this.sSOLoginDataModel.RoleID==_EnumRole.ITI_ResultAdmin">
                   <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a  class="actionBtns" title="Download Marksheet" (click)="GetITIStudent_Marksheet(row)"><i class="ti ti-download"></i></a>
                   </div>
