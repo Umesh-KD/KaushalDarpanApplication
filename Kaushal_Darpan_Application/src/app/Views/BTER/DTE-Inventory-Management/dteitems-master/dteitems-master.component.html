@@ -180,10 +180,6 @@
             <td align="left">{{item.TotalPrice}}</td>
             <td align="left">{{item.IndentNo}}</td>
             <td align="left">{{item.IssueBookFolioDate | date:'dd-MM-yyyy' }}</td>
-
-            <!-- <td align="left">{{item.batchId}}</td>
-            
-            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{item.Working}}</td>
             <td align="left">{{item.NotWorking}}</td>
             <td align="left">{{item.Auctioned}}</td>
@@ -329,12 +325,13 @@
                 <tr>
                   <th class="text-left">SNO</th>
                   <th class="text-left">Name</th>
+                  <th class="text-left">Item Type</th>
                   <th class="text-left">Item Name</th>
                   <th class="text-left">Equipment Name</th>
-                  <th class="text-left">Equipment Code</th>
-                  <th class="text-left">Item Type</th>
+                  <th class="text-left">Equipment Code</th>                  
                   <th class="text-left">Qty</th>
                   <th class="text-left">Issue Date</th>
+                  <th class="text-left">Indent No</th>
                   <th class="text-left">Equipment Status on Return</th>
                   <th class="text-left">Status</th>
                 </tr>
@@ -343,16 +340,18 @@
                 <tr *ngFor="let item of IssuedItemList; let idx=index;">
                   <td align="left">{{ idx+1}}</td>
                   <td align="left">{{ item.Name}}</td>
-                  <td align="left">{{ item.ItemCategoryName}}</td>
-                  <td align="left">{{ item.EquipmentName}}</td>
-                  <td align="left">{{ item.EquipmentsCode}}</td>
                   <td align="left">
                     <span [ngClass]="item.IsConsumable == 1 ? 'badge-permanent' : 'badge-consumable'">
                       {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
                     </span>
                   </td>
+                  <td align="left">{{ item.ItemCategoryName}}</td>
+                  <td align="left">{{ item.EquipmentName}}</td>
+                  <td align="left">{{ item.EquipmentsCode}}</td>
+                  
                   <td align="left">{{ item.Quantity}}</td>
                   <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+                  <td align="left">{{ item.IndentNo}}</td>
                   <td align="left">
                     <span
                       [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">

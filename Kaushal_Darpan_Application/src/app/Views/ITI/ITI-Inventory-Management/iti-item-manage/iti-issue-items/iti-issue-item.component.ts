@@ -459,6 +459,33 @@ export class AddItiIssueItemComponent {
       this.SelectedItems = this.SelectedItems.filter(x => x.ItemId !== item.ItemId);
     }
   }
+  onItemToggle1(item: any) {
+    debugger
+    if (item.Selected) {
+      // Add if not already present
+      if (!this.SelectedItems.find(x => x.ItemCategoryId == item.ItemCategoryId && x.EquipmentsId == item.EquipmentsId)) {
+        this.SelectedItems.push({
+          ItemId: item.ItemId,
+          ItemName: item.CompanyName,
+          ItemCategoryName: item.ItemCategoryName,
+          Quantity: item.Quantity, // default,
+          FileName: item.FileName || '',
+          Dis_FileName: item.Dis_FileName || '',
+          EquipmentsId: item.EquipmentsId,
+          issuedTo: item.IssueTo,
+          ItemCategoryId: item.ItemCategoryId,
+          ItemDetailsId: item.ItemDetailsId,
+        });
+        this.FileName = ''
+        this.Dis_FileName = ''
+      }
+    } else {
+      // Remove if unchecked
+      this.SelectedItems = this.SelectedItems.filter(x => 
+        !(x.ItemCategoryId == item.ItemCategoryId && x.EquipmentsId == item.EquipmentsId)
+      );
+    }
+  }
   validateQuantity(item: any) {
   // Find the original item from ItemsDDLList
   const original = this.ItemsDDLList.find((x: any)  => x.ItemId === item.ItemId);
@@ -561,22 +588,20 @@ export class AddItiIssueItemComponent {
         }, 200)
       }
     }
-    async ShowSubmitIssue(content: any, itemId:any,staffId:any) {
+    async ShowSubmitIssue(content: any, row: any) {
     
-      this.staff_ID=staffId;
-    const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
-    if (!anyTeamSelected) {
-      this.toastr.error("Please select at least one Item!");
-      return;
-    }
+      this.staff_ID = this.Searchrequests.staffID;
+      const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+      if (!anyTeamSelected) {
+        this.toastr.error("Please select at least one Item!");
+        return;
+      }
 
-    if (this.Searchrequests.staffID == 0) {
-      this.toastr.error("Please select at least one Staff!");
-      return;
-    }
-
-    console.log('Logs Item ID:'+itemId);
-      await this.itiInventoryService.GetIssueItemListPermanent(itemId).then((data: any) => {
+      if (this.Searchrequests.staffID == 0) {
+        this.toastr.error("Please select at least one Staff!");
+        return;
+      }
+      await this.itiInventoryService.GetIssueItemListPermanent(row.EquipmentsId, row.ItemCategoryId).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.ItemsDataList = data.Data; 

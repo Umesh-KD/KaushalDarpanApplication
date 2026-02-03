@@ -203,9 +203,11 @@ export enum EnumRole {
   AdministrartiveStaff=235,
   AdministrartiveStaff2 = 236,
   ITi_PracticalExaminer = 92,
-  ITI_ResultAdmin=245
+  ITI_ResultAdmin=245,
 
 
+  // BTER Establishment 
+  EM_JDTE=239
 }
 
 export enum enumExamStudentStatus {

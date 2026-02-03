@@ -1230,6 +1230,8 @@ const routes: Routes = [
       { path: 'Bter-AddUserRequest/:id', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
       { path: 'BterUserRequestList', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-request-list/bter-request-list.module').then(m => m.BterUserRequestListModule) },
       { path: 'BterEmDepartmentWiseRequestlist', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/Bter-Em-DepartmentWiseRequest-list/Bter-Em-DepartmentWiseRequest-list.module').then(m => m.BterEmDepartmentWiseRequestlistModule) },
+      { path: 'BterUserRequestList/:id', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-request-list/bter-request-list.module').then(m => m.BterUserRequestListModule) },
+     
 
       { path: 'pass-fail-report', loadChildren: () => import('./Views/ITI/results/pass-fail-report/pass-fail-report.module').then(m => m.passfailreportDownloadModule), title: 'pass-fail-report' },
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },

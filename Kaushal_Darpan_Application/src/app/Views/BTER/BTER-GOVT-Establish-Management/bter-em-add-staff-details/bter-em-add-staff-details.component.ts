@@ -68,7 +68,10 @@ export class BterEMAddStaffDetailsComponent {
   public IsHideShow: boolean = false
   public IsSubjectlistTech: boolean = false
   public IsOterFacultyTech: boolean = false
+  public today: string='';
   public IsGuestHouse: boolean = false
+
+
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -239,7 +242,7 @@ export class BterEMAddStaffDetailsComponent {
 
     }
 
-    
+    await this.setTodayDate();
 
 
    
@@ -868,6 +871,39 @@ export class BterEMAddStaffDetailsComponent {
 
   openDatePicker(event: any) {
     event.target.showPicker();
+  }
+
+
+  setTodayDate(): void {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    this.today = `${year}-${month}-${day}`;
+  }
+
+
+  async calExperience(){
+    debugger
+    console.log(this.today)
+    console.log(this.request.DepartmentJoiningDate);
+
+    const today = new Date(this.today);
+    const joining = new Date(this.request.DepartmentJoiningDate);
+  
+    let years = today.getFullYear() - joining.getFullYear();
+  
+    // adjust if birthday/anniversary not reached this year
+    // const m = today.getMonth() - joining.getMonth();
+  
+    // if (m < 0 || (m === 0 && today.getDate() < joining.getDate())) {
+    //   years--;
+    // }
+
+    this.request.Experience=  years.toString();
+  
+    console.log("Total Experience (Years):", years);
+
   }
 
 

@@ -12,6 +12,9 @@
 <app-bter-dashboard *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon"></app-bter-dashboard>
 <app-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.AdminNodel || this.sSOLoginDataModel.RoleID == _EnumRole.TPO"></app-placement-dashboard>
 <app-principle-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNonDegree"></app-principle-dashboard>
+
+<app-jdte-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE"></app-jdte-dashboard>
+
 <app-acp-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ACP || this.sSOLoginDataModel.RoleID == _EnumRole.ACP_NonEng"></app-acp-dashboard>
 <app-store-keeper-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.StoreKeeper "></app-store-keeper-dashboard>
 <!--<app-college-master *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon"></app-college-master>-->

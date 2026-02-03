@@ -239,19 +239,8 @@ export class MinRequiredTradeItemsComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-    const now = new Date();
-    const dateTime =
-      now.getFullYear().toString() +
-      (now.getMonth() + 1).toString().padStart(2, '0') +
-      now.getDate().toString().padStart(2, '0') +
-      '_' +
-      now.getHours().toString().padStart(2, '0') +
-      now.getMinutes().toString().padStart(2, '0') +
-      now.getSeconds().toString().padStart(2, '0');
-
-    const fileName = `MinRequiredItemsList_${dateTime}.xlsx`;
-
-    XLSX.writeFile(wb, fileName);
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `MinRequiredItemsList_${timestamp}.xlsx`);
   }
 
 }
