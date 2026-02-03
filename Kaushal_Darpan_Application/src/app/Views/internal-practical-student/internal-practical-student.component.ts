@@ -86,7 +86,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
-    debugger
+    //debugger
     this.InternalPracticalID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     if(this.InternalPracticalID==null || this.InternalPracticalID==0 || Number.isNaN(this.InternalPracticalID)){
       this.InternalPracticalID = Number(
@@ -262,7 +262,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   // Submit method to validate and save data
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
-    debugger
+    //debugger
     // Filter the TheoryMarksList to get only the items where Marked is true
     if (StudentExamPaperMarksID == 0 && isFinalSubmit == false ) {
       var filtered = this.TheoryMarksList.filter(x => x.Marked == true);
@@ -342,7 +342,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
         if (x.IsPresentPractical === 1 && (x.IsDetain == false || x.IsUFM == false)) {
           if (x.ObtainedPractical === null || x.ObtainedPractical === undefined || x.ObtainedPractical === 0) {
-            debugger
+            //debugger
             this.toastr.error('Please enter marks for the student (Obtained Marks cannot be blank when Present)');
             return;
           }
