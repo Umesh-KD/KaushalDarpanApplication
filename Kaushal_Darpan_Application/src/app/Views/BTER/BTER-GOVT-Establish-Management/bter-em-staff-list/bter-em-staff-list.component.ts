@@ -14,6 +14,7 @@ import { DropdownValidators } from '../../../../Services/CustomValidators/custom
 import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { UserRequestService } from '../../../../Services/UserRequest/user-request.service';
 import { __values } from 'tslib';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -80,7 +81,8 @@ export class BTEREMStaffListComponent {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private userRequestService: UserRequestService
+    private userRequestService: UserRequestService,
+    private activatedRoute: ActivatedRoute,
   ) {}
 
   async ngOnInit() {
@@ -148,6 +150,24 @@ export class BTEREMStaffListComponent {
 
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
+    let statusID = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString());
+   
+    if(statusID==1){
+        this.searchRequest.status=0
+    }
+    else if(statusID==2)
+    {
+        this.searchRequest.status=247
+    }
+    else if(statusID==3)
+    {
+        this.searchRequest.status=3   //check in backend if pending or 249(revert)
+    }
+    else if(statusID=4){
+    this.searchRequest.status=248 
+    }
 
     await this.GetStatusList();
     await this.BTER_EM_GetStaffList();
@@ -246,6 +266,8 @@ export class BTEREMStaffListComponent {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+    this.searchRequest.status=this.searchRequest.status
+    this.searchRequest.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng
     try {
       this.loaderService.requestStarted();
       await this.bterEstablishManagementService.BTER_EM_GetStaffList(this.searchRequest)
@@ -253,7 +275,7 @@ export class BTEREMStaffListComponent {
           data = JSON.parse(JSON.stringify(data));
         
           this.StaffList = data['Data'];
-          this.StaffList = this.StaffList.filter((item: any) => item.CourseType == this.sSOLoginDataModel.Eng_NonEng)
+        //  this.StaffList = this.StaffList.filter((item: any) => item.CourseType == this.sSOLoginDataModel.Eng_NonEng)
 
           this.loadInTable()
           console.log(this.StaffList, "ZonalList")

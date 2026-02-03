@@ -609,6 +609,7 @@ export class BterUserRequestListComponent implements OnInit {
       this.searchRequest.PageSize = 0
       this.searchRequest.Action = "LIST";
       this.searchRequest.UserId = this.sSOLoginDataModel.UserID;
+      this.searchRequest.ReqRoleID=this.sSOLoginDataModel.RoleID;
       this.loaderService.requestStarted();
       await this.userRequestService.BterEmUserRequest(this.searchRequest)
         .then((data: any) => {
