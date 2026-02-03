@@ -24,7 +24,7 @@ export class ListItiTradeComponent {
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
-  public ITITradeList: any = [];
+  public ItiTradeList: any = [];
   searchText: string = '';
   public CollegeTypeList: any[] = [];
   public TradetblList: any[] = [];
@@ -66,9 +66,10 @@ export class ListItiTradeComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
 
-    this.getTradetblListList()
+    await this.getTradeList()
 
-    this.GetTradeTypesList();
+    await this.GetTradeTypesList();
+    await this.GetTradeListDDL();
   }
 
   async GetTradeTypesList()
@@ -89,7 +90,8 @@ export class ListItiTradeComponent {
       }, 200);
     }
   }
-  async getTradetblListList() {
+  async getTradeList() {
+    debugger
     try {
       this.loaderService.requestStarted();
       if (this.sSOLoginDataModel.RoleID == 42) {
@@ -98,7 +100,7 @@ export class ListItiTradeComponent {
       //this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
       //const roleId = this.sSOLoginDataModel?.RoleID ?? 0;
       //this.searchRequest.IsAddmission = roleId === 16;
-      await this.ItiTradeService.GetAllData(this.searchRequest)
+      await this.ItiTradeService.getTradeList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -131,7 +133,7 @@ export class ListItiTradeComponent {
   onResetCancel(): void
   {
     this.onCancel();
-    this.getTradetblListList();
+    this.getTradeList();
   }
 
   onEdit(Id: number): void {
@@ -163,7 +165,7 @@ export class ListItiTradeComponent {
                 if (this.State = EnumStatus.Success) {
                   this.toastr.success(this.Message)
                   //reload
-                  this.getTradetblListList();
+                  this.getTradeList();
                 }
                 else {
                   this.toastr.error(this.ErrorMessage)
@@ -274,6 +276,25 @@ export class ListItiTradeComponent {
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.TradetblList.length;
+  }
+
+  async GetTradeListDDL() {
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequest.action = "_getAllData"
+
+      await this.commonMasterService.TradeAndCodeList(this.searchRequest).then((data: any) => {
+        const parsedData = JSON.parse(JSON.stringify(data));
+        this.ItiTradeList = parsedData.Data;
+        console.log('Trade List===>',this.ItiTradeList);
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
 

@@ -1725,6 +1725,13 @@ export class ReportService {
     );
   }
 
+  public async IAStudentReportDownload(payload: any)  {
+    return this.http.post(`${this.APIUrl}/GetInternalAssessmentStudentReport`, payload, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async ExamLetterReport(obj: any) {
 

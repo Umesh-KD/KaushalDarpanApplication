@@ -43,12 +43,12 @@
 
             <!-- SSO ID -->
             <!--<div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID: <span class="StarMarking">*</span></label>
-        <input type="text" class="form-input" placeholder="Enter SSO ID" [(ngModel)]="request.SSOID" formControlName="txtSSOID" disabled readonly>
-        <div *ngIf="isSubmitted && groupForm.controls.txtSSOID.errors" class="text-danger">
-          <p *ngIf="groupForm.controls.txtSSOID.errors.required">This field is required .!</p>
-        </div>
-      </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID: <span class="StarMarking">*</span></label>
+    <input type="text" class="form-input" placeholder="Enter SSO ID" [(ngModel)]="request.SSOID" formControlName="txtSSOID" disabled readonly>
+    <div *ngIf="isSubmitted && groupForm.controls.txtSSOID.errors" class="text-danger">
+      <p *ngIf="groupForm.controls.txtSSOID.errors.required">This field is required .!</p>
+    </div>
+  </div>-->
             <!-- Name -->
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name: <span class="StarMarking">*</span></label>
@@ -84,7 +84,7 @@
                 <option value="0">--Select--</option>
                 <option value="1">Govt.</option>
                 <option value="5">Private</option>
-               
+
               </select>
               <div *ngIf="isSubmitted && groupForm.controls.ddlManagementType.errors" class="text-danger">
                 <p *ngIf="!groupForm.controls.ddlManagementType.errors.required">This field is required .!</p>
@@ -133,6 +133,59 @@
               </div>
             </div>
 
+            <!--start-->
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Is Campus:
+              </label>
+
+              <div class="flex gap-4">
+                <label>
+                  <input type="radio"
+                         name="IsCampus"
+                         [value]="true"
+                         formControlName="IsCampus"
+                         [(ngModel)]="request.IsCampus">
+                  Yes
+                </label>
+
+                <label>
+                  <input type="radio" selected
+                         name="IsCampus"
+                         [value]="false"
+                         formControlName="IsCampus"
+                         [(ngModel)]="request.IsCampus">
+                  No
+                </label>
+              </div>
+
+              <div *ngIf="isSubmitted && groupForm.controls.IsCampus.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.IsCampus.errors.required">
+                  This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <!-- College dropdown only when Yes -->
+            <div *ngIf="request.IsCampus == true">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                College:
+              </label>
+
+              <ng-select [(ngModel)]="request.CampusID" formControlName="CampusID"
+                         [clearable]="false"
+                         [ngModelOptions]="{standalone: true}">
+                <ng-option [value]="0">Choose Option</ng-option>
+                <ng-container *ngFor="let item of govCollegeList">
+                  <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                </ng-container>
+              </ng-select>
+            </div>
+
+
+            <!--end-->
             <!-- Checkboxes -->
             <div class="flex flex-wrap gap-3 hidden">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1 mt-6">

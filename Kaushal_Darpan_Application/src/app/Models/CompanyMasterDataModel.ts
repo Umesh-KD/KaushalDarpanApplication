@@ -1,4 +1,5 @@
 import { HrMasterDataModel } from "./HrMasterDataModel"
+import { RequestBaseModel } from "./RequestBaseModel"
 
 export class CompanyMasterDataModels {
   public ID: number = 0
@@ -173,21 +174,19 @@ export class StudentEmploymentDetailsModel {
 
 }
 
-export class InternalMarksReportCollegeWiseSearchModel {
+export class InternalMarksReportCollegeWiseSearchModel extends RequestBaseModel {
 
   public SemesterID?:number=0
-  public DepartmentID?:number=0
-  public EndTermID?:number=0
-  public Eng_NonEng?:number=0
   public InstituteID?:number=0
   public StreamID?:number=0
   public Type?:number=0
   public SchemeID?:number=0
-
+  public TypeID?:number=0
   public PageSize: number = 50
   public PageNumber: number = 1
-
   public SortOrder: string = '';
   public SortColumn: string = '';
+  public TermPart?:number=0
+  public StreamIDs: string = '';
   
 }

@@ -36,6 +36,7 @@ export class AddITIsComponent implements OnInit{
   public ITITradeSchemeList: any = [];
   public ManagmentTypeList: any = [];
   public ITIRemarkList: any = [];
+  public govCollegeList: any = [];
   public rows: ITISeatIntakesModel[] = [];
   request = new ITIsDataModels();
   SeatIntakeForm!: FormGroup
@@ -71,9 +72,10 @@ export class AddITIsComponent implements OnInit{
       txtPincode: [''],
       check8th: [false],
       check10th: [false],
-      check12th: [false]
+      check12th: [false],
+      IsCampus: [false],
+      CampusID: ['']
     });
-
     this.SeatIntakeForm = this.fb.group({
       ddlTradeName: ['', [DropdownValidators]],
       ddlTradeScheme: ['', [DropdownValidators]],
@@ -91,6 +93,7 @@ export class AddITIsComponent implements OnInit{
     this.GetTradeListDDL();
     this.GetTradeSchemeDDL();
     this.GetRemark();
+    this.loadDropdownData('GovtIti');
     this.Id = Number(this.routers.snapshot.queryParamMap.get('id')?.toString());
    
     if (this.Id) {
@@ -101,6 +104,7 @@ export class AddITIsComponent implements OnInit{
     
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    
   }
 
   async GetTradeListDDL() {
@@ -362,7 +366,23 @@ export class AddITIsComponent implements OnInit{
   get _SeatIntakeForm() { return this.SeatIntakeForm.controls; }
 
 
+  loadDropdownData(MasterCode: string): void {
+    debugger;
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      switch (MasterCode) {
+        case 'GovtIti':
+          this.govCollegeList = data['Data'];
+          console.log("govCollegeList ==>",this.govCollegeList)
+          break;
+        default:
+          break;
+      }
+    });
+  }
 
-
-
+  onCampusChange() {
+    if (this.request.IsCampus === false) {
+      this.request.CampusID = 0;
+    }
+  }
 }

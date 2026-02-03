@@ -23,13 +23,26 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name:</label>
-          <input type="text" class="form-input" placeholder="Trade Name" [(ngModel)]="searchRequest.TradeName">
+          <input type="text" class="form-input" placeholder="Tr ade Name" [(ngModel)]="searchRequest.TradeName">
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Code:</label>
           <input type="text" class="form-input" placeholder="Trade Code" [(ngModel)]="searchRequest.TradeCode">
+        </div>-->
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
+          <ng-select [(ngModel)]="searchRequest.TradeId"
+                     [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of ItiTradeList;">
+              <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
 
         <div>
@@ -46,11 +59,11 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Type:</label>
           <select [disabled]="sSOLoginDataModel.RoleID!=16" class="form-select" [(ngModel)]="searchRequest.TradeTypeId">
             <option value="0">Choose Option</option>
-            <option value="1">NCVT</option>
-            <option value="2">SCVT</option>
+            <option value="1">Eng</option>
+            <option value="2">Non Eng</option>
             <!--<option *ngFor="let item of TradeTypesList" [value]="item.CourseTypeID">
-    {{item.CourseTypeName}}
-  </option>-->
+        {{item.CourseTypeName}}
+      </option>-->
           </select>
         </div>
 
@@ -67,7 +80,7 @@
     </select>
   </div>-->
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="getTradetblListList()">Search</button>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getTradeList()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetCancel()">Reset</button>
         </div>
 

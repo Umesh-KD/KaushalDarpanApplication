@@ -12,6 +12,7 @@ import { ITIAdminDashboardServiceService } from '../../../Services/ITI-Admin-Das
 import { DynamicUploadContentApprenticeshipListsModal } from '../../../Models/CampusDetailsWebDataModel';
 import { HomeService } from '../../../Services/Home/home.service';
 import { Home2Service } from '../../../Services/Home2/home2.service';
+import { AppsettingService } from '../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-college-dashboard-iti',
@@ -38,7 +39,7 @@ export class CollegeDashboardITIComponent {
   public DistrictMasterList: any = [];
   constructor(private ITIAdminDashboardServiceService: ITIAdminDashboardServiceService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
-
+    private appsettingConfig: AppsettingService,
     private home2Service: Home2Service,
     private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
