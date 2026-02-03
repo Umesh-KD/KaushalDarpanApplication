@@ -49,7 +49,7 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
   public SemesterMasterList: any = [];
-  public IAStudentReportlist = new InternalMarksReportCollegeWiseSearchModel();
+
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -333,33 +333,28 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
     }
 
     //debugger
-    this.IAStudentReportlist.SemesterID = this.searchRequest.SemesterID
-    this.IAStudentReportlist.EndTermID = this.sSOLoginDataModel.EndTermID
-    this.IAStudentReportlist.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    this.IAStudentReportlist.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
-    this.IAStudentReportlist.SchemeID = this.searchRequest.SchemeID
-    this.IAStudentReportlist.TypeID = this.searchRequest.TypeID
-    this.IAStudentReportlist.StreamID = this.searchRequest.StreamID
-    this.IAStudentReportlist.InstituteID = this.searchRequest.InstituteID
-    this.IAStudentReportlist.TermPart = this.sSOLoginDataModel.TermPart;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.searchRequest.TermPart = this.sSOLoginDataModel.TermPart;
 
     // strteamids
-    if (this.IAStudentReportlist.StreamID == 0) {
-      this.IAStudentReportlist.StreamIDs = this.BranchList.map(x => x.StreamID).join(',');
+    if (this.searchRequest.StreamID == 0) {
+      this.searchRequest.StreamIDs = this.BranchList.map(x => x.StreamID).join(',');
     }
 
-    await this.ReportData.IAStudentReportDownload(this.IAStudentReportlist)
+    await this.ReportData.IAStudentReportDownload(this.searchRequest)
       .then((res: any) => {
         //debugger
         if (res.State == EnumStatus.Success) {
           var pdfname = "report";
-          if (this.IAStudentReportlist.TypeID == 1) {
+          if (this.searchRequest.TypeID == 1) {
             pdfname = "Practical_Report.pdf";
           }
-          else if (this.IAStudentReportlist.TypeID == 2) {
+          else if (this.searchRequest.TypeID == 2) {
             pdfname = "Internal_Assessment_Report.pdf";
           }
-          else if (this.IAStudentReportlist.TypeID == 3) {
+          else if (this.searchRequest.TypeID == 3) {
             pdfname = "SCA_Report.pdf";
           }
           this.downloadBase64PDF(res.Data, pdfname);
