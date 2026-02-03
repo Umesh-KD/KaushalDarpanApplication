@@ -147,10 +147,10 @@
                   <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a  class="actionBtns" title="Download Marksheet" (click)="GetITIStudent_Marksheet(row)"><i class="ti ti-download"></i></a>
                   </div>
-                  <div *ngIf="row.IsConsolidatedMarkSheet==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <div *ngIf="row.IsConsolidatedMarkSheet==1 && row.Result==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a  title="Download Consolidated Marksheet" (click)="ConsolidatedDownload(row)"><i class="ti ti-download"></i></a>
                   </div>
-                  <div *ngIf="row.certificate_number!=''" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <div *ngIf="row.certificate_number!=''  && row.Result==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a  title="Download SCVT Certificate" (click)="DownloadSCVTCertificate(row.enrollment)"><i class="ti ti-download"></i></a>
                   </div>
                 </div>
