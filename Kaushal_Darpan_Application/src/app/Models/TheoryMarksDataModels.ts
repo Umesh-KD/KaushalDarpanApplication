@@ -55,8 +55,6 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public MarkEnter: number = 0;
   public UserID: number = 0;
   public UserAdditionalID: number = 0;
-
-
   public RollNo: string = '';
   public InternalPracticalID: number = 0;
   public GroupCodeID: number = 0;
@@ -68,9 +66,7 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public SSOID: string = ''
   public SubjectType: string = ''
   public SubjectName: string = ''
-
-
-
+  public CheckedStatus?: number = -1;
 }
 
 

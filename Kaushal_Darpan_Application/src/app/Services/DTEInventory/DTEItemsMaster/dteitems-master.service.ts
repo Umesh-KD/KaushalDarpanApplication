@@ -251,8 +251,8 @@ public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHis
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async GetDTEIssueItemListPermanent(itemId: number) {
-    return await this.http.get(this.APIUrl + "/GetDTEIssueItemListPermanent/" + itemId, this.headersOptions)
+  public async GetDTEIssueItemListPermanent(EquipmentsId: number, ItemCategoryId: number) {
+    return await this.http.get(this.APIUrl + "/GetDTEIssueItemListPermanent/" + EquipmentsId + "/" + ItemCategoryId, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -1215,6 +1215,7 @@ const routes: Routes = [
       { path: 'certificate', loadChildren: () => import('./Views/ITI/results/iti-certificate/iti-certificate.module').then(m => m.ItiCertificateModule), title: 'certificate' },
       { path: 'marksheet', loadChildren: () => import('./Views/ITI/results/marksheet/marksheet.module').then(m => m.marksheetDownloadModule), title: 'Mark Sheet' },
       { path: 'c-form-report', loadChildren: () => import('./Views/ITI/results/c-form/c-form.module').then(m => m.CFormModule), title: 'Report' },
+      { path: 'c-Form-Consolidated-report', loadChildren: () => import('./Views/ITI/results/c-Form-Consolidated/c-Form-Consolidated.module').then(m => m.cFormConsolidatedModule), title: 'Consolidated Report' },
       { path: 'iti-results', loadChildren: () => import('./Views/ITI/results/iti-result/iti-result.module').then(m => m.ITIResultModule), title: 'ITI Result' },
       { path: 'iti-student-pass-fail-result', loadChildren: () => import('./Views/ITI/results/iti-student-pass-fail-result/iti-student-pass-fail-result.module').then(m => m.itiStudentPassFailResultModule), title: 'iti-student-pass-fail-result' },
 

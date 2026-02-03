@@ -13,9 +13,9 @@ import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EquipmentsMasterService } from '../../../../Services/EquipmentsMaster/equipments-master.service';
 import { ItiTradeService } from '../../../../Services/iti-trade/iti-trade.service';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
+import {  ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { DTEItemsSearchModel, itemStatusRevertModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSearchModel, inventoryIssueHistorySearchModel, itemStatusRevertModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { DTEEquipmentsMasterService } from '../../../../Services/DTEInventory/DTEEquipmentsMaster/dteequipments-master.service';
 import * as XLSX from 'xlsx';
@@ -34,6 +34,7 @@ export class DteItemsMasterComponent {
   public Searchrequest = new DTEItemsSearchModel();
   public Revertrequest = new itemStatusRevertModel();
   public searchTradeRequest = new ITITradeSearchModel();
+  public issueSearchReq = new inventoryIssueHistorySearchModel() 
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public showColumn: boolean = false;
@@ -49,6 +50,7 @@ export class DteItemsMasterComponent {
   public Table_SearchText: string = "";
   public ItemMasterList: any = [];
   public ItemMasterList1: any = [];
+  public IssuedItemList: any = [];
   public EquipmentsDDLList: any = [];
   public TradeDDLList: any = [];
   public CollegeDDLList: any = [];
@@ -428,5 +430,45 @@ export class DteItemsMasterComponent {
     this.modalReference?.close();    
     this.Revertrequest.Remark = '';
     this.isSubmitted = false;
+  }
+
+  async ShowIssueItemList(content: any, row: any) {
+    await this.GetAllDataIssuedItems(row);
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'lg', keyboard: true, centered: true });
+    return;
+  }
+
+  async CloseModalPopup() {
+    this.modalService.dismissAll();
+    // await this.GetAllData();
+  }
+
+  async GetAllDataIssuedItems(row: any) {
+    try {
+      this.loaderService.requestStarted();
+
+      this.issueSearchReq.actionName = 'GetIssueItemList';
+      this.issueSearchReq.ReturnStatus = 0;
+      this.issueSearchReq.ItemId = row.ItemId;
+      this.issueSearchReq.InstituteID = this.sSOLoginDataModel.InstituteID;
+
+      await this.dteItemsMasterService.GetAllInventoryIssueReturnItemList(this.issueSearchReq)
+        .then((data: any) => {
+          if (data) {
+            this.IssuedItemList = data.Data 
+          } else {
+            console.error("No data returned from API");
+          }
+        }, error => console.error(error));
+      console.log('Item Master List ', this.ItemMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 }

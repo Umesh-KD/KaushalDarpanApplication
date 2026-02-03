@@ -14,7 +14,7 @@
 
 <div class="card">
   <div class="card-body p-5">
-    <div class="mb-8" >
+    <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <!-- <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a> -->
@@ -22,15 +22,14 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <!-- this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || -->
         <!-- *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.HOD_Eng  || this.sSOLoginDataModel.RoleID == _EnumRole.HOD_NonEng || this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon " -->
-        <div >
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID" 
-          [disabled]="
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID"
+                  [disabled]="
           sSOLoginDataModel?.RoleID === _EnumRole.HOD_Eng ||
           sSOLoginDataModel?.RoleID === _EnumRole.HOD_NonEng ||
           sSOLoginDataModel?.RoleID === _EnumRole.Principal ||
-          sSOLoginDataModel?.RoleID === _EnumRole.PrincipalNon"
-          >
+          sSOLoginDataModel?.RoleID === _EnumRole.PrincipalNon">
             <option value="0">--All--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
@@ -46,7 +45,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Branch:<span class="StarMarking"></span>
+            Branch:
           </label>
           <select class="form-select" id="ddlBranch"
                   [(ngModel)]="searchRequest.StreamID">
@@ -56,7 +55,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No./Name/subject: </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Marks Status:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.CheckedStatus">
+            <option value="-1">--All--</option>
+            <option value="0">Pending</option>
+            <option value="1">Entered</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No. / Name / Subject: </label>
           <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
         </div>
 
@@ -68,7 +78,6 @@
             <option value="2">Marks Entered</option>
           </select>
         </div> -->
-
         <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperIsPresent">Status: </label>
           <select class="form-select" id="PracticalPaperIsPresent" tabindex="-1" aria-hidden="true">
@@ -117,8 +126,8 @@
 
             <th align="left">
               <!-- <input type="checkbox" id="checkboxSeletedAll" class="checkboxSize" [checked]="allSelected"
-           (change)="toggleAllCheckboxes($event)"> -->
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()"  [disabled]="isfinalsubmit" />
+              (change)="toggleAllCheckboxes($event)"> -->
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" [disabled]="isfinalsubmit" />
             </th>
             <th title="Click to sorting" (click)="sortInTableData('SubjectCode')">
               Subject Code
@@ -156,13 +165,13 @@
         </thead>
 
         <tbody>
-          <tr *ngFor="let row of paginatedInTableData;let idx=index;"  [ngClass]="row.rowclass">
+          <tr *ngFor="let row of paginatedInTableData;let idx=index;" [ngClass]="row.rowclass">
             <td align="left">
               <!-- <input type="checkbox"
                      [checked]="row.Marked"
                      (change)="toggleCheckbox(row)"> -->
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked" [disabled]="row.IsDetain || isfinalsubmit"
-                  #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
               <!-- <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked" [disabled]="isfinalsubmit"
                   #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"> -->
             </td>
@@ -178,36 +187,38 @@
 
             <td *ngIf="IsView" align="left">
               <div class="flex">
-                <input tabindex="{{idx}}"  class="form-input" style="width:100px" type="text"
-                  (keydown.tab)="onTabPress($event, idx)" 
-                  (keydown)="allowOnlyPositiveNumbers($event)"
-                  [disabled]="!row.Marked || row.IsPresentInternalAssisment!=1" 
-                  id="txtObtainedInternalAssisment"
-                  [(ngModel)]="row.ObtainedInternalAssisment"  
-                  [readonly]="row.IsPresentInternalAssisment!=1" 
-                  title="11">
+                <input tabindex="{{idx}}" class="form-input" style="width:100px" type="text"
+                       (keydown.tab)="onTabPress($event, idx)"
+                       (keydown)="allowOnlyPositiveNumbers($event)"
+                       [disabled]="!row.Marked || row.IsPresentInternalAssisment!=1"
+                       id="txtObtainedInternalAssisment"
+                       [ngModel]="row.ObtainedInternalAssisment == 0 && row.IsInternalAssesmentCheckecd==false ? '' : row.ObtainedInternalAssisment"
+                       (ngModelChange)="row.ObtainedInternalAssisment = $event == '' ? 0 : $event"
+                       [readonly]="row.IsPresentInternalAssisment!=1"
+                       title="11">
                 <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
               </div>
             </td>
             <td *ngIf="!IsView" align="left">
               <div class="flex">
-                <input tabindex="{{idx}}" class="form-input" style="width:100px" type="text" 
-                  [disabled]="!row.Marked || row.IsPresentPractical!=1" 
-                  id="txtObtainedPractical"
-                  [(ngModel)]="row.ObtainedPractical" 
-                  (keydown.tab)="onTabPress($event, idx)" 
-                  (keydown)="allowOnlyPositiveNumbers($event)"
-                  [readonly]="row.IsPresentPractical!=1" 
-                  title="22">
+                <input tabindex="{{idx}}" class="form-input" style="width:100px" type="text"
+                       [disabled]="!row.Marked || row.IsPresentPractical!=1"
+                       id="txtObtainedPractical"
+                       [ngModel]="row.ObtainedPractical == 0 && row.IsPracticalChecked==false ? '' : row.ObtainedPractical"
+                       (ngModelChange)="row.ObtainedPractical = $event == '' ? 0 : $event"
+                       (keydown.tab)="onTabPress($event, idx)"
+                       (keydown)="allowOnlyPositiveNumbers($event)"
+                       [readonly]="row.IsPresentPractical!=1"
+                       title="22">
                 <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
               </div>
             </td>
             <td *ngIf="IsView" align="left">
               <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
               <select *ngIf="!row.IsDetain" class="form-select" id="IsPresentInternalAssisment" [disabled]="!row.Marked"
-               [(ngModel)]="row.IsPresentInternalAssisment"  (change)="onStatusPracticalAssesmentChange(row)">
-              <!-- <select class="form-select" id="IsPresentInternalAssisment" [disabled]="!row.Marked"
-               [(ngModel)]="row.IsPresentInternalAssisment"  (change)="onStatusPracticalAssesmentChange(row)"> -->
+                      [(ngModel)]="row.IsPresentInternalAssisment" (change)="onStatusPracticalAssesmentChange(row)">
+                <!-- <select class="form-select" id="IsPresentInternalAssisment" [disabled]="!row.Marked"
+                 [(ngModel)]="row.IsPresentInternalAssisment"  (change)="onStatusPracticalAssesmentChange(row)"> -->
                 <option value="0">Absent</option>
                 <option value="1">Present</option>
                 <option value="3">Detained</option>
@@ -217,9 +228,9 @@
             <td *ngIf="!IsView" align="left">
               <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
               <select *ngIf="!row.IsDetain" class="form-select" id="IsIsPresentPractical" [disabled]="!row.Marked"
-               [(ngModel)]="row.IsPresentPractical" (change)="onStatusPracticalChange(row)">
-              <!-- <select class="form-select" id="IsIsPresentPractical" [disabled]="!row.Marked"
-               [(ngModel)]="row.IsPresentPractical" (change)="onStatusPracticalChange(row)"> -->
+                      [(ngModel)]="row.IsPresentPractical" (change)="onStatusPracticalChange(row)">
+                <!-- <select class="form-select" id="IsIsPresentPractical" [disabled]="!row.Marked"
+                 [(ngModel)]="row.IsPresentPractical" (change)="onStatusPracticalChange(row)"> -->
                 <option value="0">Absent</option>
                 <option value="1">Present</option>
                 <option value="3">Detained</option>
@@ -265,23 +276,23 @@
         </tbody>
 
       </table>
-     
+
 
     </div>
-     <!--pagination-->
-      <div class="p-3 paginationBox flex items-center justify-end w-full">
-        <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
-        <div class="paginationBoxItems flex items-center">
-          <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
-          <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
-          <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
-                [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
-          <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
-          <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
-          <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
-        </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
       </div>
-      <!--end pagination-->
+    </div>
+    <!--end pagination-->
 
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3" *ngIf="TheoryMarksList.length>0 && !isfinalsubmit ">
       <div class="flex text-center justify-center">

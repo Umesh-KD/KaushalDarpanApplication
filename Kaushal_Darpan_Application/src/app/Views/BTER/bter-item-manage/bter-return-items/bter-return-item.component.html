@@ -147,6 +147,7 @@
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
             <th class="text-left">Item</th>
+            <th class="text-left">Equipment Code</th>
             <th class="text-left">Qty</th>
             <th class="text-left">Issue Date</th>
             <th class="text-left">Issue To</th>
@@ -162,6 +163,7 @@
             <td align="left">{{ i+1}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.EquipmentsCode}}</td>
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>

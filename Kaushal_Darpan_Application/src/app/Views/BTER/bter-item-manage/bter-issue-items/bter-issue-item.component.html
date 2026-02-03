@@ -112,8 +112,8 @@
       <div *ngFor="let row of ItemsDDLList; let idx = index">
         <!--<label class="d-block">Select/Item Name/Quantity</label>-->
         <label>
-          <input type="checkbox" [(ngModel)]="row.Selected" (change)="onItemToggle(row)" class="mr-1">
-          {{ row.CampanyName }}-({{ row.Quantity }})
+          <input type="checkbox" [(ngModel)]="row.Selected" (change)="onItemToggle1(row)" class="mr-1">
+          {{ row.CompanyName }}-({{ row.Quantity }})
         </label>
       </div>
     </div>
@@ -190,15 +190,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of SelectedItems; let i = index">
-            <td>{{ item.ItemCategoryName }}</td>
-            <td>{{ item.ItemName }}</td>
-            <td *ngIf="Searchrequests.ItemType == 1">
+            <td class="text-center">{{ item.ItemCategoryName }}</td>
+            <td class="text-center">{{ item.ItemName }}</td>
+            <td class="text-center" *ngIf="Searchrequests.ItemType == 1">
               <input type="number" class="form-input" [(ngModel)]="item.Quantity" min="1" placeholder="Enter Qty"
                 (change)="validateQuantity(item)">
             </td>
-            <td *ngIf="Searchrequests.ItemType == 0">
+            <td class="text-center" *ngIf="Searchrequests.ItemType == 0">
               <span style="cursor: pointer; color: blue;"
-                (click)="ShowSubmitIssue(Submit_Details_Issue,item.ItemId,Searchrequests.staffID)">
+                (click)="ShowSubmitIssue(Submit_Details_Issue, item)">
                 {{item.Quantity}}
               </span>
             </td>
@@ -261,13 +261,15 @@
               <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                 <tr>
                   <th class="text-left">
-                    <input type="checkbox" (change)="toggleAll($event)" /> select All
+                    <input type="checkbox" (change)="toggleAll($event)" />
                   </th>
                   <th class="text-left">SNO</th>
                   <th class="text-left">Item Category</th>
                   <th class="text-left">Item Name</th>
                   <th class="text-left">Compnay Name</th>
-                  <th class="text-left">Item Code</th>
+                  <th class="text-left">Equipment Code</th>
+                  <th class="text-left">Equipment Code</th>
+                  <th class="text-left">Item Specification</th>
                   <th class="text-left">Qty</th>
                 </tr>
               </thead>
@@ -280,7 +282,9 @@
                   <td align="left">{{ item.ItemCategoryName}}</td>
                   <td align="left">{{ item.EquipmentName}}</td>
                   <td align="left">{{ item.CampanyName}}</td>
-                  <td align="left">{{ item.ItemCode}}</td>
+                  <td align="left">{{ item.EquipmentsCode}}</td>
+                  <td align="left">{{ item.EquipmentsCode}}</td>
+                  <td align="left">{{ item.ItemSpecification}}</td>
                   <td align="left">{{ item.IssueQuantity}}</td>
                 </tr>
                 <tr *ngIf="ItemsDataList?.length==0">
