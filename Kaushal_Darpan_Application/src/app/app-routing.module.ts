@@ -1095,6 +1095,7 @@ const routes: Routes = [
 
       { path: 'ITI-Search', loadChildren: () => import('./Views/iti-search/iti-search.module').then(m => m.ITISearchModule) },
       { path: 'ItiPlanningList', loadChildren: () => import('./Views/ITI/iti-planning-list/iti-planning-list.module').then(m => m.ItiPlanningListModule) },
+      { path: 'Iti-Dashboard', loadChildren: () => import('./Views/ITI/ITI-Dashboard/iti-Dashboard.module').then(m => m.itiDashboardModule) },
 
 
       { path: 'ITI-Govt-AddEstablish', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-AddEstablish/ITI-Govt-AddEstablish.module').then(m => m.ITIGovtAddEstablishModule), title: 'ITI-Govt-AddEstablish' },
