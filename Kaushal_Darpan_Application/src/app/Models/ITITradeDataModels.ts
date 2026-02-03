@@ -23,6 +23,7 @@ export class ITITradeDataModels {
   public DepartmentID: number = 0;
   public IsAdmission: boolean = false;
   public Syllabuslink: string = '';
+  public electricityUnit: number = 0;
 
 }
 
