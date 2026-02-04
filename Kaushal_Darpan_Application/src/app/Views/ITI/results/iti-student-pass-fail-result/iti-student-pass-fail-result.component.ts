@@ -70,6 +70,7 @@ export class itiStudentPassFailResultComponent {
   searchForm!: FormGroup;
   public MarksheetSearch = new ITICollegeStudentMarksheetSearchModel();
   public DashBoardStatuID: number = -1;
+  public _enumrole = EnumRole
   //private activatedRoute: ActivatedRoute
   public GetStudentITI_MarksheetList: any[] = [];
   public State: number = -1;
@@ -106,7 +107,11 @@ export class itiStudentPassFailResultComponent {
     this.requestPassFailModel.FinancialYearID = Number(this.sSOLoginDataModel.FinancialYearID);
     await this.GetITICollegeStudent_Marksheet();
     this.collegeDropDown = this.GetStudentITI_MarksheetList;
-   
+    if (this.sSOLoginDataModel.RoleID = EnumRole.ITIPrincipal) {
+      this.requestPassFailModel.InstituteId = this.sSOLoginDataModel.InstituteID
+    }
+
+
     this.searchData();
     this.GetITITradeList();
     
@@ -684,7 +689,7 @@ export class itiStudentPassFailResultComponent {
       this.loaderService.requestStarted();
       this.TradeListData = [];
 
-      await this.itiResultService.GetITITradeList(this.requestPassFailModel)
+      await this.commonMasterService.ItiTrade(2, 2, this.sSOLoginDataModel.EndTermID, this.requestPassFailModel.InstituteId)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
