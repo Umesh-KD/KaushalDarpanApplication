@@ -19,6 +19,7 @@ import { MenuByUserAndRoleWiseModel } from '../../../Models/MenuByUserAndRoleWis
 import { RoleListRequestModel } from '../../../Models/RoleMasterDataModel';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';  // new added 05082025
 import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
+import { MenuFreezeService } from '../../../Services/menu-freeze/menu-freeze.service';
 declare var window: any;
 
 
@@ -62,6 +63,7 @@ export class MasterLayoutComponent implements OnInit {
   searchTerm: string = '';
   AppLink: string = '';
   filterMenuData!: any;
+  isLockMenu:boolean = false;
   isMobileSubscription: Subscription | undefined;
   @ViewChild('htmlElement') htmlElement!: ElementRef;
   @ViewChild('mymodalSessionExpired') mymodalSessionExpired: TemplateRef<any> | undefined;
@@ -78,7 +80,7 @@ export class MasterLayoutComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver, private el: ElementRef, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private loaderService: LoaderService,
     private sanitizer: DomSanitizer, location: PlatformLocation, private idle: Idle, private modalService: NgbModal, private commonFunctionService: CommonFunctionService,
     private cookieService: CookieService, private menuService: MenuService, private http: HttpClient, private appsettingConfig: AppsettingService, private renderer: Renderer2,
-    private ssologin: SSOLoginService
+    private ssologin: SSOLoginService,private menuFreeze: MenuFreezeService
 
   ) {
     location.onPopState(() => {
@@ -128,6 +130,10 @@ export class MasterLayoutComponent implements OnInit {
 
   async ngOnInit() {
     setTimeout("preventBack()", 0);
+    this.menuFreeze.isFrozen().subscribe(isFrozen => {
+      console.log(isFrozen);
+      this.isLockMenu = isFrozen;
+    });
     this.showActiveCurrentPage();
     // Observe if the screen is mobile
     this.isMobile$ = this.breakpointObserver.observe([Breakpoints.Handset]).pipe(
@@ -426,6 +432,7 @@ export class MasterLayoutComponent implements OnInit {
         }
       }
     });
+    
     this.groupedMenuData = groupedData;
   }
 

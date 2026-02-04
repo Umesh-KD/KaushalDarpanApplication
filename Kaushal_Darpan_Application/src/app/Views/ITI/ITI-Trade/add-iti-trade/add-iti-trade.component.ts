@@ -61,6 +61,8 @@ export class AddItiTradeComponent implements OnInit {
 
       txtTradeCode: ['', Validators.required],
       txtQualificationDetails: ['', Validators.required],
+      txtSyllabuslink: [''],
+      txtelectricityUnit: [''],
 
 
       ddlTradeTypeId: ['', [DropdownValidators]],
@@ -255,6 +257,8 @@ export class AddItiTradeComponent implements OnInit {
           this.request.QualificationDetails = data['Data']["QualificationDetails"];
           this.request.OnlyForWomen = data['Data']["OnlyForWomen"];
           this.request.NoOfSemesters = data['Data']["NoOfSemesters"];
+          this.request.Syllabuslink = data['Data']["Syllabuslink"];
+          this.request.electricityUnit = data['Data']["electricityUnit"];
          
 
           // Update UI elements if necessary

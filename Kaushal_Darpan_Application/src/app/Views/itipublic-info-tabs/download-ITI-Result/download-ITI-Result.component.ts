@@ -336,4 +336,56 @@ export class downloadITIResultComponent {
   }
 
 
+
+  async ConsolidatedDownload(item: any) {
+
+    try {
+      debugger;
+      this.loaderService.requestStarted();
+      this.searchRequestConsolidated.EnrollmentNo = item.enrollment;
+      this.searchRequestConsolidated.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequestConsolidated.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+      await this.reportService.ITIMarksheetConsolidated(this.searchRequestConsolidated)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          data = JSON.parse(JSON.stringify(data));
+
+          if (data && data.Data) {
+            const base64 = data.Data;
+
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = item.enrollment + '_consolidated_marksheet.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+          } else {
+            this.toastr.error(this.Message)
+          }
+        }, (error: any) => {
+          console.error(error);
+          this.toastr.error(this.ErrorMessage)
+        });
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }

@@ -14,6 +14,7 @@ import { StaffMasterSearchModel } from '../../Models/StaffMasterDataModel';
 import { StaffMasterService } from '../../Services/StaffMaster/staff-master.service';
 import { BTEREstablishManagementService } from '../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { HODDashboardSearchModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
+import { MenuFreezeService } from '../../Services/menu-freeze/menu-freeze.service';
 
 @Component({
   selector: 'app-BTER-HOD-Dashboard',
@@ -49,6 +50,8 @@ export class BTERHODDashboardComponent {
     private collegeMasterService: CollegeMasterService,
     private sweetAlert2: SweetAlert2,
     private staffMasterService: StaffMasterService,
+    private menuFreeze: MenuFreezeService ,
+    private router: Router
   ) { }
 
   async ngOnInit() {
@@ -62,8 +65,10 @@ export class BTERHODDashboardComponent {
       if (this.StaffMasterList.length > 0) {
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == EnumEMProfileStatus.Pending || status == EnumEMProfileStatus.Completed || status == EnumEMProfileStatus.Revert) {
+          this.menuFreeze.freezeMenus()
           this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
-            window.open("/bter-em-add-staff-details", "_Self")
+            // window.open("/bter-em-add-staff-details", "_Self")
+            this.router.navigateByUrl('/bter-em-add-staff-details');
           }, 'OK', false);
         }        
       }

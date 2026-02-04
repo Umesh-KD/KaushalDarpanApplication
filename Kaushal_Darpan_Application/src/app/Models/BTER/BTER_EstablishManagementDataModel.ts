@@ -13,6 +13,8 @@ export class BTER_EM_StaffListSearchModel {
   UserID: number = 0;
   BranchID: number = 0;
   Name: string = "";
+  status?:number=0;
+  Eng_NonEng?:number=0;
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, catchError, BehaviorSubject } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { AdminDashboardSearchModel, AdminDashboardIssueTrackerSearchModel } from '../../Models/AdminDashboardDataModel';
+import { AdminDashboardSearchModel, AdminDashboardIssueTrackerSearchModel, EM_JDTEDashboardSearchModel } from '../../Models/AdminDashboardDataModel';
 import { ITIsDataModels } from '../../Models/ITIsDataModels';
 
 
@@ -74,4 +74,13 @@ export class AdminDashboardDataService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetEM_JDTEDashData(searchRequest: EM_JDTEDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetEM_JDTEDashData", body, this.headersOptions)
+        .pipe(
+            catchError(this.handleErrorObservable)
+        ).toPromise();
+}
 }

@@ -130,6 +130,7 @@ export class AddITIsComponent implements OnInit{
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCollegeCategory().then((data: any) => {
         this.InstituteCategoryList = data.Data;
+        console.log('Institute Category List ==>',this.InstituteCategoryList)
       });
     } catch (error) {
       console.error(error);

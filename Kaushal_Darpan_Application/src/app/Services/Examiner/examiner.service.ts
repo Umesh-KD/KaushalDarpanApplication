@@ -54,7 +54,7 @@ export class ExaminerService {
 
   public async DeleteById(ExaminerID: number, userId: number) {
     var body = JSON.stringify({ "ExaminerID": ExaminerID, "ModifyBy": userId });
-    return await this.http.delete(`${this.APIUrl}/DeleteByID/${ExaminerID}/${userId}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteByID/${ExaminerID}/${userId}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -164,7 +164,7 @@ export class ExaminerService {
 
   public async DeleteByID_Reval(ExaminerID: number, userId: number) {
     var body = JSON.stringify({ "ExaminerID": ExaminerID, "ModifyBy": userId });
-    return await this.http.delete(`${this.APIUrl}/DeleteByID_Reval/${ExaminerID}/${userId}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteByID_Reval/${ExaminerID}/${userId}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

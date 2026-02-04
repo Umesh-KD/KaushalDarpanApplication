@@ -9,7 +9,7 @@ export class TheoryMarksDataModels {
   public RollNo: string = '';
   public StudentID: number = 0;
   public StreamID: number = 0;
-  public ObtainedTheory: number | null = 0;
+  public ObtainedTheory: any = '';
   public IsPresentTheory: number = 1;
   public SubjectID: number = 0;
   public MaxTheory: number = 0;
@@ -55,8 +55,6 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public MarkEnter: number = 0;
   public UserID: number = 0;
   public UserAdditionalID: number = 0;
-
-
   public RollNo: string = '';
   public InternalPracticalID: number = 0;
   public GroupCodeID: number = 0;
@@ -68,9 +66,7 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public SSOID: string = ''
   public SubjectType: string = ''
   public SubjectName: string = ''
-
-
-
+  public CheckedStatus?: number = -1;
 }
 
 

@@ -89,6 +89,8 @@
             <th class="text-left">To Date</th>
             <th class="text-left">Total Days</th>
             <th class="text-left">Status</th>
+            <th class="text-left">Remark</th>
+            <th class="text-left">Principle Remark</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -103,6 +105,8 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.To_Date}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.TotalDays}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Action}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.userRemark}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PrincipleRemark === ''?'Not Approved Yet!':row.PrincipleRemark}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a [routerLink]="'/ApplyLeave'" [queryParams]="{ID:row.StaffLeaveID,key:1}" *ngIf="(row.Action=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>

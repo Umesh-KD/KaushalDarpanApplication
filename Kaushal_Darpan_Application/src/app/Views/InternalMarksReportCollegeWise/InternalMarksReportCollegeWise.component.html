@@ -2,12 +2,12 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Eligible Student </h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Internal Marks Report</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Eligible Student</a>
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Eligible Student List</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Internal Marks Report List</a>
     </div>
   </div>
 </div>
@@ -24,27 +24,26 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
-          <select class="form-select" id="InstituteID" [(ngModel)]="searchRequest.InstituteID">
-            <option value="0">--All--</option>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute <span class="StarMarking">*</span></label>
+          <select class="form-select" id="InstituteID" [(ngModel)]="searchRequest.InstituteID" disabled="disabled">
+            <option value="0">--Select--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
         </div>
         <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
-            <select  class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.Name}}</option>
-            </select>
-        </div>
-        
-        <!-- value="{{searchRequest.SemesterID}}" -->
-        <div >
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year/Semester</label>
-          <select class="form-select" id="StudentExamYear"                
-                  [(ngModel)]="searchRequest.SemesterID"
-                 >
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+          <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
             <option value="0">--All--</option>
+            <option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+        </div>
+
+        <!-- value="{{searchRequest.SemesterID}}" -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year/Semester <span class="StarMarking">*</span></label>
+          <select class="form-select" id="StudentExamYear"
+                  [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">--Select--</option>
             <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
           </select>
         </div>
@@ -52,17 +51,36 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
           <select class="form-select" id="SchemeID" [(ngModel)]="searchRequest.SchemeID">
-            <option value="0" >--All--</option>
-            <!-- <option value="1346"> Yearly Scheme</option> -->
-            <option value="1347">Old Semester Scheme</option>
-            <option value="1348">New Semester Scheme</option>
-            <!-- <option value="1349">Merged Semester Scheme</option> -->
+            <option value="0">--All--</option>
+            <option value="1347">Old Semester</option>
+            <option value="1348">New Semester</option>
           </select>
         </div>
 
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetEligibleStudentListData(1)">Search</button>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Type <span class="StarMarking">*</span></label>
+          <select class="form-select" id="TypeID" [(ngModel)]="searchRequest.TypeID">
+            <option value="0">--Select--</option>
+            <option value="1">Practical</option>
+            <option value="2">Internal Assessment </option>
+            <option value="3">SCA</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
+          <select class="form-select" [(ngModel)]="searchRequest.PresentStatus">
+            <option value="0">--All--</option>
+            <option value="1">Present</option>
+            <option value="2">Absent</option>
+            <option value="3">Detained</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="downloadIAStudentReport()">Download</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+
             <i class="ti ti-refresh"></i>
             Reset
           </button>
@@ -70,7 +88,7 @@
 
       </div>
     </div>
-    
+
   </div>
 </div>
 <!-- end row -->

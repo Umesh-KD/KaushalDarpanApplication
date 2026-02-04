@@ -23,13 +23,26 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name:</label>
-          <input type="text" class="form-input" placeholder="Trade Name" [(ngModel)]="searchRequest.TradeName">
+          <input type="text" class="form-input" placeholder="Tr ade Name" [(ngModel)]="searchRequest.TradeName">
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Code:</label>
           <input type="text" class="form-input" placeholder="Trade Code" [(ngModel)]="searchRequest.TradeCode">
+        </div>-->
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
+          <ng-select [(ngModel)]="searchRequest.TradeId"
+                     [clearable]="false">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-container *ngFor="let item of ItiTradeList;">
+              <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
 
         <div>
@@ -46,11 +59,11 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Type:</label>
           <select [disabled]="sSOLoginDataModel.RoleID!=16" class="form-select" [(ngModel)]="searchRequest.TradeTypeId">
             <option value="0">Choose Option</option>
-            <option value="1">NCVT</option>
-            <option value="2">SCVT</option>
+            <option value="1">Eng</option>
+            <option value="2">Non Eng</option>
             <!--<option *ngFor="let item of TradeTypesList" [value]="item.CourseTypeID">
-    {{item.CourseTypeName}}
-  </option>-->
+        {{item.CourseTypeName}}
+      </option>-->
           </select>
         </div>
 
@@ -67,7 +80,7 @@
     </select>
   </div>-->
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="getTradetblListList()">Search</button>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getTradeList()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetCancel()">Reset</button>
         </div>
 
@@ -89,6 +102,7 @@
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
+          <option value="{{totalInTableRecord}}">Max</option>
         </select>
       </div>
       <div class="">
@@ -96,7 +110,7 @@
       <div class="">
       </div>
       <div class="">
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" (ngModelChange)="onSearchChange()"/>
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
@@ -104,33 +118,34 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">#</th>
-            <th class="text-left">Trade Name</th>
-            <th class="text-left">Code</th>
+            <th class="text-left">Trade Name and Code</th>
+            <!--<th class="text-left">Code</th>-->
             <th class="text-left">Trade Type</th>
             <th class="text-left">Trade Level</th>
             <th class="text-left">Duration</th>
             <!--<th class="text-left">Min Age Limit</th>-->
             <!--<th class="text-left">Min Percentage In Science</th>-->
             <!--<th class="text-left">Min Percentage In Math</th>-->
-            <th class="text-left">Sanctioned Seats</th>
+            <!--<th class="text-left">Sanctioned Seats</th>-->
             <!--<th class="text-left">Entry Qualification</th>-->
             <!--<th class="text-left">Status</th>-->
             <!--<th class="text-left">Active/Inactive Remark</th>-->
             <th class="text-center">Action</th>
           </tr>
         </thead>
+        <!--{{paginatedInTableData | json}}-->
         <tbody>
           <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText ;let idx=index;">
             <td>{{(startInTableIndex+1)+idx}}</td>
-            <td>{{item.TradeName}}</td>
-            <td>{{item.TradeCode}}</td>
+            <td>{{item.Name}}</td>
+            <!--<td>{{item.TradeCode}}</td>-->
             <td>{{item.CourseTypeName}}</td>
             <td>{{item.TradeLevelId}}</td>
             <td>{{item.DurationYear}}</td>
             <!--<td align="left">{{item.MinAgeLimit}}</td>-->
             <!--<td align="left">{{item.MinPercentageInScience}}</td>-->
             <!--<td align="left">{{item.MinPercentageInMath}}</td>-->
-            <td>{{item.NoOfSanctionedSeats}}</td>
+            <!--<td>{{item.NoOfSanctionedSeats}}</td>-->
             <!--<td>{{item.QualificationDetails}}</td>-->
             <!--<td>{{item.ActiveStatus}}</td>-->
             <!--<td>1</td>-->

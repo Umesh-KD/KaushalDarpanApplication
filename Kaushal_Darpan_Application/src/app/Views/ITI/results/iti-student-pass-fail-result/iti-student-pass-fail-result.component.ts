@@ -33,7 +33,7 @@ export class itiStudentPassFailResultComponent {
   public searchRequest = new CenterObserverSearchModel();
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
-   public requestObs = new CenterObserverDataModel()
+  public requestObs = new CenterObserverDataModel()
   public _GlobalConstants = GlobalConstants
   public _EnumRole = EnumRole;
   public paginatedInTableData: any[] = [];
@@ -48,14 +48,15 @@ export class itiStudentPassFailResultComponent {
   public totalInTableRecord: number = 0;
   //public ListITITrade: any = [];
   public CollegeList: any = [];
-  
+  public pageIndex: number = 1000;
 
-   isPublished: boolean = false; // Flag to check if the exam is published
-   isGenerated : boolean = false; // Flag to check if the order is generated
-   modeType:string = ''; // Mode type for the operation (Generate or Publish)
-   requestModel : ItiGetResultDataModel = new ItiGetResultDataModel();
-   requestPassFailModel: ItiGetPassFailResultDataModel = new ItiGetPassFailResultDataModel();
-   selectedYear: number = 0; // Variable to hold the selected year for filtering results
+
+  isPublished: boolean = false; // Flag to check if the exam is published
+  isGenerated: boolean = false; // Flag to check if the order is generated
+  modeType: string = ''; // Mode type for the operation (Generate or Publish)
+  requestModel: ItiGetResultDataModel = new ItiGetResultDataModel();
+  requestPassFailModel: ItiGetPassFailResultDataModel = new ItiGetPassFailResultDataModel();
+  selectedYear: number = 0; // Variable to hold the selected year for filtering results
 
   @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
 
@@ -92,13 +93,13 @@ export class itiStudentPassFailResultComponent {
     private commonMasterService: CommonFunctionService,
     public ItiResultDownloadService: ITICollegeMarksheetDownloadService,
     public ReportServices: ReportService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.searchForm = this.fb.group({
       collegeID: ['', []],
     });
-   
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log(this.sSOLoginDataModel);
     this.MobileNo = Number(this.sSOLoginDataModel.Mobileno);
@@ -107,20 +108,16 @@ export class itiStudentPassFailResultComponent {
     this.requestPassFailModel.FinancialYearID = Number(this.sSOLoginDataModel.FinancialYearID);
     await this.GetITICollegeStudent_Marksheet();
     this.collegeDropDown = this.GetStudentITI_MarksheetList;
-    if (this.sSOLoginDataModel.RoleID = EnumRole.ITIPrincipal) {
-      this.requestPassFailModel.InstituteId = this.sSOLoginDataModel.InstituteID
-    }
-
 
     this.searchData();
     this.GetITITradeList();
-    
+
 
     const statusParam = this.activatedRoute.snapshot.paramMap.get('id');
     if (statusParam !== null && !isNaN(Number(statusParam)) && statusParam.trim() !== '') {
       this.requestPassFailModel.Results = Number(statusParam);
     }
-}
+  }
 
   CloseModalPopup() {
     this.modalService.dismissAll();
@@ -175,22 +172,22 @@ export class itiStudentPassFailResultComponent {
   }
 
   askUserConformation(content: any, mode: string) {
-    this.modeType = mode; 
-    if(mode === 'Publish' && this.isPublished){
+    this.modeType = mode;
+    if (mode === 'Publish' && this.isPublished) {
       this.toastr.warning('Result already published.');
-      return ;
+      return;
     }
     this.Swal2.Confirmation("Are you sure?", async (result: any) => {
       if (result.isConfirmed) {
         this.resetOTPControls();
         this.openModalGenerateOTP(content);
       }
-      
+
     });
   }
 
   async openModalGenerateOTP(content: any) {
-    
+
     this.resetOTPControls();
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -231,13 +228,13 @@ export class itiStudentPassFailResultComponent {
     }
   }
 
-   CloseOTPModal() {
+  CloseOTPModal() {
 
     this.modalService.dismissAll();
   }
 
   async VerifyOTP() {
-    
+
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
         try {
@@ -257,7 +254,7 @@ export class itiStudentPassFailResultComponent {
   }
 
   async VerifyOTPGenerate() {
-    
+
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
         try {
@@ -284,15 +281,15 @@ export class itiStudentPassFailResultComponent {
     try {
       this.loaderService.requestStarted();
       this.requestModel.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
-      if(this.modeType === 'Generate'){
-        
+      if (this.modeType === 'Generate') {
+
         await this.itiResultService.GetGenerateResult(this.requestModel).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
 
             if (data.Data[0].Status == 1) {
               this.toastr.success(data.Data[0].MSG);
-              this.isGenerated = true; 
+              this.isGenerated = true;
               this.GetStudentPassFailResultData();
             } else {
               this.toastr.error(data.Data[0].MSG);
@@ -304,7 +301,7 @@ export class itiStudentPassFailResultComponent {
           }
         })
       }
-      else if(this.modeType === 'Publish'){
+      else if (this.modeType === 'Publish') {
         await this.itiResultService.GetPublishResult(this.requestModel).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
@@ -323,12 +320,12 @@ export class itiStudentPassFailResultComponent {
           }
         })
       }
-      else{
+      else {
         return;
       }
 
       this.CloseOTPModal();
-      
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -419,8 +416,18 @@ export class itiStudentPassFailResultComponent {
   }
 
 
+  onSearchChange() {
+    debugger
 
-
+    if (this.Table_SearchText == '') {
+      this.pageInTableSize = "50"; // reset pagination
+      this.loadInTable();
+    }
+    else {
+      this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
+      this.loadInTable();
+    }
+  }
 
   async searchData() {
     try {
@@ -428,7 +435,7 @@ export class itiStudentPassFailResultComponent {
       debugger;
       // Set trade scheme and result status
       this.requestPassFailModel.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
-     
+
       // Call current status check
       await this.itiResultService.GetCurrentPassFailResultStatus(this.requestPassFailModel)
         .then((data: any) => {
@@ -447,7 +454,7 @@ export class itiStudentPassFailResultComponent {
             this.toastr.error(data.ErrorMessage);
           }
         });
-      
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -465,7 +472,7 @@ export class itiStudentPassFailResultComponent {
           if (data.State == EnumStatus.Success) {
             this.ResultData = data.Data;
             this.loadInTable();
-            console.log('test ==>',this.ResultData)
+            console.log('test ==>', this.ResultData)
           } else {
             this.toastr.error(data.ErrorMessage);
           }
@@ -483,19 +490,73 @@ export class itiStudentPassFailResultComponent {
     this.searchData();
   }
 
-  async GetITIStudent_Marksheet(rollNo:any) {
+  //async GetITIStudent_Marksheet(rollNo: any) {
+
+  //  try {
+
+  //    this.loaderService.requestStarted();
+  //    const MarksheetSearch = new StudentMarksheetSearchModel();
+  //    MarksheetSearch.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    MarksheetSearch.RollNo = rollNo.RollNo;
+  //    MarksheetSearch.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+  //    await this.ReportServices.GetITIStudent_Marksheet(MarksheetSearch)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        debugger
+  //        if (data && data.Data) {
+  //          const base64 = data.Data;
+
+  //          const byteCharacters = atob(base64);
+  //          const byteNumbers = new Array(byteCharacters.length);
+  //          for (let i = 0; i < byteCharacters.length; i++) {
+  //            byteNumbers[i] = byteCharacters.charCodeAt(i);
+  //          }
+
+  //          const byteArray = new Uint8Array(byteNumbers);
+  //          const blob = new Blob([byteArray], { type: 'application/pdf' });
+  //          const blobUrl = URL.createObjectURL(blob);
+
+  //          const link = document.createElement('a');
+  //          link.href = blobUrl;
+  //          link.download = 'StudentMarksheet.pdf';
+  //          document.body.appendChild(link);
+  //          link.click();
+  //          document.body.removeChild(link);
+  //          URL.revokeObjectURL(blobUrl);
+  //        } else {
+  //          this.toastr.error(data['Message'])
+  //        }
+  //      }, (error: any) => {
+  //        console.error(error);
+  //        this.toastr.error(error)
+  //      });
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
+
+  async GetITIStudent_Marksheet(rollNo: any) {
 
     try {
-
       this.loaderService.requestStarted();
+
       const MarksheetSearch = new StudentMarksheetSearchModel();
       MarksheetSearch.EndTermID = this.sSOLoginDataModel.EndTermID;
       MarksheetSearch.RollNo = rollNo.RollNo;
       MarksheetSearch.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
+
       await this.ReportServices.GetITIStudent_Marksheet(MarksheetSearch)
         .then((data: any) => {
+
           data = JSON.parse(JSON.stringify(data));
-          debugger
+
           if (data && data.Data) {
             const base64 = data.Data;
 
@@ -509,19 +570,30 @@ export class itiStudentPassFailResultComponent {
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
+            // Naming of the download report
+            const enrollmentNo = rollNo.enrollment || rollNo.enrollment;
+            const semesterName = (rollNo.SemesterName || '')
+              .trim()
+              .replace(/\s+/g, '_');            
+            const today = new Date().toISOString().split('T')[0];
+            const fileName = `StudentMarksheet_${enrollmentNo}_${semesterName}_${today}.pdf`;
+            // end
+
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'StudentMarksheet.pdf';
+            link.download = fileName;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(blobUrl);
+
           } else {
-            this.toastr.error(data['Message'])
+            this.toastr.error(data['Message']);
           }
+
         }, (error: any) => {
           console.error(error);
-          this.toastr.error(error)
+          this.toastr.error(error);
         });
 
     } catch (Ex) {
@@ -533,7 +605,8 @@ export class itiStudentPassFailResultComponent {
     }
   }
 
- 
+
+
   async GetITICollegeStudent_Marksheet() {
 
     try {
@@ -578,12 +651,14 @@ export class itiStudentPassFailResultComponent {
     }
   }
 
-  async ConsolidatedDownload(EnrollmentNo: any) {
+  async ConsolidatedDownload(item: any)
+  {
 
-    try {
-
+    try
+    {
+      debugger;
       this.loaderService.requestStarted();
-      this.searchRequestConsolidated.EnrollmentNo = EnrollmentNo;
+      this.searchRequestConsolidated.EnrollmentNo = item.enrollment;
       this.searchRequestConsolidated.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequestConsolidated.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
       await this.ReportServices.ITIMarksheetConsolidated(this.searchRequestConsolidated)
@@ -608,7 +683,7 @@ export class itiStudentPassFailResultComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = EnrollmentNo+'_consolidated_marksheet.pdf';
+            link.download = item.enrollment +'_consolidated_marksheet.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

@@ -31,7 +31,10 @@ export class ITIsComponent implements OnInit {
   public Message: any = [];
 
   _EnumRole = EnumRole;
-
+  public CompanyMasterList: any = [];
+  public AllCompanyMasterList: any[] = [];
+  public CollegeID: number = 0;
+  public ITItypeID: number = 0;
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
   public InstituteCategoryList: any = [];
@@ -120,6 +123,7 @@ export class ITIsComponent implements OnInit {
 
     await this.GetPrintRollAdmitCardSetting();
     this.loadDropdownData('GovtIti')
+    await this.getItiNameAndCode()
   }
 
  
@@ -775,7 +779,40 @@ export class ITIsComponent implements OnInit {
     }
   }
 
+  async getItiNameAndCode() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('PrivateITICollege', this.ITItypeID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AllCompanyMasterList = data['Data'];   // full list
+          this.CompanyMasterList = this.AllCompanyMasterList; // default
+          
+        }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
+  onSearchChange() {
+    debugger
+
+    if (this.Table_SearchText == '') {
+      this.pageInTableSize = "50"; // reset pagination
+      this.loadInTable();
+    }
+    else {
+      this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
+      this.loadInTable();
+    }
+  }
 
 }

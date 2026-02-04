@@ -361,7 +361,8 @@ export class AuctionListComponent {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList1);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Auction_Reports.xlsx');
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Auction_Reports_${timestamp}.xlsx`);
   }
 
   public downloadPDF() {

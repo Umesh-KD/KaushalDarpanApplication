@@ -86,7 +86,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
-    debugger
+    //debugger
     this.InternalPracticalID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     if(this.InternalPracticalID==null || this.InternalPracticalID==0 || Number.isNaN(this.InternalPracticalID)){
       this.InternalPracticalID = Number(
@@ -185,7 +185,7 @@ export class InternalPracticalStudentComponent implements OnInit {
       await this.InternalPracticalStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if(data.Data[0].IsOpen === 0) {
+          if(data.Data[0].IsOpen == 0) {
             this.toastr.warning(data.Data[0].Message)
           } else {
             this.TheoryMarksList = data['Data'];
@@ -262,7 +262,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   // Submit method to validate and save data
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
-    debugger
+    //debugger
     // Filter the TheoryMarksList to get only the items where Marked is true
     if (StudentExamPaperMarksID == 0 && isFinalSubmit == false ) {
       var filtered = this.TheoryMarksList.filter(x => x.Marked == true);
@@ -272,7 +272,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
 
 
-    if (filtered.length === 0 && isFinalSubmit == false) {
+    if (filtered.length == 0 && isFinalSubmit == false) {
       this.toastr.warning('Please Select Student data');
       return;
     }
@@ -286,21 +286,21 @@ export class InternalPracticalStudentComponent implements OnInit {
 
     // Iterate over each filtered item for validation
     for (let x of filtered) {
-      if (this.searchRequest.InternalPracticalID === 2) {
+      if (this.searchRequest.InternalPracticalID == 2) {
         // Validate for UFM and document upload
-        if (x.IsPresentInternalAssisment === 4 && !x.UFMDocument) {
+        if (x.IsPresentInternalAssisment == 4 && !x.UFMDocument) {
           this.toastr.error('Please upload a document for UFM students.');
           return;
         }
 
         // Other validations (absent, present, etc.)
-        if (x.IsPresentInternalAssisment === 0 && x.IsDetain == false && x.MaxInternalAssisment !== 0 && x.ObtainedInternalAssisment !== 0) {
+        if (x.IsPresentInternalAssisment == 0 && x.IsDetain == false && x.MaxInternalAssisment !== 0 && x.ObtainedInternalAssisment !== 0) {
           this.toastr.error('For absent students, marks must be 0.');
           return;
         }
 
-        if (x.IsPresentInternalAssisment === 1 && (x.IsDetain == false || x.IsUFM == false)) {
-          if (x.ObtainedInternalAssisment === null || x.ObtainedInternalAssisment === undefined || x.ObtainedInternalAssisment === 0) {
+        if (x.IsPresentInternalAssisment == 1 && (x.IsDetain == false || x.IsUFM == false)) {
+          if (x.ObtainedInternalAssisment == null || x.ObtainedInternalAssisment == undefined || x.ObtainedInternalAssisment == 0) {
             this.toastr.error('Please enter marks for the student (Obtained Marks cannot be blank when Present)');
             return;
           }
@@ -321,28 +321,28 @@ export class InternalPracticalStudentComponent implements OnInit {
           return;
         }
 
-        if (x.IsPresentInternalAssisment === 0 && x.ObtainedInternalAssisment>0) {
+        if (x.IsPresentInternalAssisment == 0 && x.ObtainedInternalAssisment>0) {
           this.toastr.error('Please update Status to Present/Absent');
           return;
         }
       }
 
-      if (this.searchRequest.InternalPracticalID === 1) {
+      if (this.searchRequest.InternalPracticalID == 1) {
         // Validate for practical and document upload
-        if (x.IsPresentPractical === 4 && !x.UFMDocument) {
+        if (x.IsPresentPractical == 4 && !x.UFMDocument) {
           this.toastr.error('Please upload a document for UFM students.');
           return;
         }
 
         // Other validations (absent, present, etc.)
-        if (x.IsPresentPractical === 0 && x.IsDetain == false && x.MaxPractical !== 0 && x.ObtainedPractical !== 0) {
+        if (x.IsPresentPractical == 0 && x.IsDetain == false && x.MaxPractical !== 0 && x.ObtainedPractical !== 0) {
           this.toastr.error('For absent students, marks must be 0.');
           return;
         }
 
-        if (x.IsPresentPractical === 1 && (x.IsDetain == false || x.IsUFM == false)) {
-          if (x.ObtainedPractical === null || x.ObtainedPractical === undefined || x.ObtainedPractical === 0) {
-            debugger
+        if (x.IsPresentPractical == 1 && (x.IsDetain == false || x.IsUFM == false)) {
+          if (x.ObtainedPractical == null || x.ObtainedPractical == undefined || x.ObtainedPractical == 0) {
+            //debugger
             this.toastr.error('Please enter marks for the student (Obtained Marks cannot be blank when Present)');
             return;
           }
@@ -358,7 +358,7 @@ export class InternalPracticalStudentComponent implements OnInit {
           return;
         }
 
-        if (x.IsPresentPractical === 0 && x.ObtainedPractical > 0) {
+        if (x.IsPresentPractical == 0 && x.ObtainedPractical > 0) {
           this.toastr.error('Please update Status to Present/Absent');
           return;
         }
@@ -379,9 +379,9 @@ export class InternalPracticalStudentComponent implements OnInit {
       }
     });
 
-    if (this.searchRequest.InternalPracticalID === 2) {
+    if (this.searchRequest.InternalPracticalID == 2) {
       this.fullMarksStudents = filtered.filter(x => x.MaxInternalAssisment == x.ObtainedInternalAssisment);
-    } else if (this.searchRequest.InternalPracticalID === 1) {
+    } else if (this.searchRequest.InternalPracticalID == 1) {
       this.fullMarksStudents = filtered.filter(x => x.MaxPractical == x.ObtainedPractical);
     }
 
@@ -404,7 +404,7 @@ export class InternalPracticalStudentComponent implements OnInit {
       await this.InternalPracticalStudentService.UpdateSaveData(array, this.searchRequest.InternalPracticalID)
         .then(async (data: any) => {
           
-          if (data.State === EnumStatus.Success) {
+          if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
             if (array.length > 1) {
               await this.GetTheoryMarksList();
@@ -565,7 +565,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const rowIndex = this.TheoryMarksList.findIndex(x => x === item);
+    const rowIndex = this.TheoryMarksList.findIndex(x => x == item);
     if (rowIndex !== -1) {
       this.TheoryMarksList[rowIndex].Marked = isSelected;
     }
@@ -701,7 +701,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
 
   onTabPress(event: KeyboardEvent, idx: number): void {
-    if (event.key === 'Tab') {
+    if (event.key == 'Tab') {
       event.preventDefault(); // Prevents the default tab action
 
       const nextIndex = idx + 1;

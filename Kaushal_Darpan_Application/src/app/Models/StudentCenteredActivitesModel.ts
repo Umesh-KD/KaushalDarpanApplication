@@ -28,6 +28,7 @@ export class StudentCenteredActivitesModels {
   public isFinalSubmit: boolean = false
   public IsDetain: boolean = false
   public rowclass:string=''
+  public StudentName?:string=''
 
 }
 
@@ -44,6 +45,7 @@ export class StudentCenteredActivitesSearchModel extends RequestBaseModel {
   public AdmissionCategoryID: number = 0;
   public Dis_UFMDocument: string = '';
   public UFMDocument: string = '';
+  public CheckedStatus?: number = -1;
 }
 
 export class DTEApplicationDashboardModel {

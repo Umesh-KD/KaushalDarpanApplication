@@ -115,7 +115,6 @@ this.itemsFormArray.get('items')?.valueChanges
   //}
 
   async GetAllItemDetails() {
-    debugger
   if (this.ItemId != null && this.ItemId != undefined && this.ItemId > 0) {
     await this.dteItemsMasterService.GetAllDTEItemDetails(this.ItemId).then((data: any) => {
       debugger
@@ -441,8 +440,6 @@ getRange(quantity: string | number): number[] {
     try {
       this.loaderService.requestStarted();
 
-      debugger
-
       this.searchdata.ItemCategoryName = categoryName;
       this.searchdata.EquipmentsCode = currentValue;
       const data: any = await this.dteItemsMasterService.EquipmentCodeDuplicate(this.searchdata);
@@ -453,9 +450,7 @@ getRange(quantity: string | number): number[] {
         this.IsDuplicate = data.IsDuplicate;
 
         this.toastr.warning(`Duplicate Equipment Code: ${normalized}`)
-        this.itemsFormArray.at(index).get('txtEquipmentCode')?.setValue('0');
-
-       
+        this.itemsFormArray.at(index).get('txtEquipmentCode')?.setValue('0');       
       }
       // If API returns a single object
       else if (data && data.State === 1) {

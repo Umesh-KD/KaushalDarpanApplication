@@ -139,11 +139,12 @@
             <td align="left">{{ row.OfficeName }}</td>
             <td align="left">{{ row.InstituteName }}</td>
             <td align="left">{{ row.LastWorkingDate }}</td>
-            <td align="left">{{ row.JoiningDate }}</td>
+            <!-- <td align="left">{{ row.JoiningDate }}</td> -->
+            <td align="left">{{ row.RequestTypeID===2?'Not Applicable' : row.JoiningDate }}</td>
             <td align="left">{{ row.RequestDate }}</td>
             <td align="left">{{ row.RequestStatus }}</td>
             <td align="left">{{ row.RelievingStatus }}</td>
-            <td align="left">{{ row.JoiningStatus }}</td>
+            <td align="left">{{ row.RequestTypeID===2? 'Not Applicable': row.JoiningStatus }}</td>
             <td align="left">{{ row.RequestRemarks }}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
@@ -158,6 +159,7 @@
                 <!-- Principal Approval -->
                 <a *ngIf="row.StaffRequestType != 'Transfer'
          && row.RelievingStatusId != 247
+         && row.RelievingStatusId != 248
          && row.RequestTypeID == 2"
                    href="javascript:void(0);"
                    title="VRS Approve By Principal"
@@ -208,7 +210,7 @@
                 <i class="ti ti-check"></i>
               </a>-->
 
-                <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID === 1 && row.RelievingStatusId !== 247"
+                <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID === 1 && row.RelievingStatusId !== 247 && row.RelievingStatusId !== 248"
                    href="javascript:void(0);"
                    title="Staff Request"
                    (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)">

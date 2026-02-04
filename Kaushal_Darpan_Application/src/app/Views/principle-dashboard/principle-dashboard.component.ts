@@ -12,6 +12,9 @@ import { EnumEMProfileStatus, EnumRole } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { StaffMasterSearchModel } from '../../Models/StaffMasterDataModel';
 import { StaffMasterService } from '../../Services/StaffMaster/staff-master.service';
+import { MenuFreezeService } from '../../Services/menu-freeze/menu-freeze.service';
+import { AdminDashboardDataService } from '../../Services/AdminDashboard/admin-dashboard-data.service';
+import { EM_JDTEDashboardSearchModel } from '../../Models/AdminDashboardDataModel';
 
 @Component({
   selector: 'app-principle-dashboard',
@@ -23,6 +26,9 @@ export class PrincipleDashboardComponent {
   public viewPlacementDashboardList: any = [];
   public InventoryList: any = [];
   public Table_SearchText: string = "";
+  public viewAdminDashboardList: any[] = [];
+  public viewJDTEStaffDetailList: any[] = [];
+  public viewJDTEReleiving: any[] = [];
   public viewAdminDashboardListEnrollment: any[] = [];
   public viewAdminDashboardListExamination: any[] = [];
   public viewAdminDashboardListOther: any[] = [];
@@ -34,6 +40,7 @@ export class PrincipleDashboardComponent {
   public SuccessMessage: string = '';
   public ErrorMessage: string = '';
   public searchRequest = new StaffDashboardSearchModel();
+  public search=new EM_JDTEDashboardSearchModel();
   public staffSearchRequest = new StaffMasterSearchModel();
 
   isProfileComplete: boolean = false;
@@ -44,13 +51,16 @@ export class PrincipleDashboardComponent {
     private collegeMasterService: CollegeMasterService,
     private sweetAlert2: SweetAlert2,
     private staffMasterService: StaffMasterService,
+    private menuFreeze: MenuFreezeService,
+    private router: Router,
+    private AdminDashDataService: AdminDashboardDataService,
   ) { }
 
   async ngOnInit() {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.CheckProfileStatus();
-
+debugger
     if ((this.sSOLoginDataModel.RoleID == EnumRole.Principal || EnumRole.PrincipalNon)) {
       await this.CheckProfileStatus_SELF();
 
@@ -58,21 +68,25 @@ export class PrincipleDashboardComponent {
         debugger
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == EnumEMProfileStatus.Pending || status == EnumEMProfileStatus.Completed || status == EnumEMProfileStatus.Revert) {
+          this.menuFreeze.freezeMenus();
           if(status == EnumEMProfileStatus.Revert)
           {
             this.sweetAlert2.Confirmation("Your Profile Reverted please Complete your profile Again?", async (result: any) => {
-              window.open("/bter-em-add-staff-details", "_Self")
+              // window.open("/bter-em-add-staff-details", "_Self")
+              this.router.navigateByUrl('/bter-em-add-staff-details');
             }, 'OK', false);
           }
           else
           {
             this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
-              window.open("/bter-em-add-staff-details", "_Self")
+              // window.open("/bter-em-add-staff-details", "_Self")
+              this.router.navigateByUrl('/bter-em-add-staff-details');
             }, 'OK', false);
           }
 
         }
         else {
+          
           await this.CheckProfileStatus();
           if (this.isProfileComplete == false) {
             this.sweetAlert2.Confirmation("College Profile Is not completed please Complete college profile?", async (result: any) => {
@@ -83,6 +97,7 @@ export class PrincipleDashboardComponent {
         }
       }
       await this.GetAllData();
+      await this.GetEMAllData();
     }
 
   }
@@ -143,6 +158,71 @@ export class PrincipleDashboardComponent {
           console.log(this.viewPlacementDashboardList);
         }, (error: any) => console.error(error)
         );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetEMAllData() {
+    debugger;
+    this.search.ModifyBy = this.sSOLoginDataModel.UserID;
+    this.search.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.search.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.search.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.search.RoleID = this.sSOLoginDataModel.RoleID;
+    this.search.UserID=this.sSOLoginDataModel.UserID;
+    // this.searchRequest.IsYearly;
+    // this.sSOLoginDataModel.ExamScheme = this.searchRequest.IsYearly;
+    // this.sSOLoginDataModel.ExamScheme = this.searchRequest.IsYearly;
+    this.search.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
+
+    if (this.sSOLoginDataModel.RoleID == 2 || this.sSOLoginDataModel.RoleID == 12) {
+      this.search.CommonID = 89;
+    }
+    else if (this.sSOLoginDataModel.RoleID == 17 || this.sSOLoginDataModel.RoleID == 18) {
+      this.search.CommonID = 88;
+    }
+    else if (this.sSOLoginDataModel.RoleID == 7 || this.sSOLoginDataModel.RoleID == 13) {
+      this.search.CommonID = 87;
+    }
+    // else if (this.sSOLoginDataModel.RoleID == 239) {
+    //   this.searchRequest.CommonID = 90;
+    // }
+    else {
+      this.search.CommonID = 0;
+    }
+
+    try {
+
+      this.loaderService.requestStarted();
+      debugger;
+      await this.AdminDashDataService.GetEM_JDTEDashData(this.search)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.viewAdminDashboardList = data['Data'];
+
+          console.log(this.viewAdminDashboardList,"viewAdminDashboardList")
+
+          // Filter based on ListType 'EnrollmentType'
+          this.viewJDTEStaffDetailList = this.viewAdminDashboardList.filter(s => s.ListType === 'StaffDetail');
+          // Filter based on ListType 'ExaminationType'
+          this.viewJDTEReleiving = this.viewAdminDashboardList.filter(s => s.ListType === 'Releiving');
+          // Filter based on ListType 'OtherType'
+          this.viewAdminDashboardListOther = this.viewAdminDashboardList.filter(s => s.ListType === 'OtherType');
+
+        }, (error: any) => console.error(error)
+        );
+
+
+
     }
     catch (ex) {
       console.log(ex);
