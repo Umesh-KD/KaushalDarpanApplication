@@ -112,7 +112,7 @@ export class TheoryMarksComponent implements OnInit {
 
     // LOAD
     this.OpenModalPopup(this.MyModel_ExaminerCodeLogin);
-    this.DDL_GroupCode_ExaminerWise();
+    await this.DDL_GroupCode_ExaminerWise();
   }
 
   get form() { return this.ExaminerCodeLoginForm.controls; }
@@ -159,7 +159,7 @@ export class TheoryMarksComponent implements OnInit {
       this.loaderService.requestStarted();
 
       await this.collegeDashDataService.GetCopyCheckerDashData(this.copyCheckerRequest)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.TheoryMarksDashBoardCount = data['Data'];
           const checkIsChecked = this.TheoryMarksDashBoardCount.find((e: any) => e.IsChecked > 0)
@@ -167,7 +167,7 @@ export class TheoryMarksComponent implements OnInit {
             this.IsCountShow = false
             this.isListVisible = true
 
-            this.GetTheoryMarksDetailList();
+            await this.GetTheoryMarksDetailList();
           } else {
             this.IsCountShow = true
           }
@@ -185,6 +185,7 @@ export class TheoryMarksComponent implements OnInit {
   }
   //
   async GetTheoryMarksDetailList() {
+    //debugger
     try {
       this.AllInTableSelect=false;
       //session
@@ -206,8 +207,8 @@ export class TheoryMarksComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
             this.TheoryMarksDetailList = data['Data'];
-            this.TheoryMarksDetailList.map((x: any) => {
-            this.onStatusThoryMarks(x);
+            this.TheoryMarksDetailList.map(async (x: any) => {
+            await this.onStatusThoryMarks(x);
           })
 
           this.TheoryMarksDetailList.forEach(x => {
