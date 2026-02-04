@@ -99,7 +99,7 @@ export class ApplyForHostelComponent {
         limitSelection: -1,
         clearSearchFilter: true,
         maxHeight: 85,
-        itemsShowLimit: 3,
+        itemsShowLimit: 4,
         searchPlaceholderText: 'Search...',
         noDataAvailablePlaceholderText: 'Not Found',
         closeDropDownOnSelection: false,
@@ -316,7 +316,8 @@ export class ApplyForHostelComponent {
       let obj = {
         StudentID: this.sSOLoginDataModel.StudentID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
-        Action: "_StudentDetails"
+        Action: "_StudentDetails",
+        EndTermID: this.sSOLoginDataModel.EndTermID
       };
       await this._HostelManagmentService.GetStudentDetailsForApply(obj)
         .then((data: any) => {
