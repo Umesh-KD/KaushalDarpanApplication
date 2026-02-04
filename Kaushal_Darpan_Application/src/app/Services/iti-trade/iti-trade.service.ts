@@ -9,6 +9,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { ITITradeDataModels, ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ITIPlanningBankGuarantee } from '../../Models/ItiPlanningDataModel';
 import { ITIExaminerDataModel, ITIPaperUploadSearchModel, ITIStudentExamMarksDataModel } from '../../Models/DocumentDetailsModel';
+import { ITISearchModel } from '../../Models/ITI-SearchDataModel';
 @Injectable({
   providedIn: 'root'
 })
@@ -172,6 +173,15 @@ export class ItiTradeService {
   public async getTradeList(searchRequest: ITITradeSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/getTradeList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetDashboardData(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetDashboardData`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

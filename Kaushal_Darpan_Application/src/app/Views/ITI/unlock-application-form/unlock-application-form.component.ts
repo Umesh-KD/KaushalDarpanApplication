@@ -371,6 +371,23 @@ export class UnlockApplicationFormComponent {
       this.GetAllData(3)
     }
   }
+
+  onSearchChange() {
+    debugger
+
+    if (this.Table_SearchText == '') {
+      this.pageInTableSize = "50"; // reset pagination
+      this.GetAllData(1);
+      this.GetAllData(2);
+      this.GetAllData(3);
+    }
+    else {
+      this.pageInTableSize = this?.totalRecord?.toString() ?? "50"; // reset pagination
+      this.GetAllData(1);
+      this.GetAllData(2);
+      this.GetAllData(3);
+    }
+  }
 }
 
 
