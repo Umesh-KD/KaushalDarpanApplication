@@ -38,6 +38,7 @@ export class PrincipalDashboardITIComponent implements OnInit
   public viewAdminDashboardListEnrollment: StudentExamDetails[] = [];
   public viewAdminDashboardListExamination: StudentExamDetails[] = [];
   public viewAdminDashboardListOther: StudentExamDetails[] = [];
+  public viewAdminDashboardListResult: any[] = [];
   public viewAdminDashboardAllot: any[] = [];
   public searchRequest1 = new ITIAdminDashboardProfileModel();
   public viewApplicationCount: StudentExamDetails[] = [];
@@ -158,6 +159,7 @@ export class PrincipalDashboardITIComponent implements OnInit
           this.viewAdminDashboardListExamination = this.viewAdminDashboardList.filter(s => s.ListType === 'ExaminationType');
           // Filter based on ListType 'OtherType'
           this.viewAdminDashboardListOther = this.viewAdminDashboardList.filter(s => s.ListType === 'OtherType');
+          this.viewAdminDashboardListResult = this.viewAdminDashboardList.filter(s => s.ListType === 'Results');
         }, (error: any) => console.error(error)
         );
     }

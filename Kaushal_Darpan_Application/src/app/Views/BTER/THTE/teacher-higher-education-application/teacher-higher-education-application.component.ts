@@ -103,7 +103,7 @@ export class TeacherHigherEducationApplicationComponent {
       appliedCourse: ['', [DropdownValidators]],
       // appliedInstitute: ['', [DropdownValidators]],
       appliedInstitute: ['',[Validators.required]],
-      pHDStatus: ['', [Validators.required]],
+      pHDStatus: ['',],
       appliedInstituteDistance: ['', [Validators.required]],
       appliedInstituteCategory: ['', [DropdownValidators]],
       appliedInstituteSubCategory: [''],

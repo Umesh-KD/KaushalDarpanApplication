@@ -13,10 +13,10 @@
 </div>
 
 <!-- Page Title End -->
-<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+<div *ngIf="sSOLoginDataModel.SelectedValue== 1" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
   <b class="text-1xl-5"><i class="ti ti-list"></i> Application Count</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1"><i class="ti ti-chevron-down"></i></button>
 </div>
-<div class="collapse multi-collapse show" id="multiCollapseExample1">
+<div *ngIf="sSOLoginDataModel.SelectedValue== 1" class="collapse multi-collapse show" id="multiCollapseExample1">
   <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
     <div *ngFor="let stat of viewApplicationCount; let i = index">
       <div class="card">
@@ -71,11 +71,11 @@
   </div>
 </div>-->
 
-<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
+<div *ngIf="sSOLoginDataModel.SelectedValue== 2" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
   <b class="text-1xl-5"><i class="ti ti-list"></i> Examination</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
 </div>
 
-<div class="collapse multi-collapse show" id="multiCollapseExample3">
+<div *ngIf="sSOLoginDataModel.SelectedValue== 2" class="collapse multi-collapse show" id="multiCollapseExample3">
   <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
     <div *ngFor="let stat of viewAdminDashboardListExamination; let i = index">
       <div class="card" *ngIf="stat.ListType=='ExaminationType'">
@@ -104,12 +104,12 @@
 
 
 
-<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7">
+<div *ngIf="sSOLoginDataModel.SelectedValue== 1" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7">
   <b class="text-1xl-5"><i class="ti ti-list"></i> Allotment</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7"><i class="ti ti-chevron-down"></i></button>
 </div>
 
 
-<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+<div *ngIf="sSOLoginDataModel.SelectedValue== 1" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
   <div *ngFor="let stat of viewAdminDashboardAllot; let i = index">
     <div class="card" *ngIf="stat.ListType=='AllotmentType'">
       <div class="p-5">
@@ -135,3 +135,34 @@
 </div>
 
 
+
+
+<div *ngIf="sSOLoginDataModel.SelectedValue== 2 && viewAdminDashboardListResult?.length>0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Result</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7"><i class="ti ti-chevron-down"></i></button>
+</div>
+
+
+<div *ngIf="sSOLoginDataModel.SelectedValue== 2 &&  viewAdminDashboardListResult?.length>0" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+  <div *ngFor="let stat of viewAdminDashboardListResult; let i = index">
+    <div class="card">
+      <div class="p-5">
+        <!-- Icon -->
+        <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
+
+        <!-- Title -->
+        <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
+
+        <!-- Count -->
+        <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
+
+        <!-- View All Link -->
+        <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          View All <i class="ti ti-chevron-right"></i>
+        </button>-->
+        <a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          View All <i class="ti ti-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

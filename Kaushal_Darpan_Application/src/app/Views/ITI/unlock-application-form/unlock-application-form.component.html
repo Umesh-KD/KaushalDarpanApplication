@@ -128,17 +128,18 @@
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown"  [(ngModel)]="pageSize" (change)="GetAllData(1)">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="GetAllData(1)">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
+          <option value="{{totalRecord}}">Max</option>
         </select>
       </div>
       <div class=""></div>
       <div class=""></div>
       <div class="">
-        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText"  (ngModelChange)="onSearchChange()"/>
       </div>
     </div>
 
@@ -187,13 +188,13 @@
 
     <div class="p-3 paginationBox flex items-center justify-end w-full">
       <span class="block">
-        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  ApplicationList?.length }} of {{ApplicationList[0]?.TotalRecords}}
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  ApplicationList?.length }} of {{ApplicationList[0]?.totalRecord}}
       </span>
       <div class="paginationBoxItems flex items-center">
         <button (click)="GetAllData(1)" [disabled]="pageNo==1">First</button>
         <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
         <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
-               [disabled]="ApplicationList[0]?.TotalRecords==0" (change)="GetAllData(pageNo)" />
+               [disabled]="ApplicationList[0]?.totalRecord==0" (change)="GetAllData(pageNo)" />
         <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
         <button [disabled]="pageNo==TotalPages || TotalPages==0" (click)="nextData()">Next</button>
         <button (click)="GetAllData(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
