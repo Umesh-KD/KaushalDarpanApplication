@@ -50,7 +50,7 @@
 
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block ">Search By college name</label>
-        <select id="InstituteID" [(ngModel)]="requestPassFailModel.InstituteId" class="form-input">
+        <select [disabled]="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal" id="InstituteID" [(ngModel)]="requestPassFailModel.InstituteId" class="form-input">
           <option value="0">Select college</option>
           <option *ngFor="let item of collegeDropDown" value="{{item.Id}}">{{item.Name}}</option>
         </select>
@@ -59,7 +59,7 @@
         <label class="text-gray-800 text-sm font-medium inline-block ">Trade Name</label>
         <select id="InstituteID" [(ngModel)]="requestPassFailModel.TradeId" class="form-input">
           <option value="0">Select Trade</option>
-          <option *ngFor="let item of ResultData" value="{{item.StudentID}}">{{item.trade_name}}</option>
+          <option *ngFor="let item of TradeListData" value="{{item.ID}}">{{item.Name}}</option>
         </select>
       </div>
       <div class="">

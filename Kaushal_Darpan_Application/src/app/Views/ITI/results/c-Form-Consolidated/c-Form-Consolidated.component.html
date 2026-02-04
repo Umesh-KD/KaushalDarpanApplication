@@ -19,7 +19,6 @@
           <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Year</label>
           <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester" [(ngModel)]="searchRequest.SemesterID">
             <option value="0">--All--</option>
-            <option value="1">1 Year</option>
             <option value="2">2 Year</option>
 
           </select>
@@ -29,12 +28,8 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade Types: <span class="StarMarking">*</span></label>
 
           <select class="form-select ng-pristine ng-valid ng-touched" id="TradeTypesID" [(ngModel)]="searchRequest.ExamType" formControlName="ExamType">
-            <option value="0">All</option>
+            
             <option  value="1">Eng</option>
-            <option *ngIf="searchRequest.SemesterID!=2" value="2">Non-Eng</option>
-            <!--<option *ngFor="let item of TradeTypesList" [value]="item.CourseTypeID">
-      {{item.CourseTypeName}}
-    </option>-->
           </select>
         </div>
         <!--<div>
