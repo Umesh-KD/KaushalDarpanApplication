@@ -246,6 +246,4 @@ export class DTEDashboardComponent {
       }, 200);
     }
   }
-
-
 }

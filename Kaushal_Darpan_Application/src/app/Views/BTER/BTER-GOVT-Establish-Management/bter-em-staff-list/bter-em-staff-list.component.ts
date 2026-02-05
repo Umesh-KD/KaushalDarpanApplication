@@ -165,8 +165,11 @@ export class BTEREMStaffListComponent {
     {
         this.searchRequest.status=3   //check in backend if pending or 249(revert)
     }
-    else if(statusID=4){
+    else if(statusID==4){
     this.searchRequest.status=248 
+    }
+    else{
+      this.searchRequest.status=0
     }
 
     await this.GetStatusList();

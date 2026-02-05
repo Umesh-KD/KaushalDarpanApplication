@@ -95,7 +95,7 @@
             <th class="text-left">Application ID</th>
             <th class="text-left">{{titleDDLBranchTrade}}</th>
             <th class="text-left">Semester</th>
-            <th class="text-left">Year</th>
+            <th class="text-left">Percentage</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -106,7 +106,7 @@
             <td align="left">{{item.HostelRequestNo}}</td>
             <td align="left">{{item.StreamName}}</td>
             <td align="left">{{item.SemesterName}}</td>
-            <td align="left">{{item.EndTermName}}</td>
+            <td align="left">{{item.TotalAvgPercentage}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="item.AllotmentStatus === 11">
                 <a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.AffidavitDocument}}" target="_blank" class="text-success"><i class="ti ti-eye"></i></a>

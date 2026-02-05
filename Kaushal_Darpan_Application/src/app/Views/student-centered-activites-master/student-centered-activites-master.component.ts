@@ -19,10 +19,10 @@ import { DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 @Component({
-    selector: 'app-student-centered-activites-master',
-    templateUrl: './student-centered-activites-master.component.html',
-    styleUrls: ['./student-centered-activites-master.component.css'],
-    standalone: false
+  selector: 'app-student-centered-activites-master',
+  templateUrl: './student-centered-activites-master.component.html',
+  styleUrls: ['./student-centered-activites-master.component.css'],
+  standalone: false
 })
 export class StudentCenteredActivitesMasterComponent implements OnInit {
   public State: number = -1;
@@ -70,8 +70,8 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   constructor(private commonMasterService: CommonFunctionService,
     private SCAService: StudentCenteredActivitesService, private toastr: ToastrService,
     private loaderService: LoaderService, private router: ActivatedRoute,
-    private route:Router,
-  
+    private route: Router,
+
     private modalService: NgbModal, private Swal2: SweetAlert2, private streamMasterService: StreamMasterService, private appsettingConfig: AppsettingService,
     private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef,
     private activatedRoute: ActivatedRoute,) {
@@ -81,20 +81,19 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
-     this.isStatus = Number(
-        this.activatedRoute.snapshot.paramMap.get('Status')
-      );
-      if(this.isStatus==0 || this.isStatus==null ||Number.isNaN(this.isStatus)){
-        this.isStatus= Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
-      }
-   
-      console.log(this.isStatus); // 2
-      if(this.isStatus==4)
-      {
-        this.route.navigate(['/scactivities']);
-      }
-    
-  
+    this.isStatus = Number(
+      this.activatedRoute.snapshot.paramMap.get('Status')
+    );
+    if (this.isStatus == 0 || this.isStatus == null || Number.isNaN(this.isStatus)) {
+      this.isStatus = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    }
+
+    console.log(this.isStatus); // 2
+    if (this.isStatus == 4) {
+      this.route.navigate(['/scactivities']);
+    }
+
+
     await this.GetMasterData();
     await this.GetGradeList();
 
@@ -113,7 +112,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.SemesterMasterList = data['Data'];
         }, error => console.error(error));
-        
+
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.InstituteMasterDDLList = data.Data;
@@ -152,16 +151,14 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
 
   async GetGradeList() {
     //debugger;
-    // this.GradeList=[];
-    this.paginatedInTableData=[];
+    this.GradeList = [];
     this.AllInTableSelect = false;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     try {
-      if(!this.searchRequest.InstituteID)
-      {
+      if (!this.searchRequest.InstituteID) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
       }
-      
+
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -171,7 +168,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       await this.SCAService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if(data.Data[0].IsOpen == 0) {
+          if (data.Data[0].IsOpen == 0) {
             this.toastr.warning(data.Data[0].Message)
           } else {
             this.GradeList = data['Data'];
@@ -185,13 +182,13 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
             if (isfinalsubmit.length > 0) {
               this.isfinalsubmit = true
               this.AllInTableSelect = false
-            } 
-            //table feature load
-            this.loadInTable();
-            //end table feature load
+            }
           }
+          //table feature load
+          this.loadInTable();
+          //end table feature load
 
-          
+
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -217,30 +214,30 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     //debugger
     try {
       this.loaderService.requestStarted();
-      
+
 
       // **Filter Present and UFM Students Separately**
       let presentStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 1);
       let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
       let detainStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 3);
 
-       if (StudentExamPaperMarksID == 0 && isFinalSubmit == false) {
-         let presentStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 1);
-         let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
-       } else {
-         let presentStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 1 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
-         let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
-         let detainStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 3 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
-    }
+      if (StudentExamPaperMarksID == 0 && isFinalSubmit == false) {
+        let presentStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 1);
+        let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
+      } else {
+        let presentStudents = this.GradeList.filter(x => x.Marked == true && x.IsPresentStudentCenteredActivity == 1 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
+        let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
+        let detainStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 3 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
+      }
 
       if (isFinalSubmit == true) {
-        let presentStudents = this.GradeList.filter(x =>  x.IsPresentStudentCenteredActivity == 1);
+        let presentStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 1);
         let ufmStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 4);
         let detainStudents = this.GradeList.filter(x => x.IsPresentStudentCenteredActivity == 3 && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
       }
 
       // **Validation for Present Students**
-      if (presentStudents.length == 0 && ufmStudents.length == 0 && isFinalSubmit==false && detainStudents.length == 0) {
+      if (presentStudents.length == 0 && ufmStudents.length == 0 && isFinalSubmit == false && detainStudents.length == 0) {
         this.toastr.warning('Please mark students as Present or UFM before saving.');
         return;
       }
@@ -307,9 +304,9 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
               }
               )
             }
-              this.request.Dis_UFMDocument = '';
-              this.request.UFMDocument = '';
-            
+            this.request.Dis_UFMDocument = '';
+            this.request.UFMDocument = '';
+
           } else {
             this.toastr.error(this.ErrorMessage);
           }
@@ -365,7 +362,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     this.paginatedInTableData = [...this.GradeList].slice(this.startInTableIndex, this.endInTableIndex);
     this.loaderService.requestEnded();
   }
-  
+
   previousInTablePage() {
     if (this.currentInTablePage > 1) {
       this.currentInTablePage--;
@@ -458,7 +455,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
 
   public file!: File;
   async onFilechange(event: any, Type: string, row: any) {
-    
+
     try {
 
       if (!row) {
@@ -493,7 +490,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
             this.State = data['State'];
             this.Message = data['Message'];
             this.ErrorMessage = data['ErrorMessage'];
-            console.log(data,'UploadDoc')
+            console.log(data, 'UploadDoc')
             if (this.State == EnumStatus.Success) {
               if (Type == "Document") {
                 //this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
@@ -529,8 +526,8 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   }
 
   async onStatusChange(dOC: any) {
-    
-    console.log(this.paginatedInTableData,'ListDataaaaa')
+
+    console.log(this.paginatedInTableData, 'ListDataaaaa')
     if (this.paginatedInTableData.some((x: any) => x.IsPresentStudentCenteredActivity == 4)) {
       this.isAnyUFMSelected = true
     } else if (this.paginatedInTableData.every((x: any) => x.IsPresentStudentCenteredActivity == 4)) {
@@ -549,7 +546,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     if (dOC.IsPresentStudentCenteredActivity != 1) {
       dOC.ObtainedStudentCenteredActivity = 0;
     }
-  /*  this.Isremarkshow = this.request.VerificationDocumentDetailList.some((x: any) => x.Status == EnumVerificationAction.Revert);*/
+    /*  this.Isremarkshow = this.request.VerificationDocumentDetailList.some((x: any) => x.Status == EnumVerificationAction.Revert);*/
   }
 
 

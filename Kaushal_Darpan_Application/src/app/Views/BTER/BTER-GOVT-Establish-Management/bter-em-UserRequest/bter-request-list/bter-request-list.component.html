@@ -142,11 +142,11 @@
             <!--<td align="left">{{ row.OrderNo }}</td>
             <td align="left">{{ row.OrderDate }}</td>-->
             <td align="left">{{ row.LastWorkingDate }}</td>
-            <td align="left">{{ row.JoiningDate }}</td>
+            <td align="left">{{ row.RequestTypeID==2? 'Not Applicable' : row.JoiningDate }}</td>
             <td align="left">{{ row.RequestDate }}</td>
             <td align="left">{{ row.RequestStatus }}</td>
             <td align="left">{{ row.RelievingStatus }}</td>
-            <td align="left">{{ row.JoiningStatus }}</td>
+            <td align="left">{{ row.RequestTypeID==2? 'Not Applicable' : row.JoiningStatus }}</td>
             <td align="left">{{ row.RequestRemarks }}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
