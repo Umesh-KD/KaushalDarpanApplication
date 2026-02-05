@@ -74,6 +74,8 @@ export class ITIsComponent implements OnInit {
   _GlobalConstants = GlobalConstants;
 
   public SemesterDetails: any[] = [];//copy of main data
+  ManagementTypeId: number = 0;
+  IsCampus: number = 0;
   //end table feature default
 
   constructor(
@@ -88,6 +90,7 @@ export class ITIsComponent implements OnInit {
     private modalService: NgbModal,
     private Swal2: SweetAlert2, private renderer: Renderer2,
     private appsettingConfig: AppsettingService,
+    private route: ActivatedRoute
   ) { }
 
   async ngOnInit() {
@@ -119,11 +122,32 @@ export class ITIsComponent implements OnInit {
     this.GettehsilMaster();
     this.GetStreamType();
     this.GetRemark();
-    this.GetAllData();
-
+    
     await this.GetPrintRollAdmitCardSetting();
     this.loadDropdownData('GovtIti')
     await this.getItiNameAndCode()
+
+    // CALLING for query dashboard parameter
+    this.route.queryParams.subscribe(params => {
+      const ITItypeID = Number(params['ManagementTypeId']);
+
+      if (!isNaN(ITItypeID) && ITItypeID > 0) {
+        this.ManagementTypeId = ITItypeID;
+        this.searchrequest.ITItypeID = ITItypeID;
+      }
+
+
+      const isCampus = params['IsCampus'];
+
+      if (isCampus === '1' || isCampus === '0') {
+        this.IsCampus = isCampus;
+        this.searchrequest.IsCampus = isCampus;
+      }
+    });
+    await this.GetAllData();
+
+
+
   }
 
  
