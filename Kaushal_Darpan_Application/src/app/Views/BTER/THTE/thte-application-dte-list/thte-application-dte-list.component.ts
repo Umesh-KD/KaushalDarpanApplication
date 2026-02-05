@@ -31,6 +31,7 @@ export class THTEApplicationDteListComponent {
   public ApplicationListOrderData: any = [];
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
+  public enumRole = EnumRole;
 
   public status: number = 0;
 
@@ -73,9 +74,17 @@ export class THTEApplicationDteListComponent {
         this.StatusListDDL = data['Data'];
         this.UpdateStatusListDDL = data['Data'];
 
-        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1344 || x.ID == 1345)
-        this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1345)
-        
+        if(this.sSOLoginDataModel.RoleID === EnumRole.DTE) {
+          this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1353 || x.ID == 1345)
+        } else if(this.sSOLoginDataModel.RoleID === EnumRole.CommitteInchargeDTE) {
+          this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1344 || x.ID == 1353)
+        }
+
+        if(this.sSOLoginDataModel.RoleID == EnumRole.CommitteInchargeDTE) {
+          this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1353)
+        } else if(this.sSOLoginDataModel.RoleID === EnumRole.DTE) {
+          this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1345)
+        }
       })
     } catch (error) {
       console.error(error);
@@ -187,12 +196,8 @@ export class THTEApplicationDteListComponent {
       console.error(error);
     }
   }
-
-
-
-
+  
   async GenrateOrder() {
-    debugger
     await this.teacherHigherEducationApplicationVerificationService.GetApplication_GenrateOrder_Dte_THTE(this._DTEGenrateOrder).then(async (data: any) => {
         
         data = JSON.parse(JSON.stringify(data));
@@ -222,6 +227,88 @@ export class THTEApplicationDteListComponent {
         console.error(error);
         this.toastr.error("some error !")
       });
+  }
+
+  async updateStatusRemark_DTECommittee() {
+    let anySelected = this.ApplicationListData.some((x: any) => x.Selected === true)
+    if (!anySelected) {
+      this.toastr.warning('Please select at least one record.');
+      return;
+    }
+
+
+    let dyMsg = '';
+    if (this.status == 1353) {
+      dyMsg = "Approve";
+    } else {
+      dyMsg = "Reject";
+    }
+    this.Swal2.Confirmation(`Are you sure you want to ${dyMsg}?`,
+    async (result: any) => {
+      
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: dyMsg + ' Application List',
+          input: 'textarea',
+          inputLabel: 'Remark',
+          inputPlaceholder: 'Enter your remark here...',
+          inputAttributes: {
+            'aria-label': 'Type your remark here'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Save Remark',
+          cancelButtonText: 'Cancel'
+        }).then(async (result: any) => {
+          if (result.isConfirmed && result.value?.trim()) {
+            const remark = result.value.trim();
+            await this.openOTPModal_DTECommittee(remark);
+          } else if (result.isConfirmed && !result.value?.trim()) {
+            this.toastr.warning('Remark is required.');
+          }
+        });
+      }
+    })
+    
+  }
+
+  async openOTPModal_DTECommittee(remark: string) {
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+
+    // do work
+    await this.SaveDataMarked__DTECommittee(remark);
+  }
+
+  async SaveDataMarked__DTECommittee(remark: string) {
+    try {
+      let selected = this.ApplicationListData.filter((x: any) => x.Selected === true)
+      selected.forEach((x: any) => {
+        x.ModifyBy = this.sSOLoginDataModel.UserID,
+          x.status = this.status,
+          x.Remark = remark,
+          x.RoleID = this.sSOLoginDataModel.RoleID  
+      })
+
+      await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_DTE_THTE(selected)
+      .then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.status = 0
+          this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
+          this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
+          this.GenrateOrder();
+          await this.ApplicationList_ForPrinciple_THTE();
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
 

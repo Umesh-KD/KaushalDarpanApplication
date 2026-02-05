@@ -110,6 +110,14 @@ export class TeacherHigherEducationApplicationService {
       ).toPromise();
   }
 
+  public async THTE_GrtApplyInstituteList(request: THTE_ApplicationSearchModel) {
+    return await this.http.post(this.APIUrl + "/THTE_GrtApplyInstituteList", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async CommitteeSaveData(request: CommitteeDataModel) {
     var body = JSON.stringify(request);
 
@@ -128,9 +136,9 @@ export class TeacherHigherEducationApplicationService {
       ).toPromise();
   }
 
-  public async GetCommitteeById_Team(id: number) {
+  public async GetCommitteeById_Team(id: number, RoleID: number = 0) {
 
-    return await this.http.get(`${this.APIUrl}/GetCommitteeById_Team/${id}`, this.headersOptions)
+    return await this.http.get(`${this.APIUrl}/GetCommitteeById_Team/${id}/${RoleID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -147,6 +155,23 @@ export class TeacherHigherEducationApplicationService {
   public async Bter_CommitteeStaffCheckSSOID(searchRequest: CommitteeStaffSSOIDSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/Bter_CommitteeStaffCheckSSOID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async UpdateInstitutestatus(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/UpdateInstitutestatus`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async THTE_GetInstituteCommitteeList(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/THTE_GetInstituteCommitteeList`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

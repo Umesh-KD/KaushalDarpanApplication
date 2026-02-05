@@ -53,7 +53,8 @@
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3"
-         *ngIf="searchRequest.status == 1344">
+         *ngIf="(searchRequest.status == 1344 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
+                      (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
       <div class="flex">
         <!--*ngIf="MapKeyEng == 1"-->
 
@@ -63,7 +64,15 @@
         </select>   
       </div>
       <div>
-        <button type="button" class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Save &  Genrate Order</button>
+        <button type="button" 
+          *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE"
+          class="btn bg-info text-white inline-block" 
+          (click)="updateStatusRemark()">Save &  Genrate Order</button>
+
+        <button type="button" 
+          *ngIf="sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE"
+          class="btn bg-info text-white inline-block" 
+          (click)="updateStatusRemark_DTECommittee()">Save</button>
       </div>
       <div>
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
@@ -76,7 +85,9 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left" *ngIf="searchRequest.status == 1344">
+            <th class="text-left" 
+              *ngIf="(searchRequest.status == 1344 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
+                      (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <th class="text-left">Sr.No.</th>
@@ -94,7 +105,8 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
-            <td *ngIf="searchRequest.status == 1344">
+            <td *ngIf="(searchRequest.status == 1344 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
+                      (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(row.Selected, row)">
             </td>
@@ -108,7 +120,7 @@
             <td>{{row.SSOID}}</td>
             <td align="left">{{row.DOB | date: 'dd-MM-yyyy'}}</td>
             <td align="left">{{row.JoiningDate | date: 'dd-MM-yyyy'}}</td>
-            <td align="left">{{row.AppliedInstitute}}</td>
+            <td align="left">{{row.SelectedInstitute}}</td>
             <td align="left">{{row.AppliedCourseName}}</td>
             <td align="left">{{row.CommitteeName}}</td>
             <td align="left">

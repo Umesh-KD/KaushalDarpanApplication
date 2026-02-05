@@ -1553,6 +1553,9 @@ const routes: Routes = [
       { path: 'EditQualificationList', loadChildren: () => import('./Views/ITI/edit-qualification-list/edit-qualification-list.module').then(m => m.EditQualificationListModule) },
       { path: 'THTE-Committee', loadChildren: () => import('./Views//BTER/THTE/thte-committee/thte-committee.module').then(m => m.THTECommitteeModule), title: ' add THTE Committee' },
       { path: 'THTE-CommitteeList', loadChildren: () => import('./Views//BTER/THTE/thte-committee-list/thte-committee-list.module').then(m => m.THTECommitteeListModule), title: 'THTE Committee List' },
+      { path: 'thte-committee-list-dte', loadChildren: () => import('./Views//BTER/THTE/dte-committe-list/dte-committe-list.module').then(m => m.DTECommitteListModule), title: 'THTE Committee List' },
+      { path: 'thte-committee-dte', loadChildren: () => import('./Views//BTER/THTE/thte-dte-committee/thte-dte-committee.module').then(m => m.THTEDTECommitteeModule), title: 'THTE Committee List' },
+      { path: 'institute-committee-list-dte', loadChildren: () => import('./Views//BTER/THTE/institute-committee-list-dte/institute-committee-list-dte.module').then(m => m.InstituteCommitteeListDTEModule), title: 'Institute Committee List' },
       { path: 'ITI-Office-Vacancy', loadChildren: () => import('./Views//ITI/ITI-GOVT-EstablishManagement/ITI-OfficeVacancy/ITI-OfficeVacancy.module').then(m => m.ITIOfficeVacancyModule), title: 'ITI Office Vacancy' },
 
       
