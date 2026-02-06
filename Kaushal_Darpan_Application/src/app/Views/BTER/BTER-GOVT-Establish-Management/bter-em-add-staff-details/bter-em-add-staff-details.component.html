@@ -265,18 +265,46 @@
         </div>
 
         <div *ngIf=" this.IsOterFacultyTech == false">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualification as per Service Book at the time of joining <span class="StarMarking">*</span> </label>
+          <select class="form-select " name="QualificationAtJoining" id="QualificationAtJoining" formControlName="QualificationAtJoining"
+                  [(ngModel)]="request.QualificationAtJoining">
+            <option [value]="0">Choose Option</option>
+            <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">{{item.QualificationName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAtJoining.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.QualificationAtJoining.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+       
+        <!-- <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification as per Service Book at the time of joining<span class="StarMarking">*</span></label>
           <input class="form-input" placeholder="Qualification At Joining" name="QualificationAtJoining" id="QualificationAtJoining"
                  formControlName="QualificationAtJoining" [(ngModel)]="request.QualificationAtJoining" />
-
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAtJoining.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.QualificationAtJoining.errors.required">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
-        </div>
+        </div> -->
 
         <div *ngIf=" this.IsOterFacultyTech == false">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Qualifications as per Service Book gained after joining <span class="StarMarking">*</span> </label>
+          <select class="form-select " name="QualificationAfterJoining" id="QualificationAfterJoining" formControlName="QualificationAfterJoining"
+                  [(ngModel)]="request.QualificationAfterJoining">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">{{item.QualificationName}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAfterJoining.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.QualificationAfterJoining.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <!-- <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualifications as per Service Book gained after joining <span class="StarMarking">*</span></label>
           <input class="form-input" placeholder="Qualification After Joining" name="TotalExperience" id="QualificationAfterJoining"
                  formControlName="QualificationAfterJoining" [(ngModel)]="request.QualificationAfterJoining" />
@@ -286,7 +314,8 @@
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
-        </div>
+        </div> -->
+
         <!--{{request.DateOfRetirement|json}}-->
         <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Retirement</label>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LeaveMaster } from '../../Models/LeaveMasterDataModel';
+import { LeaveMaster, LeaveMasterSearchModel } from '../../Models/LeaveMasterDataModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
@@ -10,6 +10,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { EnumStatus, EnumLeaveTypeFSFDay, EnumLeaveType } from '../../Common/GlobalConstants';
+import { AppsettingService } from '../../Common/appsetting.service';
 
 @Component({
   selector: 'app-apply-leave',
@@ -23,7 +24,8 @@ export class ApplyLeaveComponent {
   public LeaveTypeList: any[] = [];
   public LeaveTypeFSFList: any[] = [];
  public today: string='';
-  public request = new LeaveMaster()
+  public request = new LeaveMaster();
+  public req=new LeaveMasterSearchModel();
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public State: number = 0;
@@ -32,11 +34,12 @@ export class ApplyLeaveComponent {
   public ErrorMessage: string = '';
   public LeaveMasterFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public RemainingLeave:number=0;
 
 
   constructor(private commonMasterService: CommonFunctionService,
     private LeaveMasterService: LeaveMasterService,
-    private toastr: ToastrService, private loaderService: LoaderService,
+    private toastr: ToastrService, private loaderService: LoaderService, public appsettingConfig: AppsettingService,
     private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal) {
 
   }
@@ -53,7 +56,10 @@ export class ApplyLeaveComponent {
         LeaveID: ['', [DropdownValidators]],
         TotalDays: [''],
         IsHeadQuarter: [0],
-        LeaveTypeID: ['', [DropdownValidators]]
+        LeaveTypeID: ['', [DropdownValidators]],
+        txtIsHeadQuarterAddress:[''],
+        txtIsHeadQuarterMobileNo:[''],
+        RemainingLeave:[{value:'',disabled:true}]
 
       });
 
@@ -63,8 +69,13 @@ export class ApplyLeaveComponent {
     this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());//student list key
     const now = new Date();
     this.today = now.toISOString().split('T')[0]; // "2025-04-11" format
+    this.req.StaffTypeID=this.sSOLoginDataModel.StaffTypeID;
+    this.req.DepartmentID=this.sSOLoginDataModel.DepartmentID;
+    this.req.FinancialYearID=this.sSOLoginDataModel.FinancialYearID;
+    this.req.EndTermID=this.sSOLoginDataModel.EndTermID;
+    this.req.StaffID=this.sSOLoginDataModel.StaffID;
     this.LeaveMasterFormGroup.get('TotalDays')?.disable()
-    await this.GetCompanyMatserDDL();
+    await this.GetCommondata();
     await this.GetLeaveTypeFSF();
     this.setTodayDate();
 
@@ -72,6 +83,7 @@ export class ApplyLeaveComponent {
     if (this.ID > 0) {
       await this.GetById();
     }
+    this.request.IsHeadQuarter=true;
   }
   get _LeaveMasterFormGroup() { return this.LeaveMasterFormGroup.controls; }
 
@@ -109,13 +121,36 @@ export class ApplyLeaveComponent {
 
 
   // get semestar ddl
-  async GetCompanyMatserDDL() {
+  async GetCommondata() {
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCommonMasterData('LeaveType')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.LeaveTypeList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetRemainingLeave() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.req.Action='GetRemainingLeave';
+      await this.LeaveMasterService.GetRemainingLeave(this.req)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          // this.LeaveTypeList = data['Data'];
+          this.RemainingLeave=data['Data'][0].RemainingLeave;
         }, (error: any) => console.error(error)
         );
     }
@@ -197,6 +232,10 @@ debugger
         this.toastr.warning("From Date cannot be greater than To Date");
         return
       }
+      if(this.request.TotalDays<=0 || this.request.TotalDays>this.RemainingLeave){
+        this.toastr.error('You Do not have Enough Leaves');
+        return;
+      }
       this.isLoading = true;
 
       this.loaderService.requestStarted();
@@ -205,6 +244,7 @@ debugger
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.request.FinancialYearID=this.sSOLoginDataModel.FinancialYearID;
       this.request.Action = 'Pending'
       this.request.SSOID = this.sSOLoginDataModel.SSOID
       //save
@@ -237,6 +277,80 @@ debugger
     }
   }
 
+  async IsHeadQuarter(){
+    debugger
+    console.log(this.request.IsHeadQuarter);
+    if(this.request.IsHeadQuarter){
+
+    }
+  }
+
+  public file!: File;
+  async onDocchange(event: any, Type: string) {
+    debugger
+    try {
+
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type=='application/pdf') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+          //if (this.file.size < 100000) {
+          //  this.toastr.error('Select more then 100kb File')
+          //  return
+          //}
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png/pdf file')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "Photo") {
+                this.request.DisUploadDoc = data['Data'][0]["Dis_FileName"];
+                this.request.UploadDoc = data['Data'][0]["FileName"];
+
+              }
+              //else if (Type == "Sign") {
+              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+              //}
+              /*              item.FilePath = data['Data'][0]["FilePath"];*/
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+  
+
   // reset
   ResetControls() {
 
@@ -253,13 +367,19 @@ debugger
   // Enum for Leave Types (leave category)
 
 
-calculateDays() {
+async calculateDays() {
   debugger;
+  this.req.LeaveID=this.request.LeaveID;
+  await this.GetRemainingLeave();
+  if(this.RemainingLeave<=0){
+    this.toastr.error('You have not Enough Leave');
+    return;
+  }
   const fromDateStr = this.request.From_Date;
   const toDateStr = this.request.To_Date;
 
   // session type: 1=FirstHalf, 2=SecondHalf, 3=FullDay
-  const sessionType = this.request.LeaveTypeID;
+  const DayType = this.request.LeaveTypeID;
 
   // leave category: 1 to 5 as per EnumLeaveType
   const leaveType = this.request.LeaveID;
@@ -311,7 +431,7 @@ calculateDays() {
 
   // Single day leave
   if (fromDate.toDateString() == toDate.toDateString()) {
-    if (sessionType == EnumLeaveTypeFSFDay.FirstHalf || sessionType == EnumLeaveTypeFSFDay.SecondHalf) {
+    if (DayType == EnumLeaveTypeFSFDay.FirstHalf || DayType == EnumLeaveTypeFSFDay.SecondHalf) {
       this.request.TotalDays = 0.5;
     } else {
       this.request.TotalDays = 1;
@@ -319,7 +439,7 @@ calculateDays() {
   }
   // Multiple day leave
   else {
-    if (sessionType == EnumLeaveTypeFSFDay.FirstHalf || sessionType == EnumLeaveTypeFSFDay.SecondHalf) {
+    if (DayType == EnumLeaveTypeFSFDay.FirstHalf || DayType == EnumLeaveTypeFSFDay.SecondHalf) {
       // Half day leave across multiple days counts as 0.5 days
       this.request.TotalDays = 0.5;
     } else {
@@ -385,9 +505,6 @@ calculateDays() {
   //  }
   //}
 
-
-
-
   
 
   validateTimes(): boolean {
@@ -409,4 +526,17 @@ calculateDays() {
     return false;
   }
 
+  
+  onInput(event: any): void {
+    const inputValue = event.target.value;
+
+    // Remove non-digit characters
+    const onlyDigits = inputValue.replace(/\D/g, '');
+
+    // Update the input value with only digits
+    event.target.value = onlyDigits;
+
+    // Optionally, update the ngModel if needed
+    this.request.txtIsHeadQuarterMobileNo = onlyDigits;
+  }
 }
