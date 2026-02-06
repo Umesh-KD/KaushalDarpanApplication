@@ -102,4 +102,12 @@ export class LeaveMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetLeaveCreditStaffData(searchRequest: LeaveMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetLeaveCreditStaffData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

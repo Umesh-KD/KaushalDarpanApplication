@@ -33,4 +33,5 @@ export class LeaveMasterSearchModel extends RequestBaseModel{
   StaffTypeID?:number=0;
   Action?:string='';
   LeaveID?: number = 0;
+  CalenderYearID?:number=0;
   }
