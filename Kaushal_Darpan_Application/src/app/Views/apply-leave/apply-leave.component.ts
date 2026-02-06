@@ -34,7 +34,7 @@ export class ApplyLeaveComponent {
   public ErrorMessage: string = '';
   public LeaveMasterFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public RemainingLeave:number=0;
+  public LeaveBlance:number=0;
 
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -146,11 +146,12 @@ export class ApplyLeaveComponent {
     try {
       this.loaderService.requestStarted();
       this.req.Action='GetRemainingLeave';
+      this.req.LeaveID=this.request.LeaveID;
       await this.LeaveMasterService.GetRemainingLeave(this.req)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           // this.LeaveTypeList = data['Data'];
-          this.RemainingLeave=data['Data'][0].RemainingLeave;
+          this.LeaveBlance=data['Data'][0].LeaveBlance;
         }, (error: any) => console.error(error)
         );
     }
@@ -229,11 +230,11 @@ debugger
         return
       }
       if(this.request.From_Date>this.request.To_Date){
-        this.toastr.warning("From Date cannot be greater than To Date");
+        this.toastr.warning("From Date cannot be greater than To Date!");
         return
       }
-      if(this.request.TotalDays<=0 || this.request.TotalDays>this.RemainingLeave){
-        this.toastr.error('You Do not have Enough Leaves');
+      if(this.request.TotalDays<=0 || this.request.TotalDays>this.LeaveBlance){
+        this.toastr.error('You Do not have Enough Leave Balance!');
         return;
       }
       this.isLoading = true;
@@ -371,8 +372,8 @@ async calculateDays() {
   debugger;
   this.req.LeaveID=this.request.LeaveID;
   await this.GetRemainingLeave();
-  if(this.RemainingLeave<=0){
-    this.toastr.error('You have not Enough Leave');
+  if(this.LeaveBlance<=0){
+    this.toastr.error('You have not Enough Leave Balance!');
     return;
   }
   const fromDateStr = this.request.From_Date;
@@ -392,10 +393,7 @@ async calculateDays() {
   const fromDate = new Date(fromDateStr);
   const toDate = new Date(toDateStr);
 
-  if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime()) || fromDate > toDate) {
-    this.request.TotalDays = 0;
-    return;
-  }
+  
 
   // Calculate inclusive day difference between two dates
   const diffDaysInclusive = (start: Date, end: Date): number => {
@@ -429,36 +427,33 @@ async calculateDays() {
     return count;
   };
 
-  // Single day leave
-  if (fromDate.toDateString() == toDate.toDateString()) {
-    if (DayType == EnumLeaveTypeFSFDay.FirstHalf || DayType == EnumLeaveTypeFSFDay.SecondHalf) {
-      this.request.TotalDays = 0.5;
-    } else {
-      this.request.TotalDays = 1;
-    }
-  }
-  // Multiple day leave
-  else {
+ // Multiple day leave
     if (DayType == EnumLeaveTypeFSFDay.FirstHalf || DayType == EnumLeaveTypeFSFDay.SecondHalf) {
       // Half day leave across multiple days counts as 0.5 days
       this.request.TotalDays = 0.5;
+      this.request.To_Date=this.request.From_Date;
+      this.request.From_Date=this.request.To_Date;
+
     } else {
+      if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime()) || fromDate > toDate) {
+        this.request.TotalDays = 0;
+        return;
+      }
       let totalDays = diffDaysInclusive(fromDate, toDate);
 
       // Sandwich leave for PrivilegeLeave
-      if (leaveType == EnumLeaveType.PrivilegeLeave) {
-        const sandwichDays = countSandwichDays(fromDate, toDate);
-        totalDays += sandwichDays;
-      }
+      // if (leaveType == EnumLeaveType.PrivilegeLeave_NonTech || leaveType == EnumLeaveType.PrivilegeLeave_Tech ) {
+      //   const sandwichDays = countSandwichDays(fromDate, toDate);
+      //   totalDays += sandwichDays;
+      // }
 
-      // SickLeave example: double total days
-      if (leaveType == EnumLeaveType.SickLeave) {
+      // HAlf pay leave example: double total days
+      if (leaveType == EnumLeaveType.HalfPayLeave_NonTech ||leaveType == EnumLeaveType.HalfPayLeave_Tech) {
         totalDays = totalDays * 2;
       }
 
       this.request.TotalDays = totalDays;
     }
-  }
 }
 
 

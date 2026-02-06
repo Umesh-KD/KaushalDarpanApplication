@@ -2161,4 +2161,12 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  
+  public async GetCalenderYearList() {
+    return await this.http.get(this.APIUrl + '/GetCalenderYearList/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
