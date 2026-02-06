@@ -6,11 +6,13 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { PrincipleApplicationListSearchModel, THTE_DropdownDataModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel, THTE_ApplicationSearchModel, THTE_DropdownDataModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
+import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-thte-principle-application-list',
@@ -20,15 +22,16 @@ import Swal from 'sweetalert2';
 })
 export class THTEPrincipleApplicationListComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
-
+  modalReference: NgbModalRef | undefined;
   public searchRequest = new PrincipleApplicationListSearchModel();
   public dropdownRequest = new THTE_DropdownDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public UserApplyInstituteList:any=[]
 
   public ApplicationListData: any = [];
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
-
+  public requestSearch = new THTE_ApplicationSearchModel();
   public status: number = 0;
 
   //table feature default
@@ -53,6 +56,8 @@ export class THTEPrincipleApplicationListComponent {
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationVerificationService: TeacherHigherEducationApplicationVerificationService,
+    public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
+    private modalService: NgbModal,
     private router: Router,
   ) { }
 
@@ -320,6 +325,39 @@ export class THTEPrincipleApplicationListComponent {
   }
 
 
+  async ApplyCollegelist(model: any, THTEAppID: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.requestSearch.THTEAppID = THTEAppID
+
+
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplyInstituteList(this.requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserApplyInstituteList = data.Data;
+     /*     this.UserApplyInstituteList = this.UserApplyInstituteList.filter((item: any) => item.StatusID == 1340 || item.StatusID == 1345)*/
+    
+
+
+        }, (error: any) => console.error(error))
+
+
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async CloseModalRequestHistorylist() {
+    this.modalService.dismissAll()
+  }
 
   // end table feature
 }

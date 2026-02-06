@@ -33,6 +33,7 @@ export class itiDashboardComponent {
 
   public TradeCountList: any = []
   public CollegeCountList: any = []
+  public RunningCampList: any = []
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ITIsService, private loaderService: LoaderService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private activeroute: ActivatedRoute,
@@ -47,7 +48,6 @@ export class itiDashboardComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetDTEDashboard();
-
   }
 
 
@@ -73,8 +73,11 @@ export class itiDashboardComponent {
             this.CollegeCountList = this.DashboardCountList.filter(
               (f: any) => f.TileType === 'CollegeCount');
 
+            this.RunningCampList = this.DashboardCountList.filter(
+              (f: any) => f.TileType === 'RunningCamp');
 
-            console.log(this.CollegeCountList);
+
+            console.log(this.RunningCampList);
           }
         }, (error: any) => console.error(error)
         );

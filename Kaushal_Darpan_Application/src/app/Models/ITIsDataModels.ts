@@ -48,6 +48,7 @@ export class ITIsSearchModel {
   public DgetCode: string = ''
   public CampusID: number = 0
   public IsCampus: string = "-1"
+  public ManagementTypeId: number = 0
 
 
 }

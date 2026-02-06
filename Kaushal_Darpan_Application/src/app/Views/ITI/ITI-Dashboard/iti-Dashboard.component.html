@@ -109,14 +109,8 @@
     </div>
 
     <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
-     
 
-      <div class="col-lg-3" *ngFor="let item of TradeCountList">
-
-        <!--<a  [queryParams]="{ status: stat.Status }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
-    View All <i class="ti ti-chevron-right"></i>
-  </a>-->
-        
+      <div class="col-lg-3" *ngFor="let item of TradeCountList">        
         <a class="p-2" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ TradeTypeId: item.RouteValue }">
           <div class="stat-card" [ngClass]="item.CardClass">
             <div>
@@ -124,7 +118,7 @@
               <div class="stat-value">{{ item.TradeCount }}</div>
             </div>
             <div class="stat-icon bg-white" [ngClass]="getCollegeTextClass(item)">
-              <i class="bi" [ngClass]="item.IconClass"></i>
+              <i class="bi bi-people-fill"></i>
             </div>
           </div>
         </a>
@@ -142,47 +136,17 @@
 
     <!-- ================= College Dashboard ================= -->
     <div class="mt-4 flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event ng-star-inserted">
-
       <h3>
         <b>
           <i class="fa fa-list"></i> College Master Dashboard
         </b>
       </h3>
-
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
-
-              <!--Govt Colleges-->
-              <!--<div class="col-md-3">
-            <div class="stat-card bg-light-yellow">
-              <div>
-                <div class="stat-title">Govt Colleges</div>
-                <div class="stat-value text-warning">45</div>
-              </div>
-              <div class="stat-icon text-warning bg-white">
-                <i class="bi bi-bank2"></i>
-              </div>
-            </div>
-          </div>-->
-              <!--Private Colleges-->
-              <!--<div class="col-md-3">
-            <div class="stat-card bg-light-purple">
-              <div>
-                <div class="stat-title">Private Colleges</div>
-                <div class="stat-value text-danger">95</div>
-              </div>
-              <div class="stat-icon text-danger bg-white">
-                <i class="bi bi-building"></i>
-              </div>
-            </div>
-          </div>-->
-
-     
-        <div class="col-lg-3" *ngFor="let item of CollegeCountList">
-
+      <div class="col-lg-3" *ngFor="let item of CollegeCountList">
+        <a class="p-2" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ ManagementTypeId: item.RouteValue }">
           <div class="stat-card" [ngClass]="item.CardClass">
-
             <div>
               <div class="stat-title">
                 {{ item.TradeName }} Colleges
@@ -194,51 +158,69 @@
               </div>
             </div>
 
-            <div class="stat-icon bg-white"  [ngClass]="getCollegeTextClass(item)" >
-              <i class="bi" [ngClass]="item.IconClass"></i>
+            <div class="stat-icon bg-white" [ngClass]="getCollegeTextClass(item)">
+              <i class="bi bi-people-fill"></i>
             </div>
 
           </div>
+        </a>
+        </div>
+      <div class="col-lg-3" *ngFor="let item of RunningCampList">
+        <a class="p-2" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ IsCampus: item.RouteValue }">
+          <div class="stat-card" [ngClass]="item.CardClass">
+            <div>
+              <div class="stat-title">
+                {{ item.TradeName }} Running on Camp
+              </div>
 
+              <div class="stat-value"
+                   [ngClass]="item.CardClass">
+                {{ item.TradeCount }}
+              </div>
+            </div>
+
+            <div class="stat-icon bg-white" [ngClass]="getCollegeTextClass(item)">
+              <i class="bi bi-people-fill"></i>
+            </div>
+
+          </div>
+        </a>
+        </div>
+        <!-- Co-Ed Colleges -->
+        <div class="col-md-3">
+          <div class="stat-card bg-light-blue">
+            <div>
+              <div class="stat-title">Co-Ed</div>
+              <div class="stat-value text-primary">110</div>
+            </div>
+            <div class="stat-icon  bg-white">
+              <i class="bi bi-people-fill"></i>
+            </div>
+          </div>
         </div>
 
-
-
-      <!-- Co-Ed Colleges -->
-      <div class="col-md-3">
-        <div class="stat-card bg-light-blue">
-          <div>
-            <div class="stat-title">Co-Ed Colleges</div>
-            <div class="stat-value text-primary">110</div>
-          </div>
-          <div class="stat-icon text-primary bg-white">
-            <i class="bi bi-people-fill"></i>
+        <!-- Boys Colleges -->
+        <div class="col-md-3">
+          <div class="stat-card bg-light-gray">
+            <div>
+              <div class="stat-title">Women</div>
+              <div class="stat-value text-dark">30</div>
+            </div>
+            <div class="stat-icon text-dark bg-white">
+              <i class="bi bi-people-fill"></i>
+            </div>
           </div>
         </div>
+
       </div>
 
-      <!-- Boys Colleges -->
-      <div class="col-md-3">
-        <div class="stat-card bg-light-gray">
-          <div>
-            <div class="stat-title">Boys Colleges</div>
-            <div class="stat-value text-dark">30</div>
-          </div>
-          <div class="stat-icon text-dark bg-white">
-            <i class="bi bi-person-fill"></i>
-          </div>
-        </div>
-      </div>
+      <!-- College Chart -->
+      <!--<div class="chart-card mt-4">
+    <h6 class="mb-3 text-muted">College Category Overview</h6>
+    <canvas id="collegeChart" height="110"></canvas>
+  </div>-->
 
     </div>
-
-    <!-- College Chart -->
-    <!--<div class="chart-card mt-4">
-      <h6 class="mb-3 text-muted">College Category Overview</h6>
-      <canvas id="collegeChart" height="110"></canvas>
-    </div>-->
-
-  </div>
 
 
 

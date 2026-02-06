@@ -24,14 +24,16 @@ export class TeacherHigherEducationApplicationSaveModel extends ResponseBaseMode
   AppliedInstitute: string = '';
   PHDStatus: number = 0;
   PHDStatusSt: string = '';
-  AppliedInstituteDistance: number = 0;
+  AppliedInstituteDistance: string = '';
   AppliedInstituteCourseCategory: number = 0;
   AppliedInstituteSubCategory: number = 0;
+  SessionID : number = 0;
   Remark: string = '';
   CreatedBy: number = 0;
   InstituteID: number = 0;
   QualificationAtJoining: string = '';
   QualificationAfterJoining: string = '';
+  CollegeDetailList:any=[]
 }
 
 export class TeacherHigherEducationApplicationVerificationModel extends RequestBaseModel {
@@ -54,6 +56,9 @@ export class TeacherHigherEducationApplicationVerificationSaveModel extends Resp
 export class THTE_DDL  {
   Id: number = 0;
   Name?: string = '';
+  UserID?: number = 0;
+  RoleID?: number = 0;
+  StaffID?: number = 0;
 }
 
 export class THTE_ApplicationSearchModel {
@@ -61,6 +66,7 @@ export class THTE_ApplicationSearchModel {
   public THTEAppID: number = 0;
   public Name: string = '';
   public StaffID: number = 0;
+  public action :string=''
 }
 
 export class PrincipleApplicationListSearchModel extends RequestBaseModel {

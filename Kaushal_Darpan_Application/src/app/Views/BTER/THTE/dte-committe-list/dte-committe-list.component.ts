@@ -17,12 +17,12 @@ import { TeacherHigherEducationApplicationService } from '../../../../Services/t
 import { CommitteeSearchModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 
 @Component({
-  selector: 'app-thte-committee-list',
+  selector: 'app-dte-committe-list',
   standalone: false,
-  templateUrl: './thte-committee-list.component.html',
-  styleUrl: './thte-committee-list.component.css'
+  templateUrl: './dte-committe-list.component.html',
+  styleUrl: './dte-committe-list.component.css'
 })
-export class THTECommitteeListComponent {
+export class DTECommitteListComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   _EnumDeploymentStatus = EnumDeploymentStatus
   searchRequest = new CommitteeSearchModel();
@@ -43,7 +43,7 @@ export class THTECommitteeListComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
- // private modalService = inject(NgbModal);
+  // private modalService = inject(NgbModal);
   constructor(
     private commonMasterService: CommonFunctionService,
     private menuService: MenuService,
@@ -59,12 +59,12 @@ export class THTECommitteeListComponent {
     private appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
 
-  ){}
+  ) { }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
+
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.GetAllData()
@@ -78,21 +78,21 @@ export class THTECommitteeListComponent {
     this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId
     this.GetAllData();
   }
-  async GetAllData () {
+  async GetAllData() {
     try {
       this.loaderService.requestStarted();
-     
+
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID
       this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId
       this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
-      
+
       await this.teacherHigherEducationApplicationService.GetCommitteeAllData(this.searchRequest).then((data: any) => {
-     
+
         data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success){
+        if (data.State === EnumStatus.Success) {
           this.InspectionData = data.Data
-          console.log("this.InspectionData",this.InspectionData)
+          console.log("this.InspectionData", this.InspectionData)
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
@@ -119,7 +119,7 @@ export class THTECommitteeListComponent {
       async (result: any) => {
         //confirmed
         if (result.isConfirmed) {
-         
+
           try {
             // Wait for the institute data
             const institute_data = await this.GetInstitute_ById(id);
@@ -146,14 +146,14 @@ export class THTECommitteeListComponent {
               })
             }
 
-     
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200)
-    }
+
+          } catch (error) {
+            console.log(error);
+          } finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200)
+          }
         }
       });
   }
@@ -178,7 +178,7 @@ export class THTECommitteeListComponent {
     try {
       this.loaderService.requestStarted();
       await this.itiInspectionService.GetById_Team(id).then((data: any) => {
-        
+
         data = JSON.parse(JSON.stringify(data));
         console.log("data", data)
         var id = data.Data
@@ -222,8 +222,8 @@ export class THTECommitteeListComponent {
 
   @ViewChild('content') content: ElementRef | any;
 
-  async openModalGenerateOTP(content: any, id : number) {
-    
+  async openModalGenerateOTP(content: any, id: number) {
+
     this.OTP = '';
     this.MobileNo = GlobalConstants.DefaultMobileNo.length > 0 ? GlobalConstants.DefaultMobileNo : this.sSOLoginDataModel.Mobileno;
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
@@ -282,7 +282,7 @@ export class THTECommitteeListComponent {
   CloseModal() {
     this.GetAllData();
     this.modalService.dismissAll();
-    
+
   }
 
   numberOnly(event: KeyboardEvent): boolean {
@@ -303,7 +303,7 @@ export class THTECommitteeListComponent {
           this.toastr.success('Otp Verified');
           try {
             await this.itiInspectionService.GenerateInspectionDeploymentOrder(id).then((data: any) => {
-             
+
               data = JSON.parse(JSON.stringify(data));
               if (data.State === EnumStatus.Success) {
                 debugger;
@@ -325,7 +325,7 @@ export class THTECommitteeListComponent {
               this.loaderService.requestEnded();
             }, 200)
           }
-         
+
         }
         catch (ex) {
           console.log(ex);
@@ -337,7 +337,7 @@ export class THTECommitteeListComponent {
     }
     else {
       this.toastr.warning('Please En ter OTP');
-      
+
     }
   }
 

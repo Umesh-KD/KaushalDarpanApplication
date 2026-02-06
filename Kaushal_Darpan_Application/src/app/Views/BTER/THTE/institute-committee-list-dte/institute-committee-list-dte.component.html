@@ -1,15 +1,13 @@
-
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Application List</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Institute-Committee-List</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Application List</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Institute-Committee-List</a>
     </div>
   </div>
 </div>
-<!-- Page Title End -->
 
 <div class="card">
   <div class="card-body p-5">
@@ -20,23 +18,21 @@
       <div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status </label>
-            <select class="form-select" id="status"
-                [(ngModel)]="searchRequest.status"
-                (change)="ApplicationList_ForPrinciple_THTE()">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of StatusListDDL" value="{{item.ID}}">
-                {{item.Name}}
-              </option>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+            <select class="form-select" id="status" 
+                [(ngModel)]="searchReq.InstituteID">
+              <option [value]="0" selected>--All--</option>
+              <option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</option>
             </select>
+
           </div>
 
           <div>
-            <button type="button" class="btn bg-info text-white mt-6" (click)="ApplicationList_ForPrinciple_THTE()">Search</button>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="THTE_GetInstituteCommitteeList()">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
-            </div>
+          </div>
         </div>
-        
+
       </div>
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -51,66 +47,29 @@
         </select>
       </div>
     </div>
-
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3"
-        *ngIf="searchRequest.status == 1340">
-      <div class="flex">
-        <!--*ngIf="MapKeyEng == 1"-->
-
-        <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus">
-          <option value="0">--select--</option>
-          <option *ngFor="let item of UpdateStatusListDDL" value="{{item.ID}}">{{item.Name}}</option>
-        </select>
-        <button type="button" class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Save</button>
-      </div>
-      <div>
-        <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
-      </div>
-
-    </div>
+    <!--<button *ngIf="searchRequest.status == 1344" type="button" class="btn bg-info text-white inline-block" (click)="GenrateOrder()">Genrate Order</button>-->
 
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left" *ngIf="searchRequest.status == 1340">
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
-            </th>
             <th class="text-left">Sr.No.</th>
-            <!-- <th class="text-left">Action</th> -->
-            <th class="text-left">Name</th>
-            <th class="text-left">SSOID</th>
-            <th class="text-left">DOB</th>
-            <th class="text-left">Joining Date</th>
-            <th class="text-left">Applied Institute</th>
-            <th class="text-left">Applied Course</th>
-            <th class="text-left">Status</th>
-            <th class="text-left">Remark</th>
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">Committee Name </th>
+            <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
-            <td *ngIf="searchRequest.status == 1340">
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
-                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(row.Selected, row)">
-            </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
-            <!-- <td>
+            <td>{{row.InstituteName}}</td>
+            <td>{{row.CommitteeName}}</td>
+            <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="View Details" (click)="openViewStudentExamDetailsPopup(row.StudentID, row.StudentExamID)"><i class="ti ti-eye"></i></a>
+                <a href="javascript:void(0);" (click)="OpenModalCommitteeMemberDetails(CommitteeMemberDetail_Modal, row.CommitteeID)"><i class="ti ti-eye"></i></a>
               </div>
-            </td> -->
-            <td>{{row.TeacherName}}</td>
-            <td>{{row.SSOID}}</td>
-            <td align="left">{{row.DOB | date: 'dd-MM-yyyy'}}</td>
-            <td align="left">{{row.JoiningDate | date: 'dd-MM-yyyy'}}</td>
-            <td >
-              <a href="javascript:void(0);" type="button" class="btn bg-primary text-white" title="History"
-                 (click)="ApplyCollegelist(MyModel_UserInstituteHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>
+              <!--{{row.Dis_CommitteeDocument}}-->
             </td>
-            <td align="left">{{row.AppliedCourseName}}</td>
-            <td align="left">{{row.StatusName}}</td>
-            <td align="left">{{row.Remark}}</td>
           </tr>
         </tbody>
       </table>
@@ -132,52 +91,38 @@
   </div>
 </div>
 
-
-
-
-<ng-template #MyModel_UserInstituteHistory let-modal>
+<ng-template #CommitteeMemberDetail_Modal let-modal>
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between items-center">
-
-        <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist()" type="button"><i class="ti ti-x"></i></button>
+        <button class="btn bg-info text-white" (click)="CloseModalCommitteeMemberDetails()" type="button"><i class="ti ti-x"></i></button>
       </div>
-
-
-
       <div class="card-body">
-
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b class="text-1xl-5"><i class="ti ti-list"></i>Applied Institute List</b>
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Committee Member List</b>
           <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
-
-
-        <!--{{UserRequestHistoryList|json}}-->
         <div class="overflow-x-auto mt-3">
-
-
-
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
                 <th class="text-left">S No</th>
                 <th class="text-left">Institute Name</th>
-                <th class="text-left">Distance(KM)</th>
-                <th class="text-left">Status</th>
-                <th class="text-left">Remarks</th>
-
+                <th class="text-left">Committe Name</th>
+                <th class="text-left">Member Name</th>
+                <th class="text-left">SSOID</th>
+                <th class="text-left">Member Type</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let row of UserApplyInstituteList; let idx=index;  ">
+              <tr *ngFor="let row of THTE_GetInstituteCommitteeMemberData; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
-                <td align="left">{{ row.CollegeName }}</td>
-                <td align="left">{{ row.Distance }}</td>
-                <td align="left">{{ row.StatusName }}</td>
-                <td align="left">{{ row.Remark }}</td>
-
+                <td align="left">{{ row.InstituteName }}</td>
+                <td align="left">{{ row.CommitteName }}</td>
+                <td align="left">{{ row.MemberName }}</td>
+                <td align="left">{{ row.SSOID }}</td>
+                <td align="left">{{ row.MemberType }}</td>
               </tr>
               <tr *ngIf="UserRequestHistoryList?.length==0">
                 <td colspan="10" class="text-center">No Record Found </td>
@@ -186,16 +131,7 @@
           </table>
         </div>
       </div>
-
-      <div class="card-footer text-right">
-        <button type="button" (click)="CloseModalRequestHistorylist()" class="btn bg-success text-white btn-sm">
-          Close
-        </button>
-      </div>
     </div>
   </div>
 
 </ng-template>
-
-<!-- otp -->
-<app-otpmodal #otpModal></app-otpmodal>

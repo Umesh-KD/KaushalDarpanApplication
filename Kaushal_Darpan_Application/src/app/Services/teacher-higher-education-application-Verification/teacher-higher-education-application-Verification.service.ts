@@ -119,5 +119,9 @@ export class TeacherHigherEducationApplicationVerificationService {
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();
-    }
+  }
+
+
+ 
+
 }

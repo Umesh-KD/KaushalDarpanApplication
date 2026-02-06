@@ -18,12 +18,12 @@ import { TeacherHigherEducationApplicationService } from '../../../../Services/t
 import { CommitteeStaffSSOIDSearchModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 
 @Component({
-  selector: 'app-thte-committee',
+  selector: 'app-thte-dte-committee',
   standalone: false,
-  templateUrl: './thte-committee.component.html',
-  styleUrl: './thte-committee.component.css'
+  templateUrl: './thte-dte-committee.component.html',
+  styleUrl: './thte-dte-committee.component.css'
 })
-export class THTECommitteeComponent {
+export class THTEDTECommitteeComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   StreamMasterDDL: any = [];
   SemesterMasterDDL: any = [];
@@ -31,14 +31,14 @@ export class THTECommitteeComponent {
   ExamShiftDDL: any = [];
   InstituteMasterDDL: any = [];
   ExaminerDDL: any = [];
- 
+
 
   public requestSSoApi = new CommonVerifierApiDataModel();
 
   public request = new ITI_InspectionDataModel();
   public requestMember = new InspectionMemberDetailsDataModel();
   public formData = new SaveCheckSSODataModel();
-  InspectionFormGroup!: FormGroup; 
+  InspectionFormGroup!: FormGroup;
   InspectionMemberFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   isFormSubmitted: boolean = false;
@@ -65,13 +65,13 @@ export class THTECommitteeComponent {
     private router: Router,
     public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
 
-  ){}
+  ) { }
 
   async ngOnInit() {
     this.InspectionFormGroup = this.fb.group({
       //TeamInitials: [{value: '', disabled: true}],
       InspectionTeamName: ['', Validators.required],
-      
+
 
     })
 
@@ -79,7 +79,7 @@ export class THTECommitteeComponent {
       //DistrictID: ['', [DropdownValidators]],
       //InstituteID: ['',[DropdownValidators]],
       //StaffID: ['', [DropdownValidators]],
-   
+
       SSOID: ['', Validators.required],
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -108,7 +108,7 @@ export class THTECommitteeComponent {
 
   async getMasterData() {
     try {
-      this.requestTrade.action='_getAllData'
+      this.requestTrade.action = '_getAllData'
       await this.commonMasterService.TradeListGetAllData(this.requestTrade).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
@@ -139,19 +139,19 @@ export class THTECommitteeComponent {
 
   GetInstituteMaster_ByDistrictWise() {
     this.InstituteMasterDDL = []
-    this.requestDropdown.action='GetInstituteMaster_ByDistrictWise'
+    this.requestDropdown.action = 'GetInstituteMaster_ByDistrictWise'
     this.requestDropdown.DistrictID = this.requestMember.DistrictID;
     this.requestDropdown.ManagementTypeID = 1;
     this.itiInspectionService.GetITIInspectionDropdown(this.requestDropdown).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.InstituteMasterDDL = data.Data;
-      console.log("this.InstituteMasterDDL",this.InstituteMasterDDL)
+      console.log("this.InstituteMasterDDL", this.InstituteMasterDDL)
     })
   }
 
   GetStaff_InstituteWise() {
     this.ExaminerDDL = []
-    this.requestDropdown.action='GetStaff_InstituteWise'
+    this.requestDropdown.action = 'GetStaff_InstituteWise'
     this.requestDropdown.InstituteID = this.requestMember.InstituteID;
     this.requestDropdown.DepartmentID = EnumDepartment.ITI;
     this.itiInspectionService.GetITIInspectionDropdown(this.requestDropdown).then((data: any) => {
@@ -160,23 +160,23 @@ export class THTECommitteeComponent {
     })
   }
 
-  async AddMoreMember(data : any) {
+  async AddMoreMember(data: any) {
     this.isSubmitted = true;
     debugger;
     if (data == null && data == undefined) {
-       await this.SSOIDGetSomeDetails(this.requestMember.SSOID);
+      await this.SSOIDGetSomeDetails(this.requestMember.SSOID);
     }
     //if (check == false) {
     //  this.toastr.error("This SSO ID is not Exist, Please contact to Admin!");
     //  return;
     //}
 
-    if(this.InspectionMemberFormGroup.invalid) {
+    if (this.InspectionMemberFormGroup.invalid) {
       console.log("Invalid");
       return
     }
 
-    if(data && data.Data){
+    if (data && data.Data) {
       const IsDuplicate = this.request.InspectionMemberDetails.some((element: any) =>
         data.Data == element.StaffID
       );
@@ -185,10 +185,10 @@ export class THTECommitteeComponent {
         return;
       }
     }
-    else{
+    else {
       return
     }
-    
+
 
     //this.requestMember.DistrictName = this.DistrictMasterDDL.find((x: any) => x.ID == this.requestMember.DistrictID)?.Name;
     //this.requestMember.InstituteName = this.InstituteMasterDDL.find((x: any) => x.Id == this.requestMember.InstituteID)?.Name;
@@ -202,7 +202,7 @@ export class THTECommitteeComponent {
 
     this.isFormReadOnly = true;
 
-    console.log("this.request on push",this.request);
+    console.log("this.request on push", this.request);
 
     // this.dataSource.data = this.request.ObserverDetails;
     // this.dataSource.sort = this.sort;
@@ -234,7 +234,7 @@ export class THTECommitteeComponent {
       this.request.InspectionMemberDetails.forEach(element => {
         element.IsIncharge = true
       })
-    } 
+    }
 
     const hasIncharge = this.request.InspectionMemberDetails.some(x => x.IsIncharge == true);
     if (!hasIncharge) {
@@ -248,7 +248,7 @@ export class THTECommitteeComponent {
         data = JSON.parse(JSON.stringify(data));
         console.log("data", data)
         var id = data.Data
-        if(data.State === EnumStatus.Success){
+        if (data.State === EnumStatus.Success) {
           this.toastr.success("Saved Successfully");
           this.tabChange.emit({ index: 1, id: id });
 
@@ -282,8 +282,8 @@ export class THTECommitteeComponent {
   }
 
 
-  async ResetData(){
-    this.request.InspectionMemberDetails=[];
+  async ResetData() {
+    this.request.InspectionMemberDetails = [];
   }
 
   formatDateToInput(dateStr: string): string {
@@ -299,7 +299,7 @@ export class THTECommitteeComponent {
     debugger
     try {
       this.loaderService.requestStarted();
-      await this.teacherHigherEducationApplicationService.GetCommitteeById_Team(id).then((data: any) => {
+      await this.teacherHigherEducationApplicationService.GetCommitteeById_Team(id, this.sSOLoginDataModel.RoleID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         console.log("data", data)
         debugger;
@@ -312,7 +312,7 @@ export class THTECommitteeComponent {
           this.InspectionFormGroup.get('TeamTypeID')?.disable();
           this.InspectionFormGroup.get('DeploymentDateFrom')?.disable();
           this.InspectionFormGroup.get('DeploymentDateTo')?.disable();
-         
+
         } else if (data.State === EnumStatus.Warning) {
           // this.toastr.warning(data.Message);
         } else {
@@ -362,9 +362,9 @@ export class THTECommitteeComponent {
       this.requestCommitteeStaffSSOIDSearchModel.SSOID = SSOID;
       this.requestCommitteeStaffSSOIDSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-      const username = SSOID; 
-    const appName = 'madarsa.test';
-    const password = 'Test@1234';
+      const username = SSOID;
+      const appName = 'madarsa.test';
+      const password = 'Test@1234';
       // let requestSSoApi:any = {};
       this.requestSSoApi.SSOID = username;
       this.requestSSoApi.appName = appName;
@@ -382,7 +382,7 @@ export class THTECommitteeComponent {
 
       let parsedData: any;
       try {
-        parsedData =response;
+        parsedData = response;
       } catch (e) {
         console.error("Error parsing SSOID response:", e);
         this.toastr.error("Invalid data format received from server.");
@@ -399,7 +399,7 @@ export class THTECommitteeComponent {
           DeploymentDateFrom: this.request.DeploymentDateFrom,
           DeploymentDateTo: this.request.DeploymentDateTo
         };
-         this.Save_CheckSSOData(this.formData);
+        this.Save_CheckSSOData(this.formData);
       } else {
         this.toastr.error("This SSO ID does not exist. Please contact the Admin!");
         this.requestMember.SSOID = "";
@@ -421,7 +421,7 @@ export class THTECommitteeComponent {
     try {
       this.loaderService.requestStarted();
       await this.itiInspectionService.Save_CheckSSOData(formData).then((data: any) => {
-   
+
         data = JSON.parse(JSON.stringify(data));
 
         var id = data.Data
@@ -432,7 +432,7 @@ export class THTECommitteeComponent {
           else {
             this.AddMoreMember(data)
           }
-          
+
 
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
@@ -448,10 +448,4 @@ export class THTECommitteeComponent {
       }, 200)
     }
   }
-
-  
-
 }
-
-
-

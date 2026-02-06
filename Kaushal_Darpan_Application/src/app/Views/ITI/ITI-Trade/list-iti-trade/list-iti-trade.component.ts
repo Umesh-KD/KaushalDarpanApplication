@@ -81,7 +81,7 @@ export class ListItiTradeComponent {
         this.searchRequest.TradeTypeId = this.TradeTypeId;
       }
     });
-    this.getTradeList();
+   // this.getTradeList();
   }
 
 
