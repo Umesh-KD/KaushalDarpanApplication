@@ -124,7 +124,7 @@ export class ApplyLeaveComponent {
   async GetCommondata() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('LeaveType')
+      await this.commonMasterService.GetCommonMasterData('LeaveTypeByStaffTypeID',this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng,this.sSOLoginDataModel.StaffTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.LeaveTypeList = data['Data'];
