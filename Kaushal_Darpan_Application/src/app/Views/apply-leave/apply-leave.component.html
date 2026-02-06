@@ -25,8 +25,6 @@
         </div>
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
 
-
-
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Leave Type  <span class="StarMarking">*</span></label>
             <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.LeaveID" formControlName="LeaveID" (change)="calculateDays()">
@@ -38,6 +36,11 @@
             </div>
           </div>
 
+          <div *ngIf="request.LeaveID!=0">   
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remaining Leave</label>
+            <input type="text" [(ngModel)]="RemainingLeave" formControlName="RemainingLeave" class="form-input"/>
+          </div>
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Leave Type F S F <span class="StarMarking">*</span></label>
             <select class="form-select" id="LeaveTypeID" name="LeaveTypeID" [(ngModel)]="request.LeaveTypeID" formControlName="LeaveTypeID" (change)="calculateDays()">
@@ -47,15 +50,6 @@
             <div *ngIf="isSubmitted && _LeaveMasterFormGroup.LeaveTypeID.errors" class="text-danger">
               <p *ngIf="!_LeaveMasterFormGroup.LeaveTypeID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
-          </div>
-
-
-        <!-- IsHeadQuarter checkbox -->
-          <div>   
-            <label class="inline-flex items-center">
-              <input type="checkbox" [(ngModel)]="request.IsHeadQuarter" formControlName="IsHeadQuarter" class="form-checkbox" />
-              <span class="ml-2 text-gray-800 text-sm font-medium">Is Head Quarter</span>
-            </label>
           </div>
 
 
@@ -89,7 +83,7 @@
                       id="txtToDate"
                       formControlName="remark"
                       [(ngModel)]="request.Remark">
-</textarea>
+            </textarea>
 
             <div *ngIf="isSubmitted && _LeaveMasterFormGroup.remark.errors"
                  class="text-danger">
@@ -98,12 +92,72 @@
               </p>
             </div>
           </div>
+
+        <!-- IsHeadQuarter checkbox -->
+        <div>   
+          <label class="inline-flex items-center">
+            <input type="checkbox" [(ngModel)]="request.IsHeadQuarter" formControlName="IsHeadQuarter" class="form-checkbox" (change)="IsHeadQuarter()" />
+            <span class="ml-2 text-gray-800 text-sm font-medium">Is Head Quarter</span>
+          </label>
+        </div>
+       
+        <div *ngIf="request.IsHeadQuarter" >
+          <label>Address<span class="StarMarking">*</span></label>
+          <textarea type="text"
+                    class="form-input"
+                    id="txtIsHeadQuarterAddress"
+                    formControlName="txtIsHeadQuarterAddress"
+                    [(ngModel)]="request.txtIsHeadQuarterAddress">
+          </textarea>
+
+          <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtIsHeadQuarterAddress.errors"
+               class="text-danger">
+            <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterAddress.errors.required">
+              <i aria-hidden="true"></i>This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.IsHeadQuarter" >
+          <label for="txtMobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile Number:<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtIsHeadQuarterMobileNo" placeholder="Enter 10 Digits Mobile Number" [(ngModel)]="request.txtIsHeadQuarterMobileNo" formControlName="txtIsHeadQuarterMobileNo" maxlength="10" (input)="onInput($event)">
+          <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors"
+               class="text-danger">
+            <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors.required">
+              <i aria-hidden="true"></i>This field is required.!
+            </p>
+          </div>
+        </div>
+
+
           <div>
-            ' <label>Total Days </label>'
+            <label>Total Days </label>
             <input type="text" class="form-input" id="txtToDate" formControlName="TotalDays"
                    [(ngModel)]="request.TotalDays" />
           </div>
 
+          <!-- upload documnet  -->
+
+          <div >
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileStudentPhoto">Upload Document</label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto" type="file" (change)="onDocchange($event,'Photo')">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{request.DisUploadDoc === '' ? 'No File Choosen' : request.DisUploadDoc}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.UploadDoc}}"
+                   *ngIf="this.request.UploadDoc!='' " class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                   (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+                  <i class="ti ti-trash"></i>
+                </a>-->
+              </div>
+            </div>
+          </div>
           <div class="col-span-3 text-center">
             <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>

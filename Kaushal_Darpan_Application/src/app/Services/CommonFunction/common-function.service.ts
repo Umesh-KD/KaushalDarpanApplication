@@ -2154,4 +2154,11 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async GetEmployeeQualificationDDL() {
+    return await this.http.get(this.APIUrl + '/GetEmployeeQualificationDDL/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

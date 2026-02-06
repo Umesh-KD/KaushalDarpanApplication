@@ -94,4 +94,12 @@ export class LeaveMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetRemainingLeave(searchRequest: LeaveMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetRemainingLeave`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
