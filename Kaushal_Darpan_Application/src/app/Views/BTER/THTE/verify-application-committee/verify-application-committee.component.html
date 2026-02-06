@@ -121,6 +121,7 @@
             <th class="text-left">Committee Name </th>
             <th class="text-left">Committee Document</th>
             <th class="text-left">Status</th>
+            <th class="text-left">Remarks</th>
           </tr>
         </thead>
         <tbody>
@@ -159,6 +160,7 @@
             </td>
 
             <td align="left">{{row.StatusName}}</td>
+            <td align="left">{{row.Remark}}</td>
           </tr>
         </tbody>
       </table>
@@ -233,7 +235,7 @@
                 <td align="left">{{ row.StatusName }}</td>
                 <td align="left">
                   <input [disabled]="Selecteditem.StatusID!=1341"  class="form-input" type="text" name="appliedInstituteDistance"
-                         placeholder="Enter Distance" [(ngModel)]="row.Remarks" />
+                         placeholder="Enter Remarks" [(ngModel)]="row.Remarks" />
                 </td>
 
               </tr>

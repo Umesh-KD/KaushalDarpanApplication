@@ -198,3 +198,18 @@ export class CommitteeStaffSSOIDSearchModel {
   public RoleID: number = 0;
   public InstituteID: number = 0;
 }
+
+export class DTECommitteeDataModel extends RequestBaseModel {
+  public DTECommitteeID: number = 0;
+  public UserID: number = 0;
+  public DTECommitteeName: string = '';
+  public DTECommitteeMemberDetails: DTECommitteeMemberDetailsDataModel[] = [];
+}
+
+export class DTECommitteeMemberDetailsDataModel {
+  public CommitteeMemberID: number = 0
+  public SSOID: string = ''
+  public StaffID: number = 0
+  public IsIncharge: boolean = false
+  public StaffName: string = ''
+}
