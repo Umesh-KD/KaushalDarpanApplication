@@ -495,6 +495,7 @@ export class VerifyApplicationCommitteeComponent {
             this.toastr.success(data.Message);
             this.status = 0;
             this.CommitteeID = 0;
+            this.CloseModalRequestHistorylist();
             this.request = new UpdateApplicationStatusDataModel_Committee();
             await this.ApplicationList_ForCommittee_THTE();
           }
