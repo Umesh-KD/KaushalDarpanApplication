@@ -931,7 +931,7 @@ export class ItiCollegeReportComponent {
         //'GramPanchayatSamiti',
         //'VillageID',
         //'CityID',
-        'AdministrativeBodyId',
+        ,
         'PlotHouseBuildingNo',
         'SubDivOffice',
 
