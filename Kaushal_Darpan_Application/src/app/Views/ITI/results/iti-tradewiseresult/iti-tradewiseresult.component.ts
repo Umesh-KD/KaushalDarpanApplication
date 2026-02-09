@@ -80,6 +80,7 @@ export class ItiTradeWiseResultComponent implements OnInit {
 
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
       ddlExamYearID: ['', [DropdownValidators]],
+      ExamType: ['',],
      /* txtRollNo: ['', Validators.required] */   
       
  
