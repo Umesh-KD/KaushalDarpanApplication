@@ -299,6 +299,10 @@ export class ItiCollegeReportComponent {
 
     //this.request.CollegeName = this.sSOLoginDataModel.InstituteName
     //this.request.CollegeID = this.sSOLoginDataModel.InstituteID
+    
+    if(this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
+      this.resetValidatoresIPA();
+    }
 
     if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin) {
       const controlsToFreeze = [
@@ -931,7 +935,7 @@ export class ItiCollegeReportComponent {
         //'GramPanchayatSamiti',
         //'VillageID',
         //'CityID',
-        'AdministrativeBodyId',
+        ,
         'PlotHouseBuildingNo',
         'SubDivOffice',
 
@@ -2335,6 +2339,10 @@ export class ItiCollegeReportComponent {
     }
   }
 
+  async resetValidatoresIPA() {
+    this.ReportForm.controls['AdministrativeBodyId'].clearValidators();
+    this.ReportForm.controls['AdministrativeBodyId'].updateValueAndValidity();
+  }
 
   }
 

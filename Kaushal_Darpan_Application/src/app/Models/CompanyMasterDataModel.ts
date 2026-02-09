@@ -175,7 +175,6 @@ export class StudentEmploymentDetailsModel {
 }
 
 export class InternalMarksReportCollegeWiseSearchModel extends RequestBaseModel {
-
   public SemesterID?:number=0
   public InstituteID?:number=0
   public StreamID?:number=0
@@ -188,5 +187,5 @@ export class InternalMarksReportCollegeWiseSearchModel extends RequestBaseModel 
   public SortColumn: string = '';
   public TermPart?:number=0
   public StreamIDs: string = '';
-  
+  public PresentStatus?: number = 0  
 }

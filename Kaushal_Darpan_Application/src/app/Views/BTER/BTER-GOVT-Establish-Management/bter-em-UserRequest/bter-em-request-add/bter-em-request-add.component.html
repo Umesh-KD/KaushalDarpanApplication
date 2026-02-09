@@ -171,7 +171,7 @@
 
 
             <div *ngIf="getstatuId !=2">
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Transfer Post <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.PostID" formControlName="ddlPost">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>

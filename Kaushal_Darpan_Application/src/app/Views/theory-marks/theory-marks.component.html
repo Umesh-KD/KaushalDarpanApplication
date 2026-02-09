@@ -267,6 +267,16 @@
           <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Marks Status:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.CheckedStatus">
+            <option value="-1">--All--</option>
+            <option value="0">Pending</option>
+            <option value="1">Entered</option>
+          </select>
+        </div>
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetTheoryMarksDetailList()">Search</button>
@@ -293,14 +303,14 @@
   </div>-->
   </div>
       <div *ngIf="isListVisible" class="overflow-x-auto mt-3">
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
           <div class="flex justify-end flex-wrap items-center">
-            <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
-            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a> -->
+            <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>-->
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Excel</a> -->
 
-          </div>
-        </div>
+          <!--</div>
+        </div>-->
 
         <div class="mb-2">
           <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">

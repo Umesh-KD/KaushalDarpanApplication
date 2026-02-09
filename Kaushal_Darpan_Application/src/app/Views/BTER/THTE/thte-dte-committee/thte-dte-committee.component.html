@@ -1,0 +1,93 @@
+<main class="flex-grow p-6">
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Committee Members</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a routerLink="/thte-committee-list-dte" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a>
+          </div>
+        </div>
+        <div>
+
+          <form *ngIf="DTECommitteeFormGroup" [formGroup]="DTECommitteeFormGroup">
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Committee Name</label>
+                <input type="text" formControlName="DTECommitteeName" class="form-input" 
+                    [(ngModel)]="request.DTECommitteeName" placeholder="Committee Name" [readonly]="isFormReadOnly">
+                <div *ngIf="isFormSubmitted && _DTECommitteeFormGroup.DTECommitteeName.errors" class="text-danger">
+                  <p *ngIf="_DTECommitteeFormGroup.DTECommitteeName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <form *ngIf="DTECommitteeMemberFormGroup" [formGroup]="DTECommitteeMemberFormGroup">
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
+                <input type="text" formControlName="SSOID" class="form-input" [(ngModel)]="requestMember.SSOID" placeholder="SSO ID">
+                <div *ngIf="isFormSubmitted && _DTECommitteeMemberFormGroup.SSOID.errors" class="text-danger">
+                  <p *ngIf="_DTECommitteeMemberFormGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="text-left">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddMoreMember()">Verify</button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Added Member List</b>
+
+      </div>
+      <!--{{request.InspectionMemberDetails|json}}-->
+      <div class="overflow-auto max-height500">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+            <tr>
+              <th>#</th>
+              <th class="text-left">Name</th>
+              <!--<th class="text-left">User ID</th>-->
+              <th class="text-left">SSOID</th>
+              <th class="text-left">Member Type</th>
+              <th>Action</th>
+            </tr>
+
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of request.DTECommitteeMemberDetails; let idx = index;">
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.StaffName}}</td>
+              <!--<td class="text-left">{{row.StaffID}}</td>-->
+              <td class="text-left">{{row.SSOID}}</td>
+              <td class="text-left">
+                <label><input type="radio" name="memberType" [value]="row.IsIncharge" [checked]="row.IsIncharge" (change)="SetInchargeFlyingSquad(row, idx)">&nbsp; Set Incharge</label>
+              </td>
+              <td class="text-center">
+                <button *ngIf="row.CommitteeID==0 || row.CommitteeID==null"  class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="p-4">
+        <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+        <button type="button" id="btnReset" class="btn bg-danger text-white" (click)="ResetData()">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
+      </div>
+
+    </div>
+  </div>
+</main>

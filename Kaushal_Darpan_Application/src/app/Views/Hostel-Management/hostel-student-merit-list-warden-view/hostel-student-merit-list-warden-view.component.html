@@ -113,7 +113,7 @@
             <td align="left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
               <input type="checkbox" [(ngModel)]="item.selected" (change)="checkIfAllSelected()" />
             </td>
-            <td align="left">{{item.MeritNo}}</td>
+            <td align="left">{{idx+1}}</td>
             <td align="left">{{item.StudentName}}</td>
             <td align="left">{{item.HostelRequestNo}}</td>
             <td align="left">{{item.StreamName}}</td>

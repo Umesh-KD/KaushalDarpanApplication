@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ItiTradeService } from '../../../Services/iti-trade/iti-trade.service';
 
 
 @Component({
@@ -28,19 +29,79 @@ export class itiDashboardComponent {
   modalReference: NgbModalRef | undefined;
   closeResult: string | undefined;
   public request = new ITI_PlanningCollegesSearchModel()
+  public DashboardCountList: any = []
+
+  public TradeCountList: any = []
+  public CollegeCountList: any = []
+  public RunningCampList: any = []
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ITIsService, private loaderService: LoaderService,
-    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private activeroute: ActivatedRoute) {
+    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private activeroute: ActivatedRoute,
+    private itiTradeService: ItiTradeService
+
+
+  ) {
   }
 
   async ngOnInit()
   {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.GetDTEDashboard();
   }
 
 
+  async GetDTEDashboard()
+  {
+    var d =
+    {
+      FinancialYearID: this.sSOLoginDataModel.FinancialYearID
+    }
+    try
+    {
+      this.loaderService.requestStarted();
+      await this.itiTradeService.GetDashboardData(d)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success)
+          {
+            this.DashboardCountList = data['Data'];
 
+            this.TradeCountList = this.DashboardCountList.filter(
+              (f: any) => f.TileType === 'TradeCounts');
+
+            this.CollegeCountList = this.DashboardCountList.filter(
+              (f: any) => f.TileType === 'CollegeCount');
+
+            this.RunningCampList = this.DashboardCountList.filter(
+              (f: any) => f.TileType === 'RunningCamp');
+
+
+            console.log(this.RunningCampList);
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+ 
+
+  // College Cards
+  
+  getCollegeTextClass(item: any) {
+    if (item.TradeName === 'GOVT') return 'text-warning';
+    if (item.TradeName === 'PVT') return 'text-danger';
+    return 'text-primary';
+  }
+
+  
 
 }

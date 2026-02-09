@@ -853,6 +853,7 @@ const routes: Routes = [
       { path: 'PaperCountCustomizeReport', loadChildren: () => import('./Views/Reports/Paper-Count-Customize-Report/Paper-Count-Customize-Report.module').then(m => m.PaperCountCustomizeReportModule), title: 'Paper-Count-Customize-Report' },
       { path: 'PaperCountReport/:repType/:sem', loadChildren: () => import('./Views/Reports/Paper-Count-Report/Paper-Count-Report.module').then(m => m.PaperCountReportModule), title: 'Paper-Count-Report' },
       { path: 'PaperCountReport', loadChildren: () => import('./Views/Reports/Paper-Count-Report/Paper-Count-Report.module').then(m => m.PaperCountReportModule), title: 'Paper-Count-Report' },
+      { path: 'Miscellaneous-Report', loadChildren: () => import('./Views/Reports/Miscellaneous-Report/Miscellaneous-Report.module').then(m => m.MiscellaneousReportModule), title: 'Miscellaneous Report' },
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
 
       { path: 'AddItiCompanyMaster', loadChildren: () => import('./Views/ITI/ITICompanyMaster/additi-company-master/additi-company-module').then(m => m.ItiCompanyMasterModule) },
@@ -985,6 +986,9 @@ const routes: Routes = [
       { path: 'LeaveList', loadChildren: () => import('./Views/leave-list/leave-list.module').then(m => m.LeaveListModule) },
       { path: 'LeaveValidation', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
       { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
+      { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
+      { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
+      
 
       { path: 'ItiCollegeReport', loadChildren: () => import('./Views/ITI/iti-college-report/iti-college-report.module').then(m => m.ItiCollegeReportModule) },
 
@@ -1553,6 +1557,9 @@ const routes: Routes = [
       { path: 'EditQualificationList', loadChildren: () => import('./Views/ITI/edit-qualification-list/edit-qualification-list.module').then(m => m.EditQualificationListModule) },
       { path: 'THTE-Committee', loadChildren: () => import('./Views//BTER/THTE/thte-committee/thte-committee.module').then(m => m.THTECommitteeModule), title: ' add THTE Committee' },
       { path: 'THTE-CommitteeList', loadChildren: () => import('./Views//BTER/THTE/thte-committee-list/thte-committee-list.module').then(m => m.THTECommitteeListModule), title: 'THTE Committee List' },
+      { path: 'thte-committee-list-dte', loadChildren: () => import('./Views//BTER/THTE/dte-committe-list/dte-committe-list.module').then(m => m.DTECommitteListModule), title: 'THTE Committee List' },
+      { path: 'thte-committee-dte', loadChildren: () => import('./Views//BTER/THTE/thte-dte-committee/thte-dte-committee.module').then(m => m.THTEDTECommitteeModule), title: 'THTE Committee List' },
+      { path: 'institute-committee-list-dte', loadChildren: () => import('./Views//BTER/THTE/institute-committee-list-dte/institute-committee-list-dte.module').then(m => m.InstituteCommitteeListDTEModule), title: 'Institute Committee List' },
       { path: 'ITI-Office-Vacancy', loadChildren: () => import('./Views//ITI/ITI-GOVT-EstablishManagement/ITI-OfficeVacancy/ITI-OfficeVacancy.module').then(m => m.ITIOfficeVacancyModule), title: 'ITI Office Vacancy' },
 
       

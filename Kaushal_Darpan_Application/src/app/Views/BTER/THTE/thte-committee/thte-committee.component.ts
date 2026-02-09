@@ -223,6 +223,7 @@ export class THTECommitteeComponent {
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.request.UserID = this.sSOLoginDataModel.UserID;
+    this.request.RoleID = this.sSOLoginDataModel.RoleID;
 
     if (this.request.InspectionMemberDetails.length == 0) {
       this.toastr.error("Please Add At Least One Member in Team");

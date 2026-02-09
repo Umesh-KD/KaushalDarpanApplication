@@ -921,9 +921,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetCommonMasterData(MasterCode: string, DepartmentID: number = 0, CourseType: number = 0) {
+  public async GetCommonMasterData(MasterCode: string, DepartmentID: number = 0, CourseType: number = 0,StaffTypeID:number=0) {
 
-    return await this.http.get(this.APIUrl + '/CommonMasterDataByCode/' + MasterCode + '/' + DepartmentID + '/' + CourseType, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/CommonMasterDataByCode/' + MasterCode + '/' + DepartmentID + '/' + CourseType+'/'+StaffTypeID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -2149,6 +2149,21 @@ export class CommonFunctionService {
     var body = JSON.stringify(SearchRequest);
     const headers = { 'content-type': 'application/json' }
     return await this.http.post(this.APIUrl + '/TradeListGetAllData', body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetEmployeeQualificationDDL() {
+    return await this.http.get(this.APIUrl + '/GetEmployeeQualificationDDL/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
+  public async GetCalenderYearList() {
+    return await this.http.get(this.APIUrl + '/GetCalenderYearList/', this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

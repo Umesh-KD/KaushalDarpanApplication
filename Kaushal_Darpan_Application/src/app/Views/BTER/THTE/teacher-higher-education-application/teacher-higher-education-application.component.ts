@@ -53,6 +53,7 @@ export class TeacherHigherEducationApplicationComponent {
   totalRecord: any = 0;
   TotalPages: any = 0;
   public PostList: any = [];
+  public ItemList1: any = [];
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
   public pageInTableSize: string = "50";
@@ -77,6 +78,7 @@ export class TeacherHigherEducationApplicationComponent {
   public GetAllInstitutionalsDDLList: any[] = [];//ddl
   public THTE_ApplicationList: any[] = [];//ddl
   public UserRequestHistoryList: any[] = [];
+  public UserApplyInstituteList: any[] = [];
   public InstituteMasterDDL: any[] = [];
   public teacherHigherEducationApplicationRequest = new TeacherHigherEducationApplicationRequestModel();
   public IsYear: boolean = false;
@@ -93,6 +95,7 @@ export class TeacherHigherEducationApplicationComponent {
     private formBuilder: FormBuilder,
     private bterEstablishManagementService: BTEREstablishManagementService,
     private modalService: NgbModal,
+
   ) { }
 
   async ngOnInit() {
@@ -102,9 +105,9 @@ export class TeacherHigherEducationApplicationComponent {
       joiningDate: [{ value: '', disabled: true }, [Validators.required]],
       appliedCourse: ['', [DropdownValidators]],
       // appliedInstitute: ['', [DropdownValidators]],
-      appliedInstitute: ['',[Validators.required]],
-      pHDStatus: ['', [Validators.required]],
-      appliedInstituteDistance: ['', [Validators.required]],
+      //appliedInstitute: ['',[Validators.required]],
+      pHDStatus: ['',],
+      // appliedInstituteDistance: ['', [Validators.required]],
       appliedInstituteCategory: ['', [DropdownValidators]],
       appliedInstituteSubCategory: [''],
       QualificationAtJoining: [{ value: '', disabled: true }],
@@ -141,6 +144,7 @@ export class TeacherHigherEducationApplicationComponent {
           this.teacherHigherEducationApplicationSaveRequest.JoiningDate = this.request.DateOfJoining;
           this.teacherHigherEducationApplicationSaveRequest.QualificationAtJoining = this.request.QualificationAtJoining;
           this.teacherHigherEducationApplicationSaveRequest.QualificationAfterJoining = this.request.QualificationAfterJoining;
+          this.teacherHigherEducationApplicationSaveRequest.SessionID = this.request.SessionID;
 
         }
 
@@ -161,7 +165,7 @@ export class TeacherHigherEducationApplicationComponent {
         if (diffInYears < 3) {
           this.toastr.warning("Joining date must be at least 3 years before or equal to today's date.");
           this.IsYear = false;
-          this.YearMessage ="Joining date must be at least 3 years before or equal to today's date"
+          this.YearMessage = "Joining date must be at least 3 years before or equal to today's date"
         }
         else {
           this.IsYear = true;
@@ -225,7 +229,7 @@ export class TeacherHigherEducationApplicationComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CategoryOfApplyCourseInstituteList = data['Data'];
-          this.CategoryOfApplyCourseInstituteList=this.CategoryOfApplyCourseInstituteList.filter((item: any) => item.AppiedSubCatID == this.teacherHigherEducationApplicationSaveRequest.AppliedCourse);
+          this.CategoryOfApplyCourseInstituteList = this.CategoryOfApplyCourseInstituteList.filter((item: any) => item.AppiedSubCatID == this.teacherHigherEducationApplicationSaveRequest.AppliedCourse);
         }, (error: any) => console.error(error));
     }
     catch (Ex) {
@@ -252,36 +256,36 @@ export class TeacherHigherEducationApplicationComponent {
 
 
   async AC_appliedInstituteCategoryDDl() {
-   
-        if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 3) {
-          await this.GetAllInstitutionalsDDL();
 
-          this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].updateValueAndValidity();
+    if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 3) {
+      await this.GetAllInstitutionalsDDL();
 
-        } else {
-          this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].clearValidators();
-          this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteSubCategory = 0;
-        }
+      this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].updateValueAndValidity();
 
-        this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].updateValueAndValidity();
-
-
-        if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 2 || this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 4) {
-          this.teacherHigherEducationApplicationSaveRequest.PHDStatusSt = 'Yes';
-        } else {
-          this.teacherHigherEducationApplicationSaveRequest.PHDStatusSt = 'No';
-        }
+    } else {
+      this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].clearValidators();
+      this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteSubCategory = 0;
     }
 
+    this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].updateValueAndValidity();
 
-    
+
+    if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 2 || this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 4) {
+      this.teacherHigherEducationApplicationSaveRequest.PHDStatusSt = 'Yes';
+    } else {
+      this.teacherHigherEducationApplicationSaveRequest.PHDStatusSt = 'No';
+    }
+  }
 
 
-  
+
+
+
+
 
   async GetTHTE_ApplicationData() {
     try {
-     
+
       this.requestSearch.StaffID = this.sSOLoginDataModel.StaffID;
       await this.teacherHigherEducationApplicationService.GetTHTE_ApplicationData(this.requestSearch)
         .then((data: any) => {
@@ -314,6 +318,19 @@ export class TeacherHigherEducationApplicationComponent {
         return
       }
 
+      if (this.UserRequestHistoryList.length > 0) {
+        const SessionList = this.UserRequestHistoryList.filter((x: any) => x.SessionID == this.teacherHigherEducationApplicationSaveRequest.SessionID
+          && x.StatusID == 1342 || x.SessionID == this.teacherHigherEducationApplicationSaveRequest.SessionID
+          && x.StatusID == 1345
+        )
+        if (SessionList) {
+          this.toastr.warning("You Are not allow any more application for this session")
+          return
+        }
+
+      }
+
+
 
       if (this.teacherHigherEducationApplicationSaveRequest.PHDStatusSt == "Yes") {
         this.teacherHigherEducationApplicationSaveRequest.PHDStatus = 1;
@@ -322,13 +339,16 @@ export class TeacherHigherEducationApplicationComponent {
         this.teacherHigherEducationApplicationSaveRequest.PHDStatus = 0;
       }
 
+      if (this.teacherHigherEducationApplicationSaveRequest.CollegeDetailList.length == 0) {
+        this.toastr.warning("Please Enter College Details")
+        return
+      }
 
-     
       this.teacherHigherEducationApplicationSaveRequest.CreatedBy = this.sSOLoginDataModel.UserID;
       this.teacherHigherEducationApplicationSaveRequest.StaffID = this.sSOLoginDataModel.StaffID;
       this.teacherHigherEducationApplicationSaveRequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.teacherHigherEducationApplicationSaveRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      debugger
+      
       //save
       await this.teacherHigherEducationApplicationService.SaveTeacherHighEduApp(this.teacherHigherEducationApplicationSaveRequest)
         .then((data: any) => {
@@ -340,7 +360,7 @@ export class TeacherHigherEducationApplicationComponent {
             this.toastr.success(this.Message)
             this.Reset();
             this.GetTHTE_ApplicationData();
-            window.location.reload(); 
+            window.location.reload();
             this.ButtonText = "Save";
           } else if (data.State == EnumStatus.Warning) {
             this.toastr.warning(this.Message);
@@ -448,17 +468,21 @@ export class TeacherHigherEducationApplicationComponent {
             DOB: jsonResult.DOB ? jsonResult.DOB.split('T')[0] : '',
             JoiningDate: jsonResult.JoiningDate ? jsonResult.JoiningDate.split('T')[0] : '',
             AppliedCourse: jsonResult.AppliedCourse,
-            AppliedInstitute: jsonResult.AppliedInstitute,
+            //AppliedInstitute: jsonResult.AppliedInstitute,
+            AppliedInstitute: '',
             PHDStatus: jsonResult.PHDStatus,
             PHDStatusSt: jsonResult.PHDStatus === 1 ? 'Yes' : 'No',
-            AppliedInstituteDistance: jsonResult.AppliedInstituteDistance,
+            //AppliedInstituteDistance: jsonResult.AppliedInstituteDistance,
+            AppliedInstituteDistance: '',
             AppliedInstituteCourseCategory: jsonResult.AppliedInstituteCourseCategory,
             AppliedInstituteSubCategory: jsonResult.AppliedInstituteSubCategory,
+            SessionID: jsonResult.SessionID,
             Remark: jsonResult.Remark,
             CreatedBy: jsonResult.CreatedBy,
             InstituteID: jsonResult.InstituteID,
-            QualificationAtJoining:'',
-            QualificationAfterJoining:''
+            QualificationAtJoining: '',
+            QualificationAfterJoining: '',
+            CollegeDetailList: jsonResult.CollegeDetailList
           };
           await this.getAppliedCoursesByIDDDLFill();
 
@@ -503,7 +527,7 @@ export class TeacherHigherEducationApplicationComponent {
         if (data.State == EnumStatus.Success) {
           this.toastr.success(this.Message)
           this.GetTHTE_ApplicationData();
-        }else {
+        } else {
           this.toastr.error(this.Message);
           console.log(this.ErrorMessage);
         }
@@ -516,7 +540,7 @@ export class TeacherHigherEducationApplicationComponent {
     try {
       this.loaderService.requestStarted();
       this.requestSearch.THTEAppID = THTEAppID
-      
+
       await this.teacherHigherEducationApplicationService.THTE_GrtApplicationStatusHistory(this.requestSearch)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -528,7 +552,7 @@ export class TeacherHigherEducationApplicationComponent {
 
         }, (error: any) => console.error(error))
 
-      
+
       this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
     }
     catch (Ex) {
@@ -540,5 +564,84 @@ export class TeacherHigherEducationApplicationComponent {
       }, 200);
     }
   }
+
+
+
+  async Addnew() {
+    if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute == '') {
+      this.toastr.error("Please Fill Apply College Name")
+      return
+    }
+    if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance == '') {
+      this.toastr.error("Please Add College Name")
+      return
+    }
+    if (!this.teacherHigherEducationApplicationSaveRequest.CollegeDetailList) {
+      this.teacherHigherEducationApplicationSaveRequest.CollegeDetailList = []
+    }
+
+    this.teacherHigherEducationApplicationSaveRequest.CollegeDetailList.push({
+      CollegeName: this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute,
+
+      Distance: this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance
+    })
+    this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute = '',
+      this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance = ''
+     
+
+  }
+
+  async deleteRow2(index:any) {
+    this.teacherHigherEducationApplicationSaveRequest.CollegeDetailList.splice(index, 1);
+  }
+
+
+  numberOnly(event: KeyboardEvent): boolean {
+
+    const charCode = (event.which) ? event.which : event.keyCode;
+
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+
+      return false;
+
+    }
+
+    return true;
+
+  }
+
+
+  async ApplyCollegelist(model: any, THTEAppID: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.requestSearch.THTEAppID = THTEAppID
+      
+
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplyInstituteList(this.requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserApplyInstituteList = data.Data;
+          //this.UserApplyInstituteList = this.UserApplyInstituteList.filter((item: any) => item.StatusID == 1340 || item.StatusID == 1345)
+          //this.showJoiningStatusColumn = this.UserApplyInstituteList?.some(r => r.RequestTypeID === 1);
+          this.totalRecord = this.UserApplyInstituteList[0]?.TotalRecords;
+          this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+
+        }, (error: any) => console.error(error))  
+
+
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
 }
 

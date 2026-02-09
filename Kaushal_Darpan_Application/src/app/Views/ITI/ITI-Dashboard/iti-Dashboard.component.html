@@ -74,6 +74,19 @@
       box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
       padding: 20px;
     }
+    .bi-gear-fill {
+      color: cornflowerblue
+    }
+
+    .bi-book-fill {
+      color: #02c262
+    }
+    .bi-bank2 {
+      color: orangered
+    }
+    .bi-building {
+      color: peru
+    }
   </style>
 </head>
 
@@ -96,127 +109,118 @@
     </div>
 
     <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
-      <div class="col-lg-3">
-        <div class="">
-          <div class="p-2">
-            <div class="stat-card bg-light-blue">
-              <div>
-                <div class="stat-title">Engineering Trades</div>
-                <div class="stat-value text-primary">120</div>
-              </div>
-              <div class="stat-icon text-primary bg-white">
-                <i class="bi bi-gear-fill"></i>
-              </div>
+
+      <div class="col-lg-3" *ngFor="let item of TradeCountList">        
+        <a class="p-2" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ TradeTypeId: item.RouteValue }">
+          <div class="stat-card" [ngClass]="item.CardClass">
+            <div>
+              <div class="stat-title">{{ item.TradeName }} Trades </div>
+              <div class="stat-value">{{ item.TradeCount }}</div>
+            </div>
+            <div class="stat-icon bg-white" [ngClass]="getCollegeTextClass(item)">
+              <i class="bi bi-people-fill"></i>
             </div>
           </div>
-        </div>
+        </a>
       </div>
 
-      <div class="col-lg-3">
-        <div class="">
-          <div class="p-2">
-            <div class="stat-card bg-light-green">
-              <div>
-                <div class="stat-title">Non-Engineering Trades</div>
-                <div class="stat-value text-success">80</div>
-              </div>
-              <div class="stat-icon text-success bg-white">
-                <i class="bi bi-book-fill"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
 
     <!-- Trade Chart -->
-    <div class="chart-card mt-4">
+    <!--<div class="chart-card mt-4">
       <h6 class="mb-3 text-muted">Trade Distribution</h6>
       <canvas id="tradeChart" height="110"></canvas>
-    </div>
+    </div>-->
 
 
     <!-- ================= College Dashboard ================= -->
     <div class="mt-4 flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event ng-star-inserted">
-
       <h3>
         <b>
           <i class="fa fa-list"></i> College Master Dashboard
-
         </b>
       </h3>
-
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+      <div class="col-lg-3" *ngFor="let item of CollegeCountList">
+        <a class="p-2" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ ManagementTypeId: item.RouteValue }">
+          <div class="stat-card" [ngClass]="item.CardClass">
+            <div>
+              <div class="stat-title">
+                {{ item.TradeName }} Colleges
+              </div>
 
-      <!-- Govt Colleges -->
-      <div class="col-md-3">
-        <div class="stat-card bg-light-yellow">
-          <div>
-            <div class="stat-title">Govt Colleges</div>
-            <div class="stat-value text-warning">45</div>
+              <div class="stat-value"
+                   [ngClass]="item.CardClass">
+                {{ item.TradeCount }}
+              </div>
+            </div>
+
+            <div class="stat-icon bg-white" [ngClass]="getCollegeTextClass(item)">
+              <i class="bi bi-people-fill"></i>
+            </div>
+
           </div>
-          <div class="stat-icon text-warning bg-white">
-            <i class="bi bi-bank2"></i>
+        </a>
+        </div>
+      <div class="col-lg-3" *ngFor="let item of RunningCampList">
+        <a class="p-2" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ IsCampus: item.RouteValue }">
+          <div class="stat-card" [ngClass]="item.CardClass">
+            <div>
+              <div class="stat-title">
+                {{ item.TradeName }} Running on Camp
+              </div>
+
+              <div class="stat-value"
+                   [ngClass]="item.CardClass">
+                {{ item.TradeCount }}
+              </div>
+            </div>
+
+            <div class="stat-icon bg-white" [ngClass]="getCollegeTextClass(item)">
+              <i class="bi bi-people-fill"></i>
+            </div>
+
+          </div>
+        </a>
+        </div>
+        <!-- Co-Ed Colleges -->
+        <div class="col-md-3">
+          <div class="stat-card bg-light-blue">
+            <div>
+              <div class="stat-title">Co-Ed</div>
+              <div class="stat-value text-primary">110</div>
+            </div>
+            <div class="stat-icon  bg-white">
+              <i class="bi bi-people-fill"></i>
+            </div>
           </div>
         </div>
-      </div>
 
-
-
-
-
-
-      <!-- Private Colleges -->
-      <div class="col-md-3">
-        <div class="stat-card bg-light-purple">
-          <div>
-            <div class="stat-title">Private Colleges</div>
-            <div class="stat-value text-danger">95</div>
-          </div>
-          <div class="stat-icon text-danger bg-white">
-            <i class="bi bi-building"></i>
+        <!-- Boys Colleges -->
+        <div class="col-md-3">
+          <div class="stat-card bg-light-gray">
+            <div>
+              <div class="stat-title">Women</div>
+              <div class="stat-value text-dark">30</div>
+            </div>
+            <div class="stat-icon text-dark bg-white">
+              <i class="bi bi-people-fill"></i>
+            </div>
           </div>
         </div>
+
       </div>
 
-      <!-- Co-Ed Colleges -->
-      <div class="col-md-3">
-        <div class="stat-card bg-light-blue">
-          <div>
-            <div class="stat-title">Co-Ed Colleges</div>
-            <div class="stat-value text-primary">110</div>
-          </div>
-          <div class="stat-icon text-primary bg-white">
-            <i class="bi bi-people-fill"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Boys Colleges -->
-      <div class="col-md-3">
-        <div class="stat-card bg-light-gray">
-          <div>
-            <div class="stat-title">Boys Colleges</div>
-            <div class="stat-value text-dark">30</div>
-          </div>
-          <div class="stat-icon text-dark bg-white">
-            <i class="bi bi-person-fill"></i>
-          </div>
-        </div>
-      </div>
+      <!-- College Chart -->
+      <!--<div class="chart-card mt-4">
+    <h6 class="mb-3 text-muted">College Category Overview</h6>
+    <canvas id="collegeChart" height="110"></canvas>
+  </div>-->
 
     </div>
-
-    <!-- College Chart -->
-    <div class="chart-card mt-4">
-      <h6 class="mb-3 text-muted">College Category Overview</h6>
-      <canvas id="collegeChart" height="110"></canvas>
-    </div>
-
-  </div>
 
 
 

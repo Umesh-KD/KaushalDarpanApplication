@@ -14,10 +14,10 @@ import * as XLSX from 'xlsx';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 @Component({
-    selector: 'app-internal-practical-student',
-    templateUrl: './internal-practical-student.component.html',
-    styleUrls: ['./internal-practical-student.component.css'],
-    standalone: false
+  selector: 'app-internal-practical-student',
+  templateUrl: './internal-practical-student.component.html',
+  styleUrls: ['./internal-practical-student.component.css'],
+  standalone: false
 })
 export class InternalPracticalStudentComponent implements OnInit {
   public State: number = -1;
@@ -50,7 +50,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   public fullAssessmentStudents: any = []
   public fullMarksStudents: any = []
   public InstituteMasterDDLList: any = []
-  public StreamMasterDDL:any=[];
+  public StreamMasterDDL: any = [];
   public _EnumRole = EnumRole;
 
   //table feature default
@@ -88,11 +88,11 @@ export class InternalPracticalStudentComponent implements OnInit {
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
     //debugger
     this.InternalPracticalID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
-    if(this.InternalPracticalID==null || this.InternalPracticalID==0 || Number.isNaN(this.InternalPracticalID)){
+    if (this.InternalPracticalID == null || this.InternalPracticalID == 0 || Number.isNaN(this.InternalPracticalID)) {
       this.InternalPracticalID = Number(
         this.activatedRoute.snapshot.paramMap.get('Status')
       );
-   
+
       console.log(this.InternalPracticalID); // 2
     }
     console.log(this.InternalPracticalID)
@@ -128,7 +128,7 @@ export class InternalPracticalStudentComponent implements OnInit {
         console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
       })
 
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
         //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
@@ -168,13 +168,13 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   async GetTheoryMarksList() {
     try {
-       this.TheoryMarksList=[];
+      this.TheoryMarksList = [];
       this.AllInTableSelect = false;
       this.isSubmitted = true;
       if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
       }
-      
+
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -185,11 +185,11 @@ export class InternalPracticalStudentComponent implements OnInit {
       await this.InternalPracticalStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if(data.Data[0].IsOpen == 0) {
+          if (data.Data[0].IsOpen == 0) {
             this.toastr.warning(data.Data[0].Message)
           } else {
             this.TheoryMarksList = data['Data'];
-            if(this.InternalPracticalID == 2){
+            if (this.InternalPracticalID == 2) {
               this.TheoryMarksList.forEach((x: any) => {
                 this.onStatusPracticalAssesmentChange(x, true)
                 if (x.IsInternalAssesmentCheckecd == false) {
@@ -211,12 +211,12 @@ export class InternalPracticalStudentComponent implements OnInit {
               this.isfinalsubmit = true
             }
 
-            //table feature load
-            this.loadInTable();
-            //end table feature load
           }
+          //table feature load
+          this.loadInTable();
+          //end table feature load
 
-          
+
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -237,7 +237,7 @@ export class InternalPracticalStudentComponent implements OnInit {
       this.Allstudentcheck = isallcheck
       return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true && item.IsDetain == false);
       // return this.TheoryMarksList?.every(item => item.IsInternalAssesmentCheckecd == true);
- 
+
     } else if (this.InternalPracticalID == 1) {
       var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true && item.IsDetain == false);
       // var isallcheck = this.TheoryMarksList?.every(item => item.IsPracticalChecked == true);
@@ -264,7 +264,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
     //debugger
     // Filter the TheoryMarksList to get only the items where Marked is true
-    if (StudentExamPaperMarksID == 0 && isFinalSubmit == false ) {
+    if (StudentExamPaperMarksID == 0 && isFinalSubmit == false) {
       var filtered = this.TheoryMarksList.filter(x => x.Marked == true);
     } else {
       var filtered = this.TheoryMarksList.filter(x => x.Marked == true && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
@@ -321,7 +321,7 @@ export class InternalPracticalStudentComponent implements OnInit {
           return;
         }
 
-        if (x.IsPresentInternalAssisment == 0 && x.ObtainedInternalAssisment>0) {
+        if (x.IsPresentInternalAssisment == 0 && x.ObtainedInternalAssisment > 0) {
           this.toastr.error('Please update Status to Present/Absent');
           return;
         }
@@ -403,13 +403,13 @@ export class InternalPracticalStudentComponent implements OnInit {
       this.loaderService.requestStarted();
       await this.InternalPracticalStudentService.UpdateSaveData(array, this.searchRequest.InternalPracticalID)
         .then(async (data: any) => {
-          
+
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
             if (array.length > 1) {
               await this.GetTheoryMarksList();
             } else {
-              array.forEach((x:any) => {
+              array.forEach((x: any) => {
                 x.Marked = this.AllInTableSelect;
               }
               )
@@ -447,8 +447,8 @@ export class InternalPracticalStudentComponent implements OnInit {
     this.searchRequest.StudentID = 0;
     this.searchRequest.SubjectID = 0;
     this.searchRequest.RollNo = '',
-    this.searchRequest.InstituteID=0;
-      this.TheoryMarksList = [];
+      this.searchRequest.InstituteID = 0;
+    this.TheoryMarksList = [];
 
   }
 
@@ -486,7 +486,7 @@ export class InternalPracticalStudentComponent implements OnInit {
     this.paginatedInTableData = [...this.TheoryMarksList].slice(this.startInTableIndex, this.endInTableIndex);
     this.loaderService.requestEnded();
   }
-  
+
   previousInTablePage() {
     if (this.currentInTablePage > 1) {
       this.currentInTablePage--;
@@ -557,7 +557,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.TheoryMarksList.forEach(x => {
-      if(!x.IsDetain) {
+      if (!x.IsDetain) {
         x.Marked = this.AllInTableSelect;
       }
       // x.Marked = this.AllInTableSelect;
@@ -602,7 +602,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   }
 
   async onStatusPracticalChange(dOC: any, isGetAll: boolean = false) {
-    
+
 
     if (this.paginatedInTableData.some((x: any) => x.IsPresentPractical == 4)) {
       this.isAnyUFMSelected = true
@@ -619,7 +619,7 @@ export class InternalPracticalStudentComponent implements OnInit {
       dOC.Remark = '';
     }
 
-    if(isGetAll == false && dOC.IsPresentPractical != 1) {
+    if (isGetAll == false && dOC.IsPresentPractical != 1) {
       dOC.ObtainedPractical = 0;
     }
     /*  this.Isremarkshow = this.request.VerificationDocumentDetailList.some((x: any) => x.Status == EnumVerificationAction.Revert);*/
@@ -628,7 +628,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   public file!: File;
   async onFilechange(event: any, Type: string, row: any) {
-    
+
     try {
 
       if (!row) {

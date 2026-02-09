@@ -50,9 +50,7 @@ export class CorrectedMeritListComponent {
   public titleDDLBranchTrade: string = ''
   meritMultiSelected: boolean = false;
   decryptedIdsArray: any[] = [];
-
-
-
+  public GenderList: any = [];
 
   constructor(
     private toastr: ToastrService,
@@ -110,6 +108,7 @@ export class CorrectedMeritListComponent {
       remark: ['', Validators.required],
     });
 
+    await this.GetGenderList();
     await this.GetAllfinalHostelStudentMeritlist();
     await this.GetBranchMaster();
     await this.GetSemesterMaster();
@@ -118,9 +117,27 @@ export class CorrectedMeritListComponent {
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
   get _CancelRequestFormGroup() { return this.CancelRequestFormGroup.controls; }
 
+  async GetGenderList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.GetCommonMasterData('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+        }, (error: any) => console.error(error)
+      );
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   
   async GetAllfinalHostelStudentMeritlist() {
-    debugger
     try {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;
@@ -337,7 +354,14 @@ export class CorrectedMeritListComponent {
   }
 
   async onFinalMeritList() {
-    debugger
+    if(this.Searchrequest.Gender == 0) {
+      this.toastr.error("Please Select Gender");
+      return;
+    }
+    if(this.StudentReqListList?.length == 0) {
+      this.toastr.error("No data found");
+      return;
+    }
     try {
 
       this.Swal2.Confirmation("Are you sure you want to Final Publish Merit List?", async (result: any) => {

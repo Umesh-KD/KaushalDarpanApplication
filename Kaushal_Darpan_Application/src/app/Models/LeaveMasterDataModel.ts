@@ -17,6 +17,10 @@ export class LeaveMaster extends RequestBaseModel {
   TotalDays: number = 0;           // changed decimal to number and initialized
   IsHeadQuarter: boolean = false;  // boolean should be true/false
   LeaveTypeID: number = 0;
+  txtIsHeadQuarterAddress: string='';
+  txtIsHeadQuarterMobileNo: string='';
+  UploadDoc?:string='';
+  DisUploadDoc?:string='';
 }
 export class LeaveMasterSearchModel extends RequestBaseModel{
   Name: string = '';
@@ -26,4 +30,16 @@ export class LeaveMasterSearchModel extends RequestBaseModel{
   StaffID: number = 0;
   From_Date: string = '';
   To_Date: string = '';
+  StaffTypeID?:number=0;
+  Action?:string='';
+  LeaveID?: number = 0;
+  CalenderYearID?:number=0;
+  }
+
+
+  export class CreditLeaveModel extends RequestBaseModel {
+    StaffID: number = 0;
+    StaffTypeID:number=0;
+    ModifyBy: number = 0;
+    InstituteID: number = 0;
   }

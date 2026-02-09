@@ -46,6 +46,7 @@ export class ListItiTradeComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  TradeTypeId: number = 0;
   //end table feature default
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -56,7 +57,8 @@ export class ListItiTradeComponent {
     private router: Router,
     private routers: ActivatedRoute,
     private modalService: NgbModal,
-    private Swal2: SweetAlert2) {
+    private Swal2: SweetAlert2
+    , private route: ActivatedRoute) {
   }
 
   async ngOnInit()
@@ -70,7 +72,19 @@ export class ListItiTradeComponent {
 
     await this.GetTradeTypesList();
     await this.GetTradeListDDL();
+
+
+    this.route.queryParams.subscribe(params => {
+      this.TradeTypeId = +params['TradeTypeId']; 
+
+      if (this.TradeTypeId) {
+        this.searchRequest.TradeTypeId = this.TradeTypeId;
+      }
+    });
+   // this.getTradeList();
   }
+
+
 
   async GetTradeTypesList()
   {

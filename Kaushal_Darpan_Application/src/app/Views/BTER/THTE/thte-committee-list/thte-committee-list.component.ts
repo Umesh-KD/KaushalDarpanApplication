@@ -84,6 +84,9 @@ export class THTECommitteeListComponent {
      
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID
       this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId
+      this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+      
       await this.teacherHigherEducationApplicationService.GetCommitteeAllData(this.searchRequest).then((data: any) => {
      
         data = JSON.parse(JSON.stringify(data));

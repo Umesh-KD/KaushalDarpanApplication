@@ -6,7 +6,7 @@ export class CustomizeReportDataModels {
 export class CustomizeReportSearchModel {
   
 
-
+  public SchemeID: number = 0;
 }
 
 export class CustomizeReportCoulmnSearchModel {
@@ -30,7 +30,7 @@ export class CustomizeReportCoulmnSearchModel {
   public Type: number = 0;
   public ReportFlagID: number = 0;
   public action :string=''
- 
+
   
 
 

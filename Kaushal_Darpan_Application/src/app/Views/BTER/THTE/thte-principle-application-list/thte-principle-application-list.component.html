@@ -85,6 +85,7 @@
             <th class="text-left">Applied Institute</th>
             <th class="text-left">Applied Course</th>
             <th class="text-left">Status</th>
+            <th class="text-left">Remark</th>
           </tr>
         </thead>
         <tbody>
@@ -103,9 +104,13 @@
             <td>{{row.SSOID}}</td>
             <td align="left">{{row.DOB | date: 'dd-MM-yyyy'}}</td>
             <td align="left">{{row.JoiningDate | date: 'dd-MM-yyyy'}}</td>
-            <td align="left">{{row.AppliedInstitute}}</td>
+            <td >
+              <a href="javascript:void(0);" type="button" class="btn bg-primary text-white" title="History"
+                 (click)="ApplyCollegelist(MyModel_UserInstituteHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>
+            </td>
             <td align="left">{{row.AppliedCourseName}}</td>
             <td align="left">{{row.StatusName}}</td>
+            <td align="left">{{row.Remark}}</td>
           </tr>
         </tbody>
       </table>
@@ -127,5 +132,72 @@
   </div>
 </div>
 
+
+
+
+<ng-template #MyModel_UserInstituteHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+
+        <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+
+      <div class="card-body">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Applied Institute List</b>
+          <div class="flex justify-end flex-wrap items-center">
+          </div>
+        </div>
+
+
+        <!--{{UserRequestHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+
+
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Institute Name</th>
+                <th class="text-left">Distance(KM)</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Remarks</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of UserApplyInstituteList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.CollegeName }}</td>
+                <td align="left">{{ row.Distance }}</td>
+                <td align="left">{{ row.StatusName }}</td>
+                <td align="left">{{ row.Remark }}</td>
+
+              </tr>
+              <tr *ngIf="UserRequestHistoryList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalRequestHistorylist()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
 <!-- otp -->
 <app-otpmodal #otpModal></app-otpmodal>
+
+

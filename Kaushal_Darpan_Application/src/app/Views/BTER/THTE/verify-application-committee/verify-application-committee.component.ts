@@ -6,12 +6,13 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { PrincipleApplicationListSearchModel, THTE_DDL, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Committee } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel, THTE_ApplicationSearchModel, THTE_DDL, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Committee } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-verify-application-committee',
@@ -21,20 +22,22 @@ import { TeacherHigherEducationApplicationService } from '../../../../Services/t
 })
 export class VerifyApplicationCommitteeComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
-
+  public requestSearch = new THTE_ApplicationSearchModel();
   public searchRequest = new PrincipleApplicationListSearchModel();
   public dropdownRequest = new THTE_DropdownDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new UpdateApplicationStatusDataModel_Committee();
-
+  public Selecteditem: any = {}
   public ApplicationListData: any = [];
   public StatusListDDL: any = [];
+  public UserApplyInstituteList: any = [];
   public UpdateStatusListDDL: any = [];
   public CommitteeListDDL: any = [];
+  public SelectedInstituteId: number | null = null;
 
   public status: number = 0;
   public CommitteeID: number = 0;
-
+  modalReference: NgbModalRef | undefined;
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -60,6 +63,7 @@ export class VerifyApplicationCommitteeComponent {
     public teacherHigherEducationApplicationVerificationService: TeacherHigherEducationApplicationVerificationService,
     private router: Router,
     public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
+    private modalService: NgbModal,
 
   ) { }
 
@@ -73,6 +77,9 @@ export class VerifyApplicationCommitteeComponent {
 
   async GetCommitteeListDDL() {
     try {
+      this.requestDDl.UserID = this.sSOLoginDataModel.UserID;
+      this.requestDDl.RoleID = this.sSOLoginDataModel.RoleID;
+      
       await this.teacherHigherEducationApplicationService.GetCommitteeDDL(this.requestDDl)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -374,17 +381,36 @@ export class VerifyApplicationCommitteeComponent {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
   //checked all (replace org. list here)
+  // selectInTableAllCheckbox() {
+  //   this.paginatedInTableData.forEach((row: any) => {
+  //     row.Selected = this.AllInTableSelect;
+
+  //     // Direct update to the original list
+  //     const item = this.ApplicationListData.find((x: any) => x.THTEAppID === row.THTEAppID);
+  //     if (item) {
+  //       item.Selected = this.AllInTableSelect;
+  //     }
+  //   });
+  // }
   selectInTableAllCheckbox() {
-    this.paginatedInTableData.forEach((row: any) => {
+  this.paginatedInTableData.forEach((row: any) => {
+    // Apply the same condition used in your HTML *ngIf
+    const isEligible = row.SelectedInstitute != '' && row.SelectedInstitute != null;
+
+    if (isEligible) {
       row.Selected = this.AllInTableSelect;
 
-      // Direct update to the original list
+      // Update the master list
       const item = this.ApplicationListData.find((x: any) => x.THTEAppID === row.THTEAppID);
       if (item) {
         item.Selected = this.AllInTableSelect;
       }
-    });
-  }
+    } else {
+      // Optional: Ensure ineligible rows remain unselected
+      row.Selected = false; 
+    }
+  });
+}
 
   // Select/Deselect Single
   selectInTableSingleCheckbox(isSelected: boolean, row: any) {
@@ -408,4 +434,97 @@ export class VerifyApplicationCommitteeComponent {
     this.AllInTableSelect = this.paginatedInTableData.every(r => r.Selected === true);
   }
   // end table feature
-}
+
+  async ApplyCollegelist(model: any, THTEAppID: number,row:any) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.requestSearch.THTEAppID = THTEAppID
+      this.Selecteditem=row
+
+
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplyInstituteList(this.requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserApplyInstituteList = data.Data;
+          /*     this.UserApplyInstituteList = this.UserApplyInstituteList.filter((item: any) => item.StatusID == 1340 || item.StatusID == 1345)*/
+       
+
+          const selected = this.UserApplyInstituteList.find(
+            (e: any) => e.SelectedInstitute === 1
+          );
+
+          if (selected) {
+            this.SelectedInstituteId = selected.ID; // acd.ID
+          }
+
+
+
+
+        }, (error: any) => console.error(error))
+
+
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async CloseModalRequestHistorylist() {
+    this.Selecteditem = {}
+    this.modalService.dismissAll()
+  }
+  onRadioChange(row: any): void {
+   
+
+    this.UserApplyInstituteList.forEach(
+      (r: any) => r.SelectedInstitute = false
+    );
+
+    row.SelectedInstitute = true;
+  }
+
+
+
+  async SaveSelectedInstitute(remark: string) {
+    debugger
+    try {
+      let selected = this.UserApplyInstituteList.filter((x: any) => x.SelectedInstitute === true)
+      if (selected.length == 0) {
+        this.toastr.warning("Please Select Institute")
+        return
+      }
+
+      this.UserApplyInstituteList.forEach((e: any) => {
+        e.StatusID = e.SelectedInstitute === true ? 1343 : 1342,
+        e.UserID = this.sSOLoginDataModel.UserID
+      });
+
+
+      await this.teacherHigherEducationApplicationService.UpdateInstitutestatus(this.UserApplyInstituteList)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.status = 0;
+            this.CommitteeID = 0;
+            this.CloseModalRequestHistorylist();
+            this.request = new UpdateApplicationStatusDataModel_Committee();
+            await this.ApplicationList_ForCommittee_THTE();
+          }
+        })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  }
+
+
+

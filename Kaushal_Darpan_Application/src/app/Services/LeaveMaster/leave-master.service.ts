@@ -6,7 +6,7 @@ import { CommonSubjectMasterSearchModel } from '../../Models/CommonSubjectMaster
 import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel';
 import { HrMasterDataModel, HrMasterSearchModel, HrMaster_Action } from '../../Models/HrMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { LeaveMaster, LeaveMasterSearchModel } from '../../Models/LeaveMasterDataModel';
+import { CreditLeaveModel, LeaveMaster, LeaveMasterSearchModel } from '../../Models/LeaveMasterDataModel';
 
 
 @Injectable({
@@ -94,4 +94,41 @@ export class LeaveMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetRemainingLeave(searchRequest: LeaveMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetRemainingLeave`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetLeaveCreditStaffData(searchRequest: LeaveMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetLeaveCreditStaffData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
+  public async GetStaffWithLeaveBalance(searchRequest: LeaveMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStaffWithLeaveBalance`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+    //save data
+    public async CreditStaffLeave(request: CreditLeaveModel[]) {
+      var body = JSON.stringify(request);
+  
+      return await this.http.post(`${this.APIUrl}/Save_CreditStaffLeave`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+  
 }
