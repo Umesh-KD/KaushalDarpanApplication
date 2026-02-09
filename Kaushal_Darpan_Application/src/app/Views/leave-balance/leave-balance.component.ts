@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {  CreditLeaveModel, LeaveMasterSearchModel } from '../../Models/LeaveMasterDataModel';
+import { LeaveMasterSearchModel } from '../../Models/LeaveMasterDataModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { LeaveMasterService } from '../../Services/LeaveMaster/leave-master.service';
@@ -13,16 +13,15 @@ import { EnumStatus } from '../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 @Component({
-  selector: 'app-leave-credit',
+  selector: 'app-leave-balance',
   standalone: false,
-  templateUrl: './leave-credit.component.html',
-  styleUrl: './leave-credit.component.css'
+  templateUrl: './leave-balance.component.html',
+  styleUrl: './leave-balance.component.css'
 })
-export class LeaveCreditComponent {
+export class LeaveBalanceComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public StaffLeaveTrnList: any = [];
   public CalenderYearList:any=[];
-  public StaffIDList:CreditLeaveModel[]=[];
 
   public Table_SearchText: string = "";
   public searchRequest = new LeaveMasterSearchModel();
@@ -98,64 +97,8 @@ export class LeaveCreditComponent {
 
   }
 
-  async Save_CreditStaffLeave() {
-    debugger
-    let dyMsg = 'Credit';
-    // if (this.status == 1345) {
-    //   dyMsg = "Approve";
-    // } else {
-    //   dyMsg = "Reject";
-    // }
-    this.Swal2.Confirmation(`Are you sure you want to ${dyMsg}?`,
-    async (result: any) => {
-      
-      if (result.isConfirmed) {
-        try {
-          // this.StaffIDList = this.StaffLeaveTrnList.map((x:any) => ({
-          //   StaffID: x.StaffID,
-          //   StaffTypeID:x.StaffTypeID,
-          //   ModifyBy: this.sSOLoginDataModel.UserID,
-          //   DepartmentID:this.sSOLoginDataModel.DepartmentID
-          // }));
-          this.StaffIDList = Array.from(
-            new Map(
-              this.StaffLeaveTrnList.map((x: any) => [
-                x.StaffID,
-                {
-                  StaffID: x.StaffID,
-                  StaffTypeID: x.StaffTypeID,
-                  ModifyBy: this.sSOLoginDataModel.UserID,
-                  DepartmentID: this.sSOLoginDataModel.DepartmentID,
-                  FinancialYearID:this.sSOLoginDataModel.FinancialYearID,
-                  RoleID:this.sSOLoginDataModel.RoleID
-                } as CreditLeaveModel
-              ])
-            ).values()
-          ) as CreditLeaveModel[];
 
-          await this.LeaveMasterService.CreditStaffLeave(this.StaffIDList)
-            .then(async (data: any) => {
-              data = JSON.parse(JSON.stringify(data));
-              if(data.State === EnumStatus.Success) {
-                this.toastr.success(data.Message); 
-                await this.GetAllData();       
-              }
-            })
-        }
-        catch (ex) {
-          console.log(ex);
-        }
-        finally {
-          setTimeout(() => {
-            this.loaderService.requestEnded();
-          }, 200);
-        }
-      }
-    })
-    
-  }
-
-
+  
 
 
   maskMobileNumber(mobile: string): string {
@@ -176,9 +119,8 @@ export class LeaveCreditComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
-      this.searchRequest.Action='_getLeaveCreditStaffData';
       this.loaderService.requestStarted();
-      await this.LeaveMasterService.GetLeaveCreditStaffData(this.searchRequest)
+      await this.LeaveMasterService.GetStaffWithLeaveBalance(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
@@ -198,6 +140,7 @@ export class LeaveCreditComponent {
     }
   }
 
+
   // get all data
   async ClearSearchData() {
     this.searchRequest.Name = '';
@@ -206,49 +149,7 @@ export class LeaveCreditComponent {
     // await this.GetAllData();
   }
 
-  // delete by id
-  async DeleteById(PlacementCompanyID: number) {
-    this.Swal2.Confirmation("Do you want to delete?",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            //Show Loading
-            this.loaderService.requestStarted();
-
-            await this.LeaveMasterService.DeleteById(PlacementCompanyID, this.sSOLoginDataModel.UserID)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                console.log(data);
-
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
-
-                if (this.State == EnumStatus.Success) {
-                  this.toastr.success(this.Message)
-                  //reload
-                  await this.GetAllData();
-                }
-                else {
-                  this.toastr.error(this.ErrorMessage)
-                }
-
-              }, (error: any) => console.error(error)
-              );
-          }
-          catch (ex) {
-            console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
-        }
-      });
-  }
-
+ 
 
   //table feature
   calculateInTableTotalPage() {

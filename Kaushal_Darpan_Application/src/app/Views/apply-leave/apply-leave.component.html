@@ -28,7 +28,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Leave Type  <span class="StarMarking">*</span></label>
             <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.LeaveID" formControlName="LeaveID" (change)="calculateDays()">
-              <option value="0">Choose Option</option>
+              <option value="0">-- Select --</option>
               <option *ngFor="let item of LeaveTypeList" [value]="item.ID">{{item.Name}}</option>
             </select>
             <div *ngIf="isSubmitted && _LeaveMasterFormGroup.LeaveID.errors" class="text-danger">
@@ -38,13 +38,13 @@
 
           <div *ngIf="request.LeaveID!=0">   
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remaining Leave</label>
-            <input type="text" [(ngModel)]="RemainingLeave" formControlName="RemainingLeave" class="form-input"/>
+            <input type="text" [(ngModel)]="LeaveBlance" formControlName="RemainingLeave" class="form-input"/>
           </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Leave Type F S F <span class="StarMarking">*</span></label>
             <select class="form-select" id="LeaveTypeID" name="LeaveTypeID" [(ngModel)]="request.LeaveTypeID" formControlName="LeaveTypeID" (change)="calculateDays()">
-              <option value="0">Choose Option</option>
+              <option value="0">-- Select --</option>
               <option *ngFor="let item of LeaveTypeFSFList" [value]="item.ID">{{item.Name}}</option>
             </select>
             <div *ngIf="isSubmitted && _LeaveMasterFormGroup.LeaveTypeID.errors" class="text-danger">

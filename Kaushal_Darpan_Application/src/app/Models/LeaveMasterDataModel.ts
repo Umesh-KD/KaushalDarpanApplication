@@ -35,3 +35,11 @@ export class LeaveMasterSearchModel extends RequestBaseModel{
   LeaveID?: number = 0;
   CalenderYearID?:number=0;
   }
+
+
+  export class CreditLeaveModel extends RequestBaseModel {
+    StaffID: number = 0;
+    StaffTypeID:number=0;
+    ModifyBy: number = 0;
+    InstituteID: number = 0;
+  }

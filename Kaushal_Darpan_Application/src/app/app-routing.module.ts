@@ -987,7 +987,9 @@ const routes: Routes = [
       { path: 'LeaveValidation', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
       { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
       { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
+      { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
       
+
       { path: 'ItiCollegeReport', loadChildren: () => import('./Views/ITI/iti-college-report/iti-college-report.module').then(m => m.ItiCollegeReportModule) },
 
       { path: 'RegistrarDashboard', loadChildren: () => import('./Views/registrar-dashboard/registrar-dashboard.module').then(m => m.RegistrarDashboardModule) },

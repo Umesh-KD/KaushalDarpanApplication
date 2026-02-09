@@ -797,8 +797,14 @@ export enum EnumLeaveType {
     BereavementLeave = 1,
     BirthdayLeave = 2,
     SickLeave = 3,
-    CasualLeave = 4,
-    PrivilegeLeave = 5
+    CasualLeave_Tech = 4,
+    PrivilegeLeave_Tech = 5,
+    AcademicLeave_Tech=6,
+    HalfPayLeave_Tech=7,
+    CasualLeave_NonTech = 8,
+    PrivilegeLeave_NonTech = 9,
+    HalfPayLeave_NonTech=10,
+  
 }
 
 export const MONTH_LIST = [
