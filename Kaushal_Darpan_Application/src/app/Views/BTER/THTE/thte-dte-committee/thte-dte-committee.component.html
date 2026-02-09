@@ -11,27 +11,27 @@
         </div>
         <div>
 
-          <form *ngIf="InspectionFormGroup" [formGroup]="InspectionFormGroup">
+          <form *ngIf="DTECommitteeFormGroup" [formGroup]="DTECommitteeFormGroup">
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Committee Name</label>
-                <input type="text" formControlName="InspectionTeamName" class="form-input" 
-                    [(ngModel)]="request.InspectionTeamName" placeholder="Committee Name" [readonly]="isFormReadOnly">
-                <div *ngIf="isFormSubmitted && _inspectionForm.InspectionTeamName.errors" class="text-danger">
-                  <p *ngIf="_inspectionForm.InspectionTeamName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                <input type="text" formControlName="DTECommitteeName" class="form-input" 
+                    [(ngModel)]="request.DTECommitteeName" placeholder="Committee Name" [readonly]="isFormReadOnly">
+                <div *ngIf="isFormSubmitted && _DTECommitteeFormGroup.DTECommitteeName.errors" class="text-danger">
+                  <p *ngIf="_DTECommitteeFormGroup.DTECommitteeName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
               </div>
             </div>
           </form>
 
-          <form *ngIf="InspectionMemberFormGroup" [formGroup]="InspectionMemberFormGroup">
+          <form *ngIf="DTECommitteeMemberFormGroup" [formGroup]="DTECommitteeMemberFormGroup">
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
                 <input type="text" formControlName="SSOID" class="form-input" [(ngModel)]="requestMember.SSOID" placeholder="SSO ID">
-                <div *ngIf="isFormSubmitted && _inspectionMemberForm.SSOID.errors" class="text-danger">
-                  <p *ngIf="_inspectionMemberForm.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                <div *ngIf="isFormSubmitted && _DTECommitteeMemberFormGroup.SSOID.errors" class="text-danger">
+                  <p *ngIf="_DTECommitteeMemberFormGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
               </div>
             </div>
@@ -64,7 +64,7 @@
 
           </thead>
           <tbody>
-            <tr *ngFor="let row of request.InspectionMemberDetails; let idx = index;">
+            <tr *ngFor="let row of request.DTECommitteeMemberDetails; let idx = index;">
               <td class="text-left">{{idx+1}}</td>
               <td class="text-left">{{row.StaffName}}</td>
               <!--<td class="text-left">{{row.StaffID}}</td>-->

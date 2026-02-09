@@ -35,6 +35,7 @@ export class BterEMAddStaffDetailsComponent {
   public userID:number=0;
   public InstituteMasterDDLList: any = [];
   public DesignationMasterDDLList: any = [];
+  public EmployeeQualificationDDLList:any=[];
   public RoleMasterDDLList: any = [];
   public StaffTypeMasterDDLList: any = [];
   public CourseMasterDDL: any = [];
@@ -362,6 +363,15 @@ export class BterEMAddStaffDetailsComponent {
           console.log("GenderList", this.GenderList);
         }, (error: any) => console.error(error)
         );
+
+        debugger
+        // EmployeeQualificationDDLList
+        await this.commonMasterService.GetEmployeeQualificationDDL().then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.EmployeeQualificationDDLList = data.Data;
+          // this.EmployeeQualificationDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.request.StaffTypeID);
+        }, error => console.error(error))
+
     } catch (error) {
       console.error(error);
     } finally {
@@ -893,14 +903,17 @@ export class BterEMAddStaffDetailsComponent {
   
     let years = today.getFullYear() - joining.getFullYear();
   
-    // adjust if birthday/anniversary not reached this year
-    // const m = today.getMonth() - joining.getMonth();
-  
-    // if (m < 0 || (m === 0 && today.getDate() < joining.getDate())) {
-    //   years--;
-    // }
+    const m = today.getMonth() - joining.getMonth();
 
-    this.request.Experience=  years.toString();
+    // subtract 1 year if full year not completed
+    if (m < 0 || (m === 0 && today.getDate() < joining.getDate())) {
+      years--;
+    }
+  
+    // prevent negative
+    if (years < 0) years = 0;
+  
+    this.request.Experience = years.toString();
   
     console.log("Total Experience (Years):", years);
 

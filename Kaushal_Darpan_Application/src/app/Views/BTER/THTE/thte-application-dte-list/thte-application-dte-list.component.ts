@@ -11,6 +11,9 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
+import { StaffDetailsDataModel } from '../../../../Models/StaffMasterDataModel';
 
 @Component({
   selector: 'app-thte-application-dte-list',
@@ -25,8 +28,9 @@ export class THTEApplicationDteListComponent {
   public dropdownRequest = new THTE_DropdownDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public _DTEGenrateOrder = new ApplicationGenrateOrderByDteListSearchModel();
+  staffDetailsFormData = new StaffDetailsDataModel();
 
-
+  modalReference: NgbModalRef | undefined;
   public ApplicationListData: any = [];
   public ApplicationListOrderData: any = [];
   public StatusListDDL: any = [];
@@ -34,6 +38,9 @@ export class THTEApplicationDteListComponent {
   public enumRole = EnumRole;
 
   public status: number = 0;
+  public isModalOpen: boolean = false;
+  Dis_CommitteeDocs: string = ''
+  CommitteeDocs: string = ''
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -58,6 +65,8 @@ export class THTEApplicationDteListComponent {
     public appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationVerificationService: TeacherHigherEducationApplicationVerificationService,
     private router: Router,
+    private modalService: NgbModal,
+    private staffMasterService: StaffMasterService,
   ) { }
 
   async ngOnInit () { 
@@ -236,6 +245,11 @@ export class THTEApplicationDteListComponent {
       return;
     }
 
+    if((this.searchRequest.status == 1344 && this.sSOLoginDataModel.RoleID === EnumRole.CommitteInchargeDTE) && 
+        (this.CommitteeDocs == null || this.CommitteeDocs == '')) {
+      this.toastr.warning('Please upload committee document.');
+      return;
+    }
 
     let dyMsg = '';
     if (this.status == 1353) {
@@ -291,7 +305,9 @@ export class THTEApplicationDteListComponent {
         x.ModifyBy = this.sSOLoginDataModel.UserID,
           x.status = this.status,
           x.Remark = remark,
-          x.RoleID = this.sSOLoginDataModel.RoleID  
+          x.RoleID = this.sSOLoginDataModel.RoleID,
+          x.CommitteeDocs = this.CommitteeDocs,
+          x.Dis_CommitteeDocs = this.Dis_CommitteeDocs  
       })
 
       await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_DTE_THTE(selected)
@@ -302,7 +318,7 @@ export class THTEApplicationDteListComponent {
           this.status = 0
           this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
           this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
-          this.GenrateOrder();
+          await this.GenrateOrder();
           await this.ApplicationList_ForPrinciple_THTE();
         }
       })
@@ -311,6 +327,195 @@ export class THTEApplicationDteListComponent {
     }
   }
 
+  async OnConfirm(content: any, ID: number) {
+    this.modalReference = this.modalService.open(content, { size: 'xl', backdrop: 'static' });
+    this.isModalOpen = true;  // Open the modal
+    this.GetByID(ID)
+  }
+
+  ClosePopup(): void {
+    this.modalReference?.close();  // Close the modal
+  }
+
+  async GetByID(id: number) {
+    
+    try {
+
+      this.loaderService.requestStarted();
+
+      await this.staffMasterService.GetByID(id, this.sSOLoginDataModel.DepartmentID)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data, 'FFFFF');
+          this.staffDetailsFormData = data['Data']
+          this.staffDetailsFormData.StaffID = data['Data']["StaffID"];
+          this.staffDetailsFormData.StaffTypeID = data['Data']["StaffTypeID"];
+          this.staffDetailsFormData.Name = data['Data']["Name"];
+          this.staffDetailsFormData.SSOID = data['Data']["SSOID"];
+          this.staffDetailsFormData.AdharCardNumber = data['Data']["AdharCardNumber"];
+          this.staffDetailsFormData.RoleID = data['Data']["RoleID"];
+          this.staffDetailsFormData.DesignationID = data['Data']["DesignationID"];
+          this.staffDetailsFormData.StateID = data['Data']["StateID"];
+          /*   await this.ddlState_Change();*/
+          this.staffDetailsFormData.DistrictID = data['Data']["DistrictID"];
+
+          this.staffDetailsFormData.Address = data['Data']["Address"];
+
+          this.staffDetailsFormData.CourseID = data['Data']["CourseID"];
+
+          /*  await this.ddlStream_Change();*/
+          this.staffDetailsFormData.SubjectID = data['Data']["SubjectID"];
+          this.staffDetailsFormData.Email = data['Data']["Email"];
+          this.staffDetailsFormData.MobileNumber = data['Data']["MobileNumber"];
+          this.staffDetailsFormData.HigherQualificationID = data['Data']["HigherQualificationID"];
+
+          if (data['Data']["AdharCardPhoto"] != null) {
+            this.staffDetailsFormData.AdharCardPhoto = data['Data']["AdharCardPhoto"];
+          } else {
+            this.staffDetailsFormData.AdharCardPhoto = ''
+          }
+          if (data['Data']["Dis_AdharCardNumber"] != null) {
+            this.staffDetailsFormData.Dis_AdharCardNumber = data['Data']["Dis_AdharCardNumber"];
+          } else {
+            this.staffDetailsFormData.Dis_AdharCardNumber = ''
+          }
+
+          if (data['Data']["ProfilePhoto"] != null) {
+            this.staffDetailsFormData.ProfilePhoto = data['Data']["ProfilePhoto"];
+          } else {
+            this.staffDetailsFormData.ProfilePhoto = ''
+          }
+          if (data['Data']["Dis_ProfileName"] != null) {
+            this.staffDetailsFormData.Dis_ProfileName = data['Data']["Dis_ProfileName"];
+          } else {
+            this.staffDetailsFormData.Dis_ProfileName = ''
+          }
+
+          if (data['Data']["PanCardPhoto"] != null) {
+            this.staffDetailsFormData.PanCardPhoto = data['Data']["PanCardPhoto"];
+          } else {
+            this.staffDetailsFormData.PanCardPhoto = ''
+          }
+          if (data['Data']["Dis_PanCardNumber"] != null) {
+            this.staffDetailsFormData.Dis_PanCardNumber = data['Data']["Dis_PanCardNumber"];
+          } else {
+            this.staffDetailsFormData.Dis_PanCardNumber = ''
+          }
+
+          if (data['Data']["Certificate"] != null) {
+            this.staffDetailsFormData.Certificate = data['Data']["Certificate"];
+          } else {
+            this.staffDetailsFormData.Certificate = ''
+          }
+          if (data['Data']["Dis_Certificate"] != null) {
+            this.staffDetailsFormData.Dis_Certificate = data['Data']["Dis_Certificate"];
+          } else {
+            this.staffDetailsFormData.Dis_Certificate = ''
+          }
+
+          this.staffDetailsFormData.PanCardNumber = data['Data']["PanCardNumber"];
+
+          this.staffDetailsFormData.DateOfBirth = this.dateSetter(data['Data']['DateOfBirth'])
+          this.staffDetailsFormData.DateOfAppointment = this.dateSetter(data['Data']['DateOfAppointment'])
+          this.staffDetailsFormData.DateOfJoining = this.dateSetter(data['Data']['DateOfJoining'])
+          this.staffDetailsFormData.Experience = data['Data']["Experience"];
+
+          this.staffDetailsFormData.SpecializationSubjectID = data['Data']["SpecializationSubjectID"];
+          this.staffDetailsFormData.AnnualSalary = data['Data']["AnnualSalary"];
+          this.staffDetailsFormData.PFDeduction = data['Data']["PFDeduction"];
+          this.staffDetailsFormData.ResearchGuide = data['Data']["ResearchGuide"];
+          this.staffDetailsFormData.StaffStatus = data['Data']["StaffStatus"];
+          this.staffDetailsFormData.EduQualificationDetailsModel = data['Data']["EduQualificationDetailsModel"];
+          this.staffDetailsFormData.Pincode = data['Data']['Pincode']
+
+          this.staffDetailsFormData.BankName = data['Data']['BankName']
+          this.staffDetailsFormData.BankAccountNo = data['Data']['BankAccountNo']
+          this.staffDetailsFormData.BankAccountName = data['Data']['BankAccountName']
+          this.staffDetailsFormData.IFSCCode = data['Data']['IFSCCode']
+
+
+          if (this.staffDetailsFormData.StaffSubjectListModel != null)
+            this.staffDetailsFormData.StaffSubjectListModel.forEach(e => {
+              e.SubjectType = e.IsOptional ? 'Optional' : 'Teaching'
+
+            })
+          console.log(this.staffDetailsFormData.StaffSubjectListModel);
+
+          const btnSave = document.getElementById('btnSave');
+          if (btnSave) btnSave.innerHTML = "Update";
+
+          const btnReset = document.getElementById('btnReset');
+          if (btnReset) btnReset.innerHTML = "Cancel";
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  dateSetter(date: any){
+    const Dateformat = new Date(date);
+    const year = Dateformat.getFullYear();
+    const month = String(Dateformat.getMonth() + 1).padStart(2, '0');
+    const day = String(Dateformat.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate
+  }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type == 'application/pdf') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png file')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              if (Type == "CommitteeDoc") {
+                this.Dis_CommitteeDocs = data['Data'][0]["Dis_FileName"];
+                this.CommitteeDocs = data['Data'][0]["FileName"];
+
+              }
+              event.target.value = null;
+            }
+            if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
+            }
+            else if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
 
   //table feature
   calculateInTableTotalPage() {

@@ -72,6 +72,7 @@ export class SSOLoginDataModel {
     public ShowSessionSelection: number = 0;
     public SelectedValue: number = 0;
     public DistrictID: number = 0;
+    public StaffTypeID?:number=0;
 
 }
 

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { CommitteeDataModel, CommitteeSearchModel, CommitteeStaffSSOIDSearchModel, TeacherHigherEducationApplicationRequestModel, TeacherHigherEducationApplicationSaveModel, THTE_ApplicationSearchModel, THTE_DDL } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { CommitteeDataModel, CommitteeSearchModel, CommitteeStaffSSOIDSearchModel, DTECommitteeDataModel, TeacherHigherEducationApplicationRequestModel, TeacherHigherEducationApplicationSaveModel, THTE_ApplicationSearchModel, THTE_DDL } from '../../Models/TeacherHigherEducationApplicationDataModel';
 import { BTER_EM_GetPersonalDetailByUserID } from '../../Models/BTER/BTER_EstablishManagementDataModel';
 
 
@@ -172,6 +172,29 @@ export class TeacherHigherEducationApplicationService {
   public async THTE_GetInstituteCommitteeList(request: any) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/THTE_GetInstituteCommitteeList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async THTE_GetDTECommitteeList(request: CommitteeSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/THTE_GetDTECommitteeList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async THTE_DTECommitteeSaveData(request: DTECommitteeDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/THTE_DTECommitteeSaveData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async THTE_GetDTECommitteeById(id: number, RoleID: number = 0) {
+    return await this.http.get(`${this.APIUrl}/THTE_GetDTECommitteeById/${id}/${RoleID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -853,6 +853,7 @@ const routes: Routes = [
       { path: 'PaperCountCustomizeReport', loadChildren: () => import('./Views/Reports/Paper-Count-Customize-Report/Paper-Count-Customize-Report.module').then(m => m.PaperCountCustomizeReportModule), title: 'Paper-Count-Customize-Report' },
       { path: 'PaperCountReport/:repType/:sem', loadChildren: () => import('./Views/Reports/Paper-Count-Report/Paper-Count-Report.module').then(m => m.PaperCountReportModule), title: 'Paper-Count-Report' },
       { path: 'PaperCountReport', loadChildren: () => import('./Views/Reports/Paper-Count-Report/Paper-Count-Report.module').then(m => m.PaperCountReportModule), title: 'Paper-Count-Report' },
+      { path: 'Miscellaneous-Report', loadChildren: () => import('./Views/Reports/Miscellaneous-Report/Miscellaneous-Report.module').then(m => m.MiscellaneousReportModule), title: 'Miscellaneous Report' },
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
 
       { path: 'AddItiCompanyMaster', loadChildren: () => import('./Views/ITI/ITICompanyMaster/additi-company-master/additi-company-module').then(m => m.ItiCompanyMasterModule) },
@@ -985,6 +986,9 @@ const routes: Routes = [
       { path: 'LeaveList', loadChildren: () => import('./Views/leave-list/leave-list.module').then(m => m.LeaveListModule) },
       { path: 'LeaveValidation', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
       { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
+      { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
+      { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
+      
 
       { path: 'ItiCollegeReport', loadChildren: () => import('./Views/ITI/iti-college-report/iti-college-report.module').then(m => m.ItiCollegeReportModule) },
 

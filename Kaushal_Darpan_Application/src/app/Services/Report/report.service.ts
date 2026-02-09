@@ -1792,6 +1792,17 @@ export class ReportService {
       ).toPromise();
   }
 
+
+
+  public async GetMiscellaneousReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetMiscellaneousReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+
+  }
+
 }
 
 

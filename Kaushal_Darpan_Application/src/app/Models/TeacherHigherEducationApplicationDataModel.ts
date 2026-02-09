@@ -94,6 +94,8 @@ export class UpdateApplicationStatusDataModel_Principle {
   public status?: number = 0;
   public Remark?: string = '';
   public RoleID?: string = '';
+  public CommitteeDocs?: string = '';
+  public Dis_CommitteeDocs?: string = '';
 }
 
 export class UpdateApplicationStatusDataModel_Committee {
@@ -197,4 +199,19 @@ export class CommitteeStaffSSOIDSearchModel {
   public SSOID: string = '';
   public RoleID: number = 0;
   public InstituteID: number = 0;
+}
+
+export class DTECommitteeDataModel extends RequestBaseModel {
+  public DTECommitteeID: number = 0;
+  public UserID: number = 0;
+  public DTECommitteeName: string = '';
+  public DTECommitteeMemberDetails: DTECommitteeMemberDetailsDataModel[] = [];
+}
+
+export class DTECommitteeMemberDetailsDataModel {
+  public CommitteeMemberID: number = 0
+  public SSOID: string = ''
+  public StaffID: number = 0
+  public IsIncharge: boolean = false
+  public StaffName: string = ''
 }
