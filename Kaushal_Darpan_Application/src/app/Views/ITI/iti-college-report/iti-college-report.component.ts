@@ -746,9 +746,9 @@ export class ItiCollegeReportComponent {
     try {
       debugger
       this.isSubmitted = true;
-      if (this.ReportForm.invalid) {
-        return
-      }
+      //if (this.ReportForm.invalid) {
+      //  return
+      //}
 
       //if (this.request.IsNewCollege == 1) {
       //  if (this.NewReportFormGroup.invalid) {
@@ -1100,7 +1100,7 @@ export class ItiCollegeReportComponent {
 
     }
 
-    if (this.request.UrbanRural == 0) {
+    if (this.request.UrbanRural == 0 || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
       this.ReportForm.controls['VillageID'].clearValidators();
       this.ReportForm.controls['GramPanchayatSamiti'].clearValidators();
       this.ReportForm.controls['PanchayatId'].clearValidators();
