@@ -174,7 +174,7 @@ export enum EnumRole {
   
   StoreKeeper_NCVT = 213,
   StoreKeeper_SCVT = 214,
-  
+  StoreOfficer = 249,
 
   DTE_TrainingT2_establishment = 215,
   DTETrainingT1Training = 216,

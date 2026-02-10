@@ -87,6 +87,7 @@ export class ITIStateTradeCertificateSearchModel {
   public ExamYearID: number = 0;
   public StudentID: number = 0;
   public TradeScheme: number = 0;
+  public ExamType: number = 0;
 
 }
 

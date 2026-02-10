@@ -381,17 +381,36 @@ export class VerifyApplicationCommitteeComponent {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
   //checked all (replace org. list here)
+  // selectInTableAllCheckbox() {
+  //   this.paginatedInTableData.forEach((row: any) => {
+  //     row.Selected = this.AllInTableSelect;
+
+  //     // Direct update to the original list
+  //     const item = this.ApplicationListData.find((x: any) => x.THTEAppID === row.THTEAppID);
+  //     if (item) {
+  //       item.Selected = this.AllInTableSelect;
+  //     }
+  //   });
+  // }
   selectInTableAllCheckbox() {
-    this.paginatedInTableData.forEach((row: any) => {
+  this.paginatedInTableData.forEach((row: any) => {
+    // Apply the same condition used in your HTML *ngIf
+    const isEligible = row.SelectedInstitute != '' && row.SelectedInstitute != null;
+
+    if (isEligible) {
       row.Selected = this.AllInTableSelect;
 
-      // Direct update to the original list
+      // Update the master list
       const item = this.ApplicationListData.find((x: any) => x.THTEAppID === row.THTEAppID);
       if (item) {
         item.Selected = this.AllInTableSelect;
       }
-    });
-  }
+    } else {
+      // Optional: Ensure ineligible rows remain unselected
+      row.Selected = false; 
+    }
+  });
+}
 
   // Select/Deselect Single
   selectInTableSingleCheckbox(isSelected: boolean, row: any) {

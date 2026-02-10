@@ -94,6 +94,8 @@ export class UpdateApplicationStatusDataModel_Principle {
   public status?: number = 0;
   public Remark?: string = '';
   public RoleID?: string = '';
+  public CommitteeDocs?: string = '';
+  public Dis_CommitteeDocs?: string = '';
 }
 
 export class UpdateApplicationStatusDataModel_Committee {

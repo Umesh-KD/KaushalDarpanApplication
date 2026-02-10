@@ -523,8 +523,8 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-   public async GetIssueItemListPermanent(EquipmentsId: number, ItemCategoryId: number) {
-    return await this.http.get(this.APIUrl + "/GetIssueItemListPermanent/" + EquipmentsId + "/" + ItemCategoryId, this.headersOptions)
+   public async GetIssueItemListPermanent(EquipmentsId: number, ItemCategoryId: number, TradeId: number) {
+    return await this.http.get(this.APIUrl + "/GetIssueItemListPermanent/" + EquipmentsId + "/" + ItemCategoryId + "/" + TradeId, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

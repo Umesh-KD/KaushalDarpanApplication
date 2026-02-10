@@ -12,16 +12,37 @@
           <div class="card-body">
 
             <div class="row">
-              <div class="col-md-12 text-end mb-3">
-                <a class="btn btn-primary btn-sm" [routerLink]="'/singlepost'" [queryParams]="{post:this.Id}"><i class="fa fa-back"></i>Back</a>
-                <button class="btn btn-primary btn-sm" type="button" (click)="printDiv('printable_div_id')" *ngIf="PlacedStudentList.length>0"><i class="fa fa-print me-1"></i>Print</button>
+              <div class="col-md-12 d-flex justify-content-end mb-3" style="gap:2px;">
+                <a class="btn btn-primary btn-sm"
+                   [routerLink]="'/singlepost'"
+                   [queryParams]="{post:this.Id}">
+                  <i class="fa fa-back"></i> Back
+                </a>
+
+                <button class="btn btn-primary btn-sm"
+                        type="button"
+                        (click)="printDiv('printable_div_id')"
+                        *ngIf="PlacedStudentList.length>0">
+                  <i class="fa fa-print me-1"></i> Print
+                </button>
+
+                <a href="javascript:void(0);"
+                   class="btn btn-primary btn-sm"
+                   (click)="exportToExcel()">
+                  <i class="ti ti-download me-1"></i> Download in Excel
+                </a>
               </div>
+
+
+
+
+
               <div class="col-md-12" *ngIf="PlacedStudentList.length>0">
 
                 <!--<div class="d-flex justify-content-between w-100 flex-wrap">
-                  <span>No. of Vacancy: <i class="fa fa-user-o"></i>&nbsp;40</span>
-                  <span>Campus Orgnize Date: <i class="fa fa-calendar-o"></i>&nbsp;10-10-2024 09:00AM</span>
-                </div>-->
+      <span>No. of Vacancy: <i class="fa fa-user-o"></i>&nbsp;40</span>
+      <span>Campus Orgnize Date: <i class="fa fa-calendar-o"></i>&nbsp;10-10-2024 09:00AM</span>
+    </div>-->
                 <div class="table-responsive" id="printable_div_id">
                   <table class="table table-border w-full mb-0" cellpadding="5">
                     <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
