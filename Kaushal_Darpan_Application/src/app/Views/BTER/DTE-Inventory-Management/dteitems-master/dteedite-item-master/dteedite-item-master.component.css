@@ -1,0 +1,11 @@
+/* This style prevents any clicking, typing, or selecting in the row */
+.readonly-row {
+    pointer-events: none; 
+    opacity: 0.8;
+    background-color: #f3f4f6; /* Light gray background */
+}
+
+/* Optional: allow cursor to show 'not-allowed' on hover */
+.readonly-row:hover {
+    cursor: not-allowed;
+}

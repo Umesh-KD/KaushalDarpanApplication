@@ -205,13 +205,29 @@ export class inventoryIssueHistoryComponent {
   }
 
   exportToExcel(): void {
-    debugger
+
     if (!this.ItemMasterList || this.ItemMasterList.length === 0) {
       this.toastr.warning("No data available to export.");
       return;
     }
+    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'ItemCode', 'IsOption',];
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
+    const columnOrder = ['Name', 'TradeName', 'ItemCategoryName', 'EquipmentName',
+      'EquipmentsCode', 'Quantity', 'IssueDate', 'ReturnDate'
+    ];
+
+    const filteredData = this.ItemMasterList.map((item: any) => {
+      const row: any = {};
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
+        }
+      });
+
+      return row;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
 
