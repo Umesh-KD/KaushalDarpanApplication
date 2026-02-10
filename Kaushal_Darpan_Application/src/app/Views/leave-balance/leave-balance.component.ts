@@ -9,7 +9,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../Common/SweetAlert2'
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumStatus, SessionType } from '../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 @Component({
@@ -22,6 +22,7 @@ export class LeaveBalanceComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public StaffLeaveTrnList: any = [];
   public CalenderYearList:any=[];
+  public SessionYearList:any=[];
 
   public Table_SearchText: string = "";
   public searchRequest = new LeaveMasterSearchModel();
@@ -31,7 +32,11 @@ export class LeaveBalanceComponent {
   public ErrorMessage: string = '';
   public ApprovedStatus: string = "0";
   public status: number = 0;
+  public _SessionType = SessionType;
+  columns: string[] = [];
+  rows: any[] = [];
 
+  
     //table feature default
     public paginatedInTableData: any[] = [];//copy of main data
     public currentInTablePage: number = 1;
@@ -58,11 +63,12 @@ export class LeaveBalanceComponent {
   ) { }
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.searchRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID_Session;
 
     // this.searchRequest.CalenderYearID=this.sSOLoginDataModel.CalenderYearID;
 
     await this.GetCalenderYearList();
-
+    await this.GetSessionYear();
     await this.GetAllData();
 
 
@@ -70,7 +76,7 @@ export class LeaveBalanceComponent {
   }
 
   async GetCalenderYearList() {
-    debugger
+   // debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCalenderYearList()
@@ -78,7 +84,7 @@ export class LeaveBalanceComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.CalenderYearList = data['Data'];
-
+          this.searchRequest.CalenderYearID= this.CalenderYearList.find((x:any) =>x.IsCurrentCalenderYear==1).CalenderYearID;
         }, (error: any) => console.error(error)
         );
     }
@@ -93,8 +99,29 @@ export class LeaveBalanceComponent {
   }
 
 
+  async GetSessionYear() {
+   // debugger;
+    try {
+      await this.commonMasterService.GetFinancialYear().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SessionYearList = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async onCalenderYearChange(){
 
+  }
+
+
+  onSessionTypeChange(){
+  //  debugger;
+    this.StaffLeaveTrnList =[];
+    this.columns=[];
+    this.rows=[];
+    this.loadInTable();
   }
 
 
@@ -112,7 +139,7 @@ export class LeaveBalanceComponent {
 
 
   async GetAllData() {
-    debugger
+   // debugger
     try {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
@@ -125,6 +152,15 @@ export class LeaveBalanceComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.StaffLeaveTrnList = data['Data'];
+          this.columns=data['Data'].Columns;
+          this.rows=data['Data'].Rows;
+          this.columns = data['Data'].Columns
+          .filter((col: string) => 
+            col.toLowerCase() !== 'staffid' &&
+            col.toLowerCase() !== 'financialyearid'&&
+            col.toLowerCase()!=='stafftypeid' &&
+            col.toLowerCase()!=='calenderyearid'
+          );
           this.loadInTable();
           console.log(this.StaffLeaveTrnList, "lisssssttt")
         }, (error: any) => console.error(error)
@@ -161,7 +197,7 @@ export class LeaveBalanceComponent {
     this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
     this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
     this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
-    this.paginatedInTableData = [...this.StaffLeaveTrnList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.paginatedInTableData = [...this.rows].slice(this.startInTableIndex, this.endInTableIndex);
     this.loaderService.requestEnded();
   }
 
@@ -201,7 +237,7 @@ export class LeaveBalanceComponent {
   sortInTableData(field: string) {
     this.loaderService.requestStarted();
     this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
-    this.paginatedInTableData = ([...this.StaffLeaveTrnList] as any[]).sort((a, b) => {
+    this.paginatedInTableData = ([...this.rows] as any[]).sort((a, b) => {
       const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
       return this.sortInTableDirection == 'asc' ? comparison : -comparison;
     }).slice(this.startInTableIndex, this.endInTableIndex);
@@ -223,29 +259,29 @@ export class LeaveBalanceComponent {
     this.sortInTableDirection = 'asc';
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
-    this.totalInTableRecord = this.StaffLeaveTrnList.length;
+    this.totalInTableRecord = this.rows.length;
   }
   // (replace org.list here)
   get totalInTableSelected(): number {
-    return this.StaffLeaveTrnList.filter((x:any) => x.Selected)?.length;
+    return this.rows.filter((x:any) => x.Selected)?.length;
   }
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
-    this.StaffLeaveTrnList.forEach((x:any) => {
+    this.rows.forEach((x:any) => {
       x.Selected = this.AllInTableSelect;
     });
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.StaffLeaveTrnList.filter((x:any) => x.AllotmentID == item.AllotmentID);
+    const data = this.rows.filter((x:any) => x.AllotmentID == item.AllotmentID);
     data.forEach((x:any) => {
       x.Selected = isSelected;
     });
     //select all(toggle)
-    this.AllInTableSelect = this.StaffLeaveTrnList.every((r:any) => r.Selected);
+    this.AllInTableSelect = this.rows.every((r:any) => r.Selected);
   }
   // end table feature
 }

@@ -70,9 +70,9 @@ export class LeaveMasterService {
   }
 
 
-  public async HrValidationList(searchRequest: LeaveMasterSearchModel) {
+  public async GetStaffLeaveRequest(searchRequest: LeaveMasterSearchModel) {
     var body = JSON.stringify(searchRequest);
-    return await this.http.post(`${this.APIUrl}/HrValidationList`, body, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/GetStaffLeaveRequest`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

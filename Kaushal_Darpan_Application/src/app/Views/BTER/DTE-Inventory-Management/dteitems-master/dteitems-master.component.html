@@ -175,21 +175,12 @@
             <td align="left">{{item.EquipmentsName}}</td>
             <td align="left">{{item.Specification}}</td>
             <td align="left">{{item.ItemCategoryName}}</td>
-            <td align="left">{{item.InitialQuantity}}</td>
-            <td align="left">{{item.PricePerUnit}}</td>
-            <td align="left">{{item.TotalPrice}}</td>
-            <td align="left">{{item.IndentNo}}</td>
-            <td align="left">{{item.IssueBookFolioDate | date:'dd-MM-yyyy' }}</td>
-            <td align="left">{{item.Working}}</td>
-            <td align="left">{{item.NotWorking}}</td>
-            <td align="left">{{item.Auctioned}}</td>
-
             <td align="left">
               <span style="cursor: pointer; color: blue;" (click)="navigateToEdit(item.ItemId)"
                     *ngIf="sSOLoginDataModel.RoleID == EnumRole.StoreKeeper
                            && item.Status == 1
                            && item.IsConsume == 0">
-                {{ item.AvailableQuantity }}
+                {{item.InitialQuantity}}
               </span>
               <span *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
                   || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
@@ -203,8 +194,19 @@
                   || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge
                   || (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.Status == 0)
                   || (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.IsConsume == 1)">
-                {{ item.AvailableQuantity }}
+                {{item.InitialQuantity}}
               </span>
+            </td>
+            <td align="left">{{item.PricePerUnit}}</td>
+            <td align="left">{{item.TotalPrice}}</td>
+            <td align="left">{{item.IndentNo}}</td>
+            <td align="left">{{item.IssueBookFolioDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{item.Working}}</td>
+            <td align="left">{{item.NotWorking}}</td>
+            <td align="left">{{item.Auctioned}}</td>
+
+            <td align="left">
+              {{ item.AvailableQuantity }}
             </td>
             <td align="left">{{item.QuantityIssued > 0 ? '' : item.QuantityIssued}}
               <span style="cursor: pointer; color: blue;"

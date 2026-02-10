@@ -82,10 +82,11 @@
           <tr>
             <th>Sr. No.</th>
             <th class="text-left">Name</th>
-            <th class="text-left">Apply Date</th>
+            <th class="text-left">Leave</th>
             <th class="text-left">From Date</th>
             <th class="text-left">To Date</th>
-            <th class="text-left">Total Days</th>
+            <th class="text-left">Total Day(s)</th>
+            <th class="text-left">Applied Date</th>
             <th class="text-left">Status</th>
             <th class="text-left">Remark</th>
             <th class="text-left">Principle Remark</th>
@@ -93,19 +94,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of HrMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+          <tr *ngFor="let row of LeaveRequestList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td class="text-center">{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Name}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.RTS}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.LeaveName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.From_Date}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.To_Date}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.TotalDays}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.RTS}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Action}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.userRemark}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PrincipleRemark === ''?'Not Approved Yet!':row.PrincipleRemark}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a title="HR On Action" *ngIf="(row.Action=='Pending' || row.Action=='Hold')" (click)="CompanyOnAction(MyModel_Action,row.StaffLeaveID)"><i class="ti ti-check"></i></a>
+                <a title="Leave Action" *ngIf="(row.Action=='Pending' || row.Action=='Hold')" (click)="CompanyOnAction(MyModel_Action,row)"><i class="ti ti-check"></i></a>
               </div>
             </td>
           </tr>
@@ -120,7 +122,7 @@
     <form [formGroup]="formAction" id="formAction" class="form-horizontal">
       <div class="card">
         <div class="card-header flex justify-between  items-center">
-          <b><i class="fa fa-plus"></i>&nbsp;HR On Action</b>
+          <b><i class="fa fa-plus"></i>&nbsp;Leave Action</b>
           <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
         </div>
         <div class="card-body">
@@ -131,22 +133,22 @@
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Action<span class="StarMarking">*</span></label>
                 <select class="form-select" id="ddlAction" formControlName="ddlAction" [(ngModel)]="requestAction.Action">
-                  <option value="0">--Select--</option>
+                  <option value="">--Select--</option>
                   <option value="Approved">Approved</option>
                   <option value="Rejected">Rejected</option>
                   <option value="Hold">Hold</option>
                 </select>
-                <div *ngIf="isSubmitted&&requestAction.Action=='0'" class="text-danger">
-                  This field is required .!
+                <div *ngIf="isSubmitted&&formAction.get('ddlAction').errors" class="text-danger">
+                  <p *ngIf="formAction.get('ddlAction').errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
               </div>
             </div>
             <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3 mt-3">
               <div>
                 <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
-                <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.ActionRemark"></textarea>
-                <div *ngIf="isSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
-                  <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                <textarea type="text" class="form-input" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.ActionRemark"></textarea>
+                <div *ngIf="isSubmitted&&formAction.get('txtActionRemarks').errors" class="text-danger">
+                  <p *ngIf="formAction.get('txtActionRemarks').errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
               </div>
 

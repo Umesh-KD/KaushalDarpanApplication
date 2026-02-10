@@ -38,13 +38,32 @@
           </select>
         </div> -->
 
+        
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Type</label>
+          <select class="form-select" id="SessionTypeID" name="SessionTypeID" [(ngModel)]="searchRequest.SessionTypeID" (change)="onSessionTypeChange()" >
+            <option value="0">--Select--</option>
+            <option value="{{_SessionType.FinancialYear}}">Academic Year</option>
+            <option value="{{_SessionType.CalenderYear}}">Calender Year</option>
+          </select>
+        </div>
+
+        <div *ngIf="searchRequest.SessionTypeID==_SessionType.CalenderYear">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Calender Year</label>
-          <select class="form-select" id="CalenderYearID" name="CalenderYearID" [(ngModel)]="searchRequest.CalenderYearID" (change)="onCalenderYearChange()" disabled>
-            <option value="0">Choose Option</option>
+          <select class="form-select" name="CalenderYearID" [(ngModel)]="searchRequest.CalenderYearID" (change)="onCalenderYearChange()" disabled>
+            <option value="0">--Select--</option>
             <option *ngFor="let item of CalenderYearList" [value]="item.CalenderYearID">{{item.CalenderYearName}}</option>
           </select>
         </div>
+
+        <div *ngIf="searchRequest.SessionTypeID==_SessionType.FinancialYear">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year</label>
+          <select class="form-select" id="FinancialYearID" [(ngModel)]="searchRequest.FinancialYearID" disabled>
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of SessionYearList" [value]="item.FinancialYearID">{{item.FinancialYearName}}</option>
+          </select>
+        </div>
+        
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
