@@ -108,7 +108,7 @@ export class AddStaffInitialDetailsComponent {
 
 
   async GetOfficeList() {
-    debugger;
+   // debugger;
     this.formData.OfficeID = 0;
     try {
       this.loaderService.requestStarted();
@@ -140,7 +140,7 @@ export class AddStaffInitialDetailsComponent {
 
   // get sectioned post validation 
   async GetSanctionedOfficeVacancy() {
-    debugger;
+    //debugger;
     this.formData.OfficeID = 0;
     try {
       this.loaderService.requestStarted();
@@ -171,7 +171,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetOfficeWiselogic() {
-    debugger;
+   // debugger;
     this.formData.IsGuestStaff = false;
     if (this.formData.OfficeID == 17) {
       this.IsNodalOfficer = true;
@@ -196,7 +196,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async InstituteMasterWiselogic() {
-    debugger
+    //debugger
     this.formData.IsGuestStaff = false;
     this.formData.GuestHouseID = 0;
     // this.GetRoleMasterData();
@@ -232,6 +232,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async onRoleChange(){
+    
     if(this.formData.RoleID==7){
       this.formData.IsNodal=true;
       await this.InstituteMasterWiselogic();
@@ -241,10 +242,16 @@ export class AddStaffInitialDetailsComponent {
       await this.InstituteMasterWiselogic();
   
     }
+    if(this.formData.RoleID==227){
+      this.formData.IsGuestStaff=true;
+    }
+    else{
+      this.formData.IsGuestStaff=false;
+    }
   }
 
   async roleBySubDepartment() {
-    debugger
+   // debugger
    
     await this.GetRoleMasterData();
    
@@ -267,7 +274,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetInstituteMaster() {
-    debugger
+   // debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(
@@ -303,7 +310,7 @@ export class AddStaffInitialDetailsComponent {
     //  { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
     //  { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
     //];
-    debugger;
+    //debugger;
     // this.commonMasterService.InstituteMaster(
     //   this.sSOLoginDataModel.DepartmentID,
     //   this.sSOLoginDataModel.Eng_NonEng,
@@ -341,7 +348,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetRoleMasterData() {
-    debugger
+   // debugger
     try {
       this.loaderService.requestStarted();
       // await this.commonMasterService.GetRoleMasterDDL(, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
@@ -600,7 +607,7 @@ export class AddStaffInitialDetailsComponent {
       this.formData.SSOID === element.SSOID
     );
 
-    debugger
+  //  debugger
     if (isDuplicate) {
       this.toastr.error('SSO ID Already Exists.', '', { timeOut: 5000 });
       return;
@@ -625,7 +632,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async SaveData() {
-    debugger
+  //  debugger
     // if (this.AddedZonalList.length == 0) {
     //   this.toastr.error("Please Add At Least One Office");
     //   return;
@@ -685,7 +692,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GuestHouseMasterWiselogic() {
-    debugger
+  //  debugger
 
     this.formData.IsNodal = false;
     this.formData.InstituteID = 0;
@@ -713,7 +720,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetGuestHouseNameList() {
-    debugger;
+   // debugger;
     try {
       this.loaderService.requestStarted();
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)

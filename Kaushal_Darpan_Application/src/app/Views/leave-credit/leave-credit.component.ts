@@ -9,7 +9,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../Common/SweetAlert2'
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumStatus,SessionType } from '../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 @Component({
@@ -23,6 +23,7 @@ export class LeaveCreditComponent {
   public StaffLeaveTrnList: any = [];
   public CalenderYearList:any=[];
   public StaffIDList:CreditLeaveModel[]=[];
+  public SessionYearList:any=[];
 
   public Table_SearchText: string = "";
   public searchRequest = new LeaveMasterSearchModel();
@@ -46,6 +47,8 @@ export class LeaveCreditComponent {
     public totalInTableRecord: number = 0;
     //end table feature default
 
+    public _SessionType = SessionType;
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private LeaveMasterService: LeaveMasterService,
@@ -60,18 +63,14 @@ export class LeaveCreditComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    // this.searchRequest.CalenderYearID=this.sSOLoginDataModel.CalenderYearID;
+    this.searchRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID_Session;
 
     await this.GetCalenderYearList();
-
-    await this.GetAllData();
-
-
-    this.searchRequest.CalenderYearID=15;
+    await this.GetSessionYear();
   }
 
   async GetCalenderYearList() {
-    debugger
+   // debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCalenderYearList()
@@ -79,7 +78,7 @@ export class LeaveCreditComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.CalenderYearList = data['Data'];
-
+          this.searchRequest.CalenderYearID= this.CalenderYearList.find((x:any) =>x.IsCurrentCalenderYear==1).CalenderYearID;
         }, (error: any) => console.error(error)
         );
     }
@@ -94,12 +93,23 @@ export class LeaveCreditComponent {
   }
 
 
+  async GetSessionYear() {
+    try {
+      await this.commonMasterService.GetFinancialYear().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SessionYearList = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async onCalenderYearChange(){
 
   }
 
   async Save_CreditStaffLeave() {
-    debugger
+   // debugger
     let dyMsg = 'Credit';
     // if (this.status == 1345) {
     //   dyMsg = "Approve";
@@ -126,8 +136,10 @@ export class LeaveCreditComponent {
                   StaffTypeID: x.StaffTypeID,
                   ModifyBy: this.sSOLoginDataModel.UserID,
                   DepartmentID: this.sSOLoginDataModel.DepartmentID,
-                  FinancialYearID:this.sSOLoginDataModel.FinancialYearID,
-                  RoleID:this.sSOLoginDataModel.RoleID
+                  RoleID:this.sSOLoginDataModel.RoleID,
+                  SessionTypeID:this.searchRequest.SessionTypeID,     
+                  CalenderYearID:this.searchRequest.CalenderYearID,
+                  FinancialYearID:this.searchRequest.FinancialYearID
                 } as CreditLeaveModel
               ])
             ).values()
@@ -155,7 +167,10 @@ export class LeaveCreditComponent {
     
   }
 
-
+onSessionTypeChange(){
+  this.StaffLeaveTrnList =[];
+  this.loadInTable();
+}
 
 
   maskMobileNumber(mobile: string): string {
@@ -169,32 +184,26 @@ export class LeaveCreditComponent {
 
 
   async GetAllData() {
-    debugger
+   // debugger
     try {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
-      this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
-      this.searchRequest.Action='_getLeaveCreditStaffData';
-      this.loaderService.requestStarted();
+      this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID   
+      // this.searchRequest.Action='_getLeaveCreditStaffData';
+
       await this.LeaveMasterService.GetLeaveCreditStaffData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.StaffLeaveTrnList = data['Data'];
           this.loadInTable();
-          console.log(this.StaffLeaveTrnList, "lisssssttt")
         }, (error: any) => console.error(error)
         );
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
