@@ -140,7 +140,7 @@ export class cFormConsolidatedComponent implements OnInit {
 
 
   async GetCFormConsolidatedReport() {
-   
+   debugger
     if (this.searchRequest.SemesterID==0) {
       this.toastr.error("Please select Year");
       return;

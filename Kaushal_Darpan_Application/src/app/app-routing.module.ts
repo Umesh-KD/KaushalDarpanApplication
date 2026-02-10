@@ -648,10 +648,11 @@ const routes: Routes = [
       { path: 'TeacherDashboardITI', loadChildren: () => import('./Views/ITI/iti-teacher-dashboard/iti-teacher-dashboard.module').then(m => m.ITITeacherDashboardModule) },
       { path: 'AddITITimeTable', loadChildren: () => import('./Views/ITI/ITITimeTable/add-ititime-table/add-ititime-table.module').then(m => m.AddITITimeTableModule) },
       { path: 'ItiTimeTable', loadChildren: () => import('./Views/ITI/ITITimeTable/ititime-table/ititime-table.module').then(m => m.ITITimeTableModule), title: "ITI TimeTable" },
+      
       // { path: 'ItiResult/:url', loadChildren: () => import('./Views/ITI/results/iti-result/iti-result.module').then(m => m.ItiResultModule), title: "ITI Result" },
       //{ path: 'result/:url', loadChildren: () => import('./Views/result/result/result.module').then(m => m.ResultModule), title: "Result" },
       { path: 'result', loadChildren: () => import('./Views/result/result/result.module').then(m => m.ResultModule), title: "Result" },
-
+     
 
       { path: 'ITIInternalSliding8th/:id', loadChildren: () => import('./Views/ITI/StudentInternalSliding/internal-sliding/internal-sliding.module').then(m => m.InternalSlidingModule) },
       { path: 'ITIInternalSliding10th/:id', loadChildren: () => import('./Views/ITI/StudentInternalSliding/internal-sliding/internal-sliding.module').then(m => m.InternalSlidingModule) },
@@ -854,6 +855,14 @@ const routes: Routes = [
       { path: 'PaperCountReport/:repType/:sem', loadChildren: () => import('./Views/Reports/Paper-Count-Report/Paper-Count-Report.module').then(m => m.PaperCountReportModule), title: 'Paper-Count-Report' },
       { path: 'PaperCountReport', loadChildren: () => import('./Views/Reports/Paper-Count-Report/Paper-Count-Report.module').then(m => m.PaperCountReportModule), title: 'Paper-Count-Report' },
       { path: 'Miscellaneous-Report', loadChildren: () => import('./Views/Reports/Miscellaneous-Report/Miscellaneous-Report.module').then(m => m.MiscellaneousReportModule), title: 'Miscellaneous Report' },
+
+
+
+     
+      { path: 'Iti-all-Result', loadChildren: () => import('./Views/ITI/reports/iti-All-Result/iti-All-Result.module').then(m => m.itiAllResultModule), title: "All data" },
+
+
+
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
 
       { path: 'AddItiCompanyMaster', loadChildren: () => import('./Views/ITI/ITICompanyMaster/additi-company-master/additi-company-module').then(m => m.ItiCompanyMasterModule) },
