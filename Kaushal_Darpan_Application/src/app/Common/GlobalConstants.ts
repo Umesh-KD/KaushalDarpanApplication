@@ -807,6 +807,11 @@ export enum EnumLeaveType {
   
 }
 
+export enum SessionType{
+  FinancialYear=1,
+  CalenderYear=2
+}
+
 export const MONTH_LIST = [
   { id: 1, name: 'January' },
   { id: 2, name: 'February' },

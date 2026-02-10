@@ -82,6 +82,7 @@
           <tr>
             <th>Sr. No.</th>
             <th class="text-left">Name</th>
+            <th class="text-left">Leave</th>
             <th class="text-left">Apply Date</th>
             <th class="text-left">Head Quarter</th>
             <th class="text-left">Leave Type</th>
@@ -98,6 +99,7 @@
           <tr *ngFor="let row of HrMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td class="text-center">{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Name}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.LeaveName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.RTS}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.HeadQuarter}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.LeaveType}}</td>

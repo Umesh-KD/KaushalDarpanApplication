@@ -15,12 +15,15 @@ export class LeaveMaster extends RequestBaseModel {
   InstituteID: number = 0;
   SSOID: string = '';
   TotalDays: number = 0;           // changed decimal to number and initialized
+  RemainingLeave:number=0;
   IsHeadQuarter: boolean = false;  // boolean should be true/false
   LeaveTypeID: number = 0;
   txtIsHeadQuarterAddress: string='';
   txtIsHeadQuarterMobileNo: string='';
   UploadDoc?:string='';
   DisUploadDoc?:string='';
+  CalanderYearID?:number=0;
+  StaffTypeID?:number=0;
 }
 export class LeaveMasterSearchModel extends RequestBaseModel{
   Name: string = '';
@@ -31,7 +34,7 @@ export class LeaveMasterSearchModel extends RequestBaseModel{
   From_Date: string = '';
   To_Date: string = '';
   StaffTypeID?:number=0;
-  Action?:string='';
+  Action?:string="";
   LeaveID?: number = 0;
   CalenderYearID?:number=0;
   }
@@ -42,4 +45,6 @@ export class LeaveMasterSearchModel extends RequestBaseModel{
     StaffTypeID:number=0;
     ModifyBy: number = 0;
     InstituteID: number = 0;
+    CalenderYearID?: number = 0;
+
   }
