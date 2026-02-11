@@ -26,7 +26,6 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
         </div> -->
-       
         <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
           <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
@@ -38,10 +37,10 @@
           </select>
         </div> -->
 
-        
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Type</label>
-          <select class="form-select" id="SessionTypeID" name="SessionTypeID" [(ngModel)]="searchRequest.SessionTypeID" (change)="onSessionTypeChange()" >
+          <select class="form-select" id="SessionTypeID" name="SessionTypeID" [(ngModel)]="searchRequest.SessionTypeID" (change)="onSessionTypeChange()">
             <option value="0">--Select--</option>
             <option value="{{_SessionType.FinancialYear}}">Academic Year</option>
             <option value="{{_SessionType.CalenderYear}}">Calender Year</option>
@@ -63,7 +62,7 @@
             <option *ngFor="let item of SessionYearList" [value]="item.FinancialYearID">{{item.FinancialYearName}}</option>
           </select>
         </div>
-        
+
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
@@ -78,9 +77,11 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div *ngIf="StaffLeaveTrnList?.length>0">
         <!-- *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE" -->
-        <button type="button" 
-          class="btn bg-info text-white inline-block" 
-          (click)="Save_CreditStaffLeave()">Credit</button>
+        <button type="button"
+                class="btn bg-info text-white inline-block"
+                (click)="Save_CreditStaffLeave()">
+          Credit Leave Balance
+        </button>
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -101,30 +102,28 @@
 
     <div class="overflow-auto mt-3">
       <table class="table table-border w-full" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10" *ngIf="paginatedInTableData?.length">
           <tr>
             <th>Sr. No.</th>
-            <th class="text-left">Name</th>
-            <th class="text-left">Staff Type</th>    
-            <th class="text-left">Leave Type</th>    
-            <th class="text-left">Previous Balance</th>    
-            <th class="text-left">New Balance</th>          
+            <ng-container *ngFor="let col of paginatedInTableData[0] | keyvalue: originalOrder">
+            <th *ngIf="isVisibleColumn(col.key)">{{ col.key }}</th>
+            </ng-container>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
             <td class="text-center">{{idx+1}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Name}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StaffTypeName}}</td>         
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.LeaveName}}</td>         
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PrevLeaveBalance}}</td>         
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.NewLeaveBalance}}</td>           
+            <ng-container *ngFor="let col of row | keyvalue: originalOrder">
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="isVisibleColumn(col.key)">
+                {{ col.value }}
+              </td>
+            </ng-container>
           </tr>
         </tbody>
       </table>
     </div>
-     <!--pagination-->
-     <div class="p-3 paginationBox flex items-center justify-end w-full">
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
       <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
       <div class="paginationBoxItems flex items-center">
         <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>

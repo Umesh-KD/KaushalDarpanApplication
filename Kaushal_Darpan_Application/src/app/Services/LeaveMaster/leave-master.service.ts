@@ -87,9 +87,9 @@ export class LeaveMasterService {
       ).toPromise();
   }
 
-  public async Save_HrValidation_NodalAction(request: LeaveMaster) {
+  public async SaveStaffLeaveRequest(request: LeaveMaster) {
     const body = JSON.stringify(request);
-    return await this.http.post(this.APIUrl + "/Save_HrValidation_NodalAction", body, this.headersOptions)
+    return await this.http.post(this.APIUrl + "/SaveStaffLeaveRequest", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

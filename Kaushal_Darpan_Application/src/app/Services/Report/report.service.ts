@@ -35,6 +35,7 @@ import { TabulationReportSearchModel } from '../../models/bter/TabulationReportM
 import { CollegesWiseExaminationRptSearchModel } from '../../Models/CollegesWiseExaminationRptsModel';
 import { StudentItiResultModel } from '../../Models/StudentSearchModel';
 import { InternalMarksReportCollegeWiseSearchModel } from '../../Models/CompanyMasterDataModel';
+import { CertificateLetterSearchModel } from '../../Models/CertificateLetterDataModel';
 
 
 
@@ -155,6 +156,14 @@ export class ReportService {
 
   public async GetCollegesWiseReportsData(request: CollegesWiseExaminationRptSearchModel) {
     return await this.http.post(this.APIUrl + "/GetCollegesWiseReports", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetReportsData(searchRequest: CertificateLetterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetCertificateLetterReport`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
