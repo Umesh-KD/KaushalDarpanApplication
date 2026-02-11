@@ -32,6 +32,7 @@ export class VerifyApplicationCommitteeComponent {
   public StatusListDDL: any = [];
   public UserApplyInstituteList: any = [];
   public UpdateStatusListDDL: any = [];
+  public InstituteStatusListDDL: any = [];
   public CommitteeListDDL: any = [];
   public SelectedInstituteId: number | null = null;
 
@@ -52,6 +53,7 @@ export class VerifyApplicationCommitteeComponent {
   public DateConfigSetting: any = [];
   public requestDDl = new THTE_DDL();
   //end table feature default
+  public isShowInstituteSaveButton: boolean = false;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -169,10 +171,10 @@ export class VerifyApplicationCommitteeComponent {
     }
     
 
-    if(this.request.CommitteeDocs == '' || this.request.CommitteeDocs == undefined || this.request.CommitteeDocs == null) {
-      this.toastr.warning('Please upload committee document.');
-      return;
-    }
+    // if(this.request.CommitteeDocs == '' || this.request.CommitteeDocs == undefined || this.request.CommitteeDocs == null) {
+    //   this.toastr.warning('Please upload committee document.');
+    //   return;
+    // }
 
     let dyMsg = '';
     if(this.status == 1343) {
@@ -222,7 +224,7 @@ export class VerifyApplicationCommitteeComponent {
   }
 
   async SaveDataMarked(remark: string) {
-    debugger
+     
     try {
       let selected = this.ApplicationListData.filter((x: any) => x.Selected === true)
       this.request.ApplicationListData = selected
@@ -436,19 +438,15 @@ export class VerifyApplicationCommitteeComponent {
   // end table feature
 
   async ApplyCollegelist(model: any, THTEAppID: number,row:any) {
-    debugger
+     
     try {
       this.loaderService.requestStarted();
       this.requestSearch.THTEAppID = THTEAppID
       this.Selecteditem=row
-
-
       await this.teacherHigherEducationApplicationService.THTE_GrtApplyInstituteList(this.requestSearch)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.UserApplyInstituteList = data.Data;
-          /*     this.UserApplyInstituteList = this.UserApplyInstituteList.filter((item: any) => item.StatusID == 1340 || item.StatusID == 1345)*/
-       
 
           const selected = this.UserApplyInstituteList.find(
             (e: any) => e.SelectedInstitute === 1
@@ -457,14 +455,8 @@ export class VerifyApplicationCommitteeComponent {
           if (selected) {
             this.SelectedInstituteId = selected.ID; // acd.ID
           }
-
-
-
-
         }, (error: any) => console.error(error))
-
-
-      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+      this.modalReference = this.modalService.open(model, { size: 'xl', backdrop: 'static' });
     }
     catch (Ex) {
       console.log(Ex);
@@ -493,18 +485,40 @@ export class VerifyApplicationCommitteeComponent {
 
 
   async SaveSelectedInstitute(remark: string) {
-    debugger
+     
     try {
-      let selected = this.UserApplyInstituteList.filter((x: any) => x.SelectedInstitute === true)
-      if (selected.length == 0) {
-        this.toastr.warning("Please Select Institute")
-        return
+      // let selected = this.UserApplyInstituteList.filter((x: any) => x.SelectedInstitute === true)
+      // if (selected.length == 0) {
+      //   this.toastr.warning("Please Select Institute")
+      //   return
+      // }
+
+      // 1. Check if every single row has a status selected (!= 0)
+      const allStatusSelected = this.UserApplyInstituteList.every((row: any) => 
+        row.InstituteStatus != 0 && row.InstituteStatus != null
+      );
+
+      if (!allStatusSelected) {
+        this.toastr.error("Please choose status for all institutes in the list.");
+        return;
+      }
+
+      // 2. Check if rejections have remarks
+      const invalidRejections = this.UserApplyInstituteList.filter((row: any) => 
+        row.InstituteStatus == 1342 && (!row.Remarks || row.Remarks.trim() === '')
+      );
+
+      if (invalidRejections?.length > 0) {
+        this.toastr.error("Remarks are mandatory for all rejected institutes.");
+        return;
       }
 
       this.UserApplyInstituteList.forEach((e: any) => {
         e.StatusID = e.SelectedInstitute === true ? 1343 : 1342,
         e.UserID = this.sSOLoginDataModel.UserID
       });
+
+      console.log("this.UserApplyInstituteList",this.UserApplyInstituteList);
 
 
       await this.teacherHigherEducationApplicationService.UpdateInstitutestatus(this.UserApplyInstituteList)

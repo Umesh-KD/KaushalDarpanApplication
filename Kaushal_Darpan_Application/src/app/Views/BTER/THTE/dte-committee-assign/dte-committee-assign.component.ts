@@ -14,14 +14,15 @@ import Swal from 'sweetalert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { StaffDetailsDataModel } from '../../../../Models/StaffMasterDataModel';
+import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 
 @Component({
-  selector: 'app-thte-application-dte-list',
+  selector: 'app-dte-committee-assign',
   standalone: false,
-  templateUrl: './thte-application-dte-list.component.html',
-  styleUrl: './thte-application-dte-list.component.css'
+  templateUrl: './dte-committee-assign.component.html',
+  styleUrl: './dte-committee-assign.component.css'
 })
-export class THTEApplicationDteListComponent {
+export class DTECommitteeAssignComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   public searchRequest = new PrincipleApplicationListSearchModel();
@@ -35,12 +36,14 @@ export class THTEApplicationDteListComponent {
   public ApplicationListOrderData: any = [];
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
+  public DTECommitteeListDDL: any = [];
   public enumRole = EnumRole;
 
   public status: number = 0;
   public isModalOpen: boolean = false;
   Dis_CommitteeDocs: string = ''
   CommitteeDocs: string = ''
+  DTECommitteID: number = 0;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -64,6 +67,7 @@ export class THTEApplicationDteListComponent {
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationVerificationService: TeacherHigherEducationApplicationVerificationService,
+    public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
     private router: Router,
     private modalService: NgbModal,
     private staffMasterService: StaffMasterService,
@@ -71,8 +75,20 @@ export class THTEApplicationDteListComponent {
 
   async ngOnInit () { 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    await this.THTE_GetDTECommitteeDDL();
     await this.GetMasterData();
+  }
+
+  async THTE_GetDTECommitteeDDL() {
+    try {
+      let request: any = {}
+      await this.teacherHigherEducationApplicationService.THTE_GetDTECommitteeDDL(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DTECommitteeListDDL = data['Data'];
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   async GetMasterData() {
@@ -82,18 +98,8 @@ export class THTEApplicationDteListComponent {
         data = JSON.parse(JSON.stringify(data));
         this.StatusListDDL = data['Data'];
         this.UpdateStatusListDDL = data['Data'];
-
-        if(this.sSOLoginDataModel.RoleID === EnumRole.DTE) {
-          this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1353 || x.ID == 1345)
-        } else if(this.sSOLoginDataModel.RoleID === EnumRole.CommitteInchargeDTE) {
-          this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1354 || x.ID == 1353)
-        }
-
-        if(this.sSOLoginDataModel.RoleID == EnumRole.CommitteInchargeDTE) {
-          this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1353)
-        } else if(this.sSOLoginDataModel.RoleID === EnumRole.DTE) {
-          this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1345)
-        }
+        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1344 || x.ID == 1354)
+        this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1354)
       })
     } catch (error) {
       console.error(error);
@@ -122,49 +128,23 @@ export class THTEApplicationDteListComponent {
     }
   }
 
-  async updateStatusRemark() {
+  async openOTPModal() {
     let anySelected = this.ApplicationListData.some((x: any) => x.Selected === true)
     if (!anySelected) {
       this.toastr.warning('Please select at least one record.');
       return;
     }
 
-
-    let dyMsg = '';
-    if (this.status == 1345) {
-      dyMsg = "Approve";
-    } else {
-      dyMsg = "Reject";
+    if(this.DTECommitteID == 0 || this.DTECommitteID == undefined || this.DTECommitteID == null) {
+      this.toastr.warning('Please select committee.');
+      return;
     }
-    this.Swal2.Confirmation(`Are you sure you want to ${dyMsg}?`,
-    async (result: any) => {
-      
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: dyMsg + ' Application List',
-          input: 'textarea',
-          inputLabel: 'Remark',
-          inputPlaceholder: 'Enter your remark here...',
-          inputAttributes: {
-            'aria-label': 'Type your remark here'
-          },
-          showCancelButton: true,
-          confirmButtonText: 'Save Remark',
-          cancelButtonText: 'Cancel'
-        }).then(async (result: any) => {
-          if (result.isConfirmed && result.value?.trim()) {
-            const remark = result.value.trim();
-            await this.openOTPModal(remark);
-          } else if (result.isConfirmed && !result.value?.trim()) {
-            this.toastr.warning('Remark is required.');
-          }
-        });
-      }
-    })
-    
-  }
 
-  async openOTPModal(remark: string) {
+    if(this.status == 0 || this.status == undefined || this.status == null) {
+      this.toastr.warning('Please select status.');
+      return;
+    }
+
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
 
     // await for open model
@@ -174,143 +154,24 @@ export class THTEApplicationDteListComponent {
     await this.childComponent.waitForVerification();
 
     // do work
-    await this.SaveDataMarked(remark);
+    await this.DTECommitteeAssign_THTE();
   }
 
-  async SaveDataMarked(remark: string) {
-    try {
-      let selected = this.ApplicationListData.filter((x: any) => x.Selected === true)
-      selected.forEach((x: any) => {
-        x.ModifyBy = this.sSOLoginDataModel.UserID,
-          x.status = this.status,
-          x.Remark = remark,
-          x.RoleID = this.sSOLoginDataModel.RoleID  
-      })
-      debugger
-      
-
-      await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_DTE_THTE(selected)
-      .then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          this.status = 0
-          this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
-          this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
-          this.GenrateOrder();
-          await this.ApplicationList_ForPrinciple_THTE();
-        }
-      })
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  
-  async GenrateOrder() {
-    await this.teacherHigherEducationApplicationVerificationService.GetApplication_GenrateOrder_Dte_THTE(this._DTEGenrateOrder).then(async (data: any) => {
-        
-        data = JSON.parse(JSON.stringify(data));
-        debugger
-        if (data && data.Data) {
-          const base64 = data.Data;
-
-          const byteCharacters = atob(base64);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: 'application/pdf' });
-          const blobUrl = URL.createObjectURL(blob);
-
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = 'THTEApplicationGenrateOrderDte.pdf';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(blobUrl);
-        } 
-      }, (error: any) => {
-        console.error(error);
-        this.toastr.error("some error !")
-      });
-  }
-
-  async updateStatusRemark_DTECommittee() {
-    let anySelected = this.ApplicationListData.some((x: any) => x.Selected === true)
-    if (!anySelected) {
-      this.toastr.warning('Please select at least one record.');
-      return;
-    }
-
-    if((this.searchRequest.status == 1354 && this.sSOLoginDataModel.RoleID === EnumRole.CommitteInchargeDTE) && 
-        (this.CommitteeDocs == null || this.CommitteeDocs == '')) {
-      this.toastr.warning('Please upload committee document.');
-      return;
-    }
-
-    let dyMsg = '';
-    if (this.status == 1353) {
-      dyMsg = "Approve";
-    } else {
-      dyMsg = "Reject";
-    }
-    this.Swal2.Confirmation(`Are you sure you want to ${dyMsg}?`,
-    async (result: any) => {
-      
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: dyMsg + ' Application List',
-          input: 'textarea',
-          inputLabel: 'Remark',
-          inputPlaceholder: 'Enter your remark here...',
-          inputAttributes: {
-            'aria-label': 'Type your remark here'
-          },
-          showCancelButton: true,
-          confirmButtonText: 'Save Remark',
-          cancelButtonText: 'Cancel'
-        }).then(async (result: any) => {
-          if (result.isConfirmed && result.value?.trim()) {
-            const remark = result.value.trim();
-            await this.openOTPModal_DTECommittee(remark);
-          } else if (result.isConfirmed && !result.value?.trim()) {
-            this.toastr.warning('Remark is required.');
-          }
-        });
-      }
-    })
+  async DTECommitteeAssign_THTE() {
     
-  }
 
-  async openOTPModal_DTECommittee(remark: string) {
-    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-
-    // await for open model
-    await this.childComponent.OpenOTPPopup();
-
-    // await OTP verification
-    await this.childComponent.waitForVerification();
-
-    // do work
-    await this.SaveDataMarked__DTECommittee(remark);
-  }
-
-  async SaveDataMarked__DTECommittee(remark: string) {
     try {
       let selected = this.ApplicationListData.filter((x: any) => x.Selected === true)
       selected.forEach((x: any) => {
         x.ModifyBy = this.sSOLoginDataModel.UserID,
-          x.status = this.status,
-          x.Remark = remark,
-          x.RoleID = this.sSOLoginDataModel.RoleID,
-          x.CommitteeDocs = this.CommitteeDocs,
-          x.Dis_CommitteeDocs = this.Dis_CommitteeDocs  
+        x.status = this.status,
+        x.RoleID = this.sSOLoginDataModel.RoleID,
+        x.CommitteeDocs = this.CommitteeDocs,
+        x.Dis_CommitteeDocs = this.Dis_CommitteeDocs  ,
+        x.DTECommitteID = this.DTECommitteID
       })
 
-      await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_DTE_THTE(selected)
+      await this.teacherHigherEducationApplicationVerificationService.DTECommitteeAssign_THTE(selected)
       .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
@@ -318,13 +179,16 @@ export class THTEApplicationDteListComponent {
           this.status = 0
           this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
           this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
-          await this.GenrateOrder();
+          this.status = 0;
+          this.DTECommitteID = 0;
           await this.ApplicationList_ForPrinciple_THTE();
         }
       })
     } catch (error) {
       console.error(error);
     }
+    
+    
   }
 
   async OnConfirm(content: any, ID: number) {

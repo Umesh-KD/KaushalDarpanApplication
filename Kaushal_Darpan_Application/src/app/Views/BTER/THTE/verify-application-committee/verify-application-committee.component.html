@@ -187,34 +187,26 @@
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between items-center">
-
         <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist()" type="button"><i class="ti ti-x"></i></button>
       </div>
-
-
-
       <div class="card-body">
-
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i>Applied Institute List</b>
           <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
-
-
         <!--{{UserRequestHistoryList|json}}-->
         <div class="overflow-x-auto mt-3">
-
-
-
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
                 <th class="text-left">S No</th>
-                <th class="text-left">Select</th>
+                <!-- <th class="text-left">Select</th> -->
+                <th class="text-left">Institute Type</th>
                 <th class="text-left">Institute Name</th>
                 <th class="text-left">Distance(KM)</th>
-                <th class="text-left">Status</th>
+                <th class="text-left">Application Status</th>
+                <th class="text-left">Choose Status</th>
                 <th class="text-left">Remarks</th>
 
               </tr>
@@ -222,20 +214,35 @@
             <tbody>
               <tr *ngFor="let row of UserApplyInstituteList; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
-                <td>
+                <!-- <td>
                   <input type="radio"
                          name="radiocheck"
                          [value]="row.ID"
                          [(ngModel)]="SelectedInstituteId"
                          (change)="onRadioChange(row)">
-                </td>
+                </td> -->
+                <td align="left">{{ row.InstituteTypeName }}</td>
 
                 <td align="left">{{ row.CollegeName }}</td>
                 <td align="left">{{ row.Distance }}</td>
                 <td align="left">{{ row.StatusName }}</td>
                 <td align="left">
-                  <input [disabled]="Selecteditem.StatusID!=1341"  class="form-input" type="text" name="appliedInstituteDistance"
-                         placeholder="Enter Remarks" [(ngModel)]="row.Remarks" />
+                  <select class="form-select" id="StatusID" [(ngModel)]="row.InstituteStatus" name="StatusID">
+                    <option value="0">--Choose Status--</option>
+                    <option value="1343">Accept</option>
+                    <option value="1342">Reject</option>
+                  </select>
+                </td>
+                <td align="left">
+                  <input class="form-input" type="text" name="appliedInstituteDistance"
+                    placeholder="Enter Remarks" 
+                    [(ngModel)]="row.Remarks"
+                    [required]="row.InstituteStatus == 1342"
+                    [ngClass]="{'border-red-500': isSubmitted && row.InstituteStatus == 1342 && !row.Remarks}"/>
+
+                  <div *ngIf="isSubmitted && row.InstituteStatus == 1342 && !row.Remarks" class="text-danger text-xs">
+                    Remarks are required for rejection.
+                  </div>
                 </td>
 
               </tr>
@@ -254,7 +261,6 @@
       </div>
     </div>
   </div>
-
 </ng-template>
 
 <!-- otp -->

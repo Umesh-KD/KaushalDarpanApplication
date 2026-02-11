@@ -34,6 +34,9 @@ export class TeacherHigherEducationApplicationSaveModel extends ResponseBaseMode
   QualificationAtJoining: string = '';
   QualificationAfterJoining: string = '';
   CollegeDetailList:any=[]
+  IsQualificationRecorded?: number = 2
+  InstituteType?: number = 0;
+  InstituteTypeName?: string = '';
 }
 
 export class TeacherHigherEducationApplicationVerificationModel extends RequestBaseModel {
@@ -96,6 +99,7 @@ export class UpdateApplicationStatusDataModel_Principle {
   public RoleID?: string = '';
   public CommitteeDocs?: string = '';
   public Dis_CommitteeDocs?: string = '';
+  public DTECommitteID?: number = 0;
 }
 
 export class UpdateApplicationStatusDataModel_Committee {

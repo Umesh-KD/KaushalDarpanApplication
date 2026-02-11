@@ -199,4 +199,12 @@ export class TeacherHigherEducationApplicationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async THTE_GetDTECommitteeDDL(request: CommitteeSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/THTE_GetDTECommitteeDDL`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
