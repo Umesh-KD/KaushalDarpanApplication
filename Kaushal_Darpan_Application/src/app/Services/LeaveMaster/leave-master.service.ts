@@ -62,8 +62,9 @@ export class LeaveMasterService {
 
   //delete
   public async DeleteById(ID: number, userId: number) {
+    debugger
     var body = JSON.stringify({ "ID": ID, "ModifyBy": userId });
-    return await this.http.delete(`${this.APIUrl}/DeleteByID/${ID}/${userId}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteByID/${ID}/${userId}`,body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
