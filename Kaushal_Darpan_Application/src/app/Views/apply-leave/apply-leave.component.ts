@@ -9,7 +9,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus, EnumLeaveTypeFSFDay, EnumLeaveType } from '../../Common/GlobalConstants';
+import { EnumStatus, EnumLeaveTypeFSFDay, EnumLeaveType, GlobalConstants } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 @Component({
@@ -24,6 +24,11 @@ export class ApplyLeaveComponent {
   public LeaveTypeList: any[] = [];
   public LeaveTypeFSFList: any[] = [];
  public today: string='';
+
+ public minDate: string='';
+ public maxDate: string='';
+ public currentYear: number=0;
+
   public request = new LeaveMaster();
   public req=new LeaveMasterSearchModel();
   public isLoading: boolean = false;
@@ -58,17 +63,20 @@ export class ApplyLeaveComponent {
         IsHeadQuarter: [0],
         LeaveTypeID: ['', [DropdownValidators]],
         txtIsHeadQuarterAddress:[''],
-        txtIsHeadQuarterMobileNo:[''],
+        txtIsHeadQuarterMobileNo:['', [Validators.pattern(GlobalConstants.MobileNumberPattern), Validators.minLength(10), Validators.maxLength(10)]],
         RemainingLeave:[{value:'',disabled:true}]
 
       });
 
-
+    
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
     this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());//student list key
     const now = new Date();
     this.today = now.toISOString().split('T')[0]; // "2025-04-11" format
+    this.currentYear = new Date().getFullYear();
+    this.minDate = `${this.currentYear}-01-01`;
+    this.maxDate = `${this.currentYear}-12-31`;
     this.req.StaffTypeID=this.sSOLoginDataModel.StaffTypeID;
     this.req.DepartmentID=this.sSOLoginDataModel.DepartmentID;
     this.req.FinancialYearID=this.sSOLoginDataModel.FinancialYearID;
@@ -79,11 +87,12 @@ export class ApplyLeaveComponent {
     await this.GetLeaveTypeFSF();
     this.setTodayDate();
 
+    this.request.IsHeadQuarter=true;
     //edit
     if (this.ID > 0) {
       await this.GetById();
     }
-    this.request.IsHeadQuarter=true;
+
   }
   get _LeaveMasterFormGroup() { return this.LeaveMasterFormGroup.controls; }
 
@@ -122,6 +131,7 @@ export class ApplyLeaveComponent {
 
   // get semestar ddl
   async GetCommondata() {
+    //debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCommonMasterData('LeaveTypeByStaffTypeID',this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng,this.sSOLoginDataModel.StaffTypeID)
@@ -142,16 +152,18 @@ export class ApplyLeaveComponent {
   }
 
   async GetRemainingLeave() {
-    debugger
+   // debugger
     try {
+      this.LeaveBlance=0;
       this.loaderService.requestStarted();
       this.req.Action='GetRemainingLeave';
       this.req.LeaveID=this.request.LeaveID;
+      this.req.FinancialYearID=this.sSOLoginDataModel.FinancialYearID_Session;
+      this.req.SessionTypeID=this.request.SessionTypeID;
       await this.LeaveMasterService.GetRemainingLeave(this.req)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          // this.LeaveTypeList = data['Data'];
-          this.LeaveBlance=data['Data'][0].LeaveBlance;
+          this.LeaveBlance=data['Data'][0]?.LeaveBlance;
         }, (error: any) => console.error(error)
         );
     }
@@ -189,13 +201,14 @@ export class ApplyLeaveComponent {
 
   // get detail by id
   async GetById() {
+    //debugger;
     try {
       
       this.loaderService.requestStarted();
 
       await this.LeaveMasterService.GetById(this.ID)
 
-        .then((data: any) => {          
+        .then(async (data: any) => {          
           data = JSON.parse(JSON.stringify(data));
           this.request = data['Data'];
           const dob = new Date(data['Data']['From_Date']);
@@ -208,6 +221,8 @@ export class ApplyLeaveComponent {
           const month1 = String(dob1.getMonth() + 1).padStart(2, '0');
           const day1 = String(dob1.getDate()).padStart(2, '0');
           this.request.To_Date = `${year1}-${month1}-${day1}`;
+
+          await this.GetRemainingLeave();
         }, (error: any) => console.error(error)
         );
     }
@@ -223,7 +238,22 @@ export class ApplyLeaveComponent {
 
   // get detail by id
   async SaveData() {
-debugger
+    debugger
+  // Calculate inclusive day difference between two dates
+    const diffDaysInclusive = (start: Date, end: Date): number => {
+      const diffTime = end.getTime() - start.getTime();
+      return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    };
+    const fromDate = new Date(this.request.From_Date);
+    const toDate = new Date(this.request.To_Date);
+
+    if(this.request.LeaveID==EnumLeaveType.CasualLeave_NonTech || this.request.LeaveID==EnumLeaveType.CasualLeave_Tech){     
+      let totalDays = diffDaysInclusive(fromDate, toDate);
+      if(totalDays>10){
+        this.toastr.warning("Casual Leave Cannot be Greater than 10 Days!");
+        return;
+      }
+    }
     try {
       this.isSubmitted = true;
       if (this.LeaveMasterFormGroup.invalid) {
@@ -237,6 +267,11 @@ debugger
         this.toastr.error('You Do not have Enough Leave Balance!');
         return;
       }
+      if((this.request.UploadDoc=="" || this.request.UploadDoc==null) && (this.request.LeaveID==EnumLeaveType.HalfPayLeave_NonTech ||this.request.LeaveID == EnumLeaveType.HalfPayLeave_Tech)){
+        this.toastr.warning("Document is manadatoery for Half Pay Leave!");
+        return;
+      }
+  
       this.isLoading = true;
 
       this.loaderService.requestStarted();
@@ -246,6 +281,8 @@ debugger
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.request.FinancialYearID=this.sSOLoginDataModel.FinancialYearID;
+      this.request.RemainingLeave=Number(this.LeaveBlance);
+
       this.request.Action = 'Pending'
       this.request.SSOID = this.sSOLoginDataModel.SSOID
       //save
@@ -279,7 +316,7 @@ debugger
   }
 
   async IsHeadQuarter(){
-    debugger
+   // debugger
     console.log(this.request.IsHeadQuarter);
     if(this.request.IsHeadQuarter){
 
@@ -288,7 +325,7 @@ debugger
 
   public file!: File;
   async onDocchange(event: any, Type: string) {
-    debugger
+    //debugger
     try {
 
       this.file = event.target.files[0];
@@ -371,7 +408,13 @@ debugger
 async calculateDays() {
   debugger;
   this.req.LeaveID=this.request.LeaveID;
+  this.request.SessionTypeID=this.LeaveTypeList.find((item:any)=>item.ID==this.request.LeaveID).SessionTypeID;
+  // this.filteredStatusList = this.statusList.filter((item: { ID: number; }) => item.ID === 1339 || item.ID === 218);
   await this.GetRemainingLeave();
+  if(this.LeaveBlance==undefined){
+    this.toastr.error('You have not Leave data!');
+    return;
+  }
   if(this.LeaveBlance<=0){
     this.toastr.error('You have not Enough Leave Balance!');
     return;
@@ -393,13 +436,20 @@ async calculateDays() {
   const fromDate = new Date(fromDateStr);
   const toDate = new Date(toDateStr);
 
-  
-
   // Calculate inclusive day difference between two dates
   const diffDaysInclusive = (start: Date, end: Date): number => {
     const diffTime = end.getTime() - start.getTime();
     return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
   };
+
+  if(leaveType==EnumLeaveType.CasualLeave_NonTech || leaveType==EnumLeaveType.CasualLeave_Tech){    
+      let totalDays = diffDaysInclusive(fromDate, toDate);
+      if(totalDays>10){
+        this.toastr.warning("Casual Leave Cannot be Greater than 10 Days!");
+        this.request.TotalDays=totalDays;
+        return;
+      }
+  }
 
   // Weekend check: Sunday=0, Saturday=6
   const isWeekend = (date: Date): boolean => {
@@ -427,10 +477,12 @@ async calculateDays() {
     return count;
   };
 
+  let totalDays =0;
  // Multiple day leave
-    if (DayType == EnumLeaveTypeFSFDay.FirstHalf || DayType == EnumLeaveTypeFSFDay.SecondHalf) {
+      if (DayType == EnumLeaveTypeFSFDay.FirstHalf || DayType == EnumLeaveTypeFSFDay.SecondHalf) {
       // Half day leave across multiple days counts as 0.5 days
-      this.request.TotalDays = 0.5;
+      totalDays =0.5;
+      this.request.TotalDays =totalDays;
       this.request.To_Date=this.request.From_Date;
       this.request.From_Date=this.request.To_Date;
 
@@ -439,21 +491,25 @@ async calculateDays() {
         this.request.TotalDays = 0;
         return;
       }
-      let totalDays = diffDaysInclusive(fromDate, toDate);
+      totalDays = diffDaysInclusive(fromDate, toDate);
 
       // Sandwich leave for PrivilegeLeave
       // if (leaveType == EnumLeaveType.PrivilegeLeave_NonTech || leaveType == EnumLeaveType.PrivilegeLeave_Tech ) {
       //   const sandwichDays = countSandwichDays(fromDate, toDate);
       //   totalDays += sandwichDays;
-      // }
-
-      // HAlf pay leave example: double total days
-      if (leaveType == EnumLeaveType.HalfPayLeave_NonTech ||leaveType == EnumLeaveType.HalfPayLeave_Tech) {
-        totalDays = totalDays * 2;
-      }
-
-      this.request.TotalDays = totalDays;
+      // }   
     }
+
+     // HAlf pay leave example: double total days
+     if (leaveType == EnumLeaveType.HalfPayLeave_NonTech ||leaveType == EnumLeaveType.HalfPayLeave_Tech) {
+      totalDays = totalDays * 2;
+    }
+
+    else if(leaveType==EnumLeaveType.CasualLeave_NonTech || leaveType==EnumLeaveType.CasualLeave_Tech){
+
+    }
+
+    this.request.TotalDays = totalDays;
 }
 
 
@@ -522,16 +578,16 @@ async calculateDays() {
   }
 
   
-  onInput(event: any): void {
-    const inputValue = event.target.value;
+  // onInput(event: any): void {
+  //   const inputValue = event.target.value;
 
-    // Remove non-digit characters
-    const onlyDigits = inputValue.replace(/\D/g, '');
+  //   // Remove non-digit characters
+  //   const onlyDigits = inputValue.replace(/\D/g, '');
 
-    // Update the input value with only digits
-    event.target.value = onlyDigits;
+  //   // Update the input value with only digits
+  //   event.target.value = onlyDigits;
 
-    // Optionally, update the ngModel if needed
-    this.request.txtIsHeadQuarterMobileNo = onlyDigits;
-  }
+  //   // Optionally, update the ngModel if needed
+  //   this.request.txtIsHeadQuarterMobileNo = onlyDigits;
+  // }
 }

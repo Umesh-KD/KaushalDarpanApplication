@@ -16,7 +16,7 @@
 </div>
 
 <div>
-<form [formGroup]="LeaveMasterFormGroup" id="HrMasterFormGroup" class="form-horizontal">
+<form [formGroup]="LeaveMasterFormGroup" id="LeaveMasterFormGroup" class="form-horizontal">
   <div class="card">
     <div class="card-body p-5">
       <div class="mb-8">
@@ -27,7 +27,7 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Leave Type  <span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.LeaveID" formControlName="LeaveID" (change)="calculateDays()">
+            <select class="form-select" id="LeaveID" name="LeaveID" [(ngModel)]="request.LeaveID" formControlName="LeaveID" (change)="calculateDays()">
               <option value="0">-- Select --</option>
               <option *ngFor="let item of LeaveTypeList" [value]="item.ID">{{item.Name}}</option>
             </select>
@@ -56,7 +56,8 @@
           <div>
             <label>From Date <span class="StarMarking">*</span> </label>
             <input type="date" class="form-input" id="txtFromDate" formControlName="txtFromDate"
-                   [(ngModel)]="request.From_Date" (change)="calculateDays()" [min]="today" />
+                   [(ngModel)]="request.From_Date" (change)="calculateDays()" [min]="today" 
+                   [max]="maxDate" (keydown)="$event.preventDefault()" />
             <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtFromDate.errors"
                  class="text-danger">
               <p *ngIf="_LeaveMasterFormGroup.txtFromDate.errors.required">
@@ -67,7 +68,8 @@
           <div>
             <label>To Date <span class="StarMarking">*</span> </label>
             <input type="date" class="form-input" id="txtToDate" formControlName="txtToDate"
-                   [(ngModel)]="request.To_Date" (change)="calculateDays()" [min]="today" />
+                   [(ngModel)]="request.To_Date" (change)="calculateDays()" [min]="today"
+                   [max]="maxDate" (keydown)="$event.preventDefault()"/>
             <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtToDate.errors"
                  class="text-danger">
               <p *ngIf="_LeaveMasterFormGroup.txtToDate.errors.required">
@@ -120,18 +122,25 @@
 
         <div *ngIf="request.IsHeadQuarter" >
           <label for="txtMobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile Number:<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="txtIsHeadQuarterMobileNo" placeholder="Enter 10 Digits Mobile Number" [(ngModel)]="request.txtIsHeadQuarterMobileNo" formControlName="txtIsHeadQuarterMobileNo" maxlength="10" (input)="onInput($event)">
+          <input type="text" class="form-input" id="txtIsHeadQuarterMobileNo" placeholder="Enter 10 Digits Mobile Number" [(ngModel)]="request.txtIsHeadQuarterMobileNo" formControlName="txtIsHeadQuarterMobileNo" maxlength="10" minlength="10" (keypress)="validateNumber($event)">
           <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors"
                class="text-danger">
-            <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors.required">
+            <!-- <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['required']">
               <i aria-hidden="true"></i>This field is required.!
+            </p> -->
+            <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['pattern']">
+              <i aria-hidden="true"></i> Please enter a valid mobile number!
+            </p>
+            <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['minlength'] || _LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['maxlength']">
+              <i aria-hidden="true"></i> Mobile number must be 10 digits!
             </p>
           </div>
+
         </div>
 
 
           <div>
-            <label>Total Days </label>
+            <label>Total Leave Deduction(in Days) </label>
             <input type="text" class="form-input" id="txtToDate" formControlName="TotalDays"
                    [(ngModel)]="request.TotalDays" />
           </div>

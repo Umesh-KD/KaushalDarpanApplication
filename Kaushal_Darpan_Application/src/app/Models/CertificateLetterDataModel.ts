@@ -8,6 +8,8 @@ export class CertificateLetterDataModel extends RequestBaseModel{
 
 export class CertificateLetterSearchModel {
   public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public CourseTypeID: number = 0;
   public InstituteID?: number=0;
   public SemesterID: number = 0;
   public ExamTypeID: number = 0;

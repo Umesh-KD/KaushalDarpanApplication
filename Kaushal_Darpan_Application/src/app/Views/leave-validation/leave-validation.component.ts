@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../Common/SweetAlert2'
 import { EnumStatus } from '../../Common/GlobalConstants';
+import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 @Component({
   selector: 'app-leave-validation',
   standalone: false,
@@ -19,7 +20,7 @@ import { EnumStatus } from '../../Common/GlobalConstants';
 export class LeaveValidationComponent {
   public CompanyMasterDDLList: any = [];
   public requestAction=new LeaveMaster()
-  public HrMasterList: any = [];
+  public LeaveRequestList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new LeaveMasterSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -34,7 +35,7 @@ export class LeaveValidationComponent {
   formAction!: FormGroup;
   constructor(
     private commonMasterService: CommonFunctionService,
-    private HrMasterService: LeaveMasterService,
+    private LeaveService: LeaveMasterService,
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
@@ -46,8 +47,8 @@ export class LeaveValidationComponent {
   async ngOnInit() {
     this.formAction = this.formBuilder.group(
       {
-        ddlAction: ['', Validators.required],
-        txtActionRemarks: ['', Validators.required],
+        ddlAction: ["", Validators.required],
+        txtActionRemarks: ["", Validators.required],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Id = Number(this.activatedRoute.snapshot.paramMap.get('id') ?? .0)
@@ -99,21 +100,20 @@ export class LeaveValidationComponent {
 
   async GetAllData() {
     try {
-      
-
-
+     // debugger
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
-      this.loaderService.requestStarted();
-      await this.HrMasterService.HrValidationList(this.searchRequest)
+      this.searchRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID_Session;
+
+      await this.LeaveService.GetStaffLeaveRequest(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
-          this.HrMasterList = data['Data'];
-          console.log(this.HrMasterList, "lisssssttt")
+          this.LeaveRequestList = data['Data'];
+          console.log(this.LeaveRequestList, "lisssssttt")
           
         }, (error: any) => console.error(error)
         );
@@ -121,11 +121,6 @@ export class LeaveValidationComponent {
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -147,7 +142,7 @@ export class LeaveValidationComponent {
             //Show Loading
             this.loaderService.requestStarted();
 
-            await this.HrMasterService.DeleteById(PlacementCompanyID, this.sSOLoginDataModel.UserID)
+            await this.LeaveService.DeleteById(PlacementCompanyID, this.sSOLoginDataModel.UserID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
                 console.log(data);
@@ -180,36 +175,32 @@ export class LeaveValidationComponent {
       });
   }
 
-  async CompanyOnAction(content: any, StaffLeaveID: number) {
-    debugger
-    this.requestAction.StaffLeaveID = StaffLeaveID;
-        
-    this.requestAction.Action = "0";
-    this.requestAction.ActionRemark = "";
+  async CompanyOnAction(content: any, row: any) {
+    //debugger
+    
     this.isSubmitted = false;
+
+    // reset model
+    this.requestAction.Action = "";
+    this.requestAction.ActionRemark = "";
+
+    // modal save
+    this.requestAction.StaffLeaveID = row.StaffLeaveID;        
+    this.requestAction.StaffTypeID = row.StaffTypeID;   
+    this.requestAction.CalanderYearID = row.CalanderYearID;   
+    this.requestAction.SessionTypeID = row.SessionTypeID;   
+    this.requestAction.FinancialYearID = row.FinancialYearID;  
+    this.requestAction.LeaveID = row.LeaveID;    
+    this.requestAction.StaffID = row.StaffID;   
+    this.requestAction.TotalDays=row.TotalDays;
+
+
     this.formAction.reset();
       // Always close any previous modal before opening new
     if (this.modalReference) {
       this.modalReference.close();
     }
     
-  // this.modalReference = this.modalService.open(content, { 
-  //   size: 'sm', 
-  //   ariaLabelledBy: 'modal-basic-title', 
-  //   backdrop: 'static' 
-  // });
-
-  //  this.modalReference.result.then(
-  //   (result) => {
-  //     this.closeResult = `Closed with: ${result}`;
-  //     this.modalReference = undefined; // reset reference
-  //   },
-  //   (reason) => {
-  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  //     this.modalReference = undefined; // reset reference
-  //   }
-  // );
-
     this.modalReference = this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
     
     this.modalReference.result.then((result) => {
@@ -220,18 +211,6 @@ export class LeaveValidationComponent {
     
 
   }
-  //async ViewandUpdate(content: any, HRManagerID: number) {
-
-  //  const initialState = {
-  //    HRManagerID: HRManagerID,
-  //    Type: "Admin",
-  //  };
-  //  this.modalReference = this.modalService.open(HrMasterComponent, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
-  //  this.modalReference.componentInstance.initialState = initialState;
-
-  //  //this.modalReference.shown(CampusPostComponent, { initialState });
-  //  //this.modalReference.show(CampusPostComponent, { initialState });
-  //}
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -247,21 +226,19 @@ export class LeaveValidationComponent {
   }
 
   async SaveData_ApprovedCampus() {
-    debugger
+    //debugger
     this.isSubmitted = true;
 
     if (this.formAction.invalid) {
       return
     }
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    
     this.requestAction.ActionBy = this.sSOLoginDataModel.UserID;
-    this.requestAction.ActionRemark=this.formAction.get('txtActionRemarks')?.value
-    // this.requestAction.ActionRemark = this.formAction.controls['txtActionRemarks'].value;
     this.requestAction.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
     //Show Loading
-    this.loaderService.requestStarted();
     try {
-      await this.HrMasterService.Save_HrValidation_NodalAction(this.requestAction)
+      await this.LeaveService.SaveStaffLeaveRequest(this.requestAction)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
@@ -276,11 +253,9 @@ export class LeaveValidationComponent {
           }
         })
     }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+    catch (ex) { 
+      console.log(ex) 
+
     }
   }
 

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import {  CreditLeaveModel, LeaveMasterSearchModel } from '../../Models/LeaveMasterDataModel';
+import { CreditLeaveModel, LeaveMasterSearchModel } from '../../Models/LeaveMasterDataModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { LeaveMasterService } from '../../Services/LeaveMaster/leave-master.service';
@@ -9,7 +9,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../Common/SweetAlert2'
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumStatus, SessionType } from '../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 @Component({
@@ -21,8 +21,9 @@ import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 export class LeaveCreditComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public StaffLeaveTrnList: any = [];
-  public CalenderYearList:any=[];
-  public StaffIDList:CreditLeaveModel[]=[];
+  public CalenderYearList: any = [];
+  public StaffIDList: CreditLeaveModel[] = [];
+  public SessionYearList: any = [];
 
   public Table_SearchText: string = "";
   public searchRequest = new LeaveMasterSearchModel();
@@ -33,18 +34,29 @@ export class LeaveCreditComponent {
   public ApprovedStatus: string = "0";
   public status: number = 0;
 
-    //table feature default
-    public paginatedInTableData: any[] = [];//copy of main data
-    public currentInTablePage: number = 1;
-    public pageInTableSize: string = "50";
-    public totalInTablePage: number = 0;
-    public sortInTableColumn: string = '';
-    public sortInTableDirection: string = 'asc';
-    public startInTableIndex: number = 0;
-    public endInTableIndex: number = 0;
-    public AllInTableSelect: boolean = false;
-    public totalInTableRecord: number = 0;
-    //end table feature default
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
+
+  public _SessionType = SessionType;
+
+  // properties you do NOT want to show
+  excludedColumns = [
+    'StaffID',
+    'StaffTypeID',
+    'SessionTypeID',
+    'CalenderYearID',
+    'FinancialYearID'
+  ];
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -60,18 +72,14 @@ export class LeaveCreditComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    // this.searchRequest.CalenderYearID=this.sSOLoginDataModel.CalenderYearID;
+    this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID_Session;
 
     await this.GetCalenderYearList();
-
-    await this.GetAllData();
-
-
-    this.searchRequest.CalenderYearID=15;
+    await this.GetSessionYear();
   }
 
   async GetCalenderYearList() {
-    debugger
+    // debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCalenderYearList()
@@ -79,7 +87,7 @@ export class LeaveCreditComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.CalenderYearList = data['Data'];
-
+          this.searchRequest.CalenderYearID = this.CalenderYearList.find((x: any) => x.IsCurrentCalenderYear == 1).CalenderYearID;
         }, (error: any) => console.error(error)
         );
     }
@@ -94,12 +102,23 @@ export class LeaveCreditComponent {
   }
 
 
-  async onCalenderYearChange(){
+  async GetSessionYear() {
+    try {
+      await this.commonMasterService.GetFinancialYear().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SessionYearList = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async onCalenderYearChange() {
 
   }
 
   async Save_CreditStaffLeave() {
-    debugger
+    // debugger
     let dyMsg = 'Credit';
     // if (this.status == 1345) {
     //   dyMsg = "Approve";
@@ -107,55 +126,60 @@ export class LeaveCreditComponent {
     //   dyMsg = "Reject";
     // }
     this.Swal2.Confirmation(`Are you sure you want to ${dyMsg}?`,
-    async (result: any) => {
-      
-      if (result.isConfirmed) {
-        try {
-          // this.StaffIDList = this.StaffLeaveTrnList.map((x:any) => ({
-          //   StaffID: x.StaffID,
-          //   StaffTypeID:x.StaffTypeID,
-          //   ModifyBy: this.sSOLoginDataModel.UserID,
-          //   DepartmentID:this.sSOLoginDataModel.DepartmentID
-          // }));
-          this.StaffIDList = Array.from(
-            new Map(
-              this.StaffLeaveTrnList.map((x: any) => [
-                x.StaffID,
-                {
-                  StaffID: x.StaffID,
-                  StaffTypeID: x.StaffTypeID,
-                  ModifyBy: this.sSOLoginDataModel.UserID,
-                  DepartmentID: this.sSOLoginDataModel.DepartmentID,
-                  FinancialYearID:this.sSOLoginDataModel.FinancialYearID,
-                  RoleID:this.sSOLoginDataModel.RoleID
-                } as CreditLeaveModel
-              ])
-            ).values()
-          ) as CreditLeaveModel[];
+      async (result: any) => {
 
-          await this.LeaveMasterService.CreditStaffLeave(this.StaffIDList)
-            .then(async (data: any) => {
-              data = JSON.parse(JSON.stringify(data));
-              if(data.State === EnumStatus.Success) {
-                this.toastr.success(data.Message); 
-                await this.GetAllData();       
-              }
-            })
+        if (result.isConfirmed) {
+          try {
+            // this.StaffIDList = this.StaffLeaveTrnList.map((x:any) => ({
+            //   StaffID: x.StaffID,
+            //   StaffTypeID:x.StaffTypeID,
+            //   ModifyBy: this.sSOLoginDataModel.UserID,
+            //   DepartmentID:this.sSOLoginDataModel.DepartmentID
+            // }));
+            this.StaffIDList = Array.from(
+              new Map(
+                this.StaffLeaveTrnList.map((x: any) => [
+                  x.StaffID,
+                  {
+                    StaffID: x.StaffID,
+                    StaffTypeID: x.StaffTypeID,
+                    ModifyBy: this.sSOLoginDataModel.UserID,
+                    DepartmentID: this.sSOLoginDataModel.DepartmentID,
+                    RoleID: this.sSOLoginDataModel.RoleID,
+                    SessionTypeID: this.searchRequest.SessionTypeID,
+                    CalenderYearID: this.searchRequest.CalenderYearID,
+                    FinancialYearID: this.searchRequest.FinancialYearID
+                  } as CreditLeaveModel
+                ])
+              ).values()
+            ) as CreditLeaveModel[];
+
+            await this.LeaveMasterService.CreditStaffLeave(this.StaffIDList)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State === EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  await this.GetAllData();
+                }
+              })
+          }
+          catch (ex) {
+            console.log(ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
         }
-        catch (ex) {
-          console.log(ex);
-        }
-        finally {
-          setTimeout(() => {
-            this.loaderService.requestEnded();
-          }, 200);
-        }
-      }
-    })
-    
+      })
+
   }
 
-
+  onSessionTypeChange() {
+    this.StaffLeaveTrnList = [];
+    this.loadInTable();
+  }
 
 
   maskMobileNumber(mobile: string): string {
@@ -169,32 +193,26 @@ export class LeaveCreditComponent {
 
 
   async GetAllData() {
-    debugger
+    // debugger
     try {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
-      this.searchRequest.Action='_getLeaveCreditStaffData';
-      this.loaderService.requestStarted();
+      // this.searchRequest.Action='_getLeaveCreditStaffData';
+
       await this.LeaveMasterService.GetLeaveCreditStaffData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.StaffLeaveTrnList = data['Data'];
           this.loadInTable();
-          console.log(this.StaffLeaveTrnList, "lisssssttt")
         }, (error: any) => console.error(error)
         );
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -326,25 +344,39 @@ export class LeaveCreditComponent {
   }
   // (replace org.list here)
   get totalInTableSelected(): number {
-    return this.StaffLeaveTrnList.filter((x:any) => x.Selected)?.length;
+    return this.StaffLeaveTrnList.filter((x: any) => x.Selected)?.length;
   }
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
-    this.StaffLeaveTrnList.forEach((x:any) => {
+    this.StaffLeaveTrnList.forEach((x: any) => {
       x.Selected = this.AllInTableSelect;
     });
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.StaffLeaveTrnList.filter((x:any) => x.AllotmentID == item.AllotmentID);
-    data.forEach((x:any) => {
+    const data = this.StaffLeaveTrnList.filter((x: any) => x.AllotmentID == item.AllotmentID);
+    data.forEach((x: any) => {
       x.Selected = isSelected;
     });
     //select all(toggle)
-    this.AllInTableSelect = this.StaffLeaveTrnList.every((r:any) => r.Selected);
+    this.AllInTableSelect = this.StaffLeaveTrnList.every((r: any) => r.Selected);
   }
   // end table feature
+
+
+  // for keep org. list order
+  originalOrder = (
+    a: { key: string },
+    b: { key: string }
+  ): number => {
+    return 0; // keeps insertion order
+  };
+
+  // helper function
+  isVisibleColumn(key: string): boolean {
+    return !this.excludedColumns.includes(key);
+  }
 }

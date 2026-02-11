@@ -47,20 +47,31 @@
             </div>
           </div>
           <!--<div>
-          <label for="RollNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Roll No:<span class="StarMarking">*</span>
-          </label>
-          <input type="text" placeholder="Roll No" class="form-input" id="txtRollNo" formControlName="txtRollNo" name="txtRollNo" [(ngModel)]="searchRequest.RollNo">
-          <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtRollNo.errors" class="text-danger">
-            <p *ngIf="_AddStaffBasicDetailFromGroup.txtRollNo.errors.required">
-              <i aria-hidden="true"></i>
-              This
-              field is
-              required.!
-            </p>
-          </div>
-        </div>-->
+    <label for="RollNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+      Roll No:<span class="StarMarking">*</span>
+    </label>
+    <input type="text" placeholder="Roll No" class="form-input" id="txtRollNo" formControlName="txtRollNo" name="txtRollNo" [(ngModel)]="searchRequest.RollNo">
+    <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtRollNo.errors" class="text-danger">
+      <p *ngIf="_AddStaffBasicDetailFromGroup.txtRollNo.errors.required">
+        <i aria-hidden="true"></i>
+        This
+        field is
+        required.!
+      </p>
+    </div>
+  </div>-->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade Types: <span class="StarMarking">*</span></label>
 
+            <select class="form-select ng-pristine ng-valid ng-touched" id="TradeTypesID" [(ngModel)]="searchRequest.ExamType" formControlName="ExamType">
+              <option value="0">All</option>
+              <option value="1">Eng</option>
+              <option *ngIf="searchRequest.ExamYearID!=2" value="2">Non-Eng</option>
+              <!--<option *ngFor="let item of TradeTypesList" [value]="item.CourseTypeID">
+        {{item.CourseTypeName}}
+      </option>-->
+            </select>
+          </div>
           <div>
             <button type="submit" (click)="GetList()" class="btn bg-info text-white mt-6 me-1">Search</button>
             <button *ngIf="isVisibleDownload" type="submit" (click)="TradeWiseResultDownload()" class="btn bg-info text-white mt-6 me-1">Download</button>

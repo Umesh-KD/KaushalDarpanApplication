@@ -42,6 +42,7 @@ export class DteEditeItemMasterComponent {
   public _EnumRole = EnumRole;
   public errorLList: any = [];
   public CheckAuctionSearch = new CheckItemAuctionSearch();
+  public ItemStatus: number =  0;
   constructor(
     private dteItemsMasterService: DteItemsMasterService,
     private toastr: ToastrService,
@@ -56,7 +57,7 @@ export class DteEditeItemMasterComponent {
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
-    debugger;
+     ;
     console.log(this.ItemId);
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
@@ -75,7 +76,7 @@ export class DteEditeItemMasterComponent {
     // ✅ Disable status where needed
 
 
-    debugger
+     
     this.itemsFormArray.controls.forEach((group, index) => {
       const equipmentWorking = this.ItemDetailsList[index]?.EquipmentWorking;
       const AuctionStatus = this.ItemDetailsList[index]?.AuctionStatus;
@@ -117,7 +118,7 @@ this.itemsFormArray.get('items')?.valueChanges
   async GetAllItemDetails() {
   if (this.ItemId != null && this.ItemId != undefined && this.ItemId > 0) {
     await this.dteItemsMasterService.GetAllDTEItemDetails(this.ItemId).then((data: any) => {
-      debugger
+       
       console.log('Item Details List==>', data)
       data = JSON.parse(JSON.stringify(data));
       if (data.State === EnumStatus.Success) {
@@ -170,6 +171,8 @@ addItemsControls() {
           this.request.TotalPrice = data['Data']["TotalPrice"];
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
+          this.ItemStatus = data['Data']["Status"];
+
           // Update UI elements if necessary
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
@@ -513,7 +516,7 @@ getRange(quantity: string | number): number[] {
 //}
 
   //async equipmentCodeDuplicate(code: string, categoryId: number) {
-  //  debugger
+  //   
   //  try {
   //    this.loaderService.requestStarted();
 

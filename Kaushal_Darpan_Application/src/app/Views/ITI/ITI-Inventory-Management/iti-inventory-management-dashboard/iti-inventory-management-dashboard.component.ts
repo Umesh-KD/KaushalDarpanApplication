@@ -39,6 +39,8 @@ export class ITIInventoryManagementDashboard {
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
     this.InventoryDashboardList = [];
     try {
       this.loaderService.requestStarted();

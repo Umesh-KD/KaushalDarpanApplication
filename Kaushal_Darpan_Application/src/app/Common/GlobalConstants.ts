@@ -174,7 +174,7 @@ export enum EnumRole {
   
   StoreKeeper_NCVT = 213,
   StoreKeeper_SCVT = 214,
-  
+  StoreOfficer = 249,
 
   DTE_TrainingT2_establishment = 215,
   DTETrainingT1Training = 216,
@@ -805,6 +805,11 @@ export enum EnumLeaveType {
     PrivilegeLeave_NonTech = 9,
     HalfPayLeave_NonTech=10,
   
+}
+
+export enum SessionType{
+  FinancialYear=1,
+  CalenderYear=2
 }
 
 export const MONTH_LIST = [

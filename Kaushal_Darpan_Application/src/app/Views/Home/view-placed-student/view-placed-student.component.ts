@@ -8,7 +8,7 @@ import { ViewPlacedStudentService } from '../../../Services/ViewPlacedStudent/Vi
 import { ViewPlacedStudentSearchModel } from '../../../Models/ViewPlacedStudentDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { EnumDepartment } from '../../../Common/GlobalConstants';
-
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-view-placed-student',
@@ -79,6 +79,46 @@ export class ViewPlacedStudentComponent implements OnInit {
       newWin?.close();
     }, 10);
   }
+
+
+
+  exportToExcel(): void {
+    const wantedColumns =
+        ['SrNo', 'StudentName', 'EnrollmentNo', 'InstituteName', 'InstitutionManagementType', 'FatherName', 'Age',   'Dis_Gender'];
+
+    const exportData = this.PlacedStudentList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+      });
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map(row =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName = `Campus_Details_Report_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
+
+
+
+
+
+
 }
 
 

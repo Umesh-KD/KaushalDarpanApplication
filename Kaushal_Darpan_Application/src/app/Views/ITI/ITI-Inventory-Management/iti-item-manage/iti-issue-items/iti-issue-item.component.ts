@@ -601,7 +601,8 @@ export class AddItiIssueItemComponent {
         this.toastr.error("Please select at least one Staff!");
         return;
       }
-      await this.itiInventoryService.GetIssueItemListPermanent(row.EquipmentsId, row.ItemCategoryId).then((data: any) => {
+      let TradeId = this.Searchrequests.TradeId
+      await this.itiInventoryService.GetIssueItemListPermanent(row.EquipmentsId, row.ItemCategoryId, TradeId).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.ItemsDataList = data.Data; 

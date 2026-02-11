@@ -76,7 +76,9 @@
             </tr>
           </thead>
           <tbody *ngIf="ItemDetailsList?.length > 0">
-            <tr *ngFor="let item of itemsFormArray.controls; let i = index" [formGroup]="item">
+            <tr *ngFor="let item of itemsFormArray.controls; let i = index" 
+              [formGroup]="item"
+              [ngClass]="{'readonly-row': ItemStatus != 0}">
               <td class="border p-2">{{ i + 1 }}</td>
 
               <td class="border p-2">
@@ -144,7 +146,8 @@
           </tbody>
         </table>
       </div>
-      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6"
+        *ngIf="ItemStatus == 0">
         <div class="text-center">
           <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
           <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">

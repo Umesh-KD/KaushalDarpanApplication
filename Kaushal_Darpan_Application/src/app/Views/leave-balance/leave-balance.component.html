@@ -27,24 +27,31 @@
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
         </div> -->
        
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
-          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
-            <option value="">--All--</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-            <option value="Hold">Hold</option>
-          </select>
-        </div> -->
-
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Type</label>
+          <select class="form-select" id="SessionTypeID" name="SessionTypeID" [(ngModel)]="searchRequest.SessionTypeID" (change)="onSessionTypeChange()" >
+            <option value="0">--All--</option>
+            <option value="{{_SessionType.FinancialYear}}">Academic Year</option>
+            <option value="{{_SessionType.CalenderYear}}">Calender Year</option>
+          </select>
+        </div>
+
+        <div *ngIf="searchRequest.SessionTypeID==_SessionType.CalenderYear">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Calender Year</label>
-          <select class="form-select" id="CalenderYearID" name="CalenderYearID" [(ngModel)]="searchRequest.CalenderYearID" (change)="onCalenderYearChange()" disabled>
-            <option value="0">Choose Option</option>
+          <select class="form-select" name="CalenderYearID" [(ngModel)]="searchRequest.CalenderYearID" (change)="onCalenderYearChange()" disabled>
+            <option value="0">--Select--</option>
             <option *ngFor="let item of CalenderYearList" [value]="item.CalenderYearID">{{item.CalenderYearName}}</option>
           </select>
         </div>
+
+        <div *ngIf="searchRequest.SessionTypeID==_SessionType.FinancialYear">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year</label>
+          <select class="form-select" id="FinancialYearID" [(ngModel)]="searchRequest.FinancialYearID" disabled>
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of SessionYearList" [value]="item.FinancialYearID">{{item.FinancialYearName}}</option>
+          </select>
+        </div>
+        
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
@@ -79,19 +86,27 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
-            <th class="text-left">Name</th>
+            <th *ngFor="let col of columns">
+              {{col}}
+            </th>
+            <!-- <th class="text-left">Name</th>
             <th class="text-left">Staff Type</th>  
             <th class="text-left">Leave Type</th>  
-            <th class="text-left">Leave Balance</th>            
+            <th class="text-left">Leave Type</th> 
+            <th class="text-left">Leave Balance</th>-->
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
             <td class="text-center">{{idx+1}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Name}}</td>
+             <!-- Dynamic cells -->
+            <td *ngFor="let col of columns">
+              {{row[col]}}
+            </td>
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Name}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StaffTypeName}}</td>         
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.LeaveName}}</td>    
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.LeaveBalance}}</td>  
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.LeaveBalance}}</td>   -->
           </tr>
         </tbody>
       </table>

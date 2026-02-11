@@ -219,7 +219,16 @@ export class ITIAddRequestLabelingEquipmentsComponent {
     // Update the input field and model
     input.value = numericValue.toString();
     this.request.ApprovedQuantity = numericValue;
-    this.calculateTotalPrice();
+    if(this.request?.Quantity) {
+      if(this.request.ApprovedQuantity > this.request?.Quantity){
+        this.request.ApprovedQuantity = 0
+        this.toastr.warning("Approved Quantity can't be greater than Requested Quantity");
+        return;
+      }
+      else {
+        this.calculateTotalPrice();
+      }
+    }
   }
 
   async EquimentsWiseQty() {
@@ -264,6 +273,11 @@ export class ITIAddRequestLabelingEquipmentsComponent {
         this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
         this.request.RoleID = this.sSOLoginDataModel.RoleID;
         this.request.TradeIdTypeId = this.sSOLoginDataModel.Eng_NonEng;
+
+        if((this.request?.ApprovedQuantity ?? 0) > (this.request?.Quantity ?? 0)) {
+          this.toastr.warning("Approved Quantity can't be greater than Requested Quantity");
+          return;
+        }
 
         await this.itiInventoryService.SaveEquipmentsMappingRequestData(this.request)
           .then((data: any) => {

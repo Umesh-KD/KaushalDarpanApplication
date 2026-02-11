@@ -62,17 +62,18 @@ export class LeaveMasterService {
 
   //delete
   public async DeleteById(ID: number, userId: number) {
+    debugger
     var body = JSON.stringify({ "ID": ID, "ModifyBy": userId });
-    return await this.http.delete(`${this.APIUrl}/DeleteByID/${ID}/${userId}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteByID/${ID}/${userId}`,body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
 
-  public async HrValidationList(searchRequest: LeaveMasterSearchModel) {
+  public async GetStaffLeaveRequest(searchRequest: LeaveMasterSearchModel) {
     var body = JSON.stringify(searchRequest);
-    return await this.http.post(`${this.APIUrl}/HrValidationList`, body, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/GetStaffLeaveRequest`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -87,9 +88,9 @@ export class LeaveMasterService {
       ).toPromise();
   }
 
-  public async Save_HrValidation_NodalAction(request: LeaveMaster) {
+  public async SaveStaffLeaveRequest(request: LeaveMaster) {
     const body = JSON.stringify(request);
-    return await this.http.post(this.APIUrl + "/Save_HrValidation_NodalAction", body, this.headersOptions)
+    return await this.http.post(this.APIUrl + "/SaveStaffLeaveRequest", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

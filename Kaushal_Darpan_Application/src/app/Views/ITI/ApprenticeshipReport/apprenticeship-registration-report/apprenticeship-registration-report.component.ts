@@ -70,11 +70,11 @@ export class ApprenticeshipRegistrationReport {
     });
     this.ssoLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //this.GetTradeMatserDDL();
-    this.GetITICollege();
+    await this.GetITICollege();
     this.request.FileName = '';
     const Editid = sessionStorage.getItem('ApprenticeshipRegistrationReportPKID');
     if (Editid != undefined && parseInt(Editid) > 0) {
-      this.GetReportDatabyID(parseInt(Editid));
+      await this.GetReportDatabyID(parseInt(Editid));
       this.ApprenticeshipReportFormGroup.disable(); // Disables all form controls
       console.log(Editid);
     }
