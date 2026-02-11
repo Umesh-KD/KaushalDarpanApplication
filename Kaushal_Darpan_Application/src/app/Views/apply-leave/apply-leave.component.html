@@ -125,13 +125,13 @@
           <input type="text" class="form-input" id="txtIsHeadQuarterMobileNo" placeholder="Enter 10 Digits Mobile Number" [(ngModel)]="request.txtIsHeadQuarterMobileNo" formControlName="txtIsHeadQuarterMobileNo" maxlength="10" minlength="10" (keypress)="validateNumber($event)">
           <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors"
                class="text-danger">
-            <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['required']">
+            <!-- <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['required']">
               <i aria-hidden="true"></i>This field is required.!
-            </p>
+            </p> -->
             <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['pattern']">
               <i aria-hidden="true"></i> Please enter a valid mobile number!
             </p>
-            <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['minlength'] || _LeaveMasterFormGroup.get('txtIsHeadQuarterMobileNo').errors?.['maxlength']">
+            <p *ngIf="_LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['minlength'] || _LeaveMasterFormGroup.txtIsHeadQuarterMobileNo.errors?.['maxlength']">
               <i aria-hidden="true"></i> Mobile number must be 10 digits!
             </p>
           </div>

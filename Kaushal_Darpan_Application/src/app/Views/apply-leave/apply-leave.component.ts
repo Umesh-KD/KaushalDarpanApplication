@@ -63,7 +63,7 @@ export class ApplyLeaveComponent {
         IsHeadQuarter: [0],
         LeaveTypeID: ['', [DropdownValidators]],
         txtIsHeadQuarterAddress:[''],
-        txtIsHeadQuarterMobileNo:['', [Validators.required,Validators.pattern(GlobalConstants.MobileNumberPattern), Validators.minLength(10), Validators.maxLength(10)]],
+        txtIsHeadQuarterMobileNo:['', [Validators.pattern(GlobalConstants.MobileNumberPattern), Validators.minLength(10), Validators.maxLength(10)]],
         RemainingLeave:[{value:'',disabled:true}]
 
       });
