@@ -106,7 +106,7 @@ export class itiAllResultComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     const todayDate = new Date().toISOString().split('T')[0];
 
-    const fileName = `Campus_Details_Report_${todayDate}.xlsx`;
+    const fileName = `All_Result_data_Report_${todayDate}.xlsx`;
     XLSX.writeFile(wb, fileName);
   }
 
