@@ -107,6 +107,11 @@ export class itiStudentPassFailResultComponent {
     this.requestPassFailModel.EndTermID = Number(this.sSOLoginDataModel.EndTermID);
     this.requestPassFailModel.FinancialYearID = Number(this.sSOLoginDataModel.FinancialYearID);
 
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITI_ResultAdmin) {
+    
+   
+      this.requestPassFailModel.InstituteId = Number(this.sSOLoginDataModel.InstituteID);
+    }
 
 
     await this.GetITICollegeStudent_Marksheet();
@@ -438,7 +443,8 @@ export class itiStudentPassFailResultComponent {
       debugger;
       // Set trade scheme and result status
       this.requestPassFailModel.TradeScheme = this.sSOLoginDataModel.Eng_NonEng;
-      this.requestPassFailModel.InstituteId = Number(this.sSOLoginDataModel.InstituteID);
+
+
       // Call current status check
       await this.itiResultService.GetCurrentPassFailResultStatus(this.requestPassFailModel)
         .then((data: any) => {
