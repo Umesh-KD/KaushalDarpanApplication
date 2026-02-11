@@ -9,7 +9,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus, EnumLeaveTypeFSFDay, EnumLeaveType } from '../../Common/GlobalConstants';
+import { EnumStatus, EnumLeaveTypeFSFDay, EnumLeaveType, GlobalConstants } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 @Component({
@@ -63,7 +63,7 @@ export class ApplyLeaveComponent {
         IsHeadQuarter: [0],
         LeaveTypeID: ['', [DropdownValidators]],
         txtIsHeadQuarterAddress:[''],
-        txtIsHeadQuarterMobileNo:[''],
+        txtIsHeadQuarterMobileNo:['', [Validators.required,Validators.pattern(GlobalConstants.MobileNumberPattern), Validators.minLength(10), Validators.maxLength(10)]],
         RemainingLeave:[{value:'',disabled:true}]
 
       });
@@ -238,7 +238,22 @@ export class ApplyLeaveComponent {
 
   // get detail by id
   async SaveData() {
-//debugger
+    debugger
+  // Calculate inclusive day difference between two dates
+    const diffDaysInclusive = (start: Date, end: Date): number => {
+      const diffTime = end.getTime() - start.getTime();
+      return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    };
+    const fromDate = new Date(this.request.From_Date);
+    const toDate = new Date(this.request.To_Date);
+
+    if(this.request.LeaveID==EnumLeaveType.CasualLeave_NonTech || this.request.LeaveID==EnumLeaveType.CasualLeave_Tech){     
+      let totalDays = diffDaysInclusive(fromDate, toDate);
+      if(totalDays>10){
+        this.toastr.warning("Casual Leave Cannot be Greater than 10 Days!");
+        return;
+      }
+    }
     try {
       this.isSubmitted = true;
       if (this.LeaveMasterFormGroup.invalid) {
@@ -256,6 +271,7 @@ export class ApplyLeaveComponent {
         this.toastr.warning("Document is manadatoery for Half Pay Leave!");
         return;
       }
+  
       this.isLoading = true;
 
       this.loaderService.requestStarted();
@@ -390,7 +406,7 @@ export class ApplyLeaveComponent {
 
 
 async calculateDays() {
-  //debugger;
+  debugger;
   this.req.LeaveID=this.request.LeaveID;
   this.request.SessionTypeID=this.LeaveTypeList.find((item:any)=>item.ID==this.request.LeaveID).SessionTypeID;
   // this.filteredStatusList = this.statusList.filter((item: { ID: number; }) => item.ID === 1339 || item.ID === 218);
@@ -420,13 +436,20 @@ async calculateDays() {
   const fromDate = new Date(fromDateStr);
   const toDate = new Date(toDateStr);
 
-  
-
   // Calculate inclusive day difference between two dates
   const diffDaysInclusive = (start: Date, end: Date): number => {
     const diffTime = end.getTime() - start.getTime();
     return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
   };
+
+  if(leaveType==EnumLeaveType.CasualLeave_NonTech || leaveType==EnumLeaveType.CasualLeave_Tech){    
+      let totalDays = diffDaysInclusive(fromDate, toDate);
+      if(totalDays>10){
+        this.toastr.warning("Casual Leave Cannot be Greater than 10 Days!");
+        this.request.TotalDays=totalDays;
+        return;
+      }
+  }
 
   // Weekend check: Sunday=0, Saturday=6
   const isWeekend = (date: Date): boolean => {
@@ -480,6 +503,10 @@ async calculateDays() {
      // HAlf pay leave example: double total days
      if (leaveType == EnumLeaveType.HalfPayLeave_NonTech ||leaveType == EnumLeaveType.HalfPayLeave_Tech) {
       totalDays = totalDays * 2;
+    }
+
+    else if(leaveType==EnumLeaveType.CasualLeave_NonTech || leaveType==EnumLeaveType.CasualLeave_Tech){
+
     }
 
     this.request.TotalDays = totalDays;
@@ -551,16 +578,16 @@ async calculateDays() {
   }
 
   
-  onInput(event: any): void {
-    const inputValue = event.target.value;
+  // onInput(event: any): void {
+  //   const inputValue = event.target.value;
 
-    // Remove non-digit characters
-    const onlyDigits = inputValue.replace(/\D/g, '');
+  //   // Remove non-digit characters
+  //   const onlyDigits = inputValue.replace(/\D/g, '');
 
-    // Update the input value with only digits
-    event.target.value = onlyDigits;
+  //   // Update the input value with only digits
+  //   event.target.value = onlyDigits;
 
-    // Optionally, update the ngModel if needed
-    this.request.txtIsHeadQuarterMobileNo = onlyDigits;
-  }
+  //   // Optionally, update the ngModel if needed
+  //   this.request.txtIsHeadQuarterMobileNo = onlyDigits;
+  // }
 }
