@@ -1,0 +1,17 @@
+.status-pill {
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.status-live {
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: #fff;
+}
+
+.status-notlive {
+  background: linear-gradient(45deg, #dc3545, #fd7e14);
+  color: #fff;
+}

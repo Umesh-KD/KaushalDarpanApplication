@@ -861,6 +861,7 @@ const routes: Routes = [
      
       { path: 'Iti-all-Result', loadChildren: () => import('./Views/ITI/reports/iti-All-Result/iti-All-Result.module').then(m => m.itiAllResultModule), title: "All data" },
 
+      { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule) },
 
 
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
