@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { ItiGetPassFailResultDataModel, ItiGetResultDataModel } from '../../Models/ITI/ITI_ResultModel';
+import { ExamLiveResultModel, ItiGetPassFailResultDataModel, ItiGetResultDataModel } from '../../Models/ITI/ITI_ResultModel';
 
 @Injectable({
   providedIn: 'root'
@@ -121,6 +121,15 @@ export class ITIResultService {
   public async DownloadCFormConsolidatedReport(requestObj: ItiGetResultDataModel) {
     var body = JSON.stringify(requestObj);
     return await this.http.post(`${this.APIUrl}/DownloadCFormConsolidatedReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetExamLiveResult(requestObj: ExamLiveResultModel) {
+    var body = JSON.stringify(requestObj);
+    return await this.http.post(`${this.APIUrl}/GetExamLiveResult`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -1,0 +1,68 @@
+<app-loader> </app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Live Result</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/ItiTimeTable']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Live Result</a>
+    </div>
+  </div>
+
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+     
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Live Results</b>
+    </div>
+
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th width="20%" class="text-left">Exam Name</th>
+            <th width="20%" class="text-left">Status</th>
+            <th width="20%" class="text-left">Date</th>
+            <th width="20%" class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of liveResultDataList | tableSearchFilter:Table_SearchText ; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.ExamName}}</td>
+
+            <td > 
+              <span class="status-pill"
+                    [ngClass]="row.isLiveResult == 1 ? 'status-live' : 'status-notlive'">
+                {{ row.isLiveResult == 1 ? 'Live' : 'Un Live' }}
+              </span>
+            </td>
+
+            <td> {{ row.ModifyDate  }}</td>
+            <td align="left">
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+
+                <button type="button" class="btn bg-success text-white fixed-btn"
+                        (click)="LiveResult()">
+                  {{ row.isLiveResult == 0 ? 'Live' : 'Un Live' }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+

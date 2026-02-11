@@ -122,6 +122,7 @@ export class LeaveListComponent {
 
   // delete by id
   async DeleteById(PlacementCompanyID: number) {
+    debugger
     this.Swal2.Confirmation("Do you want to delete?",
       async (result: any) => {
         //confirmed

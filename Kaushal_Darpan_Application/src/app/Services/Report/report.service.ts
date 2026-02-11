@@ -1812,6 +1812,15 @@ export class ReportService {
 
   }
 
+  public async GetITIAllDataExcelReport(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetITIAllDataExcelReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+
+  }
+
 }
 
 

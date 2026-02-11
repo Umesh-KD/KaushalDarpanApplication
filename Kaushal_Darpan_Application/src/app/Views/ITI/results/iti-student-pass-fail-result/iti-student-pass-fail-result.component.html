@@ -50,7 +50,7 @@
 
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block ">Search By college name</label>
-        <select [disabled]="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal" id="InstituteID" [(ngModel)]="requestPassFailModel.InstituteId" class="form-input">
+        <select [disabled]="(sSOLoginDataModel.RoleID != _enumrole.ITI_ResultAdmin)" id="InstituteID" [(ngModel)]="requestPassFailModel.InstituteId" class="form-input">
           <option value="0">Select college</option>
           <option *ngFor="let item of collegeDropDown" value="{{item.Id}}">{{item.Name}}</option>
         </select>

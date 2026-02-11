@@ -234,12 +234,11 @@ export class LeaveValidationComponent {
     }
     
     this.requestAction.ActionBy = this.sSOLoginDataModel.UserID;
-    //this.requestAction.ActionRemark=this.formAction.get('txtActionRemarks')?.value
-    // this.requestAction.ActionRemark = this.formAction.controls['txtActionRemarks'].value;
     this.requestAction.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
     //Show Loading
     try {
-      await this.LeaveService.Save_HrValidation_NodalAction(this.requestAction)
+      await this.LeaveService.SaveStaffLeaveRequest(this.requestAction)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];

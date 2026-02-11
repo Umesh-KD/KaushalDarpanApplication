@@ -1378,7 +1378,8 @@ export class ItiCollegeReportComponent {
         });
       }
     });
-
+   this.ReportForm.controls['AdministrativeBodyId'].clearValidators();
+   this.ReportForm.controls['AdministrativeBodyId'].updateValueAndValidity();
     this.isSubmitted = true;
     if (this.ReportForm.invalid) {
       return
