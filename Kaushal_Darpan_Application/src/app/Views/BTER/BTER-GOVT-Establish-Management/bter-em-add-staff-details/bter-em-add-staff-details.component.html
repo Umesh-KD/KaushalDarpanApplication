@@ -150,6 +150,19 @@
             </p>
           </div>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of first appointment as a govt employee <span class="StarMarking">*</span></label>
+          <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfFirstAppointment" id="DateOfFirstAppointment"
+                 formControlName="DateOfFirstAppointment" [(ngModel)]="request.DateOfFirstAppointment" (click)="openDatePicker($event)" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfFirstAppointment.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.DateOfFirstAppointment.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        
         <!--{{request.DepartmentJoiningDate|json}}
         {{request.DateOfAppointment|json}}-->
         <div *ngIf=" this.IsOterFacultyTech == false" >

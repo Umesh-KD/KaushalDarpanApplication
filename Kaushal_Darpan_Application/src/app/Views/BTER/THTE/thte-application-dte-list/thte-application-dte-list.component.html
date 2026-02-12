@@ -441,3 +441,175 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #Modal_StaffDetails let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div *ngIf="isModalOpen" class="card-header flex justify-between items-center">
+        <div class="flex-1 text-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Preview</b>
+        </div>
+        <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="card tab-panels " id="Preview">
+          <div class="card-body p-5">
+
+            <div class="mb-6 w-full text-center">
+              <h3 class="m-0 text-3xl">Preview Staff Details</h3>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Teacher Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+
+                <div><b>Teacher Name:</b></div>
+                <div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Email:</b></div>
+                <div>{{staffDetailsFormData.Email}}</div>
+                <div><b>Mobile:</b></div>
+                <div>{{staffDetailsFormData.MobileNumber}}</div>
+                <div><b>Designation:</b></div>
+                <div>{{staffDetailsFormData.Designation}}</div>
+                <div><b>Date of Joining as lecture:</b></div>
+                <div>{{staffDetailsFormData.DateOfJoining}}</div>
+                <!--<div><b>Date of Retirement:</b></div>
+                <div></div>-->
+                <div><b>Number of years experience:</b></div>
+                <div>
+                  {{staffDetailsFormData.Experience}}
+                </div>
+                <div><b>Teacher Branch & code:</b></div>
+                <div>{{staffDetailsFormData.StreamCode}} {{staffDetailsFormData.StreamName}}</div>
+
+                <div><b>Adhar Card Number:</b></div>
+                <div>
+                  {{staffDetailsFormData.AdharCardNumber}}
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + staffDetailsFormData.AdharCardPhoto}}"
+                    *ngIf="this.staffDetailsFormData.AdharCardPhoto !=''" class="btn bg-primary text-white m-0"
+                    target="_blank"><i class="ti ti-eye"></i></a>
+
+                </div>
+
+                <div><b>Pan Card Number:</b></div>
+                <div>
+                  {{staffDetailsFormData.PanCardNumber}}
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + staffDetailsFormData.PanCardPhoto}}"
+                    *ngIf="this.staffDetailsFormData.PanCardPhoto !=''" class="btn bg-primary text-white m-0"
+                    target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Current Working Institute</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Institute Name:</b></div>
+                <div>{{staffDetailsFormData.InstituteName}}</div>
+                <div><b>Division:</b></div>
+                <div>{{staffDetailsFormData.InstituteDivision}}</div>
+                <div><b>District:</b></div>
+                <div>{{staffDetailsFormData.InstituteDistrict}}</div>
+                <div><b>Tehsil:</b></div>
+                <div>{{staffDetailsFormData.InstituteTehsil}}</div>
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Qualification Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>UG:</b></div>
+                <div>{{staffDetailsFormData.UGQualificationName}}</div>
+                <div><b>PG:</b></div>
+                <div>{{staffDetailsFormData.PGQualificationName}}</div>
+                <div><b>PhD:</b></div>
+                <div>{{staffDetailsFormData.PHDQualificationName}}</div>
+              </div>
+            </div>
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div>
+                <div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State </b></div>
+                <div>{{staffDetailsFormData.StateName}}</div>
+                <div><b>District </b></div>
+                <div>{{staffDetailsFormData.District}}</div>
+                <!--<div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>-->
+                <div><b>Pincode </b></div>
+                <div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Bank Account Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Bank Name</b></div>
+                <div>{{staffDetailsFormData.BankName}}</div>
+                <div><b>Name In Bank Account</b></div>
+                <div>{{staffDetailsFormData.BankAccountName}}</div>
+                <div><b>Account No.</b></div>
+                <div>{{staffDetailsFormData.BankAccountNo}}</div>
+                <div><b>IFSC Code</b></div>
+                <div>{{staffDetailsFormData.IFSCCode}}</div>
+                <div><b>PAN Card</b></div>
+                <div>{{staffDetailsFormData.PanCardNumber}}</div>
+              </div>
+            </div>
+
+            <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0" class="overflow-auto">
+              <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+                  <tr>
+                    <th>S.No</th>
+                    <th>Branch Type</th>
+                    <th>Branch Name</th>
+                    <th>EXam Type</th>
+                    <th>Semester</th>
+                    <th>Subject</th>
+                    <th>Subject Type</th>
+
+                  </tr>
+
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let row of staffDetailsFormData.StaffSubjectListModel; let idx = index">
+                    <td class="text-center">{{idx+1}}</td>
+                    <td class="text-center">{{row.StreamType}}</td>
+                    <td class="text-center">{{row.BranchName}}</td>
+                    <td class="text-center">{{row.ExamType}}</td>
+                    <td class="text-center">{{row.SemesterName}}</td>
+                    <td class="text-center">{{row.SubjectName}}</td>
+                    <td class="text-center">{{row.SubjectType}}</td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -95,6 +95,7 @@ export class BterEMAddStaffDetailsComponent {
 
       Name: ['', [Validators.required]],
       DateOfBirth: ['', [Validators.required]],
+      DateOfFirstAppointment: ['', [Validators.required]],
       DateOfAppointment: ['', [Validators.required]],
       DepartmentJoiningDate: ['', [Validators.required]],
       DateOfJoining: ['', [Validators.required]],
@@ -139,7 +140,7 @@ export class BterEMAddStaffDetailsComponent {
    
     this.userID=this.sSOLoginDataModel.UserID;
 
-    debugger
+     
     try {
       this.loaderService.requestStarted();
       await this.bterEstablishManagementService.BTER_EM_DesignationWiseBranch(this._DesignationWiseBranchDataModel)
@@ -171,7 +172,7 @@ export class BterEMAddStaffDetailsComponent {
    
     
 
-    debugger
+     
     const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
     const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.StaffTypeID == this.request.StaffTypeID && item.DesignationID );
     /*&& item.StaffTypeID == this.request.StaffTypeID*/
@@ -298,7 +299,7 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async SemesterMaster() {
-    debugger
+     
     try {
 
       this.loaderService.requestStarted();
@@ -364,7 +365,7 @@ export class BterEMAddStaffDetailsComponent {
         }, (error: any) => console.error(error)
         );
 
-        debugger
+         
         // EmployeeQualificationDDLList
         await this.commonMasterService.GetEmployeeQualificationDDL().then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -382,7 +383,7 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async GetPersonalDetailByUserID() {
-    debugger
+     
     try {
       
       this.loaderService.requestStarted();
@@ -396,7 +397,7 @@ export class BterEMAddStaffDetailsComponent {
           console.log(this.StaffMasterFormGroup.get('DateOfBirth')?.value);
           /*this.staffDetailsFormData.StaffSubjectListModel = request.*/
           console.log("GetPersonalDetailByUserID", this.request);
-          debugger
+           
           //if (this.request.DepartmentJoiningDate != '' || this.request.DepartmentJoiningDate != null) {
           //  const isoDate = this.request.DepartmentJoiningDate;
           //  const dateObj = new Date(isoDate);
@@ -523,7 +524,7 @@ export class BterEMAddStaffDetailsComponent {
     };
   }
   async SaveData() {
-    debugger
+     
     this.isSubmitted = true;
     if (this.StaffMasterFormGroup.invalid) {
       Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
@@ -588,7 +589,7 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async onUserProfileStatusHistorylist(model: any, StaffUserID: number) {
-    debugger
+     
     try {
       this.loaderService.requestStarted();
       this.searchRequestUserProfileStatus.StaffUserID = StaffUserID;
@@ -705,7 +706,7 @@ export class BterEMAddStaffDetailsComponent {
         this.Addrequest.SubjectID === element.SubjectID
       );
 
-      debugger
+       
       if (isDuplicate) {
         this.toastr.error('A record with this subject already exists.', 'Duplicate Entry');
         return;
@@ -771,7 +772,7 @@ export class BterEMAddStaffDetailsComponent {
 
 
     try {
-      debugger
+       
       this.loaderService.requestStarted();
       await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -802,7 +803,7 @@ export class BterEMAddStaffDetailsComponent {
             //  this.request.DateOfBirth = `${year}-${month}-${day}`; // yyyy-MM-dd format
             //}
 
-            debugger;
+             ;
             if (parsedData.dateOfBirth) {
               const [dayStr, monthStr, yearStr] = parsedData.dateOfBirth.split('/');
               const day = parseInt(dayStr, 10);
@@ -894,7 +895,7 @@ export class BterEMAddStaffDetailsComponent {
 
 
   async calExperience(){
-    debugger
+     
     console.log(this.today)
     console.log(this.request.DepartmentJoiningDate);
 
