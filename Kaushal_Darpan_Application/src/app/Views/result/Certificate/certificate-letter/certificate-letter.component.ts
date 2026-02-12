@@ -33,7 +33,7 @@ export class CertificateLetterComponent {
   request = new CertificateLetterDataModel()
   public searchRequest = new CertificateLetterSearchModel();
   public InstituteList: any = [];
-  public ExamTypeList: any = [];
+  public ResultTypeList: any = [];
   public ReportlList: CertificateLetterSearchModel[] = [];
 
   constructor(
@@ -78,14 +78,35 @@ export class CertificateLetterComponent {
     }
   }
 
+  //async GetExamTypeMasterDDL() {
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.commonMasterService.GetCommonMasterData('ResultExamType')
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.ExamTypeList = data.Data;
+  //        console.log(this.ExamTypeList)
+  //      }, (error: any) => console.error(error))
+  //  }
+  //  catch (ex) {
+  //    console.log(ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
   async GetExamTypeMasterDDL() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('ResultExamType')
+      await this.commonMasterService.GetExamResultType()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.ExamTypeList = data.Data;
-          console.log(this.ExamTypeList)
+          this.ResultTypeList = data.Data;
+          console.log(this.ResultTypeList)
         }, (error: any) => console.error(error))
     }
     catch (ex) {

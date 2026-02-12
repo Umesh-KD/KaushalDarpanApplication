@@ -34,7 +34,7 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Exam Type:</label>
             <select class="form-select" [(ngModel)]="searchRequest.ExamTypeID">
               <option value="0">Choose Option</option>
-              <option *ngFor="let row of ExamTypeList" [value]="row.ID">{{row.Name}}</option>
+              <option *ngFor="let row of ResultTypeList" [value]="row.ID">{{row.Name}}</option>
             </select>
           </div>
 
