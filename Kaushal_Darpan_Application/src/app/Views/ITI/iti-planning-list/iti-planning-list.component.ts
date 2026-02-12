@@ -13,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-iti-planning-list',
@@ -325,4 +325,35 @@ export class ItiPlanningListComponent {
   }
 
 
+  exportToExcel(): void {
+    const wantedColumns = ['Sno', 'CollegeName', 'Email', 'InstituteCategoryName', 'InstituteManagement', 'PlotHouseBuildingNo',
+      'StreetRoadLane', 'AreaLocalitySector', 'LandMark', 'DivisionName', 'SubDivision', 'DistrictName', 'TehsilName', 'Urban/Rural',
+      'CityName', 'PanchayatSamitiName', 'GramPanchayatSamitiName','VillageName'
+    ];
+
+    const exportData = this.CampusValidationListData.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = (col === 'SrNo') ? index + 1 : row[col];
+      });
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // 🧠 Auto-width calculation
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map((row:any) => (row[col] ? row[col].toString().length : 0))
+      );
+      return { wch: maxLength + 2 }; // Add padding
+    });
+
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'PreExamStudentsData.xlsx');
+  }
 }
