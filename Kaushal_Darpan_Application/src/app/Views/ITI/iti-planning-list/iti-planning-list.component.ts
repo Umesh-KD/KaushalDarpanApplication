@@ -354,6 +354,6 @@ export class ItiPlanningListComponent {
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'PreExamStudentsData.xlsx');
+    XLSX.writeFile(wb, 'CollegePlanningDetails.xlsx');
   }
 }
