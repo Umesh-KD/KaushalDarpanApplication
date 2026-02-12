@@ -33,3 +33,15 @@ export class ITIStateTradeCertificateSearchModel {
   public TradeScheme: number = 0;
 
 }
+
+export class ExamLiveResultModel {
+
+  EndTermID: number = 0;
+  UserID: number = 0;
+  ExamName: string = '';
+  IsLiveResult: number = 0;
+  ModifyBy: number = 0;
+  Action : string = '';
+
+}
+

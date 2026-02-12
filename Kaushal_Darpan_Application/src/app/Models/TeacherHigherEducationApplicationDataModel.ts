@@ -34,6 +34,9 @@ export class TeacherHigherEducationApplicationSaveModel extends ResponseBaseMode
   QualificationAtJoining: string = '';
   QualificationAfterJoining: string = '';
   CollegeDetailList:any=[]
+  IsQualificationRecorded?: number = 2
+  InstituteType?: number = 0;
+  InstituteTypeName?: string = '';
 }
 
 export class TeacherHigherEducationApplicationVerificationModel extends RequestBaseModel {
@@ -67,6 +70,7 @@ export class THTE_ApplicationSearchModel {
   public Name: string = '';
   public StaffID: number = 0;
   public action :string=''
+  public RoleID :number = 0
 }
 
 export class PrincipleApplicationListSearchModel extends RequestBaseModel {
@@ -75,6 +79,7 @@ export class PrincipleApplicationListSearchModel extends RequestBaseModel {
   public Name: string = '';
   public StaffID: number = 0;
   public status?: number = 0;
+  public UserID?: number = 0;
 }
 
 export class THTE_DropdownDataModel{
@@ -96,6 +101,7 @@ export class UpdateApplicationStatusDataModel_Principle {
   public RoleID?: string = '';
   public CommitteeDocs?: string = '';
   public Dis_CommitteeDocs?: string = '';
+  public DTECommitteID?: number = 0;
 }
 
 export class UpdateApplicationStatusDataModel_Committee {

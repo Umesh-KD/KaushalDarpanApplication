@@ -121,7 +121,13 @@ export class TeacherHigherEducationApplicationVerificationService {
             ).toPromise();
   }
 
-
+  public async DTECommitteeAssign_THTE(request: UpdateApplicationStatusDataModel_Principle[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/DTECommitteeAssign_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
  
 
 }

@@ -84,6 +84,12 @@ export class TeacherHigherEducationApplicationComponent {
   public IsYear: boolean = false;
   public YearMessage: string = '';
 
+  public CollegeTypeList: any[] = [
+    { id: 1, name: 'Type 1: IISC, IITs etc.' },
+    { id: 2, name: 'Type 2: NITs, IIITs, National level Govt. Institutes, Central Universities, State level Govt. Institutes Approved under AICTE/UGC etc.' },
+    { id: 3, name: 'Type 3: Private Universities/ Institutions-approved by UGC/AICTE (NAAC "A" Grade and upper)' },
+  ];
+
   constructor(private commonMasterService: CommonFunctionService,
     private loaderService: LoaderService,
     private toastr: ToastrService,
@@ -104,6 +110,7 @@ export class TeacherHigherEducationApplicationComponent {
       dOB: [{ value: '', disabled: true }, [Validators.required]],
       joiningDate: [{ value: '', disabled: true }, [Validators.required]],
       appliedCourse: ['', [DropdownValidators]],
+      IsQualificationRecorded: [''],
       // appliedInstitute: ['', [DropdownValidators]],
       //appliedInstitute: ['',[Validators.required]],
       pHDStatus: ['',],
@@ -127,7 +134,7 @@ export class TeacherHigherEducationApplicationComponent {
   get _ApplyTeacherHigerTechnicalEducationFromGroup() { return this.ApplyTeacherHigerTechnicalEducationFromGroup.controls; }
 
   async GetPersonalDetailByUserID() {
-    debugger
+     
     try {
 
       this.loaderService.requestStarted();
@@ -138,7 +145,7 @@ export class TeacherHigherEducationApplicationComponent {
         if (data.State == EnumStatus.Success) {
           this.request = data.Data[0];
           console.log("GetPersonalDetailByUserID", this.request);
-          debugger
+           
           this.teacherHigherEducationApplicationSaveRequest.TeacherName = this.request.Name;
           this.teacherHigherEducationApplicationSaveRequest.DOB = this.request.DateOfBirth;
           this.teacherHigherEducationApplicationSaveRequest.JoiningDate = this.request.DateOfJoining;
@@ -217,14 +224,14 @@ export class TeacherHigherEducationApplicationComponent {
 
 
   async getAppliedCoursesByIDDDLFill() {
-    debugger
+     
 
     this.GetCategoryOfApplyCourseInstitute();
   }
 
   async GetCategoryOfApplyCourseInstitute() {
     try {
-      debugger
+       
       await this.teacherHigherEducationApplicationService.GetCategoryOfApplyCourseInstitute(this.requestDDl)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -310,11 +317,15 @@ export class TeacherHigherEducationApplicationComponent {
   }
 
   async SaveTeacherHighEduApp() {
-    try {
-      debugger
+    try {       
       this.isSubmitted = true;
-
       if (this.ApplyTeacherHigerTechnicalEducationFromGroup.invalid) {
+        this.toastr.warning("Please Enter Mandatory Fields")
+        return
+      }
+
+      if(this.teacherHigherEducationApplicationSaveRequest.IsQualificationRecorded == 2) {
+        this.toastr.warning("Please Select Is Qualification Recorded")
         return
       }
 
@@ -329,9 +340,6 @@ export class TeacherHigherEducationApplicationComponent {
         }
 
       }
-
-
-
       if (this.teacherHigherEducationApplicationSaveRequest.PHDStatusSt == "Yes") {
         this.teacherHigherEducationApplicationSaveRequest.PHDStatus = 1;
       }
@@ -442,19 +450,13 @@ export class TeacherHigherEducationApplicationComponent {
   }
 
   async EditInfo(id: number) {
-    try {
-      debugger
+    try {       
       this.loaderService.requestStarted();
       this.ButtonText = "Update";
       this.requestSearch.THTEAppID = id;
-
       const data: any = await this.teacherHigherEducationApplicationService.GetTHTE_ApplicationByID(this.requestSearch);
 
-      this.State = data.State;
-      this.Message = data.Message;
-      this.ErrorMessage = data.ErrorMessage;
-
-      if (this.State === EnumStatus.Success) {
+      if (data.State === EnumStatus.Success) {
         if (data.Data) {
           let jsonResult;
 
@@ -482,6 +484,7 @@ export class TeacherHigherEducationApplicationComponent {
             InstituteID: jsonResult.InstituteID,
             QualificationAtJoining: '',
             QualificationAfterJoining: '',
+            IsQualificationRecorded: jsonResult.IsQualificationRecorded,
             CollegeDetailList: jsonResult.CollegeDetailList
           };
           await this.getAppliedCoursesByIDDDLFill();
@@ -536,7 +539,7 @@ export class TeacherHigherEducationApplicationComponent {
   }
 
   async onUserRequestHistorylist(model: any, THTEAppID: number) {
-    debugger
+     
     try {
       this.loaderService.requestStarted();
       this.requestSearch.THTEAppID = THTEAppID
@@ -569,26 +572,38 @@ export class TeacherHigherEducationApplicationComponent {
 
   async Addnew() {
     if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute == '') {
-      this.toastr.error("Please Fill Apply College Name")
+      this.toastr.error("Please Fill College Name")
       return
     }
     if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance == '') {
-      this.toastr.error("Please Add College Name")
+      this.toastr.error("Please Add College Distance")
       return
     }
+
+    if(this.teacherHigherEducationApplicationSaveRequest.InstituteType == 0){
+      this.toastr.error("Please Select Institute Type")
+      return
+    }
+
     if (!this.teacherHigherEducationApplicationSaveRequest.CollegeDetailList) {
       this.teacherHigherEducationApplicationSaveRequest.CollegeDetailList = []
     }
 
+    this.teacherHigherEducationApplicationSaveRequest.InstituteTypeName = 
+    this.CollegeTypeList.find((x: any) => 
+      Number(x.id) == Number(this.teacherHigherEducationApplicationSaveRequest.InstituteType)
+    )?.name;
+
     this.teacherHigherEducationApplicationSaveRequest.CollegeDetailList.push({
       CollegeName: this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute,
-
-      Distance: this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance
+      Distance: this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance,
+      InstituteType: this.teacherHigherEducationApplicationSaveRequest.InstituteType,
+      InstituteTypeName: this.teacherHigherEducationApplicationSaveRequest.InstituteTypeName
     })
     this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute = '',
-      this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance = ''
-     
-
+    this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance = '',
+    this.teacherHigherEducationApplicationSaveRequest.InstituteType = 0
+    this.teacherHigherEducationApplicationSaveRequest.InstituteTypeName = ''
   }
 
   async deleteRow2(index:any) {
@@ -612,7 +627,7 @@ export class TeacherHigherEducationApplicationComponent {
 
 
   async ApplyCollegelist(model: any, THTEAppID: number) {
-    debugger
+     
     try {
       this.loaderService.requestStarted();
       this.requestSearch.THTEAppID = THTEAppID

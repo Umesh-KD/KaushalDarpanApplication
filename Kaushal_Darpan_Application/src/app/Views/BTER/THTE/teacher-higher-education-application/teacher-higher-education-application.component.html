@@ -107,6 +107,16 @@
           </div>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Last Qualification is recorded in the service book? </label>
+          <select class="form-select" name="IsQualificationRecorded" formControlName="IsQualificationRecorded"
+                  [(ngModel)]="teacherHigherEducationApplicationSaveRequest.IsQualificationRecorded">
+            <option value="2">--Select--</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
 
         <!--<div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">PHD</label>
@@ -251,7 +261,7 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-
+            <th class="text-left">Types of Institute for Higher Study </th>
             <th class="text-left">Applied Institute</th>
             <th class="text-left">Applied Institute KM(Distance)</th>
             <th class="text-left">Action</th>
@@ -262,22 +272,15 @@
         <tbody>
 
           <tr *ngFor="let item of teacherHigherEducationApplicationSaveRequest.CollegeDetailList;let idx=index;">
-
+            <td>
+              {{item.InstituteTypeName}}
+            </td>
             <td>
               {{item.CollegeName}}
             </td>
 
             <td>
-
               {{item.Distance}}
-
-
-
-
-
-
-
-
             </td>
             <td>
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow2(idx)">
@@ -285,26 +288,24 @@
               </button>
             </td>
           </tr>
-
           <tr>
-
+            <td>
+              <select class="form-select" name="InstituteType"
+                      [(ngModel)]="teacherHigherEducationApplicationSaveRequest.InstituteType">
+                
+                <option value="0">--Select--</option>
+                <option value="1">Type 1: IISC, IITs etc.</option>
+                <option value="2">Type 2: NITs, IIITs, National level Govt. Institutes, Central Universities, State level Govt. Institutes Approved under AICTE/UGC etc.</option>
+                <option value="3">Type 3: Private Universities/ Institutions-approved by UGC/AICTE (NAAC 'A' Grade and upper)</option>
+              </select>
+            </td>
             <td>
               <input class="form-input" type="text" name="appliedInstitute"
                      placeholder="Enter College Name" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" />
             </td>
-
             <td>
-
-
-
               <input (keypress)="numberOnly($event)" class="form-input" type="number" name="appliedInstituteDistance"
                    placeholder="Enter Distance"    [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance" />
-
-
-
-
-
-
             </td>
             <td>
               <button *ngIf="IsYear == true" type="button" class="btn bg-primary text-white mt-4" (click)="Addnew()">
@@ -475,45 +476,35 @@
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between items-center">
-
         <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist()" type="button"><i class="ti ti-x"></i></button>
       </div>
-
-
-
       <div class="card-body">
-
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i>Applied Institute List</b>
           <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
-
-
         <!--{{UserRequestHistoryList|json}}-->
         <div class="overflow-x-auto mt-3">
-
-
-
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
                 <th class="text-left">S No</th>
+                <th class="text-left">Institute Type</th>
                 <th class="text-left">Institute Name</th>
                 <th class="text-left">Distance(KM)</th>
                 <th class="text-left">Status</th>
-                <th class="text-left">Remarks</th>
- 
+                <th class="text-left">Remarks</th> 
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let row of UserApplyInstituteList; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.InstituteTypeName }}</td>
                 <td align="left">{{ row.CollegeName }}</td>
                 <td align="left">{{ row.Distance }}</td>
                 <td align="left">{{ row.StatusName }}</td>
-                <td align="left">{{ row.Remark }}</td>
-      
+                <td align="left">{{ row.Remark }}</td>      
               </tr>
               <tr *ngIf="UserRequestHistoryList?.length==0">
                 <td colspan="10" class="text-center">No Record Found </td>
@@ -522,7 +513,6 @@
           </table>
         </div>
       </div>
-
       <div class="card-footer text-right">
         <button type="button" (click)="CloseModalRequestHistorylist()" class="btn bg-success text-white btn-sm">
           Close

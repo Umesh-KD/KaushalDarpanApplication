@@ -84,6 +84,8 @@
             <th class="text-left">Joining Date</th>
             <th class="text-left">Applied Institute</th>
             <th class="text-left">Applied Course</th>
+            <th class="text-left">Category of Apply Course Institute</th>
+            <th class="text-left">Last Qualification is recorded in the service book?</th>
             <th class="text-left">Status</th>
             <th class="text-left">Remark</th>
           </tr>
@@ -109,6 +111,8 @@
                  (click)="ApplyCollegelist(MyModel_UserInstituteHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>
             </td>
             <td align="left">{{row.AppliedCourseName}}</td>
+            <td align="left">{{row.HigherStudyPermissionCategoryName}}</td>
+            <td align="left">{{row.IsQualificationRecorded_str}}</td>
             <td align="left">{{row.StatusName}}</td>
             <td align="left">{{row.Remark}}</td>
           </tr>
@@ -163,6 +167,7 @@
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
                 <th class="text-left">S No</th>
+                <th class="text-left">Institute Type</th>
                 <th class="text-left">Institute Name</th>
                 <th class="text-left">Distance(KM)</th>
                 <th class="text-left">Status</th>
@@ -173,6 +178,7 @@
             <tbody>
               <tr *ngFor="let row of UserApplyInstituteList; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.InstituteTypeName }}</td>
                 <td align="left">{{ row.CollegeName }}</td>
                 <td align="left">{{ row.Distance }}</td>
                 <td align="left">{{ row.StatusName }}</td>

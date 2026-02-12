@@ -89,7 +89,7 @@
               <th class="text-left">Min Marks</th>
               <th class="text-left">Obtained Marks</th>
               <th class="text-left">Result</th>
-              <th>Download</th>
+              <!--<th>Download</th>-->
 
 
             </tr>
@@ -106,13 +106,13 @@
               <td>{{ row.MinMarks }}</td>
               <td>{{ row.ObtainedMarks }}</td>
               <td>{{ row.Result }}</td>
-              <td align="center">
+              <!--<td align="center">
                 <div class="flex " style="justify-content:center;" *ngIf="row.IsShowDownloadBtn==1">
                   <a class="download-btn btn btn-info btn-xs" title="Download Marksheet" (click)="GetITIStudent_Marksheet(row.EnrollmentNo)"><i class="ti ti-download"></i></a>
                   <a *ngIf="row.IsConsolidatedMarkSheet==1 && row.ResultFlag==1" class="download-btn btn btn-info btn-xs" title="Download Consolidated Marksheet" (click)="ConsolidatedDownload(row)"><i class="ti ti-download"></i></a>
                   <a *ngIf="row.certificate_number!=''  && row.ResultFlag==1" class="download-btn btn btn-info btn-xs" title="Download SCVT Certificate" (click)="DownloadSCVTCertificate(row.enrollment)"><i class="ti ti-download"></i></a>
                 </div>
-              </td>
+              </td>-->
 
 
             </tr>
