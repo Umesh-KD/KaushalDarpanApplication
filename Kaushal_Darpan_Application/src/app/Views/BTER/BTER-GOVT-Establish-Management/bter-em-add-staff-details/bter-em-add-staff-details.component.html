@@ -63,7 +63,7 @@
         <!--{{DesignationMasterDDLList|json}}
   {{request.StaffTypeID|json}}-->
         
-        <div *ngIf="IsHideShow">
+        <!-- <div *ngIf="IsHideShow">
           <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch as per Current Designation<span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
                   [(ngModel)]="request.BranchID">
@@ -75,7 +75,7 @@
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
-        </div>
+        </div> -->
 
         <div *ngIf="this.IsGuestHouse != true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation as per Service Book <span class="StarMarking">*</span> </label>
@@ -261,6 +261,22 @@
             </p>
           </div>
         </div>
+
+        <div *ngIf="IsHideShow">
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch as per Current Designation<span class="StarMarking">*</span></label>
+          <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
+                  [(ngModel)]="request.BranchID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.BranchID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.BranchID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+
 
         <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
