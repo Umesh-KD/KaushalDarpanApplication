@@ -1671,6 +1671,10 @@ export class ItiPlanningComponent {
     //  return
     //}
 
+    if (this.request.InstituteManagementId == 1) {
+      this.request.ManagementStatus='Approved'
+    }
+
     if (this.request.ManagementStatus == '') {
       this.toastr.warning("Please Select Status For  Management Details Section")
       return
@@ -1697,18 +1701,18 @@ export class ItiPlanningComponent {
       this.request.AddressRemark = ''
     }
 
-    if (this.request.ContactStatus == '') {
-      this.toastr.warning("Please Select Status For  Address Details Section")
-      return
+    //if (this.request.ContactStatus == '') {
+    //  this.toastr.warning("Please Select Status For  Address Details Section")
+    //  return
 
-    }
-    if (this.request.ContactStatus == 'Not Approved' && this.request.ContactRemark == '') {
-      this.toastr.warning("Please Write Remarks For  Contact Details Section")
-      return
-    }
-    if (this.request.ContactStatus == 'Approved') {
-      this.request.ContactRemark = ''
-    }
+    //}
+    //if (this.request.ContactStatus == 'Not Approved' && this.request.ContactRemark == '') {
+    //  this.toastr.warning("Please Write Remarks For  Contact Details Section")
+    //  return
+    //}
+    //if (this.request.ContactStatus == 'Approved') {
+    //  this.request.ContactRemark = ''
+    //}
 
     if (this.request.ElectricalStatus == '') {
       this.toastr.warning("Please Select Status For  Electrical load  Details Section")
@@ -1752,14 +1756,15 @@ export class ItiPlanningComponent {
     }
 
     if (this.request.AffilationStatus == 'Not Approved' || this.request.AddressStatus == 'Not Approved'
-      || this.request.ContactStatus == 'Not Approved' || this.request.ManagementStatus == 'Not Approved'
+      || //this.request.ContactStatus == 'Not Approved' ||
+      this.request.ManagementStatus == 'Not Approved'
       || this.request.TrustMemberStatus == 'Not Approved' || this.request.ElectricalStatus == 'Not Approved'
     ) {
       this.request.Status = 4
       const remarks = [
         this.request.AddressRemark,
         this.request.ManagementRemark,
-        this.request.ContactRemark,
+        //this.request.ContactRemark,
         this.request.AffilationRemark,
         this.request.TrustMemberRemark,
         this.request.ElectricalRemark

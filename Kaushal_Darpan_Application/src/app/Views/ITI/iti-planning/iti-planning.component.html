@@ -79,7 +79,7 @@
 
             <!-- Right controls -->
             <div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
- this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT && request.InstituteManagementId==5" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
 
               <!-- Select -->
               <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
@@ -900,35 +900,35 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
           <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
             <i class="ti ti-plus"></i>
             Contact Details
-            <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.ContactStatus=='Not Approved' ||
+            <!--<p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.ContactStatus=='Not Approved' ||
 this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ContactStatus=='Not Approved'" class="text-danger ms-2 ">
               *  {{request.ContactRemark}}
 
-            </p>
+            </p>-->
 
           </div>
 
           <!-- Right controls -->
-          <div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+          <!--<div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
+this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-center gap-2 flex-1 min-w-0 justify-end">-->
 
             <!-- Select -->
-            <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+            <!--<select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
             focus:border-blue-500 focus:ring-1 focus:ring-blue-200
             text-sm font-medium"
                     formControlName="ContactStatus" [(ngModel)]="request.ContactStatus">
               <option value="">-- Select --</option>
               <option value="Approved">Approved.</option>
               <option value="Not Approved">Not Approved</option>
-            </select>
+            </select>-->
 
             <!-- Remark -->
-            <input *ngIf="request.ContactStatus=='Not Approved'" type="text"
+            <!--<input *ngIf="request.ContactStatus=='Not Approved'" type="text"
                    formControlName="ContactRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
             focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
                    [(ngModel)]="request.ContactRemark "
                    placeholder="Remarks">
-          </div>
+          </div>-->
         </div>
 
 
@@ -1369,9 +1369,9 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
       </div>
     </div>
 
-    <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 hide-in-pdf " *ngIf="request.Status==2 && sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT">
+    <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 hide-in-pdf " *ngIf="sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT">
       <div class="text-center mb-2">
-        <button *ngIf="request.Status==2 && sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" type="submit" (click)="SaveData_ApprovedCampus()" class="btn bg-info text-white mt-6 me-1">Click for Approve</button>
+        <button *ngIf="sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" type="submit" (click)="SaveData_ApprovedCampus()" class="btn bg-info text-white mt-6 me-1">Submit</button>
       </div>
     </div>
 
