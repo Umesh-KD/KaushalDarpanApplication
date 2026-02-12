@@ -70,6 +70,7 @@ export class THTE_ApplicationSearchModel {
   public Name: string = '';
   public StaffID: number = 0;
   public action :string=''
+  public RoleID :number = 0
 }
 
 export class PrincipleApplicationListSearchModel extends RequestBaseModel {
@@ -78,6 +79,7 @@ export class PrincipleApplicationListSearchModel extends RequestBaseModel {
   public Name: string = '';
   public StaffID: number = 0;
   public status?: number = 0;
+  public UserID?: number = 0;
 }
 
 export class THTE_DropdownDataModel{

@@ -442,6 +442,7 @@ export class VerifyApplicationCommitteeComponent {
     try {
       this.loaderService.requestStarted();
       this.requestSearch.THTEAppID = THTEAppID
+      this.requestSearch.RoleID = this.sSOLoginDataModel.RoleID
       this.Selecteditem=row
       await this.teacherHigherEducationApplicationService.THTE_GrtApplyInstituteList(this.requestSearch)
         .then((data: any) => {
@@ -514,7 +515,6 @@ export class VerifyApplicationCommitteeComponent {
       }
 
       this.UserApplyInstituteList.forEach((e: any) => {
-        e.StatusID = e.SelectedInstitute === true ? 1343 : 1342,
         e.UserID = this.sSOLoginDataModel.UserID
       });
 
@@ -538,7 +538,7 @@ export class VerifyApplicationCommitteeComponent {
     }
   }
 
-  }
+}
 
 
 

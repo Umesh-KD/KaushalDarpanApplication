@@ -6,7 +6,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { ApplicationGenrateOrderByDteListSearchModel, PrincipleApplicationListSearchModel, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Principle } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { ApplicationGenrateOrderByDteListSearchModel, PrincipleApplicationListSearchModel, THTE_ApplicationSearchModel, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Principle } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { StaffDetailsDataModel } from '../../../../Models/StaffMasterDataModel';
+import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 
 @Component({
   selector: 'app-thte-application-dte-list',
@@ -29,6 +30,7 @@ export class THTEApplicationDteListComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public _DTEGenrateOrder = new ApplicationGenrateOrderByDteListSearchModel();
   staffDetailsFormData = new StaffDetailsDataModel();
+  public requestSearch = new THTE_ApplicationSearchModel();
 
   modalReference: NgbModalRef | undefined;
   public ApplicationListData: any = [];
@@ -36,6 +38,8 @@ export class THTEApplicationDteListComponent {
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
   public enumRole = EnumRole;
+  public Selecteditem: any = {}
+  public UserApplyInstituteList: any = [];
 
   public status: number = 0;
   public isModalOpen: boolean = false;
@@ -64,6 +68,7 @@ export class THTEApplicationDteListComponent {
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationVerificationService: TeacherHigherEducationApplicationVerificationService,
+    public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
     private router: Router,
     private modalService: NgbModal,
     private staffMasterService: StaffMasterService,
@@ -107,7 +112,7 @@ export class THTEApplicationDteListComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
-
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID
       
       await this.teacherHigherEducationApplicationVerificationService.ApplicationList_ForDTE_THTE(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -186,7 +191,7 @@ export class THTEApplicationDteListComponent {
           x.Remark = remark,
           x.RoleID = this.sSOLoginDataModel.RoleID  
       })
-      debugger
+       
       
 
       await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_DTE_THTE(selected)
@@ -210,7 +215,7 @@ export class THTEApplicationDteListComponent {
     await this.teacherHigherEducationApplicationVerificationService.GetApplication_GenrateOrder_Dte_THTE(this._DTEGenrateOrder).then(async (data: any) => {
         
         data = JSON.parse(JSON.stringify(data));
-        debugger
+         
         if (data && data.Data) {
           const base64 = data.Data;
 
@@ -245,11 +250,11 @@ export class THTEApplicationDteListComponent {
       return;
     }
 
-    if((this.searchRequest.status == 1354 && this.sSOLoginDataModel.RoleID === EnumRole.CommitteInchargeDTE) && 
-        (this.CommitteeDocs == null || this.CommitteeDocs == '')) {
-      this.toastr.warning('Please upload committee document.');
-      return;
-    }
+    // if((this.searchRequest.status == 1354 && this.sSOLoginDataModel.RoleID === EnumRole.CommitteInchargeDTE) && 
+    //     (this.CommitteeDocs == null || this.CommitteeDocs == '')) {
+    //   this.toastr.warning('Please upload committee document.');
+    //   return;
+    // }
 
     let dyMsg = '';
     if (this.status == 1353) {
@@ -633,4 +638,82 @@ export class THTEApplicationDteListComponent {
     this.AllInTableSelect = this.paginatedInTableData.every(r => r.Selected === true);
   }
   // end table feature
+
+  async CloseModalRequestHistorylist() {
+    this.Selecteditem = {}
+    this.modalService.dismissAll()
+  }
+
+  async ApplyCollegelist(model: any, THTEAppID: number,row:any) {
+     
+    try {
+      this.loaderService.requestStarted();
+      this.requestSearch.THTEAppID = THTEAppID
+      this.requestSearch.RoleID = this.sSOLoginDataModel.RoleID
+      this.Selecteditem=row
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplyInstituteList(this.requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserApplyInstituteList = data.Data;
+        }, (error: any) => console.error(error))
+      this.modalReference = this.modalService.open(model, { size: 'xl', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async SaveDTERecommendationInstitutes_THTE(remark: string) {
+     
+    try {
+      // let selected = this.UserApplyInstituteList.filter((x: any) => x.SelectedInstitute === true)
+      // if (selected.length == 0) {
+      //   this.toastr.warning("Please Select Institute")
+      //   return
+      // }
+
+      // 1. Check if every single row has a status selected (!= 0)
+      const allStatusSelected = this.UserApplyInstituteList.every((row: any) => 
+        row.DTECommitteeStatus != 0 && row.DTECommitteeStatus != null
+      );
+
+      if (!allStatusSelected) {
+        this.toastr.error("Please choose status for all institutes in the list.");
+        return;
+      }
+
+      // 2. Check if rejections have remarks
+      const invalidRejections = this.UserApplyInstituteList.filter((row: any) => 
+        row.DTECommitteeStatus == 1342 && (!row.Remarks || row.Remarks.trim() === '')
+      );
+
+      if (invalidRejections?.length > 0) {
+        this.toastr.error("Remarks are mandatory for all rejected institutes.");
+        return;
+      }
+
+      this.UserApplyInstituteList.forEach((e: any) => {
+        e.UserID = this.sSOLoginDataModel.UserID
+      });
+
+      await this.teacherHigherEducationApplicationService.SaveDTERecommendationInstitutes_THTE(this.UserApplyInstituteList)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.status = 0;
+            await this.CloseModalRequestHistorylist();
+            // this.request = new UpdateApplicationStatusDataModel_Committee();
+            // await this.ApplicationList_ForCommittee_THTE();
+          }
+        })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
