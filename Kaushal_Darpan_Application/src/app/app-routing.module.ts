@@ -1353,6 +1353,8 @@ const routes: Routes = [
       { path: 'InstitutejanaadharReport', loadChildren: () => import('./Views/ITI/institutejanaadhar-report/institutejanaadhar-report.module').then(m => m.InstitutejanaadharReportModule) },
 
 
+      { path: 'Sanctioned-Posts', loadChildren: () => import('./Views/BTER/bter-Sanctioned-posts/bter-Sanctioned-posts.module').then(m => m.bterSanctionedPostsModule), title:'Sanctioned Post' },
+
       { path: 'StudentCancellationVerify/:id', loadChildren: () => import('./Views/BTER/enrollment-cancelation-verify/enrollment-cancelation-verify.module').then(m => m.EnrollmentCancelationVerifyModule) },
       { path: 'StudentCancellationVerify', loadChildren: () => import('./Views/BTER/enrollment-cancelation-verify/enrollment-cancelation-verify.module').then(m => m.EnrollmentCancelationVerifyModule) },
       { path: 'ITIInvigilatorPaymentRequest', loadChildren: () => import('./Views/ITI/iti-invigilator-payment-request/iti-invigilator-payment-request.module').then(m => m.ITIInvigilatorPaymentRequestModule), title: 'ITIInvigilatorPaymentRequest' },
