@@ -454,8 +454,23 @@ export class MasterLayoutComponent implements OnInit {
 
   //new
   js_SubMenu(event: any): void {
+
+    console.log(event);
     const clickedElement = event.target;
+
     const parentLi = clickedElement.closest('li');
+    const menuTextSpan = clickedElement.querySelector('.menu-text span');
+
+    if (menuTextSpan) {
+      const text = menuTextSpan.textContent?.trim();
+
+      if (this.sSOLoginDataModel.RoleID == EnumRole.DTETraing) {
+        if (text === "Master") {
+          this.router.navigate(['/Iti-Dashboard']);
+        }
+      }
+    }
+
 
     if (parentLi) {
       const isAlreadyOpen = parentLi.classList.contains('showChildMenu');
@@ -474,7 +489,11 @@ export class MasterLayoutComponent implements OnInit {
   }
 
 
-  js_SubMenuActive(event: any): void {
+  js_SubMenuActive(event: any): void
+  {
+
+    console.log("event",event);
+
     const clickedElement = event.target;
     const parentLi = clickedElement.closest('.menu-item');
     if (parentLi) {

@@ -34,6 +34,9 @@ export class TeacherHigherEducationApplicationSaveModel extends ResponseBaseMode
   QualificationAtJoining: string = '';
   QualificationAfterJoining: string = '';
   CollegeDetailList:any=[]
+  IsQualificationRecorded?: number = 2
+  InstituteType?: number = 0;
+  InstituteTypeName?: string = '';
 }
 
 export class TeacherHigherEducationApplicationVerificationModel extends RequestBaseModel {
@@ -67,6 +70,7 @@ export class THTE_ApplicationSearchModel {
   public Name: string = '';
   public StaffID: number = 0;
   public action :string=''
+  public RoleID :number = 0
 }
 
 export class PrincipleApplicationListSearchModel extends RequestBaseModel {
@@ -75,6 +79,7 @@ export class PrincipleApplicationListSearchModel extends RequestBaseModel {
   public Name: string = '';
   public StaffID: number = 0;
   public status?: number = 0;
+  public UserID?: number = 0;
 }
 
 export class THTE_DropdownDataModel{
@@ -96,6 +101,7 @@ export class UpdateApplicationStatusDataModel_Principle {
   public RoleID?: string = '';
   public CommitteeDocs?: string = '';
   public Dis_CommitteeDocs?: string = '';
+  public DTECommitteID?: number = 0;
 }
 
 export class UpdateApplicationStatusDataModel_Committee {
@@ -214,4 +220,33 @@ export class DTECommitteeMemberDetailsDataModel {
   public StaffID: number = 0
   public IsIncharge: boolean = false
   public StaffName: string = ''
+}
+
+export class StaffDetailsPreviewDataModel {
+  public SSOID?: string = ''
+  public Office?: string = ''
+  public ServiceBookDesignation?: string = ''
+  public ServiceBookBranch?: string = ''
+  public Name?: string = ''
+  public Gender?: string = ''
+  public DateofBirth?: string = ''
+  public DateOfFirstAppointment?: string = ''
+  public DepartmentJoiningDate?: string = ''
+  public DateOfJoining?: string = ''
+  public DateOfAppointment?: string = ''
+  public MobileNumber?: string = ''
+  public EmployeeID?: string = ''
+  public CurrentDesignation?: string = ''
+  public CurrentBranch?: string = ''
+  public Experience?: string = ''
+  public QualificationAtJoining?: string = ''
+  public QualificationAfterJoining?: string = ''
+  public DateOfRetirement?: string = ''
+
+
+
+  public StaffID: number = 0
+  public StaffUserID: number = 0
+  public UserID: number = 0
+  public RoleID: number = 0
 }

@@ -34,6 +34,7 @@ export class itiDashboardComponent {
   public TradeCountList: any = []
   public CollegeCountList: any = []
   public RunningCampList: any = []
+  public SeatIntakeList: any = []
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ITIsService, private loaderService: LoaderService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private activeroute: ActivatedRoute,
@@ -75,6 +76,9 @@ export class itiDashboardComponent {
 
             this.RunningCampList = this.DashboardCountList.filter(
               (f: any) => f.TileType === 'RunningCamp');
+
+            this.SeatIntakeList = this.DashboardCountList.filter(
+              (f: any) => f.TileType === 'SeatIntake');
 
 
             console.log(this.RunningCampList);

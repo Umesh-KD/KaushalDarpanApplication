@@ -6,11 +6,13 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { PrincipleApplicationListSearchModel, THTE_DropdownDataModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel, THTE_ApplicationSearchModel, THTE_DropdownDataModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 
 @Component({
   selector: 'app-thte-committee-afterprinciple-application-list',
@@ -24,12 +26,16 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
   public searchRequest = new PrincipleApplicationListSearchModel();
   public dropdownRequest = new THTE_DropdownDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public requestSearch = new THTE_ApplicationSearchModel();
 
   public ApplicationListData: any = [];
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
+  public UserApplyInstituteList: any = [];
+  public Selecteditem: any = {}
 
   public status: number = 0;
+  modalReference: NgbModalRef | undefined;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -53,7 +59,9 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationVerificationService: TeacherHigherEducationApplicationVerificationService,
+    public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
     private router: Router,
+    private modalService: NgbModal,
   ) { }
 
   async ngOnInit () { 
@@ -295,4 +303,31 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
     this.AllInTableSelect = this.paginatedInTableData.every(r => r.Selected === true);
   }
   // end table feature
+
+  async CloseModalRequestHistorylist() {
+    this.modalService.dismissAll()
+  }
+
+  async ApplyCollegelist(model: any, THTEAppID: number,row:any) {
+     
+    try {
+      this.loaderService.requestStarted();
+      this.requestSearch.THTEAppID = THTEAppID
+      this.Selecteditem=row
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplyInstituteList(this.requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserApplyInstituteList = data.Data;
+        }, (error: any) => console.error(error))
+      this.modalReference = this.modalService.open(model, { size: 'xl', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }

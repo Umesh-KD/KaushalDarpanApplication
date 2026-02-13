@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { PrincipleApplicationListSearchModel,   UpdateApplicationStatusDataModel_Committee } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel,   StaffDetailsPreviewDataModel,   UpdateApplicationStatusDataModel_Committee } from '../../Models/TeacherHigherEducationApplicationDataModel';
 import { ApplicationGenrateOrderByDteListSearchModel,  TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
 
 
@@ -121,7 +121,19 @@ export class TeacherHigherEducationApplicationVerificationService {
             ).toPromise();
   }
 
-
+  public async DTECommitteeAssign_THTE(request: UpdateApplicationStatusDataModel_Principle[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/DTECommitteeAssign_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
  
-
+  public async StaffDetailsPreview_THTE(request: StaffDetailsPreviewDataModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StaffDetailsPreview_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

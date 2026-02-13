@@ -53,43 +53,28 @@
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3" 
-        *ngIf="(searchRequest.status == 1354 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
-                (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
+        *ngIf="searchRequest.status == 1344">
 
-      <div *ngIf="(searchRequest.status == 1354 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE)">
-        <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-               for="fileStudentPhoto">Upload Committee Document</label>
-        <div class="flex fileUploader">
-          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                 id="CommitteeDoc" type="file" (change)="onFilechange($event,'CommitteeDoc')">
-          <label for="CommitteeDoc">
-            <span>Choose File</span>
-            {{Dis_CommitteeDocs === '' ? 'No File Choosen' : Dis_CommitteeDocs}}
-          </label>
-          @if(Dis_CommitteeDocs){
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + CommitteeDocs}}"
-                 *ngIf="Dis_CommitteeDocs !='' || Dis_CommitteeDocs !=null"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-            </div>
-          }
-        </div>
-      </div>
-      <div>
+    <div>
         <div class="flex mt-6">
           <!--*ngIf="MapKeyEng == 1"-->
+          <select class="form-select" id="DTECommitteID" [(ngModel)]="DTECommitteID" name="DTECommitteID">
+            <option value="0">--select committee--</option>
+            <option *ngFor="let item of DTECommitteeListDDL" value="{{item.DTECommitteID}}">{{item.DTECommitteName}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex mt-6">
           <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus">
-            <option value="0">--select--</option>
+            <option value="0">--select status--</option>
             <option *ngFor="let item of UpdateStatusListDDL" value="{{item.ID}}">{{item.Name}}</option>
           </select>
         </div>
       </div>
       <div class="mt-6">
-        <button type="button" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE"
-          class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Save & Genrate Order</button>
-
-        <button type="button" *ngIf="sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE"
-          class="btn bg-info text-white inline-block" (click)="updateStatusRemark_DTECommittee()">Save</button>
+        <button class="btn bg-info text-white inline-block" (click)="openOTPModal()">Assign</button>
       </div>
       <div  class="mt-6">
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
@@ -102,10 +87,9 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left" *ngIf="(searchRequest.status == 1354 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
-                      (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
+            <th class="text-left">
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect"
-                (change)="selectInTableAllCheckbox()"/>
+                (change)="selectInTableAllCheckbox()" *ngIf="searchRequest.status == 1344"/>
             </th>
             <th class="text-left">Sr.No.</th>
             <!-- <th class="text-left">Action</th> -->
@@ -113,7 +97,6 @@
             <th class="text-left">SSOID</th>
             <th class="text-left">DOB</th>
             <th class="text-left">Joining Date</th>
-            <th class="text-left">Applied Institute</th>
             <th class="text-left">Recommended Institute</th>
             <th class="text-left">Applied Course</th>
             <th class="text-left">Committee Name </th>
@@ -125,25 +108,15 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
-            <td *ngIf="(searchRequest.status == 1354 && sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE) || 
-                      (searchRequest.status == 1353 && sSOLoginDataModel.RoleID === enumRole.DTE)">
+            <td>
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected" #checkboxInTableSeletedSingle
-                (change)="selectInTableSingleCheckbox(row.Selected, row)" />
+                (change)="selectInTableSingleCheckbox(row.Selected, row)" *ngIf="searchRequest.status == 1344">
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
-            <!-- <td>
-    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-      <a href="javascript:void(0);" title="View Details" (click)="openViewStudentExamDetailsPopup(row.StudentID, row.StudentExamID)"><i class="ti ti-eye"></i></a>
-    </div>
-  </td> -->
             <td>{{row.TeacherName}}</td>
             <td>{{row.SSOID}}</td>
             <td align="left">{{row.DOB | date: 'dd-MM-yyyy'}}</td>
             <td align="left">{{row.JoiningDate | date: 'dd-MM-yyyy'}}</td>
-            <td>
-              <a href="javascript:void(0);" type="button" class="btn bg-primary text-white" title="History"
-                 (click)="ApplyCollegelist(MyModel_UserInstituteHistory, row.THTEAppID,row)"><i class="ti ti-eye"></i></a>
-            </td>
             <td align="left">{{row.SelectedInstitute}}</td>
             <td align="left">{{row.AppliedCourseName}}</td>
             <td align="left">{{row.CommitteeName}}</td>
@@ -152,12 +125,6 @@
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.CommitteeDocument}}"
                   *ngIf="row.Dis_CommitteeDocument !=''" target="_blank">
                   <i class="ti ti-eye" title="Principle Committee Document"></i>
-                </a>
-
-                <a *ngIf="row.StatusID == 1353 || row.StatusID == 1345"
-                  href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.DTECommitteeDoc}}"
-                  target="_blank">
-                  <i class="ti ti-eye" title="DTE Committee Document"></i>
                 </a>
               </div>
               <!--{{row.Dis_CommitteeDocument}}-->
@@ -194,81 +161,6 @@
 
 <!-- otp -->
 <app-otpmodal #otpModal></app-otpmodal>
-
-<ng-template #MyModel_UserInstituteHistory let-modal>
-  <div class="modal-content">
-    <div class="card">
-      <div class="card-header flex justify-between items-center">
-        <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist()" type="button"><i class="ti ti-x"></i></button>
-      </div>
-      <div class="card-body">
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b class="text-1xl-5"><i class="ti ti-list"></i>Applied Institute List</b>
-          <div class="flex justify-end flex-wrap items-center">
-          </div>
-        </div>
-        <!--{{UserRequestHistoryList|json}}-->
-        <div class="overflow-x-auto mt-3">
-          <table class="table table-border w-full table-auto" cellpadding="5">
-            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-              <tr>
-                <th class="text-left">S No</th>
-                <th class="text-left">Institute Type</th>
-                <th class="text-left">Institute Name</th>
-                <th class="text-left">Distance(KM)</th>
-                <th class="text-left">Recommendation by College Committee</th>
-                <th class="text-left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE">DTE Committee Status</th>
-                <th class="text-left" *ngIf="sSOLoginDataModel.RoleID !== enumRole.DTE">Choose Status</th>
-                <th class="text-left">Remarks</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of UserApplyInstituteList; let idx=index;  ">
-                <td align="left">{{idx+1}}</td>
-                <td align="left">{{ row.InstituteTypeName }}</td>
-
-                <td align="left">{{ row.CollegeName }}</td>
-                <td align="left">{{ row.Distance }}</td>
-                <td align="left">{{ row.InstituteStatus_str }}</td>
-                <td align="left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE">{{ row.DTECommitteeStatus_str }}</td>
-                <td align="left" *ngIf="sSOLoginDataModel.RoleID !== enumRole.DTE">
-                  <select class="form-select" id="StatusID" [(ngModel)]="row.DTECommitteeStatus" name="StatusID">
-                    <option value="0">--Choose Status--</option>
-                    <option value="1343">Accept</option>
-                    <option value="1342">Reject</option>
-                  </select>
-                </td>
-                <td align="left" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE">{{ row.Remarks }}</td>
-                <td align="left" *ngIf="sSOLoginDataModel.RoleID !== enumRole.DTE">
-                  <input class="form-input" type="text" name="appliedInstituteDistance"
-                    placeholder="Enter Remarks" 
-                    [(ngModel)]="row.Remarks"
-                    [required]="row.DTECommitteeStatus == 1342"
-                    [ngClass]="{'border-red-500': isSubmitted && row.DTECommitteeStatus == 1342 && !row.Remarks}"/>
-
-                  <div *ngIf="isSubmitted && row.DTECommitteeStatus == 1342 && !row.Remarks" class="text-danger text-xs">
-                    Remarks are required for rejection.
-                  </div>
-                </td>
-
-              </tr>
-              <tr *ngIf="UserRequestHistoryList?.length==0">
-                <td colspan="10" class="text-center">No Record Found </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="card-footer text-center" *ngIf="searchRequest.status == 1354">
-        <button type="button" (click)="SaveDTERecommendationInstitutes_THTE()" class="btn bg-success text-white btn-sm">
-          Save
-        </button>
-      </div>
-    </div>
-  </div>
-</ng-template>
 
 <ng-template #Modal_StaffDetails let-modal
   class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">

@@ -143,6 +143,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public Gender: number = 0
   public Name: string = ''
   public DateOfBirth: string = ''
+  public DateOfFirstAppointment: string = ''
   public DateOfAppointment: string = ''
   public DateOfJoining: string = ''
   public DepartmentJoiningDate: string = ''

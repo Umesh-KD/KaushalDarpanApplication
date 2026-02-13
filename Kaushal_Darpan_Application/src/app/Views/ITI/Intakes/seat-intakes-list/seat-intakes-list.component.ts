@@ -11,6 +11,7 @@ import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-seat-intakes-list',
@@ -37,7 +38,7 @@ export class SeatIntakesListComponent implements OnInit {
   public SeatIntakeDataList: any = [];
   public Table_SearchText: string = '';
   public SeatIntakeIDnew: number=0;
-
+  CollegeTypeID: number = 0;
   State: any;
   Message: any;
   ErrorMessage: any;
@@ -62,7 +63,8 @@ export class SeatIntakesListComponent implements OnInit {
     private loaderService: LoaderService,
     private ItiSeatIntakeService: ItiSeatIntakeService,
     private Swal2: SweetAlert2,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private route: ActivatedRoute
   ) { }
 
   async ngOnInit() {
@@ -97,6 +99,15 @@ export class SeatIntakesListComponent implements OnInit {
     console.log(this.SSOLoginDataModel,"SSOLoginDataModel")
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
+    
+
+    this.route.queryParams.subscribe(params => {
+      this.CollegeTypeID = +params['ManagementTypeId'];
+
+      if (this.CollegeTypeID) {
+        this.searchRequest.CollegeTypeID = this.CollegeTypeID;
+      }
+    });
     this.onSearch();
   }
   get _SeatIntakeSearchFormGroup() { return this.SeatIntakeSearchFormGroup.controls; }

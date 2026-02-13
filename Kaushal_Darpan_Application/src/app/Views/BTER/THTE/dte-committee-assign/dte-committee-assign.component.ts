@@ -6,39 +6,46 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { PrincipleApplicationListSearchModel, THTE_ApplicationSearchModel, THTE_DDL, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Committee } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { ApplicationGenrateOrderByDteListSearchModel, PrincipleApplicationListSearchModel, StaffDetailsPreviewDataModel, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Principle } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
-import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
+import { StaffDetailsDataModel } from '../../../../Models/StaffMasterDataModel';
+import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 
 @Component({
-  selector: 'app-verify-application-committee',
+  selector: 'app-dte-committee-assign',
   standalone: false,
-  templateUrl: './verify-application-committee.component.html',
-  styleUrl: './verify-application-committee.component.css'
+  templateUrl: './dte-committee-assign.component.html',
+  styleUrl: './dte-committee-assign.component.css'
 })
-export class VerifyApplicationCommitteeComponent {
+export class DTECommitteeAssignComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
-  public requestSearch = new THTE_ApplicationSearchModel();
+
   public searchRequest = new PrincipleApplicationListSearchModel();
   public dropdownRequest = new THTE_DropdownDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public request = new UpdateApplicationStatusDataModel_Committee();
-  public Selecteditem: any = {}
+  public _DTEGenrateOrder = new ApplicationGenrateOrderByDteListSearchModel();
+  staffDetailsFormData = new StaffDetailsDataModel();
+  staffDetailsPreview = new StaffDetailsPreviewDataModel();
+
+  modalReference: NgbModalRef | undefined;
   public ApplicationListData: any = [];
+  public ApplicationListOrderData: any = [];
   public StatusListDDL: any = [];
-  public UserApplyInstituteList: any = [];
   public UpdateStatusListDDL: any = [];
-  public InstituteStatusListDDL: any = [];
-  public CommitteeListDDL: any = [];
-  public SelectedInstituteId: number | null = null;
+  public DTECommitteeListDDL: any = [];
+  public enumRole = EnumRole;
 
   public status: number = 0;
-  public CommitteeID: number = 0;
-  modalReference: NgbModalRef | undefined;
+  public isModalOpen: boolean = false;
+  Dis_CommitteeDocs: string = ''
+  CommitteeDocs: string = ''
+  DTECommitteID: number = 0;
+
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -51,9 +58,7 @@ export class VerifyApplicationCommitteeComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public DateConfigSetting: any = [];
-  public requestDDl = new THTE_DDL();
   //end table feature default
-  public isShowInstituteSaveButton: boolean = false;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -63,85 +68,55 @@ export class VerifyApplicationCommitteeComponent {
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationVerificationService: TeacherHigherEducationApplicationVerificationService,
-    private router: Router,
     public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
+    private router: Router,
     private modalService: NgbModal,
-
+    private staffMasterService: StaffMasterService,
   ) { }
 
   async ngOnInit () { 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-    await this.GetCommitteeListDDL();
-    await this.GetStatusData();
+    await this.THTE_GetDTECommitteeDDL();
+    await this.GetMasterData();
   }
 
-
-  async GetCommitteeListDDL() {
+  async THTE_GetDTECommitteeDDL() {
     try {
-      this.requestDDl.UserID = this.sSOLoginDataModel.UserID;
-      this.requestDDl.RoleID = this.sSOLoginDataModel.RoleID;
-      
-      await this.teacherHigherEducationApplicationService.GetCommitteeDDL(this.requestDDl)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.CommitteeListDDL = data['Data'];
-        }, (error: any) => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
+      let request: any = {}
+      await this.teacherHigherEducationApplicationService.THTE_GetDTECommitteeDDL(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DTECommitteeListDDL = data['Data'];
+      })
+    } catch (error) {
+      console.error(error)
     }
   }
 
-
-  async GetStatusData() {
+  async GetMasterData() {
     try {
       this.dropdownRequest.action = "GetStatusDDL"
-      this.dropdownRequest.RoleID = this.sSOLoginDataModel.RoleID
-      
       await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StatusListDDL = data['Data'];
-        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1341  || x.ID === 1343)
-        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1343)
+        this.UpdateStatusListDDL = data['Data'];
+        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1344 || x.ID == 1354)
+        this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1354)
       })
     } catch (error) {
       console.error(error);
     }
   }
 
-  async GetCommitteeData() {
-    try {
-      this.dropdownRequest.action = "GetStatusDDL"
-      this.dropdownRequest.RoleID = this.sSOLoginDataModel.RoleID
+  async btn_Clear() {}
 
-      await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.StatusListDDL = data['Data'];
-        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1341 || x.ID === 1342 || x.ID === 1343)
-        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1343 || x.ID === 1342)
-      })
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-
-
-  async btn_Clear() {
-    this.searchRequest = new PrincipleApplicationListSearchModel();
-  }
-
-  async ApplicationList_ForCommittee_THTE() {
+  async ApplicationList_ForPrinciple_THTE() {
     try {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
 
-      if(this.sSOLoginDataModel.RoleID === EnumRole.Principal || this.sSOLoginDataModel.RoleID === EnumRole.PrincipalNon) {
-        this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID
-      }
-      await this.teacherHigherEducationApplicationVerificationService.ApplicationList_ForCommittee_THTE(this.searchRequest).then(async (data: any) => {
+      
+      await this.teacherHigherEducationApplicationVerificationService.ApplicationList_ForDTE_THTE(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.ApplicationListData = data['Data'];
@@ -154,63 +129,23 @@ export class VerifyApplicationCommitteeComponent {
     }
   }
 
-  async updateStatusRemark() {
+  async openOTPModal() {
     let anySelected = this.ApplicationListData.some((x: any) => x.Selected === true)
     if (!anySelected) {
       this.toastr.warning('Please select at least one record.');
       return;
     }
-    if(this.status == 0) {
+
+    if(this.DTECommitteID == 0 || this.DTECommitteID == undefined || this.DTECommitteID == null) {
+      this.toastr.warning('Please select committee.');
+      return;
+    }
+
+    if(this.status == 0 || this.status == undefined || this.status == null) {
       this.toastr.warning('Please select status.');
       return;
     }
 
-    if (this.CommitteeID == 0) {
-      this.toastr.warning('Please select committee.');
-      return;
-    }
-    
-
-    // if(this.request.CommitteeDocs == '' || this.request.CommitteeDocs == undefined || this.request.CommitteeDocs == null) {
-    //   this.toastr.warning('Please upload committee document.');
-    //   return;
-    // }
-
-    let dyMsg = '';
-    if(this.status == 1343) {
-      dyMsg = "Accept And Forward To Principle";
-    } else {
-      dyMsg = "Reject";
-    }
-    this.Swal2.Confirmation(`Are you sure you want to ${dyMsg}?`,
-    async (result: any) => {
-      
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: dyMsg + ' Application List',
-          input: 'textarea',
-          inputLabel: 'Remark',
-          inputPlaceholder: 'Enter your remark here...',
-          inputAttributes: {
-            'aria-label': 'Type your remark here'
-          },
-          showCancelButton: true,
-          confirmButtonText: 'Save Remark',
-          cancelButtonText: 'Cancel'
-        }).then(async (result: any) => {
-          if (result.isConfirmed && result.value?.trim()) {
-            const remark = result.value.trim();
-            await this.openOTPModal(remark);
-          } else if (result.isConfirmed && !result.value?.trim()) {
-            this.toastr.warning('Remark is required.');
-          }
-        });
-      }
-    })
-    
-  }
-
-  async openOTPModal(remark: string) {
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
 
     // await for open model
@@ -220,30 +155,63 @@ export class VerifyApplicationCommitteeComponent {
     await this.childComponent.waitForVerification();
 
     // do work
-    await this.SaveDataMarked(remark);
+    await this.DTECommitteeAssign_THTE();
   }
 
-  async SaveDataMarked(remark: string) {
-     
+  async DTECommitteeAssign_THTE() {
+    
+
     try {
       let selected = this.ApplicationListData.filter((x: any) => x.Selected === true)
-      this.request.ApplicationListData = selected
+      selected.forEach((x: any) => {
+        x.ModifyBy = this.sSOLoginDataModel.UserID,
+        x.status = this.status,
+        x.RoleID = this.sSOLoginDataModel.RoleID,
+        x.CommitteeDocs = this.CommitteeDocs,
+        x.Dis_CommitteeDocs = this.Dis_CommitteeDocs  ,
+        x.DTECommitteID = this.DTECommitteID
+      })
 
-      this.request.ModifyBy = this.sSOLoginDataModel.UserID
-      this.request.status = this.status
-      this.request.Remark = remark
-      this.request.RoleID = this.sSOLoginDataModel.RoleID
-      this.request.CommitteeID = this.CommitteeID
-
-      await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_Committee_THTE(this.request)
+      await this.teacherHigherEducationApplicationVerificationService.DTECommitteeAssign_THTE(selected)
       .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
+          this.status = 0
+          this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
+          this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
           this.status = 0;
-          this.CommitteeID = 0;
-          this.request = new UpdateApplicationStatusDataModel_Committee();
-          await this.ApplicationList_ForCommittee_THTE();
+          this.DTECommitteID = 0;
+          await this.ApplicationList_ForPrinciple_THTE();
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+    
+    
+  }
+
+  async OnConfirm(content: any, ID: number) {
+    await this.StaffDetailsPreview_THTE(ID)
+    this.modalReference = this.modalService.open(content, { size: 'xl', backdrop: 'static' });
+    this.isModalOpen = true;  // Open the modal
+  }
+
+  ClosePopup(): void {
+    this.staffDetailsPreview = new StaffDetailsPreviewDataModel();
+    this.modalReference?.close();  // Close the modal
+  }
+
+  async StaffDetailsPreview_THTE(ID: number) {
+    try {
+      this.staffDetailsPreview.StaffID = ID;
+      await this.teacherHigherEducationApplicationVerificationService.StaffDetailsPreview_THTE(this.staffDetailsPreview).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.staffDetailsPreview = data['Data'][0];
+        } else {
+          this.staffDetailsPreview = new StaffDetailsPreviewDataModel();
         }
       })
     } catch (error) {
@@ -276,8 +244,8 @@ export class VerifyApplicationCommitteeComponent {
 
             if (data.State == EnumStatus.Success) {
               if (Type == "CommitteeDoc") {
-                this.request.Dis_CommitteeDocs = data['Data'][0]["Dis_FileName"];
-                this.request.CommitteeDocs = data['Data'][0]["FileName"];
+                this.Dis_CommitteeDocs = data['Data'][0]["Dis_FileName"];
+                this.CommitteeDocs = data['Data'][0]["FileName"];
 
               }
               event.target.value = null;
@@ -383,36 +351,17 @@ export class VerifyApplicationCommitteeComponent {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
   //checked all (replace org. list here)
-  // selectInTableAllCheckbox() {
-  //   this.paginatedInTableData.forEach((row: any) => {
-  //     row.Selected = this.AllInTableSelect;
-
-  //     // Direct update to the original list
-  //     const item = this.ApplicationListData.find((x: any) => x.THTEAppID === row.THTEAppID);
-  //     if (item) {
-  //       item.Selected = this.AllInTableSelect;
-  //     }
-  //   });
-  // }
   selectInTableAllCheckbox() {
-  this.paginatedInTableData.forEach((row: any) => {
-    // Apply the same condition used in your HTML *ngIf
-    const isEligible = row.SelectedInstitute != '' && row.SelectedInstitute != null;
-
-    if (isEligible) {
+    this.paginatedInTableData.forEach((row: any) => {
       row.Selected = this.AllInTableSelect;
 
-      // Update the master list
+      // Direct update to the original list
       const item = this.ApplicationListData.find((x: any) => x.THTEAppID === row.THTEAppID);
       if (item) {
         item.Selected = this.AllInTableSelect;
       }
-    } else {
-      // Optional: Ensure ineligible rows remain unselected
-      row.Selected = false; 
-    }
-  });
-}
+    });
+  }
 
   // Select/Deselect Single
   selectInTableSingleCheckbox(isSelected: boolean, row: any) {
@@ -436,109 +385,4 @@ export class VerifyApplicationCommitteeComponent {
     this.AllInTableSelect = this.paginatedInTableData.every(r => r.Selected === true);
   }
   // end table feature
-
-  async ApplyCollegelist(model: any, THTEAppID: number,row:any) {
-     
-    try {
-      this.loaderService.requestStarted();
-      this.requestSearch.THTEAppID = THTEAppID
-      this.requestSearch.RoleID = this.sSOLoginDataModel.RoleID
-      this.Selecteditem=row
-      await this.teacherHigherEducationApplicationService.THTE_GrtApplyInstituteList(this.requestSearch)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.UserApplyInstituteList = data.Data;
-
-          const selected = this.UserApplyInstituteList.find(
-            (e: any) => e.SelectedInstitute === 1
-          );
-
-          if (selected) {
-            this.SelectedInstituteId = selected.ID; // acd.ID
-          }
-        }, (error: any) => console.error(error))
-      this.modalReference = this.modalService.open(model, { size: 'xl', backdrop: 'static' });
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-  async CloseModalRequestHistorylist() {
-    this.Selecteditem = {}
-    this.modalService.dismissAll()
-  }
-  onRadioChange(row: any): void {
-   
-
-    this.UserApplyInstituteList.forEach(
-      (r: any) => r.SelectedInstitute = false
-    );
-
-    row.SelectedInstitute = true;
-  }
-
-
-
-  async SaveSelectedInstitute(remark: string) {
-     
-    try {
-      // let selected = this.UserApplyInstituteList.filter((x: any) => x.SelectedInstitute === true)
-      // if (selected.length == 0) {
-      //   this.toastr.warning("Please Select Institute")
-      //   return
-      // }
-
-      // 1. Check if every single row has a status selected (!= 0)
-      const allStatusSelected = this.UserApplyInstituteList.every((row: any) => 
-        row.InstituteStatus != 0 && row.InstituteStatus != null
-      );
-
-      if (!allStatusSelected) {
-        this.toastr.error("Please choose status for all institutes in the list.");
-        return;
-      }
-
-      // 2. Check if rejections have remarks
-      const invalidRejections = this.UserApplyInstituteList.filter((row: any) => 
-        row.InstituteStatus == 1342 && (!row.Remarks || row.Remarks.trim() === '')
-      );
-
-      if (invalidRejections?.length > 0) {
-        this.toastr.error("Remarks are mandatory for all rejected institutes.");
-        return;
-      }
-
-      this.UserApplyInstituteList.forEach((e: any) => {
-        e.UserID = this.sSOLoginDataModel.UserID
-      });
-
-      console.log("this.UserApplyInstituteList",this.UserApplyInstituteList);
-
-
-      await this.teacherHigherEducationApplicationService.UpdateInstitutestatus(this.UserApplyInstituteList)
-        .then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State === EnumStatus.Success) {
-            this.toastr.success(data.Message);
-            this.status = 0;
-            this.CommitteeID = 0;
-            this.CloseModalRequestHistorylist();
-            this.request = new UpdateApplicationStatusDataModel_Committee();
-            await this.ApplicationList_ForCommittee_THTE();
-          }
-        })
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
 }
-
-
-

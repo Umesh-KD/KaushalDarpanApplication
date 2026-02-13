@@ -123,16 +123,16 @@
                 </button>
 
                 <button type="button"
-                  class="bg-success btn text-white btn-sm" 
-                  (click)="openModal_CheckIn(modal_CheckIn, item)" 
-                  *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
+                        class="bg-success btn text-white btn-sm"
+                        (click)="openModal_CheckIn(modal_CheckIn, item)"
+                        *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                   Check In
                 </button>
 
-                <button type="button" 
-                  class="bg-warning btn text-dark btn-sm" 
-                  (click)="openOTPModal_CheckOut(item)" 
-                  *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
+                <button type="button"
+                        class="bg-warning btn text-dark btn-sm"
+                        (click)="openOTPModal_CheckOut(item)"
+                        *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                   Check Out
                 </button>
 
