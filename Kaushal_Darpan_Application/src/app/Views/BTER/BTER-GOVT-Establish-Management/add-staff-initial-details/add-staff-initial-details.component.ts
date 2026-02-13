@@ -36,7 +36,7 @@ export class AddStaffInitialDetailsComponent {
   public IsAddasPrincipal: boolean = false;
   public IsGuestHouseAdmin: boolean = false;
 
-
+  public BugetHeadList:any=[];
   public OfficeList: any[] = [];
   public LevelList: any[] = [];
   public ListITICollegeByManagement: any[] = [];
@@ -78,7 +78,8 @@ export class AddStaffInitialDetailsComponent {
       IsNodal: [false],
       IsGuestStaff: [false],
       ddlPost: ['', [DropdownValidators]],
-      Office: ['', [DropdownValidators]]
+      Office: ['', [DropdownValidators]],
+      BugetHeadID:['']
 
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -90,7 +91,7 @@ export class AddStaffInitialDetailsComponent {
     
    
     await this.GetStaffTypeData();
-
+    await this.GetBudgetList();
 
     
   }
@@ -632,7 +633,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async SaveData() {
-  //  debugger
+   debugger
     // if (this.AddedZonalList.length == 0) {
     //   this.toastr.error("Please Add At Least One Office");
     //   return;
@@ -642,8 +643,7 @@ export class AddStaffInitialDetailsComponent {
      
     //   element.CreatedBy = this.sSOLoginDataModel.UserID;
     //   element.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
-    //   element.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      
+    //   element.DepartmentID = this.sSOLoginDataModel.DepartmentID;  
     // })
 
     this.isSubmitted = true;
@@ -684,11 +684,37 @@ export class AddStaffInitialDetailsComponent {
   async ResetControl() { }
 
 
-  async StaffTypeChangePost() {
-    
+  async StaffTypeChangePost() { 
     await this.GetPostList();
-   
+  }
 
+
+  async GetBudgetList() {
+    debugger;  
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList = data['Data'];
+          console.log(this.OfficeList, "OfficeList");
+        }, error => console.error(error));
+
+        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.BugetHeadList = data['Data'];
+          console.log(this.BugetHeadList, "BugetHeadList");
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
   async GuestHouseMasterWiselogic() {

@@ -53,7 +53,7 @@
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
 
                 <button type="button" class="btn bg-success text-white fixed-btn"
-                        (click)="LiveResult()">
+                        (click)="openOTPModal_LiveResult()">
                   {{ row.isLiveResult == 0 ? 'Live' : 'Un Live' }}
                 </button>
               </div>
@@ -65,4 +65,5 @@
   </div>
 </div>
 
+<app-otpmodal #otpModal></app-otpmodal>
 

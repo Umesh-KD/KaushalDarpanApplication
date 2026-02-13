@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ExamLiveResultModel } from '../../../Models/ITI/ITI_ResultModel';
 import { ITIResultService } from '../../../Services/ITIResult/iti-result.service';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 
 @Component({
   selector: 'app-Iti-Live-Result',
@@ -18,6 +20,7 @@ export class ItiLiveResultComponent {
   public isSubmitted: boolean = false;
   public ItiCollegesListAll: any = [];
   public ExamLiveSearchRequest = new ExamLiveResultModel()
+  public otpRequest = new ExamLiveResultModel()
   public isLoading: boolean = false;
   public State: number = 0;
   public Message: string = '';
@@ -30,11 +33,22 @@ export class ItiLiveResultComponent {
   public _EnumRole = EnumRole
 
   liveResultDataList: any[] = [];
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
+  public OTP: string = '';
+  public MobileNo: string = '';
+  public GeneratedOTP: string = '';
+  closeResult: string | undefined;
+  public showResendButton: boolean = false;
+  timeLeft: number = GlobalConstants.DefaultTimerOTP;
+  private interval: any;
+
   constructor(
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private Swal2: SweetAlert2,
-    private itiResult: ITIResultService
+    private itiResult: ITIResultService,
+    private modalService: NgbModal,
+    private sMSMailService: SMSMailService,  
   ) {
 
   }
@@ -72,9 +86,9 @@ export class ItiLiveResultComponent {
 
   async LiveResult() {
 
-    this.Swal2.Confirmation("Are you sure to change status?", async (result: any) => {
+    //this.Swal2.Confirmation("Are you sure to change status?", async (result: any) => {
 
-      if (!result.isConfirmed) return;
+    //  if (!result.isConfirmed) return;
 
       try {
 
@@ -84,34 +98,44 @@ export class ItiLiveResultComponent {
         this.ExamLiveSearchRequest.UserID = this.sSOLoginDataModel.UserID;
         this.ExamLiveSearchRequest.Action = "UpdateResultStatus";
 
- await this.itiResult.GetExamLiveResult(this.ExamLiveSearchRequest)
-   .then((data: any) => {
-     this.State = data['State'];
-     this.Message = data['Message'];
-     this.ErrorMessage = data['ErrorMessage'];
-            if (this.State == EnumStatus.Success)
-            {
-              this.toastr.success('Status Changed Successfully');
-           
-            }
-          }, error => console.error(error));
-
-
-
-        this.getliveResultData();
-
-      } catch (error) {
-
-        console.error(error);
-
-      } finally {
-
-        this.loaderService.requestEnded();
-
+       
+        await this.itiResult.GetExamLiveResult(this.ExamLiveSearchRequest)
+         .then((data: any) => {
+           this.State = data['State'];
+           this.Message = data['Message'];
+           this.ErrorMessage = data['ErrorMessage'];
+              if (this.State == EnumStatus.Success)
+              {
+                this.toastr.success('Status Changed Successfully');
+              }
+         }, error => console.error(error));
+            this.getliveResultData();
+          } catch (error) {
+            console.error(error);
+          } finally {
+            this.loaderService.requestEnded();
       }
-    });
+
+     
+
+   // });
   }
 
+
+  async openOTPModal_LiveResult() {
+    this.Swal2.Confirmation("Are you sure to change status?", async (result: any) => {
+
+      if (!result.isConfirmed) return;
+
+    debugger
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    await this.childComponent.OpenOTPPopup();
+    await this.childComponent.waitForVerification();
+
+    await this.LiveResult();
+
+    });
+  }
 
 
 }

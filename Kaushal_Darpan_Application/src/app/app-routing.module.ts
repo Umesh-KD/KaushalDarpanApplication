@@ -861,7 +861,7 @@ const routes: Routes = [
      
       { path: 'Iti-all-Result', loadChildren: () => import('./Views/ITI/reports/iti-All-Result/iti-All-Result.module').then(m => m.itiAllResultModule), title: "All data" },
 
-      { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule) },
+      { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule),title: "Live Result" },
 
 
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
@@ -998,7 +998,7 @@ const routes: Routes = [
       { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
       { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
       { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
-      
+
 
       { path: 'ItiCollegeReport', loadChildren: () => import('./Views/ITI/iti-college-report/iti-college-report.module').then(m => m.ItiCollegeReportModule) },
 

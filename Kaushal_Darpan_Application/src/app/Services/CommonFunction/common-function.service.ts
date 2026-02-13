@@ -872,6 +872,13 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async GetPostTypeDDL() {
+    return await this.http.get(this.APIUrl + '/GetPostTypeDDL/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetParentSubjectDDL(request: SubjectSearchModel) {
 
     const body = JSON.stringify(request);
