@@ -562,3 +562,5 @@ export class OfficeVacancyModel {
   public UploadedDocument?:string=''
   public Name?:string='';
 }
+
+

@@ -421,7 +421,8 @@ export class OfficeVacancyComponent implements OnInit {
       this.loaderService.requestStarted();
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.SearchData.EndTermID = this.sSOLoginDataModel.EndTermID;
-
+      console.log(this.SearchData.StaffTypeID);
+      console.log(this.SearchData.OfficeID);
       await this.BTER_EstablishManagementService.OfficeVacancyList(this.SearchData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -605,7 +606,9 @@ console.log(this.formData.DesignationID);
   }
 
   async ClearSearchData(){
-    this.SearchData.DesignationName='';
+    this.SearchData.Name='';
+    this.SearchData.StaffTypeID=0;
+    this.SearchData.OfficeID=0;
     await this.OfficeVacancyDataList();
   }
 
