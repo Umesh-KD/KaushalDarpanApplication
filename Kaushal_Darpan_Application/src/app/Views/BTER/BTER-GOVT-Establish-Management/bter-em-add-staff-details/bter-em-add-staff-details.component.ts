@@ -781,7 +781,10 @@ export class BterEMAddStaffDetailsComponent {
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           console.log('SSOID',parsedData);
           if (parsedData != null) {
-            this.request.EmployeeID = parsedData.employeeNumber;
+            if(this.request.EmployeeID=='' || this.request.EmployeeID==null || this.request.EmployeeID==undefined){
+              this.request.EmployeeID = parsedData.employeeNumber;
+            }
+            // this.request.EmployeeID = parsedData.employeeNumber;
             this.request.Name = parsedData.displayName;
             this.request.MobileNumber = parsedData.mobile;
             this.request.SSOID = parsedData.SSOID;

@@ -38,12 +38,21 @@
 
         <!-- Staff Type -->
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type<span class="StarMarking">*</span></label>
           <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
+
+        <!-- Post Type  -->
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post Type<span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="PostTypeID" [(ngModel)]="formData.PostTypeID" (change)="fillupDesignation()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of PostTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div> -->
 
         <!-- Post -->
         <div>
@@ -65,13 +74,38 @@
         <!-- Total Seat -->
         <div>
           <label for="TotalSeatID">Total Seat <span class="StarMarking">*</span></label>
-          <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
+          <div>
+            <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
                  [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+          </div>
         </div>
+
+        <!-- upload documnet  -->
+        <div >
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="fileStudentPhoto">Upload Document <span class="StarMarking">*</span></label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="fileStudentPhoto" type="file" (change)="onDocchange($event,'Photo')" formControlName="UploadedDocument">
+            <label for="fileStudentPhoto">
+              <span>Choose File</span>
+              {{formData.Dis_UploadedDocument === '' ? 'No File Choosen' : formData.Dis_UploadedDocument}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + formData.UploadedDocument}}"
+                 *ngIf="this.formData.Dis_UploadedDocument!='' " class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                 (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+                <i class="ti ti-trash"></i>
+              </a>-->
+            </div>
+          </div>
+        </div>
+
 
         <!-- Comments -->
         <div class="form-group col-span-3">
-          <label for="Comments">Comments:</label>
+          <label for="Comments">Comments: <span class="StarMarking">*</span></label>
           <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
         </div>
 
@@ -259,6 +293,37 @@
 <!--{{OfficeVacancyList|json}}-->
 <div class="card mt-3">
   <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a [routerLink]="'/ApplyLeave'" [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="SearchData.Name">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="SearchData.OfficeID" formControlName="OfficeID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type<span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="SearchData.StaffTypeID" (change)="fillupDesignation()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="OfficeVacancyDataList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+
+    </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For List</b>
     </div>

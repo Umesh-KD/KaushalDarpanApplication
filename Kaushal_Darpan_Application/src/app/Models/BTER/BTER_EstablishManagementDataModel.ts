@@ -43,7 +43,7 @@ export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
   public ModifyBy: number=0
   public CourseTypeID: number = 0;
   public GuestHouseID: number = 0;
-
+  public BugetHeadID?:number=0;
 
 }
 
@@ -257,6 +257,7 @@ export class BTER_EM_ApproveStaffDataModel extends RequestBaseModel {
   public ModifyBy: number = 0
   public StaffTypeID: number = 0
   public WorkOfficeID: number = 0
+  public BugetHeadID?:number=0
 }
 
 export class BTER_EM_DeleteModel extends RequestBaseModel {
@@ -556,4 +557,7 @@ export class OfficeVacancyModel {
   public PostedSeat: number = 0;
   public TradeID: number = 0
   public TradeName: string = ''
+  public Dis_UploadedDocument?:string=''
+  public UploadedDocument?:string=''
+  public Name?:string='';
 }

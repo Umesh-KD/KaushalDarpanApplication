@@ -66,6 +66,7 @@ export class EMPrincipleStaffComponent {
   public StaffMasterList: any[] = [];
   public CategoryList: any[] = [];
   public CourseMasterDDL: any[] = [];
+  public BranchInstituteDDL: any[] = [];
   public DesignationMasterDDLList: any = [];
   public GenderList: any = [];
   public DesignationWiseBranchListRole: any[] = [];
@@ -115,7 +116,8 @@ export class EMPrincipleStaffComponent {
       EmailID: [{ value: '', disabled: true }],
       Hostel: [''],
       guestRoomID: [0, []],
-      ddlPost: ['', [DropdownValidators]]
+      ddlPost: ['', [DropdownValidators]],
+      BranchID:['',[DropdownValidators]] 
     })
 
     this.settingsMultiselect = {
@@ -225,6 +227,7 @@ export class EMPrincipleStaffComponent {
 
     await this.GetDesignationMasterData();
     await this.GetCategroyData();
+    await this.getBranchesInstituteIDWise();
 
     this.approveRequest.WorkOfficeID = 0;
 
@@ -484,7 +487,7 @@ async GetTechnicianDll() {
   async StaffLevelChild() {
     debugger
     this.formData.StaffLevelChildID = 0;
-    this.AddValidationStaffLevelNon();
+    // this.AddValidationStaffLevelNon();
     this.formData.Show_StaffLevelChild = true;
     this.searchRequest.StaffLevelID = this.formData.StaffLevelID;
     /* alert(this.searchRequest.StaffLevelID);*/
@@ -588,7 +591,6 @@ async GetTechnicianDll() {
   }
 
   async GetBranchesMasterData() {
-
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
@@ -647,7 +649,17 @@ async GetTechnicianDll() {
 
     }
     this.AddStaffBasicDetailFromGroup.controls['Technician'].updateValueAndValidity();
+ 
+    // -------------------------
+    if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.Lecturer) {
+      this.AddStaffBasicDetailFromGroup.controls['BranchID'].setValidators([DropdownValidators]);
+    } else {
+      this.AddStaffBasicDetailFromGroup.controls['BranchID'].clearValidators();
 
+    }
+    this.AddStaffBasicDetailFromGroup.controls['BranchID'].updateValueAndValidity();
+
+    // -------------------------
     this.formData.multiHostelIDs = "";
     if (this.formData.StaffLevelID == this._ITIGovtEM_EnumStaffLevel.HostelWarden) {
       await this.GetHostelData();
@@ -694,9 +706,7 @@ async GetTechnicianDll() {
   }
 
   async OnFormSubmit() {
-    debugger
-    
-
+    // debugger
     if(this.sSOLoginDataModel.RoleID != 7) {
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.removeValidators([DropdownValidators]);
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.updateValueAndValidity();
@@ -906,6 +916,7 @@ async GetTechnicianDll() {
   }
 
   async getStreamMasterData() {
+    debugger;
     try {
       this.StreamSearch.InstituteID = this.sSOLoginDataModel.InstituteID
       this.StreamSearch.StreamType = this.sSOLoginDataModel.Eng_NonEng
@@ -915,6 +926,28 @@ async GetTechnicianDll() {
         data = JSON.parse(JSON.stringify(data));
         this.CourseMasterDDL = data.Data;
         console.log("StreamMasterList", this.CourseMasterDDL)
+      }, error => console.error(error));
+      
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async getBranchesInstituteIDWise() {
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.Stream_InstituteIdWise(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.Eng_NonEng,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID,this.sSOLoginDataModel.FinancialYearID).then((data: any) =>
+      {
+        data = JSON.parse(JSON.stringify(data));
+        this.BranchInstituteDDL = data.Data;
+        console.log("BranchInstituteDDL", this.BranchInstituteDDL)
       }, error => console.error(error));
       
     }
@@ -1221,19 +1254,19 @@ async GetCategroyData() {
     this.isSubmitted = false;
   }
 
-  async AddValidationStaffLevelNon() {
-    if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
-      this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
-    }
-    else if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
-      this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
-    }
-    else {
-      this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].clearValidators();
+  // async AddValidationStaffLevelNon() {
+  //   if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
+  //     this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
+  //   }
+  //   else if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
+  //     this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
+  //   }
+  //   else {
+  //     this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].clearValidators();
 
-    }
-    this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].updateValueAndValidity();
-  }
+  //   }
+  //   this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].updateValueAndValidity();
+  // }
 
   async GetStaff_HostelIDs(StaffID: number, StaffUserID: number) {
     try {
