@@ -43,6 +43,7 @@ export class bterSanctionedPostsComponent implements OnInit {
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
 
+
   
   public UserRequestHistoryList: any[] = [];
   public _EnumEMProfileStatus = EnumEMProfileStatus;
@@ -56,6 +57,7 @@ export class bterSanctionedPostsComponent implements OnInit {
   public paginatedInTableData: any[] = [];
   public UserRequestList: any[] = [];
   public SanctionedPostsList: any[] = [];
+  public OfficeList: any[] = [];
   public currentInTablePage: number = 1;
   public pageInTableSize: string = "50";
   public totalInTablePage: number = 0;
@@ -66,6 +68,8 @@ export class bterSanctionedPostsComponent implements OnInit {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public showJoiningStatusColumn: boolean = false;
+
+  public BugetHeadList: any = [];
   constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,
     private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
@@ -82,43 +86,20 @@ export class bterSanctionedPostsComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.BugetHeadList = [
+      { ID: 1, Name: 'State Plan Budget' },
+      { ID: 2, Name: 'Center Plan Budget' },
+      { ID: 3, Name: 'Unplanned Budget' }
+    ];
   
     this.getSanctionedPostslist();
     console.log(this.sSOLoginDataModel);
+    this.GetStaffTypeData();
+    await this.GetOfficeList();
+
+   
   }
 
-
-
-  //async GetEducationDetails() {
-
-  //  this.isSubmitted = false;
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    this.educationDetailsRequest.SSOID = this.sSOLoginDataModel.SSOID;
-  //    this.educationDetailsRequest.StaffID = this.sSOLoginDataModel.StaffID;
-  //    this.educationDetailsRequest.StaffUserID = this.sSOLoginDataModel.UserID;
-  //    this.educationDetailsRequest.Action = 'UserEducationalQualification';
-  //    await this.ITIGovtEMStaffMasterService.ITIGovtEM_ITI_Govt_Em_PersonalDetailByUserID(this.educationDetailsRequest)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        console.log(data);
-          
-  //        this.AddedEducationList = data['Data']['EducationalList'];
-  //        const btnSave = document.getElementById('btnSave')
-  //        if (btnSave) btnSave.innerHTML = "Update";
-  //        const btnReset = document.getElementById('btnReset')
-  //        if (btnReset) btnReset.innerHTML = "Cancel";
-
-  //      }, error => console.error(error));
-  //  }
-  //  catch (ex) { console.log(ex) }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-
-  //}
 
 
 
@@ -141,7 +122,11 @@ export class bterSanctionedPostsComponent implements OnInit {
 
   async getSanctionedPostslist() {
     try {
-      
+
+      this.searchRequest.StaffTypeID = this.searchRequest.StaffTypeID;
+      this.searchRequest.OfficeID = this.searchRequest.OfficeID;
+      this.searchRequest.BugetHeadID = this.searchRequest.BugetHeadID;
+      debugger
       this.loaderService.requestStarted();
       await this.EstablishManagementService.OfficeVacancyList(this.searchRequest)
         .then((data: any) => {
@@ -160,8 +145,74 @@ export class bterSanctionedPostsComponent implements OnInit {
     }
   }
 
- 
 
+  //async GetOfficeList() {
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, this.searchRequest.LevelID)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.OfficeList = data['Data'];
+  //        console.log(this.OfficeList, "OfficeList")
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+  async GetStaffTypeData() {
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffTypeList = data.Data;
+        console.log("StaffTypeList", this.StaffTypeList);
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetOfficeList() {
+    debugger;
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList = data['Data'];
+          console.log(this.OfficeList, "OfficeList");
+        }, error => console.error(error));
+
+      await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.BugetHeadList = data['Data'];
+          console.log(this.BugetHeadList, "BugetHeadList");
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
  
 
 }
