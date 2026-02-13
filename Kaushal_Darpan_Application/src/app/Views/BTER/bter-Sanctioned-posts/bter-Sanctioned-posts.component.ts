@@ -70,11 +70,9 @@ export class bterSanctionedPostsComponent implements OnInit {
   public showJoiningStatusColumn: boolean = false;
 
   public BugetHeadList: any = [];
-  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
-    private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,
-    private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
-    private ITICollegeTradeService: ItiSeatIntakeService,
-    private userRequestService: UserRequestService, private fb: FormBuilder, public appsettingConfig: AppsettingService,
+  constructor(private commonMasterService: CommonFunctionService, 
+    private toastr: ToastrService, private loaderService: LoaderService,
+    public appsettingConfig: AppsettingService,
     private EstablishManagementService: BTEREstablishManagementService,
 
 
@@ -96,29 +94,15 @@ export class bterSanctionedPostsComponent implements OnInit {
     console.log(this.sSOLoginDataModel);
     this.GetStaffTypeData();
     await this.GetOfficeList();
-
-   
   }
-
-
-
-
-
-  
 
   async ResetControl() {
     this.isSubmitted = false;
-    //this.searchRequest.RequestType = 0;
-    //this.searchRequest.LevelID = 0;
-    //this.searchRequest.PostID = 0;
-    //this.searchRequest.OfficeID = 0;
-    //this.searchRequest.StaffTypeID = 0;
-    //this.searchRequest.OrderNo = "";
-  
+    this.searchRequest.OfficeID = 0;
+    this.searchRequest.StaffTypeID = 0;
+    this.searchRequest.BugetHeadID = 0;
     await this.getSanctionedPostslist();
   }
-
-
 
   async getSanctionedPostslist() {
     try {
@@ -144,27 +128,6 @@ export class bterSanctionedPostsComponent implements OnInit {
       }, 200);
     }
   }
-
-
-  //async GetOfficeList() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, this.searchRequest.LevelID)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.OfficeList = data['Data'];
-  //        console.log(this.OfficeList, "OfficeList")
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
 
   async GetStaffTypeData() {
 
