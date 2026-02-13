@@ -111,34 +111,34 @@
                 <button type="button"
                         class="bg-info btn text-white btn-sm"
                         (click)="onSubmit(modal_SubmitReq, item)"
-                        >
+                        *ngIf="item.Status < 217 && (sSOLoginDataModel.RoleID ==_EnumRole.GuestHouseIncharge)">
                   Approve/Reject
                 </button>
 
                 <button type="button"
                         class="bg-info btn text-white btn-sm"
                         (click)="onSubmit(modal_SubmitReq, item)"
-                        >
+                        *ngIf="item.Status === 217 && (sSOLoginDataModel.RoleID ==_EnumRole.GuestHouseAdmin)">
                   Approve/Reject
                 </button>
 
                 <button type="button"
-                  class="bg-success btn text-white btn-sm" 
-                  (click)="openModal_CheckIn(modal_CheckIn, item)" 
-                 >
+                        class="bg-success btn text-white btn-sm"
+                        (click)="openModal_CheckIn(modal_CheckIn, item)"
+                        *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                   Check In
                 </button>
 
-                <button type="button" 
-                  class="bg-warning btn text-dark btn-sm" 
-                  (click)="openOTPModal_CheckOut(item)" 
-                 >
+                <button type="button"
+                        class="bg-warning btn text-dark btn-sm"
+                        (click)="openOTPModal_CheckOut(item)"
+                        *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                   Check Out
                 </button>
 
 
                 <button type="button" class="btn btn-sm bg-primary text-white mt-2"
-                       
+                        *ngIf="(item.Status === 1339 || item.Status === 220) && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden  && item.PaymentStatus == 0"
                         (click)="openModalGenerateOTP(modal_GenrateOTP,item)">
                   <i class="ti ti-currency-rupee"></i> Pay Now
                 </button>
