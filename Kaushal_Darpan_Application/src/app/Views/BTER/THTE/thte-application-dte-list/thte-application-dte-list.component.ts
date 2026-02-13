@@ -203,7 +203,7 @@ export class THTEApplicationDteListComponent {
           this.status = 0
           this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
           this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
-          this.GenrateOrder();
+          await this.GenrateOrder();
           await this.ApplicationList_ForPrinciple_THTE();
         }
       })
@@ -324,7 +324,7 @@ export class THTEApplicationDteListComponent {
           this.status = 0
           this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
           this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
-          await this.GenrateOrder();
+          // await this.GenrateOrder();
           await this.ApplicationList_ForPrinciple_THTE();
         }
       })
