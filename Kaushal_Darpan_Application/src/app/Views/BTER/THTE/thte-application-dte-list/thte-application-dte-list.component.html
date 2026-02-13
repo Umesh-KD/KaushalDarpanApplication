@@ -15,6 +15,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        
       </div>
       <div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -40,7 +41,9 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <div class="flex justify-end flex-wrap items-center">
+      <div class="flex justify-end flex-wrap items-center gap-3">
+        <button type="button" *ngIf="searchRequest.status == 1345 && sSOLoginDataModel.RoleID === enumRole.DTE"
+          class="btn bg-info text-white inline-block me-2" (click)="GenrateOrderInWord()">Generate order in word</button>
         <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Excel</a> -->
         <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize"
           (change)="loadInTable()">
@@ -86,7 +89,7 @@
       </div>
       <div class="mt-6">
         <button type="button" *ngIf="sSOLoginDataModel.RoleID === enumRole.DTE"
-          class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Save & Genrate Order</button>
+          class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Approve for Order Genration</button>
 
         <button type="button" *ngIf="sSOLoginDataModel.RoleID === enumRole.CommitteInchargeDTE"
           class="btn bg-info text-white inline-block" (click)="updateStatusRemark_DTECommittee()">Save</button>

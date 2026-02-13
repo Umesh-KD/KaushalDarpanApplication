@@ -45,6 +45,8 @@ export class TheoryMarksDataModels {
   public StudentExamID?: number = 0;
   public IsUFM: boolean = false;
   public rowclass: string = ''
+  public centersubmitstatus: number = 0;
+  public centerpresentstatus: number = 0;
 }
 
 export class TheoryMarksSearchModel extends RequestBaseModel {
@@ -67,6 +69,8 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public SubjectType: string = ''
   public SubjectName: string = ''
   public CheckedStatus?: number = -1;
+  public centersubmitstatus?: number = 0;
+  public centerpresentstatus?: number = 0;
 }
 
 
