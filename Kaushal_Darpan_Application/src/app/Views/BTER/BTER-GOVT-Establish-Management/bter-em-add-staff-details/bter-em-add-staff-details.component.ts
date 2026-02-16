@@ -346,8 +346,15 @@ export class BterEMAddStaffDetailsComponent {
 
   async GetDesignationMasterData() {
     try {
+      debugger;
+      if (this.sSOLoginDataModel.OfficeID == 18) {
+        var id = 1;
+      }
+      else {
+        id = 0;
+      }
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
+      await this.commonMasterService.GetDesignationAndPostMaster(id).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
         this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.request.StaffTypeID);

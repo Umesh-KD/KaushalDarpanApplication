@@ -1648,8 +1648,8 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetDesignationAndPostMaster() {
-    return await this.http.get(this.APIUrl + '/GetDesignationAndPostMaster/', this.headersOptions)
+  public async GetDesignationAndPostMaster(id:any=0) {
+    return await this.http.get(this.APIUrl + '/GetDesignationAndPostMaster/' +  id , this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
