@@ -80,65 +80,35 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <!-- <th *ngIf="isForwardToVerify">
-              <input  type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
-            </th> -->
             <th width="80px" align="left">Sr. No.</th>
             <th class="text-left">Team Name</th>
-            <!--<th class="text-left">Team Type</th>-->
-            <!--<th class="text-left">Deployed Institute</th>-->
-            <!--<th class="text-left">Deployment Date From</th>
-            <th class="text-left">Deployment Date To</th>-->
-            <!--<th class="text-left">Created By</th>-->
-            <!--<th class="text-left">Deployment Staus</th>-->
-
+            <th class="text-left">Status</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
 
           <tr *ngFor="let row of InspectionData; let idx=index;">
-            <!-- <td *ngIf="isForwardToVerify">
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected" *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned"
-                #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
-            </td> -->
 
             <td>{{idx+1}}</td>
             <td>{{row.InspectionTeamName}}</td>
-            <!--<td>{{row.TeamTypeName}}</td>-->
-            <!--<td align="left">{{row.InstituteName}}</td>-->
-            <!--<td align="left">{{row.DeploymentDateFrom | date:'dd/MM/yyyy' }}</td>
-            <td align="left">{{row.DeploymentDateTo | date:'dd/MM/yyyy' }}</td>-->
-            <!--<td>{{row.CreatedBy}}</td>-->
-            <!--<td align="left">-->
-              <!--<a *ngIf="row.IsDeployed==true && row.DeploymentStatus==_EnumDeploymentStatus.Assigned" [routerLink]="'/center-observer-deployment'" [queryParams]="{ id: row.CenterObserverTeamID }" class="mx-2">
-                  Edit Deployment
-              </a>
-               <a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending" id="btnReset" [routerLink]="'/center-observer-deployment'" [queryParams]="{ id: row.CenterObserverTeamID }" class="btn bg-info text-white">
-                  Deploy Team
-              </a>-->
-                <!--<a *ngIf="row.DeployTeamStatus==_EnumDeploymentStatus.Pending" id="btnReset" [routerLink]="'/inspection-deployment'" [queryParams]="{ id: row.InspectionTeamID }" class="btn bg-info text-white">
-                  Deploy Team
-                </a>-->
-              <!--<a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending" (click)="UpdateDeployment(row.InspectionTeamID)" class="py-1 px-2 bg-warning text-white">Deployed Pending</a>-->
-              <!--<a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending && row.DeployTeamStatus!=_EnumDeploymentStatus.Pending" (click)="openModalGenerateOTP(modal_GenrateOTP, row.InspectionTeamID)" class="py-1 px-2 bg-warning text-white">Deployed Pending</a>
-              <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned" class="py-1 px-2 bg-success text-white me-1">Deployed</span>
-              <a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned" class="py-1 px-2 bg-primary text-white" (click)="DownloadPdf(row.InspectionOrder)">Export PDF</a>-->
-            <!--</td>-->
+            <td>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <label class="block">Status</label>
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.IsActive == 1" (change)="onToggleChange(row.InspectionTeamID, row.IsActive)">
+                  <span class="toggleIcon">
+                    <span class="toggleTitle">{{ row.IsActive == 1 ? '' : '' }}</span>
+                  </span>
+                </label>
+              </div>            
+            </td>
             <td align="left">
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
-                <!--<a href="javascript:void(0);" title="View Details"
-                   (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionTeamID)">
-                  <i class="ti ti-eye"></i>
-                </a>-->
 
                 <a [routerLink]="'/THTE-Committee'" [queryParams]="{id:row.InspectionTeamID}" title="Edit" *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending">
                   <i class="ti ti-pencil"></i>
                 </a>
-                <!--<button href="javascript:void(0);" title="{{row.Req_Remark}}" (click)="RequestApproveByAdmin(row.Req_Remark, row.DeploymentID)"
-                        *ngIf="row.isRequest==1" class="btn bg-info text-white">
-                  Delay Request
-                </button>-->
 
               </div>
             </td>

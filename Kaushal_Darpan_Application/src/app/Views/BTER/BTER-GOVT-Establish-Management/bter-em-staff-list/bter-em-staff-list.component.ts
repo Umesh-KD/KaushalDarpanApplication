@@ -70,6 +70,7 @@ export class BTEREMStaffListComponent {
   public DesignationMasterDDLList: any = [];
   public GenderList: any = [];
   public InstituteMasterDDLList: any[] = [];
+  public BugetHeadList:any=[];
   public unlockRequest = new BTER_EM_UnlockProfileDataModel();
   public isApprove: boolean = false;
   _EnumRole = EnumRole;
@@ -124,6 +125,7 @@ export class BTEREMStaffListComponent {
       DateOfRetirement: [''],
       Remark: [''],
       WorkOfficeID: [0, [DropdownValidators]],
+      BugetHeadID:['',[Validators.required]] 
     });
 
 
@@ -175,6 +177,7 @@ export class BTEREMStaffListComponent {
     await this.GetStatusList();
     await this.BTER_EM_GetStaffList();
     await this.GetOfficeList();
+    await this.GetBudgetList();
 
     await this.GetInstituteMaster();
     await this.GetStaffTypeData();
@@ -535,6 +538,34 @@ export class BTEREMStaffListComponent {
     }
   }
 
+  async GetBudgetList() {
+    debugger;  
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList = data['Data'];
+          console.log(this.OfficeList, "OfficeList");
+        }, error => console.error(error));
+
+        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.BugetHeadList = data['Data'];
+          console.log(this.BugetHeadList, "BugetHeadList");
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async openModal_ApproveStaffProfile(content: any, StaffUserID: number, SSOID: any, type: boolean) {
     debugger
     this.IsView = type;
@@ -558,6 +589,7 @@ export class BTEREMStaffListComponent {
     this.IsView = false
     /*window.location.reload();*/
   }
+
   async refreshValidators() {
     debugger
     // if(this.approveRequest.IsSalaryDrawnFromSamePost==true){
@@ -594,6 +626,7 @@ export class BTEREMStaffListComponent {
     this.StaffMasterFormGroup.get('HigherEduInstitute')?.updateValueAndValidity();
     // this.StaffMasterFormGroup.get('IsSalaryDrawnFromSamePost')?.updateValueAndValidity();
   }
+
   async ApproveStaffProfile() {
     debugger
     await this.refreshValidators();
@@ -708,6 +741,8 @@ export class BTEREMStaffListComponent {
       }, 200);
     }
   }
+
+
   CloseModal() {
     this.modalService.dismissAll();
     this.modalReference?.close();

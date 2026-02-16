@@ -71,13 +71,13 @@
         </div>
 
 
-        <div *ngIf="IsGuestStaffoffice==true">
+        <!-- <div *ngIf="IsGuestStaffoffice==true">
           <br />
           <label for="IsGuestStaff" class="text-gray-800 text-sm font-medium inline-block mb-2">
             <input type="checkbox" id="IsGuestStaff" name="IsGuestStaff"
                    formControlName="IsGuestStaff" [(ngModel)]="formData.IsGuestStaff" (change)="GuestHouseMasterWiselogic()"> Add as Guest Staff
           </label>
-        </div>
+        </div> -->
 
 
         <!-- <div  *ngIf="this.IsGuestHouseAdmin != true && IsNodalOfficer==true">
@@ -89,7 +89,6 @@
         </div> -->
 
           <!--{{RoleMasterList|json}}-->
-
 
           <div>
             <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span class="StarMarking">*</span></label>
@@ -106,8 +105,13 @@
             </div>
           </div>
 
-
-        
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.BugetHeadID" formControlName="BugetHeadID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
 
         <div *ngIf="this.IsGuestHouseAdmin != true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>

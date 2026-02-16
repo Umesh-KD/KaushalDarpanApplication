@@ -212,9 +212,16 @@ export class TheoryMarksComponent implements OnInit {
           })
 
           this.TheoryMarksDetailList.forEach(x => {
+            debugger;
             if (x.IsChecked === false) {
-              x.IsPresentTheory = 1
-              x.ObtainedTheory= ''
+               if( x.centersubmitstatus == 1 &&  x.centerpresentstatus==0)
+                {   x.IsPresentTheory = 0
+                    x.ObtainedTheory= '';
+                  }
+                else 
+                  {   x.IsPresentTheory = 1
+                      x.ObtainedTheory= '';
+                  }
             }
           })
 
@@ -296,7 +303,9 @@ export class TheoryMarksComponent implements OnInit {
       var filtered = this.TheoryMarksDetailList
     }
 
-    let markNotEntered = filtered.filter(x => x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '');
+    let markNotEntered = filtered.filter(
+      x => (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '') && (x.centersubmitstatus == 1 &&  x.centerpresentstatus==1)
+    ); //  -- ramesh 13-02-2026 for validation
     if(markNotEntered.length > 0) {
       this.toastr.error('Please enter marks for present student! first!');
       return
@@ -307,6 +316,7 @@ export class TheoryMarksComponent implements OnInit {
 
       // If the student is marked as "Absent" (IsPresentTheory = 0), validate marks
       if (x.IsPresentTheory === 0) {
+        x.ObtainedTheory = 0; // Ensure marks are 0 when absent -- ramesh 13-02-2026
         // Ensure marks are 0 when absent (MaxTheory and ObtainedTheory should be 0 for absent students)
         if (x.ObtainedTheory !== 0) {
           this.toastr.error('Please Enter 0 for absent student!');
