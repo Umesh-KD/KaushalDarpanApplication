@@ -221,3 +221,32 @@ export class DTECommitteeMemberDetailsDataModel {
   public IsIncharge: boolean = false
   public StaffName: string = ''
 }
+
+export class StaffDetailsPreviewDataModel {
+  public SSOID?: string = ''
+  public Office?: string = ''
+  public ServiceBookDesignation?: string = ''
+  public ServiceBookBranch?: string = ''
+  public Name?: string = ''
+  public Gender?: string = ''
+  public DateofBirth?: string = ''
+  public DateOfFirstAppointment?: string = ''
+  public DepartmentJoiningDate?: string = ''
+  public DateOfJoining?: string = ''
+  public DateOfAppointment?: string = ''
+  public MobileNumber?: string = ''
+  public EmployeeID?: string = ''
+  public CurrentDesignation?: string = ''
+  public CurrentBranch?: string = ''
+  public Experience?: string = ''
+  public QualificationAtJoining?: string = ''
+  public QualificationAfterJoining?: string = ''
+  public DateOfRetirement?: string = ''
+
+
+
+  public StaffID: number = 0
+  public StaffUserID: number = 0
+  public UserID: number = 0
+  public RoleID: number = 0
+}

@@ -282,6 +282,7 @@ export class ApplyLeaveComponent {
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.request.FinancialYearID=this.sSOLoginDataModel.FinancialYearID;
       this.request.RemainingLeave=Number(this.LeaveBlance);
+      this.request.RoleID=this.sSOLoginDataModel.RoleID;
 
       this.request.Action = 'Pending'
       this.request.SSOID = this.sSOLoginDataModel.SSOID

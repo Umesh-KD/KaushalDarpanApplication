@@ -244,4 +244,20 @@ export class ItiSeatIntakeService {
       ).toPromise();
   }
 
+
+
+  public async GetTradeCollegesMaster(request: ITICollegeTradeSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetTradeCollegesMaster`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async ActiveStatusTradeByID(request: SeatIntakeDataModel) {
+    const body = JSON.stringify(request)
+    return await this.http.post(this.APIUrl + '/ActiveStatusTradeByID', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

@@ -50,7 +50,6 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">MobileNo</label>
           <input class="form-input" placeholder="Enter Mobile No" name="SSOID" id="MobileNo"
                  formControlName="MobileNo" [(ngModel)]="formData.MobileNo" />
-
         </div>
 
         <div>
@@ -141,6 +140,20 @@
           </div>
         </div>
 
+        <!-- add branch if role is leacturer  -->
+        <div *ngIf="formData.StaffTypeID == _ITIGovtEM_EnumStaffType.Teaching && formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.Lecturer">
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch<span class="StarMarking">*</span></label>
+          <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
+                  [(ngModel)]="formData.BranchID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of BranchInstituteDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.BranchID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.BranchID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
 
         <div *ngIf="formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>

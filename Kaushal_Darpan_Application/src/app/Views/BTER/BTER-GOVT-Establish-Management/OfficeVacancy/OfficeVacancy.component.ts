@@ -14,6 +14,7 @@ import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatus
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { BTERCollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
+import { AppsettingService } from '../../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-OfficeVacancy',
@@ -76,6 +77,7 @@ export class OfficeVacancyComponent implements OnInit {
   public ProfileStatusID: number = 0;
   public _EnumProfileStatus = EnumProfileStatus;
   public serviceDetailsRequest = new BTER_Govt_EM_PersonalDetailByUserIDSearchModel();
+  public searchRequest=new OfficeVacancyModel();
   @ViewChild('MyModel_ReplayQuery') MyModel_ReplayQuery: any;
   closeResult: string | undefined;
   public DdlType: string = "";
@@ -83,8 +85,18 @@ export class OfficeVacancyComponent implements OnInit {
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public IsLockandSubmit: boolean = false;
 
-  constructor(private commonMasterService: CommonFunctionService, private BTER_EstablishManagementService: BTEREstablishManagementService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
-    private ITICollegeTradeService: ItiSeatIntakeService
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private BTER_EstablishManagementService: BTEREstablishManagementService, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private activatedRoute: ActivatedRoute, 
+    private routers: Router, 
+    private modalService: NgbModal, 
+    private Swal2: SweetAlert2,
+    private ITICollegeTradeService: ItiSeatIntakeService,
+    public appsettingConfig: AppsettingService
   ) {
 
   }
@@ -98,7 +110,8 @@ export class OfficeVacancyComponent implements OnInit {
       DesignationID: [0, [DropdownValidators]],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
       Comments: [''],
-      BugetHeadID: [0, [DropdownValidators]]
+      BugetHeadID: [0, [DropdownValidators]],
+      UploadedDocument: ['',Validators.required]
     });
 
     this.groupForm = this.formBuilder.group({
@@ -122,6 +135,7 @@ export class OfficeVacancyComponent implements OnInit {
     await this.GetOfficeList();
     await this.GetInstitute();
     await this.GetStaffTypeData();
+    // await this.GetPostTypeData();
    /* await this.GetPostList();*/
     console.log(this.sSOLoginDataModel);
   }
@@ -141,7 +155,7 @@ export class OfficeVacancyComponent implements OnInit {
     const formValues = this.AddOfficeVacancyForm.value;
 
     // Validate required fields before adding
-    if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID || !formValues.TotalSeatID) {
+    if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID || !formValues.TotalSeatID || !formValues.UploadedDocument) {
       this.toastr.warning("Please fill all required fields before adding.");
       return;
     }
@@ -223,7 +237,9 @@ export class OfficeVacancyComponent implements OnInit {
       PlanningID:0,
       Index: this.tempIndex++,
       TradeID: 0,
-      TradeName:''
+      TradeName:'',
+      Dis_UploadedDocument:this.formData.Dis_UploadedDocument,
+      UploadedDocument:this.formData.UploadedDocument
     };
 
     console.log('Vacancy being added:', vacancyData);
@@ -323,7 +339,71 @@ export class OfficeVacancyComponent implements OnInit {
    
   }
  
+  public file!: File;
+  async onDocchange(event: any, Type: string) {
+    //debugger
+    try {
 
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type=='application/pdf') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+          //if (this.file.size < 100000) {
+          //  this.toastr.error('Select more then 100kb File')
+          //  return
+          //}
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png/pdf file')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "Photo") {
+                this.formData.Dis_UploadedDocument = data['Data'][0]["Dis_FileName"];
+                this.formData.UploadedDocument = data['Data'][0]["FileName"];
+
+              }
+              //else if (Type == "Sign") {
+              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+              //}
+              /*              item.FilePath = data['Data'][0]["FilePath"];*/
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+  
 
   
 
@@ -341,7 +421,8 @@ export class OfficeVacancyComponent implements OnInit {
       this.loaderService.requestStarted();
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.SearchData.EndTermID = this.sSOLoginDataModel.EndTermID;
-
+      console.log(this.SearchData.StaffTypeID);
+      console.log(this.SearchData.OfficeID);
       await this.BTER_EstablishManagementService.OfficeVacancyList(this.SearchData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -441,6 +522,24 @@ export class OfficeVacancyComponent implements OnInit {
     }
   }
 
+
+  // async GetPostTypeData() {
+  //   try {
+  //     this.loaderService.requestStarted();
+  //     await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       this.StaffTypeList = data.Data;
+  //       console.log("StaffTypeList", this.StaffTypeList);
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
+
  async fillupDesignation() {
    
     
@@ -506,6 +605,12 @@ console.log(this.formData.DesignationID);
     }
   }
 
+  async ClearSearchData(){
+    this.SearchData.Name='';
+    this.SearchData.StaffTypeID=0;
+    this.SearchData.OfficeID=0;
+    await this.OfficeVacancyDataList();
+  }
 
 
   CloseModal() {

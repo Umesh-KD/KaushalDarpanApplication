@@ -67,7 +67,7 @@ export class THTECommitteeListComponent {
     
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    this.GetAllData()
+    await this.GetAllData()
   }
 
   async ResetControl() {
@@ -76,7 +76,7 @@ export class THTECommitteeListComponent {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID
     this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId
-    this.GetAllData();
+    await this.GetAllData();
   }
   async GetAllData () {
     try {
@@ -130,14 +130,14 @@ export class THTECommitteeListComponent {
               return; // Optional: stop further execution
             }
             else {
-              await this.itiInspectionService.UpdateDeployment(id).then((data: any) => {
+              await this.itiInspectionService.UpdateDeployment(id).then(async (data: any) => {
 
                 data = JSON.parse(JSON.stringify(data));
                 console.log("data", data)
                 var id = data.Data
                 if (data.State === EnumStatus.Success) {
                   this.toastr.success("Deployment Updated Successfully");
-                  this.GetAllData();
+                  await this.GetAllData();
                 } else if (data.State === EnumStatus.Warning) {
                   this.toastr.warning(data.Message);
                 } else {
@@ -279,8 +279,8 @@ export class THTECommitteeListComponent {
     }, 1000); // Update every second
   }
 
-  CloseModal() {
-    this.GetAllData();
+  async CloseModal() {
+    await this.GetAllData();
     this.modalService.dismissAll();
     
   }
@@ -411,14 +411,14 @@ export class THTECommitteeListComponent {
             // this.searchRequest.DeploymentID = DeploymentID
             this.loaderService.requestStarted();
             await this.itiInspectionService.RequestApprove(DeplomentId)
-              .then((data: any) => {
+              .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
 
                 if (data.State === EnumStatus.Success) {
                   // this.toastr.success(data.Message);
                   this.toastr.success("Request Status Successfully Updated");
 
-                  this.GetAllData();
+                  await this.GetAllData();
 
                 } else {
                   this.toastr.error(data.ErrorMessage);
@@ -435,5 +435,48 @@ export class THTECommitteeListComponent {
           }
         }
       });
+  }
+
+  onToggleChange(CommitteeID: number, IsActive: boolean) {
+    this.Swal2.Confirmation("Are you sure you want to change status?", async (result: any) => {
+      if (result.isConfirmed) {
+        try {
+          
+          var ActiveStatus: number = 0
+          IsActive = !IsActive
+          if (IsActive == true) {
+            ActiveStatus = 1
+          } else {
+            ActiveStatus = 0
+          }
+          let request: any = {};
+
+          request.CommitteeID = CommitteeID;
+          request.IsActive = ActiveStatus;
+          request.UserID = this.sSOLoginDataModel.UserID;
+          request.RoleID = this.sSOLoginDataModel.RoleID;
+
+          this.loaderService.requestStarted();
+          await this.teacherHigherEducationApplicationService.CommitteeStatusChange_THTE(request)
+            .then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+
+              if (data.State = EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                await this.GetAllData();
+              } else {
+                this.toastr.error(data.ErrorMessage);
+              }
+
+            }, (error: any) => console.error(error));
+        } catch (ex) {
+          console.log(ex);
+        } finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+    });
   }
 }

@@ -133,7 +133,7 @@
             <td align="left">{{row.Remark}}</td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a (click)="OnConfirm(SttafModelPriview,row.StaffID)" title="View Profile"><i class="ti ti-eye"></i></a>
+                <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID)" title="View Profile"><i class="ti ti-eye"></i></a>
               </div>
             </td>
           </tr>
@@ -162,7 +162,7 @@
 <!-- otp -->
 <app-otpmodal #otpModal></app-otpmodal>
 
-<ng-template #SttafModelPriview let-modal
+<ng-template #Modal_StaffDetails let-modal
   class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
@@ -172,164 +172,198 @@
         </div>
         <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
       </div>
-      <div class="card-body">
-        <div class="card tab-panels " id="Preview">
-          <div class="card-body p-5">
+      <div class="card-body p-5">
 
-            <div class="mb-6 w-full text-center">
-              <h3 class="m-0 text-3xl">Preview Staff Details</h3>
-            </div>
-            <div class="mb-6">
-              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
-                <b class="text-1xl-5">Teacher Details</b>
-              </div>
-              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
-
-                <div><b>Teacher Name:</b></div>
-                <div>{{staffDetailsFormData.Name}}</div>
-                <div><b>Email:</b></div>
-                <div>{{staffDetailsFormData.Email}}</div>
-                <div><b>Mobile:</b></div>
-                <div>{{staffDetailsFormData.MobileNumber}}</div>
-                <div><b>Designation:</b></div>
-                <div>{{staffDetailsFormData.Designation}}</div>
-                <div><b>Date of Joining as lecture:</b></div>
-                <div>{{staffDetailsFormData.DateOfJoining}}</div>
-                <!--<div><b>Date of Retirement:</b></div>
-                <div></div>-->
-                <div><b>Number of years experience:</b></div>
-                <div>
-                  {{staffDetailsFormData.Experience}}
-                </div>
-                <div><b>Teacher Branch & code:</b></div>
-                <div>{{staffDetailsFormData.StreamCode}} {{staffDetailsFormData.StreamName}}</div>
-
-                <div><b>Adhar Card Number:</b></div>
-                <div>
-                  {{staffDetailsFormData.AdharCardNumber}}
-                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + staffDetailsFormData.AdharCardPhoto}}"
-                    *ngIf="this.staffDetailsFormData.AdharCardPhoto !=''" class="btn bg-primary text-white m-0"
-                    target="_blank"><i class="ti ti-eye"></i></a>
-
-                </div>
-
-                <div><b>Pan Card Number:</b></div>
-                <div>
-                  {{staffDetailsFormData.PanCardNumber}}
-                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + staffDetailsFormData.PanCardPhoto}}"
-                    *ngIf="this.staffDetailsFormData.PanCardPhoto !=''" class="btn bg-primary text-white m-0"
-                    target="_blank"><i class="ti ti-eye"></i></a>
-                </div>
-
-              </div>
-            </div>
-            <div class="mb-6">
-              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
-                <b class="text-1xl-5">Current Working Institute</b>
-              </div>
-              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
-                <div><b>Institute Name:</b></div>
-                <div>{{staffDetailsFormData.InstituteName}}</div>
-                <div><b>Division:</b></div>
-                <div>{{staffDetailsFormData.InstituteDivision}}</div>
-                <div><b>District:</b></div>
-                <div>{{staffDetailsFormData.InstituteDistrict}}</div>
-                <div><b>Tehsil:</b></div>
-                <div>{{staffDetailsFormData.InstituteTehsil}}</div>
-
-              </div>
-            </div>
-            <div class="mb-6">
-              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
-                <b class="text-1xl-5"> Qualification Details</b>
-              </div>
-              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
-                <div><b>UG:</b></div>
-                <div>{{staffDetailsFormData.UGQualificationName}}</div>
-                <div><b>PG:</b></div>
-                <div>{{staffDetailsFormData.PGQualificationName}}</div>
-                <div><b>PhD:</b></div>
-                <div>{{staffDetailsFormData.PHDQualificationName}}</div>
-              </div>
-            </div>
-
-
-            <div class="mb-6">
-              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
-                <b class="text-1xl-5"> Permanent Address</b>
-              </div>
-              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
-                <div><b>Address Line 1</b></div>
-                <div>{{staffDetailsFormData.Address}}</div>
-                <div><b>State </b></div>
-                <div>{{staffDetailsFormData.StateName}}</div>
-                <div><b>District </b></div>
-                <div>{{staffDetailsFormData.District}}</div>
-                <!--<div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.City}}</div>
-                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>-->
-                <div><b>Pincode </b></div>
-                <div>{{staffDetailsFormData.Pincode}}</div>
-              </div>
-            </div>
-
-
-            <div class="mb-6">
-              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
-                <b class="text-1xl-5"> Bank Account Details</b>
-              </div>
-              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
-                <div><b>Bank Name</b></div>
-                <div>{{staffDetailsFormData.BankName}}</div>
-                <div><b>Name In Bank Account</b></div>
-                <div>{{staffDetailsFormData.BankAccountName}}</div>
-                <div><b>Account No.</b></div>
-                <div>{{staffDetailsFormData.BankAccountNo}}</div>
-                <div><b>IFSC Code</b></div>
-                <div>{{staffDetailsFormData.IFSCCode}}</div>
-                <div><b>PAN Card</b></div>
-                <div>{{staffDetailsFormData.PanCardNumber}}</div>
-              </div>
-            </div>
-
-            <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0" class="overflow-auto">
-              <table class="w-full table-border" cellpadding="5">
-                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-
-                  <tr>
-                    <th>S.No</th>
-                    <th>Branch Type</th>
-                    <th>Branch Name</th>
-                    <th>EXam Type</th>
-                    <th>Semester</th>
-                    <th>Subject</th>
-                    <th>Subject Type</th>
-
-                  </tr>
-
-                </thead>
-
-                <tbody>
-                  <tr *ngFor="let row of staffDetailsFormData.StaffSubjectListModel; let idx = index">
-                    <td class="text-center">{{idx+1}}</td>
-                    <td class="text-center">{{row.StreamType}}</td>
-                    <td class="text-center">{{row.BranchName}}</td>
-                    <td class="text-center">{{row.ExamType}}</td>
-                    <td class="text-center">{{row.SemesterName}}</td>
-                    <td class="text-center">{{row.SubjectName}}</td>
-                    <td class="text-center">{{row.SubjectType}}</td>
-
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-
-
-          </div>
+        <!-- ================= Institute & Branch Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 mt-3 rounded">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Institute & Branch Details
+          </b>
         </div>
 
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4 mb-6">
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">
+              Office *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.Office}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">
+              Designation as per Service Book *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.ServiceBookDesignation}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">
+              Branch as per Service Book
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.ServiceBookBranch}}
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= Employee Personal Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Employee Personal Details
+          </b>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4 mb-6">
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Name of Employee *</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.Name}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Gender *</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.Gender}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Birth *</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.DateofBirth}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Date of first appointment as govt employee *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.DateOfFirstAppointment}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Joining in Department *</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.DepartmentJoiningDate}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Date of Appointment as regular govt Employee *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.DateOfAppointment}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Date of Joining in Current Institute *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.DateOfAppointment}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Mobile No *</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.MobileNumber}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">SSO ID *</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.SSOID}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Employee ID *</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.EmployeeID}}
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= Employment Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Employment Details
+          </b>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Current Designation *</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.CurrentDesignation}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Name of Branch as per Current Designation *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.CurrentBranch}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Work Experience (In Years) *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.Experience}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Qualification at the time of joining *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.QualificationAtJoining}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Qualification gained after joining *
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.QualificationAfterJoining}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Date of Retirement
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsPreview.DateOfRetirement}}
+            </div>
+          </div>
+
+        </div>
 
       </div>
     </div>
+
   </div>
 </ng-template>

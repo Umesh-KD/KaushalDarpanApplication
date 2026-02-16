@@ -861,7 +861,7 @@ const routes: Routes = [
      
       { path: 'Iti-all-Result', loadChildren: () => import('./Views/ITI/reports/iti-All-Result/iti-All-Result.module').then(m => m.itiAllResultModule), title: "All data" },
 
-      { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule) },
+      { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule),title: "Live Result" },
 
 
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
@@ -998,7 +998,7 @@ const routes: Routes = [
       { path: 'LeaveValidation/:id', loadChildren: () => import('./Views/leave-validation/leave-validation.module').then(m => m.LeaveValidationModule) },
       { path: 'LeaveCredit', loadChildren: () => import('./Views/leave-credit/leave-credit.module').then(m => m.LeaveCreditModule) },
       { path: 'LeaveBalance', loadChildren: () => import('./Views/leave-balance/leave-balance.module').then(m => m.LeaveBalanceModule) },
-      
+
 
       { path: 'ItiCollegeReport', loadChildren: () => import('./Views/ITI/iti-college-report/iti-college-report.module').then(m => m.ItiCollegeReportModule) },
 
@@ -1353,6 +1353,8 @@ const routes: Routes = [
       { path: 'InstitutejanaadharReport', loadChildren: () => import('./Views/ITI/institutejanaadhar-report/institutejanaadhar-report.module').then(m => m.InstitutejanaadharReportModule) },
 
 
+      { path: 'Sanctioned-Posts', loadChildren: () => import('./Views/BTER/bter-Sanctioned-posts/bter-Sanctioned-posts.module').then(m => m.bterSanctionedPostsModule), title:'Sanctioned Post' },
+
       { path: 'StudentCancellationVerify/:id', loadChildren: () => import('./Views/BTER/enrollment-cancelation-verify/enrollment-cancelation-verify.module').then(m => m.EnrollmentCancelationVerifyModule) },
       { path: 'StudentCancellationVerify', loadChildren: () => import('./Views/BTER/enrollment-cancelation-verify/enrollment-cancelation-verify.module').then(m => m.EnrollmentCancelationVerifyModule) },
       { path: 'ITIInvigilatorPaymentRequest', loadChildren: () => import('./Views/ITI/iti-invigilator-payment-request/iti-invigilator-payment-request.module').then(m => m.ITIInvigilatorPaymentRequestModule), title: 'ITIInvigilatorPaymentRequest' },
@@ -1623,6 +1625,10 @@ const routes: Routes = [
       { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
       { path: 'UploadAnnexture32', loadChildren: () => import('./Views/upload-annexture32/upload-annexture32.module').then(m => m.UploadAnnexture32Module) },
       { path: 'UploadAnnexture32List', loadChildren: () => import('./Views/upload-annexture32-list/upload-annexture32-list.module').then(m => m.UploadAnnexture32ListModule) },
+      { path: 'CollegeTradeMaster', loadChildren: () => import('./Views/ITI/college-trade-master/college-trade-master.module').then(m => m.CollegeTradeMasterModule) },
+
+
+
 
 
 
@@ -1731,9 +1737,6 @@ const routes: Routes = [
   { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
   { path: 'Views\ITI\AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
 
-  
-  
- 
 
   
 
