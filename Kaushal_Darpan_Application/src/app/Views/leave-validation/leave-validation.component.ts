@@ -227,7 +227,7 @@ export class LeaveValidationComponent {
   }
 
   async SaveData_ApprovedCampus() {
-    //debugger
+    debugger
     this.isSubmitted = true;
 
     if (this.formAction.invalid) {
@@ -236,6 +236,7 @@ export class LeaveValidationComponent {
     
     this.requestAction.ActionBy = this.sSOLoginDataModel.UserID;
     this.requestAction.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.requestAction.RoleID=this.sSOLoginDataModel.RoleID;
 
     //Show Loading
     try {

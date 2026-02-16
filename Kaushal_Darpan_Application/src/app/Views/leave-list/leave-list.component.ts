@@ -84,14 +84,12 @@ export class LeaveListComponent {
 
   async GetAllData() {
     try {
-      
-
-
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
+      this.searchRequest.RoleID=this.sSOLoginDataModel.RoleID
       this.loaderService.requestStarted();
       await this.HrMasterService.GetAllData(this.searchRequest)
         .then((data: any) => {
@@ -130,8 +128,7 @@ export class LeaveListComponent {
           try {
             //Show Loading
             this.loaderService.requestStarted();
-
-            await this.HrMasterService.DeleteById(PlacementCompanyID, this.sSOLoginDataModel.UserID)
+            await this.HrMasterService.DeleteById(PlacementCompanyID, this.sSOLoginDataModel.UserID,this.sSOLoginDataModel.RoleID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
                 console.log(data);
