@@ -13,7 +13,11 @@
 <app-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.AdminNodel || this.sSOLoginDataModel.RoleID == _EnumRole.TPO"></app-placement-dashboard>
 <app-principle-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNonDegree"></app-principle-dashboard>
 
-<app-jdte-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE"></app-jdte-dashboard>
+<app-jdte-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE 
+|| this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER 
+||this.sSOLoginDataModel.RoleID == _EnumRole.EM_JD_BTER
+||this.sSOLoginDataModel.RoleID == _EnumRole.EM_NON_GAZETTED_STAFF">
+</app-jdte-dashboard>
 
 <app-acp-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ACP || this.sSOLoginDataModel.RoleID == _EnumRole.ACP_NonEng"></app-acp-dashboard>
 <app-store-keeper-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.StoreKeeper "></app-store-keeper-dashboard>

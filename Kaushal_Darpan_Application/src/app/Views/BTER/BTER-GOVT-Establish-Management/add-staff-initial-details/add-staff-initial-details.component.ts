@@ -113,17 +113,18 @@ export class AddStaffInitialDetailsComponent {
     this.formData.OfficeID = 0;
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+      // await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+      await this.commonMasterService.DDL_RoleWiseOffice(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.RoleID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeList = data['Data'];
-          if (this.sSOLoginDataModel.RoleID == 194) {
-            this.OfficeList = this.OfficeList.filter(x => x.ID == 19);
-          }
-          if (this.sSOLoginDataModel.RoleID == 50) {
-            this.OfficeList = this.OfficeList.filter(x => x.ID == 18);
-          }
-          this.OfficeList = this.OfficeList.filter((item: any) => item.ID != 21);
+          // if (this.sSOLoginDataModel.RoleID == 194) {
+          //   this.OfficeList = this.OfficeList.filter(x => x.ID == 19);
+          // }
+          // if (this.sSOLoginDataModel.RoleID == 50) {
+          //   this.OfficeList = this.OfficeList.filter(x => x.ID == 18);
+          // }
+          // this.OfficeList = this.OfficeList.filter((item: any) => item.ID != 21);
 
           console.log(this.OfficeList, "OfficeList")          
         }, error => console.error(error));
@@ -349,11 +350,12 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetRoleMasterData() {
-   // debugger
+    debugger
     try {
       this.loaderService.requestStarted();
       // await this.commonMasterService.GetRoleMasterDDL(, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
       this.roleModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.roleModel.RoleID=this.sSOLoginDataModel.RoleID;
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_Govt_RoleOfficeMapping_GetAllData(this.roleModel).then((data: any) => {
      
         data = JSON.parse(JSON.stringify(data));
@@ -693,13 +695,6 @@ export class AddStaffInitialDetailsComponent {
     debugger;  
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.OfficeList = data['Data'];
-          console.log(this.OfficeList, "OfficeList");
-        }, error => console.error(error));
-
         await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

@@ -31,11 +31,11 @@
         <form [formGroup]="groupForm">
           <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
-            <div>
+            <div >
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Request Type: <span class="StarMarking">*</span></label>
               <select class="form-select" id="ddlRequestType" [(ngModel)]="request.RequestType" formControlName="ddlRequestType" (change)="FunctionRequestType()">
                 <option value="0">--Select--</option>
-                <option value="1">Transfer</option>
+                <option value="1" *ngIf="!restrictedTransferRoles.includes(sSOLoginDataModel.RoleID)">Transfer</option>
                 <option value="2">VRS</option>
               </select>
               <div *ngIf="isSubmitted && _groupForm.ddlRequestType.errors" class="text-danger">
@@ -184,8 +184,8 @@
               </div>
             </div>
 
-
             <div>
+              <label *ngIf="!restrictedTransferRoles.includes(sSOLoginDataModel.RoleID) && getstatuId === 2">Note:"Upload Application with Verified Signature from competent authority."</label>
               <label  *ngIf="getstatuId === 2" >Note:"Upload Application with verified principal signature."</label>
               <label *ngIf="getstatuId === 1 || getstatuId === 2"
                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"

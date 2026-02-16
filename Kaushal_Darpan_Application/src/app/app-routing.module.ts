@@ -1246,7 +1246,6 @@ const routes: Routes = [
       { path: 'BterEmDepartmentWiseRequestlist', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/Bter-Em-DepartmentWiseRequest-list/Bter-Em-DepartmentWiseRequest-list.module').then(m => m.BterEmDepartmentWiseRequestlistModule) },
       { path: 'BterUserRequestList/:id', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-request-list/bter-request-list.module').then(m => m.BterUserRequestListModule) },
      
-
       { path: 'pass-fail-report', loadChildren: () => import('./Views/ITI/results/pass-fail-report/pass-fail-report.module').then(m => m.passfailreportDownloadModule), title: 'pass-fail-report' },
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'ACP-Dashboard', loadChildren: () => import('./Views/BTER/acp-dashboard/acp-dashboard.module').then(m => m.ACPDashboardModule) },
@@ -1351,9 +1350,6 @@ const routes: Routes = [
       { path: 'StudentEnrollmentCancelation', loadChildren: () => import('./Views/BTER/student-enrollment-cancelation/student-enrollment-cancelation.module').then(m => m.StudentEnrollmentCancelationModule) },
       { path: 'StudentJanaadharReport', loadChildren: () => import('./Views/ITI/studentjanaadhar-report/studentjanaadhar-report.module').then(m => m.StudentjanaadharReportModule) },
       { path: 'InstitutejanaadharReport', loadChildren: () => import('./Views/ITI/institutejanaadhar-report/institutejanaadhar-report.module').then(m => m.InstitutejanaadharReportModule) },
-
-
-      { path: 'Sanctioned-Posts', loadChildren: () => import('./Views/BTER/bter-Sanctioned-posts/bter-Sanctioned-posts.module').then(m => m.bterSanctionedPostsModule), title:'Sanctioned Post' },
 
       { path: 'StudentCancellationVerify/:id', loadChildren: () => import('./Views/BTER/enrollment-cancelation-verify/enrollment-cancelation-verify.module').then(m => m.EnrollmentCancelationVerifyModule) },
       { path: 'StudentCancellationVerify', loadChildren: () => import('./Views/BTER/enrollment-cancelation-verify/enrollment-cancelation-verify.module').then(m => m.EnrollmentCancelationVerifyModule) },
@@ -1509,7 +1505,8 @@ const routes: Routes = [
       { path: 'tabulation-report', loadChildren: () => import('./Views/BTER/tabulation-report/tabulation-report.module').then(m => m.TabulationReportModule) },
 
       { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
-      
+      { path: 'sanctioned-posts', loadChildren: () => import('./Views/BTER/bter-Sanctioned-posts/bter-Sanctioned-posts.module').then(m => m.bterSanctionedPostsModule), title:'Sanctioned Post' },
+
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
 
       { path: 'counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/couselling-candidate-form-tab/couselling-candidate-form-tab.module').then(m => m.CousellingCandidateFormTabModule), title: 'Candidate Form' },

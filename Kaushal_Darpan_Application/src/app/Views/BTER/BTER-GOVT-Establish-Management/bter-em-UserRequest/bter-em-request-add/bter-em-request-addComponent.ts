@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { AppsettingService } from "../../../../../Common/appsetting.service";
-import { EnumStatus } from "../../../../../Common/GlobalConstants";
+import { EnumRole, EnumStatus } from "../../../../../Common/GlobalConstants";
 import { ItiTradeSearchModel } from "../../../../../Models/CommonMasterDataModel";
 import { ITICollegeTradeSearchModel } from "../../../../../Models/ITI/SeatIntakeDataModel";
 import { BterRequestSearchModel, RequestSearchModel } from "../../../../../Models/ITI/UserRequestModel";
@@ -29,6 +29,7 @@ export class BtereEMRequestAddComponent implements OnInit {
     groupForm!: FormGroup;
     public State: number = -1;
     public Message: any = [];
+    public _EnumRole = EnumRole;
 
     public ErrorMessage: any = [];
     public isSubmitted: boolean = false;
@@ -71,6 +72,14 @@ export class BtereEMRequestAddComponent implements OnInit {
     public today: string = '';
     public GetStaffDetailsVRS: any[] = [];
     public getstatuId: number = 0;
+
+
+      restrictedTransferRoles = [
+        this._EnumRole.EM_Secretary_BTER,
+        this._EnumRole.EM_JD_BTER,
+        this._EnumRole.EM_NON_GAZETTED_STAFF
+      ];
+
     constructor(
         private fb: FormBuilder,
         private commonMasterService: CommonFunctionService,
@@ -165,6 +174,7 @@ export class BtereEMRequestAddComponent implements OnInit {
     await this.GetRoleMasterData();
    
   }
+
 
 
     async GetLevelList() {

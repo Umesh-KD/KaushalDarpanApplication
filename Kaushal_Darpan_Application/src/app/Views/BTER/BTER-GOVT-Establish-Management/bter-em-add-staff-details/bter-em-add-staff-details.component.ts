@@ -172,7 +172,7 @@ export class BterEMAddStaffDetailsComponent {
    
     
 
-     
+     debugger
     const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
     const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.StaffTypeID == this.request.StaffTypeID && item.DesignationID );
     /*&& item.StaffTypeID == this.request.StaffTypeID*/

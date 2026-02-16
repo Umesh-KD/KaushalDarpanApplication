@@ -557,6 +557,7 @@ export class ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel {
   PostID: number = 0;
   DepartmentID: number = 0;
   CreatedBy: number = 0;
+  RoleID?:number=0;
 }
 export class ITI_Govt_EM_PersonalDetailByUserIDSearchModel {
 

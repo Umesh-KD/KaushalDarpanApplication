@@ -131,5 +131,15 @@ export class LeaveMasterService {
           catchError(this.handleErrorObservable)
         ).toPromise();
     }
+
+    //save data
+    public async CreditStaffLeave_NonGazetted(request: CreditLeaveModel[]) {
+      var body = JSON.stringify(request);
+  
+      return await this.http.post(`${this.APIUrl}/Save_CreditStaffLeave_NonGazetted`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
   
 }

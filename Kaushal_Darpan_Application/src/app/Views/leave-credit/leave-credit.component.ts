@@ -9,7 +9,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../Common/SweetAlert2'
-import { EnumStatus, SessionType } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, SessionType } from '../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 @Component({
@@ -33,6 +33,7 @@ export class LeaveCreditComponent {
   public ErrorMessage: string = '';
   public ApprovedStatus: string = "0";
   public status: number = 0;
+  public _EnumRole = EnumRole;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -120,22 +121,10 @@ export class LeaveCreditComponent {
   async Save_CreditStaffLeave() {
     // debugger
     let dyMsg = 'Credit';
-    // if (this.status == 1345) {
-    //   dyMsg = "Approve";
-    // } else {
-    //   dyMsg = "Reject";
-    // }
     this.Swal2.Confirmation(`Are you sure you want to ${dyMsg}?`,
       async (result: any) => {
-
         if (result.isConfirmed) {
           try {
-            // this.StaffIDList = this.StaffLeaveTrnList.map((x:any) => ({
-            //   StaffID: x.StaffID,
-            //   StaffTypeID:x.StaffTypeID,
-            //   ModifyBy: this.sSOLoginDataModel.UserID,
-            //   DepartmentID:this.sSOLoginDataModel.DepartmentID
-            // }));
             this.StaffIDList = Array.from(
               new Map(
                 this.StaffLeaveTrnList.map((x: any) => [
@@ -153,8 +142,9 @@ export class LeaveCreditComponent {
                 ])
               ).values()
             ) as CreditLeaveModel[];
-
-            await this.LeaveMasterService.CreditStaffLeave(this.StaffIDList)
+            if(this.sSOLoginDataModel.RoleID==this._EnumRole.EM_JD_BTER || this.sSOLoginDataModel.RoleID==this._EnumRole.EM_Secretary_BTER)
+            {
+              await this.LeaveMasterService.CreditStaffLeave_NonGazetted(this.StaffIDList)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
                 if (data.State === EnumStatus.Success) {
@@ -162,6 +152,19 @@ export class LeaveCreditComponent {
                   await this.GetAllData();
                 }
               })
+            }
+            else
+            {
+              await this.LeaveMasterService.CreditStaffLeave(this.StaffIDList)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State === EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  await this.GetAllData();
+                }
+              })
+            }
+
           }
           catch (ex) {
             console.log(ex);
@@ -200,8 +203,8 @@ export class LeaveCreditComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
+      this.searchRequest.RoleID=this.sSOLoginDataModel.RoleID;
       // this.searchRequest.Action='_getLeaveCreditStaffData';
-
       await this.LeaveMasterService.GetLeaveCreditStaffData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -224,48 +227,6 @@ export class LeaveCreditComponent {
     // await this.GetAllData();
   }
 
-  // delete by id
-  async DeleteById(PlacementCompanyID: number) {
-    this.Swal2.Confirmation("Do you want to delete?",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            //Show Loading
-            this.loaderService.requestStarted();
-
-            await this.LeaveMasterService.DeleteById(PlacementCompanyID, this.sSOLoginDataModel.UserID)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                console.log(data);
-
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
-
-                if (this.State == EnumStatus.Success) {
-                  this.toastr.success(this.Message)
-                  //reload
-                  await this.GetAllData();
-                }
-                else {
-                  this.toastr.error(this.ErrorMessage)
-                }
-
-              }, (error: any) => console.error(error)
-              );
-          }
-          catch (ex) {
-            console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
-        }
-      });
-  }
 
 
   //table feature
