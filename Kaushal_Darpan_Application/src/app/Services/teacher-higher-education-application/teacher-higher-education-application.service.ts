@@ -215,4 +215,12 @@ export class TeacherHigherEducationApplicationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async CommitteeStatusChange_THTE(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/CommitteeStatusChange_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

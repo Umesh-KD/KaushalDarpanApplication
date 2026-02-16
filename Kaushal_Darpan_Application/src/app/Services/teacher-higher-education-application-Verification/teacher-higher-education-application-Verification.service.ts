@@ -136,4 +136,13 @@ export class TeacherHigherEducationApplicationVerificationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GenerateOrderInWord_THTE(request: ApplicationGenrateOrderByDteListSearchModel) {
+    const body = JSON.stringify(request);
+    debugger
+    return this.http.post(`${this.APIUrl}/GenerateOrderInWord_THTE`, body, this.headersOptions)
+        .pipe(
+            catchError(this.handleErrorObservable)
+        ).toPromise();
+  }
 }

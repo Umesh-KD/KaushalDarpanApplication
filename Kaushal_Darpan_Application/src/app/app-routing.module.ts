@@ -1622,6 +1622,10 @@ const routes: Routes = [
       { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
       { path: 'UploadAnnexture32', loadChildren: () => import('./Views/upload-annexture32/upload-annexture32.module').then(m => m.UploadAnnexture32Module) },
       { path: 'UploadAnnexture32List', loadChildren: () => import('./Views/upload-annexture32-list/upload-annexture32-list.module').then(m => m.UploadAnnexture32ListModule) },
+      { path: 'CollegeTradeMaster', loadChildren: () => import('./Views/ITI/college-trade-master/college-trade-master.module').then(m => m.CollegeTradeMasterModule) },
+
+
+
 
 
 
@@ -1730,9 +1734,6 @@ const routes: Routes = [
   { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
   { path: 'Views\ITI\AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
 
-  
-  
- 
 
   
 

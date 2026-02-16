@@ -203,7 +203,7 @@ export class THTEApplicationDteListComponent {
           this.status = 0
           this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
           this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
-          await this.GenrateOrder();
+          // await this.GenrateOrderInWord();
           await this.ApplicationList_ForPrinciple_THTE();
         }
       })
@@ -242,6 +242,43 @@ export class THTEApplicationDteListComponent {
         console.error(error);
         this.toastr.error("some error !")
       });
+  }
+
+  async GenrateOrderInWord() {
+    this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
+    await this.teacherHigherEducationApplicationVerificationService.GenerateOrderInWord_THTE(this._DTEGenrateOrder).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+            this.downloadBase64Word(data.Data, 'timetable.docx');
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+          }
+          else {
+            this.toastr.error(data.Message);
+          }
+      }, (error: any) => {
+        console.error(error);
+        this.toastr.error("some error !")
+      });
+  }
+
+  downloadBase64Word(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    link.download = `HTE_Order_${timestamp}.docx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
   }
 
   async updateStatusRemark_DTECommittee() {
