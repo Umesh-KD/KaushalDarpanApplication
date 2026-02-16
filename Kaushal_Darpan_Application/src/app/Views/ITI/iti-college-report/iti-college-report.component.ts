@@ -485,6 +485,7 @@ export class ItiCollegeReportComponent {
   async GetOrderList() {
     try {
 
+      this.PostSanctionList =[]
 
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCommonMasterData("OrderList", this.ParentID)
