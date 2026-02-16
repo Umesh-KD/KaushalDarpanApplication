@@ -28,7 +28,11 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
 
   // Columns to be displayed in the table
   displayedColumns: string[] = [
-    'SrNo', 'ExamName', 'ExaminerName', 'SubjectCode', 'GroupCode', 'CenterCode', 'Present', 'Absent', 'Below14MarksStudent', 'Below15to17MarksStudent', 'Below18to54MarksStudent', 'Below55to60MarksStudent','Above60MarksStudent'
+    'SrNo', 'ExamName', 'ExaminerName', 'SubjectCode', 'GroupCode', 'CenterCode', 'Present', 
+    'Absent', 
+    // 'PresentbyExami', 'AbsentbyExami', 
+    'Below14MarksStudent', 'Below15to17MarksStudent', 'Below18to54MarksStudent', 
+    'Below55to60MarksStudent','Above60MarksStudent'
   ];
 
   // Data source for the table
