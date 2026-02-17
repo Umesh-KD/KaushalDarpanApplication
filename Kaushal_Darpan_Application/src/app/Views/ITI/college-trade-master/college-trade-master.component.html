@@ -167,6 +167,7 @@
             <th class="text-left">Total Unit</th>
             <!--<th class="text-left">Original Seats</th>-->
             <th class="text-left">Last Year Admission</th>
+            <th class="text-left">Duration</th>
             <!--<th class="text-left">IMC Fees Per Annum</th>-->
             <!--<th align="left">TotalSeats</th>
             <th align="left">GEN       </th>
@@ -211,6 +212,7 @@
             <td align="left">{{item.Unit_n}}</td>
             <!--<td align="left" >{{item.OriginalSeat}}</td>-->
             <td align="left">{{item.LastYearStatus}}</td>
+            <td align="left">{{item.DurationYear}}</td>
             <!--<td align="left">{{item.ImcFee}}</td>-->
             <!--<td align="left" class="{{item.SeatNotAvailable}}">{{item.TotalSeats }}</td>
             <td align="left" class="{{item.SeatNotAvailable}}">{{item.GEN        }}</td>
@@ -243,7 +245,7 @@
 
 
             <td class="">
-              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+              <div *ngIf="item.IsAllow==1" class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
                 <!--<label class="block">Status</label>-->
                 <label class="inline-flex items-right cursor-pointer toggleCheckBox Active statusActiveInActive">
                   <input class="sr-only peer" type="checkbox" id="Active" [checked]="item.IsAdmission == 1" (click)="onToggleChange($event , item.ID, item.IsAdmission)">
