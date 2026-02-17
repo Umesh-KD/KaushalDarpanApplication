@@ -207,7 +207,7 @@ export class ApplyLeaveComponent {
       
       this.loaderService.requestStarted();
 
-      await this.LeaveMasterService.GetById(this.ID)
+      await this.LeaveMasterService.GetById(this.ID,this.sSOLoginDataModel.RoleID)
 
         .then(async (data: any) => {          
           data = JSON.parse(JSON.stringify(data));

@@ -32,6 +32,10 @@ export class itiDashboardComponent {
   public DashboardCountList: any = []
 
   public TradeCountList: any = []
+  public TradeCountListEng: any = []
+  public TradeCountListNonEng: any = []
+
+
   public CollegeCountList: any = []
   public RunningCampList: any = []
   public SeatIntakeList: any = []
@@ -69,19 +73,20 @@ export class itiDashboardComponent {
             this.DashboardCountList = data['Data'];
 
             this.TradeCountList = this.DashboardCountList.filter(
-              (f: any) => f.TileType === 'TradeCounts');
+              (f: any) => f.TileType === 'TradeCount');
 
-            this.CollegeCountList = this.DashboardCountList.filter(
-              (f: any) => f.TileType === 'CollegeCount');
+            this.TradeCountListEng = this.DashboardCountList.filter(
+              (f: any) => f.TileType === 'TradeCount' && f.TradeName == "ENG");
 
-            this.RunningCampList = this.DashboardCountList.filter(
-              (f: any) => f.TileType === 'RunningCamp');
-
-            this.SeatIntakeList = this.DashboardCountList.filter(
-              (f: any) => f.TileType === 'SeatIntake');
+            this.TradeCountListNonEng = this.DashboardCountList.filter(
+              (f: any) => f.TileType === 'TradeCount' && f.TradeName == "Non Eng");
 
 
-            console.log(this.RunningCampList);
+
+            console.log(this.TradeCountListEng);
+            console.log(this.TradeCountListNonEng);
+
+            
           }
         }, (error: any) => console.error(error)
         );
