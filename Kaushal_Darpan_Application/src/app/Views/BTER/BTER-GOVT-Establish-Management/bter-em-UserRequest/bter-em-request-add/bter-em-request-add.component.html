@@ -185,8 +185,19 @@
             </div>
 
             <div>
-              <label *ngIf="!restrictedTransferRoles.includes(sSOLoginDataModel.RoleID) && getstatuId === 2">Note:"Upload Application with Verified Signature from competent authority."</label>
-              <label  *ngIf="getstatuId === 2" >Note:"Upload Application with verified principal signature."</label>
+              <label *ngIf="getstatuId === 2">
+    
+                <ng-container *ngIf="restrictedTransferRoles.includes(sSOLoginDataModel.RoleID); else normalNote">
+                  Note: "Upload Application with Verified Signature from competent authority."
+                </ng-container>
+            
+                <ng-template #normalNote>
+                  Note: "Upload Application with verified principal signature."
+                </ng-template>
+            
+              </label>
+              <!-- <label *ngIf="restrictedTransferRoles.includes(sSOLoginDataModel.RoleID) && getstatuId === 2">Note:"Upload Application with Verified Signature from competent authority."</label> -->
+              <!-- <label  *ngIf="getstatuId === 2" >Note:"Upload Application with verified principal signature."</label> -->
               <label *ngIf="getstatuId === 1 || getstatuId === 2"
                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                      [attr.for]="getstatuId === 1 ? 'AttachDocument_signature' : 'AttachDocument_file'">

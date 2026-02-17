@@ -130,7 +130,7 @@ export class LeaveValidationComponent {
     this.searchRequest.Name = '';
     this.searchRequest.Status = '';
 
-    // await this.GetAllData();
+    await this.GetAllData();
   }
 
   // delete by id

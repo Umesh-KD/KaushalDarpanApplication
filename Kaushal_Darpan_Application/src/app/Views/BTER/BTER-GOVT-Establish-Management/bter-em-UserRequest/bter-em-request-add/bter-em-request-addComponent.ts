@@ -760,15 +760,12 @@ export class BtereEMRequestAddComponent implements OnInit {
 
 
   async FunctionRequestType(): Promise<void> {
-    debugger
+    // debugger
     await this.FunctionRequestTypeShowSomePropety();
     if (this.request.RequestType == 2 || this.request.RequestType == 1) {
       this.getstatuId = Number(this.request.RequestType);
       try {
         this.isLoading = true;
-
-
-
 
         this.loaderService.requestStarted();
 
