@@ -552,6 +552,8 @@ export class OfficeVacancyComponent implements OnInit {
     // || this.formData.OfficeID==17
     if (this.formData.StaffTypeID == 31 && (this.formData.OfficeID==18)) {
       id = 1;
+    } else if(this.formData.StaffTypeID == 31 && this.formData.OfficeID==17) {
+      id=2;
     }
     try {
       this.loaderService.requestStarted();

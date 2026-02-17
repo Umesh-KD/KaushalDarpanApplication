@@ -279,6 +279,19 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status(Absent/Present/UFM/Detained):
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.StudentStatus">
+            <option value="-1">--All--</option>
+            <option value="0">Absent</option>
+            <option value="1">Present</option>
+            <option value="3">Detained</option>
+            <option value="4">UFM</option>
+          </select>
+        </div>
+
+        <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetTheoryMarksDetailList()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="reset()">Cancel</button>
         </div>
