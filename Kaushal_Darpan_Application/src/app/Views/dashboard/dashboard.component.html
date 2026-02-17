@@ -16,7 +16,9 @@
 <app-jdte-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE 
 || this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER 
 ||this.sSOLoginDataModel.RoleID == _EnumRole.EM_JD_BTER
-||this.sSOLoginDataModel.RoleID == _EnumRole.EM_NON_GAZETTED_STAFF">
+||this.sSOLoginDataModel.RoleID == _EnumRole.EM_NON_GAZETTED_STAFF
+||this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF
+||this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF">
 </app-jdte-dashboard>
 
 <app-acp-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ACP || this.sSOLoginDataModel.RoleID == _EnumRole.ACP_NonEng"></app-acp-dashboard>

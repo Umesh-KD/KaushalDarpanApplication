@@ -21,7 +21,7 @@
         <!-- Office -->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
+          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID" (change)="fillupDesignation()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
           </select>
