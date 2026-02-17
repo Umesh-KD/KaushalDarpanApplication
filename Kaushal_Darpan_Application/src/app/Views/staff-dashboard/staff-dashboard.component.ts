@@ -112,7 +112,7 @@ export class StaffDashboardComponent implements OnInit {
               }
             } else if(this.sSOLoginDataModel.DepartmentID == 1) {
               if (this.sSOLoginDataModel.EmTypeId == 2) {
-                window.open("/additiprivatestaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self")
+                window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self")
               }
               else if (this.sSOLoginDataModel.EmTypeId == 1) {
                 debugger

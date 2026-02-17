@@ -408,12 +408,13 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetPostList() {
-    debugger; 
     try {
       var id = 0;
-      if (this.formData.RoleID == 252 && this.formData.StaffTypeID == 31) {
+      if(this.formData.StaffTypeID == 31 && this.formData.OfficeID ==17 && this.formData.RoleID == 252 ) {
+        id = 2;
+      } else if (this.formData.RoleID == 252 && this.formData.StaffTypeID == 31) {
         id = 1;
-      }
+      } 
       this.loaderService.requestStarted();
       await this.commonMasterService.GetDesignationAndPostMaster(id)
         .then((data: any) => {
