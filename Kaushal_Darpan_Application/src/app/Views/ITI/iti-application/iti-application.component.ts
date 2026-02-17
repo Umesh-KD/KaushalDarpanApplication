@@ -58,6 +58,7 @@ export class ItiApplicationComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   //end table feature default
+  ManagementTypeId: number = 0;
 
   pageNo: any = 1;
   pageSize: any = 50;
@@ -95,6 +96,19 @@ export class ItiApplicationComponent {
     if (this.UrlStatus) {
       await this.GetAllData(1)
     }
+
+     //  public CollegeTypeID: number = 0;
+
+
+    this.route.queryParams.subscribe(params => {
+      this.ManagementTypeId = +params['ManagementTypeId'];
+
+      if (this.ManagementTypeId) {
+        this.searchRequest.ManagementTypeId = this.ManagementTypeId;
+      }
+    });
+    await this.GetAllData(1)
+
   }
 
   openViewApplicationPopup(ApplicationID: number, SSOID: string) {
