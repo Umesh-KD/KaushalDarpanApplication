@@ -186,6 +186,7 @@ export class StaffMasterSearchModel {
   public StaffLevelChildID: number = 0
   public BranchID: number = 0
   public TechnicianID: number = 0
+  public UserID?: number = 0
 
 }
 
