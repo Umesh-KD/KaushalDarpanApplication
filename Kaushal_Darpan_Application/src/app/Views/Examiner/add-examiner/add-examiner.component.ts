@@ -223,15 +223,19 @@ export class AddExaminerComponent implements OnInit {
       this.SubjectMasterDDLList = [];
       this.CommonSubjectDDLList = [];
       this.searchRequest.CommonSubjectID = 0;
-
+      debugger
       // if common subject
       if (this.CommonSubjectYesNo == 2 && this.searchRequest.SemesterID > 0) {//yes
         await this.GetCommonSubjectDDL();
         return;
       }
 
+      if(this.searchRequest.SemesterID == 0 || this.searchRequest.StreamID == 0) {
+        return;
+      }
+
       // else
-      await this.commonMasterService.SubjectMaster_StreamIDWise(this.searchRequest.StreamID, this.sSOLoginDataModel.DepartmentID, this.searchRequest.SemesterID)
+      await this.commonMasterService.SubjectMaster_StreamIDWise(this.searchRequest.StreamID, this.sSOLoginDataModel.DepartmentID, this.searchRequest.SemesterID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.SubjectMasterDDLList = data.Data;
@@ -443,7 +447,7 @@ export class AddExaminerComponent implements OnInit {
     //debugger
     try {
       this.searchRequest.CommonSubjectID = 0;
-      this.StaffForExaminerList = [];
+      this.StaffForExaminerList = []; 
       const select = document.getElementById('CommonSubjectYesNo') as HTMLSelectElement;
       const value = Number(select.value);
 

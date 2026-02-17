@@ -59,10 +59,10 @@ export class ExaminersComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     console.log(this.sSOLoginDataModel);
-    this.getSemesterMasterList();
+    await this.getSemesterMasterList();
     await this.ExaminationSchemeChange()
-    this.getStreamMasterList();
-    this.getGroupCodeMasterList();
+    await this.getStreamMasterList();
+    await this.getGroupCodeMasterList();
     //this.getExaminerData();
     //this.getExamMasterList();//grid data
   }
@@ -104,10 +104,11 @@ export class ExaminersComponent implements OnInit {
   async getGroupCodeMasterList() {
     try {
       let model = new CommonDDLSubjectMasterModel();
-      model.SubjectID = this.searchRequest.SemesterID;
+      model.SubjectID = this.searchRequest.SubjectID;
       model.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       model.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       model.EndTermID = this.sSOLoginDataModel.EndTermID;
+      model.SemesterID = this.searchRequest.SemesterID
       //
       await this.commonMasterService.GetGroupCode(model)
         .then((data: any) => {
@@ -290,6 +291,7 @@ export class ExaminersComponent implements OnInit {
   }
 
   async GetCommonSubjectDDL() {
+    await this.getGroupCodeMasterList(); // for get group code based on semester
     try {
       if (this.CommonSubjectYesNo == 1 || this.searchRequest.SemesterID == 0) {//no
         this.CommonSubjectDDLList = [];
