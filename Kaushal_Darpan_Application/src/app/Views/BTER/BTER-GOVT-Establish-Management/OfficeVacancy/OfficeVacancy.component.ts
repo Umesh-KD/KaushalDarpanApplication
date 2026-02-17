@@ -191,7 +191,7 @@ export class OfficeVacancyComponent implements OnInit {
     
 
     const getoffice = this.OfficeList.find((item:any) => item.ID == formValues.OfficeID);
-    const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
+    const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID)||[];
 
     
    
@@ -548,9 +548,13 @@ export class OfficeVacancyComponent implements OnInit {
 
   async GetPostList() {
     debugger;
+    var id = 0;
+    if (this.formData.StaffTypeID == 31 && this.formData.OfficeID==18) {
+      id = 1;
+    }
     try {
       this.loaderService.requestStarted();
-      const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
+      const data: any = await this.commonMasterService.GetDesignationAndPostMaster(id);
       this.PostList = data['Data'];
       this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
       // Keep original list for filtering later

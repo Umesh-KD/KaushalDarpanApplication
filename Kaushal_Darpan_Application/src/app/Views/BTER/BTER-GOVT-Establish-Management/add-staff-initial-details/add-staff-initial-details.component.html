@@ -113,20 +113,30 @@
             </select>
           </div>
 
-        <div *ngIf="this.IsGuestHouseAdmin != true">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
-          <select class="form-select" name="StaffType" id="StaffType" formControlName="StaffType"
-                  [(ngModel)]="formData.StaffTypeID" (change)="StaffTypeChangePost()">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.StaffType.errors" class="text-danger">
-            <p *ngIf="!_AddStaffBasicDetailFromGroup.StaffType.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This
-              field is required .!
-            </p>
+          <div *ngIf="this.IsGuestHouseAdmin != true">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+            <select class="form-select"
+                    name="StaffType"
+                    id="StaffType"
+                    formControlName="StaffType"
+                    [(ngModel)]="formData.StaffTypeID"
+                    (change)="StaffTypeChangePost()">
+
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of StaffTypeList"
+                      [value]="item.ID">
+                {{item.Name}}
+              </option>
+
+            </select>
+
+            <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.StaffType.errors" class="text-danger">
+              <p *ngIf="!_AddStaffBasicDetailFromGroup.StaffType.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
           </div>
-        </div>
 
         <div *ngIf="this.IsGuestHouseAdmin != true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>

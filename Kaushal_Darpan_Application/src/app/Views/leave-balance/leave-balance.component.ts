@@ -146,6 +146,7 @@ export class LeaveBalanceComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
+      this.searchRequest.RoleID=this.sSOLoginDataModel.RoleID
       this.loaderService.requestStarted();
       await this.LeaveMasterService.GetStaffWithLeaveBalance(this.searchRequest)
         .then((data: any) => {

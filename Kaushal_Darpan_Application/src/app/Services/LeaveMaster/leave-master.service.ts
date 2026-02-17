@@ -43,8 +43,8 @@ export class LeaveMasterService {
   }
 
   //Get by id
-  public async GetById(ID: number) {
-    return await this.http.get(`${this.APIUrl}/GetByID/${ID}`, this.headersOptions)
+  public async GetById(ID: number,RoleID:number=0) {
+    return await this.http.get(`${this.APIUrl}/GetByID/${ID}/${RoleID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -61,10 +61,10 @@ export class LeaveMasterService {
   }
 
   //delete
-  public async DeleteById(ID: number, userId: number) {
+  public async DeleteById(ID: number, userId: number, RoleID:number=0) {
     debugger
     var body = JSON.stringify({ "ID": ID, "ModifyBy": userId });
-    return await this.http.post(`${this.APIUrl}/DeleteByID/${ID}/${userId}`,body, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteByID/${ID}/${userId}/${RoleID}`,body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -127,6 +127,16 @@ export class LeaveMasterService {
       var body = JSON.stringify(request);
   
       return await this.http.post(`${this.APIUrl}/Save_CreditStaffLeave`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
+    //save data
+    public async CreditStaffLeave_NonGazetted(request: CreditLeaveModel[]) {
+      var body = JSON.stringify(request);
+  
+      return await this.http.post(`${this.APIUrl}/Save_CreditStaffLeave_NonGazetted`, body, this.headersOptions)
         .pipe(
           catchError(this.handleErrorObservable)
         ).toPromise();

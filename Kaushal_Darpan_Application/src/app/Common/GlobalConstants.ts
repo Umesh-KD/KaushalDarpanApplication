@@ -208,7 +208,10 @@ export enum EnumRole {
 
 
   // BTER Establishment 
-  EM_JDTE=239
+  EM_JDTE=239,
+  EM_JD_BTER=48,
+  EM_Secretary_BTER=243,
+  EM_NON_GAZETTED_STAFF=252
 }
 
 export enum enumExamStudentStatus {

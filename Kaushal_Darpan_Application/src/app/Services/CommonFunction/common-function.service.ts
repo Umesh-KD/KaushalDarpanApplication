@@ -1625,6 +1625,12 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async DDL_RoleWiseOffice(DepartmentID: number, RoleID: number) {
+    return await this.http.get(this.APIUrl + '/DDL_RoleWiseOffice/' + DepartmentID + "/" + RoleID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number) {
     return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID, this.headersOptions)
@@ -1642,8 +1648,8 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetDesignationAndPostMaster() {
-    return await this.http.get(this.APIUrl + '/GetDesignationAndPostMaster/', this.headersOptions)
+  public async GetDesignationAndPostMaster(id:any=0) {
+    return await this.http.get(this.APIUrl + '/GetDesignationAndPostMaster/' +  id , this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

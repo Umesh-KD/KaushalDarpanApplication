@@ -758,8 +758,15 @@ export class BTEREMStaffListComponent {
       //  this.DesignationMasterDDLList = data.Data;
       //  // console.log("DesignationMasterList", this.DesignationMasterDDLList);
       //}, error => console.error(error))
+      var id = 0;
+      if (this.sSOLoginDataModel.OfficeID == 18) {
+        id = 1
+      }
+      else {
+        id = 0;
+      }
 
-      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
+      await this.commonMasterService.GetDesignationAndPostMaster(id).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
         this.DesignationMasterDDLList = this.DesignationMasterDDLList;

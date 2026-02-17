@@ -160,6 +160,7 @@ export class ApplyLeaveComponent {
       this.req.LeaveID=this.request.LeaveID;
       this.req.FinancialYearID=this.sSOLoginDataModel.FinancialYearID_Session;
       this.req.SessionTypeID=this.request.SessionTypeID;
+      this.req.RoleID=this.sSOLoginDataModel.RoleID;
       await this.LeaveMasterService.GetRemainingLeave(this.req)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -206,7 +207,7 @@ export class ApplyLeaveComponent {
       
       this.loaderService.requestStarted();
 
-      await this.LeaveMasterService.GetById(this.ID)
+      await this.LeaveMasterService.GetById(this.ID,this.sSOLoginDataModel.RoleID)
 
         .then(async (data: any) => {          
           data = JSON.parse(JSON.stringify(data));
