@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -98,68 +98,9 @@
 
   <div>
 
-    <!-- Header -->
     <div class="mb-4">
       <h2 class="dashboard-header"><i class="fa fa-dashboard"></i> Master Dashboard</h2>
     </div>
-    <!-- ================= Trade Dashboard ================= -->
-    <!--<div class="mt-4 flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event ng-star-inserted">
-    <h3>
-      <b>
-        <i class="fa fa-list"></i>
-        Trade Dashboard
-      </b>
-    </h3>
-  </div>-->
-    <!--<div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
-
-    <div class="col-lg-3" *ngFor="let item of TradeCountList">
-      <a class="p-2" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ TradeTypeId: item.RouteValue }">
-        <div class="stat-card" [ngClass]="item.CardClass">
-          <div>
-            <div class="stat-title">{{ item.TradeName }} Trades </div>
-            <div class="stat-value">{{ item.TradeCount }}</div>
-          </div>
-          <div class="stat-icon bg-white" [ngClass]="getCollegeTextClass(item)">
-            <i class="bi bi-people-fill"></i>
-          </div>
-        </div>
-      </a>
-    </div>
-
-    <div class="row">
-      <div class="col-md-4 mb-3">
-        <div class="stat-card bg-light-gray">
-          <div>
-            <div class="stat-title">Seat Intake Total College</div>
-            <div class="stat-value text-dark">30</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4 mb-3">
-        <div class="stat-card bg-light-gray">
-          <div>
-            <div class="stat-title">Total Students</div>
-            <div class="stat-value text-dark">120</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="stat-card bg-light-gray">
-          <div>
-            <div class="stat-title">Total Faculty</div>
-            <div class="stat-value text-dark">15</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-  </div>-->
-
-
     <div class="mt-4 flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event ng-star-inserted">
       <h3>
         <b>
@@ -192,10 +133,7 @@
           </div>
         </a>
       </div>
-
     </div>
-
-
 
     <div>
       <h3>
@@ -217,11 +155,7 @@
         </a>
       </div>
     </div>
-
-
-   
   </div>
-
 
 
   <div class="mt-4 flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event ng-star-inserted">
@@ -232,67 +166,23 @@
     </h3>
   </div>
 
-  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
-   
-      <!--<div class="col-md-3 custom-margin" *ngFor="let item of SeatIntakeList">
-        <a class="p-2" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ ManagementTypeId: item.RouteValue }">
-          <div class="stat-card" [ngClass]="item.CardClass">
-            <div>
-              <div class="stat-title">
-                {{ item.TradeName }} Seat Intake
-              </div>
 
-              <div class="stat-value"
-                   [ngClass]="item.CardClass">
-                {{ item.TradeCount }}
-              </div>
-            </div>
-
-            <div class="stat-icon bg-white" [ngClass]="getCollegeTextClass(item)">
-              <i class="bi bi-people-fill"></i>
-            </div>
-
+  <div class="grid md:grid-cols-3 gap-6">
+    <div *ngFor="let item of SeatInTakeCountListEng">
+      <a class="p-2 block" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ TradeTypeId: item.RouteValue }">
+        <div class="stat-card bg-white">
+          <div>
+            <div class="stat-title">{{item.CollegeType}} Engineering</div>
+            <div class="stat-value text-dark">{{item.TradeCount}}</div>
           </div>
-        </a>
-    
-    </div>-->
 
-    <div class="col-md-3">
-      <div class="stat-card bg-white">
-        <div>
-          <div class="stat-title">Gov</div>
-          <div class="stat-value text-dark">30</div>
+          <div class="stat-icon text-dark bg-white">
+            <i class="bi bi-people-fill"></i>
+          </div>
         </div>
-        <div class="stat-icon text-dark bg-white">
-          <i class="bi bi-people-fill"></i>
-        </div>
-      </div>
+      </a>
     </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-white">
-        <div>
-          <div class="stat-title">Pvt</div>
-          <div class="stat-value text-dark">30</div>
-        </div>
-        <div class="stat-icon text-dark bg-white">
-          <i class="bi bi-people-fill"></i>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="stat-card bg-white">
-        <div>
-          <div class="stat-title">Total</div>
-          <div class="stat-value text-dark">30</div>
-        </div>
-        <div class="stat-icon text-dark bg-white">
-          <i class="bi bi-people-fill"></i>
-        </div>
-      </div>
-    </div>
-    
-   </div>
-
+  </div>
 
   <div class="mt-4 flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event ng-star-inserted">
     <h3>
@@ -302,109 +192,244 @@
     </h3>
   </div>
 
-  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+  <div class="grid md:grid-cols-3 gap-6">
 
-    <div class="col-md-3 custom-margin">
-      <div class="stat-card bg-white">
-        <div>
-          <div class="stat-title">Govt on-Roll College</div>
-          <div class="stat-value text-dark">30</div>
-        </div>
-        <div class="stat-icon text-dark bg-white">
-          <i class="bi bi-people-fill"></i>
-        </div>
-      </div>
-    </div>
+    <div *ngFor="let item of OnRollTraineeListEng">
+      <a class="p-2 block" target="_blank" [routerLink]="['/' + item.RedirectLink]" [queryParams]="{ TradeTypeId: item.RouteValue }">
+        <div class="stat-card bg-white">
+          <div>
+            <div class="stat-title">{{item.CollegeType}} Engineering</div>
+            <div class="stat-value text-dark">{{item.TradeCount}}</div>
+          </div>
 
-    <div class="col-md-3">
-      <div class="stat-card bg-white">
-        <div>
-          <div class="stat-title">Private on-Roll College</div>
-          <div class="stat-value text-dark">30</div>
+          <div class="stat-icon text-dark bg-white">
+            <i class="bi bi-people-fill"></i>
+          </div>
         </div>
-        <div class="stat-icon text-dark bg-white">
-          <i class="bi bi-people-fill"></i>
-        </div>
-      </div>
+      </a>
     </div>
 
-    <div class="col-md-3">
-      <div class="stat-card bg-white">
-        <div>
-          <div class="stat-title">Total on-Roll College</div>
-          <div class="stat-value text-dark">30</div>
-        </div>
-        <div class="stat-icon text-dark bg-white">
-          <i class="bi bi-people-fill"></i>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 custom-margin">
-      <div class="stat-card bg-white">
-        <div>
-          <div class="stat-title">SCVT</div>
-          <div class="stat-value text-dark">30</div>
-        </div>
-        <div class="stat-icon text-dark bg-white">
-          <i class="bi bi-people-fill"></i>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3 custom-margin">
-      <div class="stat-card bg-white">
-        <div>
-          <div class="stat-title">NCVT</div>
-          <div class="stat-value text-dark">30</div>
-        </div>
-        <div class="stat-icon text-dark bg-white">
-          <i class="bi bi-people-fill"></i>
-        </div>
-      </div>
-    </div>
   </div>
 
+</body>
+</html>-->
 
 
-    <!--<!-- ================= Chart Scripts ================= -->
-    <!--<script>
-      // Trade Doughnut Chart
-      new Chart(document.getElementById("tradeChart"), {
-        type: "doughnut",
-        data: {
-          labels: ["Engineering", "Non-Engineering"],
-          datasets: [{
-            data: [120, 80],
-            backgroundColor: ["#0d6efd", "#198754"]
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { position: "bottom" }
-          }
-        }
-      });
 
-      // College Bar Chart
-      new Chart(document.getElementById("collegeChart"), {
-        type: "bar",
-        data: {
-          labels: ["Govt", "Private", "Co-Ed", "Boys"],
-          datasets: [{
-            label: "Total Colleges",
-            data: [45, 95, 110, 30],
-            backgroundColor: "#0d6efd"
-          }]
-        },
-        options: {
-          plugins: {
-            legend: { display: false }
-          },
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
-      });
-    </script>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITI Master Dashboard</title>
+
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .dashboard-header {
+      font-size: 22px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    /* ================= COMMON CARD STYLE ================= */
+    .stat-card {
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      color: #fff;
+    }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+      }
+
+    .stat-title {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    .stat-icon {
+      font-size: 22px;
+      padding: 14px;
+      border-radius: 50%;
+      background: #ffffff; /* WHITE CIRCLE */
+      color: #198754; /* GREEN ICON */
+    }
+
+    /* ================= ENGINEERING ================= */
+    .engineering-card {
+      background: #e8f1ff;
+    }
+
+    /* ================= NON ENGINEERING ================= */
+    .noneng-card {
+      background: #eafaf1;
+    }
+
+    /* ================= SEAT INTAKE ================= */
+    .seat-card {
+      background: #f3e8ff;
+    }
+
+    /* ================= ON ROLL ================= */
+    .onroll-card {
+      background: #fff8e6;
+    }
+    .stat-value {
+      font-size: 26px;
+      font-weight: 600;
+      margin-top: 3px;
+      color: #5c5956;
+    }
+
+
+    .section-header {
+      background: #ffffff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      margin: 15px 8px; 
+    }
+
+    .section-header h3 {
+      margin: 0; 
+      font-size: 16px; 
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div>
+
+    <div class="mb-4">
+      <h2 class="dashboard-header">
+        <i class="fa fa-dashboard"></i> Master Dashboard
+      </h2>
+    </div>
+
+    <!-- ================= TRADE DASHBOARD ================= -->
+
+    <div class="section-header">
+      <h3><i class="fa fa-list"></i> Trade Dashboard</h3>
+    </div>
+
+    <h4><b style="margin:20px;">Engineering Trade</b></h4>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div *ngFor="let item of TradeCountListEng">
+        <a class="p-2 block" target="_blank"
+           [routerLink]="['/' + item.RedirectLink]"
+           [queryParams]="{ TradeTypeId: item.RouteValue }">
+
+          <div class="stat-card engineering-card">
+            <div>
+              <div class="stat-title">{{item.CollegeType}} Engineering</div>
+              <div class="stat-value">{{item.TradeCount}}</div>
+            </div>
+
+            <div class="stat-icon">
+              <i class="bi bi-gear-fill"></i> <!-- GREEN SETTING ICON -->
+            </div>
+          </div>
+
+        </a>
+      </div>
+    </div>
+
+    <h4><b style="margin:20px;">Non Engineering Trade</b></h4>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div *ngFor="let item of TradeCountListNonEng">
+        <a class="p-2 block" target="_blank"
+           [routerLink]="['/' + item.RedirectLink]"
+           [queryParams]="{ TradeTypeId: item.RouteValue }">
+
+          <div class="stat-card noneng-card">
+            <div>
+              <div class="stat-title">{{item.CollegeType}} Non Engineering</div>
+              <div class="stat-value">{{item.TradeCount}}</div>
+            </div>
+
+            <div class="stat-icon">
+              <i class="bi bi-book-fill"></i>
+            </div>
+          </div>
+
+        </a>
+      </div>
+    </div>
+
+    <!-- ================= SEAT INTAKE ================= -->
+
+    <div class="section-header">
+      <h3><i class="fa fa-list"></i> Seat Intake Dashboard</h3>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div *ngFor="let item of SeatInTakeCountListEng">
+        <a class="p-2 block" target="_blank"
+           [routerLink]="['/' + item.RedirectLink]"
+           [queryParams]="{ TradeTypeId: item.RouteValue }">
+
+          <div class="stat-card seat-card">
+            <div>
+              <div class="stat-title">{{item.CollegeType}} Engineering</div>
+              <div class="stat-value">{{item.TradeCount}}</div>
+            </div>
+
+            <div class="stat-icon">
+              <i class="bi bi-bank2"></i>
+            </div>
+          </div>
+
+        </a>
+      </div>
+    </div>
+
+    <!-- ================= ON ROLL ================= -->
+
+    <div class="section-header">
+      <h3><i class="fa fa-list"></i> On-Roll Trainee</h3>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div *ngFor="let item of OnRollTraineeListEng">
+        <a class="p-2 block" target="_blank"
+           [routerLink]="['/' + item.RedirectLink]"
+           [queryParams]="{ TradeTypeId: item.RouteValue }">
+
+          <div class="stat-card onroll-card">
+            <div>
+              <div class="stat-title">{{item.CollegeType}} Engineering</div>
+              <div class="stat-value">{{item.TradeCount}}</div>
+            </div>
+
+            <div class="stat-icon">
+              <i class="bi bi-people-fill"></i>
+            </div>
+          </div>
+
+        </a>
+      </div>
+    </div>
+
+  </div>
 
 </body>
 </html>
+
+
