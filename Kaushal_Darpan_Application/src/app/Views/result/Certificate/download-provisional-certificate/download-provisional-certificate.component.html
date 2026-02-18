@@ -96,10 +96,10 @@
           <tbody>
             <tr *ngFor="let provi of ProvisionalCertificateList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
               <td>{{idx+1}}</td>
-              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{provi.StudentName}}</td>
-              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{provi.EnrollmentNo}}</td>
-              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{provi.InstituteNameEnglish}}</td>
-              <td>240P000001</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{provi.Name}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{provi.Enrollment}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{provi.Institute}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{provi.SrNo_Provisional}}</td>
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <!--<a href="javascript:void(0);" title="Issue"><i class="ti ti-check"></i></a>-->
