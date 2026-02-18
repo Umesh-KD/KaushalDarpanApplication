@@ -199,9 +199,9 @@ export class TheoryMarksComponent implements OnInit {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.IsConfirmed = this.IsConfirmed = true;
-      if(this.routeStatus !== undefined || this.routeStatus !== null) { 
-        this.searchRequest.StudentStatus = this.routeStatus
-      }
+      // if(this.routeStatus !== undefined || this.routeStatus !== null) { 
+      //   this.searchRequest.StudentStatus = this.routeStatus
+      // }
       //group code id
       if (this.IsCountShow == false) {
         this.searchRequest.ExaminerCode = this.examinerCodeLoginModel.ExaminerCode

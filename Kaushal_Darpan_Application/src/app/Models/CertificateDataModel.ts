@@ -25,4 +25,5 @@ export class CertificateSearchModel {
   public ModifyBy: number = 0
   public RoleID: number = 0
   public DepartmentID: number = 0;
+  public CourseTypeID: number = 0;
 }

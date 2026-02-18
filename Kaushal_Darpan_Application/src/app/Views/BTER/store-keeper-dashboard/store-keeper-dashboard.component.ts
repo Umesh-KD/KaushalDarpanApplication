@@ -78,19 +78,6 @@ export class StoreKeeperDashboardComponent {
 
         }, 'OK', false);
       }
-
-      else if (status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) {
-        if (this.sSOLoginDataModel.EmTypeId == 1) {
-
-          if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {
-            window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self")
-          }
-
-        }
-      }
-
-
-
     }
 
   }

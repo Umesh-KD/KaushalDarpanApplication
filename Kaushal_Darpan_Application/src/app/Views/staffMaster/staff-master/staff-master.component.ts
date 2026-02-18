@@ -66,14 +66,14 @@ export class StaffMasterComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    this.GetStateMaterData();
-    this.GetRoleMasterData();
-    this.GetDesignationMasterData();
-    this.GetBranchesMasterData();
-    this.GetSubjectMasterDDL();
-    this.GetInstituteMasterData();
-    this.GetexaminerStatusData();
-    this.GetStaffTypeData();
+    await this.GetStateMaterData();
+    await this.GetRoleMasterData();
+    await this.GetDesignationMasterData();
+    await this.GetBranchesMasterData();
+    await this.GetSubjectMasterDDL();
+    await this.GetInstituteMasterData();
+    await this.GetexaminerStatusData();
+    await this.GetStaffTypeData();
     await this.GetAllData();
   }
 
@@ -241,7 +241,13 @@ export class StaffMasterComponent implements OnInit {
   async GetAllData() {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.CourseTypeId = this.sSOLoginDataModel.Eng_NonEng;
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal) { this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID }
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+    this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal) { 
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    }
     
     try {
       this.loaderService.requestStarted();

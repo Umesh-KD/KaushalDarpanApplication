@@ -404,7 +404,8 @@ export enum EnumMessageType {
 export enum EnumStatusOfStaff {
   Draft = 163,
   Submitted = 164,
-  Approved = 165
+  Approved = 165,
+  Pending = 0
 }
 
 export enum EnumDirectAdmissionType

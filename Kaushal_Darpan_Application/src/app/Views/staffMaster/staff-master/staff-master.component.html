@@ -202,8 +202,8 @@
                   <i class="ti ti-check"></i>
                 </a>
                 <!--*ngIf="sSOLoginDataModel.RoleID==_enumrole.Principal && row.ExaminerStatus == _EnumStatusOfStaff.Approved"-->
-                <a [routerLink]="'/addstaffmaster'"
-                   [queryParams]="{id:row.StaffID}" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a *ngIf="row.ProfileStatus === _EnumStatusOfStaff.Pending"
+                  [routerLink]="'/addstaffmaster'" [queryParams]="{id:row.StaffID}" title="Edit"><i class="ti ti-pencil"></i></a>
 
                 <a *ngIf="(sSOLoginDataModel.RoleID===_EnumRole.Principal
                       || sSOLoginDataModel.RoleID===_EnumRole.PrincipalNon
@@ -218,7 +218,7 @@
                       || sSOLoginDataModel.RoleID===_EnumRole.AdminNon
                       || sSOLoginDataModel.RoleID===_EnumRole.ITIAdmin_SCVT
                       || sSOLoginDataModel.RoleID===_EnumRole.ITIAdmin_NCVT )
-                      && (row.ExaminerStatus !== _EnumStatusOfStaff.Draft)"
+                      && (row.ExaminerStatus !== _EnumStatusOfStaff.Draft || row.ExaminerStatus !== _EnumStatusOfStaff.Submitted || row.ExaminerStatus !== _EnumStatusOfStaff.Approved)"
                    (click)="UnlockStaff(row.StaffID)" title="Unlock">
 
                   <i class="ti ti-lock-open"></i>
