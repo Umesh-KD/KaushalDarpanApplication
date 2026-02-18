@@ -13,8 +13,8 @@
 <app-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.AdminNodel || this.sSOLoginDataModel.RoleID == _EnumRole.TPO"></app-placement-dashboard>
 <app-principle-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Principal || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == _EnumRole.PrincipalNonDegree"></app-principle-dashboard>
 
-<app-jdte-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE 
-|| this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER 
+<app-jdte-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE
+|| this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER
 ||this.sSOLoginDataModel.RoleID == _EnumRole.EM_JD_BTER
 ||this.sSOLoginDataModel.RoleID == _EnumRole.EM_NON_GAZETTED_STAFF
 ||this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF
@@ -47,7 +47,7 @@
            ||this.sSOLoginDataModel.RoleID == _EnumRole.HOD_Eng
            ||this.sSOLoginDataModel.RoleID == _EnumRole.BterStaff
            ||this.sSOLoginDataModel.RoleID == _EnumRole.GuestFaculty
-           ||this.sSOLoginDataModel.RoleID == _EnumRole.ShikshaSambal      
+           ||this.sSOLoginDataModel.RoleID == _EnumRole.ShikshaSambal
                      "></app-staff-dashboard>
 <!--||this.sSOLoginDataModel.RoleID == _EnumRole.HOD_Eng-->
 <!--||this.sSOLoginDataModel.RoleID == _EnumRole.223-->
@@ -111,6 +111,7 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 <app-examiner-incharge-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge_NonEng"></app-examiner-incharge-dashboard>
 <app-guestroom-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.GuestRoomWarden || this.sSOLoginDataModel.RoleID == _EnumRole.GuestHouseAdmin || this.sSOLoginDataModel.RoleID == _EnumRole.GuestHouseIncharge "></app-guestroom-dashboard>
 <app-admin-dashboard-scvt *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER || this.sSOLoginDataModel.RoleID == _EnumRole.ITI_ResultAdmin  "></app-admin-dashboard-scvt>
+
 <app-admin-dashboard-ncvt *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER "></app-admin-dashboard-ncvt>  <!--// New Dashboard Create for ITI NCVT-->
 <app-registrar-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Registrar || this.sSOLoginDataModel.RoleID == _EnumRole.Registrar_NonEng "></app-registrar-dashboard>
 <!--<app-it-support-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITSupport || this.sSOLoginDataModel.RoleID == _EnumRole.ITSupport "></app-it-support-dashboard>-->
@@ -132,8 +133,10 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 <app-iti-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITI_Placement_Admin || this.sSOLoginDataModel.RoleID == _EnumRole.ITI_Placement_TPO"></app-iti-placement-dashboard>
 <app-iti-ApprenticeshipDirectorNCVTDashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Apprenticeship
  || this.sSOLoginDataModel.RoleID == _EnumRole.ITIZonalOfficer"></app-iti-ApprenticeshipDirectorNCVTDashboard>
+<app-ITI-Planning-Dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIPlanningAdmin
+ || this.sSOLoginDataModel.RoleID == _EnumRole.ITIBuildingAdmin"> </app-ITI-Planning-Dashboard>
 <!--ITI END-->
 }
 
 
-  
+

@@ -4,6 +4,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { SeatIntakeDataModel, SeatIntakeSearchModel, ITICollegeTradeSearchModel } from '../../../Models/ITI/SeatIntakeDataModel';
 import { SanctionOrderModel } from '../../../Models/ITI/UserRequestModel';
+import { ITIAdminDashboardSearchModel } from '../../../Models/ITIAdminDashboardDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -256,6 +257,15 @@ export class ItiSeatIntakeService {
   public async ActiveStatusTradeByID(request: SeatIntakeDataModel) {
     const body = JSON.stringify(request)
     return await this.http.post(this.APIUrl + '/ActiveStatusTradeByID', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetPlanningDashboardData(searchRequest: ITIAdminDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetPlanningDashboardData", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
