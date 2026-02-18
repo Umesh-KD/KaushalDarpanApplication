@@ -127,6 +127,8 @@ export class CertificateLetterComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
+      //this.searchRequest.InstituteID = this.sSOLoginDataModel.Eng_NonEng
+      //this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
       await this.reportService.GetReportsData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
