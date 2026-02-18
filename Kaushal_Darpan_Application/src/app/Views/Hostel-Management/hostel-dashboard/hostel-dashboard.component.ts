@@ -78,9 +78,6 @@ export class HostelDashboardComponent {
                 window.open("/bter-em-add-staff-details", "_Self")
             }
           }
-          else if (this.sSOLoginDataModel.DepartmentID == 2) {
-              window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self")
-          }
         }, 'OK', false);
       }
     }

@@ -131,7 +131,7 @@ export class StaffDashboardComponent implements OnInit {
           }, 'OK', false);
         }
 
-        else if (status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) {
+        else if ((status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) && this.sSOLoginDataModel.DepartmentID == 2) {
           if (this.sSOLoginDataModel.EmTypeId == 1) {
 
             if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {
