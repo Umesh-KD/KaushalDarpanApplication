@@ -30,7 +30,8 @@
     </div>
 
 
-    <a routerLink="/staffmaster" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <a routerLink="/staffmaster" class="inline-flex items-center btn bg-dark text-white btn-sm" 
+      *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin || sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
       <i class="ti ti-chevron-left"></i> Back
     </a>
   </ng-template>
@@ -120,7 +121,7 @@
           </div>
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation <span class="StarMarking">*</span> </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation</label>
           <select class="form-select " name="DesignationID" id="ddlDesignationID" formControlName="ddlDesignationID"
                   [(ngModel)]="staffDetailsFormData.DesignationID">
             <option value="0">Choose Option</option>

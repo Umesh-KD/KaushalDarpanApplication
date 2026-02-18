@@ -43,6 +43,7 @@ export class DteEditeItemMasterComponent {
   public errorLList: any = [];
   public CheckAuctionSearch = new CheckItemAuctionSearch();
   public ItemStatus: number =  0;
+  public isAllEquipCodeUpdated: boolean =  false;
   constructor(
     private dteItemsMasterService: DteItemsMasterService,
     private toastr: ToastrService,
@@ -125,6 +126,7 @@ this.itemsFormArray.get('items')?.valueChanges
         console.log('Item Details List==>', data.data)
         this.ItemDetailsList = data.Data;
 
+        this.isAllEquipCodeUpdated = this.ItemDetailsList.every(item => item.EquipmentCode !== null && item.EquipmentCode !== undefined && item.EquipmentCode !== '');
 
         this.addItemsControls();
       }
