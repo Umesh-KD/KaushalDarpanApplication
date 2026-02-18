@@ -96,7 +96,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of HrMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+          <tr *ngFor="let row of LeaveRequestList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td class="text-center">{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Name}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.LeaveName}}</td>
@@ -111,8 +111,8 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PrincipleRemark === ''?'Not Approved Yet!':row.PrincipleRemark}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="'/ApplyLeave'" [queryParams]="{ID:row.StaffLeaveID,key:1}" *ngIf="(row.Action=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete" *ngIf="(row.Action=='Pending')" (click)="DeleteById(row.StaffLeaveID)"><i class="ti ti-trash"></i></a>
+                <a [routerLink]="'/ApplyLeave'" [queryParams]="{ID:row.StaffLeaveID,SID:row.StaffID,key:1}" *ngIf="(row.Action=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete" *ngIf="(row.Action=='Pending')" (click)="DeleteById(row)"><i class="ti ti-trash"></i></a>
               </div>
             </td>
           </tr>
