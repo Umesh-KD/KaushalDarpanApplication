@@ -896,8 +896,11 @@
 
       <div class="flex justify-center flex-wrap items-centermt-3">
         <div>
-          <button *ngIf="this.staffDetailsFormData.StatusOfStaff == _EnumStatusOfStaff.Draft || sSOLoginDataModel.RoleID == _EnumRole.Principal"
+          <!-- <button *ngIf="this.staffDetailsFormData.StatusOfStaff == _EnumStatusOfStaff.Draft || sSOLoginDataModel.RoleID == _EnumRole.Principal"
                   class="btn bg-success text-white mt-3" type="button" (click)="SaveData()">
+            Submit
+          </button> -->
+          <button class="btn bg-success text-white mt-3" type="button" (click)="SaveData()">
             Submit
           </button>
           <button class="btn bg-danger text-white mt-3" type="button" (click)="CancelData()">Cancel</button>

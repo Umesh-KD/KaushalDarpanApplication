@@ -47,9 +47,8 @@ export class StaffDashboardComponent implements OnInit {
     private routers: Router,
     private commonMasterService: CommonFunctionService,
     private staffMasterService: StaffMasterService,
-    private sweetAlert2: SweetAlert2) {
-
-  }
+    private sweetAlert2: SweetAlert2
+  ) {}
 
   async ngOnInit() {
     
