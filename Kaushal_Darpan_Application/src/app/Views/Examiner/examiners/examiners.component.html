@@ -123,7 +123,7 @@
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+        <select id="ddlConter" class="form-select  couterDropDown"  [(ngModel)]="pageInTableSize" (change)="loadInTable()">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
@@ -144,19 +144,29 @@
           <tr>
             <th class="text-left">Sr No</th>
             <!--<th class="text-left">Exam Name</th>-->
-            <th class="text-left">SSOID</th>
-            <th class="text-left">Group Code</th>
-            <th class="text-left">Teacher Name</th>
-            <th class="text-left">Email</th>
-            <th class="text-left">Subject</th>
-            <th class="text-center">Action</th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('SSOID')">SSOID
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SSOID'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Code')">Group Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Code'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Name')">Teacher Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Email')">Email
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Email'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('SubjectCode')">Subject
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th >Action</th>
 
           </tr>
 
         </thead>
         <tbody>
-          <tr *ngFor="let examiner of ExaminersList | tableSearchFilter:Table_SearchText;let idx=index;">
-            <td align="left">{{idx+1}}</td>
+          <tr *ngFor="let examiner of paginatedInTableData;let idx=index;">
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>
             <!--<td>{{examiner.ExamName}}</td>-->
             <td>{{examiner.SSOID}}</td>
             <td>{{examiner.Code}}</td>
@@ -176,6 +186,20 @@
       </table>
 
     </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
 
   </div>
 </div>
