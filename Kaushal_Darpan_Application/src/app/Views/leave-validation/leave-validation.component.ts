@@ -97,7 +97,6 @@ export class LeaveValidationComponent {
     return mobile; // Return original if length is less than or equal to 4
   }
 
-
   async GetAllData() {
     try {
      // debugger

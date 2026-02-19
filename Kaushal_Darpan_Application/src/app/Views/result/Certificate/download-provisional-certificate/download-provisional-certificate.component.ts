@@ -47,6 +47,9 @@ export class DownloadProvisionalCertificateComponent implements OnInit {
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
+
       this.loaderService.requestStarted();
       await this.downloadCertificateService.GetAllProvisionalCertificateData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

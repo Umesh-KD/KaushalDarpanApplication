@@ -132,7 +132,7 @@ export class AddStaffMasterComponent implements OnInit {
       txtDateOfBirth: [this.today, [Validators.required]],
       ddlHighestQualification: ['', [Validators.required]],
       ddlRoleID: ['', [DropdownValidators]],
-      ddlDesignationID: ['', [DropdownValidators]],
+      ddlDesignationID: [''],
 
     
       ddlStaffTypeID: [0, [DropdownValidators]],
