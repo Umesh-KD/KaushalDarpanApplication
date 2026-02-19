@@ -61,4 +61,21 @@ export class ITIAdminUserService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  //save data
+  public async adminUserDataSave(request: AdminUserDetailModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/adminUserDataSave`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  //save data
+  public async getAlladminUserData(request: AdminUserSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/getAlladminUserData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

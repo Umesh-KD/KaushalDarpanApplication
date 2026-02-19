@@ -497,6 +497,7 @@ const routes: Routes = [
       { path: 'application-fees-trn-history', loadChildren: () => import('./Views/Reports/application-fees-transaction-history/application-fees-transaction-history.module').then(m => m.ApplicationFeesTransactionHistoryModule), title: 'Student Fees Transaction History Report' },
       { path: 'AdminUser', loadChildren: () => import('./Views/BTER/admin-user/admin-user.module').then(m => m.AdminUserModule), title: 'Admin User' },
       { path: 'ITIAdministrativeStaff', loadChildren: () => import('./Views/ITI/itiadmin-user/itiadmin-user.module').then(m => m.ITIAdminUserModule), title: 'Administrative Staff' },
+      
       { path: 'master-configuration', loadChildren: () => import('./Views/master-configuration/master-configuration.module').then(m => m.MasterConfigurationModule), title: 'Master Configuration' },
       { path: 'master-configuration-bter', loadChildren: () => import('./Views/master-configuration-bter/master-configuration-bter.module').then(m => m.MasterConfigurationBTERModule), title: 'Master Configuration' },
       { path: 'RevaluationTab', loadChildren: () => import('./Views/Student/revaluation-tab/revaluation-tab.module').then(m => m.RevaluationTabModule) },
@@ -1579,7 +1580,8 @@ const routes: Routes = [
 
       { path: 'SanctionMaster', loadChildren: () => import('./Views/ITI/sanction-master/sanction-master.module').then(m => m.SanctionMasterModule) },
       { path: 'AddSanctionOrder', loadChildren: () => import('./Views/ITI/add-sanction-order/add-sanction-order.module').then(m => m.AddSanctionOrderModule) },
-
+      { path: 'Add-Admin-Sub-User', loadChildren: () => import('./Views/ITI/iti-Add-Admin-Sub-User/iti-Add-Admin-Sub-User.module').then(m => m.itiAddAdminSubUserModule) },
+      { path: 'Admin-Sub-User', loadChildren: () => import('./Views/ITI/iti-Admin-Sub-User/iti-Admin-Sub-User.module').then(m => m.itiAdminSubUserModule), title: 'Admin Sub User' },
       { path: 'SanctionOrderList', loadChildren: () => import('./Views/ITI/sanction-order-list/sanction-order-list.module').then(m => m.SanctionOrderListModule) },
 
       { path: 'SeatIntakePlanning', loadChildren: () => import('./Views/ITI/seat-intake-planning/seat-intake-planning.module').then(m => m.SeatIntakePlanningModule) },
