@@ -55,20 +55,39 @@ export class JanAadharDetailService {
 
   // send otp
   public async SendJanaadharOTP(row: NewJanAadharAPIModel) {
+    debugger;
     var body = JSON.stringify(row);
     const params = new HttpParams()
       .set('sType', 'GenerateOTP')
       .set('memberId', row.MEMBER_ID)
       .set('SchemeName', 'EEMS');
-    return await this.http.post(`${this.APIUrl}/JanAdharDataNew`, body, { params, headers: this.headersOptions })
+    return await this.http.post(`${this.APIUrl}/JanAdharDataNew`, body, { params })
       .pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
 
 
+  // send otp
+  public async VerifyOTP(row: NewJanAadharAPIModel) {
+    debugger;
+    var body = JSON.stringify(row);
+    const params = new HttpParams()
+      .set('sType', 'ValidateOTP_FetchRequestedData')
+      .set('memberId', row.MEMBER_ID)
+      .set('tid', row.tid)
+      .set('OTP', row.OTP)
+      .set('SchemeName', 'EEMS');
+    return await this.http.post(`${this.APIUrl}/JanAdharDataNew`, body, { params })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 
+
+
+  
 
 }

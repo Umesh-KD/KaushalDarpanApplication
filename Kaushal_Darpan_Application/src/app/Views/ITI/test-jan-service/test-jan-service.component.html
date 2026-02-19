@@ -1,0 +1,95 @@
+<div class="container mt-3">
+  <div class="row">
+    <div class="col-md-4">
+
+      <div class="mb-3">
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="janadharNo"
+               placeholder="Enter Janadhar No">
+      </div>
+
+      <button type="button"
+              class="btn btn-primary"
+              (click)="verifyJanadhar()">
+        Verify Janadhar
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="container mt-4" *ngIf="janMember">
+
+  <div class="border rounded p-3 bg-white">
+
+    <h5 class="mb-3">Jan Aadhaar Member Details</h5>
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Name</label>
+        <div class="form-control bg-light">{{janMember.NAME_EN}}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Gender</label>
+        <div class="form-control bg-light">{{janMember.GENDER}}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Date of Birth</label>
+        <div class="form-control bg-light">{{janMember.DOB}}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Father Name</label>
+        <div class="form-control bg-light">{{janMember.FATHER_NAME_EN || '-'}}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Mother Name</label>
+        <div class="form-control bg-light">{{janMember.MOTHER_NAME_EN || '-'}}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Mobile No</label>
+        <div class="form-control bg-light">{{janMember.MOBILE_NO || '-'}}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Email</label>
+        <div class="form-control bg-light">{{janMember.EMAIL || '-'}}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Category</label>
+        <div class="form-control bg-light">{{janMember.CATEGORY_DESC_ENG || '-'}}</div>
+      </div>
+
+      <div class="col-md-12">
+        <label class="form-label fw-semibold">Address</label>
+        <div class="form-control bg-light">{{janMember.ADDRESS}}</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Marital Status</label>
+        <div class="form-control bg-light">{{janMember.MARITAL_STATUS || '-'}}</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<new-jan-aadhar (verifiedData)="getJanadharData($event)"></new-jan-aadhar>
+
+
+
