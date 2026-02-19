@@ -14,3 +14,6 @@ const routes: Routes = [{ path: '', component: JanAadharDetailComponent }];
   exports: [RouterModule]
 })
 export class JanAadharDetailRoutingModule { }
+
+
+

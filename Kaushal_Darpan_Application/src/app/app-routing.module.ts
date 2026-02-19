@@ -1627,7 +1627,7 @@ const routes: Routes = [
       { path: 'CollegeTradeMaster', loadChildren: () => import('./Views/ITI/college-trade-master/college-trade-master.module').then(m => m.CollegeTradeMasterModule) },
 
 
-
+      { path: 'TestJan', loadChildren: () => import('./Views/ITI/test-jan-service/test-jan-service.module').then(m => m.TestJanServiceModule) },
 
 
 
@@ -1735,6 +1735,7 @@ const routes: Routes = [
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
   { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
   { path: 'Views\ITI\AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
+
 
 
   

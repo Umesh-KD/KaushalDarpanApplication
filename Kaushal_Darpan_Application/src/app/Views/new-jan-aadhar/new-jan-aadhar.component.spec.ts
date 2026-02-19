@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {JanAadharDetailComponent } from './new-jan-aadhar.component';
+import { JanAadharDetailComponent } from './JanAadharDetailComponent';
 
 describe('CompanyMasterComponent', () => {
   let component:  JanAadharDetailComponent;
