@@ -173,7 +173,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetOfficeWiselogic() {
-   // debugger;
+   debugger;
     this.formData.IsGuestStaff = false;
     if (this.formData.OfficeID == 17) {
       this.IsNodalOfficer = true;
@@ -198,13 +198,22 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async InstituteMasterWiselogic() {
-    //debugger
+    debugger
     this.formData.IsGuestStaff = false;
     this.formData.GuestHouseID = 0;
     // this.GetRoleMasterData();
-
     if (this.formData.IsNodal == true) {
+       // staffTypeControl.disable();
+       await this.GetInstituteMaster();
+       // ✅ Filter only Govt institutes (1)
+     this.InstituteMasterDDL = this.InstituteMasterDDL.filter(
+       (item: any) => item.InstitutionManagementTypeID === 1
+     );
+     this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
+     // this.formData.RoleID = 7;
+     // 1- govt. 5- pvt
       this.formData.StaffTypeID=30;
+      this._AddStaffBasicDetailFromGroup['StaffType']?.setValue(30);
       this.StaffTypeChangePost();
           // ✅ Disable dropdown
           
@@ -212,18 +221,10 @@ export class AddStaffInitialDetailsComponent {
   // this.f['StaffType'].disable();
 
       this._AddStaffBasicDetailFromGroup['StaffType'].disable();
-    // staffTypeControl.disable();
-      await this.GetInstituteMaster();
-        // ✅ Filter only Govt institutes (1)
-      this.InstituteMasterDDL = this.InstituteMasterDDL.filter(
-        (item: any) => item.InstitutionManagementTypeID === 1
-      );
-      this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
-      // this.formData.RoleID = 7;
-      // 1- govt. 5- pvt
+   
   } else {
       this.formData.IsNodal = false;
-      if (this.formData.RoleID != 252) {
+      if (this.formData.RoleID != EnumRole.EM_NON_GAZETTED_STAFF && this.formData.RoleID !=EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
         this._AddStaffBasicDetailFromGroup['StaffType'].enable();
       }
 
@@ -238,15 +239,16 @@ export class AddStaffInitialDetailsComponent {
 
   async onRoleChange() {
     debugger
-    if (this.formData.RoleID == 252) {
+    if (this.formData.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF ||this.formData.RoleID==EnumRole.EM_NON_GAZETTED_STAFF) {
       this.StaffTypeList = this.StaffTypeList.filter((x: any) => x.ID == 31);
     
-      this.AddStaffBasicDetailFromGroup.get('StaffType')?.disable();
       this.formData.StaffTypeID = 31;
+      this.AddStaffBasicDetailFromGroup.get('StaffType')?.disable();
       this.StaffTypeChangePost();
 
 
     } else {
+      await this.GetStaffTypeData();
      // this.AddStaffBasicDetailFromGroup.get('StaffType')?.enable();
     }
     
@@ -291,7 +293,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetInstituteMaster() {
-   // debugger
+   debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(
@@ -476,7 +478,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetStaffTypeData() {
-
+debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {

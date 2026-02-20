@@ -605,6 +605,7 @@ export class AddStaffMasterComponent implements OnInit {
   public file!: File;
 
   async LockandSubmit() {
+    debugger
     this.Swal2.Confirmation("Are you sure you want to Lock and Submit ?",
       async (result: any) => {
         //confirmed
@@ -614,13 +615,22 @@ export class AddStaffMasterComponent implements OnInit {
             this.staffDetailsFormData.ModifyBy = this.sSOLoginDataModel.UserID
             this.staffDetailsFormData.StatusOfStaff = EnumStatusOfStaff.Submitted
             console.log("lock and submit", this.staffDetailsFormData)
-            await this.staffMasterService.LockandSubmit(this.staffDetailsFormData).then((data: any) => {
+            await this.staffMasterService.LockandSubmit(this.staffDetailsFormData).then(async (data: any) => {
               data = JSON.parse(JSON.stringify(data));
               console.log(data);
               if (data.State === EnumStatus.Success){
-                this.toastr.success(data.Message);
+                // this.toastr.success(data.Message);
+                 this.Swal2.ConfirmationSuccess(
+                  "YOUR PROFILE IS LOCK & SUBMITTED. PLEASE WAIT FOR APPROVAL BY BTER. ONLY AFTER APPROVAL YOU WILL BE ABLE TO FILL THE MARKS.",
+                  async (result: any) => {
+                    if (result.isConfirmed) {
+                      this.ClosePopup();
+                    }
+                  },
+                  "OK",
+                  false
+                );
                 this.ClosePopup();
-                window.location.reload();
               } else {
                 this.toastr.error(data.ErrorMessage);
               }
