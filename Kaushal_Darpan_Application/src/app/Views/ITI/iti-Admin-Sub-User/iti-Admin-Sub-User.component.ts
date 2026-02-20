@@ -54,22 +54,22 @@ export class itiAdminSubUserComponent {
 
   async ngOnInit() {
 
-    this.AdminUserFormGroup = this.formBuilder.group(
-      {
-        txtUserName: [{ value: '', disabled: true }, Validators.required],
+    //this.AdminUserFormGroup = this.formBuilder.group(
+    //  {
+    //    txtUserName: [{ value: '', disabled: true }, Validators.required],
 
-        txtUserEmail: ['', Validators.required],
-        RoleID: ['', [DropdownValidators]],
-        InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
-        txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
-        //txtMobileNo: ['', Validators.required],
-        txtMobileNo: [{ value: '', disabled: true }, Validators.required],
-      });
+    //    txtUserEmail: ['', Validators.required],
+    //    RoleID: ['', [DropdownValidators]],
+    //    InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
+    //    txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
+    //    //txtMobileNo: ['', Validators.required],
+    //    txtMobileNo: [{ value: '', disabled: true }, Validators.required],
+    //  });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
     await this.GetAllData();
-    await this.GetAllDataITI();
+   // await this.GetAllDataITI();
 
 
   }
@@ -89,6 +89,9 @@ export class itiAdminSubUserComponent {
     try {
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.searchRequest.Name = this.searchRequest.Name
+      this.searchRequest.MobileNo = this.searchRequest.MobileNo
+      this.searchRequest.Email = this.searchRequest.Email
       this.sSOLoginDataModel.EndTermID = this.sSOLoginDataModel.EndTermID
       this.sSOLoginDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     
@@ -113,28 +116,28 @@ export class itiAdminSubUserComponent {
   }
 
 
-  async GetAllDataITI() {
-    try {
+  //async GetAllDataITI() {
+  //  try {
 
 
 
-      this.loaderService.requestStarted();
-      await this.commonMasterService.Iticollege(2, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID,0).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        debugger
-        this.CollegeList = data.Data;
-        console.log(this.AdminUserList, "marksheetlist")
-      }, (error: any) => console.error(error))
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
+  //    this.loaderService.requestStarted();
+  //    await this.commonMasterService.Iticollege(2, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID,0).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      debugger
+  //      this.CollegeList = data.Data;
+  //      console.log(this.AdminUserList, "marksheetlist")
+  //    }, (error: any) => console.error(error))
+  //  }
+  //  catch (ex) {
+  //    console.log(ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
 
 
