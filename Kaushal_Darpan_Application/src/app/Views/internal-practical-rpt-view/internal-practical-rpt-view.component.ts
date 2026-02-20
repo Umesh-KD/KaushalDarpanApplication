@@ -67,6 +67,7 @@ export class InternalPracticalRptViewComponent implements OnInit {
   //end table feature default
 
   public isAnyUFMSelected: boolean = false;
+  public MarkEntered: number = 0;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -87,18 +88,21 @@ export class InternalPracticalRptViewComponent implements OnInit {
   async ngOnInit() {
     //debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    /*this.UserID = this.sSOLoginDataModel.UserID;*/
 
+    /*this.UserID = this.sSOLoginDataModel.UserID;*/
+    //
     this.InternalPracticalID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
-    console.log(this.InternalPracticalID)
+    this.searchRequest.StrKey = String(this.activatedRoute.snapshot.queryParamMap.get('strkey'));
+
     this.searchRequest.InternalPracticalID = this.InternalPracticalID;
-    if (this.InternalPracticalID == 2) {
+    //
+    if (this.InternalPracticalID == 2 || this.searchRequest.StrKey?.includes('mrkent') || this.searchRequest.StrKey?.includes('totl')) {
       this.IsView = true;
     }
     else {
       this.IsView = false;
     }
-    console.log("isview", this.IsView);
+
     //load
     await this.GetMasterData();
     await this.getGroupCodeMasterList();
@@ -195,7 +199,7 @@ export class InternalPracticalRptViewComponent implements OnInit {
   async GetTheoryMarksList() {
     try {
       this.isSubmitted = true;
-      if(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng){
+      if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
       }
       //session
@@ -421,7 +425,7 @@ export class InternalPracticalRptViewComponent implements OnInit {
     this.searchRequest.StudentID = 0;
     this.searchRequest.SubjectID = 0;
     this.searchRequest.RollNo = '',
-    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.TheoryMarksList = [];
     this.paginatedInTableData = [];
 
