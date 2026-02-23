@@ -1051,7 +1051,7 @@ export class ItiInstructorFormComponent {
         const ssoid = this.request.Uid;
 
         //this.request = this.InstructorForm.value as ITI_InstructorDataModel;
-        this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString()??'';
+        this.request.CreatedBy = '0'
         this.request.DepartmentID ='2'
         this.request.Uid = ssoid;
         this.request.EmploymentDetails = this.employeeRequestList;
@@ -1059,7 +1059,8 @@ export class ItiInstructorFormComponent {
         this.request.EducationalQualifications = this.educationList;
         console.log('Final Request Data:', this.request);
         if (this.request.StatusID == 0) {
-          this.request.StatusID=1
+          this.request.StatusID = 1
+
         }
         const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
         this.State = response['State'];

@@ -926,13 +926,13 @@ this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-
 
 
 
-            <div *ngIf="isSSOVisible && choicelist.length > 0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+            <div *ngIf="isSSOVisible && choicelist?.length > 0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
               <b class="text-1xl-5"><i class="ti ti-plus"></i> Choice Details </b>
 
             </div>
 
 
-            <div *ngIf="isSSOVisible && choicelist.length > 0" class="overflow-x-auto mt-3">
+            <div *ngIf="isSSOVisible && choicelist?.length > 0" class="overflow-x-auto mt-3">
               <table class="table table-border w-full table-auto" cellpadding="5">
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                   <tr class="text-left">
@@ -978,12 +978,12 @@ this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-
             <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">
               <div *ngIf="this.sSOLoginDataModel.RoleID == 100 ||
 this.sSOLoginDataModel.RoleID ==97" class="text-center">
-                <button class="btn btn-sm bg-info text-white" *ngIf="!isViewMode && !InstructorForm.disabled " type="submit" (click)="onSubmit()">Submit</button>
+                <button *ngIf="request.StatusID==1 || request.StatusID==3 || request.StatusID==8 || request.StatusID==2 " class="btn btn-sm bg-info text-white" type="submit" (click)="onSubmit()">Submit</button>
 
-                <a (click)="Back()"
+                <!--<a (click)="Back()"
                    class="inline-flex items-center btn bg-dark text-white btn-sm">
                   <i class="ti ti-chevron-left"></i> Back
-                </a>
+                </a>-->
 
               </div>
             </div>

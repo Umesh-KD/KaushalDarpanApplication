@@ -999,8 +999,42 @@ export class ItiInstructorFormViewComponent {
     return true;
   }
 
+  async onpopup() {
+
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno;
+
+    await this.childComponent.OpenOTPPopup();
+
+    let isVerified = false;
+
+    const timeout = new Promise<void>((resolve) => {
+      setTimeout(() => {
+        if (!isVerified) {
+          console.log('OTP timeout');
+          // optional: close popup
+          this.childComponent.CloseOTPModal?.();
+          resolve();
+        }
+      }, 3000);
+    });
+
+    const verify = this.childComponent.waitForVerification().then(() => {
+      isVerified = true;
+    });
+
+    await Promise.race([verify, timeout]);
+
+    if (isVerified) {
+      await this.onSubmit();
+    } else {
+      alert('OTP verification timeout');
+    }
+
+  }
+
 
   async onSubmit() {
+    
 
     if (!this.validateVerification()) {
       return;
@@ -1072,14 +1106,10 @@ export class ItiInstructorFormViewComponent {
       .filter(r => r?.trim())
       .join(', ');
 
-    debugger
+    
 
 
-    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-    // await for open model
-    await this.childComponent.OpenOTPPopup();
-    // await OTP verification
-    await this.childComponent.waitForVerification();
+
 
     this.verifyrequest.ModifyBy = this.sSOLoginDataModel.UserID
     this.verifyrequest.FinancialYear = this.sSOLoginDataModel.FinancialYearID
