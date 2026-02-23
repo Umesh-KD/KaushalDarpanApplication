@@ -310,6 +310,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async CenterCode() {
+    
+    return await this.http.get(`${this.APIUrl}/CenterCodeMaster/`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async SemesterGenerateMaster() {
     return await this.http.get(this.APIUrl + '/SemesterGenerateMaster/', this.headersOptions)
       .pipe(
