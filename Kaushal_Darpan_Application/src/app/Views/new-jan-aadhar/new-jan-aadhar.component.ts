@@ -158,12 +158,9 @@ export class JanAadharDetailComponent implements OnInit {
           this.isOpen = true;
           this.toastr.success(res.Data.response.message);
 
-
           this.ResposeOTPModel = res.Data.response;
           this.ResposeOTPModel.MEMBER_ID = row.MEMBER_ID;
           this.ResposeOTPModel.tid = res.Data.response.tid;
-
-
 
           console.log("OTP Response:", this.ResposeOTPModel);
           console.log("Signature:", res.Data.signature);
