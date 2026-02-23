@@ -150,8 +150,6 @@ const routes: Routes = [
       {
         path: 'profile', loadChildren: () => import('./Views/profile/profile.module').then(m => m.ProfileModule), title: 'Profile'
       },
-
-
       {
         path: 'dashboard', loadChildren: () => import('./Views/dashboard/dashboard.module').then(m => m.dashboardModule), title: 'Dashboard'
       },
@@ -161,7 +159,6 @@ const routes: Routes = [
       {
         path: 'loader', loadChildren: () => import('./Views/Shared/loader/loader.module').then(m => m.LoaderModule),
       },
-
       { path: 'designationmaster', loadChildren: () => import('./Views/designation-master/designation-master.routing.module').then(m => m.DesignationRoutingModule), title: 'Designation Master' },
 
       { path: 'levelmaster', loadChildren: () => import('./Views/level-master/level-master.routing.module').then(m => m.LevelRoutingModule), title: 'Level Master' },
@@ -169,11 +166,8 @@ const routes: Routes = [
       { path: 'generate-cc-code', loadChildren: () => import('./Views/CenterAllotment/generate-cc-code/generate-cc-code.module').then(m => m.GenerateCcCodeModule), title: 'Generate CC Code' },
       { path: 'SubjectMaster', loadChildren: () => import('./Views/subject-master/subject-master-routing.module').then(m => m.SubjectMasterRoutingModule), title: 'Subject Master' },
       { path: 'SubjectCategory', loadChildren: () => import('./Views/subject-category/subject-category.module.ts').then(m => m.SubjectCategoryRoutingModule), title: 'Subject Category' },
-      { path: 'PlacementDashboard/:id', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
-      
+      { path: 'PlacementDashboard/:id', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },     
       { path: 'PlacementDashReport/:id', loadChildren: () => import('./Views/placement-dash-report/placement-dash-report.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Placement Dashboard Report' },
-
-
       { path: 'ITIPlacementDashboard/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
       { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dash-report/placement-dash-report.routing.module').then(m => m.ITIPlacementDashReportModule), title: 'ITI Placement Dashboard Report' },
 
@@ -497,6 +491,7 @@ const routes: Routes = [
       { path: 'application-fees-trn-history', loadChildren: () => import('./Views/Reports/application-fees-transaction-history/application-fees-transaction-history.module').then(m => m.ApplicationFeesTransactionHistoryModule), title: 'Student Fees Transaction History Report' },
       { path: 'AdminUser', loadChildren: () => import('./Views/BTER/admin-user/admin-user.module').then(m => m.AdminUserModule), title: 'Admin User' },
       { path: 'ITIAdministrativeStaff', loadChildren: () => import('./Views/ITI/itiadmin-user/itiadmin-user.module').then(m => m.ITIAdminUserModule), title: 'Administrative Staff' },
+      
       { path: 'master-configuration', loadChildren: () => import('./Views/master-configuration/master-configuration.module').then(m => m.MasterConfigurationModule), title: 'Master Configuration' },
       { path: 'master-configuration-bter', loadChildren: () => import('./Views/master-configuration-bter/master-configuration-bter.module').then(m => m.MasterConfigurationBTERModule), title: 'Master Configuration' },
       { path: 'RevaluationTab', loadChildren: () => import('./Views/Student/revaluation-tab/revaluation-tab.module').then(m => m.RevaluationTabModule) },
@@ -1580,7 +1575,8 @@ const routes: Routes = [
 
       { path: 'SanctionMaster', loadChildren: () => import('./Views/ITI/sanction-master/sanction-master.module').then(m => m.SanctionMasterModule) },
       { path: 'AddSanctionOrder', loadChildren: () => import('./Views/ITI/add-sanction-order/add-sanction-order.module').then(m => m.AddSanctionOrderModule) },
-
+      { path: 'Add-Admin-Sub-User', loadChildren: () => import('./Views/ITI/iti-Add-Admin-Sub-User/iti-Add-Admin-Sub-User.module').then(m => m.itiAddAdminSubUserModule) },
+      { path: 'Admin-Sub-User', loadChildren: () => import('./Views/ITI/iti-Admin-Sub-User/iti-Admin-Sub-User.module').then(m => m.itiAdminSubUserModule), title: 'Admin Sub User' },
       { path: 'SanctionOrderList', loadChildren: () => import('./Views/ITI/sanction-order-list/sanction-order-list.module').then(m => m.SanctionOrderListModule) },
 
       { path: 'SeatIntakePlanning', loadChildren: () => import('./Views/ITI/seat-intake-planning/seat-intake-planning.module').then(m => m.SeatIntakePlanningModule) },
@@ -1626,7 +1622,7 @@ const routes: Routes = [
       { path: 'CollegeTradeMaster', loadChildren: () => import('./Views/ITI/college-trade-master/college-trade-master.module').then(m => m.CollegeTradeMasterModule) },
 
 
-
+      { path: 'TestJan', loadChildren: () => import('./Views/ITI/test-jan-service/test-jan-service.module').then(m => m.TestJanServiceModule) },
 
 
 
@@ -1734,6 +1730,7 @@ const routes: Routes = [
   { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
   { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
   { path: 'Views\ITI\AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
+
 
 
   

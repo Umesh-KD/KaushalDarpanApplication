@@ -153,6 +153,17 @@ export class LeaveCreditComponent {
                 }
               })
             }
+            else if(this.sSOLoginDataModel.RoleID==this._EnumRole.EM_ADTE_NON_GAZETTED_STAFF)
+            {
+              await this.LeaveMasterService.CreditStaffLeave_ADTE_NonGazetted(this.StaffIDList)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State === EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  await this.GetAllData();
+                }
+              })
+            }
             else
             {
               await this.LeaveMasterService.CreditStaffLeave(this.StaffIDList)

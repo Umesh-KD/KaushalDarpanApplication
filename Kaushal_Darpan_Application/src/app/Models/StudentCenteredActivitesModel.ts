@@ -46,6 +46,7 @@ export class StudentCenteredActivitesSearchModel extends RequestBaseModel {
   public Dis_UFMDocument: string = '';
   public UFMDocument: string = '';
   public CheckedStatus?: number = -1;
+  public StrKey?: string = '';
 }
 
 export class DTEApplicationDashboardModel {

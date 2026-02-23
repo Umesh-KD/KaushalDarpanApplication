@@ -21,6 +21,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 export class ApplyLeaveComponent {
 
   public ID: number = 0;
+  public StaffID: number = 0;
   public LeaveTypeList: any[] = [];
   public LeaveTypeFSFList: any[] = [];
  public today: string='';
@@ -71,6 +72,7 @@ export class ApplyLeaveComponent {
     
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
+    this.StaffID = Number(this.activatedRoute.snapshot.queryParamMap.get('SID')?.toString());
     this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());//student list key
     const now = new Date();
     this.today = now.toISOString().split('T')[0]; // "2025-04-11" format
@@ -207,7 +209,7 @@ export class ApplyLeaveComponent {
       
       this.loaderService.requestStarted();
 
-      await this.LeaveMasterService.GetById(this.ID,this.sSOLoginDataModel.RoleID)
+      await this.LeaveMasterService.GetById(this.ID,this.sSOLoginDataModel.RoleID,this.StaffID)
 
         .then(async (data: any) => {          
           data = JSON.parse(JSON.stringify(data));

@@ -20,6 +20,9 @@ import { OTPModalModule } from '../otpmodal/otpmodal.module';
     JanAadharDetailRoutingModule,
     OTPModalModule
 
-  ]
+  ],
+  exports: [JanAadharDetailComponent]   // ⭐ THIS LINE MAKES IT PLUG-IN
 })
 export class JanAadharDetailModule { }
+
+

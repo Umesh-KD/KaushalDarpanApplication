@@ -455,7 +455,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID'
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID','UFMDocument','Dis_UFMDocument','rowclass'
     ];
     const filteredData = this.TheoryMarksList.map((item: any) => {
       const filteredItem: any = {};
