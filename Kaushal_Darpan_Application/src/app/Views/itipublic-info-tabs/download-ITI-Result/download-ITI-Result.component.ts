@@ -74,6 +74,9 @@ export class downloadITIResultComponent {
   public enumExamStudentStatus = enumExamStudentStatus;
   public SemesterName: String = ''
   public StudentSubjectList: any[] = [];
+
+  public Studentmarkdata: any[] = [];
+  
   public isSubmitted: boolean = false
   public isShowSelected: boolean = false;
   public IsdocumentShow: boolean = false
@@ -150,6 +153,7 @@ export class downloadITIResultComponent {
     this.itiResultRequest.RollNo ='';
     this.itiResultRequest.DOB = '';
     this.itiResultRequest.ID = 0;
+    this.isShowGrid = false;
     this.isSubmitted = false;
     this.itiResultData = [];
 }
@@ -159,6 +163,7 @@ export class downloadITIResultComponent {
    
     this.isShowGrid = true;
     this.itiResultData = [];
+    this.Studentmarkdata = [];
     this.itiResultRequest.DepartmentID = EnumDepartment.ITI;
     this.itiResultRequest.EndTermID = this.itiResultRequest.ID;
     try {
@@ -168,9 +173,27 @@ export class downloadITIResultComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success)
           {
-            this.itiResultData = data['Data']['Table'];
+            const table = data?.Data?.Table || [];
+            const table1 = data?.Data?.Table1 || [];
+            debugger;
+            if (table.length > 0)
+            {
+
+              this.itiResultData = table;
+              this.Studentmarkdata = table1;
+
+            } else {
+
+              this.itiResultData = [];
+              this.Studentmarkdata = [];
+              this.isShowGrid = false;  // HIDE RESULT
+              this.sweetAlert2.Info("No Record Found");
+            }
+
             console.log("iti Result Data", this.itiResultData)
           }
+         
+
         }, (error: any) => {
           console.error(error);
         });
@@ -387,5 +410,34 @@ export class downloadITIResultComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+
+
+  printResult() {
+
+    const printContents = document.getElementById('printSection')?.innerHTML;
+    const popupWin = window.open('', '_blank', 'width=900,height=700');
+
+    popupWin?.document.open();
+    popupWin?.document.write(`
+    <html>
+      <head>
+        
+        <style>
+          @page {
+            size: A4 portrait;
+            margin: 10mm;
+          }
+        </style>
+      </head>
+
+      <body onload="window.print(); window.close();">
+        ${printContents}
+      </body>
+    </html>`
+    );
+
+    popupWin?.document.close();
   }
 }
