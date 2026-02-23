@@ -25,6 +25,7 @@ export class TheoryMarksRptViewComponent {
   public TheoryMarksRptDataList: any = [];
   public SemesterMasterList: any = [];
   public Branchlist: any = [];
+  public CenterCodeList:any=[];
   public InstituteMasterDDLList: any = [];
 
   //table feature default
@@ -79,7 +80,14 @@ export class TheoryMarksRptViewComponent {
         data = JSON.parse(JSON.stringify(data));
         this.InstituteMasterDDLList = data.Data;
         console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
-      })
+      });
+
+      await this.commonMasterService.CenterCode()
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.CenterCodeList = data['Data'];
+      }, error => console.error(error));
+
     }
     catch (ex) {
       console.log(ex);
@@ -92,6 +100,7 @@ export class TheoryMarksRptViewComponent {
   }
 
   async GetTheoryMarksDetailList() {
+    debugger
     try {
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
