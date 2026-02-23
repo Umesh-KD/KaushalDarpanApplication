@@ -1,3 +1,5 @@
+import { ItiHrMasterDataModel } from "./ItiHrMasterDataModel"
+
 export class ItiCompanyMasterDataModels {
   public ID: number = 0
   public Name: string = ''
@@ -21,6 +23,8 @@ export class ItiCompanyMasterDataModels {
   public HRName: string = '';
   public EmailId: string = '';
   public MobileNo: String = '';
+
+  public ListCompanyHRDetails: ItiHrMasterDataModel[] = [];
 }
 
 export interface IItiCompanyMasterDataModel {
@@ -46,6 +50,11 @@ export class ItiCompanyMasterSearchModel {
   public PageNumber: number = 0;
   public PageSize: number = 0;
 }
+
+export class ItiCompanyMasterSearchByIdModel extends ItiCompanyMasterSearchModel {
+  public ID: number = 0;
+}
+
 export class ItiCompanyMaster_Action {
   public ID: number = 0;
   public Action: string = '0';
