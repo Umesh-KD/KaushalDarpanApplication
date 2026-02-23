@@ -70,7 +70,7 @@ export class ITI_InstructorService {
   }
 
 
-  public async GetGridBindInstructorData(searchRequest: ITI_InstructorDataBindSearchModel) {
+  public async GetGridBindInstructorData(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetGridBindInstructorData`, body, this.headersOptions)
       .pipe(
@@ -123,5 +123,57 @@ export class ITI_InstructorService {
       ).toPromise();
   }
 
+
+  public async SaveItiworkflow(request: any) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/SaveItiworkflow`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetverificationStatus(request: any) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/GetverificationStatus`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async SaveOptionDetailsData(request: any[]) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveOptionDetailsData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetOptionDetailsbyID(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetOptionDetailsbyID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async PriorityChange(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/PriorityChange`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async Onfinaljoin(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/Onfinaljoin`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

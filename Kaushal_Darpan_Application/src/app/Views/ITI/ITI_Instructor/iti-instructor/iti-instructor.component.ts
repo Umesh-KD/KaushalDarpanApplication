@@ -51,8 +51,9 @@ export class ItiInstructorComponent{
   public traderequest = new ItiTradeSearchModel()
   searchForm!: FormGroup;
   public _EnumRole = EnumRole
+  public InstructorID:number=0
   public InstructorSearch = new ITI_InstructorDataSearchModel();
-  public InstructorBindSearch = new ITI_InstructorDataBindSearchModel();
+  public InstructorBindSearch: any = {};
   selectedInstructor: any;
   public isLoading: boolean = false;
   assignStatus: string = '';
@@ -166,7 +167,7 @@ export class ItiInstructorComponent{
     await this.StaffLevelChild();
     await this.getITICollege();
     await this.GetStaffTypeData();
-    await this.GetBranchesMasterData();
+
     //await this.ItiShiftUnitDDL(ID: number);
 
   }
@@ -185,7 +186,8 @@ export class ItiInstructorComponent{
     this.searchForm.reset();
     this.InstructorBindSearch = {
       Uid: '',
-      Name: ''
+      Name: '',
+      RoleID: this.sSOLoginDataModel.RoleID
     };
     this.GetItiInstructorDatas();
   }
@@ -207,8 +209,12 @@ export class ItiInstructorComponent{
       const searchValues = this.searchForm.value;
 
       this.InstructorBindSearch.Name = searchValues.Name;
-      this.InstructorBindSearch.Uid = searchValues.Uid;
+      this.InstructorBindSearch.Name = searchValues.Name;
+      this.InstructorBindSearch.RoleID = this.sSOLoginDataModel.RoleID;
+      this.InstructorBindSearch.InstituteID = this.sSOLoginDataModel.InstituteID;
+ 
       this.InstructorBindSearch.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
 
       await this.ItiInstructorService.GetGridBindInstructorData(this.InstructorBindSearch)
         .then((data: any) => {
@@ -593,70 +599,83 @@ export class ItiInstructorComponent{
       }, 200);
     }
   }
-
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
+
     debugger;
 
-    //if (SSOID == "") {
-    //  this.toastr.error("Please Enter SSOID");
-    //  return;
-    //}
-
-    const username = SSOID;
-    const appName = 'madarsa.test';
-    const password = 'Test@1234';
-
-    this.requestSSoApi.SSOID = username;
-    this.requestSSoApi.appName = appName;
-    this.requestSSoApi.password = password;
-
+    const obj = {
+      Uid: SSOID,
+      InstituteID: this.sSOLoginDataModel.InstituteID,
+      RoleID: this.sSOLoginDataModel.RoleID
+    };
 
     try {
 
       this.loaderService.requestStarted();
+
       this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
-      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        let response = JSON.parse(JSON.stringify(data));
-        if (response?.Data) {
 
-          let parsedData = JSON.parse(response.Data); // parse string inside Data
-          console.log("parsedData", parsedData);
-          if (parsedData != null) {
-            /*this.DuplicateCheck(this.requestSSoApi.SSOID);*/
-            //this.formData.Displayname = parsedData.displayName
-            this.isSSOVisible = true;
-            this.formData.Displayname = parsedData.displayName;
-            this.formData.MobileNo = parsedData.mobile;
-            this.formData.Mailpersonal = parsedData.Mailpersonal;
-            this.formData.SSOID = parsedData.SSOID;
-            //this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
-            if (parsedData.designation != null) {
-              this.GetDesignationID = this.PostList.find((item: any) =>
-                item.Name?.toLowerCase().trim() === parsedData.designation?.toLowerCase().trim()
-              )?.ID ?? 0;
+      const data: any = await this.ItiInstructorService.GetGridBindInstructorData(obj);
 
-              this.formData.DesignationID = this.GetDesignationID;
-            }
-            else {
-              this.formData.DesignationID = 0;
-            }
-          }
-          else {
-            this.toastr.error("Record Not Found");
-            this.formData.SSOID = "";
-            this.isSSOVisible = false;
-            return;
-          }
+      const response = data; // no need stringify/parse
+
+      if (response?.Data && response.Data.length > 0) {
+
+        // directly access first object
+        const parsedData = response.Data[0];
+
+        console.log("parsedData", parsedData);
+
+        this.isSSOVisible = true;
+        debugger
+        this.formData.Displayname = parsedData.Name ?? '';
+        this.formData.MobileNo = parsedData.Mobile ?? '';
+        this.formData.Mailpersonal = parsedData.Email ?? '';
+        this.formData.SSOID = parsedData.Uid ?? '';
+        this.formData.BranchID = parsedData.TradeID ?? 0;
+        this.formData.Shift = parsedData.Seatintake ?? 0;
+
+        if (parsedData.designation) {
+
+          this.formData.DesignationID =
+            this.PostList.find((item: any) =>
+              item.Name?.toLowerCase().trim() === parsedData.designation.toLowerCase().trim()
+            )?.ID ?? 0;
+
+         
+
+        } else {
+
+          this.formData.DesignationID = 0;
+
         }
-      });
-    } catch (error) {
+        this.ItiShiftUnitDDL()
+        this.formData.Shift = parsedData.Seatintake ?? 0;
+      }
+      else {
+
+        this.toastr.error("Record Not Found");
+
+        this.formData.SSOID = "";
+        this.isSSOVisible = false;
+
+      }
+
+    }
+    catch (error) {
+
       console.error(error);
-    } finally {
+      this.toastr.error("Error fetching details");
+
+    }
+    finally {
+
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+
     }
+
   }
 
   async AddValidationStaffWiseNon() {
@@ -685,12 +704,19 @@ export class ItiInstructorComponent{
 
   }
 
-  async GetBranchesMasterData() {
+  async GetBranchesMasterData(InstructorID:number) {
 
     try {
-      this.traderequest.CollegeID = this.sSOLoginDataModel.InstituteID
+      var obj = {
+        InstructorID: InstructorID,
+        ActiveStatus: 1,
+        StatusID: 0,
+        Action: "TradeListAssign",
+        InstituteID: this.sSOLoginDataModel.InstituteID
+      }
+   
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCollegeTradeMaster(this.traderequest).then((data: any) => {
+      await this.ItiInstructorService.GetverificationStatus(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.BranchesMasterList = data.Data;
         console.log("StreamMasterList", this.BranchesMasterList);
@@ -717,7 +743,7 @@ export class ItiInstructorComponent{
     if (this.searchRequest.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
       this.formData.StaffLevelID = this._ITIGovtEM_EnumStaffLevel.TeachingRole;
       this.formData.BranchID = 0;
-      await this.GetBranchesMasterData();
+  
       this.formData.HostelID = 0;
       await this.StaffLevelChild();
 
@@ -797,65 +823,16 @@ export class ItiInstructorComponent{
       if (!this.AddStaffBasicDetailFromGroup.invalid) {
         return
       }
-
-      this.isLoading = true;
-
-      this.formData.ModifyBy = this.sSOLoginDataModel.UserID;
-      this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.formData.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
-
-
-      //if (this.formData.StaffLevelID != this._ITIGovtEM_EnumStaffLevel.HostelWarden) {
-      //  this.formData.HostelID = 0;
-      //}
-
-      //if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
-      //  this.formData.StatusOfStaff = EnumStatusOfStaff.Draft;
-      //}
-
-      if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
-        this.formData.StatusOfStaff = EnumStatusOfStaff.Draft;
+      var obj = {
+        InstructorID: this.InstructorID,
+        ActiveStatus: 1,
+        StatusID: 6,
+        Action: "Sentrequest",
+        InstituteID: this.sSOLoginDataModel.InstituteID,
+        Seatintake: this.formData.Shift,
+        TradeID: this.formData.BranchID,
+        ModifyBy: this.sSOLoginDataModel.UserID
       }
-
-      //if (this.formData.StaffLevelChildID != this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
-      //  this.formData.TechnicianID = 0;
-      //}
-
-      //if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.HostelWarden) {
-      //  if (this.sSOLoginDataModel.DepartmentID == 1) {
-      //    this.formData.RoleID = 0;
-      //  }
-      //  else {
-      //    if (this.sSOLoginDataModel.DepartmentID == 2 && this.sSOLoginDataModel.Eng_NonEng == 1) {
-      //      this.formData.RoleID = 0;
-      //    }
-      //    else if (this.sSOLoginDataModel.DepartmentID == 2 && this.sSOLoginDataModel.Eng_NonEng == 2) {
-      //      this.formData.RoleID = 0;
-      //    }
-
-      //  }
-
-      //}
-      //else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.TPO) {
-      //  this.formData.RoleID = 0;
-      //}
-      //else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden) {
-      //  this.formData.RoleID = 0;
-      //}
-
-
-      //else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.Lecturer) {
-      //  this.formData.RoleID = 0;
-      //}
-
-      //else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
-      //  this.formData.RoleID = 0;
-      //}
-      //else {
-      //  this.formData.RoleID = 0;
-      //}
-      this.formData.EMTypeID = 1;
 
       //if (this.formData.HostelIDs.length > 0) {
       //  this.formData.multiHostelIDs = this.formData.HostelIDs.map((item: any) => item.ID).join(',');
@@ -866,7 +843,7 @@ export class ItiInstructorComponent{
       this.formData.IsInstructor = true;
       this.formData.OfficeID = this.sSOLoginDataModel.OfficeID;
       //save
-      await this.Staffservice.SaveStaffBasicInstructorDetails(this.formData)
+      await this.ItiInstructorService.GetverificationStatus(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
@@ -874,8 +851,9 @@ export class ItiInstructorComponent{
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          if (data.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
+          debugger
+         
+            this.toastr.success("Update Succesfully")
             this.CloseModalPopup();
       
             this.ResetControls();
@@ -883,17 +861,9 @@ export class ItiInstructorComponent{
 
             //const btnSave = document.getElementById('btnSave');
             //if (btnSave) btnSave.innerHTML = "Submit";
-          }
-          else if (data.State == EnumStatus.Warning) {
-            this.toastr.warning(this.ErrorMessage);
-            this.CloseModalPopup();
-            //this.ResetControls();
-          }
-          else {
-
-            this.toastr.error(this.ErrorMessage)
-          }
-
+        
+          
+     
         }, (error: any) => console.error(error)
         );
     }
@@ -926,15 +896,17 @@ export class ItiInstructorComponent{
 
 
 
-  async onAssign(content: any, ID: string) {
-
-    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+  async onAssign(content: any, ID: string, InstructorID: number) {
+    this.InstructorID = InstructorID
+    this.modalService.open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
 
-    this.GetById(ID);
+    this.SSOIDGetSomeDetails(ID);
+    this.GetBranchesMasterData(InstructorID)
+
   }
 
 

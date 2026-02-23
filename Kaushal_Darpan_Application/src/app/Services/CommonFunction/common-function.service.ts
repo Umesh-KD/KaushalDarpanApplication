@@ -310,6 +310,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async CenterCode() {
+    
+    return await this.http.get(`${this.APIUrl}/CenterCodeMaster/`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async SemesterGenerateMaster() {
     return await this.http.get(this.APIUrl + '/SemesterGenerateMaster/', this.headersOptions)
       .pipe(
@@ -936,6 +944,16 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+
+  public async GetInstructorDetails(SSOID: string) {
+
+    return await this.http.get(this.APIUrl + '/GetInstructorDetails/' + SSOID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async GetCenterMasterDDL(request: RequestBaseModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetCenterMasterDDL/`, body, this.headersOptions)
@@ -1261,7 +1279,7 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+    
   public async QualificationDetailsDDL(searchRequest: QualificationDDLDataModel) {
     var body = JSON.stringify(searchRequest);
     const headers = { 'content-type': 'application/json' }

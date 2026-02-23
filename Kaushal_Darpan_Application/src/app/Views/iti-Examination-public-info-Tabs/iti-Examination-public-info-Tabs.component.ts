@@ -43,18 +43,39 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
   @Input() CourseId: number = 0;
   @ViewChild('tabContent', { read: ViewContainerRef }) tabContent!: ViewContainerRef;
   selectedTabIndex = 0;
-  //public departmentId = 1;
-  //    
   sSOLoginDataModel = new SSOLoginDataModel();
+  //public RollNo = ''
+//  public dob = ''
 
+
+  @ViewChild(downloadITIResultComponent)
+  downloadITIResultComponent!: downloadITIResultComponent;
   constructor(private resolver: ComponentFactoryResolver,
     private Swal2: SweetAlert2, private router: Router, private routers: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef, private route: ActivatedRoute,
     private commonservice: CommonFunctionService) {
 
   }
+  @Input() RollNo!: string;
+  @Input() dob!: string;
 
   async ngOnInit() {
+
+    this.route.queryParams.subscribe(params => {
+      const roll = params['rollNo'];
+      const Dob = params['dob'];
+
+      if (roll) {
+        this.RollNo = roll;
+      }
+
+      if (Dob) {
+        this.dob = Dob;
+      }
+
+  
+    });
+
     await this.GetCurrentAdmissionSession();
     await this.LoadTabs();
   }
@@ -86,10 +107,8 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
   async LoadTabs() {
     this.tabs = [] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>; DepartmentID: number; CourseTypeId: number, Enable: boolean, HasLink: boolean, Link: string }[];
    
-    //this.tabs.push({ TabName: 'Apply for ITI Revealuation', TabNameHI: 'पुनर्मूल्यांकन हेतु आवेदन करें', TabIcon: 'ti ti-license', component: RevealuationComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
-    //this.tabs.push({ TabName: 'Know your Revaluation Appication No', TabNameHI: 'Know your Revaluation Appication No', TabIcon: 'ti ti-license', component: KnowRevealuationITIComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
     this.tabs.push({ TabName: 'Download ITI Result', TabNameHI: 'आईटीआई परिणाम डाउनलोड करें', TabIcon: 'ti ti-license', component: downloadITIResultComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
-   
+
 
   }
 
@@ -101,19 +120,10 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
     this.loadComponent(this.selectedTabIndex, (this.CourseId > 0 ? this.CourseId : this.tabs[0]?.CourseTypeId), this.tabs[0]?.TabName, this.tabs[0]?.TabNameHi);
     this.cdr.detectChanges();
 
+
+
+
   }
-
-
-  //public async ChangeDepartment(DepartmentID: number = 1) {
-  //  this.CourseId = Number(this.routers.snapshot.queryParamMap.get('courseid'));
-  //  this.CourseId = isNaN(this.CourseId) ? 0 : this.CourseId;
-  //  this.selectedTabIndex = 0
-  //  this.LoadTabs();
-  //  this.tabs = this.tabs.filter((f: any) => f.DepartmentID == DepartmentID);
-  //  await this.loadComponent(this.selectedTabIndex, (this.CourseId > 0 ? this.CourseId : this.tabs[0]?.CourseTypeId), this.tabs[0]?.TabName, this.tabs[0]?.TabNameHi);
-  //  this.cdr.detectChanges();
-  //  this.DepartmentID = DepartmentID
-  //}
 
 
   public async ChangeDepartment(DepartmentID: number = this.DepartmentID) {
@@ -153,58 +163,26 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
   }
 
 
-  //public selectTab(index: number, CourseTypeId: number, CourseTypeName: string): void {
-
-  //  const selectedComponent = this.tabs[index].component;
-
-  //  // Only show confirmation for DTEApplicationComponent
-  //  if (selectedComponent == DTEApplicationComponent) {
-  //    this.Swal2.Confirmation(
-  //      "Are you sure you want to applying for the admission form ?<br>क्या आप वाकई प्रवेश फार्म के लिए आवेदन करना चाहते हैं ?",
-  //      async (result: any) => {
-  //        if (result.isConfirmed) {
-  //          this.selectedTabIndex = index;
-  //          this.loadComponent(index, CourseTypeId, CourseTypeName);
-  //        }
-  //      });
-  //  } else {
-  //    // For other tabs, load directly
-  //    this.selectedTabIndex = index;
-  //    this.loadComponent(index, CourseTypeId, CourseTypeName);
-  //  }
-  //}
-
-
-
-  // Dynamically loads the selected component
   //public async loadComponent(index: number, CourseTypeId: number, CourseTypeName: string, CourseTypeNameHi: string) {
-  //  debugger;
   //  const component = this.tabs[index]?.component;
 
+  //  if (!component) {
+  //    console.error('Component is undefined for tab index:', index, this.tabs);
+  //    return;
+  //  }
 
   //  const factory = this.resolver.resolveComponentFactory(component);
   //  this.tabContent.clear();
-
-
   //  const componentRef = this.tabContent.createComponent(factory);
-  //  const instance = componentRef.instance as any;
 
-  //  //componentRef.instance.DepartmentId = CourseTypeId;
 
-  //  (componentRef.instance as any).CourseTypeId = CourseTypeId;
-  //  (componentRef.instance as any).CourseTypeName = CourseTypeName;
-  //  (componentRef.instance as any).CourseTypeNameHi = CourseTypeNameHi;
-  //  (componentRef.instance as any).FinancialYearName = this.sessionData.FinancialYearName.toString().substring(0, 4);
-  //  instance.TypeId = this.TypeId; // 👈 Pass @Input TypeId here
-
-  //  (componentRef.instance as any).tabChange?.subscribe((targetIndex: number) => {
-  //    this.selectTab(targetIndex, CourseTypeId, CourseTypeName, CourseTypeNameHi);
-  //    //this.departmentId
-  //  });
+  //  this.downloadITIResultComponent.itiResultRequest.RollNo = this.RollNo;
+  //  this.downloadITIResultComponent.itiResultRequest.DOB = this.dob;
+  //  this.downloadITIResultComponent.itiResultRequest.EndTermID = 37;
   //}
-
-
+  childComponentRef: any;
   public async loadComponent(index: number, CourseTypeId: number, CourseTypeName: string, CourseTypeNameHi: string) {
+
     const component = this.tabs[index]?.component;
 
     if (!component) {
@@ -214,7 +192,16 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
 
     const factory = this.resolver.resolveComponentFactory(component);
     this.tabContent.clear();
-    const componentRef = this.tabContent.createComponent(factory);
+
+    this.childComponentRef = this.tabContent.createComponent(factory);
+
+
+    this.childComponentRef.instance.RollNo = this.RollNo;
+    this.childComponentRef.instance.DOB = this.dob;
+    this.childComponentRef.instance.EndTermID = 37;
+
+
+    this.cdr.detectChanges();
   }
 
 

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ItiInstructorViewRoutingModule } from './iti-instructor-form-view-routing.module';
 import { ItiInstructorFormViewComponent } from './iti-instructor-form-view.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 // import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 
 
@@ -15,9 +16,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     ItiInstructorViewRoutingModule,
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule, 
+    OTPModalModule
     // OTPModalModule
 
-  ]
+  ],
+  exports: [ItiInstructorFormViewComponent]
 })
 export class ItiInstructorFormViewModule { }

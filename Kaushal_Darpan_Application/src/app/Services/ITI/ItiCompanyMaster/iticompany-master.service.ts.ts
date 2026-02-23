@@ -40,8 +40,9 @@ export class ItiCompanyMasterService {
   }
 
   //Get by id
-  public async GetById(ID: number) {
-    return await this.http.get(`${this.APIUrl}/GetByID/${ID}`, this.headersOptions)
+  public async GetById(request: ItiCompanyMasterSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetByID`,body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
