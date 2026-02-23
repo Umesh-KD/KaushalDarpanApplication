@@ -978,7 +978,7 @@ this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-
             <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">
               <div *ngIf="this.sSOLoginDataModel.RoleID == 100 ||
 this.sSOLoginDataModel.RoleID ==97" class="text-center">
-                <button class="btn btn-sm bg-info text-white" type="submit" (click)="onSubmit()">Submit</button>
+                <button *ngIf="request.Status==1 || request.Status==3 || request.Status==8 " class="btn btn-sm bg-info text-white" type="submit" (click)="onSubmit()">Submit</button>
 
                 <!--<a (click)="Back()"
                    class="inline-flex items-center btn bg-dark text-white btn-sm">

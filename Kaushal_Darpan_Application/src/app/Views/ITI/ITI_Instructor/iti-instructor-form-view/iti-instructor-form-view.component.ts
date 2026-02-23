@@ -1072,7 +1072,7 @@ export class ItiInstructorFormViewComponent {
       .filter(r => r?.trim())
       .join(', ');
 
-    debugger
+    
 
 
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
