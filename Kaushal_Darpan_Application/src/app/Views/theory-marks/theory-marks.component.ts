@@ -317,7 +317,9 @@ export class TheoryMarksComponent implements OnInit {
     }
 
     let markNotEntered = filtered.filter(
-      x => (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '') && (x.centersubmitstatus == 1 &&  x.centerpresentstatus==1)
+      x => (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '')
+        && x.centersubmitstatus == 1 && x.centerpresentstatus == 1
+        && x.IsUFM == false && x.IsDetain == false && x.IsPresentTheory == 1
     ); //  -- ramesh 13-02-2026 for validation
     if(markNotEntered.length > 0) {
       this.toastr.error('Please enter marks for present student! first!');
@@ -328,7 +330,7 @@ export class TheoryMarksComponent implements OnInit {
     for (let x of filtered) {
 
       // If the student is marked as "Absent" (IsPresentTheory = 0), validate marks
-      if (x.IsPresentTheory === 0) {
+      if (x.IsPresentTheory === 0 && x.IsDetain == false) {
         x.ObtainedTheory = 0; // Ensure marks are 0 when absent -- ramesh 13-02-2026
         // Ensure marks are 0 when absent (MaxTheory and ObtainedTheory should be 0 for absent students)
         if (x.ObtainedTheory !== 0) {
@@ -338,7 +340,7 @@ export class TheoryMarksComponent implements OnInit {
       }
 
       // If the student is marked as "Present" (IsPresentTheory = 1), ensure that marks are entered
-      if (x.IsPresentTheory === 1) {
+      if (x.IsPresentTheory === 1 && x.IsUFM == false && x.IsDetain == false) {
         // If no marks are entered, show the "Please enter marks" message
         if (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '') {
           this.toastr.error('Please enter marks for present student!');

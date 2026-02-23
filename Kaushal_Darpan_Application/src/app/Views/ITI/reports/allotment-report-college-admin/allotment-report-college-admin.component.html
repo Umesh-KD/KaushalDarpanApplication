@@ -105,7 +105,9 @@
               <th class="text-left" rowspan="2">Trade Scheme</th>
               <th class="text-left" rowspan="2">Applicant Name</th>
               <th class="text-left" rowspan="2">Father Name</th>
+              <th class="text-left" rowspan="2">Mother Name</th>
               <th class="text-left" rowspan="2">DOB</th>
+              <th class="text-left" rowspan="2">Category</th>
               <!--<th class="text-left" rowspan="2">Branch Name</th>-->
               <th class="text-left" rowspan="2">Mobile No</th>
               <th class="text-left" rowspan="2">Alloted Gender</th>
@@ -118,6 +120,7 @@
             </tr>
 
           </thead>
+          <!--{{paginatedInTableData | json}}-->
           <tbody>
             <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
               <td>{{ (startInTableIndex+1) + idx }}</td>
@@ -129,7 +132,9 @@
               <td>{{ item.TradeScheme }}</td>
               <td>{{ item.ApplicantName }}</td>
               <td>{{ item.FatherName }}</td>
+              <td>{{ item.FatherName }}</td>
               <td>{{ item.DOB }}</td>
+              <td>{{ item.Category }}</td>
               <!--<td>{{ item.BranchName }}</td>-->
               <td>{{ item.MobileNo }}</td>
               <td>{{ item.AllotedGender }}</td>

@@ -27,11 +27,13 @@ export class ExaminerReportAndMarksTrackingComponent implements OnInit {
   ISMarksTracking: any;
   ISPresentTracking: any;
   // Columns to be displayed in the table
+  // , 'StudentName', 'FatherName', 'MotherName',
   displayedColumns: string[] = [
-    'SrNo','GroupCode', 'RollNo', 'StudentName', 'FatherName', 'MotherName', 'SubjectCode','ObtainedTheory'
+    'SrNo','GroupCode', 'RollNo', 'SubjectCode','ObtainedTheory'
   ];
+  // , 'StudentName', 'FatherName', 'MotherName'
   displayedPresentColumns: string[] = [
-    'SrNo', 'GroupCode', 'CenterCode', 'RollNo', 'StudentName', 'FatherName', 'MotherName', 'SubjectCode', 'ObtainedTheory'
+    'SrNo', 'GroupCode', 'CenterCode', 'RollNo', 'SubjectCode', 'ObtainedTheory'
   ];
 
   // Data source for the table
@@ -102,6 +104,7 @@ export class ExaminerReportAndMarksTrackingComponent implements OnInit {
     this.ExaminerReportAndPresentTrackingStudent = [];
     try {
       this.loaderService.requestStarted();
+      debugger
       await this.reportService.GetExaminerReportAndMarksTrackingStudent(requestData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
