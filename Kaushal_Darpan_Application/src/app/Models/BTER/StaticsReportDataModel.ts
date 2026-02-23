@@ -1,0 +1,29 @@
+export class ExaminerStaticReportFeedbackDataModel {
+    public ExaminerStaticRptFeedbackID?: number = 0;
+    public ExaminerID?: number = 0;
+    public ExaminerCode?: string = '';
+    public GroupCodeID?: number = 0;
+    public SubjectID?: number = 0;
+    public CommonRemarkForQueAns?: string = '';
+    public IsMassCoping?: string = '';
+    public Syllabus?: string = '';
+    public InstituteLevel?: string = '';
+    public TeachingByTeacher?: string = '';
+    public StudyOfStudent?: string = '';
+    public SuggestionForImprovement?: string = '';
+    public Date?: string = '';
+    public SignPhoto?: string = '';
+    public Dis_SignPhoto?: string = '';
+    public ExamName?: string = '';
+    public ExaminerName?: string = '';
+    public GroupCode?: string = '';
+    public SubjectCode?: string = '';
+    public InstituteName?: string = '';
+    public ExaminerSignNo?: string = '';
+    public UserID?: number = 0;
+    public CourseType?: number = 0;
+    public DepartmentID?: number = 0;
+    public CenterID?: number = 0;
+    public MassCopyDocument?: string = '';
+    public Dis_MassCopyDocument?: string = '';
+}

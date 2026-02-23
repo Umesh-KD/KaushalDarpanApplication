@@ -19,7 +19,7 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <!--<div *ngIf="(sSOLoginDataModel.RoleID === EnumRole.StoreKeeper || sSOLoginDataModel.RoleID === EnumRole.Admin || sSOLoginDataModel.RoleID === EnumRole.Principal) && this.sSOLoginDataModel.InstituteID === 0">-->
         <div>
-          <a [routerLink]="['/AddDteItemMaster']"
+          <a [routerLink]="['/AddDteItemMaster']" *ngIf="sSOLoginDataModel.RoleID === EnumRole.StoreKeeper"
              class="btn bg-success btn-sm text-white">
             <i class="ti ti-plus"></i> Add New
           </a>
@@ -208,6 +208,9 @@
                 *ngIf="item.Status == 1 && item.IsConsume == 0 && item.QuantityIssued > 0">
                 {{ item.QuantityIssued }}
               </span>
+              <span *ngIf="item.Status == 1 && item.IsConsume == 1 && item.QuantityIssued > 0">
+                {{ item.QuantityIssued }}
+              </span>
             </td>
             <td align="left">
                <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + item.BillFilePath }}"
@@ -218,39 +221,38 @@
             <td align="left">{{item.Remark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
-                        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
-                        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
-                        || sSOLoginDataModel.RoleID == EnumRole.DTE
-                        || sSOLoginDataModel.RoleID == EnumRole.DTENON
-                        || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
-                        || sSOLoginDataModel.RoleID == EnumRole.AdminNon
-                        || sSOLoginDataModel.RoleID == EnumRole.DTELateral
-                        || sSOLoginDataModel.RoleID == EnumRole.Principal
-                        || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge"
-                        class="btn btn-sm text-white"
-                        (click)="(item.Status == 0) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
-                        [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
-                        [title]="item.Status == 1 ? 'Approved' : 'Accept'">
-                  {{ item.Status == 0 || item.Status == '0' || item.Status == null ? 'Pending' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted'  : 'Pending' }}
+                <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge"
+                  class="btn btn-sm text-white"
+                  (click)="(item.Status == 0) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
+                  [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
+                  [title]="item.Status == 1 ? 'Approved' : 'Accept'">
+                  {{ item.Status == 0 ? 'Pending at Store Incharge' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted'  :  item.Status == 3 ? 'Approved by Store Incharge' : '' }}
                 </button>
-                <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Admin
-                        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
-                        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
-                        || sSOLoginDataModel.RoleID == EnumRole.DTE
-                        || sSOLoginDataModel.RoleID == EnumRole.DTENON
-                        || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
-                        || sSOLoginDataModel.RoleID == EnumRole.AdminNon
-                        || sSOLoginDataModel.RoleID == EnumRole.DTELateral
-                        || sSOLoginDataModel.RoleID == EnumRole.Principal
-                        || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge)
-                        && (item.Status == '0' || item.Status == null)"
-                        class="btn btn-sm text-white"
-                        (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
-                        [ngClass]="'bg-revert'"
-                        [title]="'Revert'">
+                <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge)
+                    && (item.Status == 0)"
+                    class="btn btn-sm text-white"
+                    click="onSubmit(MyModel_ReplayQuery,item.ItemId)"
+                    [ngClass]="'bg-revert'"
+                    [title]="'Revert'">
                   Revert
                 </button>
+
+                <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal || sSOLoginDataModel.RoleID == EnumRole.PrincipalNon"
+                  class="btn btn-sm text-white"
+                  (click)="(item.Status == 3) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
+                  [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
+                  [title]="item.Status == 1 ? 'Approved' : 'Accept'">
+                  {{ item.Status == 0 ? 'Pending at Store Incharge' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted' :  item.Status == 3 ? 'Approved by Store Incharge'  : '' }}
+                </button>
+                <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)
+                    && (item.Status == 3)"
+                    class="btn btn-sm text-white"
+                    (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
+                    [ngClass]="'bg-revert'"
+                    [title]="'Revert'">
+                  Revert
+                </button>
+
                 @if((item.Status == 0) && sSOLoginDataModel.RoleID == EnumRole.StoreKeeper) {
                 <a [routerLink]="['/AddDteItemMaster']" [queryParams]="{ id: item.ItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
                 }
