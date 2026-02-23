@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDatamodel, BterSearchmodel } from '../../../../Models/ApplicationFormDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -25,7 +25,7 @@ import jsPDF from 'jspdf';
 import { HttpClient } from '@angular/common/http';
 import { DeferBlockBehavior } from '@angular/core/testing';
 import html2canvas from 'html2canvas';
-import { ITI_Instructor_TechCITSDetailsSearchModel, ITI_InstructorDataModel, ITI_InstructorEducationalQualification, ITI_InstructorEmploymentDetails, ITI_InstructorTechnicalCITSQualification, ITI_InstructorTechnicalCITSQualificationList, ITI_InstructorTechnicalQualification } from '../../../../Models/ITI/ItiInstructorDataModel';
+import { ITI_Instructor_TechCITSDetailsSearchModel, ITI_InstructorDataModel, ITI_InstructorEducationalQualification, ITI_InstructorEmploymentDetails, ITI_InstructorTechnicalCITSQualification, ITI_InstructorTechnicalCITSQualificationList, ITI_InstructorTechnicalQualification, Iti_InstructorVerification } from '../../../../Models/ITI/ItiInstructorDataModel';
 import { ITI_InstructorService } from '../../../../Services/ITI/ITI_Instructor/ITI_Instructor.Service';
 import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { ApplicationStudentDatamodel, IStudentJanAadharDetailModel, JanAadharMemberDetails } from '../../../../Models/StudentJanAadharDetailModel';
@@ -43,7 +43,7 @@ import { DocumentDetailsService } from '../../../../Common/document-details';
   styleUrl: './iti-instructor-form.component.css'
 })
 export class ItiInstructorFormComponent {
-
+  @Input() uid: string = '';
   public urlId: string = '';
   public InstructorForm!: FormGroup
   public EducationForm!: FormGroup
@@ -61,6 +61,7 @@ export class ItiInstructorFormComponent {
   public DistrictMasterList: any[] = [];
   public StateMasterList: any[] = [];
   public DistrictMasterList3: any[] = [];
+  public verifyrequest = new Iti_InstructorVerification()
   public BoardList: any = []
   closeResult: string | undefined;
   public maxDate:string=''
@@ -187,6 +188,13 @@ export class ItiInstructorFormComponent {
   formData = new ITI_InstructorTechnicalCITSQualification()
   modalReference: NgbModalRef | undefined;
   public TechCITSId: number = 0;
+  public ispersonal: boolean = false
+  public isbank: boolean = false
+  public isaddress: boolean = false
+  public iscoraddress: boolean = false
+  public iseducat: boolean = false
+  public istechdetail: boolean = false
+  public isempdetail: boolean = false
 
   constructor(
     private formBuilder: FormBuilder,
@@ -389,8 +397,92 @@ export class ItiInstructorFormComponent {
 
     this.urlId = idParam;
 
+    if (this.uid != '' && this.uid != undefined) {
+      this.urlId = this.uid
+    }
+
+
     if (this.urlId != '' && this.urlId != null && this.urlId != undefined) {
+
+      this.InstructorForm.patchValue({
+        Uid: this.urlId
+      });
+
       await this.GetById(this.urlId)
+      debugger
+      if (this.uid) {
+        await this.GetVerifiationList()
+
+        if (this.verifyrequest.PersonalStatus == 'Not Approved') {
+          this.ispersonal = true
+          this.InstructorForm.controls['IsDomicile'].enable()
+          this.InstructorForm.controls['JanAadhar'].enable()
+          this.InstructorForm.controls['Aadhar'].enable()
+          this.InstructorForm.controls['AadharDocument'].enable()
+          this.InstructorForm.controls['Name'].enable()
+          this.InstructorForm.controls['FatherOrHusbandName'].enable()
+          this.InstructorForm.controls['MotherName'].enable()
+          this.InstructorForm.controls['Dob'].enable()
+          this.InstructorForm.controls['Gender'].enable()
+          this.InstructorForm.controls['MaritalStatus'].enable()
+          this.InstructorForm.controls['Category'].enable()
+          this.InstructorForm.controls['Category'].enable()
+          this.InstructorForm.controls['Mobile'].enable()
+          this.InstructorForm.controls['Email'].enable()
+         
+        }
+        if (this.verifyrequest.BankStatus == 'Not Approved') {
+          this.isbank = true
+          this.InstructorForm.controls['BankAccountNumber'].enable()
+          this.InstructorForm.controls['IFSCCode'].enable()
+          this.InstructorForm.controls['BankName'].enable()
+        }
+        if (this.verifyrequest.AddressStatus == 'Not Approved') {
+          this.isaddress = true
+          this.InstructorForm.controls['PlotHouseBuildingNo'].enable()
+          this.InstructorForm.controls['StreetRoadLane'].enable()
+          this.InstructorForm.controls['AreaLocalitySector'].enable()
+          this.InstructorForm.controls['LandMark'].enable()
+          this.InstructorForm.controls['ddlState'].enable()
+          this.InstructorForm.controls['ddlDistrict'].enable()
+          this.InstructorForm.controls['PropTehsilID'].enable()
+          this.InstructorForm.controls['City'].enable()
+          this.InstructorForm.controls['pincode'].enable()
+          this.InstructorForm.controls['PermanentDocument'].enable()
+          this.InstructorForm.controls['sameAsPermanent'].enable()
+        }
+
+        if (this.verifyrequest.CorAddressStatus == 'Not Approved') {
+          this.iscoraddress = true
+          this.InstructorForm.controls['Correspondence_PlotHouseBuildingNo'].enable()
+          this.InstructorForm.controls['Correspondence_StreetRoadLane'].enable()
+          this.InstructorForm.controls['Correspondence_AreaLocalitySector'].enable()
+          this.InstructorForm.controls['Correspondence_LandMark'].enable()
+          this.InstructorForm.controls['Correspondence_State'].enable()
+          this.InstructorForm.controls['Correspondence_ddlState'].enable()
+          this.InstructorForm.controls['Correspondence_ddlDistrict'].enable()
+          this.InstructorForm.controls['Correspondence_PropTehsilID'].enable()
+          this.InstructorForm.controls['Correspondence_City'].enable()
+          this.InstructorForm.controls['Correspondence_pincode'].enable()
+        }
+        if (this.verifyrequest.EducationalStatus == 'Not Approved') {
+          this.iseducat = true
+          this.EducationForm.enable()
+        }
+        if (this.verifyrequest.TechnicalStatus == 'Not Approved') {
+          this.istechdetail = true
+          this.TechnicalForm.enable()
+        }
+        if (this.verifyrequest.EmpStatus == 'Not Approved') {
+          this.isempdetail = true
+          this.EmploymentForm.enable()
+        }
+
+
+        this.request.StatusID=8
+      }
+
+      
     }
 
   
@@ -966,6 +1058,9 @@ export class ItiInstructorFormComponent {
         this.request.TechnicalQualifications = this.techRequestList;
         this.request.EducationalQualifications = this.educationList;
         console.log('Final Request Data:', this.request);
+        if (this.request.StatusID == 0) {
+          this.request.StatusID=1
+        }
         const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
         this.State = response['State'];
         this.Message = response['Message'];
@@ -1027,18 +1122,28 @@ export class ItiInstructorFormComponent {
             return
 
           } else {
-            if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43) {
-              this.toastr.error("Already Fill")
+            if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43 && this.urlId == '') {
+
+              this.swat.Info("Already Fill");
+
+              setTimeout(() => {
+                window.open('/InstructorTab', '_self');
+              }, 1500);
+     
             }
             
             this.isSSOVisible = true;
             this.request = data['Data']['Table'][0]
+           
             const safeRequest = Object.fromEntries(
               Object.entries(this.request || {}).map(([key, value]) => [key, value ?? ''])
             );
+            this.request.Dob = this.dateSetter(data['Data']['Table'][0]['Dob'])
 
             this.InstructorForm.patchValue({
-              ddlDistrict: this.request.ddlDistrict
+              ddlDistrict: this.request.ddlDistrict,
+              dob: this.request.Dob
+
             });
 
 
@@ -1052,6 +1157,7 @@ export class ItiInstructorFormComponent {
             if (data['Data']['Table3'] && data['Data']['Table3'].length > 0) {
               this.techRequestList = data['Data']['Table3']
             }
+
             if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43) {
               this.EducationForm.disable()
               this.EmploymentForm.disable()
@@ -1496,6 +1602,7 @@ export class ItiInstructorFormComponent {
     this.TechnicalForm.reset();
     this.InstructorForm.reset();
     this.EmploymentForm.reset();
+    this.request = new ITI_InstructorDataModel()
     this.InstructorForm.controls['Uid'].reset(); // reset value
     this.InstructorForm.controls['Uid'].enable();
   }
@@ -2160,8 +2267,45 @@ export class ItiInstructorFormComponent {
   }
 
 
+  dateSetter(date: any) {
+    const Dateformat = new Date(date);
+    const year = Dateformat.getFullYear();
+    const month = String(Dateformat.getMonth() + 1).padStart(2, '0');
+    const day = String(Dateformat.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate
+  }
 
- 
+
+
+  async GetVerifiationList() {
+    try {
+      debugger
+      var obj = {
+        InstructorID: this.request.ID,
+        ActiveStatus: 1,
+        StatusID: 0,
+        Action: "VerificationList"
+      }
+      this.loaderService.requestStarted();
+      await this.ItiInstructorService.GetverificationStatus(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.verifyrequest = data['Data'][0];
+
+        }, (error: any) => console.error(error)
+        );
+      console.log('Passing Year List ==>', this.PassingYearList)
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }
 

@@ -18,6 +18,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule,
     // OTPModalModule
 
-  ]
+  ], exports: [ItiInstructorFormComponent]
 })
 export class ItiInstructorFormModule { }

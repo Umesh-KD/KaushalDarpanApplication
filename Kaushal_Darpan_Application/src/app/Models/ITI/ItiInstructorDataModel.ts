@@ -83,7 +83,7 @@ export class ITI_InstructorDataModel {
   public TehsilName?: string = '';
   public AadharDocument?: string = '';
   public PermanentDocument?: string = '';
-
+  public  StatusID:number=0
   // Parent should hold child tables
   public EducationalQualifications?: ITI_InstructorEducationalQualification[] = [];
   public TechnicalQualifications?: ITI_InstructorTechnicalQualification[] = [];
@@ -201,6 +201,7 @@ export class ITI_InstructorDataBindSearchModel {
   public Name?: string = '';
   public DepartmentID?: string = '';
   public Uid?: string = '';
+  public RoleID:number=0
   //public ApplicationNo?: string = '';
 }
 
@@ -217,6 +218,43 @@ export class ITI_InstructorDataAssignSearchModel {
   public CollegeId?: number = 0;
 
 }
+
+export class Iti_InstructorVerification {
+
+  public VerificationID: number = 0;
+  public InstructorID: number = 0;
+
+  public PersonalStatus: string = '';
+  public PersonalRemark: string = '';
+
+  public BankStatus: string = '';
+  public BankRemark: string = '';
+
+  public AddressStatus: string = '';
+  public AddressRemark: string = '';
+
+  public CorAddressStatus: string = '';
+  public CorAddressRemark: string = '';
+
+  public EducationalStatus: string = '';
+  public EducationalRemark: string = '';
+
+  public TechnicalStatus: string = '';
+  public TechnicalRemark: string = '';
+
+  public EmpStatus: string = '';
+  public EmpRemark: string = '';
+  public Remark: string = '';
+
+
+  public FinancialYear: number = 0;
+
+  public StatusID:number=0
+  public ModifyBy:number=0
+
+}
+
+
 
 export class ITI_Instructor_TechCITSDetailsSearchModel {
 

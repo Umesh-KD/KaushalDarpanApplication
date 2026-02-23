@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { AppointInstructorListRoutingModule } from './appoint-instructor-list-routing.module';
 import { AppointInstructorListComponent } from './appoint-instructor-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
+import { LoaderModule } from '../../Shared/loader/loader.module';
 
 
 @NgModule({
@@ -11,7 +14,11 @@ import { AppointInstructorListComponent } from './appoint-instructor-list.compon
   ],
   imports: [
     CommonModule,
-    AppointInstructorListRoutingModule
+    AppointInstructorListRoutingModule,
+    FormsModule,
+    TableSearchFilterModule,
+    ReactiveFormsModule,
+    LoaderModule
   ]
 })
 export class AppointInstructorListModule { }

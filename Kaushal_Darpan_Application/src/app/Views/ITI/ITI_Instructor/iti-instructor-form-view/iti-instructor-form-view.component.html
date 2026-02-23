@@ -1,59 +1,101 @@
-<head>
+<head >
   <link href="/assets/KD5/css/bootstrap.min.css" rel="stylesheet" />
   <link href="/assets/KD5/css/Style.css?2" rel="stylesheet" />
 </head>
 <div #pdfTable id="pdfTable">
-  <div class="">
+  <div class="px-5">
     <div class="card">
       <div class="card-body p-5">
 
-        <!--<div class="card bg-light mb-4">
-          <div class="card-body text-center">
+        <div class="card bg-light mb-4">
+          <div class="justify-between flex card-body text-center">
+            <a></a>
             <h3 class="m-0 fs-4">ITI Instructor</h3>
+            <a *ngIf="
+ this.sSOLoginDataModel?.RoleID == 100 || this.sSOLoginDataModel?.RoleID == 97 || this.sSOLoginDataModel?.RoleID == 16" [routerLink]="['/AppointInstructorList']"
+               class="inline-flex items-center btn bg-dark text-white btn-sm">
+              <i class="ti ti-chevron-left"></i> Back
+            </a>
+
+            <a *ngIf="
+this.sSOLoginDataModel?.RoleID == 43 || this.sSOLoginDataModel?.RoleID == 20" [routerLink]="['/instructor']"
+               class="inline-flex items-center btn bg-dark text-white btn-sm">
+              <i class="ti ti-chevron-left"></i> Back
+            </a>
+
+
+            <a *ngIf="
+uid!=''" (click)="BackTab()"
+               class="inline-flex items-center btn bg-dark text-white btn-sm">
+              <i class="ti ti-chevron-left"></i> Back
+            </a>
+
           </div>
-        </div>-->
+    
+        </div>
 
         <form [formGroup]="InstructorForm" id="HrMasterFormGroup" class="form-horizontal">
           <div class="mb-8">
 
+            <!--*ngIf="this.sSOLoginDataModel?.RoleID != 20 && this.sSOLoginDataModel?.RoleID != 43"-->
             <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-4">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO / UID<span class="StarMarking">*</span></label>
                 <div class="d-flex align-items-center justify-between">
 
                   <input class="form-input w-75" type="text" formControlName="Uid"
-                         placeholder="Enter SSO / UID"/>
+                         placeholder="Enter SSO / UID" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
 
-                  <!--<button  type="submit"
+                  <button *ngIf="showGetDetailsButton && this.urlId==''" type="submit"
                           class="btn bg-info py-2 px-4 text-white"
                           (click)="GetById(InstructorForm.controls.Uid.value)">
                     Get Details
-                  </button>-->
+                  </button>
 
 
                 </div>
-                <div *ngIf="_InstructorForm.Uid.errors" class="text-danger">
-                  <p *ngIf="!_InstructorForm.Uid.errors">
-                    <i aria-hidden="true"></i>This field is required .!
-                  </p>
+                <!--<div *ngIf="_InstructorForm.Uid.errors" class="text-danger">
+        <p *ngIf="!_InstructorForm.Uid.errors">
+          <i aria-hidden="true"></i>This field is required .!
+        </p>
 
-                </div>
+      </div>-->
               </div>
 
             </div>
 
 
             <!-- Personal Details -->
-            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
               <b class="text-1xl-5"><i class="ti ti-plus"></i>Personal Details</b>
-              <a [routerLink]="['/instructor']"
-                 class="inline-flex items-center btn bg-dark text-white btn-sm">
-                <i class="ti ti-chevron-left"></i> Back
-              </a>
+              <!--<a *ngIf="sSOLoginDataModel?.RoleID != 20 && sSOLoginDataModel?.RoleID != 43" (click)="Back()"
+       class="inline-flex items-center btn bg-dark text-white btn-sm">
+      <i class="ti ti-chevron-left"></i> Back
+    </a>-->
+              <div *ngIf=" this.sSOLoginDataModel.RoleID == 100 ||
+this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+
+                <!-- Select -->
+                <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
+            text-sm font-medium"
+                        formControlName="PersonalStatus" [(ngModel)]="verifyrequest.PersonalStatus">
+                  <option value="">-- Select --</option>
+                  <option value="Approved">Approved.</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+
+                <!-- Remark -->
+                <input *ngIf="verifyrequest.PersonalStatus=='Not Approved'" type="text"
+                       formControlName="PersonalRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                       [(ngModel)]="verifyrequest.PersonalRemark"
+                       placeholder="Remarks">
+              </div>
 
             </div>
 
-            <div  class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+            <div *ngIf="isSSOVisible" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -75,7 +117,7 @@
 
               <div *ngIf="this.request.IsDomicile == true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1"> JanAadhar No<span class="StarMarking">*</span></label>
-                <input class="form-input" type="text" [(ngModel)]="this.request.JanAadhar" formControlName="JanAadhar" placeholder="Enter JanAdhar No" />
+                <input class="form-input" type="text" (keypress)="validateNumber($event)" [(ngModel)]="this.request.JanAadhar" formControlName="JanAadhar" placeholder="Enter JanAdhar No" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.JanAadhar.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -83,42 +125,69 @@
 
               <div *ngIf="showJanAadhaar">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Aadhar No<span class="StarMarking">*</span></label>
-                <input class="form-input" type="text" [(ngModel)]="this.request.Aadhar" formControlName="Aadhar" placeholder="Enter Aadhar No" />
+                <input class="form-input" type="text" maxlength="12" (keypress)="validateNumber($event)" [(ngModel)]="this.request.Aadhar" formControlName="Aadhar" placeholder="Enter Aadhar No" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.Aadhar.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
               </div>
 
-              <div *ngIf="this.request.IsDomicile == true">
-                <button *ngIf="showAadhaar" type="submit"
-                        class="btn bg-info py-2 px-4 text-white"
-                        (click)="GetDetailsByJanAadhaar()">
-                  Verify
-                </button>
-              </div>
+              <!--<div *ngIf="this.request.IsDomicile == true">
+      <button *ngIf="showAadhaar" type="submit"
+              class="btn bg-info py-2 px-4 text-white"
+              (click)="GetDetailsByJanAadhaar()">
+        Verify
+      </button>
+    </div>-->
 
-              <div *ngIf="IsShowDrop && !IsShow" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="formGroupGetDetailsByJanadhar">
-
-                <div>
-                  <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
-                    जन आधार/आधार सदस्य सूची (Jan Aadhar/Aadhar Member List)<span class="StarMarking">*</span>
-                  </label>
-                  <div class="flex flex-col gap-2">
-                    <div *ngFor="let row of AdharMemberList">
-                      <label>
-                        <input type="radio"
-                               [checked]="row.IsMainRole" [ngModelOptions]="{standalone: true}"
-                               name="radiocheck" (change)="SendJanaadharOTP(row)">
-                        {{row.NAME}}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name<span class="StarMarking">*</span></label>
-                <input class="form-input" type="text" [(ngModel)]="this.request.Name" formControlName="Name" placeholder="Enter Name"  />
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                       for="AadharDocument">Upload Document<span class="StarMarking">*</span></label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         [ngModelOptions]="{standalone: true}" id="AadharDocument" formControlName="AadharDocument" type="file" (change)="onFilechange($event,'Aadhar')">
+                  <label for="AadharDocument">
+                    <span>Choose File</span>
+                    {{request.AadharDocument === '' ? 'No File Choosen' : request.AadharDocument}}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AadharDocument}}"
+                       *ngIf="this.request.AadharDocument !=''"
+                       class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+
+                <div *ngIf="isSubmitted && _InstructorForm.AadharDocument.errors" class="text-danger">
+                  <p>
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+
+              </div>
+
+
+              <!--<div *ngIf="IsShowDrop && !IsShow" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="formGroupGetDetailsByJanadhar">
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          जन आधार/आधार सदस्य सूची (Jan Aadhar/Aadhar Member List)<span class="StarMarking">*</span>
+        </label>
+        <div class="flex flex-col gap-2">
+          <div *ngFor="let row of AdharMemberList">
+            <label>
+              <input type="radio"
+                     [checked]="row.IsMainRole" [ngModelOptions]="{standalone: true}"
+                     name="radiocheck" (change)="SendJanaadharOTP(row)">
+              {{row.NAME}}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>-->
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Instructor <span class="StarMarking">*</span></label>
+                <input readonly class="form-input" type="text" [(ngModel)]="this.request.Name" formControlName="Name" placeholder="Enter Name" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.Name.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -126,7 +195,7 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's/Husband's Name<span class="StarMarking">*</span></label>
-                <input class="form-input" type="text" [(ngModel)]="this.request.FatherOrHusbandName" formControlName="FatherOrHusbandName" placeholder="Enter Father's/Husband's Name" [readonly]="isViewMode"  />
+                <input class="form-input" type="text" [(ngModel)]="this.request.FatherOrHusbandName" formControlName="FatherOrHusbandName" placeholder="Enter Father's/Husband's Name" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.FatherOrHusbandName.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -134,40 +203,58 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mother's Name<span class="StarMarking">*</span></label>
-                <input class="form-input" type="text" [(ngModel)]="this.request.MotherName" formControlName="MotherName" placeholder="Enter Mother's Name" [readonly]="isViewMode" />
+                <input class="form-input" type="text" [(ngModel)]="this.request.MotherName" formControlName="MotherName" placeholder="Enter Mother's Name" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.MotherName.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
               </div>
 
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth<span class="StarMarking">*</span></label>
-                <input onkeydown="return false" onpaste="return false" onkeypress="return false" oninput="return false" [(ngModel)]="this.request.Dob" formControlName="Dob" class="form-input" type="date" [readonly]="isViewMode"  />
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Date of Birth<span class="StarMarking">*</span>
+                </label>
+                <input type="date"
+                       class="form-input"
+                       formControlName="Dob"
+                       [(ngModel)]="request.Dob"
+                       [max]="maxDate"
+                       [readonly]="isViewMode"
+                       (click)="openDatePicker($event)"
+                       onkeydown="return false"
+                       onpaste="return false"
+                       onkeypress="return false"
+                       oninput="return false"
+                       [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+
                 <div *ngIf="isSubmitted && _InstructorForm.Dob.errors" class="text-danger">
-                  <p><i aria-hidden="true"></i>This field is required.!</p>
+                  <p><i aria-hidden="true"></i>This field is required!</p>
                 </div>
               </div>
 
+
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender<span class="StarMarking">*</span></label>
-                <select class="form-select" name="gender" id="gender" [(ngModel)]="this.request.Gender" formControlName="Gender" >
-                  <option *ngIf="InstructorForm.controls['Gender'].value === '' || InstructorForm.controls['Gender'].value === '0' || InstructorForm.controls['Gender'].value === 'undefined'" value="0">--Select--</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
+                <select class="form-select" name="gender" id="gender" [(ngModel)]="this.request.Gender" formControlName="Gender" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode }" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
+
+
+                  <option value="">--Select--</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="OTHER">Other</option>
                 </select>
                 <div *ngIf="isSubmitted && _InstructorForm.Gender.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
-
               </div>
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Marital Status<span class="StarMarking">*</span></label>
-                <select class="form-select" name="maritalStatus" id="maritalStatus" [(ngModel)]="this.request.MaritalStatus" formControlName="MaritalStatus">
-                  <option *ngIf="InstructorForm.controls['MaritalStatus'].value === '' || InstructorForm.controls['MaritalStatus'].value === '0' || InstructorForm.controls['MaritalStatus'].value === 'undefined'" value="0">--Select--</option>
+                <select class="form-select" name="maritalStatus" id="maritalStatus" [(ngModel)]="this.request.MaritalStatus" formControlName="MaritalStatus" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
+
+                  <option value="">--Select--</option>
                   <option value="Married">Married</option>
                   <option value="Unmarried">Unmarried</option>
+                  <option value="Divorce">Divorcee</option>
                 </select>
 
                 <div *ngIf="isSubmitted && _InstructorForm.MaritalStatus.errors" class="text-danger">
@@ -178,13 +265,14 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category<span class="StarMarking">*</span></label>
-                <select class="form-select" name="category" id="category" [(ngModel)]="this.request.Category" formControlName="Category">
+                <select class="form-select" name="category" id="category" [(ngModel)]="this.request.Category" formControlName="Category" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
                   <option *ngIf="InstructorForm.controls['Category'].value === '' || InstructorForm.controls['Category'].value === '0' || InstructorForm.controls['Category'].value === 'undefined'" value="0">--Select--</option>
-                  <option value="Gen">Gen</option>
+                  <!--<option value="">--Select--</option>-->
+                  <option value="General">General</option>
                   <option value="OBC">OBC</option>
                   <option value="SC">SC</option>
                   <option value="ST">ST</option>
-                  <option value="EWS">EWS</option>
+                  <!--<option value="EWS">EWS</option>-->
                 </select>
 
                 <div *ngIf="isSubmitted && _InstructorForm.Category.errors" class="text-danger">
@@ -195,18 +283,25 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No.:<span class="StarMarking">*</span></label>
-                <input class="form-input" (keypress)="numberOnly($event)" type="number" [(ngModel)]="this.request.Mobile" formControlName="Mobile" placeholder="Enter Mobile number" [readonly]="isViewMode" />
+                <input [readonly]="false" class="form-input"
+                       type="text"
+                       maxlength="10"
+                       (keypress)="numberOnly($event)"
+                       [(ngModel)]="this.request.Mobile"
+                       formControlName="Mobile"
+                       placeholder="Enter Mobile number"
+                       [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.Mobile.errors" class="text-danger">
                   <p>
                     <i aria-hidden="true"></i>Enter Valid Number .!
                   </p>
                 </div>
-
               </div>
+
 
               <div>
                 <label for="Email" class="text-gray-800 text-sm font-medium inline-block mb-1">Email<span class="StarMarking">*</span></label>
-                <input type="email" class="form-input" placeholder="Enter Email" id="Email" [(ngModel)]="this.request.Email" formControlName="Email" [readonly]="isViewMode">
+                <input type="email" class="form-input" placeholder="Enter Email" id="Email" [(ngModel)]="this.request.Email" formControlName="Email" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Email.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>Please enter a valid email address.</p>
                 </div>
@@ -217,30 +312,55 @@
 
             <!--Bank Details-->
 
-            <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+            <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
               <b class="text-1xl-5"><i class="ti ti-plus"></i> Bank Details </b>
+
+              <div *ngIf=" this.sSOLoginDataModel.RoleID == 100 ||
+this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+
+                <!-- Select -->
+                <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
+            text-sm font-medium"
+                        formControlName="BankStatus" [(ngModel)]="verifyrequest.BankStatus">
+                  <option value="">-- Select --</option>
+                  <option value="Approved">Approved.</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+
+                <!-- Remark -->
+                <input *ngIf="verifyrequest.BankStatus=='Not Approved'" type="text"
+                       formControlName="BankRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                       [(ngModel)]="verifyrequest.BankRemark"
+                       placeholder="Remarks">
+              </div>
+
+
             </div>
             <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="BankAccountNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">Bank Account Number:<span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="BankAccountNumber" [(ngModel)]="this.request.BankAccountNumber" formControlName="BankAccountNumber" placeholder="Enter Bank Account Number" [readonly]="isViewMode" >
-                <div *ngIf="isSubmitted && _InstructorForm.BankAccountNumber.errors " class="text-danger">
-                  <p><i aria-hidden="true"></i>This field is required.!</p>
+                <input maxlength="16" (keypress)="validateNumber($event)" type="text" class="form-input" id="BankAccountNumber" [(ngModel)]="this.request.BankAccountNumber" formControlName="BankAccountNumber" placeholder="Enter Bank Account Number" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+                <div *ngIf="isSubmitted && _InstructorForm.BankAccountNumber.errors" class="text-danger">
+                  <p *ngIf="isSubmitted && _InstructorForm.BankAccountNumber.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                  <p *ngIf="isSubmitted && _InstructorForm.BankAccountNumber.errors.pattern"><i aria-hidden="true"></i>Enter Valid Account Number.!</p>
                 </div>
               </div>
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="IFSCCode" class="text-gray-800 text-sm font-medium inline-block mb-2">IFSC Code: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="IFSCCode" [(ngModel)]="this.request.IFSCCode" formControlName="IFSCCode" placeholder="Enter IFSC Code" [readonly]="isViewMode" >
+                <input type="text" class="form-input" id="IFSCCode" [(ngModel)]="this.request.IFSCCode" formControlName="IFSCCode" placeholder="Enter IFSC Code" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.IFSCCode.errors" class="text-danger">
-                  <p><i aria-hidden="true"></i>This field is required.!</p>
+                  <p *ngIf="isSubmitted && _InstructorForm.IFSCCode.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                  <p *ngIf="isSubmitted && _InstructorForm.IFSCCode.errors.pattern"><i aria-hidden="true"></i>Enter Valid IFSC Code.!</p>
                 </div>
               </div>
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="BankName" class="text-gray-800 text-sm font-medium inline-block mb-2">Bank Name: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="BankName" [(ngModel)]="this.request.BankName" formControlName="BankName" placeholder=" Enter Bank Name" [readonly]="isViewMode" >
+                <input type="text" class="form-input" id="BankName" [(ngModel)]="this.request.BankName" formControlName="BankName" placeholder=" Enter Bank Name" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.BankName.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -250,101 +370,110 @@
 
 
             <!-- Address Details (Permanent) -->
-            <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+            <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
               <b class="text-1xl-5"><i class="ti ti-plus"></i> Address Details (Permanent)</b>
+
+              <div *ngIf=" this.sSOLoginDataModel.RoleID == 100 ||
+this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+
+                <!-- Select -->
+                <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
+            text-sm font-medium"
+                        formControlName="AddressStatus" [(ngModel)]="verifyrequest.AddressStatus">
+                  <option value="">-- Select --</option>
+                  <option value="Approved">Approved.</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+
+                <!-- Remark -->
+                <input *ngIf="verifyrequest.AddressStatus=='Not Approved'" type="text"
+                       formControlName="AddressRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                       [(ngModel)]="verifyrequest.AddressRemark"
+                       placeholder="Remarks">
+              </div>
+
+
             </div>
             <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="PlotHouseBuildingNo" class="text-gray-800 text-sm font-medium inline-block mb-2">Plot/House/Building No<span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="PlotHouseBuildingNo" [(ngModel)]="this.request.PlotHouseBuildingNo" formControlName="PlotHouseBuildingNo" placeholder="Enter Plot/House/Building No" [readonly]="isViewMode">
+                <input type="text" class="form-input" id="PlotHouseBuildingNo" [(ngModel)]="this.request.PlotHouseBuildingNo" formControlName="PlotHouseBuildingNo" placeholder="Enter Plot/House/Building No" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.PlotHouseBuildingNo.errors " class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
               </div>
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="StreetRoadLane" class="text-gray-800 text-sm font-medium inline-block mb-2">Street/Road/Lane: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="StreetRoadLane" [(ngModel)]="this.request.StreetRoadLane" formControlName="StreetRoadLane" placeholder="Enter Street/Road/Lane" [readonly]="isViewMode" >
+                <input type="text" class="form-input" id="StreetRoadLane" [(ngModel)]="this.request.StreetRoadLane" formControlName="StreetRoadLane" placeholder="Enter Street/Road/Lane" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.StreetRoadLane.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
               </div>
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Area/Locality/Sector: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.AreaLocalitySector" formControlName="AreaLocalitySector" placeholder=" Enter Area/Locality/Sector" [readonly]="isViewMode" >
+                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.AreaLocalitySector" formControlName="AreaLocalitySector" placeholder=" Enter Area/Locality/Sector" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.AreaLocalitySector.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
               </div>
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LandMark: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.LandMark" formControlName="LandMark" placeholder="Enter LandMark" [readonly]="isViewMode" >
+                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.LandMark" formControlName="LandMark" placeholder="Enter LandMark" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.LandMark.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
               </div>
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="ddlState" class="text-gray-800 text-sm font-medium inline-block mb-2">
                   State:<span class="StarMarking">*</span>
                 </label>
-                <select class="form-select" id="ddlState" name="State" [(ngModel)]="this.request.ddlState" formControlName="ddlState" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" 
+                <select class="form-select" id="ddlState" name="State" [(ngModel)]="this.request.ddlState" formControlName="ddlState" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}"
                         (change)="ddlState_Change()">
-
-                  <option *ngIf="InstructorForm.controls['ddlState'].value === '' || InstructorForm.controls['ddlState'].value === '0'" value="0">--Select--</option>
+                  <option value="0">--Select--</option>
                   <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
-
                 </select>
 
                 <div *ngIf="isSubmitted && _InstructorForm.ddlState.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
-
               </div>
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
                   District:<span class="StarMarking">*</span>
                 </label>
-                <select class="form-select" id="ddlDistrict" name="District" [(ngModel)]="this.request.ddlDistrict" formControlName="ddlDistrict" (change)="ddlDistrict_Change()" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}">
+                <select class="form-select" id="ddlDistrict" name="District" (change)="ddlDistrict_Change2()"
+                        [(ngModel)]="this.request.ddlDistrict" formControlName="ddlDistrict" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
                   <option *ngIf="InstructorForm.controls['ddlDistrict'].value === '' || InstructorForm.controls['ddlDistrict'].value === '0' || InstructorForm.controls['ddlDistrict'].value === 'undefined'" value="0">--Select--</option>
                   <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
                 </select>
-
                 <div *ngIf="isSubmitted && _InstructorForm.ddlDistrict.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
-
-
               </div>
 
-              <div >
-                <label *ngIf="this.request.IsDomicile == true" class="text-gray-800 text-sm font-medium inline-block mb-2">Tehsil Name<span class="StarMarking">*</span></label>
-                <select *ngIf="this.request.IsDomicile == true" [(ngModel)]="this.request.PropTehsilID" formControlName="PropTehsilID" class="form-select" id="TehsilId" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
+
+              <div *ngIf="isSSOVisible && this.request.ddlState=='6'">
+                <label>Tehsil<span class="StarMarking">*</span></label>
+                <select formControlName="PropTehsilID" [(ngModel)]="this.request.PropTehsilID" class="form-select" id="TehsilId" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
                   <option *ngIf="InstructorForm.controls['PropTehsilID'].value === '' || InstructorForm.controls['PropTehsilID'].value === '0'" value="0">--Select--</option>
                   <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
                 </select>
-
-                <div *ngIf="isSubmitted && _InstructorForm.PropTehsilID.errors && this.request.IsDomicile == true" class="text-danger">
+                <div *ngIf="isSubmitted && _InstructorForm.PropTehsilID.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
-
-                <div *ngIf="this.request.IsDomicile == false">
-                  <label for="TehsilName" class="text-gray-800 text-sm font-medium inline-block mb-2">Tehsil Name :<span class="StarMarking">*</span></label>
-                  <input type="text" class="form-input" [(ngModel)]="this.request.TehsilName" id="TehsilText" formControlName="TehsilName" placeholder=" Enter Tehsil Name :" [readonly]="isViewMode">
-                  <div *ngIf="isSubmitted && _InstructorForm.TehsilName.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-
               </div>
 
-              <div >
+              <div *ngIf="isSSOVisible">
                 <label for="City" class="text-gray-800 text-sm font-medium inline-block mb-2">City / Village :<span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="City" [(ngModel)]="this.request.City" formControlName="City" placeholder=" Enter City / Village :" [readonly]="isViewMode" >
+                <input type="text" class="form-input" id="City" [(ngModel)]="this.request.City" formControlName="City" placeholder=" Enter City / Village :" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.City.errors" class="text-danger">
                   <p>
                     <i aria-hidden="true"></i>This field is required .!
@@ -352,34 +481,97 @@
                 </div>
               </div>
 
-
-              <div >
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pin Code:<span class="StarMarking">*</span></label>
-                <input class="form-input" (keypress)="numberOnly($event)" type="number" [(ngModel)]="this.request.pincode" formControlName="pincode" placeholder="Enter Mobile number" [readonly]="isViewMode"  />
+              <div *ngIf="isSSOVisible">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Pin Code:<span class="StarMarking">*</span>
+                </label>
+                <input class="form-input"
+                       type="text"
+                       maxlength="6"
+                       (keypress)="numberOnly($event)"
+                       [(ngModel)]="this.request.pincode"
+                       formControlName="pincode"
+                       placeholder="Enter Pincode"
+                       [readonly]="isViewMode"
+                       [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.pincode.errors" class="text-danger">
+                  <p><i aria-hidden="true"></i>Enter Valid Pincode .!</p>
+                </div>
+              </div>
+
+
+              <div *ngIf="isSSOVisible">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                       for="PermanentDocument">Upload Document<span class="StarMarking">*</span></label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         id="PermanentDocument" formControlName="PermanentDocument" type="file" (change)="onFilechange($event,'PermanentDocument')">
+                  <label for="PermanentDocument">
+                    <span>Choose File</span>
+                    {{request.PermanentDocument === '' ? 'No File Choosen' : request.PermanentDocument}}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.PermanentDocument}}"
+                       *ngIf="this.request.PermanentDocument !=''"
+                       class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+                <div *ngIf="isSubmitted && _InstructorForm.PermanentDocument.errors" class="text-danger">
                   <p>
-                    <i aria-hidden="true"></i>Enter Valid Pincode .!
+                    <i aria-hidden="true"></i>This field is required .!
                   </p>
                 </div>
               </div>
             </div>
-
-            <!-- Address Details (Correspondence) -->
-            <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+            <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
               <b class="text-1xl-5"><i class="ti ti-plus"></i> Address Details (Correspondence)</b>
+              <!--<div *ngIf="isSSOVisible" class="flex items-center gap-2 mt-4">
+    <input id="sameAsPermanent"
+           type="checkbox"
+           class="form-checkbox"
+           [checked]="sameAsPermanent"
+           formControlName="sameAsPermanent"
+           [(ngModel)]="sameAsPermanent"
+           (change)="toggleAddress($event)" />-->
+              <!--<label for="sameAsPermanent" class="text-sm">Same as Permanent Address</label>-->
+              <!--</div>-->
+              <div *ngIf=" this.sSOLoginDataModel.RoleID == 100 ||
+this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+
+                <!-- Select -->
+                <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
+            text-sm font-medium"
+                        formControlName="CorAddressStatus" [(ngModel)]="verifyrequest.CorAddressStatus">
+                  <option value="">-- Select --</option>
+                  <option value="Approved">Approved.</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+
+                <!-- Remark -->
+                <input *ngIf="verifyrequest.CorAddressStatus=='Not Approved'" type="text"
+                       formControlName="CorAddressRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                       [(ngModel)]="verifyrequest.CorAddressRemark"
+                       placeholder="Remarks">
+              </div>
+
+
             </div>
-            <div  class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+
+            <div *ngIf="isSSOVisible" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
               <div>
-                <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Plot/House/Building No<span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_PlotHouseBuildingNo" formControlName="Correspondence_PlotHouseBuildingNo" placeholder="Enter Plot/House/Building No" [readonly]="isViewMode" >
-                <div *ngIf="isSubmitted && _InstructorForm.Correspondence_PlotHouseBuildingNo.errors" class="text-danger">
-                  <p><i aria-hidden="true"></i>This field is required.!</p>
-                </div>
+                <label>Plot/House/Building No<span class="StarMarking">*</span></label>
+                <input type="text" class="form-input"
+                       [(ngModel)]="request.Correspondence_PlotHouseBuildingNo"
+                       formControlName="Correspondence_PlotHouseBuildingNo"
+                       placeholder="Enter Plot/House/Building No" />
               </div>
 
               <div>
                 <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Street/Road/Lane: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_StreetRoadLane" formControlName="Correspondence_StreetRoadLane" placeholder="Enter Street/Road/Lane" [readonly]="isViewMode" >
+                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_StreetRoadLane" formControlName="Correspondence_StreetRoadLane" placeholder="Enter Street/Road/Lane" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Correspondence_StreetRoadLane.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -387,7 +579,7 @@
 
               <div>
                 <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Area/Locality/Sector: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_AreaLocalitySector" formControlName="Correspondence_AreaLocalitySector" placeholder=" Enter Area/Locality/Sector" [readonly]="isViewMode" >
+                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_AreaLocalitySector" formControlName="Correspondence_AreaLocalitySector" placeholder=" Enter Area/Locality/Sector" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Correspondence_AreaLocalitySector.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -395,7 +587,7 @@
 
               <div>
                 <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LandMark: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_LandMark" formControlName="Correspondence_LandMark" placeholder="Enter LandMark" [readonly]="isViewMode">
+                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_LandMark" formControlName="Correspondence_LandMark" placeholder="Enter LandMark" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Correspondence_LandMark.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -405,10 +597,10 @@
                 <label for="ddlState" class="text-gray-800 text-sm font-medium inline-block mb-2">
                   State:<span class="StarMarking">*</span>
                 </label>
-                <select class="form-select" id="ddlState" name="Correspondence_State" [ngModel]="this.request.Correspondence_ddlState" formControlName="Correspondence_ddlState"
+                <select class="form-select" id="Correspondence_State" name="Correspondence_State" [ngModel]="request.Correspondence_ddlState" formControlName="Correspondence_ddlState"
                         (change)="ddlState_Change2()" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
 
-                  <option *ngIf="InstructorForm.controls['Correspondence_ddlState'].value === '' || InstructorForm.controls['Correspondence_ddlState'].value === '0'" value="0">--Select--</option>
+                  <option value="">--Select--</option>
                   <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
                 </select>
 
@@ -418,11 +610,15 @@
               </div>
 
               <div>
+
                 <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
                   District:<span class="StarMarking">*</span>
                 </label>
-                <select class="form-select" id="ddlDistrict" name="District" [(ngModel)]="this.request.Correspondence_ddlDistrict" formControlName="Correspondence_ddlDistrict" (change)="ddlDistrict_Change2()" [disabled]="isViewMode" >
-                  <option *ngIf="InstructorForm.controls['Correspondence_ddlDistrict'].value === '' || InstructorForm.controls['Correspondence_ddlDistrict'].value === '0'" value="0">--Select--</option>
+                <select class="form-select" id="ddlDistrict" name="District"
+                        [(ngModel)]="request.Correspondence_ddlDistrict" formControlName="Correspondence_ddlDistrict"
+                        (change)="ddlDistrict_Change()" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}"
+                        [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
+                  <option *ngIf="InstructorForm.controls['Correspondence_ddlDistrict'].value === '' || InstructorForm.controls['Correspondence_ddlDistrict'].value === '0'" value="">--Select--</option>
                   <option *ngFor="let item of DistrictMasterList3" [value]="item.ID">{{item.Name}}</option>
                 </select>
 
@@ -433,10 +629,10 @@
 
               </div>
 
-              <div>
+              <div *ngIf="this.request.Correspondence_ddlState=='6'">
                 <label>Tehsil<span class="StarMarking">*</span></label>
-                <select formControlName="Correspondence_PropTehsilID" [(ngModel)]="this.request.Correspondence_PropTehsilID" class="form-select" id="TehsilId" [disabled]="isViewMode">
-                  <option *ngIf="InstructorForm.controls['Correspondence_PropTehsilID'].value === '' || InstructorForm.controls['Correspondence_PropTehsilID'].value === '0'" value="0">--Select--</option>
+                <select formControlName="Correspondence_PropTehsilID" [(ngModel)]="this.request.Correspondence_PropTehsilID" class="form-select" id="TehsilId" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
+                  <option *ngIf="InstructorForm.controls['Correspondence_PropTehsilID'].value === '' || InstructorForm.controls['Correspondence_PropTehsilID'].value === '0'" value="">--Select--</option>
                   <option *ngFor="let item of TehsilMasterList2" [value]="item.ID">{{item.Name}}</option>
                 </select>
 
@@ -448,419 +644,343 @@
 
               <div>
                 <label for="Correspondence_City" class="text-gray-800 text-sm font-medium inline-block mb-2">City / Village :<span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="Correspondence_City" [(ngModel)]="this.request.Correspondence_City" formControlName="Correspondence_City" placeholder=" Enter City / Village" [readonly]="isViewMode">
+                <input type="text" class="form-input" id="Correspondence_City" [(ngModel)]="this.request.Correspondence_City" formControlName="Correspondence_City" placeholder=" Enter City / Village" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Correspondence_City.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
               </div>
 
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pin Code:<span class="StarMarking">*</span></label>
-                <input class="form-input" (keypress)="numberOnly($event)" type="number" [(ngModel)]="this.request.Correspondence_pincode" formControlName="Correspondence_pincode" placeholder="Enter Pincode" [readonly]="isViewMode" />
-                <div *ngIf="isSubmitted&&_InstructorForm.Correspondence_pincode.errors" class="text-danger">
-                  <p>
-                    <i aria-hidden="true"></i>Enter Valid Pincode .!
-                  </p>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Pin Code:<span class="StarMarking">*</span>
+                </label>
+                <input class="form-input"
+                       type="text"
+                       maxlength="6"
+                       (keypress)="numberOnly($event)"
+                       [(ngModel)]="this.request.Correspondence_pincode"
+                       formControlName="Correspondence_pincode"
+                       placeholder="Enter Pincode"
+                       [readonly]="isViewMode"
+                       [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                <div *ngIf="isSubmitted && _InstructorForm.Correspondence_pincode.errors" class="text-danger">
+                  <p><i aria-hidden="true"></i>Enter Valid Pincode .!</p>
                 </div>
               </div>
             </div>
 
-            <form *ngFor="let item of this.educationList ; let i = index" [formGroup]="EducationForm">
-              <!--Educational Qualification Details:-  -->
-              <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-                <b class="text-1xl-5"><i class="ti ti-plus"></i> Educational Qualification Details:- </b>
+
+
+            <!--Educational Qualification Details:-  -->
+            <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Educational Qualification Details:- </b>
+
+
+              <div *ngIf=" this.sSOLoginDataModel.RoleID == 100 ||
+this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+
+                <!-- Select -->
+                <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
+            text-sm font-medium"
+                        formControlName="EducationalStatus" [(ngModel)]="verifyrequest.EducationalStatus">
+                  <option value="">-- Select --</option>
+                  <option value="Approved">Approved.</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+
+                <!-- Remark -->
+                <input *ngIf="verifyrequest.EducationalStatus=='Not Approved'" type="text"
+                       formControlName="EducationalRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                       [(ngModel)]="verifyrequest.EducationalRemark"
+                       placeholder="Remarks">
               </div>
-              <div  class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
-                <div>
-                  <label>Examination Passed<span class="StarMarking">*</span></label>
-                  <input class="form-input" [(ngModel)]="this.educationList[i].Education_Exam" formControlName="Education_Exam" placeholder=" Enter Examination Pass" [readonly]="isViewMode"  />
-                  <div *ngIf="isSubmitted && EducationForm.controls.Education_Exam.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-                <div>
-                  <label>School/Board</label>
-                  <input class="form-input" [(ngModel)]="this.educationList[i].Education_Board" formControlName="Education_Board" placeholder=" Enter School board" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted && EducationForm.controls.Education_Board.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-                <div>
-                  <label>Year Of Passing<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="number" [(ngModel)]="this.educationList[i].Education_Year" formControlName="Education_Year" placeholder=" Enter Education Year" [readonly]="isViewMode"/>
-                  <div *ngIf="isSubmitted && EducationForm.controls.Education_Year.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>Enter Valid Year .!
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <label>Subjects<span class="StarMarking">*</span></label>
-                  <input class="form-input" [(ngModel)]="this.educationList[i].Education_Subjects" formControlName="Education_Subjects" placeholder=" Enter Education Subject" [readonly]="isViewMode"/>
-                  <div *ngIf="isSubmitted && EducationForm.controls.Education_Subjects.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
-                </div>
+            </div>
 
-                <div>
-                  <label>Percentage<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="number" [(ngModel)]="this.educationList[i].Education_Percentage" formControlName="Education_Percentage" placeholder=" Enter Percentage" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted&& EducationForm.controls.Education_Percentage.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
-                </div>
 
-                <div>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                         for="fileStudentCompany">Upload Document<span class="StarMarking">*</span></label>
-                  <div class="flex fileUploader">
-                    <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                           id="fileStudentCompany" formControlName="EducationDocument" type="file" (change)="onFilechange($event,'EducationType')">
-                    <label for="fileStudentCompany">
-                      <span>Choose File</span>
-                      {{this.educationList[i].EducationDocument === '' ? 'No File Choosen' : this.educationList[i].EducationDocument}}
-                    </label>
-                    <div class="flex">
-                      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + this.educationList[i].EducationDocument}}"
-                         *ngIf="this.educationRequest.EducationDocument !=''"
-                         class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                    </div>
-                  </div>
 
-                  <div *ngIf="isSubmitted && EducationForm.controls.EducationDocument.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
-
-                </div>
-
-                <div class="mt-2">
-                  <button type="button" class="btn bg-info text-white" (click)="addEducationQualification()">+ Add More</button>
-                </div>
-
-              </div>
-            </form>
-
-            <div *ngIf="isSSOVisible && educationList.length > 0" class="mt-3">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>Exam</th>
+            <div *ngIf="isSSOVisible && educationList.length > 0" class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr class="text-left">
+                    <th>SNo</th>
+                    <th>Type of Exam</th>
+                    <th>Examination Passed</th>
+                    <th>Subjects</th>
                     <th>Board</th>
                     <th>Year</th>
-                    <th>Subjects</th>
-                    <th>Percentage</th>
+                    <th>MarkType</th>
+                    <th>Percentage / CGPA</th>
                     <th>Document</th>
-                    <th>Action</th>
+                    <!--<th>Action</th>-->
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let edu of educationList; let i = index">
+                    <td>{{i+1}}</td>
                     <td>{{edu.Education_Exam}}</td>
+                    <td>{{edu.EduQualificationName}}</td>
+                    <td>{{edu.Education_Subjects}}</td>
                     <td>{{edu.Education_Board}}</td>
                     <td>{{edu.Education_Year}}</td>
-                    <td>{{edu.Education_Subjects}}</td>
-                    <td>{{edu.Education_Percentage}}</td>
+                    <td>{{edu.MarkTypeName}}</td>
+                    <td>
+                      {{ edu.MarksTypeID == '0' ? edu.Education_Percentage : edu.Education_CGPA }}
+                    </td>
                     <td>
                       <a *ngIf="edu.EducationDocument"
                          href="{{appsettingConfig.StaticFileRootPathURL + '/' + edu.EducationDocument}}"
                          target="_blank" class="btn bg-primary text-white btn-sm">
-                        <i class="ti ti-eye"></i>
+                        <i class="ti ti-eye text-white"></i>
                       </a>
                     </td>
-                    <td>
-                      <button type="button" class="btn bg-danger text-white btn-sm" (click)="removeEducation(i)">Delete</button>
-                    </td>
+
                   </tr>
                 </tbody>
               </table>
             </div>
 
 
-            <form *ngFor="let item of this.techRequestList ; let i = index" [formGroup]="TechnicalForm">
-              <!--Technical Qualification Details:-  -->
-              <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-                <b class="text-1xl-5"><i class="ti ti-plus"></i> Technical Qualification Details:- </b>
+            <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i>Technical Qualification Details:- </b>
+
+              <div *ngIf=" this.sSOLoginDataModel.RoleID == 100 ||
+this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+
+                <!-- Select -->
+                <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
+            text-sm font-medium"
+                        formControlName="TechnicalStatus" [(ngModel)]="verifyrequest.TechnicalStatus">
+                  <option value="">-- Select --</option>
+                  <option value="Approved">Approved.</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+
+                <!-- Remark -->
+                <input *ngIf="verifyrequest.TechnicalStatus=='Not Approved'" type="text"
+                       formControlName="TechnicalRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                       [(ngModel)]="verifyrequest.TechnicalRemark"
+                       placeholder="Remarks">
               </div>
-              <div *ngIf="isSSOVisible" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
-                <div>
-                  <label>Examination Passed<span class="StarMarking">*</span></label>
-                  <input class="form-input" [(ngModel)]="this.techRequestList[i].Tech_Exam" placeholder=" Enter Tech Exam" formControlName="Tech_Exam" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Exam.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
 
-                </div>
-                <div>
-                  <label>University/Board/Council<span class="StarMarking">*</span></label>
-                  <input class="form-input" [(ngModel)]="this.techRequestList[i].Tech_Board" placeholder=" Enter Tech Board" formControlName="Tech_Board" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Exam.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
+            </div>
 
-                </div>
-                <div>
-                  <label>Subjects<span class="StarMarking">*</span></label>
-                  <input class="form-input" [(ngModel)]="this.techRequestList[i].Tech_Subjects" placeholder=" Enter Technical Subject" formControlName="Tech_Subjects" [readonly]="isViewMode"/>
-                  <div *ngIf="isSubmitted&& TechnicalForm.controls.Tech_Subjects.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
 
-                </div>
-                <div>
-                  <label>Year Of Passing<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="number" [(ngModel)]="this.techRequestList[i].Tech_Year" placeholder=" Enter Tech Year" formControlName="Tech_Year" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Year.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>Enter Valid Year .!
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <label>Percentage<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="number" [(ngModel)]="this.techRequestList[i].Tech_Percentage" placeholder=" Enter Tech Percentage" formControlName="Tech_Percentage" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted&& TechnicalForm.controls.Tech_Percentage.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
-                </div>
 
-                <div>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                         for="fileStudentCompany4">Upload Document<span class="StarMarking">*</span></label>
-                  <div class="flex fileUploader">
-                    <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                           id="fileStudentCompany4" type="file" (change)="onFilechange($event,'TechType')">
-                    <label for="fileStudentCompany4">
-                      <span>Choose File</span>
-                      {{this.techRequestList[i].TechDocument === '' ? 'No File Choosen' : this.techRequestList[i].TechDocument}}
-                    </label>
-                    <div class="flex">
-                      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + this.techRequestList[i].TechDocument}}"
-                         *ngIf="this.techRequest.TechDocument !='' "
-                         class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                    </div>
-                  </div>
 
-                  <div *ngIf="isSubmitted && TechnicalForm.controls.TechDocument.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
 
-                </div>
-
-                <div class="mt-2">
-                  <button type="button" class="btn bg-info text-white" (click)="addTechQualification()">+ Add More</button>
-                </div>
-
-              </div>
-            </form>
-
-            <div *ngIf="isSSOVisible && techRequestList.length > 0" class="mt-3">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
+            <div *ngIf="isSSOVisible && techRequestList.length > 0" class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr class="text-left">
+                    <th>SNo.</th>
+                    <th>Type of Technical Qualification</th>
                     <th>Examination Passed</th>
-                    <th>University/Board/Council</th>
-                    <th>Subjects</th>
+                    <th>Stream/Trade</th>
                     <th>Year Of Passing</th>
-                    <th>Percentage</th>
+                    <th>Mark Type</th>
+                    <th>Percentage/CGPA</th>
+                    <th>Whether CITS Certified</th>
                     <th>Document</th>
-                    <th>Action</th>
+                    <!--<th>Action</th>-->
                   </tr>
                 </thead>
+                <!--{{techRequestList | json}}-->
                 <tbody>
                   <tr *ngFor="let tech of techRequestList; let i = index">
-                    <td>{{tech.Tech_Exam}}</td>
-                    <td>{{tech.Tech_Board}}</td>
-                    <td>{{tech.Tech_Subjects}}</td>
+
+
+
+
+
+
+
+                    <td>{{i+1}}</td>
+                    <td>{{tech.QualificationLevel}}</td>
+                    <td>{{tech.QualificationName}}</td>
+                    <td>{{tech.StreamName ? tech.StreamName : '' }}</td>
                     <td>{{tech.Tech_Year}}</td>
-                    <td>{{tech.Tech_Percentage}}</td>
+                    <td>{{tech.MarkTypeName}}</td>
                     <td>
-                      <a *ngIf="tech.TechDocument"
-                         href="{{appsettingConfig.StaticFileRootPathURL + '/' + tech.TechDocument}}"
-                         target="_blank" class="btn bg-primary text-white btn-sm">
-                        <i class="ti ti-eye"></i>
+                      {{ tech.Tech_MarksTypeID == '0' ? tech.Tech_Percentage : tech.Tech_CGPA }}
+                    </td>
+                    <td>
+                      <a href="javascript:void(0);" title="CITS Certified" class="btn bg-primary text-white btn-sm">
+                        <i class="ti ti-eye text-white"
+                           (click)="ViewCTISTechQualification(MyModel_ViewCTISTechQualification, tech.ID,i)"></i>
                       </a>
                     </td>
                     <td>
-                      <button type="button" class="btn bg-danger text-white btn-sm" (click)="removeTech(i)">Delete</button>
+                      <a *ngIf="tech.TechDocument"
+                         href="{{appsettingConfig.StaticFileRootPathURL + '/' + tech.TechDocument}}" title="Download"
+                         target="_blank" class="btn bg-primary text-white">
+                        <i class="ti ti-eye text-white"></i>
+                      </a>
                     </td>
+                    <!--<td>
+            <button type="button" class="btn bg-danger text-white btn-sm" (click)="removeTech(i)">Delete</button>
+          </td>-->
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <!--Employment Details:-  -->
-            <form *ngFor="let item of this.employeeRequestList ; let i = index" [formGroup]="EmploymentForm">
-              <div  [formGroupName]="EmploymentForm" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-                <b class="text-1xl-5"><i class="ti ti-plus"></i> Employment Details </b>
+
+            <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Employment Details </b>
+              <div *ngIf=" this.sSOLoginDataModel.RoleID == 100 ||
+this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
+
+                <!-- Select -->
+                <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
+            text-sm font-medium"
+                        formControlName="EmpStatus" [(ngModel)]="verifyrequest.EmpStatus">
+                  <option value="">-- Select --</option>
+                  <option value="Approved">Approved.</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+
+                <!-- Remark -->
+                <input *ngIf="verifyrequest.EmpStatus=='Not Approved'" type="text"
+                       formControlName="EmpRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
+            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                       [(ngModel)]="verifyrequest.EmpRemark"
+                       placeholder="Remarks">
               </div>
-              <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
-                <div>
-                  <label>PAN No<span class="StarMarking">*</span></label>
-                  <input class="form-input" [(ngModel)]="this.employeeRequestList[i].Pan_No" placeholder=" Enter PAN No " formControlName="Pan_No" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted&& EmploymentForm.controls.Pan_No.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
+            </div>
 
-                </div>
-                <div>
-                  <label>Employee Type</label>
-                  <select class="form-select" [(ngModel)]="this.employeeRequestList[i].Employee_Type" formControlName="Employee_Type" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}">
-                    <option *ngIf="EmploymentForm.controls['Employee_Type'].value === '' || EmploymentForm.controls['Employee_Type'].value === '0'" value="0">--Select--</option>
-                    <option value="Regular">Regular</option>
-                    <option value="Contractual">Contractual</option>
-                    <option value="Temporary">Temporary</option>
-                  </select>
-                  <div *ngIf="isSubmitted && EmploymentForm.controls.Employee_Type.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-                <div>
-                  <label>Employer Name<span class="StarMarking">*</span></label>
-                  <input class="form-input" placeholder=" Enter Employee Name " [(ngModel)]="this.employeeRequestList[i].Employer_Name" formControlName="Employer_Name" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted && EmploymentForm.controls.Employer_Name.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-                <div>
-                  <label>Employer Address<span class="StarMarking">*</span></label>
-                  <input class="form-input" placeholder=" Enter Employee Address " [(ngModel)]="this.employeeRequestList[i].Employer_Address" formControlName="Employer_Address" [readonly]="isViewMode"  />
 
-                  <div *ngIf="isSubmitted && EmploymentForm.controls.Employer_Address.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-                <div>
-                  <label>TAN No of Employer<span class="StarMarking">*</span></label><input class="form-input" placeholder=" Enter Employee TAN no " [(ngModel)]="this.employeeRequestList[i].Tan_No" formControlName="Tan_No" [readonly]="isViewMode" />
-                  <div *ngIf="isSubmitted && EmploymentForm.controls.Tan_No.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-                <div>
-                  <label>From<span class="StarMarking">*</span></label><input class="form-input" type="date" [(ngModel)]="this.employeeRequestList[i].Employment_From" formControlName="Employment_From" [readonly]="isViewMode"  />
-                  <div *ngIf="isSubmitted && EmploymentForm.controls.Employment_From.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-
-                </div>
-                <div>
-                  <label>To<span class="StarMarking">*</span></label><input class="form-input" type="date" [(ngModel)]="this.employeeRequestList[i].Employment_To" formControlName="Employment_To" [readonly]="isViewMode"  />
-                  <div *ngIf="isSubmitted && EmploymentForm.controls.Employment_To.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-                <div>
-                  <label>Basic Pay per Month<span class="StarMarking">*</span></label><input class="form-input" type="number" placeholder=" Enter Basic Pay " [(ngModel)]="this.employeeRequestList[i].Basic_Pay" formControlName="Basic_Pay" [readonly]="isViewMode"  />
-                  <div *ngIf="isSubmitted && EmploymentForm.controls.Basic_Pay.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
-                </div>
-
-                <div>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                         for="fileStudentCompany2">Upload Document<span class="StarMarking">*</span></label>
-                  <div class="flex fileUploader">
-                    <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                           id="fileStudentCompany2" formControlName="EmploymentDocument" type="file" (change)="onFilechange($event,'EmpType')">
-                    <label for="fileStudentCompany2">
-                      <span>Choose File</span>
-                      {{this.employeeRequestList[i].EmploymentDocument === '' ? 'No File Choosen' : this.employeeRequestList[i].EmploymentDocument}}
-                    </label>
-                    <div class="flex">
-                      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + this.employeeRequestList[i].EmploymentDocument}}"
-                         *ngIf="this.employeeRequest.EmploymentDocument !=''"
-                         class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                    </div>
-                  </div>
-
-                  <div *ngIf="isSubmitted && EmploymentForm.controls.EmploymentDocument.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
-                  </div>
-
-                </div>
-
-                <div class="mt-2">
-                  <button type="button" class="btn bg-info text-white" (click)="addEmployeeQualification()"> + Add More</button>
-                </div>
-
-              </div>
-            </form>
-
-            <div *ngIf="isSSOVisible && employeeRequestList.length > 0" class="mt-3">
-              <table class="table table-bordered">
-                <thead>
-                  <tr>
-                    <th>PAN No</th>
+            <div *ngIf="isSSOVisible && employeeRequestList.length > 0" class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr class="text-left">
+                    <th>SNo</th>
+                    <th>Employee Code</th>
+                    <th>PAN</th>
+                    <th>PAN Document</th>
+                    <th>Post Held</th>
                     <th>Employee Type</th>
                     <th>Employee Name</th>
                     <th>Employer Address</th>
-                    <th>TAN No of Employer</th>
-                    <th>Basic Pay per Month</th>
+                    <th>Employer Registration Type</th>
+                    <th>Registration Type of Employer</th>
+                    <th>Basic Salary per Month</th>
+                    <th>Basic salary document</th>
                     <th>Document</th>
-                    <th>Action</th>
+                    <!--<th>Action</th>-->
                   </tr>
                 </thead>
+                <!--{{employeeRequestList | json}}-->
                 <tbody>
                   <tr *ngFor="let emp of employeeRequestList; let i = index">
+
+
+
+                    <td>{{i+1}}</td>
+                    <td>{{emp.EmployeeCode}}</td>
                     <td>{{emp.Pan_No}}</td>
+                    <td>
+                      <a *ngIf="emp.panDocument"
+                         href="{{appsettingConfig.StaticFileRootPathURL + '/' + emp.panDocument}}"
+                         target="_blank" class="btn bg-primary text-white">
+                        <i class="ti ti-eye text-white"></i>
+                      </a>
+                    </td>
+                    <td>{{emp.PostHeld}}</td>
                     <td>{{emp.Employee_Type}}</td>
                     <td>{{emp.Employer_Name}}</td>
                     <td>{{emp.Employer_Address}}</td>
+                    <td>{{emp.Employer_Registration}}</td>
                     <td>{{emp.Tan_No}}</td>
                     <td>{{emp.Basic_Pay}}</td>
                     <td>
-                      <a *ngIf="emp.EmploymentDocument"
-                         href="{{appsettingConfig.StaticFileRootPathURL + '/' + emp.EmploymentDocument}}"
-                         target="_blank" class="btn bg-primary text-white btn-sm">
-                        <i class="ti ti-eye"></i>
+
+                      <a *ngIf="emp.BasicSalaryDocument"
+                         href="{{appsettingConfig.StaticFileRootPathURL + '/' + emp.BasicSalaryDocument}}"
+                         target="_blank"
+                         class="btn bg-primary text-white">
+
+                        <i class="ti ti-eye text-white"></i>
+
                       </a>
+
                     </td>
                     <td>
-                      <button type="button" class="btn bg-danger text-white btn-sm" (click)="removeEmployee(i)">Delete</button>
+                      <a *ngIf="emp.EmploymentDocument"
+                         href="{{appsettingConfig.StaticFileRootPathURL + '/' + emp.EmploymentDocument}}"
+                         target="_blank" class="btn bg-primary text-white">
+                        <i class="ti ti-eye text-white"></i>
+                      </a>
                     </td>
+
                   </tr>
                 </tbody>
               </table>
             </div>
 
 
-            <div *ngIf="isSSOVisible" class="form-check mt-3">
-              <input type="checkbox"
-                     class="form-check-input"
-                     id="ConsentToAssignAsExaminer"
-                     [(ngModel)]="request.ConsentToAssignAsExaminer"
-                     name="ConsentToAssignAsExaminer" formControlName="ConsentToAssignAsExaminer" />
-              <label class="form-check-label" for="ConsentToAssignAsExaminer">
-                Consent To Assign This Staff Member As An Examiner?
-              </label>
+
+            <div *ngIf="isSSOVisible && choicelist.length > 0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Choice Details </b>
+
             </div>
 
 
+            <div *ngIf="isSSOVisible && choicelist.length > 0" class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr class="text-left">
+                    <th>SNo</th>
+                    <th>College Name</th>
+                    <th>Trade Name</th>
+                    <th>Priority</th>
+                  
+                    <!--<th>Action</th>-->
+                  </tr>
+                </thead>
+                <!--{{employeeRequestList | json}}-->
+                <tbody>
+                  <tr *ngFor="let emp of choicelist; let i = index">
+
+
+
+                    <td>{{i+1}}</td>
+                    <td>{{emp.InstituteName}}</td>
+                    <td>{{emp.TradeName}}</td>
+                    <td>{{emp.Priority}}</td>
+                   
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+
+            <!--<div *ngIf="isSSOVisible" class="form-check mt-3">
+    <input type="checkbox"
+           class="form-check-input"
+           id="ConsentToAssignAsExaminer"
+           [(ngModel)]="request.ConsentToAssignAsExaminer"
+           name="ConsentToAssignAsExaminer" formControlName="ConsentToAssignAsExaminer" />
+    <label class="form-check-label" for="ConsentToAssignAsExaminer">
+      Consent To Assign This Staff Member As An Examiner?
+    </label>
+  </div>-->
+
+
             <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">
-              <div class="text-center">
-                <button class="btn btn-sm bg-info text-white" type="submit" (click)="onSubmit()">Update</button>
-                <!--<button class="btn btn-sm bg-info text-white" *ngIf="!isViewMode && !InstructorForm.disabled" type="button" (click)="onReset()">Reset</button>-->
-                <a [routerLink]="['/instructor']"
+              <div *ngIf="this.sSOLoginDataModel.RoleID == 100 ||
+this.sSOLoginDataModel.RoleID ==97" class="text-center">
+                <button class="btn btn-sm bg-info text-white" *ngIf="!isViewMode && !InstructorForm.disabled " type="submit" (click)="onSubmit()">Submit</button>
+
+                <a (click)="Back()"
                    class="inline-flex items-center btn bg-dark text-white btn-sm">
                   <i class="ti ti-chevron-left"></i> Back
                 </a>
@@ -869,32 +989,95 @@
             </div>
           </div>
         </form>
+
       </div>
     </div>
   </div>
-  </div>
-  <!--Start Model Popup-->
-  <ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
-    <div class="modal-content">
-      <div class="card">
-        <div class="card-header flex justify-between  items-center">
-          <b>
-            <i class="fa fa-plus"></i>&nbsp; OTP Verification
-          </b>
-          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+</div>
+<!--Start Model Popup-->
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
         </div>
-        <div class="card-body">
-          <div class="mt-4">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
-            <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="ResendOTP()" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+<!--Whether CITS Certified popup  model-->
+<ng-template #MyModel_ViewCTISTechQualification let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Whether CITS Certified Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+                <tr>
+                  <th>SNo.</th>
+                  <th>Year</th>
+                  <th>Trade</th>
+                  <th>CITS Certified</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of formData.OtherCITSQualification; let i = index">
+                  <td align="center">{{ i + 1 }}</td>
+                  <td align="center">{{row.Tech_CITSYear}}</td>
+                  <td align="center">{{row.Tech_CITSTrade}}</td>
+                  <td align="center">
+
+
+
+
+                    <div class="flex align-center justify-center actionBtns w-auto"
+                         style="width:auto !important">
+
+                      <a *ngIf="row.Tech_CITSCertifiedDocument"
+                         href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/Instructor//{{row.Tech_CITSCertifiedDocument}}"
+                         target="_blank" class="btn bg-primary text-white btn-sm">
+                        <i class="ti ti-eye"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+
+
+            </table>
           </div>
         </div>
-        <div class="text-center flex items-center justify-center mt-3">
-          <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
-          <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
-          <button *ngIf="showResendButton" (click)="ResendOTP()" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
-        </div>
-        <br />
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
       </div>
     </div>
-  </ng-template>
+  </div>
+</ng-template>
+
+
+<app-otpmodal #otpModal></app-otpmodal>
