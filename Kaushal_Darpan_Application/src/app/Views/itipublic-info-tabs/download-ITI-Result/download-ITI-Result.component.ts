@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { StudentMeritInfoModel } from '../../../Models/StudentMeritInfoDataModel';
 import { StudentItiResultModel, StudentSearchModel } from '../../../Models/StudentSearchModel';
 import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
@@ -83,6 +83,10 @@ export class downloadITIResultComponent {
    public downloadRequest = new ItiApplicationSearchmodel()
   public isOnStatus = false;
   public itiResult = new StudentITIResultSearchModel();
+
+  @Input() RollNo!: string;
+  @Input() DOB!: string;
+  @Input() EndTermID!: number;
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService,private ApplicationStatusService:ApplicationStatusService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
     private emitraPaymentService: EmitraPaymentService,
@@ -97,18 +101,38 @@ export class downloadITIResultComponent {
 
   async ngOnInit() {
 
+
+
+
     this.itiResultform = this.formBuilder.group({
       ID: [0, Validators.required],
       RollNo: ['', Validators.required],
       DOB: ['', Validators.required]
     });
 
+    this.itiResultRequest.RollNo = this.RollNo;
+    this.itiResultRequest.ID = this.EndTermID;
+    this.itiResultRequest.DOB = this.DOB;
+
+ 
+
+
+    if (this.RollNo && this.DOB && this.EndTermID) {
+      this.GetITIStudent_MarksheetList();
+
+    }
+
+
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
      const today = new Date();
     this.maxDate = today.toISOString().split('T')[0];
 
+
+
     await this.GetPublicInfoStatus();
-     this.loadDropdownData('ITIEndTerm');
+    this.loadDropdownData('ITIEndTerm');
+
   }
 
 
