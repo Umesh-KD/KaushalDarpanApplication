@@ -640,7 +640,8 @@ const routes: Routes = [
       { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
       { path: 'bter-inventory_Issue-report', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-INV_Issue-report/bter-INV_Issue-report.module').then(m => m.bterINVIssuereportModule) },
       { path: 'bter-staff-inventory-details', loadChildren: () => import('./Views/BTER/bter-item-manage/staff-inventory-details/staff-inventory-details.module').then(m => m.StaffInventoryDetailsModule), title: 'Staff Inventory Details' },
-      
+      { path: 'approve-issued-items', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/approve-issued-items/approve-issued-items.module').then(m => m.ApproveIssuedItemsModule), title: 'Approve Issued Items' },
+
       /*BTER-DTE-Inventory-Management*/
 
       { path: 'Itisca', loadChildren: () => import('./Views/ITI/Examination/student-center-activity/student-center-activity.module').then(m => m.StudentCenterActivityModule) },
