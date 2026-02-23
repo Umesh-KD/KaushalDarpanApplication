@@ -82,11 +82,12 @@ export class TheoryMarksRptViewComponent {
         console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
       });
 
-      await this.commonMasterService.CenterCode()
-      .then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.CenterCodeList = data['Data'];
-      }, error => console.error(error));
+      //await this.commonMasterService.CenterCode()
+      //.then((data: any) => {
+      //  data = JSON.parse(JSON.stringify(data));
+      //  this.CenterCodeList = data['Data'];
+      //}
+       // , error => console.error(error));
 
     }
     catch (ex) {
