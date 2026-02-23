@@ -70,6 +70,7 @@ export class TheoryMarksComponent implements OnInit {
   @ViewChildren('markInput') markInputs!: QueryList<ElementRef>;
 
   public closeResult: string | undefined;
+  routeStatus: number = -1;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -109,6 +110,11 @@ export class TheoryMarksComponent implements OnInit {
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
+
+    this.routeStatus = this.router.snapshot.queryParamMap.get('status') ? Number(this.router.snapshot.queryParamMap.get('status')) : -1;
+    if(this.routeStatus !== undefined || this.routeStatus !== null) { 
+      this.searchRequest.StudentStatus = this.routeStatus
+    }
 
     // LOAD
     this.OpenModalPopup(this.MyModel_ExaminerCodeLogin);
@@ -185,7 +191,7 @@ export class TheoryMarksComponent implements OnInit {
   }
   //
   async GetTheoryMarksDetailList() {
-    //debugger
+    debugger
     try {
       this.AllInTableSelect=false;
       //session
@@ -193,7 +199,9 @@ export class TheoryMarksComponent implements OnInit {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.IsConfirmed = this.IsConfirmed = true;
-
+      // if(this.routeStatus !== undefined || this.routeStatus !== null) { 
+      //   this.searchRequest.StudentStatus = this.routeStatus
+      // }
       //group code id
       if (this.IsCountShow == false) {
         this.searchRequest.ExaminerCode = this.examinerCodeLoginModel.ExaminerCode
@@ -211,8 +219,13 @@ export class TheoryMarksComponent implements OnInit {
             await this.onStatusThoryMarks(x);
           })
 
+          this.isfinalsubmit = this.TheoryMarksDetailList.every(x => x.isFinalSubmit === true);
+
+          // if (isfinalsubmit) {
+          //   this.isfinalsubmit = true
+          // }
+
           this.TheoryMarksDetailList.forEach(x => {
-            debugger;
             if (x.IsChecked === false) {
                if( x.centersubmitstatus == 1 &&  x.centerpresentstatus==0)
                 {   x.IsPresentTheory = 0
@@ -222,13 +235,13 @@ export class TheoryMarksComponent implements OnInit {
                   {   x.IsPresentTheory = 1
                       x.ObtainedTheory= '';
                   }
+            } else if(x.IsChecked === true && x.IsPresentTheory==0) {
+              x.ObtainedTheory= '';
             }
           })
 
-          var isfinalsubmit = this.TheoryMarksDetailList.filter(x => x.isFinalSubmit == true)
-          if (isfinalsubmit.length > 0) {
-            this.isfinalsubmit = true
-          }
+          // var isfinalsubmit = this.TheoryMarksDetailList.filter(x => x.isFinalSubmit == true)
+          
           //table feature load
           this.loadInTable();
           //end table feature load
@@ -273,7 +286,7 @@ export class TheoryMarksComponent implements OnInit {
 
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
     // try {
-    debugger
+    
     this.loaderService.requestStarted();
     
     this.TheoryMarksDetailList.forEach((item: any) => {
@@ -431,9 +444,11 @@ export class TheoryMarksComponent implements OnInit {
     this.AllInTableSelect = false;
   }
 
-  public reset() {
+  async reset() {
     this.searchRequest.RollNo = ''
-    this.GetTheoryMarksDetailList()
+    this.searchRequest.StudentStatus = -1;
+    this.searchRequest.CheckedStatus = -1;
+    await this.GetTheoryMarksDetailList()
   }
 
   async OnConfirm(content: any, ExaminerCode: string = '') {
@@ -452,7 +467,7 @@ export class TheoryMarksComponent implements OnInit {
   }
 
   async Confirm() {
-    this.GetTheoryMarksDetailList();
+    await this.GetTheoryMarksDetailList();
     this.isListVisible = true;
     this.modalReference?.close();
   }

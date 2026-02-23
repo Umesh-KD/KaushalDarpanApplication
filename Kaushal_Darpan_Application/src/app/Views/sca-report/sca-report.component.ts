@@ -21,7 +21,7 @@ import { EnumRole } from '../../Common/GlobalConstants';
   templateUrl: './sca-report.component.html',
   styleUrl: './sca-report.component.css'
 })
-export class ScaReportComponent { 
+export class ScaReportComponent {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
@@ -63,19 +63,33 @@ export class ScaReportComponent {
   //end table feature default
 
   constructor(private commonMasterService: CommonFunctionService,
-    private SCAService: StudentCenteredActivitesService, private toastr: ToastrService,
-    private loaderService: LoaderService, private router: ActivatedRoute,
-    private modalService: NgbModal, private Swal2: SweetAlert2, private streamMasterService: StreamMasterService, private appsettingConfig: AppsettingService,
+    private SCAService: StudentCenteredActivitesService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private router: ActivatedRoute,
+    private modalService: NgbModal,
+    private Swal2: SweetAlert2,
+    private streamMasterService: StreamMasterService,
+    private appsettingConfig: AppsettingService,
     private ReportService: ReportService,
-    private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef) {
+    private documentDetailsService: DocumentDetailsService,
+    private cdr: ChangeDetectorRef,
+    private activatedRoute: ActivatedRoute
+  ) {
   }
 
-    
+
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
+
+    //
+    this.searchRequest.StrKey = String(this.activatedRoute.snapshot.queryParamMap.get('strkey'));
+
+    // load
     await this.GetMasterData();
-    // await this.GetGradeList();
+    await this.GetGradeList();
 
   }
 
@@ -109,16 +123,12 @@ export class ScaReportComponent {
     }
   }
 
-
-
-
-
   async GetGradeList() {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     try {
-/*      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle*/
+      /*      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle*/
       //session
-      if(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng){
+      if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       }
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -154,8 +164,6 @@ export class ScaReportComponent {
       }, 200);
     }
   }
-
-  
 
   ResetControl() {
     this.isSubmitted = false;
@@ -285,10 +293,5 @@ export class ScaReportComponent {
     // Update "Select All" checkbox state
     this.AllInTableSelect = this.GradeList.every(r => r.Marked);
   }
-
-
- 
-
- 
 
 }

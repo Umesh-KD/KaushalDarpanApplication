@@ -9,6 +9,7 @@ import { EnumEMProfileStatus, EnumRole } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { MenuFreezeService } from '../../Services/menu-freeze/menu-freeze.service';
 import { Router } from '@angular/router';
+import { CommonFunctionHelper } from '../../Common/commonFunctionHelper';
 
 @Component({
   selector: 'app-secretary-jd-confidential-dashboard',
@@ -29,23 +30,24 @@ export class SecretaryJdConfidentialDashboardComponent {
     private staffMasterService: StaffMasterService,
     private sweetAlert2: SweetAlert2,
     private menuFreeze: MenuFreezeService,
-    private router: Router
-  ) {}
+    private router: Router,
+    public commonFunctionHelper: CommonFunctionHelper
+  ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetDashboardCount();
 
-    if(this.sSOLoginDataModel.RoleID == EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == EnumRole.JDConfidential_NonEng) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == EnumRole.JDConfidential_NonEng) {
       await this.CheckProfileStatus();
       if (this.StaffMasterList.length > 0) {
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == EnumEMProfileStatus.Pending) {
           this.menuFreeze.freezeMenus();
           this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
-              // window.open("/bter-em-add-staff-details", "_Self")
-              this.router.navigateByUrl('/bter-em-add-staff-details');
-              }, 'OK', false);
+            // window.open("/bter-em-add-staff-details", "_Self")
+            this.router.navigateByUrl('/bter-em-add-staff-details');
+          }, 'OK', false);
         }
       }
     }

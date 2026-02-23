@@ -82,8 +82,7 @@ textarea.form-control {
   font-size: 0.875rem;
 }*/
 
-
-.InvStatus-issued {
+.InvStatus-pending {
   background-color: #fbbc05; /* yellow */
   color: #fff;
   padding: 0px 10px;
@@ -93,8 +92,8 @@ textarea.form-control {
   display: inline-block;
 }
 
-.InvStatus-returned {
-  background-color: #34a853; /* green */
+.InvStatus-issued {
+  background-color: #34a853; /* yellow */
   color: #fff;
   padding: 0px 10px;
   border-radius: 6px;
@@ -102,6 +101,27 @@ textarea.form-control {
   font-size: 12px;
   display: inline-block;
 }
+
+.InvStatus-returned {
+  background-color: #f3ae47; /* green */
+  color: #fff;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.InvStatus-reject {
+  background-color: #f36147; /* green */
+  color: #fff;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+}
+
 .badge-consumable {
   background-color: #28a745; /* green */
   color: white;

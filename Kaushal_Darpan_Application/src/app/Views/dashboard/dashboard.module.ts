@@ -54,6 +54,7 @@ import { BTERHODDashboardModule } from '../BTER-HOD-Dashboard/BTER-HOD-Dashboard
 import { ApprenticeshipDirectorNCVTDashboardModule } from '../ITI/iti-ApprenticeshipDirectorNCVTDashboard/iti-ApprenticeshipDirectorNCVTDashboard.module';
 import { PracticalExaminerDashboardModule } from '../ITI/practical-examiner-dashboard/practical-examiner-dashboard.module';
 import { JDTEDashboardModule } from '../jdte-dashboard/jdte-dashboard.module';
+import { ITIPlanningDashboardModule } from '../ITI/ITI-Planning-Dashboard/ITI-Planning-Dashboard.module';
 
 
 /// work here 
@@ -109,7 +110,8 @@ import { JDTEDashboardModule } from '../jdte-dashboard/jdte-dashboard.module';
     BTERHODDashboardModule,
     ApprenticeshipDirectorNCVTDashboardModule,
     PracticalExaminerDashboardModule,
-    JDTEDashboardModule
+    JDTEDashboardModule,
+    ITIPlanningDashboardModule
   ]
 })
 export class dashboardModule { }

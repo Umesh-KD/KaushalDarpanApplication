@@ -132,7 +132,7 @@ export class AddStaffMasterComponent implements OnInit {
       txtDateOfBirth: [this.today, [Validators.required]],
       ddlHighestQualification: ['', [Validators.required]],
       ddlRoleID: ['', [DropdownValidators]],
-      ddlDesignationID: ['', [DropdownValidators]],
+      ddlDesignationID: [''],
 
     
       ddlStaffTypeID: [0, [DropdownValidators]],
@@ -605,6 +605,7 @@ export class AddStaffMasterComponent implements OnInit {
   public file!: File;
 
   async LockandSubmit() {
+    debugger
     this.Swal2.Confirmation("Are you sure you want to Lock and Submit ?",
       async (result: any) => {
         //confirmed
@@ -614,13 +615,22 @@ export class AddStaffMasterComponent implements OnInit {
             this.staffDetailsFormData.ModifyBy = this.sSOLoginDataModel.UserID
             this.staffDetailsFormData.StatusOfStaff = EnumStatusOfStaff.Submitted
             console.log("lock and submit", this.staffDetailsFormData)
-            await this.staffMasterService.LockandSubmit(this.staffDetailsFormData).then((data: any) => {
+            await this.staffMasterService.LockandSubmit(this.staffDetailsFormData).then(async (data: any) => {
               data = JSON.parse(JSON.stringify(data));
               console.log(data);
               if (data.State === EnumStatus.Success){
-                this.toastr.success(data.Message);
+                // this.toastr.success(data.Message);
+                 this.Swal2.ConfirmationSuccess(
+                  "YOUR PROFILE IS LOCK & SUBMITTED. PLEASE WAIT FOR APPROVAL BY BTER. ONLY AFTER APPROVAL YOU WILL BE ABLE TO FILL THE MARKS.",
+                  async (result: any) => {
+                    if (result.isConfirmed) {
+                      this.ClosePopup();
+                    }
+                  },
+                  "OK",
+                  false
+                );
                 this.ClosePopup();
-                window.location.reload();
               } else {
                 this.toastr.error(data.ErrorMessage);
               }
@@ -1006,45 +1016,52 @@ export class AddStaffMasterComponent implements OnInit {
   async SaveData() {
 
     this.isSubmitted = true;
-    if (this.staffDetailsFormData.DateOfAppointment) {
-      const dob = new Date(this.staffDetailsFormData.DateOfBirth);
-      const doa = new Date(this.staffDetailsFormData.DateOfAppointment);
-      const doJ = new Date(this.staffDetailsFormData.DateOfJoining);
+    if(!(this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon)) {
+      if (this.staffDetailsFormData.DateOfAppointment) {
+        const dob = new Date(this.staffDetailsFormData.DateOfBirth);
+        const doa = new Date(this.staffDetailsFormData.DateOfAppointment);
+        const doJ = new Date(this.staffDetailsFormData.DateOfJoining);
 
-      if (doa > dob) {
-        const ageAtAppointment = doa.getFullYear() - dob.getFullYear();
-        const isBeforeBirthday =
-          doa.getMonth() < dob.getMonth() ||
-          (doa.getMonth() === dob.getMonth() && doa.getDate() < dob.getDate());
-        const finalAge = isBeforeBirthday ? ageAtAppointment - 1 : ageAtAppointment;
+        if (doa > dob) {
+          const ageAtAppointment = doa.getFullYear() - dob.getFullYear();
+          const isBeforeBirthday =
+            doa.getMonth() < dob.getMonth() ||
+            (doa.getMonth() === dob.getMonth() && doa.getDate() < dob.getDate());
+          const finalAge = isBeforeBirthday ? ageAtAppointment - 1 : ageAtAppointment;
 
-        if (finalAge >= 21) {
-          //alert("Ok: Gap is 21 years or more.");
-          if (doJ >= doa) {
-            //alert("Ok Joingin")
+          if (finalAge >= 21) {
+            //alert("Ok: Gap is 21 years or more.");
+            if (doJ >= doa) {
+              //alert("Ok Joingin")
+            }
+            else {
+              //alert("Not Ok Joingin")
+              this.toastr.error("Check Joining Date is not correct. It should be equal to or later than the Date of Appointment.");
+              return;
+            }
           }
           else {
-            //alert("Not Ok Joingin")
-            this.toastr.error("Check Joining Date is not correct. It should be equal to or later than the Date of Appointment.");
+            this.toastr.error("Check Date of Appointment is not correct. There should be a gap of at least 21 years from the Date of Birth.");
+            //alert("Not Ok: Gap is less than 21 years.");
             return;
           }
         }
         else {
-          this.toastr.error("Check Date of Appointment is not correct. There should be a gap of at least 21 years from the Date of Birth.");
-          //alert("Not Ok: Gap is less than 21 years.");
+          this.toastr.error("Check Date of Appointment is not correct. Date of Appointment is not after Date of Birth.");
+          //alert("Not Ok: Date of Appointment is not after Date of Birth.");
           return;
         }
       }
       else {
-        this.toastr.error("Check Date of Appointment is not correct. Date of Appointment is not after Date of Birth.");
-        //alert("Not Ok: Date of Appointment is not after Date of Birth.");
+        this.toastr.error("Invalid Date of Appointment");
+        //alert("Invalid Date of Appointment");
         return;
       }
     }
-    else {
-      this.toastr.error("Invalid Date of Appointment");
-      //alert("Invalid Date of Appointment");
-      return;
+    
+
+    if(this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) {
+      await this.removeValidation();
     }
 
     if (this.StaffMasterFormGroup.invalid) {
@@ -1473,6 +1490,48 @@ export class AddStaffMasterComponent implements OnInit {
     const control = this.StaffMasterFormGroup.get('txtPanCardNumber');
     control?.setValue(formattedValue); // allow value + validation
     control?.markAsTouched();          // show error if format is wrong
+  }
+
+  async removeValidation() {
+    this.StaffMasterFormGroup.get('txtAdharCardNumber')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtPanCardNumber')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtAppointmentDate')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtJoiningDate')?.clearValidators();
+    this.StaffMasterFormGroup.get('Experience')?.clearValidators();
+    this.StaffMasterFormGroup.get('AnnualSalary')?.clearValidators();
+    this.StaffMasterFormGroup.get('StaffStatus')?.clearValidators();
+    this.StaffMasterFormGroup.get('PFDeduction')?.clearValidators();
+    this.StaffMasterFormGroup.get('ResearchGuide')?.clearValidators();
+    this.StaffMasterFormGroup.get('ddlStateID')?.clearValidators();
+    this.StaffMasterFormGroup.get('ddlDistrictID')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtPincode')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtAddress')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtBankName')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtBankAccountName')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtBankAccountNo')?.clearValidators();
+    this.StaffMasterFormGroup.get('txtIFSCCode')?.clearValidators();
+    this.StaffMasterFormGroup.get('UGQualificationID')?.clearValidators();
+    this.StaffMasterFormGroup.get('PHDQualification')?.clearValidators();
+
+    this.StaffMasterFormGroup.get('txtAdharCardNumber')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtPanCardNumber')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtAppointmentDate')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtJoiningDate')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('Experience')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('AnnualSalary')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('StaffStatus')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('PFDeduction')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('ResearchGuide')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('ddlStateID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('ddlDistrictID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtPincode')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtAddress')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtBankName')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtBankAccountName')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtBankAccountNo')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('txtIFSCCode')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('UGQualificationID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('PHDQualification')?.updateValueAndValidity();
   }
 
 }

@@ -68,8 +68,7 @@ export class ListItiTradeComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
 
-    await this.getTradeList()
-
+   
     await this.GetTradeTypesList();
     await this.GetTradeListDDL();
 
@@ -81,7 +80,8 @@ export class ListItiTradeComponent {
         this.searchRequest.TradeTypeId = this.TradeTypeId;
       }
     });
-   // this.getTradeList();
+    await this.getTradeList()
+
   }
 
 

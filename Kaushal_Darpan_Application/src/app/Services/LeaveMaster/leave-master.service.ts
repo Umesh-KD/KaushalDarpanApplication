@@ -43,8 +43,8 @@ export class LeaveMasterService {
   }
 
   //Get by id
-  public async GetById(ID: number,RoleID:number=0) {
-    return await this.http.get(`${this.APIUrl}/GetByID/${ID}/${RoleID}`, this.headersOptions)
+  public async GetById(ID: number,RoleID:number=0,StaffID:number=0) {
+    return await this.http.get(`${this.APIUrl}/GetByID/${ID}/${RoleID}/${StaffID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -61,10 +61,10 @@ export class LeaveMasterService {
   }
 
   //delete
-  public async DeleteById(ID: number, userId: number, RoleID:number=0) {
+  public async DeleteById(ID: number, userId: number, RoleID:number=0,StaffID:number=0) {
     debugger
     var body = JSON.stringify({ "ID": ID, "ModifyBy": userId });
-    return await this.http.post(`${this.APIUrl}/DeleteByID/${ID}/${userId}/${RoleID}`,body, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteByID/${ID}/${userId}/${RoleID}/${StaffID}`,body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -132,11 +132,21 @@ export class LeaveMasterService {
         ).toPromise();
     }
 
-    //save data
+    //save BTER_NONGAZETTED data
     public async CreditStaffLeave_NonGazetted(request: CreditLeaveModel[]) {
       var body = JSON.stringify(request);
   
       return await this.http.post(`${this.APIUrl}/Save_CreditStaffLeave_NonGazetted`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
+    //save BTER_NONGAZETTED data
+    public async CreditStaffLeave_ADTE_NonGazetted(request: CreditLeaveModel[]) {
+      var body = JSON.stringify(request);
+  
+      return await this.http.post(`${this.APIUrl}/Save_CreditStaffLeave_ADTE_NonGazetted`, body, this.headersOptions)
         .pipe(
           catchError(this.handleErrorObservable)
         ).toPromise();

@@ -133,6 +133,7 @@ export class OfficeVacancyComponent implements OnInit {
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
     await this.OfficeVacancyDataList();
     await this.GetOfficeList();
+    await this.GetBTER_BGT_BudgetType();
     await this.GetInstitute();
     await this.GetStaffTypeData();
     // await this.GetPostTypeData();
@@ -447,8 +448,7 @@ export class OfficeVacancyComponent implements OnInit {
 
 
   async GetOfficeList() {
-    debugger;
-  
+    // debugger;
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
@@ -457,7 +457,21 @@ export class OfficeVacancyComponent implements OnInit {
           this.OfficeList = data['Data'];
           console.log(this.OfficeList, "OfficeList");
         }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
+  async GetBTER_BGT_BudgetType() {
+    // debugger;
+    try {
+      this.loaderService.requestStarted();
         await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -474,6 +488,7 @@ export class OfficeVacancyComponent implements OnInit {
       }, 200);
     }
   }
+
 
   //async GetInstitute() {
   //  await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
@@ -549,8 +564,11 @@ export class OfficeVacancyComponent implements OnInit {
   async GetPostList() {
     debugger;
     var id = 0;
-    if (this.formData.StaffTypeID == 31 && this.formData.OfficeID==18) {
+    // || this.formData.OfficeID==17
+    if (this.formData.StaffTypeID == 31 && (this.formData.OfficeID==18)) {
       id = 1;
+    } else if(this.formData.StaffTypeID == 31 && this.formData.OfficeID==17) {
+      id=2;
     }
     try {
       this.loaderService.requestStarted();

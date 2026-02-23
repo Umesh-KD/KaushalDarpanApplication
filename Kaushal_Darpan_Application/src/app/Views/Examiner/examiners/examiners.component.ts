@@ -40,7 +40,18 @@ export class ExaminersComponent implements OnInit {
   public commonDDLCommonSubjectModel = new CommonDDLCommonSubjectModel();
   public CommonSubjectYesNo: number = 1;
   public CommonSubjectDDLList: any[] = [];
-
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
   constructor(
     private commonMasterService: CommonFunctionService,
     private examinerservice: ExaminerService,
@@ -59,10 +70,10 @@ export class ExaminersComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     console.log(this.sSOLoginDataModel);
-    this.getSemesterMasterList();
+    await this.getSemesterMasterList();
     await this.ExaminationSchemeChange()
-    this.getStreamMasterList();
-    this.getGroupCodeMasterList();
+    await this.getStreamMasterList();
+    await this.getGroupCodeMasterList();
     //this.getExaminerData();
     //this.getExamMasterList();//grid data
   }
@@ -83,7 +94,7 @@ export class ExaminersComponent implements OnInit {
       }, 200);
     }
   }
-
+  //ma
   async getExamMasterList() {
     try {
       this.loaderService.requestStarted();
@@ -104,10 +115,11 @@ export class ExaminersComponent implements OnInit {
   async getGroupCodeMasterList() {
     try {
       let model = new CommonDDLSubjectMasterModel();
-      model.SubjectID = this.searchRequest.SemesterID;
+      model.SubjectID = this.searchRequest.SubjectID;
       model.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       model.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       model.EndTermID = this.sSOLoginDataModel.EndTermID;
+      model.SemesterID = this.searchRequest.SemesterID
       //
       await this.commonMasterService.GetGroupCode(model)
         .then((data: any) => {
@@ -183,6 +195,7 @@ export class ExaminersComponent implements OnInit {
       await this.examinerservice.GetExaminerData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ExaminersList = data.Data;
+        this.loadInTable();
         console.log("this.ExaminersList", this.ExaminersList)
       })
     } catch (error) {
@@ -290,6 +303,7 @@ export class ExaminersComponent implements OnInit {
   }
 
   async GetCommonSubjectDDL() {
+    await this.getGroupCodeMasterList(); // for get group code based on semester
     try {
       if (this.CommonSubjectYesNo == 1 || this.searchRequest.SemesterID == 0) {//no
         this.CommonSubjectDDLList = [];
@@ -312,4 +326,83 @@ export class ExaminersComponent implements OnInit {
       console.log(ex);
     }
   }
+
+  //table feature 
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org. list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.ExaminersList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org. list here)
+  async sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.ExaminersList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.ExaminersList.length;
+  }
+  
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  // end table feature
 }

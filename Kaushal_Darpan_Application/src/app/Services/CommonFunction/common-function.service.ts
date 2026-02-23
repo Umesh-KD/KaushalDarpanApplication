@@ -905,8 +905,8 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async SubjectMaster_StreamIDWise(StreamID: number, DepartmentID: number = 0, SemesterID: number = 0) {
-    return await this.http.get(this.APIUrl + '/SubjectMaster_StreamIDWise/' + StreamID + '/' + DepartmentID + '/' + SemesterID, this.headersOptions)
+  public async SubjectMaster_StreamIDWise(StreamID: number, DepartmentID: number = 0, SemesterID: number = 0, Eng_NonEng: number = 0, EndTermID: number = 0) {
+    return await this.http.get(this.APIUrl + '/SubjectMaster_StreamIDWise/' + StreamID + '/' + DepartmentID + '/' + SemesterID + '/' + Eng_NonEng + '/' + EndTermID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -104,7 +104,50 @@
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
-      <table class="table table-border w-full table-auto" cellpadding="5">
+      <table class="table table-border w-full table-auto" cellpadding="5"  *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Examiner || this.sSOLoginDataModel.RoleID == _EnumRole.Examiner_NonEng">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>SNo</th>
+            <th title="Click to sorting" (click)="sortInTableData('CCCode')">
+             Center C-Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='CCCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('RollNo')">
+              Roll Number
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='RollNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>            
+            <th title="Click to sorting" (click)="sortInTableData('SubjectName')">
+              Subject
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('GroupCode')">
+              Group Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='GroupCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th>Max Marks</th>
+            <th>Marks Obtained</th>
+            <!--<th>Status</th>
+        <th *ngIf="isAnyUFMSelected">Document Required</th>-->
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData;let idx=index;">
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>
+            <td align="left">{{row.CCCode}}</td>
+            <td align="left">{{row.RollNo}}</td>
+            <td align="left">{{row.SubjectName}}</td>
+            <td align="left">{{row.GroupCode}}</td>
+            <td align="left">{{ row.MaxTheory }}</td>
+            <td align="left">{{ row.ObtainedTheory }}</td>
+
+          </tr>
+        </tbody>
+
+      </table>
+
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon
+             || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng ">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>SNo</th>
@@ -112,6 +155,11 @@
               Student Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
+            <th title="Click to sorting" (click)="sortInTableData('CCCode')">
+              Center C-Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='CCCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
             <th title="Click to sorting" (click)="sortInTableData('RollNo')">
               Roll Number
               <span class="shortingSpan" *ngIf="sortInTableColumn=='RollNo'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -132,10 +180,18 @@
               Subject
               <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
+            <th title="Click to sorting" (click)="sortInTableData('GroupCode')">
+              Group Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='GroupCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('EnrollmentNo')">
+              Enrollment No
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='EnrollmentNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
             <th>Max Marks</th>
             <th>Marks Obtained</th>
             <!--<th>Status</th>
-          <th *ngIf="isAnyUFMSelected">Document Required</th>-->
+        <th *ngIf="isAnyUFMSelected">Document Required</th>-->
           </tr>
         </thead>
 
@@ -143,11 +199,16 @@
           <tr *ngFor="let row of paginatedInTableData;let idx=index;">
             <td align="left">{{(startInTableIndex+1)+idx}}</td>
             <td align="left">{{row.StudentName}}</td>
+            <td align="left">{{row.CCCode}}</td>
             <td align="left">{{row.RollNo}}</td>
             <td align="left">{{row.InstituteName}}</td>
             <td align="left">{{row.SemesterName}}</td>
             <td align="left">{{row.StreamName}}</td>
             <td align="left">{{row.SubjectName}}</td>
+
+            <td align="left">{{row.GroupCode}}</td>
+            <td align="left">{{row.EnrollmentNo}}</td>
+
             <td align="left">{{ row.MaxTheory }}</td>
             <td align="left">{{ row.ObtainedTheory }}</td>
 
@@ -155,8 +216,6 @@
         </tbody>
 
       </table>
-
-
     </div>
     <!--pagination-->
     <div class="p-3 paginationBox flex items-center justify-end w-full">

@@ -211,7 +211,9 @@ export enum EnumRole {
   EM_JDTE=239,
   EM_JD_BTER=48,
   EM_Secretary_BTER=243,
-  EM_NON_GAZETTED_STAFF=252
+  EM_NON_GAZETTED_STAFF=252,
+  EM_ADTE_GAZETTED_STAFF=240,
+  EM_ADTE_NON_GAZETTED_STAFF=241,
 }
 
 export enum enumExamStudentStatus {
@@ -402,7 +404,8 @@ export enum EnumMessageType {
 export enum EnumStatusOfStaff {
   Draft = 163,
   Submitted = 164,
-  Approved = 165
+  Approved = 165,
+  Pending = 0
 }
 
 export enum EnumDirectAdmissionType

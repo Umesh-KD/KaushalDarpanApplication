@@ -65,6 +65,17 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issue Status:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.IssueStatus" (change)="GetAllData()">
+            <option value="0">--- All ---</option>
+            <option value="1">Pending for Approve</option>
+            <option value="2">Approved</option>
+            <option value="3">Reject</option>
+            <option value="4">Returned</option>
+          </select>
+        </div>
+
+        <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
         </div>
@@ -156,11 +167,12 @@
                 </span>
             </td> 
             <td align="left">
-              <span [ngClass]="{
-                                 'InvStatus-issued': item.InvStatus === 0,
-                                 'InvStatus-returned': item.InvStatus === 1
+              <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
+                                 'InvStatus-issued': item.IssueStatus === 2,
+                                 'InvStatus-reject': item.IssueStatus === 3,
+                                 'InvStatus-returned': item.IssueStatus === 4
                                }">
-                {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus ===1 ? 'Returned' : 'Unknown' }}
+                {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
               </span>
             </td>
           </tr>

@@ -19,7 +19,7 @@ import { EnumStatus } from '../../Common/GlobalConstants';
 export class LeaveListComponent {
   public CompanyMasterDDLList: any = [];
 
-  public HrMasterList: any = [];
+  public LeaveRequestList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new LeaveMasterSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -95,8 +95,8 @@ export class LeaveListComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
-          this.HrMasterList = data['Data'];
-          console.log(this.HrMasterList, "lisssssttt")
+          this.LeaveRequestList = data['Data'];
+          console.log(this.LeaveRequestList, "lisssssttt")
         }, (error: any) => console.error(error)
         );
     }
@@ -119,8 +119,10 @@ export class LeaveListComponent {
   }
 
   // delete by id
-  async DeleteById(PlacementCompanyID: number) {
+  async DeleteById(row: any) {
     debugger
+    let ID=row.StaffLeaveID
+    let StaffID=row.StaffID
     this.Swal2.Confirmation("Do you want to delete?",
       async (result: any) => {
         //confirmed
@@ -128,7 +130,7 @@ export class LeaveListComponent {
           try {
             //Show Loading
             this.loaderService.requestStarted();
-            await this.HrMasterService.DeleteById(PlacementCompanyID, this.sSOLoginDataModel.UserID,this.sSOLoginDataModel.RoleID)
+            await this.HrMasterService.DeleteById(ID, this.sSOLoginDataModel.UserID,this.sSOLoginDataModel.RoleID,StaffID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
                 console.log(data);

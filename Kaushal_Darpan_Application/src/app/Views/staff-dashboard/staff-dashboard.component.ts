@@ -47,9 +47,8 @@ export class StaffDashboardComponent implements OnInit {
     private routers: Router,
     private commonMasterService: CommonFunctionService,
     private staffMasterService: StaffMasterService,
-    private sweetAlert2: SweetAlert2) {
-
-  }
+    private sweetAlert2: SweetAlert2
+  ) {}
 
   async ngOnInit() {
     
@@ -112,7 +111,7 @@ export class StaffDashboardComponent implements OnInit {
               }
             } else if(this.sSOLoginDataModel.DepartmentID == 1) {
               if (this.sSOLoginDataModel.EmTypeId == 2) {
-                window.open("/additiprivatestaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self")
+                window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self")
               }
               else if (this.sSOLoginDataModel.EmTypeId == 1) {
                 debugger
@@ -132,7 +131,7 @@ export class StaffDashboardComponent implements OnInit {
           }, 'OK', false);
         }
 
-        else if (status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) {
+        else if ((status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) && this.sSOLoginDataModel.DepartmentID == 2) {
           if (this.sSOLoginDataModel.EmTypeId == 1) {
 
             if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {

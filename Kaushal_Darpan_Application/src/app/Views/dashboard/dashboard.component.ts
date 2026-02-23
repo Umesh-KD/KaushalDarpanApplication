@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+  import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { EnumRole } from '../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { NavigationEnd, Router } from '@angular/router';

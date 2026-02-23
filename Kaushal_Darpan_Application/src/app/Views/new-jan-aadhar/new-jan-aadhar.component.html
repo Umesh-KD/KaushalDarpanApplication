@@ -2,12 +2,11 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Master</h4>
-
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Jan Aadhaar Details</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700"> Student Details</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Jan Aadhaar Detail</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Update Student Details</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Jan Aadhaar Detail</a>
     </div>
   </div>
 </div>
@@ -16,8 +15,8 @@
 
 <div class="card">
   <div class="card-body p-5">
-    
-        <!-- Form -->
+
+    <!-- Form -->
     <form class="form-container">
       <div class="form-group">
         <label class="form-label" for="janAadharNumber">{{'Enter Jan Aadhaar Number'}}</label>
@@ -27,82 +26,113 @@
                [disabled]="!isFirstStep" inputmode="numeric" />
       </div>
 
-      <div class="submit-container" *ngIf="isFirstStep">
+      <div class="submit-container" >
         <button type="submit" class="btn-primary" id="btnFistStep" (click)="btnFistStep($event)"
-                [disabled]="!isFirstStep">
+                >
           {{'Submit' }}
         </button>
       </div>
     </form>
-
-    <div id="SecondStep" *ngIf="!showMemberDetail">
-      <div class="table-list-container mt-0" id="memberListBox" *ngIf="IsShow">
-        <div class="box-heading heading-search mt-0">
-          <h2>{{'Select Jan Aadhaar Member' | translate}}</h2>
-        </div>
-        <div class="table-container">
-          <table class="job-list-table">
-            <thead>
-              <tr>
-                <th class="text-center">Sr No</th>
-                <th class="text-center">Member Name</th>
-                <th class="text-center">Member ID</th>
-                <th class="text-center">Member Type</th>
-
-                <th class="text-center"> Select Member</th>
-              </tr>
-            </thead>
-            <tbody class="text-center">
-              <tr *ngFor="let row of JanAdharMemberList; let i = index">
-                <td>{{i + 1}}</td>
-                <td>{{row.NAME_EN}}</td>
-                <td>{{row.MEMBER_ID}}</td>
-                <td>{{row.MEMBER_TYPE}}</td>
-                <td>
-                  <button class="btn-primary px-4" (click)="SendOTP(row); ShowOtpPopup(ApplySchemesEmp);">Send OTP</button>
-                </td>             
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <!--end new jan aadhar code  -->
-      </div>
-    </div>
-    
   </div>
 </div>
-<!-- end row -->
+<ng-template #MemberListPopup let-modal>
+  <div class="card">
 
+      <div class="card-header">
+        <!-- close icon -->
+        <button type="button" class="btn bg-info text-white btn-s pull-right" (click)="closeMemberListPopup()">X</button>
+        <h2>Select Jan Aadhaar Member</h2>
+      </div>
+      <div class="card-body">
+        <div id="SecondStep" *ngIf="IsShow">
+          <div class="table-list-container mt-0" id="memberListBox">
+            <div class="box-heading heading-search mt-0">
+             
+            </div>
+            <div class="table-container">
+              <table class="table table-border w-full table-auto">
+                <thead>
+                  <tr>
+                    <th class="text-center">Sr No</th>
+                    <th class="text-center">Member Name</th>
+                    <th class="text-center">Member ID</th>
+                    <th class="text-center">Member Type</th>
+                    <th class="text-center"> Select Member</th>
+                  </tr>
+                </thead>
+                <tbody class="text-center">
+                  <tr *ngFor="let row of JanAdharMemberList; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{row.NAME_EN}}</td>
+                    <td>{{row.MEMBER_ID}}</td>
+                    <td>{{row.MEMBER_TYPE}}</td>
+                    <td>
+                      <!--;SendOTP(row);-->
+                      <button class="btn bg-info text-white btn-sm" (click)="ShowOtpPopup(ApplySchemesEmp)">Send OTP</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!--end new jan aadhar code  -->
+          </div>
+        </div>
+      </div>
 
-<!--Verify Modal open-->
-<ng-template #ApplySchemesEmp let-modal class="OTP-Modal">
-  <div class="modal-body otp-modal-body pt-5 pb-4">
-    <button type="button" class="btn-close" aria-label="Close" (click)="CloseModalPopup()"></button>
-    <div class="otp-modal text-center">
-      <!--<img class="mobile-icon" src="/assets/images/mobile-icon.png" />-->
-      <h5 class="modal-title my-2" id="janadharOTPLabel">Verify Jan Aadhaar</h5>
-      <p class="text-center">We've sent a <b>OTP</b> on your phone number.</p>
-      <!--<p>we will send you a <b>One Time Password</b> <br /> on your phone number</p>-->
-      <!--<label class="fw-600">Enter OTP <span class="validate JanAdharOTPV">*</span></label>-->
-      <input autocomplete="off" type="text" class="form-control" (keypress)="numberOnly($event)" maxlength="6"
-             placeholder="Enter OTP" [(ngModel)]="OTP" id="txtJanAdharOTP">
-    </div>
-
-    <div class="text-center bottom-btns mt-4">
-      <button class="btn btn-primary" type="button" (click)="VerifyOTP()">Submit</button>
-      <button *ngIf="showResendButton" class="resend-btn mt-2" type="button" id="resendBtn"
-              (click)="ResendOTP()">
-        Re-Send OTP
-      </button>
-
-      <!-- <button type="button" class="btn btn-danger btn-sm" (click)="CloseModalPopup()">Close</button> -->
-    </div>
-    <div class="re-timer mt-2 text-center" *ngIf="!showResendButton && isOpen">
-      <p class="m-0" id="timers">Resend in <span class="text-danger">{{ formatTime(timeLeft) }} seconds</span></p>
-    </div>
   </div>
 </ng-template>
 
+  <ng-template #ApplySchemesEmp let-modal>
+    <div class="otp-overlay">
+      <div class="otp-modal">
+        <button class="otp-close" type="button" (click)="CloseModalPopup()">
+          <i class="fa fa-times"></i>
+        </button>
 
+        <!-- Header -->
+        <div class="otp-header">
+          <div class="otp-icon">
+            <i class="fa fa-shield"></i>
+          </div>
+          <h4>OTP Verification</h4>
+          <p class="sub">Verify Jan Aadhaar</p>
+        </div>
 
+        <!-- Body -->
+        <div class="otp-body">
+          <p class="text-center info-text">
+            We have sent a <b>6-digit OTP</b> to your registered mobile number
+          </p>
+     
+          <div class="otp-box-wrapper">
+            <input class="otp-digit"
+                   maxlength="1"
+                   *ngFor="let item of otpArray; let i = index"
+                   #otpInput
+                   type="text"
+                   inputmode="numeric"
+                   pattern="[0-9]*"
+                   (input)="onOtpInput($event, i)"
+                   (keydown)="onKeyDown($event, i)"
+                   (paste)="onPaste($event)">
 
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="otp-footer" style="margin-top:25px;">
+          <button class="verify-btn" type="button" (click)="VerifyOTP()">
+            <i class="fa fa-check-circle"></i> Verify OTP
+          </button>
+          <button *ngIf="showResendButton" class="close-btn" type="button" id="resendBtn"
+                  (click)="ResendOTP()">
+            <i class="fa fa-refresh"></i> Re-Send OTP
+          </button>
+          <div class="re-timer mt-2 text-center" *ngIf="!showResendButton && isOpen">
+            <p class="m-0" id="timers">Resend in <span class="text-danger">{{ formatTime(timeLeft) }} seconds</span></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </ng-template>
