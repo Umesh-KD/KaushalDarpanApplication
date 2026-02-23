@@ -97,6 +97,7 @@ export class inventoryIssueHistorySearchModel {
   public UserID? : number = 0;
   public RoleID? : number = 0;
   public status? : number = 0;
+  public IssueStatus? : number = 2;
   public IsStaff? : boolean = false;
 }
 export class inventoryIssueHistoryITISearchModel {
@@ -218,5 +219,9 @@ export class DTELabMasterModel {
   public Lab_ModifyBy: number=0;
   public Lab_ModifyDate?: Date | string | null;
   public Lab_IPAddress: string='';
-  
+}
+
+export class ApproveIssuedItemsDataModel {
+  public IssuedId: number = 0;
+  public UserID: number = 0;
 }

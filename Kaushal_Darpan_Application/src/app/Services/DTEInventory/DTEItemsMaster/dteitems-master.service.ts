@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTEItemsSaveModel,DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels,DTELabMasterModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel, DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTELabMasterModel, ApproveIssuedItemsDataModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -111,15 +111,14 @@ export class DteItemsMasterService {
   }
 
 
-  public async EquipmentCodeDuplicate(request: EquipmentCodeDuplicateSearch)
-  {
+  public async EquipmentCodeDuplicate(request: EquipmentCodeDuplicateSearch) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/EquipmentCodeDuplicate', request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
 
   public async UpdateStatusRevertData(request: any) {
 
@@ -187,7 +186,7 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHistorySearchModel) {
+  public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllInventoryIssueReturnItemList`, body, this.headersOptions)
       .pipe(
@@ -226,7 +225,7 @@ public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHis
       ).toPromise();
   }
 
-  
+
   public async GetIssueItemList(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetIssueItemList`, body, this.headersOptions)
@@ -257,15 +256,15 @@ public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHis
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-   public async GetDTEIssueSubmitPermanent(submitRequest: ItemsIssueReturnModels) {
-      var body = JSON.stringify(submitRequest);
-      return await this.http.post(`${this.APIUrl}/GetDTEIssueSubmitPermanent`, body, this.headersOptions)
-        .pipe(
-          catchError(this.handleErrorObservable)
-        ).toPromise();
-    }
-    public async GetDTEGetSetLabMaster(labRequest: DTELabMasterModel) {
-    return await this.http.post(this.APIUrl + "/GetDTEGetSetLabMaster",labRequest, this.headersOptions)
+  public async GetDTEIssueSubmitPermanent(submitRequest: ItemsIssueReturnModels) {
+    var body = JSON.stringify(submitRequest);
+    return await this.http.post(`${this.APIUrl}/GetDTEIssueSubmitPermanent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetDTEGetSetLabMaster(labRequest: DTELabMasterModel) {
+    return await this.http.post(this.APIUrl + "/GetDTEGetSetLabMaster", labRequest, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -314,6 +313,21 @@ public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHis
   public async Download_SR5ReportData_pdf_BTER(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/Download_SR5ReportData_pdf_BTER`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetIssueItemsForApprove(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetIssueItemsForApprove`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async ApproveIssuedItems(searchRequest: any[]) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/ApproveIssuedItems`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

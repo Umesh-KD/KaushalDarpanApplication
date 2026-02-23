@@ -108,18 +108,25 @@
             <td>{{ item.Category }}</td>
             <td>{{ item.Mobile }}</td>
             <td>{{ item.Email }}</td>
-            <td>{{ item.IsAssign == 1 ? 'Assigned' : 'Not Assigned' }}</td>
+            <td>{{ item.PrincipalStatus }}</td>
 
             <td class="text-center">
-              <button *ngIf="item.IsAssign != 1 && sSOLoginDataModel.RoleID==20 || item.IsAssign != 1 && sSOLoginDataModel.RoleID==43"
-                      (click)="onAssign(modal_ItiInstructorPopup,item.Uid)"
-                      title="Assign"
-                      class="p-1">
-                <i class="ti ti-pencil"></i>
-              </button>
-              <button *ngIf=" sSOLoginDataModel.RoleID==16" (click)="onViewDetail(item.Uid)" title="View Detail">
-                <i class="ti ti-eye"></i>
-              </button>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a (click)="onViewDetail(item.Uid)" title="View Detail">
+                  <i class="ti ti-eye"></i>
+                </a>
+
+
+                <a *ngIf="item.IsAssign != 1 && sSOLoginDataModel.RoleID==20 || item.IsAssign != 1 && sSOLoginDataModel.RoleID==43"
+                   (click)="onAssign(modal_ItiInstructorPopup,item.Uid,item.ID)"
+                   title="Assign"
+                   class="p-1">
+                  <i class="ti ti-pencil"></i>
+                </a>
+                <!--<button *ngIf=" sSOLoginDataModel.RoleID==16" (click)="onViewDetail(item.Uid)" title="View Detail">
+                  <i class="ti ti-eye"></i>
+                </button>-->
+                </div>
             </td>
           </tr>
           <tr *ngIf="paginatedInTableData.length == 0">
@@ -151,7 +158,7 @@
 
 
 
-<ng-template #modal_ItiInstructorPopup let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+<ng-template #modal_ItiInstructorPopup let-modal class=" h-full  fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
@@ -184,7 +191,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">EmailID</label>
-              <input class="form-input" placeholder="Enter Email ID" name="txtEmailID" id="txtEmailID" formControlName="txtEmailID" />
+              <input class="form-input" [(ngModel)]="formData.Mailpersonal" placeholder="Enter Email ID" name="txtEmailID" id="txtEmailID" formControlName="txtEmailID" />
             </div>
 
             <div>
@@ -286,7 +293,7 @@
             </div>-->
             <!--</div>-->
 
-            <div *ngIf="formData.BranchID !=0 && formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.LabIncharge">
+            <!--<div *ngIf="formData.BranchID !=0 && formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.LabIncharge">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Technician <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="formData.TechnicianID" formControlName="ddlTechnician" [ngModelOptions]="{standalone: true}">
                 <option value="0">--Choose Option--</option>
@@ -300,7 +307,7 @@
                   field is required .!
                 </p>
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
             <div>
