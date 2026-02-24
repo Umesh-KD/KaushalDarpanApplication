@@ -73,6 +73,7 @@ export class SSOLoginDataModel {
     public SelectedValue: number = 0;
     public DistrictID: number = 0;
     public StaffTypeID?:number=0;
+    public OfficeName:string='';
 
 }
 
