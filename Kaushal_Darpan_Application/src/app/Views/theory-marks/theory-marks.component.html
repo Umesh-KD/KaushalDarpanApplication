@@ -438,7 +438,7 @@
 
     <div *ngIf="TheoryMarksDetailList.length>0 && isfinalsubmit!=true" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
       <div class="flex text-center justify-center">
-        <button type="button" class="btn bg-success text-white me-2" (click)="OnSubmit()">Submit All</button>
+        <button type="button" class="btn bg-success text-white me-2" (click)="OnSubmit()">Save All</button>
         <button *ngIf="AllInTableSelect==true || selectedAllForPresent==true" type="button" class="btn bg-success text-white me-2" (click)="LockAndSubmit(0,1)">Lock & Submit</button>
         <!-- <button type="button" class="btn bg-danger text-white" (click)="ResetControl()">Cancel</button> -->
       </div>

@@ -1098,6 +1098,7 @@ export class AddStaffMasterComponent implements OnInit {
       this.staffDetailsFormData.ModifyBy = this.sSOLoginDataModel.UserID
 
       console.log("staffDetailsFormData.StatusOfStaff", this.staffDetailsFormData.StatusOfStaff)
+      // this.staffDetailsFormData.PanCardNumber=this.staffDetailsFormData.txtPanCardNumber;
       this.staffDetailsFormData.PanCardNumber = this.encryptionService.encryptData(this.staffDetailsFormData.PanCardNumber);
       this.staffDetailsFormData.AdharCardNumber = this.encryptionService.encryptData(this.staffDetailsFormData.AdharCardNumber);
 

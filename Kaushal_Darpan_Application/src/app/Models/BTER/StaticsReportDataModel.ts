@@ -5,11 +5,11 @@ export class ExaminerStaticReportFeedbackDataModel {
     public GroupCodeID?: number = 0;
     public SubjectID?: number = 0;
     public CommonRemarkForQueAns?: string = '';
-    public IsMassCoping?: string = '';
-    public Syllabus?: string = '';
-    public InstituteLevel?: string = '';
-    public TeachingByTeacher?: string = '';
-    public StudyOfStudent?: string = '';
+    public IsMassCoping?: boolean = false;
+    public Syllabus?: number = 0;
+    public InstituteLevel?: number = 0;
+    public TeachingByTeacher?: number = 0;
+    public StudyOfStudent?: number = 0;
     public SuggestionForImprovement?: string = '';
     public Date?: string = '';
     public SignPhoto?: string = '';
