@@ -124,6 +124,7 @@ export class ScaReportComponent {
   }
 
   async GetGradeList() {
+    debugger
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     try {
       /*      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle*/

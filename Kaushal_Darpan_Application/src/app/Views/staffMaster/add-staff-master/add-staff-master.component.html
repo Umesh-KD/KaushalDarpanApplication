@@ -520,6 +520,7 @@
           <input type="text"
                  maxlength="10"
                  formControlName="txtPanCardNumber"
+                 [(ngModel)]="staffDetailsFormData.PanCardNumber"
                  class="form-input"
                  placeholder="Enter PAN Card Number"
                  (input)="onPanInput($event)" />

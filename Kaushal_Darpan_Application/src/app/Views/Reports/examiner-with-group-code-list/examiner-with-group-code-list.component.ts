@@ -33,8 +33,9 @@ export class ExaminerWithGroupCodeListComponent implements OnInit {
 
   // Columns to be displayed in the table
   displayedColumns: string[] = [
-    'SNo', 'GroupCode', 'RollNo', 'SubjectCode', 'SubjectName', 'ObtainedTheory', 'IsChecked', 
-    'IsPresentTheory', 
+    'SNo', 'GroupCode', 'ExaminerName', 'SubjectCode', 'AllotedStudentTotal', 'ExaminerCode',
+    //  'IsChecked', 
+    // 'IsPresentTheory', 
     // 'PresentbyExami', 'AbsentbyExami', 
     // 'isFinalSubmit', 'MarksSubmittedTotal', 'MarksPendingTotal', 
     // 'StaffInatituteName', 'ExaminerCode',
@@ -206,6 +207,9 @@ export class ExaminerWithGroupCodeListComponent implements OnInit {
   async UnlockRow(GroupCode: any) {
     debugger;
     this.unlockRequest.GroupCode = GroupCode;
+    this.unlockRequest.EndTermID=this.sSOLoginDataModel.EndTermID;
+    this.unlockRequest.DepartmentID=this.sSOLoginDataModel.DepartmentID;
+    this.unlockRequest.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng;
     this.loaderService.requestStarted();
     this.Swal2.Confirmation("Are you sure you want Unlock ?",
       async (result: any) => {
