@@ -15,7 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
 import { CommonDDLExaminerGroupCodeModel } from '../../../Models/CommonDDLExaminerGroupCodeModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ExaminerStaticReportFeedbackDataModel } from '../../../Models/BTER/StaticsReportDataModel';
+import { ExaminerStaticReportFeedbackDataModel, ExaminerStaticReportSearchModel } from '../../../Models/BTER/StaticsReportDataModel';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -31,8 +31,8 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
 
   // Columns to be displayed in the table
   displayedColumns: string[] = [
-    'SrNo', 'ExamName', 'ExaminerName', 'SubjectCode', 'GroupCode', 'CenterCode', 'Present', 
-    'Absent', 
+    'SrNo', 'ExamName', 'ExaminerName', 'SubjectCode', 'GroupCode', 'Present', 
+    'Absent', 'CCCode',
     // 'PresentbyExami', 'AbsentbyExami', 
     'Below14MarksStudent', 'Below15to17MarksStudent', 'Below18to54MarksStudent', 
     'Below55to60MarksStudent','Above60MarksStudent', 'Action'
@@ -43,7 +43,6 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   sSOLoginDataModel: any;
   InstituteMasterList: any;
   SemesterMasterList: any;
-  filterForm: FormGroup | undefined;
   feedbackForm: FormGroup | undefined;
   // Pagination Properties
   totalRecords: number = 0;
@@ -59,6 +58,8 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   SubjectCodeMasterDDLList: any;
   modalReference: NgbModalRef | undefined;
   public request = new ExaminerStaticReportFeedbackDataModel();
+  public requestData = new ExaminerStaticReportSearchModel();
+  public requestDataPdf = new ExaminerStaticReportSearchModel();
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
@@ -73,14 +74,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.filterForm = this.fb.group({
-      CenterCode: [''],
-      GroupCode: [''],
-      SubjectCode: [0],
-      selectedSemester: [0],
-    });
-
-    this.filterForm = this.fb.group({
+    this.feedbackForm = this.fb.group({
       ExaminerID: [''],
       ExaminerCode: [''],
       GroupCodeID: [0],
@@ -132,7 +126,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
       subjectCodeDDLRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       subjectCodeDDLRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       subjectCodeDDLRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-      subjectCodeDDLRequest.SemesterID = this.filterForm?.value.selectedSemester;
+      subjectCodeDDLRequest.SemesterID = this.requestData.SemesterID ?? 0;
       await this.commonMasterService.GetSubjectCodeMasterDDL(subjectCodeDDLRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -145,41 +139,28 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     }
   }
 
-  resetForm(): void {
-    this.filterForm?.reset({
-      CenterCode: '',
-      GroupCode: '',
-      SubjectCode: 0,
-      selectedSemester: 0,
-    });
-    this.GetAllData();
+  async resetForm() {
+    this.requestData = new ExaminerStaticReportSearchModel();
+    await this.GetAllData();
   }
 
-  filterFormSubmit() {
-    this.GetAllData();
+  async filterFormSubmit() {
+    await this.GetAllData();
   }
 
   // Fetching the data from the service and updating the table
   async GetAllData() {
-    let requestData: any = {
-      CenterCode: this.filterForm?.value.CenterCode != "" && this.filterForm?.value.CenterCode != undefined && this.filterForm?.value.CenterCode != 0 ? this.filterForm?.value.CenterCode : 0,
-      GroupCode: this.filterForm?.value.GroupCode != "" && this.filterForm?.value.GroupCode != undefined && this.filterForm?.value.GroupCode != 0 ? this.filterForm?.value.GroupCode : 0,
-      SubjectCode: this.filterForm?.value.SubjectCode != "" && this.filterForm?.value.SubjectCode != undefined && this.filterForm?.value.SubjectCode != 0 ? this.filterForm?.value.SubjectCode : '',
-      //InstituteID: this.filterForm?.value.selectedInstitute != "" && this.filterForm?.value.selectedInstitute != undefined && this.filterForm?.value.selectedInstitute != 0 ? this.filterForm?.value.selectedInstitute : 0,
-      SemesterID: this.filterForm?.value.selectedSemester != "" && this.filterForm?.value.selectedSemester != undefined && this.filterForm?.value.selectedSemester != 0 ? this.filterForm?.value.selectedSemester : 0,
-      EndTermID: this.ssoLoginUser.EndTermID,
-      DepartmentID: this.ssoLoginUser.DepartmentID,
-      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      RoleID: this.ssoLoginUser.RoleID,
-      SSOID: this.ssoLoginUser.SSOID,
-      Action: 'StaticsReportProvideByExaminer'
 
-      /*Action:'ReportData'*/
-    }
+    this.requestData.EndTermID = this.ssoLoginUser.EndTermID;
+    this.requestData.DepartmentID = this.ssoLoginUser.DepartmentID;
+    this.requestData.Eng_NonEng = this.ssoLoginUser.Eng_NonEng;
+    this.requestData.RoleID = this.ssoLoginUser.RoleID;
+    this.requestData.SSOID = this.ssoLoginUser.SSOID;
+    this.requestData.Action = 'StaticsReportProvideByExaminer';
     this.CollegesWiseReportsModellList = [];
     try {
       this.loaderService.requestStarted();
-      await this.reportService.GetStaticsReportProvideByExaminer(requestData)
+      await this.reportService.GetStaticsReportProvideByExaminer(this.requestData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
@@ -207,27 +188,21 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
 
 
   async PDFDownload(row: any) {
-    
+    this.requestDataPdf.CenterCode = this.requestData.CenterCode;
+    this.requestDataPdf.GroupCode = row.GroupCode;
+    this.requestDataPdf.SubjectCode = this.requestData.SubjectCode;
+    this.requestDataPdf.SemesterID = this.requestData.SemesterID;
+    this.requestDataPdf.EndTermID = this.ssoLoginUser.EndTermID;
+    this.requestDataPdf.DepartmentID = this.ssoLoginUser.DepartmentID;
+    this.requestDataPdf.Eng_NonEng = this.ssoLoginUser.Eng_NonEng;
+    this.requestDataPdf.RoleID = this.ssoLoginUser.RoleID;
+    this.requestDataPdf.SSOID = this.ssoLoginUser.SSOID;
+    this.requestDataPdf.Action = 'ReportData';
 
-
-    let requestData: any = {
-      CenterCode: this.filterForm?.value.CenterCode != "" && this.filterForm?.value.CenterCode != undefined && this.filterForm?.value.CenterCode != 0 ? this.filterForm?.value.CenterCode : 0,
-      // GroupCode: this.filterForm?.value.GroupCode != "" && this.filterForm?.value.GroupCode != undefined && this.filterForm?.value.GroupCode != 0 ? this.filterForm?.value.GroupCode : 0,
-      SubjectCode: this.filterForm?.value.SubjectCode != "" && this.filterForm?.value.SubjectCode != undefined && this.filterForm?.value.SubjectCode != 0 ? this.filterForm?.value.SubjectCode : '',
-      //InstituteID: this.filterForm?.value.selectedInstitute != "" && this.filterForm?.value.selectedInstitute != undefined && this.filterForm?.value.selectedInstitute != 0 ? this.filterForm?.value.selectedInstitute : 0,
-      SemesterID: this.filterForm?.value.selectedSemester != "" && this.filterForm?.value.selectedSemester != undefined && this.filterForm?.value.selectedSemester != 0 ? this.filterForm?.value.selectedSemester : 0,
-      EndTermID: this.ssoLoginUser.EndTermID,
-      DepartmentID: this.ssoLoginUser.DepartmentID,
-      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      RoleID: this.ssoLoginUser.RoleID,
-      SSOID: this.ssoLoginUser.SSOID,
-      GroupCode: row.GroupCode,
-      Action: 'ReportData'     
-    }
     //this.CollegesWiseReportsModellList = [];
     try {
       this.loaderService.requestStarted();
-      await this.reportService.StatisticsInformationReportPdf(requestData)
+      await this.reportService.StatisticsInformationReportPdf(this.requestDataPdf)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
@@ -317,25 +292,26 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
 
 
   exportToExcel(): void {
-    //const unwantedColumns = [
-    //  'EndTermID', 'InstituteID', 'Selected', 'SemesterID', 'Status', 'StreamID', 'StudentID'
-    //];
-    //const filteredData = this.viewAdminDashboardList.map(item => {
-    //  const filteredItem: any = {};
-    //  Object.keys(item).forEach(key => {
-    //    if (!unwantedColumns.includes(key)) {
-    //      filteredItem[key] = item[key];
-    //    }
-    //  });
-    //  return filteredItem;
-    //});
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.CollegesWiseReportsModellList);
+    const unwantedColumns = [
+     'ExaminerID', 'GroupCodeID', 'CenterCode',
+    ];
+    const filteredData = this.CollegesWiseReportsModellList.map((item: any) => {
+     const filteredItem: any = {};
+     Object.keys(item).forEach(key => {
+       if (!unwantedColumns.includes(key)) {
+         filteredItem[key] = item[key];
+       }
+     });
+     return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     // Create a new Excel workbook this.PreExamStudentData
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     // Export the Excel file
-    XLSX.writeFile(wb, 'CollegesWiseReports.xlsx');
+    XLSX.writeFile(wb, `StaticsReportExaminer_${timestamp}.xlsx`);
   }
 
   DownloadFile(FileName: string, DownloadfileName: any): void {
