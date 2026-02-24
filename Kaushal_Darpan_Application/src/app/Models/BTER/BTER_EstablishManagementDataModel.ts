@@ -560,7 +560,9 @@ export class OfficeVacancyModel {
   public TradeName: string = ''
   public Dis_UploadedDocument?:string=''
   public UploadedDocument?:string=''
-  public Name?:string='';
+  public Name?: string = '';
+  public PostSanctionDate: string = ''
+  public PostSanctionedID: number = 0;
 }
 
 

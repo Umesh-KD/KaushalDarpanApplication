@@ -240,7 +240,9 @@ export class OfficeVacancyComponent implements OnInit {
       TradeID: 0,
       TradeName:'',
       Dis_UploadedDocument:this.formData.Dis_UploadedDocument,
-      UploadedDocument:this.formData.UploadedDocument
+      UploadedDocument: this.formData.UploadedDocument,
+      PostSanctionDate: '',
+      PostSanctionedID:0
     };
 
     console.log('Vacancy being added:', vacancyData);
@@ -758,7 +760,9 @@ console.log(this.formData.DesignationID);
           PlanningID:0,
           Index: this.tempIndex++,
           TradeID: 0,
-          TradeName:''
+          TradeName: '',
+          PostSanctionDate: '',
+          PostSanctionedID:0
         };
         console.log('Vacancy being added:', vacancyData);
        // Remove existing record with same Index

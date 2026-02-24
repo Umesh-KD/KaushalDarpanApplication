@@ -26,8 +26,8 @@ import { HiringRoleMasterService } from '../../../Services/HiringRoleMaster/hiri
   styleUrl: './iti-college-report.component.css'
 })
 export class ItiCollegeReportComponent {
-  public isAddrequest: boolean=false
-  public isAddrequest1: boolean=false
+  public isAddrequest: boolean = false
+  public isAddrequest1: boolean = false
   public ReportForm!: FormGroup
   public BasicReportForm!: FormGroup
   public NewReportFormGroup!: FormGroup
@@ -42,6 +42,7 @@ export class ItiCollegeReportComponent {
   public PanchayatSamitiList: any[] = [];
   public SubDivisionMasterList: any[] = [];
   public ResidenceList: any[] = [];
+  public DocumentPlanList: any[] = [];
   public TehsilMasterList: any[] = [];
   public DistrictMasterList1: any[] = [];
   public searchRequest = new ItiSanctionOrderList();
@@ -49,9 +50,9 @@ export class ItiCollegeReportComponent {
   public GramPanchayatList: any[] = [];
   public BoardList: any = []
   public request = new ItiReportDataModel()
-  public PostSanctionList:any[]=[]
-  public TradeSanctionList:any[]=[]
-  public MetpSanctionList:any[]=[]
+  public PostSanctionList: any[] = []
+  public TradeSanctionList: any[] = []
+  public MetpSanctionList: any[] = []
   /*  public addrequest = new SupplementaryDataModel()*/
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -77,7 +78,7 @@ export class ItiCollegeReportComponent {
   public ApplicationID: number = 0;
   public searchrequest = new BterSearchmodel()
   public GenderList: any = ''
-  public ParentID: number =0
+  public ParentID: number = 0
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
 
@@ -137,7 +138,7 @@ export class ItiCollegeReportComponent {
         LandTypeID: ['', Validators.required],
         LandAddress: [''],
         Pincode: ['', Validators.required],
-   
+
         ContractLoad: [''],
         BuildShortage: [''],
         IsHostel: ['', Validators.required],
@@ -190,7 +191,7 @@ export class ItiCollegeReportComponent {
         IsPurposeHall: ['', Validators.required],
         IsMainITI: ['', Validators.required],
         IsBuildingTaken: ['', Validators.required],
- 
+
         ShilanyasDate: ['', Validators.required],
         LokarpanDate: ['', Validators.required],
         LokarpanName: ['', Validators.required],
@@ -199,7 +200,7 @@ export class ItiCollegeReportComponent {
         ShilanyasName: ['', Validators.required],
         StartDate: ['', Validators.required],
         CompleteDate: ['', Validators.required],
-      
+
         //FrontPhoto: [''],
         //SidePhoto: [''],
         //InteriorPhoto: [''],
@@ -210,27 +211,27 @@ export class ItiCollegeReportComponent {
 
     this.BasicReportForm = this.formBuilder.group(
       {
-        
+
         ApproachRoad: ['', Validators.required],
         InternalRoad: ['', Validators.required],
         Harvesting: ['', Validators.required],
         ElectPhase: ['', Validators.required],
         IsSolarPanel: ['', Validators.required],
         IsBoundaryWall: ['', Validators.required],
-      
+
         ElectConnection: ['', Validators.required],
         PanelCapacity: ['', Validators.required],
         HostelUtilized: ['', Validators.required],
         NoOfTree: ['', Validators.required],
         ElectPhaserequired: ['', Validators.required],
-   
+
         ContractLoad: [''],
         BuildShortage: [''],
         IsHostel: ['', Validators.required],
 
         Remarks: [''],
 
- 
+
 
         //FrontPhoto: [''],
         //SidePhoto: [''],
@@ -242,7 +243,7 @@ export class ItiCollegeReportComponent {
 
 
     this.NewReportFormGroup = this.formBuilder.group({
-    /*  ConstructionAgency: ['', Validators.required],*/
+      /*  ConstructionAgency: ['', Validators.required],*/
       PDName: ['', Validators.required],
       ContractorName: ['', Validators.required],
       PDMobile: ['', Validators.required],
@@ -266,7 +267,7 @@ export class ItiCollegeReportComponent {
       ShilanyasName: ['', Validators.required],
       StartDate: ['', Validators.required],
       CompleteDate: ['', Validators.required],
-   
+
 
     })
 
@@ -281,7 +282,7 @@ export class ItiCollegeReportComponent {
       IsBuildingTaken: ['', Validators.required],
       TakenOverDate: ['', Validators.required],
       //IsOperatingOwn: ['', Validators.required],
-     
+
 
     })
 
@@ -292,15 +293,15 @@ export class ItiCollegeReportComponent {
     //this.searchrequest.DepartmentID = EnumDepartment.BTER;
     //this.request.DepartmentID = EnumDepartment.BTER;
     this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
-  
+
     //await this.loadDropdownData('Board')
     //await this.GetStateMatserDDL()
     //await this.GetPassingYearDDL()
 
     //this.request.CollegeName = this.sSOLoginDataModel.InstituteName
     //this.request.CollegeID = this.sSOLoginDataModel.InstituteID
-    
-    if(this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
       this.resetValidatoresIPA();
     }
 
@@ -308,13 +309,13 @@ export class ItiCollegeReportComponent {
       const controlsToFreeze = [
         'txtName',
         'Loksabha',
-       
+
         'Vidhansabha',
-     
+
         'SanctionOrderNo',
         'SanctionOrderDate',
-       
-/*        'PanchayatId',*/
+
+        /*        'PanchayatId',*/
         'CollegeID',
         'txtYear',
         'Category',
@@ -334,7 +335,7 @@ export class ItiCollegeReportComponent {
         'MISCode',
         'ConstructionAgency'
 
-        
+
       ];
 
       controlsToFreeze.forEach(controlName => {
@@ -433,20 +434,21 @@ export class ItiCollegeReportComponent {
 
     }
 
-   
+
     if (this.ApplicationID > 0) {
       await this.GetById(this.ApplicationID)
-      
+
     }
     /*    this.request.IsNewCollege=1*/
     await this.GetGovtITI()
-/*    await this.GetParliamentITI()*/
+    /*    await this.GetParliamentITI()*/
     await this.GetDivisionMasterList()
     await this.GetLateralCourse()
     await this.GetcOmmonData()
-/*    await this.GetOrderList()*/
+    await this.GetDocumentPlan()
+    /*    await this.GetOrderList()*/
 
-    
+
   }
 
   get _ReportForm() { return this.ReportForm.controls; }
@@ -485,7 +487,7 @@ export class ItiCollegeReportComponent {
   async GetOrderList() {
     try {
 
-      this.PostSanctionList =[]
+      this.PostSanctionList = []
 
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCommonMasterData("OrderList", this.ParentID)
@@ -520,7 +522,7 @@ export class ItiCollegeReportComponent {
           this.ParliamentMaster = data['Data'];
           console.log(this.ParliamentMaster)
 
-        
+
 
           // console.log(this.DivisionMasterList)
         }, error => console.error(error));
@@ -538,18 +540,18 @@ export class ItiCollegeReportComponent {
 
 
 
-  async GetAssemblyITI(ID:any=0) {
+  async GetAssemblyITI(ID: any = 0) {
     try {
-      
+
 
       this.loaderService.requestStarted();
-       this.commonMasterService.AssemblyMaster_DistrictIDWise(0)
+      this.commonMasterService.AssemblyMaster_DistrictIDWise(0)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
           this.AssemblyMaster = data['Data'];
-        
-             this.commonMasterService.PanchayatSamiti(ID)
+
+          this.commonMasterService.PanchayatSamiti(ID)
             .then((data: any) => {
               data = JSON.parse(JSON.stringify(data));
 
@@ -614,7 +616,7 @@ export class ItiCollegeReportComponent {
             console.log("photo data", data);
             if (data.State === EnumStatus.Success) {
 
-              
+
 
 
 
@@ -667,7 +669,7 @@ export class ItiCollegeReportComponent {
                   this.request.DomeViewCopy = data['Data'][0]["FileName"];
 
                   break;
-               
+
                 case "MetpCopy":
                   this.request.MetpCopy = data['Data'][0]["FileName"];
 
@@ -689,7 +691,7 @@ export class ItiCollegeReportComponent {
 
                   break;
 
-             
+
                 case "WorkFSCopy":
                   this.request.WorkFSCopy = data['Data'][0]["FileName"];
 
@@ -697,6 +699,10 @@ export class ItiCollegeReportComponent {
 
                 case "LeaseOrderCopy":
                   this.request.LeaseOrderCopy = data['Data'][0]["FileName"];
+
+                  break;
+                case "PlanDocument":
+                  this.request.PlanDocument = data['Data'][0]["FileName"];
 
                   break;
 
@@ -722,7 +728,7 @@ export class ItiCollegeReportComponent {
   async SaveData() {
 
 
-/*    this.nonItiValidator()*/
+    /*    this.nonItiValidator()*/
 
     if (this.request.IsNewCollege == 0 && this.request.CollegeID == 0) {
       this.toastr.warning("Please Select Iti")
@@ -735,8 +741,7 @@ export class ItiCollegeReportComponent {
       return
     }
 
-    if (this.request.IsSolarPanel == 'No')
-    {
+    if (this.request.IsSolarPanel == 'No') {
       this.request.PanelCapacity = ''
     }
     if (this.request.IsBuildingTaken == 'No') {
@@ -768,8 +773,8 @@ export class ItiCollegeReportComponent {
       if (this.request.IsNewCollege == 0) {
         this.resetConstructionDetails()
       }
-  /*    this.request.OrderDetailsList=[]*/
-  /*    this.request.OrderDetailsList.push(...this.TradeSanctionList, ...this.PostSanctionList, ...this.MetpSanctionList)*/
+      /*    this.request.OrderDetailsList=[]*/
+      /*    this.request.OrderDetailsList.push(...this.TradeSanctionList, ...this.PostSanctionList, ...this.MetpSanctionList)*/
 
 
       console.log(this.request)
@@ -855,7 +860,7 @@ export class ItiCollegeReportComponent {
         'NoOfTree',
         'ElectPhaserequired',
         'ContractLoad',
-       
+
         'IsHostel',
         //'PrincipleName',
         'PrincipleMobile',
@@ -880,14 +885,14 @@ export class ItiCollegeReportComponent {
         //'CityID',
         //'AdministrativeBodyId',
         'PlotHouseBuildingNo',
-      'SubDivOffice',
-      
-      'ContractDemand',
-      'SanctionLoad',
-      'ConsumerName',
-      'ConnectionType'
+        'SubDivOffice',
 
-     
+        'ContractDemand',
+        'SanctionLoad',
+        'ConsumerName',
+        'ConnectionType'
+
+
       ];
 
       controlsToClear.forEach(controlName => {
@@ -914,14 +919,14 @@ export class ItiCollegeReportComponent {
         'NoOfTree',
         'ElectPhaserequired',
         'ContractLoad',
-        
+
         'IsHostel',
         //'PrincipleName',
         'PrincipleMobile',
         'PrincipleEmailID',
         'LandTypeID',
         'LandAvailable',
-     /*   'LandAddress',*/
+        /*   'LandAddress',*/
         'Pincode',
         'PanchayatDis',
         'Ward',
@@ -944,7 +949,7 @@ export class ItiCollegeReportComponent {
         'SanctionLoad',
         'ConsumerName',
 
-  
+
 
       ];
 
@@ -962,8 +967,8 @@ export class ItiCollegeReportComponent {
       const controlsToClear = [
         //'TradeOrderNo',
         //'TradeOrderDate',
-      
-       
+
+
         'Ownership',
         'UrbanRural',
         'GramPanchayatSamiti',
@@ -987,8 +992,8 @@ export class ItiCollegeReportComponent {
     } else {
       // If the user IS ITIBuildingAdmin — reapply required validators
       const requiredControls = [
-   
-      
+
+
         'Ownership',
         'UrbanRural',
         'GramPanchayatSamiti',
@@ -1013,7 +1018,7 @@ export class ItiCollegeReportComponent {
 
 
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin || this.request.IsNewCollege==0) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin || this.request.IsNewCollege == 0) {
 
       const controlsToClear = [
         'ShilanyasDate',
@@ -1023,13 +1028,13 @@ export class ItiCollegeReportComponent {
         'ShilanyasPost',
         'ShilanyasName',
         'IsOperatingOwn',
-     /*   'ConstructionAgency',*/
+        /*   'ConstructionAgency',*/
         'PDName',
         'ContractorName',
         'PDMobile',
         'ContractorMobile',
         'IsDispute',
-         'PercentCivilWork',
+        'PercentCivilWork',
         'PercentCivilDate',
         'IsPurposeHall',
         'IsMainITI',
@@ -1060,7 +1065,7 @@ export class ItiCollegeReportComponent {
         'ShilanyasPost',
         'ShilanyasName',
         'IsOperatingOwn',
-      /*  'ConstructionAgency',*/
+        /*  'ConstructionAgency',*/
         'PDName',
         'ContractorName',
         'PDMobile',
@@ -1091,7 +1096,7 @@ export class ItiCollegeReportComponent {
       this.ReportForm.controls['VillageID'].setValidators([DropdownValidators]);
       this.ReportForm.controls['GramPanchayatSamiti'].setValidators([DropdownValidators]);
       this.ReportForm.controls['PanchayatId'].setValidators([DropdownValidators]);
- 
+
     } else {
       this.ReportForm.controls['CityID'].setValidators([DropdownValidators]);
       this.ReportForm.controls['AdministrativeBodyId'].setValidators([DropdownValidators]);
@@ -1115,7 +1120,7 @@ export class ItiCollegeReportComponent {
     this.ReportForm.controls['VillageID'].updateValueAndValidity();
     this.ReportForm.controls['GramPanchayatSamiti'].updateValueAndValidity();
     this.ReportForm.controls['PanchayatId'].updateValueAndValidity();
-   
+
 
   }
 
@@ -1127,7 +1132,7 @@ export class ItiCollegeReportComponent {
       const parsedData = JSON.parse(JSON.stringify(data));
       debugger
       if (parsedData['Data'] != null) {
-          this.request = parsedData['Data'];
+        this.request = parsedData['Data'];
       }
       const defaultModel = new ItiReportDataModel();
 
@@ -1148,7 +1153,7 @@ export class ItiCollegeReportComponent {
       //  this.request.CollegeName=''
       //}
       // Optional: override with login data
- /*     this.request.CollegeName = this.sSOLoginDataModel.InstituteName;*/
+      /*     this.request.CollegeName = this.sSOLoginDataModel.InstituteName;*/
 
       // Format specific date fields
       const dateFields: (keyof ItiReportDataModel)[] = [
@@ -1174,7 +1179,7 @@ export class ItiCollegeReportComponent {
       await this.GetGramPanchayatSamiti()
       await this.villageMaster()
 
- 
+
       this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData['Data']["GramPanchayatSamiti"]);
       this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionID"]);
       this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictID"]);
@@ -1183,7 +1188,7 @@ export class ItiCollegeReportComponent {
       this.ReportForm.get('Vidhansabha')?.setValue(parsedData['Data']["Vidhansabha"]);
       this.ReportForm.get('TehsilID')?.setValue(parsedData['Data']["TehsilID"]);
       this.ReportForm.get('CityID')?.setValue(parsedData['Data']["CityID"]);
-  
+
       this.ReportForm.get('VillageID')?.setValue(parsedData['Data']["VillageID"]);
       this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData['Data']["AdministrativeBodyId"]);
       this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
@@ -1194,8 +1199,8 @@ export class ItiCollegeReportComponent {
         this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatId"]);
         this.request.PanchayatId = parsedData['Data']['PanchayatId'];
       }, 300);
-     
-/*      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)*/
+
+      /*      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)*/
       console.log(parsedData);
     } catch (ex) {
       console.log(ex);
@@ -1206,8 +1211,7 @@ export class ItiCollegeReportComponent {
     }
   }
 
-  async resetrow()
-  {
+  async resetrow() {
     this.isSubmitted = false
     this.request = new ItiReportDataModel()
     this.request.CollegeID = this.sSOLoginDataModel.InstituteID
@@ -1309,7 +1313,7 @@ export class ItiCollegeReportComponent {
 
 
     // Reset other unrelated fields (if required)
-    
+
 
     this.isAddrequest = false
 
@@ -1321,7 +1325,7 @@ export class ItiCollegeReportComponent {
   }
 
 
- async openOTP() {
+  async openOTP() {
     debugger
 
     this.nonItiValidator()
@@ -1367,8 +1371,12 @@ export class ItiCollegeReportComponent {
       this.ReportForm.controls['TakenOverDate'].setValidators(Validators.required);
     }
 
-   this.ReportForm.controls['TakenOverDate'].updateValueAndValidity();
+    this.ReportForm.controls['TakenOverDate'].updateValueAndValidity();
 
+ 
+    this.ReportForm.controls['AdministrativeBodyId'].clearValidators();
+    this.ReportForm.controls['AdministrativeBodyId'].updateValueAndValidity();
+    this.isSubmitted = true;
     Object.keys(this.ReportForm.controls).forEach(key => {
       const control = this.ReportForm.get(key);
 
@@ -1379,9 +1387,6 @@ export class ItiCollegeReportComponent {
         });
       }
     });
-   this.ReportForm.controls['AdministrativeBodyId'].clearValidators();
-   this.ReportForm.controls['AdministrativeBodyId'].updateValueAndValidity();
-    this.isSubmitted = true;
     if (this.ReportForm.invalid) {
       return
     }
@@ -1406,7 +1411,7 @@ export class ItiCollegeReportComponent {
     //}
 
 
-   if ( this.sSOLoginDataModel.RoleID == 97) {
+    if (this.sSOLoginDataModel.RoleID == 97) {
       if (this.request.InteriorPhoto == '') {
         this.toastr.warning("Please Upload Photo of Interior View of Main Campus")
         return
@@ -1427,7 +1432,7 @@ export class ItiCollegeReportComponent {
       //}
 
 
-      if (this.request.IsNewCollege == 1 && this.request.AllotmentLetter == '' && this.request.IsOperatingOwn=='Yes') {
+      if (this.request.IsNewCollege == 1 && this.request.AllotmentLetter == '' && this.request.IsOperatingOwn == 'Yes') {
         this.toastr.warning("Please Upload Allotment Letter Copy")
       }
 
@@ -1435,7 +1440,7 @@ export class ItiCollegeReportComponent {
         this.toastr.warning("Please Upload Building Plan Copy")
       }
 
-      if (this.request.IsNewCollege == 1 && this.request.DomeViewCopy == '' ) {
+      if (this.request.IsNewCollege == 1 && this.request.DomeViewCopy == '') {
         this.toastr.warning("Please Upload  Front Dome View Copy")
       }
 
@@ -1460,9 +1465,9 @@ export class ItiCollegeReportComponent {
       this.request.TakenOverDate = ''
     }
 
- 
-   
-  
+
+
+
     //  if (this.request.IsNewCollege == 1) {
     //    if (this.NewReportFormGroup.invalid) {
 
@@ -1496,15 +1501,15 @@ export class ItiCollegeReportComponent {
     //  return
     //}
 
-      this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-      // await for open model
-      await this.childComponent.OpenOTPPopup();
-      // await OTP verification
-      await this.childComponent.waitForVerification();
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+    // await OTP verification
+    await this.childComponent.waitForVerification();
 
-      // do work
+    // do work
     await this.SaveData();
-    
+
 
 
     //this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
@@ -1602,13 +1607,13 @@ export class ItiCollegeReportComponent {
       /*this.OptionsFormGroup.markAllAsTouched();*/
       return;
     }
-      
+
 
     // Get the selected values
 
 
     if (this.request.IsHostel == 'No') {
-      this.request.HostelUtilized='No'
+      this.request.HostelUtilized = 'No'
     }
 
 
@@ -1616,7 +1621,7 @@ export class ItiCollegeReportComponent {
       this.request.BasicDetailsList = [];
     }
 
-  
+
     //if (this.request.PostID != 7 && this.request.PostID != 8) {
     //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
     //  if (Exist) {
@@ -1628,23 +1633,23 @@ export class ItiCollegeReportComponent {
 
     this.request.BasicDetailsList.push({
 
-      ApproachRoad:      this.request.ApproachRoad,
-      InternalRoad:    this.request.InternalRoad,
+      ApproachRoad: this.request.ApproachRoad,
+      InternalRoad: this.request.InternalRoad,
       Harvesting: this.request.Harvesting,
       ElectPhase: this.request.ElectPhase,
       IsSolarPanel: this.request.IsSolarPanel,
-      IsBoundaryWall: this.request.IsBoundaryWall    ,
-                
+      IsBoundaryWall: this.request.IsBoundaryWall,
+
       ElectConnection: this.request.ElectConnection,
       PanelCapacity: this.request.PanelCapacity,
       HostelUtilized: this.request.HostelUtilized,
       NoOfTree: this.request.NoOfTree,
       ElectPhaserequired: this.request.ElectPhaserequired,
-                        
+
       ContractLoad: this.request.ContractLoad,
       BuildShortage: this.request.BuildShortage,
       IsHostel: this.request.IsHostel,
-                          
+
       Remarks: this.request.Remarks
 
     });
@@ -1665,7 +1670,7 @@ export class ItiCollegeReportComponent {
     this.request.BuildShortage = '';
     this.request.IsHostel = '';
     this.request.Remarks = '';
-    
+
 
 
     // Reset other unrelated fields (if required)
@@ -1767,6 +1772,28 @@ export class ItiCollegeReportComponent {
     }
   }
 
+
+  async GetDocumentPlan() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('DocumentPlan')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data, 'ggg');
+          this.DocumentPlanList = data['Data'];
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async GetLateralCourse() {
     try {
@@ -1886,65 +1913,65 @@ export class ItiCollegeReportComponent {
 
     // Get the selected values
 
-   // if (this.request.OrderType == 0) {
-   //   this.toastr.warning("Please Select Order Type")
-   //   return
-   // }
-   // if (this.request.SanctionOrderDate == '') {
-   //   this.toastr.warning("Please Add Order Date")
-   //   return
-   // }
-   // if (this.request.SanctionOrderNo == '') {
-   //   this.toastr.warning("Please Enter Order No")
-   //   return
-   // }
-   // if (this.request.SanctionOrderCopy == '') {
-   //   this.toastr.warning("Please Add Order Copy")
-   //   return
-   // }
+    // if (this.request.OrderType == 0) {
+    //   this.toastr.warning("Please Select Order Type")
+    //   return
+    // }
+    // if (this.request.SanctionOrderDate == '') {
+    //   this.toastr.warning("Please Add Order Date")
+    //   return
+    // }
+    // if (this.request.SanctionOrderNo == '') {
+    //   this.toastr.warning("Please Enter Order No")
+    //   return
+    // }
+    // if (this.request.SanctionOrderCopy == '') {
+    //   this.toastr.warning("Please Add Order Copy")
+    //   return
+    // }
 
 
-   // if (!this.PostSanctionList) {
-   //   this.PostSanctionList = [];
-   // }
+    // if (!this.PostSanctionList) {
+    //   this.PostSanctionList = [];
+    // }
 
 
-   // //if (this.request.PostID != 7 && this.request.PostID != 8) {
-   // //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
-   // //  if (Exist) {
-   // //    this.toastr.warning("Already Have request with selected Post ID")
-   // //    return
-   // //  }
-   // //}
+    // //if (this.request.PostID != 7 && this.request.PostID != 8) {
+    // //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
+    // //  if (Exist) {
+    // //    this.toastr.warning("Already Have request with selected Post ID")
+    // //    return
+    // //  }
+    // //}
 
-   // const OrderTypeName = this.OrderList.find((e: any) => e.ID == this.request.OrderType)?.Name || '';
-
-   
-
-   // this.PostSanctionList.push({
-
-   //   OrderCopy: this.request.SanctionOrderCopy,
-   //   OrderDate: this.request.SanctionOrderDate,
-   //   OrderNo: this.request.SanctionOrderNo,
-   //   OrderType: this.request.OrderType,
-   //   OrderTypeName: OrderTypeName
-
-   // });
-   ///* this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType==1)*/
+    // const OrderTypeName = this.OrderList.find((e: any) => e.ID == this.request.OrderType)?.Name || '';
 
 
-   // this.request.SanctionOrderCopy = '';
-   // this.request.SanctionOrderDate = '';
-   // this.request.SanctionOrderNo = '';
-   // this.request.SanctionOrderNo = '';
-   // this.request.OrderType = 0;
-   // OrderTypeName:''
+
+    // this.PostSanctionList.push({
+
+    //   OrderCopy: this.request.SanctionOrderCopy,
+    //   OrderDate: this.request.SanctionOrderDate,
+    //   OrderNo: this.request.SanctionOrderNo,
+    //   OrderType: this.request.OrderType,
+    //   OrderTypeName: OrderTypeName
+
+    // });
+    ///* this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType==1)*/
+
+
+    // this.request.SanctionOrderCopy = '';
+    // this.request.SanctionOrderDate = '';
+    // this.request.SanctionOrderNo = '';
+    // this.request.SanctionOrderNo = '';
+    // this.request.OrderType = 0;
+    // OrderTypeName:''
 
     debugger
 
-    const IsSelect = this.PostSanctionList.filter((e:any)=>e.Marked==true)
+    const IsSelect = this.PostSanctionList.filter((e: any) => e.Marked == true)
 
-    if (IsSelect.length ==0) {
+    if (IsSelect.length == 0) {
       this.toastr.warning("Please Select Any Order First")
       return
     }
@@ -2018,12 +2045,12 @@ export class ItiCollegeReportComponent {
 
 
     });
-/*    this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
+    /*    this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
 
 
     this.request.TradeCopy = '';
     this.request.TradeOrderDate = '';
- 
+
     this.request.TradeOrderNo = '';
     this.request.OrderType = 0;
 
@@ -2129,6 +2156,10 @@ export class ItiCollegeReportComponent {
 
   }
 
+  deleteUpdatePlan(index: number): void {
+    this.request.OtherDocument.splice(index, 1);
+
+  }
 
   async GetCollegeDetails(ID: number) {
     try {
@@ -2153,20 +2184,20 @@ export class ItiCollegeReportComponent {
         this.request.SubDivisionID = parsedData['Data']["SubDivisionId"]
         this.request.Loksabha = parsedData['Data']["ParliamentId"]
         //await this.GetAssemblyITI(this.request.Loksabha)
-        debugger  
+        debugger
         this.request.Vidhansabha = parsedData['Data']["AssemblyId"]
         this.request.TehsilID = parsedData['Data']["TehsilId"]
         this.request.CityID = parsedData['Data']["CityID"]
         this.request.PanchayatId = parsedData['Data']["PanchayatsamityId"]
         this.request.VillageID = parsedData['Data']["VillageId"]
         this.request.AdministrativeBodyId = parsedData['Data']["AdministrativeId"]
-       
+
         this.request.UrbanRural = parsedData['Data']["UrbanRural"]
         this.request.Pincode = parsedData['Data']["Pincode"]
         this.request.Pincode = parsedData['Data']["Pincode"]
         this.request.ItiCode = parsedData['Data']["Code"]
         this.request.MISCode = parsedData['Data']["DgetCode"]
-      
+
         this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionId"]);
         this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictId"]);
         this.ReportForm.get('SubDivisionID')?.setValue(parsedData['Data']["SubDivisionId"]);
@@ -2179,7 +2210,7 @@ export class ItiCollegeReportComponent {
         this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData['Data']["AdministrativeId"]);
         this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
         this.ReportForm.get('Pincode')?.setValue(parsedData['Data']["Pincode"]);
-   
+
         if (this.request.UrbanRural == 76) {
           await this.GetGramPanchayatSamiti();
         }
@@ -2187,7 +2218,7 @@ export class ItiCollegeReportComponent {
         this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData['Data']["GrampanchayatId"]);
       }
       //// Assign default values for null or undefined fields
-    
+
 
       //if (this.request.ItiMembersModel.length > 0) {
       //  this.ItiMemberPost()
@@ -2213,7 +2244,7 @@ export class ItiCollegeReportComponent {
       /*     this.request.CollegeName = this.sSOLoginDataModel.InstituteName;*/
 
       /*    Format specific date fields*/
-   
+
 
       console.log(parsedData, "dsw");
     } catch (ex) {
@@ -2294,7 +2325,7 @@ export class ItiCollegeReportComponent {
     this.request.UpdateExpectedDate = ''
     this.request.WorkSanctionCopy = ''
     this.request.UpdatePercentWork = ''
-    this.request.UpdateRemarks=''
+    this.request.UpdateRemarks = ''
   }
 
 
@@ -2302,16 +2333,16 @@ export class ItiCollegeReportComponent {
 
   async getExaminerData() {
     this.searchRequest.OrderType = this.request.OrderType
-    this.PostSanctionList=[]
+    this.PostSanctionList = []
     try {
       await this.ScholarshipService.GetsanctionOrderNotAssign(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.PostSanctionList = data.Data;
         console.log("this.PostSanctionList", this.PostSanctionList)
         debugger
-       this.PostSanctionList = this.PostSanctionList.filter((item: any) =>
-        
-         !this.request.OrderDetailsList.some((order: any) => order.SanctionID === item.SanctionID)
+        this.PostSanctionList = this.PostSanctionList.filter((item: any) =>
+
+          !this.request.OrderDetailsList.some((order: any) => order.SanctionID === item.SanctionID)
         );
       })
     } catch (error) {
@@ -2345,6 +2376,65 @@ export class ItiCollegeReportComponent {
     this.ReportForm.controls['AdministrativeBodyId'].clearValidators();
     this.ReportForm.controls['AdministrativeBodyId'].updateValueAndValidity();
   }
+
+
+
+  AddUpdateWork1() {
+
+
+
+    debugger
+    //if (this.request.IsBuildingTaken != 'Yes') {
+    //  this.AddReportFormGroup1.controls['TakenOverDate'].clearValidators();
+    //} else {
+    //  this.AddReportFormGroup1.controls['TakenOverDate'].setValidators(Validators.required);
+    //}
+
+    //this.AddReportFormGroup1.controls['TakenOverDate'].updateValueAndValidity();
+
+
+
+
+    // Get the selected values
+
+
+    if (this.request.PlanDocID == 0 || this.request.PlanDocument == ''
+    ) {
+      this.toastr.warning("Please Fill Required Fields And Upload Valid Documents")
+      return
+    }
+
+
+    if (!this.request.OtherDocument) {
+      this.request.OtherDocument = [];
+    }
+
+
+    //if (this.request.PostID != 7 && this.request.PostID != 8) {
+    //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
+    //  if (Exist) {
+    //    this.toastr.warning("Already Have request with selected Post ID")
+    //    return
+    //  }
+    //}
+    const Name = this.DocumentPlanList.find((e: any) => e.ID == this.request.PlanDocID).Name ?? ''
+
+    this.request.OtherDocument.push({
+
+      OrderCopy: this.request.PlanDocument,
+      OrderType: this.request.PlanDocID,
+      OrderTypeName: Name
+
+
+    });
+    /*    this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
+
+
+    this.request.PlanDocument = '',
+      this.request.PlanDocID = 0
+
+  }
+
 
   }
 
