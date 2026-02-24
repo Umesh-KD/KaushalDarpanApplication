@@ -468,7 +468,8 @@
             <table class="table table-border w-full table-auto" cellpadding="5">
               <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                 <tr>
-                  <th class="text-left">SrNo</th>
+                  <th class="text-left">Group Code</th>
+                  <th class="text-left">CC Code</th>
                   <th class="text-left">Present</th>
                   <th class="text-left">Absent</th>
                   <th class="text-left">Below 14 Marks Student</th>
@@ -482,7 +483,8 @@
               </thead>
               <tbody>
                 <tr *ngFor="let row of MarksDataList; let idx=index; ">
-                  <td align="left">{{idx+1}}</td>
+                  <td>{{row.GroupCode}}</td>
+                  <td>{{row.CCCode}}</td>
                   <td>{{row.Present}}</td>
                   <td>{{row.Absent}}</td>
                   <td>{{row.Below14MarksStudent}}</td>

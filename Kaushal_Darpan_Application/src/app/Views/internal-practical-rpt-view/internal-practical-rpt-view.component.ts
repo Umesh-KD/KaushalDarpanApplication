@@ -96,7 +96,7 @@ export class InternalPracticalRptViewComponent implements OnInit {
 
     this.searchRequest.InternalPracticalID = this.InternalPracticalID;
     //
-    if (this.InternalPracticalID == 2 || this.searchRequest.StrKey?.includes('mrkent') || this.searchRequest.StrKey?.includes('totl')) {
+    if (this.InternalPracticalID == 2 || this.searchRequest.StrKey?.includes('mrkent2') || this.searchRequest.StrKey?.includes('totl2')) {
       this.IsView = true;
     }
     else {

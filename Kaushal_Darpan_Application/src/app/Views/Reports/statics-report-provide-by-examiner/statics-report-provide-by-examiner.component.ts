@@ -465,6 +465,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   async closeMarksDataList() {
     this.modalService.dismissAll();
     this.modalReference?.close();   
+    this.requestMarksData = new ExaminerStaticReportSearchModel();
   }
 
   async openMarksDataList(content: any, row: any) {
