@@ -122,7 +122,7 @@ export class ITI_InstructorEmploymentDetails {
   public EmploymentDocument?: string = '';
   public BasicSalaryDocument?: string = '';
   public panDocument?: string = '';
-  public PostHeld?: number = 0;
+  public PostHeld?: string = '';
   public EmployeeCode?: string = '';
   public Employer_Registration?: string = '';
   public Employer_presentlyWorking = 'false';

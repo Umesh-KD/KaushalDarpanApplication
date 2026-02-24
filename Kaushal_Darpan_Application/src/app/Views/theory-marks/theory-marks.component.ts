@@ -286,13 +286,13 @@ export class TheoryMarksComponent implements OnInit {
 
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
     // try {
-    debugger
+    //debugger
 
     let isIntentionalAllowZeroMark = false;
     this.loaderService.requestStarted();
 
     this.TheoryMarksDetailList.forEach((item: any) => {
-      if (item.isSufm == true || item.isDetain == true) {
+      if (item.isSufm == true || item.isDetain == true || item.IsPresentTheory == 0) {
         item.selected = true;
       }
     });
@@ -521,8 +521,8 @@ export class TheoryMarksComponent implements OnInit {
   }
 
   async FeedbackSubmit() {
-    debugger
-    await this.OnSubmit(0, true);    
+    //debugger
+    await this.OnSubmit(0, true);
   }
 
   async FeedbackSubmitProceed() {
@@ -855,6 +855,17 @@ export class TheoryMarksComponent implements OnInit {
     }
 
     event.preventDefault();
+  }
+
+  // selected all except absent
+  get selectedAllForPresent(): boolean {
+    let anyUnmarkedInPresent = this.TheoryMarksDetailList.filter(x => x.Marked == false && x.IsPresentTheory == 1)?.length;
+    if (anyUnmarkedInPresent != 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 
 }

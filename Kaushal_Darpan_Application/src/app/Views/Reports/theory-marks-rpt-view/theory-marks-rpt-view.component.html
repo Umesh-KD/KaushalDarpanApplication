@@ -120,8 +120,12 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>SNo</th>
+            <th title="Click to sorting" (click)="sortInTableData('ExaminerName')">
+             Examiner
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ExaminerName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
             <th title="Click to sorting" (click)="sortInTableData('CCCode')">
-             Center C-Code
+             CC-Code
               <span class="shortingSpan" *ngIf="sortInTableColumn=='CCCode'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th title="Click to sorting" (click)="sortInTableData('RollNo')">
@@ -138,6 +142,7 @@
             </th>
             <th>Max Marks</th>
             <th>Marks Obtained</th>
+            <th>Student Status</th>
             <!--<th>Status</th>
         <th *ngIf="isAnyUFMSelected">Document Required</th>-->
           </tr>
@@ -146,13 +151,14 @@
         <tbody>
           <tr *ngFor="let row of paginatedInTableData;let idx=index;">
             <td align="left">{{(startInTableIndex+1)+idx}}</td>
+            <td align="left">{{row.ExaminerName}}</td>
             <td align="left">{{row.CCCode}}</td>
             <td align="left">{{row.RollNo}}</td>
             <td align="left">{{row.SubjectName}}</td>
             <td align="left">{{row.GroupCode}}</td>
             <td align="left">{{ row.MaxTheory }}</td>
             <td align="left">{{ row.ObtainedTheory }}</td>
-
+            <td align="left">{{ row.StudentStatus }}</td>
           </tr>
         </tbody>
 
@@ -163,12 +169,16 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>SNo</th>
+            <th title="Click to sorting" (click)="sortInTableData('ExaminerName')">
+              Examiner
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ExaminerName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
             <th title="Click to sorting" (click)="sortInTableData('StudentName')">
               Student Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th title="Click to sorting" (click)="sortInTableData('CCCode')">
-              Center C-Code
+              CC-Code
               <span class="shortingSpan" *ngIf="sortInTableColumn=='CCCode'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
 
@@ -202,14 +212,16 @@
             </th>
             <th>Max Marks</th>
             <th>Marks Obtained</th>
+            <th>Student Status</th>
             <!--<th>Status</th>
-        <th *ngIf="isAnyUFMSelected">Document Required</th>-->
+  <th *ngIf="isAnyUFMSelected">Document Required</th>-->
           </tr>
         </thead>
 
         <tbody>
           <tr *ngFor="let row of paginatedInTableData;let idx=index;">
             <td align="left">{{(startInTableIndex+1)+idx}}</td>
+            <td align="left">{{row.ExaminerName}}</td>
             <td align="left">{{row.StudentName}}</td>
             <td align="left">{{row.CCCode}}</td>
             <td align="left">{{row.RollNo}}</td>
@@ -217,13 +229,11 @@
             <td align="left">{{row.SemesterName}}</td>
             <td align="left">{{row.StreamName}}</td>
             <td align="left">{{row.SubjectName}}</td>
-
             <td align="left">{{row.GroupCode}}</td>
             <td align="left">{{row.EnrollmentNo}}</td>
-
             <td align="left">{{ row.MaxTheory }}</td>
             <td align="left">{{ row.ObtainedTheory }}</td>
-
+            <td align="left">{{ row.StudentStatus }}</td>
           </tr>
         </tbody>
 

@@ -50,6 +50,7 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
 
   @ViewChild(downloadITIResultComponent)
   downloadITIResultComponent!: downloadITIResultComponent;
+  //public isAutoSearch: false
   constructor(private resolver: ComponentFactoryResolver,
     private Swal2: SweetAlert2, private router: Router, private routers: ActivatedRoute,
     private cdr: ChangeDetectorRef, private route: ActivatedRoute,
@@ -58,13 +59,14 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
   }
   @Input() RollNo!: string;
   @Input() dob!: string;
+  @Input() sessionId!: string;
 
   async ngOnInit() {
 
     this.route.queryParams.subscribe(params => {
       const roll = params['rollNo'];
       const Dob = params['dob'];
-
+    const sessionID = params['sessionId'];
       if (roll) {
         this.RollNo = roll;
       }
@@ -72,9 +74,13 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
       if (Dob) {
         this.dob = Dob;
       }
-
-  
+      if (sessionID) {
+        this.sessionId = sessionID;
+      }
     });
+
+
+    
 
     await this.GetCurrentAdmissionSession();
     await this.LoadTabs();
@@ -193,13 +199,12 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
     const factory = this.resolver.resolveComponentFactory(component);
     this.tabContent.clear();
 
-    this.childComponentRef = this.tabContent.createComponent(factory);
 
+    this.childComponentRef = this.tabContent.createComponent(factory);
 
     this.childComponentRef.instance.RollNo = this.RollNo;
     this.childComponentRef.instance.DOB = this.dob;
-    this.childComponentRef.instance.EndTermID = 37;
-
+    this.childComponentRef.instance.EndTermID = this.sessionId;
 
     this.cdr.detectChanges();
   }

@@ -72,14 +72,14 @@
     </form>
 
     <div class="mt-3" *ngIf="isShowGrid">
-
+      <h3 style="margin-bottom: 5px;font-size: 16px; margin-top: 0; color: #333; border-bottom: 1px solid #ccc;">
+        Search Results
+      </h3>
       <div class="" id="printSection">
 
         <div style="border: 4px double #5b9bd5;  margin: 0 auto;" *ngIf="itiResultData?.[0]?.RollNo != ''">
 
-          <h3 style="margin-bottom: 0px;font-size: 16px; margin-top: 0; color: #333; border-bottom: 1px solid #ccc; padding: 8px 15px;">
-            Search Results
-          </h3>
+
           <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; line-height: 1.8;">
             <tr style="border-bottom: 1px solid #ccc;">
               <td style="width: 12%; font-weight: bold;line-height: 16px; padding: 10px 0px 10px 15px;">
@@ -150,15 +150,17 @@
             <span> <b>Note:</b> {{ itiResultData[0].ResultNote }}</span>
           </div>
 
-          
+
 
 
         </div>
 
       </div>
-      <button class="btn btn-primary" (click)="printResult()">
-        🖨 Print Result
-      </button>
+      <div style="text-align:center;margin-top:10px;" >
+        <button class="btn btn-primary" (click)="printResult()">
+          🖨 Print Result
+        </button>
+      </div>
     </div>
   </div>
 </div>

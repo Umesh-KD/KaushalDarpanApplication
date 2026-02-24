@@ -57,12 +57,12 @@
                    class="inline-flex items-center btn bg-dark text-white btn-sm">
                   <i class="ti ti-chevron-left"></i> Back
                 </a>
-                <a *ngIf="this.urlId!=''" [routerLink]="['/InstructorTab']"
+                <a *ngIf="this.urlId!=''" (click)="Back2()"
                    class="inline-flex items-center btn bg-dark text-white btn-sm">
                   <i class="ti ti-chevron-left"></i> Back
                 </a>
               
-
+                
               </div>
 
               <div *ngIf="isSSOVisible" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
@@ -1528,6 +1528,9 @@
                 <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">
                   <div class="text-center">
                     <button class="btn btn-sm bg-info text-white" *ngIf="!isViewMode || uid  && !InstructorForm.disabled || uid " type="submit" (click)="onSubmit()">Submit</button>
+                    <button class="btn btn-sm bg-info text-white" *ngIf="request.StatusID==9 || request.StatusID==3
+
+                            " type="submit" (click)="onFinalSubmit()">Final Submit</button>
                     <button class="btn btn-sm bg-info text-white" *ngIf="!isViewMode && !InstructorForm.disabled && !uid" type="button" (click)="onReset()">Reset</button>
                     <a (click)="Back()"
                        class="inline-flex items-center btn bg-dark text-white btn-sm">
