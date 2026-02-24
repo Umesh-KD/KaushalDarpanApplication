@@ -133,96 +133,29 @@
           {{ element.GroupCode }}
         </td>
       </ng-container>
-      <!-- <ng-container matColumnDef="CCCode">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>CC Code </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.CCCode }}
-        </td>
-      </ng-container> -->
-      <ng-container matColumnDef="Present">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Present </th>
-        <td mat-cell *matCellDef="let element">
-          <!-- Dynamic routerLink based on element's student ID -->
-          {{ element.Present }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="Absent">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Absent </th>
-        <td mat-cell *matCellDef="let element">
-          <!-- Dynamic routerLink based on element's student ID -->
-          {{ element.Absent }}
-        </td>
-      </ng-container>
-
-      <!-- <ng-container matColumnDef="PresentbyExami">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Present by Exam </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.PresentbyExami }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="AbsentbyExami">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Absent by Exam </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.AbsentbyExami }}
-        </td>
-      </ng-container> -->
-
-      <ng-container matColumnDef="Below14MarksStudent">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Below 14 Marks Student </th>
-        <td mat-cell *matCellDef="let element">
-          <!-- Dynamic routerLink based on element's student ID -->
-          {{ element.Below14MarksStudent }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Below15to17MarksStudent">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>15 to 17 Marks Student </th>
-        <td mat-cell *matCellDef="let element">
-          <!-- Dynamic routerLink based on element's student ID -->
-          {{ element.Below15to17MarksStudent }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Below18to54MarksStudent">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>18 to 54 Marks Student </th>
-        <td mat-cell *matCellDef="let element">
-          <!-- Dynamic routerLink based on element's student ID -->
-          {{ element.Below18to54MarksStudent }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Below55to60MarksStudent">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>55 to 60 Marks Student </th>
-        <td mat-cell *matCellDef="let element">
-          <!-- Dynamic routerLink based on element's student ID -->
-          {{ element.Below55to60MarksStudent }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Above60MarksStudent">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Above 60 Marks Student </th>
-        <td mat-cell *matCellDef="let element">
-          <!-- Dynamic routerLink based on element's student ID -->
-          {{ element.Above60MarksStudent }}
-        </td>
-      </ng-container>
 
       <ng-container matColumnDef="Action">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Action </th>
         <td mat-cell *matCellDef="let element">
-          <div class="flex align-center justify-center actionBtns w-auto"
-                   style="width:auto !important">
+          <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+
+            <a (click)="openMarksDataList(MarksDataList_Modal, element)"
+              class="btn bg-primary" target="_blank" title="View Marks Data List"><i class="ti ti-eye"></i>
+            </a>
+
             <a class="btn btn-primary" title="Edit" *ngIf="element.Status == 0"
-              (click)="openFeedbackForm( FeedbackForm_Modal, element)"><i class="ti ti-pencil"></i></a>
+              (click)="openFeedbackForm( FeedbackForm_Modal, element)"><i class="ti ti-pencil"></i>
+            </a>
 
             <a href="javascript:void(0);" class="btn bg-info" *ngIf="element.Status == 1"
-              (click)="PDFDownload(element)" ><i class="ti ti-download"></i></a>
+              (click)="PDFDownload(element)" ><i class="ti ti-download"></i>
+            </a>
 
             <a href="{{appsettingConfig.StaticFileRootPathURL + element.MassCopyDocument}}" 
               *ngIf="element.Status == 1 && element.MassCopyDocument !=''"
-              class="btn bg-primary" target="_blank" title="Mass Copy Document"><i class="ti ti-eye"></i>
+              class="btn bg-secondary" target="_blank" title="Mass Copy Document"><i class="ti ti-eye"></i>
             </a>
+
           </div>
         </td>
       </ng-container>
@@ -514,6 +447,53 @@
               </div>
 
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MarksDataList_Modal let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-list"></i> </b>
+        <button class="btn bg-info text-white" (click)="closeMarksDataList()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">SrNo</th>
+                  <th class="text-left">Present</th>
+                  <th class="text-left">Absent</th>
+                  <th class="text-left">Below 14 Marks Student</th>
+                  <th class="text-left">15 to 16 Marks Student </th>
+                  <th class="text-left">17 Marks Student </th>
+                  <th class="text-left">18 to 54 Marks Student </th>
+                  <th class="text-left">55 to 60 Marks Student</th>
+                  <th class="text-left">Above 60 Marks Student</th>
+                </tr>
+
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of MarksDataList; let idx=index; ">
+                  <td align="left">{{idx+1}}</td>
+                  <td>{{row.Present}}</td>
+                  <td>{{row.Absent}}</td>
+                  <td>{{row.Below14MarksStudent}}</td>
+                  <td>{{row.Below15to16MarksStudent}}</td>
+                  <td>{{row._17MarksStudent}}</td>
+                  <td>{{row.Below18to54MarksStudent}}</td>
+                  <td>{{row.Below55to60MarksStudent}}</td>
+                  <td>{{row.Above60MarksStudent}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

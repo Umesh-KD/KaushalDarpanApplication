@@ -31,11 +31,9 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
 
   // Columns to be displayed in the table
   displayedColumns: string[] = [
-    'SrNo', 'ExamName', 'ExaminerName', 'SubjectCode', 'GroupCode', 'Present', 
-    'Absent', 
+    'SrNo', 'ExamName', 'ExaminerName', 'SubjectCode', 'GroupCode', 
     // 'PresentbyExami', 'AbsentbyExami', 'CCCode',
-    'Below14MarksStudent', 'Below15to17MarksStudent', 'Below18to54MarksStudent', 
-    'Below55to60MarksStudent','Above60MarksStudent', 'Action'
+     'Action'
   ];
 
   // Data source for the table
@@ -60,6 +58,9 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   public request = new ExaminerStaticReportFeedbackDataModel();
   public requestData = new ExaminerStaticReportSearchModel();
   public requestDataPdf = new ExaminerStaticReportSearchModel();
+  public requestMarksData = new ExaminerStaticReportSearchModel();
+
+  public MarksDataList: any = [];
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
@@ -448,6 +449,44 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
           this.toastr.success(data.Message);
           this.closeFeedbackForm();
           await this.GetAllData();
+        }
+        else if (data.State == EnumStatus.Error) {
+          this.toastr.error(data.ErrorMessage);
+        }
+        else {
+          this.toastr.warning(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async closeMarksDataList() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();   
+  }
+
+  async openMarksDataList(content: any, row: any) {
+    await this.GetStaticsReportExaminerMarksData(row);
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'lg', keyboard: true, centered: true });
+    return;
+  }
+
+  async GetStaticsReportExaminerMarksData(row: any) {
+    try {
+      this.requestMarksData.RoleID = this.ssoLoginUser.RoleID
+      this.requestMarksData.EndTermID = this.ssoLoginUser.EndTermID
+      this.requestMarksData.DepartmentID = this.ssoLoginUser.DepartmentID
+      this.requestMarksData.Eng_NonEng = this.ssoLoginUser.Eng_NonEng
+      this.requestMarksData.GroupCode = row.GroupCode
+      this.requestMarksData.SSOID = this.ssoLoginUser.SSOID
+      this.requestMarksData.SubjectCode = row.SubjectCode
+
+      await this.reportService.GetStaticsReportExaminerMarksData(this.requestMarksData).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.MarksDataList = data.Data;
         }
         else if (data.State == EnumStatus.Error) {
           this.toastr.error(data.ErrorMessage);

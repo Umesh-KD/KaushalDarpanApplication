@@ -1830,6 +1830,13 @@ export class ReportService {
 
   }
 
+  public async GetStaticsReportExaminerMarksData(data: any) {
+    return await this.http.post(this.APIUrl + "/GetStaticsReportExaminerMarksData/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 
