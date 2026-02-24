@@ -447,7 +447,7 @@ export class downloadITIResultComponent {
     popupWin?.document.write(`
     <html>
       <head>
-        
+          <title>ITI Result</title>
         <style>
           @page {
             size: A4 portrait;
