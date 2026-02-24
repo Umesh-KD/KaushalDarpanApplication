@@ -286,7 +286,7 @@ export class TheoryMarksComponent implements OnInit {
 
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
     // try {
-    debugger
+    //debugger
 
     let isIntentionalAllowZeroMark = false;
     this.loaderService.requestStarted();
@@ -521,7 +521,7 @@ export class TheoryMarksComponent implements OnInit {
   }
 
   async FeedbackSubmit() {
-    debugger
+    //debugger
     await this.OnSubmit(0, true);
   }
 
