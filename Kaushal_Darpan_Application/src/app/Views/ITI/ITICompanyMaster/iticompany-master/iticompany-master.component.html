@@ -90,9 +90,12 @@
             <td>{{company.Status}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="'/AddItiCompanyMaster'" [queryParams]="{CompanyID:company.ID, key:1}" *ngIf="(company.Status=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a [routerLink]="'/AddItiCompanyMaster'" [queryParams]="{CompanyID:company.ID, key:2}" *ngIf="(company.Status=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" title="Delete" *ngIf="(company.Status=='Pending')" (click)="DeleteById(company.ID)">
                   <i class="ti ti-trash"></i>
+                </a>
+                <a *ngIf="(company.Status=='Approved')" [routerLink]="'/AddItiCompanyMaster'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
+                  <i class="ti ti-eye"></i>
                 </a>
               </div>
             </td>

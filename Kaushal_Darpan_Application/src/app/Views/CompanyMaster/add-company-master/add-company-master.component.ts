@@ -400,8 +400,6 @@ export class AddCompanyMasterComponent implements OnInit {
   // reset
   ResetControls() {
     this.request = new CompanyMasterDataModels();
-
-
     //this.multiSelect.toggleSelectAll();
   }
 

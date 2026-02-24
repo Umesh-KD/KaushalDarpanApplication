@@ -32,7 +32,7 @@ export class TheoryMarksComponent implements OnInit {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public SemesterMasterList: any = [];
-  public isfinalsubmit:boolean=false
+  public isfinalsubmit: boolean = false
   public Branchlist: any = [];
   /*public TheoryMarksList: any = [];*/
   public UserID: number = 0;
@@ -65,6 +65,7 @@ export class TheoryMarksComponent implements OnInit {
   public file!: File;
   public ExaminerCode: string = ''
   public Feedback: string = ''
+
   @ViewChild('MyModel_ExaminerCodeLogin') MyModel_ExaminerCodeLogin: ElementRef | any;
   @ViewChild('MyModel_FeedbackForm') MyModel_FeedbackForm: ElementRef | any;
   @ViewChildren('markInput') markInputs!: QueryList<ElementRef>;
@@ -112,7 +113,7 @@ export class TheoryMarksComponent implements OnInit {
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
 
     this.routeStatus = this.router.snapshot.queryParamMap.get('status') ? Number(this.router.snapshot.queryParamMap.get('status')) : -1;
-    if(this.routeStatus !== undefined || this.routeStatus !== null) { 
+    if (this.routeStatus !== undefined || this.routeStatus !== null) {
       this.searchRequest.StudentStatus = this.routeStatus
     }
 
@@ -137,7 +138,7 @@ export class TheoryMarksComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.GroupCodeList = data['Data'];
-          console.log("GroupCodeList",this.GroupCodeList);
+          console.log("GroupCodeList", this.GroupCodeList);
         }, (error: any) => console.error(error)
         );
     }
@@ -191,9 +192,9 @@ export class TheoryMarksComponent implements OnInit {
   }
   //
   async GetTheoryMarksDetailList() {
-    debugger
+    //debugger
     try {
-      this.AllInTableSelect=false;
+      this.AllInTableSelect = false;
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -214,8 +215,8 @@ export class TheoryMarksComponent implements OnInit {
       await this.TheoryMarksService.GetTheoryMarksDetailList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-            this.TheoryMarksDetailList = data['Data'];
-            this.TheoryMarksDetailList.map(async (x: any) => {
+          this.TheoryMarksDetailList = data['Data'];
+          this.TheoryMarksDetailList.map(async (x: any) => {
             await this.onStatusThoryMarks(x);
           })
 
@@ -227,21 +228,21 @@ export class TheoryMarksComponent implements OnInit {
 
           this.TheoryMarksDetailList.forEach(x => {
             if (x.IsChecked === false) {
-               if( x.centersubmitstatus == 1 &&  x.centerpresentstatus==0)
-                {   x.IsPresentTheory = 0
-                    x.ObtainedTheory= '';
-                  }
-                else 
-                  {   x.IsPresentTheory = 1
-                      x.ObtainedTheory= '';
-                  }
-            } else if(x.IsChecked === true && x.IsPresentTheory==0) {
-              x.ObtainedTheory= '';
+              if (x.centersubmitstatus == 1 && x.centerpresentstatus == 0) {
+                x.IsPresentTheory = 0
+                x.ObtainedTheory = '';
+              }
+              else {
+                x.IsPresentTheory = 1
+                x.ObtainedTheory = '';
+              }
+            } else if (x.IsChecked === true && x.IsPresentTheory == 0) {
+              x.ObtainedTheory = '';
             }
           })
 
           // var isfinalsubmit = this.TheoryMarksDetailList.filter(x => x.isFinalSubmit == true)
-          
+
           //table feature load
           this.loadInTable();
           //end table feature load
@@ -258,10 +259,9 @@ export class TheoryMarksComponent implements OnInit {
   }
   //
 
-
   isAllChecked(): boolean {
-    
-    let nonDetained =  this.TheoryMarksDetailList?.filter(item => item.IsDetain == false);
+
+    let nonDetained = this.TheoryMarksDetailList?.filter(item => item.IsDetain == false);
     return nonDetained?.every(item => item.IsChecked == true);
   }
 
@@ -269,11 +269,11 @@ export class TheoryMarksComponent implements OnInit {
 
     var IsCheckecd = this.TheoryMarksDetailList.some(x => x.Marked == true);
 
-      if (IsCheckecd==false) {
-        this.toastr.error("Please Marked At least One Student")
-        return
-      }
-
+    if (IsCheckecd == false) {
+      this.toastr.error("Please Marked At least One Student")
+      return
+    }
+    // confirmation box
     this.Swal2.Confirmation("Are you sure? <br> Once Submitted, It can't be edited anymore.",
       async (result: any) => {
         if (result.isConfirmed) {
@@ -286,9 +286,11 @@ export class TheoryMarksComponent implements OnInit {
 
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
     // try {
-    
+    debugger
+
+    let isIntentionalAllowZeroMark = false;
     this.loaderService.requestStarted();
-    
+
     this.TheoryMarksDetailList.forEach((item: any) => {
       if (item.isSufm == true || item.isDetain == true) {
         item.selected = true;
@@ -321,11 +323,11 @@ export class TheoryMarksComponent implements OnInit {
         && x.centersubmitstatus == 1 && x.centerpresentstatus == 1
         && x.IsUFM == false && x.IsDetain == false && x.IsPresentTheory == 1
     ); //  -- ramesh 13-02-2026 for validation
-    if(markNotEntered.length > 0) {
-      this.toastr.error('Please enter marks for present student! first!');
+    if (markNotEntered.length > 0) {
+      this.toastr.error(`Please enter marks for present student first! (Roll No)</br> ${markNotEntered.map((x: any) => x.RollNo).join(', <br>')}`);
       return
     }
-    
+
     // Iterate over each filtered item for validation
     for (let x of filtered) {
 
@@ -334,36 +336,25 @@ export class TheoryMarksComponent implements OnInit {
         x.ObtainedTheory = 0; // Ensure marks are 0 when absent -- ramesh 13-02-2026
         // Ensure marks are 0 when absent (MaxTheory and ObtainedTheory should be 0 for absent students)
         if (x.ObtainedTheory !== 0) {
-          this.toastr.error('Please Enter 0 for absent student!');
+          this.toastr.error(`Please Enter 0 for absent student! (Roll No) </br> ${x.RollNo}`);
           return;
         }
+      }
+
+      // Ensure that MaxTheory is not less than ObtainedTheory
+      if ((x.ObtainedTheory!) > x.MaxTheory && x.IsUFM == false && x.IsDetain == false) {
+        this.toastr.error(`'Obtained Marks' cannot be greater then 'Max Marks'! (Roll No) </br> ${x.RollNo}`);
+        return;
       }
 
       // If the student is marked as "Present" (IsPresentTheory = 1), ensure that marks are entered
       if (x.IsPresentTheory === 1 && x.IsUFM == false && x.IsDetain == false) {
         // If no marks are entered, show the "Please enter marks" message
         if (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '') {
-          this.toastr.error('Please enter marks for present student!');
+          this.toastr.error(`Please enter marks for present student! (Roll No) </br> ${x.RollNo}`);
           return;
         }
 
-        // Ensure the mark is either 0 or greater than 0 but not more than MaxTheory
-        if (x.ObtainedTheory === 0) {
-          this.Swal2.Confirmation(`Marks are 0 for this student, proceed if this is intentional.:<br>`, async (result: any) => {
-            if (!result.isConfirmed) {
-              return;
-            }
-          })
-        } else if (x.ObtainedTheory > x.MaxTheory) {
-          this.toastr.error('Marks must be between 0 and Max Theory marks!');
-          return;
-        }
-      }
-
-      // Ensure that MaxTheory is not less than ObtainedTheory
-      if ((x.ObtainedTheory!) > x.MaxTheory) {
-        this.toastr.error("'Obtained Marks' cannot be greater then 'Max Marks'!");
-        return;
       }
 
       // Set the Modifier information
@@ -372,20 +363,36 @@ export class TheoryMarksComponent implements OnInit {
 
     filtered.forEach(x => {
       x.IsChecked = true,
-      x.isFinalSubmit = isFinalSubmit
-    })    
+        x.isFinalSubmit = isFinalSubmit
+    })
 
-    this.perfactStudents = filtered.filter(x => x.ObtainedTheory == x.MaxTheory);
-    console.log("this.perfactStudents", this.perfactStudents);
-    if (this.perfactStudents.length > 0) {
-      this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for Roll Number:<br> ${this.perfactStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
+    // zero marks
+    let zeromarksStudents = filtered.filter(x => x.ObtainedTheory === 0 && x.IsUFM == false && x.IsDetain == false && x.IsPresentTheory == 1) ?? [];
+    if (zeromarksStudents.length > 0) {
+      await this.Swal2.Confirmation(`Marks are 0 for student, proceed if this is intentional: (Roll No)<br> ${zeromarksStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
-           await this.SaveData(filtered)
+          await this.OnSubmitAfter(filtered);
+        }
+      })
+    }
 
+    // if zero not found
+    if (zeromarksStudents.length == 0) {
+      await this.OnSubmitAfter(filtered);
+    }
+  }
+
+  async OnSubmitAfter(item: any[]) {
+    // full marks
+    this.perfactStudents = item.filter(x => x.ObtainedTheory == x.MaxTheory) ?? [];
+    if (this.perfactStudents.length > 0) {
+      await this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for student: (Roll No)<br> ${this.perfactStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
+        if (result.isConfirmed) {
+          await this.SaveData(item);
         }
       })
     } else {
-       await this.SaveData(filtered)
+      await this.SaveData(item);
     }
   }
 
@@ -412,7 +419,8 @@ export class TheoryMarksComponent implements OnInit {
               }
               )
             }
-
+            // submit remark
+            await this.FeedbackSubmitProceed();
           } else {
             this.toastr.error(this.ErrorMessage);
           }
@@ -428,14 +436,6 @@ export class TheoryMarksComponent implements OnInit {
       this.loaderService.requestEnded();
     }
   }
-
-
-
-
-
-
-
-
 
   ResetControl() {
     this.isSubmitted = false;
@@ -502,6 +502,7 @@ export class TheoryMarksComponent implements OnInit {
       this.routers.navigate(['/dashboard']);
     }
   }
+
   CloseModalFeedboackPopup(isNavigate: boolean) {
     this.modalService.dismissAll();
     // if (isNavigate) {
@@ -520,8 +521,12 @@ export class TheoryMarksComponent implements OnInit {
   }
 
   async FeedbackSubmit() {
-    await this.OnSubmit(0, true);
-    if(this.IsFeedbackSubmit) {
+    debugger
+    await this.OnSubmit(0, true);    
+  }
+
+  async FeedbackSubmitProceed() {
+    if (this.IsFeedbackSubmit) {
       try {
         this.loaderService.requestStarted();
         this.feedbackRequest.GroupCodeID = this.examinerCodeLoginModel.GroupCodeID;
@@ -539,19 +544,16 @@ export class TheoryMarksComponent implements OnInit {
             this.CloseModalFeedboackPopup(true);
             this.routers.navigate(['/dashboard']);
           } else {
-            this.toastr.error(data.ErrorMessage); 
+            this.toastr.error(data.ErrorMessage);
           }
         })
-        
+
       } catch (error) {
         console.error(error);
-      } finally {
-        setTimeout (() => {
-          this.loaderService.requestEnded();
-        }, 200)
       }
-    }    
+    }
   }
+
   async openPageAfterExaminerLogin() {
     try {
       this.isSubmitted = true;
@@ -713,15 +715,15 @@ export class TheoryMarksComponent implements OnInit {
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    
+
     const rowIndex = this.TheoryMarksDetailList.findIndex(x => x === item);
     if (rowIndex !== -1) {
       this.TheoryMarksDetailList[rowIndex].Marked = isSelected;
     }
 
     // Update "Select All" checkbox state
-    let nonDetained =this.TheoryMarksDetailList.filter(r => r.IsDetain==false);
-    this.AllInTableSelect = nonDetained.every(r => r.Marked==true);
+    let nonDetained = this.TheoryMarksDetailList.filter(r => r.IsDetain == false);
+    this.AllInTableSelect = nonDetained.every(r => r.Marked == true);
   }
 
   //end table feature
@@ -743,7 +745,7 @@ export class TheoryMarksComponent implements OnInit {
       dOC.Remark = '';
     }
 
-    if(dOC.IsPresentTheory == 0) {
+    if (dOC.IsPresentTheory == 0) {
       dOC.ObtainedTheory = 0;
     }
 
@@ -797,8 +799,6 @@ export class TheoryMarksComponent implements OnInit {
     }
   }
 
-
-
   numberOnly(event: KeyboardEvent): boolean {
 
     const charCode = (event.which) ? event.which : event.keyCode;
@@ -815,14 +815,26 @@ export class TheoryMarksComponent implements OnInit {
 
   onTabPress(event: KeyboardEvent, idx: number): void {
     if (event.key === 'Tab') {
-      event.preventDefault(); // Prevents the default tab action
+      event.preventDefault();
 
-      const nextIndex = idx + 1;
-      const nextInput = document.querySelector(`[tabindex="${nextIndex}"]`) as HTMLElement;
+      let nextIndex = idx + 1;
+      let nextTextbox: HTMLInputElement | null = null;
 
-      if (nextInput) {
-        nextInput.focus();
+      while (!nextTextbox) {
+        const element = document.querySelector(
+          `input[type="text"][tabindex="${nextIndex}"]`
+        ) as HTMLInputElement | null;
+
+        if (!element) break;
+
+        if (!element.disabled) {
+          nextTextbox = element;
+        } else {
+          nextIndex++;
+        }
       }
+
+      nextTextbox?.focus();
     }
   }
 

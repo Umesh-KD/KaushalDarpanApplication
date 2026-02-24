@@ -73,6 +73,7 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public centerpresentstatus?: number = 0;
   public StudentStatus?: number = -1;
   public StrKey?: string = '';
+  public CenterCode?:number=0;
 }
 
 

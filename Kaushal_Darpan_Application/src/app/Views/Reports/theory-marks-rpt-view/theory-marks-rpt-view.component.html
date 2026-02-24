@@ -59,9 +59,21 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No.: </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No / CC Code / Group Code: </label>
           <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
         </div>
+
+        
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Center C-Code:<span class="StarMarking"></span>
+          </label>
+          <select class="form-select" id="ddlBranch"
+                  [(ngModel)]="searchRequest.CenterCode">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of CenterCodeList" [value]="item?.CCCode">{{item.CCCode}}</option>
+          </select>
+        </div>-->
 
         <!-- <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>

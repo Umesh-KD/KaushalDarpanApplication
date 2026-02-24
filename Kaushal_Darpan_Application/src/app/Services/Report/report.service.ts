@@ -36,6 +36,7 @@ import { CollegesWiseExaminationRptSearchModel } from '../../Models/CollegesWise
 import { StudentItiResultModel } from '../../Models/StudentSearchModel';
 import { InternalMarksReportCollegeWiseSearchModel } from '../../Models/CompanyMasterDataModel';
 import { CertificateLetterSearchModel } from '../../Models/CertificateLetterDataModel';
+import { ExaminerStaticReportFeedbackDataModel } from '../../Models/BTER/StaticsReportDataModel';
 
 
 
@@ -1816,6 +1817,14 @@ export class ReportService {
     const body = JSON.stringify(searchRequest);
 
     return await this.http.post(`${this.APIUrl}/GetITIAllDataExcelReport`, body, this.headersOptions)
+      .pipe(catchError(this.handleErrorObservable)
+      ).toPromise();
+
+  }
+
+  public async SaveExaminerStaticReportFeedbackForm(searchRequest: ExaminerStaticReportFeedbackDataModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/SaveExaminerStaticReportFeedbackForm`, body, this.headersOptions)
       .pipe(catchError(this.handleErrorObservable)
       ).toPromise();
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { StudentMeritInfoModel } from '../../../Models/StudentMeritInfoDataModel';
 import { StudentItiResultModel, StudentSearchModel } from '../../../Models/StudentSearchModel';
 import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
@@ -74,12 +74,19 @@ export class downloadITIResultComponent {
   public enumExamStudentStatus = enumExamStudentStatus;
   public SemesterName: String = ''
   public StudentSubjectList: any[] = [];
+
+  public Studentmarkdata: any[] = [];
+  
   public isSubmitted: boolean = false
   public isShowSelected: boolean = false;
   public IsdocumentShow: boolean = false
    public downloadRequest = new ItiApplicationSearchmodel()
   public isOnStatus = false;
   public itiResult = new StudentITIResultSearchModel();
+
+  @Input() RollNo!: string;
+  @Input() DOB!: string;
+  @Input() EndTermID!: number;
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService,private ApplicationStatusService:ApplicationStatusService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
     private emitraPaymentService: EmitraPaymentService,
@@ -94,18 +101,38 @@ export class downloadITIResultComponent {
 
   async ngOnInit() {
 
+
+
+
     this.itiResultform = this.formBuilder.group({
       ID: [0, Validators.required],
       RollNo: ['', Validators.required],
       DOB: ['', Validators.required]
     });
 
+    this.itiResultRequest.RollNo = this.RollNo;
+    this.itiResultRequest.ID = this.EndTermID;
+    this.itiResultRequest.DOB = this.DOB;
+
+ 
+
+
+    if (this.RollNo && this.DOB && this.EndTermID) {
+      this.GetITIStudent_MarksheetList();
+
+    }
+
+
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
      const today = new Date();
     this.maxDate = today.toISOString().split('T')[0];
 
+
+
     await this.GetPublicInfoStatus();
-     this.loadDropdownData('ITIEndTerm');
+    this.loadDropdownData('ITIEndTerm');
+
   }
 
 
@@ -150,6 +177,7 @@ export class downloadITIResultComponent {
     this.itiResultRequest.RollNo ='';
     this.itiResultRequest.DOB = '';
     this.itiResultRequest.ID = 0;
+    this.isShowGrid = false;
     this.isSubmitted = false;
     this.itiResultData = [];
 }
@@ -159,6 +187,7 @@ export class downloadITIResultComponent {
    
     this.isShowGrid = true;
     this.itiResultData = [];
+    this.Studentmarkdata = [];
     this.itiResultRequest.DepartmentID = EnumDepartment.ITI;
     this.itiResultRequest.EndTermID = this.itiResultRequest.ID;
     try {
@@ -168,9 +197,27 @@ export class downloadITIResultComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success)
           {
-            this.itiResultData = data['Data']['Table'];
+            const table = data?.Data?.Table || [];
+            const table1 = data?.Data?.Table1 || [];
+            debugger;
+            if (table.length > 0)
+            {
+
+              this.itiResultData = table;
+              this.Studentmarkdata = table1;
+
+            } else {
+
+              this.itiResultData = [];
+              this.Studentmarkdata = [];
+              this.isShowGrid = false;  // HIDE RESULT
+              this.sweetAlert2.Info("No Record Found");
+            }
+
             console.log("iti Result Data", this.itiResultData)
           }
+         
+
         }, (error: any) => {
           console.error(error);
         });
@@ -387,5 +434,34 @@ export class downloadITIResultComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+
+
+  printResult() {
+
+    const printContents = document.getElementById('printSection')?.innerHTML;
+    const popupWin = window.open('', '_blank', 'width=900,height=700');
+
+    popupWin?.document.open();
+    popupWin?.document.write(`
+    <html>
+      <head>
+        
+        <style>
+          @page {
+            size: A4 portrait;
+            margin: 10mm;
+          }
+        </style>
+      </head>
+
+      <body onload="window.print(); window.close();">
+        ${printContents}
+      </body>
+    </html>`
+    );
+
+    popupWin?.document.close();
   }
 }

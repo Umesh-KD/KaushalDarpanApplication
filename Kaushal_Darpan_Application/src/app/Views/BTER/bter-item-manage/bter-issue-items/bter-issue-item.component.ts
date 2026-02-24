@@ -76,6 +76,7 @@ export class AddBterIssueItemComponent {
   public ItemMasterList1: any = [];
   public IssuedItemList: any = [];
   isFileError: boolean = false;
+  consumableIndentNo: string = '';
   constructor(
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
@@ -609,6 +610,10 @@ export class AddBterIssueItemComponent {
       this.toastr.error('Please upload document');
       return;
     }
+    if(this.consumableIndentNo == null || this.consumableIndentNo == '' || this.consumableIndentNo == undefined){
+      this.toastr.error('Indent No is mendatory');
+      return;
+    }
     this.SelectedItems.forEach((element: any) => {
       element.FileName = this.FileName, element.Dis_FileName = this.Dis_FileName,
         element.InstituteID = this.sSOLoginDataModel.InstituteID,
@@ -617,7 +622,7 @@ export class AddBterIssueItemComponent {
         element.StaffId = this.Searchrequests.staffID,
         element.StreamID = this.Searchrequests.StreamID,
         element.LabID = this.Searchrequests.LabID,
-        //element.itemCategoryId = this.Searchrequests.itemCategoryId,
+        element.IndentNo = this.consumableIndentNo,
         element.itemCategoryId = this.Searchrequests.ItemCategoryId
         || 0;
 

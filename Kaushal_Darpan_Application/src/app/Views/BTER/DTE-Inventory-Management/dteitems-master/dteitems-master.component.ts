@@ -217,7 +217,7 @@ export class DteItemsMasterComponent {
                   this.request.TotalPrice = item.TotalPrice,
                   this.request.IdentificationMark = item.IdentificationMark,
                   this.request.CampanyName = item.CampanyName,
-                  this.request.Status = 1,
+                  this.request.Status = (this.sSOLoginDataModel.RoleID === EnumRole.BTER_StoreIncharge ? 3 : 1),
                   this.request.ModifyBy = this.sSOLoginDataModel.UserID;
               } else {
                 this.request.CreatedBy = this.sSOLoginDataModel.UserID;

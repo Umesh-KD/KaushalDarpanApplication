@@ -14,6 +14,9 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
 import { CommonDDLExaminerGroupCodeModel } from '../../../Models/CommonDDLExaminerGroupCodeModel';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ExaminerStaticReportFeedbackDataModel } from '../../../Models/BTER/StaticsReportDataModel';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-statics-report-provide-by-examiner',
@@ -32,7 +35,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     'Absent', 
     // 'PresentbyExami', 'AbsentbyExami', 
     'Below14MarksStudent', 'Below15to17MarksStudent', 'Below18to54MarksStudent', 
-    'Below55to60MarksStudent','Above60MarksStudent'
+    'Below55to60MarksStudent','Above60MarksStudent', 'Action'
   ];
 
   // Data source for the table
@@ -41,6 +44,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   InstituteMasterList: any;
   SemesterMasterList: any;
   filterForm: FormGroup | undefined;
+  feedbackForm: FormGroup | undefined;
   // Pagination Properties
   totalRecords: number = 0;
   pageSize: number = 10;
@@ -53,6 +57,8 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   Table_SearchText: string = '';
   GroupMasterDDLList: any;
   SubjectCodeMasterDDLList: any;
+  modalReference: NgbModalRef | undefined;
+  public request = new ExaminerStaticReportFeedbackDataModel();
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
@@ -61,22 +67,50 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     private commonMasterService: CommonFunctionService,
     private fb: FormBuilder,
     public appsettingConfig: AppsettingService,
-    private http: HttpClient) {
-  }
+    private http: HttpClient,
+    private modalService: NgbModal,
+    private toastr: ToastrService,
+  ) {}
 
-  ngOnInit(): void {
-    this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.loadMasterData();
-    this.GetAllData();
+  async ngOnInit() {
     this.filterForm = this.fb.group({
       CenterCode: [''],
       GroupCode: [''],
       SubjectCode: [0],
       selectedSemester: [0],
     });
+
+    this.filterForm = this.fb.group({
+      ExaminerID: [''],
+      ExaminerCode: [''],
+      GroupCodeID: [0],
+      SubjectID: [0],
+      CommonRemarkForQueAns: [''],
+      IsMassCoping: [''],
+      Syllabus: [''],
+      InstituteLevel: [''],
+      TeachingByTeacher: [''],
+      StudyOfStudent: [''],
+      SuggestionForImprovement: [''],
+      Date: [''],
+    });
+
+    this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.getTodayDate();
+    await this.loadMasterData();
+    await this.GetAllData();
   }
 
-  loadMasterData(): void {
+  async getTodayDate() {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+
+    this.request.Date = `${day}-${month}-${year}`;
+  }
+
+  async loadMasterData() {
     this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
       .then((data: any) => {
         this.InstituteMasterList = data['Data'];
@@ -172,56 +206,53 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   }
 
 
-  async PDFDownload() {
+  async PDFDownload(row: any) {
     
 
 
-   let requestData: any = {
-     CenterCode: this.filterForm?.value.CenterCode != "" && this.filterForm?.value.CenterCode != undefined && this.filterForm?.value.CenterCode != 0 ? this.filterForm?.value.CenterCode : 0,
-     GroupCode: this.filterForm?.value.GroupCode != "" && this.filterForm?.value.GroupCode != undefined && this.filterForm?.value.GroupCode != 0 ? this.filterForm?.value.GroupCode : 0,
-     SubjectCode: this.filterForm?.value.SubjectCode != "" && this.filterForm?.value.SubjectCode != undefined && this.filterForm?.value.SubjectCode != 0 ? this.filterForm?.value.SubjectCode : '',
-     //InstituteID: this.filterForm?.value.selectedInstitute != "" && this.filterForm?.value.selectedInstitute != undefined && this.filterForm?.value.selectedInstitute != 0 ? this.filterForm?.value.selectedInstitute : 0,
-     SemesterID: this.filterForm?.value.selectedSemester != "" && this.filterForm?.value.selectedSemester != undefined && this.filterForm?.value.selectedSemester != 0 ? this.filterForm?.value.selectedSemester : 0,
-     EndTermID: this.ssoLoginUser.EndTermID,
-     DepartmentID: this.ssoLoginUser.DepartmentID,
-     Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-     RoleID: this.ssoLoginUser.RoleID,
-     SSOID: this.ssoLoginUser.SSOID,
-     Action: 'ReportData'
+    let requestData: any = {
+      CenterCode: this.filterForm?.value.CenterCode != "" && this.filterForm?.value.CenterCode != undefined && this.filterForm?.value.CenterCode != 0 ? this.filterForm?.value.CenterCode : 0,
+      // GroupCode: this.filterForm?.value.GroupCode != "" && this.filterForm?.value.GroupCode != undefined && this.filterForm?.value.GroupCode != 0 ? this.filterForm?.value.GroupCode : 0,
+      SubjectCode: this.filterForm?.value.SubjectCode != "" && this.filterForm?.value.SubjectCode != undefined && this.filterForm?.value.SubjectCode != 0 ? this.filterForm?.value.SubjectCode : '',
+      //InstituteID: this.filterForm?.value.selectedInstitute != "" && this.filterForm?.value.selectedInstitute != undefined && this.filterForm?.value.selectedInstitute != 0 ? this.filterForm?.value.selectedInstitute : 0,
+      SemesterID: this.filterForm?.value.selectedSemester != "" && this.filterForm?.value.selectedSemester != undefined && this.filterForm?.value.selectedSemester != 0 ? this.filterForm?.value.selectedSemester : 0,
+      EndTermID: this.ssoLoginUser.EndTermID,
+      DepartmentID: this.ssoLoginUser.DepartmentID,
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
+      RoleID: this.ssoLoginUser.RoleID,
+      SSOID: this.ssoLoginUser.SSOID,
+      GroupCode: row.GroupCode,
+      Action: 'ReportData'     
+    }
+    //this.CollegesWiseReportsModellList = [];
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.StatisticsInformationReportPdf(requestData)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            //this.CollegesWiseReportsModellList = data['Data'];
+            this.DownloadFile(data.Data,'')
 
-     
-   }
-   //this.CollegesWiseReportsModellList = [];
-   try {
-     this.loaderService.requestStarted();
-     await this.reportService.StatisticsInformationReportPdf(requestData)
-       .then((data: any) => {
-         data = JSON.parse(JSON.stringify(data));
-         if (data.State === EnumStatus.Success) {
-           //this.CollegesWiseReportsModellList = data['Data'];
-           this.DownloadFile(data.Data,'')
-
-           //this.dataSource = new MatTableDataSource(this.CollegesWiseReportsModellList);
-           //this.dataSource.sort = this.sort;  // Apply sorting
-           //this.totalRecords = this.CollegesWiseReportsModellList.length;
-           //this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-           //this.updateTable();
-         //} else if (data.State === 3) {
-           //this.CollegesWiseReportsModellList = [];
-           //this.dataSource = new MatTableDataSource(this.CollegesWiseReportsModellList);
-           //this.dataSource.sort = this.sort;  // Apply sorting
-           //this.totalRecords = this.CollegesWiseReportsModellList.length;
-           //this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-           //this.updateTable();
-         }
-       }, (error: any) => console.error(error));
-   } catch (ex) {
-     console.log(ex);
-   } finally {
-     this.loaderService.requestEnded();
-   }
-
-
+            //this.dataSource = new MatTableDataSource(this.CollegesWiseReportsModellList);
+            //this.dataSource.sort = this.sort;  // Apply sorting
+            //this.totalRecords = this.CollegesWiseReportsModellList.length;
+            //this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+            //this.updateTable();
+          //} else if (data.State === 3) {
+            //this.CollegesWiseReportsModellList = [];
+            //this.dataSource = new MatTableDataSource(this.CollegesWiseReportsModellList);
+            //this.dataSource.sort = this.sort;  // Apply sorting
+            //this.totalRecords = this.CollegesWiseReportsModellList.length;
+            //this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+            //this.updateTable();
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
   }
 
   // Handle page change event for pagination
@@ -327,5 +358,93 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     return `file_${timestamp}.${extension}`;
   }
 
+
+  async openFeedbackForm(content: any, row: any) {
+    this.request.ExamName = row.ExamName
+    this.request.ExaminerName = row.ExaminerName
+    this.request.SubjectCode = row.SubjectCode
+    this.request.GroupCode = row.GroupCode
+    this.request.ExaminerID = row.ExaminerID
+    this.request.CenterID = row.CenterID
+    this.request.SubjectID = row.SubjectID
+    this.request.GroupCodeID = row.GroupCodeID
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'lg', keyboard: true, centered: true });
+    return;
+  }
+
+  async closeFeedbackForm() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();   
+    this.request = new ExaminerStaticReportFeedbackDataModel();
+  }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+      this.file = event.target.files[0];
+
+      if (this.file) {
+        //  Check file size (max 2MB)
+        if (this.file.size > 2 * 1024 * 1024) {
+          this.toastr.error('Select a file less than 2MB');
+          return;
+        }
+        //  Proceed with upload
+        this.loaderService.requestStarted();
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              if (Type === "sign") {
+                this.request.SignPhoto = data['Data'][0]["FileName"];
+                this.request.Dis_SignPhoto = data['Data'][0]["Dis_FileName"];
+              } else if (Type === "MassCopyDocument") {
+                this.request.MassCopyDocument = data['Data'][0]["FileName"];
+                this.request.Dis_MassCopyDocument = data['Data'][0]["Dis_FileName"];
+              }
+
+              event.target.value = null; // Clear file input
+            } else if (data.State === EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage);
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            }
+          })
+          .catch((error: any) => {
+            console.error("Upload Error:", error);
+            this.toastr.error("An error occurred while uploading the file.");
+          });
+      }
+    } catch (Ex) {
+      console.log("Exception in file upload:", Ex);
+      this.toastr.error("Unexpected error occurred.");
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  async SaveExaminerStaticReportFeedbackForm() {
+    try {
+      this.request.UserID = this.sSOLoginDataModel.UserID
+      this.request.CourseType = this.sSOLoginDataModel.Eng_NonEng
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      await this.reportService.SaveExaminerStaticReportFeedbackForm(this.request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.closeFeedbackForm();
+        }
+        else if (data.State == EnumStatus.Error) {
+          this.toastr.error(data.ErrorMessage);
+        }
+        else {
+          this.toastr.warning(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
   
 }

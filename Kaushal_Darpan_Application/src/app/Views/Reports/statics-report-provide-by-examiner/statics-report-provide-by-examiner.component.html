@@ -82,9 +82,9 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
         
-        <a href="javascript:void(0);" (click)="PDFDownload()" class="btn bg-info btn-sm text-white">
+        <!-- <a href="javascript:void(0);" (click)="PDFDownload()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-download"></i> Download PDF
-        </a>
+        </a> -->
 
         <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-download"></i> Export Execl
@@ -207,6 +207,21 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+            <a class="btn btn-primary" title="Edit"
+              (click)="openFeedbackForm( FeedbackForm_Modal, element)"><i class="ti ti-pencil"></i></a>
+
+            <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
+              (click)="PDFDownload(element)" ><i class="ti ti-download"></i>
+            </a>
+          </div>
+        </td>
+      </ng-container>
+
       <!-- Table Rows -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -221,3 +236,301 @@
     </mat-paginator>
   </div>
 </div>
+
+
+<ng-template #FeedbackForm_Modal let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-list"></i> </b>
+        <button class="btn bg-info text-white" (click)="closeFeedbackForm()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-x-auto mt-3">
+            <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6 border">
+
+              <!-- Header -->
+              <div class="text-center mb-6">
+                <h2 class="text-lg font-semibold">राजस्थान सरकार</h2>
+                <h3 class="text-md font-medium">प्राविधिक शिक्षा मण्डल, राजस्थान, जोधपुर</h3>
+                <h4 class="text-sm font-semibold underline mt-1">
+                  परीक्षा प्रतिवेदन {{request.ExamName}}
+                </h4>
+              </div>
+
+              <!-- Top Details Section -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm mb-6">
+                <div>
+                  <p><strong>प्रति:</strong></p>
+                  <p>संयुक्त निदेशक (गोपनीय)</p>
+                  <p>प्राविधिक शिक्षा मण्डल,</p>
+                  <p>राजस्थान, जोधपुर</p>
+                  <p class="mt-2">Email: </p>
+                </div>
+
+                <div class="space-y-2">
+                  <div>
+                    <label class="block font-medium">प्रेषक: {{request.ExaminerName}}</label>
+                  </div>
+                  <div>
+                    <label class="block font-medium">परिक्षक कोड: {{request.ExaminerCode}}</label>
+                  </div>
+                  <div>
+                    <label class="block font-medium">ग्रुप कोड: {{request.GroupCode}}</label>
+                  </div>
+                  <div>
+                    <label class="block font-medium">विषय कोड:  {{request.SubjectCode}}</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question 1 -->
+              <div class="mb-6">
+                <label class="block font-medium mb-2">
+                  1. परीक्षार्थियों के उत्तरों के बारे में सामान्य टिप्पणियाँ एवं प्रत्येक प्रश्न पर टिप्पणी *
+                </label>
+                <textarea rows="4"
+                  class="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"
+                  placeholder="Enter comment"
+                  [(ngModel)]="request.CommonRemarkForQueAns"></textarea>
+              </div>
+
+              <!-- Question 2 -->
+              <div class="mb-6">
+                <label class="block font-medium mb-2">
+                  2. नकल/सामूहिक नकल (Mass Copying) यदि हो तो के संबंध में विस्तृत ठोस सूचना नियम पत्र में विस्तृत ब्यौरा लिखें |
+                </label>
+                <div class="flex items-center gap-6">
+                  <label class="flex items-center gap-2">
+                    <input type="radio" name="massCopy" class="text-blue-600" value="1" [(ngModel)]="request.IsMassCoping">
+                    Yes
+                  </label>
+                  <label class="flex items-center gap-2">
+                    <input type="radio" name="massCopy" class="text-blue-600" value="0" checked [(ngModel)]="request.IsMassCoping">
+                    No
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6" *ngIf="request.IsMassCoping == 1">
+                <label class="block font-medium mb-2">
+                  नकल/सामूहिक नकल (Mass Copying) यदि हो तो |
+                </label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        id="MassCopyDocument" type="file" (change)="onFilechange($event,'MassCopyDocument')">
+                  <label for="MassCopyDocument">
+                    <span>Choose File</span>
+                    {{request.Dis_MassCopyDocument === '' ? 'No File Choosen' : request.Dis_MassCopyDocument}}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.MassCopyDocument}}" *ngIf="request.MassCopyDocument !=''"
+                      class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Question 3 -->
+              <div class="mb-6">
+                <h4 class="font-semibold mb-3">3. आवश्यक सूचनाएँ -</h4>
+
+                <!-- Reusable Radio Row -->
+                <div class="space-y-4 text-sm">
+
+                  <!-- (a) -->
+                  <div>
+                    <p class="font-medium mb-2">(अ) पाठ्यक्रम*</p>
+                    <div class="flex flex-wrap gap-6">
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="course" class="text-blue-600" value="4" [(ngModel)]="request.Syllabus">
+                        संतोषजनक
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="course" class="text-blue-600" value="3" [(ngModel)]="request.Syllabus">
+                        अच्छा
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="course" class="text-blue-600" value="2" [(ngModel)]="request.Syllabus">
+                        बहुत अच्छा
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="course" class="text-blue-600" value="1" [(ngModel)]="request.Syllabus">
+                        असंतोषजनक
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- (b) -->
+                  <div>
+                    <p class="font-medium mb-2">(ब) संस्थान स्तर*</p>
+                    <div class="flex flex-wrap gap-6">
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="institute" class="text-blue-600" value="4" [(ngModel)]="request.InstituteLevel">
+                        संतोषजनक
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="institute" class="text-blue-600" value="3" [(ngModel)]="request.InstituteLevel">
+                        अच्छा
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="institute" class="text-blue-600" value="2" [(ngModel)]="request.InstituteLevel">
+                        बहुत अच्छा
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="institute" class="text-blue-600" value="1" [(ngModel)]="request.InstituteLevel">
+                        असंतोषजनक
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- (c) -->
+                  <div>
+                    <p class="font-medium mb-2">(स) शिक्षक द्वारा शिक्षण*</p>
+                    <div class="flex flex-wrap gap-6">
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="teaching" class="text-blue-600" value="4" [(ngModel)]="request.TeachingByTeacher">
+                        संतोषजनक
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="teaching" class="text-blue-600" value="3" [(ngModel)]="request.TeachingByTeacher">
+                        अच्छा
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="teaching" class="text-blue-600" value="2" [(ngModel)]="request.TeachingByTeacher">
+                        बहुत अच्छा
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="teaching" class="text-blue-600" value="1" [(ngModel)]="request.TeachingByTeacher">
+                        असंतोषजनक
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- (d) -->
+                  <div>
+                    <p class="font-medium mb-2">(द) विद्यार्थियों के अध्ययन*</p>
+                    <div class="flex flex-wrap gap-6">
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="study" class="text-blue-600" value="4" [(ngModel)]="request.StudyOfStudent">
+                        संतोषजनक
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="study" class="text-blue-600" value="3" [(ngModel)]="request.StudyOfStudent">
+                        अच्छा
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="study" class="text-blue-600" value="2" [(ngModel)]="request.StudyOfStudent">
+                        बहुत अच्छा
+                      </label>
+                      <label class="flex items-center gap-2">
+                        <input type="radio" name="study" class="text-blue-600" value="1" [(ngModel)]="request.StudyOfStudent">
+                        असंतोषजनक
+                      </label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Question 4 -->
+              <div>
+                <label class="block font-medium mb-2">
+                  4. उन्नति हेतु सुझाव एवं अन्य:
+                </label>
+                <textarea rows="3"
+                  class="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"
+                  placeholder="Enter other detail"
+                  [(ngModel)]="request.SuggestionForImprovement"></textarea>
+              </div>
+
+              <!-- Special Notes Section -->
+              <div class="mt-8 border-t pt-6 text-sm">
+
+                <h4 class="font-semibold mb-3">विशेष नोट:-</h4>
+
+                <ol class="list-decimal ml-5 space-y-2">
+                  <li>प्रतिवेदन विद्यार्थियों एवं शिक्षकों की सूचना के लिए है।</li>
+                  <li>प्रतिवेदन पर प्रस्तुत सूचनाएँ परीक्षा परिणाम समिति में प्रस्तुत की जा सकती हैं।</li>
+                  <li>
+                    उत्तर पुस्तिकाएं जांच के पश्चात क्रम अनुसार व्यवस्थित कर बंडल पर रूपया गोप-33 साथ पैक कर भिजवाएं।
+                    गोप-33 को गुम नहीं करे। यदि गोप. 33 अस्पष्ट हो तो पुनः बंडल में उपलब्ध उत्तर पुस्तिकाओं का विवरण
+                    अंकित कर हस्तलिखित तैयार कर रूपया करे।
+                  </li>
+                </ol>
+
+                <!-- Date & Signature Section -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+
+                  <!-- Date -->
+                  <div>
+                    <label class="block font-medium mb-1">दिनांक:</label>
+                    <input type="date" [(ngModel)]="request.Date"
+                      class="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200">
+                  </div>
+
+                  <div>
+                  </div>
+
+                  <!-- Signature Upload -->
+                  <div>
+                    <label class="block font-medium mb-1">परीक्षक के हस्ताक्षर:</label>
+                    <div class="flex fileUploader">
+                      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="sign" type="file" (change)="onFilechange($event,'sign')">
+                      <label for="sign">
+                        <span>Choose File</span>
+                        {{request.Dis_SignPhoto === '' ? 'No File Choosen' : request.Dis_SignPhoto}}
+                      </label>
+                      <div class="flex">
+                        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.SignPhoto}}" *ngIf="request.SignPhoto !=''"
+                          class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Examiner Details -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+
+                  <div>
+                    <label class="block font-medium mb-1">परीक्षक का नाम:  {{request.ExaminerName}}</label> 
+                  </div>
+
+                  <div>
+                    <label class="block font-medium mb-1">संस्थान का नाम: {{request.InstituteName}}</label>
+                  </div>
+
+                  <div>
+                    <label class="block font-medium mb-1">परीक्षक कोड संख्या: {{request.ExaminerCode}}</label>
+                    <!-- <input type="text"
+                      class="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"> -->
+                  </div>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-center gap-4 mt-8 border-t pt-6">
+
+                  <button type="submit" (click)="SaveExaminerStaticReportFeedbackForm()"
+                    class="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                    Submit
+                  </button>
+
+                  <button type="button" (click)="closeFeedbackForm()"
+                    class="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition">
+                    Close
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
