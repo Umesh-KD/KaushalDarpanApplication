@@ -108,7 +108,7 @@ export class ItiEstablishmentListComponent {
   async GetAllGovtITI() {
     try {
 
-
+      this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
       this.loaderService.requestStarted();
       await this.ITIsService.GetAllEstablishmentIti(this.searchRequest)
         .then((data: any) => {

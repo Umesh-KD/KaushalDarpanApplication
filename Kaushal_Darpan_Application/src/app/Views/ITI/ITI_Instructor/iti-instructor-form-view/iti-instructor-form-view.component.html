@@ -809,9 +809,9 @@ this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-
                       {{ tech.Tech_MarksTypeID == '0' ? tech.Tech_Percentage : tech.Tech_CGPA }}
                     </td>
                     <td>
-                      <a href="javascript:void(0);" title="CITS Certified" class="btn bg-primary text-white btn-sm">
+                      <a href="javascript:void(0);" title="CITS Certified"  (click)="ViewCTISTechQualification1( tech.ID,i)" class="btn bg-primary text-white btn-sm">
                         <i class="ti ti-eye text-white"
-                           (click)="ViewCTISTechQualification(MyModel_ViewCTISTechQualification, tech.ID,i)"></i>
+                          ></i>
                       </a>
                     </td>
                     <td>
@@ -1021,8 +1021,8 @@ this.sSOLoginDataModel.RoleID ==97" class="text-center">
 </ng-template>
 
 <!--Whether CITS Certified popup  model-->
-<ng-template #MyModel_ViewCTISTechQualification let-modal
-             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<ng-template #MyModel_ViewCTISTechQualification let-modal  style="z-index:99"
+             class="w-full h-full fixed top-0 left-0  transition-all duration-500 overflow-y-auto  hidden">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
@@ -1081,3 +1081,66 @@ this.sSOLoginDataModel.RoleID ==97" class="text-center">
 
 
 <app-otpmodal #otpModal></app-otpmodal>
+
+<div *ngIf="isCITSModalOpen"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+
+  <!-- modal -->
+  <div class="bg-white rounded-lg shadow-xl w-[95vw] max-w-[1200px] min-h-[300px] max-h-[90vh] overflow-auto">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center px-5 py-3 border-b bg-gray-100 rounded-t-lg">
+      <b>
+        <i class="fa fa-plus"></i> Whether CITS Certified Details
+      </b>
+
+      <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+              (click)="CloseModalPopup1()">
+        ✕
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-5">
+
+      <div class="overflow-x-auto">
+
+        <table class="table table-border w-full">
+          <thead class="bg-gray-200">
+            <tr>
+              <th>SNo.</th>
+              <th>Year</th>
+              <th>Trade</th>
+              <th>CITS Certified</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let row of formData.OtherCITSQualification; let i=index">
+              <td align="center">{{i+1}}</td>
+              <td align="center">{{row.Tech_CITSYear}}</td>
+              <td align="center">{{row.TradeName}}</td>
+              <td align="center">
+
+                <a *ngIf="row.Tech_CITSCertifiedDocument"
+                   [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/Instructor/' + row.Tech_CITSCertifiedDocument"
+                   target="_blank"
+                   class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+
+                  View
+
+                </a>
+
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

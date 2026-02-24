@@ -57,12 +57,12 @@
                    class="inline-flex items-center btn bg-dark text-white btn-sm">
                   <i class="ti ti-chevron-left"></i> Back
                 </a>
-                <a *ngIf="this.urlId!=''" [routerLink]="['/InstructorTab']"
+                <a *ngIf="this.urlId!=''" (click)="Back2()"
                    class="inline-flex items-center btn bg-dark text-white btn-sm">
                   <i class="ti ti-chevron-left"></i> Back
                 </a>
               
-
+                
               </div>
 
               <div *ngIf="isSSOVisible" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
