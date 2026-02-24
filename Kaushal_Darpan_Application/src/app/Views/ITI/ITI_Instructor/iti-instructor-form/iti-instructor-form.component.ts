@@ -1059,7 +1059,7 @@ export class ItiInstructorFormComponent {
         this.request.EducationalQualifications = this.educationList;
         console.log('Final Request Data:', this.request);
         if (this.request.StatusID == 0) {
-          this.request.StatusID = 1
+          this.request.StatusID = 9
 
         }
         const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
@@ -1098,6 +1098,96 @@ export class ItiInstructorFormComponent {
 }
 
 
+
+  async onFinalSubmit() {
+    this.isSubmitted = true;
+
+    this.request.Aadhar = this.InstructorForm.value.Aadhar
+    if (this.request.IsDomicile == true && this.request.JanAadhar == '') {
+      this.toastr.warning("Please Add Janaadhar Number ")
+      return
+    }
+    //if (this.request.IsDomicile == true && this.IsJANVerify == false) {
+    //  this.toastr.warning("Please Verify or Add Valid JanAadhar ")
+    //  return
+    //}
+    if (this.request.ddlState != '6') {
+      this.InstructorForm.controls['PropTehsilID'].clearAsyncValidators()
+      this.InstructorForm.controls['Correspondence_PropTehsilID'].clearAsyncValidators()
+      this.InstructorForm.controls['PropTehsilID'].updateValueAndValidity()
+      this.InstructorForm.controls['Correspondence_PropTehsilID'].updateValueAndValidity()
+    }
+
+    if (this.InstructorForm.invalid) {
+      return
+    }
+    if (this.educationList.length == 0) {
+      this.toastr.warning("Please Add Education Detail")
+      return
+    }
+    if (this.employeeRequestList.length == 0) {
+      this.toastr.warning("Please Add Employee Details")
+      return
+    }
+    this.Swal2.Confirmation("Are you sure you want to final Submit?,you cannot make changes after this", async (result: any) => {
+      if (result.isConfirmed) {
+        this.isLoading = true;
+        this.loaderService.requestStarted();
+        try {
+          const ssoid = this.request.Uid;
+
+          //this.request = this.InstructorForm.value as ITI_InstructorDataModel;
+          this.request.CreatedBy = '0'
+          this.request.DepartmentID = '2'
+          this.request.Uid = ssoid;
+          this.request.EmploymentDetails = this.employeeRequestList;
+          this.request.TechnicalQualifications = this.techRequestList;
+          this.request.EducationalQualifications = this.educationList;
+          console.log('Final Request Data:', this.request);
+          if (this.request.StatusID = 9) {
+            this.request.StatusID = 1
+          } else {
+            this.request.StatusID = 8 
+          }
+
+          
+          const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
+          this.State = response['State'];
+          this.Message = response['Message'];
+          this.ErrorMessage = response['ErrorMessage'];
+
+          if (this.State === EnumStatus.Success) {
+            //  Show success alert
+            await this.Swal2.Success(this.Message || 'Instructor data saved successfully!');
+            //this.InstructorForm.reset();
+            //this.employeeRequestList = [];
+            //this.techRequestList = [];
+            //this.educationList = [];
+          } else {
+            //  Show error alert
+            await this.Swal2.Error(this.ErrorMessage || 'Something went wrong while saving data!');
+          }
+
+        } catch (ex) {
+          console.error('Error:', ex);
+          await this.Swal2.Error('An unexpected error occurred while submitting the form.');
+        } finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+            this.isLoading = false;
+          }, 200);
+        }
+      }
+      else {
+        //  User clicked Cancel
+        this.toastr.info('Submission cancelled.');
+        return;
+      }
+    });
+  }
+
+
+
   async GetById(ID: string) {
 
     try {
@@ -1123,7 +1213,10 @@ export class ItiInstructorFormComponent {
             return
 
           } else {
-            if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43 && this.urlId == '') {
+            if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43 && this.urlId == '' &&
+              data['Data']['Table'][0]['StatusID']!=9
+           
+            ) {
 
               this.swat.Info("Already Fill");
 
@@ -1159,7 +1252,7 @@ export class ItiInstructorFormComponent {
               this.techRequestList = data['Data']['Table3']
             }
 
-            if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43) {
+            if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43 && this.request.StatusID!=9) {
               this.EducationForm.disable()
               this.EmploymentForm.disable()
               this.TechnicalForm.disable()
