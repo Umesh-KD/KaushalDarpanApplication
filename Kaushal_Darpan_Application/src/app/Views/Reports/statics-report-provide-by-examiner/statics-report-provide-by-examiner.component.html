@@ -133,13 +133,12 @@
           {{ element.GroupCode }}
         </td>
       </ng-container>
-      <ng-container matColumnDef="CCCode">
+      <!-- <ng-container matColumnDef="CCCode">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>CC Code </th>
         <td mat-cell *matCellDef="let element">
-          <!-- Dynamic routerLink based on element's student ID -->
           {{ element.CCCode }}
         </td>
-      </ng-container>
+      </ng-container> -->
       <ng-container matColumnDef="Present">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Present </th>
         <td mat-cell *matCellDef="let element">
@@ -214,11 +213,15 @@
         <td mat-cell *matCellDef="let element">
           <div class="flex align-center justify-center actionBtns w-auto"
                    style="width:auto !important">
-            <a class="btn btn-primary" title="Edit"
+            <a class="btn btn-primary" title="Edit" *ngIf="element.Status == 0"
               (click)="openFeedbackForm( FeedbackForm_Modal, element)"><i class="ti ti-pencil"></i></a>
 
-            <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
-              (click)="PDFDownload(element)" ><i class="ti ti-download"></i>
+            <a href="javascript:void(0);" class="btn bg-info" *ngIf="element.Status == 1"
+              (click)="PDFDownload(element)" ><i class="ti ti-download"></i></a>
+
+            <a href="{{appsettingConfig.StaticFileRootPathURL + element.MassCopyDocument}}" 
+              *ngIf="element.Status == 1 && element.MassCopyDocument !=''"
+              class="btn bg-primary" target="_blank" title="Mass Copy Document"><i class="ti ti-eye"></i>
             </a>
           </div>
         </td>
@@ -269,7 +272,7 @@
                   <p>संयुक्त निदेशक (गोपनीय)</p>
                   <p>प्राविधिक शिक्षा मण्डल,</p>
                   <p>राजस्थान, जोधपुर</p>
-                  <p class="mt-2">Email: </p>
+                  <p class="mt-2">Email: conf.bter&#64;gmail.com</p>
                 </div>
 
                 <div class="space-y-2">
@@ -306,17 +309,17 @@
                 </label>
                 <div class="flex items-center gap-6">
                   <label class="flex items-center gap-2">
-                    <input type="radio" name="massCopy" class="text-blue-600" value="1" [(ngModel)]="request.IsMassCoping">
+                    <input type="radio" name="massCopy" class="text-blue-600" [value]="true" [(ngModel)]="request.IsMassCoping">
                     Yes
                   </label>
                   <label class="flex items-center gap-2">
-                    <input type="radio" name="massCopy" class="text-blue-600" value="0" checked [(ngModel)]="request.IsMassCoping">
+                    <input type="radio" name="massCopy" class="text-blue-600" [value]="false" checked [(ngModel)]="request.IsMassCoping">
                     No
                   </label>
                 </div>
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6" *ngIf="request.IsMassCoping == 1">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6" *ngIf="request.IsMassCoping == true">
                 <label class="block font-medium mb-2">
                   नकल/सामूहिक नकल (Mass Copying) यदि हो तो |
                 </label>
@@ -468,7 +471,7 @@
                   <!-- Date -->
                   <div>
                     <label class="block font-medium mb-1">दिनांक:</label>
-                    <input type="date" [(ngModel)]="request.Date"
+                    <input type="date" [(ngModel)]="request.Date" disabled readonly
                       class="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200">
                   </div>
 
@@ -491,25 +494,6 @@
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <!-- Examiner Details -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-
-                  <div>
-                    <label class="block font-medium mb-1">परीक्षक का नाम:  {{request.ExaminerName}}</label> 
-                  </div>
-
-                  <div>
-                    <label class="block font-medium mb-1">संस्थान का नाम: {{request.InstituteName}}</label>
-                  </div>
-
-                  <div>
-                    <label class="block font-medium mb-1">परीक्षक कोड संख्या: {{request.ExaminerCode}}</label>
-                    <!-- <input type="text"
-                      class="w-full border rounded px-3 py-2 focus:ring focus:ring-blue-200"> -->
-                  </div>
-
                 </div>
 
                 <!-- Buttons -->

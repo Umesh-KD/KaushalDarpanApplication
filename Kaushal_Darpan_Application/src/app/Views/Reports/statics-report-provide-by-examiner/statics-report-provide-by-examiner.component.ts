@@ -32,8 +32,8 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   // Columns to be displayed in the table
   displayedColumns: string[] = [
     'SrNo', 'ExamName', 'ExaminerName', 'SubjectCode', 'GroupCode', 'Present', 
-    'Absent', 'CCCode',
-    // 'PresentbyExami', 'AbsentbyExami', 
+    'Absent', 
+    // 'PresentbyExami', 'AbsentbyExami', 'CCCode',
     'Below14MarksStudent', 'Below15to17MarksStudent', 'Below18to54MarksStudent', 
     'Below55to60MarksStudent','Above60MarksStudent', 'Action'
   ];
@@ -101,7 +101,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
 
-    this.request.Date = `${day}-${month}-${year}`;
+    this.request.Date = `${year}-${month}-${day}`;
   }
 
   async loadMasterData() {
@@ -293,7 +293,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
 
   exportToExcel(): void {
     const unwantedColumns = [
-     'ExaminerID', 'GroupCodeID', 'CenterCode',
+     'ExaminerID', 'GroupCodeID', 'CenterCode', 'CCCode', 'Status', 'MassCopyDocument',
     ];
     const filteredData = this.CollegesWiseReportsModellList.map((item: any) => {
      const filteredItem: any = {};
@@ -352,6 +352,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     this.modalService.dismissAll();
     this.modalReference?.close();   
     this.request = new ExaminerStaticReportFeedbackDataModel();
+    this.getTodayDate();
   }
 
   public file!: File;
@@ -359,13 +360,19 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     try {
       this.file = event.target.files[0];
 
+
       if (this.file) {
-        //  Check file size (max 2MB)
-        if (this.file.size > 2 * 1024 * 1024) {
-          this.toastr.error('Select a file less than 2MB');
-          return;
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png') {
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
         }
-        //  Proceed with upload
+        else {
+          this.toastr.error('Select Only jpeg/jpg/png file')
+          return
+        }
+
         this.loaderService.requestStarted();
         await this.commonMasterService.UploadDocument(this.file)
           .then((data: any) => {
@@ -402,6 +409,36 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
 
   async SaveExaminerStaticReportFeedbackForm() {
     try {
+      if(this.request.CommonRemarkForQueAns == null || this.request.CommonRemarkForQueAns == undefined || this.request.CommonRemarkForQueAns == ''){
+        this.toastr.error("Please Enter परीक्षार्थियों के उत्तरों के बारे में सामान्य टिप्पणियाँ एवं प्रत्येक प्रश्न पर टिप्पणी");
+        return
+      } else if(this.request.IsMassCoping == null || this.request.IsMassCoping == undefined){
+        this.toastr.error("Please Select नकल/सामूहिक नकल (Mass Copying) यदि हो तो के संबंध में विस्तृत ठोस सूचना नियम पत्र में विस्तृत ब्यौरा लिखें |");
+        return
+      } else if(this.request.InstituteLevel == null || this.request.InstituteLevel == undefined || this.request.InstituteLevel == 0){
+        this.toastr.error("Please Select संस्थान स्तर");
+        return
+      } else if(this.request.StudyOfStudent == null || this.request.StudyOfStudent == undefined || this.request.StudyOfStudent == 0){
+        this.toastr.error("Please Select विद्यार्थियों के अध्ययन");
+        return
+      } else if (this.request.TeachingByTeacher == null || this.request.TeachingByTeacher == undefined || this.request.TeachingByTeacher == 0) {
+        this.toastr.error("Please Select शिक्षक द्वारा शिक्षण");
+        return
+      } else if (this.request.SuggestionForImprovement == null || this.request.SuggestionForImprovement == undefined || this.request.SuggestionForImprovement == '') {
+        this.toastr.error("Please Enter उन्नति हेतु सुझाव एवं अन्य");
+        return
+      } else if (this.request.Syllabus == null || this.request.Syllabus == undefined || this.request.Syllabus == 0) {
+        this.toastr.error("Please Select पाठ्यक्रम");
+        return
+      } else if (this.request.SignPhoto == null || this.request.SignPhoto == undefined || this.request.SignPhoto == '') {
+        this.toastr.error("Please Upload Sign Photo");
+        return
+      } else if (this.request.IsMassCoping == true && (this.request.MassCopyDocument == null || this.request.MassCopyDocument == undefined || this.request.MassCopyDocument == '')) {
+        this.toastr.error("Please Upload Mass Copy Document");
+        return
+      }
+
+
       this.request.UserID = this.sSOLoginDataModel.UserID
       this.request.CourseType = this.sSOLoginDataModel.Eng_NonEng
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -410,6 +447,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.closeFeedbackForm();
+          await this.GetAllData();
         }
         else if (data.State == EnumStatus.Error) {
           this.toastr.error(data.ErrorMessage);
