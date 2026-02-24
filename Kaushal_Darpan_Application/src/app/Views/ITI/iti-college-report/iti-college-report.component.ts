@@ -119,7 +119,7 @@ export class ItiCollegeReportComponent {
         //SanctionOrderDate: ['', Validators.required],
         //TradeOrderNo: ['', Validators.required],
         //TradeOrderDate: ['', Validators.required],
-        PrincipleName: ['', Validators.required],
+        //PrincipleName: ['', Validators.required],
         PrincipleMobile: ['', Validators.required],
         PrincipleEmailID: ['', Validators.required],
         ApproachRoad: ['', Validators.required],
@@ -304,7 +304,7 @@ export class ItiCollegeReportComponent {
       this.resetValidatoresIPA();
     }
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin || this.sSOLoginDataModel.RoleID == 97) {
       const controlsToFreeze = [
         'txtName',
         'Loksabha',
@@ -833,11 +833,11 @@ export class ItiCollegeReportComponent {
 
     //this.ReportForm.controls['PanelCapacity'].updateValueAndValidity();
 
-    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin) {
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97) {
 
     }
 
-    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin) {
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97) {
 
       const controlsToClear = [
         //'TradeOrderNo',
@@ -857,7 +857,7 @@ export class ItiCollegeReportComponent {
         'ContractLoad',
        
         'IsHostel',
-        'PrincipleName',
+        //'PrincipleName',
         'PrincipleMobile',
         'PrincipleEmailID',
         'LandTypeID',
@@ -916,7 +916,7 @@ export class ItiCollegeReportComponent {
         'ContractLoad',
         
         'IsHostel',
-        'PrincipleName',
+        //'PrincipleName',
         'PrincipleMobile',
         'PrincipleEmailID',
         'LandTypeID',
@@ -957,7 +957,7 @@ export class ItiCollegeReportComponent {
       });
     }
 
-    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin) {
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97) {
 
       const controlsToClear = [
         //'TradeOrderNo',
@@ -1406,7 +1406,7 @@ export class ItiCollegeReportComponent {
     //}
 
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin) {
+   if ( this.sSOLoginDataModel.RoleID == 97) {
       if (this.request.InteriorPhoto == '') {
         this.toastr.warning("Please Upload Photo of Interior View of Main Campus")
         return

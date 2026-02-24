@@ -1741,6 +1741,8 @@ const routes: Routes = [
   
   { path: 'Views\ITI\InstructorOptionForm', loadChildren: () => import('./Views/ITI/instructor-option-form/instructor-option-form.module').then(m => m.InstructorOptionFormModule) },
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
+  { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
+  { path: 'Views\ITI\ItiPlanDocument', loadChildren: () => import('./Views/ITI/itiplan-document/itiplan-document.module').then(m => m.ITIPlanDocumentModule) },
  
 
 

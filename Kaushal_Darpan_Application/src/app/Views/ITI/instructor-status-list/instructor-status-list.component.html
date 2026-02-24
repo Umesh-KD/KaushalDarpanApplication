@@ -58,7 +58,7 @@
 
 
 
-    <app-iti-instructor *ngIf="showpage"  [uid]="selectedUid" ></app-iti-instructor>
+    <app-iti-instructor *ngIf="showpage"  [uid]="selectedUid" (formSaved)="onOptionSaved($event)" ></app-iti-instructor>
     <app-iti-instructor-view *ngIf="showView" [uid]="selectedUid" (formSaved)="onOptionSaved($event)"></app-iti-instructor-view>
     <app-instructor-selectchoice *ngIf="showselect" [uid]="selectedUid" (formSaved)="onOptionSaved($event)"></app-instructor-selectchoice>
     <app-instructor-option-form *ngIf="showOption" [uid]="selectedUid"  (formSaved)="onOptionSaved($event)"></app-instructor-option-form>

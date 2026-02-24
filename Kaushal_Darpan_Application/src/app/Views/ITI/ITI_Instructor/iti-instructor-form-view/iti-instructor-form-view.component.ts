@@ -55,6 +55,7 @@ export class ItiInstructorFormViewComponent {
   public sameAsPermanent: boolean = false;
   public IsCITScertified: boolean = false;
   public showJanAadhaar: boolean = false;
+  public isCITSModalOpen: boolean = false;
   public ResidenceList: any = []
   public CompanyMasterDDLList: any[] = [];
   @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
@@ -742,7 +743,7 @@ export class ItiInstructorFormViewComponent {
     if (this.request.ID != 0) {
       await this.ViewCTISTechQualificationDetails()
     }
-    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+    this.modalReference = this.modalService.open(content, {  size: 'xl', keyboard: true, centered: true });
   }
 
 
@@ -2380,6 +2381,28 @@ export class ItiInstructorFormViewComponent {
 
   async BackTab() {
     this.formSaved.emit(true);
+  }
+
+
+  async ViewCTISTechQualification1(id: number, index: number) {
+
+    this.formData.OtherCITSQualification =
+      this.techRequestList[index].OtherCITSQualification;
+
+    this.TechCITSId = id;
+
+    this.searchtechCITSRequest.TechCITSId = this.TechCITSId;
+
+    if (this.request.ID != 0) {
+      await this.ViewCTISTechQualificationDetails();
+    }
+
+    this.isCITSModalOpen = true;
+  }
+
+
+  CloseModalPopup1() {
+    this.isCITSModalOpen = false;
   }
 
 }
