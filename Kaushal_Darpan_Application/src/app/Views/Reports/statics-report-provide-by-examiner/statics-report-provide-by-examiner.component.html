@@ -143,7 +143,7 @@
               class="btn bg-primary" target="_blank" title="View Marks Data List"><i class="ti ti-eye"></i>
             </a>
 
-            <a class="btn btn-primary" title="Edit" *ngIf="element.Status == 0"
+            <a class="btn btn-primary" title="Edit" *ngIf="element.Status == 0 && element.IsMarksSummitted == 1"
               (click)="openFeedbackForm( FeedbackForm_Modal, element)"><i class="ti ti-pencil"></i>
             </a>
 
