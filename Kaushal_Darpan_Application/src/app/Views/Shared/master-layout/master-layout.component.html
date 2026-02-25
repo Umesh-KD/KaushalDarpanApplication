@@ -217,9 +217,9 @@
             </mat-select>
           </mat-form-field>
 
-
+          <!-- *ngIf="((sSOLoginDataModel.OfficeName !== null || sSOLoginDataModel.OfficeName !== '') && (!(sSOLoginDataModel.OfficeID == 0 || sSOLoginDataModel.OfficeID == 21) && sSOLoginDataModel.DepartmentID===_EnumDepartment.BTER))" -->
           <!-- office Name (Visible for specific roles) -->
-          <mat-form-field class="mt-3 mx-2" id="OfficeName" appearance="fill" *ngIf="sSOLoginDataModel.OfficeID !== 0 && sSOLoginDataModel.OfficeID !== 21 && sSOLoginDataModel.DepartmentID===_EnumDepartment.BTER && sSOLoginDataModel.OfficeName !== null"
+          <mat-form-field class="mt-3 mx-2" id="OfficeName" appearance="fill" *ngIf="(sSOLoginDataModel.OfficeName != null || sSOLoginDataModel.OfficeName != '' || sSOLoginDataModel.OfficeName != undefined) && sSOLoginDataModel.DepartmentID===_EnumDepartment.BTER"
                           style="width: 35%; max-width: 240px;">
             <mat-label>Office Name</mat-label>
             <input [disabled]="true" style="font-weight: bold;" class="text-xs" matInput [(ngModel)]="OfficeName" name="OfficeName">

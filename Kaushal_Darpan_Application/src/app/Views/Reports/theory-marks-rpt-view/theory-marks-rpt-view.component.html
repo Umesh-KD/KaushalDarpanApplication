@@ -221,7 +221,7 @@
             <th>Max Marks</th>
             <th>Marks Obtained</th>
             <th>Student Status</th>
-            <th>UFM Document</th>
+            <th *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin ||sSOLoginDataModel.RoleID==_EnumRole.AdminNon ||sSOLoginDataModel.RoleID==_EnumRole.JDConfidential_Eng ||sSOLoginDataModel.RoleID==_EnumRole.JDConfidential_NonEng">UFM Document</th>
             <!--<th>Status</th>
   <th *ngIf="isAnyUFMSelected">Document Required</th>-->
           </tr>
@@ -244,7 +244,7 @@
             <td align="left">{{ row.ObtainedTheory }}</td>
             <td align="left">{{ row.StudentStatus }}</td>
             
-            <td align="left">
+            <td align="left" *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin ||sSOLoginDataModel.RoleID==_EnumRole.AdminNon ||sSOLoginDataModel.RoleID==_EnumRole.JDConfidential_Eng ||sSOLoginDataModel.RoleID==_EnumRole.JDConfidential_NonEng">
               <a *ngIf="row.IsUFM==1" href="{{appsettingConfig.StaticFileRootPathURL+ _GlobalConstants.StudentsFolder+'/'+ row.UFMDocument}}"
                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
             </td>
