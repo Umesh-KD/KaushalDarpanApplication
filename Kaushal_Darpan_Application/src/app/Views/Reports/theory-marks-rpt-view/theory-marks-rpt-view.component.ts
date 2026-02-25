@@ -27,6 +27,7 @@ export class TheoryMarksRptViewComponent {
   public Branchlist: any = [];
   public CenterCodeList:any=[];
   public InstituteMasterDDLList: any = [];
+  public _GlobalConstants: any = GlobalConstants;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -108,7 +109,7 @@ export class TheoryMarksRptViewComponent {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-
+      
       // this.searchRequest.IsConfirmed = this.IsConfirmed = true;
 
       // //group code id

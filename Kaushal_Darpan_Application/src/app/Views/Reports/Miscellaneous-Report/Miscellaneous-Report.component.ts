@@ -467,14 +467,10 @@ export class MiscellaneousReportComponent implements OnInit {
     }
   }
 
-
-
-
-
   exportToExcelstaticType(): void {
     debugger
     const wantedColumns =
-      ['SrNo', 'GroupCode', 'ExaminerName', 'SubjectCode', 'AllotedStudentTotal', 'MarksSubmittedTotal',
+      ['SrNo', 'GroupCode', 'ExaminerName', 'SubjectCode', 'AllotedStudentTotal', 'MarksSubmittedTotal','PresentTotal','AbsentTotal',
         'MarksPendingTotal', 'StaffInatituteName', 'MobileNumber','ExaminerCode'];
 
   const exportData = this.GetfilteredList.map((row: any, index: number) => {
