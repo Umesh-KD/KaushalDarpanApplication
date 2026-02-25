@@ -78,7 +78,9 @@
             <td>{{item.TotalPendingCopy}}</td>
             <td>{{item.TotalSavedCopy}}</td>
             <td>{{item.StatusName}}</td>
-            <td><input type="button" class="btn btn-sm bg-info text-white" value="View" (click)="GenerateAndViewPdf(item.ExaminerID)" title="click here to preview file" /> </td>
+            <td >
+              <input *ngIf="item.TotalPendingCopy == 0" type="button" class="btn btn-sm bg-info text-white" value="View" (click)="GenerateAndViewPdf(item.ExaminerID)" title="click here to preview file" /> 
+            </td>
           </tr>
 
         </tbody>
