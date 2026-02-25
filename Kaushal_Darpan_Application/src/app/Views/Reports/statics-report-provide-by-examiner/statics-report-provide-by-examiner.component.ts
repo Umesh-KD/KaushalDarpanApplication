@@ -201,6 +201,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
     this.requestDataPdf.Action = 'ReportData';
 
     //this.CollegesWiseReportsModellList = [];
+    
     try {
       this.loaderService.requestStarted();
       await this.reportService.StatisticsInformationReportPdf(this.requestDataPdf)
