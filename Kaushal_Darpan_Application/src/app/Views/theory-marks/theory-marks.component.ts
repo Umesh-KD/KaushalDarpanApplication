@@ -371,32 +371,32 @@ export class TheoryMarksComponent implements OnInit {
     if (zeromarksStudents.length > 0) {
       await this.Swal2.Confirmation(`Marks are 0 for student, proceed if this is intentional: (Roll No)<br> ${zeromarksStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
-          await this.OnSubmitAfter(filtered);
+          await this.OnSubmitAfter(filtered, isFinalSubmit);
         }
       })
     }
 
     // if zero not found
     if (zeromarksStudents.length == 0) {
-      await this.OnSubmitAfter(filtered);
+      await this.OnSubmitAfter(filtered, isFinalSubmit);
     }
   }
 
-  async OnSubmitAfter(item: any[]) {
+  async OnSubmitAfter(item: any[], isFinalSubmit: boolean=false) {
     // full marks
     this.perfactStudents = item.filter(x => x.ObtainedTheory == x.MaxTheory) ?? [];
     if (this.perfactStudents.length > 0) {
       await this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for student: (Roll No)<br> ${this.perfactStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
-          await this.SaveData(item);
+          await this.SaveData(item, isFinalSubmit);
         }
       })
     } else {
-      await this.SaveData(item);
+      await this.SaveData(item, isFinalSubmit);
     }
   }
 
-  async SaveData(array: any) {
+  async SaveData(array: any, isFinalSubmit: boolean=false) {
     try {
       console.log("filtered while save", array);
       await this.TheoryMarksService.UpdateSaveData(array)
@@ -420,7 +420,10 @@ export class TheoryMarksComponent implements OnInit {
               )
             }
             // submit remark
-            await this.FeedbackSubmitProceed();
+            if(isFinalSubmit) {
+              await this.FeedbackSubmitProceed();
+            }
+            // await this.FeedbackSubmitProceed();
           } else {
             this.toastr.error(this.ErrorMessage);
           }
