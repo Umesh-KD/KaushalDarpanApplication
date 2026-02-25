@@ -126,6 +126,7 @@ export class RenumerationExaminerComponent implements OnInit {
   }
 
   async GetAllData() {
+    debugger;
     try {
       this.isSubmitted = true;
       this.RenumerationExaminerRequest.SSOID = this.sSOLoginDataModel.SSOID;

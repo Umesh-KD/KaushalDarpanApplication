@@ -19,6 +19,7 @@ export class RenumerationExaminerModel extends ResponseBaseModel {
   public Status: number = 0;
   public StatusName: string = '';
   public FileName: string = '';
+  public isShowAction?: number = 0;
 }
 
 export class TrackStatusDataModel extends ResponseBaseModel {

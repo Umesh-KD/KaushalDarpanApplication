@@ -79,7 +79,7 @@
             <td>{{item.TotalSavedCopy}}</td>
             <td>{{item.StatusName}}</td>
             <td >
-              <input *ngIf="item.TotalPendingCopy == 0" type="button" class="btn btn-sm bg-info text-white" value="View" (click)="GenerateAndViewPdf(item.ExaminerID)" title="click here to preview file" /> 
+              <input *ngIf="((item.TotalAllotedCopy-item.TotalPendingCopy)==item.TotalSavedCopy)" type="button" class="btn btn-sm bg-info text-white" value="View" (click)="GenerateAndViewPdf(item.ExaminerID)" title="click here to preview file" /> 
             </td>
           </tr>
 
