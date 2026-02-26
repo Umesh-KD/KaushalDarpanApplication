@@ -98,11 +98,29 @@ export class AttendanceServiceService {
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+
+
+  public async SetCalendarEventModelITI(model: any[]) {
+    debugger
+    return await this.http.post(this.APIUrl + '/SetCalendarEventModelITI', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
   public async getCalendarEventModel(model: CalendarEventModel) {
     return await this.http.post(this.APIUrl + '/getCalendarEventModel', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+
+
+  public async getCalendarEventModelITI(model: CalendarEventModel) {
+    return await this.http.post(this.APIUrl + '/getCalendarEventModelITI', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
 
   public async GetRosterDisplay_PDFTimeTable(model: RosterDisplayTimeTableDataModel) {
     return await this.http.post(`${this.APIUrl}/GetRosterDisplay_PDFTimeTable`, model, this.headersOptions).pipe(

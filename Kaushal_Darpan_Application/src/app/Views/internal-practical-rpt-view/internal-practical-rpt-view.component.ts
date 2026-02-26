@@ -98,7 +98,7 @@ export class InternalPracticalRptViewComponent implements OnInit {
 
     this.searchRequest.InternalPracticalID = this.InternalPracticalID;
     //
-    if (this.InternalPracticalID == 2 || this.searchRequest.StrKey?.includes('mrkent2') || this.searchRequest.StrKey?.includes('totl2')) {
+    if (this.InternalPracticalID == 2 || this.searchRequest.StrKey?.includes('mrkent') || this.searchRequest.StrKey?.includes('totl')) {
       this.IsView = true;
     }
     else {
@@ -126,15 +126,7 @@ export class InternalPracticalRptViewComponent implements OnInit {
       }
       this.key = this.activatedRoute.snapshot.queryParamMap.get('strkey')??'';
       console.log("isview", this.IsView);
-      debugger
-
-      if (this.key === 'mrkent2') {
-        this.searchRequest.MarkEnter = 2;
-      } else if (this.key === 'totl2') {
-        this.searchRequest.MarkEnter = 1;
-      } else {
-        this.searchRequest.MarkEnter = 2;
-      }
+      //debugger
   
       await this.GetTheoryMarksList(); // or whatever function loads your data
     });
@@ -301,7 +293,7 @@ export class InternalPracticalRptViewComponent implements OnInit {
       console.log(this.TheoryMarksList, "TheoryMarks");
 
       // Only process if array has data
-      if (Array.isArray(this.TheoryMarksList) && this.TheoryMarksList.length > 0) {
+      if (Array.isArray(this.TheoryMarksList) && this.TheoryMarksList?.length > 0) {
 
         if (this.InternalPracticalID == 2) {
 

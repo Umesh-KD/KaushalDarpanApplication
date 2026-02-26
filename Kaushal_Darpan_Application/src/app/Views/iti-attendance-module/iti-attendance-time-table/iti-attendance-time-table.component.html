@@ -200,8 +200,8 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> AssignToSSOID</label>
-              <ng-select formControlName="AssignToSSOID" [clearable]="false">
-                <ng-option [value]="0">--Select--</ng-option>
+              <ng-select formControlName="AssignToSSOID" [clearable]="false"  (change)="GetstaffDetails($event)">
+                <ng-option [value]="">--Select--</ng-option>
                 @for (item of StaffList; track item.SSOID) {
                 <ng-option [value]="item.SSOID">{{item.NameWithSSOID}}</ng-option>
                 }
@@ -213,8 +213,8 @@
 
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade</label>
-              <ng-select formControlName="SemesterID" [clearable]="false">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
+              <ng-select formControlName="SemesterID" [clearable]="false" (change)="Onyearchange($event, EditDataFormGroup.getRawValue().StreamID)">
                 <ng-option [value]="0">--Select--</ng-option>
                 <!--<ng-option [value]="1">1st Year</ng-option>
       <ng-option [value]="2">2nd Year</ng-option>-->

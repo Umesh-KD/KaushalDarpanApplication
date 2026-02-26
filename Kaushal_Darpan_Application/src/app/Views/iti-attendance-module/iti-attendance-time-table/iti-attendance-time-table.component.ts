@@ -76,7 +76,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
     this.EditDataFormGroup = this.fb.group({
       ID: [''],
       SubjectID: [0, Validators.required],
-      AssignToSSOID: [0, Validators.required],
+      AssignToSSOID: ['', Validators.required],
       StreamID: [0, Validators.required],
       SemesterID: [0, Validators.required],
       ShiftId: [0, Validators.required]
@@ -152,7 +152,8 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
     })
 
     this.ItiShiftUnitDDL(ID)
-
+    debugger
+    this.SubjectMasterDDL=[]
     if (ID && SemesterID != "" && SemesterID != null) {
       this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -162,6 +163,15 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
       console.error('Event or value is undefined');
     }
    
+  }
+
+  Onyearchange(ID: number = 0,stream:number) {
+    debugger
+    this.SubjectMasterDDL=[]
+    this.commonMasterService.SubjectMaster_StreamIDWise(stream, this.sSOLoginDataModel.DepartmentID, ID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.SubjectMasterDDL = data.Data;
+    })
   }
 
   async GetAttendanceTimeTable() {
@@ -217,7 +227,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
 
   getData() {
     this.isSubmitted = true;
-    if (this.TableForm.value.StreamID > 0 && this.TableForm.value.SemesterID > 0 && this.TableForm.value.SubjectID > 0) {
+    if (this.TableForm.getRawValue().StreamID > 0 && this.TableForm.value.SemesterID > 0 && this.TableForm.value.SubjectID > 0) {
       this.GetAttendanceTimeTable();
     } else {
       this.toastr.warning("please select Stream, Subject, Semester")
@@ -454,16 +464,16 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
     //  this.toastr.warning("SSOID Not Exists.!")
     //  return;
     //}
-    if (this.EditDataFormGroup.value.StreamID > 0 && this.EditDataFormGroup.value.SemesterID > 0 && this.EditDataFormGroup.value.SubjectID > 0) {
+    if (this.EditDataFormGroup.getRawValue().StreamID > 0 && this.EditDataFormGroup.value.SemesterID > 0 && this.EditDataFormGroup.value.SubjectID > 0) {
       if (this.EditDataFormGroup.valid) {
         try {
           let obj = {
             ID: this.EditDataFormGroup.value.ID,
             SubjectID: this.EditDataFormGroup.value.SubjectID,
             AssignToSSOID: this.EditDataFormGroup.value.AssignToSSOID,
-            StreamID: this.EditDataFormGroup.value.StreamID,
+            StreamID: this.EditDataFormGroup.getRawValue().StreamID,
             SemesterID: this.EditDataFormGroup.value.SemesterID,
-            ShiftId: this.EditDataFormGroup.value.ShiftId,
+            ShiftId: this.EditDataFormGroup.getRawValue().ShiftId,
             DepartmentID: this.sSOLoginDataModel.DepartmentID,
             EndTermID: this.sSOLoginDataModel.EndTermID,
             CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
@@ -499,7 +509,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
     this.requestStaff.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.Eng_NonEng;
-    this.commonMasterService.ITIGetStaff_InstituteWise(this.requestStaff).then((data: any) => {
+    this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       debugger;
       if (data.Data.length > 0) {
@@ -513,5 +523,42 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
       //this.ExaminerDDL = [{ StaffID: 1, Name: 'Staff 1', SSOID: 'Staff1' },{ StaffID: 2, Name: 'Staff 2', SSOID: 'Staff2' },{ StaffID: 3, Name: 'Staff 3', SSOID: 'Staff3' }];
     })
   }
+
+  async GetstaffDetails(SSOID: any) {
+
+    // Enable first
+    debugger
+    this.EditDataFormGroup.get('StreamID')?.enable();
+    this.EditDataFormGroup.get('ShiftId')?.enable();
+
+    const item = this.StaffList.find(
+      (e: any) => e.SSOID == SSOID
+    );
+
+    if (!item) return;
+
+
+
+    this.EditDataFormGroup.patchValue({
+    
+      StreamID: item.TradeID, 
+      ShiftId: item.SeatIntakeID
+    });
+
+    await this.getSubjectMasterDDL(item.TradeID, this.EditDataFormGroup.value.SemesterID);
+    // Disable again
+
+    this.EditDataFormGroup.patchValue({
+
+      StreamID: item.TradeID,
+      ShiftId: item.SeatIntakeID
+    });
+   
+    this.EditDataFormGroup.get('StreamID')?.disable();
+    this.EditDataFormGroup.get('ShiftId')?.disable();
+    console.log(this.EditDataFormGroup.value)
+  }
+
+
 
 }

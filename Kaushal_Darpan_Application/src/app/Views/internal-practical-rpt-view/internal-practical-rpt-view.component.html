@@ -75,7 +75,7 @@
           </select>
         </div>-->
 
-         <div>
+         <div *ngIf="this.searchRequest.StrKey?.includes('totl')">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
             <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
               <option value="0">--All--</option>
