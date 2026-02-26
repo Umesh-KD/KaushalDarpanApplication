@@ -68,6 +68,8 @@ export class InternalPracticalRptViewComponent implements OnInit {
 
   public isAnyUFMSelected: boolean = false;
   public MarkEntered: number = 0;
+  public key: string = ''
+
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -96,12 +98,14 @@ export class InternalPracticalRptViewComponent implements OnInit {
 
     this.searchRequest.InternalPracticalID = this.InternalPracticalID;
     //
-    if (this.InternalPracticalID == 2 || this.searchRequest.StrKey?.includes('mrkent2') || this.searchRequest.StrKey?.includes('totl2')) {
+    if (this.InternalPracticalID == 2 || this.searchRequest.StrKey?.includes('mrkent') || this.searchRequest.StrKey?.includes('totl')) {
       this.IsView = true;
     }
     else {
       this.IsView = false;
     }
+
+
 
     //load
     await this.GetMasterData();
@@ -120,8 +124,10 @@ export class InternalPracticalRptViewComponent implements OnInit {
       else {
         this.IsView = false;
       }
+      this.key = this.activatedRoute.snapshot.queryParamMap.get('strkey')??'';
       console.log("isview", this.IsView);
-
+      //debugger
+  
       await this.GetTheoryMarksList(); // or whatever function loads your data
     });
   }
@@ -196,48 +202,124 @@ export class InternalPracticalRptViewComponent implements OnInit {
     this.allSelected = this.TheoryMarksList.every(r => r.Marked);
   }
 
+  //async GetTheoryMarksList() {
+  //  debugger
+  //  try {
+  //    this.isSubmitted = true;
+  //    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng) {
+  //      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
+  //    }
+  //    //session
+  //    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+  //    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+  //    //
+  //    this.loaderService.requestStarted();
+  //    await this.reportservice.GetAllDataRpt(this.searchRequest)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.State = data['State'];
+  //        this.Message = data['Message'];
+  //        this.ErrorMessage = data['ErrorMessage'];
+  //        this.TheoryMarksList = data['Data'];
+  //        console.log(this.TheoryMarksList, "TheoryMarks")
+
+  //        if (this.InternalPracticalID == 2) {
+  //          this.TheoryMarksList.forEach((x: any) => {
+  //            this.onStatusPracticalAssesmentChange(x)
+  //            if (x.IsInternalAssesmentCheckecd == false) {
+  //              x.IsPresentInternalAssisment = 1
+  //            }
+  //          })
+  //        } else if (this.InternalPracticalID == 1) {
+  //          this.TheoryMarksList.forEach((x: any) => {
+  //            this.onStatusPracticalChange(x)
+  //            if (x.IsPracticalChecked == false) {
+  //              x.IsPresentPractical = 1
+  //            }
+  //          })
+  //        }
+
+  //        //table feature load
+  //        this.loadInTable();
+  //        //end table feature load
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
   async GetTheoryMarksList() {
     try {
+
       this.isSubmitted = true;
-      if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng || this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng) {
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;//principle
+
+      if (
+        this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
+        this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon ||
+        this.sSOLoginDataModel.RoleID == EnumRole.HOD_Eng ||
+        this.sSOLoginDataModel.RoleID == EnumRole.HOD_NonEng
+      ) {
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       }
-      //session
+
+      // session values
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      //
+
       this.loaderService.requestStarted();
-      await this.reportservice.GetAllDataRpt(this.searchRequest)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.TheoryMarksList = data['Data'];
-          console.log(this.TheoryMarksList, "TheoryMarks")
 
-          if (this.InternalPracticalID == 2) {
-            this.TheoryMarksList.forEach((x: any) => {
-              this.onStatusPracticalAssesmentChange(x)
-              if (x.IsInternalAssesmentCheckecd == false) {
-                x.IsPresentInternalAssisment = 1
-              }
-            })
-          } else if (this.InternalPracticalID == 1) {
-            this.TheoryMarksList.forEach((x: any) => {
-              this.onStatusPracticalChange(x)
-              if (x.IsPracticalChecked == false) {
-                x.IsPresentPractical = 1
-              }
-            })
-          }
+      const response: any = await this.reportservice.GetAllDataRpt(this.searchRequest);
 
-          //table feature load
-          this.loadInTable();
-          //end table feature load
-        }, error => console.error(error));
+      const data = JSON.parse(JSON.stringify(response));
+
+      this.State = data?.State;
+      this.Message = data?.Message;
+      this.ErrorMessage = data?.ErrorMessage;
+
+      // 🔥 IMPORTANT FIX
+      this.TheoryMarksList = data?.Data ?? [];
+
+      console.log(this.TheoryMarksList, "TheoryMarks");
+
+      // Only process if array has data
+      if (Array.isArray(this.TheoryMarksList) && this.TheoryMarksList?.length > 0) {
+
+        if (this.InternalPracticalID == 2) {
+
+          this.TheoryMarksList.forEach((x: any) => {
+            this.onStatusPracticalAssesmentChange(x);
+            if (!x.IsInternalAssesmentCheckecd) {
+              x.IsPresentInternalAssisment = 1;
+            }
+          });
+
+        } else if (this.InternalPracticalID == 1) {
+
+          this.TheoryMarksList.forEach((x: any) => {
+            this.onStatusPracticalChange(x);
+            if (!x.IsPracticalChecked) {
+              x.IsPresentPractical = 1;
+            }
+          });
+
+        }
+
+      }
+
+      // table load
+      this.loadInTable();
+
     }
     catch (Ex) {
       console.log(Ex);
@@ -524,7 +606,8 @@ export class InternalPracticalRptViewComponent implements OnInit {
     this.sortInTableDirection = 'asc';
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
-    this.totalInTableRecord = this.TheoryMarksList.length;
+    //this.totalInTableRecord = this.TheoryMarksList.length || 0;
+    this.totalInTableRecord = this.TheoryMarksList?.length ?? 0;
   }
   // (replace org.list here)
   get totalInTableSelected(): number {

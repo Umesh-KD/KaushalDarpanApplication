@@ -31,7 +31,7 @@
         </ng-select>
       </div>
 
-      <div>
+      <!--<div>
         <div class="form-group row">
           <label for="GroupCode" class="text-gray-800 text-sm font-medium inline-block mb-1">
             Group Code
@@ -54,7 +54,7 @@
               [(ngModel)]="requestData.CenterCode">
           </div>
         </div>
-      </div>
+      </div>-->
 
 
       <!--<div>
@@ -135,7 +135,7 @@
       </ng-container>
 
       <ng-container matColumnDef="Action">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action trhgtfg</th>
         <td mat-cell *matCellDef="let element">
           <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
@@ -143,11 +143,11 @@
               class="btn bg-primary" target="_blank" title="View Marks Data List"><i class="ti ti-eye"></i>
             </a>
 
-            <a class="btn btn-primary" title="Edit" *ngIf="element.Status == 0"
+            <a class="btn btn-primary" title="Edit" *ngIf="element.Status == 0 && element.IsMarksSummitted == 1"
               (click)="openFeedbackForm( FeedbackForm_Modal, element)"><i class="ti ti-pencil"></i>
             </a>
 
-            <a href="javascript:void(0);" class="btn bg-info" *ngIf="element.Status == 1"
+            <a href="javascript:void(0);" class="btn bg-info" *ngIf="element.Status == 1" title="Download Marks Data List"
               (click)="PDFDownload(element)" ><i class="ti ti-download"></i>
             </a>
 

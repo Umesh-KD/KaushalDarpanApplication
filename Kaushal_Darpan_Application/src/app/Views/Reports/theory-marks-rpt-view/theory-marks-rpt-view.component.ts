@@ -10,6 +10,8 @@ import { ReportService } from '../../../Services/Report/report.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { ToastrService } from 'ngx-toastr';
+import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
 
 @Component({
   selector: 'app-theory-marks-rpt-view',
@@ -20,13 +22,14 @@ import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 export class TheoryMarksRptViewComponent {
   public searchRequest = new TheoryMarksSearchModel();
   _EnumRole = EnumRole
-  
+
   sSOLoginDataModel = new SSOLoginDataModel();
   public TheoryMarksRptDataList: any = [];
   public SemesterMasterList: any = [];
   public Branchlist: any = [];
-  public CenterCodeList:any=[];
+  public CenterCodeList: any = [];
   public InstituteMasterDDLList: any = [];
+  public _GlobalConstants: any = GlobalConstants;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -47,7 +50,10 @@ export class TheoryMarksRptViewComponent {
     private commonMasterService: CommonFunctionService,
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
-    private http: HttpClient) {
+    private http: HttpClient,
+    private toastr: ToastrService,
+    private commonFunctionHelper: CommonFunctionHelper
+  ) {
   }
 
   async ngOnInit() {
@@ -87,7 +93,7 @@ export class TheoryMarksRptViewComponent {
       //  data = JSON.parse(JSON.stringify(data));
       //  this.CenterCodeList = data['Data'];
       //}
-       // , error => console.error(error));
+      // , error => console.error(error));
 
     }
     catch (ex) {
@@ -108,7 +114,7 @@ export class TheoryMarksRptViewComponent {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-
+      
       // this.searchRequest.IsConfirmed = this.IsConfirmed = true;
 
       // //group code id
@@ -123,9 +129,9 @@ export class TheoryMarksRptViewComponent {
       await this.TheoryMarksService.GetTheoryMarksRptData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          
+
           this.TheoryMarksRptDataList = data['Data'];
-          
+
           //table feature load
           this.loadInTable();
           //end table feature load
@@ -161,26 +167,26 @@ export class TheoryMarksRptViewComponent {
       // this.searchRequest.GroupCodeID = this.TheoryMarksDashBoardCount[0].GroupCodeID;
       // //call
 
-      
-      this.loaderService.requestStarted();
       await this.reportService.TheorymarksReportPdf_BTER(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          
           //this.TheoryMarksRptDataList = data['Data'];
-          this.DownloadFile(data.Data, '')
-
-          
-
+          //this.DownloadFile(data.Data, '')
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.commonFunctionHelper.downloadBase64OfPdf(data.Data, 'TheoryMarksReport.pdf');
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.error(data.Message);
+          }
+          else {
+            this.toastr.error(data.Message);
+            console.log(data.ErrorMessage);
+          }
         }, (error: any) => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -189,7 +195,7 @@ export class TheoryMarksRptViewComponent {
     this.searchRequest = new TheoryMarksSearchModel();
     this.GetTheoryMarksDetailList();
   }
-  
+
   //table feature
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
@@ -267,10 +273,33 @@ export class TheoryMarksRptViewComponent {
 
   //end table feature
 
+  //exportToExcel(): void {
+  //  const unwantedColumns = [
+  //   'StudentID','StudentExamID','StudentExamPaperMarksID','StudentExamPaperID','rowclass'
+  //  ];
+  //  const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
+  //    const filteredItem: any = {};
+  //    Object.keys(item).forEach(key => {
+  //      if (!unwantedColumns.includes(key)) {
+  //        filteredItem[key] = item[key];
+  //      }
+  //    });
+  //    return filteredItem;
+  //  });
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'Theory-Marks-Report-Data.xlsx');
+  //}
+
+
+
+
   exportToExcel(): void {
     const unwantedColumns = [
-     'StudentID','StudentExamID','StudentExamPaperMarksID','StudentExamPaperID','rowclass'
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass'
     ];
+
     const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -280,11 +309,19 @@ export class TheoryMarksRptViewComponent {
       });
       return filteredItem;
     });
+
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Theory-Marks-Report-Data.xlsx');
+
+    const fileName = `Theory-Marks-Report-Data_${new Date()
+      .toISOString()
+      .replace(/[:.]/g, '-')}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
   }
+
+
 
   DownloadFile(FileName: string, DownloadfileName: any): void {
 
@@ -302,8 +339,18 @@ export class TheoryMarksRptViewComponent {
   }
 
   generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+    const now = new Date();
+
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
+    
+    return `Theory_marks_report_data_${timestamp}.${extension}`;
   }
 
 }

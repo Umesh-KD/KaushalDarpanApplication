@@ -110,14 +110,19 @@ export class downloadITIResultComponent {
       DOB: ['', Validators.required]
     });
 
+
+
+
     this.itiResultRequest.RollNo = this.RollNo;
-    this.itiResultRequest.ID = this.EndTermID;
+    this.itiResultRequest.ID = this.EndTermID??0;
     this.itiResultRequest.DOB = this.DOB;
 
  
 
 
-    if (this.RollNo && this.DOB && this.EndTermID) {
+    if (this.RollNo && this.DOB && this.EndTermID)
+    {
+
       this.GetITIStudent_MarksheetList();
 
     }
@@ -451,7 +456,7 @@ export class downloadITIResultComponent {
         <style>
           @page {
             size: A4 portrait;
-            margin: 10mm;
+            margin: 5mm;
           }
         </style>
       </head>
