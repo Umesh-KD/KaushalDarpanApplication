@@ -273,10 +273,33 @@ export class TheoryMarksRptViewComponent {
 
   //end table feature
 
+  //exportToExcel(): void {
+  //  const unwantedColumns = [
+  //   'StudentID','StudentExamID','StudentExamPaperMarksID','StudentExamPaperID','rowclass'
+  //  ];
+  //  const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
+  //    const filteredItem: any = {};
+  //    Object.keys(item).forEach(key => {
+  //      if (!unwantedColumns.includes(key)) {
+  //        filteredItem[key] = item[key];
+  //      }
+  //    });
+  //    return filteredItem;
+  //  });
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'Theory-Marks-Report-Data.xlsx');
+  //}
+
+
+
+
   exportToExcel(): void {
     const unwantedColumns = [
       'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass'
     ];
+
     const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -286,11 +309,19 @@ export class TheoryMarksRptViewComponent {
       });
       return filteredItem;
     });
+
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Theory-Marks-Report-Data.xlsx');
+
+    const fileName = `Theory-Marks-Report-Data_${new Date()
+      .toISOString()
+      .replace(/[:.]/g, '-')}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
   }
+
+
 
   DownloadFile(FileName: string, DownloadfileName: any): void {
 
@@ -308,8 +339,18 @@ export class TheoryMarksRptViewComponent {
   }
 
   generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+    const now = new Date();
+
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
+    
+    return `Theory_marks_report_data_${timestamp}.${extension}`;
   }
 
 }
