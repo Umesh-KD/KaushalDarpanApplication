@@ -145,7 +145,7 @@ export class ScaReportComponent {
           this.ErrorMessage = data['ErrorMessage'];
           this.GradeList = data['Data'];
           console.log(this.GradeList, "TheoryMarks")
-          this.GradeList.forEach((x: any) => {
+          this.GradeList?.forEach((x: any) => {
             if (x.IsSCAChecked == false) {
               x.IsPresentStudentCenteredActivity = 1
             }
@@ -267,7 +267,7 @@ export class ScaReportComponent {
     this.sortInTableDirection = 'asc';
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
-    this.totalInTableRecord = this.GradeList.length;
+    this.totalInTableRecord = this.GradeList?.length;
   }
   // (replace org.list here)
   get totalInTableSelected(): number {
