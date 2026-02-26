@@ -16,6 +16,12 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { GlobalConstants } from '../../../Common/GlobalConstants';
 import { AttendanceServiceService } from '../../../Services/AttendanceServices/attendance-service.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+interface DynamicColumn {
+  originalKey: string;
+  dayType: string;
+  date: string;
+  isHoliday: boolean;
+}
 
 @Component({
   selector: 'app-iti-student-attendance',
@@ -25,19 +31,24 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ITIStudentAttendanceComponent implements OnInit {
-  displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName'];
-  dynamicColumns: string[] = [];
+  dynamicColumns: DynamicColumn[] = [];
+
+  displayedColumns: string[] = [];
+
   filterData: any[] = [];
+
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
+
   SubjectMasterDDL: any[] = [];
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
   private _liveAnnouncer = inject(LiveAnnouncer);
   dataSource = new MatTableDataSource<any>([]);
   checkedAll: boolean = false;
+  minEndDate: string | null = null;
   // Pagination related variables
   totalRecords: number = 0;
   pageSize: number = 500;
@@ -85,6 +96,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
     };
   }
 
+
   ngOnInit() {
     
     
@@ -111,6 +123,20 @@ export class ITIStudentAttendanceComponent implements OnInit {
       }
     }, 1000);
     
+  }
+
+
+  onStartDateChange(event: any) {
+    const startDate = event.target.value;
+    if (startDate) {
+      this.minEndDate = startDate; // set min for end date
+      const endDate = this.TableForm.value.AttendanceEndDate;
+
+      // if already selected end date is smaller, reset it
+      if (endDate && endDate < startDate) {
+        this.TableForm.patchValue({ AttendanceEndDate: '' });
+      }
+    }
   }
   get formTable() { return this.TableForm.controls; }
 
@@ -144,16 +170,28 @@ export class ITIStudentAttendanceComponent implements OnInit {
     }
 
   }
-
   async GetAttendanceTimeTable() {
-    
+
     try {
-      const dateStart = new Date(this.TableForm.value.AttendanceStartDate.toLocaleDateString());
-      dateStart.setDate(dateStart.getDate() + 1);
-      const formattedDateStart = dateStart.toISOString().split('T')[0];
-      const dateEnd = new Date(this.TableForm.value.AttendanceEndDate.toLocaleDateString());
-      dateEnd.setDate(dateEnd.getDate() + 1);
-      const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+
+
+
+
+      const rawStart = this.TableForm.value.AttendanceStartDate;
+      const rawEnd = this.TableForm.value.AttendanceEndDate;
+      const dateStart = new Date(rawStart);
+      const formattedDateStart =
+        dateStart.getFullYear() + '-' +
+        String(dateStart.getMonth() + 1).padStart(2, '0') + '-' +
+        String(dateStart.getDate()).padStart(2, '0');
+
+      const dateEnd = new Date(rawEnd);
+      const formattedDateEnd =
+        dateEnd.getFullYear() + '-' +
+        String(dateEnd.getMonth() + 1).padStart(2, '0') + '-' +
+        String(dateEnd.getDate()).padStart(2, '0');
+    
+
       let obj = {
         SemesterID: this.TableForm.value.SemesterID,
         EndTermID: this.sSOLoginDataModel.EndTermID,
@@ -166,37 +204,87 @@ export class ITIStudentAttendanceComponent implements OnInit {
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         UnitID: this.UnitID,
-        ShiftID:this.ShiftID
+        ShiftID: this.ShiftID
       };
 
       this.filterData = [];
 
-      await this.attendanceServiceService.GetStudentAttendance_ITI(obj).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data['Data']));
-        this.filterData = data;
-        if (this.filterData.length > 0) {
-          // ✅ Reset dynamic columns and static columns
-          this.dynamicColumns = [];
-          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName'];
+      await this.attendanceServiceService
+        .GetStudentAttendance_ITI(obj)
+        .then((data: any) => {
 
-          // ✅ Extract dynamic columns from the first row of data
-          this.dynamicColumns = Object.keys(this.filterData[0])
-            .filter(key => key !== 'EnrollmentNo' && key !== 'StudentName' && key !== 'SubjectName' && key !== 'SemesterID' && key !== 'StreamID' && key !== 'SubjectID' && key !== 'SubjectID1' && key !== 'InstituteID' && key !== 'AttendanceDate' && key !== 'Attendance' && key !== 'EndTermID' && key !== 'CourseTypeID' && key !== 'StudentID' );
+          data = JSON.parse(JSON.stringify(data['Data']));
+          this.filterData = data;
 
-          // ✅ Add dynamic columns to displayedColumns
-          this.displayedColumns = [...this.displayedColumns, ...this.dynamicColumns];
-        }
+          if (this.filterData.length > 0) {
 
-        this.dataSource.data = this.filterData;
-        this.dataSource.sort = this.sort;
-        this.totalRecords = this.filterData.length;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+            // Reset columns
+            this.dynamicColumns = [];
 
-        this.updateTable(); // ✅ Update table after loading data
-      }, error => console.error(error));
+            this.displayedColumns = [
+              'SrNo',
+              'EnrollmentNo',
+              'StudentName',
+              'SubjectName'
+            ];
+
+            // Extract dynamic columns properly
+            this.dynamicColumns = Object.keys(this.filterData[0])
+              .filter(key =>
+                ![
+                  'StudentID',
+                  'EnrollmentNo',
+                  'StudentName',
+                  'SubjectName',
+                  'SemesterID',
+                  'StreamID',
+                  'SubjectID',
+                  'SubjectID1',
+                  'InstituteID',
+                  'AttendanceDate',
+                  'Attendance',
+                  'EndTermID',
+                  'CourseTypeID',
+                  'IsFinalSubmit'
+                ].includes(key)
+              )
+              .map(key => {
+
+                const match = key.match(/\((.*?)\)\s(.+)/);
+
+                return {
+                  originalKey: key,
+                  dayType: match ? match[1] : '',
+                  date: match ? match[2] : key,
+                  isHoliday: match ? match[1] === 'Holiday' : false
+                };
+
+              });
+
+            // Add to displayedColumns
+            this.displayedColumns = [
+              ...this.displayedColumns,
+              ...this.dynamicColumns.map(x => x.originalKey)
+            ];
+
+          }
+
+          this.dataSource.data = this.filterData;
+          this.dataSource.sort = this.sort;
+
+          this.totalRecords = this.filterData.length;
+          this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+
+          this.updateTable();
+
+        }, error => console.error(error));
+
     } catch (Ex) {
+
       console.log(Ex);
+
     }
+
   }
 
   // Method to handle attendance change (can be customized)
