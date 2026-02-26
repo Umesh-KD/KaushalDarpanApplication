@@ -358,7 +358,7 @@ export class ITIConsentUpdateComponent {
     this.Swal2.Confirmation(`Are you sure you want to ${dymsg} ?`,
       async (result: any) => {
         if (result.isConfirmed) {
-          this.childComponent.MobileNo = '8334874706'//this.sSOLoginDataModel.Mobileno
+          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
 
           // await for open model
           await this.childComponent.OpenOTPPopup();
