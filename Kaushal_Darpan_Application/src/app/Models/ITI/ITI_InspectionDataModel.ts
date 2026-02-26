@@ -185,6 +185,7 @@ export class UpdateConsentModel {
   public DocConsent: File | string | null = null;
   public Remark: string = ''
   public UserID: number = 0
+  public Status?: number=0;
 }
 
 export class ConsentSearchModel {
