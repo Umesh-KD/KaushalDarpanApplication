@@ -1630,6 +1630,8 @@ const routes: Routes = [
 
       { path: 'ItiPlanDocument', loadChildren: () => import('./Views/ITI/itiplan-document/itiplan-document.module').then(m => m.ITIPlanDocumentModule) },
 
+      { path: 'ItiSetCalender', loadChildren: () => import('./Views/ITI/iti-set-calender/iti-set-calender.module').then(m => m.ItiSetCalenderModule) },
+
 
 
 
@@ -1745,7 +1747,6 @@ const routes: Routes = [
   { path: 'Views\ITI\InstructorOptionForm', loadChildren: () => import('./Views/ITI/instructor-option-form/instructor-option-form.module').then(m => m.InstructorOptionFormModule) },
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
-
 
 
 

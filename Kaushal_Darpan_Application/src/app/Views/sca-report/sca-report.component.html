@@ -54,7 +54,7 @@
           <input class="form-input" placeholder="Roll Number" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
         </div>
 
-         <div>
+         <div *ngIf="this.searchRequest.StrKey?.includes('totl')">
            <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
            <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
              <option value="0">--All--</option>
@@ -165,7 +165,7 @@
           <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
         </div>
       </div>
-    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3" *ngIf="GradeList.length>0">
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3" *ngIf="GradeList?.length>0">
       <div class="flex text-center justify-center">
         <!--<button type="button" class="btn bg-success text-white me-2" (click)="OnSubmit()">Save All</button>
         <button type="button" class="btn bg-danger text-white" (click)="ResetControl()">Cancel</button>-->

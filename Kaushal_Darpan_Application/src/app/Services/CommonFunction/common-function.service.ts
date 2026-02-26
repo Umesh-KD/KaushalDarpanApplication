@@ -1763,6 +1763,19 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+
+  public async ITIInstructor_InstituteWise(request: any) {
+    ;
+    const body = JSON.stringify(request);
+    console.log(body);
+    return await this.http.post(this.APIUrl + '/ITIInstructor_InstituteWise', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
   public async NodalCenterList(request: NodalDataModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/NodalCenterList`, body, this.headersOptions)
