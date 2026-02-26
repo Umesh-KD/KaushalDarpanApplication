@@ -189,6 +189,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
 
 
   async PDFDownload(row: any) {
+    debugger
     this.requestDataPdf.CenterCode = this.requestData.CenterCode;
     this.requestDataPdf.GroupCode = row.GroupCode;
     this.requestDataPdf.SubjectCode = this.requestData.SubjectCode;
@@ -332,8 +333,15 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
   }
 
   generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
+    return `Download_Marks_Data_List_${timestamp}.${extension}`;
   }
 
 

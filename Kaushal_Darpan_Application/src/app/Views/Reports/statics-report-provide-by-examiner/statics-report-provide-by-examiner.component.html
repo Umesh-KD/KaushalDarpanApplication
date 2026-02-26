@@ -135,7 +135,7 @@
       </ng-container>
 
       <ng-container matColumnDef="Action">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action trhgtfg</th>
         <td mat-cell *matCellDef="let element">
           <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
@@ -147,7 +147,7 @@
               (click)="openFeedbackForm( FeedbackForm_Modal, element)"><i class="ti ti-pencil"></i>
             </a>
 
-            <a href="javascript:void(0);" class="btn bg-info" *ngIf="element.Status == 1"
+            <a href="javascript:void(0);" class="btn bg-info" *ngIf="element.Status == 1" title="Download Marks Data List"
               (click)="PDFDownload(element)" ><i class="ti ti-download"></i>
             </a>
 
