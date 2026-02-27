@@ -462,6 +462,81 @@ export class ITIStudentAttendanceComponent implements OnInit {
       }, error => console.error(error));
   }
 
+
+  saveAttendancefinal() {
+    console.log(this.dataSource.filteredData);
+    let saveAttendanceData: any[] = this.dataSource.filteredData;
+    const attendanceData = {
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+      SemesterID: this.TableForm.value.SemesterID,
+      StreamID: this.TableForm.value.StreamID,
+      SubjectID: this.TableForm.value.SubjectID,
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+      InstituteID: this.sSOLoginDataModel.InstituteID,
+      AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID
+    };
+
+    saveAttendanceData.forEach(item => {
+      // Add new columns (data) to each item
+      item.EndTermID = attendanceData.EndTermID;
+      item.FinancialYearID = attendanceData.FinancialYearID;
+      item.DepartmentID = attendanceData.DepartmentID;
+      item.SemesterID = attendanceData.SemesterID;
+      item.StreamID = attendanceData.StreamID;
+      item.SubjectID = attendanceData.SubjectID;
+      item.InstituteID = attendanceData.InstituteID,
+        item.CourseTypeID = attendanceData.CourseTypeID;
+      item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
+      item.IsFinalSubmit =1
+    });
+    debugger
+    // Iterate over each student record to transform attendance dates into an "Attendance" column
+    saveAttendanceData.forEach(item => {
+      // Create an empty array to store attendance data
+      let attendanceArray: any[] = [];
+
+      // Loop through the object properties and extract attendance date columns
+      Object.keys(item).forEach(key => {
+        // If the key is a date (i.e., not part of the basic student info)
+        if (key.trim() !== "DepartmentID" && key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName" && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "FinancialYearID" && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID" && key.trim() !== "CourseTypeID"
+          && key.trim() !== "AssignTeacherForSubjectID" && key.trim() !== "SubjectID1"
+          && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance" && key.trim() !== "InstituteID"
+          && key.trim() !== "StudentID" && key.trim() !=="IsFinalSubmit") {
+
+          // Push the date and its status as an object into the attendance array
+          attendanceArray.push({
+            "Date": key.trim(),
+            "Status": item[key],
+            "IsFinalSubmit": 1
+          });
+
+          // Delete the attendance date key from the item object
+          delete item[key];
+        }
+      });
+
+      // Add the attendance array as a new column 'Attendance'
+      item.Attendance = attendanceArray;
+    });
+    // Optionally, log the updated data to verify the result
+    console.log(saveAttendanceData);
+
+    this.attendanceServiceService.saveITI_AttendanceData(saveAttendanceData)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.Data == 1) {
+          this.GetAttendanceTimeTable();
+          this.toastr.success(data.Message);
+          this.checkedAll = false;
+        }
+      }, error => console.error(error));
+  }
+
+
+
+
   // Method to toggle all attendance to present or absent
   toggleAllAttendance() {
     const attendanceStatus = this.checkedAll ? 'P' : 'A';
@@ -469,6 +544,16 @@ export class ITIStudentAttendanceComponent implements OnInit {
       element.Attendance = attendanceStatus;
     });
   }
+
+  isDateFinalSubmitted(element: any, dateKey: string): boolean {
+
+    const record = element.Attendance?.find(
+      (x: any) => x.Date === dateKey
+    );
+
+    return record?.IsFinalSubmit == 1;
+  }
+
 
   // Method to handle individual attendance toggle change
   //onAttendanceChange(event: MatSlideToggleChange, element: any) {

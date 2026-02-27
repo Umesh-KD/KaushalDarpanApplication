@@ -157,6 +157,7 @@ export class InspectionTeamComponent {
   }
 
   async AddMoreMember(data : any) {
+    debugger
     this.isSubmitted = true;
     debugger;
     if (data == null && data == undefined) {
@@ -343,7 +344,7 @@ export class InspectionTeamComponent {
 
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
-
+debugger
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
       return;
@@ -410,7 +411,7 @@ export class InspectionTeamComponent {
 
   async Save_CheckSSOData(formData: any) {
     //this.isFormSubmitted = true
-
+debugger;
     try {
       this.loaderService.requestStarted();
       await this.itiInspectionService.Save_CheckSSOData(formData).then((data: any) => {
@@ -424,9 +425,7 @@ export class InspectionTeamComponent {
           }
           else {
             this.AddMoreMember(data)
-          }
-          
-
+          }         
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
