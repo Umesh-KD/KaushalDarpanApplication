@@ -50,7 +50,8 @@ export class ITIAddConsentComponent {
       DistrictID: ['', [DropdownValidators]],
       InstituteID: ['', [DropdownValidators]],
       TentativeDate: [''],
-      consentTypeID: ['', [DropdownValidators]]
+      consentTypeID: ['', [DropdownValidators]],
+      txtAmount:['']
     });
     this.getMasterData();
   }
@@ -109,6 +110,7 @@ export class ITIAddConsentComponent {
   }
 
   async AddDeployment() {
+    debugger
     this.isSubmitted = true;
     if (this.consentFromGroup.invalid) {
       return;
@@ -135,6 +137,7 @@ export class ITIAddConsentComponent {
   }
 
   async SaveData() {
+    debugger
     if (!this.consentDeployList || this.consentDeployList.length === 0) {
       this.toastr.error("Please Add At Least One Institute");
       return;
@@ -174,5 +177,18 @@ export class ITIAddConsentComponent {
     event.target.showPicker();
   }
 
+  numberOnly(event: KeyboardEvent): boolean {
+
+    const charCode = (event.which) ? event.which : event.keyCode;
+
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+
+      return false;
+
+    }
+
+    return true;
+
+  }
 
 }
