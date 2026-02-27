@@ -144,7 +144,7 @@ export class InstructorOptionFormComponent {
   }
 
   get CheckInstitute(): boolean {
-    const insdtitutexist = this.AddedChoices.some(x => x.InstituteID == this.formData.InstituteID && x.InstituteID == this.formData.TradeID)
+    const insdtitutexist = this.AddedChoices?.some(x => x.InstituteID == this.formData.InstituteID && x.InstituteID == this.formData.TradeID)
     if (insdtitutexist) {
       return true
     } else {
@@ -159,22 +159,28 @@ export class InstructorOptionFormComponent {
     //const AddedChoices_10: OptionsDetailsDataModel[] = [];
     //const AddedChoices_12: OptionsDetailsDataModel[] = [];
 
+
+
+
     this.isSubmitted = true
     if (this.OptionsFormGroup.invalid) {
       this.OptionsFormGroup.markAllAsTouched();
       return;
     }
     if (this.formData.InstituteID == 0 || this.formData.InstituteID == null) {
-      this.toastr.error("आईटीआई")
+      this.swat.Warning("आईटीआई")
+      return
     }
 
     if (this.formData.TradeID == 0 || this.formData.TradeID == null) {
-      this.toastr.error("Trade Name")
+      this.swat.Warning("Trade Name")
+      return
     }
-
+    debugger
 
     if (this.CheckInstitute) {
-      this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
+      this.swat.Warning("आपने पहले ही इस संयोजन को चुन लिया है")
+      return
     }
     else {
       this.formData.ManagementTypeName = this.ManagmentTypeList.filter((x: any) => x.InstitutionManagementTypeID == this.formData.ManagementTypeID)[0]['InstitutionManagementType'];
@@ -184,14 +190,17 @@ export class InstructorOptionFormComponent {
 
       console.log("trade name", this.formData.TradeName)
 
+      if (!this.AddedChoices) {
+        this.AddedChoices=[]
+      }
 
-      const insdtitutexist = this.AddedChoices.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
+      const insdtitutexist = this.AddedChoices?.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
       if (insdtitutexist) {
-        this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
+        this.swat.Warning("आपने पहले ही इस संयोजन को चुन लिया है")
         return
       }
-      this.formData.Priority = this.AddedChoices.length + 1;
-      this.AddedChoices.push({
+      this.formData.Priority = this.AddedChoices?.length + 1;
+      this.AddedChoices?.push({
         ...this.formData
       });
 
@@ -209,7 +218,7 @@ export class InstructorOptionFormComponent {
       //this.OptionsFormGroup.reset();
     //this.formData = new OptionsDetailsDataModel();
 
-    this.AddedChoices.forEach((e: any) => e.InstructorID = this.InstructorID)
+    this.AddedChoices?.forEach((e: any) => e.InstructorID = this.InstructorID)
 
       this.formData.TradeID = 0
       this.isSubmitted = false
