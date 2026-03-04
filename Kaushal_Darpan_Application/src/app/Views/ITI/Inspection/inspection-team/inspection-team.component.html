@@ -78,9 +78,7 @@
             </div>
         </form>
         <form *ngIf="InspectionMemberFormGroup" [formGroup]="InspectionMemberFormGroup">
-          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
-           
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">         
             <!--<div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
     <select type="text" class="form-input" formControlName="DistrictID" [(ngModel)]="requestMember.DistrictID"  (change)="GetInstituteMaster_ByDistrictWise()">
@@ -122,18 +120,26 @@
               <div *ngIf="isFormSubmitted && _inspectionMemberForm.SSOID.errors" class="text-danger">
                 <p *ngIf="_inspectionMemberForm.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>
-            </div>
+            </div>          
             <div>
               <div class="text-left">
                 <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddMoreMember()">Verify</button>
               </div>
-            </div>
+            </div>            
           </div>
         </form>
+
+
+        <!-- start Non SSOID Members  -->
+
+
+
+
+        <!-- End Non SSOID Members  -->
+
       </div>
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-list"></i> Added Member List</b>
-        
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Added Member List</b>       
       </div>
 
       <div class="overflow-auto max-height500">

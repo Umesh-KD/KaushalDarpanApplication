@@ -176,6 +176,7 @@ export class ConsentModel  {
   public Remark: string = ''
   public UserID: number = 0
   public consentTypeID: number = 0
+  public Amount?:number=0
 }
 
 

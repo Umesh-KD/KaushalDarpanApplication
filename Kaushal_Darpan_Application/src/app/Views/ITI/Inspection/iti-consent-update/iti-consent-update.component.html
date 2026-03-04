@@ -57,6 +57,10 @@
               Updated Date
               <span class="sort-indicator" *ngIf="sortColumn === 'UpdatedDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
             </th>
+            <th class="sortable" (click)="onSort('UpdatedDate')">
+              Fee Amount
+              <span class="sort-indicator" *ngIf="sortColumn === 'UpdatedDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+            </th>
             <th>Action</th>
           </tr>
         </thead>
@@ -74,6 +78,7 @@
             <td>{{ row.InstituteName }}</td>
             <td>{{ row.TentativeDate | date:'dd/MM/yyyy' }}</td>
             <td>{{ row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ row.Amount }}</td>
             <td>
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="!(row.status == 1 || row.status == 2)" href="javascript:void(0);" (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">

@@ -35,26 +35,31 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
-        <i class="ti ti-excel"></i> Export Excel
-      </a>
-    </div>
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+      <div class="flex gap-3">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>
+
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
         </select>
-
+      </div>
+      
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <button type="button" class="btn bg-info text-white inline-block" (click)="SaveDataMarked()">Mark Auctioned Selected Items</button>
+      </div>
+      <div class="">
+        <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
       </div>
       <div class="">
       </div>
       <div class="">
-      </div>
-      <div class="">
-        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+        
       </div>
     </div>
     <!--{{ItemMasterList|json}}-->
@@ -62,6 +67,9 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
+            <th>
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+            </th>
             <th class="text-left">SR NO</th>
             <th class="text-left">Category</th>
             <th class="text-left">College Name</th>
@@ -70,14 +78,17 @@
             <th class="text-left">Equipment Working Non-Working</th>
             <th class="text-left">Available Quantity</th>
             <th class="text-left">Price Per Unit</th>
-            <!-- <th class="text-left">Total Price</th> -->
             <th class="text-left">Is Auction</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
-            <td align="left">{{idx+1}}</td>
+          <tr *ngFor="let item of paginatedInTableData; let idx=index;">
+            <td>
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="item.Selected"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,item)">
+            </td>
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.CollegeName??"BTER"}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
@@ -87,10 +98,6 @@
             </td>
             <td align="left">{{item.AvailableQuantity}}</td>
             <td align="left">{{item.PricePerUnit}}</td>
-            <!-- <td align="left">{{item.TotalPrice}}</td> -->
-            <!--<td align="left">
-            {{ item.IsOption == '1' ? 'Pending' : (item.AuctionStatus == '1' ? 'Done' : 'N/A') }}
-          </td>-->
             <td align="left">
               {{
                   (item.IsOption == '1' && item.AuctionStatus == '1') ? 'Done' :
@@ -108,9 +115,21 @@
           </tr>
         </tbody>
       </table>
-
     </div>
-
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
   </div>
 </div>
 

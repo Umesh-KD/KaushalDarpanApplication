@@ -56,6 +56,19 @@ export class AuctionListComponent {
   EnumRole = EnumRole;
   minDate: string = '';
 
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
+
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   constructor(
     private toastr: ToastrService,
@@ -97,8 +110,6 @@ export class AuctionListComponent {
 
   async SaveAuctionData() {
     try {
-      debugger;
-
       this.isSubmitted = true;
       if (this.AuctionFormGroup.invalid || this.AuctionFormGroup.value.AuctionQuantity == 0) {
         this.toastr.error("Please valid Auction Detail")
@@ -179,7 +190,6 @@ export class AuctionListComponent {
   }
 
   async ViewandUpdate(content: any, item:any) {
-    debugger;
     this.isSubmitted = false;
     this.ItemDetailsId = item.ItemDetailsId
     this.request.isOption = item.IsOption
@@ -197,7 +207,6 @@ export class AuctionListComponent {
   public file!: File;
   async onFilechange(event: any, Type: string) {
     try {
-      debugger;
       this.file = event.target.files[0];
       if (this.file) {
         if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type == 'application/pdf') {
@@ -260,18 +269,18 @@ export class AuctionListComponent {
 
   async GetAllData() {
     try {
-      debugger;
       this.loaderService.requestStarted();
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID;
       await this.dteItemsMasterService.GetAllAuctionList(this.Searchrequest)
         .then((data: any) => {
-          debugger;
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
+
           this.ItemMasterList = data['Data'];
+          this.loadInTable();
           this.ItemMasterList1 = data['Data'];
         }, error => console.error(error));
     }
@@ -286,7 +295,6 @@ export class AuctionListComponent {
   }
 
   navigateToEdit(id: number) {
-    debugger;
     this.routers.navigate(['/DteEditeItemMaster'], { queryParams: { id } });
   }
 
@@ -406,4 +414,103 @@ export class AuctionListComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
   }
+
+  async SaveDataMarked() {}
+
+  //table feature 
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org. list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.ItemMasterList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org. list here)
+  async sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.ItemMasterList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.ItemMasterList.length;
+  }
+  // (replace org. list here)
+  get totalInTableSelected(): number {
+    return this.ItemMasterList.filter((x: any) => x.Selected)?.length;
+  }
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  //checked all (replace org. list here)
+  selectInTableAllCheckbox() {
+    this.ItemMasterList.forEach((x: any) => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+  //checked single (replace org. list here)
+  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+    const data = this.ItemMasterList.filter((x: any) => x.ItemDetailsId == item.ItemDetailsId);
+    data.forEach((x: any) => {
+      x.Selected = isSelected;
+    });
+    //select all(toggle)
+    this.AllInTableSelect = this.ItemMasterList.every((r: any) => r.Selected);
+  }
+  // end table feature
 }
