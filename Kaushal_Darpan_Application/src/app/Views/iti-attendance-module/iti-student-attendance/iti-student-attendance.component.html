@@ -153,11 +153,11 @@
             <!-- CELL -->
             <td mat-cell *matCellDef="let element">
 
-              <mat-slide-toggle [disabled]="column.isHoliday ||  isDateFinalSubmitted(element, column.originalKey)"
-                                [checked]="element[column.originalKey] === 'P'"
+              <mat-slide-toggle [disabled]="column.isHoliday || isFinalSubmitted(element[column.originalKey])"
+                                [checked]="isPresent(element[column.originalKey])"
                                 (change)="onAttendanceChange($event, element, column.originalKey)">
 
-                {{ element[column.originalKey] === 'P' ? 'Present' : 'Absent' }}
+                {{ isPresent(element[column.originalKey]) ? 'Present' : 'Absent' }}
 
               </mat-slide-toggle>
 
