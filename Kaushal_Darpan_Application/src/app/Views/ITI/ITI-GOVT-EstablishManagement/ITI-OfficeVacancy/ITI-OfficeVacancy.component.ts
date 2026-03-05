@@ -210,7 +210,9 @@ export class ITIOfficeVacancyComponent implements OnInit {
       PostedSeat:0,
       Index: this.tempIndex++,
       TradeID: 0,
-      TradeName: ''
+      TradeName: '',
+      PostSanctionDate: '',
+      PostSanctionedID:0
     };
 
     console.log('Vacancy being added:', vacancyData);

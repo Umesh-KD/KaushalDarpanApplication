@@ -73,6 +73,7 @@ export class SSOLoginDataModel {
     public SelectedValue: number = 0;
     public DistrictID: number = 0;
     public StaffTypeID?:number=0;
+    public OfficeName:string='';
 
 }
 
@@ -93,6 +94,7 @@ export class UpdateStudentDetailsModel {
 
 export class ItiPlanningSearchModel {
   public InstituteID:number=0
+  public DistrictID:number=0
   public IsNewCollege: number = 2
   public CollegeName:string=''
 }

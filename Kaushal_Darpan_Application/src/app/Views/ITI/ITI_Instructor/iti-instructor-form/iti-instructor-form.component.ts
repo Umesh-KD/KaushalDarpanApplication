@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDatamodel, BterSearchmodel } from '../../../../Models/ApplicationFormDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -45,6 +45,7 @@ import { DocumentDetailsService } from '../../../../Common/document-details';
 export class ItiInstructorFormComponent {
   @Input() uid: string = '';
   public urlId: string = '';
+  @Output() formSaved = new EventEmitter<boolean>();
   public InstructorForm!: FormGroup
   public EducationForm!: FormGroup
   public TechnicalForm!: FormGroup
@@ -310,7 +311,7 @@ export class ItiInstructorFormComponent {
       Employer_Name: [''],
       Employer_Address: [''],
       Tan_No: [''],
-      Aadhar: ['', Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)],
+      Aadhar: ['', [Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)]],
       AadharDocument: ['', Validators.required],   /// aad new 19/11/2025
       JanAadhar: [''],
       Employment_From: [''],
@@ -409,10 +410,10 @@ export class ItiInstructorFormComponent {
       });
 
       await this.GetById(this.urlId)
-      debugger
+      
       if (this.uid) {
         await this.GetVerifiationList()
-
+        debugger
         if (this.verifyrequest.PersonalStatus == 'Not Approved') {
           this.ispersonal = true
           this.InstructorForm.controls['IsDomicile'].enable()
@@ -458,7 +459,7 @@ export class ItiInstructorFormComponent {
           this.InstructorForm.controls['Correspondence_StreetRoadLane'].enable()
           this.InstructorForm.controls['Correspondence_AreaLocalitySector'].enable()
           this.InstructorForm.controls['Correspondence_LandMark'].enable()
-          this.InstructorForm.controls['Correspondence_State'].enable()
+  
           this.InstructorForm.controls['Correspondence_ddlState'].enable()
           this.InstructorForm.controls['Correspondence_ddlDistrict'].enable()
           this.InstructorForm.controls['Correspondence_PropTehsilID'].enable()
@@ -1236,8 +1237,9 @@ export class ItiInstructorFormComponent {
 
             this.InstructorForm.patchValue({
               ddlDistrict: this.request.ddlDistrict,
-              dob: this.request.Dob
-
+              dob: this.request.Dob,
+              AadharDocument: this.request.AadharDocument,
+              PermanentDocument: this.request.PermanentDocument
             });
 
 
@@ -1699,6 +1701,11 @@ export class ItiInstructorFormComponent {
     this.request = new ITI_InstructorDataModel()
     this.InstructorForm.controls['Uid'].reset(); // reset value
     this.InstructorForm.controls['Uid'].enable();
+
+  }
+
+  Back2() {
+    this.formSaved.emit(true);
   }
 
   openDatePicker(event: any) {

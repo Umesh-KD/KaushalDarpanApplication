@@ -6,6 +6,7 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { ITIConsentUpdateComponent } from './iti-consent-update.component';
 import { ITIConsentUpdateRoutingModule } from './iti-consent-update-routing.module';
+import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ITIConsentUpdateRoutingModule } from './iti-consent-update-routing.modu
     FormsModule,
     ReactiveFormsModule,
     LoaderModule,
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    OTPModalModule
   ]
 })
 export class ITIConsentUpdateModule { }

@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { SearchRequest } from '../../../../Models/CitizenSuggestionDataModel';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-iti-consent-update',
@@ -43,6 +44,7 @@ export class ITIConsentUpdateComponent {
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   public Table_SearchText: string = '';
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   constructor(
     private fb: FormBuilder,
@@ -52,6 +54,7 @@ export class ITIConsentUpdateComponent {
     private modalService: NgbModal,
     private appsettingConfig: AppsettingService,
     private commonMasterService: CommonFunctionService,
+    private Swal2: SweetAlert2
 
   ) { }
 
@@ -133,17 +136,20 @@ export class ITIConsentUpdateComponent {
     try {
       this.InspectionConsentID = InspectionConsentID;
 
-      const response: any = await this.GetById_Consent(InspectionConsentID);
+      // const response: any = await this.GetById_Consent(InspectionConsentID);
+      const response: any = await this.itiInspectionService.GetById_Consent(InspectionConsentID);
 
       if (response && response.State === EnumStatus.Success && response.Data) {
         const row = response.Data;
+        console.log(row.TentativeDate);
+        console.log(row[0].TentativeDate)
 
         this.UpdateConsentRequest = {
-          TentativeDate: row.TentativeDate ? row.TentativeDate.split('T')[0] : '', 
-          Remark: row.Remark || '',
+          TentativeDate: row[0].TentativeDate ? row[0].TentativeDate.split('T')[0] : '', 
+          Remark: row[0].Remark || '',
           DocConsent: null, 
-          UserID: row.UserID || 0, 
-          InspectionConsentID: row.InspectionConsentID || InspectionConsentID 
+          UserID: row[0].UserID || 0, 
+          InspectionConsentID: row[0].InspectionConsentID || InspectionConsentID 
         };
       } else {
         console.warn('No data found for the given ID:', InspectionConsentID);
@@ -217,17 +223,22 @@ export class ITIConsentUpdateComponent {
     }
   }
 
-  async onSubmitConsent() {
-    
+  async onSubmitConsent(status:any) {
+    debugger
     this.isSubmitted = true;
     if (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '') {
       this.toastr.error('Please upload the required document.');
+      return;
+    }
+    if(this.consentForm.invalid){
+      this.toastr.error('Please fill all mandatory fields !');
       return;
     }
     this.UpdateConsentRequest.UserID = this.sSOLoginDataModel.UserID;
     this.UpdateConsentRequest.Remark = this.consentForm.get('Remarks')?.value;
     this.UpdateConsentRequest.TentativeDate = this.consentForm.get('TentativeDate')?.value;
     this.UpdateConsentRequest.InspectionConsentID = this.InspectionConsentID;
+    this.UpdateConsentRequest.Status=status;
     try {
       this.isSubmitted = true;
       this.loaderService.requestStarted();
@@ -333,5 +344,53 @@ export class ITIConsentUpdateComponent {
     }
 
     return null;
+  }
+
+  async openOTPModal(status:any) {
+    let dymsg='';
+    if(status==1){
+      dymsg='Submit';
+    }
+    else{
+      dymsg='Decline';
+    }
+
+    this.Swal2.Confirmation(`Are you sure you want to ${dymsg} ?`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+          // await for open model
+          await this.childComponent.OpenOTPPopup();
+
+          // await OTP verification
+          // await this.childComponent.waitForVerification();
+          let isVerified = false;
+
+          const timeout = new Promise<void>((resolve) => {
+            setTimeout(() => {
+              if (!isVerified) {
+                console.log('OTP timeout');
+                // optional: close popup
+                this.childComponent.CloseOTPModal?.();
+                resolve();
+              }
+            }, 60000);
+          });
+
+          const verify = this.childComponent.waitForVerification().then(() => {
+            isVerified = true;
+          });
+
+          await Promise.race([verify, timeout]);
+
+          if (isVerified) {         
+            await this.onSubmitConsent(status);
+          } else {
+            alert('OTP verification timeout');
+          }
+
+        }
+      });
   }
 }

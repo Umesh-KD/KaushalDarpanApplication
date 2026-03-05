@@ -42,6 +42,7 @@ export class MasterLayoutComponent implements OnInit {
   public fileUpload: any = {};
   public folder: string = "test";
   public InstituteName: string = "";
+  public OfficeName:string="";
   public _EnumRole = EnumRole;
   public HostelID: number = 0;
   public _EnumDepartment = EnumDepartment;
@@ -199,6 +200,8 @@ export class MasterLayoutComponent implements OnInit {
     this.HostelID = this.sSOLoginDataModel.HostelID;
     this.InstituteName = this.sSOLoginDataModel.InstituteName;
     this.SessionTypeID = this.sSOLoginDataModel.SelectedValue;
+    this.OfficeName=this.sSOLoginDataModel.OfficeName;
+
     await this.GetUserRoleList();
 
     if (this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWarden || this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWardenITINCVT || this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWardenITISCVT) {

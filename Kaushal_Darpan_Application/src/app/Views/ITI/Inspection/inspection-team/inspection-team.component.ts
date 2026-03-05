@@ -7,7 +7,7 @@ import { DropdownValidators } from '../../../../Services/CustomValidators/custom
 import { MenuService } from '../../../../Services/Menu/menu.service';
 import { StaffMasterDDLDataModel } from '../../../../Models/CenterObserverDataModel';
 import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
-import { EnumDepartment, EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumDepartment, EnumInspectionDeploymentType, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ITIInspectionService } from '../../../../Services/ITI/ITI-Inspection/iti-inspection.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -34,13 +34,17 @@ export class InspectionTeamComponent {
 
   public request = new ITI_InspectionDataModel();
   public requestMember = new InspectionMemberDetailsDataModel();
+  public requestNonSSOMember=new InspectionMemberDetailsDataModel();
   public formData = new SaveCheckSSODataModel();
   InspectionFormGroup!: FormGroup; 
   InspectionMemberFormGroup!: FormGroup;
+  InspectionNonSSOIDMemberFormGroup!:FormGroup;
   isSubmitted: boolean = false;
   isFormSubmitted: boolean = false;
   isFormReadOnly: boolean = false;
   showTeamInitials: boolean = true;
+  isSSOMember:boolean=true;
+
   public requestStaff = new StaffMasterDDLDataModel();
   requestTrade = new ItiTradeSearchModel()
   requestIti = new ItiCollegesSearchModel()
@@ -78,6 +82,17 @@ export class InspectionTeamComponent {
    
       SSOID: ['', Validators.required],
     })
+
+    this.InspectionNonSSOIDMemberFormGroup=this.fb.group({
+      StaffName:['',Validators.required],
+      MobileNo:['',[Validators.pattern(GlobalConstants.MobileNumberPattern), Validators.minLength(10), Validators.maxLength(10)]],
+      DepartmentName:[''],
+      Email:['',[Validators.pattern(GlobalConstants.EmailPattern)]],
+      Designation:[''],
+      Address:[''],
+      EmployeeID:['']
+    })
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     // this.InspectionTeamID = this.activatedRoute.snapshot.queryParams['id'];
     // console.log("this.InspectionTeamID",this.InspectionTeamID)
@@ -101,6 +116,7 @@ export class InspectionTeamComponent {
 
   get _inspectionForm() { return this.InspectionFormGroup.controls; }
   get _inspectionMemberForm() { return this.InspectionMemberFormGroup.controls; }
+  get _inspectionNonSSOIDMemberForm() { return this.InspectionNonSSOIDMemberFormGroup.controls; }
 
   async getMasterData() {
     try {
@@ -157,9 +173,11 @@ export class InspectionTeamComponent {
   }
 
   async AddMoreMember(data : any) {
+    debugger
     this.isSubmitted = true;
     debugger;
-    if (data == null && data == undefined) {
+    // && this.requestMember.SSOID
+    if (data == null && data == undefined ) {
        await this.SSOIDGetSomeDetails(this.requestMember.SSOID);
     }
     //if (check == false) {
@@ -167,10 +185,24 @@ export class InspectionTeamComponent {
     //  return;
     //}
 
+    // if(this.requestMember.SSOID){
+    //   if(this.InspectionMemberFormGroup.invalid) {
+    //     console.log("Invalid");
+    //     return
+    //   }
+    // }
+    // else{
+    //   if(this.InspectionNonSSOIDMemberFormGroup.invalid) {
+    //     console.log("Invalid");
+    //     return
+    //   }
+    // }
+
     if(this.InspectionMemberFormGroup.invalid) {
       console.log("Invalid");
       return
     }
+
 
     const IsDuplicate = this.request.InspectionMemberDetails.some((element: any) =>
       data.Data == element.StaffID
@@ -206,7 +238,54 @@ export class InspectionTeamComponent {
     this.isSubmitted = false;
   }
 
+  async AddMoreNonSSOMember(data : any) {
+    debugger
+    this.isSubmitted = true;
+    debugger;
+
+    if(this.requestMember.SSOID){
+      if(this.InspectionMemberFormGroup.invalid) {
+        console.log("Invalid");
+        return
+      }
+    }
+    else{
+      if(this.InspectionNonSSOIDMemberFormGroup.invalid) {
+        console.log("Invalid");
+        return
+      }
+    }
+    const IsDuplicate = this.request.InspectionMemberDetails.some((element: any) =>
+     element.StaffName?.trim().toLowerCase()==this.requestNonSSOMember.StaffName?.trim().toLocaleLowerCase()  && 
+     element.MobileNo?.trim()==this.requestNonSSOMember.MobileNo?.trim()
+    );
+    if (IsDuplicate) {
+      // this.toastr.error('Already Exists');
+      this.toastr.error("Already Exist !");
+      return;
+    }
+    
+    console.log(this.requestNonSSOMember);
+
+    this.request.InspectionMemberDetails.push(this.requestNonSSOMember);
+
+    this.isFormReadOnly = true;
+
+    console.log("this.request on push",this.request);
+
+    // this.dataSource.data = this.request.ObserverDetails;
+    // this.dataSource.sort = this.sort;
+
+    // this.totalRecords = this.request.ObserverDetails.length;
+    // this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+    // this.updateTable();
+
+    this.requestNonSSOMember = new InspectionMemberDetailsDataModel();
+    this.isSubmitted = false;
+  }
+
   async SaveData() {
+    debugger;
     this.isFormSubmitted = true
     debugger;
     //if(this.InspectionFormGroup.invalid) return;
@@ -219,6 +298,24 @@ export class InspectionTeamComponent {
       this.toastr.error("Please Add At Least One Member in Team");
       return;
     }
+
+    // Check if any member has null / empty SSOID
+// const Member = this.request.InspectionMemberDetails
+// .find((x: any) => !x.SSOID || x.SSOID.trim() === '');
+
+// if (Member) {
+// this.toastr.error("All team members must have a valid SSOID");
+// return;
+// }
+
+    if(this.request.InspectionMemberDetails.length==1){
+      const invalidMember=this.request.InspectionMemberDetails.find((x:any)=>!x.SSOID || x.SSOID.trim()==='');
+      if(invalidMember){
+        this.toastr.error("Add At Least One Member With SSOID To Set Incharge !");
+        return;
+      }
+    }
+
 
     if (this.request.InspectionMemberDetails.length == 1) {
       this.request.InspectionMemberDetails.forEach(element => {
@@ -343,7 +440,7 @@ export class InspectionTeamComponent {
 
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
-
+debugger
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
       return;
@@ -373,9 +470,7 @@ export class InspectionTeamComponent {
           if (parsedData != null) {
             
             //this.formData.Displayname = parsedData.displayName
-
-
-            
+          
             this.formData.Name = parsedData.displayName;
             this.formData.MobileNo = parsedData.mobile;
             this.formData.EmailID = parsedData.mailPersonal;
@@ -410,7 +505,7 @@ export class InspectionTeamComponent {
 
   async Save_CheckSSOData(formData: any) {
     //this.isFormSubmitted = true
-
+debugger;
     try {
       this.loaderService.requestStarted();
       await this.itiInspectionService.Save_CheckSSOData(formData).then((data: any) => {
@@ -424,9 +519,7 @@ export class InspectionTeamComponent {
           }
           else {
             this.AddMoreMember(data)
-          }
-          
-
+          }         
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
@@ -439,6 +532,13 @@ export class InspectionTeamComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200)
+    }
+  }
+
+  validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
     }
   }
 
@@ -481,9 +581,6 @@ export class InspectionTeamComponent {
   //      }, 200);
   //    }
   //  }
-
- 
-
 
 }
 

@@ -37,6 +37,7 @@ import { StudentItiResultModel } from '../../Models/StudentSearchModel';
 import { InternalMarksReportCollegeWiseSearchModel } from '../../Models/CompanyMasterDataModel';
 import { CertificateLetterSearchModel } from '../../Models/CertificateLetterDataModel';
 import { ExaminerStaticReportFeedbackDataModel } from '../../Models/BTER/StaticsReportDataModel';
+import { ExaminerwithGroupcodeModel } from '../../Models/MiscellaneousModel';
 
 
 
@@ -240,6 +241,24 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  // START examiner with group code list and unlock  
+  public async GetExaminerWithGroupCodeList(data: any) {
+    return await this.http.post(this.APIUrl + "/GetExaminerWithGroupCodeList/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async UnlockExaminerWithGroupCode(searchRequest: ExaminerwithGroupcodeModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/UnlockExaminerWithGroupCode`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  // END examiner with group code list and unlock  
   public async GetOnlineReportProvideByExaminer(request: OnlineMarkingSearchModel) {
     const body = JSON.stringify(request)
     return this.http.post(`${this.APIUrl}/GetOnlineReportProvideByExaminer`, body, this.headersOptions)
@@ -1828,6 +1847,13 @@ export class ReportService {
       .pipe(catchError(this.handleErrorObservable)
       ).toPromise();
 
+  }
+
+  public async GetStaticsReportExaminerMarksData(data: any) {
+    return await this.http.post(this.APIUrl + "/GetStaticsReportExaminerMarksData/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
   }
 
 }

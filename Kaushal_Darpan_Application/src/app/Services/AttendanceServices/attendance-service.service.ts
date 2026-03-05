@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { catchError, throwError } from 'rxjs';
 import { StreamMasterDataModelsTesting } from '../../Models/StreamMasterDataModelsTesting';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { CalendarEventModel, PostAttendanceTimeTable, RosterDisplayTimeTableDataModel } from '../../Models/StaffMasterDataModel';
+import { CalendarEventModel, CalendarEventModelITI, PostAttendanceTimeTable, RosterDisplayTimeTableDataModel } from '../../Models/StaffMasterDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -98,8 +98,38 @@ export class AttendanceServiceService {
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+
+
+  public async SetCalendarEventModelITI(model: any[]) {
+    debugger
+    return await this.http.post(this.APIUrl + '/SetCalendarEventModelITI', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async UpdateCalendarEventModelITI(model: any[]) {
+    debugger
+    return await this.http.post(this.APIUrl + '/UpdateCalendarEventModelITI', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
   public async getCalendarEventModel(model: CalendarEventModel) {
     return await this.http.post(this.APIUrl + '/getCalendarEventModel', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
+  public async getCalendarEventModelITI(model: CalendarEventModel) {
+    return await this.http.post(this.APIUrl + '/getCalendarEventModelITI', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async getAssignCalendarEventModelITI(model: CalendarEventModelITI) {
+    return await this.http.post(this.APIUrl + '/getAssignCalendarEventModelITI', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }

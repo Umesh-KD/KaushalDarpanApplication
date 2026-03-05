@@ -12,6 +12,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-iti-consent',
@@ -29,8 +30,12 @@ export class ITIConsentComponent {
   public ConsentData: any = [];
   public InstituteMasterDDL: any = [];
   public DistrictMasterDDL: any = [];
+  public StatusHistoryList:any=[];
   requestCenter = new CenterMasterDDLDataModel();
   public consentDeploy = new ConsentModel();
+  modalReference: NgbModalRef | undefined;
+
+
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   public Table_SearchText: string = '';
@@ -40,7 +45,8 @@ export class ITIConsentComponent {
     private loaderService: LoaderService,
     private Swal2: SweetAlert2,
     private http: HttpClient,
-    private appsettingConfig: AppsettingService
+    private appsettingConfig: AppsettingService,
+    private modalService: NgbModal,
   ) { }
 
   async ngOnInit() {
@@ -146,6 +152,35 @@ export class ITIConsentComponent {
     })
   }
 
+  async onStatusHistorylist (model: any, InspectionConsentID: number) {
+     
+    try {
+      this.loaderService.requestStarted();
+
+      await await this.itiInspectionService.GetHistoryDataById_Team(InspectionConsentID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StatusHistoryList = data.Data;
+          //this.UserProfileStatusHistoryList=this.UserProfileStatusHistoryList.filter((item:any)=>item.UserProfileStatus==='Revert');
+
+        }, (error: any) => console.error(error))
+
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalProfileStatuslist() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+  }
 
   onSort(column: string) {
     if (this.sortColumn === column) {
@@ -174,5 +209,6 @@ export class ITIConsentComponent {
       return 0;
     })];
   }
+  
 }
 

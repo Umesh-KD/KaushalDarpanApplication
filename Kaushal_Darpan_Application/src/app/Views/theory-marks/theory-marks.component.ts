@@ -286,38 +286,37 @@ export class TheoryMarksComponent implements OnInit {
 
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
     // try {
-    debugger
+    //debugger
 
-    let isIntentionalAllowZeroMark = false;
-    this.loaderService.requestStarted();
+    var filtered: any[] = [];
 
+    // manually marks
     this.TheoryMarksDetailList.forEach((item: any) => {
-      if (item.isSufm == true || item.isDetain == true) {
-        item.selected = true;
+      if (item.isSufm == true || item.isDetain == true || item.IsPresentTheory == 0) {
+        item.Marked = true;
       }
     });
 
-    if (StudentExamPaperMarksID == 0 && isFinalSubmit == false) {
-      var filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true && x.IsUFM != true && x.IsDetain != true);
-    } else {
-      var filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true && x.StudentExamPaperMarksID == StudentExamPaperMarksID);
+    // for single student
+    if (StudentExamPaperMarksID > 0) {
+      filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true && x.IsUFM != true && x.IsDetain != true && x.StudentExamPaperMarksID == StudentExamPaperMarksID) ?? [];
     }
-    // Filter the TheoryMarksList to get only the items where Marked is true
-
-    /*  var filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true);*/
-    if (isFinalSubmit == false) {
-      var IsCheckecd = this.TheoryMarksDetailList.filter(x => x.Marked == true);
-
-      if (IsCheckecd.length == 0) {
-        this.toastr.error("Please Marked At least One Student")
-        return
-      }
+    else {
+      filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true && x.IsUFM != true && x.IsDetain != true) ?? [];
     }
 
+    // student checked
+    if (filtered.length == 0) {
+      this.toastr.error("Please Marked At least One Student")
+      return
+    }
+
+    // final submit the add all list
     if (isFinalSubmit == true) {
-      var filtered = this.TheoryMarksDetailList
+      filtered = this.TheoryMarksDetailList
     }
 
+    // mark not entered
     let markNotEntered = filtered.filter(
       x => (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '')
         && x.centersubmitstatus == 1 && x.centerpresentstatus == 1
@@ -348,7 +347,7 @@ export class TheoryMarksComponent implements OnInit {
       }
 
       // If the student is marked as "Present" (IsPresentTheory = 1), ensure that marks are entered
-      if (x.IsPresentTheory === 1 && x.IsUFM == false && x.IsDetain == false) {
+      if (x.IsPresentTheory == 1 && x.IsUFM == false && x.IsDetain == false) {
         // If no marks are entered, show the "Please enter marks" message
         if (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '') {
           this.toastr.error(`Please enter marks for present student! (Roll No) </br> ${x.RollNo}`);
@@ -371,32 +370,32 @@ export class TheoryMarksComponent implements OnInit {
     if (zeromarksStudents.length > 0) {
       await this.Swal2.Confirmation(`Marks are 0 for student, proceed if this is intentional: (Roll No)<br> ${zeromarksStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
-          await this.OnSubmitAfter(filtered);
+          await this.OnSubmitAfter(filtered, isFinalSubmit);
         }
       })
     }
 
     // if zero not found
     if (zeromarksStudents.length == 0) {
-      await this.OnSubmitAfter(filtered);
+      await this.OnSubmitAfter(filtered, isFinalSubmit);
     }
   }
 
-  async OnSubmitAfter(item: any[]) {
+  async OnSubmitAfter(item: any[], isFinalSubmit: boolean = false) {
     // full marks
     this.perfactStudents = item.filter(x => x.ObtainedTheory == x.MaxTheory) ?? [];
     if (this.perfactStudents.length > 0) {
       await this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for student: (Roll No)<br> ${this.perfactStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
-          await this.SaveData(item);
+          await this.SaveData(item, isFinalSubmit);
         }
       })
     } else {
-      await this.SaveData(item);
+      await this.SaveData(item, isFinalSubmit);
     }
   }
 
-  async SaveData(array: any) {
+  async SaveData(array: any, isFinalSubmit: boolean = false) {
     try {
       console.log("filtered while save", array);
       await this.TheoryMarksService.UpdateSaveData(array)
@@ -420,7 +419,10 @@ export class TheoryMarksComponent implements OnInit {
               )
             }
             // submit remark
-            await this.FeedbackSubmitProceed();
+            if (isFinalSubmit) {
+              await this.FeedbackSubmitProceed();
+            }
+            // await this.FeedbackSubmitProceed();
           } else {
             this.toastr.error(this.ErrorMessage);
           }
@@ -521,8 +523,8 @@ export class TheoryMarksComponent implements OnInit {
   }
 
   async FeedbackSubmit() {
-    debugger
-    await this.OnSubmit(0, true);    
+    //debugger
+    await this.OnSubmit(0, true);
   }
 
   async FeedbackSubmitProceed() {
@@ -855,6 +857,17 @@ export class TheoryMarksComponent implements OnInit {
     }
 
     event.preventDefault();
+  }
+
+  // selected all except absent
+  get selectedAllForPresent(): boolean {
+    let anyUnmarkedInPresent = this.TheoryMarksDetailList.filter(x => x.Marked == false && x.IsPresentTheory == 1)?.length;
+    if (anyUnmarkedInPresent != 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 
 }

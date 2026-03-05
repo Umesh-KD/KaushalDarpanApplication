@@ -39,6 +39,14 @@ export class InspectionMemberDetailsDataModel extends RequestBaseModel {
 
     public CommitteeID: number = 0;
 
+    // public MemberName?:string='';
+    public MobileNo?:string='';
+    public DepartmentName?:string='';
+    public Email?:string='';
+    public Designation?:string='';
+    public Address?:string='';
+    public EmployeeID?:string='';
+
 }
 
 
@@ -176,6 +184,7 @@ export class ConsentModel  {
   public Remark: string = ''
   public UserID: number = 0
   public consentTypeID: number = 0
+  public Amount?:number=0
 }
 
 
@@ -185,6 +194,7 @@ export class UpdateConsentModel {
   public DocConsent: File | string | null = null;
   public Remark: string = ''
   public UserID: number = 0
+  public Status?: number=0;
 }
 
 export class ConsentSearchModel {

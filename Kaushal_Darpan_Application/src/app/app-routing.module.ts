@@ -1515,7 +1515,9 @@ const routes: Routes = [
       { path: 'alloted-candidate-list', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list/alloted-candidate-list.module').then(m => m.AllotedCandidateListModule), title: 'Alloted Candidate List' },
       { path: 'alloted-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list-report/alloted-candidate-list-report.module').then(m => m.AllotedCandidateListReportModule), title: 'Alloted Candidate List' },
       { path: 'candidate-allotment-report', loadChildren: () => import('./Views/Counselling-Master/candidate-allotment-report/candidate-allotment-report.module').then(m => m.CandidateAllotmentListReportModule), title: 'Candidate Allotment List' },
-      {path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
+      { path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
+      { path: 'examiner-with-group-code-list', loadChildren: () => import('./Views/Reports/examiner-with-group-code-list/examiner-with-group-code-list.module').then(m => m.ExaminerWithGroupCodeListModule), title: 'ExaminerWithGroupCodeList' },
+      
       {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
       {path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details'},
       { path: 'counselling-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/counselling-candidate-list-report/counselling-candidate-list-report.module').then(m => m.CounsellingCandidateListReportModule), title: 'Alloted Candidate List' },
@@ -1536,11 +1538,9 @@ const routes: Routes = [
       { path: 'add-student-employement', loadChildren: () => import('./Views/ITI/AdditionalDetails/add-self-employement/add-self-employement.module').then(m => m.AddStudentEmployementModule), title: 'Add Student Employement' },
 
 
-
       {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
       { path: 'jan-aadhar-detail', loadChildren: () => import('./Views/new-jan-aadhar/new-jan-aadhar.module').then(m => m.JanAadharDetailModule), title: 'Jan AAdhar Detail Details' },
       { path: 'InternalMarksReportCollegeWise', loadChildren: () => import('./Views/InternalMarksReportCollegeWise/InternalMarksReportCollegeWise.module').then(m => m.InternalMarksReportCollegeWiseModule), title: 'InternalMarksReportCollegeWise' },
-
 
 
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
@@ -1627,6 +1627,13 @@ const routes: Routes = [
 
 
       { path: 'TestJan', loadChildren: () => import('./Views/ITI/test-jan-service/test-jan-service.module').then(m => m.TestJanServiceModule) },
+
+      { path: 'ItiPlanDocument', loadChildren: () => import('./Views/ITI/itiplan-document/itiplan-document.module').then(m => m.ITIPlanDocumentModule) },
+
+      { path: 'ItiSetCalender', loadChildren: () => import('./Views/ITI/iti-set-calender/iti-set-calender.module').then(m => m.ItiSetCalenderModule) },
+
+      { path: 'UnlockCalender', loadChildren: () => import('./Views/ITI/unlock-calender/unlock-calender.module').then(m => m.UnlockCalenderModule) },
+
 
 
 
@@ -1741,11 +1748,9 @@ const routes: Routes = [
   
   { path: 'Views\ITI\InstructorOptionForm', loadChildren: () => import('./Views/ITI/instructor-option-form/instructor-option-form.module').then(m => m.InstructorOptionFormModule) },
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
- 
-
-
-
-
+  { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
+  { path: 'Views\ITI\ReAssignAttendenceList', loadChildren: () => import('./Views/ITI/re-assign-attendence-list/re-assign-attendence-list.module').then(m => m.ReAssignAttendenceListModule) },
+  { path: 'Views\ITI\ReAssignAttendence', loadChildren: () => import('./Views/ITI/re-assign-attendence/re-assign-attendence.module').then(m => m.ReAssignAttendenceModule) },
 
 
 

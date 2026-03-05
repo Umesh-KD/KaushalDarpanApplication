@@ -124,7 +124,7 @@
 
   </div>
 
-  <div *ngIf="AddedChoices.length > 0">
+  <div *ngIf="AddedChoices?.length > 0">
     <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5">Option Choose List</b>
     </div>
@@ -153,7 +153,7 @@
               <button class="btn bg-primary text-white" type="button" title="Priority Up" (click)="PriorityChange(row, 'UP')" [disabled]="idx === 0">
                 <i class="ti ti-arrow-narrow-up"></i>
               </button>
-              <button class="btn bg-info text-white" type="button" title="Priority Down" (click)="PriorityChange(row, 'DOWN')" [disabled]="idx === AddedChoices8.length - 1">
+              <button class="btn bg-info text-white" type="button" title="Priority Down" (click)="PriorityChange(row, 'DOWN')" [disabled]="idx === AddedChoices?.length - 1">
                 <i class="ti ti-arrow-narrow-down"></i>
               </button>
             </td>

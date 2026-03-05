@@ -94,6 +94,7 @@ export class ItiReportDataModel {
   public SubDivisionID: number = 0
   public OrderType: number = 0
   public OrderDetailsList: any[] = []
+  public OtherDocument: any[] = []
   public WorkStarted:string=''
   public WorkName:string=''
   public WorkTradeCopy:string=''
@@ -122,7 +123,9 @@ export class ItiReportDataModel {
   public OrderTypeID:number=0
   public Ownership:number=0
   public ConnectionType:number=0
-  public DISCOM:number=0
+  public DISCOM: number = 0
+  public PlanDocument: string = ''
+  public PlanDocID:number=0
 
 }
 

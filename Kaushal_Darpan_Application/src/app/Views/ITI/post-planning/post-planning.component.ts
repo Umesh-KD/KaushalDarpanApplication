@@ -18,6 +18,9 @@ import { BTERCollegeTradeSearchModel } from '../../../Models/ITI/SeatIntakeDataM
 import { ITIGovtEMStaffMaster } from '../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { ITIOfficeVacancyModel } from '../../../Models/ITIGovtEMStaffMasterDataModel';
 import { ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
+import { ItiSanctionOrderList } from '../../../Models/ITI/ItiReportDataModel';
+import { HiringRoleMasterService } from '../../../Services/HiringRoleMaster/hiring-role-master.service';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-post-planning',
@@ -31,10 +34,16 @@ export class PostPlanningComponent {
   public formData = new ITIOfficeVacancyModel();
   public SearchData = new ITIOfficeVacancyModel();
   public isSubmitted: boolean = false;
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public ItiCollegesListAll: any = [];
+  public OrderNoList: any = [];
+  public AcademicOrderNoList: any = [];
+  public FinancialOrderNoList: any = [];
   public tradeSearchRequest = new ItiTradeSearchModel()
   public deleteRequest = new ITIOfficeVacancyModel();
+  public ItiSanctionOrderList = new ItiSanctionOrderList();
 
+  public currentDate = new Date();
   public isLoading: boolean = false;
 
   public State: number = 0;
@@ -73,8 +82,8 @@ export class PostPlanningComponent {
   public QueryReqFormGroup!: FormGroup;
   public _EnumRole = EnumRole
   public GetRoleID: number = 0
-  OfficeVacancyList: OfficeVacancyModel[] = [];
-  OfficeVacancy: OfficeVacancyModel[] = [];
+  OfficeVacancyList: ITIOfficeVacancyModel[] = [];
+  OfficeVacancy: ITIOfficeVacancyModel[] = [];
   public ProfileStatus: number = 0;
   public ProfileStatusID: number = 0;
   public _EnumProfileStatus = EnumProfileStatus;
@@ -87,7 +96,7 @@ export class PostPlanningComponent {
   public IsLockandSubmit: boolean = false;
 
   constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMaster: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
-    private ITICollegeTradeService: ItiSeatIntakeService
+    private ITICollegeTradeService: ItiSeatIntakeService, private ScholarshipService: HiringRoleMasterService,
   ) {
 
   }
@@ -102,7 +111,9 @@ export class PostPlanningComponent {
       DesignationID: [0, [DropdownValidators]],
       TradeID: [0,],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
-      Comments: ['']
+      Comments: [''],
+      PostSanctionDate: [''],
+      PostSanctionedID: ['', [DropdownValidators]]
     });
 
     this.groupForm = this.formBuilder.group({
@@ -124,6 +135,7 @@ export class PostPlanningComponent {
     await this.GetInstitute();
     await this.GetStaffTypeData();
     await this.GetTradeData();
+    await this.GetOrderDetailsList();
     /* await this.GetPostList();*/
     console.log(this.sSOLoginDataModel);
   }
@@ -145,7 +157,7 @@ export class PostPlanningComponent {
     // Validate required fields before adding
     if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID
       || !formValues.TotalSeatID
-      ||!formValues.ddlCollege
+      || !formValues.ddlCollege || !formValues.PostSanctionedID
     ) {
       this.toastr.warning("Please fill all required fields before adding.");
       return;
@@ -165,7 +177,7 @@ export class PostPlanningComponent {
     const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
     const gettrade = this.TradeList.find((item4: any) => item4.Id == formValues.TradeID);
-
+    const OrderName = this.AcademicOrderNoList.find((item5: any) => item5.SanctionID == formValues.PostSanctionedID);
 
     const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);
 
@@ -181,7 +193,7 @@ export class PostPlanningComponent {
 
     console.log(getinstituteName);
 
-    const vacancyData: ITIOfficeVacancyModel = {
+    const vacancyData: any = {
       Comments: formValues.Comments,
       DesignationID: formValues.DesignationID,
       InstituteID: formValues.InstituteID || 0,  // fallback if null
@@ -208,7 +220,11 @@ export class PostPlanningComponent {
       PostedSeat: 0,
       TradeID: formValues.TradeID,
       TradeName: gettrade?.TradeName||'',
-      Index: this.tempIndex++
+      Index: this.tempIndex++,
+      PostSanctionDate: formValues.PostSanctionDate,
+      PostSanctionedID: formValues.PostSanctionedID,
+      OrderName: OrderName.OrderNo,
+
     };
 
     console.log('Vacancy being added:', vacancyData);
@@ -337,7 +353,7 @@ export class PostPlanningComponent {
 
   ResetControl() {
     this.isSubmitted = false;
-    this.formData = new OfficeVacancyModel();
+    this.formData = new ITIOfficeVacancyModel();
 
     //const btnSave = document.getElementById('btnSave');
     //if (btnSave) btnSave.innerHTML = "Submit";
@@ -540,7 +556,7 @@ export class PostPlanningComponent {
         // No need to re-assign DesignationID if it's part of userSubmitData
         // this.formData.DesignationID = userSubmitData.DesignationID;
       } else {
-        this.formData = new OfficeVacancyModel(); // or initialize with default values if needed
+        this.formData = new ITIOfficeVacancyModel(); // or initialize with default values if needed
       }
 
       // If fillupDesignation is async, await it
@@ -556,10 +572,20 @@ export class PostPlanningComponent {
   CloseModal() {
     this.modalService.dismissAll();
     this.modalReference?.close();
-    this.formData = new OfficeVacancyModel();
+    this.formData = new ITIOfficeVacancyModel();
     this.isSubmitted = false;
   }
 
+
+  async OnfinalSave() {
+
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+    this.SaveData()
+  }
 
   async VacancyPostUpdate() {
     debugger
@@ -576,7 +602,7 @@ export class PostPlanningComponent {
 
             this.CloseModal();
             this.OfficeVacancyDataList();
-            this.formData = new OfficeVacancyModel();
+            this.formData = new ITIOfficeVacancyModel();
 
             setTimeout(() => {
               window.location.reload();
@@ -627,4 +653,44 @@ export class PostPlanningComponent {
     }
   }
 
+  async GetOrderDetailsList() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.ItiSanctionOrderList.InstituteID = this.formData.PlanningID
+
+      await this.ScholarshipService.GetsanctionOrder(this.ItiSanctionOrderList).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        // this.request = data.Data[0];
+        this.OrderNoList = data.Data;
+        this.AcademicOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 3);
+        this.FinancialOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 2);
+
+        console.log(this.OrderNoList, "orderlist");
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async OnOrderChange(type: number) {
+    debugger
+    if (type == 1) {
+      const item = this.AcademicOrderNoList.find(
+        (e: any) => e.ID == this.formData.PostSanctionedID
+      );
+
+      this.formData.PostSanctionDate = item?.OrderDate ?? '';
+      this.AddOfficeVacancyForm.controls['PostSanctionDate'].disable()
+
+    }
+    
+  }
 }

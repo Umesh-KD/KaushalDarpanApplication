@@ -57,13 +57,14 @@
     </div>
     <div class="overflow-x-auto mt-3">
       <!-- pending-->
-      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="RenumerationExaminerRequest.RenumerationExaminerStatusID==_EnumRenumerationExaminer.Pending">
+      <table class="table table-border w-full table-auto" cellpadding="5" 
+        *ngIf="RenumerationExaminerRequest.RenumerationExaminerStatusID==_EnumRenumerationExaminer.Pending">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr. No.</th>
             <th class="text-left">Group Code</th>
-            <th class="text-left">Alloted Copy</th>
-            <th class="text-left">Pending Copy</th>
+            <th class="text-left">Allotted Copy</th>
+            <th class="text-left">Absent Student</th>
             <th class="text-left">Saved Copy</th>
             <th class="text-left">Status</th>
             <th class="text-left">Action</th>
@@ -78,14 +79,20 @@
             <td>{{item.TotalPendingCopy}}</td>
             <td>{{item.TotalSavedCopy}}</td>
             <td>{{item.StatusName}}</td>
-            <td><input type="button" class="btn btn-sm bg-info text-white" value="View" (click)="GenerateAndViewPdf(item.ExaminerID)" title="click here to preview file" /> </td>
+            <td >
+              <input type="button" class="btn btn-sm bg-info text-white" value="View"
+                *ngIf="item.Status14p == 1 && item.Status == 0"  
+                (click)="GenerateAndViewPdf(item.ExaminerID)" 
+                title="click here to preview file" /> 
+            </td>
           </tr>
 
         </tbody>
       </table>
 
       <!-- Submitted And Forwarded to JD -->
-      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="RenumerationExaminerRequest.RenumerationExaminerStatusID==_EnumRenumerationExaminer.SubmittedAndForwardedtoJD">
+      <table class="table table-border w-full table-auto" cellpadding="5" 
+        *ngIf="RenumerationExaminerRequest.RenumerationExaminerStatusID==_EnumRenumerationExaminer.SubmittedAndForwardedtoJD">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr. No.</th>
@@ -102,7 +109,12 @@
             <td>{{item.GroupCode}}</td>
             <td>{{item.TotalSavedCopy}}</td>
             <td>{{item.StatusName}}</td>
-            <td><a href="{{appsettingConfig.StaticFileRootPathURL}}/{{_GlobalConstants.ReportsFolder}}/{{item.FileName}}" alt="pdf" target="_blank" title="click here to Generate & View file">Generate & View</a>  </td>
+            <td>
+              <a alt="pdf" target="_blank"
+                href="{{appsettingConfig.StaticFileRootPathURL}}/{{_GlobalConstants.ReportsFolder}}/{{item.FileName}}"  
+                title="click here to Generate & View file">Generate & View
+              </a>  
+            </td>
           </tr>
 
         </tbody>

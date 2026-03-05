@@ -181,7 +181,7 @@ export class CenterDailyReportsComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DownloadFile(data.Data, 'file download');
-          alert(data.Data)
+         // alert(data.Data)
         }, (error: any) => console.error(error));
     } catch (ex) {
       console.log(ex);
@@ -192,26 +192,15 @@ export class CenterDailyReportsComponent implements OnInit {
 
 
   exportToExcel(): void {
-    //const unwantedColumns = [
-    //  'EndTermID', 'InstituteID', 'Selected', 'SemesterID', 'Status', 'StreamID', 'StudentID'
-    //];
-    //const filteredData = this.viewAdminDashboardList.map(item => {
-    //  const filteredItem: any = {};
-    //  Object.keys(item).forEach(key => {
-    //    if (!unwantedColumns.includes(key)) {
-    //      filteredItem[key] = item[key];
-    //    }
-    //  });
-    //  return filteredItem;
-    //});
+
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.CollegesWiseReportsModellList);
-    // Create a new Excel workbook this.PreExamStudentData
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    // Export the Excel file
-    XLSX.writeFile(wb, 'CollegesWiseReports.xlsx');
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `CollegesWiseReports_${timestamp}.xlsx`);
   }
+
+  
 
   DownloadFile(FileName: string, DownloadfileName: any): void {
 
@@ -228,7 +217,14 @@ export class CenterDailyReportsComponent implements OnInit {
     });
   }
   generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
+    return `Center-daily-reports_${timestamp}.${extension}`;
   }
 }

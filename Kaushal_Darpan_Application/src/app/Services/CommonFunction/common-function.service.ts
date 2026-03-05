@@ -920,6 +920,16 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+
+
+  public async GetAssignedSubject(SSOID: string, EndTermID = 0, SemesterID: number = 0, Eng_NonEng: number = 0, StreamID: number = 0) {
+    return await this.http.get(this.APIUrl + '/GetAssignedSubject/' + SSOID + '/' + EndTermID + '/' + SemesterID + '/' + Eng_NonEng + '/' + StreamID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async Examiner_SSOID(DepartmentID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/Examiner_SSOID/' + DepartmentID, this.headersOptions)
@@ -1762,6 +1772,19 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async ITIInstructor_InstituteWise(request: any) {
+    ;
+    const body = JSON.stringify(request);
+    console.log(body);
+    return await this.http.post(this.APIUrl + '/ITIInstructor_InstituteWise', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
   public async NodalCenterList(request: NodalDataModel) {
     var body = JSON.stringify(request);

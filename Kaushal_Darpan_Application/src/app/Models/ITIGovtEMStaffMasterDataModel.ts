@@ -715,7 +715,9 @@ export class ITIOfficeVacancyModel {
   public StaffTypeName: string = '';
   public PostedSeat: number = 0;
   public TradeID:number=0
-  public TradeName:string=''
+  public TradeName: string = ''
+  public PostSanctionDate: string = ''
+  public PostSanctionedID: number = 0;
 }
 
 export class ITT_EM_ApproveStaffDataModel extends RequestBaseModel {

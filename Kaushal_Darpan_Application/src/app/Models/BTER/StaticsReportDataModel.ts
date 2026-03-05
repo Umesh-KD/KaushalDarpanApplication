@@ -5,11 +5,11 @@ export class ExaminerStaticReportFeedbackDataModel {
     public GroupCodeID?: number = 0;
     public SubjectID?: number = 0;
     public CommonRemarkForQueAns?: string = '';
-    public IsMassCoping?: string = '';
-    public Syllabus?: string = '';
-    public InstituteLevel?: string = '';
-    public TeachingByTeacher?: string = '';
-    public StudyOfStudent?: string = '';
+    public IsMassCoping?: boolean = false;
+    public Syllabus?: number = 0;
+    public InstituteLevel?: number = 0;
+    public TeachingByTeacher?: number = 0;
+    public StudyOfStudent?: number = 0;
     public SuggestionForImprovement?: string = '';
     public Date?: string = '';
     public SignPhoto?: string = '';
@@ -26,4 +26,18 @@ export class ExaminerStaticReportFeedbackDataModel {
     public CenterID?: number = 0;
     public MassCopyDocument?: string = '';
     public Dis_MassCopyDocument?: string = '';
+}
+
+export class ExaminerStaticReportSearchModel {
+    public CenterCode?: string = '';
+    public GroupCode?: string = '';
+    public SubjectCode?: string = '';
+    public InstituteID?: number = 0;
+    public SemesterID?: number = 0;
+    public EndTermID?: number = 0;
+    public DepartmentID?: number = 0;
+    public Eng_NonEng?: number = 0;
+    public RoleID?: number = 0;
+    public SSOID?: string = '';
+    public Action?: string = '';
 }
