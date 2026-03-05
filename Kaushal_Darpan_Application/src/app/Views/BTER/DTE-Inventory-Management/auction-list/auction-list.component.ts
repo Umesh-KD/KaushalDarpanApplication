@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
@@ -55,6 +55,7 @@ export class AuctionListComponent {
   public CollegeDDLList: any = [];
   EnumRole = EnumRole;
   minDate: string = '';
+  public closeResult: string | undefined;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -70,6 +71,8 @@ export class AuctionListComponent {
   //end table feature default
 
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
+
+  @ViewChild('AuctionItems_Modal') MyModel_AuctionItem: ElementRef | any;
   constructor(
     private toastr: ToastrService,
     private ItiTradeService: ItiTradeService,
@@ -415,7 +418,28 @@ export class AuctionListComponent {
     return `file_${timestamp}.${extension}`;
   }
 
-  async SaveDataMarked() {}
+  OpenModalPopup(content: any) {
+
+    this.modalService.open(content, { size: 'sm', backdrop: 'static', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  async SaveDataMarked() {
+    this.OpenModalPopup(this.MyModel_AuctionItem);
+  }
 
   //table feature 
   calculateInTableTotalPage() {
