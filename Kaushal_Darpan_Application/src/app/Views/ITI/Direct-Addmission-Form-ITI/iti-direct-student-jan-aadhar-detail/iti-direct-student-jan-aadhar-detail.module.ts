@@ -7,11 +7,12 @@ import { ITIDirectStudentJanAadharDetailRoutingModule } from './iti-direct-stude
 import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
-
+import { JanAadharDetailModule } from '../../../new-jan-aadhar/new-jan-aadhar.module';
 
 @NgModule({
   declarations: [
-    ITIDirectStudentJanAadharDetailComponent
+    ITIDirectStudentJanAadharDetailComponent,
+
   ],
   imports: [
     CommonModule,
@@ -21,7 +22,8 @@ import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
     CommonModule, 
     LoaderModule, 
     TableSearchFilterModule, 
-    OTPModalModule
+    OTPModalModule, JanAadharDetailModule
+
   ]
 })
 export class ITIDirectStudentJanAadharDetailModule { }

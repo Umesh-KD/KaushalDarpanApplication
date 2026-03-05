@@ -20,7 +20,6 @@ export class JanAadharDetailComponent implements OnInit {
   @Input() janadharNo: string = '';   // <-- coming from another component
   @Output() verifiedData = new EventEmitter<any>(); // <-- send data back
 
-
   public  request = new JanAadharDetailModel();
   public JanAdharMemberList: NewJanAadharDetailsEntity[] = [];
   public ResposeOTPModel = new NewJanAadharAPIModel();
@@ -74,9 +73,8 @@ export class JanAadharDetailComponent implements OnInit {
       private NewJanAadharDetailService:JanAadharDetailService,
   ) { }
 
-
-
-  ngOnInit(): void {
+  ngOnInit(): void
+  {
     // throw new Error('Method not implemented.');
     this.request.JAN_AADHAR = "4586715134";
    

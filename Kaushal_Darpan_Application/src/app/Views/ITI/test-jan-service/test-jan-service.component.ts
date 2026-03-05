@@ -14,8 +14,6 @@ export class TestJanServiceComponent {
   getJanadharData(data: any)
   {
     this.janMember = data as JanAadharVerifyMemberDetails
-
-    
   }
 
   janadharNo: string = '';

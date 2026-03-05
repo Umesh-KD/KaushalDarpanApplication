@@ -86,11 +86,23 @@
 
 
                 <div *ngIf="this.request.IsDomicile == true">
+
                   <label class="text-gray-800 text-sm font-medium inline-block mb-1"> JanAadhar No<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="text" (keypress)="validateNumber($event)" [(ngModel)]="this.request.JanAadhar" formControlName="JanAadhar" placeholder="Enter JanAdhar No" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-                  <div *ngIf="isSubmitted && _InstructorForm.JanAadhar.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required.!</p>
+                  <div class="input-group">
+                    <input class="form-control" style="border-color:#ddd" type="text" (keypress)="validateNumber($event)" [(ngModel)]="this.request.JanAadhar" formControlName="JanAadhar" placeholder="Enter JanAdhar No" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+
+
+                    <button style="display:none" class="btn bg-info" style="color:white" type="button" (click)="verifyJanAadhar()">
+                      Verify
+                    </button>
+                    <div *ngIf="isSubmitted && _InstructorForm.JanAadhar.errors" class="text-danger">
+                      <p><i aria-hidden="true"></i>This field is required.!</p>
+                    </div>
                   </div>
+                  <div *ngIf="isSubmitted && _InstructorForm.JanAadhar.errors" class="text-danger">
+                    <p>This field is required.!</p>
+                  </div>
+
                 </div>
 
                 <div *ngIf="showJanAadhaar">
