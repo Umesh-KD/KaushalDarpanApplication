@@ -421,7 +421,9 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
           rowData.SemesterID,
           rowData.SubjectID,
           rowData.ShiftNo,
-          rowData.UnitID
+          rowData.UnitID,
+          '',
+          ''
         ]);
       }
     }

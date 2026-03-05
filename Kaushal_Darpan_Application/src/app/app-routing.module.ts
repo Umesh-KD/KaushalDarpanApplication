@@ -1634,6 +1634,8 @@ const routes: Routes = [
 
       { path: 'UnlockCalender', loadChildren: () => import('./Views/ITI/unlock-calender/unlock-calender.module').then(m => m.UnlockCalenderModule) },
 
+      { path: 'ReAssignAttendence', loadChildren: () => import('./Views/ITI/re-assign-attendence/re-assign-attendence.module').then(m => m.ReAssignAttendenceModule) },
+
 
 
 
@@ -1750,8 +1752,6 @@ const routes: Routes = [
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
   { path: 'Views\ITI\ReAssignAttendenceList', loadChildren: () => import('./Views/ITI/re-assign-attendence-list/re-assign-attendence-list.module').then(m => m.ReAssignAttendenceListModule) },
-  { path: 'Views\ITI\ReAssignAttendence', loadChildren: () => import('./Views/ITI/re-assign-attendence/re-assign-attendence.module').then(m => m.ReAssignAttendenceModule) },
-
 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
