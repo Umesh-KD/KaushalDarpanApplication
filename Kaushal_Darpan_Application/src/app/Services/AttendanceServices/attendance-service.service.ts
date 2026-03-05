@@ -45,6 +45,15 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
+
+  public async RePostAttendanceTimeTable(model: any) {
+    return await this.http.post(this.APIUrl + '/RePostAttendanceTimeTable', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
+
   public async GetStudentAttendance(model: any) {
     return await this.http.post(this.APIUrl + '/GetStudentAttendance', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
@@ -57,7 +66,7 @@ export class AttendanceServiceService {
   }
 
   public async GetStudentAttendance_ITI(model: any) {
-    return await this.http.post(this.APIUrl + '/GetStudentAttendance', model, this.headersOptions).pipe(
+    return await this.http.post(this.APIUrl + '/ITIGetStudentAttendance', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
@@ -85,6 +94,13 @@ export class AttendanceServiceService {
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+
+  public async ITIReAttendanceTimeTable(model: any) {
+    return await this.http.post(this.APIUrl + '/ITIReAttendanceTimeTable', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
 
   public async PostAttendanceTimeTableList(model: PostAttendanceTimeTable[]) {
     return await this.http.post(this.APIUrl + '/PostAttendanceTimeTableList', model, this.headersOptions).pipe(

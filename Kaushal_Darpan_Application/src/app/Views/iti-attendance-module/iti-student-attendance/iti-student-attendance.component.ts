@@ -49,6 +49,8 @@ export class ITIStudentAttendanceComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   checkedAll: boolean = false;
   minEndDate: string | null = null;
+  AttendanceStartDate: string ='';
+  AttendanceEndDate: string ='';
   // Pagination related variables
   totalRecords: number = 0;
   pageSize: number = 500;
@@ -84,6 +86,9 @@ export class ITIStudentAttendanceComponent implements OnInit {
     this.subjectId = parseInt(this.route.snapshot.paramMap.get('subjectId') ?? "0");
     this.ShiftID = parseInt(this.route.snapshot.paramMap.get('ShiftID') ?? "0");
     this.UnitID = parseInt(this.route.snapshot.paramMap.get('UnitID') ?? "0");
+    this.AttendanceStartDate = this.route.snapshot.paramMap.get('AttendanceStartDate') ?? "";
+    this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "0";
+    
     this.getMasterData();
     const today = new Date();
     const yesterday = new Date();
@@ -112,8 +117,23 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
     this.TableForm.patchValue({
       StreamID: this.streamId,
-      SemesterID: this.semesterId
+      SemesterID: this.semesterId,
+
     });
+    if (this.AttendanceStartDate != '' && this.AttendanceStartDate != null && this.AttendanceStartDate != undefined
+      && this.AttendanceEndDate != '' && this.AttendanceEndDate != null && this.AttendanceEndDate != undefined
+    ) {
+
+      this.TableForm.patchValue({
+        AttendanceStartDate: this.AttendanceStartDate,
+        AttendanceEndDate: this.AttendanceEndDate,
+
+      });
+      this.TableForm.controls['AttendanceEndDate'].disable();
+      this.TableForm.controls['AttendanceStartDate'].disable();
+    }
+
+
     setTimeout(()=> {
       if (this.semesterId > 0) {
         this.TableForm.patchValue({
@@ -177,8 +197,8 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
 
 
-      const rawStart = this.TableForm.value.AttendanceStartDate;
-      const rawEnd = this.TableForm.value.AttendanceEndDate;
+      const rawStart = this.TableForm.getRawValue().AttendanceStartDate;
+      const rawEnd = this.TableForm.getRawValue().AttendanceEndDate;
       const dateStart = new Date(rawStart);
       const formattedDateStart =
         dateStart.getFullYear() + '-' +
