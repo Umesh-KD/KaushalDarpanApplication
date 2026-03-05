@@ -1,0 +1,111 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Lock/Unlock Calendar</h4>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+          <!--<a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
+            <select class="form-select" id="ddlBranch"
+                    (change)="Onyearchange()" [(ngModel)]="SSOID">
+              <option value="">--All--</option>
+              <option *ngFor="let item of StaffList" [value]="item.SSOID">{{item.NameWithSSOID}}</option>
+            </select>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject:</label>
+            <select class="form-select" id="ddlBranch"
+                    [(ngModel)]="SubjectID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
+
+          <div class="flex justify-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="getCalendarEventModel()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+          </div>
+
+
+          <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
+    <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
+      <option value="0">--All--</option>
+      <option value="1">Marks Pending</option>
+      <option value="2">Marks Entered</option>
+    </select>
+  </div> -->
+        </div>
+
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Months Wise Teacaher Calendar</b>
+        </div>
+
+
+
+
+
+
+
+
+        <div class="calendar-toolbar">
+          <button class="nav-btn" (click)="prevMonth()">Previous</button>
+
+          <span class="month-year">
+            {{ monthName }}
+            <input type="number" [value]="year" (change)="onYearChange($event)" min="1900" max="2100" />
+          </span>
+
+          <button class="nav-btn" (click)="nextMonth()">Next</button>
+
+          <button class="save-btn" (click)="saveAllEvents()">Save All</button>
+        </div>
+
+
+        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; text-align: center; width: 80%; margin: auto;">
+          <tr>
+            <th *ngFor="let day of weekDays">{{ day }}</th>
+          </tr>
+
+          <tr *ngFor="let week of [].constructor(6); let w = index">
+            <td *ngFor="let d of weekDays; let i = index"
+                [class.empty]="(w*7 + i) < startDay || (w*7 + i - startDay + 1) > monthDays.length"
+                [class.holiday]="getEvent(w*7 + i - startDay + 1)?.EventType === 'Holiday'"
+                [class.exam]="getEvent(w*7 + i - startDay + 1)?.EventType === 'Exam'"
+                [class.finalSubmit]="getEvent(w*7 + i - startDay + 1)?.IsFinalSubmit"
+                (click)="onDateClick(w*7 + i - startDay + 1)"
+                style="position: relative; cursor: pointer;">
+
+              <ng-container *ngIf="(w*7 + i) >= startDay && (w*7 + i - startDay + 1) <= monthDays.length">
+                {{ w*7 + i - startDay + 1 }}
+                <span class="tooltip" *ngIf="getEvent(w*7 + i - startDay + 1)?.Remark">
+                  {{ getEvent(w*7 + i - startDay + 1)?.Remark }}
+                </span>
+              </ng-container>
+             
+            </td>
+          </tr>
+        </table>
+        <!--{{ eventsList|json }}-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end row -->

@@ -286,7 +286,13 @@ export class ITIStudentAttendanceComponent implements OnInit {
     }
 
   }
+  isFinalSubmitted(value: any): boolean {
+  return value?.includes('(F)');
+}
 
+isPresent(value: any): boolean {
+  return value?.startsWith('P');
+}
   // Method to handle attendance change (can be customized)
   onAttendanceChange(event: any, element: any, column: string) {
     const attendanceStatus = event.checked ? 'P' : 'A';

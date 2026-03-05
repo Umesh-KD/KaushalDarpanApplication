@@ -39,6 +39,14 @@ export class InspectionMemberDetailsDataModel extends RequestBaseModel {
 
     public CommitteeID: number = 0;
 
+    // public MemberName?:string='';
+    public MobileNo?:string='';
+    public DepartmentName?:string='';
+    public Email?:string='';
+    public Designation?:string='';
+    public Address?:string='';
+    public EmployeeID?:string='';
+
 }
 
 
