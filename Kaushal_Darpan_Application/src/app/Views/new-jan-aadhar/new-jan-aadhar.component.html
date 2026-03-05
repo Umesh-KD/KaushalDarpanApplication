@@ -68,7 +68,8 @@
                     <td>{{row.MEMBER_TYPE}}</td>
                     <td>
                       <!--;SendOTP(row);-->
-                      <button class="btn bg-info text-white btn-sm" (click)="ShowOtpPopup(ApplySchemesEmp)">Send OTP</button>
+                      <!--<button class="btn bg-info text-white btn-sm" (click)="ShowOtpPopup(ApplySchemesEmp);">Send OTP</button>-->
+                      <button class="btn bg-info text-white btn-sm" (click)="ShowOtpPopup(ApplySchemesEmp);SendOTP(row);">Send OTP</button>
                     </td>
                   </tr>
                 </tbody>
