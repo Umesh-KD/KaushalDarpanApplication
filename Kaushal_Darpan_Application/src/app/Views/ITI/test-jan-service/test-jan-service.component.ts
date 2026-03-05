@@ -15,17 +15,17 @@ export class TestJanServiceComponent {
   {
     this.janMember = data as JanAadharVerifyMemberDetails
 
+    
   }
-
 
   janadharNo: string = '';
-  @ViewChild(JanAadharDetailComponent)
-  janadharComponent!: JanAadharDetailComponent;
 
-  verifyJanadhar() {
+  @ViewChild(JanAadharDetailComponent) janadharComponent!: JanAadharDetailComponent;
+
+  verifyJanadhar()
+  {
     this.janadharComponent.startVerification(this.janadharNo);
   }
-
 
 
 
