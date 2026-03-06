@@ -1457,8 +1457,8 @@ const routes: Routes = [
       { path: 'ExamNodalMapping', loadChildren: () => import('./Views/exam-nodal-mapping/exam-nodal-mapping.module').then(m => m.ExamNodalMappingModule) },
       //private sudent application form routes
 
-      { path: 'iti-direct-private-student-jan-aadhar-detail', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-ITI/iti-direct-private-student-jan-aadhar-detail/iti-direct-private-student-jan-aadhar-detail.module').then(m => m.ITIDirectprivateStudentJanAadharDetailModule), title: 'ITI Direct Admission' },
-      { path: 'direct-admission-private-application-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-ITI/iti-direct-private-application-form-tab/iti-direct-private-application-form-tab.module').then(m => m.ITIDirectprivateApplicationFormTabModule), title: 'ITI Private Application Form' },
+      { path: 'iti-direct-private-student-jan-aadhar-detail', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-private-student-jan-aadhar-detail/iti-direct-private-student-jan-aadhar-detail.module').then(m => m.ITIDirectprivateStudentJanAadharDetailModule), title: 'ITI Direct Admission' },
+      //{ path: 'direct-admission-private-application-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-private-application-form-tab/iti-direct-private-application-form-tab.module').then(m => m.ITIDirectprivateApplicationFormTabModule), title: 'ITI Private Application Form' },
 
       { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
 
