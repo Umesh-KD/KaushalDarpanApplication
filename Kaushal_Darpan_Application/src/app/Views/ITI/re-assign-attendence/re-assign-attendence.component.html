@@ -1,11 +1,11 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Re-Assign Teacher For Subject</b>
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Substitute Teacher For Subject</b>
       <div class="flex justify-end flex-wrap items-center">
         @if((sSOLoginDataModel.RoleID == 20 || sSOLoginDataModel.RoleID == 43) && sSOLoginDataModel.DepartmentID == 2){
         <a href="javascript:void(0);" (click)="EditData(MyModel_EdiDetails)" class="btn bg-info btn-sm text-white">
-          <i class="ti ti-excel"></i> Add Assign Teacher For Subject
+          <i class="ti ti-excel"></i> Add Substitute Teacher For Subject
         </a>
         }
 
@@ -67,7 +67,7 @@
     <hr />
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Added R  Re-Assign Teacher For SubjectList</b>
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Added  SubstituteTeacher For SubjectList</b>
       <div class="flex">
         <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="filterData && filterData.length > 0">
           <i class="ti ti-excel"></i> Export Excel
