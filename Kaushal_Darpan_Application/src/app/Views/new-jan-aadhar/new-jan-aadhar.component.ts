@@ -30,20 +30,15 @@ export class JanAadharDetailComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
 
-
   private memberModalRef!: NgbModalRef;
   private otpModalRef!: NgbModalRef;
-
 
   private modalRef!: NgbModalRef;
   showResendButton: boolean = false;
   timeLeft: number = GlobalConstants.DefaultTimerOTP;
   public resendModel = new NewJanAadharAPIModel();
-
-
   public janDetails: any = [];
   public responsemodel = new JanAadharVerifyMemberDetails();
-
   @ViewChild('MemberListPopup') MemberListPopup!: TemplateRef<any>;
   @ViewChild('ApplySchemesEmp') ApplySchemesEmp!: TemplateRef<any>;
   closeResult: string | undefined;

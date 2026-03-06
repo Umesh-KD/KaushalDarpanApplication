@@ -643,6 +643,24 @@
               </div>
             </div>-->
 
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Sectors<span class="StarMarking">*</span>
+              </label>
+              <select  class="form-select" id="ddlSectorWiseTradeCodeList" formControlName="ddlSectors"
+                      [(ngModel)]="SectorID" (change)="changeSectorWiseTradeCode()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of SectorWiseTradeCodeList;" [ngValue]="item.ID">{{item.SectorName}}</option>
+              </select>
+              <!-- <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlEligibleInstitutes.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlEligibleInstitutes.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div> -->
+            </div>
+            
+
              <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Trade<span class="StarMarking">*</span>

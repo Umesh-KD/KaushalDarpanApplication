@@ -24,8 +24,8 @@
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
             <div class="flex justify-end flex-wrap items-center">
-                <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i
-                        class="ti ti-download"></i> Download Excel</a>
+                <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i
+                        class="ti ti-download"></i> Download Excel</a> -->
                 <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a> -->
 
             </div>
@@ -49,11 +49,11 @@
                         <input type="checkbox" class="checkboxSize"
                             [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
                     </th>
-                    <th class="text-left" title="Click to sorting" (click)="sortInTableData('CenterCode')">
+                    <!-- <th class="text-left" title="Click to sorting" (click)="sortInTableData('CenterCode')">
                         Center C-Code
                         <span class="shortingSpan" *ngIf="sortInTableColumn=='CenterCode'"
                             [innerHTML]="sortInTableDirectionAero"></span>
-                    </th>
+                    </th> -->
                     <th class="text-left">Group Code</th>
                     <th class="text-left" title="Click to sorting" (click)="sortInTableData('SubjectCode')">
                         Subject Code
@@ -78,7 +78,7 @@
                             [disabled]="row.IsDetain || row.IsUFM" #checkboxInTableSeletedSingle
                             (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
                     </td>
-                    <td align="left">{{row.CenterCode}}</td>
+                    <!-- <td align="left">{{row.CenterCode}}</td> -->
                     <td align="left">{{row.GroupCode}}</td>
                     <td align="left">{{row.SubjectCode}}</td>
                     <td class="" align="left">{{row.RollNo}}</td>
@@ -87,10 +87,18 @@
                     <td align="left">
                         <div class="flex">
                             <!--<input class="form-input" style="width:100px" type="text" (keypress) = "numberOnly($event)" [disabled]="!row.Marked" id="txtObtainedTheory" [(ngModel)]="row.ObtainedTheory">-->
-                            <input class="form-input" style="width:100px" type="text" (keypress)="numberOnly($event)"
+                            <!-- <input class="form-input" style="width:100px" type="text" (keypress)="numberOnly($event)"
                                 tabindex="{{idx}}"
                                 [disabled]="!row.Marked || row.IsPresentTheory==0" id="txtObtainedTheory"
-                                [(ngModel)]="row.ObtainedTheory" (keydown)="onTabPress($event, idx)">
+                                [(ngModel)]="row.ObtainedTheory" (keydown)="onTabPress($event, idx)"> -->
+
+                            <input class="form-input" style="width:100px" type="text" tabindex="{{idx}}" id="txtObtainedTheory"
+                                (keypress)="numberOnly($event)"
+                                [readonly]="row.IsPresentTheory==0"
+                                [disabled]="!row.Marked || row.IsPresentTheory==0"
+                                [(ngModel)]="row.ObtainedTheory"
+                                (keydown.tab)="onTabPress($event, idx)"
+                                (keydown)="allowOnlyPositiveNumbers($event)">
                             <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
                                 (click)="openOTP(row.StudentExamPaperMarksID)">Save</button>
                         </div>

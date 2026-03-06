@@ -468,18 +468,18 @@ export class AdminTheoryMarksUpdateComponent {
 
   //end table feature
 
-  onTabPress(event: KeyboardEvent, idx: number): void {
-    if (event.key === 'Tab') {
-      event.preventDefault(); // Prevents the default tab action
+  // onTabPress(event: KeyboardEvent, idx: number): void {
+  //   if (event.key === 'Tab') {
+  //     event.preventDefault(); // Prevents the default tab action
 
-      const nextIndex = idx + 1;
-      const nextInput = document.querySelector(`[tabindex="${nextIndex}"]`) as HTMLElement;
+  //     const nextIndex = idx + 1;
+  //     const nextInput = document.querySelector(`[tabindex="${nextIndex}"]`) as HTMLElement;
 
-      if (nextInput) {
-        nextInput.focus();
-      }
-    }
-  }
+  //     if (nextInput) {
+  //       nextInput.focus();
+  //     }
+  //   }
+  // }
 
   numberOnly(event: KeyboardEvent): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
@@ -487,5 +487,71 @@ export class AdminTheoryMarksUpdateComponent {
       return false;
     }
     return true;
+  }
+
+  async onStatusThoryMarks(dOC: any) {
+    console.log(this.paginatedInTableData, 'ListDataaaaa')
+    if (this.paginatedInTableData.some((x: any) => x.IsPresentTheory == 4)) {
+      this.isAnyUFMSelected = true
+    } else if (this.paginatedInTableData.every((x: any) => x.IsPresentTheory == 4)) {
+      this.isAnyUFMSelected = true
+    }
+    else {
+      this.isAnyUFMSelected = false
+    }
+    if (dOC.IsPresentTheory == 4) {
+      dOC.ShowRemark = true;
+    } else {
+      dOC.ShowRemark = false;
+      dOC.Remark = '';
+    }
+
+    if (dOC.IsPresentTheory == 0) {
+      dOC.ObtainedTheory = 0;
+    }
+  }
+
+  onTabPress(event: KeyboardEvent, idx: number): void {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+
+      let nextIndex = idx + 1;
+      let nextTextbox: HTMLInputElement | null = null;
+
+      while (!nextTextbox) {
+        const element = document.querySelector(
+          `input[type="text"][tabindex="${nextIndex}"]`
+        ) as HTMLInputElement | null;
+
+        if (!element) break;
+
+        if (!element.disabled) {
+          nextTextbox = element;
+        } else {
+          nextIndex++;
+        }
+      }
+
+      nextTextbox?.focus();
+    }
+  }
+
+  allowOnlyPositiveNumbers(event: KeyboardEvent) {
+    const allowedKeys = [
+      'Backspace',
+      'Tab',
+      'ArrowLeft',
+      'ArrowRight',
+      'Delete'
+    ];
+
+    if (
+      allowedKeys.includes(event.key) ||
+      (event.key >= '0' && event.key <= '9')
+    ) {
+      return;
+    }
+
+    event.preventDefault();
   }
 }
