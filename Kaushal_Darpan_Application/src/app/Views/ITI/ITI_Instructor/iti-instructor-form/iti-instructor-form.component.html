@@ -61,12 +61,9 @@
                    class="inline-flex items-center btn bg-dark text-white btn-sm">
                   <i class="ti ti-chevron-left"></i> Back
                 </a>
-              
-                
               </div>
 
               <div *ngIf="isSSOVisible" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
-
                 <div>
                   <label class="text-gray-800 text-sm font-medium inline-block mb-2">
                     Is Domicile of Rajasthan :
@@ -80,17 +77,26 @@
                       <input type="radio" [(ngModel)]="this.request.IsDomicile" formControlName="IsDomicile" [value]="false" /> No
                     </label>
                   </div>
-
-
                 </div>
 
 
                 <div *ngIf="this.request.IsDomicile == true">
+
                   <label class="text-gray-800 text-sm font-medium inline-block mb-1"> JanAadhar No<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="text" (keypress)="validateNumber($event)" [(ngModel)]="this.request.JanAadhar" formControlName="JanAadhar" placeholder="Enter JanAdhar No" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-                  <div *ngIf="isSubmitted && _InstructorForm.JanAadhar.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required.!</p>
+                  <div class="input-group">
+                    <input class="form-control" style="border-color:#ddd" type="text" (keypress)="validateNumber($event)" [(ngModel)]="this.request.JanAadhar" formControlName="JanAadhar" placeholder="Enter JanAdhar No" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+
+                    <button  class="btn bg-info" style="color:white" type="button" (click)="verifyJanadhar()">
+                      Verify
+                    </button>
+                    <div *ngIf="isSubmitted && _InstructorForm.JanAadhar.errors" class="text-danger">
+                      <p><i aria-hidden="true"></i>This field is required.!</p>
+                    </div>
                   </div>
+                  <div *ngIf="isSubmitted && _InstructorForm.JanAadhar.errors" class="text-danger">
+                    <p>This field is required.!</p>
+                  </div>
+
                 </div>
 
                 <div *ngIf="showJanAadhaar">
@@ -1632,3 +1638,4 @@
 </ng-template>
 
 
+<new-jan-aadhar (verifiedData)="getJanadharData($event)"></new-jan-aadhar>

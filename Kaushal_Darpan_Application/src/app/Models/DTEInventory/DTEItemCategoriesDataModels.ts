@@ -6,4 +6,6 @@ export class DTEItemCategoriesDataModels {
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;
   public DepartmentID: number = 0;
+  public CategoryFor?: number = 0;
+  public TradeId?: number = 0;
 }

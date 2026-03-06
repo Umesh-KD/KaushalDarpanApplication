@@ -30,10 +30,8 @@
               <option value="2">No</option>
             </select>
           </div>
-          
           <div *ngIf="showPref">
             <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
-
               {{this.DepartmentID == _enumDepartment.BTER ? 'प्राथमिकता श्रेणी (Preferential Category)' : 'निवासी (Please Select Your Domicile)'}}:
             </label>
             <select class="form-select normal-size-dropdown" id="ddlPreferentialCategory" name="ddlPreferentialCategory"
@@ -41,22 +39,23 @@
               <option value="0">-- Select --</option>
               <option *ngFor="let item of PrefentialCategoryList_temp" value="{{item.ID}}">{{item.Name}}</option>
             </select>
-
           </div>
         </div>
 
         <div *ngIf="IsShowDropdown && request.DOMICILE==1" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="JanAadhaarCardNoVerify">
           <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert">
-            <b>नोट:</b>  कृपया अपना जन आधार/आधार नंबर एंटर करके अपनी डिटेल्स को गेट करे |
+            <b>नोट:</b>  कृपया अपना जन आधार नंबर एंटर करके अपनी डिटेल्स को गेट करे |
           </div>
           <div>
             <label for="txtJanAadhaar" class="text-gray-800 text-sm font-medium inline-block mb-2">
-              {{request.ENR_ID == 5? 'जन आधार/आधार कार्ड नंबर (Jan Aadhaar/Aadhaar Card No.)' : 'आधार नंबर (Aadhaar No.)'}}:<span class="StarMarking">*</span>
+              {{request.ENR_ID == 5? 'जन आधार कार्ड नंबर (Jan Aadhaar Card No.)' : 'आधार नंबर (Aadhaar No.)'}}:<span class="StarMarking">*</span>
             </label>
             <div class="flex">
-              <input type="text" class="form-input rounded-e-none" id="txtJanAadhaar" placeholder="Enter Jan Aadhaar/Aadhaar Card No"
+              <input type="text" class="form-input rounded-e-none" maxlength="12" id="txtJanAadhaar" placeholder="Enter Jan Aadhaar Card No"
                      [(ngModel)]="request.JAN_AADHAR" (change)="Showdrop()" formControlName="txtJanAadhaar">
-              <button class="btn bg-warning nowrap rounded-s-none text-white" type="button" (click)="GetDetailsByJanAadhaar()">Get Details</button>
+              <!--<button class="btn bg-warning nowrap rounded-s-none text-white" type="button" (click)="GetDetailsByJanAadhaar()">Get Details</button>-->
+              <button class="btn bg-warning nowrap rounded-s-none text-white" type="button" (click)="verifyJanadhar()">Get Details</button>
+
             </div>
           </div>
         </div>
@@ -269,3 +268,4 @@
 </ng-template>
 
 <app-otpmodal #otpModal></app-otpmodal>
+<new-jan-aadhar (verifiedData)="getJanadharData($event)"></new-jan-aadhar>

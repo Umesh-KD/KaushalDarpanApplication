@@ -21,7 +21,7 @@ export class ITIInventoryService {
   readonly headersOptions: any;
   readonly headersOptions1: any;
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private appsettingConfig: AppsettingService
   ) {
     this.headersOptions = {
@@ -29,7 +29,7 @@ export class ITIInventoryService {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + localStorage.getItem('authtoken')
       })
-     
+
     };
     this.headersOptions1 = {
       headers: new HttpHeaders({
@@ -151,10 +151,7 @@ export class ITIInventoryService {
   }
 
   public async SaveCategoryMaster(request: DTEItemCategoriesDataModels) {
-
-
     const body = JSON.stringify(request);
-
     return await this.http.post(this.APIUrl + '/SaveCategoryMaster', request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -168,7 +165,6 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
 
   //Get 
   public async GetAllEquipmentsMaster(request: any) {
@@ -186,10 +182,7 @@ export class ITIInventoryService {
   }
 
   public async SaveEquipmentsMasterData(request: DTEEquipmentsDataModel) {
-
-
     const body = JSON.stringify(request);
-
     return await this.http.post(this.APIUrl + '/SaveEquipmentsMasterData', request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -197,10 +190,7 @@ export class ITIInventoryService {
   }
 
   public async SaveRequestEquipmentsMapping(request: DTETradeEquipmentsMappingData) {
-
-
     const body = JSON.stringify(request);
-
     return await this.http.post(this.APIUrl + '/SaveRequestEquipmentsMapping', request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -472,7 +462,7 @@ export class ITIInventoryService {
       ).toPromise();
   }
 
-    public async SaveIssueItemsList(itemsList: any[]) {
+  public async SaveIssueItemsList(itemsList: any[]) {
     const body = JSON.stringify(itemsList);
     debugger;
     return await this.http.post(this.APIUrl + '/SaveIssueItemsList', body, this.headersOptions)
@@ -495,7 +485,7 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-   public async GetInventoryIssueItemListNew(searchRequest: inventoryIssueHistorySearchModel) {
+  public async GetInventoryIssueItemListNew(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetInventoryIssueItemListNew`, body, this.headersOptions)
       .pipe(
@@ -503,39 +493,39 @@ export class ITIInventoryService {
       ).toPromise();
   }
   public async GetAll_INV_returnItemNew(submitRequest: ItemsIssueReturnModels) {
-      var body = JSON.stringify(submitRequest);
-      return await this.http.post(`${this.APIUrl}/GetAll_INV_returnItemNew`, body, this.headersOptions)
-        .pipe(
-          catchError(this.handleErrorObservable)
-        ).toPromise();
-    }
-     public async GetAllinventoryIssueHistoryNew(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(submitRequest);
+    return await this.http.post(`${this.APIUrl}/GetAll_INV_returnItemNew`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetAllinventoryIssueHistoryNew(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllinventoryIssueHistoryNew`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-    public async GetAllStoksNew(searchRequest: DTEStoksSearchModel) {
+  public async GetAllStoksNew(searchRequest: DTEStoksSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllStoksNew`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-   public async GetIssueItemListPermanent(EquipmentsId: number, ItemCategoryId: number, TradeId: number) {
+  public async GetIssueItemListPermanent(EquipmentsId: number, ItemCategoryId: number, TradeId: number) {
     return await this.http.get(this.APIUrl + "/GetIssueItemListPermanent/" + EquipmentsId + "/" + ItemCategoryId + "/" + TradeId, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-   public async GetIssueSubmitPermanent(submitRequest: ItemsIssueReturnModels) {
-      var body = JSON.stringify(submitRequest);
-      return await this.http.post(`${this.APIUrl}/GetIssueSubmitPermanent`, body, this.headersOptions)
-        .pipe(
-          catchError(this.handleErrorObservable)
-        ).toPromise();
-    }
+  public async GetIssueSubmitPermanent(submitRequest: ItemsIssueReturnModels) {
+    var body = JSON.stringify(submitRequest);
+    return await this.http.post(`${this.APIUrl}/GetIssueSubmitPermanent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async GetSR5ReportData_ITI_INV(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
@@ -576,7 +566,7 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
   public async GetMinRequiredItem_ITI_INV(request: MinRequiredItemSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetMinRequiredItem_ITI_INV`, body, this.headersOptions)

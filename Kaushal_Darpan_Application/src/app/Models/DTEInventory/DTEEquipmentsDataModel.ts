@@ -13,4 +13,6 @@ export class DTEEquipmentsDataModel {
   public ItemCategoryId: number = 0;
   public IsConsumable: number = 0;
   public IsSerialNo: number = 0;
+  public TradeId?: number = 0;
+  public EquipmentFor?: number = 0;
 }

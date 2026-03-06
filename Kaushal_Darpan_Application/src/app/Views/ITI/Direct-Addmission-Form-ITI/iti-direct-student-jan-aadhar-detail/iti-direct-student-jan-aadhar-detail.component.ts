@@ -20,6 +20,8 @@ import { EncryptionService } from '../../../../Services/EncryptionService/encryp
 import { ItiTradeSearchModel, StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 import { ApplicationMessageDataModel } from '../../../../Models/ApplicationMessageDataModel';
+import { JanAadharVerifyMemberDetails } from '../../../../Models/NewJanAadharAPIModel';
+import { JanAadharDetailComponent } from '../../../new-jan-aadhar/new-jan-aadhar.component';
 
 @Component({
   selector: 'app-iti-direct-student-jan-aadhar-detail',
@@ -78,6 +80,10 @@ export class ITIDirectStudentJanAadharDetailComponent {
   public searchRequest = new SearchApplicationStudentDatamodel();
   public model = new ApplicationStudentDatamodel()
   public janaadharMemberDetails = new JanAadharMemberDetails()
+
+
+
+
   public resendModel = new IStudentJanAadharDetailModel()
   public streamSearchRequest = new StreamDDL_InstituteWiseModel()
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -138,8 +144,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
         txtFather: ['', Validators.required],
         txtMotherEngname: ['', Validators.required],
         txtDOB: ['', [Validators.required, this.minimumAgeValidator(14)]],
-        /*        email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],*/
-                email: ['',],
+        email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+         /*   email: ['',],
         /*  txtMobileNumber: ['', Validators.required],*/
         ddlCategoryA: ['', [DropdownValidators]],
         Gender: [0, [DropdownValidatorsString]],
@@ -148,14 +154,14 @@ export class ITIDirectStudentJanAadharDetailComponent {
         DepartmentName: ['', Validators.required],
         ddlCourseType: ['', [DropdownValidators]],
         txtMobileNumber: ['', [Validators.required, Validators.pattern(GlobalConstants.MobileNumberPattern)]],
-/*        txtMobileNumber: ['',],*/
+        /*        txtMobileNumber: ['',],*/
         TradeLevel: [''],
         TradeID: [''],
         DirectAdmissionTypeID: [''],
         BranchID: [''],
         Apaarid: ['']
       });
-    
+
     await this.CheckDepartmentID();
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetMasterData();
@@ -235,34 +241,28 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
   Showdropdown() {
 
-    if (this.request.ENR_ID == 5 )
-    {
+    if (this.request.ENR_ID == 5) {
       if (this.IsDirectAdmission == true) {
         this.IsShowDropdown = true
       } else {
         this.IsShowDropdown = false
       }
+    }
+    else {
+      this.IsShowDropdown = false
+
 
     }
-    else
-    {
-     
-        this.IsShowDropdown = false
-      
-  
-    }
-    if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0)
-    {
+    if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0) {
       this.IsShow = true
     }
-    else
-    {
+    else {
       if (this.IsDirectAdmission == true) {
         this.IsShow = false
       } else {
         this.IsShow = true
       }
-    
+
     }
 
     if (this.request.ENR_ID == 8) {
@@ -394,7 +394,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
             data = JSON.parse(JSON.stringify(data));
             console.log(data);
             if (this.State == EnumStatus.Success) {
-              if(data.Data.janmemid == null || data.Data.janmemid == undefined || data.Data.janmemid == " " || data.Data.janaadhaarId == null || data.Data.janaadhaarId == undefined || data.Data.janaadhaarId == " "){
+              if (data.Data.janmemid == null || data.Data.janmemid == undefined || data.Data.janmemid == " " || data.Data.janaadhaarId == null || data.Data.janaadhaarId == undefined || data.Data.janaadhaarId == " ") {
                 this.janaadharMemberDetails.janaadhaarId = this.resendModel.JAN_AADHAR
                 this.janaadharMemberDetails.janmemid = this.resendModel.JAN_MEMBER_ID
               } else {
@@ -513,7 +513,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
   }
 
   async GetDetailsByJanAadhaar() {
-    
+
     if (this.request.JAN_AADHAR.length < 10 || this.request.JAN_AADHAR.length > 12) {
       this.toastr.error("Invalid Janadhar Details")
     }
@@ -551,8 +551,36 @@ export class ITIDirectStudentJanAadharDetailComponent {
     }
   }
 
-  openOTP() {
 
+  janMember = new JanAadharVerifyMemberDetails()
+
+  async getJanadharData(data: any) {
+    try {
+      this.janMember = data as JanAadharVerifyMemberDetails
+      this.IsShow = true;
+      this.IsShowDropdown = false;
+      this.Address = this.janMember.ADDRESS;
+      await this.GetApplicationId("SearchByMemberID");
+      await this.FillMemberDetails();
+      this.toastr.success("Succesfully Verified")
+      console.log("getJanadharData", data);
+    }
+    catch (erro)
+    {
+      console.log(erro);
+    }
+  }
+
+  @ViewChild(JanAadharDetailComponent) janadharComponent!: JanAadharDetailComponent;
+  verifyJanadhar() {
+    if (this.request.JAN_AADHAR.length < 10 || this.request.JAN_AADHAR.length > 12) {
+      this.toastr.error("Invalid Janadhar Details")
+    }
+    this.janadharComponent.startVerification(this.request.JAN_AADHAR);
+  }
+
+  openOTP()
+  {
     this.isSubmitted = true;
     if (this.model.DepartmentID == EnumDepartment.BTER) {
       this.refereshDepartmentValidator(true)
@@ -867,7 +895,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
   async CheckDepartmentID() {
     //Set DepartmentID
-    
+
     let deptid = this.router.snapshot.queryParamMap.get('deptid');
     //this.ApplicationID = Number(this.encryptionService.decryptData(deptid??"0"));
 
@@ -896,9 +924,9 @@ export class ITIDirectStudentJanAadharDetailComponent {
   }
 
 
-  async FillMemberDetails() {
+  async FillMemberDetails_OLD() {
     try {
-      console.log(this.janaadharMemberDetails, "hhh")
+
       this.model.StudentName = this.janaadharMemberDetails.nameEng;
       this.model.FatherName = this.janaadharMemberDetails.fnameEng;
       this.model.MotherName = this.janaadharMemberDetails.mnameEng;
@@ -934,6 +962,65 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
 
 
+  async FillMemberDetails() {
+    try {
+
+      // name
+      this.model.StudentName = this.janMember?.NAME_EN?.toString() ?? '';
+      this.model.StudentNameHindi = this.janMember?.NAME_LL?.toString() ?? '';
+
+      // father name
+      this.model.FatherName = this.janMember?.FATHER_NAME_EN?.toString() ?? '';
+      this.model.FatherNameHindi = this.janMember?.FATHER_NAME_LL?.toString() ?? '';
+
+      // mother name
+      this.model.MotherName = this.janMember?.MOTHER_NAME_EN?.toString() ?? '';
+      this.model.MotherNameHindi = this.janMember?.MOTHER_NAME_LL?.toString() ?? '';
+
+      // gender
+      const gender = this.janMember?.GENDER?.toUpperCase();
+      this.model.Gender = gender === 'MALE' ? '97' : gender === 'FEMALE' ? '98' : '99';
+
+      // contact
+      this.model.MobileNumber = this.janMember?.MOBILE_NO?.toString() ?? '';
+      this.model.Email = this.janMember?.EMAIL?.toString() ?? '';
+
+      // jan aadhar
+      this.model.JanAadharMemberID = this.janMember?.SRDR_MID?.toString() ?? '';
+      this.model.JanAadharNo = this.janMember?.JAN_AADHAR?.toString() ?? '';
+
+      // category
+      const result = this.CategoryAlist?.find(
+        (f: any) => f.CasteCategoryName === this.janMember?.CATEGORY_DESC_ENG
+      );
+
+      if (result) {
+        this.model.CategoryA = result.CasteCategoryID;
+      }
+
+      // DOB
+      const dateStr = this.janMember?.DOB;
+
+      if (dateStr) {
+        const [day = '', month = '', year = ''] = dateStr.split('/');
+        if (day && month && year) {
+          const formattedDate = new Date(`${year}-${month}-${day}`)
+            .toISOString()
+            .split('T')[0];
+          this.model.DOB = formattedDate;
+        }
+      }
+
+
+    }
+    catch (ex) {
+      console.log(ex);
+
+    }
+  }
+
+
+
 
 
   async GetDateDataList() {
@@ -948,7 +1035,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
           const today = new Date();
           const deptID = this.DepartmentID;
           var activeCourseID: any = [];
-          
+
           if (this.DepartmentID == EnumDepartment.BTER) {
             this.AdmissionDateList.filter((x: any) => {
               if (new Date(x.To_Date) > today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID && x.CourseTypeID == EnumCourseType1.Diploma2ndYearEngLateralAdmission) {
@@ -963,22 +1050,22 @@ export class ITIDirectStudentJanAadharDetailComponent {
           }
 
           if (this.DepartmentID == EnumDepartment.ITI) {
-            
-            if(this.IsDirectAdmission) {
+
+            if (this.IsDirectAdmission) {
               var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
               if (lnth <= 0) {
                 this.toastr.warning("Date for ITI Admission is Closed or Not Open");
                 this.routers.navigate(['/dashboard']);
 
               }
-            } else if(this.IsJailAdmission) {
+            } else if (this.IsJailAdmission) {
               var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
               if (lnth <= 0) {
                 this.toastr.warning("Date for ITI Admission is Closed or Not Open");
                 this.routers.navigate(['/dashboard']);
               }
             }
-            
+
             const admissionEntry = this.AdmissionDateList.find((e: any) => e.TypeID == 148);
             this.FromDate = admissionEntry ? admissionEntry.From_Date : null;
             console.log(this.FromDate, "from date")
@@ -1131,19 +1218,17 @@ export class ITIDirectStudentJanAadharDetailComponent {
     this.StudentJanDetailFormGroup.get('DepartmentName')?.updateValueAndValidity();
   }
 
-  async changeDomicile(val: number)
-  {
-    if(val == 1) {
+  async changeDomicile(val: number) {
+    if (val == 1) {
       this.showPref = true
       this.model.IsRajasthani = true
       this.PrefentialCategoryList_temp = this.PrefentialCategoryList
       this.request.ENR_ID = 5
       this.StudentJanDetailFormGroup.controls['ddlPreferentialCategory'].disable();
-      
+
       this.Showdropdown()
     }
-    else if (val == 2)
-    {
+    else if (val == 2) {
       this.showPref = true
       this.AdharMemberList = [];
       this.request.ENR_ID = 0
@@ -1152,6 +1237,10 @@ export class ITIDirectStudentJanAadharDetailComponent {
       this.Showdropdown()
     }
   }
+
+
+
+
 
 
 
