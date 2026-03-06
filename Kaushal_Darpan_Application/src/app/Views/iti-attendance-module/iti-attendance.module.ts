@@ -11,7 +11,7 @@ const routes: Routes = [
   path: '', component: ITIAttendanceTimeTableComponent
   },
   {
-    path: ':streamId/:semesterId/:subjectId/:ShiftID/:UnitID', component: ITIStudentAttendanceComponent
+    path: ':streamId/:semesterId/:subjectId/:ShiftID/:UnitID/:AttendanceStartDate/:AttendanceEndDate', component: ITIStudentAttendanceComponent
   }
 ];
 

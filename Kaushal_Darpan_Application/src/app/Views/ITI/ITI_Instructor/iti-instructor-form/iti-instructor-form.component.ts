@@ -34,6 +34,8 @@ import Swal from 'sweetalert2';
 import { QualificationDDLDataModel } from '../../../../Models/CommonMasterDataModel';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { DocumentDetailsService } from '../../../../Common/document-details';
+import { JanAadharVerifyMemberDetails } from '../../../../Models/NewJanAadharAPIModel';
+import { JanAadharDetailComponent } from '../../../new-jan-aadhar/new-jan-aadhar.component';
 
 
 @Component({
@@ -2407,6 +2409,40 @@ export class ItiInstructorFormComponent {
       }, 200);
     }
   }
+
+
+  janMember = new JanAadharVerifyMemberDetails()
+  async getJanadharData(data: any)
+  {
+    try {
+      this.janMember = data as JanAadharVerifyMemberDetails
+      this.toastr.success("Succesfully Verified")
+      console.log("getJanadharData", data);
+    }
+    catch (erro) {
+      console.log(erro);
+    }
+  }
+
+  @ViewChild(JanAadharDetailComponent) janadharComponent!: JanAadharDetailComponent;
+  verifyJanadhar() {
+
+    const janAadhar = this.request?.JanAadhar?.toString() ?? '';
+
+    if (janAadhar=='')
+    {
+      this.toastr.warning("Please Enter Janaadhar Details");
+    }
+
+    if (janAadhar.length < 10 || janAadhar.length > 12)
+    {
+      this.toastr.error("Invalid Janadhar Details")
+    }
+    this.janadharComponent.startVerification(janAadhar);
+  }
+
+
+
 
 }
 
