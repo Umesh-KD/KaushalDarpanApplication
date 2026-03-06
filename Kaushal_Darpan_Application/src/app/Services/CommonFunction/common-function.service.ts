@@ -725,6 +725,22 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async SectorWiseTradeCode() {
+
+    return await this.http.get(`${this.APIUrl}/SectorWiseTradeCode`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SectorWiseTrades(DepartmentID: number = 0, SectorID: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/SectorWiseTrades/' + DepartmentID + '/' + SectorID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async PlacementCompanyMaster_IDWise(ID: number, DepartmentID: number = 0) {
 
     return await this.http.get(this.APIUrl + "/PlacementCompanyMaster_IDWise/" + ID + "/" + DepartmentID, this.headersOptions)
