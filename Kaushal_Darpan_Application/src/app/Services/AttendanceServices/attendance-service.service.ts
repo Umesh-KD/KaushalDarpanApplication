@@ -71,6 +71,14 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
+
+  public async GetStudentAttendance_ITIReport(model: any) {
+    return await this.http.post(this.APIUrl + '/GetStudentAttendance_ITIReport', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
   public async saveAttendanceData(model: any) {
     return await this.http.post(this.APIUrl + '/AddStudentAttendance', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
