@@ -166,7 +166,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetMasterData();
 
-    if (this.IsDirectAdmission) {
+    if (this.IsDirectAdmission)
+    {
       //this.model.InstituteID = this.sSOLoginDataModel.InstituteID
       if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.ITI) {
         // this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
