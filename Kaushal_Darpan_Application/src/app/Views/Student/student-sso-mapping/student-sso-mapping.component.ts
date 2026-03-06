@@ -1,7 +1,7 @@
 
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { EnumDepartment, EnumStatus, GlobalConstants, enumExamStudentStatus } from '../../../Common/GlobalConstants';
+import { EnumDepartment, EnumDirectAdmissionType, EnumStatus, GlobalConstants, enumExamStudentStatus } from '../../../Common/GlobalConstants';
 import { Component, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { StudentDetailsModel } from '../../../Models/StudentDetailsModel';
 import { StudentService } from '../../../Services/Student/student.service';
@@ -27,7 +27,8 @@ import { Router } from '@angular/router';
     styleUrls: ['./student-sso-mapping.component.css'],
     standalone: false
 })
-export class StudentSsoMappingComponent implements OnInit, OnDestroy {
+export class StudentSsoMappingComponent implements OnInit, OnDestroy
+{
   public StreamMasterList: [] = [];
   public SemesterList: [] = [];
   public StreamID: number = 0;
@@ -40,6 +41,8 @@ export class StudentSsoMappingComponent implements OnInit, OnDestroy {
   public DateConfigSetting1: any = [];
   public DateConfigSetting_Direct: any = [];
   public _EnumDepartment = EnumDepartment;
+  public _EnumAdmissionType = EnumDirectAdmissionType;
+  
   public isShowGrid: boolean = false;
   public searchssoform!: FormGroup
   public OTP: string = '';
@@ -52,7 +55,10 @@ export class StudentSsoMappingComponent implements OnInit, OnDestroy {
   BTER: any;
   ITI: any;
   MapKeyEng: number = 0;
+
   DirectAdmissionMapKey: number = 0;
+  DirectAdmissionPrivateMapKey: number = 0;
+
   BterMapKeyEng: number = 0;
   studentDetailsModel = new StudentDetailsModel();
   //Modal Boostrap.
@@ -481,7 +487,7 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
       CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
       AcademicYearID:9 ,
       EndTermID: 9,
-      Key: "DIRECT ADDMISSSION",
+      Key: "DIRECT ADDMISSSION,DIRECT ADDMISSSION PRIVATE",
       SSOID: this.sSOLoginDataModel.SSOID
     }
     debugger
@@ -490,26 +496,39 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
         data = JSON.parse(JSON.stringify(data));
         this.DateConfigSetting_Direct = data['Data'][0];
         // this.DirectAdmissionMapKey = 1
-        this.DirectAdmissionMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION'];        
+
+        this.DirectAdmissionMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION'];
+        this.DirectAdmissionPrivateMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION PRIVATE'];
 
         console.log(this.DateConfigSetting, "DirectAdmissionMapKey")
       }, (error: any) => console.error(error)
       );
   }
 
-  async Redirect(key: number) {
+  async Redirect(key: number, AdmissionType: number=0) {
     if (key == EnumDepartment.BTER) {
       this.CloseModal()
       
       await this.router.navigate(['/DirectStudentJanAadharDetail'],
         { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.BTER), isDirectAdmission: this.encryptionService.encryptData(true) } }
       );
-    } else if (key == EnumDepartment.ITI) {
+    }
+    else if (key == EnumDepartment.ITI && EnumDirectAdmissionType.DirectAdmissionITI == AdmissionType)
+    {
       this.CloseModal()
       await this.router.navigate(['/iti-direct-admission-student-initial-detail'],
         { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isDirectAdmission: this.encryptionService.encryptData(true) } }
       );
     }
+    else if (key == EnumDepartment.ITI && EnumDirectAdmissionType.DirectAdmissionITIPrivate == AdmissionType) {
+      this.CloseModal()
+      await this.router.navigate(['/iti-direct-admission-student-initial-detail'],
+        { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isDirectAdmission: this.encryptionService.encryptData(true) } }
+      );
+    }
+
+
+    
     //  else if (key == EnumDirectAdmissionType.JailAdmission) {
     //   this.CloseModal()
     //   this.router.navigate(['/StudentJanAadharDetail'],

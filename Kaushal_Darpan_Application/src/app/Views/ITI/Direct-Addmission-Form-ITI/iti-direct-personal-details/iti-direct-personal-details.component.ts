@@ -108,7 +108,8 @@ export class ITIDirectPersonalDetailsComponent {
       {
         txtName: [{ value: '', disabled: true }, Validators.required],
         txtnameHindi: [{ value: '' }, Validators.required],
-        txtEmail: [{ value: '', }, Validators.required],
+       // txtEmail: [{ value: '', }, Validators.required],
+        txtEmail: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
         txtFather: [{ value: '',}, Validators.required],
         txtFatherHindi: [{ value: '' }, Validators.required],
         txtDOB: [{ value: '', disabled: true }, Validators.required],

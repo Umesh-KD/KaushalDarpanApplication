@@ -415,6 +415,10 @@ export enum EnumDirectAdmissionType
   JailAdmission = 181,
   DirectAdmission = 182,
   DirectAdmissionITI = 1,
+  DirectAdmissionITIPrivate = 9
+
+
+
 }
 
 export enum EnumConfigTypeTabs {

@@ -50,7 +50,15 @@
           <p *ngIf="_PersonalDetailForm.txtEmail.errors.required">
             <i aria-hidden="true"></i> This field is required.!
           </p>
+
+
+
         </div>
+
+        <p *ngIf="_PersonalDetailForm.txtEmail?.errors?.pattern" class="text-danger">
+          <i aria-hidden="true"></i> Please enter a valid email address.
+        </p>
+
       </div>
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
