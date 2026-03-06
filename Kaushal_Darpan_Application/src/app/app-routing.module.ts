@@ -1451,11 +1451,14 @@ const routes: Routes = [
       //{ path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
 
       { path: 'iti-direct-admission-student-initial-detail', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-ITI/iti-direct-student-jan-aadhar-detail/iti-direct-student-jan-aadhar-detail.module').then(m => m.ITIDirectStudentJanAadharDetailModule), title: 'ITI Direct Admission' },
-      { path: 'direct-admission-application-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-ITI/iti-direct-application-form-tab/iti-direct-application-form-tab.module').then(m => m.ITIDirectApplicationFormTabModule), title: 'ITI-Application Form' },
+      { path: 'direct-admission-application-private-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-ITI/iti-direct-application-form-tab/iti-direct-application-form-tab.module').then(m => m.ITIDirectApplicationFormTabModule), title: 'ITI-Application Form' },
       { path: 'iti-staff-management-report', loadChildren: () => import('./Views/ITI/reports/staff-management-reports/staff-management-reports.module').then(m => m.StaffManagementReportsModule), title: 'iti-staff-management-report' },
 
       { path: 'ExamNodalMapping', loadChildren: () => import('./Views/exam-nodal-mapping/exam-nodal-mapping.module').then(m => m.ExamNodalMappingModule) },
+      //private sudent application form routes
 
+      { path: 'iti-direct-admission-student-initial-private-detail', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-private-student-jan-aadhar-detail/iti-direct-private-student-jan-aadhar-detail.module').then(m => m.ITIDirectprivateStudentJanAadharDetailModule), title: 'ITI Direct Admission' },
+      { path: 'direct-admission-private-application-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-application-private-form-tab/iti-direct-application-private-form-tab.module').then(m => m.ITIDirectApplicationPrivateFormTabModule), title: 'ITI Private Application Form' },
 
       { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
 
@@ -1517,7 +1520,9 @@ const routes: Routes = [
       { path: 'candidate-allotment-report', loadChildren: () => import('./Views/Counselling-Master/candidate-allotment-report/candidate-allotment-report.module').then(m => m.CandidateAllotmentListReportModule), title: 'Candidate Allotment List' },
       { path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
       { path: 'examiner-with-group-code-list', loadChildren: () => import('./Views/Reports/examiner-with-group-code-list/examiner-with-group-code-list.module').then(m => m.ExaminerWithGroupCodeListModule), title: 'ExaminerWithGroupCodeList' },
+      { path: 'mass-copping-detail-report', loadChildren: () => import('./Views/Reports/mass-copping-detail-report/mass-copping-detail-report.module').then(m => m.MassCoppingDetailReportModule), title: 'MassCoppingDetailReport' },
       
+
       {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
       {path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details'},
       { path: 'counselling-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/counselling-candidate-list-report/counselling-candidate-list-report.module').then(m => m.CounsellingCandidateListReportModule), title: 'Alloted Candidate List' },
