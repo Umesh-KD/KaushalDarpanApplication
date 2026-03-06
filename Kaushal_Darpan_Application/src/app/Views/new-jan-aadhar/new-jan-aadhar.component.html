@@ -1,19 +1,7 @@
-<!-- Page Title Start -->
-
-<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
-  <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Jan Aadhaar Details</h4>
-    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Jan Aadhaar Detail</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Jan Aadhaar Detail</a>
-    </div>
-  </div>
-</div>
-<!-- Page Title End -->
 
 
-<div class="card">
+
+<div class="card" style="display:none">
   <div class="card-body p-5">
 
     <!-- Form -->
@@ -35,6 +23,7 @@
     </form>
   </div>
 </div>
+
 <ng-template #MemberListPopup let-modal>
   <div class="card">
 
@@ -68,7 +57,8 @@
                     <td>{{row.MEMBER_TYPE}}</td>
                     <td>
                       <!--;SendOTP(row);-->
-                      <button class="btn bg-info text-white btn-sm" (click)="ShowOtpPopup(ApplySchemesEmp)">Send OTP</button>
+                      <!--<button class="btn bg-info text-white btn-sm" (click)="ShowOtpPopup(ApplySchemesEmp);">Send OTP</button>-->
+                      <button class="btn bg-info text-white btn-sm" (click)="ShowOtpPopup(ApplySchemesEmp);SendOTP(row);">Send OTP</button>
                     </td>
                   </tr>
                 </tbody>

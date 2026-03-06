@@ -364,6 +364,7 @@ export class BlankReportComponent {
     ) {
       this.searchRequest.InstituteID = this.CenterId
       this.searchRequest.InstituteId = this.CenterId
+      this.searchRequest.InvigilatorAppointmentID = this.CSId
     }
     
     try {
