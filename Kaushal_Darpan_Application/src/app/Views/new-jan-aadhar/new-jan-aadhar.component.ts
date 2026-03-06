@@ -30,10 +30,8 @@ export class JanAadharDetailComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
 
-
   private memberModalRef!: NgbModalRef;
   private otpModalRef!: NgbModalRef;
-
 
   private modalRef!: NgbModalRef;
   showResendButton: boolean = false;
