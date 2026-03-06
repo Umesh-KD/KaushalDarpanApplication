@@ -746,7 +746,8 @@ export class ITIDirectprivateStudentJanAadharDetailComponent {
             }
             else if (this.DepartmentID === EnumDepartment.ITI) {
               /*   window.open(`/ApplicationFormTab?AppID=${this.encryptionService.encryptData(this.ApplicationID)}`, "_self");*/
-              this.routers.navigate(['/direct-admission-application-form'],
+              //this.routers.navigate(['/direct-admission-application-form'],
+                this.routers.navigate(['/direct-admission-application-private-form'],
                 {
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 });
@@ -849,7 +850,8 @@ export class ITIDirectprivateStudentJanAadharDetailComponent {
                 });
                 //window.open(`/Itipreviewform?AppID=${this.encryptionService.encryptData(this.ApplicationID) }`, "_self");
               } else {
-                this.routers.navigate(['/direct-admission-application-form'], {
+                //this.routers.navigate(['/direct-admission-application-form'], {
+                  this.routers.navigate(['/direct-admission-application-private-form'], {
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 });
                 //window.open(`/ApplicationFormTab?AppID=${this.encryptionService.encryptData(this.ApplicationID) }`, "_self");

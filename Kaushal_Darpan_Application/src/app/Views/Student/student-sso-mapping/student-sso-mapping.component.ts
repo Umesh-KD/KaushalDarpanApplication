@@ -522,7 +522,7 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
     }
     else if (key == EnumDepartment.ITI && EnumDirectAdmissionType.DirectAdmissionITIPrivate == AdmissionType) {
       this.CloseModal()
-      await this.router.navigate(['/iti-direct-admission-student-initial-detail'],
+      await this.router.navigate(['/iti-direct-admission-student-initial-private-detail'],
         { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isDirectAdmission: this.encryptionService.encryptData(true) } }
       );
     }
