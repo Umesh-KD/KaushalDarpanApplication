@@ -65,6 +65,7 @@ export class ItiCampusPostComponent implements OnInit {
   public SemesterMasterList: any = []
   public HiringRoleMasterList: any = []
   public EligibleInstitutesList: any = []
+  public SectorWiseTradeCodeList:any=[]
   public divisionList:any=[]
   public institueList:any=[]
   public copyOfinstitueList:any=[]
@@ -83,6 +84,7 @@ export class ItiCampusPostComponent implements OnInit {
   public settingsMultiselect: object = {};
 
   public campusDateStartfrom : string = '';
+  public SectorID:number=0;
 
 
   constructor(
@@ -184,8 +186,8 @@ export class ItiCampusPostComponent implements OnInit {
       ddlInterviewType: [''],
       ddlEligibleInstitutes: ['', [DropdownValidators]],
       // ddlNoOfInterviewRound: [''],
-      txtappointmentLocation:['', Validators.required]
-
+      txtappointmentLocation:['', Validators.required],
+      ddlSectors:['']
     });
 
 
@@ -291,12 +293,12 @@ export class ItiCampusPostComponent implements OnInit {
 
 debugger
       // await this.commonMasterService.StreamMaster()
-       await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID,2,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID)
       // await this.commonMasterService.GetITITradeList()
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.StreamMasterList = data['Data'];
-        }, error => console.error(error));
+      //  await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID,2,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID)
+      //   .then((data: any) => {
+      //     data = JSON.parse(JSON.stringify(data));
+      //     this.StreamMasterList = data['Data'];
+      //   }, error => console.error(error));
 
       await this.commonMasterService.PassingYear()
         .then((data: any) => {
@@ -320,6 +322,13 @@ debugger
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.EligibleInstitutesList = data['Data'];
+        }, error => console.error(error));
+      
+        debugger
+        await this.commonMasterService.SectorWiseTradeCode()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.SectorWiseTradeCodeList = data['Data'];
         }, error => console.error(error));
 
       await this.commonMasterService.GetDivisionMaster()
@@ -453,6 +462,23 @@ debugger
     }
   }
 
+  async changeSectorWiseTradeCode(){
+    try {
+      debugger
+      this.loaderService.requestStarted();
+      console.log(this.SectorID);
+      debugger;
+      await this.commonMasterService.SectorWiseTrades(this.sSOLoginDataModel.DepartmentID,this.SectorID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+
+  }
   
   async loadDropdownData(MasterCode: string) {
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
