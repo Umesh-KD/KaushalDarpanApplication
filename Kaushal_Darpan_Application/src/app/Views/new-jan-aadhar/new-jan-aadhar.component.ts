@@ -45,17 +45,10 @@ export class JanAadharDetailComponent implements OnInit {
   public responsemodel = new JanAadharVerifyMemberDetails();
 
   @ViewChild('MemberListPopup') MemberListPopup!: TemplateRef<any>;
-
   @ViewChild('ApplySchemesEmp') ApplySchemesEmp!: TemplateRef<any>;
-
-
   closeResult: string | undefined;
-
   isOpen: boolean = false;
-
   isStepNext: boolean = true;
-  
-
   private interval: any;
     constructor(
       // private commonMasterService: CommonFunctionService, 
