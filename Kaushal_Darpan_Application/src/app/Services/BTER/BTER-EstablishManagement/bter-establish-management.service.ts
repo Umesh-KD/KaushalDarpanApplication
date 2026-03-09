@@ -349,6 +349,35 @@ export class BTEREstablishManagementService {
       ).toPromise();
   }
 
+  public async EM_BudgetHeadMaster_Save(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/EM_BudgetHeadMaster_Save", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetBudgetHeadMasterData_EM(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetBudgetHeadMasterData_EM`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
-  
+  public async DeleteBudgetHeadById_EM(HeadId: number, UserID: number) {
+    debugger
+    return await this.http.delete(`${this.APIUrl}/DeleteBudgetHeadById_EM/${HeadId}/${UserID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetBudgetHeadById_EM(id: number) {
+    return await this.http.get(`${this.APIUrl}/GetBudgetHeadById_EM/${id}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
