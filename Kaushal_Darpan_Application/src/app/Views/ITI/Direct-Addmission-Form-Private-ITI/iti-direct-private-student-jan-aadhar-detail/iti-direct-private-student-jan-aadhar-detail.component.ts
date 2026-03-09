@@ -29,7 +29,8 @@ import { JanAadharDetailComponent } from '../../../new-jan-aadhar/new-jan-aadhar
   templateUrl: './iti-direct-private-student-jan-aadhar-detail.component.html',
   styleUrl: './iti-direct-private-student-jan-aadhar-detail.component.css'
 })
-export class ITIDirectprivateStudentJanAadharDetailComponent {
+export class ITIDirectprivateStudentJanAadharDetailComponent
+{
   StudentJanDetailFormGroup!: FormGroup;
   @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
   isModalOpen: boolean = false;
@@ -166,21 +167,18 @@ export class ITIDirectprivateStudentJanAadharDetailComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetMasterData();
 
-    if (this.IsDirectAdmission) {
-      //this.model.InstituteID = this.sSOLoginDataModel.InstituteID
-      if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.ITI) {
-        // this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
-        this.model.DirectAdmissionTypeID = 1
-        // if (this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
-        //   this.GetApplicationId('SearchBySSO')
-        // }
-      } else if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.BTER) {
-        this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
-      }
-    } else if (this.IsJailAdmission) {
+    if (this.IsDirectAdmission)
+    {
+      this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmissionITIPrivate
+    }
+    else if (this.IsJailAdmission)
+    {
       this.model.InstituteID = this.sSOLoginDataModel.InstituteID
       this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.JailAdmission
-    } else {
+    }
+
+    else
+    {
       if (this.DepartmentID == EnumDepartment.ITI && this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
         this.GetApplicationId('SearchBySSO')
       }
