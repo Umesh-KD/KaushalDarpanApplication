@@ -124,13 +124,11 @@ export class EMBudgetHeadMasterComponent {
     this.loaderService.requestStarted();
 
     try {
-      if (this.BGTHeadForm.valid) {
-        console.log('Form submitted successfully:', this.BGTHeadForm.value);
-        this.request = this.BGTHeadForm.value as ITI_BGT_HeadMasterDataModel;
-        
-        console.log('Form Submitted:request', this.request);
+      if (this.BGTHeadForm.valid) {        
         this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
         this.request.FinYearID = this.sSOLoginDataModel.FinancialYearID;
+        this.request.UserID = this.sSOLoginDataModel.UserID;
+        console.log('Form Submitted:request', this.request);
 
         await this.bterEstablishManagementService.EM_BudgetHeadMaster_Save(this.request)
           .then(async (data: any) => {
