@@ -462,7 +462,14 @@ isPresent(value: any): boolean {
       // Loop through the object properties and extract attendance date columns
       Object.keys(item).forEach(key => {
         // If the key is a date (i.e., not part of the basic student info)
-        if (key.trim() !== "DepartmentID" && key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName" && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "FinancialYearID" && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID" && key.trim() !== "CourseTypeID" && key.trim() !== "AssignTeacherForSubjectID" && key.trim() !== "SubjectID1" && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance" && key.trim() !== "InstituteID" && key.trim() !== "StudentID") {
+        if (key.trim() !== "DepartmentID" && key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName"
+          && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "FinancialYearID"
+          && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID"
+          && key.trim() !== "CourseTypeID" && key.trim() !== "AssignTeacherForSubjectID"
+          && key.trim() !== "SubjectID1" && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance"
+          && key.trim() !== "InstituteID" && key.trim() !== "StudentID"
+        && key.trim() !=="StaffID"
+        ) {
 
           // Push the date and its status as an object into the attendance array
           attendanceArray.push({ "Date": key.trim(), "Status": item[key] });
@@ -531,7 +538,9 @@ isPresent(value: any): boolean {
         if (key.trim() !== "DepartmentID" && key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName" && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "FinancialYearID" && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID" && key.trim() !== "CourseTypeID"
           && key.trim() !== "AssignTeacherForSubjectID" && key.trim() !== "SubjectID1"
           && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance" && key.trim() !== "InstituteID"
-          && key.trim() !== "StudentID" && key.trim() !=="IsFinalSubmit") {
+          && key.trim() !== "StudentID" && key.trim() !== "IsFinalSubmit"
+          && key.trim() !== "StaffID"
+        ) {
 
           // Push the date and its status as an object into the attendance array
           attendanceArray.push({
