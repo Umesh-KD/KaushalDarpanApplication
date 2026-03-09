@@ -110,7 +110,7 @@ export class BtereEMRequestAddComponent implements OnInit {
             Upload: [''],
             ddlDistrictID: [''],
           ddlStaffType: ['', [DropdownValidators]],
-          DDlReqRoleID: [{ value: '' }, [DropdownValidators]],
+        //   DDlReqRoleID: [{ value: '' }, [DropdownValidators]],
           txtEmployeeName: [{ value: '', disabled: true }],
         //   txtEmployeeNumber: [{ value: '', disabled: true }],
         txtEmployeeNumber: [''],
@@ -157,7 +157,7 @@ export class BtereEMRequestAddComponent implements OnInit {
   get _groupForm() { return this.groupForm.controls; }
 
   async roleBySubDepartment() {
-
+debugger;
     this.request.NodalDistrictID = 0;
     this.request.InstituteID = 0;
 
@@ -366,11 +366,12 @@ export class BtereEMRequestAddComponent implements OnInit {
     }
 
   async GetRoleMasterData() {
-
+debugger
     try {
       this.loaderService.requestStarted();
       // await this.commonMasterService.GetRoleMasterDDL(, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
       this.roleModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.roleModel.RoleID=this.sSOLoginDataModel.RoleID;
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_Govt_RoleOfficeMapping_GetAllData(this.roleModel).then((data: any) => {
 
         data = JSON.parse(JSON.stringify(data));
@@ -402,6 +403,7 @@ export class BtereEMRequestAddComponent implements OnInit {
         this.loaderService.requestStarted();
         this.isLoading = true;
         this.request.UserId = this.sSOLoginDataModel.UserID;
+        this.request.ReqRoleID=this.sSOLoginDataModel.RoleID;
 
         try {
           this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
@@ -760,7 +762,7 @@ export class BtereEMRequestAddComponent implements OnInit {
 
 
   async FunctionRequestType(): Promise<void> {
-    // debugger
+    debugger
     await this.FunctionRequestTypeShowSomePropety();
     if (this.request.RequestType == 2 || this.request.RequestType == 1) {
       this.getstatuId = Number(this.request.RequestType);
@@ -808,21 +810,21 @@ export class BtereEMRequestAddComponent implements OnInit {
     if (this.request.RequestType == 2) {
 
       this.groupForm.controls['ddlOffice'].clearValidators();
-      this.groupForm.controls['DDlReqRoleID'].clearValidators();
+    //   this.groupForm.controls['DDlReqRoleID'].clearValidators();
       this.groupForm.controls['ddlDistrictID'].clearValidators();
       this.groupForm.controls['ddlITICollegeTrade'].clearValidators();
       this.groupForm.controls['ddlStaffType'].clearValidators();
       this.groupForm.controls['ddlPost'].clearValidators();
     } else {
       this.groupForm.controls['ddlOffice'].setValidators([DropdownValidators]);
-      this.groupForm.controls['DDlReqRoleID'].setValidators([DropdownValidators]);
+    //   this.groupForm.controls['DDlReqRoleID'].setValidators([DropdownValidators]);
       this.groupForm.controls['ddlDistrictID'].setValidators([DropdownValidators]);
       this.groupForm.controls['ddlITICollegeTrade'].setValidators([DropdownValidators]);
       this.groupForm.controls['ddlStaffType'].setValidators([DropdownValidators]);
       this.groupForm.controls['ddlPost'].setValidators([DropdownValidators]);
     }
     this.groupForm.controls['ddlOffice'].updateValueAndValidity();
-    this.groupForm.controls['DDlReqRoleID'].updateValueAndValidity();
+    // this.groupForm.controls['DDlReqRoleID'].updateValueAndValidity();
     this.groupForm.controls['ddlDistrictID'].updateValueAndValidity();
     this.groupForm.controls['ddlITICollegeTrade'].updateValueAndValidity();
     this.groupForm.controls['ddlStaffType'].updateValueAndValidity();

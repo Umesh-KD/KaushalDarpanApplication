@@ -216,6 +216,7 @@ export class InspectionTeamComponent {
     //this.requestMember.DistrictName = this.DistrictMasterDDL.find((x: any) => x.ID == this.requestMember.DistrictID)?.Name;
     //this.requestMember.InstituteName = this.InstituteMasterDDL.find((x: any) => x.Id == this.requestMember.InstituteID)?.Name;
     this.requestMember.StaffName = this.formData.Name
+    this.requestMember.MobileNo=this.formData.MobileNo??'';
     this.requestMember.StaffID = data.Data;
     this.requestMember.SSOID = this.requestSSoApi.SSOID;
 
