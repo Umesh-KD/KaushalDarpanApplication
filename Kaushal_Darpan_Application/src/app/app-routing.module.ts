@@ -1218,7 +1218,7 @@ const routes: Routes = [
       { path: 'bter-em-add-staff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/add-staff-initial-details/add-staff-initial-details.module').then(m => m.AddStaffInitialDetailsModule), title: 'Add Staff' },
       { path: 'bter-em-add-staff-principle', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-principle-staff/em-principle-staff.module').then(m => m.EMPrincipleStaffModule), title: 'Add Staff' },
       { path: 'bter-em-add-staff-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-add-staff-details/bter-em-add-staff-details.module').then(m => m.BterEMAddStaffDetailsModule), title: 'Add Staff' },
-
+      { path: 'em-budget-head', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-budget-head-master/em-budget-head-master.module').then(m => m.EMBudgetHeadMasterModule), title: 'Establishment BGT Head' },
 
       { path: 'Pdf-Download', loadChildren: () => import('./Views/ITI/Pdf-Download/Pdf-Download-routing.module').then(m => m.PdfDownloadRoutingModule), title: 'Pdf-Download' },
       /*{ path: 'certificate', loadChildren: () => import('./Views/ITI/results/iti-certificate/iti-certificate-routing.module').then(m => m.ItiCertificateRoutingModule), title: 'certificate' },*/
@@ -1642,6 +1642,7 @@ const routes: Routes = [
       { path: 'ReAssignAttendence', loadChildren: () => import('./Views/ITI/re-assign-attendence/re-assign-attendence.module').then(m => m.ReAssignAttendenceModule) },
 
       { path: 'ItiAttendenceReport', loadChildren: () => import('./Views/ITI/re-assign-attendence-list/re-assign-attendence-list.module').then(m => m.ReAssignAttendenceListModule) },
+      { path: 'ItiAttendencePercent', loadChildren: () => import('./Views/ITI/iti-attendence-percent/iti-attendence-percent.module').then(m => m.ItiAttendencePercentModule) },
 
 
 
@@ -1757,7 +1758,7 @@ const routes: Routes = [
   { path: 'Views\ITI\InstructorOptionForm', loadChildren: () => import('./Views/ITI/instructor-option-form/instructor-option-form.module').then(m => m.InstructorOptionFormModule) },
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
- 
+
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 
