@@ -131,11 +131,11 @@ export class OfficeVacancyComponent implements OnInit {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
+    await this.GetStaffTypeData();
     await this.OfficeVacancyDataList();
     await this.GetOfficeList();
     await this.GetBTER_BGT_BudgetType();
     await this.GetInstitute();
-    await this.GetStaffTypeData();
     // await this.GetPostTypeData();
    /* await this.GetPostList();*/
     console.log(this.sSOLoginDataModel);
@@ -520,9 +520,8 @@ export class OfficeVacancyComponent implements OnInit {
       });
   }
 
-
   async GetStaffTypeData() {
-
+   debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
@@ -660,6 +659,7 @@ console.log(this.formData.DesignationID);
 
 
     await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+      debugger;
       data = JSON.parse(JSON.stringify(data));
       this.StaffTypeList = data.Data;
       console.log("StaffTypeList", this.StaffTypeList);

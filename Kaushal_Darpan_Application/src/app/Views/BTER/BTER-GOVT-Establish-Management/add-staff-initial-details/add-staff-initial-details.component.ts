@@ -247,8 +247,10 @@ export class AddStaffInitialDetailsComponent {
       this.StaffTypeChangePost();
 
 
-    } else {
+    }
+    else {
       await this.GetStaffTypeData();
+      await this.GuestHouseMasterWiselogic();
      // this.AddStaffBasicDetailFromGroup.get('StaffType')?.enable();
     }
     
@@ -261,7 +263,7 @@ export class AddStaffInitialDetailsComponent {
       await this.InstituteMasterWiselogic();
   
     }
-    if(this.formData.RoleID==227){
+    if(this.formData.RoleID==EnumRole.GuestHouseAdmin){
       this.formData.IsGuestStaff=true;
     }
     else{
@@ -736,7 +738,6 @@ debugger
 
   async GuestHouseMasterWiselogic() {
   //  debugger
-
     this.formData.IsNodal = false;
     this.formData.InstituteID = 0;
     if (this.formData.IsGuestStaff == true) {

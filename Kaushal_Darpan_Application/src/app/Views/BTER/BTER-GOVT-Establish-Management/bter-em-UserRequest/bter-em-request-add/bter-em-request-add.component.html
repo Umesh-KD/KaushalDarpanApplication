@@ -66,7 +66,7 @@
 
             <div *ngIf="getstatuId!=2">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
-              <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="ddlOffice" (click)="roleBySubDepartment()">
+              <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="ddlOffice" (change)="roleBySubDepartment()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
               </select>
@@ -78,7 +78,7 @@
               </div>
             </div>
 
-            <div *ngIf="getstatuId!=2">
+            <!-- <div *ngIf="getstatuId!=2">
               <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span class="StarMarking">*</span></label>
               <select class="form-select " name="ReqRoleID" id="ReqRoleID" formControlName="DDlReqRoleID"
                       [(ngModel)]="request.ReqRoleID">
@@ -92,7 +92,7 @@
                   required .!
                 </p>
               </div>
-            </div>
+            </div> -->
 
 
 
@@ -117,7 +117,7 @@
                 District:<span class="StarMarking">*</span>
               </label>
 
-              <select class="form-select" [(ngModel)]="request.NodalDistrictID" formControlName="ddlDistrictID" (click)="getITICollege()">
+              <select class="form-select" [(ngModel)]="request.NodalDistrictID" formControlName="ddlDistrictID" (change)="getITICollege()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
               </select>
