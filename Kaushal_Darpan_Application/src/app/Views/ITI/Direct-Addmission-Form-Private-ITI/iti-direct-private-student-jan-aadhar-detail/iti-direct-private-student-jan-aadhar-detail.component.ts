@@ -24,12 +24,13 @@ import { JanAadharVerifyMemberDetails } from '../../../../Models/NewJanAadharAPI
 import { JanAadharDetailComponent } from '../../../new-jan-aadhar/new-jan-aadhar.component';
 
 @Component({
-  selector: 'app-iti-direct-student-jan-aadhar-detail',
+  selector: 'app-iti-direct-private-student-jan-aadhar-detail',
   standalone: false,
-  templateUrl: './iti-direct-student-jan-aadhar-detail.component.html',
-  styleUrl: './iti-direct-student-jan-aadhar-detail.component.css'
+  templateUrl: './iti-direct-private-student-jan-aadhar-detail.component.html',
+  styleUrl: './iti-direct-private-student-jan-aadhar-detail.component.css'
 })
-export class ITIDirectStudentJanAadharDetailComponent {
+export class ITIDirectprivateStudentJanAadharDetailComponent
+{
   StudentJanDetailFormGroup!: FormGroup;
   @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
   isModalOpen: boolean = false;
@@ -168,20 +169,16 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
     if (this.IsDirectAdmission)
     {
-      //this.model.InstituteID = this.sSOLoginDataModel.InstituteID
-      if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.ITI) {
-        // this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
-        this.model.DirectAdmissionTypeID = 1
-        // if (this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
-        //   this.GetApplicationId('SearchBySSO')
-        // }
-      } else if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.BTER) {
-        this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
-      }
-    } else if (this.IsJailAdmission) {
+      this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmissionITIPrivate
+    }
+    else if (this.IsJailAdmission)
+    {
       this.model.InstituteID = this.sSOLoginDataModel.InstituteID
       this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.JailAdmission
-    } else {
+    }
+
+    else
+    {
       if (this.DepartmentID == EnumDepartment.ITI && this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
         this.GetApplicationId('SearchBySSO')
       }
@@ -747,7 +744,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
             }
             else if (this.DepartmentID === EnumDepartment.ITI) {
               /*   window.open(`/ApplicationFormTab?AppID=${this.encryptionService.encryptData(this.ApplicationID)}`, "_self");*/
-              this.routers.navigate(['/direct-admission-application-form'],
+              //this.routers.navigate(['/direct-admission-application-form'],
+                this.routers.navigate(['/direct-admission-application-private-form'],
                 {
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 });
@@ -850,7 +848,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
                 });
                 //window.open(`/Itipreviewform?AppID=${this.encryptionService.encryptData(this.ApplicationID) }`, "_self");
               } else {
-                this.routers.navigate(['/direct-admission-application-form'], {
+                //this.routers.navigate(['/direct-admission-application-form'], {
+                  this.routers.navigate(['/direct-admission-application-private-form'], {
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 });
                 //window.open(`/ApplicationFormTab?AppID=${this.encryptionService.encryptData(this.ApplicationID) }`, "_self");

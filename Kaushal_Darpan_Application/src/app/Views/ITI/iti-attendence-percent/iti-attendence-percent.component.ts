@@ -1,3 +1,4 @@
+
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -22,15 +23,13 @@ interface DynamicColumn {
   date: string;
   isHoliday: boolean;
 }
-
 @Component({
-  selector: 'app-iti-student-attendance',
-  templateUrl: './iti-student-attendance.component.html',
-  styleUrl: './iti-student-attendance.component.css',
+  selector: 'app-iti-attendence-percent',
   standalone: false,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './iti-attendence-percent.component.html',
+  styleUrl: './iti-attendence-percent.component.css'
 })
-export class ITIStudentAttendanceComponent implements OnInit {
+export class ItiAttendencePercentComponent {
   dynamicColumns: DynamicColumn[] = [];
 
   displayedColumns: string[] = [];
@@ -41,6 +40,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
+  shiftddl: any[] = [];
 
   SubjectMasterDDL: any[] = [];
   TableForm!: FormGroup;
@@ -49,8 +49,8 @@ export class ITIStudentAttendanceComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   checkedAll: boolean = false;
   minEndDate: string | null = null;
-  AttendanceStartDate: string ='';
-  AttendanceEndDate: string ='';
+  AttendanceStartDate: string = '';
+  AttendanceEndDate: string = '';
   // Pagination related variables
   totalRecords: number = 0;
   pageSize: number = 500;
@@ -64,7 +64,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   ShiftID!: number;
   UnitID!: number;
   today: Date = new Date();
-  yesterdayDate: string;
+  yesterdayDate: string='';
   sevenDaysLater: Date = new Date();
   selectedRange: { start: Date, end: Date } | null = null;
 
@@ -88,29 +88,22 @@ export class ITIStudentAttendanceComponent implements OnInit {
     this.UnitID = parseInt(this.route.snapshot.paramMap.get('UnitID') ?? "0");
     this.AttendanceStartDate = this.route.snapshot.paramMap.get('AttendanceStartDate') ?? "";
     this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "0";
-    
+
     this.getMasterData();
-    const today = new Date();
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1); // Move to the previous day
-    this.yesterdayDate = yesterday.toISOString().split('T')[0]; 
-    this.sevenDaysLater.setDate(this.today.getDate() - 7);
-    this.selectedRange = {
-      start: this.sevenDaysLater,
-      end: this.today
-    };
+
   }
 
 
   ngOnInit() {
-    
-    
+
+
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
       StreamID: ['', Validators.required],
       SemesterID: ['', Validators.required],
       AttendanceStartDate: [this.selectedRange?.start],
-      AttendanceEndDate: [this.selectedRange?.end]
+      AttendanceEndDate: [this.selectedRange?.end],
+      ShiftId: ['']
     });
 
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
@@ -134,7 +127,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
     }
 
 
-    setTimeout(()=> {
+    setTimeout(() => {
       if (this.semesterId > 0) {
         this.TableForm.patchValue({
           SubjectID: this.subjectId
@@ -142,7 +135,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
         this.getData();
       }
     }, 1000);
-    
+
   }
 
 
@@ -158,11 +151,13 @@ export class ITIStudentAttendanceComponent implements OnInit {
       }
     }
   }
+
+
   get formTable() { return this.TableForm.controls; }
 
   async getMasterData() {
     try {
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
+      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
       })
@@ -179,7 +174,28 @@ export class ITIStudentAttendanceComponent implements OnInit {
     }
   }
 
+
+  async ItiShiftUnitDDL(ID: number) {
+    try {
+      debugger
+      await this.commonMasterService.ItiShiftUnitDDL(ID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.shiftddl = data.Data;
+      })
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
   getSubjectMasterDDL(ID: any, SemesterID: any) {
+
+    this.TableForm.patchValue({
+      SubjectID: 0,
+      ShiftId: 0
+    })
+    this.ItiShiftUnitDDL(ID)
     if (ID && SemesterID != "" && SemesterID != null) {
       this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -193,24 +209,28 @@ export class ITIStudentAttendanceComponent implements OnInit {
   async GetAttendanceTimeTable() {
 
     try {
-
-
-
-
+      debugger
       const rawStart = this.TableForm.getRawValue().AttendanceStartDate;
       const rawEnd = this.TableForm.getRawValue().AttendanceEndDate;
-      const dateStart = new Date(rawStart);
-      const formattedDateStart =
-        dateStart.getFullYear() + '-' +
-        String(dateStart.getMonth() + 1).padStart(2, '0') + '-' +
-        String(dateStart.getDate()).padStart(2, '0');
 
-      const dateEnd = new Date(rawEnd);
-      const formattedDateEnd =
-        dateEnd.getFullYear() + '-' +
-        String(dateEnd.getMonth() + 1).padStart(2, '0') + '-' +
-        String(dateEnd.getDate()).padStart(2, '0');
-    
+      let formattedDateStart = null;
+      let formattedDateEnd = null;
+
+      if (rawStart) {
+        const dateStart = new Date(rawStart);
+        formattedDateStart =
+          dateStart.getFullYear() + '-' +
+          String(dateStart.getMonth() + 1).padStart(2, '0') + '-' +
+          String(dateStart.getDate()).padStart(2, '0');
+      }
+
+      if (rawEnd) {
+        const dateEnd = new Date(rawEnd);
+        formattedDateEnd =
+          dateEnd.getFullYear() + '-' +
+          String(dateEnd.getMonth() + 1).padStart(2, '0') + '-' +
+          String(dateEnd.getDate()).padStart(2, '0');
+      }
 
       let obj = {
         SemesterID: this.TableForm.value.SemesterID,
@@ -224,13 +244,16 @@ export class ITIStudentAttendanceComponent implements OnInit {
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         UnitID: this.UnitID,
-        ShiftID: this.ShiftID
+        ShiftID: this.ShiftID,
+        Seatintake: this.TableForm.value.ShiftId
       };
+
+      console.log(obj); // check values
 
       this.filterData = [];
 
       await this.attendanceServiceService
-        .GetStudentAttendance_ITI(obj)
+        .GetStudentAttendance_PercentReport(obj)
         .then((data: any) => {
 
           data = JSON.parse(JSON.stringify(data['Data']));
@@ -238,53 +261,14 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
           if (this.filterData.length > 0) {
 
-            // Reset columns
-            this.dynamicColumns = [];
-
             this.displayedColumns = [
               'SrNo',
               'EnrollmentNo',
               'StudentName',
-              'SubjectName'
-            ];
-
-            // Extract dynamic columns properly
-            this.dynamicColumns = Object.keys(this.filterData[0])
-              .filter(key =>
-                ![
-                  'StudentID',
-                  'EnrollmentNo',
-                  'StudentName',
-                  'SubjectName',
-                  'SemesterID',
-                  'StreamID',
-                  'SubjectID',
-                  'SubjectID1',
-                  'InstituteID',
-                  'AttendanceDate',
-                  'Attendance',
-                  'EndTermID',
-                  'CourseTypeID',
-                  'IsFinalSubmit'
-                ].includes(key)
-              )
-              .map(key => {
-
-                const match = key.match(/\((.*?)\)\s(.+)/);
-
-                return {
-                  originalKey: key,
-                  dayType: match ? match[1] : '',
-                  date: match ? match[2] : key,
-                  isHoliday: match ? match[1] === 'Holiday' : false
-                };
-
-              });
-
-            // Add to displayedColumns
-            this.displayedColumns = [
-              ...this.displayedColumns,
-              ...this.dynamicColumns.map(x => x.originalKey)
+              'SubjectName',
+              'PresentDays',
+              'TotalWorkingDays',
+              'Percent'
             ];
 
           }
@@ -297,7 +281,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
           this.updateTable();
 
-        }, error => console.error(error));
+        });
 
     } catch (Ex) {
 
@@ -307,12 +291,12 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
   }
   isFinalSubmitted(value: any): boolean {
-  return value?.includes('(F)');
-}
+    return value?.includes('(F)');
+  }
 
-isPresent(value: any): boolean {
-  return value?.startsWith('P');
-}
+  isPresent(value: any): boolean {
+    return value?.startsWith('P');
+  }
   // Method to handle attendance change (can be customized)
   onAttendanceChange(event: any, element: any, column: string) {
     const attendanceStatus = event.checked ? 'P' : 'A';
@@ -329,9 +313,9 @@ isPresent(value: any): boolean {
 
   getData() {
     this.isSubmitted = true;
-    if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
+   
       this.GetAttendanceTimeTable();
-    }
+    
   }
 
   onPaginationChange(event: PageEvent): void {
@@ -450,26 +434,18 @@ isPresent(value: any): boolean {
       item.StreamID = attendanceData.StreamID;
       item.SubjectID = attendanceData.SubjectID;
       item.InstituteID = attendanceData.InstituteID,
-      item.CourseTypeID = attendanceData.CourseTypeID;
+        item.CourseTypeID = attendanceData.CourseTypeID;
       item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
-      item.StaffID = this.sSOLoginDataModel.UserID;
     });
     // Iterate over each student record to transform attendance dates into an "Attendance" column
     saveAttendanceData.forEach(item => {
       // Create an empty array to store attendance data
-      let attendanceArray:any[] = [];
+      let attendanceArray: any[] = [];
 
       // Loop through the object properties and extract attendance date columns
       Object.keys(item).forEach(key => {
         // If the key is a date (i.e., not part of the basic student info)
-        if (key.trim() !== "DepartmentID" && key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName"
-          && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "FinancialYearID"
-          && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID"
-          && key.trim() !== "CourseTypeID" && key.trim() !== "AssignTeacherForSubjectID"
-          && key.trim() !== "SubjectID1" && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance"
-          && key.trim() !== "InstituteID" && key.trim() !== "StudentID"
-        && key.trim() !=="StaffID"
-        ) {
+        if (key.trim() !== "DepartmentID" && key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName" && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "FinancialYearID" && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID" && key.trim() !== "CourseTypeID" && key.trim() !== "AssignTeacherForSubjectID" && key.trim() !== "SubjectID1" && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance" && key.trim() !== "InstituteID" && key.trim() !== "StudentID") {
 
           // Push the date and its status as an object into the attendance array
           attendanceArray.push({ "Date": key.trim(), "Status": item[key] });
@@ -523,8 +499,7 @@ isPresent(value: any): boolean {
       item.InstituteID = attendanceData.InstituteID,
         item.CourseTypeID = attendanceData.CourseTypeID;
       item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
-      item.IsFinalSubmit = 1;
-      item.StaffID = this.sSOLoginDataModel.UserID;
+      item.IsFinalSubmit = 1
     });
     debugger
     // Iterate over each student record to transform attendance dates into an "Attendance" column
@@ -538,9 +513,7 @@ isPresent(value: any): boolean {
         if (key.trim() !== "DepartmentID" && key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName" && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "FinancialYearID" && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID" && key.trim() !== "CourseTypeID"
           && key.trim() !== "AssignTeacherForSubjectID" && key.trim() !== "SubjectID1"
           && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance" && key.trim() !== "InstituteID"
-          && key.trim() !== "StudentID" && key.trim() !== "IsFinalSubmit"
-          && key.trim() !== "StaffID"
-        ) {
+          && key.trim() !== "StudentID" && key.trim() !== "IsFinalSubmit") {
 
           // Push the date and its status as an object into the attendance array
           attendanceArray.push({
@@ -592,8 +565,4 @@ isPresent(value: any): boolean {
   }
 
 
-  // Method to handle individual attendance toggle change
-  //onAttendanceChange(event: MatSlideToggleChange, element: any) {
-  //  element.Attendance = event.checked ? 'P' : 'A';
-  //}
 }

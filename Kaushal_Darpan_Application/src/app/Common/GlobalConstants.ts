@@ -13,8 +13,8 @@ export class GlobalConstants {
   public static CenterSuperintendent: string = "CenterSuperintendent";
   public static AllotmentReceipt: string = "Reports/AllotmentReciept";
   public static ITIPaperDownload: string = "ITIUpload";  // new added 19062025
-  public static ITIAdmitCardFolder: string = "/AdmitCard"; 
-  public static RejectAtBter: string = "RejectAtBter"; 
+  public static ITIAdmitCardFolder: string = "/AdmitCard";
+  public static RejectAtBter: string = "RejectAtBter";
 
   // regex
   public static AadhaarPattern: RegExp = /^[2-9]{1}[0-9]{11}$/;  // Aadhaar must start with 2-9 and be 12 digits long
@@ -126,7 +126,7 @@ export enum EnumRole {
   Examiner_NonEng = 59,
   AccountsSec_NonEng = 58,
   JDConfidential_NonEng = 54,
-  HOD_Eng = 60, 
+  HOD_Eng = 60,
   HOD_NonEng = 61,
   Principle_NonEng_Degree1Year = 207,
   Principle_NonEng_Degree2YearLateral = 208,
@@ -156,7 +156,7 @@ export enum EnumRole {
   Registrar_NCVT = 85,
   Center_SuperintendentSCVT = 90,
 
-  ITIProfessor_SCVT = 94,  
+  ITIProfessor_SCVT = 94,
   ITIADMINISTRATIVEOFFICER = 101,
   ITIStaff = 190,
   ITIZonalOfficer = 100,
@@ -168,17 +168,17 @@ export enum EnumRole {
   BterLabAttendant = 200,
   BterEnrITSupport = 206,
   ITSupport = 206,
-  StudentSectionincharge =205,
-  StudentSectioninchargeNonEng =209,
-  ITSupportNonEng =210,
-  
+  StudentSectionincharge = 205,
+  StudentSectioninchargeNonEng = 209,
+  ITSupportNonEng = 210,
+
   StoreKeeper_NCVT = 213,
   StoreKeeper_SCVT = 214,
   StoreOfficer = 249,
 
   DTE_TrainingT2_establishment = 215,
   DTETrainingT1Training = 216,
-  DTETrainingPlacementAdmin	=217,
+  DTETrainingPlacementAdmin = 217,
   DTETrainingT3Purchase = 218,
   DTETrainingT4Scheme = 219,
   DTETrainingE4Planning = 220,
@@ -186,25 +186,25 @@ export enum EnumRole {
   Apprenticeship = 212,
 
   ITCell_Eng = 206,
-  ITCell_NonEng = 210, 
+  ITCell_NonEng = 210,
   DTEDegreeCourse1stYear = 80,
   DTEDegreeCourse2ndYear = 81,
-  GuestFaculty=225,
+  GuestFaculty = 225,
   ShikshaSambal = 226,
   CandidateRole = 999,
   GuestHouseAdmin = 227,
   GuestHouseIncharge = 228,
 
   ITIPlanningAdmin = 231,
-  ITIBuildingAdmin=232,
-  
+  ITIBuildingAdmin = 232,
+
   // ITI Placement Roles 
-  ITI_Placement_TPO =229,
-  ITI_Placement_Admin=233,
-  AdministrartiveStaff=235,
+  ITI_Placement_TPO = 229,
+  ITI_Placement_Admin = 233,
+  AdministrartiveStaff = 235,
   AdministrartiveStaff2 = 236,
   ITi_PracticalExaminer = 92,
-  ITI_ResultAdmin=245,
+  ITI_ResultAdmin = 245,
 
 
   // BTER Establishment 
@@ -255,7 +255,7 @@ export enum EnumUserType {
   GOVT = "GOVT",
   KIOSK = "KIOSK",
   STUDENT = "STUDENT",
-  CANDIDATE ="CANDIDATE"
+  CANDIDATE = "CANDIDATE"
 }
 
 export enum EnumProfileStatus {
@@ -304,12 +304,12 @@ export enum EnumConfigurationType {
   ApplicationNo_DirectAdmission = 153,
   ChallanNo_DirectAdmission = 154,
   Bter_CollegeFee = 155,
-  Registrar=40,
-  Registrar_NonEng=55,
+  Registrar = 40,
+  Registrar_NonEng = 55,
   Reval_GroupCode = 160,
   JailAdmission = 164,
   DirectAdmission = 79,
-  Counselling=167
+  Counselling = 167
 }
 
 export enum EnumDepartment {
@@ -338,7 +338,7 @@ export enum EnumVerificationAction {
   ReCheck = 8,
   Verified = 9,
   RejectMerit = 10,
-  Accept_with_deficiency=44
+  Accept_with_deficiency = 44
 }
 
 export enum EnumExamTypeIDChangeAction {
@@ -374,10 +374,10 @@ export enum EnumCasteCategory {
 }
 
 export enum EnumLateralCourse {
-    Diploma_Engineering = 140,
-    Senior_Secondary_Vocational = 141,
-    Senior_Secondary = 143,
-    ITI_Tenth = 142
+  Diploma_Engineering = 140,
+  Senior_Secondary_Vocational = 141,
+  Senior_Secondary = 143,
+  ITI_Tenth = 142
 }
 
 export enum EnumDegreeCourse {
@@ -409,13 +409,16 @@ export enum EnumStatusOfStaff {
   Pending = 0
 }
 
-export enum EnumDirectAdmissionType
-{
+export enum EnumDirectAdmissionType {
   Donation_Quota = 159,
   Management_Quota = 160,
   JailAdmission = 181,
   DirectAdmission = 182,
   DirectAdmissionITI = 1,
+  DirectAdmissionITIPrivate = 9
+
+
+
 }
 
 export enum EnumConfigTypeTabs {
@@ -458,8 +461,8 @@ export enum EnumEnrollNoStatus {
   Published = 14,
   Reverted = 15,
   VerifiedByRegistrar = 60,
-  VerifiedByACP =61,
-  Return =12,
+  VerifiedByACP = 61,
+  Return = 12,
 }
 
 export enum EnumEnrollCancelStatus {
@@ -472,7 +475,7 @@ export enum EnumEnrollCancelStatus {
   VerifiedEnrollCancelByITSupport = 206,
   VerifiedEnrollCancelBySectionIncharge = 205,
   VerifiedEnrollCancelByStudent = 3,
- 
+
 }
 
 
@@ -495,21 +498,20 @@ export enum EnumDispatchDDlValue {
   HandOverToExaminerByPrincipal = 32,
   AssigntoCollageFromBter = 19,
   HandOverToPrincipalByExaminer = 33,
-  VerifyByExaminer=20
+  VerifyByExaminer = 20
 }
 
 export const JailCollegeID = [36,
-108,
-149,
-150,
+  108,
+  149,
+  150,
 
-226,
-227,
-228,
-229];
+  226,
+  227,
+  228,
+  229];
 
-export enum EnumRenumerationExaminer
-{
+export enum EnumRenumerationExaminer {
   Pending = 0,
   SubmittedAndForwardedtoJD = 36,
   ApprovedAndSendtoAccounts = 42,
@@ -580,7 +582,7 @@ export enum EnumEmitraService {
 
   BTER_CollegeFeeService = 14855,
   BTER_CollegeFee_Emitra_Service = 14855,
-  
+
   BTER_EnrollmentFees_ENG = 2920,
   BTER_EnrollmentFees_NonENG = 2795,
 
@@ -595,18 +597,16 @@ export enum EnumCampusType {
   InstituteLevelCampus = "Institute Level Campus",
   DivisionLevelPoolCampus = 'Division Level Pool Campus',
   StateLevelPoolCampus = 'State Level Pool Campus'
- 
+
 }
 
 
-export enum PublicAddType
-{
+export enum PublicAddType {
   Downloads = 1,
   Highlights = 2,
   Notes = 3
 }
-export enum EnumSemesterDDL
-{
+export enum EnumSemesterDDL {
   AllSemester = 0,
   YearlySemester = 2,
   BTERSemester = 51,
@@ -666,7 +666,7 @@ export enum ITIGovtEM_EnumStaffLevel {
   HostelWarden = 5,
   GuestRoomWarden = 16,
   Staff = 18,
-  StoreKeeper=21
+  StoreKeeper = 21
 }
 export enum ITIGovtEM_EnumStaffLevelChild {
   Clerk = 6,
@@ -735,32 +735,31 @@ export enum EnumRemunerationStatus {
 
 
 export enum EnumRevalDispatchDDlValue {
-  
-    AdminToPrincipal = 66,
-    PrincipalVerifiedByToAdmin = 67,
-    PrincipalToExaminer = 76,
-    ExaminerVerifiedByToPrincipal = 77,
-    ExaminerCheckCopy = 80,
-    ExaminerSendBundle = 82,
-    PrincipalVerifiedByToExaminer = 83,
-    PrincipalDespoistToAdmin = 87,
-    AdminToPrincipalDespoistReply = 88
+
+  AdminToPrincipal = 66,
+  PrincipalVerifiedByToAdmin = 67,
+  PrincipalToExaminer = 76,
+  ExaminerVerifiedByToPrincipal = 77,
+  ExaminerCheckCopy = 80,
+  ExaminerSendBundle = 82,
+  PrincipalVerifiedByToExaminer = 83,
+  PrincipalDespoistToAdmin = 87,
+  AdminToPrincipalDespoistReply = 88
 }
 
 
-export enum EnumBugetStatus
-{
+export enum EnumBugetStatus {
 
   Pending = 84,
   Approved = 85,
   Rejected = 86
-  
+
 }
 
 export enum EnumHostelStatus {
   HostelApply = 1,
-  HostelGenerateProvisionalMerit= 2,
-  HostelAllotted=4,
+  HostelGenerateProvisionalMerit = 2,
+  HostelAllotted = 4,
   Deallocate = 6,
   Reassign = 7
 }
@@ -782,7 +781,7 @@ export enum HostelStatus {
   AffidavitObject = 10,
   PublishFinalMerit = 11,
   SeatDeallocated = 12,
-  
+
   GenerateProvisionalMerit = 14,
   ReGenerateProvisionalMerit = 15,
 }
@@ -794,29 +793,29 @@ export enum PromoteStatus {
   Detained = 1330
 }
 export enum EnumLeaveTypeFSFDay {
-    FirstHalf = 235,
-    SecondHalf = 236,
-    FullDay = 237
+  FirstHalf = 235,
+  SecondHalf = 236,
+  FullDay = 237
 }
 
 
 export enum EnumLeaveType {
-    BereavementLeave = 1,
-    BirthdayLeave = 2,
-    SickLeave = 3,
-    CasualLeave_Tech = 4,
-    PrivilegeLeave_Tech = 5,
-    AcademicLeave_Tech=6,
-    HalfPayLeave_Tech=7,
-    CasualLeave_NonTech = 8,
-    PrivilegeLeave_NonTech = 9,
-    HalfPayLeave_NonTech=10,
-  
+  BereavementLeave = 1,
+  BirthdayLeave = 2,
+  SickLeave = 3,
+  CasualLeave_Tech = 4,
+  PrivilegeLeave_Tech = 5,
+  AcademicLeave_Tech = 6,
+  HalfPayLeave_Tech = 7,
+  CasualLeave_NonTech = 8,
+  PrivilegeLeave_NonTech = 9,
+  HalfPayLeave_NonTech = 10,
+
 }
 
-export enum SessionType{
-  FinancialYear=1,
-  CalenderYear=2
+export enum SessionType {
+  FinancialYear = 1,
+  CalenderYear = 2
 }
 
 export const MONTH_LIST = [
@@ -835,6 +834,10 @@ export const MONTH_LIST = [
 ];
 
 export enum EnumITIBudgetDDLAction {
-    GetBudgetTypeDDL = "GetBudgetTypeDDL",
-    GetBudgetHeadDDL = "GetBudgetHeadDDL",
+  GetBudgetTypeDDL = "GetBudgetTypeDDL",
+  GetBudgetHeadDDL = "GetBudgetHeadDDL",
+}
+export enum EnumOpenURLKey {
+  RoleMaster = "Kd@R0l9Ms!r0Pn",
+  MenuMaster = "Kd@M9N4Ms!r0Pn",
 }
