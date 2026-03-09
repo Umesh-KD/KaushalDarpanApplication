@@ -11,7 +11,7 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
-import { EnumDepartment, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumDepartment, EnumOpenURLKey, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { ReportService } from '../../Services/Report/report.service';
 export * from '../Shared/loader/loader.component';
@@ -21,10 +21,10 @@ export * from '../Shared/loader/loader.component';
   providedIn: 'root'
 })
 @Component({
-    selector: 'app-role-master',
-    templateUrl: './role-master.component.html',
-    styleUrls: ['./role-master.component.css'],
-    standalone: false
+  selector: 'app-role-master',
+  templateUrl: './role-master.component.html',
+  styleUrls: ['./role-master.component.css'],
+  standalone: false
 })
 export class RoleMasterComponent implements OnInit {
 
@@ -57,10 +57,20 @@ export class RoleMasterComponent implements OnInit {
   request = new RoleMasterDataModel();
   sSOLoginDataModel = new SSOLoginDataModel();
 
+  public enumRole = EnumRole;
+  public enumOpenURLKey = EnumOpenURLKey;
 
-  constructor(private commonMasterService: CommonFunctionService, private RoleMasterService: RoleMasterService, private reportService: ReportService,
-    private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2) {
+
+  constructor(private commonMasterService: CommonFunctionService,
+    private RoleMasterService: RoleMasterService,
+    private reportService: ReportService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private routers: Router,
+    private modalService: NgbModal,
+    private Swal2: SweetAlert2) {
   }
 
   async ngOnInit() {
@@ -71,16 +81,26 @@ export class RoleMasterComponent implements OnInit {
         //ddlLevel: ['', [DropdownValidators]],
         //ddlDesignation: ['', [DropdownValidators]],
         txtRoleNameHindi: ['', Validators.required],
-        txtRoleNameShort: ['', Validators.required],       
+        txtRoleNameShort: ['', Validators.required],
         CourseType: [{ value: '', disabled: true }, [DropdownValidators]],
         chkActiveStatus: ['true'],
       })
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    //debugger
+    let key = this.activatedRoute.snapshot.queryParamMap.get('k')?.toString();
+    if ((this.sSOLoginDataModel.RoleID !== this.enumRole.Admin &&
+      this.sSOLoginDataModel.RoleID !== this.enumRole.AdminNon)
+      || key != this.enumOpenURLKey.RoleMaster
+    ) {
+      this.routers.navigate(["/dashboard"]);
+    }
+
     this.request.UserID = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
     this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
 
-
+    // load
     await this.GetMasterData();
     await this.GetRoleMasterList();
     await this.GetCouseType();
@@ -164,7 +184,7 @@ export class RoleMasterComponent implements OnInit {
   }
 
   async SaveData() {
-    
+
     this.isSubmitted = true;
     if (this.RoleMasterFormGroup.invalid) {
       return

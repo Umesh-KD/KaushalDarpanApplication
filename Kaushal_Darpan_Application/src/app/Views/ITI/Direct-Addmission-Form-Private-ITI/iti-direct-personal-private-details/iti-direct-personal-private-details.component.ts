@@ -1,4 +1,4 @@
-/// <reference path="../iti-direct-address-form/iti-direct-address-form.component.ts" />
+
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -7,7 +7,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
 import { ItiApplicationFormService } from '../../../../Services/ItiApplicationForm/iti-application-form.service';
-import { PersonalDetailsDatamodel } from '../../../../Models/ITIFormDataModel';
+import { PersonalDetailsDatamodel, PersonalDetailsDatamodell } from '../../../../Models/ITIFormDataModel';
 import { EnumDepartment, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ItiApplicationSearchmodel } from '../../../../Models/ItiApplicationPreviewDataModel';
 import { JanAadharMemberDetails } from '../../../../Models/StudentJanAadharDetailModel';
@@ -19,12 +19,12 @@ import { EncryptionService } from '../../../../Services/EncryptionService/encryp
 declare function LoadData(): any;
 
 @Component({
-  selector: 'app-iti-direct-personal-details',
+  selector: 'app-iti-direct-personal-private-details',
   standalone: false,
-  templateUrl: './iti-direct-personal-details.component.html',
-  styleUrl: './iti-direct-personal-details.component.css'
+  templateUrl: './iti-direct-personal-private-details.component.html',
+  styleUrl: './iti-direct-personal-private-details.component.css'
 })
-export class ITIDirectPersonalDetailsComponent {
+export class ITIDirectPersonalPrivateDetailsComponent {
   tooltipVisible = false;
   tooltipMessage = 'Please type word in english and enter space to convert in hindi';
   public DepartmentID: any = 0;
@@ -32,7 +32,7 @@ export class ITIDirectPersonalDetailsComponent {
   public testid: string = ''
   public sSOLoginDataModel = new SSOLoginDataModel()
   public PersonalDetailForm!: FormGroup
-  public request = new PersonalDetailsDatamodel()
+  public request = new PersonalDetailsDatamodell()
   public isSubmitted: boolean = false
   public maritialList: any = []
   public CategoryBlist: any = []
@@ -673,6 +673,8 @@ export class ITIDirectPersonalDetailsComponent {
 
   async FillMemberDetails(){
     try {
+
+
       this.request.StudentName = this.janaadharMemberDetails.nameEng;
       this.request.StudentNameHindi = this.janaadharMemberDetails.nameHnd;
       this.request.FatherName = this.janaadharMemberDetails.fnameEng;
