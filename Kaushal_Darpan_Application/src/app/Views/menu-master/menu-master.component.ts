@@ -10,7 +10,7 @@ import { MenuMasterService } from '../../Services/MenuMaster/menu-master.service
 import { MenuMasterDataModel, MenuMasterSerchModel } from '../../Models/MenuMasterModel';
 import { HrMasterSearchModel } from '../../Models/HrMasterDataModel';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumOpenURLKey, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-menu-master',
@@ -41,7 +41,20 @@ export class MenuMasterComponent {
   isAddMenuModalVisible: boolean = false;
   isDropdownVisible: boolean = false; // Checkbox state
   ParentId: number | null = null;
-  constructor(private fb: FormBuilder, private commonMasterService: CommonFunctionService, private MenuMasterService: MenuMasterService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2) {
+
+  public enumRole = EnumRole;
+  public enumOpenURLKey = EnumOpenURLKey;
+
+  constructor(private fb: FormBuilder,
+    private commonMasterService: CommonFunctionService,
+    private MenuMasterService: MenuMasterService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private routers: Router,
+    private modalService: NgbModal,
+    private Swal2: SweetAlert2) {
 
   }
   async ngOnInit() {
@@ -59,9 +72,20 @@ export class MenuMasterComponent {
         ddlParent: [''],
 
       })
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-   /* this.GetParentMenuDDL(); */
-  
+
+    //debugger
+    let key = this.activatedRoute.snapshot.queryParamMap.get('k')?.toString();
+    if ((this.sSOLoginDataModel.RoleID !== this.enumRole.Admin &&
+      this.sSOLoginDataModel.RoleID !== this.enumRole.AdminNon)
+      || key != this.enumOpenURLKey.MenuMaster
+    ) {
+      this.routers.navigate(["/dashboard"]);
+    }
+
+    //load
+    /* this.GetParentMenuDDL(); */
     await this.GetAllData();
     /*await this.OnVisible();*/
    /* await this.OnVisible()*/

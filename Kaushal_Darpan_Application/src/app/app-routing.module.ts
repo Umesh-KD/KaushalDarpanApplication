@@ -1218,7 +1218,7 @@ const routes: Routes = [
       { path: 'bter-em-add-staff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/add-staff-initial-details/add-staff-initial-details.module').then(m => m.AddStaffInitialDetailsModule), title: 'Add Staff' },
       { path: 'bter-em-add-staff-principle', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-principle-staff/em-principle-staff.module').then(m => m.EMPrincipleStaffModule), title: 'Add Staff' },
       { path: 'bter-em-add-staff-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-add-staff-details/bter-em-add-staff-details.module').then(m => m.BterEMAddStaffDetailsModule), title: 'Add Staff' },
-
+      { path: 'em-budget-head', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-budget-head-master/em-budget-head-master.module').then(m => m.EMBudgetHeadMasterModule), title: 'Establishment BGT Head' },
 
       { path: 'Pdf-Download', loadChildren: () => import('./Views/ITI/Pdf-Download/Pdf-Download-routing.module').then(m => m.PdfDownloadRoutingModule), title: 'Pdf-Download' },
       /*{ path: 'certificate', loadChildren: () => import('./Views/ITI/results/iti-certificate/iti-certificate-routing.module').then(m => m.ItiCertificateRoutingModule), title: 'certificate' },*/
