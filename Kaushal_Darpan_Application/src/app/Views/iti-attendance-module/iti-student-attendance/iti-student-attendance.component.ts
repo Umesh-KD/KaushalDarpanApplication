@@ -452,6 +452,7 @@ isPresent(value: any): boolean {
       item.InstituteID = attendanceData.InstituteID,
       item.CourseTypeID = attendanceData.CourseTypeID;
       item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
+      item.StaffID = this.sSOLoginDataModel.UserID;
     });
     // Iterate over each student record to transform attendance dates into an "Attendance" column
     saveAttendanceData.forEach(item => {
@@ -515,7 +516,8 @@ isPresent(value: any): boolean {
       item.InstituteID = attendanceData.InstituteID,
         item.CourseTypeID = attendanceData.CourseTypeID;
       item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
-      item.IsFinalSubmit =1
+      item.IsFinalSubmit = 1;
+      item.StaffID = this.sSOLoginDataModel.UserID;
     });
     debugger
     // Iterate over each student record to transform attendance dates into an "Attendance" column
