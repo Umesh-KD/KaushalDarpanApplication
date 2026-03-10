@@ -48,6 +48,7 @@ export class ConsumableItemAuctionComponent {
   public EquipmentsDDLList: any = [];
   public TradeDDLList: any = [];
   public CollegeDDLList: any = [];
+  public ConsumableAuctionedItemData: any = [];
   EnumRole = EnumRole;
   minDate: string = '';
   masterSelected: boolean = false;
@@ -267,11 +268,6 @@ export class ConsumableItemAuctionComponent {
                 this.request.AuctionDoc = data['Data'][0]["FileName"];
 
               }
-              //else if (Type == "Sign") {
-              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
-              //}
-              /*              item.FilePath = data['Data'][0]["FilePath"];*/
               event.target.value = null;
             }
             if (this.State == EnumStatus.Error) {
@@ -320,57 +316,33 @@ export class ConsumableItemAuctionComponent {
     }
   }
 
-  navigateToEdit(id: number) {
-    this.routers.navigate(['/DteEditeItemMaster'], { queryParams: { id } });
+  async GetConsumableAuctionedItemsData() {
+    try {
+      this.loaderService.requestStarted();
+      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID;
+      this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      await this.itiInventoryService.GetConsumableAuctionedItemsData(this.Searchrequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ConsumableAuctionedItemData = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
   async ResetControl() {
     this.isSubmitted = false;
     this.Searchrequest = new ItemsSearchModel();
     this.ID = 0;
-  }
-
-  async btnDelete_OnClick(Id: number) {
-
-    this.Swal2.Confirmation("Are you sure you want to delete this ?",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            //Show Loading
-            this.loaderService.requestStarted();
-
-            await this.itiInventoryService.DeleteItemsMasterByID(Id, this.UserID)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                console.log(data);
-
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
-
-                if (this.State = EnumStatus.Success) {
-                  this.toastr.success(this.Message)
-                  //reload
-                  await this.GetConsumableItemAuctionData();
-                }
-                else {
-                  this.toastr.error(this.ErrorMessage)
-                }
-
-              }, (error: any) => console.error(error)
-              );
-          }
-          catch (ex) {
-            console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
-        }
-      });
   }
 
   exportToExcel(): void {
@@ -438,6 +410,16 @@ export class ConsumableItemAuctionComponent {
   generateFileName(extension: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
+  }
+
+  async ShowAuctionedItemsList(content: any) {    
+    await this.GetConsumableAuctionedItemsData();
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'xl', keyboard: true,centered: true});
+    return;
+  }
+
+  async CloseModalPopup_AuctionedHistory() {
+    this.modalService.dismissAll();
   }
 
 }
