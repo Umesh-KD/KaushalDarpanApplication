@@ -1540,4 +1540,6 @@ async GetCategroyData() {
     }
   }
 
+
+  async exportToExcel() {}
 }

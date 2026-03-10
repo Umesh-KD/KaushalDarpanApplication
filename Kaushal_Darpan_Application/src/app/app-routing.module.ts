@@ -597,6 +597,7 @@ const routes: Routes = [
       { path: 'allotted-item-details', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
       { path: 'iti-staff-inventory-details', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
       { path: 'iti-auction-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-report/iti-auction-report.module').then(m => m.itiauctionreportModule) },
+      { path: 'iti-consumable-item-auction', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/consumable-item-auction/consumable-item-auction.module').then(m => m.ConsumableItemAuctionModule), title: 'Consumable Item Auction' },
 
       /*ITI-Inventory-Management-END*/
 
