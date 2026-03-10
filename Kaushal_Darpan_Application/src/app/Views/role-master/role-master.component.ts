@@ -90,7 +90,8 @@ export class RoleMasterComponent implements OnInit {
     //debugger
     let key = this.activatedRoute.snapshot.queryParamMap.get('k')?.toString();
     if ((this.sSOLoginDataModel.RoleID !== this.enumRole.Admin &&
-      this.sSOLoginDataModel.RoleID !== this.enumRole.AdminNon)
+      this.sSOLoginDataModel.RoleID !== this.enumRole.AdminNon &&
+      this.sSOLoginDataModel.RoleID !== this.enumRole.DTETraing)
       || key != this.enumOpenURLKey.RoleMaster
     ) {
       this.routers.navigate(["/dashboard"]);
