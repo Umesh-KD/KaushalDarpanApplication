@@ -223,8 +223,7 @@ export class AddStaffInitialDetailsComponent {
   async onRoleChange() {
     debugger
     if (this.formData.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF ||this.formData.RoleID==EnumRole.EM_NON_GAZETTED_STAFF) {
-      this.StaffTypeList = this.StaffTypeList.filter((x: any) => x.ID == 31);
-    
+      this.StaffTypeList = this.StaffTypeList.filter((x: any) => x.ID == 31);  
       this.formData.StaffTypeID = 31;
       this.AddStaffBasicDetailFromGroup.get('StaffType')?.disable();
       this.StaffTypeChangePost();
@@ -244,7 +243,7 @@ export class AddStaffInitialDetailsComponent {
       await this.InstituteMasterWiselogic();
   
     }
-    if(this.formData.RoleID==EnumRole.GuestHouseAdmin){
+    if(this.formData.RoleID==EnumRole.GuestHouseAdmin || EnumRole.GuestHouseIncharge || EnumRole.GuestRoomWarden){
       this.formData.IsGuestStaff=true;
       await this.GuestHouseMasterWiselogic();
     }
@@ -719,7 +718,7 @@ debugger
   }
 
   async GuestHouseMasterWiselogic() {
-   debugger
+   //debugger
     this.formData.IsNodal = false;
     this.formData.InstituteID = 0;
     if (this.formData.IsGuestStaff == true) {
