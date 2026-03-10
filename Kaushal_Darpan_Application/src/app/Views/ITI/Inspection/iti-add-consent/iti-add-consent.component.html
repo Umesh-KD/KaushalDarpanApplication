@@ -64,7 +64,7 @@
             </div>
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Amount <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Inspection Amount <span class="StarMarking">*</span></label>
               <input type="text" class="form-input" (keypress)="numberOnly($event)" placeholder="Enter Total Amount" [(ngModel)]="consentDeploy.Amount" formControlName="txtAmount">
               <div *ngIf="isSubmitted && _consentFromGroup.txtAmount.errors" class="text-danger">
                 <p *ngIf="!_consentFromGroup.txtAmount.errors.required"><i aria-hidden="true"></i> Amount is required .!</p>

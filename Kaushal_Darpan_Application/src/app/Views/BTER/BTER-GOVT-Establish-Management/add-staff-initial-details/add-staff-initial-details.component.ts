@@ -83,31 +83,14 @@ export class AddStaffInitialDetailsComponent {
 
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-
-    
-
-    await this.GetOfficeList();
-    
-   
+    await this.GetOfficeList();  
     await this.GetStaffTypeData();
     await this.GetBudgetList();
-
-    
   }
-
-
-
 
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
 
-  
-
   goBack() {}
-
-
-
-
   async GetOfficeList() {
    // debugger;
     this.formData.OfficeID = 0;
@@ -246,8 +229,8 @@ export class AddStaffInitialDetailsComponent {
       this.AddStaffBasicDetailFromGroup.get('StaffType')?.disable();
       this.StaffTypeChangePost();
 
-
-    } else {
+    }
+    else {
       await this.GetStaffTypeData();
      // this.AddStaffBasicDetailFromGroup.get('StaffType')?.enable();
     }
@@ -261,8 +244,9 @@ export class AddStaffInitialDetailsComponent {
       await this.InstituteMasterWiselogic();
   
     }
-    if(this.formData.RoleID==227){
+    if(this.formData.RoleID==EnumRole.GuestHouseAdmin){
       this.formData.IsGuestStaff=true;
+      await this.GuestHouseMasterWiselogic();
     }
     else{
       this.formData.IsGuestStaff=false;
@@ -735,27 +719,23 @@ debugger
   }
 
   async GuestHouseMasterWiselogic() {
-  //  debugger
-
+   debugger
     this.formData.IsNodal = false;
     this.formData.InstituteID = 0;
     if (this.formData.IsGuestStaff == true) {
       await this.GetGuestHouseNameList();
       this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].setValidators([DropdownValidators]);
-
       if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
         this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseIncharge)
       }
       else {
         this.RoleMasterList = this.RoleMasterList.filter((item: any) =>  item.ID == EnumRole.GuestHouseAdmin )
       }
-     
-
     } else {
       this.formData.IsGuestStaff = false;
       this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].clearValidators();
       this.formData.GuestHouseID = 0;
-      this.GetRoleMasterData();
+      // this.GetRoleMasterData();
     }
     this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].updateValueAndValidity();
 
@@ -773,7 +753,7 @@ debugger
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.GuestHouseNameList = data['Data'];
-        }, error => console.error(error));
+        }, error => console.error(error));  
     }
     catch (Ex) {
       console.log(Ex);

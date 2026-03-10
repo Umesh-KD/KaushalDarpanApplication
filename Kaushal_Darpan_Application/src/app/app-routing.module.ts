@@ -1452,14 +1452,14 @@ const routes: Routes = [
       //{ path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
 
       { path: 'iti-direct-admission-student-initial-detail', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-ITI/iti-direct-student-jan-aadhar-detail/iti-direct-student-jan-aadhar-detail.module').then(m => m.ITIDirectStudentJanAadharDetailModule), title: 'ITI Direct Admission' },
-      { path: 'direct-admission-application-private-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-ITI/iti-direct-application-form-tab/iti-direct-application-form-tab.module').then(m => m.ITIDirectApplicationFormTabModule), title: 'ITI-Application Form' },
+      { path: 'direct-admission-application-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-ITI/iti-direct-application-form-tab/iti-direct-application-form-tab.module').then(m => m.ITIDirectApplicationFormTabModule), title: 'ITI-Application Form' },
       { path: 'iti-staff-management-report', loadChildren: () => import('./Views/ITI/reports/staff-management-reports/staff-management-reports.module').then(m => m.StaffManagementReportsModule), title: 'iti-staff-management-report' },
 
       { path: 'ExamNodalMapping', loadChildren: () => import('./Views/exam-nodal-mapping/exam-nodal-mapping.module').then(m => m.ExamNodalMappingModule) },
       //private sudent application form routes
 
       { path: 'iti-direct-admission-student-initial-private-detail', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-private-student-jan-aadhar-detail/iti-direct-private-student-jan-aadhar-detail.module').then(m => m.ITIDirectprivateStudentJanAadharDetailModule), title: 'ITI Direct Admission' },
-      { path: 'direct-admission-private-application-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-application-private-form-tab/iti-direct-application-private-form-tab.module').then(m => m.ITIDirectApplicationPrivateFormTabModule), title: 'ITI Private Application Form' },
+      { path: 'direct-admission-application-private-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-application-private-form-tab/iti-direct-application-private-form-tab.module').then(m => m.ITIDirectApplicationPrivateFormTabModule), title: 'ITI Private Application Form' },
 
       { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
 

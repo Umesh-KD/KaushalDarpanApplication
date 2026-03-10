@@ -701,8 +701,9 @@ export class ApplicationListComponent {
   }
 
   async redirectToDirectAdmissionApplicationForm(row: any) {
+    debugger
     
-    this.route.navigate(['/direct-admission-application-form'],{
+    this.route.navigate(['/direct-admission-application-private-form'],{
       queryParams: { AppID: this.encryptionService.encryptData(row.ApplicationID) }
     });
   }

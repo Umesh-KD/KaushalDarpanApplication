@@ -56,7 +56,8 @@
       <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
         <!--{{RoleMasterList|json}}-->
         <!--{{PostList|json}}-->
-        <div *ngIf="this.IsGuestHouseAdmin != true">
+        <!-- *ngIf="this.IsGuestHouseAdmin != true" -->
+        <div >
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="Office" (change)="GetOfficeWiselogic()">
             <option value="0">--Select--</option>
@@ -112,8 +113,8 @@
               <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
             </select>
           </div>
-
-          <div *ngIf="this.IsGuestHouseAdmin != true">
+          <!-- *ngIf="this.IsGuestHouseAdmin != true" -->
+          <div >
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
             <select class="form-select"
                     name="StaffType"
@@ -138,7 +139,8 @@
             </div>
           </div>
 
-        <div *ngIf="this.IsGuestHouseAdmin != true">
+          <!-- *ngIf="this.IsGuestHouseAdmin != true" -->
+        <div >
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
             <option value="0">--Select--</option>

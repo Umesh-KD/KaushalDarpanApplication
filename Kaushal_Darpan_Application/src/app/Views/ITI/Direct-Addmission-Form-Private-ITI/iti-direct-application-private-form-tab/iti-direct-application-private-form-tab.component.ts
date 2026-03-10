@@ -6,7 +6,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
-import { EnumConfigurationType, EnumDepartment, EnumRole, JailCollegeID } from '../../../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumDepartment, EnumDirectAdmissionType, EnumRole, JailCollegeID } from '../../../../Common/GlobalConstants';
 import { ItiApplicationFormService } from '../../../../Services/ItiApplicationForm/iti-application-form.service';
 import { ItiApplicationSearchmodel } from '../../../../Models/ItiApplicationPreviewDataModel';
 import { DateConfigurationModel } from '../../../../Models/DateConfigurationDataModels';
@@ -192,30 +192,13 @@ export class ITIDirectApplicationPrivateFormTabComponent {
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
           debugger
-          if(this.PersonalDetailsData.DirectAdmissionType==1) {
             var lnth =
-            this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
+              this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumDirectAdmissionType.DirectAdmissionITIPrivate && x.DepartmentID == deptID }).length
             if (lnth <= 0)
             {
               this.toastr.warning("Addmission Date is not Open")
               this.router.navigate(['/dashboard'])
             }
-          } else {
-            var lnth =
-            this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
-            if (lnth <= 0)
-            {
-              this.toastr.warning("Addmission Date is not Open")
-              this.router.navigate(['/dashboard'])
-            }
-          }
-          // var lnth =
-          //   this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
-          // if (lnth <= 0)
-          // {
-          //   this.toastr.warning("Addmission Date is not Open")
-          //   this.router.navigate(['/dashboard'])
-          // }
         }, error => console.error(error));
     }
     catch (Ex) {
