@@ -78,6 +78,7 @@ export class ApplicationListComponent {
   DirectAdmissionApplicationID: number = 0
   public DateConfigSetting_Direct: any = [];
   DirectAdmissionMapKey: number = 0;
+  DirectAdmissionPrivateMapKey: number = 0;
   public IsAlloted:boolean=false
   constructor(
     private loaderService: LoaderService, 
@@ -112,6 +113,7 @@ export class ApplicationListComponent {
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.courseTypeList = this.commonservice.ConvertEnumToList(EnumCourseType1);
     await this.GetDirectAdmissionDateConfig();
+    await this.GetPrivateAdmissionDateConfig();
     await this.GetITIDateDataList()
     await this.GetAllDataActionWise()
     this.checkJailCollege();
@@ -703,10 +705,20 @@ export class ApplicationListComponent {
   async redirectToDirectAdmissionApplicationForm(row: any) {
     debugger
     
-    this.route.navigate(['/direct-admission-application-private-form'],{
+    this.route.navigate(['/direct-admission-application-form'],{
       queryParams: { AppID: this.encryptionService.encryptData(row.ApplicationID) }
     });
   }
+
+
+  async redirectToDirectPrivateAdmissionApplicationForm(row: any) {
+    debugger
+
+    this.route.navigate(['/direct-admission-application-private-form'], {
+      queryParams: { AppID: this.encryptionService.encryptData(row.ApplicationID) }
+    });
+  }
+
 
   async GetDirectAdmissionDateConfig() {
 
@@ -728,4 +740,28 @@ export class ApplicationListComponent {
       }, (error: any) => console.error(error)
       );
   }
+
+
+
+  async GetPrivateAdmissionDateConfig() {
+
+    var data = {
+      DepartmentID: EnumDepartment.ITI,
+      CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
+      AcademicYearID: 9,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Key: "DIRECT ADDMISSSION PRIVATE",
+      SSOID: this.sSOLoginDataModel.SSOID
+    }
+    await this.commonservice.GetDateConfigSetting(data)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+    
+        // this.DirectAdmissionMapKey = 1
+        this.DirectAdmissionPrivateMapKey = data['Data'][0]['DIRECT ADDMISSSION PRIVATE'];
+        console.log(this.DirectAdmissionPrivateMapKey)
+      }, (error: any) => console.error(error)
+      );
+  }
+
 }

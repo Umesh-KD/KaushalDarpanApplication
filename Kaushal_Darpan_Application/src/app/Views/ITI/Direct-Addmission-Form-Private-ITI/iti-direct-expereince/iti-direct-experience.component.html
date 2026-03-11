@@ -1,0 +1,170 @@
+
+<div class="card-body p-5">
+  <form [formGroup]="OptionsFormGroup">
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6 ">
+
+
+
+      <div>
+        <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          उद्योग का नाम (Name Of Industry): <span class="StarMarking">*</span>
+        </label>
+        <input type="text" class="form-input" id="NameOfIndustry" placeholder="Enter Name Of Industry"
+               name="NameOfIndustry" formControlName="NameOfIndustry" [(ngModel)]="formData.NameOfIndustry">
+        <div *ngIf="isSubmitted && _OptionsFormGroup.NameOfIndustry.errors" class="text-danger">
+          <p *ngIf="_OptionsFormGroup.NameOfIndustry.errors.required">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          कार्य का प्रकार (Type Of Work): <span class="StarMarking">*</span>
+        </label>
+        <input type="text" class="form-input" id="NameOfIndustry" placeholder="Enter Type Of Work"
+               name="NameOfIndustry" formControlName="TypeOfWork" [(ngModel)]="formData.TypeOfWork">
+        <div *ngIf="isSubmitted && _OptionsFormGroup.TypeOfWork.errors" class="text-danger">
+          <p *ngIf="_OptionsFormGroup.TypeOfWork.errors.required">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          अनुभव का विवरण (Experience Detail Description): <span class="StarMarking">*</span>
+        </label>
+        <input type="text" class="form-input" id="NameOfIndustry" placeholder="Enter Experience Detail Description"
+               name="NameOfIndustry" formControlName="ExperienceDetailDescription" [(ngModel)]="formData.ExperienceDetailDescription">
+        <div *ngIf="isSubmitted && _OptionsFormGroup.ExperienceDetailDescription.errors" class="text-danger">
+          <p *ngIf="_OptionsFormGroup.ExperienceDetailDescription.errors.required">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          वर्ष (Year): <span class="StarMarking">*</span>
+        </label>
+        <input type="number" class="form-input" id="NameOfIndustry" placeholder="Enter Year"
+               name="Year" formControlName="Year" [(ngModel)]="formData.Year">
+        <div *ngIf="isSubmitted && _OptionsFormGroup.Year.errors" class="text-danger">
+          <p *ngIf="!_OptionsFormGroup.Year.errors.DropdownValidators">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          माह (Month): <span class="StarMarking">*</span>
+        </label>
+        <input type="number" class="form-input" id="NameOfIndustry" placeholder="Enter Month"
+               name="Year" formControlName="Month" [(ngModel)]="formData.Month">
+        <div *ngIf="isSubmitted && _OptionsFormGroup.Month.errors" class="text-danger">
+          <p *ngIf="!_OptionsFormGroup.Month.errors.DropdownValidators">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-30">
+        <button type="button" class="btn bg-primary text-white" (click)="AddChoice()">
+          <i class="ti ti-plus"></i> Add
+          Choice
+        </button>
+        <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
+      </div>
+
+    </div>
+    <!-- <p *ngIf="request.CategoryC == 69" class="smallTextForm">(विकलांग व्यावसायिक पुनर्वास केंद्र द्वारा प्राप्त उपयुकता प्रमाण पत्र के अनुसार व्यवसाय का चयन करे )</p> -->
+  </form>
+</div>
+
+<div *ngIf="AddedChoices?.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+  <b class="text-1xl-5">Experience Detail List</b>
+</div>
+
+<div *ngIf="AddedChoices?.length>0" class="overflow-auto">
+  <table class="w-full table-border" cellpadding="5">
+
+    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+      <tr>
+        <th>S.No</th>
+        <th class="text-left">Industry Name</th>
+        <th class="text-left">Type Of Work</th>
+        <th>Year</th>
+        <th>Month</th>
+        <th class="text-left">Experience Description</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let row of AddedChoices; let idx = index">
+
+        <td class="text-center">{{idx + 1}}</td>
+
+        <td class="text-left">
+          {{row.NameOfIndustry}}
+        </td>
+
+        <td class="text-left">
+          {{row.TypeOfWork}}
+        </td>
+
+        <td class="text-center">
+          {{row.Year}}
+        </td>
+
+        <td class="text-center">
+          {{row.Month}}
+        </td>
+
+        <td class="text-left">
+          {{row.ExperienceDetailDescription}}
+        </td>
+
+        <td class="text-center">
+          <button class="btn bg-danger text-white"
+                  type="button"
+                  title="Delete"
+                  (click)="DeleteExperience(idx)">
+            <i class="ti ti-trash"></i>
+          </button>
+        </td>
+
+      </tr>
+      <tr class="font-bold bg-gray-100">
+        <!-- Non-numeric columns -->
+        <td colspan="3" class="text-center">Total</td>
+
+        <!-- Numeric totals -->
+        <td class="text-center" *ngFor="let key of includedKeys">
+          {{ totals[key] }}
+        </td>
+
+        <!-- Remaining columns -->
+        <td colspan="2"></td>
+      </tr>
+    </tbody>
+
+  </table>
+</div>
+
+<div class="card-footer text-center">
+  <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
+  <button type="button" class="btn bg-primary text-white" (click)="SaveOptionDetailsData()">
+    <i class="ti ti-device-floppy"></i>Save & Next
+  </button>
+  <button type="button" class="btn bg-light text-dark" (click)="ResetOptions()">
+    <i class="ti ti-refresh"></i>Reset
+  </button>
+</div>

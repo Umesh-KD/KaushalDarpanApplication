@@ -18,6 +18,7 @@ import { ITIDirectQualificationPrivateFormComponent } from '../iti-direct-qualif
 import { ITIDirectAddressPrivateFormComponent } from '../iti-direct-address-private-form/iti-direct-address-private-form.component';
 import { ITIDirectDocumentPrivateFormComponent } from '../iti-direct-document-private-form/iti-direct-document-private-form.component';
 import { ITIDirectPreviewPrivateFormComponent } from '../iti-direct-preview-private-form/iti-direct-preview-private-form.component';
+import { ITIDirectExperienceComponent } from '../iti-direct-expereince/iti-direct-experience.component';
 
 
 @Component({
@@ -44,6 +45,8 @@ export class ITIDirectApplicationPrivateFormTabComponent {
       { TabName: 'Personal Details', TabNameHI: 'व्यक्तिगत विवरण', component: ITIDirectPersonalPrivateDetailsComponent, TabIcon: 'ti ti-user' },
       { TabName: 'Option Form', TabNameHI: 'विकल्प प्रपत्र', component: ITIDirectOptionPrivateFormComponent, TabIcon: 'ti ti-license' },
       { TabName: 'Qualification Detail', TabNameHI: 'योग्यता विवरण', component: ITIDirectQualificationPrivateFormComponent, TabIcon: 'ti ti-school' },
+      { TabName: 'Experience Detail', TabNameHI: 'अनुभव विवरण', component: ITIDirectExperienceComponent, TabIcon: 'ti ti-briefcase' },
+
       { TabName: 'Address Details', TabNameHI: 'पते का विवरण', component: ITIDirectAddressPrivateFormComponent, TabIcon: 'ti ti-map-pin' },
       { TabName: 'Documents', TabNameHI: 'दस्तावेज़', component: ITIDirectDocumentPrivateFormComponent, TabIcon: 'ti ti-file' },
       { TabName: 'Preview', TabNameHI: 'समीक्षा', component: ITIDirectPreviewPrivateFormComponent, TabIcon: 'ti ti-checkbox' }
@@ -149,20 +152,21 @@ export class ITIDirectApplicationPrivateFormTabComponent {
             debugger
             this.PersonalDetailsData = data['Data']
             console.log("PersonalDetailsData",this.PersonalDetailsData);
-            if(this.PersonalDetailsData.DirectAdmissionType == 1) {
+            if(this.PersonalDetailsData.DirectAdmissionType == 9) {
               if (data['Data']['IsFinalSubmit'] == 2) {
-                this.router.navigate(['/Itipreviewform'], {
+                this.router.navigate(['/directItipreviewform'], {
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 });
               }
 
-              if( this.PersonalDetailsData.DirectAdmissionType == 1) {
-                this.tabs.splice(1, 1)      
-              }
+              //if( this.PersonalDetailsData.DirectAdmissionType ==9) {
+              //  this.tabs.splice(1, 1)      
+              //}
             } else {
               if (data['Data']['IsFinalSubmit'] == 2) {
-                this.router.navigate(['/Itipreviewform'], {
-                  queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
+                this.router.navigate(['/directItipreviewform'], {
+                  queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID)
+              }
                 });
               }
             }
@@ -192,22 +196,14 @@ export class ITIDirectApplicationPrivateFormTabComponent {
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
           debugger
-          if(this.PersonalDetailsData.DirectAdmissionType==1) {
-            var lnth =
-            this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
+    
+          var lnth =
+            this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DIRECT_ADDMISSSION_PRIVATE && x.DepartmentID == deptID }).length
             if (lnth <= 0)
             {
               this.toastr.warning("Addmission Date is not Open")
               this.router.navigate(['/dashboard'])
-            }
-          } else {
-            var lnth =
-            this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
-            if (lnth <= 0)
-            {
-              this.toastr.warning("Addmission Date is not Open")
-              this.router.navigate(['/dashboard'])
-            }
+            
           }
           // var lnth =
           //   this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length

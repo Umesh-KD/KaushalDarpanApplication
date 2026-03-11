@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { AddressDetailsDataModel, DocumentDetailList, DocumentDetailsDataModel, ITI_DirectAdmissionApplyDataModel, OptionsDetailsDataModel, PersonalDetailsDatamodel, QualificationDetailsDataModel } from '../../Models/ITIFormDataModel';
+import { AddressDetailsDataModel, DocumentDetailList, DocumentDetailsDataModel, ExperienceDetailsDataModel, ITI_DirectAdmissionApplyDataModel, OptionsDetailsDataModel, PersonalDetailsDatamodel, QualificationDetailsDataModel } from '../../Models/ITIFormDataModel';
 import { ItiApplicationSearchmodel, ItiApplicationUnlockDataModel } from '../../Models/ItiApplicationPreviewDataModel';
 import { BterCollegesSearchModel } from '../../Models/ApplicationFormDataModel';
 import { DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
@@ -56,6 +56,15 @@ export class ItiApplicationFormService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async SaveExperienceDetails(request: ExperienceDetailsDataModel[]) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveExperienceDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async SaveQualificationDetailsData(request: QualificationDetailsDataModel[]) {
     var body = JSON.stringify(request);
@@ -115,6 +124,15 @@ export class ItiApplicationFormService {
       ).toPromise();
   }
 
+
+  public async GetExpereinceDetailsbyID(searchRequest: ItiApplicationSearchmodel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetExpereinceDetailsbyID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetApplicationPreviewbyID(searchRequest: ItiApplicationSearchmodel) {
     var body = JSON.stringify(searchRequest);
 
@@ -123,6 +141,18 @@ export class ItiApplicationFormService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async GetDirectPrivatePreview(searchRequest: ItiApplicationSearchmodel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetDirectPrivatePreview`, searchRequest, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetDocumentDatabyID(searchRequest: ItiApplicationSearchmodel) {
     var body = JSON.stringify(searchRequest);

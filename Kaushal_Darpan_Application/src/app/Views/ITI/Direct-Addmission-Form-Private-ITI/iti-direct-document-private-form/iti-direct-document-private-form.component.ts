@@ -116,7 +116,7 @@ export class ITIDirectDocumentPrivateFormComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            if(this.PersonalDetailsData.DirectAdmissionType == 1) {
+            if(this.PersonalDetailsData.DirectAdmissionType == 9) {
               this.tabChange.emit(4)
             } else {
               this.tabChange.emit(5);
@@ -233,6 +233,12 @@ export class ITIDirectDocumentPrivateFormComponent {
           //document
           this.documentDetails = data['Data']['DocumentDetails']
 
+          this.documentDetails.forEach(e => {
+            if (e.GroupNo === 4) {
+              e.GroupNo = 2;
+            }
+          });
+
           console.log("documentDetails", this.documentDetails)
 
           const btnSave = document.getElementById('btnSave')
@@ -281,7 +287,7 @@ export class ITIDirectDocumentPrivateFormComponent {
   }
 
   async Back() {
-    if(this.PersonalDetailsData.DirectAdmissionType == 1) {
+    if(this.PersonalDetailsData.DirectAdmissionType == 9) {
       this.tabChange.emit(2)
     } else {
       this.tabChange.emit(3)

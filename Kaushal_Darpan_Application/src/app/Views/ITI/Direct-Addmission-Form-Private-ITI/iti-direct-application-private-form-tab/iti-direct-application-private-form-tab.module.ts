@@ -15,6 +15,9 @@ import { ITIDirectDocumentPrivateFormComponent } from '../iti-direct-document-pr
 import { ITIDirectQualificationPrivateFormComponent } from '../iti-direct-qualification-private-form/iti-direct-qualification-private-form.component';
 import { ITIDirectOptionPrivateFormComponent } from '../iti-direct-option-private-form/iti-direct-option-private-form.component';
 import { ITIDirectPersonalPrivateDetailsComponent } from '../iti-direct-personal-private-details/iti-direct-personal-private-details.component';
+import { ITIDirectPreviewPrivateFormRoutingModule } from '../iti-direct-preview-private-form/iti-direct-preview-private-form-routing.module';
+import { DirectPreviewFormTabModule } from '../iti-direct-preview-private-form/iti-direct-preview-private-form.module';
+import { ITIDirectExperienceComponent } from '../iti-direct-expereince/iti-direct-experience.component';
 
 
 
@@ -27,7 +30,7 @@ import { ITIDirectPersonalPrivateDetailsComponent } from '../iti-direct-personal
     ITIDirectOptionPrivateFormComponent,
     ITIDirectQualificationPrivateFormComponent,
     ITIDirectDocumentPrivateFormComponent,
-    ITIDirectPreviewPrivateFormComponent,
+    ITIDirectExperienceComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +39,8 @@ import { ITIDirectPersonalPrivateDetailsComponent } from '../iti-direct-personal
     ReactiveFormsModule,
     LoaderModule,
     MaterialModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    
   ]
 })
 export class ITIDirectApplicationPrivateFormTabModule { }

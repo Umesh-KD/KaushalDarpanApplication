@@ -25,11 +25,11 @@
           (Applicant's Name in Hindi):<span class="StarMarking">*</span>
         </label>
         <input type="text" class="form-input" id="ApplicationId" placeholder="Enter Applicant's Name"
-          (keypress)="noNumbersAllowed($event)"     formControlName="txtnameHindi" gtranslate="true" [(ngModel)]="request.StudentNameHindi" 
-          (focus)="showTooltip($event)" (blur)="hideTooltip($event)"
-          matTooltip="Please type word in english and enter space to convert in hindi"
-          matTooltipPosition="above"
-          matTooltipClass="custom-tooltip">
+               (keypress)="noNumbersAllowed($event)" formControlName="txtnameHindi" gtranslate="true" [(ngModel)]="request.StudentNameHindi"
+               (focus)="showTooltip($event)" (blur)="hideTooltip($event)"
+               matTooltip="Please type word in english and enter space to convert in hindi"
+               matTooltipPosition="above"
+               matTooltipClass="custom-tooltip">
         <span class="redAlertMsg">कृपया बिना अभिवादन के अपना नाम लिखें</span>
         <div *ngIf="isSubmitted && _PersonalDetailForm.txtnameHindi.errors" class="text-danger">
           <p *ngIf="_PersonalDetailForm.txtnameHindi.errors.required">
@@ -79,10 +79,10 @@
           (Father's Name in Hindi):<span class="StarMarking">*</span>
         </label>
         <input type="text" class="form-input " id="ApplicationId" placeholder="Enter Father's Name in Hindi"
-               formControlName="txtFatherHindi" gtranslate="true" [(ngModel)]="request.FatherNameHindi" (keypress)="noNumbersAllowed($event)" 
+               formControlName="txtFatherHindi" gtranslate="true" [(ngModel)]="request.FatherNameHindi" (keypress)="noNumbersAllowed($event)"
                matTooltip="Please type word in english and enter space to convert in hindi"
-          matTooltipPosition="above"
-          matTooltipClass="custom-tooltip">
+               matTooltipPosition="above"
+               matTooltipClass="custom-tooltip">
         <span class="redAlertMsg">कृपया बिना अभिवादन के पिता का नाम लिखें</span>
         <div *ngIf="isSubmitted && _PersonalDetailForm.txtFatherHindi.errors" class="text-danger">
           <p *ngIf="_PersonalDetailForm.txtFatherHindi.errors.required">
@@ -91,6 +91,32 @@
           </p>
         </div>
       </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          पिता का व्यवसाय (Father Occupation):<span class="StarMarking">*</span>
+        </label>
+        <input type="text" class="form-input" id="ApplicationId" formControlName="FatherOccupation"
+               [(ngModel)]="request.FatherOccupation">
+
+        <div *ngIf="isSubmitted && _PersonalDetailForm.FatherOccupation.errors" class="text-danger">
+          <p *ngIf="_PersonalDetailForm.FatherOccupation.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+        </div>
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          कार्यालय का पता (Office Address):<span class="StarMarking">*</span>
+        </label>
+        <input type="text" class="form-input" id="ApplicationId" formControlName="OfficeAddress"
+               [(ngModel)]="request.OfficeAddress">
+
+        <div *ngIf="isSubmitted && _PersonalDetailForm.OfficeAddress.errors" class="text-danger">
+          <p *ngIf="_PersonalDetailForm.OfficeAddress.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+        </div>
+      </div>
+
+
       <div>
         <label for="txtDOB" class="text-gray-800 text-sm font-medium inline-block mb-2">
           जन्म तिथि (Date of
@@ -113,7 +139,7 @@
           <p *ngIf="_PersonalDetailForm.txtMotherEngname.errors.required">
             <i aria-hidden="true"></i> This field is
             required.!
-          </p>  
+          </p>
         </div>
       </div>
       <div>
@@ -121,11 +147,11 @@
           माता का नाम हिंदी
           में (Mother's Name in Hindi)::<span class="StarMarking">*</span>
         </label>
-        <input type="text" class="form-input " id="txtMotherHindiname" (keypress)="noNumbersAllowed($event)"  placeholder="Enter Mother's Name in Hindi"
+        <input type="text" class="form-input " id="txtMotherHindiname" (keypress)="noNumbersAllowed($event)" placeholder="Enter Mother's Name in Hindi"
                formControlName="txtMotherHindiname" gtranslate="true" [(ngModel)]="request.MotherNameHindi"
                matTooltip="Please type word in english and enter space to convert in hindi"
-          matTooltipPosition="above"
-          matTooltipClass="custom-tooltip">
+               matTooltipPosition="above"
+               matTooltipClass="custom-tooltip">
         <span class="redAlertMsg">कृपया बिना अभिवादन के माता का नाम लिखें</span>
         <div *ngIf="isSubmitted && _PersonalDetailForm.txtMotherHindiname.errors" class="text-danger">
           <p *ngIf="_PersonalDetailForm.txtMotherHindiname.errors.required">
@@ -149,7 +175,7 @@
           Number):<span class="StarMarking">*</span>
         </label>
         <input type="text" class="form-input" id="MobileNumber" value="XXXXXX3866"
-            (keypress)="numberOnly($event)"   formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" (change)="request.MobileNumber = filterNumber(request.MobileNumber)"
+               (keypress)="numberOnly($event)" formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" (change)="request.MobileNumber = filterNumber(request.MobileNumber)"
                maxlength="10">
         <div *ngIf="isSubmitted && _PersonalDetailForm.MobileNumber.errors" class="text-danger">
           <p *ngIf="_PersonalDetailForm.MobileNumber.errors.required">
@@ -163,9 +189,9 @@
           मोबाइल नंबर
           (Whatsapp Mobile Number) :<span class="StarMarking">*</span>
         </label>
-        <input type="text"  class="form-input" id="txtWhatsappMobileNumber" placeholder="Please Enter Whatsapp Mobile Number" formControlName="txtWhatsappMobileNumber"
-          (keypress)="numberOnly($event)"      [(ngModel)]="request.WhatsNumber" (change)="request.WhatsNumber = filterNumber(request.WhatsNumber)"
-                maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+        <input type="text" class="form-input" id="txtWhatsappMobileNumber" placeholder="Please Enter Whatsapp Mobile Number" formControlName="txtWhatsappMobileNumber"
+               (keypress)="numberOnly($event)" [(ngModel)]="request.WhatsNumber" (change)="request.WhatsNumber = filterNumber(request.WhatsNumber)"
+               maxlength="10" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
       </div>
       <!-- <div>
     <label for="txtLandlineNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -202,7 +228,7 @@
           (Details of ID Proof):<span class="StarMarking">*</span>
         </label>
         <input type="text" class="form-input" id="txtDetailsofIDProof" formControlName="txtDetailsofIDProof"
-             (keypress)="numberOnly($event)"   [(ngModel)]="request.DetailID" [attr.maxlength]="request.IndentyProff == 1 ? 12 : 14"
+               (keypress)="numberOnly($event)" [(ngModel)]="request.DetailID" [attr.maxlength]="request.IndentyProff == 1 ? 12 : 14"
                [attr.minlength]="request.IndentyProff == 1 ? 12 : 14" (change)="request.DetailID = filterNumber(request.DetailID)">
         <div *ngIf="isSubmitted && _PersonalDetailForm.txtDetailsofIDProof.errors" class="text-danger">
           <p *ngIf="_PersonalDetailForm.txtDetailsofIDProof.errors.required">
@@ -413,7 +439,7 @@
       </div>
 
     </div>
-    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6 ">
+    <!--<div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6 ">
       <div>
         <label for="ddlCategoryB" class="text-gray-800 text-sm font-medium inline-block mb-2">
           श्रेणी बी (सैनिक आश्रित)
@@ -428,8 +454,8 @@
             <i aria-hidden="true"></i>This field is required .!
           </p>
         </div>
-      </div>
-      <div>
+      </div>-->
+      <!--<div>
         <label for="txtCategoryC" class="text-gray-800 text-sm font-medium inline-block mb-2">
           श्रेणी सी (Category C)
           (PH):<span class="StarMarking">*</span>
@@ -443,7 +469,7 @@
             <i aria-hidden="true"></i>This field is required .!
           </p>
         </div>
-      </div>
+      </div>-->
 
       <!--<div>
         <label for="ddlCategoryE" class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -467,7 +493,7 @@
           में पात्र हैं ( Single Mother Dependent )
         </span>
       </div>-->
-      <div *ngIf="request.CategoryC == 69">
+      <!--<div *ngIf="request.CategoryC == 69">
         <label for="txtCategoryC" class="text-gray-800 text-sm font-medium inline-block mb-2">
           पीडब्ल्यूडी श्रेणी (PWD Category)
           :<span class="StarMarking">*</span>
@@ -481,8 +507,8 @@
             <i aria-hidden="true"></i>This field is required .!
           </p>
         </div>
-      </div>
-    </div>
+      </div>-->
+    <!--</div>-->
     <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6 ">
 
       

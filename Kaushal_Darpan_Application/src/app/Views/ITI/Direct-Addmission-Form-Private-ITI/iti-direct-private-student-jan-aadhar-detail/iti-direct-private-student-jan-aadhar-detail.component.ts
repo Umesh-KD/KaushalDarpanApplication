@@ -169,22 +169,15 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
 
     if (this.IsDirectAdmission)
     {
+      debugger
       this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmissionITIPrivate
-    }
-    else if (this.IsJailAdmission)
-    {
-      this.model.InstituteID = this.sSOLoginDataModel.InstituteID
-      this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.JailAdmission
-    }
-
-    else
-    {
       if (this.DepartmentID == EnumDepartment.ITI && this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
         this.GetApplicationId('SearchBySSO')
       }
-      // }
-      console.log("nothing")
     }
+    
+
+   
 
     this.courseTypeList = this.commonMasterService.ConvertEnumToList(EnumCourseType1);
     this.setMaxDate();
@@ -554,6 +547,7 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
 
   async getJanadharData(data: any) {
     try {
+      debugger
       this.janMember = data as JanAadharVerifyMemberDetails
       this.IsShow = true;
       this.IsShowDropdown = false;
@@ -570,11 +564,15 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
   }
 
   @ViewChild(JanAadharDetailComponent) janadharComponent!: JanAadharDetailComponent;
-  verifyJanadhar() {
+ async verifyJanadhar() {
     if (this.request.JAN_AADHAR.length < 10 || this.request.JAN_AADHAR.length > 12) {
       this.toastr.error("Invalid Janadhar Details")
     }
-    this.janadharComponent.startVerification(this.request.JAN_AADHAR);
+
+    await this.janadharComponent.startVerification(this.request.JAN_AADHAR);
+
+
+
   }
 
   openOTP()
@@ -720,7 +718,7 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
       }
 
       this.model.InstituteID = this.sSOLoginDataModel.InstituteID
-
+      this.model.DirectAdmissionTypeID=9
       // this.Address
 
       await this.StudentJanAadharDetailService.SavePersonalData(this.model)
@@ -735,14 +733,7 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
             console.log(this.DepartmentID + "DepartmentID");
             console.log(EnumDepartment.ITI + "EnumDepartment");
 
-            if (this.DepartmentID === EnumDepartment.BTER) {
-              /*  window.open(`/Applicationform?AppID=${this.encryptionService.encryptData(this.ApplicationID)}`, "_self");*/
-              this.routers.navigate(['/Applicationform'], {
-                queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
-              });
-
-            }
-            else if (this.DepartmentID === EnumDepartment.ITI) {
+            
               /*   window.open(`/ApplicationFormTab?AppID=${this.encryptionService.encryptData(this.ApplicationID)}`, "_self");*/
               //this.routers.navigate(['/direct-admission-application-form'],
                 this.routers.navigate(['/direct-admission-application-private-form'],
@@ -750,7 +741,7 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 });
 
-            }
+            
             this.ResetData();
           }
           else {
@@ -811,12 +802,8 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
       this.searchRequest.DepartmentID = this.DepartmentID;
       this.searchRequest.Action = Action
-      this.searchRequest.JanAadharMemberId = this.janaadharMemberDetails.janmemid;
-      if (this.IsDirectAdmission == true) {
-        this.searchRequest.DirectAdmission = 1
-      } else {
-        this.searchRequest.DirectAdmission = 0
-      }
+      this.searchRequest.JanAadharMemberId = this.janMember.MEMBER_ID;
+      this.searchRequest.DirectAdmission=9
 
 
       // if (this.IsDirectAdmission && this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI) {
@@ -964,7 +951,7 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
 
   async FillMemberDetails() {
     try {
-
+      debugger
       // name
       this.model.StudentName = this.janMember?.NAME_EN?.toString() ?? '';
       this.model.StudentNameHindi = this.janMember?.NAME_LL?.toString() ?? '';
@@ -1032,46 +1019,26 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.AdmissionDateList = data['Data'];
+          debugger
           const today = new Date();
           const deptID = this.DepartmentID;
           var activeCourseID: any = [];
 
-          if (this.DepartmentID == EnumDepartment.BTER) {
-            this.AdmissionDateList.filter((x: any) => {
-              if (new Date(x.To_Date) > today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID && x.CourseTypeID == EnumCourseType1.Diploma2ndYearEngLateralAdmission) {
-                activeCourseID.push(3);
-              } else if
-                (new Date(x.To_Date) > today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID && x.CourseTypeID == EnumCourseType1.Diploma1stYearEng) {
-                activeCourseID.push(1);
-              }
-              else if (new Date(x.To_Date) > today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID && x.CourseTypeID == EnumCourseType1.DiplomaNonEngineering1stYear)
-                activeCourseID.push(2);
-            })
+     
+
+
+          var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DIRECT_ADDMISSSION_PRIVATE && x.DepartmentID == deptID }).length
+          if (lnth <= 0) {
+            this.toastr.warning("Date for ITI Admission is Closed or Not Open");
+            this.routers.navigate(['/dashboard']);
+
+
+          
+  
           }
 
-          if (this.DepartmentID == EnumDepartment.ITI) {
-
-            if (this.IsDirectAdmission) {
-              var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
-              if (lnth <= 0) {
-                this.toastr.warning("Date for ITI Admission is Closed or Not Open");
-                this.routers.navigate(['/dashboard']);
-
-              }
-            } else if (this.IsJailAdmission) {
-              var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
-              if (lnth <= 0) {
-                this.toastr.warning("Date for ITI Admission is Closed or Not Open");
-                this.routers.navigate(['/dashboard']);
-              }
-            }
-
-            const admissionEntry = this.AdmissionDateList.find((e: any) => e.TypeID == 148);
-            this.FromDate = admissionEntry ? admissionEntry.From_Date : null;
-            console.log(this.FromDate, "from date")
-          }
-
-          this.courseTypeList = this.courseTypeList.filter((course: any) => activeCourseID.includes(course.value));
+          this.courseTypeList = this.courseTypeList.filter((course: any) =>
+            activeCourseID.includes(course.value));
         }, error => console.error(error));
     }
     catch (Ex) {

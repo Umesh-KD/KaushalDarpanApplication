@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ItiApplicationSearchmodel, PreviewApplicationModel } from '../../../../Models/ItiApplicationPreviewDataModel';
+import { ItiApplicationSearchmodel, PreviewApplicationModel, PreviewDirectApplicationModel } from '../../../../Models/ItiApplicationPreviewDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { FormBuilder } from '@angular/forms';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -38,7 +38,7 @@ export class ITIDirectPreviewPrivateFormComponent {
   public _enumDepartment = EnumDepartment
   public CompanyMasterDDLList: any[] = [];
   public BoardList: any = []
-  public request = new PreviewApplicationModel()
+  public request = new PreviewDirectApplicationModel()
   Eligible8thTradesID:number=0
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -46,7 +46,7 @@ export class ITIDirectPreviewPrivateFormComponent {
   public Message: string = '';
   public ErrorMessage: string = '';
   public PDFURL: string = '';
-  public _GlobalConstants: any = GlobalConstants;
+  public _GlobalConstants: any = GlobalConstants; 
   public Options8thLevel: any =[]
   public Options10thLevel: any = []
   public Options12thLevel: any = []
@@ -125,7 +125,7 @@ export class ITIDirectPreviewPrivateFormComponent {
       this.request.ApplicationID = this.ApplicationID;
       await this.GetById()
     } else {
-      window.open(`/StudentJanAadharDetail`, "_self");
+      window.open(`/iti-direct-admission-student-initial-private-detail`, "_self");
     }
     await this.GetITIDateDataList();
   }
@@ -145,7 +145,7 @@ export class ITIDirectPreviewPrivateFormComponent {
     this.searchrequest.RoleID = this.sSOLoginDataModel.RoleID
     try {
       this.loaderService.requestStarted();
-      await this.ItiApplicationFormService.GetApplicationPreviewbyID(this.searchrequest)
+      await this.ItiApplicationFormService.GetDirectPrivatePreview(this.searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           
@@ -156,7 +156,7 @@ export class ITIDirectPreviewPrivateFormComponent {
              
             console.log("this.request.OptionalViewDatas", this.request.OptionalViewDatas)
             if(this.request.IsFinalPay == true && this.request.IsfinalSubmit == EnumApplicationFromStatus.FinalSave) {
-              this.router.navigate(['/Itipreviewform'], {
+              this.router.navigate(['/directItipreviewform'], {
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 });
             }
@@ -705,20 +705,13 @@ export class ITIDirectPreviewPrivateFormComponent {
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
 
-          if(this.request.DirectAdmissionType == 1) {
-            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
+
+          var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DIRECT_ADDMISSSION_PRIVATE && x.DepartmentID == deptID }).length
             if (lnth <= 0)
             {
               this.toastr.warning("Date for ITI Admission is Closed or Not Open");
               this.isITIAddmissionOpen = false;
-            }
-          } else {
-            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
-            if (lnth <= 0)
-            {
-              this.toastr.warning("Date for ITI Admission is Closed or Not Open");
-              this.isITIAddmissionOpen = false;
-            }
+            
           }
           
           const admissionEntry = this.AdmissionDateList.find((e: any) => e.TypeID == 148);

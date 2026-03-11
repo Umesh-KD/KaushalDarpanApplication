@@ -35,7 +35,7 @@ export class AddressFormComponent {
   public searchrequest = new BterSearchmodel()
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public janaadharMemberDetails = new JanAadharMemberDetails()
-  public ApplicationID: number=0;
+  public ApplicationID: number = 0;
   constructor(
     private formBuilder: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -79,7 +79,7 @@ export class AddressFormComponent {
     this.GetStateMaterData();
 
 
-    this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0")) 
+    this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     if (this.ApplicationID > 0) {
       this.searchrequest.ApplicationID = this.ApplicationID;
       this.GetById();
@@ -89,11 +89,9 @@ export class AddressFormComponent {
   }
 
 
-  EnableDisableCorsAddressDetail(isSelected: boolean)
-  {
+  EnableDisableCorsAddressDetail(isSelected: boolean) {
 
-    if (isSelected)
-    {
+    if (isSelected) {
       this.CorsAddressDetailsFormGroup.controls['CorstxtAddressLine1'].disable();
       this.CorsAddressDetailsFormGroup.controls['CorstxtAddressLine2'].disable();
 
@@ -104,8 +102,7 @@ export class AddressFormComponent {
       this.CorsAddressDetailsFormGroup.controls['CorstxtCityVillage'].disable();
       this.CorsAddressDetailsFormGroup.controls['CorstxtPincode'].disable();
 
-    } else
-    {
+    } else {
       this.CorsAddressDetailsFormGroup.controls['CorstxtAddressLine1'].enable();
       this.CorsAddressDetailsFormGroup.controls['CorstxtAddressLine2'].enable();
 
@@ -209,7 +206,7 @@ export class AddressFormComponent {
             this.toastr.success(this.Message)
             /*  this.CancelData();*/
             this.formSubmitSuccess.emit(true);
-            this.tabChange.emit(3); 
+            this.tabChange.emit(3);
             /* this.routers.navigate(['/Hrmaster']);*/
           }
           else {
@@ -222,7 +219,7 @@ export class AddressFormComponent {
     catch (ex) {
       console.log(ex);
     }
-    finally { 
+    finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
@@ -256,7 +253,7 @@ export class AddressFormComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
-        
+
           if (data['Data'] != null) {
 
             this.formData = data['Data']
@@ -280,12 +277,12 @@ export class AddressFormComponent {
     catch (ex) { console.log(ex) }
     finally {
       setTimeout(() => {
-        this.loaderService.requestEnded();  
+        this.loaderService.requestEnded();
       }, 200);
     }
   }
 
-  
+
 
   async CancelData() {
     this.formData.CorsAddressLine1 = ''
@@ -313,8 +310,7 @@ export class AddressFormComponent {
     }
   }
 
-  async Back()
-  {
+  async Back() {
     this.tabChange.emit(1)
   }
 
