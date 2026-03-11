@@ -368,14 +368,14 @@ export class BTEREstablishManagementService {
   
   public async DeleteBudgetHeadById_EM(HeadId: number, UserID: number) {
     debugger
-    return await this.http.delete(`${this.APIUrl}/DeleteBudgetHeadById_EM/${HeadId}/${UserID}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteBudgetHeadById_EM/${HeadId}/${UserID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
   public async GetBudgetHeadById_EM(id: number) {
-    return await this.http.get(`${this.APIUrl}/GetBudgetHeadById_EM/${id}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/GetBudgetHeadById_EM/${id}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
