@@ -286,7 +286,7 @@ export class ITIDirectPreviewPrivateFormComponent {
 
   ShowHideButtons(status: number, IsPaymentSuccess: boolean = false, AdmissionType: number = 0) {
     // ---------- For Jail Admission ----------------
-    if(AdmissionType == 181) {
+    if(AdmissionType == 9) {
       if (status == EnumApplicationFromStatus.FinalSave && IsPaymentSuccess == false) {
 
         this.ShowfinalLButton = false;

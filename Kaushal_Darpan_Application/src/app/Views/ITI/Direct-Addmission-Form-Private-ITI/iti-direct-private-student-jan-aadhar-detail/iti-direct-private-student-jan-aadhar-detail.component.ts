@@ -830,7 +830,7 @@ export class ITIDirectprivateStudentJanAadharDetailComponent
           if (this.ApplicationID > 0) {
             if (this.DepartmentID === EnumDepartment.ITI) {
               if (this.IsFinalSubmit == EnumApplicationFromStatus.FinalSave) {
-                this.routers.navigate(['/Itipreviewform'], {
+                this.routers.navigate(['/directItipreviewform'], {
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 });
                 //window.open(`/Itipreviewform?AppID=${this.encryptionService.encryptData(this.ApplicationID) }`, "_self");
