@@ -300,7 +300,7 @@ export class ITIAddItemsMasterComponent {
 
 
   async GetTradeDDL() {
-    
+    debugger
     try {
       this.loaderService.requestStarted();
       //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
