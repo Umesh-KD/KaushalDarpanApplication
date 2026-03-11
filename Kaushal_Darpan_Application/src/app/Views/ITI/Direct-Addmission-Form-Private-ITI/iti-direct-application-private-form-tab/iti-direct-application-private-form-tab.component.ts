@@ -6,7 +6,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
-import { EnumConfigurationType, EnumDepartment, EnumRole, JailCollegeID } from '../../../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumDepartment, EnumDirectAdmissionType, EnumRole, JailCollegeID } from '../../../../Common/GlobalConstants';
 import { ItiApplicationFormService } from '../../../../Services/ItiApplicationForm/iti-application-form.service';
 import { ItiApplicationSearchmodel } from '../../../../Models/ItiApplicationPreviewDataModel';
 import { DateConfigurationModel } from '../../../../Models/DateConfigurationDataModels';

@@ -77,8 +77,9 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr No</th>
+            <th class="text-left">Budget Type</th>
             <th class="text-left">Head Name</th>
-             <th class="text-left">Head Description</th>
+            <th class="text-left">Head Description</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -86,6 +87,7 @@
           <tr *ngFor="let item of UCHeadDataList; let idx=index;">
 
             <td align="left">{{idx+1}}</td>
+            <td>{{item.BudgetType_str}}</td>
             <td>{{item.HeadName}}</td>
             <td>{{item.HeadDescription}}
             <td align="left">
@@ -115,7 +117,17 @@
           <div class="mb-8">
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
               
-              
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Budget Type: 
+                </label>
+                <select class="form-select" id="EquipmentsId" 
+                  formControlName="BudgetTypeID"[(ngModel)]="request.BudgetTypeID">
+                  <option value="0">--- Choose Option ---</option>
+                  <option value="1">Planned</option>
+                  <option value="2">Unplanned</option>
+                </select>
+              </div>
               
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Head Name</label>

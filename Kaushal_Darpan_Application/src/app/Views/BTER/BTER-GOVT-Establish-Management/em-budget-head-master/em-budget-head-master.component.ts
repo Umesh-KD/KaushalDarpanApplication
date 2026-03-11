@@ -32,6 +32,7 @@ export class EMBudgetHeadMasterComponent {
   public ddlBudgetTypeList: any = [];
 
   modalReference: NgbModalRef | undefined;
+  public isSubmitted: boolean = false
 
   constructor(
     private modalService: NgbModal,
@@ -49,8 +50,10 @@ export class EMBudgetHeadMasterComponent {
   async ngOnInit() {
     this.BGTHeadForm=this.formBuilder.group({
       HeadName: ['', Validators.required],
-      HeadDescription: ['']
+      HeadDescription: [''],
+      BudgetTypeID: ['', [DropdownValidators]],
     })
+    this.request.BudgetTypeID = 0
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetBudgetHeadMasterData_EM();
   }
