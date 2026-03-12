@@ -60,6 +60,24 @@
             <option *ngFor="let item of ResultTypeList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Academic Year
+          </label>
+          <select [(ngModel)]="searchRequest.EndTermID"
+                  class="form-select">
+
+            <option [ngValue]="0">Choose Option</option>
+            <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+                    [ngValue]="item.EndTermID">
+
+              {{ item.EndTermName }}
+            </option>
+          </select>
+        </div>
+
+
       </div>
       <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
         <div class="flex justify-center flex-wrap items-center mb-3 p-3 py-2 text-center" style="background:#fffdce">

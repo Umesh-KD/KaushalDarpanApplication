@@ -187,7 +187,9 @@
                 <a *ngIf="(sSOLoginDataModel.RoleID === _EnumRole.AdminNon
                     || sSOLoginDataModel.RoleID === _EnumRole.Admin
                     || sSOLoginDataModel.RoleID===_EnumRole.ITIAdmin_SCVT
-                    || sSOLoginDataModel.RoleID===_EnumRole.ITIAdmin_NCVT)
+                    || sSOLoginDataModel.RoleID===_EnumRole.ITIAdmin_NCVT
+                    || sSOLoginDataModel.RoleID===_EnumRole.ExamInchargeSCVT
+                    || sSOLoginDataModel.RoleID===_EnumRole.ExamInchargeNCVT)
                     && (row.ExaminerStatus === _EnumStatusOfStaff.Submitted)"
                    href="javascript:void(0);" (click)="ApproveStaff(row.StaffID)" title="Approve">
                   <i class="ti ti-check"></i>

@@ -13,6 +13,8 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
 import { ReportService } from '../../../Services/Report/report.service';
 import { EnumCourseType, EnumDepartment, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
+import { MenuService } from '../../../Services/Menu/menu.service';
 @Component({
     selector: 'app-marksheet-download',
     templateUrl: './marksheet-download.component.html',
@@ -46,7 +48,7 @@ export class MarksheetDownloadComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   //end table feature default
-
+  public FinYearList: any = [];
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
     private loaderService: LoaderService,
@@ -58,13 +60,14 @@ export class MarksheetDownloadComponent {
     public appsettingConfig: AppsettingService,
     private reportService: ReportService,
     private http: HttpClient,
-
+    private menuService: MenuService
   ) {
   }
 
   async ngOnInit() {
     await this.GetMasterDDL();
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.YearDropdownData();
   }
 
   async GetMasterDDL() {
@@ -103,9 +106,11 @@ export class MarksheetDownloadComponent {
 
   
   async getAllData() {
+    debugger
     try {
       this.loaderService.requestStarted();
-      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.searchRequest.EndTermID = this.searchRequest.EndTermID
+      //this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
       this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       await this.marksheetDownloadService.GetAllData(this.searchRequest)
@@ -132,10 +137,13 @@ export class MarksheetDownloadComponent {
   }
 
   async DownloadMarksheet(row: any) {
+    debugger
     try {
       this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.downloadReq.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
-      this.downloadReq.EndTermID = this.sSOLoginDataModel.EndTermID;
+      //this.downloadReq.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.downloadReq.EndTermID = this.searchRequest.EndTermID;
+      
       this.downloadReq.StudentID = row.StudentID;
       this.downloadReq.SemesterID = row.SemesterID;
       this.downloadReq.ResultTypeID = row.ResultTypeID;
@@ -189,12 +197,14 @@ export class MarksheetDownloadComponent {
   }
 
   async DownloadMarksheetBulk() {
+    debugger
     try {
 
       this.StudentList.forEach((element: any) => {
         element.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         element.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
-        element.EndTermID = this.sSOLoginDataModel.EndTermID;
+        //element.EndTermID = this.sSOLoginDataModel.EndTermID;
+        element.EndTermID = this.searchRequest.EndTermID;
       });
 
       this.loaderService.requestStarted();
@@ -320,4 +330,34 @@ export class MarksheetDownloadComponent {
     this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
   }
   // end table feature
+
+
+
+
+  async YearDropdownData() {
+    try {
+      this.loaderService.requestStarted();
+
+      await this.menuService.GetAcedmicYearList(this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.SelectedValue)
+        .then((AcedmicYear: any) => {
+          AcedmicYear = JSON.parse(JSON.stringify(AcedmicYear));
+          this.FinYearList = AcedmicYear['Data'];
+          debugger
+          //this.loaderService.requestEnded();
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 10);
+    }
+  }
+
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
+  }
 }
