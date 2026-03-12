@@ -50,6 +50,7 @@ export class RoomAvailabilityComponent {
       this.loaderService.requestStarted();
 
       let searchRequest: any = {}
+      searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
       await this.guestRoomManagementService.GetGuestHouseNameList(searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -71,6 +72,7 @@ export class RoomAvailabilityComponent {
       this.loaderService.requestStarted();
       let request: any = {}
       request.GuestHouseID = this.GuestHouseID
+      request.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
       await this.guestRoomManagementService.GetGuestHouseRoomAvailabilityData(request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

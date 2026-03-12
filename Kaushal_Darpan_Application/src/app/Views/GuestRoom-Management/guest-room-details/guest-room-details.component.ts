@@ -185,7 +185,7 @@ export class GuestRoomDetailsComponent {
   async GetAllData() {
     try {
       this.loaderService.requestStarted();
-
+      this.request.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
       await this.guestRoomManagmentService.GetAllGuestRoomDetails(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -508,6 +508,7 @@ export class GuestRoomDetailsComponent {
   async GetGuestHouseNameList() {
     try {
       this.loaderService.requestStarted();
+      this.searchRequest1.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

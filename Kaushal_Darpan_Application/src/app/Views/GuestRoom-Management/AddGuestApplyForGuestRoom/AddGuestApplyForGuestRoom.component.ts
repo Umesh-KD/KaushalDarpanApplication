@@ -616,6 +616,7 @@ export class AddGuestApplyForGuestRoomComponent {
   async GetGuestRoomNameList() {
     try {
       this.loaderService.requestStarted();
+      this.searchRequest1.guestHouseForApply = true
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

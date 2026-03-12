@@ -32,7 +32,6 @@ export class BTEREstablishManagementService {
 
   public async BTER_EM_AddStaffInitialDetails(request: BTER_EM_AddStaffDataModel) {
     var body = JSON.stringify(request);
-
     return await this.http.post(`${this.APIUrl}/BTER_EM_AddStaffInitialDetails`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

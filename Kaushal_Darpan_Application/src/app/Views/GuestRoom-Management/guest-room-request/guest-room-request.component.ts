@@ -152,6 +152,7 @@ export class GuestRoomRequestComponent {
       this.loaderService.requestStarted();
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+      this.searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? ''
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       await this._GuestRoomManagmentService.GuestRequestList(this.searchRequest)
         .then((data: any) => {

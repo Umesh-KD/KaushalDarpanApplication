@@ -12,6 +12,7 @@ export class RoomDetailsDataModel {
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;
   public DepartmentID: number = 0;
+  public GuestHouseIDs?: string= '';
 }
 
 export class RoomExcelDetailsModel {
