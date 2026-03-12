@@ -17,6 +17,10 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a href="javascript:void(0);" (click)="ShowAuctionedItemsList(Items_Details_Auctioned)"
+            class="btn bg-info btn-sm text-white">
+            <i class="ti ti-excel"></i> List of Auctioned Items
+        </a>
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -229,3 +233,55 @@
 </ng-template>
 
 <!-- end row -->
+
+<ng-template #Items_Details_Auctioned let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-list">Consumable Auctioned Items</i> </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup_AuctionedHistory()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">SNO</th>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Item Name</th>
+                  <th class="text-left">Equipment Name</th>
+                  <th class="text-left">Auctioned Quantity</th>
+                  <th class="text-left">Auctioned Date</th>
+                  <th class="text-left">Auction Document</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of ConsumableAuctionedItemData | tableSearchFilter:Table_SearchText; let idx=index;">
+                  <td align="left">{{ idx+1}}</td>
+                  <td align="left">{{ item.CollegeName}}</td>
+                  <td align="left">{{ item.ItemCategoryName}}</td>
+                  <td align="left">{{ item.EquipmentsName}}</td>
+                  <td align="left">{{ item.AuctionedQty}}</td>
+                  <td align="left">{{ item.AuctionDate | date: 'dd-MM-yyyy'}}</td>
+                  <td>
+                    <div class="flex">
+                        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.AuctionDoc}}"
+                        class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="ConsumableAuctionedItemData?.length==0">
+                  <td colspan="10">
+                    No Record Found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

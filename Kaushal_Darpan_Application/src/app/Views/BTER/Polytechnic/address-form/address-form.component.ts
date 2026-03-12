@@ -1,16 +1,16 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { BterAddressDataModel, BterSearchmodel } from '../../../Models/ApplicationFormDataModel';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { BterAddressDataModel, BterSearchmodel } from '../../../../Models/ApplicationFormDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { LoaderService } from '../../../Services/Loader/loader.service';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
-import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import { BterApplicationForm } from '../../../Services/BterApplicationForm/bterApplication.service';
-import { EnumDepartment, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
-import { JanAadharMemberDetails } from '../../../Models/StudentJanAadharDetailModel';
+import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
+import { BterApplicationForm } from '../../../../Services/BterApplicationForm/bterApplication.service';
+import { EnumDepartment, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { JanAadharMemberDetails } from '../../../../Models/StudentJanAadharDetailModel';
 import { ActivatedRoute } from '@angular/router';
-import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 
 @Component({
     selector: 'app-address-form',

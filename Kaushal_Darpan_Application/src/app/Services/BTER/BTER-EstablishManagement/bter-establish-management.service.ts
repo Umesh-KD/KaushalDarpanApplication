@@ -32,7 +32,6 @@ export class BTEREstablishManagementService {
 
   public async BTER_EM_AddStaffInitialDetails(request: BTER_EM_AddStaffDataModel) {
     var body = JSON.stringify(request);
-
     return await this.http.post(`${this.APIUrl}/BTER_EM_AddStaffInitialDetails`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -375,14 +374,14 @@ export class BTEREstablishManagementService {
   
   public async DeleteBudgetHeadById_EM(HeadId: number, UserID: number) {
     debugger
-    return await this.http.delete(`${this.APIUrl}/DeleteBudgetHeadById_EM/${HeadId}/${UserID}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteBudgetHeadById_EM/${HeadId}/${UserID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
   public async GetBudgetHeadById_EM(id: number) {
-    return await this.http.get(`${this.APIUrl}/GetBudgetHeadById_EM/${id}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/GetBudgetHeadById_EM/${id}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

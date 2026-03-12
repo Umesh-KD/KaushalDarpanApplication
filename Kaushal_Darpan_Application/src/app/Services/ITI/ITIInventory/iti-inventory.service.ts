@@ -590,4 +590,12 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   } 
+
+  public async GetConsumableAuctionedItemsData(searchRequest: DTEItemsSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetConsumableAuctionedItemsData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  } 
 }

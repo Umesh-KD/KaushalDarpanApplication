@@ -30,6 +30,12 @@
         <div><b>पिता का नाम हिंदी में (Father's Name in Hindi):</b></div>
         <div>{{request.FatherNameHindi}}</div>
 
+        <div><b>पिता का व्यवसाय (Father Occupation):</b></div>
+        <div>{{request.FatherOccupation}}</div>
+
+        <div><b>कार्यालय का पता (Office Address):</b></div>
+        <div>{{request.OfficeAddress}}</div>
+
         <div><b>माता का नाम (Mother's Name):</b></div>
         <div>{{request.MotherName}}</div>
 
@@ -88,7 +94,7 @@
     </div>
     <div class="mb-6">
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5">पते का विवरण (Address Details)</b>
+        <b class="text-1xl-5">पते का विवरण (Permanent Address Details)</b>
       </div>
 
       <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
@@ -254,6 +260,63 @@
     <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light ">
       <b class="text-1xl-5">
         &nbsp;
+        कुल अनुभव (Experience Details)
+      </b>
+    </div>
+
+    <div class="overflow-auto mb-6">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="text-left">
+            <th>S.No</th>
+            <th class="text-left">Industry Name</th>
+            <th class="text-left">Type Of Work</th>
+            <th>Year</th>
+            <th>Month</th>
+            <th class="text-left">Experience Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of request.ExperienceDetailsDataModel; let idx = index"
+              [ngClass]="{'font-bold bg-gray-100': idx === request.ExperienceDetailsDataModel.length - 1}">
+
+            <td class="text-center">
+              {{ idx === request.ExperienceDetailsDataModel.length - 1 ? 'Total' : idx + 1 }}
+            </td>
+
+            <td class="text-left">
+              {{row.NameOfIndustry}}
+            </td>
+
+            <td class="text-left">
+              {{row.TypeOfWork}}
+            </td>
+
+            <td class="text-left">
+              {{row.Year}}
+            </td>
+
+            <td class="text-left">
+              {{row.Month}}
+            </td>
+
+            <td class="text-left">
+              {{row.ExperienceDetailDescription}}
+            </td>
+
+          </tr>
+          <tr *ngIf="request.ExperienceDetailsDataModel?.length==null">
+            <td colspan="7">No Record</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light ">
+      <b class="text-1xl-5">
+        &nbsp;
         अपलोड किए गए दस्तावेज़ (Uploaded Documents)
       </b>
     </div>
@@ -321,23 +384,23 @@
 
 
           <!--<ul style="float: RIGHT;list-style: auto;margin-left: 14px;">
-            <li>
-              मैं घोषणा करता/करती हूँ कि मेरे पास आधार संख्या, वैध मोबाइल नंबर एवं ईमेल आईडी उपलब्ध है,
-              जिन्हें मैं प्रवेश प्रक्रिया प्रारंभ होने से लेकर प्रशिक्षण पूर्ण होने तक सक्रिय रखूँगा/रखूँगी।
-            </li>
-            <li>
-              मैं यह भी पुष्टि करता/करती हूँ कि पिछले सत्र में मेरी किसी अन्य सीटीएस (क्राफ्ट्समैन ट्रेनिंग स्कीम) कोर्स में सक्रिय प्रवेश नहीं है।
-              मुझे ज्ञात है कि यदि मेरा कोई अन्य सक्रिय प्रवेश पाया गया, तो मेरी वर्तमान प्रवेश प्रक्रिया बिना किसी सूचना के रद्द कर दी जाएगी।
-            </li>
-            <li>
-              मैं जानता/जानती हूँ कि मेरी प्रवेश की पुष्टि तभी होगी जब मैं प्रशिक्षार्थी सत्यापन प्रक्रिया पूर्ण कर लूँगा/लूँगी,
-              जिसके पश्चात ही एक अद्वितीय पीआरएन आईडी जनरेट की जाएगी।
-            </li>
-            <li>
-              यदि मुझे प्रवेश प्रदान किया जाता है, तो मैं प्रवेश की तिथि से 15 दिनों के भीतर स्वयं संबंधित संस्थान (सरकारी/प्राइवेट आईटीआई)
-              में जाकर शुल्क का भुगतान करूँगा/करूँगी तथा इससे संबंधित समस्त जिम्मेदारी मेरी होगी।
-            </li>
-          </ul>-->
+          <li>
+            मैं घोषणा करता/करती हूँ कि मेरे पास आधार संख्या, वैध मोबाइल नंबर एवं ईमेल आईडी उपलब्ध है,
+            जिन्हें मैं प्रवेश प्रक्रिया प्रारंभ होने से लेकर प्रशिक्षण पूर्ण होने तक सक्रिय रखूँगा/रखूँगी।
+          </li>
+          <li>
+            मैं यह भी पुष्टि करता/करती हूँ कि पिछले सत्र में मेरी किसी अन्य सीटीएस (क्राफ्ट्समैन ट्रेनिंग स्कीम) कोर्स में सक्रिय प्रवेश नहीं है।
+            मुझे ज्ञात है कि यदि मेरा कोई अन्य सक्रिय प्रवेश पाया गया, तो मेरी वर्तमान प्रवेश प्रक्रिया बिना किसी सूचना के रद्द कर दी जाएगी।
+          </li>
+          <li>
+            मैं जानता/जानती हूँ कि मेरी प्रवेश की पुष्टि तभी होगी जब मैं प्रशिक्षार्थी सत्यापन प्रक्रिया पूर्ण कर लूँगा/लूँगी,
+            जिसके पश्चात ही एक अद्वितीय पीआरएन आईडी जनरेट की जाएगी।
+          </li>
+          <li>
+            यदि मुझे प्रवेश प्रदान किया जाता है, तो मैं प्रवेश की तिथि से 15 दिनों के भीतर स्वयं संबंधित संस्थान (सरकारी/प्राइवेट आईटीआई)
+            में जाकर शुल्क का भुगतान करूँगा/करूँगी तथा इससे संबंधित समस्त जिम्मेदारी मेरी होगी।
+          </li>
+        </ul>-->
 
         </label>
       </div>
@@ -346,21 +409,17 @@
 
     <div class="w-full text-center mt-4">
 
-      <button type="button" 
-          *ngIf="ShowfinalLButton && isITIAddmissionOpen && request.DirectAdmissionType == 1"
-          class="btn bg-primary text-white" (click)="SavePreview(MyModel_PreviewDetails, request.ApplicationID) ">
+      <button type="button"
+              *ngIf="ShowfinalLButton && isITIAddmissionOpen && request.DirectAdmissionType == 9"
+              class="btn bg-primary text-white" (click)="SavePreview(MyModel_PreviewDetails, request.ApplicationID) ">
         <i class="ti ti-device-floppy"></i>Lock & Final Submit
       </button>
 
-      <button type="button"
-         *ngIf="ShowfinalLButton && isITIAddmissionOpen && request.DirectAdmissionType == 181"
-          class="btn bg-primary text-white" (click)="SaveFinalSubmit(MyModel_PreviewDetails)">
-        <i class="ti ti-inr"></i>Submit
-      </button>
+
 
       <button type="button"
-         *ngIf="!ShowfinalLButton && !ShowPaymentButton"
-          class="btn bg-success text-white" (click)="DownloadApplicationForm()">
+              *ngIf="!ShowfinalLButton && !ShowPaymentButton"
+              class="btn bg-success text-white" (click)="DownloadApplicationForm()">
         <i class="ti ti-inr"></i>Download
       </button>
 

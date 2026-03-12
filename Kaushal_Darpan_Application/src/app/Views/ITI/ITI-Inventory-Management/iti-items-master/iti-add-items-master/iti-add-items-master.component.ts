@@ -300,14 +300,14 @@ export class ITIAddItemsMasterComponent {
 
 
   async GetTradeDDL() {
-    
+    debugger
     try {
       this.loaderService.requestStarted();
       //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
       //await this.commonFunctionService.StreamMaster()
       let Searchrequests: any = {}
       Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
-      Searchrequests.TypeName = 'TradeList';
+      Searchrequests.TypeName = 'TradeList_minReqItem';
       
       await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(Searchrequests)
         .then((data: any) => {

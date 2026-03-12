@@ -67,14 +67,13 @@ export class SSOLoginDataModel {
   public PrincipleSSOID?: string = '';
   public PrincipleMobile?: string = '';
   public collageID: number = 0;
-    //public MobileNo: number = 0;
-
-    public ShowSessionSelection: number = 0;
-    public SelectedValue: number = 0;
-    public DistrictID: number = 0;
-    public StaffTypeID?:number=0;
-    public OfficeName:string='';
-
+  //public MobileNo: number = 0;
+  public ShowSessionSelection: number = 0;
+  public SelectedValue: number = 0;
+  public DistrictID: number = 0;
+  public StaffTypeID?:number=0;
+  public OfficeName:string='';
+  public GuestHouseID?: string = ''
 }
 
 

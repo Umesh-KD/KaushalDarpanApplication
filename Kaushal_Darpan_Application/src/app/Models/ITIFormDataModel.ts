@@ -160,7 +160,24 @@ export class Qualification8thDetailsDataModel {
 
 
 
+export class ExperienceDetailsDataModel {
 
+  public ExperienceID: number = 0
+  public ApplicationID: number = 0
+
+  public Year: number = 0
+  public Month: number = 0
+
+  public NameOfIndustry: string = ''
+  public TypeOfWork: string = ''
+  public ExperienceDetailDescription: string = ''
+
+
+
+  public ModifyBy: number = 0
+
+
+}
 
 export class Qualification10thDetailsDataModel {
   public SelectedQualification10: number = 10
@@ -328,4 +345,6 @@ export class PersonalDetailsDatamodell {
   public PH8thTradeList: string = ''
   public PH10thTradeList: string = ''
   public Apaarid: string = ''
+  public FatherOccupation: string = ''
+  public OfficeAddress: string = ''
 }

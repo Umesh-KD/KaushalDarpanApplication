@@ -94,6 +94,7 @@
     <Folder Include="src\app\Views\BTER\Issue-Tracker\" />
     <Folder Include="src\app\Views\BTER\ITI-Inventory-Management\" />
     <Folder Include="src\app\Views\Centers\" />
+    <Folder Include="src\app\Views\ITI\Direct-Addmission-Form-Private-ITI\iti-direct-expereince\" />
     <Folder Include="src\app\Views\ITI\ITIs\add-itis\add-itis\" />
     <Folder Include="src\app\Views\ITI\ITI-DispatchManagement\" />
     <Folder Include="src\assets\libs\%40tailwindcss\aspect-ratio\node_modules\" />

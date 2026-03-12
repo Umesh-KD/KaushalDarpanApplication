@@ -75,7 +75,7 @@ export class ItiAttendencePercentComponent {
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
-    private http: HttpClient, private route: ActivatedRoute,
+    private http: HttpClient, private route: ActivatedRoute,  
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
     public appsettingConfig: AppsettingService) {
