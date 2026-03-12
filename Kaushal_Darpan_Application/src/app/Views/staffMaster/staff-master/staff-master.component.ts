@@ -597,7 +597,7 @@ export class StaffMasterComponent implements OnInit {
 
             this.MobileNo = this.sSOLoginDataModel.Mobileno;
 
-            if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_NCVT) {
+            if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == EnumRole.ExamInchargeSCVT || this.sSOLoginDataModel.RoleID == EnumRole.ExamInchargeNCVT) {
               this.openModalGenerateOTP(this.modal_GenrateOTP);
             }
             else {

@@ -406,7 +406,7 @@ export class FeeConfigurationComponent implements OnInit {
       await this.commonMasterService.GetConfigurationType(this.RoleID, EnumConfigTypeTabs.Fee_Tab).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TypeMasterDDL = data.Data;
-        if (this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_SCVT
+        if (this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == EnumRole.ExamInchargeSCVT
         ) {
           this.TypeMasterDDL = this.TypeMasterDDL.filter((e: any) => e.ID == 5)
         } 

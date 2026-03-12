@@ -214,7 +214,15 @@ export enum EnumRole {
   EM_GAZETTED_STAFF=251,
   EM_NON_GAZETTED_STAFF=252,
   EM_ADTE_GAZETTED_STAFF=240,
-  EM_ADTE_NON_GAZETTED_STAFF=241,
+  EM_ADTE_NON_GAZETTED_STAFF = 241,
+
+
+  // ITI Examination Incharge Roles
+
+  ExamInchargeSCVT = 253,
+  ExamInchargeNCVT = 254,
+  AdmissionIncharges = 255
+
 }
 
 export enum enumExamStudentStatus {
@@ -842,3 +850,4 @@ export enum EnumOpenURLKey {
   RoleMaster = "Kd@R0l9Ms!r0Pn",
   MenuMaster = "Kd@M9N4Ms!r0Pn",
 }
+
