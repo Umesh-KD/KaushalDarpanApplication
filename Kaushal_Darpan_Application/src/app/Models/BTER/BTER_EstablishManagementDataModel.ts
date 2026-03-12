@@ -169,7 +169,89 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public StaffTypeID: number = 0
   public EduQualificationDetailsModel: Staff_EduQualificationDetailsModel[] = [];
   public bterStaffSubjectListModel: BterStaffSubjectList[] = [];
+  public BterServiceHistoryListModel:BTER_EM_AddServiceHistoryDataModel[]=[];
+}
 
+
+export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
+  public SSOID: string = ''
+  public UserID: number = 0
+
+  public JoiningDate:string=''
+  public OfficeID: number = 0
+  public OfficeName?:string=''
+  public InstituteID: number = 0
+  public InstituteName?:string=''
+  public FromDate:string=''
+  public ToDate:string=''
+  public DesignationID: number = 0
+  public DesignationName?:string=''
+  public Qualification:string=''
+
+  // Single document for Service History
+  public DisUploadDoc: string=''
+  public UploadDoc: string=''
+
+
+  // transfer
+  public IsTransfer:boolean=false;
+  public TransferToInstituteID:number=0
+  public TransferFromInstituteID:number=0
+  public TransferFromInstituteName:string=''
+  public TransferToInstituteName:string=''
+  public TransferFromOfficeID: number=0 
+  public TransferToOfficeID: number=0
+  public TransferToOfficeName:string=''
+  public DateOfTransfer:string=''
+
+  // Promotion
+  public IsPromotion:boolean=false;
+  public ToDesignationIDPromotion: number = 0;
+  public ToDesignationName: number = 0;
+  public DateOfpromotion: string='';
+
+   // Multiple Documents
+   public TransferDocuments: BTER_EM_DocumentServiceHistoryDataModel[] = []
+   public PromotionDocuments: BTER_EM_DocumentServiceHistoryDataModel[] = []
+  
+}
+
+export class BTER_EM_DocumentServiceHistoryDataModel {
+  // transfer
+  public DisUploadDoc: string=''
+  public UploadDoc: string=''
+  
+}
+
+
+export class StaffDetailsServicePreviewDataModel {
+  public SSOID?: string = ''
+  public Office?: string = ''
+  public ServiceBookDesignation?: string = ''
+  public ServiceBookBranch?: string = ''
+  public Name?: string = ''
+  public Gender?: string = ''
+  public DateofBirth?: string = ''
+  public DateOfFirstAppointment?: string = ''
+  public DepartmentJoiningDate?: string = ''
+  public DateOfJoining?: string = ''
+  public DateOfAppointment?: string = ''
+  public MobileNumber?: string = ''
+  public EmployeeID?: string = ''
+  public CurrentDesignation?: string = ''
+  public CurrentBranch?: string = ''
+  public Experience?: string = ''
+  public QualificationAtJoining?: string = ''
+  public QualificationAfterJoining?: string = ''
+  public DateOfRetirement?: string = ''
+
+  public StaffID: number = 0
+  public StaffUserID: number = 0
+  public UserID: number = 0
+  public RoleID: number = 0
+
+  // service history 
+  public ServiceHistoryList:BTER_EM_AddServiceHistoryDataModel[]=[]
 }
 
 

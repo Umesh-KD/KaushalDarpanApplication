@@ -155,7 +155,6 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of first appointment as a govt employee <span class="StarMarking">*</span></label>
           <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfFirstAppointment" id="DateOfFirstAppointment"
                  formControlName="DateOfFirstAppointment" [(ngModel)]="request.DateOfFirstAppointment" (click)="openDatePicker($event)" />
-
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfFirstAppointment.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfFirstAppointment.errors.required">
               <i aria-hidden="true"></i>This field is required .!
@@ -462,6 +461,7 @@
           </div>
         </div>
       </form>
+
       <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light" >
         <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
         <b class="text-1xl-5">Staff Subject List </b>
@@ -498,6 +498,461 @@
                   <i class="ti ti-trash"></i>
                 </button>
 
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+      <!-- service history details  -->
+      <div  class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" >
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Service History</b>
+      </div>
+      <form [formGroup]="AddServiceistoryFormGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3"> 
+          <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining <span class="StarMarking">*</span></label>
+            <input autocomplete="off" type="date" class="form-input" placeholder="" name="JoiningDate" id="JoiningDate"
+                  formControlName="JoiningDate" [(ngModel)]="serviceReq.JoiningDate" (click)="openDatePicker($event)" />
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.JoiningDate.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.JoiningDate.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div> -->
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department<span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="serviceReq.OfficeID" formControlName="OfficeID" (change)="GetDesignationData_ServiceHistory()">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.OfficeID.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.OfficeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="serviceReq.OfficeID==21">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name<span class="StarMarking">*</span></label>
+            <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
+                    [(ngModel)]="serviceReq.InstituteID" (change)="getStreamMasterData()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select> 
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.InstituteID.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.InstituteID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Date<span class="StarMarking">*</span></label>
+            <input autocomplete="off" type="date" class="form-input" placeholder="" name="FromDate" id="FromDate"
+                  formControlName="FromDate" [(ngModel)]="serviceReq.FromDate" (click)="openDatePicker($event)" />
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.FromDate.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.FromDate.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Date<span class="StarMarking">*</span></label>
+            <input autocomplete="off" type="date" class="form-input" placeholder="" name="ToDate" id="ToDate"
+                  formControlName="ToDate" [(ngModel)]="serviceReq.ToDate" (click)="openDatePicker($event)" />
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToDate.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.ToDate.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf=" this.IsOterFacultyTech == false">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation<span class="StarMarking">*</span> </label>
+            <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
+                    [(ngModel)]="serviceReq.DesignationID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}</option>   
+            </select>
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DesignationID.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.DesignationID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification<span class="StarMarking">*</span> </label>
+            <input autocomplete="off" class="form-input " placeholder="Enter Qualification" value="12dfgdf" name="Qualification" id="Qualification"
+                   formControlName="Qualification" [(ngModel)]="serviceReq.Qualification" />
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.Qualification.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.Qualification.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <!-- upload documnet  -->
+          <div >
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileStudentPhoto">Upload Document</label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto" type="file" (change)="onDocchange($event,'Service')">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{serviceReq.DisUploadDoc === '' ? 'No File Choosen' : serviceReq.DisUploadDoc}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + serviceReq.UploadDoc}}"
+                   *ngIf="this.serviceReq.UploadDoc!='' " class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </div>
+          </div>
+          
+
+          <!-- (click)="checkTransfer($event)" -->
+          <div class="flex flex-col justify-end mb-4">
+            <label class="me-2 ">
+              <input type="checkbox" value="" id="Box8THForm" (click)="checkTransfer($event)"
+                     [checked]="IsTransfer" [(ngModel)]="serviceReq.IsTransfer" formControlName="IsTransfer" />
+              Transfer
+            </label>
+          </div>
+
+
+          <!-- serviceReq.OfficeID==21 "21 is of college officeid" -->
+          <!-- <div *ngIf="serviceReq.IsTransfer && serviceReq.OfficeID==21 ">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Institute</label>
+            <select class="form-select " name="TransferFromInstituteID" id="TransferFromInstituteID" formControlName="TransferFromInstituteID"
+                    [(ngModel)]="serviceReq.TransferFromInstituteID" (change)="getStreamMasterData()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select> 
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.InstituteID.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.InstituteID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div>
+          </div> -->
+          <div *ngIf="serviceReq.IsTransfer">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Department<span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="serviceReq.TransferToOfficeID" formControlName="TransferToOfficeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.TransferToOfficeID.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.TransferToOfficeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="serviceReq.IsTransfer && serviceReq.TransferToOfficeID==21 ">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Institute</label>
+            <select class="form-select " name="TransferToInstituteID" id="TransferToInstituteID" formControlName="TransferToInstituteID"
+                    [(ngModel)]="serviceReq.TransferToInstituteID" (change)="getStreamMasterData()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select> 
+            <!-- <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.InstituteID.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.InstituteID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div> -->
+          </div>
+
+          <!-- <div *ngIf="serviceReq.IsTransfer">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Department<span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="serviceReq.TransferFromOfficeID" formControlName="TransferFromOfficeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.TransferFromOfficeID.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.TransferFromOfficeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div> -->
+
+
+          <div *ngIf="serviceReq.IsTransfer">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Transfer<span class="StarMarking">*</span></label>
+            <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfTransfer" id="DateOfTransfer"
+                  formControlName="DateOfTransfer" [(ngModel)]="serviceReq.DateOfTransfer" (click)="openDatePicker($event)" />
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DateOfTransfer.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.DateOfTransfer.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-end mb-4">
+            <label class="me-2 ">
+              <input type="checkbox" value="" id="Box8THForm" (click)="checkPromotion($event)"
+                     [checked]="IsPromotion" [(ngModel)]="serviceReq.IsPromotion" formControlName="IsPromotion" />
+              Promotion
+            </label>
+          </div>
+
+          <div *ngIf="serviceReq.IsPromotion">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Designation<span class="StarMarking">*</span> </label>
+            <select class="form-select " name="ToDesignationIDPromotion" id="ToDesignationIDPromotion" formControlName="ToDesignationIDPromotion"
+                    [(ngModel)]="serviceReq.ToDesignationIDPromotion">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of DesignationMasterDDLList_ServiceHistory" [value]="item.ID">{{item.Name}}</option>   
+            </select>
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToDesignationIDPromotion.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.ToDesignationIDPromotion.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="serviceReq.IsPromotion">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Promotion<span class="StarMarking">*</span></label>
+            <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfpromotion" id="DateOfpromotion"
+                  formControlName="DateOfpromotion" [(ngModel)]="serviceReq.DateOfpromotion" (click)="openDatePicker($event)" />
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DateOfpromotion.errors" class="text-danger">
+              <p *ngIf="_AddServiceistoryFormGroup.DateOfpromotion.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3"> 
+           <!-- upload documnet  -->
+          <div *ngIf="serviceReq.IsTransfer">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  for="fileTransferDoc">Transfer's Document</label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="fileTransferDoc" type="file" (change)="onDocchange($event,'Transfer')">
+              <label for="fileTransferDoc">
+                <span>Choose File</span>
+                <!-- {{serviceReq.DisUploadDoc === '' ? 'No File Choosen' : serviceReq.DisUploadDoc}} -->
+                No Files Choosen
+              </label>
+              <!-- <div *ngFor="let doc of serviceReq.TransferDocuments" class="flex mt-2">
+                <span>{{doc.DisUploadDoc}}</span>            
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
+                  class="btn bg-primary text-white ml-2"
+                  target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>           
+              </div> -->
+              <!-- Uploaded Document List -->
+            </div>
+            <ul class="mt-3 border rounded-lg divide-y bg-white">
+              <li *ngFor="let doc of serviceReq.TransferDocuments; let i = index"
+                  class="flex justify-between items-center px-3 py-2">          
+                <span class="text-sm text-gray-700">
+                  {{i+1}}. {{doc.DisUploadDoc}}
+                </span>            
+                <div class="flex gap-2">           
+                  <a
+                    href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
+                    class="btn bg-primary text-white"
+                    target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>            
+                  <button
+                    type="button"
+                    class="btn bg-danger text-white"
+                    (click)="removeTransferDoc(i)">
+                    <i class="ti ti-trash"></i>
+                  </button>           
+                </div>           
+              </li>          
+            </ul>
+          </div>
+
+          <!-- upload documnet  -->
+          <div *ngIf="serviceReq.IsPromotion">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  for="filePromotionDoc">Promotion's Document</label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="filePromotionDoc" type="file" (change)="onDocchange($event,'Promotion')">
+              <label for="filePromotionDoc">
+                <span>Choose File</span>
+                <!-- {{serviceReq.DisUploadDoc === '' ? 'No File Choosen' : serviceReq.DisUploadDoc}} -->
+                No Files Choosen
+              </label>
+              <!-- <div *ngFor="let doc of serviceReq.TransferDocuments" class="flex mt-2">
+                <span>{{doc.DisUploadDoc}}</span>            
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
+                  class="btn bg-primary text-white ml-2"
+                  target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>           
+              </div> -->
+              <!-- Uploaded Document List -->
+            </div>
+            <ul class="mt-3 border rounded-lg divide-y bg-white">
+              <li *ngFor="let doc of serviceReq.PromotionDocuments; let i = index"
+                  class="flex justify-between items-center px-3 py-2">          
+                <span class="text-sm text-gray-700">
+                  {{i+1}}. {{doc.DisUploadDoc}}
+                </span>            
+                <div class="flex gap-2">           
+                  <a
+                    href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
+                    class="btn bg-primary text-white"
+                    target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>            
+                  <button
+                    type="button"
+                    class="btn bg-danger text-white"
+                    (click)="removePromotionDoc(i)">
+                    <i class="ti ti-trash"></i>
+                  </button>           
+                </div>           
+              </li>          
+            </ul>
+          </div>
+        </div>
+
+        
+        <div class="pt-30">
+          <button type="button" class="btn bg-primary text-white" (click)="AddAnotherServiceHistory()">
+            <i class="ti ti-plus"></i> Add More
+          </button>
+          <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
+        </div>
+        
+      </form>
+      
+      <div *ngIf="serviceHistoryList.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light" >
+        <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
+        <b class="text-1xl-5">Service History List</b>
+      </div>
+     
+      <div *ngIf="serviceHistoryList.length>0" class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr>
+              <th>S.No</th>
+              <!-- <th>Joining Date</th> -->
+              <th>Department</th>
+              <th>Institute</th>
+              <th>From Date</th>
+              <th>To Date</th>
+              <th>Designation</th>
+              <th>Qualification</th>
+              <th>Service Document</th>
+              <th>Transfer</th>
+              <th>Promotion</th>     
+              <!-- <th>Transfer</th>
+              <th>Transfer Date</th>
+              <th>Promotion</th> 
+              <th>Promotion Date</th>                 -->
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let row of serviceHistoryList; let idx = index">
+              <td class="text-center">{{idx+1}}</td>
+              <!-- <td>{{row.JoiningDate}}</td> -->
+              <td>{{row.OfficeName}}</td>
+              <!-- Institute -->
+              <td>
+                <span *ngIf="row.OfficeID == 21">
+                  {{row.InstituteName}}
+                </span>
+                <span *ngIf="row.OfficeID != 21" class="text-gray-400">
+                  N/A
+                </span>
+              </td>
+              <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
+              <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
+              <td>{{row.DesignationName}}</td>
+              <td>{{row.Qualification}}</td>
+              <td class="text-center">
+                <a *ngIf="row.UploadDoc"
+                   href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.UploadDoc}}"
+                   target="_blank"
+                   class="btn bg-primary text-white">
+                   <i class="ti ti-eye"></i>
+                </a>
+                <span *ngIf="!row.UploadDoc" class="text-gray-400">N/A</span>           
+              </td>
+
+              <!-- Transfer -->
+              <td>
+                <span *ngIf="row.IsTransfer; else noTransfer">
+                  <b class="text-green-600">Taken</b>
+                  <div class="text-sm mt-1">
+                    To Dept: {{row.TransferToOfficeName}}
+                  </div>
+                  <div class="text-sm">
+                    Tansfer Date: {{row.DateOfTransfer | date:'yyyy-MM-dd'}}
+                  </div>
+                  <div class="text-sm" *ngIf="row.TransferToInstituteID">
+                    To Institute: {{row.TransferToInstituteName}}
+                  </div>
+                  <div *ngIf="row.TransferDocuments?.length>0">
+                    Docs:
+                    <span *ngFor="let doc of row.TransferDocuments">
+                      <a
+                        href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
+                        target="_blank"
+                        class="text-white  btn bg-primary ">
+                        <i class="ti ti-eye"></i>
+                      </a>
+                    </span>
+                  </div>
+                </span>
+                <ng-template #noTransfer>
+                  <span class="text-gray-400">N/A</span>
+                </ng-template>
+              </td>
+
+                <!-- Promotion -->
+              <td>
+                <span *ngIf="row.IsPromotion; else noPromotion">
+                  <b class="text-green-600">Taken</b>
+                  <div class="text-sm mt-1">
+                    Designation: {{row.ToDesignationName}}
+                  </div>
+                  <div class="text-sm">
+                    Date: {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
+                  </div>
+                  <div *ngIf="row.PromotionDocuments?.length>0">
+                    Docs:
+                    <span *ngFor="let doc of row.PromotionDocuments">
+                      <a
+                        href="{{appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc}}"
+                        target="_blank"
+                        class="text-white ml-1 btn bg-primary">
+                        <i class="ti ti-eye"></i>
+                      </a>
+                    </span>
+                  </div>
+                </span>
+                <ng-template #noPromotion>
+                  <span class="text-gray-400">N/A</span>
+                </ng-template>
+              </td>
+
+
+              <td class="text-center">
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteServiceHistory(idx)">
+                  <i class="ti ti-trash"></i>
+                </button>
               </td>
             </tr>
           </tbody>
