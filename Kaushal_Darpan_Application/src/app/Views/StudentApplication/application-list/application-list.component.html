@@ -154,7 +154,7 @@
               <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit !== 2" (click)="redirectApplication(row,2)"
                  class="btn bg-info text-white btn-sm"> Complete Application</a>
               <!--&& !IsAlloted-->
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType!=1"
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType!=1 && row.DirectAdmissionType!=9"
                  (click)="applyForDirectAdmission(row)"
                  class="btn bg-info text-white btn-sm"> Apply For Direct Admission</a>
 
@@ -165,7 +165,7 @@
               <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit === 2 && !(row.IsPaymentSuccess == true && sSOLoginDataModel.RoleID == 3)" (click)="redirectApplication(row,2)"
                  class="btn bg-info text-white btn-sm"> View & Submit</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2"
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && row.DirectAdmissionType!=9"
                  [routerLink]="'/Itipreviewform'"
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> View</a>
@@ -175,6 +175,14 @@
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> Edit Qualification Details</a>
 
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionPrivateMapKey==1 && row.DirectAdmissionType==9 && row.IsFinalSubmit !== 2"
+                 (click)="redirectToDirectPrivateAdmissionApplicationForm(row)"
+                 class="btn bg-info text-white btn-sm"> Complete Direct Private Admission Form </a>
+
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && row.DirectAdmissionType==9"
+                 [routerLink]="'/directItipreviewform'"
+                 [queryParams]="{ AppID: row.encryptedApplicationID }"
+                 class="btn bg-info text-white btn-sm"> View</a>
               <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit !== 2 && isITIAddmissionOpen || row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
   [routerLink]="'/ApplicationFormTab'"
   [queryParams]="{ AppID: row.encryptedApplicationID }"

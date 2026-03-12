@@ -336,6 +336,7 @@ const routes: Routes = [
       { path: 'documentdetailsform', loadChildren: () => import('./Views/ITI/document-details-form-tab/document-details-form-tab.module').then(m => m.DocumentDetailsFormTabModule), title: 'Document Details' },
       { path: 'optionsform', loadChildren: () => import('./Views/ITI/option-form-tab/option-form-tab.module').then(m => m.OptionFormTabModule), title: 'Options' },
       { path: 'Itipreviewform', loadChildren: () => import('./Views/ITI/preview-form-tab/preview-form-tab.module').then(m => m.PreviewFormTabModule), title: 'ITI Preview' },
+   
       //  { path: 'qualificationform', loadChildren: () => import('./Views/ITI/qualification-tab/qualification-tab.module').then(m => m.QualificationTabModule) },
 
       { path: 'Applicationform', loadChildren: () => import('./Views/Polytechnic/application-form/application-form.module').then(m => m.ApplicationFormModule), title: 'BTER-Application Form' },
@@ -1459,7 +1460,10 @@ const routes: Routes = [
       //private sudent application form routes
 
       { path: 'iti-direct-admission-student-initial-private-detail', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-private-student-jan-aadhar-detail/iti-direct-private-student-jan-aadhar-detail.module').then(m => m.ITIDirectprivateStudentJanAadharDetailModule), title: 'ITI Direct Admission' },
-      { path: 'direct-admission-application-private-form', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-application-private-form-tab/iti-direct-application-private-form-tab.module').then(m => m.ITIDirectApplicationPrivateFormTabModule), title: 'ITI Private Application Form' },
+      {
+        path: 'direct-admission-application-private-form', loadChildren: () => import
+          ('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-application-private-form-tab/iti-direct-application-private-form-tab.module').then(m => m.ITIDirectApplicationPrivateFormTabModule), title: 'ITI Private Application Form'
+      },
 
       { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
 
@@ -1484,7 +1488,7 @@ const routes: Routes = [
       { path: 'iti-allotment-report/:id/:iid', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
 
       { path: 'iti-allotment-report/:id/:iid/:idd', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
-
+      { path: 'directItipreviewform', loadChildren: () => import('./Views/ITI/Direct-Addmission-Form-Private-ITI/iti-direct-preview-private-form/iti-direct-preview-private-form.module').then(m => m.DirectPreviewFormTabModule), title: 'ITI Preview' },
       { path: 'iti-allotment-report', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },

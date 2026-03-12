@@ -309,7 +309,8 @@ export enum EnumConfigurationType {
   Reval_GroupCode = 160,
   JailAdmission = 164,
   DirectAdmission = 79,
-  Counselling = 167
+  Counselling = 167,
+  DIRECT_ADDMISSSION_PRIVATE =171
 }
 
 export enum EnumDepartment {
