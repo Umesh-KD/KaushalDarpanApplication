@@ -251,7 +251,7 @@ export class ITIDirectExperienceComponent {
 
   async SaveOptionDetailsData() {
     if (this.AddedChoices?.length == 0) {
-      this.toastr.error("Please Add Least One Data")
+      this.toastr.error("Please add at least one Experience Detail.")
       return
     }
 
@@ -416,7 +416,7 @@ export class ITIDirectExperienceComponent {
   }
 
   async Back() {
-    this.tabChange.emit(0)
+    this.tabChange.emit(1);
   }
 
   async QualificationDataById() {

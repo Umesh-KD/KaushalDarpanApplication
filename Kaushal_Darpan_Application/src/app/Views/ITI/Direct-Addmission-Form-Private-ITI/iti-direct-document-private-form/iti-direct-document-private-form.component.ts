@@ -117,7 +117,7 @@ export class ITIDirectDocumentPrivateFormComponent {
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
             if(this.PersonalDetailsData.DirectAdmissionType == 9) {
-              this.tabChange.emit(4)
+              this.tabChange.emit(5)
             } else {
               this.tabChange.emit(5);
             }
