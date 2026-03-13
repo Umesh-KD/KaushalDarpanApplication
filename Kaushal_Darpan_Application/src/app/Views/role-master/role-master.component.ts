@@ -89,10 +89,9 @@ export class RoleMasterComponent implements OnInit {
     //debugger
     if (this.sSOLoginDataModel.RoleID !== this.enumRole.Admin &&
       this.sSOLoginDataModel.RoleID !== this.enumRole.AdminNon &&
-      this.sSOLoginDataModel.RoleID !== this.enumRole.DTETraing && this.sSOLoginDataModel.RoleID !== this.enumRole.ITIAdmin_SCVT &&
+      this.sSOLoginDataModel.RoleID !== this.enumRole.DTETraing &&
+      this.sSOLoginDataModel.RoleID !== this.enumRole.ITIAdmin_SCVT &&
       this.sSOLoginDataModel.RoleID !== this.enumRole.ITIAdmin_NCVT
-    )
-      || key != this.enumOpenURLKey.RoleMaster
     ) {
       this.routers.navigate(["/dashboard"]);
     }
