@@ -171,6 +171,8 @@ export class ExperienceDetailsDataModel {
   public NameOfIndustry: string = ''
   public TypeOfWork: string = ''
   public ExperienceDetailDescription: string = ''
+  public EstablishmentIndustryRegistrationdetails: string = ''
+  public ExperienceCertificateFromEmployer: string = ''
 
 
 
