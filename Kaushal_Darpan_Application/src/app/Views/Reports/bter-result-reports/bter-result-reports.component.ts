@@ -14,7 +14,7 @@ import { BterCertificateReportDataModel } from '../../../Models/BTER/BterCertifi
 import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
 import { MarksheetLetterSearchModel } from '../../../Models/MarksheetLetterDataModel';
 import { CollegesWiseReportsModel } from '../../../Models/CollegesWiseReportsModel';
-import { ExamResultStudentStaticsModel, GetSessionalFailStudentReport } from '../../../Models/GenerateAdmitCardDataModel';
+import { ExamResultStudentStaticsModel, ExamWiseStreamPapersReportModelModel, GetSessionalFailStudentReport } from '../../../Models/GenerateAdmitCardDataModel';
 
 export interface requestData {
   Action: string;
@@ -75,6 +75,8 @@ export class BterResultReportsComponent implements OnInit {
   public CollegesWiseReportsModellList: CollegesWiseReportsModel[] = [];
   public SessionalStudentFailReportList: GetSessionalFailStudentReport[] = [];
   public ExamResultStudentStaticsList: ExamResultStudentStaticsModel[] = [];
+  public SubjectTheoryParcticalMarkStaticsList: ExamResultStudentStaticsModel[] = [];
+  public ExamWiseStreamPapersrList: ExamWiseStreamPapersReportModelModel[] = [];
 
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
@@ -138,7 +140,8 @@ export class BterResultReportsComponent implements OnInit {
       // vivek
       { ID: 15, Name: 'Exam Result Student Statics Report', URL: 'Exam-Result-Student-Statics-report' },
       { ID: 15, Name: 'Subject Theory Parctical Mark Statics', URL: 'Subject-Theory-Parctical-Mark-Statics-report' },
-      
+      { ID: 16, Name: 'Result Appeared Passed Statistics Report', URL: 'Result-Appeared-Passed-Statistics-Report' },
+      { ID: 17, Name: 'ExamWise Stream Papers Report', URL: 'ExamWise-Stream-Papers-Report' },
     ];
   }
  
@@ -183,7 +186,6 @@ export class BterResultReportsComponent implements OnInit {
 
 
   async GetAllData(): Promise<void> {
-    debugger
     this.ActionDynamic = this.filterModel.Action;
     this.ReportsListData = [];
 
@@ -241,6 +243,13 @@ export class BterResultReportsComponent implements OnInit {
         case "Subject-Theory-Parctical-Mark-Statics-report":
           await this.GetSubjectTheoryParcticalMarkStaticsReport();
           break;
+
+        case "Result-Appeared-Passed-Statistics-Report":
+          await this.getResultAppearedPassedStatisticsReport();
+          break;
+        case "ExamWise-Stream-Papers-Report":
+          await this.GetExamWiseStreamPapersreport();
+          break;
         //case "Appeared-Passesd-Statistics":
         //  response = await this.reportService.AppearedPassedStatisticsReportDownload(this.filterModel);
         //  return;
@@ -251,7 +260,6 @@ export class BterResultReportsComponent implements OnInit {
       }
 
       const data = JSON.parse(JSON.stringify(response));
-      debugger
       if (data.State === EnumStatus.Success) {
         if (["bridge-course-report", "branch-wise-statistical-reports"].includes(this.ActionDynamic)) {
           this.downloadBase64PDF(data.Data, this.getReportFileName(this.ActionDynamic));
@@ -289,7 +297,6 @@ export class BterResultReportsComponent implements OnInit {
   }
 
   DownloadFile(fileName: string): void {
-    debugger;
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${fileName}`;
 
     this.http.get(fileUrl, { responseType: 'blob', observe: 'response' }).subscribe(response => {
@@ -420,7 +427,6 @@ export class BterResultReportsComponent implements OnInit {
       EndTermID: this.ssoLoginUser.EndTermID,
 
     }
-    //debugger;
     this.CollegesWiseReportsModellList = [];
     try {
       this.loaderService.requestStarted();
@@ -491,21 +497,14 @@ export class BterResultReportsComponent implements OnInit {
 
 
 
-
-
-
-
-
-
   async GetExamResultStudentStaticsReport() {
-    debugger;
     let request: any = {
 
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
       DepartmentID: this.ssoLoginUser.DepartmentID,
       //Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      Eng_NonEng: 2,
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng, 
       EndTermID: this.ssoLoginUser.EndTermID
     }
     try {
@@ -564,18 +563,14 @@ export class BterResultReportsComponent implements OnInit {
     XLSX.writeFile(wb, fileName);
   }
 
-
-
-
   async GetSubjectTheoryParcticalMarkStaticsReport() {
-    debugger;
     let request: any = {
 
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
       DepartmentID: this.ssoLoginUser.DepartmentID,
       //Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      Eng_NonEng: 2,
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng, 
       EndTermID: this.ssoLoginUser.EndTermID
     }
     try {
@@ -584,11 +579,11 @@ export class BterResultReportsComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
-            this.ExamResultStudentStaticsList = data['Data'];
+            this.SubjectTheoryParcticalMarkStaticsList = data['Data'];
             this.exportToExcelExamSubjectTheoryParcticalMarkStaticsReport();
-            this.dataSource = new MatTableDataSource(this.ExamResultStudentStaticsList);
+            this.dataSource = new MatTableDataSource(this.SubjectTheoryParcticalMarkStaticsList);
 
-            console.log('ExamResultStudentStaticsReport ===>', this.ExamResultStudentStaticsList)
+            console.log('ExamResultStudentStaticsReport ===>', this.SubjectTheoryParcticalMarkStaticsList)
           }
         }, (error: any) => console.error(error));
     } catch (ex) {
@@ -598,8 +593,6 @@ export class BterResultReportsComponent implements OnInit {
     }
   }
 
-
-
   exportToExcelExamSubjectTheoryParcticalMarkStaticsReport(): void {
     const wantedColumns =
       ['SrNo', 'InstituteNameEnglish', 'StudentType', 'semesterid', 'enrollmentno', 'rollno', 'StreamName', 'SubjectCode', 'studentname', 'TheoryMarks', 'PracticalMarks', 'IAMarks',
@@ -607,7 +600,7 @@ export class BterResultReportsComponent implements OnInit {
 
       ];
 
-    const exportData = this.ExamResultStudentStaticsList.map((row: any, index: number) => {
+    const exportData = this.SubjectTheoryParcticalMarkStaticsList.map((row: any, index: number) => {
       const filteredRow: any = {};
       wantedColumns.forEach(col => {
         filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
@@ -635,5 +628,106 @@ export class BterResultReportsComponent implements OnInit {
     XLSX.writeFile(wb, fileName);
   }
 
+  async getResultAppearedPassedStatisticsReport() {
+    let request: any = {
+
+      streamID: this.filterModel.StreamID,
+      SemesterID: this.filterModel.SemesterID,
+      DepartmentID: this.ssoLoginUser.DepartmentID,
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
+      EndTermID: this.ssoLoginUser.EndTermID
+    }
+
+    this.reportService.getResultAppearedPassedStatisticsReport(request)
+      .subscribe({
+        next: (blob: Blob) => {
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+          const fileName = `Result_Appeared_Passed_Statistics_Report_${dateTime}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
+  }
+
+
+
+  async GetExamWiseStreamPapersreport() {
+    debugger;
+    let request: any = {
+      EndTermID: this.ssoLoginUser.EndTermID,
+      DepartmentID: this.ssoLoginUser.DepartmentID,
+      CourseTypeID: this.ssoLoginUser.CourseTypeID,
+      streamID: this.filterModel.StreamID,
+      SemesterID: this.filterModel.SemesterID,
+      SchemeID: this.ssoLoginUser.SchemeID,
+      
+    }
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.GetExamWiseStreamPapersreport(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.ExamWiseStreamPapersrList = data['Data'];
+            this.exportToExcelExamWiseStreamPapersReport();
+            this.dataSource = new MatTableDataSource(this.ExamWiseStreamPapersrList);
+
+            console.log('ExamWiseStreamPapersReport ===>', this.ExamWiseStreamPapersrList)
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  exportToExcelExamWiseStreamPapersReport(): void {
+    const wantedColumns =
+      ['SrNo', 'SubjectCode', 'SemesterID','StreamSubjectcode','SubjectName','Credit','StreamName','StreamCode','AvMax','AvMaxi_Org','AvMaxi','PMax','XMaxi','Q','N_Student','N_Student_Paper' ];
+
+    const exportData = this.ExamWiseStreamPapersrList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+      });
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map(row =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Exam Wise Stream Papers');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName = `Exam_Wise_Stream_Papers_Report_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
   
 }
