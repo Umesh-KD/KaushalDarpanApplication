@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffDetailsServicePreviewDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
@@ -15,6 +15,8 @@ import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterData
 import { UserRequestService } from '../../../../Services/UserRequest/user-request.service';
 import { __values } from 'tslib';
 import { ActivatedRoute } from '@angular/router';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -56,10 +58,12 @@ export class BTEREMStaffListComponent {
   public approveRequest = new BTER_EM_ApproveStaffDataModel();
   public StreamSearch = new StreamDDL_InstituteWiseModel();
   public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
+  public staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
+  public unlockRequest = new BTER_EM_UnlockProfileDataModel();
+  public RequestUpdateStatus = new RequestUpdateStatus();
   public UserProfileStatusHistoryList: any = [];
   public isApproveSubmitted: boolean = false;
   public isLoading: boolean = false;
-  public RequestUpdateStatus = new RequestUpdateStatus();
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
@@ -71,8 +75,9 @@ export class BTEREMStaffListComponent {
   public GenderList: any = [];
   public InstituteMasterDDLList: any[] = [];
   public BugetHeadList:any=[];
-  public unlockRequest = new BTER_EM_UnlockProfileDataModel();
+
   public isApprove: boolean = false;
+  public isModalOpen: boolean = false;
   _EnumRole = EnumRole;
   constructor(
     private loaderService: LoaderService,
@@ -81,6 +86,7 @@ export class BTEREMStaffListComponent {
     private Swal2: SweetAlert2,
     private toastr: ToastrService,
     private modalService: NgbModal,
+    private appsettingConfig:AppsettingService,
     private formBuilder: FormBuilder,
     private userRequestService: UserRequestService,
     private activatedRoute: ActivatedRoute,
@@ -269,6 +275,7 @@ export class BTEREMStaffListComponent {
 
 
   async BTER_EM_GetStaffList() {
+    debugger
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID
@@ -590,6 +597,10 @@ export class BTEREMStaffListComponent {
     /*window.location.reload();*/
   }
 
+  ClosePreviewPopup(): void {
+    this.staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
+    this.modalReference?.close();  // Close the modal
+  }
   async refreshValidators() {
     debugger
     // if(this.approveRequest.IsSalaryDrawnFromSamePost==true){
@@ -1025,5 +1036,44 @@ export class BTEREMStaffListComponent {
     /*window.location.reload();*/
   }
 
+  async OnConfirm(content: any,StaffID:number, ID: number) {
+debugger
+    await this.StaffDetailsPreview_Service(StaffID,ID);
+  
+    this.modalReference = this.modalService.open(content, {
+      size: 'xl',
+      backdrop: 'static'
+    });
+  
+    this.isModalOpen = true;
+  
+  }
+
+  async StaffDetailsPreview_Service(StaffID:number,ID: number) {
+    debugger
+    try {
+      // Ensure object exists
+      if (!this.staffDetailsServicePreview) {
+        this.staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
+      }
+      this.staffDetailsServicePreview.UserID = ID;
+      this.staffDetailsServicePreview.StaffID=StaffID;
+      await this.bterEstablishManagementService.StaffDetailsPreview_ServiceHistory(this.staffDetailsServicePreview).then(async(data:any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+
+          // Personal Details
+          this.staffDetailsServicePreview = data.Data;
+          // Service History List
+          // this.staffDetailsServicePreview.ServiceHistoryList =
+          //   data.Data?.ServiceHistoryList || [];
+        } else {
+          this.staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 }

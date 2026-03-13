@@ -846,8 +846,4 @@ export enum EnumITIBudgetDDLAction {
   GetBudgetTypeDDL = "GetBudgetTypeDDL",
   GetBudgetHeadDDL = "GetBudgetHeadDDL",
 }
-export enum EnumOpenURLKey {
-  RoleMaster = "Kd@R0l9Ms!r0Pn",
-  MenuMaster = "Kd@M9N4Ms!r0Pn",
-}
 

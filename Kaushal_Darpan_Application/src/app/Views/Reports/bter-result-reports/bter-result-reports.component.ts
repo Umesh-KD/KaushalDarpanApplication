@@ -14,7 +14,7 @@ import { BterCertificateReportDataModel } from '../../../Models/BTER/BterCertifi
 import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
 import { MarksheetLetterSearchModel } from '../../../Models/MarksheetLetterDataModel';
 import { CollegesWiseReportsModel } from '../../../Models/CollegesWiseReportsModel';
-import { GetSessionalFailStudentReport } from '../../../Models/GenerateAdmitCardDataModel';
+import { ExamResultStudentStaticsModel, GetSessionalFailStudentReport } from '../../../Models/GenerateAdmitCardDataModel';
 
 export interface requestData {
   Action: string;
@@ -74,6 +74,7 @@ export class BterResultReportsComponent implements OnInit {
   selectedReport: any = null;
   public CollegesWiseReportsModellList: CollegesWiseReportsModel[] = [];
   public SessionalStudentFailReportList: GetSessionalFailStudentReport[] = [];
+  public ExamResultStudentStaticsList: ExamResultStudentStaticsModel[] = [];
 
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
@@ -124,16 +125,19 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 2, Name: 'Result Statistics Report', URL: 'result-statistics' },
       { ID: 3, Name: 'Result Statistics Bridge Course Stream Wise Report', URL: 'result-statistics-bridge-course-stream-wise' },
       { ID: 4, Name: 'Passout Student Report', URL: 'passout-student-report' },
-      { ID: 5, Name: 'Bridge Course Reports', URL: 'bridge-course-report' }, //   changess for vivek
-      { ID: 6, Name: 'Branch Wise Statistical Reports', URL: 'branch-wise-statistical-reports' }, //   changess for vivek
-      { ID: 7, Name: 'Mass Copping Reports', URL: 'mass-copping-report' },//   changess for vivek
-      { ID: 8, Name: 'Sessional Fail Student Report', URL: 'sessional-fail-student-report' },//   changess for vivek
-      { ID: 9, Name: 'Institute Student Report', URL: 'institute-student-report' },//   changess for vivek
+      { ID: 5, Name: 'Bridge Course Reports', URL: 'bridge-course-report' },
+      { ID: 6, Name: 'Branch Wise Statistical Reports', URL: 'branch-wise-statistical-reports' },
+      { ID: 7, Name: 'Mass Copping Reports', URL: 'mass-copping-report' },
+      { ID: 8, Name: 'Sessional Fail Student Report', URL: 'sessional-fail-student-report' },
+      { ID: 9, Name: 'Institute Student Report', URL: 'institute-student-report' },
       { ID: 10, Name: 'RMI Fail Student Report', URL: 'RMIFailStudentReport' },
       { ID: 11, Name: 'Theory Fail Student Report', URL: 'TheoryPaperFailStudent' },
       { ID: 12, Name: 'Student Examiner Detail Report', URL: 'StudentDetailsReport' },
       { ID: 13, Name: 'Appeared/Passed Statistics Report', URL: 'Appeared-Passesd-Statistics'},
-      { ID: 14, Name: 'Appeared/Passed Statistics Institute wise Report', URL: 'Appeared-Passesd-Statistics-Institute-wise'},
+      { ID: 14, Name: 'Appeared/Passed Statistics Institute wise Report', URL: 'Appeared-Passesd-Statistics-Institute-wise' },
+      // vivek
+      { ID: 15, Name: 'Exam Result Student Statics Report', URL: 'Exam-Result-Student-Statics-report' },
+      { ID: 15, Name: 'Subject Theory Parctical Mark Statics', URL: 'Subject-Theory-Parctical-Mark-Statics-report' },
       
     ];
   }
@@ -229,6 +233,13 @@ export class BterResultReportsComponent implements OnInit {
           break;
         case "Appeared-Passesd-Statistics-Institute-wise":
           response = await this.reportService.DownloadAppearedPassedInstitutewise(this.filterModel);
+          break;
+          // vivek 
+        case "Exam-Result-Student-Statics-report":
+          await this.GetExamResultStudentStaticsReport();
+          break;
+        case "Subject-Theory-Parctical-Mark-Statics-report":
+          await this.GetSubjectTheoryParcticalMarkStaticsReport();
           break;
         //case "Appeared-Passesd-Statistics":
         //  response = await this.reportService.AppearedPassedStatisticsReportDownload(this.filterModel);
@@ -406,7 +417,8 @@ export class BterResultReportsComponent implements OnInit {
       AcademicYearID: this.ssoLoginUser.FinancialYearID,
       Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
       RoleID: this.ssoLoginUser.RoleID,
-      EndTermID: this.ssoLoginUser.EndTermID
+      EndTermID: this.ssoLoginUser.EndTermID,
+
     }
     //debugger;
     this.CollegesWiseReportsModellList = [];
@@ -476,5 +488,152 @@ export class BterResultReportsComponent implements OnInit {
     const fileName = `Institute_Student_Report.xlsx`;
     XLSX.writeFile(wb, fileName);
   }
+
+
+
+
+
+
+
+
+
+  async GetExamResultStudentStaticsReport() {
+    debugger;
+    let request: any = {
+
+      streamID: this.filterModel.StreamID,
+      SemesterID: this.filterModel.SemesterID,
+      DepartmentID: this.ssoLoginUser.DepartmentID,
+      //Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
+      Eng_NonEng: 2,
+      EndTermID: this.ssoLoginUser.EndTermID
+    }
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.GetExamResultStudentStaticsReport(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.ExamResultStudentStaticsList = data['Data'];
+            this.exportToExcelExamResultStudentStaticsReport();
+            this.dataSource = new MatTableDataSource(this.ExamResultStudentStaticsList);
+           
+            console.log('ExamResultStudentStaticsReport ===>', this.ExamResultStudentStaticsList)
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  exportToExcelExamResultStudentStaticsReport(): void {
+    const wantedColumns =
+      ['SrNo', 'EnrollmentNo', 'Division', 'DiplomaFinalResult', 'EndTermSem1', 'EndTermSem2', 'EndTermSem3', 'EndTermSem4', 'EndTermSem5', 'EndTermSem6', 'EarnedCreditsSem1',
+ 'EarnedCreditsSem2', 'EarnedCreditsSem3', 'EarnedCreditsSem4', 'EarnedCreditsSem5', 'EarnedCreditsSem6', 'PointsSecuredSem1', 'PointsSecuredSem2', 'PointsSecuredSem3', 'PointsSecuredSem4',
+ 'PointsSecuredSem5', 'PointsSecuredSem6', 'GradePointSem1', 'GradePointSem2', 'GradePointSem3', 'GradePointSem4', 'GradePointSem5', 'GradePointSem6', 'SGPASem1', 'SGPASem2',
+ 'SGPASem3', 'SGPASem4', 'SGPASem5', 'SGPASem6', 'CGPASem1', 'CGPASem2', 'CGPASem3', 'CGPASem4', 'CGPASem5', 'CGPASem6', 'ResultSem1', 'ResultSem2', 'ResultSem3', 'ResultSem4', 'ResultSem5', 'ResultSem6'
+ ];
+
+    const exportData = this.ExamResultStudentStaticsList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+      });
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map(row =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Exam Result Student');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName = `Exam_Result_Student_Statics_report_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
+
+
+
+
+  async GetSubjectTheoryParcticalMarkStaticsReport() {
+    debugger;
+    let request: any = {
+
+      streamID: this.filterModel.StreamID,
+      SemesterID: this.filterModel.SemesterID,
+      DepartmentID: this.ssoLoginUser.DepartmentID,
+      //Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
+      Eng_NonEng: 2,
+      EndTermID: this.ssoLoginUser.EndTermID
+    }
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.GetSubjectTheoryParcticalMarkStaticsReport(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.ExamResultStudentStaticsList = data['Data'];
+            this.exportToExcelExamSubjectTheoryParcticalMarkStaticsReport();
+            this.dataSource = new MatTableDataSource(this.ExamResultStudentStaticsList);
+
+            console.log('ExamResultStudentStaticsReport ===>', this.ExamResultStudentStaticsList)
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
+
+  exportToExcelExamSubjectTheoryParcticalMarkStaticsReport(): void {
+    const wantedColumns =
+      ['SrNo', 'InstituteNameEnglish', 'StudentType', 'semesterid', 'enrollmentno', 'rollno', 'StreamName', 'SubjectCode', 'studentname', 'TheoryMarks', 'PracticalMarks', 'IAMarks',
+        'SCAgrade', 'PreseTheor', 'ATM', 'RMI', 'Grade', 'GradePoint', 'SubjectCredits', 'EarnedCredits', 'PointsSecured'
+
+      ];
+
+    const exportData = this.ExamResultStudentStaticsList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+      });
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map(row =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Subject Theory Parctical Mark');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName = `Subject_Theory_Parctical_Mark_Statics_report_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
+
   
 }

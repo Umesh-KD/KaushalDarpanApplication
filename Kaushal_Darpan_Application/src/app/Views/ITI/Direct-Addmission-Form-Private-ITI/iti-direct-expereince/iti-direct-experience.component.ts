@@ -251,7 +251,7 @@ export class ITIDirectExperienceComponent {
 
   async SaveOptionDetailsData() {
     if (this.AddedChoices?.length == 0) {
-      this.toastr.error("Please Add Least One Data")
+      this.toastr.error("Please add at least one Experience Detail.")
       return
     }
 
@@ -337,7 +337,18 @@ export class ITIDirectExperienceComponent {
     const totalMonths = (this.totals['Year'] * 12) + this.totals['Month'];
 
     this.totals['Year'] = Math.floor(totalMonths / 12);
-    this.totals['Month'] = totalMonths % 12;
+    this.totals['Month'] = totalMonths % 12
+
+
+
+    const year = Math.floor(totalMonths / 12);
+    const month = totalMonths % 12;
+
+    this.totals['Year'] = `${year} ${year === 1 ? 'Year' : 'Years'} `;
+    this.totals['Month'] = `${month} ${month === 1 ? 'Month' : 'Months'}`;
+
+
+
 
   }
 
@@ -416,7 +427,7 @@ export class ITIDirectExperienceComponent {
   }
 
   async Back() {
-    this.tabChange.emit(0)
+    this.tabChange.emit(1);
   }
 
   async QualificationDataById() {

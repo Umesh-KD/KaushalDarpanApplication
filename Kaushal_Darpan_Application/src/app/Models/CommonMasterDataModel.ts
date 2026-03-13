@@ -61,7 +61,7 @@ export class TSPTehsilDataModel {
 export class StreamDDL_InstituteWiseModel {
   public InstituteID: number = 0
   public ApplicationID: number = 0
-  public StreamType:number=0
+  public StreamType: number = 0
   public action: string = ''
 
 }
@@ -86,7 +86,14 @@ export class StudentthdranSeat1Model {
   public DoucmentName: string = '';
   public Remarks: string = '';
   public UserID: number = 0;
-
-
 }
 
+export class UploadFileMasterModel {
+  public FolderName: string = '';
+  public ForPGMK: boolean = false;
+}
+export class DeleteFileMasterModel {
+  public FolderName: string = '';
+  public FileName: string = '';
+  public ForPGMK: boolean = false;
+}
