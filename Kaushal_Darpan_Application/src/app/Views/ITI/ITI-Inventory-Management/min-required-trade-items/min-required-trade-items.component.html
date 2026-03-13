@@ -91,11 +91,12 @@
             <th class="text-left">SNO</th>
             <th class="text-left">Trade Name</th>
             <th class="text-left">DGT SNo</th>
+            <th class="text-left">DGT Syllabus Year </th>
             <th class="text-left">Item Name</th>
             <th class="text-left">Required Qty as per DGT norms</th>
             <th class="text-left">Available Qty</th>
             <th class="text-left">Deficiency/Shortfall</th>
-            <th class="text-left">Details</th>
+            <!-- <th class="text-left">Details</th> -->
             <th class="text-left" *ngIf="this.sSOLoginDataModel.RoleID == EnumRole.DTETrainingT3Purchase">Action</th>
           </tr>
         </thead>
@@ -103,12 +104,13 @@
           <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
             <td align="left">{{item.TradeName}}</td>   
-            <td align="left"></td> 
+            <td align="left">{{item.DGTSNo}}</td>   
+            <td align="left">{{item.DGT_SyllabusYear}}</td>   
             <td align="left">{{item.ItemName}}</td>
             <td align="left">{{item.RequiredQuantity}}</td>            
             <td align="left">{{item.AvailableQty}}</td>
             <td align="left">{{ item.Dificiency < 0 ? (item.Dificiency * -1) : item.Dificiency }}</td>
-            <td align="left">{{item.ItemDetail}}</td>
+            <!-- <td align="left">{{item.ItemDetail}}</td> -->
             <td *ngIf="this.sSOLoginDataModel.RoleID == EnumRole.DTETrainingT3Purchase">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a [routerLink]="['/add-min-required-item']" [queryParams]="{ id: item.RequiredItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
