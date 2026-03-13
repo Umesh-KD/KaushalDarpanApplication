@@ -44,7 +44,7 @@ export class FileUuploadComponent {
 
   async UploadFile(fileInput: HTMLInputElement) {
     try {
-      debugger
+      //debugger
       let file = fileInput.files?.[0];
       if (file) {
         // confirmation
@@ -89,7 +89,7 @@ export class FileUuploadComponent {
 
   async DeleteFile() {
     try {
-      debugger
+      //debugger
       // confirmation
       let file = `${this.deleteFileModel.FolderName}/${this.deleteFileModel.FileName}`;
       let forPGMK = this.uploadFileModel.ForPGMK == true ? '<br />For Page Management' : '';
