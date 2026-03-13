@@ -1676,8 +1676,8 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number) {
-    return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID, this.headersOptions)
+  public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number, BGTType?:number) {
+    return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID + "/" + BGTType, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

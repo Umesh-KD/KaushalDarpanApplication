@@ -80,7 +80,8 @@ export class AddStaffInitialDetailsComponent {
       IsGuestStaff: [false],
       ddlPost: ['', [DropdownValidators]],
       Office: ['', [DropdownValidators]],
-      BugetHeadID:['']
+      BugetHeadID:[''],
+      BugetHeadTypeID:[0]
 
     })
 
@@ -265,7 +266,7 @@ export class AddStaffInitialDetailsComponent {
       await this.InstituteMasterWiselogic();
   
     }
-    if(this.formData.RoleID==EnumRole.GuestHouseAdmin || EnumRole.GuestHouseIncharge || EnumRole.GuestRoomWarden){
+    if(this.formData.RoleID==EnumRole.GuestHouseAdmin || this.formData.RoleID==EnumRole.GuestHouseIncharge || this.formData.RoleID==EnumRole.GuestRoomWarden){
       this.formData.IsGuestStaff=true;
       await this.GuestHouseMasterWiselogic();
     }
@@ -732,7 +733,7 @@ debugger
     debugger;  
     try {
       this.loaderService.requestStarted();
-        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
+        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1,this.formData.BugetHeadTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.BugetHeadList = data['Data'];
@@ -748,7 +749,7 @@ debugger
       }, 200);
     }
   }
-
+  
   async GuestHouseMasterWiselogic() {
    //debugger
     this.formData.IsNodal = false;
@@ -795,6 +796,8 @@ debugger
       }, 200);
     }
   }
+
+
 
   onItemSelect(item: any,) {    
     if (!this.formData.GuestHouseIDs?.some(ele => ele.ID === item.ID)) {
