@@ -9,7 +9,7 @@ import { DTEEquipmentsDataModel } from '../../../Models/DTEInventory/DTEEquipmen
 import { DTEItemUnitModel } from '../../../Models/DTEInventory/DTEItemUnitModel';
 import { DTEInventoryDashboardDataModel } from '../../../Models/DTEInventory/DTEInventoryDashboardDataModel';
 import { DTEIssuedSearchModel, DTEReturnItemSearchModel, DTEIssuedItemDataModel, DTEStoksSearchModel, ReturnDteItemDataModel } from '../../../Models/DTEInventory/DTEIssuedItemDataModel';
-import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, itemReturnModel, ItemsIssueReturnModels, inventoryIssueHistoryITISearchModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, itemReturnModel, ItemsIssueReturnModels, inventoryIssueHistoryITISearchModel, HandoverInventoryItemsDataModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AddMinRequiredItemDataModel, AuctionDetailsModel, ItemsDetailsInterface, MinRequiredItemSearchModel } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -594,6 +594,22 @@ export class ITIInventoryService {
   public async GetConsumableAuctionedItemsData(searchRequest: DTEItemsSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetConsumableAuctionedItemsData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  } 
+
+  public async GetItemsForHandover_ITI_INV(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetItemsForHandover_ITI_INV`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  } 
+
+  public async HandoverInventoryItems_ITI_INV(request: HandoverInventoryItemsDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/HandoverInventoryItems_ITI_INV`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -27,6 +27,7 @@ export class AddMinRequiredTradeItemsComponent {
   public TradeDDLList: any = [];
   public CategoryDDLList: any = [];
   public UnitMasterList: any = [];
+  public PassingYearList: any = [];
 
   public isSubmitted: boolean = false;
   public RequiredItemId: number = 0;
@@ -48,7 +49,9 @@ export class AddMinRequiredTradeItemsComponent {
       TradeId: ['0', [DropdownValidators]],
       ItemCategoryId: ['', [DropdownValidators]],
       EquipmentsId: ['0', [DropdownValidators]],
+      DGT_SyllabusYear: ['0', [Validators.required]],
       RequiredQuantity: ['', [Validators.required]],
+      DGTSNo: ['', [Validators.required]],
     });
 
     this.RequiredItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -56,6 +59,7 @@ export class AddMinRequiredTradeItemsComponent {
     
     await this.GetTradeDDL();
     await this.ddlCategory_Change();
+    await this.GetPassingYearDDL();
 
     if(this.RequiredItemId > 0) {
       this.GetById();
@@ -190,6 +194,27 @@ export class AddMinRequiredTradeItemsComponent {
       })
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async GetPassingYearDDL() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.AdmissionPassingYear()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PassingYearList = data['Data'];
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
 }

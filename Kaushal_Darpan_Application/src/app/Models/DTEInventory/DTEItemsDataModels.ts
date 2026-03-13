@@ -225,3 +225,11 @@ export class ApproveIssuedItemsDataModel {
   public IssuedId: number = 0;
   public UserID: number = 0;
 }
+
+export class HandoverInventoryItemsDataModel {
+  public HandoverFrom: number = 0;
+  public HandoverTo: number = 0;
+  public ItemList?: any[] = [];
+  public UserID?: number = 0;
+  public TradeId: number = 0;
+}

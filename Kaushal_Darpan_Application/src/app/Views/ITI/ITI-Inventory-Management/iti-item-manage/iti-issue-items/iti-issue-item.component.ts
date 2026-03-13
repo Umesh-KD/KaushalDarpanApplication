@@ -653,7 +653,7 @@ export class AddItiIssueItemComponent {
 
     this.loaderService.requestStarted();
     this.isLoading = true;
-    this.submitRequest.TradeId=this.TradeId,
+    this.submitRequest.TradeId=this.Searchrequests.TradeId,
     this.submitRequest.StaffId = this.staff_ID,
     this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID,
     this.submitRequest.EndTermID = this.sSOLoginDataModel.EndTermID,

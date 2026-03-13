@@ -599,6 +599,7 @@ const routes: Routes = [
       { path: 'iti-staff-inventory-details', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
       { path: 'iti-auction-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-report/iti-auction-report.module').then(m => m.itiauctionreportModule) },
       { path: 'iti-consumable-item-auction', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/consumable-item-auction/consumable-item-auction.module').then(m => m.ConsumableItemAuctionModule), title: 'Consumable Item Auction' },
+      { path: 'handover-inventory-items-iti', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/handover-inventory-items-iti/handover-inventory-items-iti.module').then(m => m.HandoverInventoryItemsITIModule), title: 'Handover Inventory Items' },
 
       /*ITI-Inventory-Management-END*/
 
@@ -1649,7 +1650,8 @@ const routes: Routes = [
       { path: 'ItiAttendenceReport', loadChildren: () => import('./Views/ITI/re-assign-attendence-list/re-assign-attendence-list.module').then(m => m.ReAssignAttendenceListModule) },
       { path: 'ItiAttendencePercent', loadChildren: () => import('./Views/ITI/iti-attendence-percent/iti-attendence-percent.module').then(m => m.ItiAttendencePercentModule) },
 
-
+      { path: 'file-upload', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
+      { path: 'file-delete', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
 
 
     ]
@@ -1763,7 +1765,7 @@ const routes: Routes = [
   { path: 'Views\ITI\InstructorOptionForm', loadChildren: () => import('./Views/ITI/instructor-option-form/instructor-option-form.module').then(m => m.InstructorOptionFormModule) },
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
-
+  
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 

@@ -1856,6 +1856,40 @@ export class ReportService {
       ).toPromise();
   }
 
+
+
+
+  public async GetExamResultStudentStaticsReport(data: any) {
+    return await this.http.post(this.APIUrl + "/GetExamResultStudentStaticsReport/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetSubjectTheoryParcticalMarkStaticsReport(data: any) {
+    return await this.http.post(this.APIUrl + "/GetSubjectTheoryParcticalMarkStaticsReport/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public getResultAppearedPassedStatisticsReport(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/getResultAppearedPassedStatisticsReport/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
+
+  public async GetExamWiseStreamPapersreport(data: any) {
+    return await this.http.post(this.APIUrl + "/GetExamWiseStreamPapersreport/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 

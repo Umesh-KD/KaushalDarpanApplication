@@ -216,7 +216,7 @@ export class MinRequiredTradeItemsComponent {
   exportToExcel(): void {
     const unwantedColumns = ['RequiredItemId', 'EquipmentsId', 'IsConsumable'];
 
-    const columnOrder = ['TradeName', 'ItemCategoryName', 'ItemType', 'ItemName',
+    const columnOrder = ['TradeName', 'DGTSNo', 'DGT_SyllabusYear', 'ItemCategoryName', 'ItemType', 'ItemName',
       'RequiredQuantity', 'AvailableQty', 'Dificiency'
     ];
 

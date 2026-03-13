@@ -124,6 +124,8 @@ export class AddMinRequiredItemDataModel {
   public UnitId?: number = 0;
   public RequiredQuantity?: number = 0;
   public ModifyBy?: number = 0;
+  public DGTSNo?: string = '';
+  public DGT_SyllabusYear?: string = '';
 }
 
 export class MinRequiredItemSearchModel {

@@ -39,11 +39,11 @@ export class ITIDirectApplicationPrivateFormTabComponent {
   public IsJailCollege: boolean = false
 
 
-  completedTabs = [true, false, false, false, false, true]; // Keep track of completed tabs
+  completedTabs = [true, false,  false, false, true]; // Keep track of completed tabs
   tabs =
     [
       { TabName: 'Personal Details', TabNameHI: 'व्यक्तिगत विवरण', component: ITIDirectPersonalPrivateDetailsComponent, TabIcon: 'ti ti-user' },
-      { TabName: 'Option Form', TabNameHI: 'विकल्प प्रपत्र', component: ITIDirectOptionPrivateFormComponent, TabIcon: 'ti ti-license' },
+/*      { TabName: 'Option Form', TabNameHI: 'विकल्प प्रपत्र', component: ITIDirectOptionPrivateFormComponent, TabIcon: 'ti ti-license' },*/
       { TabName: 'Qualification Detail', TabNameHI: 'योग्यता विवरण', component: ITIDirectQualificationPrivateFormComponent, TabIcon: 'ti ti-school' },
       { TabName: 'Experience Detail', TabNameHI: 'अनुभव विवरण', component: ITIDirectExperienceComponent, TabIcon: 'ti ti-briefcase' },
 

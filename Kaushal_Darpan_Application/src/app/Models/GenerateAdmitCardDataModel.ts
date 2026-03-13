@@ -113,3 +113,22 @@ export class DownloadAppearedPassedInstitutewise {
   public Eng_NonEng: number = 0;
   public SemesterID: number = 0;
 }
+
+
+
+export class ExamResultStudentStaticsModel {
+  public SemesterID: number = 0;
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public streamID: number = 0;
+}
+
+
+export class ExamWiseStreamPapersReportModelModel {
+  public EndTermID: number = 0;
+  public DepartmentID: number = 0;
+  public CourseTypeID: number = 0;
+  public StreamID: number = 0;
+  public SemesterId: number = 0;
+  public SchemeID: number = 0;
+ }

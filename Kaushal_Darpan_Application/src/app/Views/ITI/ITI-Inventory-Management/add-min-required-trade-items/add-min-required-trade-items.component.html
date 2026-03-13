@@ -87,7 +87,9 @@
                  [min]="1"
                  [max]="maxQty"
                  step="1"
-                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,3)" [(ngModel)]="request.RequiredQuantity" (input)="onQuantityInput($event)">
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,3)" 
+                 [(ngModel)]="request.RequiredQuantity" 
+                 (input)="onQuantityInput($event)">
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.RequiredQuantity.errors" class="text-danger">
             <p *ngIf="_AddItemsRequestFormGroup.RequiredQuantity.errors.required">
               <i aria-hidden="true"></i>
@@ -99,6 +101,44 @@
             </p>
           </div>
         </div>
+
+        <div>
+          <label for="DGTSNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            DGT SNo: <span class="StarMarking">*</span>
+          </label>
+
+          <input type="text"
+                 id="DGTSNo"
+                 class="form-input"
+                 formControlName="DGTSNo"
+                 placeholder="Enter DGT SNo"
+                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                 [(ngModel)]="request.DGTSNo">
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.DGTSNo.errors" class="text-danger">
+            <p *ngIf="_AddItemsRequestFormGroup.DGTSNo.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="DGT_SyllabusYear" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            DGT Syllabus Year:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="DGT_SyllabusYear" formControlName="DGT_SyllabusYear"
+                  [(ngModel)]="request.DGT_SyllabusYear">
+            <option value="" selected>Select DGT Syllabus Year</option>
+            <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddItemsRequestFormGroup.DGT_SyllabusYear.errors" class="text-danger">
+            <p *ngIf="_AddItemsRequestFormGroup.DGT_SyllabusYear.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
       </div>
 
       <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-4">
