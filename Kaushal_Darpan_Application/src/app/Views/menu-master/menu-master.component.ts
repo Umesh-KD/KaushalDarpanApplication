@@ -10,7 +10,7 @@ import { MenuMasterService } from '../../Services/MenuMaster/menu-master.service
 import { MenuMasterDataModel, MenuMasterSerchModel } from '../../Models/MenuMasterModel';
 import { HrMasterSearchModel } from '../../Models/HrMasterDataModel';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumOpenURLKey, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-menu-master',
@@ -43,7 +43,6 @@ export class MenuMasterComponent {
   ParentId: number | null = null;
 
   public enumRole = EnumRole;
-  public enumOpenURLKey = EnumOpenURLKey;
 
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -76,11 +75,9 @@ export class MenuMasterComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     //debugger
-    let key = this.activatedRoute.snapshot.queryParamMap.get('k')?.toString();
-    if ((this.sSOLoginDataModel.RoleID !== this.enumRole.Admin &&
+    if (this.sSOLoginDataModel.RoleID !== this.enumRole.Admin &&
       this.sSOLoginDataModel.RoleID !== this.enumRole.AdminNon &&
-      this.sSOLoginDataModel.RoleID !== this.enumRole.DTETraing)
-      || key != this.enumOpenURLKey.MenuMaster
+      this.sSOLoginDataModel.RoleID !== this.enumRole.DTETraing
     ) {
       this.routers.navigate(["/dashboard"]);
     }

@@ -631,6 +631,7 @@ export class WardenApplyForGuestRoomComponent {
   async GetGuestRoomNameList() {
     try {
       this.loaderService.requestStarted();
+      this.searchRequest1.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

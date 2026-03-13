@@ -53,7 +53,7 @@
 
 
 
-      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-6">
         <!--{{RoleMasterList|json}}-->
         <!--{{PostList|json}}-->
         <!-- *ngIf="this.IsGuestHouseAdmin != true" -->
@@ -102,6 +102,24 @@
               <p *ngIf="!_AddStaffBasicDetailFromGroup.RoleID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is
                 required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="formData.IsGuestStaff==true">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name <span class="StarMarking">*</span></label>
+            <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
+                                    [formControl]="_AddStaffBasicDetailFromGroup.GuestHouseID" [settings]="settingsMultiselect"
+                                    [data]="GuestHouseNameList"
+                                    [(ngModel)]="formData.GuestHouseIDs"
+                                    [disabled]="false" (onSelect)="onItemSelect($event)" (onDeSelectAlls)="onDeSelectAll($event)"
+                                    (onSelectAll)="onSelectAll($event)" (onDeSelects)="onDeSelects($event)" (onDropDownCloses)="onDropDownCloses($event)">
+            </ng-multiselect-dropdown>
+
+            <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.GuestHouseID.errors" class="text-danger">
+              <p *ngIf="_AddStaffBasicDetailFromGroup.GuestHouseID.errors.required">
+                <i aria-hidden="true"></i>
+                This field is required.!
               </p>
             </div>
           </div>
@@ -169,7 +187,7 @@
         </div>
 
 
-        <div *ngIf="formData.IsGuestStaff==true">
+        <!-- <div *ngIf="formData.IsGuestStaff==true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>
           <select formControlName="GuestHouseID" class="form-select" [(ngModel)]="formData.GuestHouseID">
             <option value="0">--Select--</option>
@@ -181,7 +199,7 @@
               field is required .!
             </p>
           </div>
-        </div>
+        </div> -->
 
 
         <!-- <div>

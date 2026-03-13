@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel, BTERExtraOrdinaryLeavesForStaffModel, OfficeVacancyModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel, BTERExtraOrdinaryLeavesForStaffModel, OfficeVacancyModel, StaffDetailsServicePreviewDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { HODDashboardSearchModel, RequestUpdateStatus } from '../../../Models/ITIGovtEMStaffMasterDataModel';
 
 
@@ -32,7 +32,6 @@ export class BTEREstablishManagementService {
 
   public async BTER_EM_AddStaffInitialDetails(request: BTER_EM_AddStaffDataModel) {
     var body = JSON.stringify(request);
-
     return await this.http.post(`${this.APIUrl}/BTER_EM_AddStaffInitialDetails`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -194,6 +193,13 @@ export class BTEREstablishManagementService {
 
   public async BterStaffSubjectListModel(PK_ID: number, DepartmentID: number = 0) {
     return await this.http.get(this.APIUrl + "/BterStaffSubjectListModel/" + PK_ID + "/" + DepartmentID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async BterServiceListModel(PK_ID: number, DepartmentID: number = 0) {
+    return await this.http.get(this.APIUrl + "/BterServiceListModel/" + PK_ID + "/" + DepartmentID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -376,6 +382,14 @@ export class BTEREstablishManagementService {
 
   public async GetBudgetHeadById_EM(id: number) {
     return await this.http.post(`${this.APIUrl}/GetBudgetHeadById_EM/${id}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async StaffDetailsPreview_ServiceHistory(request: StaffDetailsServicePreviewDataModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StaffDetailsPreview_ServiceHistory`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

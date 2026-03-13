@@ -87,6 +87,7 @@ export class GuestRoomReportComponent {
     //
     try {
       this.loaderService.requestStarted();
+      this.searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
       await this._GuestRoomManagmentService.GuestRequestReportList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

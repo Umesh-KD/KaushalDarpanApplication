@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, RequiredValidator, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole } from '../../../../Common/GlobalConstants';
-import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddServiceHistoryDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_DocumentServiceHistoryDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { StaffDetailsDataModel, StaffSubjectList } from '../../../../Models/StaffMasterDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AppsettingService } from '../../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-bter-em-add-staff-details',
@@ -24,17 +25,21 @@ export class BterEMAddStaffDetailsComponent {
   StaffMasterFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   public AddsubjectFormGroup!: FormGroup;
+  public AddServiceistoryFormGroup!:FormGroup;
   public request = new BTER_EM_AddStaffDetailsDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public StreamSearch = new StreamDDL_InstituteWiseModel()
   public requestUser = new BTER_EM_GetPersonalDetailByUserID();
+  public serviceReq=new BTER_EM_AddServiceHistoryDataModel();
   public finalSubmitRequest = new Bter_RequestUpdateStatus();
   AddedServiceList: BTERGovtEMStaff_ServiceDetailsOfPersonalModel[] = [];
   AddedServiceListAdded: BTERGovtEMStaff_ServiceDetailsOfPersonalModel[] = [];
   public Addrequest = new StaffSubjectList();
   public userID:number=0;
   public InstituteMasterDDLList: any = [];
+  public instituteList:any=[];
   public DesignationMasterDDLList: any = [];
+  public DesignationMasterDDLList_ServiceHistory: any = [];
   public EmployeeQualificationDDLList:any=[];
   public RoleMasterDDLList: any = [];
   public StaffTypeMasterDDLList: any = [];
@@ -46,13 +51,20 @@ export class BterEMAddStaffDetailsComponent {
   public SemesterList: any = [];
   public SubjectMasterDDL: any = [];
   public ShowAllSemester: number = 0;
+
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
+  
   public StateMasterList: IStateMasterDataModel[] = [];
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public _EnumRole = EnumRole;
   public isAddrequest: boolean = false;
+  public isAddServiceReq:boolean=false;
   public AddedChoices: StaffSubjectList[] = [];
   public DesignationWiseBranchListRole: any [] = [];
   public DesignationWiseBranchList: any [] = [];
+  public serviceHistoryList: any[] = [];
   staffDetailsFormData = new StaffDetailsDataModel();
   _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
 
@@ -62,6 +74,8 @@ export class BterEMAddStaffDetailsComponent {
   modalReference: NgbModalRef | undefined;
 
   public IsOptional: boolean = false
+  public IsTransfer:boolean=false
+  public IsPromotion:boolean=false
   _enumDepartment = EnumDepartment
   public ExamTypeHeading = '';
   public requestSSoApi = new CommonVerifierApiDataModel();
@@ -78,6 +92,7 @@ export class BterEMAddStaffDetailsComponent {
     private loaderService: LoaderService,
     private commonMasterService: CommonFunctionService,
     private bterEstablishManagementService: BTEREstablishManagementService,
+    public appsettingConfig:AppsettingService,
     private toastr: ToastrService,
     private modalService: NgbModal,
     private router: Router,
@@ -133,7 +148,49 @@ export class BterEMAddStaffDetailsComponent {
       // ITIStreamType: ['', [DropdownValidators]],
     })
 
+    // this.AddServiceistoryFormGroup=this.formBuilder.group({
+    //   JoiningDate: ['', [Validators.required]],
+    //   OfficeID: [0],
+    //   InstituteID: [0],
+    //   FromDate: ['', [Validators.required]],
+    //   ToDate: ['', [Validators.required]],
+    //   DesignationID: [0, [DropdownValidators]],
+    //   Qualification:['',Validators.required],
+    //   IsTransfer:[''],
+    //   IsPromotion:[''],
+    //   DateOfTransfer:[''],
+
+    //   TransferToInstituteID:[0],
+    //   TransferFromInstituteID:[0],
+    //   TransferFromOfficeID:[0],
+    //   TransferToOfficeID:[0]
+    // })
+
+    this.AddServiceistoryFormGroup = this.formBuilder.group({
+      // JoiningDate: ['', Validators.required],
+      OfficeID: [0],
+      InstituteID: [0],
     
+      FromDate: ['', Validators.required],
+      ToDate: ['', Validators.required],
+    
+      DesignationID: [0, DropdownValidators],
+      Qualification: ['', Validators.required],
+    
+      // Transfer
+      IsTransfer: [false],
+      DateOfTransfer: [''],
+    
+      TransferFromInstituteID: [0],
+      TransferToInstituteID: [0],
+      TransferFromOfficeID: [0],
+      TransferToOfficeID: [0],
+    
+      // Promotion
+      IsPromotion: [false],
+      ToDesignationIDPromotion: [0],
+      DateOfpromotion: ['']
+    });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -141,38 +198,18 @@ export class BterEMAddStaffDetailsComponent {
     this.userID=this.sSOLoginDataModel.UserID;
 
      
-    try {
-      this.loaderService.requestStarted();
-      await this.bterEstablishManagementService.BTER_EM_DesignationWiseBranch(this._DesignationWiseBranchDataModel)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.DesignationWiseBranchListRole = data['Data'];
-          this.DesignationWiseBranchList = data['Data'];
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-
+    await this.GetLoadData();
+    await this.GetInstituteMaster();
+    await this.GetOfficeList();
+    await this.getStreamMasterData();
+    await this.GetManageDDl();
 
     if (this.sSOLoginDataModel.UserID > 0) {
       await this.GetPersonalDetailByUserID();
     }
 
-    await this.GetOfficeList();
-    await this.GetInstituteMaster();
-    await this.getStreamMasterData();
     await this.GetDesignationMasterData();
-    await this.GetManageDDl();
-   
     
-
-     debugger
     const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
     const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.StaffTypeID == this.request.StaffTypeID && item.DesignationID );
     /*&& item.StaffTypeID == this.request.StaffTypeID*/
@@ -250,13 +287,33 @@ export class BterEMAddStaffDetailsComponent {
    
     await this.SSOIDGetSomeDetails(this.sSOLoginDataModel.SSOID);
   }
+
   get _AddsubjectFormGroup() { return this.AddsubjectFormGroup.controls; }
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
+  get _AddServiceistoryFormGroup(){return this.AddServiceistoryFormGroup.controls;}
 
 
+  async GetLoadData(){
+    try {
+      this.loaderService.requestStarted();
+      await this.bterEstablishManagementService.BTER_EM_DesignationWiseBranch(this._DesignationWiseBranchDataModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DesignationWiseBranchListRole = data['Data'];
+          this.DesignationWiseBranchList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async GetManageDDl() {
-
 
     await this.commonMasterService.GetExamType()
       .then((data: any) => {
@@ -345,6 +402,7 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async GetDesignationMasterData() {
+    debugger;
     try {
       debugger;
       if (this.sSOLoginDataModel.OfficeID == 18) {
@@ -389,8 +447,29 @@ export class BterEMAddStaffDetailsComponent {
     }
   }
 
+
+  async GetDesignationData_ServiceHistory() {
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DesignationMasterDDLList_ServiceHistory = data.Data;
+
+        // console.log("DesignationMasterList", this.DesignationMasterDDLList);
+      }, error => console.error(error))
+
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   async GetPersonalDetailByUserID() {
-     
+     debugger;
     try {
       
       this.loaderService.requestStarted();
@@ -450,6 +529,27 @@ export class BterEMAddStaffDetailsComponent {
 
       }, error => console.error(error))
 
+      await this.bterEstablishManagementService.BterServiceListModel(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.DepartmentID).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+ 
+            // Assign service history list
+            this.serviceHistoryList = data?.Data ?? [];
+            //  process documents 
+            this.serviceHistoryList.forEach((item: any) => {
+              // Transfer documents
+              if (!item.TransferDocuments) {
+                item.TransferDocuments = [];
+              }
+              // Promotion documents
+              if (!item.PromotionDocuments) {
+                item.PromotionDocuments = [];
+              }
+          })       
+        }
+        console.log("Service History List", this.serviceHistoryList);
+      }, error => console.error(error))
+
 
 
     } catch (error) {
@@ -494,12 +594,13 @@ export class BterEMAddStaffDetailsComponent {
       }, 200);
     }
   }
-  GetInstituteMaster() {
-    const officeList = [
-      { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID: 17 },
-      { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
-      { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
-    ];
+
+  async GetInstituteMaster() {
+    // const officeList = [
+    //   { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID: 17 },
+    //   { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
+    //   { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
+    // ];
 
     this.commonMasterService.InstituteMaster(
       this.sSOLoginDataModel.DepartmentID,
@@ -507,15 +608,41 @@ export class BterEMAddStaffDetailsComponent {
       this.sSOLoginDataModel.EndTermID
     ).then((response: any) => {
       const instituteList = Array.isArray(response?.Data) ? response.Data : [];
-      this.InstituteMasterDDLList = officeList.concat(instituteList);
+      this.InstituteMasterDDLList = Array.isArray(response?.Data) ? response.Data : [];
+      // this.InstituteMasterDDLList = officeList.concat(instituteList);
     });
   }
+
+
+  // async GetloadData() {
+  //   debugger;
+  //   this.commonMasterService.InstituteMaster(
+  //     this.sSOLoginDataModel.DepartmentID,
+  //     this.sSOLoginDataModel.Eng_NonEng,
+  //     this.sSOLoginDataModel.EndTermID
+  //   ).then((response: any) => {
+  //     this.instituteList = Array.isArray(response?.Data) ? response.Data : [];
+  //   });
+  // }
+
 
   checkoptional() {
     this.Addrequest.IsOptional = !this.Addrequest.IsOptional;
     if (!this.Addrequest.IsOptional) {
       this.Addrequest.IsOptional = false
     }
+  }
+
+  checkTransfer(event:any){
+    debugger;
+      this.serviceReq.IsTransfer=event.target.checked;
+    console.log('tr',this.serviceReq.IsTransfer);
+  }
+
+  checkPromotion(event:any){
+    debugger;
+      this.serviceReq.IsPromotion=event.target.checked;
+    console.log('pr',this.serviceReq.IsPromotion);
   }
 
   getCircularReplacer() {
@@ -530,8 +657,8 @@ export class BterEMAddStaffDetailsComponent {
       return value;
     };
   }
-  async SaveData() {
-     
+  async SaveData() { 
+    debugger
     this.isSubmitted = true;
     if (this.StaffMasterFormGroup.invalid) {
       Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
@@ -572,6 +699,7 @@ export class BterEMAddStaffDetailsComponent {
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+    this.request.BterServiceHistoryListModel=this.serviceHistoryList;
 
     try {
       await this.bterEstablishManagementService.BTER_EM_AddStaffDetails(this.request).then(async (data: any) => {
@@ -751,12 +879,263 @@ export class BterEMAddStaffDetailsComponent {
         this.isAddrequest = false
       }
 
-      
-
     }
   }
+
+  async AddAnotherServiceHistory() {
+    debugger;
+    this.isAddServiceReq = true;
+    await this.refreshValidators();
+    if (this.AddServiceistoryFormGroup.invalid) {
+      /*this.OptionsFormGroup.markAllAsTouched();*/
+      return;
+    }
+
+    let formValue=this.AddServiceistoryFormGroup.value;
+
+    const newFromDate=new Date(formValue.FromDate);
+    const newToDate=new Date(formValue.ToDate);
+    // to check duplicate from and to date 
+    const duplicate=this.serviceHistoryList.some((x:any)=>
+      x.FromDate===formValue.FromDate &&
+      x.ToDate===formValue.ToDate
+    );
+    if(duplicate){
+      this.toastr.error("This service Period is alredy Exists !");
+      return;
+    }
+    //  Overlap validation
+
+    const overlap=this.serviceHistoryList.some((x:any)=>{
+      const existingFrom=new Date(x.FromDate);
+      const existingTo=new Date(x.ToDate);
+      return(
+        newFromDate<=existingTo && newToDate>=existingFrom
+      );
+    });
+    if(overlap){
+      this.toastr.error("Date range overlaps with existing Service History !")
+      return;
+    }
+
+      // Get Names safely
+      const institute = this.InstituteMasterDDLList.find((x: any) => x.InstituteID == formValue.TransferToInstituteID);
+      const designation = this.DesignationMasterDDLList.find((x: any) => x.ID == formValue.DesignationID);
+      const office = this.OfficeList.find((x: any) => x.ID == formValue.OfficeID);
+      const transferOffice = this.OfficeList.find((x: any) => x.ID == formValue.TransferToOfficeID);
+      const promotionDesignation = this.DesignationMasterDDLList.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
+      
+      if(this.serviceReq.InstituteID!=0){
+        this.serviceReq.InstituteName=this.InstituteMasterDDLList.filter((x:any)=>x.InstituteID==this.serviceReq.InstituteID)[0]['InstituteName'];
+      }
+      // this.serviceReq.DesignationName=this.DesignationMasterDDLList.filter((x:any)=>x.ID==this.serviceReq.DesignationID)[0]['Name'];
+      // this.serviceReq.OfficeName=this.OfficeList.filter((x:any)=>x.ID==this.serviceReq.OfficeID)[0]['Name'];
+      this.serviceReq.DesignationName=designation?.Name || '';
+      this.serviceReq.OfficeName=office?.Name || '';
+      this.serviceReq.TransferToOfficeName=transferOffice?.Name || '';
+      this.serviceReq.ToDesignationName=promotionDesignation?.Name || '';
+      this.serviceReq.TransferToInstituteName=institute?.InstituteName || '';
+      this.serviceReq.UserID=this.sSOLoginDataModel.UserID;
+      this.serviceReq.SSOID=this.sSOLoginDataModel.SSOID;
+
+
+      const serviceData = {
+        // JoiningDate: formValue.JoiningDate,
+        OfficeID: formValue.OfficeID,
+        InstituteID: formValue.InstituteID,
+        FromDate: formValue.FromDate,
+        ToDate: formValue.ToDate,
+        DesignationID: formValue.DesignationID,
+        Qualification: formValue.Qualification,
+        DesignationName:this.serviceReq.DesignationName,
+        InstituteName:this.serviceReq.InstituteName,
+        OfficeName:this.serviceReq.OfficeName,
+        SSOID:this.serviceReq.SSOID,
+        UserID:this.serviceReq.UserID,
+
+        // Service History Document (Single)
+        DisUploadDoc: this.serviceReq.DisUploadDoc,
+        UploadDoc: this.serviceReq.UploadDoc,
+
+        // Transfer
+        IsTransfer: formValue.IsTransfer,
+        DateOfTransfer: formValue.DateOfTransfer,
+        TransferToInstituteID: formValue.TransferToInstituteID,
+        TransferToOfficeID: formValue.TransferToOfficeID,
+        TransferToOfficeName: this.serviceReq.TransferToOfficeName,
+        TransferToInstituteName:this.serviceReq.TransferToInstituteName, 
+
+          // Transfer Documents (Multiple)
+        TransferDocuments: [...this.serviceReq.TransferDocuments],
+   
+        // Promotion
+        IsPromotion: formValue.IsPromotion,
+        ToDesignationIDPromotion: formValue.ToDesignationIDPromotion,
+        ToDesignationName: this.serviceReq.ToDesignationName,
+        DateOfpromotion: formValue.DateOfpromotion,
+
+        // Promotion Documents (Multiple)
+        PromotionDocuments: [...this.serviceReq.PromotionDocuments]
+        
+  
+      };
+      
+      // push entry
+      this.serviceHistoryList.push(serviceData);
+      // reset form
+      this.AddServiceistoryFormGroup.reset({
+        OfficeID: 0,
+        InstituteID: 0,
+        DesignationID: 0,
+        TransferToOfficeID: 0,
+        TransferToInstituteID: 0,
+        ToDesignationIDPromotion: 0,
+        IsTransfer: false,
+        IsPromotion: false
+      });
+
+      this.serviceReq=new BTER_EM_AddServiceHistoryDataModel();
+      this.isAddServiceReq = false;
+  
+  }
+
+
+  async refreshValidators(){
+    debugger
+    if(this.serviceReq.OfficeID==21){
+        this.AddServiceistoryFormGroup.controls['InstituteID'].setValidators([DropdownValidators]);
+    }
+    else {
+      this.AddServiceistoryFormGroup.controls['InstituteID'].clearValidators();
+    }
+    this.AddServiceistoryFormGroup.controls['InstituteID'].updateValueAndValidity();
+
+    if(this.serviceReq.IsTransfer){
+      this.AddServiceistoryFormGroup.controls['TransferToOfficeID'].setValidators([DropdownValidators]);
+      this.AddServiceistoryFormGroup.controls['DateOfTransfer'].setValidators(Validators.required);
+    }
+    else{
+      this.AddServiceistoryFormGroup.controls['TransferToOfficeID'].clearValidators();
+      this.AddServiceistoryFormGroup.controls['DateOfTransfer'].clearValidators();
+    }
+    this.AddServiceistoryFormGroup.controls['TransferToOfficeID'].updateValueAndValidity();
+    this.AddServiceistoryFormGroup.controls['DateOfTransfer'].updateValueAndValidity();
+   
+    if(this.serviceReq.IsPromotion){
+      this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion'].setValidators([DropdownValidators]);
+      this.AddServiceistoryFormGroup.controls['DateOfpromotion'].setValidators(Validators.required);
+    }
+    else{
+      this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion'].clearValidators();
+      this.AddServiceistoryFormGroup.controls['DateOfpromotion'].clearValidators();
+    }
+    this.AddServiceistoryFormGroup.controls['ToDesignationIDPromotion'].updateValueAndValidity();
+    this.AddServiceistoryFormGroup.controls['DateOfpromotion'].updateValueAndValidity();
+
+  }
+
+
+  public file!: File;
+  async onDocchange(event: any, Type: string) {
+    debugger
+    try {
+
+      const files=event.target.files;
+      if(!files ||files.length===0) return;
+      for(let i=0;i<files.length;i++){
+        this.file=files[i];
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type=='application/pdf') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png/pdf file')
+          return
+        }
+      
+      // if (this.file) {       
+        // upload to server folder
+        this.loaderService.requestStarted();
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              // if (Type == "Photo") {
+              //   this.serviceReq.DisUploadDoc = data['Data'][0]["Dis_FileName"];
+              //   this.serviceReq.UploadDoc = data['Data'][0]["FileName"];
+
+              // }
+              // SERVICE HISTORY (single)
+            if (Type == "Service") {
+
+              this.serviceReq.DisUploadDoc = data['Data'][0]["Dis_FileName"];
+              this.serviceReq.UploadDoc = data['Data'][0]["FileName"];
+            }
+
+            // TRANSFER (multiple)
+            else if (Type == "Transfer") {
+
+              let doc = new BTER_EM_DocumentServiceHistoryDataModel();
+              doc.DisUploadDoc = data['Data'][0]["Dis_FileName"];
+              doc.UploadDoc = data['Data'][0]["FileName"];
+              this.serviceReq.TransferDocuments.push(doc);
+              this.toastr.success("Uploaded Transfer document");
+            }
+
+            // PROMOTION (multiple)
+            else if (Type == "Promotion") {
+
+              let doc = new BTER_EM_DocumentServiceHistoryDataModel();
+
+              doc.DisUploadDoc = data['Data'][0]["Dis_FileName"];
+              doc.UploadDoc = data['Data'][0]["FileName"];
+
+              this.serviceReq.PromotionDocuments.push(doc);
+              this.toastr.success("Uploaded Promotion document");
+
+            }
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+          // }
+        }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+  
+  removeTransferDoc(index: number) {
+    this.serviceReq.TransferDocuments.splice(index, 1);
+  }
+  removePromotionDoc(index:number){
+    this.serviceReq.PromotionDocuments.splice(index,1);
+  }
+
   deleteRow(index: number): void {
     this.staffDetailsFormData.StaffSubjectListModel.splice(index, 1);
+  }
+
+  deleteServiceHistory(index:number):void{
+    this.serviceHistoryList.splice(index,1);
   }
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {

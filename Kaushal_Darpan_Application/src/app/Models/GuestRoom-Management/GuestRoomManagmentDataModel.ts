@@ -80,8 +80,8 @@ export class GuestRoomSeatSearchModel {
   public RoomType: number = 0;
   public SeatCapacity: number = 0;
   public RoomQuantity?: number;
-
-
+  public GuestHouseIDs?: string = '';
+  public guestHouseForApply?: boolean = false;
 }
 
 export class FacilitiesDataModel {
@@ -164,6 +164,7 @@ export class GuestApplyForGuestRoomSearchModel {
   public DepartmentID: number = 0;
   public GuestHouseName: string = '';
   public FacilitiesName: string = '';
+  public GuestHouseIDs: string = '';
   public IsFacilities: boolean = false;
   public ModifyBy: number = 0;
   public RoleID: number = 0;

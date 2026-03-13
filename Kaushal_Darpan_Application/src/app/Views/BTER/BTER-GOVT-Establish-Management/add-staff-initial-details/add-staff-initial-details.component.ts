@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BTER_EM_AddStaffDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_AddStaffDataModel, BTER_EM_StaffHostelListModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
@@ -52,6 +52,7 @@ export class AddStaffInitialDetailsComponent {
   public Message: string = '';
   public ErrorMessage: string = '';
   public searchRequest1 = new GuestRoomSeatSearchModel();
+  public settingsMultiselect: object = {};
 
 
   constructor(
@@ -68,7 +69,7 @@ export class AddStaffInitialDetailsComponent {
   async ngOnInit() {
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
       InstituteID: ['', []],
-      GuestHouseID: ['', []],
+      GuestHouseID: [''],
       RoleID: ['', [DropdownValidators]],
       StaffType: ['', [DropdownValidators]],
       SSOID: ['',],
@@ -82,6 +83,27 @@ export class AddStaffInitialDetailsComponent {
       BugetHeadID:['']
 
     })
+
+    this.settingsMultiselect = {
+      singleSelection: false,
+      idField: 'ID',
+      textField: 'Name',
+      enableCheckAll: true,
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      allowSearchFilter: true,
+      limitSelection: -1,
+      clearSearchFilter: true,
+      maxHeight: 197,
+      itemsShowLimit: 10,
+      searchPlaceholderText: 'Search...',
+      noDataAvailablePlaceholderText: 'Not Found',
+      closeDropDownOnSelection: false,
+      showSelectedItemsAtTop: false,
+      defaultOpen: false,
+      IsVerified: false,
+    };
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetOfficeList();  
     await this.GetStaffTypeData();
@@ -639,6 +661,11 @@ debugger
     }
   }
 
+  async refreshValidation() {
+    this.AddStaffBasicDetailFromGroup.get('GuestHouseID')?.clearValidators();
+    this.AddStaffBasicDetailFromGroup.get('GuestHouseID')?.updateValueAndValidity();
+  }
+
   async SaveData() {
    debugger
     // if (this.AddedZonalList.length == 0) {
@@ -654,6 +681,11 @@ debugger
     // })
 
     this.isSubmitted = true;
+    await this.refreshValidation();
+    if (this.formData.IsGuestStaff==true && (this.formData.MultiGuestHouseIDs == '' || this.formData.MultiGuestHouseIDs == null || this.formData.MultiGuestHouseIDs == undefined)) {
+      this.toastr.error("Please Add At Least One Guest House");
+      return;
+    }
     if (this.AddStaffBasicDetailFromGroup.invalid) {
       return;
     }
@@ -661,7 +693,7 @@ debugger
     this.formData.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
     this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.formData.EndTermID=this.sSOLoginDataModel.EndTermID;
-
+    this.formData.GuestHouseID = 0 // storing multiple guesthouseids in param named multiGuestHouseIDs
     try {
       this.loaderService.requestStarted();
 
@@ -764,6 +796,34 @@ debugger
     }
   }
 
-  
+  onItemSelect(item: any,) {    
+    if (!this.formData.GuestHouseIDs?.some(ele => ele.ID === item.ID)) {
+      const selectedGuestHouse = new BTER_EM_StaffHostelListModel();
+      selectedGuestHouse.ID = item.ID;
+      selectedGuestHouse.Name = item.Name; 
+      this.formData.GuestHouseIDs?.push(selectedGuestHouse);
+    }    
+    this.formData.MultiGuestHouseIDs = this.formData.GuestHouseIDs?.map(ele => ele.ID).join(',');
+  }
+
+  onDeSelectAll(centerID: number) {
+    this.formData.MultiGuestHouseIDs = '';
+  }
+
+  onSelectAll(items: any[],) {    
+    this.GuestHouseNameList = [...items];
+    if (this.GuestHouseNameList.length > 0) {
+      // Assuming HostelList is an array of objects, and each object has a property 'HostelID'
+      this.formData.MultiGuestHouseIDs = this.GuestHouseNameList.map((item :any)=> item.ID).join(',');
+    }
+  }
+
+  public onDeSelects(item: any) {
+    console.log(item);
+  }
+
+  public onDropDownCloses(item: any) {
+    console.log(item);
+  }
 
 }
