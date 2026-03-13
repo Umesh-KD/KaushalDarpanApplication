@@ -69,16 +69,19 @@
               <td>{{item.DepartmentName}}</td>
               <td class="text-center">
 
+                <!--<a *ngIf="item.DepartmentID!=1" routerLink="/iti-direct-admission-student-initial-detail"
+     [queryParams]="{deptid:encryptParameter(item.DepartmentID),isDirectAdmission: this.encryptionService.encryptData(true)}"
+     class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Now </a>-->
 
 
                 <!--<a *ngIf="item.DepartmentID!=1" routerLink="/iti-direct-admission-student-initial-detail"
                    [queryParams]="{deptid:encryptParameter(item.DepartmentID),isDirectAdmission: this.encryptionService.encryptData(true)}"
-                   class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Now </a>-->
+                   class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Addmission </a>-->
 
-                <a *ngIf="item.DepartmentID!=1" routerLink="/iti-direct-admission-student-initial-detail"
+
+                <a *ngIf="item.DepartmentID!=1" routerLink="/iti-direct-admission-student-initial-private-detail"
                    [queryParams]="{deptid:encryptParameter(item.DepartmentID),isDirectAdmission: this.encryptionService.encryptData(true)}"
-                   class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Addmission </a>
-
+                   class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Addmission Private </a>
 
                 <a *ngIf="item.DepartmentID==1" routerLink="/dtepublicinfo" [queryParams]="{type:1}" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Apply Now </a>
               </td>
