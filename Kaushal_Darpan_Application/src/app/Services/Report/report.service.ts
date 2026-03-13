@@ -1821,8 +1821,6 @@ export class ReportService {
       ).toPromise();
   }
 
-
-
   public async GetMiscellaneousReport(searchRequest: any) {
     const body = JSON.stringify(searchRequest);
 
