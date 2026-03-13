@@ -337,7 +337,18 @@ export class ITIDirectExperienceComponent {
     const totalMonths = (this.totals['Year'] * 12) + this.totals['Month'];
 
     this.totals['Year'] = Math.floor(totalMonths / 12);
-    this.totals['Month'] = totalMonths % 12;
+    this.totals['Month'] = totalMonths % 12
+
+
+
+    const year = Math.floor(totalMonths / 12);
+    const month = totalMonths % 12;
+
+    this.totals['Year'] = `${year} ${year === 1 ? 'Year' : 'Years'} `;
+    this.totals['Month'] = `${month} ${month === 1 ? 'Month' : 'Months'}`;
+
+
+
 
   }
 
