@@ -127,13 +127,13 @@ export class InternalMarksReportCollegeWiseComponent implements OnInit {
   async GetBranchList() {
     //debugger;
     try {
-      this.loaderService.requestStarted();
+      this.loaderService.requestStarted();     
 
       await this.commonMasterService.Stream_InstituteIdWise(
         this.sSOLoginDataModel.DepartmentID,
         this.sSOLoginDataModel.Eng_NonEng,
         this.sSOLoginDataModel.EndTermID,
-        this.sSOLoginDataModel.InstituteID,
+        this.searchRequest.InstituteID,
         this.sSOLoginDataModel.FinancialYearID
       ).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

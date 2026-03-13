@@ -26,7 +26,11 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute <span class="StarMarking">*</span></label>
           <select class="form-select" id="InstituteID" [(ngModel)]="searchRequest.InstituteID" 
-            [disabled]="searchRequest.InstituteID > 0">
+            [disabled]="!(sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || 
+                sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng ||
+                sSOLoginDataModel.RoleID == _EnumRole.Admin ||
+                sSOLoginDataModel.RoleID == _EnumRole.AdminNon)" 
+            (change)="GetBranchList()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
