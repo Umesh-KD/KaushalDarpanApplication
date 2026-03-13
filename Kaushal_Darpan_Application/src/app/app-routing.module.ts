@@ -1650,6 +1650,7 @@ const routes: Routes = [
       { path: 'ItiAttendencePercent', loadChildren: () => import('./Views/ITI/iti-attendence-percent/iti-attendence-percent.module').then(m => m.ItiAttendencePercentModule) },
 
       { path: 'file-upload', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
+      { path: 'file-delete', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
 
 
     ]

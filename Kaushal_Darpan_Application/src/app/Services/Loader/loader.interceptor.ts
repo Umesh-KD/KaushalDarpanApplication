@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { LoaderService } from './loader.service';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { catchError, finalize, mergeMap, tap } from 'rxjs/operators';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
@@ -16,7 +16,13 @@ import { ReferrerService } from '../referrer.service';
 export class LoaderInterceptor implements HttpInterceptor {
   public sSOLoginDataModel = new SSOLoginDataModel();
   private totalRequests = 0;
-  constructor(private referrerService: ReferrerService, private router: Router, private cookieService: CookieService, private loaderService: LoaderService, private Swal2: SweetAlert2, private toastr: ToastrService) {
+  constructor(private referrerService: ReferrerService,
+    private router: Router,
+    private cookieService: CookieService,
+    private loaderService: LoaderService,
+    private swal2: SweetAlert2,
+    private toastr: ToastrService,
+    private activatedRoute: ActivatedRoute) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
   }
 
@@ -33,13 +39,14 @@ export class LoaderInterceptor implements HttpInterceptor {
     catch (Ex) {
       console.log(Ex);
     }
-    }
+  }
 
 
   intercept123(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
     const internalReferrer = this.referrerService.getPreviousUrl();
     const currentReferrer = this.referrerService.getCurrentUrl();
-   /* const currentUrl = this.router.url.toLowerCase().trim().replace(/^\/+/, '');*/
+    /* const currentUrl = this.router.url.toLowerCase().trim().replace(/^\/+/, '');*/
     const currentUrl = currentReferrer
       .split('?')[0]             // Remove query params
       .replace(/^\/+/, '')       // Remove leading slashes
@@ -51,20 +58,20 @@ export class LoaderInterceptor implements HttpInterceptor {
 
     if (currentUrl && currentUrl != 'dashboard' && currentUrl != 'login' && this.sSOLoginDataModel?.RoleID) {
       const storedMenu = this.sSOLoginDataModel?.SSOMenu;// localStorage.getItem('Menu');
-      if (storedMenu != undefined &&  storedMenu != null) {
+      if (storedMenu != undefined && storedMenu != null) {
         const filterMenuData: IMenu[] = storedMenu;// JSON.parse(storedMenu);
         const isMatched = filterMenuData.some(
-          x => x.OnSelect.replaceAll("/","").toLowerCase().trim() === currentUrl.toLowerCase().trim()
+          x => x.OnSelect.replaceAll("/", "").toLowerCase().trim() === currentUrl.toLowerCase().trim()
         );
         if (!isMatched) {
           console.log('You only work within active session');
           if (referrerUrl == "") {
             //this.Logout();
             //this.router.navigateByUrl("404");
-           // this.toastr.error("⚠️ Access Denied. Please contact your administrator for permission.");
+            // this.toastr.error("⚠️ Access Denied. Please contact your administrator for permission.");
           }
           if (referrerUrl && referrerUrl != 'dashboard' && referrerUrl != 'login' && this.sSOLoginDataModel?.RoleID) {
-         
+
             const storedMenu = this.sSOLoginDataModel?.SSOMenu;
             if (storedMenu != undefined && storedMenu != null) {
               const filterMenuData: IMenu[] = storedMenu;// JSON.parse(storedMenu);
@@ -72,16 +79,16 @@ export class LoaderInterceptor implements HttpInterceptor {
                 x => x.OnSelect.replaceAll("/", "").toLowerCase().trim() === referrerUrl.toLowerCase().trim()
               );
               if (!isMatched1) {
-               // this.toastr.error("⚠️ Access Denied. Please contact your administrator for permission.");
-               // this.router.navigateByUrl("404");
+                // this.toastr.error("⚠️ Access Denied. Please contact your administrator for permission.");
+                // this.router.navigateByUrl("404");
                 //this.toastr.error("isMatched1");
               }
             }
-          }          
+          }
         }
       }
     }
-    
+
     //return next.handle(req);
 
 
@@ -106,10 +113,10 @@ export class LoaderInterceptor implements HttpInterceptor {
 
 
 
-   
+
     return next.handle(req).pipe(
       mergeMap(event => {
-        
+
         if (event instanceof HttpResponse) {
           if (event.body?.Data === GlobalConstants.UN_AUTH_ROLE) {
             // Redirect to unauthorized route
@@ -135,6 +142,20 @@ export class LoaderInterceptor implements HttpInterceptor {
 
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    //// --- Check if request URL ends with '/firequery' ---
+    //if (req.url.toLowerCase().endsWith('/file-upload')) {
+    //  let key = this.activatedRoute.snapshot.queryParamMap.get('kufa')?.toString();
+    //  if (key != EnumOpenURLKey.UploadFile) {
+    //    // Redirect to error page
+    //    this.router.navigate(['/error']);
+
+    //    // Cancel the request
+    //    return EMPTY; // Use EMPTY instead of new Observable()
+    //  }
+    //}
+
+
     const internalReferrer = this.referrerService.getPreviousUrl();
     const currentReferrer = this.referrerService.getCurrentUrl();
 
@@ -156,7 +177,7 @@ export class LoaderInterceptor implements HttpInterceptor {
 
     this.totalRequests++;
     this.loaderService.show();
-
+    //debugger;
     return next.handle(req).pipe(
       mergeMap(event => {
         if (event instanceof HttpResponse && event.body?.Data === GlobalConstants.UN_AUTH_ROLE) {
@@ -196,7 +217,6 @@ export class LoaderInterceptor implements HttpInterceptor {
       item.OnSelect.replace(/\/\d+$/, "").replace(/\//g, "").toLowerCase().trim() === urlSegment.replace(/\/\d+$/, "").replace(/\//g, "").toLowerCase().trim()
     );
   }
-
 
 }
 

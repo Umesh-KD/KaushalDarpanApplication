@@ -11,7 +11,7 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
-import { EnumDepartment, EnumOpenURLKey, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumDepartment, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { ReportService } from '../../Services/Report/report.service';
 export * from '../Shared/loader/loader.component';
@@ -58,7 +58,6 @@ export class RoleMasterComponent implements OnInit {
   sSOLoginDataModel = new SSOLoginDataModel();
 
   public enumRole = EnumRole;
-  public enumOpenURLKey = EnumOpenURLKey;
 
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -88,8 +87,7 @@ export class RoleMasterComponent implements OnInit {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //debugger
-    let key = this.activatedRoute.snapshot.queryParamMap.get('k')?.toString();
-    if ((this.sSOLoginDataModel.RoleID !== this.enumRole.Admin &&
+    if (this.sSOLoginDataModel.RoleID !== this.enumRole.Admin &&
       this.sSOLoginDataModel.RoleID !== this.enumRole.AdminNon &&
       this.sSOLoginDataModel.RoleID !== this.enumRole.DTETraing && this.sSOLoginDataModel.RoleID !== this.enumRole.ITIAdmin_SCVT &&
       this.sSOLoginDataModel.RoleID !== this.enumRole.ITIAdmin_NCVT
