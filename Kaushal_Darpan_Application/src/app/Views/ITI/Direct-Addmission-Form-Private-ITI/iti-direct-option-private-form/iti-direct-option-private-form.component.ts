@@ -75,7 +75,9 @@ export class ITIDirectOptionPrivateFormComponent {
         ddlDistrict: ['', [DropdownValidators]],
         ddlInstitute: ['', [DropdownValidators]],
         ddlTrade: ['', [DropdownValidators]],
-        TradeLevel: ['', [DropdownValidators]]
+        TradeLevel: ['', [DropdownValidators]],
+        ddlTradeCategory: ['0', [DropdownValidators]]
+
       });
 
 
@@ -213,6 +215,11 @@ export class ITIDirectOptionPrivateFormComponent {
       this.toastr.error("Trade Name")
     }
 
+    if (this.formData.TradeCategory == 0 || this.formData.TradeCategory == null) {
+      this.toastr.error("Please Enter Trade Category")
+    }
+
+
 
     if (this.CheckInstitute) {
       this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
@@ -228,6 +235,21 @@ export class ITIDirectOptionPrivateFormComponent {
       }
   
       this.formData.TradeName = this.ItiTradeList.filter((x: any) => x.Id == this.formData.TradeID)[0]['TradeName'];
+
+
+      if (this.formData.TradeCategory == 1) {
+        this.formData.TradeCategoryName = 'Allied Trade';
+      }
+      else if (this.formData.TradeCategory == 2) {
+        this.formData.TradeCategoryName = 'SCVT';
+      }
+      else if (this.formData.TradeCategory == 3) {
+        this.formData.TradeCategoryName = 'CoE';
+      }
+      else if (this.formData.TradeCategory == 4) {
+        this.formData.TradeCategoryName = 'Other';
+      }
+
       
       console.log("trade name", this.formData.TradeName)
 

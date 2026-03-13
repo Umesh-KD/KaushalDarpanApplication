@@ -94,9 +94,12 @@ export class OptionsDetailsDataModel {
   public SSOID: string = ''
   public AcademicYear: number = 0
 
+  public TradeCategoryName: string = ''
 
   public MinPercentageInScience: string = ''
   public MinPercentageInMath: string = ''
+  public TradeCategory:number = 0
+
   
 }
 

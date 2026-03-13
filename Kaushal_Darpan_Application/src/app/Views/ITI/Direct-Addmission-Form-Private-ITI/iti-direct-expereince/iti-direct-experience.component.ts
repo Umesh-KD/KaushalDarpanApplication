@@ -427,7 +427,7 @@ export class ITIDirectExperienceComponent {
   }
 
   async Back() {
-    this.tabChange.emit(1);
+    this.tabChange.emit(2);
   }
 
   async QualificationDataById() {
