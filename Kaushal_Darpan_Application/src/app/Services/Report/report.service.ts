@@ -1873,6 +1873,22 @@ export class ReportService {
       ).toPromise();
   }
 
+  public getResultAppearedPassedStatisticsReport(payload: any) {
+    debugger
+    return this.http.post(`${this.APIUrl}/getResultAppearedPassedStatisticsReport/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
+
+  public async GetExamWiseStreamPapersreport(data: any) {
+    return await this.http.post(this.APIUrl + "/GetExamWiseStreamPapersreport/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }
 
