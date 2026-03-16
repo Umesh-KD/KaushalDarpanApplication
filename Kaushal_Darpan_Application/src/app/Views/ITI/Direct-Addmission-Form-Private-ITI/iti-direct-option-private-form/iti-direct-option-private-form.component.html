@@ -103,9 +103,30 @@
           </div>
         </div>
 
+        <div *ngIf="!IsJailAdmission">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+            आईटीआई
+            का नाम (Trade Category): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="ddlTradeCategory" id="ddlTradeCategory" formControlName="ddlTradeCategory"
+                  [(ngModel)]="formData.TradeCategory">
+            <option value="0">--Choose Option--</option>
+            <option value="1">Allied Trade</option>
+            <option value="2">SCVT</option>
+            <option value="3">CoE</option>
+            <option value="4">Other</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlTradeCategory.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlTradeCategory.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
 
 
-        <div *ngIf="IsJailAdmission" >
+
+        <div *ngIf="IsJailAdmission">
           <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">
             आईटीआई
             का नाम (Name of ITI): <span class="StarMarking">*</span>
@@ -193,6 +214,7 @@
             <th>Trade Level</th>
             <th>Name of College</th>
             <th>Branch Name</th>
+            <th>Trade Category Name</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -202,6 +224,8 @@
             <td class="text-center">{{row.TradeLevel}}th</td>
             <td class="text-center">{{row.InstituteName}}</td>
             <td class="text-center">{{row.TradeName}}</td>
+            <td class="text-center">{{row.TradeCategoryName}}</td>
+
             <td class="text-center">
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
                 <i class="ti ti-trash"></i>
@@ -233,6 +257,7 @@
             <th>Trade Level</th>
             <th>Name of College</th>
             <th>Branch Name</th>
+            <th>Trade Category Name</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -242,6 +267,7 @@
             <td class="text-center">{{row.TradeLevel}}th</td>
             <td class="text-center">{{row.InstituteName}}</td>
             <td class="text-center">{{row.TradeName}}</td>
+            <td class="text-center">{{row.TradeCategoryName}}</td>
             <td class="text-center">
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
                 <i class="ti ti-trash"></i>

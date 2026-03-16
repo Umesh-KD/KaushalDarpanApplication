@@ -125,6 +125,15 @@
           </div>
 
           <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Type<span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.BugetHeadTypeID" formControlName="BugetHeadTypeID" (change)="GetBudgetList()">
+              <option value="0">--Select--</option>
+              <option value="1">Planned Budget</option>
+              <option value="2">Non-Planned Budget</option>
+            </select>
+          </div>
+
+          <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
             <select class="form-select" [(ngModel)]="formData.BugetHeadID" formControlName="BugetHeadID">
               <option value="0">--Select--</option>

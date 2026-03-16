@@ -655,7 +655,8 @@ debugger
                 }
                 // upload to server folder
                 this.loaderService.requestStarted();
-                await this.commonMasterService.UploadPublicInfoDocument(this.file)
+                // await this.commonMasterService.UploadPublicInfoDocument(this.file)
+                await this.commonMasterService.UploadDocument(this.file)
                     .then((data: any) => {
                         data = JSON.parse(JSON.stringify(data));
 

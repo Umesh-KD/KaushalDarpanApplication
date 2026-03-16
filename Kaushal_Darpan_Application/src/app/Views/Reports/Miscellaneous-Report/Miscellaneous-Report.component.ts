@@ -47,7 +47,7 @@ export class MiscellaneousReportComponent implements OnInit {
 
   //public requestData = new CustomizeReportCoulmnSearchModel();
   public requestData = new MiscellaneousModel();
-  public GetfilteredList: any = [];
+  public GetfilteredList: any[] = [];
   public selectedNames: string[] = [];
   ssoLoginUser = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
@@ -62,7 +62,7 @@ export class MiscellaneousReportComponent implements OnInit {
     private Swal2: SweetAlert2,
     private reportService: ReportService
   ) {
-    
+
     this.repType = parseInt(this.routers.snapshot.paramMap.get('repType') ?? "0");
     this.sem = parseInt(this.routers.snapshot.paramMap.get('sem') ?? "0");
   }
@@ -86,11 +86,12 @@ export class MiscellaneousReportComponent implements OnInit {
   ReportFlaglist: any[] = [];
   ReportTypelist: any[] = [];
 
+
   async ngOnInit() {
     const controls = this.UniqueKeys.map(column => {
-      return this.fb.control(column.selected); 
-    });  
-    
+      return this.fb.control(column.selected);
+    });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.groupForm = this.fb.group({
       displayColumns: [''],
@@ -106,9 +107,9 @@ export class MiscellaneousReportComponent implements OnInit {
       EndTerm: [this.ssoLoginUser.EndTermID],
       CategaryCast: [''],
       UniqueCol: [''],
-      ReportFlagID:[''],
+      ReportFlagID: [''],
       Type: [this.repType],
-      SchemeID: [''],
+      SchemeID: ['0'],
     });
 
     await this.loadReportType();
@@ -117,127 +118,32 @@ export class MiscellaneousReportComponent implements OnInit {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterList = data['Data'];
     }, (error: any) => console.error(error));
-     
+
     await this.reportService.GetEndTerm().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.EndTermList = data['Data'];
     }, (error: any) => console.error(error));
-    this.SubmitData();
-  } 
+
+  }
 
   async loadReportType() {
     this.ReportTypelist = [
       { ID: 0, Name: 'Download Single Absent Report' },
       { ID: 1, Name: 'Download Single Present Report' },
       { ID: 2, Name: 'Download UFM Report' },
-      { ID: 3, Name: 'Download Consolated Detain Student List report' },
-      { ID: 4, Name: 'Download Examiners With Group Code And Marking report' },  
-      
+      { ID: 3, Name: 'Download Consolidated Detain Student List report' },
+      { ID: 4, Name: 'Download Examiners With Group Code And Marking report' },
+
     ];
   }
-
-  getUniqueKeys(objects: any[]): { name: string; key: string }[] {
-    const keySet = new Set<string>();
-
-    objects.forEach(obj => {
-      Object.keys(obj).forEach(key => {
-        keySet.add(key);
-      });
-    });
-    return Array.from(keySet).map(key => ({
-      name: key,
-      key: key
-    }));
-  }
-
-
-
-  exportToExcel(): void {
-    debugger;
-
-    this.selectedNames = this.UniqueKeys.map(column => column.name);
-
-    this.selectedNames.sort((a, b) => {
-      // Get the category of each column
-      const categoryA = this.getColumnCategory(a);
-      const categoryB = this.getColumnCategory(b);
-
-      // If both columns belong to the same category, sort alphabetically
-      if (categoryA === categoryB) {
-        return a.localeCompare(b);
-      }
-
-      // Otherwise, sort based on priority categories
-      return categoryA - categoryB;
-    });
-
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([], {});
-
-    XLSX.utils.sheet_add_aoa(ws, [['Engineering Semester Examination, Nov 2025']], { origin: 'A1' });
-    XLSX.utils.sheet_add_aoa(ws, [['Branch and Subject wise Student Report Nov 2025']], { origin: 'A2' });
-
-    const row1 = ['S.No', ...this.selectedNames];
-    XLSX.utils.sheet_add_aoa(ws, [row1], { origin: 'A3' });
-
-    const row2 = ['1', 'Total', 'Total', ...new Array(this.selectedNames.length - 2).fill('')];
-    XLSX.utils.sheet_add_aoa(ws, [row2], { origin: 'A4' });
-
-    const lastColumnIndex = row1.length - 1; // 0-based index
-
-    (ws as any)['!merges'] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: lastColumnIndex } }, // A1 merged
-      { s: { r: 1, c: 0 }, e: { r: 1, c: lastColumnIndex } }, // A2 merged
-    ];
-
-    const centerTitle = {
-      font: { bold: true, sz: 14 },
-      alignment: { horizontal: "center", vertical: "center" }
-    };
-
-    if (ws['A1']) (ws['A1'] as any).s = centerTitle;
-    if (ws['A2']) (ws['A2'] as any).s = centerTitle;
-
-    const borderStyle = {
-      top: { style: "thin" },
-      bottom: { style: "thin" },
-      left: { style: "thin" },
-      right: { style: "thin" }
-    };
-
-    const range = XLSX.utils.decode_range(ws['!ref']!);
-
-    for (let R = range.s.r; R <= range.e.r; ++R) {
-      for (let C = range.s.c; C <= range.e.c; ++C) {
-        const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
-        if (!ws[cellRef]) continue;
-        if (!ws[cellRef].s) ws[cellRef].s = {};
-        ws[cellRef].s.border = borderStyle;
-      }
-    }
-
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    if (this.groupForm.value.Type == 2) XLSX.writeFile(wb, 'Download_Single_Absent_Report.xlsx');
-    else if (this.groupForm.value.Type == 3) XLSX.writeFile(wb, 'Download_Single_Present_Report.xlsx');
-    else if (this.groupForm.value.Type == 1) XLSX.writeFile(wb, 'Download_UFM_Report.xlsx');
-    else if (this.groupForm.value.Type == 0) XLSX.writeFile(wb, 'Download_Consolated_Detain_Student_List_report.xlsx');
-    else if (this.groupForm.value.Type == 4) XLSX.writeFile(wb, 'Download_Examiners_With_Group_Code_And_Marking_report.xlsx');
-    
-    else XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');
-  }
-
   get form() { return this.groupForm.controls; }
 
-  cities: string[] = [];
-  filtersApplied = false;
-
   async SubmitData() {
-    debugger;
+    //debugger;
     this.CustomizeReportCoulmnDataPush = [];
     try {
-     
-      
+
+
       this.requestData.SemesterID = !isNaN(Number(this.groupForm.value.SemesterID)) ? Number(this.groupForm.value.SemesterID) : 0;
       this.requestData.InstituteID = !isNaN(Number(this.filter.Institute)) ? Number(this.filter.Institute) : 0;
       this.requestData.EndTermID = !isNaN(Number(this.groupForm.value.EndTerm)) ? Number(this.groupForm.value.EndTerm) : 0;
@@ -248,83 +154,35 @@ export class MiscellaneousReportComponent implements OnInit {
       this.requestData.PresentStatus = this.requestData.Type;
       this.requestData.SchemeID = !isNaN(Number(this.groupForm.value.SchemeID)) ? Number(this.groupForm.value.SchemeID) : 0;;
 
-        try {
-          await this.reportService.GetMiscellaneousReport(this.requestData)
-            .then((data: any) => {
-              data = JSON.parse(JSON.stringify(data));
-              if (data.State === EnumStatus.Success) {
-                
-                this.displayedColumns = data["Data"];
-                this.CustomizeReportCoulmnDataPush = data["Data"];
-                this.UniqueKeys = this.getUniqueKeys(this.displayedColumns);
-
-                this.selectedNames = this.UniqueKeys.map(column => column.name);
-                this.selectedNames.sort((a, b) => {
-                  // Get the category of each column
-                  const categoryA = this.getColumnCategory(a);
-                  const categoryB = this.getColumnCategory(b);
-
-                  // If both columns belong to the same category, sort alphabetically
-                  if (categoryA === categoryB) {
-                    return a.localeCompare(b);
-                  }
-
-                  // Otherwise, sort based on priority categories
-                  return categoryA - categoryB;
-                });
-                
-                this.GetfilteredList = this.CustomizeReportCoulmnDataPush.map((item: any, index: number) => {
-                  const filteredItem: any = { 'S.No': index + 1 };
-                  this.selectedNames.forEach((key) => {
-                    if (item[key] !== undefined) {
-                      filteredItem[key] = item[key];
-                    }
-                  });
-                  return filteredItem;
-                });
-                if (this.requestData.Type == 4) {
-                  this.exportToExcelstaticType();
-                }
-                else {
-                  this.exportToExcelTpye2();
-                }
+      try {
+        await this.reportService.GetMiscellaneousReport(this.requestData)
+          .then((data: any) => {
+            // message
+            if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.Message);
+            }
+            else if (data.State == EnumStatus.Success) {
+              this.GetfilteredList = data["Data"];// list
+              if (this.requestData.Type == 4) {
+                this.exportToExcelstaticType();
               }
-            }, (error: any) => console.error(error));
-        } catch (ex) {
-          console.log(ex);
-        }
+              else {
+                this.exportToExcelTpye2();
+              }
+            }
+            else {
+              this.toastr.error(data.Message);
+              console.log(data.ErrorMessage);
+            }
+          }, (error: any) => console.error(error));
+      } catch (ex) {
+        console.log(ex);
+      }
     }
     catch (ex) {
       console.log(ex);
     }
   }
-
-  public priorityColumns: any = ['S.No', 'Branch', 'SemesterId', 'InstituteCode', 'ExamCenterCode',  'Semester', 'SubjectCode', 'SubjectName', 'NoOfRegStudents',]; 
-  getColumnCategory = (column: string) => {
-    // Check if the column is in the priority columns list
-    if (this.priorityColumns.includes(column)) {
-      return 1; // High priority (these come first)
-    }
-
-    // Regex for columns with 'N' suffix (e.g., 1001N, 1002N, ...)
-    const numericColumnsWithSuffix = /(\d+N)$/;
-    if (numericColumnsWithSuffix.test(column)) {
-      return 2; // Medium priority (columns like 1001N, 1002N, ...)
-    }
-
-    // Regex for columns with numeric values (e.g., 1001, 1002, ...)
-    const numericColumnsWithoutSuffix = /(\d+)$/;
-    if (numericColumnsWithoutSuffix.test(column)) {
-      return 3; // Lower priority (columns like 1001, 1002, ...)
-    }
-
-    const lowPriorityColumns = ['SCA', 'Total'];
-    if (lowPriorityColumns.includes(column)) {
-      return 4; // Lowest priority (these come last)
-    }
-
-    return 5; // Default category for other columns
-  };
 
   applyFilter(filterValue: string): void {
     if (filterValue === "all") {
@@ -368,112 +226,13 @@ export class MiscellaneousReportComponent implements OnInit {
     this.requestData = new MiscellaneousModel();
   }
 
-  exportToExcelTpye2(): void {
-    const fixedColumns = ['RollNo', 'StudentName', 'EnrollmentNo', 'StudentType'];
-
-    const subjectColumns = this.UniqueKeys
-      .map(c => c.name)
-      .filter(name => !fixedColumns.includes(name) && name !== 'SrNo')
-      .sort();
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([], {});
-    XLSX.utils.sheet_add_aoa(ws, [['Engineering Semester Examination, Nov 2025']], { origin: 'A1' });
-    XLSX.utils.sheet_add_aoa(ws, [['Branch and Subject wise Student Report Nov 2025 (The report has been generated based on the online attendance marked by the Examination Centre Superintendent at the respective examination centres)']], { origin: 'A2' });
-        
-    const headerRow = ['SrNo', ...fixedColumns, ...subjectColumns];
-    XLSX.utils.sheet_add_aoa(ws, [headerRow], { origin: 'A3' });
-
-    this.GetfilteredList.forEach((item: any, index: number) => {
-      const row = [
-        index + 1,
-        item.RollNo ?? '',
-        item.StudentName ?? '',
-        item.EnrollmentNo ?? '',
-        item.StudentType ?? '',
-        ...subjectColumns.map(code => item[code] ?? '')
-      ];
-
-      XLSX.utils.sheet_add_aoa(ws, [row], { origin: `A${4 + index}` });
-    });
-
-    
-    (ws as any)['!merges'] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: headerRow.length - 1 } },
-      { s: { r: 1, c: 0 }, e: { r: 1, c: headerRow.length - 1 } }
-    ];
-
-    (ws as any)['!freeze'] = { xSplit: 0, ySplit: 3 };
-
-
-
-    const titleStyle = {
-      font: { bold: true, sz: 14 },
-      alignment: { horizontal: 'center', vertical: 'center' }
-    };
-
-    const headerStyle = {
-      font: { bold: true },
-      alignment: { horizontal: 'center', vertical: 'center' }
-    };
-
-    const borderStyle = {
-      top: { style: 'thin' },
-      bottom: { style: 'thin' },
-      left: { style: 'thin' },
-      right: { style: 'thin' }
-    };
-
-    
-    const range = XLSX.utils.decode_range(ws['!ref']!);
-    for (let R = range.s.r; R <= range.e.r; ++R) {
-      for (let C = range.s.c; C <= range.e.c; ++C) {
-
-        const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
-        const cell = ws[cellRef];
-        if (!cell) continue;
-
-        if (!cell.s) cell.s = {};
-        cell.s.border = borderStyle;
-
-        if (R === 2) {
-          cell.s = { ...cell.s, ...headerStyle };
-        }
-
-        if (cell.v === 'AB') {
-          cell.s.font = { bold: true, color: { rgb: 'FF0000' } };
-          cell.s.alignment = { horizontal: 'center' };
-        }
-      }
-    }
-
-    if (ws['A1']) (ws['A1'] as any).s = titleStyle;
-    if (ws['A2']) (ws['A2'] as any).s = titleStyle;
-
-    (ws as any)['!cols'] = headerRow.map(h => ({
-      wch: Math.max(12, h.length + 2)
-    }));
-
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    if (this.groupForm.value.Type == 2) {
-      XLSX.writeFile(wb, 'Download_UFM_Report.xlsx');
-    } else if (this.groupForm.value.Type == 0) {
-      XLSX.writeFile(wb, 'Download_Single_Absent_Report.xlsx');
-    } else if (this.groupForm.value.Type == 1) {
-      XLSX.writeFile(wb, 'Download_Single_Present_Report.xlsx');
-    } 
-     else {
-      XLSX.writeFile(wb, 'Download_Consolated_Detain_Student_List_report.xlsx');
-    }
-  }
-
   exportToExcelstaticType(): void {
-    debugger
+    //debugger
     const wantedColumns =
-      ['SrNo', 'GroupCode', 'ExaminerName', 'SubjectCode', 'AllotedStudentTotal', 'MarksSubmittedTotal','PresentTotal','AbsentTotal',
-        'MarksPendingTotal', 'StaffInatituteName', 'MobileNumber','ExaminerCode'];
+      ['SrNo', 'GroupCode', 'ExaminerName', 'SubjectCode', 'AllotedStudentTotal', 'MarksSubmittedTotal', 'PresentTotal', 'AbsentTotal',
+        'MarksPendingTotal', 'StaffInatituteName', 'MobileNumber', 'ExaminerCode'];
 
-  const exportData = this.GetfilteredList.map((row: any, index: number) => {
+    const exportData = this.GetfilteredList.map((row: any, index: number) => {
       const filteredRow: any = {};
       wantedColumns.forEach(col => {
         filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
@@ -501,5 +260,61 @@ export class MiscellaneousReportComponent implements OnInit {
     XLSX.writeFile(wb, fileName);
   }
 
+  exportToExcelTpye2(): void {
+    const excludeColumns = [''];
+    const fixedColumns = ['SrNo', 'RollNo', 'StudentName', 'EnrollmentNo', 'BranchName', 'CenterInstituteCode', 'StudentType', 'GroupCode'];
+
+    const filteredData = this.GetfilteredList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!excludeColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+
+    const allHeaders = Object.keys(filteredData[0]);
+    const otherColumns = allHeaders.filter(col => !fixedColumns.includes(col));
+    const headers = [...fixedColumns, ...otherColumns];
+
+    // create empty worksheet
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([]);
+
+    // Add title rows
+    XLSX.utils.sheet_add_aoa(ws, [
+      ['Engineering Semester Examination, Nov 2025']
+    ], { origin: 0 });
+
+    XLSX.utils.sheet_add_aoa(ws, [
+      ['Branch and Subject wise Student Report Nov 2025 (The report has been generated based on the online attendance marked by the Examination Center Superintendent at the respective examination centers)']
+    ], { origin: 1 });
+
+    // Merge title rows across all columns
+    const totalColumns = headers.length;
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: totalColumns - 1 } },
+      { s: { r: 1, c: 0 }, e: { r: 1, c: totalColumns - 1 } }
+    ];
+
+    // Add headers at row 3 (index 2)
+    XLSX.utils.sheet_add_aoa(ws, [headers], { origin: 2 });
+
+    // Add data rows starting from row 4
+    const rows = filteredData.map(row => headers.map(h => row[h]));
+    XLSX.utils.sheet_add_aoa(ws, rows, { origin: 3 });
+
+    // create workbook and write file
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    let fileName = '';
+    if (this.groupForm.value.Type == 2) fileName = 'Download_UFM_Report.xlsx';
+    else if (this.groupForm.value.Type == 0) fileName = 'Download_Single_Absent_Report.xlsx';
+    else if (this.groupForm.value.Type == 1) fileName = 'Download_Single_Present_Report.xlsx';
+    else fileName = 'Download_Consolated_Detain_Student_List_report.xlsx';
+
+    XLSX.writeFile(wb, fileName);
+  }
 
 }

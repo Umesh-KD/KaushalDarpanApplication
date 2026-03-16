@@ -117,10 +117,8 @@ export class ITIDirectDocumentPrivateFormComponent {
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
             if(this.PersonalDetailsData.DirectAdmissionType == 9) {
-              this.tabChange.emit(5)
-            } else {
-              this.tabChange.emit(5);
-            }
+              this.tabChange.emit(6)
+            } 
           }
           else {
             this.toastr.error(data.ErrorMessage)
@@ -286,12 +284,9 @@ export class ITIDirectDocumentPrivateFormComponent {
     }
   }
 
-  async Back() {
-    if(this.PersonalDetailsData.DirectAdmissionType == 9) {
-      this.tabChange.emit(2)
-    } else {
-      this.tabChange.emit(3)
-    }
+  async Back()
+  {
+      this.tabChange.emit(4)
   }
 
   async DeleteDocumentList(DocumentType: string) {

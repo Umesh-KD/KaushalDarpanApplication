@@ -44,6 +44,7 @@ export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
   public CourseTypeID: number = 0;
   public GuestHouseID: number = 0;
   public BugetHeadID?:number=0;
+  public BugetHeadTypeID?:number=0;
   public GuestHouseIDs?: BTER_EM_StaffHostelListModel[] = [];
   public MultiGuestHouseIDs?: string = '';
 }

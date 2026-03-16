@@ -41,6 +41,7 @@ export class AdminDashboardITIComponent implements OnInit
   public viewOptionFormCount: StudentExamDetails[] = [];
 
   public viewDirectApplicationCount: StudentExamDetails[] = [];
+  public viewPrivateApplicationCount: StudentExamDetails[] = [];
   public viewJailApplicationCount: StudentExamDetails[] = [];
 
 
@@ -111,6 +112,7 @@ export class AdminDashboardITIComponent implements OnInit
             this.viewApplicationCount = this.viewAdminDashboardList.filter(s => s.ListType == 'ApplicationCount');
 
             this.viewDirectApplicationCount = this.viewAdminDashboardList.filter(s => s.ListType == 'DirectApplicationCount');
+            this.viewPrivateApplicationCount = this.viewAdminDashboardList.filter(s => s.ListType == 'PrivateApplicationCount');
 
 
 

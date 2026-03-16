@@ -9,7 +9,7 @@ import { SubjectSearchModel } from '../../Models/SubjectMasterDataModel';
 import { RequestBaseModel } from '../../Models/RequestBaseModel';
 import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel, EmitraFeePaymentListSearchModel, OptionalSubjectDDLDataModel } from '../../Models/CommonDDLSubjectMasterModel';
 import { CommonSerialMasterRequestModel } from '../../Models/CommonSerialMasterRequestModel';
-import { DDL_InvigilatorSSOID_DataModel, ItiCollegesSearchModel, ItiStuAppSearchModelUpward, ItiTradeSearchModel, QualificationDDLDataModel, StreamDDL_InstituteWiseModel, TSPTehsilDataModel, UpwardMoment } from '../../Models/CommonMasterDataModel';
+import { DDL_InvigilatorSSOID_DataModel, ItiCollegesSearchModel, ItiStuAppSearchModelUpward, ItiTradeSearch_PrivateModel, ItiTradeSearchModel, QualificationDDLDataModel, StreamDDL_InstituteWiseModel, TSPTehsilDataModel, UpwardMoment } from '../../Models/CommonMasterDataModel';
 import { BterCollegesSearchModel } from '../../Models/ApplicationFormDataModel';
 import { UploadBTERFileModel, UploadCounsellingFileModel, UploadFileModel } from '../../Models/UploadFileModel';
 import { DeleteDocumentDetailsModel, DeleteDocumentDetailsModel_Counselling } from '../../Models/DeleteDocumentDetailsModel';
@@ -1676,8 +1676,8 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number) {
-    return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID, this.headersOptions)
+  public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number, BGTType?:number) {
+    return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID + "/" + BGTType, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -2238,5 +2238,16 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async ITI_DeirectAdmissionOptionFormData_Private(tradeSearchRequest: ItiTradeSearch_PrivateModel) {
+    var body = JSON.stringify(tradeSearchRequest);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + '/ITI_DeirectAdmissionOptionFormData_Private', body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }

@@ -959,10 +959,10 @@ export class ITIDirectQualificationPrivateFormComponent {
       });
     }
 
-    //if (!this.box8Checked && !this.box10Checked && !this.box12Checked) {
-    //  this.toastr.error("Please Fill Option Form first ")
-    //  return
-    //}
+    if (!this.box8Checked && !this.box10Checked && !this.box12Checked) {
+      this.toastr.error("Please Fill Option Form first ")
+      return
+    }
     try {
 
       this.loaderService.requestStarted();
@@ -975,10 +975,10 @@ export class ITIDirectQualificationPrivateFormComponent {
             this.toastr.success(data.Message)
             if (this.PersonalDetailsData.DirectAdmissionType == 1)
             {
-              this.tabChange.emit(2);
+              this.tabChange.emit(3);
             } else
             {
-              this.tabChange.emit(2);
+              this.tabChange.emit(3);
             }
           } else {
             this.toastr.error(data.ErrorMessage)

@@ -97,3 +97,22 @@ export class DeleteFileMasterModel {
   public FileName: string = '';
   public ForPGMK: boolean = false;
 }
+
+
+export class ItiTradeSearch_PrivateModel {
+  public CollegeID: number = 0
+  public action: string = ''
+  public TradeLevel: number = 0
+  public IsPH: number = 0
+  public CourseTypeID?: number = 0
+  public TradeTypeId?: number = 0
+  public Age: number = 0
+  public Gender: number = 0
+  public DistrictID: number = 0
+  public ManagementTypeID: number = 0
+  public CollegeCode: string = ''
+  public TradeCode: string = ''
+
+  //public MathPercentage: string = '0.00'
+  //public SciencePercentage: string ='0.00'
+}

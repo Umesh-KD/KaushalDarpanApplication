@@ -211,7 +211,8 @@
                   {{request.AttachDocument_file === '' ? 'No File Choosen' : request.AttachDocument_file}}
                 </label>
                 <div class="flex">
-                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + request.AttachDocument_fileName}}"
+                  <!-- <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + request.AttachDocument_fileName}}" -->
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AttachDocument_fileName}}"
                      *ngIf="this.request.AttachDocument_file !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 </div>
               </div>
