@@ -79,7 +79,7 @@
         <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
           Establishment/Industry Registration Details: <span class="StarMarking">*</span>
         </label>
-        <input type="number" class="form-input" id="NameOfIndustry" placeholder="Enter Establishment Industry Registration Details"
+        <input maxlength="20" type="text" class="form-input" id="NameOfIndustry" placeholder="Enter Establishment Industry Registration Details"
                name="Year" formControlName="EstablishmentIndustryRegistrationdetails" [(ngModel)]="formData.EstablishmentIndustryRegistrationdetails">
         <div *ngIf="isSubmitted && _OptionsFormGroup.EstablishmentIndustryRegistrationdetails.errors" class="text-danger">
           <p *ngIf="!_OptionsFormGroup.EstablishmentIndustryRegistrationdetails.errors.DropdownValidators">
@@ -90,31 +90,6 @@
       </div>
 
 
-      <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-2"
-           for="fileExperienceCertificate">Experience Certificate From Employer<span class="StarMarking">*</span></label>
-    <div class="flex fileUploader">
-      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="fileExperienceCertificate" formControlName="ExperienceCertificateFromEmployer" type="file" (change)="onFilechange($event,'ExpCertificate')">
-      <label for="fileExperienceCertificate">
-        <span>Choose File</span>
-        {{formData.ExperienceCertificateFromEmployer === '' ? 'No File Choosen' : formData.ExperienceCertificateFromEmployer}}
-      </label>
-      <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL}} + '/' + {{formData.ExperienceCertificateFromEmployer}}"
-
-           *ngIf="this.formData.ExperienceCertificateFromEmployer !=''"
-           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-      </div>
-    </div>
-
-    <div *ngIf="isEmp && OptionsFormGroup.controls.ExperienceCertificateFromEmployer.errors" class="text-danger">
-      <p>
-        <i aria-hidden="true"></i>This field is required .!
-      </p>
-    </div>
-
-  </div>-->
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-2"
                for="fileExperienceCertificate">Experience Certificate From Employer<span class="StarMarking">*</span></label>
