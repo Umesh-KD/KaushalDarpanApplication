@@ -232,4 +232,6 @@ export class HandoverInventoryItemsDataModel {
   public ItemList?: any[] = [];
   public UserID?: number = 0;
   public TradeId: number = 0;
+  public HandoverDocument: string = '';
+  public Dis_HandoverDocument: string = '';
 }

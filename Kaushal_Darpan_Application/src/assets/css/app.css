@@ -7050,7 +7050,7 @@ table.table-border tr:nth-child(1) th, table.table-border thead tr:nth-child(1) 
 }
 
 .detailsList div:nth-of-type(2n+1) {
-  text-align: right !important;
+  text-align: left !important;
   padding-bottom: 3px;
 }
 .detailsListPhoto div:nth-of-type(2n+1) {
@@ -7716,10 +7716,10 @@ h5.text-base {
     gap: .60rem !important;
   }
   .detailsList > div {
-      text-align:center !important
+      text-align:left !important
   }
   .detailsList div:nth-of-type(2n+1) {
-    text-align: center !important;
+    text-align: left !important;
     padding-bottom: 0px;
     border-bottom: 0px;
   }

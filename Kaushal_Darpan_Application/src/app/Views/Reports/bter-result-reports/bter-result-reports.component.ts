@@ -25,6 +25,7 @@ export interface requestData {
   DepartmentID: number;
   Eng_NonEng: number;
   ResultType: number;
+  SchemeID: number;
 }
 
 @Component({
@@ -55,7 +56,8 @@ export class BterResultReportsComponent implements OnInit {
     EndTermID: 0,
     DepartmentID: 0,
     Eng_NonEng: 0,
-    ResultType: 0
+    ResultType: 0,
+    SchemeID: 0
   };
 
   totalRecords = 0;
@@ -139,9 +141,9 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 14, Name: 'Appeared/Passed Statistics Institute wise Report', URL: 'Appeared-Passesd-Statistics-Institute-wise' },
       // vivek
       { ID: 15, Name: 'Exam Result Student Statics Report', URL: 'Exam-Result-Student-Statics-report' },
-      { ID: 15, Name: 'Subject Theory Parctical Mark Statics', URL: 'Subject-Theory-Parctical-Mark-Statics-report' },
-      { ID: 16, Name: 'Result Appeared Passed Statistics Report', URL: 'Result-Appeared-Passed-Statistics-Report' },
-      { ID: 17, Name: 'ExamWise Stream Papers Report', URL: 'ExamWise-Stream-Papers-Report' },
+      { ID: 15, Name: 'Subject Theory Practical Mark Statics', URL: 'Subject-Theory-Parctical-Mark-Statics-report' },
+      { ID: 16, Name: 'Result Sheet', URL: 'Result-Appeared-Passed-Statistics-Report' },
+      { ID: 17, Name: 'Exam Wise Stream Papers Report', URL: 'ExamWise-Stream-Papers-Report' },
     ];
   }
  
@@ -150,6 +152,7 @@ export class BterResultReportsComponent implements OnInit {
     this.filterModel.ResultType = 0;
     this.filterModel.SemesterID = 0;
     this.filterModel.StreamID = 0;
+    this.filterModel.SchemeID = 0;
     this.selectedType = selectedType;
     this.ReportsListData = [];
     this.dataSource = new MatTableDataSource(this.ReportsListData);
@@ -166,7 +169,8 @@ export class BterResultReportsComponent implements OnInit {
       StreamID: 0,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
-      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      SchemeID: 0
     };
     this.selectedType = '';
     this.ReportsListData = [];
@@ -190,7 +194,6 @@ export class BterResultReportsComponent implements OnInit {
     this.ReportsListData = [];
 
     try {
-      this.loaderService.requestStarted();
       let response: any = null;
 
       switch (this.ActionDynamic) {
@@ -273,9 +276,7 @@ export class BterResultReportsComponent implements OnInit {
 
     } catch (ex) {
       console.error(ex);
-    } finally {
-      this.loaderService.requestEnded();
-    }
+    } 
   }
 
 
@@ -668,18 +669,17 @@ export class BterResultReportsComponent implements OnInit {
 
 
   async GetExamWiseStreamPapersreport() {
-    debugger;
+    //debugger;
     let request: any = {
       EndTermID: this.ssoLoginUser.EndTermID,
       DepartmentID: this.ssoLoginUser.DepartmentID,
-      CourseTypeID: this.ssoLoginUser.CourseTypeID,
+      CourseTypeID: this.ssoLoginUser.Eng_NonEng,
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
-      SchemeID: this.ssoLoginUser.SchemeID,
+      SchemeID: this.filterModel.SchemeID,
       
     }
     try {
-      this.loaderService.requestStarted();
       await this.reportService.GetExamWiseStreamPapersreport(request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -693,9 +693,7 @@ export class BterResultReportsComponent implements OnInit {
         }, (error: any) => console.error(error));
     } catch (ex) {
       console.log(ex);
-    } finally {
-      this.loaderService.requestEnded();
-    }
+    } 
   }
 
   exportToExcelExamWiseStreamPapersReport(): void {

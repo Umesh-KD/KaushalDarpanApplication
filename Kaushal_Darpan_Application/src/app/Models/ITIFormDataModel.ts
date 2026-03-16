@@ -204,8 +204,8 @@ export class ExperienceDetailsDataModel {
   public ExperienceID: number = 0
   public ApplicationID: number = 0
 
-  public Year: number = 0
-  public Month: number = 0
+  //public Year: number = 0
+  //public Month: number = 0
 
   public NameOfIndustry: string = ''
   public TypeOfWork: string = ''
@@ -216,6 +216,8 @@ export class ExperienceDetailsDataModel {
 
 
   public ModifyBy: number = 0
+  public dateFrom: string = ''
+  public dateTo: string = ''
 
 
 }

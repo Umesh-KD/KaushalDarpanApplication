@@ -11,6 +11,7 @@ import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 @Component({
   selector: 'app-handover-inventory-items-iti',
@@ -169,6 +170,36 @@ export class HandoverInventoryItemsITIComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async UploadDocument(event: any, FileName: any, Dis_FileName: any) {
+    try {
+      let uploadModel: UploadFileModel = {
+        FileName: FileName ?? "",
+        FileExtention: "",
+        MinFileSize: "20kb",
+        MaxFileSize: "50mb",
+        FolderName: "ITIIssuesIndent",
+
+      }
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {          
+          if (data.State == EnumStatus.Success) {
+            this.request.Dis_HandoverDocument = data.Data[0].Dis_FileName;
+            this.request.HandoverDocument = data.Data[0].FileName;
+            event.target.value = null;
+          }
+          if (data.State == EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage)
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
     }
   }
 }
