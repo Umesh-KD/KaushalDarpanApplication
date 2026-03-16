@@ -257,6 +257,7 @@
             <th>Trade Level</th>
             <th>Name of College</th>
             <th>Branch Name</th>
+            <th>Trade Category Name</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -266,6 +267,7 @@
             <td class="text-center">{{row.TradeLevel}}th</td>
             <td class="text-center">{{row.InstituteName}}</td>
             <td class="text-center">{{row.TradeName}}</td>
+            <td class="text-center">{{row.TradeCategoryName}}</td>
             <td class="text-center">
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
                 <i class="ti ti-trash"></i>
