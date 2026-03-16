@@ -190,6 +190,7 @@
               <th>Marks Type</th>
             
               <th>Percentage</th>
+              <th>Document</th>
             
             </tr>
           </thead>
@@ -201,11 +202,18 @@
               <td>{{item.SchoolCollegeName || 'N/A'}}</td>
               <td>{{item.StreamName}}</td>
               <td>{{item.PassingYear}}</td>
-        
+
               <td>{{item.MarktypeName}}</td>
-        
+
               <td>{{item.Percentage}}</td>
-          
+              <td class="text-left">
+                <a 
+                   href="{{appsettingConfig.StaticFileRootPathURL + '/Students/' + item.TechDocument}}"
+                   target="_blank" class="btn bg-primary text-white btn-sm">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </td>
+
             </tr>
           </tbody>
         </table>

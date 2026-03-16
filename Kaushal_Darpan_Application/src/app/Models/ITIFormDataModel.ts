@@ -163,6 +163,7 @@ export class TechnicalQualificationDetailsDataModel {
   public Tech_CGPA?: number = 0;
   public StateID?: number = 0;
   public TechDocument?: string = '';
+  public Dis_TechDocument?: string = '';
   public MarksType?: number = 0;
   public MarkTypeName?: string = '';
   public CITSCertified?: string = '';

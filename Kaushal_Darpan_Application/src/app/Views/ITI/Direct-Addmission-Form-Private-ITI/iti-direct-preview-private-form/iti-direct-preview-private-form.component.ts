@@ -171,7 +171,7 @@ export class ITIDirectPreviewPrivateFormComponent {
                 this.Options12thLevel.push(option)
               }
             })
-            
+            debugger
             this.request.QualificationViewDetails = data.Data.QualificationViewDetails
             this.Techqualificalrequest = this.request.QualificationViewDetails.filter((e: any) => e.QualificationName == 'Technical')
             this.request.QualificationViewDetails = this.request.QualificationViewDetails.filter((e: any) => e.QualificationName != 'Technical')
