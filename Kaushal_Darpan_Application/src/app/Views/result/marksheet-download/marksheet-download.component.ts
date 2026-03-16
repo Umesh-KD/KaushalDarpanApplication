@@ -106,7 +106,7 @@ export class MarksheetDownloadComponent {
 
   
   async getAllData() {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.EndTermID = this.searchRequest.EndTermID
@@ -137,7 +137,7 @@ export class MarksheetDownloadComponent {
   }
 
   async DownloadMarksheet(row: any) {
-    debugger
+    //debugger
     try {
       this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.downloadReq.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
@@ -197,7 +197,7 @@ export class MarksheetDownloadComponent {
   }
 
   async DownloadMarksheetBulk() {
-    debugger
+    //debugger
     try {
 
       this.StudentList.forEach((element: any) => {
@@ -342,7 +342,7 @@ export class MarksheetDownloadComponent {
         .then((AcedmicYear: any) => {
           AcedmicYear = JSON.parse(JSON.stringify(AcedmicYear));
           this.FinYearList = AcedmicYear['Data'];
-          debugger
+          //debugger
           //this.loaderService.requestEnded();
         }, error => console.error(error));
     }

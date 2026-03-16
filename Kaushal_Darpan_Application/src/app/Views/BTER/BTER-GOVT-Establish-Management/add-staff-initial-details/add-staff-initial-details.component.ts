@@ -257,7 +257,7 @@ export class AddStaffInitialDetailsComponent {
      // this.AddStaffBasicDetailFromGroup.get('StaffType')?.enable();
     }
     
-    if(this.formData.RoleID==7){
+    if(this.formData.RoleID==EnumRole.Principal || this.formData.RoleID==EnumRole.PrincipalNon){
       this.formData.IsNodal=true;
       await this.InstituteMasterWiselogic();
     }
@@ -758,11 +758,13 @@ debugger
       await this.GetGuestHouseNameList();
       this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].setValidators([DropdownValidators]);
       if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
-        this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseIncharge)
+        this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestHouseIncharge)
+      } else if(this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseIncharge){
+        this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden)
       }
-      else {
-        this.RoleMasterList = this.RoleMasterList.filter((item: any) =>  item.ID == EnumRole.GuestHouseAdmin )
-      }
+      // else {
+      //   this.RoleMasterList = this.RoleMasterList.filter((item: any) =>  item.ID == EnumRole.GuestHouseAdmin )
+      // }
     } else {
       this.formData.IsGuestStaff = false;
       this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].clearValidators();
@@ -778,6 +780,8 @@ debugger
    // debugger;
     try {
       this.loaderService.requestStarted();
+      this.searchRequest1.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID;
+      this.searchRequest1.isEstablishment = true
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

@@ -47,74 +47,102 @@
         </div>
       </div>
 
-      <div>
-        <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
-          वर्ष (Year): <span class="StarMarking">*</span>
-        </label>
-        <input type="number" class="form-input" id="NameOfIndustry" placeholder="Enter Year"
-               name="Year" formControlName="Year" [(ngModel)]="formData.Year">
-        <div *ngIf="isSubmitted && _OptionsFormGroup.Year.errors" class="text-danger">
-          <p *ngIf="!_OptionsFormGroup.Year.errors.DropdownValidators">
-            <i aria-hidden="true"></i> This field is
-            required.!
-          </p>
-        </div>
-      </div>
-
-      <div>
-        <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
-          माह (Month): <span class="StarMarking">*</span>
-        </label>
-        <input type="number" class="form-input" id="NameOfIndustry" placeholder="Enter Month"
-               name="Year" formControlName="Month" [(ngModel)]="formData.Month">
-        <div *ngIf="isSubmitted && _OptionsFormGroup.Month.errors" class="text-danger">
-          <p *ngIf="!_OptionsFormGroup.Month.errors.DropdownValidators">
-            <i aria-hidden="true"></i> This field is
-            required.!
-          </p>
-        </div>
-      </div>
-
-      <div>
-        <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
-          Establishment/Industry Registration Details: <span class="StarMarking">*</span>
-        </label>
-        <input type="number" class="form-input" id="NameOfIndustry" placeholder="Enter Establishment Industry Registration Details"
-               name="Year" formControlName="EstablishmentIndustryRegistrationdetails" [(ngModel)]="formData.EstablishmentIndustryRegistrationdetails">
-        <div *ngIf="isSubmitted && _OptionsFormGroup.EstablishmentIndustryRegistrationdetails.errors" class="text-danger">
-          <p *ngIf="!_OptionsFormGroup.EstablishmentIndustryRegistrationdetails.errors.DropdownValidators">
-            <i aria-hidden="true"></i> This field is
-            required.!
-          </p>
-        </div>
-      </div>
-
-
       <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-2"
-           for="fileExperienceCertificate">Experience Certificate From Employer<span class="StarMarking">*</span></label>
-    <div class="flex fileUploader">
-      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="fileExperienceCertificate" formControlName="ExperienceCertificateFromEmployer" type="file" (change)="onFilechange($event,'ExpCertificate')">
-      <label for="fileExperienceCertificate">
-        <span>Choose File</span>
-        {{formData.ExperienceCertificateFromEmployer === '' ? 'No File Choosen' : formData.ExperienceCertificateFromEmployer}}
-      </label>
-      <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL}} + '/' + {{formData.ExperienceCertificateFromEmployer}}"
-
-           *ngIf="this.formData.ExperienceCertificateFromEmployer !=''"
-           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-      </div>
-    </div>
-
-    <div *ngIf="isEmp && OptionsFormGroup.controls.ExperienceCertificateFromEmployer.errors" class="text-danger">
-      <p>
-        <i aria-hidden="true"></i>This field is required .!
+    <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
+      वर्ष (Year): <span class="StarMarking">*</span>
+    </label>
+    <input type="number" class="form-input" id="NameOfIndustry" placeholder="Enter Year"
+           name="Year" formControlName="Year" [(ngModel)]="formData.Year">
+    <div *ngIf="isSubmitted && _OptionsFormGroup.Year.errors" class="text-danger">
+      <p *ngIf="!_OptionsFormGroup.Year.errors.DropdownValidators">
+        <i aria-hidden="true"></i> This field is
+        required.!
       </p>
     </div>
+  </div>
 
+    <div>
+    <label for="NameOfIndustry" class="text-gray-800 text-sm font-medium inline-block mb-2">
+      माह (Month): <span class="StarMarking">*</span>
+    </label>
+    <input type="number" class="form-input" id="NameOfIndustry" placeholder="Enter Month"
+           name="Year" formControlName="Month" [(ngModel)]="formData.Month">
+    <div *ngIf="isSubmitted && _OptionsFormGroup.Month.errors" class="text-danger">
+      <p *ngIf="!_OptionsFormGroup.Month.errors.DropdownValidators">
+        <i aria-hidden="true"></i> This field is
+        required.!
+      </p>
+    </div>
   </div>-->
+     
+     
+
+      <div>
+        <label for="dateFrom" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          Date From: <span class="StarMarking">*</span>
+        </label>
+
+        <input type="date"
+               class="form-input"
+               formControlName="dateFrom"
+               [max]="maxFromDate"
+               (change)="onFromDateChange()">
+
+        <div *ngIf="isSubmitted && OptionsFormGroup.controls['dateFrom'].errors" class="text-danger">
+          <p *ngIf="OptionsFormGroup.controls['dateFrom'].errors?.['required']">
+            Date From is required!
+          </p>
+        </div>
+      </div>
+
+
+      <div>
+        <label for="dateTo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          Date To: <span class="StarMarking">*</span>
+        </label>
+
+        <input type="date"
+               class="form-input"
+               formControlName="dateTo"
+               [min]="minToDate"
+               (change)="onToDateChange()">
+
+        <div *ngIf="isSubmitted && OptionsFormGroup.controls['dateTo'].errors" class="text-danger">
+          <p *ngIf="OptionsFormGroup.controls['dateTo'].errors?.['required']">
+            Date To is required!
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+          Establishment/Industry Registration Details:
+          <span class="StarMarking">*</span>
+
+          <!-- Info Icon -->
+          <span class="info-icon"
+                matTooltip="TAN/GSTIN/EPFO Establishment No/ESIC Registration No/CIN"
+                matTooltipPosition="above">
+            <i class="fa fa-info-circle"></i>
+          </span>
+
+        </label>
+
+        <input type="text"
+               class="form-input"
+               id="EstablishmentIndustryRegistrationdetails"
+               placeholder="Enter Establishment Industry Registration Details"
+               formControlName="EstablishmentIndustryRegistrationdetails"
+               [(ngModel)]="formData.EstablishmentIndustryRegistrationdetails">
+
+        <div *ngIf="isSubmitted && _OptionsFormGroup.EstablishmentIndustryRegistrationdetails.errors" class="text-danger">
+          <p *ngIf="!_OptionsFormGroup.EstablishmentIndustryRegistrationdetails.errors.DropdownValidators">
+            This field is required!
+          </p>
+        </div>
+      </div>
+
+
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-2"
                for="fileExperienceCertificate">Experience Certificate From Employer<span class="StarMarking">*</span></label>
@@ -131,22 +159,22 @@
           </div>
 
         </div>
-        </div>
-        <!--<div *ngIf="item.errors?.ExperienceCertificateFromEmployer" class="text-danger">
-      <p>This field is required!</p>
-    </div>-->
-
-
-        <div class="pt-30">
-          <button type="button" class="
-                btn bg-primary text-white" (click)="AddChoice()">
-            <i class="ti ti-plus"></i> Add
-            Choice
-          </button>
-          <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
-        </div>
-
       </div>
+      <!--<div *ngIf="item.errors?.ExperienceCertificateFromEmployer" class="text-danger">
+    <p>This field is required!</p>
+  </div>-->
+
+
+      <div class="pt-30">
+        <button type="button" class="
+                btn bg-primary text-white" (click)="AddChoice()">
+          <i class="ti ti-plus"></i> Add
+          Choice
+        </button>
+        <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
+      </div>
+
+    </div>
       <!-- <p *ngIf="request.CategoryC == 69" class="smallTextForm">(विकलांग व्यावसायिक पुनर्वास केंद्र द्वारा प्राप्त उपयुकता प्रमाण पत्र के अनुसार व्यवसाय का चयन करे )</p> -->
 </form>
 </div>
@@ -163,8 +191,8 @@
         <th>S.No</th>
         <th class="text-left">Industry Name</th>
         <th class="text-left">Type Of Work</th>
-        <th>Year</th>
-        <th>Month</th>
+        <th>Date From</th>
+        <th>Date To</th>
         <th class="text-left">Experience Description</th>
         <th class="text-left">Establishment/Industry Registration details</th>
         <th class="text-left">Experience Certificate from employer</th>
@@ -185,13 +213,21 @@
           {{row.TypeOfWork}}
         </td>
 
-        <td class="text-center">
+        <td class="text-left">
+          {{row.dateFrom}}
+        </td>
+
+        <td class="text-left">
+          {{row.dateTo}}
+        </td>
+
+        <!--<td class="text-center">
           {{row.Year}}
         </td>
 
         <td class="text-center">
           {{row.Month}}
-        </td>
+        </td>-->
 
         <td class="text-left">
           {{row.ExperienceDetailDescription}}
@@ -217,18 +253,18 @@
         </td>
 
       </tr>
-      <tr class="font-bold bg-gray-100">
+      <!--<tr class="font-bold bg-gray-100">-->
         <!-- Non-numeric columns -->
-        <td colspan="3" class="text-center">Total</td>
+        <!--<td colspan="3" class="text-center">Total</td>-->
 
         <!-- Numeric totals -->
-        <td class="text-center" *ngFor="let key of includedKeys">
+        <!--<td class="text-center" *ngFor="let key of includedKeys">
           {{ totals[key] }}
-        </td>
+        </td>-->
 
         <!-- Remaining columns -->
-        <td colspan="4"></td>
-      </tr>
+        <!--<td colspan="4"></td>
+      </tr>-->
     </tbody>
 
   </table>

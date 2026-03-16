@@ -25,6 +25,11 @@
             <option value="0">--Select--</option>
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
           </select>
+          <div *ngIf="isSubmitted && _AddOfficeVacancyForm.OfficeID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.OfficeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
         </div>
 
         <!-- Institute (shows only when OfficeID == 11) -->
@@ -34,6 +39,11 @@
             <option value="0">--Select--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
+          <div *ngIf="isSubmitted && _AddOfficeVacancyForm.InstituteID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.InstituteID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
         </div>
 
         <!-- Staff Type -->
@@ -43,6 +53,12 @@
             <option value="0">Choose Option</option>
             <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm?.StaffTypeID?.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm?.StaffTypeID?.errors?.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
         </div>
 
         <!-- Post Type  -->
@@ -61,6 +77,27 @@
             <option value="0">--Select--</option>
             <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
           </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.DesignationID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.DesignationID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Type<span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.BugetHeadTypeID" formControlName="BugetHeadTypeID" (change)="GetBTER_BGT_BudgetType()">
+            <option value="0">--Select--</option>
+            <option value="1">Planned Budget</option>
+            <option value="2">Non-Planned Budget</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.BugetHeadTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.BugetHeadTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
         </div>
 
         <div>
@@ -69,6 +106,12 @@
             <option value="0">--Select--</option>
             <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
           </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.BugetHeadID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.BugetHeadID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
         </div>
 
         <!-- Total Seat -->
@@ -77,6 +120,12 @@
           <div>
             <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
                  [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+          </div>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.TotalSeatID.errors" class="text-danger">
+            <p *ngIf="_AddOfficeVacancyForm.TotalSeatID.errors?.required">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
           </div>
         </div>
 
@@ -107,6 +156,12 @@
         <div class="form-group col-span-3">
           <label for="Comments">Comments: <span class="StarMarking">*</span></label>
           <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.Comments.errors" class="text-danger">
+            <p *ngIf="_AddOfficeVacancyForm.Comments.errors.required">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
         </div>
 
       </div>

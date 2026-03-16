@@ -82,6 +82,7 @@ export class GuestRoomSeatSearchModel {
   public RoomQuantity?: number;
   public GuestHouseIDs?: string = '';
   public guestHouseForApply?: boolean = false;
+  public isEstablishment?: boolean = false;
 }
 
 export class FacilitiesDataModel {

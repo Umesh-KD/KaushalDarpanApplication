@@ -784,7 +784,7 @@ async GetTechnicianDll() {
             if (btnSave) btnSave.innerHTML = "Submit";
           }
           else if (data.State == EnumStatus.Warning) {
-            this.toastr.warning(data.ErrorMessage);
+            this.toastr.warning(data.Message);
             this.ResetControls();
           } else {
             this.toastr.error(data.ErrorMessage)

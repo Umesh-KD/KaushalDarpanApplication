@@ -109,9 +109,10 @@ export class OfficeVacancyComponent implements OnInit {
       StaffTypeID: [0, [DropdownValidators]],
       DesignationID: [0, [DropdownValidators]],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
-      Comments: [''],
+      Comments: ['',Validators.required],
       BugetHeadID: [0, [DropdownValidators]],
-      UploadedDocument: ['',Validators.required]
+      UploadedDocument: ['',Validators.required],
+      BugetHeadTypeID: [0, [DropdownValidators]]
     });
 
     this.groupForm = this.formBuilder.group({
@@ -151,10 +152,15 @@ export class OfficeVacancyComponent implements OnInit {
   
   tempIndex: number = 1;
 
+
   async addOfficeVacancy() {
     debugger;
     const formValues = this.AddOfficeVacancyForm.value;
-
+    this.isSubmitted=true;
+    if(this.AddOfficeVacancyForm.invalid){
+        this.toastr.warning("Please fill all required fields before adding.");
+        return;
+    }
     // Validate required fields before adding
     if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID || !formValues.TotalSeatID || !formValues.UploadedDocument) {
       this.toastr.warning("Please fill all required fields before adding.");
@@ -248,6 +254,7 @@ export class OfficeVacancyComponent implements OnInit {
     console.log('Vacancy being added:', vacancyData);
 
     this.OfficeVacancyList.push(vacancyData); // Add to array
+    this.isSubmitted = false;
     this.OfficeVacancy = this.OfficeVacancyList;
     this.isFinalSave=false;
     this.toastr.success("Vacancy added successfully.");
@@ -470,11 +477,32 @@ export class OfficeVacancyComponent implements OnInit {
     }
   }
 
+  // async GetBTER_BGT_BudgetType() {
+  //   // debugger;
+  //   try {
+  //     this.loaderService.requestStarted();
+  //       await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
+  //       .then((data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         this.BugetHeadList = data['Data'];
+  //         console.log(this.BugetHeadList, "BugetHeadList");
+  //       }, error => console.error(error));
+  //   }
+  //   catch (Ex) {
+  //     console.log(Ex);
+  //   }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
+
   async GetBTER_BGT_BudgetType() {
-    // debugger;
+    debugger;  
     try {
       this.loaderService.requestStarted();
-        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
+        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1,this.formData.BugetHeadTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.BugetHeadList = data['Data'];
