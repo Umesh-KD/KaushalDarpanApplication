@@ -93,8 +93,8 @@ export class ITIDirectExperienceComponent {
         ExperienceDetailDescription: ['', [Validators.required]],
         Year: ['', [DropdownValidators]],
         Month: ['', [DropdownValidators]],
-        EstablishmentIndustryRegistrationdetails: ['', [Validators.required]],
-        ExperienceCertificateFromEmployer: ['', [Validators.required]]
+        EstablishmentIndustryRegistrationdetails: ['', [Validators.required]]
+  
       });
 
 
@@ -147,7 +147,9 @@ export class ITIDirectExperienceComponent {
   }
 
 
-  async AddChoice() {
+  async AddChoice()
+  {
+    debugger;
     this.isSubmitted = true
     if (this.OptionsFormGroup.invalid) {
       this.OptionsFormGroup.markAllAsTouched();
@@ -553,7 +555,7 @@ export class ITIDirectExperienceComponent {
   async UploadDocument(event: any, formData: any) {
     try {
       let uploadModel = new UploadFileModel();
-      uploadModel.FolderName = "ITI/StudentAdmission/";
+      uploadModel.FolderName = "Students";
       await this.documentDetailsService.UploadDocument(event, uploadModel)
         .then((data: any) => {
           this.State = data['State'];

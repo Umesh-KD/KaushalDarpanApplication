@@ -115,38 +115,40 @@
     </div>
 
   </div>-->
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-2"
+               for="fileExperienceCertificate">Experience Certificate From Employer<span class="StarMarking">*</span></label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="fileExperienceCertificate" type="file" (change)="UploadDocument($event,formData)" />
+          <label for="fileExperienceCertificate">
+            <span>Choose File</span>
+            {{ formData.ExperienceCertificateFromEmployer === '' ? 'No File Chosen' : formData.ExperienceCertificateFromEmployer }}
+          </label>
+          <div class="flex" *ngIf="formData.ExperienceCertificateFromEmployer !== ''">
+            <a href="{{appsettingConfig.StaticFileRootPathURL}}/Students/{{formData.ExperienceCertificateFromEmployer}}"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+          </div>
+
+        </div>
+        </div>
+        <!--<div *ngIf="item.errors?.ExperienceCertificateFromEmployer" class="text-danger">
+      <p>This field is required!</p>
+    </div>-->
 
 
-      <div class="flex fileUploader">
-        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-               id="fileExperienceCertificate" type="file" (change)="UploadDocument($event,formData)" />
-        <label for="fileExperienceCertificate">
-          <span>Choose File</span>
-          {{ formData.ExperienceCertificateFromEmployer === '' ? 'No File Chosen' : formData.ExperienceCertificateFromEmployer }}
-        </label>
-        <div class="flex" *ngIf="formData.ExperienceCertificateFromEmployer !== ''">
-          <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/StudentAdmission//{{formData.ExperienceCertificateFromEmployer}}"
-             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        <div class="pt-30">
+          <button type="button" class="
+                btn bg-primary text-white" (click)="AddChoice()">
+            <i class="ti ti-plus"></i> Add
+            Choice
+          </button>
+          <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
         </div>
 
       </div>
-      <!--<div *ngIf="item.errors?.ExperienceCertificateFromEmployer" class="text-danger">
-    <p>This field is required!</p>
-  </div>-->
-
-
-      <div class="pt-30">
-        <button type="button" class="
-                btn bg-primary text-white" (click)="AddChoice()">
-          <i class="ti ti-plus"></i> Add
-          Choice
-        </button>
-        <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
-      </div>
-
-    </div>
-    <!-- <p *ngIf="request.CategoryC == 69" class="smallTextForm">(विकलांग व्यावसायिक पुनर्वास केंद्र द्वारा प्राप्त उपयुकता प्रमाण पत्र के अनुसार व्यवसाय का चयन करे )</p> -->
-  </form>
+      <!-- <p *ngIf="request.CategoryC == 69" class="smallTextForm">(विकलांग व्यावसायिक पुनर्वास केंद्र द्वारा प्राप्त उपयुकता प्रमाण पत्र के अनुसार व्यवसाय का चयन करे )</p> -->
+</form>
 </div>
 
 <div *ngIf="AddedChoices?.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
@@ -199,7 +201,7 @@
         </td>
         <td class="text-left">
           <a *ngIf="row.ExperienceCertificateFromEmployer"
-             href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.ExperienceCertificateFromEmployer}}"
+             href="{{appsettingConfig.StaticFileRootPathURL + 'Students/' + row.ExperienceCertificateFromEmployer}}"
              target="_blank" class="btn bg-primary text-white btn-sm">
             <i class="ti ti-eye"></i>
           </a>
