@@ -12,7 +12,7 @@ export class DTEApplicationDashboardDataModel {
   public FinancialYearID:number=0
   public HostelID?: number = 0;
   public UrlStatus?: string = '';
-
+  public GuestHouseIDs?: string = '';
 }
 
 export class DTEDashboardModel {

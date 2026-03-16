@@ -56,16 +56,9 @@ export class GuestRoomDashboardComponent {
     private staffMasterService: StaffMasterService,
     private router: ActivatedRoute, private modalService: NgbModal, public appsettingConfig: AppsettingService, private Swal2: SweetAlert2,
     private sweetAlert2: SweetAlert2
-  ) {
-   
-  }
+  ) { }
 
-
-
-
-  async ngOnInit() {
-    
-    
+  async ngOnInit() {    
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetGuestRoomDashboard();
     await this.CheckProfileStatus();
@@ -134,6 +127,8 @@ export class GuestRoomDashboardComponent {
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
     this.searchRequest.HostelID = this.sSOLoginDataModel.HostelID;
+    this.searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID;
+    
     this.HostelDashboardList = [];
     try {
       this.loaderService.requestStarted();
