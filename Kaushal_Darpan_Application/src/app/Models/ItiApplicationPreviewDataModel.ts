@@ -111,7 +111,7 @@ export class PreviewDirectApplicationModel {
   public IsfinalSubmit: number = 0;
 
 
-  public QualificationViewDetails: QualificationViewDetails[] = [];
+  public QualificationViewDetails: any[] = [];
   public OptionalViewDatas: OptionalViewData[] = [];
   public PendingDataModel: PendingDataModel[] = [];
   public DocumentDetailList: DocumentDetailsModel[] = [];

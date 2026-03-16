@@ -66,7 +66,7 @@ export class ItiApplicationFormService {
   }
 
 
-  public async SaveQualificationDetailsData(request: QualificationDetailsDataModel[]) {
+  public async SaveQualificationDetailsData(request: any[]) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/SaveQualificationDetailsData`, body, this.headersOptions)
       .pipe(

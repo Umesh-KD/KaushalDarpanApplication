@@ -50,6 +50,7 @@ export class ITIDirectPreviewPrivateFormComponent {
   public Options8thLevel: any =[]
   public Options10thLevel: any = []
   public Options12thLevel: any = []
+  public Techqualificalrequest: any = []
   public transactionStatusDataModel = new TransactionStatusDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
 
@@ -172,6 +173,8 @@ export class ITIDirectPreviewPrivateFormComponent {
             })
             
             this.request.QualificationViewDetails = data.Data.QualificationViewDetails
+            this.Techqualificalrequest = this.request.QualificationViewDetails.filter((e: any) => e.QualificationName == 'Technical')
+            this.request.QualificationViewDetails = this.request.QualificationViewDetails.filter((e: any) => e.QualificationName != 'Technical')
             console.log("this.request", this.request)
             const dob = new Date(data['Data']['DOB']);
             const year = dob.getFullYear();

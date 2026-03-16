@@ -171,6 +171,46 @@
       </div>
     </div>
 
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">तकनीकी योग्यता विवरण ( Technical Qualification Details)</b>
+      </div>
+
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr class="text-left">
+              <th>Qualification Level</th>
+              <th>State of Study</th>
+              <th>Examination Passed</th>
+              <th>College</th>
+              <th>Stream/Trade</th>
+              <th>Year of Passing</th>
+          
+              <th>Marks Type</th>
+            
+              <th>Percentage</th>
+            
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of Techqualificalrequest">
+              <td>{{item.QualificationLevel}}</td>
+              <td>{{item.StateName}}</td>
+              <td>{{item.ExaminationPassed || 'N/A'}}</td>
+              <td>{{item.SchoolCollegeName || 'N/A'}}</td>
+              <td>{{item.StreamName}}</td>
+              <td>{{item.PassingYear}}</td>
+        
+              <td>{{item.MarktypeName}}</td>
+        
+              <td>{{item.Percentage}}</td>
+          
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <div class="mb-6" *ngIf="Options8thLevel.length > 0">
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
