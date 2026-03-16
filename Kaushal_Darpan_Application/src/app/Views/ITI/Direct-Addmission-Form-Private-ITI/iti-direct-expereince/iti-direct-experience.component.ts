@@ -171,7 +171,8 @@ export class ITIDirectExperienceComponent {
     this.formData.Year = 0
     this.formData.NameOfIndustry = ''
     this.formData.TypeOfWork = ''
-
+    this.formData.EstablishmentIndustryRegistrationdetails = ''
+    this.formData.ExperienceCertificateFromEmployer = ''  
   }
 
 
