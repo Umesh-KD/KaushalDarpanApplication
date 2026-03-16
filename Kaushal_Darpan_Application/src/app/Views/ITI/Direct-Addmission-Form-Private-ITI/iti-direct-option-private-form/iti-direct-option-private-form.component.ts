@@ -75,7 +75,9 @@ export class ITIDirectOptionPrivateFormComponent {
         ddlDistrict: ['', [DropdownValidators]],
         ddlInstitute: ['', [DropdownValidators]],
         ddlTrade: ['', [DropdownValidators]],
-        TradeLevel: ['', [DropdownValidators]]
+        TradeLevel: ['', [DropdownValidators]],
+        ddlTradeCategory: ['0', [DropdownValidators]]
+
       });
 
 
@@ -213,6 +215,11 @@ export class ITIDirectOptionPrivateFormComponent {
       this.toastr.error("Trade Name")
     }
 
+    if (this.formData.TradeCategory == 0 || this.formData.TradeCategory == null) {
+      this.toastr.error("Please Enter Trade Category")
+    }
+
+
 
     if (this.CheckInstitute) {
       this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
@@ -228,6 +235,21 @@ export class ITIDirectOptionPrivateFormComponent {
       }
   
       this.formData.TradeName = this.ItiTradeList.filter((x: any) => x.Id == this.formData.TradeID)[0]['TradeName'];
+
+
+      if (this.formData.TradeCategory == 1) {
+        this.formData.TradeCategoryName = 'Allied Trade';
+      }
+      else if (this.formData.TradeCategory == 2) {
+        this.formData.TradeCategoryName = 'SCVT';
+      }
+      else if (this.formData.TradeCategory == 3) {
+        this.formData.TradeCategoryName = 'CoE';
+      }
+      else if (this.formData.TradeCategory == 4) {
+        this.formData.TradeCategoryName = 'Other';
+      }
+
       
       console.log("trade name", this.formData.TradeName)
 
@@ -601,7 +623,7 @@ export class ITIDirectOptionPrivateFormComponent {
 
 
         this.loaderService.requestStarted();
-        await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData(this.tradeSearchRequest).then((data: any) => {
+        await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData_Private(this.tradeSearchRequest).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ItiCollegesList = data.Data
           this.GetInstituteListByTradeType()
@@ -664,10 +686,12 @@ export class ITIDirectOptionPrivateFormComponent {
       this.tradeSearchRequest.action = '_getCollegeoByTrade'
 
       this.loaderService.requestStarted();
-      await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData(this.tradeSearchRequest).then((data: any) => {
+      await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData_Private(this.tradeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiCollegesList = data.Data
+        console.log('Colleges List===>',this.ItiCollegesList)
       })
+     
     } catch (error) {
       console.error(error)
     } finally {
@@ -693,16 +717,19 @@ export class ITIDirectOptionPrivateFormComponent {
       this.tradeSearchRequest.Age = this.PersonalDetailsData.Age
       this.tradeSearchRequest.DistrictID = this.formData.DistrictID
       this.tradeSearchRequest.ManagementTypeID = this.formData.ManagementTypeID
-      if (this.IsJailAdmission) {
+      if (this.IsJailAdmission)
+      {
     
         this.tradeSearchRequest.action = 'JailAdmisiiontrade'
-      } else {
+      }
+      else
+      {
         this.tradeSearchRequest.action = '_getTradebyCollege'
       }
 
 
       this.loaderService.requestStarted();
-      await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData(this.tradeSearchRequest).then((data: any) => {
+      await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData_Private(this.tradeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiTradeList = data.Data
         console.log("this.ItiTradeList",this.ItiTradeList)

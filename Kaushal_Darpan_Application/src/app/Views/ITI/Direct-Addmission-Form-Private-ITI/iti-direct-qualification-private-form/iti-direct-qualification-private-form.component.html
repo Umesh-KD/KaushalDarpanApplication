@@ -7,7 +7,7 @@
         योग्यता विवरण भरें (Fill qualification
         details):<span class="StarMarking">*</span>
       </label>
-      <div *ngIf="PersonalDetailsData.DirectAdmissionType==1" >
+      <div *ngIf="PersonalDetailsData.DirectAdmissionType==1">
         <label class="me-2">
           <input type="checkbox" value="8" id="Box8THForm" (click)="onClick8thCheckbox()"
                  [checked]="box8Checked" />
@@ -249,7 +249,7 @@
           <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Marks Type:<span class="StarMarking">*</span>
           </label>
-          <select class="form-select" id="ddlMarksType"  formControlName="ddlMarksType10"
+          <select class="form-select" id="ddlMarksType" formControlName="ddlMarksType10"
                   [(ngModel)]="formData10th.MarksTypeID10" (change)="calculatePercentage10th()">
             <option selected value="0">Select Marks Type</option>
             <option *ngFor="let item of MarksTypeList" [value]="item.ID">{{item.Name}}</option>
@@ -557,47 +557,22 @@
           </label>
           <select class="form-select" id="Board" formControlName="txtBoardUniversity"
                   [(ngModel)]="formData.BoardUniversityHigh">
-            <option value="" selected>---Select Board---</option>
-            <option *ngFor="let item of BoardList" [value]="item.Name">{{item.Name}}</option>
+            <option value="">---Select Board---</option>
+            <option *ngFor="let item of BoardList" value="item.Name">{{item.Name}}</option>
           </select>
-         
+
         </div>
 
-        <!-- <div>
-          <label for="" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Board/University:<span class="StarMarking"></span>
-          </label>
-          <input type="text" class="form-input" placeholder="Enter Board/University"
-                 formControlName="txtBoardUniversity" [(ngModel)]="formData.BoardUniversityHigh"
-                 (change)="formData.BoardUniversityHigh = filterString(formData.BoardUniversityHigh)" />
-          <div *ngIf="isSubmitted && _HighQualificationForm.txtBoardUniversity.errors" class="text-danger">
-            <p *ngIf="_HighQualificationForm.txtBoardUniversity.errors.required"><i aria-hidden="true"></i>
-              This field is required.!
-            </p>
-          </div>
-        </div> -->
-        <div>
-          <label for="" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            School/College:<span class="StarMarking"></span>
-          </label>
-          <input type="text" class="form-input" id="" placeholder="Enter School/College"
-                 formControlName="txtSchoolCollege" [(ngModel)]="formData.SchoolCollegeHigh"
-                 (change)="formData.SchoolCollegeHigh = filterString(formData.SchoolCollegeHigh)">
-          <!-- <div *ngIf="isSubmitted && _HighQualificationForm.txtSchoolCollege.errors" class="text-danger">
-            <p *ngIf="_HighQualificationForm.txtSchoolCollege.errors.required"><i aria-hidden="true"></i>
-              This field is required.!
-            </p>
-          </div> -->
-        </div>
+      
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Highest Qualification<span class="StarMarking">*</span></label>
           <select class="form-select" id="UGQualificationID" name="UGQualificationID" formControlName="txtHighestQualification"
                   [(ngModel)]="formData.HighestQualificationHigh">
             <option value="">--- Select Highest Qualification ---</option>
-            <option *ngFor="let item of QualificationList" [value]="item.QualificationName">{{item.QualificationName}}</option>
+            <option *ngFor="let item of QualificationList" value="item.QualificationName">{{item.QualificationName}}</option>
           </select>
-          
+
         </div>
 
         <!-- <div>
@@ -619,8 +594,8 @@
           </label>
           <select class="form-select" id="YearofPassing" formControlName="txtYearOfPassing"
                   [(ngModel)]="formData.YearofPassingHigh">
-            <option value="" selected>Select Year of Passing</option>
-            <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+            <option value="">Select Year of Passing</option>
+            <option *ngFor="let item of PassingYearList" value="item.Year">{{item.Year}}</option>
           </select>
           <!-- <div *ngIf="isSubmitted&&_HighQualificationForm.txtYearOfPassing.errors" class="text-danger">
             <p *ngIf="!_HighQualificationForm.txtYearOfPassing.errors.DropdownValidators">
@@ -701,6 +676,174 @@
 
     </div>
   </form>
+
+
+  <form [formGroup]="TechnicalForm">
+
+    <div class="mb-3 mt-3 w-full">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Technical Qualification Details</b>
+        <span class="text-danger">(तारांकित (*) फील्ड भरना अनिवार्य हैं)</span>
+      </div>
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-3">
+
+
+     
+          <div>
+            <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              State of Study:<span class="StarMarking"></span>
+            </label>
+            <select class="form-select" id="StateofStudy" formControlName="StateID" [(ngModel)]="techRequest.StateID">
+              <option value="0">--- Select State ---</option>
+              <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+            </select>
+            <!-- <div *ngIf="isSubmitted&&_HighQualificationForm.ddlState.errors" class="text-danger">
+    <p *ngIf="!_HighQualificationForm.ddlState.errors.DropdownValidators">
+      <i aria-hidden="true"></i>This field is required .!
+    </p>
+  </div> -->
+            <div *ngIf="isSubmitted && TechnicalForm.controls.StateID?.errors" class="text-danger">
+              <p>This field is required .!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Technical Qualification<span class="StarMarking">*</span>
+            </label>
+
+            <select class="form-select"
+                    [(ngModel)]="techRequest.QualificationLevel"
+                    formControlName="QualificationLevel"
+                    (change)="examinationPass($event.target.value)">
+              <option value="">-- Select Examination --</option>
+              <option *ngFor="let item of QualificationDetailsLevelList" [value]="item.QualificationLevel">
+                {{ item.QualificationLevel }}
+              </option>
+            </select>
+
+            <div *ngIf="isSubmitted && TechnicalForm.controls.QualificationLevel?.errors" class="text-danger">
+              <p>This field is required .!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              College:<span class="StarMarking"></span>
+            </label>
+            <input type="text" class="form-input" id="" placeholder="Enter College Name"
+                   formControlName="txtSchoolCollege" [(ngModel)]="formData.SchoolCollegeHigh"
+                   (change)="techRequest.SchoolCollegeHigh = filterString(formData.SchoolCollegeHigh)">
+            <!-- <div *ngIf="isSubmitted && _HighQualificationForm.txtSchoolCollege.errors" class="text-danger">
+        <p *ngIf="_HighQualificationForm.txtSchoolCollege.errors.required"><i aria-hidden="true"></i>
+          This field is required.!
+        </p>
+      </div> -->
+            <div *ngIf="isSubmitted && TechnicalForm.controls.txtSchoolCollege?.errors" class="text-danger">
+              <p>This field is required .!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Examination Passed<span class="StarMarking">*</span>
+            </label>
+
+            <select class="form-select"
+                    [(ngModel)]="techRequest.QualificationID"
+                    formControlName="QualificationName"
+                    (change)="streamddl($event.target.value)">
+              <option value="0">-- Select Examination --</option>
+              <option *ngFor="let item of QualificationDDL" [value]="item.QualificationID">
+                {{ item.QualificationName }}
+              </option>
+            </select>
+
+            <div *ngIf="isSubmitted && TechnicalForm.controls.QualificationName?.errors" class="text-danger">
+              <p>This field is required .!</p>
+            </div>
+          </div>
+
+
+          <div *ngIf="techRequest.QualificationLevel=='Diploma/Certificate Course'">
+            <label for="StreamID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              Stream/Trade:
+            </label>
+            <select class="form-select"
+                    id="StreamID"
+                    formControlName="StreamID"
+                    [(ngModel)]="techRequest.StreamID">
+              <option [ngValue]="0">---Select Board---</option>
+              <option *ngFor="let s of StreamList" [value]="s.StreamID">{{ s.StreamName }}</option>
+            </select>
+            <div *ngIf="isSubmitted && TechnicalForm.controls.StreamID?.errors" class="text-danger">
+              <p>This field is required .!</p>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label for="Tech_Year" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              Year of Passing:<span class="StarMarking">*</span>
+            </label>
+            <select class="form-select"
+                    id="Tech_Year"
+                    formControlName="Tech_Year"
+                    [(ngModel)]="techRequest.Tech_Year">
+              <option value="">Select Year of Passing</option>
+              <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+            </select>
+            <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Year.errors" class="text-danger">
+              <p>
+                <i aria-hidden="true"></i>Enter Valid Year .!
+              </p>
+            </div>
+
+          </div>
+
+          <div>
+            <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              Marks Type:<span class="StarMarking"></span>
+            </label>
+            <select class="form-select" id="ddlMarksType" formControlName="Tech_MarksTypeID"
+                    [(ngModel)]="techRequest.MarksType">
+              <option value="0">Select Marks Type</option>
+              <option *ngFor="let item of MarksTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && TechnicalForm.controls.QualificationName?.errors" class="text-danger">
+              <p>This field is required .!</p>
+            </div>
+          </div>
+
+
+          <div *ngIf="TechnicalForm.get('Tech_MarksTypeID')?.value == '83'">
+            <label>Percentage<span class="StarMarking">*</span></label>
+            <input maxlength="3" class="form-input" type="number" [(ngModel)]="techRequest.Tech_Percentage" placeholder=" Enter Tech Percentage"
+                   formControlName="Tech_Percentage" />
+            <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Percentage.errors" class="text-danger">
+              <p><i aria-hidden="true"></i>Enter valid percentage (0–100) .!</p>
+            </div>
+          </div>
+
+          <div *ngIf="TechnicalForm.get('Tech_MarksTypeID')?.value == '84'">
+            <label>CGPA<span class="StarMarking">*</span></label>
+            <input class="form-input" maxlength="3" type="number" [(ngModel)]="techRequest.Tech_Percentage" placeholder=" Enter Tech Percentage" formControlName="Tech_CGPA" />
+            <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Percentage.errors" class="text-danger">
+              <p>Enter valid CGPA (0–10) .!</p>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+  </form>
+
+
 </div>
 <div class="card-footer text-center">
   <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>

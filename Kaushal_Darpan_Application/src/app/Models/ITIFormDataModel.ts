@@ -94,9 +94,12 @@ export class OptionsDetailsDataModel {
   public SSOID: string = ''
   public AcademicYear: number = 0
 
+  public TradeCategoryName: string = ''
 
   public MinPercentageInScience: string = ''
   public MinPercentageInMath: string = ''
+  public TradeCategory:number = 0
+
   
 }
 
@@ -128,6 +131,9 @@ export class QualificationDetailsDataModel {
 
 }
 
+
+
+
 export class HighestQualificationDetailsDataModel {
   public StateIDHigh: number = 0
   public BoardUniversityHigh: string = ''
@@ -143,6 +149,38 @@ export class HighestQualificationDetailsDataModel {
 
 
 }
+
+
+export class TechnicalQualificationDetailsDataModel {
+  public Tech_Exam?: string = '';
+  public Tech_Board?: string = '';
+  public Tech_Subjects?: string = '';
+  public StreamName?: string = '';
+  public StreamID?: number = 0;
+  public SchoolCollegeHigh?: string = '';
+  public Tech_Year?: string = '';
+  public Tech_Percentage?: number;
+  public Tech_CGPA?: number = 0;
+  public StateID?: number = 0;
+  public TechDocument?: string = '';
+  public MarksType?: number = 0;
+  public MarkTypeName?: string = '';
+  public CITSCertified?: string = '';
+  public Tech_CITSCertifiedDocument?: string = '';
+  public QualificationLevel?: string = '';
+  public QualificationName?: string = '';
+  public QualificationID?: number = 0;
+  public Tech_MarksTypeID?: string = '';
+  public Tech_CITSTrade?: string = '';
+  public Tech_CITSYear?: string = '';
+
+ /* public OtherCITSQualification: ITI_InstructorTechnicalCITSQualificationList[] = [new ITI_InstructorTechnicalCITSQualificationList()];*/
+  
+
+
+}
+
+
 
 export class Qualification8thDetailsDataModel {
   public SelectedQualification8: number = 8
@@ -171,6 +209,8 @@ export class ExperienceDetailsDataModel {
   public NameOfIndustry: string = ''
   public TypeOfWork: string = ''
   public ExperienceDetailDescription: string = ''
+  public EstablishmentIndustryRegistrationdetails: string = ''
+  public ExperienceCertificateFromEmployer: string = ''
 
 
 

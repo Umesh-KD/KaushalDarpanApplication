@@ -12,6 +12,9 @@ import { ItiApplicationSearchmodel } from '../../../../Models/ItiApplicationPrev
 import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
 import { ActivatedRoute } from '@angular/router';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { DocumentDetailsService } from '../../../../Common/document-details';
 
 @Component({
   selector: 'app-iti-direct-experience',
@@ -64,6 +67,10 @@ export class ITIDirectExperienceComponent {
 
   ];
   Object = Object;
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
+  public isEmp: boolean = false;
   constructor(
     private commonFunctionService: CommonFunctionService,
     private loaderService: LoaderService,
@@ -71,7 +78,9 @@ export class ITIDirectExperienceComponent {
     private ItiApplicationFormService: ItiApplicationFormService,
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
-    private encryptionService: EncryptionService
+    private encryptionService: EncryptionService,
+    private commonMasterService: CommonFunctionService,
+    private appsettingConfig: AppsettingService, private documentDetailsService: DocumentDetailsService
   ) { }
 
   async ngOnInit() {
@@ -83,7 +92,9 @@ export class ITIDirectExperienceComponent {
         TypeOfWork: ['', [Validators.required]],
         ExperienceDetailDescription: ['', [Validators.required]],
         Year: ['', [DropdownValidators]],
-        Month: ['', [DropdownValidators]]
+        Month: ['', [DropdownValidators]],
+        EstablishmentIndustryRegistrationdetails: ['', [Validators.required]]
+  
       });
 
 
@@ -110,11 +121,7 @@ export class ITIDirectExperienceComponent {
       this.OptionsFormGroup.controls['ddlManagementType'].disable();
       this.OptionsFormGroup.controls['ddlDistrict'].disable();
       this.OptionsFormGroup.controls['ddlInstitute'].disable();
-
-
     }
-
-
 
   }
 
@@ -140,7 +147,9 @@ export class ITIDirectExperienceComponent {
   }
 
 
-  async AddChoice() {
+  async AddChoice()
+  {
+    debugger;
     this.isSubmitted = true
     if (this.OptionsFormGroup.invalid) {
       this.OptionsFormGroup.markAllAsTouched();
@@ -427,7 +436,7 @@ export class ITIDirectExperienceComponent {
   }
 
   async Back() {
-    this.tabChange.emit(1);
+    this.tabChange.emit(2);
   }
 
   async QualificationDataById() {
@@ -492,5 +501,82 @@ export class ITIDirectExperienceComponent {
   async DeleteExperience(idx: number) {
     this.AddedChoices.splice(idx, 1);
     await this.calculateDynamicTotals(this.AddedChoices);
+  }
+
+  //public file!: File;
+  //async onFilechange(event: any, Type: string) {
+  //  debugger
+  //  try {
+
+  //    this.file = event.target.files[0];
+  //    if (this.file) {
+  //      this.loaderService.requestStarted();
+
+  //      let uploadModel = new UploadFileModel();
+  //      uploadModel.FolderName = "ITI/StudentAdmission/";        
+
+  //      await this.commonMasterService.UploadDocument(this.file)
+  //        .then((data: any) => {
+  //          data = JSON.parse(JSON.stringify(data));
+
+  //          this.State = data['State'];
+  //          this.Message = data['Message'];
+  //          this.ErrorMessage = data['ErrorMessage'];
+
+  //          if (this.State == EnumStatus.Success) {
+  //            if (Type == "ExpCertificate") {
+  //              this.formData.ExperienceCertificateFromEmployer = data['Data'][0]["FileName"];
+  //            }
+              
+  //            event.target.value = null;
+  //          }
+  //          if (this.State == EnumStatus.Error) {
+  //            this.toastr.error(this.ErrorMessage)
+  //          }
+  //          else if (this.State == EnumStatus.Warning) {
+  //            this.toastr.warning(this.ErrorMessage)
+  //          }
+  //        });
+  //    }
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    /*setTimeout(() => {*/
+  //    this.loaderService.requestEnded();
+  //    /*  }, 200);*/
+  //  }
+  //}
+
+
+
+
+  async UploadDocument(event: any, formData: any) {
+    try {
+      let uploadModel = new UploadFileModel();
+      uploadModel.FolderName = "Students";
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State == EnumStatus.Success) {
+
+            formData.ExperienceCertificateFromEmployer = data.Data[0].FileName;
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
   }
 }

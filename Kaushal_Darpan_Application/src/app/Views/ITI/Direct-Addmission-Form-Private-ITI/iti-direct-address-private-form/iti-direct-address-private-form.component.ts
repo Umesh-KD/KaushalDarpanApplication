@@ -209,7 +209,7 @@ export class ITIDirectAddressPrivateFormComponent {
             this.toastr.success(this.Message)
             /*  this.CancelData();*/
             this.formSubmitSuccess.emit(true);
-            this.tabChange.emit(3);
+            this.tabChange.emit(6);
             /* this.routers.navigate(['/Hrmaster']);*/
           }
           else {
@@ -314,7 +314,7 @@ export class ITIDirectAddressPrivateFormComponent {
   }
 
   async Back() {
-    this.tabChange.emit(1)
+    this.tabChange.emit(3)
   }
 
 
