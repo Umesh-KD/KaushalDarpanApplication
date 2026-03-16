@@ -101,7 +101,7 @@
         {{formData.ExperienceCertificateFromEmployer === '' ? 'No File Choosen' : formData.ExperienceCertificateFromEmployer}}
       </label>
       <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/StudentAdmission//{{formData.ExperienceCertificateFromEmployer}}"
+        <a href="{{appsettingConfig.StaticFileRootPathURL}} + '/' + {{formData.ExperienceCertificateFromEmployer}}"
 
            *ngIf="this.formData.ExperienceCertificateFromEmployer !=''"
            class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
