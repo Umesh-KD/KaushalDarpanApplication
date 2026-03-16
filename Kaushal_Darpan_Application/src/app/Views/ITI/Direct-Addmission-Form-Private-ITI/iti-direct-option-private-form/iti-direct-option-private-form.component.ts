@@ -715,10 +715,13 @@ export class ITIDirectOptionPrivateFormComponent {
       this.tradeSearchRequest.Age = this.PersonalDetailsData.Age
       this.tradeSearchRequest.DistrictID = this.formData.DistrictID
       this.tradeSearchRequest.ManagementTypeID = this.formData.ManagementTypeID
-      if (this.IsJailAdmission) {
+      if (this.IsJailAdmission)
+      {
     
         this.tradeSearchRequest.action = 'JailAdmisiiontrade'
-      } else {
+      }
+      else
+      {
         this.tradeSearchRequest.action = '_getTradebyCollege'
       }
 
