@@ -13,6 +13,8 @@ import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../../Models/
 import { ActivatedRoute } from '@angular/router';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { DocumentDetailsService } from '../../../../Common/document-details';
 
 @Component({
   selector: 'app-iti-direct-experience',
@@ -78,7 +80,7 @@ export class ITIDirectExperienceComponent {
     private activatedRoute: ActivatedRoute,
     private encryptionService: EncryptionService,
     private commonMasterService: CommonFunctionService,
-    private appsettingConfig: AppsettingService,
+    private appsettingConfig: AppsettingService, private documentDetailsService: DocumentDetailsService
   ) { }
 
   async ngOnInit() {
@@ -499,46 +501,80 @@ export class ITIDirectExperienceComponent {
     await this.calculateDynamicTotals(this.AddedChoices);
   }
 
-  public file!: File;
-  async onFilechange(event: any, Type: string) {
-    debugger
-    try {
+  //public file!: File;
+  //async onFilechange(event: any, Type: string) {
+  //  debugger
+  //  try {
 
-      this.file = event.target.files[0];
-      if (this.file) {
-        this.loaderService.requestStarted();
+  //    this.file = event.target.files[0];
+  //    if (this.file) {
+  //      this.loaderService.requestStarted();
 
-        await this.commonMasterService.UploadDocument(this.file)
-          .then((data: any) => {
-            data = JSON.parse(JSON.stringify(data));
+  //      let uploadModel = new UploadFileModel();
+  //      uploadModel.FolderName = "ITI/StudentAdmission/";        
 
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
+  //      await this.commonMasterService.UploadDocument(this.file)
+  //        .then((data: any) => {
+  //          data = JSON.parse(JSON.stringify(data));
 
-            if (this.State == EnumStatus.Success) {
-              if (Type == "ExpCertificate") {
-                this.formData.ExperienceCertificateFromEmployer = data['Data'][0]["FileName"];
-              }
+  //          this.State = data['State'];
+  //          this.Message = data['Message'];
+  //          this.ErrorMessage = data['ErrorMessage'];
+
+  //          if (this.State == EnumStatus.Success) {
+  //            if (Type == "ExpCertificate") {
+  //              this.formData.ExperienceCertificateFromEmployer = data['Data'][0]["FileName"];
+  //            }
               
-              event.target.value = null;
-            }
-            if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage)
-            }
-            else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.ErrorMessage)
-            }
-          });
-      }
+  //            event.target.value = null;
+  //          }
+  //          if (this.State == EnumStatus.Error) {
+  //            this.toastr.error(this.ErrorMessage)
+  //          }
+  //          else if (this.State == EnumStatus.Warning) {
+  //            this.toastr.warning(this.ErrorMessage)
+  //          }
+  //        });
+  //    }
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    /*setTimeout(() => {*/
+  //    this.loaderService.requestEnded();
+  //    /*  }, 200);*/
+  //  }
+  //}
+
+
+
+
+  async UploadDocument(event: any, formData: any) {
+    try {
+      let uploadModel = new UploadFileModel();
+      uploadModel.FolderName = "ITI/StudentAdmission/";
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State == EnumStatus.Success) {
+
+            formData.ExperienceCertificateFromEmployer = data.Data[0].FileName;
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      /*setTimeout(() => {*/
-      this.loaderService.requestEnded();
-      /*  }, 200);*/
     }
   }
 }

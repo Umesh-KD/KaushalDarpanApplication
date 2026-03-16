@@ -90,35 +90,54 @@
       </div>
 
 
-      <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-2"
-               for="fileExperienceCertificate">Experience Certificate From Employer<span class="StarMarking">*</span></label>
-        <div class="flex fileUploader">
-          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                 id="fileExperienceCertificate" formControlName="ExperienceCertificateFromEmployer" type="file" (change)="onFilechange($event,'ExpCertificate')">
-          <label for="fileExperienceCertificate">
-            <span>Choose File</span>
-            {{formData.ExperienceCertificateFromEmployer === '' ? 'No File Choosen' : formData.ExperienceCertificateFromEmployer}}
-          </label>
-          <div class="flex">
-            <!--<a href="{{appsettingConfig.StaticFileRootPathURL + '/' + formData.ExperienceCertificateFromEmployer}}"-->
-            <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/Student//{{item.Tech_CITSCertifiedDocument}}"
+      <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-2"
+           for="fileExperienceCertificate">Experience Certificate From Employer<span class="StarMarking">*</span></label>
+    <div class="flex fileUploader">
+      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+             id="fileExperienceCertificate" formControlName="ExperienceCertificateFromEmployer" type="file" (change)="onFilechange($event,'ExpCertificate')">
+      <label for="fileExperienceCertificate">
+        <span>Choose File</span>
+        {{formData.ExperienceCertificateFromEmployer === '' ? 'No File Choosen' : formData.ExperienceCertificateFromEmployer}}
+      </label>
+      <div class="flex">
+        <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/StudentAdmission//{{formData.ExperienceCertificateFromEmployer}}"
 
-               *ngIf="this.formData.ExperienceCertificateFromEmployer !=''"
-               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-          </div>
-        </div>
+           *ngIf="this.formData.ExperienceCertificateFromEmployer !=''"
+           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+      </div>
+    </div>
 
-        <div *ngIf="isEmp && OptionsFormGroup.controls.ExperienceCertificateFromEmployer.errors" class="text-danger">
-          <p>
-            <i aria-hidden="true"></i>This field is required .!
-          </p>
+    <div *ngIf="isEmp && OptionsFormGroup.controls.ExperienceCertificateFromEmployer.errors" class="text-danger">
+      <p>
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+
+  </div>-->
+
+
+      <div class="flex fileUploader">
+        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+               id="fileExperienceCertificate" type="file" (change)="UploadDocument($event,formData)" />
+        <label for="fileExperienceCertificate">
+          <span>Choose File</span>
+          {{ formData.ExperienceCertificateFromEmployer === '' ? 'No File Chosen' : formData.ExperienceCertificateFromEmployer }}
+        </label>
+        <div class="flex" *ngIf="formData.ExperienceCertificateFromEmployer !== ''">
+          <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/StudentAdmission//{{formData.ExperienceCertificateFromEmployer}}"
+             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
         </div>
 
       </div>
+      <!--<div *ngIf="item.errors?.ExperienceCertificateFromEmployer" class="text-danger">
+    <p>This field is required!</p>
+  </div>-->
+
 
       <div class="pt-30">
-        <button type="button" class="btn bg-primary text-white" (click)="AddChoice()">
+        <button type="button" class="
+                btn bg-primary text-white" (click)="AddChoice()">
           <i class="ti ti-plus"></i> Add
           Choice
         </button>
