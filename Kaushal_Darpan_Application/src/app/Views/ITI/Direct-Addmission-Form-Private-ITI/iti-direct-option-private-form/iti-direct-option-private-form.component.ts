@@ -689,7 +689,9 @@ export class ITIDirectOptionPrivateFormComponent {
       await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData_Private(this.tradeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiCollegesList = data.Data
+        console.log('Colleges List===>',this.ItiCollegesList)
       })
+     
     } catch (error) {
       console.error(error)
     } finally {
