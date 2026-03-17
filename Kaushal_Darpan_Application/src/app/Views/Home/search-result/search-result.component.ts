@@ -17,20 +17,13 @@ import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/ma
 })
 export class SearchResultComponent implements OnInit {
   public resultSearchReq = new StudentResultSearchModel();
-  public State: number = -1;
-  public Message: any = [];
-  public ErrorMessage: any = [];
-  public _GlobalConstants: any = GlobalConstants;
-  public PostId: number = 0;
-  public CampusPostList: any[] = [];
-  public PlacementCompanyList: any[] = [];
   public searchRequest = new CampusDetailsWebSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public CollegeList: any = [];
   public SemesterList: any = [];
   public FinancialYear: any = [];
-  public searchBySemester: string = ''
-  public searchByFinancialYearID: string = ''
+  public StudentData: any = [];
+  public SubjectDetailsData: any = [];
+  public FinalResultData: any = [];
 
   public StudentResultData: any;
 
@@ -99,15 +92,23 @@ export class SearchResultComponent implements OnInit {
 
   async GetStudentResult_public() {
     try {
-      debugger
       await this.marksheetDownloadService.GetStudentResult_public(this.resultSearchReq).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StudentResultData = data['Data'];
+        this.StudentData = data.Data['Table'][0];
+        this.SubjectDetailsData = data.Data['Table1'];
+        this.FinalResultData = data.Data['Table2'];
       })
     } catch (error) {
       console.error(error);
     }
   }
 
+  onendtermchange(event: any) {
+    this.resultSearchReq.EndTermID = event.target.value;
+  }
 
+  onsemesterchange(event: any) {
+    this.resultSearchReq.SemesterID = event.target.value;
+  }
 }
