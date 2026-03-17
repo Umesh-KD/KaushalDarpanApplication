@@ -1,6 +1,5 @@
 <div class="container-fluid p-3 py-5 bg-primary text-white text-center">
-  <h3 class="mt-0 text-white">All Campus List</h3>
-  
+  <h3 class="mt-0 text-white">Diploma Result</h3>  
 </div>
 
 <div class="container-fluid AboutSection position-relative" style="background: #deebff !important;">
@@ -19,17 +18,17 @@
 
               <div class="col-md-3">
                 <label for="inputState" class="form-label">End Term: </label>
-                <select class="form-select mb-0" id="ddlFinancialYearID" [(ngModel)]="searchByFinancialYearID">
-                  <option value="">Choose Option</option>
-                  <option *ngFor="let item of FinancialYear" [value]="item.FinancialYear">{{item.FinancialYear}}</option>
+                <select class="form-select mb-0" id="EndTermID" [(ngModel)]="resultSearchReq.EndTermID">
+                  <option [value]="0">Choose Option</option>
+                  <option *ngFor="let item of FinancialYear" [value]="item.EndTermID">{{item.EndTermName}}</option>
                 </select>
               </div>
 
 
               <div class="col-md-3">
                 <label for="inputState" class="form-label">Semester: </label>
-                <select class="form-select mb-0" id="StreamStreamTypeId" [(ngModel)]="searchBySemester">
-                  <option value="">Choose Option</option>
+                <select class="form-select mb-0" id="SemesterID" [(ngModel)]="resultSearchReq.SemesterID">
+                  <option [value]="0">Choose Option</option>
                   <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
                 </select>
               </div>
@@ -37,20 +36,21 @@
 
               <div class="col-md-3">
                 <label for="rollNo" class="form-label">Roll No: </label>
-                <input type="text" class="form-control" name="rollNo">
+                <input type="text" class="form-control" name="rollNo" placeholder="Enter Roll No"
+                  [(ngModel)]="resultSearchReq.RollNo" 
+                   oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
               </div>
 
               <div class="col-md-3">
                 <label for="startDate" class="form-label">Date Of Birth: </label>
                 <input type="date"
                        class="form-control"
-                       [(ngModel)]="CampusFromDate"
-                       name="CampusFromDate"
-                       [max]="CampusToDate">
+                       [(ngModel)]="resultSearchReq.DOB"
+                       name="CampusFromDate">
               </div>
 
               <div class="col-md-3">
-                <button type="button" class="btn btn-primary d-flex align-items-center" (click)="GetAllData()">
+                <button type="button" class="btn btn-primary d-flex align-items-center" (click)="GetStudentResult_public()">
                   <i class="ti ti-search me-2"></i> Search
                 </button>
               </div>
@@ -58,11 +58,7 @@
             </form>
           </div>
         </div>
-        
-
-        
       </div>
     </div>
-
   </div>
 </div>
