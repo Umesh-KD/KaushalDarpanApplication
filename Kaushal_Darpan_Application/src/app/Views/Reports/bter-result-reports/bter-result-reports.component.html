@@ -44,9 +44,9 @@
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
         <select class="form-select" name="SchemeID" [(ngModel)]="filterModel.SchemeID">
-          <option [value]="0">--Select--</option>         
-          <option [value]="1347">Old</option>         
-          <option [value]="1348">New</option>         
+          <option [value]="0">--Select--</option>
+          <option [value]="1347">Old</option>
+          <option [value]="1348">New</option>
         </select>
       </div>
       <div>
@@ -56,11 +56,33 @@
           <option *ngFor="let item of ResultTypeList" [value]="item.ID">{{ item.Name }}</option>
         </select>
       </div>
+
+      <div *ngIf="filterModel.Action=='Result-Appeared-Passed-Statistics-Report'"
+           class="col-span-full grid md:grid-cols-3 grid-cols-1 gap-3 mt-2">
+
+        <div>
+          <label>File No. 1</label>
+          <input type="text" class="form-input" name="FileNo1" [(ngModel)]="filterModel.FileNo1" />
+        </div>
+
+        <div>
+          <label>File No. 2</label>
+          <input type="text" class="form-input" name="FileNo2" [(ngModel)]="filterModel.FileNo2" />
+        </div>
+
+        <div>
+          <label>File Date</label>
+          <input type="date" class="form-input" name="FileDate" [(ngModel)]="filterModel.FileDate" />
+        </div>
+
+      </div>
+
       <!-- Buttons -->
-     
+
       <div>
         <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()">
-          <i class="ti ti-refresh"></i> Reset</button>
+          <i class="ti ti-refresh"></i> Reset
+        </button>
         <button type="submit" class="btn bg-info text-white mt-6"> Download</button>
       </div>
 
