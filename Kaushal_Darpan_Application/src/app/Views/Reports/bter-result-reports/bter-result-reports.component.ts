@@ -26,6 +26,9 @@ export interface requestData {
   Eng_NonEng: number;
   ResultType: number;
   SchemeID: number;
+  FileNo1: string;
+  FileNo2: string;
+  FileDate: any;
 }
 
 @Component({
@@ -57,7 +60,10 @@ export class BterResultReportsComponent implements OnInit {
     DepartmentID: 0,
     Eng_NonEng: 0,
     ResultType: 0,
-    SchemeID: 0
+    SchemeID: 0,
+    FileNo1: '',
+    FileNo2: '',
+    FileDate: null
   };
 
   totalRecords = 0;
@@ -170,7 +176,10 @@ export class BterResultReportsComponent implements OnInit {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      SchemeID: 0
+      SchemeID: 0,
+      FileNo1:'',
+      FileNo2: '',
+      FileDate: null
     };
     this.selectedType = '';
     this.ReportsListData = [];
@@ -180,12 +189,12 @@ export class BterResultReportsComponent implements OnInit {
     //this.GetAllData();
   }
 
-  filterFormSubmit(): void {    
+  async filterFormSubmit() {    
     if (this.filterModel.Action == "0") {
       this.toastrService.error('Please select Certificate Type');
       return;
     }
-    this.GetAllData();
+    await this.GetAllData();
   }
 
 
@@ -630,13 +639,18 @@ export class BterResultReportsComponent implements OnInit {
   }
 
   async getResultAppearedPassedStatisticsReport() {
-    let request: any = {
 
+    //debugger
+    let request: any = {
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
       DepartmentID: this.ssoLoginUser.DepartmentID,
       Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      EndTermID: this.ssoLoginUser.EndTermID
+      EndTermID: this.ssoLoginUser.EndTermID,
+      SchemeID: this.filterModel.SchemeID,
+      FileNo1: this.filterModel.FileNo1,
+      FileNo2: this.filterModel.FileNo2,
+      FileDate: this.filterModel.FileDate  
     }
 
     this.reportService.getResultAppearedPassedStatisticsReport(request)
@@ -677,7 +691,9 @@ export class BterResultReportsComponent implements OnInit {
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
       SchemeID: this.filterModel.SchemeID,
-      
+      FileNo1: this.filterModel.FileNo1,
+      FileNo2: this.filterModel.FileNo2,
+      FileDate: this.filterModel.FileDate      
     }
     try {
       await this.reportService.GetExamWiseStreamPapersreport(request)
