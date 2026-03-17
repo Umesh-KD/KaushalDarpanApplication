@@ -319,17 +319,16 @@
             <th>S.No</th>
             <th class="text-left">Industry Name</th>
             <th class="text-left">Type Of Work</th>
-            <th>Year</th>
-            <th>Month</th>
+            <th>Date From</th>
+            <th>Date To</th>
             <th class="text-left">Experience Description</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of request.ExperienceDetailsDataModel; let idx = index"
-              [ngClass]="{'font-bold bg-gray-100': idx === request.ExperienceDetailsDataModel.length - 1}">
+          <tr *ngFor="let row of request.ExperienceDetailsDataModel; let idx = index">
 
             <td class="text-center">
-              {{ idx === request.ExperienceDetailsDataModel.length - 1 ? 'Total' : idx + 1 }}
+              {{ idx + 1 }}
             </td>
 
             <td class="text-left">
@@ -341,11 +340,11 @@
             </td>
 
             <td class="text-left">
-              {{row.Year}}
+              {{row.dateFrom | date:'dd-MM-yyyy'}}
             </td>
 
             <td class="text-left">
-              {{row.Month}}
+              {{row.dateTo  | date:'dd-MM-yyyy'}}
             </td>
 
             <td class="text-left">
