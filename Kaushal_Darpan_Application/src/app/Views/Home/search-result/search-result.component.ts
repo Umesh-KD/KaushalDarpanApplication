@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { CampusDetailsWebSearchModel } from '../../../Models/CampusDetailsWebDataModel';
 import { StudentResultSearchModel } from '../../../Models/DownloadMarksheetDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -26,6 +26,7 @@ export class SearchResultComponent implements OnInit {
   public FinalResultData: any = [];
 
   public StudentResultData: any;
+  public showResult: boolean = false;
 
   minEndDate: string = '';
 
@@ -51,6 +52,7 @@ export class SearchResultComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.resultSearchReq = new StudentResultSearchModel();
     await this.GetSemesterList();
     await this.GetResultEndTermDDLList();   
   }
@@ -94,10 +96,31 @@ export class SearchResultComponent implements OnInit {
     try {
       await this.marksheetDownloadService.GetStudentResult_public(this.resultSearchReq).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.StudentResultData = data['Data'];
-        this.StudentData = data.Data['Table'][0];
-        this.SubjectDetailsData = data.Data['Table1'];
-        this.FinalResultData = data.Data['Table2'];
+        if(data.State === EnumStatus.Success) {
+          this.StudentResultData = data['Data'];
+          this.StudentData = data.Data['Table'][0];
+          this.SubjectDetailsData = data.Data['Table1'];
+          this.FinalResultData = data.Data['Table2'];
+
+          if(this.SubjectDetailsData?.length > 0) {
+            this.showResult = true;
+          }
+        } else if(data.State === EnumStatus.Warning) {
+          this.showResult = false;
+          this.toastr.warning(data.Message);
+          this.StudentResultData = [];
+          this.StudentData = [];
+          this.SubjectDetailsData = [];
+          this.FinalResultData = [];
+        } else {
+          this.showResult = false;
+          this.toastr.error(data.ErrorMessage);
+          this.StudentResultData = [];
+          this.StudentData = [];
+          this.SubjectDetailsData = [];
+          this.FinalResultData = [];
+        }
+        
       })
     } catch (error) {
       console.error(error);
