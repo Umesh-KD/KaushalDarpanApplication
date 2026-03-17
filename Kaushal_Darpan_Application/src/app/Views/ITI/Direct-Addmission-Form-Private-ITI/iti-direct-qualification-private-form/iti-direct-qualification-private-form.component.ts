@@ -104,6 +104,8 @@ export class ITIDirectQualificationPrivateFormComponent {
       QualificationName: ['', [DropdownValidators]],
       QualificationLevel: ['', Validators.required],
       Tech_Board: ['',],
+      TradeScheme: ['',],
+      ExamName: ['',],
       // Tech_Subjects: ['', Validators.required],
       StreamName: [''],
       StreamID: [''],
@@ -1353,7 +1355,7 @@ export class ITIDirectQualificationPrivateFormComponent {
 
 
     debugger
-    if (this.techRequest.QualificationLevel == 'Diploma/Certificate Course') {
+    if (this.techRequest.QualificationID == 11 || this.techRequest.QualificationID == 12) {
       this.TechnicalForm.get('StreamID')?.setValidators([DropdownValidators]);
 
     } else {
@@ -1362,6 +1364,23 @@ export class ITIDirectQualificationPrivateFormComponent {
     }
     this.TechnicalForm.get('StreamID')?.updateValueAndValidity();
 
+    if (this.techRequest.QualificationID == 16) {
+      this.TechnicalForm.get('ExamName')?.setValidators(Validators.required);
+
+    } else {
+      this.TechnicalForm.get('ExamName')?.clearValidators();
+      this.techRequest.ExamName = ''
+    }
+    this.TechnicalForm.get('ExamName')?.updateValueAndValidity();
+
+    if (this.techRequest.QualificationID == 11) {
+      this.TechnicalForm.get('TradeScheme')?.setValidators([DropdownValidators]);
+
+    } else {
+      this.TechnicalForm.get('TradeScheme')?.clearValidators();
+      this.techRequest.TradeScheme = 0
+    }
+    this.TechnicalForm.get('TradeScheme')?.updateValueAndValidity();
 
     if (this.techRequest.Tech_Percentage == 0) {
       this.toastr.error("Please Enter Valid Technical Percentage/CGPA")
@@ -1399,20 +1418,40 @@ export class ITIDirectQualificationPrivateFormComponent {
     }
 
 
+    const tradeSchemeName =
+      this.techRequest?.TradeScheme == 1 ? 'NCVT'
+        : this.techRequest?.TradeScheme == 2 ? 'SCVT'
+          : '';
 
 
+    const examName = this.techRequest?.ExamName ?? '';
 
 
+    let finalStreamName = '';
 
+    if (this.techRequest?.QualificationID == 11) {
+      finalStreamName = StreamName
+        ? `${StreamName}${tradeSchemeName ? ' (' + tradeSchemeName + ')' : ''}`
+        : '';
+    }
+    else if (this.techRequest?.QualificationID == 12) {
+      finalStreamName = StreamName;
+    }
+    else if (this.techRequest?.QualificationID == 16) {
+      finalStreamName = examName;
+    }
 
-
+    if (this.techRequest.TechDocument == '') {
+      this.toastr.warning("Please Add Document")
+      return
+    }
 
 
 
 
 
     this.TechRequestList.push({
-      ApplicationID: this.ApplicationID,
+      ApplicationID: this.ApplicationID,  
       SSOID: this.SSOLoginDataModel.SSOID,
       StateID: this.techRequest.StateID || 0,
       BoardUniversity: '',
@@ -1438,11 +1477,13 @@ export class ITIDirectQualificationPrivateFormComponent {
       TechExamID: this.techRequest.QualificationID,
       QualificationLevel: this.techRequest.QualificationLevel,
       StateName: StateName,
-      StreamName: StreamName,
+      StreamName: finalStreamName   ,
       ExamPassedName: ExamPassedName,
       MarktypeName: MarktypeName,
       TechDocument: this.techRequest.TechDocument,
-      Dis_TechDocument: this.techRequest.Dis_TechDocument
+      Dis_TechDocument: this.techRequest.Dis_TechDocument,
+      ExamName: this.techRequest.ExamName,
+      TradeScheme: this.techRequest.TradeScheme
     });
 
 

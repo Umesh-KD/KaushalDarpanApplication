@@ -768,7 +768,20 @@
         </div>
 
 
-        <div *ngIf="techRequest.QualificationLevel=='Diploma/Certificate Course'">
+
+        <div *ngIf="techRequest.QualificationID==16">
+          <label for="StreamID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Name Of Exam:
+          </label>
+          <input type="text" class="form-input" id="" placeholder="Enter Exam Name"
+                 formControlName="ExamName" [(ngModel)]="techRequest.ExamName">
+          <div *ngIf="istechsubmit && TechnicalForm.controls.ExamName?.errors" class="text-danger">
+            <p>This field is required .!</p>
+          </div>
+        </div>
+
+
+        <div *ngIf="techRequest.QualificationID==11 || techRequest.QualificationID==12">
           <label for="StreamID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Stream/Trade:
           </label>
@@ -776,7 +789,7 @@
                   id="StreamID"
                   formControlName="StreamID"
                   [(ngModel)]="techRequest.StreamID">
-            <option [ngValue]="0">---Select Board---</option>
+            <option [ngValue]="0">---Select---</option>
             <option *ngFor="let s of StreamList" [value]="s.StreamID">{{ s.StreamName }}</option>
           </select>
           <div *ngIf="istechsubmit && TechnicalForm.controls.StreamID?.errors" class="text-danger">
@@ -784,7 +797,22 @@
           </div>
         </div>
 
-
+        <div *ngIf="techRequest.QualificationID==11">
+          <label for="TradeScheme" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Trade Scheme:
+          </label>
+          <select class="form-select"
+                  id="StreamID"
+                  formControlName="TradeScheme"
+                  [(ngModel)]="techRequest.TradeScheme">
+            <option [ngValue]="0">---Select---</option>
+            <option  [value]="1">NCVT</option>
+            <option  [value]="2">SCVT</option>
+          </select>
+          <div *ngIf="istechsubmit && TechnicalForm.controls.TradeScheme?.errors" class="text-danger">
+            <p>This field is required .!</p>
+          </div>
+        </div>
 
         <div>
           <label for="Tech_Year" class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -886,7 +914,7 @@
           <th>State of Study</th>
           <th>Examination Passed</th>
           <th>College</th>
-          <th>Stream/Trade</th>
+          <th>Stream/Trade/Other Exam</th>
           <th>Year of Passing</th>
 
           <th>Marks Type</th>

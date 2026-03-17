@@ -171,9 +171,11 @@ export class TechnicalQualificationDetailsDataModel {
   public QualificationLevel?: string = '';
   public QualificationName?: string = '';
   public QualificationID?: number = 0;
+  public TradeScheme?: number = 0;
   public Tech_MarksTypeID?: string = '';
   public Tech_CITSTrade?: string = '';
   public Tech_CITSYear?: string = '';
+  public ExamName?: string = '';
 
  /* public OtherCITSQualification: ITI_InstructorTechnicalCITSQualificationList[] = [new ITI_InstructorTechnicalCITSQualificationList()];*/
   
