@@ -209,7 +209,7 @@ export class ITIDirectAddressPrivateFormComponent {
             this.toastr.success(this.Message)
             /*  this.CancelData();*/
             this.formSubmitSuccess.emit(true);
-            this.tabChange.emit(6);
+            this.tabChange.emit(5);
             /* this.routers.navigate(['/Hrmaster']);*/
           }
           else {
