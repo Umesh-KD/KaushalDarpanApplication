@@ -172,6 +172,7 @@ export class ITIDirectPreviewPrivateFormComponent {
               }
             })
             debugger
+
             this.request.QualificationViewDetails = data.Data.QualificationViewDetails
             this.Techqualificalrequest =
               this.request?.QualificationViewDetails?.filter(
