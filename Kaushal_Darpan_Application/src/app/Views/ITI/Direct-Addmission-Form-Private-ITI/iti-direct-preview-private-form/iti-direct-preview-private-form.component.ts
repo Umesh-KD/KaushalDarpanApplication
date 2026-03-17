@@ -173,8 +173,15 @@ export class ITIDirectPreviewPrivateFormComponent {
             })
             debugger
             this.request.QualificationViewDetails = data.Data.QualificationViewDetails
-            this.Techqualificalrequest = this.request.QualificationViewDetails.filter((e: any) => e.QualificationName == 'Technical')
-            this.request.QualificationViewDetails = this.request.QualificationViewDetails.filter((e: any) => e.QualificationName != 'Technical')
+            this.Techqualificalrequest =
+              this.request?.QualificationViewDetails?.filter(
+                (e: any) => e?.QualificationName === 'Technical'
+              ) ?? [];
+
+            this.request.QualificationViewDetails =
+              this.request?.QualificationViewDetails?.filter(
+                (e: any) => e?.QualificationName !== 'Technical'
+              ) ?? [];
             console.log("this.request", this.request)
             const dob = new Date(data['Data']['DOB']);
             const year = dob.getFullYear();
@@ -183,7 +190,7 @@ export class ITIDirectPreviewPrivateFormComponent {
             this.request.DOB = `${year}-${month}-${day}`;
 
             this.ShowHideButtons(this.request.IsfinalSubmit, this.request.IsFinalPay, this.request.DirectAdmissionType);
-
+            debugger
             if (this.request.PendingDataModel?.length > 0) { this.IsShowIncompleteData = true }
             else { this.IsShowIncompleteData = false }
           }
