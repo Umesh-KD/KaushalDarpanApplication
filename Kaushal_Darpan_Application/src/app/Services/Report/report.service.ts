@@ -1078,7 +1078,7 @@ export class ReportService {
   public async GetCentarlSupridententDistrictReportDataListReport(request: CenterAllocationSearchModel) {
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
-    debugger
+    //debugger
     return await this.http.post(this.APIUrl + '/GetCentarlSupridententDistrictReportDataListReport', body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1384,7 +1384,7 @@ export class ReportService {
     return await lastValueFrom(api);
   }
   public async GetBterMassCopingReport(data: any) {
-    debugger
+    //debugger
     return await this.http.post(this.APIUrl + "/GetMassCoppingReport/", data, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1399,7 +1399,7 @@ export class ReportService {
   }
 
   public async GetBterBranchWiseStatisticalReport(request: any): Promise<any> {
-    debugger
+    //debugger
     const body = JSON.stringify(request);
     const api = this.http.post(`${this.APIUrl}/GetBterBranchWiseStatisticalReport`, body, this.headersOptions)
       .pipe(catchError(this.handleErrorObservable));
@@ -1436,7 +1436,7 @@ export class ReportService {
 
 
     public async GetSessionalFailStudentReport(request: GetSessionalFailStudentReport) {
-      debugger
+      //debugger
       const body = JSON.stringify(request);
       return this.http.post(`${this.APIUrl}/GetSessionalFailStudentReport`, body, this.headersOptions)
           .pipe(
@@ -1446,7 +1446,7 @@ export class ReportService {
 
     // changess
     public async BterBridgeCoruseReportDownload(data: any) {
-      debugger
+      //debugger
         return await this.http.post(this.APIUrl + "/GetBterBridgeCourseReport/", data, this.headersOptions)
         .pipe(
           catchError(this.handleErrorObservable)
@@ -1454,7 +1454,7 @@ export class ReportService {
       }
 
   public async GetBterMassCopingReport_new(data: any) {
-    debugger
+    //debugger
       return await this.http.post(this.APIUrl + "/GetMassCoppingReport/", data, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1476,7 +1476,7 @@ export class ReportService {
   }
 
   public async GetBterBranchWiseStatisticalReport_new(request: any) {
-    debugger
+    //debugger
     const body = JSON.stringify(request);
     const api = this.http.post(`${this.APIUrl}/GetBterBranchWiseStatisticalReport`, body, this.headersOptions)
       .pipe(catchError(this.handleErrorObservable));
@@ -1524,7 +1524,7 @@ export class ReportService {
   }
 
   public async BterRelievingLetter(request: RelievingLetterSearchModel) {
-    debugger
+    //debugger
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/RelievingLetterReport', body, this.headersOptions)
@@ -1735,7 +1735,7 @@ export class ReportService {
 
 
   public GroupCodeMasterReportDownload(payload: any) {
-    debugger
+    //debugger
     return this.http.post(`${this.APIUrl}/GetGroupCodeMasterReport/`,
       payload,
       {
@@ -1745,7 +1745,7 @@ export class ReportService {
   }
 
   public GroupCodeMasterReportBranchwiseDownload(payload: any) {
-    debugger
+    //debugger
     return this.http.post(`${this.APIUrl}/GetGroupCodeMasterReportBranchwise/`,
       payload,
       {
@@ -1793,7 +1793,7 @@ export class ReportService {
       ).toPromise();
   }
   public GetsampleAnnexture32(payload: any) {
-    debugger
+    //debugger
     return this.http.post(`${this.APIUrl}/GetSampleAnnexture/`,
       payload,
       {
@@ -1872,7 +1872,7 @@ export class ReportService {
   }
 
   public getResultAppearedPassedStatisticsReport(payload: any) {
-    debugger
+    //debugger
     return this.http.post(`${this.APIUrl}/getResultAppearedPassedStatisticsReport/`,
       payload,
       {

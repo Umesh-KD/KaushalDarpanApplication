@@ -640,7 +640,7 @@ export class BterResultReportsComponent implements OnInit {
 
   async getResultAppearedPassedStatisticsReport() {
 
-    debugger
+    //debugger
     let request: any = {
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
