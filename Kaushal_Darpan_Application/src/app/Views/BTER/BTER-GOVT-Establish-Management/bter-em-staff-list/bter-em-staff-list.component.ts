@@ -16,7 +16,7 @@ import { UserRequestService } from '../../../../Services/UserRequest/user-reques
 import { __values } from 'tslib';
 import { ActivatedRoute } from '@angular/router';
 import { AppsettingService } from '../../../../Common/appsetting.service';
-
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -304,6 +304,25 @@ export class BTEREMStaffListComponent {
     }
   }
 
+  exportToExcel(): void {
+    const unwantedColumns = [
+      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo'
+    ];
+    const filteredData = this.StaffList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'StaffListData.xlsx');
+  }
   async ResetControl() {
     this.searchRequest = new BTER_EM_StaffListSearchModel();
     await this.BTER_EM_GetStaffList();

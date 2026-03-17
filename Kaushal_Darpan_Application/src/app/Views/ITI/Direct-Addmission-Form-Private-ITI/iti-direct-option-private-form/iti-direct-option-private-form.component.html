@@ -45,9 +45,10 @@
           <select class="form-select" name="ddlManagementType" id="ddlManagementType"
                   formControlName="ddlManagementType" [(ngModel)]="formData.ManagementTypeID" (change)="GetInstituteListDDL()">
             <option value="0">--Choose Option--</option>
-            <option *ngFor="let item of ManagmentTypeList" value="{{item.InstitutionManagementTypeID}}">
-              {{item.InstitutionManagementType}}
-            </option>
+            <!--<option *ngFor="let item of ManagmentTypeList" value="{{item.InstitutionManagementTypeID}}">
+    {{item.InstitutionManagementType}}
+  </option>-->
+          <option value="1">Govt</option>
           </select>
           <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlManagementType.errors" class="text-danger">
             <p *ngIf="!_OptionsFormGroup.ddlManagementType.errors.DropdownValidators">
@@ -208,25 +209,25 @@
 
     <div class="overflow-auto">
       <table class="w-full table-border" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700" style="text-align:left">
           <tr>
             <th>Priority</th>
             <th>Trade Level</th>
             <th>Name of College</th>
-            <th>Branch Name</th>
+            <th>Trade Name</th>
             <th>Trade Category Name</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of AddedChoices8; let idx = index">
-            <td class="text-center">{{row.Priority}}</td>
-            <td class="text-center">{{row.TradeLevel}}th</td>
-            <td class="text-center">{{row.InstituteName}}</td>
-            <td class="text-center">{{row.TradeName}}</td>
-            <td class="text-center">{{row.TradeCategoryName}}</td>
+            <td class="text-left">{{row.Priority}}</td>
+            <td class="text-left">{{row.TradeLevel}}th</td>
+            <td class="text-left">{{row.InstituteName}}</td>
+            <td class="text-left">{{row.TradeName}}</td>
+            <td class="text-left">{{row.TradeCategoryName}}</td>
 
-            <td class="text-center">
+            <td class="text-left">
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
                 <i class="ti ti-trash"></i>
               </button>
@@ -251,24 +252,24 @@
 
     <div class="overflow-auto">
       <table class="w-full table-border" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700" style="text-align:left">
           <tr>
             <th>Priority</th>
             <th>Trade Level</th>
             <th>Name of College</th>
-            <th>Branch Name</th>
+            <th>Trade Name</th>
             <th>Trade Category Name</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of AddedChoices10; let idx = index">
-            <td class="text-center">{{row.Priority}}</td>
-            <td class="text-center">{{row.TradeLevel}}th</td>
-            <td class="text-center">{{row.InstituteName}}</td>
-            <td class="text-center">{{row.TradeName}}</td>
-            <td class="text-center">{{row.TradeCategoryName}}</td>
-            <td class="text-center">
+            <td class="text-left">{{row.Priority}}</td>
+            <td class="text-left">{{row.TradeLevel}}th</td>
+            <td class="text-left">{{row.InstituteName}}</td>
+            <td class="text-left">{{row.TradeName}}</td>
+            <td class="text-left">{{row.TradeCategoryName}}</td>
+            <td class="text-left">
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
                 <i class="ti ti-trash"></i>
               </button>
@@ -292,7 +293,7 @@
 
     <div class="overflow-auto">
       <table class="w-full table-border" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700" style="text-align:left" >
           <tr>
             <th>Priority</th>
             <th>Trade Level</th>
@@ -303,11 +304,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of AddedChoices12; let idx = index">
-            <td class="text-center">{{row.Priority}}</td>
-            <td class="text-center">{{row.TradeLevel}}th</td>
-            <td class="text-center">{{row.InstituteName}}</td>
-            <td class="text-center">{{row.TradeName}}</td>
-            <td class="text-center">
+            <td class="text-left">{{row.Priority}}</td>
+            <td class="text-left">{{row.TradeLevel}}th</td>
+            <td class="text-left">{{row.InstituteName}}</td>
+            <td class="text-left">{{row.TradeName}}</td>
+            <td class="text-left">
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
                 <i class="ti ti-trash"></i>
               </button>

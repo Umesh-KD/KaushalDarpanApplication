@@ -16,6 +16,9 @@ import { EncryptionService } from '../../../../Services/EncryptionService/encryp
 import { QualificationDDLDataModel } from '../../../../Models/CommonMasterDataModel';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ITI_InstructorTechnicalQualification } from '../../../../Models/ITI/ItiInstructorDataModel';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+import { DocumentDetailsService } from '../../../../Common/document-details';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 @Component({
   selector: 'app-iti-direct-qualification-private-form',
@@ -32,6 +35,10 @@ export class ITIDirectQualificationPrivateFormComponent {
   public HighQualificationForm!: FormGroup;
   public QualificationForm8th!: FormGroup;
   public TechnicalForm!: FormGroup;
+  public State: number = 0;
+  public key: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
   public QualificationDetailsLevelList:any =[];
   public StreamList:any =[];
   public QualificationDetailsLevelDDL = new QualificationDDLDataModel();
@@ -40,6 +47,7 @@ export class ITIDirectQualificationPrivateFormComponent {
   public formData = new HighestQualificationDetailsDataModel()
   public techRequest = new TechnicalQualificationDetailsDataModel()
   public isSubmitted: boolean = false
+  public istechsubmit: boolean = false
   public box8Checked: boolean = false;
   public box10Checked: boolean = false;
   public box12Checked: boolean = false;
@@ -48,6 +56,7 @@ export class ITIDirectQualificationPrivateFormComponent {
   public formData12th = new Qualification12thDetailsDataModel()
   // public request = new QualificationDetailsDataModel()
   public request: any[] = []
+  public TechRequestList: any[] = []
   public disable10thCheckbox: boolean = false
   public disable8thCheckbox: boolean = false
   public BoardList: any = []
@@ -82,6 +91,8 @@ export class ITIDirectQualificationPrivateFormComponent {
     private modalService: NgbModal,
     private encryptionService: EncryptionService,
     private Swal2: SweetAlert2,
+    private appsettingConfig: AppsettingService,
+    private documentDetailsService: DocumentDetailsService
   ) { }
 
   async ngOnInit() {
@@ -93,6 +104,8 @@ export class ITIDirectQualificationPrivateFormComponent {
       QualificationName: ['', [DropdownValidators]],
       QualificationLevel: ['', Validators.required],
       Tech_Board: ['',],
+      TradeScheme: ['',],
+      ExamName: ['',],
       // Tech_Subjects: ['', Validators.required],
       StreamName: [''],
       StreamID: [''],
@@ -249,6 +262,38 @@ export class ITIDirectQualificationPrivateFormComponent {
     }
   }
 
+
+  public file!: File;
+
+  async onFilechange(event: any, formData: any) {
+    try {
+      let uploadModel = new UploadFileModel();
+      uploadModel.FolderName = "Students";
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State == EnumStatus.Success) {
+            debugger
+            this.techRequest.TechDocument = data.Data[0].FileName;
+            this.techRequest.Dis_TechDocument = data.Data[0].Dis_FileName;
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+ 
 
 
   async QualificationDetailsLevel() {
@@ -688,24 +733,9 @@ export class ITIDirectQualificationPrivateFormComponent {
     }
 
     debugger
-    if (this.techRequest.QualificationLevel == 'Diploma/Certificate Course') {
-      this.TechnicalForm.get('StreamID')?.setValidators([DropdownValidators]);
-  
-    } else {
-      this.TechnicalForm.get('StreamID')?.clearValidators();
-      this.techRequest.StreamID=0
-    }
-    this.TechnicalForm.get('StreamID')?.updateValueAndValidity();
 
 
-    if (this.techRequest.Tech_Percentage == 0) {
-      this.toastr.error("Please Enter Valid Technical Percentage/CGPA")
-      return
-    }
-
-    if (this.TechnicalForm.invalid) {
-      return
-    }
+   
 
    
 
@@ -802,37 +832,37 @@ export class ITIDirectQualificationPrivateFormComponent {
       //}
     }
 
-    debugger
+    
 
 
   
-      this.request.push({
-        ApplicationID: this.ApplicationID,
-        SSOID: this.SSOLoginDataModel.SSOID,
-        StateID: this.techRequest.StateID || 0,
-        BoardUniversity: '',
-        SchoolCollege: this.techRequest.SchoolCollegeHigh,
-        Qualification: 'Technical',
-        YearofPassing: this.TechnicalForm.value.Tech_Year,
-        RollNumber: '',
-        MarksTypeID: this.TechnicalForm.value.Tech_MarksTypeID,
-        MaxMarks: 0,
-        MarksObtained:0,
-        Percentage: Number(this.techRequest.Tech_Percentage),
-        MathsMaxMarks: 0,
-        MathsMarksObtained: 0,
-        ScienceMaxMarks: 0,
-        ScienceMarksObtained: 0,
-        ModifyBy: this.SSOLoginDataModel.UserID,
-        DepartmentID: 2,
-        CreatedBy: this.SSOLoginDataModel.UserID,
-        ActiveStatus: 1,
-        DeleteStatus: 0,
-        UniversityBoard: '',
-        StreamID: this.techRequest.StreamID,
-        TechExamID: this.techRequest.QualificationID,
-        QualificationLevel: this.techRequest.QualificationLevel
-      });
+      //this.request.push({
+      //  ApplicationID: this.ApplicationID,
+      //  SSOID: this.SSOLoginDataModel.SSOID,
+      //  StateID: this.techRequest.StateID || 0,
+      //  BoardUniversity: '',
+      //  SchoolCollege: this.techRequest.SchoolCollegeHigh,
+      //  Qualification: 'Technical',
+      //  YearofPassing: this.TechnicalForm.value.Tech_Year,
+      //  RollNumber: '',
+      //  MarksTypeID: this.TechnicalForm.value.Tech_MarksTypeID,
+      //  MaxMarks: 0,
+      //  MarksObtained:0,
+      //  Percentage: Number(this.techRequest.Tech_Percentage),
+      //  MathsMaxMarks: 0,
+      //  MathsMarksObtained: 0,
+      //  ScienceMaxMarks: 0,
+      //  ScienceMarksObtained: 0,
+      //  ModifyBy: this.SSOLoginDataModel.UserID,
+      //  DepartmentID: 2,
+      //  CreatedBy: this.SSOLoginDataModel.UserID,
+      //  ActiveStatus: 1,
+      //  DeleteStatus: 0,
+      //  UniversityBoard: '',
+      //  StreamID: this.techRequest.StreamID,
+      //  TechExamID: this.techRequest.QualificationID,
+      //  QualificationLevel: this.techRequest.QualificationLevel
+      //});
     
 
     if (this.box8Checked) {
@@ -963,6 +993,13 @@ export class ITIDirectQualificationPrivateFormComponent {
       this.toastr.error("Please Fill Option Form first ")
       return
     }
+
+    if (this.TechRequestList.length < 1) {
+      this.toastr.error("Please Add Technical Qualification")
+      return
+    }
+    this.request = [...this.request, ...this.TechRequestList];
+    this.request.forEach((e: any) => e.ApplicationID = this.ApplicationID)
     try {
 
       this.loaderService.requestStarted();
@@ -1015,40 +1052,45 @@ export class ITIDirectQualificationPrivateFormComponent {
           data = JSON.parse(JSON.stringify(data));
           this.QualificationDataList = data.Data
           console.log(this.QualificationDataList)
-          
+          this.TechRequestList = this.QualificationDataList.filter(
+            (x: any) => x?.Qualification === 'Technical'
+          );
           this.QualificationDataList.map((list: any) => {
 
             debugger
-            if (list.Qualification === "Technical") {
-              this.techRequest.StateID = list.StateID,
-                this.techRequest.SchoolCollegeHigh = list.SchoolCollege,
-                this.techRequest.QualificationLevel = list.QualificationLevel,
-                this.techRequest.QualificationID = list.TechExamID,
-                this.techRequest.StreamID = list.StreamID,
-                this.techRequest.Tech_Year = list.YearofPassing,
-                this.techRequest.MarksType = list.MarksTypeID,
-                this.techRequest.Tech_Percentage = list.Percentage
-              const level = list.QualificationLevel ?? this.techRequest.QualificationLevel;
-              this.techRequest.QualificationName = '';
-              this.QualificationModel.QualificationLevel = level
+         
+           
 
-              this.commonMasterService.QualificationDDL(this.QualificationModel).then((data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                this.QualificationDDL = data.Data;
-                if (list.QualificationLevel == 'Post Graduate') {
-                  this.QualificationDDL = this.QualificationDDL.filter((e: any) => e.QualificationID != 8 && e.QualificationID != 9)
-                }
-                else if (list.QualificationLevel == 'Under Graduate') {
-                  this.QualificationDDL = this.QualificationDDL.filter((e: any) => e.QualificationID != 3 && e.QualificationID != 4)
-                }
-                console.log("GetQualificationDDL ==>", this.QualificationDDL);
-              })
+            
 
-              this.streamddl(this.techRequest.QualificationID)
+              //  this.techRequest.SchoolCollegeHigh = list.SchoolCollege,
+              //  this.techRequest.QualificationLevel = list.QualificationLevel,
+              //  this.techRequest.QualificationID = list.TechExamID,
+              //  this.techRequest.StreamID = list.StreamID,
+              //  this.techRequest.Tech_Year = list.YearofPassing,
+              //  this.techRequest.MarksType = list.MarksTypeID,
+              //  this.techRequest.Tech_Percentage = list.Percentage
+              //const level = list.QualificationLevel ?? this.techRequest.QualificationLevel;
+              //this.techRequest.QualificationName = '';
+              //this.QualificationModel.QualificationLevel = level
 
-            }
+              //this.commonMasterService.QualificationDDL(this.QualificationModel).then((data: any) => {
+              //  data = JSON.parse(JSON.stringify(data));
+              //  this.QualificationDDL = data.Data;
+              //  if (list.QualificationLevel == 'Post Graduate') {
+              //    this.QualificationDDL = this.QualificationDDL.filter((e: any) => e.QualificationID != 8 && e.QualificationID != 9)
+              //  }
+              //  else if (list.QualificationLevel == 'Under Graduate') {
+              //    this.QualificationDDL = this.QualificationDDL.filter((e: any) => e.QualificationID != 3 && e.QualificationID != 4)
+              //  }
+              //  console.log("GetQualificationDDL ==>", this.QualificationDDL);
+              //})
 
-            if (list.Qualification === "8") {
+              //this.streamddl(this.techRequest.QualificationID)
+
+            
+            
+           if (list.Qualification === "8") {
               this.box8Checked = true
               this.formData8th.StateID8 = list.StateID
               this.formData8th.SchoolCollege8 = list.SchoolCollege
@@ -1085,6 +1127,7 @@ export class ITIDirectQualificationPrivateFormComponent {
               this.formData12th.MarksObtained12 = list.MarksObtained
               this.calculatePercentage12th()
             }
+            
             else {
               this.formData.StateIDHigh = list.StateID
               this.formData.BoardUniversityHigh = list.UniversityBoard
@@ -1302,6 +1345,158 @@ export class ITIDirectQualificationPrivateFormComponent {
         this.StreamList = data['Data'];
         console.log('Stream List ==> ', this.StreamList);
       }, error => console.error(error));
+  }
+
+
+
+
+  async SaveTechQualification() {
+    this.istechsubmit = true;
+
+
+    debugger
+    if (this.techRequest.QualificationID == 11 || this.techRequest.QualificationID == 12) {
+      this.TechnicalForm.get('StreamID')?.setValidators([DropdownValidators]);
+
+    } else {
+      this.TechnicalForm.get('StreamID')?.clearValidators();
+      this.techRequest.StreamID = 0
+    }
+    this.TechnicalForm.get('StreamID')?.updateValueAndValidity();
+
+    if (this.techRequest.QualificationID == 16) {
+      this.TechnicalForm.get('ExamName')?.setValidators(Validators.required);
+
+    } else {
+      this.TechnicalForm.get('ExamName')?.clearValidators();
+      this.techRequest.ExamName = ''
+    }
+    this.TechnicalForm.get('ExamName')?.updateValueAndValidity();
+
+    if (this.techRequest.QualificationID == 11) {
+      this.TechnicalForm.get('TradeScheme')?.setValidators([DropdownValidators]);
+
+    } else {
+      this.TechnicalForm.get('TradeScheme')?.clearValidators();
+      this.techRequest.TradeScheme = 0
+    }
+    this.TechnicalForm.get('TradeScheme')?.updateValueAndValidity();
+
+    if (this.techRequest.Tech_Percentage == 0) {
+      this.toastr.error("Please Enter Valid Technical Percentage/CGPA")
+      return
+    }
+
+    if (!this.TechRequestList) {
+      this.TechRequestList=[]
+    }
+
+    if (this.TechnicalForm.invalid) {
+      return
+    }
+
+    debugger
+    const StateName =
+      this.StateMasterList?.find((e: any) => e.ID == this.techRequest?.StateID)?.Name ?? '';
+
+    const StreamName =
+      this.StreamList?.find((e: any) => e.StreamID == this.techRequest?.StreamID)?.StreamName ?? '';
+
+    const ExamPassedName =
+      this.QualificationDDL?.find((e: any) => e.QualificationID == this.techRequest?.QualificationID)?.QualificationName ?? '';
+
+    const MarktypeName =
+      this.MarksTypeList?.find((e: any) => e.ID == this.techRequest?.MarksType)?.Name ?? '';
+
+    if (this.techRequest.Tech_Year != '' && this.techRequest.Tech_Year != '0') {
+      if (Number(this.formData8th.YearofPassing8) >= Number(this.techRequest.Tech_Year) ||
+        Number(this.formData10th.YearofPassing10) >= Number(this.techRequest.Tech_Year) ||
+        Number(this.formData12th.YearofPassing12) >= Number(this.techRequest.Tech_Year)) {
+        this.toastr.warning('Passing Year of Highest Qualification must be greater than Passing Year of 8th and 10th and 12th', 'Invalid');
+        return;
+      }
+    }
+
+
+    const tradeSchemeName =
+      this.techRequest?.TradeScheme == 1 ? 'NCVT'
+        : this.techRequest?.TradeScheme == 2 ? 'SCVT'
+          : '';
+
+
+    const examName = this.techRequest?.ExamName ?? '';
+
+
+    let finalStreamName = '';
+
+    if (this.techRequest?.QualificationID == 11) {
+      finalStreamName = StreamName
+        ? `${StreamName}${tradeSchemeName ? ' (' + tradeSchemeName + ')' : ''}`
+        : '';
+    }
+    else if (this.techRequest?.QualificationID == 12) {
+      finalStreamName = StreamName;
+    }
+    else if (this.techRequest?.QualificationID == 16) {
+      finalStreamName = examName;
+    }
+
+    if (this.techRequest.TechDocument == '') {
+      this.toastr.warning("Please Add Document")
+      return
+    }
+
+
+
+
+
+    this.TechRequestList.push({
+      ApplicationID: this.ApplicationID,  
+      SSOID: this.SSOLoginDataModel.SSOID,
+      StateID: this.techRequest.StateID || 0,
+      BoardUniversity: '',
+      SchoolCollege: this.techRequest.SchoolCollegeHigh,
+      Qualification: 'Technical',
+      YearofPassing: this.TechnicalForm.value.Tech_Year,
+      RollNumber: '',
+      MarksTypeID: this.TechnicalForm.value.Tech_MarksTypeID,
+      MaxMarks: 0,
+      MarksObtained:0,
+      Percentage: Number(this.techRequest.Tech_Percentage),
+      MathsMaxMarks: 0,
+      MathsMarksObtained: 0,
+      ScienceMaxMarks: 0,
+      ScienceMarksObtained: 0,
+      ModifyBy: this.SSOLoginDataModel.UserID,
+      DepartmentID: 2,
+      CreatedBy: this.SSOLoginDataModel.UserID,
+      ActiveStatus: 1,
+      DeleteStatus: 0,
+      UniversityBoard: '',
+      StreamID: this.techRequest.StreamID,
+      TechExamID: this.techRequest.QualificationID,
+      QualificationLevel: this.techRequest.QualificationLevel,
+      StateName: StateName,
+      StreamName: finalStreamName   ,
+      ExamPassedName: ExamPassedName,
+      MarktypeName: MarktypeName,
+      TechDocument: this.techRequest.TechDocument,
+      Dis_TechDocument: this.techRequest.Dis_TechDocument,
+      ExamName: this.techRequest.ExamName,
+      TradeScheme: this.techRequest.TradeScheme
+    });
+
+
+    this.techRequest = new TechnicalQualificationDetailsDataModel()
+    this.techRequest.SchoolCollegeHigh=''
+    this.istechsubmit = false
+    
+
+  
+
+  }
+  async DeleteExperience(idx: number = 0) {
+    this.TechRequestList.splice(idx, 1);
   }
 
 }

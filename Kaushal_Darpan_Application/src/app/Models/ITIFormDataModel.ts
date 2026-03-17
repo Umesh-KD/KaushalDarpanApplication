@@ -163,6 +163,7 @@ export class TechnicalQualificationDetailsDataModel {
   public Tech_CGPA?: number = 0;
   public StateID?: number = 0;
   public TechDocument?: string = '';
+  public Dis_TechDocument?: string = '';
   public MarksType?: number = 0;
   public MarkTypeName?: string = '';
   public CITSCertified?: string = '';
@@ -170,9 +171,11 @@ export class TechnicalQualificationDetailsDataModel {
   public QualificationLevel?: string = '';
   public QualificationName?: string = '';
   public QualificationID?: number = 0;
+  public TradeScheme?: number = 0;
   public Tech_MarksTypeID?: string = '';
   public Tech_CITSTrade?: string = '';
   public Tech_CITSYear?: string = '';
+  public ExamName?: string = '';
 
  /* public OtherCITSQualification: ITI_InstructorTechnicalCITSQualificationList[] = [new ITI_InstructorTechnicalCITSQualificationList()];*/
   
@@ -203,8 +206,8 @@ export class ExperienceDetailsDataModel {
   public ExperienceID: number = 0
   public ApplicationID: number = 0
 
-  public Year: number = 0
-  public Month: number = 0
+  //public Year: number = 0
+  //public Month: number = 0
 
   public NameOfIndustry: string = ''
   public TypeOfWork: string = ''
@@ -215,6 +218,8 @@ export class ExperienceDetailsDataModel {
 
 
   public ModifyBy: number = 0
+  public dateFrom: string = ''
+  public dateTo: string = ''
 
 
 }

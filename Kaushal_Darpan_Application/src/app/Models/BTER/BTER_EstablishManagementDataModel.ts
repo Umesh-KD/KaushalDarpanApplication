@@ -647,6 +647,7 @@ export class OfficeVacancyModel {
   public Name?: string = '';
   public PostSanctionDate: string = ''
   public PostSanctionedID: number = 0;
+  public BugetHeadTypeID?:number=0;
 }
 
 

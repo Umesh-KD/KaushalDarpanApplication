@@ -12,7 +12,7 @@
                [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
                class="imgSignSelf"
                alt="{{item.ColumnName}}" />
-          <div class="text-center col-span-2" style="text-align:center !important">{{item.ColumnName}}</div>
+          <div class="text-center col-span-2" style="text-align:center !important"><b> {{item.ColumnName}}</b></div>
         </div>
 
         <div *ngIf="request.ApplicationNo"><b>आवेदन संख्या (Application Number):</b></div>
@@ -97,7 +97,7 @@
         <b class="text-1xl-5">पते का विवरण (Permanent Address Details)</b>
       </div>
 
-      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" style="text-align:left !important">
         <div><b>पता पंक्ति 1 (Address Line 1):</b></div>
         <div>{{request.AddressLine1}}</div>
 
@@ -190,6 +190,7 @@
               <th>Marks Type</th>
             
               <th>Percentage</th>
+              <th>Document</th>
             
             </tr>
           </thead>
@@ -201,11 +202,18 @@
               <td>{{item.SchoolCollegeName || 'N/A'}}</td>
               <td>{{item.StreamName}}</td>
               <td>{{item.PassingYear}}</td>
-        
+
               <td>{{item.MarktypeName}}</td>
-        
+
               <td>{{item.Percentage}}</td>
-          
+              <td class="text-left">
+                <a 
+                   href="{{appsettingConfig.StaticFileRootPathURL + '/Students/' + item.TechDocument}}"
+                   target="_blank" class="btn bg-primary text-white btn-sm">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </td>
+
             </tr>
           </tbody>
         </table>

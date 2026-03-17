@@ -1677,10 +1677,21 @@ export class CommonFunctionService {
   }
 
   public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number, BGTType?:number) {
-    return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID + "/" + BGTType, this.headersOptions)
+    let url = `${this.APIUrl}/BTER_BGT_BudgetType/${DepartmentID}/${LevelID}`;
+
+    if (BGTType !== undefined && BGTType !== null) {
+      url += `/${BGTType}`;
+    }
+
+    return await this.http.get(url, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
+  
+    // return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID + "/" + BGTType, this.headersOptions)
+    //   .pipe(
+    //     catchError(this.handleErrorObservable)
+    //   ).toPromise();
   }
 
 

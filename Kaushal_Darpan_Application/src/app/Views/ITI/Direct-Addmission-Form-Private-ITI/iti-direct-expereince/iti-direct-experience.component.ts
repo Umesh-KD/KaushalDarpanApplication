@@ -15,8 +15,10 @@ import { EncryptionService } from '../../../../Services/EncryptionService/encryp
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { DocumentDetailsService } from '../../../../Common/document-details';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
+
   selector: 'app-iti-direct-experience',
   standalone: false,
   templateUrl: './iti-direct-experience.component.html',
@@ -91,11 +93,11 @@ export class ITIDirectExperienceComponent {
         NameOfIndustry: ['', [Validators.required]],
         TypeOfWork: ['', [Validators.required]],
         ExperienceDetailDescription: ['', [Validators.required]],
-        Year: ['', [DropdownValidators]],
-        Month: ['', [DropdownValidators]],
-        EstablishmentIndustryRegistrationdetails: ['', [Validators.required]]
-  
-      });
+        EstablishmentIndustryRegistrationdetails: ['', [Validators.required]],
+        dateFrom: ['', [Validators.required]],
+        dateTo: ['', [Validators.required]]
+      
+    });
 
 
 
@@ -122,6 +124,7 @@ export class ITIDirectExperienceComponent {
       this.OptionsFormGroup.controls['ddlDistrict'].disable();
       this.OptionsFormGroup.controls['ddlInstitute'].disable();
     }
+   
 
   }
 
@@ -156,23 +159,35 @@ export class ITIDirectExperienceComponent {
       return;
     }
 
+    if (this.formData.ExperienceCertificateFromEmployer == '') {
+
+      this.toastr.error("Please upload Experience Certificate from Employer.")
+      return;
+    }
+
+
+
     if (!this.AddedChoices) {
       this.AddedChoices =[]
     }
+    
     this.AddedChoices.push({
       ...this.formData
     });
-    await this.calculateDynamicTotals(this.AddedChoices);
+    //await this.calculateDynamicTotals(this.AddedChoices);
 
     this.isSubmitted = false
     this.formData.ExperienceDetailDescription = ''
     this.formData.ExperienceID = 0
-    this.formData.Month = 0
-    this.formData.Year = 0
+    //this.formData.Month = 0
+    //this.formData.Year = 0
     this.formData.NameOfIndustry = ''
     this.formData.TypeOfWork = ''
     this.formData.EstablishmentIndustryRegistrationdetails = ''
-    this.formData.ExperienceCertificateFromEmployer = ''  
+    this.formData.ExperienceCertificateFromEmployer = ''
+
+    this.formData.dateFrom = ''
+    this.formData.dateTo = '';
   }
 
 
@@ -580,4 +595,27 @@ export class ITIDirectExperienceComponent {
       console.log(Ex);
     }
   }
+
+  minToDate: any;
+  maxFromDate: any;
+
+  onFromDateChange() {
+    const fromDate = this.OptionsFormGroup.get('dateFrom')?.value;
+    this.minToDate = fromDate;
+  }
+
+  onToDateChange() {
+    const toDate = this.OptionsFormGroup.get('dateTo')?.value;
+    this.maxFromDate = toDate;
+  }
+
+  tooltipVisible = false;
+  showTooltip(event: FocusEvent): void {
+    this.tooltipVisible = true;
+  }
+
+  hideTooltip(event: FocusEvent): void {
+    this.tooltipVisible = false;
+  }
+
 }
