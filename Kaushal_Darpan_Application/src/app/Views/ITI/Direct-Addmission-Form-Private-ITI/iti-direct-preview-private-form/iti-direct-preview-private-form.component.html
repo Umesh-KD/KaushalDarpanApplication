@@ -322,6 +322,7 @@
             <th>Date From</th>
             <th>Date To</th>
             <th class="text-left">Experience Description</th>
+            <th class="text-left">Experience Certificate from employer</th>
           </tr>
         </thead>
         <tbody>
@@ -349,6 +350,13 @@
 
             <td class="text-left">
               {{row.ExperienceDetailDescription}}
+            </td>
+            <td class="text-left">
+              <a *ngIf="row.ExperienceCertificateFromEmployer"
+                 href="{{appsettingConfig.StaticFileRootPathURL}}/Students//{{row.ExperienceCertificateFromEmployer}}"
+                 target="_blank" class="btn bg-primary text-white btn-sm">
+                <i class="ti ti-eye"></i>
+              </a>
             </td>
 
           </tr>
