@@ -7,7 +7,8 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
-
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
     selector: 'app-search-result',
@@ -133,5 +134,37 @@ export class SearchResultComponent implements OnInit {
 
   onsemesterchange(event: any) {
     this.resultSearchReq.SemesterID = event.target.value;
+  }
+
+  downloadPDF() {
+    const element = document.getElementById('resultContent');
+
+    if (!element) return;
+
+    html2canvas(element, { scale: 2 }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 295; // A4 height
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Handle multiple pages
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save('Result.pdf');
+    });
   }
 }
