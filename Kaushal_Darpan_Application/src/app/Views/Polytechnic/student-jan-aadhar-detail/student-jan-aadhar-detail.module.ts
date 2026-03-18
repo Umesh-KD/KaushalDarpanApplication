@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { OTPModalModule } from '../../otpmodal/otpmodal.module';
+import { JanAadharDetailModule } from '../../new-jan-aadhar/new-jan-aadhar.module';
 
 
 @NgModule({
@@ -16,7 +17,7 @@ import { OTPModalModule } from '../../otpmodal/otpmodal.module';
   imports: [
     CommonModule,
     StudentJanAadharDetailRoutingModule,
-    FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule, OTPModalModule
+    FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule, OTPModalModule, JanAadharDetailModule
   ]
 })
 export class StudentJanAadharDetailModule { }
