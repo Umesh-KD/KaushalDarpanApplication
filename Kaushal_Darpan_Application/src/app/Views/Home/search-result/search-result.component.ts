@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { CampusDetailsWebSearchModel } from '../../../Models/CampusDetailsWebDataModel';
 import { StudentResultSearchModel } from '../../../Models/DownloadMarksheetDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -17,22 +17,16 @@ import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/ma
 })
 export class SearchResultComponent implements OnInit {
   public resultSearchReq = new StudentResultSearchModel();
-  public State: number = -1;
-  public Message: any = [];
-  public ErrorMessage: any = [];
-  public _GlobalConstants: any = GlobalConstants;
-  public PostId: number = 0;
-  public CampusPostList: any[] = [];
-  public PlacementCompanyList: any[] = [];
   public searchRequest = new CampusDetailsWebSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public CollegeList: any = [];
   public SemesterList: any = [];
   public FinancialYear: any = [];
-  public searchBySemester: string = ''
-  public searchByFinancialYearID: string = ''
+  public StudentData: any = [];
+  public SubjectDetailsData: any = [];
+  public FinalResultData: any = [];
 
   public StudentResultData: any;
+  public showResult: boolean = false;
 
   minEndDate: string = '';
 
@@ -58,6 +52,7 @@ export class SearchResultComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.resultSearchReq = new StudentResultSearchModel();
     await this.GetSemesterList();
     await this.GetResultEndTermDDLList();   
   }
@@ -99,15 +94,44 @@ export class SearchResultComponent implements OnInit {
 
   async GetStudentResult_public() {
     try {
-      debugger
       await this.marksheetDownloadService.GetStudentResult_public(this.resultSearchReq).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.StudentResultData = data['Data'];
+        if(data.State === EnumStatus.Success) {
+          this.StudentResultData = data['Data'];
+          this.StudentData = data.Data['Table'][0];
+          this.SubjectDetailsData = data.Data['Table1'];
+          this.FinalResultData = data.Data['Table2'];
+
+          if(this.SubjectDetailsData?.length > 0) {
+            this.showResult = true;
+          }
+        } else if(data.State === EnumStatus.Warning) {
+          this.showResult = false;
+          this.toastr.warning(data.Message);
+          this.StudentResultData = [];
+          this.StudentData = [];
+          this.SubjectDetailsData = [];
+          this.FinalResultData = [];
+        } else {
+          this.showResult = false;
+          this.toastr.error(data.ErrorMessage);
+          this.StudentResultData = [];
+          this.StudentData = [];
+          this.SubjectDetailsData = [];
+          this.FinalResultData = [];
+        }
+        
       })
     } catch (error) {
       console.error(error);
     }
   }
 
+  onendtermchange(event: any) {
+    this.resultSearchReq.EndTermID = event.target.value;
+  }
 
+  onsemesterchange(event: any) {
+    this.resultSearchReq.SemesterID = event.target.value;
+  }
 }

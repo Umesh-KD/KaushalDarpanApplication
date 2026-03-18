@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { lastValueFrom, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel, GetCollegeInformationReport, GetEWSReport, GetUFMStudentReport, GetSessionalFailStudentReport, GetRMIFailStudentReport, GetTheoryFailStudentReport, GetRevaluationStudentDetailReport, GetStudentExaminerDetailReport, DownloadAppearedPassed, DownloadAppearedPassedInstitutewise } from '../../Models/GenerateAdmitCardDataModel';
+import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel, GetCollegeInformationReport, GetEWSReport, GetUFMStudentReport, GetSessionalFailStudentReport, GetRMIFailStudentReport, GetTheoryFailStudentReport, GetRevaluationStudentDetailReport, GetStudentExaminerDetailReport, DownloadAppearedPassed, DownloadAppearedPassedInstitutewise, StudentAllMarksReportModel } from '../../Models/GenerateAdmitCardDataModel';
 import { PrincipalIssueCertificateModel } from '../../Models/PrincipalIssueCertificateModel';
 import { AttendanceRpt13BDataModel, AttendanceRpt23DataModel, ReportBasedModel } from '../../Models/ReportBasedDataModel';
 import { DataPagingListModel } from '../../Models/DataPagingListModel';
@@ -1078,7 +1078,7 @@ export class ReportService {
   public async GetCentarlSupridententDistrictReportDataListReport(request: CenterAllocationSearchModel) {
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
-    debugger
+    //debugger
     return await this.http.post(this.APIUrl + '/GetCentarlSupridententDistrictReportDataListReport', body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1384,7 +1384,7 @@ export class ReportService {
     return await lastValueFrom(api);
   }
   public async GetBterMassCopingReport(data: any) {
-    debugger
+    //debugger
     return await this.http.post(this.APIUrl + "/GetMassCoppingReport/", data, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1399,7 +1399,7 @@ export class ReportService {
   }
 
   public async GetBterBranchWiseStatisticalReport(request: any): Promise<any> {
-    debugger
+    //debugger
     const body = JSON.stringify(request);
     const api = this.http.post(`${this.APIUrl}/GetBterBranchWiseStatisticalReport`, body, this.headersOptions)
       .pipe(catchError(this.handleErrorObservable));
@@ -1436,7 +1436,7 @@ export class ReportService {
 
 
     public async GetSessionalFailStudentReport(request: GetSessionalFailStudentReport) {
-      debugger
+      //debugger
       const body = JSON.stringify(request);
       return this.http.post(`${this.APIUrl}/GetSessionalFailStudentReport`, body, this.headersOptions)
           .pipe(
@@ -1446,7 +1446,7 @@ export class ReportService {
 
     // changess
     public async BterBridgeCoruseReportDownload(data: any) {
-      debugger
+      //debugger
         return await this.http.post(this.APIUrl + "/GetBterBridgeCourseReport/", data, this.headersOptions)
         .pipe(
           catchError(this.handleErrorObservable)
@@ -1454,7 +1454,7 @@ export class ReportService {
       }
 
   public async GetBterMassCopingReport_new(data: any) {
-    debugger
+    //debugger
       return await this.http.post(this.APIUrl + "/GetMassCoppingReport/", data, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1476,7 +1476,7 @@ export class ReportService {
   }
 
   public async GetBterBranchWiseStatisticalReport_new(request: any) {
-    debugger
+    //debugger
     const body = JSON.stringify(request);
     const api = this.http.post(`${this.APIUrl}/GetBterBranchWiseStatisticalReport`, body, this.headersOptions)
       .pipe(catchError(this.handleErrorObservable));
@@ -1524,7 +1524,7 @@ export class ReportService {
   }
 
   public async BterRelievingLetter(request: RelievingLetterSearchModel) {
-    debugger
+    //debugger
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/RelievingLetterReport', body, this.headersOptions)
@@ -1735,7 +1735,7 @@ export class ReportService {
 
 
   public GroupCodeMasterReportDownload(payload: any) {
-    debugger
+    //debugger
     return this.http.post(`${this.APIUrl}/GetGroupCodeMasterReport/`,
       payload,
       {
@@ -1745,7 +1745,7 @@ export class ReportService {
   }
 
   public GroupCodeMasterReportBranchwiseDownload(payload: any) {
-    debugger
+    //debugger
     return this.http.post(`${this.APIUrl}/GetGroupCodeMasterReportBranchwise/`,
       payload,
       {
@@ -1793,7 +1793,7 @@ export class ReportService {
       ).toPromise();
   }
   public GetsampleAnnexture32(payload: any) {
-    debugger
+    //debugger
     return this.http.post(`${this.APIUrl}/GetSampleAnnexture/`,
       payload,
       {
@@ -1872,7 +1872,7 @@ export class ReportService {
   }
 
   public getResultAppearedPassedStatisticsReport(payload: any) {
-    debugger
+    //debugger
     return this.http.post(`${this.APIUrl}/getResultAppearedPassedStatisticsReport/`,
       payload,
       {
@@ -1883,6 +1883,14 @@ export class ReportService {
 
   public async GetExamWiseStreamPapersreport(data: any) {
     return await this.http.post(this.APIUrl + "/GetExamWiseStreamPapersreport/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetStudentAllMarksReport(request: StudentAllMarksReportModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetStudentAllMarksReport`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -307,7 +307,8 @@ export class BTEREMStaffListComponent {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','LevelName','OfficeName','PostName','UserID','IsNodal','ProfileStatusID',
+      'StaffID','StaffUserID','DistrictName','uod_InstituteID','RoleID'
     ];
     const filteredData = this.StaffList.map((item: any) => {
       const filteredItem: any = {};
