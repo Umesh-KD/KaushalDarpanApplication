@@ -252,7 +252,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
       this.loaderService.requestStarted();
 
       await this.commonMasterService
-        .GetCommonMasterData('PrivateITICollege', this.ITItypeID)
+        .GetCommonMasterData('PrivateITICollege', 5)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
