@@ -44,6 +44,7 @@
             <option value="0">Pending</option>
             <option value="1">Active</option>
             <option value="2">Return</option>
+            <option value="3">Due</option>
             
           </select>
         </div>
@@ -60,11 +61,12 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            date Wise:
+           Due Within Days:
           </label>
           <select class="form-select"
                   [(ngModel)]="searchRequest.dayWise">
             <option value="0">-- Select Day Wise --</option>
+            <option value="45">45 Day's</option>
             <option value="30">30 Day's</option>
             <option value="15">15 Day's</option>
             <option value="7">7 Day's</option>
@@ -109,9 +111,9 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">#</th>
-            <th class="text-left">Bank Guarantee Number</th>
-            <th class="text-left">Bank Name</th>
             <th class="text-left">College  Name</th>
+            <th class="text-left">Bank Name</th>
+            <th class="text-left">Bank Guarantee No</th>
             <th class="text-left">Date Of Issue</th>
             <th class="text-left">Maturity Date</th>
             <th class="text-left">Duration Years</th>
@@ -124,9 +126,10 @@
         <tbody>
           <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText ;let idx=index;">
             <td class="text-left">{{(startInTableIndex+1)+idx}}</td>
-            <td class="text-left">{{item.BankGuaranteeNumber}}</td>
+            <td class="text-left">{{item.CollegeName}}</td>
             <td class="text-left">{{item.BankName}}</td>
-            <td class="text-left">{{item.CollageId}}</td>
+            <td class="text-left">{{item.BankGuaranteeNumber}}</td>
+
             <td class="text-left">{{item.DateOfIssue}}</td>
             <td class="text-left">{{item.Maturitydate}}</td>
             <td class="text-left">{{item.Duration}}</td>
@@ -141,17 +144,15 @@
     ? 'bg-red-100 text-red-700'
     : 'bg-yellow-100 text-yellow-700'
 ">
-                {{
-  item.Status === 1
-    ? 'Active'
-    : item.Status === 2
-    ? 'Returned'
-    : 'Pending'
-                }}
+
+
+                {{item.StatusName}}
+
+
               </span>
             </td>
 
-         
+
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
