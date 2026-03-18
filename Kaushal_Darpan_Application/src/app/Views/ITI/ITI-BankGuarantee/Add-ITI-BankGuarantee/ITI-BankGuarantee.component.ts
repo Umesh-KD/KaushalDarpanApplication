@@ -38,6 +38,8 @@ export class ITIBankGuaranteeComponent implements OnInit {
   public CollageId: number = 0;
   public InstituteID: number = 0;
   public BankGuaranteeId: number = 0;
+  public status: string = '';
+  public isAction: string = '';
 
 
   public CollegeID: number = 0;
@@ -89,6 +91,18 @@ export class ITIBankGuaranteeComponent implements OnInit {
       }
     });
 
+    // For ReNew
+    this.activatedRoute.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.BankGuaranteeId = +id;
+        this.getBankGuaranteeById(this.BankGuaranteeId);
+      }
+    });
+    // query param (status)
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.status = params['status'];  
+    });
 
   }
 
@@ -144,6 +158,15 @@ export class ITIBankGuaranteeComponent implements OnInit {
     this.request.CollageId = this.request.CollageId;
     this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
 
+    if (this.status == 'ReNew')
+    {
+      this.request.ActionType = 'ReNew';
+    }
+    else {
+      this.request.ActionType = '';
+    }
+
+   
     const isUpdate = this.request.BankGuaranteeID && this.request.BankGuaranteeID > 0;
 
     try {
@@ -175,6 +198,65 @@ export class ITIBankGuaranteeComponent implements OnInit {
       }, 200);
     }
   }
+
+
+
+  //async saveData(action: 'INSERT' | 'UPDATE' | 'ReNew') {
+
+  //  this.isSubmitted = true;
+
+  //  if (this.bankGuarantee.invalid) {
+  //    return;
+  //  }
+
+  //  this.isLoading = true;
+  //  this.loaderService.requestStarted();
+
+  //  this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
+  //  this.request.ActionType = action;  //  main flag
+
+  //  //  Renew case me ID reset karna important hai
+  //  if (action === 'ReNew') {
+  //    this.request.status = 1;
+  //  }
+
+  //  try {
+  //    const data: any = await this.campusPostService.SaveBankGuaranteeData(this.request);
+
+  //    this.State = data.State;
+  //    this.Message = data.Message;
+  //    this.ErrorMessage = data.ErrorMessage;
+
+  //    if (this.State === EnumStatus.Success) {
+
+  //      let successMsg = '';
+
+  //      if (action === 'INSERT') {
+  //        successMsg = 'Bank Guarantee saved successfully';
+  //      }
+  //      else if (action === 'UPDATE') {
+  //        successMsg = 'Bank Guarantee updated successfully';
+  //      }
+  //      else if (action === 'ReNew') {
+  //        successMsg = 'Bank Guarantee renewed successfully';
+  //      }
+
+  //      this.toastr.success(successMsg);
+  //      this.routers.navigate(['/iti-bank-guarantee-list']);
+  //    }
+  //    else {
+  //      this.toastr.error(this.ErrorMessage);
+  //    }
+
+  //  } catch (ex) {
+  //    console.error(ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //      this.isLoading = false;
+  //    }, 200);
+  //  }
+  //}
 
 
 

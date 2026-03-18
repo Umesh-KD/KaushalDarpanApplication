@@ -305,6 +305,27 @@ export class listitibankguaranteeComponent {
       }, 200);
     }
   }
+
+
+  async ReNew(BankGuaranteeID: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.router.navigate(['/iti-bank-guarantee', BankGuaranteeID]);
+
+
+      this.router.navigate(['/iti-bank-guarantee', BankGuaranteeID], {
+        queryParams: { status: 'ReNew' }
+      });
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   onBankNameChange(value: string) {
     this.searchRequest.BankName = value;
     this.searchRequest.BankGuaranteeNumber = value;
@@ -351,6 +372,21 @@ export class listitibankguaranteeComponent {
       console.log(Ex);
     }
     finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async ReturnInfo(Status: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.router.navigate(['/iti-bank-guarantee', Status]);
+
+    } catch (error) {
+      console.error(error);
+    } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);

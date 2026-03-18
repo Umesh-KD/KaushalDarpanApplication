@@ -138,14 +138,12 @@
             <td>
               <span class="px-2 py-1 rounded text-xs font-semibold"
                     [ngClass]="
-  item.Status === 1
-    ? 'bg-green-100 text-green-700'
-    : item.Status === 2
-    ? 'bg-red-100 text-red-700'
-    : 'bg-yellow-100 text-yellow-700'
-">
-
-
+                              item.Status === 1
+                                ? 'bg-green-100 text-green-700'
+                                : item.Status === 2
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-yellow-100 text-yellow-700'
+                            ">
                 {{item.StatusName}}
 
 
@@ -155,7 +153,7 @@
 
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-
+                <a *ngIf="item.Status === 1" href="javascript:void(0);" title="ReNew" (click)="ReNew(item.BankGuaranteeID)"><i class="ti ti-refresh"></i></a>
                 <a *ngIf="item.BankAgreementDocument!=''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.BankAgreementDocument}}"
                    target="_blank" title="Download Document">
                   <i class="ti ti-download"></i>
