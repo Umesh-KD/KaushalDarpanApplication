@@ -22,6 +22,9 @@ import { ItiTradeSearchModel, StreamDDL_InstituteWiseModel } from '../../../Mode
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { ApplicationMessageDataModel } from '../../../Models/ApplicationMessageDataModel';
 
+import { JanAadharVerifyMemberDetails } from '../../../Models/NewJanAadharAPIModel';
+import { JanAadharDetailComponent } from '../../new-jan-aadhar/new-jan-aadhar.component';
+
 @Component({
   selector: 'app-student-jan-aadhar-detail',
   templateUrl: './student-jan-aadhar-detail.component.html',
@@ -97,6 +100,9 @@ export class StudentJanAadharDetailComponent implements OnInit {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public messageModel = new ApplicationMessageDataModel()
 
+  public showPref: boolean = false
+  public PrefentialCategoryList_temp: any = [];
+
   public Address: any = {
     addressEng: '',
     districtName: '',
@@ -106,17 +112,6 @@ export class StudentJanAadharDetailComponent implements OnInit {
     pin: '',
     addressHnd: ''
   }
-
-
-
-
-
-
-
-
-
-
-
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -140,6 +135,7 @@ export class StudentJanAadharDetailComponent implements OnInit {
 
     this.StudentJanDetailFormGroup = this.formBuilder.group(
       {
+        Domicile: ['', [DropdownValidators]],
         ddlPreferentialCategory: ['', Validators.required],
         txtJanAadhaar: [''],
         txtName: ['', Validators.required],
@@ -1066,7 +1062,7 @@ export class StudentJanAadharDetailComponent implements OnInit {
   }
 
 
-  async FillMemberDetails() {
+  async FillMemberDetails_old() {
     try {
       console.log(this.janaadharMemberDetails, "hhh")
       this.model.StudentName = this.janaadharMemberDetails.nameEng;
@@ -1103,6 +1099,62 @@ export class StudentJanAadharDetailComponent implements OnInit {
   }
 
 
+  async FillMemberDetails() {
+    try {
+      debugger
+      // name
+      this.model.StudentName = this.janMember?.NAME_EN?.toString() ?? '';
+      this.model.StudentNameHindi = this.janMember?.NAME_LL?.toString() ?? '';
+
+      // father name
+      this.model.FatherName = this.janMember?.FATHER_NAME_EN?.toString() ?? '';
+      this.model.FatherNameHindi = this.janMember?.FATHER_NAME_LL?.toString() ?? '';
+
+      // mother name
+      this.model.MotherName = this.janMember?.MOTHER_NAME_EN?.toString() ?? '';
+      this.model.MotherNameHindi = this.janMember?.MOTHER_NAME_LL?.toString() ?? '';
+
+      // gender
+      const gender = this.janMember?.GENDER?.toUpperCase();
+      this.model.Gender = gender === 'MALE' ? '97' : gender === 'FEMALE' ? '98' : '99';
+
+      // contact
+      this.model.MobileNumber = this.janMember?.MOBILE_NO?.toString() ?? '';
+      this.model.Email = this.janMember?.EMAIL?.toString() ?? '';
+
+      // jan aadhar
+      this.model.JanAadharMemberID = this.janMember?.SRDR_MID?.toString() ?? '';
+      this.model.JanAadharNo = this.janMember?.JAN_AADHAR?.toString() ?? '';
+
+      // category
+      const result = this.CategoryAlist?.find(
+        (f: any) => f.CasteCategoryName === this.janMember?.CATEGORY_DESC_ENG
+      );
+
+      if (result) {
+        this.model.CategoryA = result.CasteCategoryID;
+      }
+
+      // DOB
+      const dateStr = this.janMember?.DOB;
+
+      if (dateStr) {
+        const [day = '', month = '', year = ''] = dateStr.split('/');
+        if (day && month && year) {
+          const formattedDate = new Date(`${year}-${month}-${day}`)
+            .toISOString()
+            .split('T')[0];
+          this.model.DOB = formattedDate;
+        }
+      }
+
+
+    }
+    catch (ex) {
+      console.log(ex);
+
+    }
+  }
 
 
 
@@ -1300,4 +1352,57 @@ export class StudentJanAadharDetailComponent implements OnInit {
 
   }
 
+ 
+
+  async changeDomicile(val: number) {
+    if (val == 1) {
+      this.showPref = true
+      this.model.IsRajasthani = true
+      this.PrefentialCategoryList_temp = this.PrefentialCategoryList  
+      this.request.ENR_ID = 5
+      this.StudentJanDetailFormGroup.controls['ddlPreferentialCategory'].disable();
+
+      this.Showdropdown()
+    }
+    else if (val == 2) {
+      this.showPref = true
+      this.AdharMemberList = [];
+      this.request.ENR_ID = 0
+      this.StudentJanDetailFormGroup.controls['ddlPreferentialCategory'].enable();
+      this.PrefentialCategoryList_temp = this.PrefentialCategoryList.filter((x: any) => x.ID != 5)
+      this.Showdropdown()
+    }
+  }
+
+
+  janMember = new JanAadharVerifyMemberDetails()
+
+  async getJanadharData(data: any) {
+    try {
+      debugger
+      this.janMember = data as JanAadharVerifyMemberDetails
+      this.IsShow = true;
+      this.IsShowDropdown = false;
+      this.Address = this.janMember.ADDRESS;
+      await this.GetApplicationId("SearchByMemberID");
+      await this.FillMemberDetails();
+      this.toastr.success("Succesfully Verified")
+      console.log("getJanadharData", data);
+      console.log("get Jan Aadhar Data==>", this.janMember);
+    }
+    catch (erro) {
+      console.log(erro);
+    }
+  }
+
+
+  @ViewChild(JanAadharDetailComponent) janadharComponent!: JanAadharDetailComponent;
+  async verifyJanadhar() {
+    if (this.request.JAN_AADHAR.length < 10 || this.request.JAN_AADHAR.length > 12) {
+      this.toastr.error("Invalid Janadhar Details")
+    }
+
+    await this.janadharComponent.startVerification(this.request.JAN_AADHAR);
+
+  }
 }
