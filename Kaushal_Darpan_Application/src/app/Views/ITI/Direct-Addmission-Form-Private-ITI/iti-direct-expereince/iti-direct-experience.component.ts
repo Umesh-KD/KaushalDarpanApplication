@@ -159,9 +159,18 @@ export class ITIDirectExperienceComponent {
       return;
     }
 
+    if (this.formData.ExperienceCertificateFromEmployer == '') {
+
+      this.toastr.error("Please upload Experience Certificate from Employer.")
+      return;
+    }
+
+
+
     if (!this.AddedChoices) {
       this.AddedChoices =[]
     }
+    
     this.AddedChoices.push({
       ...this.formData
     });

@@ -14,7 +14,7 @@ import { BterCertificateReportDataModel } from '../../../Models/BTER/BterCertifi
 import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/marksheet-download.service';
 import { MarksheetLetterSearchModel } from '../../../Models/MarksheetLetterDataModel';
 import { CollegesWiseReportsModel } from '../../../Models/CollegesWiseReportsModel';
-import { ExamResultStudentStaticsModel, ExamWiseStreamPapersReportModelModel, GetSessionalFailStudentReport } from '../../../Models/GenerateAdmitCardDataModel';
+import { ExamResultStudentStaticsModel, ExamWiseStreamPapersReportModelModel, GetSessionalFailStudentReport, StudentAllMarksReportModel } from '../../../Models/GenerateAdmitCardDataModel';
 
 export interface requestData {
   Action: string;
@@ -26,6 +26,9 @@ export interface requestData {
   Eng_NonEng: number;
   ResultType: number;
   SchemeID: number;
+  FileNo1: string;
+  FileNo2: string;
+  FileDate: any;
 }
 
 @Component({
@@ -57,7 +60,10 @@ export class BterResultReportsComponent implements OnInit {
     DepartmentID: 0,
     Eng_NonEng: 0,
     ResultType: 0,
-    SchemeID: 0
+    SchemeID: 0,
+    FileNo1: '',
+    FileNo2: '',
+    FileDate: null
   };
 
   totalRecords = 0;
@@ -79,6 +85,7 @@ export class BterResultReportsComponent implements OnInit {
   public ExamResultStudentStaticsList: ExamResultStudentStaticsModel[] = [];
   public SubjectTheoryParcticalMarkStaticsList: ExamResultStudentStaticsModel[] = [];
   public ExamWiseStreamPapersrList: ExamWiseStreamPapersReportModelModel[] = [];
+  public StudentAllMarksReport: StudentAllMarksReportModel[] = [];
 
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
@@ -144,6 +151,7 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 15, Name: 'Subject Theory Practical Mark Statics', URL: 'Subject-Theory-Parctical-Mark-Statics-report' },
       { ID: 16, Name: 'Result Sheet', URL: 'Result-Appeared-Passed-Statistics-Report' },
       { ID: 17, Name: 'Exam Wise Stream Papers Report', URL: 'ExamWise-Stream-Papers-Report' },
+      { ID: 18, Name: 'Student All Marks Report', URL: 'Student-All-Marks-Report' },
     ];
   }
  
@@ -170,7 +178,10 @@ export class BterResultReportsComponent implements OnInit {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      SchemeID: 0
+      SchemeID: 0,
+      FileNo1:'',
+      FileNo2: '',
+      FileDate: null
     };
     this.selectedType = '';
     this.ReportsListData = [];
@@ -180,12 +191,12 @@ export class BterResultReportsComponent implements OnInit {
     //this.GetAllData();
   }
 
-  filterFormSubmit(): void {    
+  async filterFormSubmit() {    
     if (this.filterModel.Action == "0") {
       this.toastrService.error('Please select Certificate Type');
       return;
     }
-    this.GetAllData();
+    await this.GetAllData();
   }
 
 
@@ -252,6 +263,10 @@ export class BterResultReportsComponent implements OnInit {
           break;
         case "ExamWise-Stream-Papers-Report":
           await this.GetExamWiseStreamPapersreport();
+          break;
+        case "Student-All-Marks-Report":
+          
+          await this.GetStudentAllMarksReport();
           break;
         //case "Appeared-Passesd-Statistics":
         //  response = await this.reportService.AppearedPassedStatisticsReportDownload(this.filterModel);
@@ -630,13 +645,18 @@ export class BterResultReportsComponent implements OnInit {
   }
 
   async getResultAppearedPassedStatisticsReport() {
-    let request: any = {
 
+    //debugger
+    let request: any = {
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
       DepartmentID: this.ssoLoginUser.DepartmentID,
       Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      EndTermID: this.ssoLoginUser.EndTermID
+      EndTermID: this.ssoLoginUser.EndTermID,
+      SchemeID: this.filterModel.SchemeID,
+      FileNo1: this.filterModel.FileNo1,
+      FileNo2: this.filterModel.FileNo2,
+      FileDate: this.filterModel.FileDate  
     }
 
     this.reportService.getResultAppearedPassedStatisticsReport(request)
@@ -677,7 +697,9 @@ export class BterResultReportsComponent implements OnInit {
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
       SchemeID: this.filterModel.SchemeID,
-      
+      FileNo1: this.filterModel.FileNo1,
+      FileNo2: this.filterModel.FileNo2,
+      FileDate: this.filterModel.FileDate      
     }
     try {
       await this.reportService.GetExamWiseStreamPapersreport(request)
@@ -727,5 +749,69 @@ export class BterResultReportsComponent implements OnInit {
     const fileName = `Exam_Wise_Stream_Papers_Report_${todayDate}.xlsx`;
     XLSX.writeFile(wb, fileName);
   }
+
+
+  async GetStudentAllMarksReport() {
+    //debugger;
+    let request: any = {
+      DepartmentID: this.ssoLoginUser.DepartmentID,
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
+      EndTermID: this.ssoLoginUser.EndTermID,
+      SemesterID: this.filterModel.SemesterID,
+      SchemeID: this.filterModel.SchemeID,
+      
+    }
+    try {
+      await this.reportService.GetStudentAllMarksReport(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.StudentAllMarksReport = data['Data'];
+            this.exportToExcelStudentAllMarksReport();
+            //this.dataSource = new MatTableDataSource(this.ExamWiseStreamPapersrList);
+
+            console.log('Student All Marks Report ===>', this.StudentAllMarksReport)
+          }
+        }, (error: any) => console.error(error));
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+
+  exportToExcelStudentAllMarksReport(): void {
+    debugger
+    const wantedColumns =
+      ['SrNo', 'RollNo', 'Institute', 'StudentName', 'Stream', '6001_Th', '6001_IA', '6002_Th', '6002_IA', '6003_Th', '6003_IA', '6004_Th', '6004_IA', '6005_Th',
+      '6005_Pr','6005_IA','6006_Pr','6006_IA','6007_Pr','6007_IA','6008_Pr','6008_IA','6009_Pr','6009_IA','6010_Pr','6010_IA','6011_Pr','6011_IA' ];
+
+    const exportData = this.StudentAllMarksReport.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+      });
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map(row =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Student All Marks');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName = `Student_All_Marks_Report_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+  }
+
   
 }

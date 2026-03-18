@@ -74,15 +74,15 @@
       </p>
     </div>
   </div>-->
-     
-     
+
+
 
       <div>
         <label for="dateFrom" class="text-gray-800 text-sm font-medium inline-block mb-2">
           Date From: <span class="StarMarking">*</span>
         </label>
 
-        <input type="date"
+        <input type="date" [(ngModel)]="formData.dateFrom"
                class="form-input"
                formControlName="dateFrom"
                [max]="maxFromDate"
@@ -101,7 +101,7 @@
           Date To: <span class="StarMarking">*</span>
         </label>
 
-        <input type="date"
+        <input type="date" [(ngModel)]="formData.dateTo"
                class="form-input"
                formControlName="dateTo"
                [min]="minToDate"
@@ -121,7 +121,7 @@
 
           <!-- Info Icon -->
           <span class="info-icon"
-                matTooltip="TAN/GSTIN/EPFO Establishment No/ESIC Registration No/CIN"
+                matTooltip="Enter TAN/GSTIN/EPFO Establishment No/ESIC Registration No/CIN"
                 matTooltipPosition="above">
             <i class="fa fa-info-circle"></i>
           </span>
@@ -160,9 +160,8 @@
 
         </div>
       </div>
-      <!--<div *ngIf="item.errors?.ExperienceCertificateFromEmployer" class="text-danger">
-    <p>This field is required!</p>
-  </div>-->
+     
+
 
 
       <div class="pt-30">
@@ -214,20 +213,20 @@
         </td>
 
         <td class="text-left">
-          {{row.dateFrom}}
+          {{ row.dateFrom | date:'dd-MM-yyyy' }}
         </td>
 
         <td class="text-left">
-          {{row.dateTo}}
+          {{ row.dateTo | date:'dd-MM-yyyy' }}
         </td>
 
         <!--<td class="text-center">
-          {{row.Year}}
-        </td>
+    {{row.Year}}
+  </td>
 
-        <td class="text-center">
-          {{row.Month}}
-        </td>-->
+  <td class="text-center">
+    {{row.Month}}
+  </td>-->
 
         <td class="text-left">
           {{row.ExperienceDetailDescription}}
@@ -237,7 +236,7 @@
         </td>
         <td class="text-left">
           <a *ngIf="row.ExperienceCertificateFromEmployer"
-             href="{{appsettingConfig.StaticFileRootPathURL + 'Students/' + row.ExperienceCertificateFromEmployer}}"
+             href="{{appsettingConfig.StaticFileRootPathURL}}/Students//{{row.ExperienceCertificateFromEmployer}}"
              target="_blank" class="btn bg-primary text-white btn-sm">
             <i class="ti ti-eye"></i>
           </a>

@@ -15,11 +15,9 @@ export class DownloadMarksheetSearchModel {
   public IPAddress: string = ''
   public ExamType: number = 0
   public ReqId?: number = 0
-
   public IsReval?: boolean = false
   public IsRWHResult?: boolean = false
   public IsLateral?: boolean = false
-
   public FianancialYearID?:number=0
 }
 
@@ -30,4 +28,9 @@ export class HostelWardenSomeDetailsModel {
   public txtWLocalGuardianContactNo: string = ''
 }
 
-
+export class StudentResultSearchModel {
+  public EndTermID: number = 0
+  public RollNo: string = ''
+  public SemesterID: number = 0
+  public DOB: string = ''
+} 
