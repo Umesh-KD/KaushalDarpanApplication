@@ -94,6 +94,7 @@ export class SearchResultComponent implements OnInit {
   }
 
   async GetStudentResult_public() {
+    debugger
     try {
       await this.marksheetDownloadService.GetStudentResult_public(this.resultSearchReq).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
