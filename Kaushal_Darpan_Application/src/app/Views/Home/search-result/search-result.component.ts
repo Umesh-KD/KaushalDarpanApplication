@@ -136,35 +136,60 @@ export class SearchResultComponent implements OnInit {
     this.resultSearchReq.SemesterID = event.target.value;
   }
 
+  // downloadPDF() {
+  //   const element = document.getElementById('resultContent');
+
+  //   if (!element) return;
+
+  //   html2canvas(element, { scale: 2 }).then(canvas => {
+  //     const imgData = canvas.toDataURL('image/png');
+
+  //     const pdf = new jsPDF('p', 'mm', 'a4');
+
+  //     const imgWidth = 210; // A4 width in mm
+  //     const pageHeight = 295; // A4 height
+  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  //     let heightLeft = imgHeight;
+  //     let position = 0;
+
+  //     pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+  //     heightLeft -= pageHeight;
+
+  //     // Handle multiple pages
+  //     while (heightLeft > 0) {
+  //       position = heightLeft - imgHeight;
+  //       pdf.addPage();
+  //       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+  //       heightLeft -= pageHeight;
+  //     }
+
+  //     pdf.save('Result.pdf');
+  //   });
+  // }
+
   downloadPDF() {
     const element = document.getElementById('resultContent');
 
     if (!element) return;
+    // Add PDF mode class
+    element?.classList.add('pdf-mode');
 
-    html2canvas(element, { scale: 2 }).then(canvas => {
+    html2canvas(element, {
+      scale: 2
+    }).then(canvas => {
+
       const imgData = canvas.toDataURL('image/png');
-
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdf = new jsPDF();
 
       const imgWidth = 210; // A4 width in mm
-      const pageHeight = 295; // A4 height
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-      let heightLeft = imgHeight;
-      let position = 0;
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(`result_${this.resultSearchReq.RollNo}.pdf`);
 
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      // Handle multiple pages
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save('Result.pdf');
+      // Remove class after PDF generation
+      element.classList.remove('pdf-mode');
     });
   }
 }

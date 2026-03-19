@@ -140,10 +140,10 @@
                         <ng-container *ngIf="subject?.IsStudentCenteredActivity != 1; else scaRow">
                           <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCode}}</td>
                           <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectName}}</td>
-                          <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCredits}}</td>
-                          <td style="padding: 6px; border: 1px solid #444;">{{subject?.EarnedCredits}}<span style="color: blue;" *ngIf="subject.IsExCurrent == 1"> *</span></td>
-                          <td style="padding: 6px; border: 1px solid #444;">{{subject?.Grade}}</td>
-                          <td style="padding: 6px; border: 1px solid #444;">{{subject?.Remarks}}</td>
+                          <td style="padding: 6px; border: 1px solid #444; text-align: center;">{{subject?.SubjectCredits}}</td>
+                          <td style="padding: 6px; border: 1px solid #444; text-align: center;">{{subject?.EarnedCredits}}<span style="color: blue;" *ngIf="subject.IsExCurrent == 1"> *</span></td>
+                          <td style="padding: 6px; border: 1px solid #444; text-align: center;">{{subject?.Grade}}</td>
+                          <td style="padding: 6px; border: 1px solid #444; text-align: center;">{{subject?.Remarks}}</td>
                         </ng-container>
 
                         <!-- Special Row -->
@@ -175,11 +175,11 @@
                       <th style="padding: 8px; border: 1px solid #444; width: 50px;" *ngIf="StudentData?.StreamId !== 43">
                         6
                       </th>
-                      <th colspan="3" *ngIf="StudentData?.StreamId === 43" style="padding: 8px; border: 1px solid #444;">Semester Result</th>
-                      <th *ngIf="StudentData?.StreamId !== 43" style="padding: 8px; border: 1px solid #444;">Semester Result</th>
+                      <th colspan="3" *ngIf="StudentData?.StreamId === 43" style="padding: 8px; border: 1px solid #444; font-weight: bold;">Semester Result</th>
+                      <th *ngIf="StudentData?.StreamId !== 43" style="padding: 8px; border: 1px solid #444; font-weight: bold;">Semester Result</th>
                     </tr>
                     <tr>
-                      <td style="padding: 8px; border: 1px solid #444; text-align: left;">Credit Registered</td>
+                      <td style="padding: 8px; border: 1px solid #444; text-align: left; font-weight: bold;">Credit Registered</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{ FinalResultData[0]?.SubjectCreditsSem1 | number:'1.2-2' }}</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem2 | number:'1.2-2' }}</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem3 | number:'1.2-2' }}</td>
@@ -191,15 +191,15 @@
                         {{FinalResultData[0]?.SubjectCreditsSem6 | number:'1.2-2' }}
                       </td>
 
-                      <td rowspan="4" *ngIf="StudentData?.StreamId === 43" colspan="3" style="padding: 8px; border: 1px solid #444; vertical-align: middle; text-align: center;">
+                      <td rowspan="4" *ngIf="StudentData?.StreamId === 43" colspan="3" style="padding: 8px; border: 1px solid #444; vertical-align: middle; text-align: center; font-weight: bold;">
                         {{FinalResultData[0]?.Result}}
                       </td>
-                      <td rowspan="4" *ngIf="StudentData?.StreamId !== 43" style="padding: 8px; border: 1px solid #444; vertical-align: middle; text-align: center;">
+                      <td rowspan="4" *ngIf="StudentData?.StreamId !== 43" style="padding: 8px; border: 1px solid #444; vertical-align: middle; text-align: center; font-weight: bold;">
                         {{FinalResultData[0]?.Result}}
                       </td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px; border: 1px solid #444; text-align: left;">Credit Earned</td>
+                      <td style="padding: 8px; border: 1px solid #444; text-align: left; font-weight: bold;">Credit Earned</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem1 | number:'1.2-2' }}</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem2 | number:'1.2-2' }}</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem3 | number:'1.2-2' }}</td>
@@ -212,7 +212,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px; border: 1px solid #444; text-align: left;">SGPA</td>
+                      <td style="padding: 8px; border: 1px solid #444; text-align: left; font-weight: bold;">SGPA</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem1 | number:'1.2-2' }}</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem2 | number:'1.2-2' }}</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem3 | number:'1.2-2' }}</td>
@@ -225,7 +225,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td style="padding: 8px; border: 1px solid #444; text-align: left;">CGPA</td>
+                      <td style="padding: 8px; border: 1px solid #444; text-align: left; font-weight: bold;">CGPA</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem1 | number:'1.2-2' }}</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem2 | number:'1.2-2' }}</td>
                       <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem3 | number:'1.2-2' }}</td>
@@ -239,7 +239,7 @@
 
                     </tr>
                     <tr>
-                      <td rowspan="2" style="padding: 8px; border: 1px solid #444; text-align: left; vertical-align: middle;">
+                      <td rowspan="2" style="padding: 8px; border: 1px solid #444; text-align: left; vertical-align: middle; font-weight: bold;">
                         Division Award Details
                       </td>
                       <td style="padding: 8px; border: 1px solid #444; text-align: left; " rowspan="1">
