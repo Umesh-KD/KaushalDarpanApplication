@@ -29,6 +29,7 @@ export class ITIAdminUserDetailModel {
   public DepartmentID: number = 0;
   public CourseType:number=0
   public UserRole:number=0
+  public Eng_NonEng:number=0
 }
 
 export class ITIAdminUserSearchModel extends RequestBaseModel {

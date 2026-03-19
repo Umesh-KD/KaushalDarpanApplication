@@ -45,8 +45,8 @@
 
         <div>
           <label for="BankGuaranteeNumber">Bank Guarantee Number:<span class="StarMarking">*</span></label>
-          <input formControlName="BankGuaranteeNumber" class="form-input" type="text" id="BankGuaranteeNumber"
-                 (keypress)="numberOnly($event)" placeholder="Bank Guarantee Number" [(ngModel)]="request.BankGuaranteeNumber">
+          <input style="text-transform:uppercase" formControlName="BankGuaranteeNumber" class="form-input" type="text" id="BankGuaranteeNumber"
+                 placeholder="Bank Guarantee Number" [(ngModel)]="request.BankGuaranteeNumber">
           <div *ngIf="isSubmitted && bankGuarantee.get('BankGuaranteeNumber').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('BankGuaranteeNumber').errors.required">
               <i aria-hidden="true"></i>This field is
@@ -123,11 +123,7 @@
             </div>
           </div>
 
-          <div *ngIf="bankGuarantee.controls.BankAgreementDocument.errors" class="text-danger">
-            <p>
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>
+       
 
         </div>
 

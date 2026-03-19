@@ -216,7 +216,8 @@
                   </label>
                   <select id="ddlConter" class="form-select" [(ngModel)]="request.RoleID" formControlName="RoleID">
                     <option value="0">--Select--</option>
-                    <option value="20">ITI Principal</option>
+                    <option *ngIf="sSOLoginDataModel.Eng_NonEng==2 || sSOLoginDataModel.Eng_NonEng==0" value="20">ITI Principal SCVT</option>
+                    <option *ngIf="sSOLoginDataModel.Eng_NonEng==1 || sSOLoginDataModel.Eng_NonEng==0" value="43">ITI Principal NCVT</option>
                     <!--<option value="{{_enumrole.AdministrartiveStaff2}}">Administrative Staff 2</option>-->
 
                   </select>
