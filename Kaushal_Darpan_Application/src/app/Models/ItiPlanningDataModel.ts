@@ -83,8 +83,22 @@ export class ITI_PlanningCollegesModel {
   public ElectricalRemark:string=''
   public AffilationStatus:string=''
   public AffilationRemark:string=''
+  public BankRemark:string=''
   public Remarks: string = ''
-  public FinancialYearID :number=0
+  public ContactName: string = ''
+  public ContactDesignation: string = ''
+  public AmountAvailable: string = ''
+  public AmountRequired: string = ''
+  public AmountDifference: string = ''
+  public LandlineNo: string = ''
+  public FinancialYearID: number = 0
+  public HighCourt: number = 0
+  public IsCourt: boolean = false
+  public BankStatus :string=''
+  public WritNo :string=''
+  public CourtDocumernt :string=''
+  public DisCourtDocumernt :string=''
+  public CourtDate :string=''
 }
 
 export class ItiAffiliationList {

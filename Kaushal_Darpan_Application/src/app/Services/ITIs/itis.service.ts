@@ -140,8 +140,8 @@ export class ITIsService {
   }
 
 
-  public async GetPlanningList(CollegeID: number = 0, ITItypeID: number, Status: number = 0) {
-    return await this.http.get(this.APIUrl + "/GetPlanningList/" + CollegeID + "/" + ITItypeID+"/" + Status, this.headersOptions)
+  public async GetPlanningList(CollegeID: number = 0, ITItypeID: number, Status: number = 0,DistrictID:number=0) {
+    return await this.http.get(this.APIUrl + "/GetPlanningList/" + CollegeID + "/" + ITItypeID+"/" + Status +"/"+ DistrictID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

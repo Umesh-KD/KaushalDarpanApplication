@@ -166,7 +166,8 @@
                 <a [routerLink]="['/ItiPlanning']" [queryParams]="{ id: row.CollegeId,Type:1 }"
                    id="btnEdit" title="Preview"><i class="ti ti-eye"></i></a>
                 <a href="javascript:void(0);" title="View History" (click)="ViewHistory(modal_StudentReverteDocument,row.CollegeId)"><i class="ti ti-list"></i></a>
-                <a href="javascript:void(0);" title="View & Update ITI" *ngIf="row.Status==2 && sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" (click)="ViewandUpdate(MyModel_Action,row.CollegeId )"><i class="ti ti-check"></i></a>
+                <!--<a href="javascript:void(0);" title="View & Update ITI" *ngIf="row.Status==2 && sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+                   (click)="ViewandUpdate(MyModel_Action,row.CollegeId )"><i class="ti ti-check"></i></a>-->
               </div>
             </td>
           </tr>

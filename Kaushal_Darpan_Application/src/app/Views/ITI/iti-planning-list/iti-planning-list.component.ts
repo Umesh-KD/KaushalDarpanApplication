@@ -99,9 +99,9 @@ export class ItiPlanningListComponent {
     debugger;
 
     try {
-    
+   
       this.loaderService.requestStarted();
-      await this.campusPostService.GetPlanningList(this.CollegeID, this.ITItypeID, this.ApprovedStatus)
+      await this.campusPostService.GetPlanningList(this.CollegeID, this.ITItypeID, this.ApprovedStatus, this.sSOLoginDataModel.DistrictID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
