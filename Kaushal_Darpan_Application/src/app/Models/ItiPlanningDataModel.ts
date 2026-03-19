@@ -153,7 +153,7 @@ export class ITIPlanningBankGuarantee {
   public amount: number = 0;
   public BankAgreementDocument: string = '';
   public numberOfUnit: number = 0;
-  public status: number = 1;
+  public status: number = 0;
   public Remarks?: string = '' ;
   public FinYearId?: number = 0 ;
   public MonthWise?: number = 0 ;
@@ -165,5 +165,11 @@ export class ITIPlanningBankGuaranteeReturn {
   public BankGuaranteeID: number = 0;
   public CollageId: number = 0;
   public status: number = 0;
+}
+export class ITIPlanningStatusUpdateByIdModel {
+  public BankGuaranteeID: number = 0;
+  public CollageId: number = 0;
+  public status: number = 1;
+  public Remarks: string = '';
 }
 
