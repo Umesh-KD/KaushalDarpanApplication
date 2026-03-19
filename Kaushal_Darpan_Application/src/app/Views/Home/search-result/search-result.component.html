@@ -18,38 +18,50 @@
             </div>
             <div class="card-body">
 
-              <form class="row g-3 align-items-end">
+              <form class="row g-3 align-items-end" [formGroup]="_formGroup">
 
                 <div class="col-md-3">
-                  <label for="inputState" class="form-label">End Term<span class="StarMarking">*</span></label>
-                  <select class="form-select mb-0" id="EndTermID" [(ngModel)]="resultSearchReq.EndTermID"
-                          (change)="onendtermchange($event)">
-                    <option [ngValue]="0">Choose Option</option>
+                  <label for="EndTermID" class="form-label">End Term<span class="StarMarking" style="color:red;">*</span></label>
+                  <select class="form-select mb-0" id="EndTermID" name="EndTermID" [(ngModel)]="resultSearchReq.EndTermID"
+                          (change)="onendtermchange($event)" formControlName="EndTermID">
+                    <option [value]="0">Choose Option</option>
                     <option *ngFor="let item of FinancialYear" [value]="item.EndTermID">{{item.EndTermName}}</option>
                   </select>
+                  <div *ngIf="isSubmitted && _formGroup.controls.EndTermID.errors" class="text-danger">
+                    <p *ngIf="!_formGroup.controls.EndTermID.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
                 </div>
 
 
                 <div class="col-md-3">
-                  <label for="inputState" class="form-label">Semester<span class="StarMarking">*</span></label>
-                  <select class="form-select mb-0" id="SemesterID" [(ngModel)]="resultSearchReq.SemesterID"
-                          (change)="onsemesterchange($event)">
-                    <option [ngValue]="0">Choose Option</option>
+                  <label for="SemesterID" class="form-label">Semester<span class="StarMarking" style="color:red;">*</span></label>
+                  <select class="form-select mb-0" id="SemesterID" name="SemesterID" [(ngModel)]="resultSearchReq.SemesterID"
+                          (change)="onsemesterchange($event)" formControlName="SemesterID">
+                    <option [value]="0">Choose Option</option>
                     <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
                   </select>
+                  <div *ngIf="isSubmitted && _formGroup.controls.SemesterID.errors" class="text-danger">
+                    <p *ngIf="!_formGroup.controls.SemesterID.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
                 </div>
 
 
                 <div class="col-md-3">
-                  <label for="rollNo" class="form-label">Roll No<span class="StarMarking">*</span></label>
-                  <input type="text" class="form-control" name="rollNo" placeholder="Enter Roll No"
+                  <label for="RollNo" class="form-label">Roll No<span class="StarMarking" style="color:red;">*</span></label>
+                  <input type="text" class="form-control" name="RollNo" placeholder="Enter Roll No"
                          [(ngModel)]="resultSearchReq.RollNo"
-                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" formControlName="RollNo">
+                  <div *ngIf="isSubmitted && _formGroup.controls.RollNo.errors" class="text-danger">
+                    <p *ngIf="_formGroup.controls.RollNo.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
                 </div>
 
                 <div class="col-md-3">
-                  <label for="startDate" class="form-label">Date Of Birth<span class="StarMarking">*</span></label>
-                  <input type="date" class="form-control" [(ngModel)]="resultSearchReq.DOB" name="CampusFromDate">
+                  <label for="startDate" class="form-label">Date Of Birth<span class="StarMarking" style="color:red;">*</span></label>
+                  <input type="date" class="form-control" [(ngModel)]="resultSearchReq.DOB" name="DOB" formControlName="DOB">
+                  <div *ngIf="isSubmitted && _formGroup.controls.DOB.errors" class="text-danger">
+                    <p *ngIf="_formGroup.controls.DOB.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
                 </div>
 
                 <div class="col-md-3">
