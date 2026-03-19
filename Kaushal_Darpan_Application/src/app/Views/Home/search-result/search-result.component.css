@@ -64,3 +64,19 @@ select.form-select {
   /*  background-color: lightcoral;*/
   background-color: #d38192 !important;
 }
+
+.pdf-mode h2 {
+  font-size: 14px !important;
+  font-weight: bold !important;
+  letter-spacing: 0.5px !important;
+  font-family: Arial, sans-serif !important;
+}
+
+.pdf-mode h3 {
+  font-size: 13px !important;
+  font-weight: bold !important;
+}
+
+.pdf-mode p {
+  font-size: 12px !important;
+}

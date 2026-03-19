@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { SearchResultRoutingModule } from './search-result-routing.module';
 import { SearchResultComponent } from './search-result.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoaderModule } from '../../Shared/loader/loader.module';
+import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 
 
 @NgModule({
@@ -13,7 +15,10 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     FormsModule ,
-    SearchResultRoutingModule
+    SearchResultRoutingModule,
+    ReactiveFormsModule,
+    LoaderModule,
+    TableSearchFilterModule
   ]
 })
 export class SearchResultModule { }
