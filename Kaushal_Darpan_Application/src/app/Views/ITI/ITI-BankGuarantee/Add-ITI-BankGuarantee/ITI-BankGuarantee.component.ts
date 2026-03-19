@@ -13,6 +13,7 @@ import { ITIPlanningBankGuarantee } from '../../../../Models/ItiPlanningDataMode
 import { ITIsService } from '../../../../Services/ITIs/itis.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { DocumentDetailsService } from '../../../../Common/document-details';
+import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
   selector: 'app-ITI-BankGuarantee',
@@ -37,6 +38,16 @@ export class ITIBankGuaranteeComponent implements OnInit {
   public CollageId: number = 0;
   public InstituteID: number = 0;
   public BankGuaranteeId: number = 0;
+  public status: string = '';
+  public isAction: string = '';
+
+
+  public CollegeID: number = 0;
+  public CampusValidationListData: any = [];
+  public ITItypeID: number = 0;
+  public ApprovedStatus: number = 0;
+  public AllCompanyMasterList: any[] = [];
+  public CompanyMasterList: any = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,19 +64,25 @@ export class ITIBankGuaranteeComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+
+      
+
     this.bankGuarantee = this.formBuilder.group({
-      BankName: ['', Validators.required],
+      BankName: [''],
       BankGuaranteeNumber: ['', Validators.required],
       dateOfIssue: ['', Validators.required],
       maturityDate: ['', Validators.required],
       duration: ['', Validators.required],
       amount: [0, Validators.required],
       BankAgreementDocument: [''],
-      Remarks: ['']
+      Remarks: [''],
+      CollageId: ['0', DropdownValidators],
+      BankID: ['0', DropdownValidators]
     });
 
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetIti();
+    await this.bankGuaranteeList('BankDetailsList');
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -73,7 +90,22 @@ export class ITIBankGuaranteeComponent implements OnInit {
         this.getBankGuaranteeById(this.BankGuaranteeId);
       }
     });
+
+    // For ReNew
+    this.activatedRoute.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.BankGuaranteeId = +id;
+        this.getBankGuaranteeById(this.BankGuaranteeId);
+      }
+    });
+    // query param (status)
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.status = params['status'];  
+    });
+
   }
+
   private formatDate(dateStr: string): string {
     if (!dateStr) return '';
     return dateStr.split('T')[0]; 
@@ -99,7 +131,8 @@ export class ITIBankGuaranteeComponent implements OnInit {
             duration: record.Duration,
             amount: record.Amount,
             BankAgreementDocument: record.BankAgreementDocument,
-            Remarks: record.Remarks
+            Remarks: record.Remarks,
+            CollageId: record.CollageId
           });
         });
 
@@ -122,9 +155,18 @@ export class ITIBankGuaranteeComponent implements OnInit {
     this.isLoading = true;
     this.loaderService.requestStarted();
 
-    this.request.CollageId = this.sSOLoginDataModel.InstituteID;
+    this.request.CollageId = this.request.CollageId;
     this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
 
+    if (this.status == 'ReNew')
+    {
+      this.request.ActionType = 'ReNew';
+    }
+    else {
+      this.request.ActionType = '';
+    }
+
+   
     const isUpdate = this.request.BankGuaranteeID && this.request.BankGuaranteeID > 0;
 
     try {
@@ -156,6 +198,65 @@ export class ITIBankGuaranteeComponent implements OnInit {
       }, 200);
     }
   }
+
+
+
+  //async saveData(action: 'INSERT' | 'UPDATE' | 'ReNew') {
+
+  //  this.isSubmitted = true;
+
+  //  if (this.bankGuarantee.invalid) {
+  //    return;
+  //  }
+
+  //  this.isLoading = true;
+  //  this.loaderService.requestStarted();
+
+  //  this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
+  //  this.request.ActionType = action;  //  main flag
+
+  //  //  Renew case me ID reset karna important hai
+  //  if (action === 'ReNew') {
+  //    this.request.status = 1;
+  //  }
+
+  //  try {
+  //    const data: any = await this.campusPostService.SaveBankGuaranteeData(this.request);
+
+  //    this.State = data.State;
+  //    this.Message = data.Message;
+  //    this.ErrorMessage = data.ErrorMessage;
+
+  //    if (this.State === EnumStatus.Success) {
+
+  //      let successMsg = '';
+
+  //      if (action === 'INSERT') {
+  //        successMsg = 'Bank Guarantee saved successfully';
+  //      }
+  //      else if (action === 'UPDATE') {
+  //        successMsg = 'Bank Guarantee updated successfully';
+  //      }
+  //      else if (action === 'ReNew') {
+  //        successMsg = 'Bank Guarantee renewed successfully';
+  //      }
+
+  //      this.toastr.success(successMsg);
+  //      this.routers.navigate(['/iti-bank-guarantee-list']);
+  //    }
+  //    else {
+  //      this.toastr.error(this.ErrorMessage);
+  //    }
+
+  //  } catch (ex) {
+  //    console.error(ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //      this.isLoading = false;
+  //    }, 200);
+  //  }
+  //}
 
 
 
@@ -221,4 +322,49 @@ export class ITIBankGuaranteeComponent implements OnInit {
     event.target.showPicker();
   }
 
+
+  
+
+  trackById(index: number, item: any): number {
+    return item.ID;
+  }
+
+  async GetIti() {
+    try {
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService
+        .GetCommonMasterData('PrivateITICollege', 5)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.AllCompanyMasterList = data['Data'];
+          this.CompanyMasterList = this.AllCompanyMasterList;
+
+          this.CollegeID = 0; //  default select
+          this.request.CollageId = 0;
+        }, error => console.error(error));
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  public BankList: any = [];
+  async bankGuaranteeList(MasterCode: string): Promise<void> {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      switch (MasterCode) {
+        case 'BankDetailsList':
+          this.BankList = data['Data'];
+          console.log(this.BankList, "datatatata")
+          break;
+        default:
+          break;
+      }
+    });
+  }
 }

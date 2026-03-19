@@ -69,6 +69,7 @@ export class MassCoppingDetailReportComponent implements OnInit {
   async ngOnInit() {
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetAllData();
   }
 
   // Fetching the data from the service and updating the table
