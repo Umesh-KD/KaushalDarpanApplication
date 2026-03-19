@@ -99,6 +99,8 @@ export class ITI_PlanningCollegesModel {
   public CourtDocumernt :string=''
   public DisCourtDocumernt :string=''
   public CourtDate :string=''
+  public BuildingPlan :string=''
+  public DisBuildingPlan :string=''
 }
 
 export class ItiAffiliationList {
