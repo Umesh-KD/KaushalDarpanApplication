@@ -210,7 +210,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Status:
           </label>
-          <select class="form-input" formControlName="status">
+          <select class="form-input" formControlName="status" [(ngModel)]="requestById.status">
             <option value="1">Active</option>
           </select>
 
@@ -228,6 +228,28 @@
                  [(ngModel)]="requestById.Remarks">
           <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Remarks.errors" class="text-danger">
             <p *ngIf="_bankGuaranteeFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Order No:
+          </label>
+          <input type="text" class="form-input" id="OrderNo" formControlName="OrderNo"
+                 [(ngModel)]="requestById.OrderNo">
+          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.OrderNo.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.OrderNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Order date:
+          </label>
+          <input type="date" class="form-input" id="Orderdate" formControlName="Orderdate"
+                 [(ngModel)]="requestById.Orderdate">
+          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Orderdate.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.Orderdate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
         </div>
       </form>
