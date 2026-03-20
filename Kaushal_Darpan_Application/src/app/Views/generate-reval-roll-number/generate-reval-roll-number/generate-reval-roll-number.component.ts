@@ -17,7 +17,7 @@ import { GetRollService } from '../../../Services/GenerateRoll/generate-roll.ser
   selector: 'app-generate-reval-roll-number',
   templateUrl: './generate-reval-roll-number.component.html',
   styleUrl: './generate-reval-roll-number.component.css',
-  standalone:false
+  standalone: false
 })
 export class GenerateRevalRollNumberComponent {
   public SearchForm!: FormGroup
@@ -31,7 +31,7 @@ export class GenerateRevalRollNumberComponent {
   public StudentList: GenerateRollData[] = []
   public InstituteMasterList: any = []
   public VerifierStatusDDL: any = [];
-  
+
 
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new GenerateRollSearchModel()
@@ -51,9 +51,9 @@ export class GenerateRevalRollNumberComponent {
   public MobileNo: number = 0;
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
-  timeLeft: number = GlobalConstants.DefaultTimerOTP; 
-  showResendButton: boolean = false; 
-  private interval: any; 
+  timeLeft: number = GlobalConstants.DefaultTimerOTP;
+  showResendButton: boolean = false;
+  private interval: any;
   constructor(
     private commonMasterService: CommonFunctionService,
     private GetRollService: GetRollService,
@@ -150,7 +150,7 @@ export class GenerateRevalRollNumberComponent {
       }, 200);
     }
   }
-  
+
   async getInstituteMasterList() {
     try {
       this.loaderService.requestStarted();
@@ -175,7 +175,7 @@ export class GenerateRevalRollNumberComponent {
   }
 
   updateButtonStates() {
-    
+
     const hasEnrollmentNumbers = this.StudentList.some((student) => student.RollNumber)
     if (hasEnrollmentNumbers) {
 
@@ -225,15 +225,10 @@ export class GenerateRevalRollNumberComponent {
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
         try {
-          this.OnPublishRevelData()
+          await this.OnPublishRevelData();
         }
         catch (ex) {
           console.log(ex);
-        }
-        finally {
-          setTimeout(() => {
-            this.loaderService.requestEnded();
-          }, 200);
         }
       } else {
         this.toastr.warning('Invalid OTP Please Try Again');
@@ -276,13 +271,13 @@ export class GenerateRevalRollNumberComponent {
 
   //Start Section Model
   async openModalGenerateOTP(content: any) {
-    
+
     // const isAnySelected = this.StudentList.some(x => x.Marked)
     // if (!isAnySelected) {
     //   this.toastr.error('Please select at least one students(s)!');
     //   return;
     // }
-    const studentsWithoutRollNumber = this.StudentList.filter(x =>  !x.RollNumber || x.RollNumber == '' || x.RollNumber == '0' || x.RollNumber == null || x.RollNumber == undefined);
+    const studentsWithoutRollNumber = this.StudentList.filter(x => !x.RollNumber || x.RollNumber == '' || x.RollNumber == '0' || x.RollNumber == null || x.RollNumber == undefined);
 
     if (studentsWithoutRollNumber.length > 0) {
       // Collect names of students without a roll number
@@ -383,7 +378,7 @@ export class GenerateRevalRollNumberComponent {
       await this.GetRollService.GetGenerateRevelData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger
+          //debugger
           if (data.State == EnumStatus.Success) {
             this.StudentList = data['Data'];
             this.updateButtonStates()
@@ -408,92 +403,91 @@ export class GenerateRevalRollNumberComponent {
         this.toastr.error('There is no data!');
         return;
       }
-      // const isAnySelected = this.StudentList.some(x => x.Marked)
-      // if (!isAnySelected) {
-      //   this.toastr.error('Please select at least one student!');
-      //   return;
-      // }
 
-      this.isSubmitted = true;
-      this.loaderService.requestStarted();
+      //if any pending to publish
+      if (this.isAnyForwarded() || this.isAnyVerified()) {
+        this.toastr.warning("Please clear the pending process of verifier then generate!");
+        return;
+      }
 
-      // const selectedStudents = this.StudentList.filter(student => student.Marked)
-      this.StudentList.forEach((item) => {
-        item.ModifyBy = this.sSOLoginDataModel.UserID
-        item.VerifyerStatus = EnumRollNoStatus.Generated
-        item.RoleID = this.sSOLoginDataModel.RoleID
-      })
+      this.Swal2.Confirmation("Are you sure you want to Generate Reval Roll No?", async (result: any) => {
+        if (result.isConfirmed) {
+          // const isAnySelected = this.StudentList.some(x => x.Marked)
+          // if (!isAnySelected) {
+          //   this.toastr.error('Please select at least one student!');
+          //   return;
+          // }
 
-      await this.GetRollService.SaveAllRevelData(this.StudentList)
-        .then(async (data: any) => {
-    
-          if (data.State == EnumStatus.Success) {
-            this.toastr.success(data.Message)
-            await this.ResetControl();
-            await this.GetRevelData();
-            //await this.GetAllData();
-          }
-          else {
-            this.toastr.error(data.ErrorMessage)
-          }
-        })
-        .catch((error: any) => {
-          console.error(error);
-          this.toastr.error('Failed to Action Short List!');
-        });
+          this.isSubmitted = true;
+
+          // const selectedStudents = this.StudentList.filter(student => student.Marked)
+          this.StudentList.forEach((item) => {
+            item.ModifyBy = this.sSOLoginDataModel.UserID
+            item.VerifyerStatus = EnumRollNoStatus.Generated
+            item.RoleID = this.sSOLoginDataModel.RoleID
+          })
+          // call
+          await this.GetRollService.SaveAllRevelData(this.StudentList)
+            .then(async (data: any) => {
+
+              if (data.State == EnumStatus.Success) {
+                this.toastr.success(data.Message)
+                await this.ResetControl();
+                await this.GetRevelData();
+                //await this.GetAllData();
+              }
+              else {
+                this.toastr.error(data.Message);
+                console.log(data.ErrorMessage);
+              }
+            })
+            .catch((error: any) => {
+              console.error(error);
+              this.toastr.error('Error!');
+            });
+        }
+      });
     }
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   async OnPublishRevelData() {
-    debugger
+    //debugger
     this.isSubmitted = true;
     try {
-      this.loaderService.requestStarted();
-      
+
       this.StudentList.forEach((item) => {
         item.ModifyBy = this.sSOLoginDataModel.UserID
         item.RoleID = this.sSOLoginDataModel.RoleID
       })
 
       const selectedStudents = this.StudentList.filter(student => student.VerifyerStatus == EnumRollNoStatus.Verified)
-
+      // call
       await this.GetRollService.OnPublishRevelData(selectedStudents)
         .then(async (data: any) => {
-          
+
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            this.CloseModal()
-            await this.ResetControl()
-            await this.GetRevelData();
           }
           else {
-            this.CloseModal()
-            await this.ResetControl()
-            await this.GetRevelData();
-            this.toastr.error(data.ErrorMessage)
+            this.toastr.error(data.Message);
+            console.log(data.ErrorMessage);
 
           }
+          // reset
+          this.CloseModal()
+          await this.ResetControl()
+          await this.GetRevelData();
         })
         .catch((error: any) => {
           console.error(error);
-          this.toastr.error('Failed to Action Short List!');
+          this.toastr.error('Error!');
         });
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -512,7 +506,7 @@ export class GenerateRevalRollNumberComponent {
   }
 
   async ForwardRevalRollNo() {
-    
+
     //if any pending to publish
     if (this.isAnyForwarded() || this.isAnyVerified()) {
       this.toastr.warning("Please clear the pending process of verifier then forward!");
@@ -522,16 +516,16 @@ export class GenerateRevalRollNumberComponent {
     //all temp roll no. generated
     let isAllRollNoNotGenerated = this.StudentList.some(x => x.RollNumber == '' || x.RollNumber == '0');
     let ZeroRollNo = this.StudentList.filter((x: any) => x.RollNumber == '0');
-    let ZeroRollNoMsg = ''  
-    if(ZeroRollNo?.length > 0){
-      ZeroRollNoMsg = `<br><br>Students do not have roll number: ${ZeroRollNo.map((x: any) => x.EnrollmentNo).join(', ')}`
+    let ZeroRollNoMsg = ''
+    if (ZeroRollNo?.length > 0) {
+      ZeroRollNoMsg = `<br><br>Students do not have reval roll number: ${ZeroRollNo.map((x: any) => x.EnrollmentNo).join(', ')}`
     }
     if (isAllRollNoNotGenerated) {
-      this.toastr.warning("Please generate all student(s) roll number then forward!"+ ZeroRollNoMsg);
+      this.toastr.warning("Please generate all student(s) reval roll number then forward!" + ZeroRollNoMsg);
       return;
     }
 
-    this.Swal2.Confirmation("Are you sure you want to forward the roll Number for verification? Once forwarded, you will not be able to generate it again.<br> Forwarding to Examiner In-charge and Registrar", async (result: any) => {
+    this.Swal2.Confirmation("Are you sure you want to forward the reval roll Number for verification? Once forwarded, you will not be able to generate it again.<br> Forwarding to Examiner In-charge and Registrar", async (result: any) => {
       // Check if the user confirmed the action
       if (result.isConfirmed) {
         await this.ChangeRevalRollNoStatus("_UpdateStatusForward");
