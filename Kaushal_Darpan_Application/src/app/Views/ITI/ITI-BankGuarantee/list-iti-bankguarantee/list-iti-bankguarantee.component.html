@@ -157,7 +157,7 @@
 
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="Return Status Change" (click)="ViewandUpdate(MyModel_ViewDetails, item)"><i class="ti ti-pencil"></i>
+                <a href="javascript:void(0);" title="Return" (click)="ViewandUpdate(MyModel_ViewDetails, item)"><i class="ti ti-arrow-back-up"></i>
                 </a>
                 <a *ngIf="item.Status === 1" href="javascript:void(0);" title="ReNew" (click)="ReNew(item.BankGuaranteeID)"><i class="ti ti-refresh"></i></a>
                 <a *ngIf="item.BankAgreementDocument!=''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.BankAgreementDocument}}"
@@ -201,35 +201,26 @@
 
   <div class="card">
     <div class="card-header flex justify-between  items-center">
-      <b>Change Status</b>
+      <b>Return Bank gaurantee</b>
       <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
     </div>
     <div class="card-body">
       <form [formGroup]="bankGuaranteeFormGroup">
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Status:
-          </label>
-          <select class="form-input" formControlName="status" [(ngModel)]="requestById.status">
-            <option value="1">Active</option>
-          </select>
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Status:
+    </label>
+    <select class="form-input" formControlName="status" [(ngModel)]="requestById.status">
+      <option value="1">Active</option>
+    </select>
 
-          <div *ngIf="isSubmitted && _bankGuaranteeFormGroup?.status?.errors" class="text-danger">
-            <p *ngIf="_bankGuaranteeFormGroup.status.errors.required">
-              This field is required!
-            </p>
-          </div>
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Remarks:
-          </label>
-          <input type="text" class="form-input" id="Remarks" formControlName="Remarks"
-                 [(ngModel)]="requestById.Remarks">
-          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Remarks.errors" class="text-danger">
-            <p *ngIf="_bankGuaranteeFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          </div>
-        </div>
+    <div *ngIf="isSubmitted && _bankGuaranteeFormGroup?.status?.errors" class="text-danger">
+      <p *ngIf="_bankGuaranteeFormGroup.status.errors.required">
+        This field is required!
+      </p>
+    </div>
+  </div>-->
+
 
 
         <div>
@@ -250,6 +241,16 @@
                  [(ngModel)]="requestById.Orderdate">
           <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Orderdate.errors" class="text-danger">
             <p *ngIf="_bankGuaranteeFormGroup.Orderdate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Remarks:
+          </label>
+          <input type="text" class="form-input" id="Remarks" formControlName="Remarks"
+                 [(ngModel)]="requestById.Remarks">
+          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Remarks.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
         </div>
       </form>
