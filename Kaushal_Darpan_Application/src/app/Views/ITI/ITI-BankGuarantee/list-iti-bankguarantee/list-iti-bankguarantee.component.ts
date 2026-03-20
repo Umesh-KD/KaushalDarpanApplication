@@ -80,6 +80,8 @@ export class listitibankguaranteeComponent {
     this.bankGuaranteeFormGroup = this.fb.group({
       status: ['1', Validators.required],  
       Remarks: ['', Validators.required],
+      OrderNo: [''],
+      Orderdate: [''],
     });
 
     this.getbankguaranteeList()
@@ -423,9 +425,12 @@ export class listitibankguaranteeComponent {
 
 
   async ViewandUpdate(content: any, item: any) {
+    debugger
     this.isSubmitted = false;
     this.requestById.status = item.status
     this.requestById.Remarks = item.Remarks
+    this.requestById.OrderNo = this.requestById.OrderNo
+    this.requestById.Orderdate = this.requestById.Orderdate
     this.requestById.BankGuaranteeID = item.BankGuaranteeID
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
 
