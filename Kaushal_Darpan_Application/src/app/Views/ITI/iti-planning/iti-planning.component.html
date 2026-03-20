@@ -1196,16 +1196,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
         </div>
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
-          <div>
-            <label for="Ward">Amount Available:<span class="StarMarking">*</span></label>
-            <input formControlName="AmountAvailable" class="form-input" type="text" id="Ward" placeholder="Enter Available Amount "
-                   [(ngModel)]="request.AmountAvailable">
-            <div *ngIf="isSubmitted&&_AddressFormGroup.AmountAvailable.errors" class="text-danger">
-              <p *ngIf="_AddressFormGroup.AmountAvailable.errors.required">
-                <i aria-hidden="true"></i>This field is required .!
-              </p>
-            </div>
-          </div>
+
 
           <div>
             <label for="Ward">Amount Required:<span class="StarMarking">*</span></label>
@@ -1213,6 +1204,17 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
                    [(ngModel)]="request.AmountRequired">
             <div *ngIf="isSubmitted&&_AddressFormGroup.AmountRequired.errors" class="text-danger">
               <p *ngIf="_AddressFormGroup.AmountRequired.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label for="Ward">Amount Available:<span class="StarMarking">*</span></label>
+            <input formControlName="AmountAvailable" class="form-input" type="text" id="Ward" placeholder="Enter Available Amount "
+                   [(ngModel)]="request.AmountAvailable">
+            <div *ngIf="isSubmitted&&_AddressFormGroup.AmountAvailable.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.AmountAvailable.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
@@ -1283,8 +1285,8 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
                    *ngIf="this.request.CourtDocumernt  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
