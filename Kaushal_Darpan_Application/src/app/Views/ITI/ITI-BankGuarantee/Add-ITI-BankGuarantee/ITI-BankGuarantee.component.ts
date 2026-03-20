@@ -41,6 +41,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
   public status: string = '';
   public isAction: string = '';
   public BankList: any = [];
+  public BankGuranteeAmount: any = [];
 
   public CollegeID: number = 0;
   public CampusValidationListData: any = [];
@@ -73,7 +74,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
       dateOfIssue: ['', Validators.required],
       maturityDate: ['', Validators.required],
       duration: ['', Validators.required],
-      amount: [0, Validators.required],
+      amount: [{ value: '', disabled: true }],
       BankAgreementDocument: [''],
       Remarks: [''],
       CollageId: ['0', DropdownValidators],
@@ -83,6 +84,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetPrivateITICollege();
     await this.bankGuaranteeList('BankDetailsList');
+    await this.bankGuaranteeAmount();
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -311,6 +313,11 @@ export class ITIBankGuaranteeComponent implements OnInit {
     });
   }
 
-
+  async bankGuaranteeAmount() {
+    this.commonMasterService.GetCommonMasterData('BankGurantee', this.request.CollageId).then((data: any) => {
+      debugger
+      this.request.amount = data['Data'][0]['Name'];
+    });
+  }
 
 }

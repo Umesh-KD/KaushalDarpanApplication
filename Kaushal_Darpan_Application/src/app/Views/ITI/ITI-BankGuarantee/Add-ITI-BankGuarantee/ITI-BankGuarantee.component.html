@@ -23,7 +23,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
-          <ng-select [(ngModel)]="request.CollageId" [clearable]="false" formControlName="CollageId">
+          <ng-select [(ngModel)]="request.CollageId" [clearable]="false" formControlName="CollageId" (change)="bankGuaranteeAmount()">
             <ng-option [value]="0">--All--</ng-option>
             <ng-option *ngFor="let item of CompanyMasterList; trackBy: trackById"
                        [value]="item.ID">
@@ -79,7 +79,7 @@
 
         <div>
           <label for="Amount">Amount:<span class="StarMarking">*</span></label>
-          <input formControlName="amount" class="form-input" type="text" id="amount"
+          <input readonly formControlName="amount" class="form-input" type="text" id="amount"
                  (keypress)="numberOnly($event)" placeholder="Amount" [(ngModel)]="request.amount">
           <div *ngIf="isSubmitted && bankGuarantee.get('amount').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('amount').errors.required">
@@ -88,6 +88,7 @@
             </p>
           </div>
         </div>
+
 
         <div>
           <label for="Duration">Duration:<span class="StarMarking">*</span></label>
@@ -118,7 +119,7 @@
             </div>
           </div>
 
-       
+
 
         </div>
 
