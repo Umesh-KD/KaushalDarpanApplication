@@ -1598,6 +1598,11 @@ const routes: Routes = [
 
 
 
+      { path: 'Add-Nodal-User', loadChildren: () => import('./Views/ITI/iti-Add-Nodel-User/iti-Add-Nodel-User.module').then(m => m.itiAddNodelUserModule) },
+      { path: 'Nodal-User-List', loadChildren: () => import('./Views/ITI/iti-Nodel-User-List/iti-Nodel-User-List.module').then(m => m.itiNodelUserListModule), title: 'Admin Sub User' },
+
+
+
       { path: 'ITIStaffWorkRegularArrangementReort', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-StaffWorkRegularArrangementReort/ITI-StaffWorkRegularArrangementReort.module').then(m => m.ITIStaffWorkRegularArrangementReortModule) },
       { path: 'ReAssignTeacherForAttendance', loadChildren: () => import('./Views/ReAssignTeacherForAttendance/ReAssignTeacherForAttendance.module').then(m => m.ReAssignTeacherForAttendanceModule) },
       { path: 'ReAssignTeacherLCAttendance', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
@@ -1652,6 +1657,7 @@ const routes: Routes = [
 
       { path: 'file-upload', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
       { path: 'file-delete', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
+      { path: 'create-nodal-verifier', loadChildren: () => import('../Views/ITI/create-nodal-verifier/create-nodal-verifier.module').then(m => m.CreateNodalVerifierModule) }
 
 
     ]
@@ -1716,6 +1722,8 @@ const routes: Routes = [
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
 
+
+      
     ]
   },
 
@@ -1765,6 +1773,7 @@ const routes: Routes = [
   { path: 'Views\ITI\InstructorOptionForm', loadChildren: () => import('./Views/ITI/instructor-option-form/instructor-option-form.module').then(m => m.InstructorOptionFormModule) },
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
+  
   
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },

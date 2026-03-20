@@ -5,7 +5,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { ITIsDataModels, ITIsSearchModel } from '../../Models/ITIsDataModels';
 import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ItiReportDataModel } from '../../Models/ITI/ItiReportDataModel';
-import { ITI_PlanningCollegesModel, ITIPlanningBankGuarantee, ITIPlanningBankGuaranteeReturn, ItiVerificationModel } from '../../Models/ItiPlanningDataModel';
+import { ITI_PlanningCollegesModel, ITIPlanningBankGuarantee, ITIPlanningBankGuaranteeReturn, ITIPlanningStatusUpdateByIdModel, ItiVerificationModel } from '../../Models/ItiPlanningDataModel';
 import { bterCollegeSearchModel, ItiCollegeModel, ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
 import { ItiPlanningSearchModel } from '../../Models/SSOLoginDataModel';
 
@@ -162,6 +162,17 @@ export class ITIsService {
       ).toPromise();
   }
 
+
+  public async SaveItiworkdocument(request: any) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/SaveItiworkdocument`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async DownloadITIPlanning(Id: number) {
 
     return await this.http.get(this.APIUrl + "/DownloadITIPlanning/" + Id + "/", this.headersOptions)
@@ -233,6 +244,7 @@ export class ITIsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  
   public async ITIPlanningBankGuaranteeReport(searchRequest: ITIPlanningBankGuarantee) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/ITIPlanningBankGuaranteeReport`, body, this.headersOptions)
@@ -252,6 +264,14 @@ export class ITIsService {
   public async ITIPlanningBankGuaranteeReturn(searchRequestReturn: ITIPlanningBankGuaranteeReturn) {
     var body = JSON.stringify(searchRequestReturn);
     return await this.http.post(`${this.APIUrl}/ITIPlanningBankGuaranteeReturn`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async statusUpdateById(searchRequest: ITIPlanningStatusUpdateByIdModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/statusUpdateById`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

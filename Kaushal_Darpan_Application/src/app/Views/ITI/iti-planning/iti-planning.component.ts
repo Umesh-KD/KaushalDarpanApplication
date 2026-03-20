@@ -895,6 +895,15 @@ export class ItiPlanningComponent {
 
                   break;
 
+                case "BuildingPlan":
+                  this.request.BuildingPlan = data['Data'][0]["FileName"];
+                  this.request.DisBuildingPlan = data['Data'][0]["Dis_FileName"];
+
+
+
+
+                  break;
+
                 default:
                   break;
               }

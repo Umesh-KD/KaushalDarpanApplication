@@ -99,6 +99,8 @@ export class ITI_PlanningCollegesModel {
   public CourtDocumernt :string=''
   public DisCourtDocumernt :string=''
   public CourtDate :string=''
+  public BuildingPlan :string=''
+  public DisBuildingPlan :string=''
 }
 
 export class ItiAffiliationList {
@@ -133,6 +135,8 @@ export class ItiVerificationModel {
   public Status: number = 0;
   public Remarks: string = '';
   public UserID: number = 0;
+  public FileName:string=''
+  public DisFileName:string=''
 }
 export class ITI_PlanningCollegesSearchModel {
   public InstituteID: number = 0;
@@ -153,7 +157,7 @@ export class ITIPlanningBankGuarantee {
   public amount: number = 0;
   public BankAgreementDocument: string = '';
   public numberOfUnit: number = 0;
-  public status: number = 1;
+  public status: number = 0;
   public Remarks?: string = '' ;
   public FinYearId?: number = 0 ;
   public MonthWise?: number = 0 ;
@@ -165,5 +169,13 @@ export class ITIPlanningBankGuaranteeReturn {
   public BankGuaranteeID: number = 0;
   public CollageId: number = 0;
   public status: number = 0;
+}
+export class ITIPlanningStatusUpdateByIdModel {
+  public BankGuaranteeID: number = 0;
+  public CollageId: number = 0;
+  public status: number = 1;
+  public Remarks: string = '';
+  public OrderNo: number = 0;
+  public Orderdate: string = '';
 }
 
