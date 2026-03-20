@@ -278,7 +278,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
 
   async OfficeITIWiseCollegeAndDirstrict() {
     debugger
-    this.GetRoleMasterData();
+    await this.GetRoleMasterData();
     this.formData.InstituteID = 0;
     this.formData.RoleID = 0;
     if (this.formData.LevelID == 2 && this.formData.OfficeID == 11) {
@@ -465,7 +465,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.LevelList = data['Data'];
-          
+          debugger
           if (this.sSOLoginDataModel.StaffID > 0) {
             if (this.LevelID === 1 && this.sSOLoginDataModel.RoleID == this._EnumRole.DTE_TrainingT2_establishment) {
               this.LevelList = this.LevelList.filter((item: any) => item.ID != 2)
@@ -564,11 +564,6 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     //    this.loaderService.requestEnded();
     //  }, 200);
     //}
-
-
-
-
-
   }
 
 
@@ -580,6 +575,8 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       this.loaderService.requestStarted();
       // await this.commonMasterService.GetRoleMasterDDL(, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
       this.roleModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.roleModel.RoleID = this.sSOLoginDataModel.RoleID;
+      this.roleModel.OfficeID = this.formData.OfficeID
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_Govt_RoleOfficeMapping_GetAllData(this.roleModel).then((data: any) => {
      
         data = JSON.parse(JSON.stringify(data));
@@ -594,14 +591,11 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
         } else {
           if (this.GetIsHodOldID > 0) {
             this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.IsHod != true)
-          } else {
-            this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.IsHod == true)
-          }
+          } 
+          // else {
+          //   this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.IsHod == true)
+          // }
         }
-
-
-       
-      
         console.log("RoleMasterList", this.RoleMasterList);
       })
     } catch (error) {

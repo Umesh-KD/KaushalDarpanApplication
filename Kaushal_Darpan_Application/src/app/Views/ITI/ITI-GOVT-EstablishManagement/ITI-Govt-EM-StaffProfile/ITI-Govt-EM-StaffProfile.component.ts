@@ -111,10 +111,8 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
 
 
   async ngOnInit() {
-    
+    debugger
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
-
-
       /*txtName: ['', Validators.required],*/
       txtName: [{ value: '', disabled: true }, Validators.required],
       /*    txtName: ['', [Validators.required]],*/
@@ -174,13 +172,7 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
       RadioisDepartmentalMixed: [''],
       RadioisRenounced: [''],
       RadioisSeniorInstructor: ['']
-
-
-
-
     })
-
-
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
@@ -188,35 +180,24 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
     this.QueryReqFormGroup = this.formBuilder.group({
       txtSSOID: ['', [Validators.required]]
     });
-
-
     this.promotionData.PostID = 0;
     //this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID
-
-
-
     this.CheckUserID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     console.log(this.CheckUserID)
     /*alert(this.CheckUserID);*/
-
-
-    this.LoadStaticDropdownLists();
-    this.GetCurrentBasicDesignationListAndCurrentPostingEmpListAndPostList();
-    this.GetGenderList();
-    this.GetBloodGroupList();
-    this.GetMaritalStatusList();
-    this.GetServiceTypeHWList();
-    this.GetCastList();
-    this.GetReligionList();
-    this.GetDivyangList();
-    this.GetStateList()
-    this.GetSpecialAbilityList()
+    await this.LoadStaticDropdownLists();
+    await this.GetCurrentBasicDesignationListAndCurrentPostingEmpListAndPostList();
+    await this.GetGenderList();
+    await this.GetBloodGroupList();
+    await this.GetMaritalStatusList();
+    await this.GetServiceTypeHWList();
+    await this.GetCastList();
+    await this.GetReligionList();
+    await this.GetDivyangList();
+    await this.GetStateList()
+    await this.GetSpecialAbilityList()
     await this.GetITI_Govt_EM_GetUserProfileStatus();
-
-
     /* await this.GetAllData()*/
-
-
     if (this.CheckUserID > 0) {
       this.personalDetailsRequest.StaffID = this.CheckUserID;
       await this.GetPersonalDetails();
@@ -230,9 +211,7 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
         await this.SSOIDGetSomeDetails(this.sSOLoginDataModel.SSOID);
       }
     }
-    await this.GetUserProfileStatus();
-
-    
+    await this.GetUserProfileStatus();    
     if (this.CheckUserID == 0 && (this._EnumEMProfileStatus.LockAndSubmit == this.sSOLoginDataModel.ProfileID ||
       this._EnumEMProfileStatus.Approve == this.sSOLoginDataModel.ProfileID
       || this._EnumEMProfileStatus.Reject == this.sSOLoginDataModel.ProfileID)) {
@@ -245,9 +224,6 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
       this.AddStaffBasicDetailFromGroup.disable();
       this.IsLockandSubmit = true;
     }
-
-
-
     console.log(this.sSOLoginDataModel);
   }
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
@@ -754,12 +730,12 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
 
   async GetPersonalDetails() {
 
-    debugger
+    // debugger
     this.isSubmitted = false;
     try {
       this.loaderService.requestStarted();
       this.personalDetailsRequest.SSOID = this.sSOLoginDataModel.SSOID;
-      debugger
+      // debugger
       console.log( this.formData);
 
 
@@ -1124,7 +1100,7 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
 
 
   async onUserProfileStatusHistorylist(model: any, StaffUserID: number) {
-    debugger
+    // debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequestUserProfileStatus.StaffID = StaffUserID;
@@ -1177,7 +1153,7 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
   }
 
   VisibleiDepartmentalMixed() {
-    debugger
+    // debugger
     if (this.formData.isDepartmentalMixed) {
       this.isVisibleiDepartmentalMixed = true;
     }

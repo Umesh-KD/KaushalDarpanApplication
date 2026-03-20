@@ -20,7 +20,7 @@ import { ITIOfficeVacancyModel } from '../../../../Models/ITIGovtEMStaffMasterDa
 @Component({
   selector: 'app-ITI-OfficeVacancy',
   standalone: false,
-  
+
   templateUrl: './ITI-OfficeVacancy.component.html',
   styleUrl: './ITI-OfficeVacancy.component.css'
 })
@@ -49,7 +49,7 @@ export class ITIOfficeVacancyComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
-  public isModalOpen = false;  
+  public isModalOpen = false;
   public StaffLevelList: any = [];
   public StaffLevelChildList: any = [];
   public HostelList: any = [];
@@ -67,10 +67,10 @@ export class ITIOfficeVacancyComponent implements OnInit {
   public GramPanchayatList: any = [];
   public City_VillageList: any = [];
   public PostingDirectRecruitment_PromotionList: any = [];
-  public CasteList: any = []; 
+  public CasteList: any = [];
   public QueryReqFormGroup!: FormGroup;
   public _EnumRole = EnumRole
-  public GetRoleID: number=0
+  public GetRoleID: number = 0
   OfficeVacancyList: OfficeVacancyModel[] = [];
   OfficeVacancy: OfficeVacancyModel[] = [];
   public ProfileStatus: number = 0;
@@ -94,7 +94,7 @@ export class ITIOfficeVacancyComponent implements OnInit {
 
     this.AddOfficeVacancyForm = this.formBuilder.group({
       OfficeID: [0, [DropdownValidators]],
-      InstituteID: [0,[]],
+      InstituteID: [0, []],
       StaffTypeID: [0, [DropdownValidators]],
       DesignationID: [0, [DropdownValidators]],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
@@ -111,12 +111,12 @@ export class ITIOfficeVacancyComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.GetRoleID = this.sSOLoginDataModel.RoleID;    
+    this.GetRoleID = this.sSOLoginDataModel.RoleID;
     await this.OfficeVacancyDataList();
     await this.GetOfficeList();
     await this.GetInstitute();
     await this.GetStaffTypeData();
-   /* await this.GetPostList();*/
+    /* await this.GetPostList();*/
     console.log(this.sSOLoginDataModel);
   }
   get _AddOfficeVacancyForm() {
@@ -127,7 +127,7 @@ export class ITIOfficeVacancyComponent implements OnInit {
   }
 
 
-  
+
   tempIndex: number = 1;
 
   async addOfficeVacancy() {
@@ -162,13 +162,13 @@ export class ITIOfficeVacancyComponent implements OnInit {
 
     const data: any = await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID);
     this.PostList = data['Data'];
-    
 
-    const getoffice = this.OfficeList.find((item:any) => item.ID == formValues.OfficeID);
+
+    const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
 
-    
-   
+
+
     const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);
 
     let getinstitute = [];
@@ -181,14 +181,14 @@ export class ITIOfficeVacancyComponent implements OnInit {
 
     const getinstituteName = getinstitute.length > 0 ? getinstitute[0].InstituteName : '';
 
-    console.log(getinstituteName); 
+    console.log(getinstituteName);
 
     const vacancyData: ITIOfficeVacancyModel = {
       Comments: formValues.Comments,
       DesignationID: formValues.DesignationID,
       InstituteID: formValues.InstituteID || 0,  // fallback if null
       OfficeID: formValues.OfficeID,
-      PlanningID:0,
+      PlanningID: 0,
       StaffTypeID: formValues.StaffTypeID,
       TotalSeatID: formValues.TotalSeatID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
@@ -207,12 +207,12 @@ export class ITIOfficeVacancyComponent implements OnInit {
       DesignationName: getdesignation.Name,
       InstituteName: getinstituteName,
       StaffTypeName: getstaffType.Name,
-      PostedSeat:0,
+      PostedSeat: 0,
       Index: this.tempIndex++,
       TradeID: 0,
       TradeName: '',
       PostSanctionDate: '',
-      PostSanctionedID:0
+      PostSanctionedID: 0
     };
 
     console.log('Vacancy being added:', vacancyData);
@@ -228,25 +228,25 @@ export class ITIOfficeVacancyComponent implements OnInit {
     this.loaderService.requestStarted();
     this.isLoading = true;
     this.isSubmitted = true;
-    
+
     if (this.OfficeVacancy.length === 0) {
       this.toastr.warning("Please add at least one valid vacancy before saving.");
       return;
     }
-   
+
     try {
       this.loaderService.requestStarted();
 
       await this.ITIGovtEMStaffMaster.Save_M_OfficeVacancy_IU(this.OfficeVacancy).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-          
+
           this.OfficeVacancy = [];
           this.OfficeVacancyDataList();
           this.toastr.success('Data saved successfully!');
 
           window.location.reload();
-           // Clear array after successful save
+          // Clear array after successful save
         } else {
           this.toastr.error(data.ErrorMessage);
         }
@@ -263,11 +263,11 @@ export class ITIOfficeVacancyComponent implements OnInit {
   }
 
 
-  
+
 
   async removeLeave(index: number, ID: number) {
     debugger
-    
+
 
     if (ID === undefined || ID === null) {
       ID = 0;
@@ -308,25 +308,25 @@ export class ITIOfficeVacancyComponent implements OnInit {
       }
     }
     else {
-     
+
     }
-   
+
   }
- 
 
 
-  
+
+
 
   ResetControl() {
     this.isSubmitted = false;
     this.formData = new OfficeVacancyModel();
-    
+
     //const btnSave = document.getElementById('btnSave');
     //if (btnSave) btnSave.innerHTML = "Submit";
   }
 
   async OfficeVacancyDataList() {
-   debugger
+    debugger
     try {
       this.loaderService.requestStarted();
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -336,8 +336,8 @@ export class ITIOfficeVacancyComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeVacancyList = data['Data'];
-          
-         
+
+
         }, error => console.error(error));
 
       console.log(this.OfficeVacancyList, "leaves data")
@@ -357,7 +357,7 @@ export class ITIOfficeVacancyComponent implements OnInit {
 
   async GetOfficeList() {
     debugger;
-  
+
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
@@ -422,10 +422,10 @@ export class ITIOfficeVacancyComponent implements OnInit {
     }
   }
 
- async fillupDesignation() {
-   
-    
-    await  this.GetPostList();
+  async fillupDesignation() {
+
+
+    await this.GetPostList();
   }
 
   async GetPostList() {
@@ -457,14 +457,14 @@ export class ITIOfficeVacancyComponent implements OnInit {
 
           this.groupForm.get('OfficeID')?.disable();
           this.groupForm.get('StaffTypeID')?.disable();
-         /* this.groupForm.get('DesignationID')?.disable();*/
+          /* this.groupForm.get('DesignationID')?.disable();*/
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.disable();
           }
         } else {
           this.groupForm.get('OfficeID')?.enable();
           this.groupForm.get('StaffTypeID')?.enable();
-         /* this.groupForm.get('DesignationID')?.enable();*/
+          /* this.groupForm.get('DesignationID')?.enable();*/
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.enable();
           }
@@ -503,7 +503,7 @@ export class ITIOfficeVacancyComponent implements OnInit {
       if (this.formData.ID != 0) {
         await this.ITIGovtEMStaffMaster.UpdateOfficeVacancy(this.formData).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-         
+
           if (data.State === EnumStatus.Success) {
             this.toastr.success(data.Message);
 
@@ -530,7 +530,7 @@ export class ITIOfficeVacancyComponent implements OnInit {
 
         });
       }
-      
+
 
     } catch (error) {
       console.error("Error saving data:", error);
