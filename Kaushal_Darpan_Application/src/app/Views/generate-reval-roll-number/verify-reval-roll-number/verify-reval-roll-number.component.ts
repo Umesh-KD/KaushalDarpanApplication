@@ -434,7 +434,7 @@ export class VerifyRevalRollNumberComponent {
 
         if (this.ddlRollListStatus == EnumRollNoStatus.Reverted) {
           Swal.fire({
-            title: 'Revert Roll No List',
+            title: 'Revert Reval Roll No List',
             input: 'textarea',
             inputLabel: 'Remark',
             inputPlaceholder: 'Enter your remark here...',
@@ -458,11 +458,11 @@ export class VerifyRevalRollNumberComponent {
 
           if (this.currentStatus == EnumRollNoStatus.Published) {
 
-            this.swal2.Info('The roll number has already been published and cannot be verified again.');
+            this.swal2.Info('The reval roll number has already been published and cannot be verified again.');
 
           }
           else {
-            this.swal2.Confirmation("Are you sure you want to verified roll no?", async (result: any) => {
+            this.swal2.Confirmation("Are you sure you want to verified reval roll no?", async (result: any) => {
               // Check if the user confirmed the action
               if (result.isConfirmed) {
 

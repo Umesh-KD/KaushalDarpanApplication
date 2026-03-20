@@ -456,7 +456,6 @@ export class GenerateRollComponent {
 
 
     try {
-      this.loaderService.requestStarted();
 
       this.StudentList.forEach((item) => {
         item.ModifyBy = this.sSOLoginDataModel.UserID;
@@ -494,19 +493,6 @@ export class GenerateRollComponent {
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-
-
-
-
-
-
-
-
   }
 
 
@@ -522,13 +508,6 @@ export class GenerateRollComponent {
         catch (ex) {
           console.log(ex);
         }
-        finally {
-          setTimeout(() => {
-            this.loaderService.requestEnded();
-          }, 200);
-        }
-
-
       }
       else {
         this.toastr.warning('Invalid OTP Please Try Again');

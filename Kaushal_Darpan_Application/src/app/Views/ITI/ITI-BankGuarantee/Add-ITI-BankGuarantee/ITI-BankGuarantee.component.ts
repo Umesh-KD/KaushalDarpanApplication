@@ -49,6 +49,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
   public ApprovedStatus: number = 0;
   public AllCompanyMasterList: any[] = [];
   public CompanyMasterList: any = [];
+  public cal: any = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,8 +66,6 @@ export class ITIBankGuaranteeComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-
-      
 
     this.bankGuarantee = this.formBuilder.group({
       BankName: [''],
@@ -85,6 +84,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
     await this.GetPrivateITICollege();
     await this.bankGuaranteeList('BankDetailsList');
     await this.bankGuaranteeAmount();
+    await this.calculateDuration();
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -107,6 +107,18 @@ export class ITIBankGuaranteeComponent implements OnInit {
     });
     
   }
+
+
+  calculateDuration() {
+
+  const issueDate = new Date(this.request.dateOfIssue);
+  const maturityDate = new Date(this.request.maturityDate);
+  const diffTime = maturityDate.getTime() - issueDate.getTime();
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  }
+
+
 
   private formatDate(dateStr: string): string {
     if (!dateStr) return '';

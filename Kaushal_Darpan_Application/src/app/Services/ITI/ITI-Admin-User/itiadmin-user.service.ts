@@ -70,7 +70,7 @@ export class ITIAdminUserService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  //save data
+ 
   public async getAlladminUserData(request: AdminUserSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/getAlladminUserData`, body, this.headersOptions)
@@ -78,4 +78,25 @@ export class ITIAdminUserService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async SaveNodalUserdata(request: AdminUserDetailModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveNodalUserdata`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  public async getAllNodalUserdata(request: AdminUserSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/getAllNodalUserdata`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
