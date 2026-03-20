@@ -40,7 +40,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
   public BankGuaranteeId: number = 0;
   public status: string = '';
   public isAction: string = '';
-
+  public BankList: any = [];
 
   public CollegeID: number = 0;
   public CampusValidationListData: any = [];
@@ -81,7 +81,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetIti();
+    await this.GetPrivateITICollege();
     await this.bankGuaranteeList('BankDetailsList');
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -200,64 +200,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
   }
 
 
-
-  //async saveData(action: 'INSERT' | 'UPDATE' | 'ReNew') {
-
-  //  this.isSubmitted = true;
-
-  //  if (this.bankGuarantee.invalid) {
-  //    return;
-  //  }
-
-  //  this.isLoading = true;
-  //  this.loaderService.requestStarted();
-
-  //  this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
-  //  this.request.ActionType = action;  //  main flag
-
-  //  //  Renew case me ID reset karna important hai
-  //  if (action === 'ReNew') {
-  //    this.request.status = 1;
-  //  }
-
-  //  try {
-  //    const data: any = await this.campusPostService.SaveBankGuaranteeData(this.request);
-
-  //    this.State = data.State;
-  //    this.Message = data.Message;
-  //    this.ErrorMessage = data.ErrorMessage;
-
-  //    if (this.State === EnumStatus.Success) {
-
-  //      let successMsg = '';
-
-  //      if (action === 'INSERT') {
-  //        successMsg = 'Bank Guarantee saved successfully';
-  //      }
-  //      else if (action === 'UPDATE') {
-  //        successMsg = 'Bank Guarantee updated successfully';
-  //      }
-  //      else if (action === 'ReNew') {
-  //        successMsg = 'Bank Guarantee renewed successfully';
-  //      }
-
-  //      this.toastr.success(successMsg);
-  //      this.routers.navigate(['/iti-bank-guarantee-list']);
-  //    }
-  //    else {
-  //      this.toastr.error(this.ErrorMessage);
-  //    }
-
-  //  } catch (ex) {
-  //    console.error(ex);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //      this.isLoading = false;
-  //    }, 200);
-  //  }
-  //}
-
+  
 
 
   public file!: File;
@@ -329,7 +272,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
     return item.ID;
   }
 
-  async GetIti() {
+  async GetPrivateITICollege() {
     try {
       this.loaderService.requestStarted();
 
@@ -354,7 +297,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
     }
   }
 
-  public BankList: any = [];
+  
   async bankGuaranteeList(MasterCode: string): Promise<void> {
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
       switch (MasterCode) {

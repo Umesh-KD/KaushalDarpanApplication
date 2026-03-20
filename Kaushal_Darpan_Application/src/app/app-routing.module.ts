@@ -33,7 +33,7 @@ const routes: Routes = [
       { path: 'iti-Examination-public-info', loadChildren: () => import('./Views/iti-Examination-public-info/iti-Examination-public-info.module').then(m => m.ITIExaminationPublicInfoModule) },
       { path: 'InstructorTab', loadChildren: () => import('./Views/ITI/instructor-tab/instructor-tab.module').then(m => m.InstructorTabModule) },
       /* { path: 'itipublicinfotabs', loadChildren: () => import('./Views/itipublic-info-tabs/itipublic-info-tabs.module').then(m => m.ITIPublicInfoTabsModule) }*/
-      { path: 'SearchResult', loadChildren: () => import('./Views/Home/search-result/search-result.module').then(m => m.SearchResultModule), title: 'Search Result' },
+      
     ]
   },
 
@@ -48,6 +48,7 @@ const routes: Routes = [
       { path: 'dtepublicinfo5', loadChildren: () => import('./Views/dte-public-info/dte-public-info.module').then(m => m.DTEPublicInfoModule) },
 
       { path: 'dtepublicinfotabs', loadChildren: () => import('./Views/dtepublic-info-tabs/dtepublic-info-tabs.module').then(m => m.DTEPublicInfoTabsModule) },
+      { path: 'SearchResult', loadChildren: () => import('./Views/Home/search-result/search-result.module').then(m => m.SearchResultModule), title: 'Search Result' },
     
     ]
   },

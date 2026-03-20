@@ -1,5 +1,3 @@
-
-
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
@@ -24,44 +22,50 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-
-
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Name:</label>
-          <input type="text" class="form-input" placeholder="Enter Bank Name" [(ngModel)]="searchRequest.BankName" (ngModelChange)="onBankNameChange($event)">
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Guarantee Number:</label>
-          <input type="text" class="form-input" placeholder="Enter Bank Guarantee Number" [(ngModel)]="searchRequest.BankGuaranteeNumber">
-        </div>-->
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Status
           </label>
           <select class="form-select" [(ngModel)]="searchRequest.status">
-            <option value="0">Pending</option>
+            <option value="0">All</option>
             <option value="1">Active</option>
             <option value="2">Return</option>
             <option value="3">Due</option>
-            
+
           </select>
         </div>
 
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
           <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollageId">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of CollegeMasterList" [value]="item.Id">
+            <option *ngFor="let item of CollegeMasterList" [value]="item.ID">
               {{item.Name}}
             </option>
           </select>
+        </div>-->
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
+          <ng-select [(ngModel)]="searchRequest.CollageId" [clearable]="false">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-option *ngFor="let item of CollegeMasterList; trackBy: trackById"
+                       [value]="item.ID">
+              {{item.Name}}
+            </ng-option>
+          </ng-select>
         </div>
+
+
+
+
+
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-           Due Within Days:
+            Due Within Days:
           </label>
           <select class="form-select"
                   [(ngModel)]="searchRequest.dayWise">
@@ -86,7 +90,7 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-between flex-wrap items-center">
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
-       
+
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -153,6 +157,8 @@
 
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Return Status Change" (click)="ViewandUpdate(MyModel_ViewDetails, item)"><i class="ti ti-pencil"></i>
+                </a>
                 <a *ngIf="item.Status === 1" href="javascript:void(0);" title="ReNew" (click)="ReNew(item.BankGuaranteeID)"><i class="ti ti-refresh"></i></a>
                 <a *ngIf="item.BankAgreementDocument!=''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.BankAgreementDocument}}"
                    target="_blank" title="Download Document">
@@ -188,3 +194,55 @@
 </div>
 
 <!-- end row -->
+
+
+<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="card">
+    <div class="card-header flex justify-between  items-center">
+      <b>Change Status</b>
+      <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="bankGuaranteeFormGroup">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status:
+          </label>
+          <select class="form-input" formControlName="status">
+            <option value="1">Active</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _bankGuaranteeFormGroup?.status?.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.status.errors.required">
+              This field is required!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Remarks:
+          </label>
+          <input type="text" class="form-input" id="Remarks" formControlName="Remarks"
+                 [(ngModel)]="requestById.Remarks">
+          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Remarks.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+      </form>
+
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="statusUpdateById()">Submit</button>
+        </div>
+      </div>
+
+
+
+    </div>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+    </div>
+  </div>
+</ng-template>
+

@@ -107,6 +107,7 @@ export class ITIAdminUserComponent {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
 
   /*      this.request.InstituteID = this.sSOLoginDataModel.InstituteID*/
       
@@ -155,7 +156,7 @@ export class ITIAdminUserComponent {
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.sSOLoginDataModel.EndTermID = this.sSOLoginDataModel.EndTermID
-      this.sSOLoginDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       

@@ -83,8 +83,24 @@ export class ITI_PlanningCollegesModel {
   public ElectricalRemark:string=''
   public AffilationStatus:string=''
   public AffilationRemark:string=''
+  public BankRemark:string=''
   public Remarks: string = ''
-  public FinancialYearID :number=0
+  public ContactName: string = ''
+  public ContactDesignation: string = ''
+  public AmountAvailable: string = ''
+  public AmountRequired: string = ''
+  public AmountDifference: string = ''
+  public LandlineNo: string = ''
+  public FinancialYearID: number = 0
+  public HighCourt: number = 0
+  public IsCourt: boolean = false
+  public BankStatus :string=''
+  public WritNo :string=''
+  public CourtDocumernt :string=''
+  public DisCourtDocumernt :string=''
+  public CourtDate :string=''
+  public BuildingPlan :string=''
+  public DisBuildingPlan :string=''
 }
 
 export class ItiAffiliationList {
@@ -139,7 +155,7 @@ export class ITIPlanningBankGuarantee {
   public amount: number = 0;
   public BankAgreementDocument: string = '';
   public numberOfUnit: number = 0;
-  public status: number = 1;
+  public status: number = 0;
   public Remarks?: string = '' ;
   public FinYearId?: number = 0 ;
   public MonthWise?: number = 0 ;
@@ -151,5 +167,11 @@ export class ITIPlanningBankGuaranteeReturn {
   public BankGuaranteeID: number = 0;
   public CollageId: number = 0;
   public status: number = 0;
+}
+export class ITIPlanningStatusUpdateByIdModel {
+  public BankGuaranteeID: number = 0;
+  public CollageId: number = 0;
+  public status: number = 1;
+  public Remarks: string = '';
 }
 
