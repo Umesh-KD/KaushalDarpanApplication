@@ -162,6 +162,17 @@ export class ITIsService {
       ).toPromise();
   }
 
+
+  public async SaveItiworkdocument(request: any) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/SaveItiworkdocument`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async DownloadITIPlanning(Id: number) {
 
     return await this.http.get(this.APIUrl + "/DownloadITIPlanning/" + Id + "/", this.headersOptions)

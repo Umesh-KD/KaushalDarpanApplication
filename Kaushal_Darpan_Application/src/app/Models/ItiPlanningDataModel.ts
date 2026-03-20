@@ -135,6 +135,8 @@ export class ItiVerificationModel {
   public Status: number = 0;
   public Remarks: string = '';
   public UserID: number = 0;
+  public FileName:string=''
+  public DisFileName:string=''
 }
 export class ITI_PlanningCollegesSearchModel {
   public InstituteID: number = 0;
