@@ -103,7 +103,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       this.status = params['status'];  
     });
-
+    
   }
 
   private formatDate(dateStr: string): string {
@@ -310,4 +310,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
       }
     });
   }
+
+
+
 }
