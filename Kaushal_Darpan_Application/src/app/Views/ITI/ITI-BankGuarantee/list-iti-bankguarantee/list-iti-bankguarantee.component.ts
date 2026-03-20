@@ -78,10 +78,10 @@ export class listitibankguaranteeComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.bankGuaranteeFormGroup = this.fb.group({
-      status: ['1', Validators.required],  
+      //status: ['1', Validators.required],  
       Remarks: ['', Validators.required],
-      OrderNo: [''],
-      Orderdate: [''],
+      OrderNo: ['', Validators.required],
+      Orderdate: ['', Validators.required],
     });
 
     this.getbankguaranteeList()
@@ -427,7 +427,7 @@ export class listitibankguaranteeComponent {
   async ViewandUpdate(content: any, item: any) {
     debugger
     this.isSubmitted = false;
-    this.requestById.status = item.status
+    this.requestById.status = 2
     this.requestById.Remarks = item.Remarks
     this.requestById.OrderNo = this.requestById.OrderNo
     this.requestById.Orderdate = this.requestById.Orderdate

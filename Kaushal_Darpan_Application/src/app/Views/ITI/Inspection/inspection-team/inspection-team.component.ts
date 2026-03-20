@@ -13,6 +13,9 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 
+
+
+
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 
 @Component({
