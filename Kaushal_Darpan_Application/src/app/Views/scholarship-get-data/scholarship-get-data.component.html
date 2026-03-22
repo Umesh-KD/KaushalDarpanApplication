@@ -1,0 +1,217 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Scholarship  Data</h4>
+
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/ScholarshipAPIData']" class="text-sm font-medium text-slate-700" aria-current="page">Scholarship Data</a>
+
+
+
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="mb-8">
+
+
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Fetch Scholarship Data</b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <ng-select [(ngModel)]="ScholarshipAPIRequest.InstituteID"
+                     [clearable]="false" (change)="GetCourse($event)">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-container *ngFor="let item of InstituteMasterList;">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
+
+        </div>
+        <div> <label class="text-gray-800 text-sm font-medium inline-block mb-1">Course</label> <ng-select [items]="CourseMasterList" bindLabel="Name" bindValue="ID" [(ngModel)]="ScholarshipAPIRequest.COURSEID" [clearable]="false"> </ng-select> </div>
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" id="searchButton" (click)="GetPracticalExamMarksList()">Search</button>
+          <!--<button type="button" class="btn bg-danger text-white mt-6" id="cancelButton">Cancel</button>-->
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+
+      <button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="Export Detail" (click)="exportToExcel()" >
+        <i class="fa fa-download"></i> Download
+      </button>
+      <!--<button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="ScholarshipAPI Data">
+        <i class="fa fa-download"></i> Download
+      </button>-->
+    </div>
+
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto text-sm" cellpadding="5">
+
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr>
+            <th>Inst_Code</th>
+            <th>Trade_code</th>
+            <th>UNIVERSITYNAME_EN</th>
+            <th>InstituteID</th>
+            <th>INSTITUTENAME</th>
+            <th>COURSENAME</th>
+            <th>COURSEID</th>
+            <th>SEATS</th>
+            <th>AFFILATION_DATE</th>
+            <th>AFFILATIONVALIDDATE</th>
+            <th>INSTITUTE_COURSE_DOCUMENTS</th>
+            <th>InstituteAFFILATIONDoc</th>
+            <th>INSTITUTETYPE</th>
+            <th>NODALOFFICERNAME</th>
+            <th>NODALOFFICEREMAIL</th>
+            <th>NODALOFFICERMOBILE</th>
+            <th>NODALOFFICERAADHAAR</th>
+            <th>DATEOF_ESTABLISHED</th>
+            <th>VILLAGE</th>
+            <th>DISTRICT</th>
+            <th>TEHSIL</th>
+            <th>PINCODE</th>
+            <th>RURALURBAN</th>
+            <th>DESIGNATION1</th>
+            <th>NAME1</th>
+            <th>EMAILADDRESS1</th>
+            <th>MOBILENUMBER1</th>
+            <th>DESIGNATION2</th>
+            <th>NAME2</th>
+            <th>EMAILADDRESS2</th>
+            <th>MOBILENUMBER2</th>
+            <th>REGISTRATIONFOR</th>
+            <th>IS_GOVT</th>
+            <th>AISHECODE</th>
+            <th>PRCODE</th>
+            <th>ISACTIVE</th>
+            <th>NODALOFFICERAADHAAR_REFNO</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of scholarshipRequestList">
+            <td>{{row.Inst_Code}}</td>
+            <td>{{row.Trade_code}}</td>
+            <td>{{row.UNIVERSITYNAME_EN}}</td>
+            <td>{{row.InstituteID}}</td>
+            <td>{{row.INSTITUTENAME}}</td>
+            <td>{{row.COURSENAME}}</td>
+            <td>{{row.COURSEID}}</td>
+            <td>{{row.SEATS}}</td>
+            <td>{{row.AFFILATION_DATE}}</td>
+            <td>{{row.AFFILATIONVALIDDATE}}</td>
+            <td>{{row.INSTITUTE_COURSE_DOCUMENTS}}</td>
+            <td>{{row.InstituteAFFILATIONDoc}}</td>
+            <td>{{row.INSTITUTETYPE}}</td>
+            <td>{{row.NODALOFFICERNAME}}</td>
+            <td>{{row.NODALOFFICEREMAIL}}</td>
+            <td>{{row.NODALOFFICERMOBILE}}</td>
+            <td>{{row.NODALOFFICERAADHAAR}}</td>
+            <td>{{row.DATEOF_ESTABLISHED}}</td>
+            <td>{{row.VILLAGE}}</td>
+            <td>{{row.DISTRICT}}</td>
+            <td>{{row.TEHSIL}}</td>
+            <td>{{row.PINCODE}}</td>
+            <td>{{row.RURALURBAN}}</td>
+            <td>{{row.DESIGNATION1}}</td>
+            <td>{{row.NAME1}}</td>
+            <td>{{row.EMAILADDRESS1}}</td>
+            <td>{{row.MOBILENUMBER1}}</td>
+            <td>{{row.DESIGNATION2}}</td>
+            <td>{{row.NAME2}}</td>
+            <td>{{row.EMAILADDRESS2}}</td>
+            <td>{{row.MOBILENUMBER2}}</td>
+            <td>{{row.REGISTRATIONFOR}}</td>
+            <td>{{row.IS_GOVT}}</td>
+            <td>{{row.AISHECODE}}</td>
+            <td>{{row.PRCODE}}</td>
+            <td>{{row.ISACTIVE}}</td>
+            <td>{{row.NODALOFFICERAADHAAR_REFNO}}</td>
+          </tr>
+
+          <!-- No Data -->
+          <tr *ngIf="!scholarshipRequestList || scholarshipRequestList.length === 0">
+            <td colspan="37" class="text-center">No Data Found</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!--<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="card">
+    <div class="card-header flex justify-between  items-center">
+      <b>Obtained Marks</b>
+      <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="ExamMarksGroup">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Obtained Marks : <span class="StarMarking">*</span>
+          </label>
+
+          <input class="form-input" type="text" id="txtExamMarks" placeholder="Enter Exam Marks" formControlName="txtExamMarks" [(ngModel)]="ObtainMarksRequest.ObtainedMarks" maxlength="3"
+                 inputmode="numeric" autocomplete="off" (keydown)="allowOnlyNumbers($event)" (paste)="preventPaste($event)">
+          <div *ngIf="isSubmitted && _ExamMarksGroup.txtExamMarks.errors"
+               class="text-danger">
+            <p *ngIf="_ExamMarksGroup.txtExamMarks.errors.required">
+              This field is required.
+            </p>
+            <p *ngIf="_ExamMarksGroup.txtExamMarks.errors.pattern">
+              Only numeric values allowed.
+            </p>
+            <p *ngIf="_ExamMarksGroup.txtExamMarks.errors.min">
+              Obtained marks an't be zero OR negative.
+            </p>
+            <p *ngIf="_ExamMarksGroup.txtExamMarks.errors.max">
+              Obtained marks can't be greater than 250.
+            </p>
+          </div>
+        </div>
+
+      </form>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveExamMarksData()">Submit</button>
+        </div>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+    </div>
+  </div>
+</ng-template>-->
