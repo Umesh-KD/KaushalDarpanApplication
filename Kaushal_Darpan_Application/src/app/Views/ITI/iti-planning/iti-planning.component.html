@@ -290,9 +290,9 @@
 
 
       </form>
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
+      <div *ngIf="request.InstituteManagementId==5  "  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
 
-        <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
+        <div   class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
           <!--<b class="text-1xl-5">-->
           <i class="ti ti-plus"></i>
           Member Of Trust/Society
