@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ItiSanctionOrderList } from '../../../Models/ITI/ItiReportDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -13,6 +13,7 @@ import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel'
 import { ITIAdminUserService } from '../../../Services/ITI/ITI-Admin-User/itiadmin-user.service';
 import { Router } from '@angular/router';
 import { UploadFileModel } from '../../../Models/UploadFileModel';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-iti-Add-Nodel-User',
@@ -43,6 +44,8 @@ export class itiAddNodelUserComponent {
 
   public NodelUser = new ITIAdminNodelUserModel()
   UploadFileModel = new UploadFileModel();
+
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
   constructor(private adminUserService: ITIAdminUserService,
     private commonMasterService: CommonFunctionService, 
     private toastr: ToastrService, private routers: Router,
@@ -114,6 +117,7 @@ export class itiAddNodelUserComponent {
       this.adminRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.adminRequest.DistrictID = this.sSOLoginDataModel.DistrictID;
       debugger
+    await this.openOTP();
       await this.adminUserService.SaveNodalUserdata(this.adminRequest)
         .then((data: any) => {
           ;
@@ -257,5 +261,19 @@ export class itiAddNodelUserComponent {
     }
   }
 
+
+
+ async openOTP() {
+    debugger
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+
+  }
+   
+
+  
 
 }
