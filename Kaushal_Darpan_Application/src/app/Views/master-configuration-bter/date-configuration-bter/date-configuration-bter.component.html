@@ -22,6 +22,7 @@
                   </option>
                 </select>
               </div>
+              
               <!--<div style="width:30%;margin-top:28px" *ngIf="request.TypeID==1">
                 <label>
                   <input type="checkbox" formControlName="cbIsLateral" [(ngModel)]="request.IsLateral" />
@@ -36,6 +37,24 @@
               </p>
             </div>
           </div>
+
+          <div *ngIf="request.TypeID == _EnumConfigurationType.Reval_Date || request.TypeID == _EnumConfigurationType.Revaluation_Fee || request.TypeID == _EnumConfigurationType.Reval">
+            <label>Semester</label><span class="StarMarking">*</span>
+            <select class="form-select" id="SemesterID" formControlName="SemesterID"
+                    [(ngModel)]="request.SemesterID">
+              <option value="0" selected>All</option>
+              <option *ngFor="let item of SemesterList" [value]="item.SemesterID">
+                {{item.SemesterName}}
+              </option>
+            </select>
+            <div *ngIf="isFormSubmitted && _DateConfigurationFormGroup.SemesterID.errors"
+                 class="text-danger">
+              <p *ngIf="!_DateConfigurationFormGroup.SemesterID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
           <div>
             <label>From Date</label>
             <input type="datetime-local" class="form-input" name="Date" id="txtFromDate" formControlName="txtFromDate"
@@ -144,6 +163,10 @@
               Type
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('SemesterName')">
+              Semester
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SemesterName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('From_Date')">
               From Date
               <span class="shortingSpan" *ngIf="sortInTableColumn=='From_Date'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -159,6 +182,7 @@
           <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index; ">
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td>{{row.Name}}  <label *ngIf="row.CourseSubTypeID==3">(Lateral)</label></td>
+            <td>{{row.SemesterName}}</td>
             <td>{{row.From_Date | date:'dd-MM-yyyy hh:mm a'}}
             <td>{{row.To_Date | date:'dd-MM-yyyy hh:mm a'}}</td>
             <td>

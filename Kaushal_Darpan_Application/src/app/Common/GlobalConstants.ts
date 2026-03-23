@@ -318,7 +318,9 @@ export enum EnumConfigurationType {
   JailAdmission = 164,
   DirectAdmission = 79,
   Counselling = 167,
-  DIRECT_ADDMISSSION_PRIVATE =171
+  DIRECT_ADDMISSSION_PRIVATE =171,
+  Reval_Date = 172,
+  Revaluation_Fee = 15
 }
 
 export enum EnumDepartment {
