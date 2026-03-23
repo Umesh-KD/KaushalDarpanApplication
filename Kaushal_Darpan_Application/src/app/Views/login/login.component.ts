@@ -54,6 +54,8 @@ export class LoginComponent implements OnInit {
   public _EnumDepartment = EnumDepartment;
   public DepartmentID: number = 0;
 
+  public MutiUserCollegeList: any = [];
+
 
   constructor(private activatedRoute: ActivatedRoute, private sSOLoginService: SSOLoginService,
     private toastr: ToastrService, private loaderService: LoaderService, private router: ActivatedRoute,
@@ -133,6 +135,9 @@ export class LoginComponent implements OnInit {
 
   @ViewChild('content') content: ElementRef | any;
   @ViewChild('modal_MultiDepartment') modal_MultiDepartment: any;
+  @ViewChild('modal_MultiInsitute') modal_MultiInsitute: any;
+
+
 
   open(content: any, BookingId: string) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -292,7 +297,8 @@ export class LoginComponent implements OnInit {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State == EnumStatus.Success) {
+          if (this.State == EnumStatus.Success)
+          {
             this.sSOLoginDataModel = data['Data'];
 
 
@@ -318,10 +324,14 @@ export class LoginComponent implements OnInit {
             if (this.sSOLoginDataModel.RoleID == this._EnumRole.CandidateRole) {
               this.routers.navigate(['/CandidateApplicationList']);
             }
-            else {
+            else
+            {
               //redirect
               //window.open('/dashboard', "_self");
-              this.routers.navigate(['/dashboard']);
+              this.CheckMultiColleges();
+             //this.routers.navigate(['/dashboard']);
+              
+
             }
           }
           else {
@@ -477,11 +487,70 @@ export class LoginComponent implements OnInit {
   }
   // end multi department modal
 
-  async SetUserDepartmentAndProceed(item: any) {
+  async SetUserDepartmentAndProceed(item: any)
+  {
     this.DepartmentID = item;
     this.CloseUserDepartmentModal();
     await this.Login(); // login with departmentid
   }
+
+  async SetUserInsitute(item: any)
+  {
+    this.sSOLoginDataModel.InstituteID = item.InstituteID;
+    this.sSOLoginDataModel.InstituteName = item.CollegeName;
+    localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
+    this.CloseUserDepartmentModal();
+    this.routers.navigate(['/dashboard']);
+  }
+
+
+  //section multiple insitute 
+    // multi department modal
+  async openUsermultipletModal(content: any) {
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+
+
+  async CheckMultiColleges()
+  {
+
+    try {
+      // check and get multiple department of user
+      await this.sSOLoginService.CheckMultiInsituteUser(this.UserName, this.Password)
+        .then(async (res: any) => {
+          if (res.State == EnumStatus.Success)
+          {
+            this.MutiUserCollegeList = res.Data;
+
+            if (this.MutiUserCollegeList?.length > 1) {
+              this.openUsermultipletModal(this.modal_MultiInsitute);
+
+            }
+            else
+            {
+              this.routers.navigate(['/dashboard']);
+            }
+          }
+          else
+          { // any invalid
+            this.toastr.error(res.Message);
+            console.error(res.ErrorMessage);
+          }
+        }, error => console.error(error)
+        );
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+
 
 
 }
