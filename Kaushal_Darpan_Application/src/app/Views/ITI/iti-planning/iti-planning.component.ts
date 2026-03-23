@@ -174,7 +174,7 @@ export class ItiPlanningComponent {
       StreetRoadLane: [''],
       Latitude: ['', Validators.required],
       Longitude: ['', Validators.required],
-      InstituteSubDivisionID: ['', Validators.required],
+      InstituteSubDivisionID: ['', [DropdownValidators]],
       LandMark: [''],
       Ward: ['', Validators.required],
       KhasraKhataNo: ['', Validators.required],
@@ -976,6 +976,11 @@ export class ItiPlanningComponent {
 
       if (this.request.InstituteManagementId == 0) {
         this.toastr.warning("Please Select Management Type")
+        return
+      }
+
+      if (this.request.BuildingPlan == '') {
+        this.toastr.error("Please Upload Building Plan Document")
         return
       }
 

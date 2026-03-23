@@ -2,14 +2,14 @@
 
   <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
     <div>
-      <h4 class="text-slate-900 text-lg font-medium mb-2">ITI College Planning</h4>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">ITI College Profile</h4>
 
       <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
         <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
         <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
         <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
         <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>-->
-        <a class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>
+        <a class="text-sm font-medium text-slate-700" aria-current="page">ITI College Profile</a>
         <!--<a href="/ItiPlanningList" class="text-sm font-medium text-slate-700 btn btn-primary" aria-current="page">Back</a>-->
         <div>
         </div>
@@ -23,7 +23,7 @@
         <div class="mb-8">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Details</b>
-            <a *ngIf="request.Status != 1  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
+            <a *ngIf="request.Status == 3  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
             <a *ngIf="sSOLoginDataModel.RoleID == _enumrole.DTETraing" href="/ItiPlanningList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
           </div>
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
@@ -519,7 +519,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMember
           <!-- Heading -->
           <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
             <i class="ti ti-plus"></i>
-            Institute Address
+            Institute Building Details
 
             <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.AddressStatus=='Not Approved' ||
 this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStatus=='Not Approved'" class="text-danger ms-2 ">
@@ -609,7 +609,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStat
           </div>
 
           <div class="">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> {{ request.OwnerShipID == 1 ? 'Rented' : 'Owned Property' }}Document (Lease deed) <span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document (Lease/Rent Agreement) <span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
               <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="AgreementFileName" type="file" (change)="onFilechange($event,'AgreementFileName')" />
@@ -914,7 +914,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStat
             <div>
               <h3 class="text-base font-bold text-gray-800">Review Action</h3>
               <p class="text-sm text-gray-600 font-semibold">
-                Please verify the Institute Address details and choose approval status.
+                Please verify the Institute Building details and choose approval status.
               </p>
             </div>
 
@@ -1666,7 +1666,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
     </div>
     <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 hide-in-pdf ">
       <div class="text-center">
-        <button *ngIf="request.Status==0 || request.Status==4" type="submit" (click)="SaveData(1)" class="btn bg-info text-white mt-6 me-1">Save</button>
+        <button *ngIf="request.Status==0 || request.Status==4" type="submit" (click)="SaveData(1)" class="btn bg-info text-white mt-6 me-1">Submit</button>
         <button *ngIf="request.Status==1" type="submit" (click)="openOTP()" class="btn bg-info text-white mt-6 me-1">Lock & submit</button>
 
 
