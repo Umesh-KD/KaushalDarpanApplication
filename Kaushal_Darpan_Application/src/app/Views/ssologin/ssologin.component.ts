@@ -103,7 +103,6 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          //this.SSOjson = "{\"ssoid\": \"" + Loginssoid + "\",\"AadhaarId\": \"444088094507722\",\"BhamashahId\": null,\"BhamashahMemberId\": null,\"DisplayName\": \"RISHI KAPOOR\",\"DateOfBirth\": \"17/09/1991\",\"Gender\": \"MALE\",\"MobileNo\": null,\"TelephoneNumber\": \"07742860212\",\"IpPhone\": null,\"MailPersonal\": \"RISHIKAPOORDELHI@GMAIL.COM\",\"PostalAddress\": \"D-119D 119, GALI NO 6 GAUTAM MARG, NIRMAN NAGAR\",\"PostalCode\": \"302019\",\"l\": \"JAIPUR\",\"st\": \"RAJASTHAN\",\"Photo\": null,\"Designation\": \"CITIZEN\",\"Department\": \"GOOGLE\",\"MailOfficial\": null,\"EmployeeNumber\": null,\"DepartmentId\": null,\"FirstName\": \"RISHI\",\"LastName\": \"KAPOOR\",\"Sldssoids\": null,\"JanaadhaarId\": null,\"ManaadhaarMemberId\": null,\"UserType\": \"CITIZEN\",\"Mfa\": \"0\",\"roleid\": \"" + this.roleid + "\",\"RoleName\": \"" + this.RoleName + "\",\"DepartmentID\": \"" + this.DepartmentID + "\"} ";
 
           if (this.State == EnumStatus.Success)
           {
@@ -114,12 +113,12 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
             {
               this.routers.navigate(['/emitradashboard']);
             }
-            else if (this.sSOLoginDataModel.RoleID == 999) {
+            else if (this.sSOLoginDataModel.RoleID == 999)
+            {
               this.routers.navigate(['/CandidateApplicationList']);
             }
             else if (this.sSOLoginDataModel.RoleID == 0)
             {
-              //open popup
               this.openModalCource(this.modal_GenrateOTP);
             }
             else {
@@ -228,10 +227,12 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
             const SSOID = res.Data?.SSOID;
             const UserIDs = res.Data?.UserIDs;
             const DepartmentIDs = res.Data?.DepartmentIDs;
-            if (DepartmentIDs.split(',').length == 1) { // run as it is
+            if (DepartmentIDs.split(',').length == 1)
+            { // run as it is
               await this.Citizenlogin(this.Username);
             }
-            else {// choose department
+            else
+            {// choose department
               // show department selection popup and choose departmentid
               this.openUserDepartmentModal(this.modal_MultiDepartment);
             }
@@ -270,5 +271,6 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
     this.CloseUserDepartmentModal();
     await this.Citizenlogin(this.Username); // login with departmentid
   }
+
 
 }
