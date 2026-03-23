@@ -22,7 +22,7 @@
 
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ITI Name</label>
           <ng-select [(ngModel)]="request.CollageId" [clearable]="false" formControlName="CollageId" (change)="bankGuaranteeAmount()">
             <ng-option [value]="0">--All--</ng-option>
             <ng-option *ngFor="let item of CompanyMasterList; trackBy: trackById"
@@ -33,7 +33,7 @@
         </div>
 
         <div>
-          <label for="BankName">Bank Name:<span class="StarMarking">*</span></label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="BankName">Bank Name:<span class="StarMarking">*</span></label>
           <ng-select [(ngModel)]="request.BankID" [clearable]="false" formControlName="BankID">
             <ng-option [value]="0">--All--</ng-option>
             <ng-option *ngFor="let item of BankList; trackBy: trackById"
@@ -44,7 +44,7 @@
         </div>
 
         <div>
-          <label for="BankGuaranteeNumber">Bank Guarantee Number:<span class="StarMarking">*</span></label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="BankGuaranteeNumber">Bank Guarantee Number:<span class="StarMarking">*</span></label>
           <input style="text-transform:uppercase" formControlName="BankGuaranteeNumber" class="form-input" type="text" id="BankGuaranteeNumber"
                  placeholder="Bank Guarantee Number" [(ngModel)]="request.BankGuaranteeNumber">
           <div *ngIf="isSubmitted && bankGuarantee.get('BankGuaranteeNumber').errors" class="text-danger">
@@ -55,8 +55,8 @@
           </div>
         </div>
         <div>
-          <label for="dateOfIssue">Date Of Issue:<span class="StarMarking">*</span></label>
-          <input formControlName="dateOfIssue" class="form-input" type="date" id="dateOfIssue"
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="dateOfIssue">Date Of Issue:<span class="StarMarking">*</span></label>
+          <input formControlName="dateOfIssue" class="form-input" type="date" id="dateOfIssue" (change)="calculateDuration()"
                  (click)="openDatePicker($event)" placeholder="Date Of Issue" [(ngModel)]="request.dateOfIssue">
           <div *ngIf="isSubmitted && bankGuarantee.get('dateOfIssue').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('dateOfIssue').errors.required">
@@ -66,8 +66,8 @@
           </div>
         </div>
         <div>
-          <label for="maturityDate">Maturity date:<span class="StarMarking">*</span></label>
-          <input formControlName="maturityDate" class="form-input" type="date" id="maturityDate"
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="maturityDate">Maturity date:<span class="StarMarking">*</span></label>
+          <input formControlName="maturityDate" class="form-input" type="date" id="maturityDate" (change)="calculateDuration()"
                  (click)="openDatePicker($event)" placeholder="Maturity date" [(ngModel)]="request.maturityDate">
           <div *ngIf="isSubmitted && bankGuarantee.get('maturityDate').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('maturityDate').errors.required">
@@ -78,7 +78,7 @@
         </div>
 
         <div>
-          <label for="Amount">Amount:<span class="StarMarking">*</span></label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Amount">Amount:<span class="StarMarking">*</span></label>
           <input readonly formControlName="amount" class="form-input" type="text" id="amount"
                  (keypress)="numberOnly($event)" placeholder="Amount" [(ngModel)]="request.amount">
           <div *ngIf="isSubmitted && bankGuarantee.get('amount').errors" class="text-danger">
@@ -91,8 +91,8 @@
 
 
         <div>
-          <label for="Duration">Duration:<span class="StarMarking">*</span></label>
-          <input formControlName="duration" class="form-input" type="text" id="duration"
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Duration">Duration:<span class="StarMarking">*</span></label>
+          <input formControlName="duration" class="form-input" type="text" id="duration" readonly 
                  placeholder="Duration" [(ngModel)]="request.duration">
           <div *ngIf="isSubmitted && bankGuarantee.get('duration').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('duration').errors.required">
@@ -104,7 +104,7 @@
 
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                 for="BankAgreementDocument">Bank Agreement Document<span class="StarMarking">*</span></label>
+                 for="BankAgreementDocument">Bank Agreement Document</label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                    id="BankAgreementDocument" formControlName="BankAgreementDocument" type="file" (change)="onFilechange($event,'bankDocument')">
@@ -129,7 +129,7 @@
 
 
         <div>
-          <label for="remarks">Remark:<span class="StarMarking">*</span></label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="remarks">Remark:<span class="StarMarking">*</span></label>
           <textarea formControlName="Remarks" class="form-input" placeholder="remarks" type="text" [(ngModel)]="request.Remarks">
           </textarea>
         </div>
