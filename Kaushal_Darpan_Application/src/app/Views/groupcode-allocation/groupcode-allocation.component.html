@@ -19,8 +19,8 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <div>
-          <!--*ngIf="MapKeyEng == 1"-->
-          <a routerLink="/groupcodeadd" class="btn bg-success btn-sm text-white me-2"><i class="ti ti-plus"></i>Add New Group Partition</a>
+          <!---->
+          <a *ngIf="MapKeyEng == 1" routerLink="/groupcodeadd" class="btn bg-success btn-sm text-white me-2"><i class="ti ti-plus"></i>Add New Group Partition</a>
           <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Center CCode</a>
   <a href="javascript:void(0);" class="btn bg-success btn-sm text-white">
     <i class="ti ti-list"></i>Selected Center

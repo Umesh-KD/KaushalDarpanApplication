@@ -18,12 +18,13 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <div>
-          <a  *ngIf="MapKeyEng == 1"  routerLink="/groupcodeaddreval" class="btn bg-success btn-sm text-white me-2"><i class="ti ti-plus"></i>Add New Group Partition</a>
+          <!--*ngIf="MapKeyEng == 1"-->
+          <a routerLink="/groupcodeaddreval" class="btn bg-success btn-sm text-white me-2"><i class="ti ti-plus"></i>Add New Group Partition</a>
           <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Center CCode</a>
-          <a href="javascript:void(0);" class="btn bg-success btn-sm text-white">
-            <i class="ti ti-list"></i>Selected Center
-            List
-          </a>-->
+  <a href="javascript:void(0);" class="btn bg-success btn-sm text-white">
+    <i class="ti ti-list"></i>Selected Center
+    List
+  </a>-->
         </div>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -49,12 +50,12 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> List For Select</b>
       <div class="flex justify-between items-center">
-        <select id="ddlConter" class="form-select  couterDropDown me-2">
+        <!--<select id="ddlConter" class="form-select  couterDropDown me-2">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
-        </select>
+        </select>-->
         <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
       </div>
     </div>
