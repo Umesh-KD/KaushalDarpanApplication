@@ -36,7 +36,11 @@
 
               Department
             </label>
-            <select class="form-select disabled" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID" (change)="GetMasterSubDDL()" [disabled]="true">
+            <select class="form-select disabled" 
+              [(ngModel)]="request.DepartmentID" 
+              formControlName="ddlDepartmentID" 
+              (change)="GetMasterSubDDL()" 
+              [disabled]="true">
               <option value="0" selected>--Choose Option--</option>
               <option *ngFor="let item of DepartmentList" value="{{item.ID}}">{{item.Name}}</option>
             </select>

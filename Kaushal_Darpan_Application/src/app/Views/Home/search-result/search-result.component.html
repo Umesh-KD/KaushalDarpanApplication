@@ -193,15 +193,15 @@
                 </tr>
                 <tr>
                   <td style="padding: 8px; border: 1px solid #444; text-align: left;">Credit Registered</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{ FinalResultData[0]?.SubjectCreditsSem1 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem2 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem3 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem4 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem1 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem1 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem2 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem2 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem3 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem3 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem4 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem4 | number:'1.2-2' }}</td>
                   <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-                    {{FinalResultData[0]?.SubjectCreditsSem5 | number:'1.2-2' }}
+                    {{FinalResultData[0]?.SubjectCreditsSem5 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem5 | number:'1.2-2' }}
                   </td>
                   <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-                    {{FinalResultData[0]?.SubjectCreditsSem6 | number:'1.2-2' }}
+                    {{FinalResultData[0]?.SubjectCreditsSem6 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem6 | number:'1.2-2' }}
                   </td>
 
                   <td rowspan="4" *ngIf="StudentData?.StreamId === 43" colspan="3" style="padding: 8px; border: 1px solid #444; vertical-align: middle; text-align: center;">
@@ -213,41 +213,41 @@
                 </tr>
                 <tr>
                   <td style="padding: 8px; border: 1px solid #444; text-align: left;">Credit Earned</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem1 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem2 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem3 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem4 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem1 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem1 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem2 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem2 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem3 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem3 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem4 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem4 | number:'1.2-2' }}</td>
                   <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-                    {{FinalResultData[0]?.EarnedCreditsSem5 | number:'1.2-2' }}
+                    {{FinalResultData[0]?.EarnedCreditsSem5 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem5 | number:'1.2-2' }}
                   </td>
                   <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-                    {{FinalResultData[0]?.EarnedCreditsSem6 | number:'1.2-2' }}
+                    {{FinalResultData[0]?.EarnedCreditsSem6 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem6 | number:'1.2-2' }}
                   </td>
                 </tr>
                 <tr>
                   <td style="padding: 8px; border: 1px solid #444; text-align: left;">SGPA</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem1 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem2 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem3 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem4 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem1 == ""? '-' : FinalResultData[0]?.SGPASem1 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem2 == ""? '-' : FinalResultData[0]?.SGPASem2 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem3 == ""? '-' : FinalResultData[0]?.SGPASem3 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem4 == ""? '-' : FinalResultData[0]?.SGPASem4 | number:'1.2-2' }}</td>
                   <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-                    {{FinalResultData[0]?.SGPASem5 | number:'1.2-2' }}
+                    {{FinalResultData[0]?.SGPASem5 == ""? '-' : FinalResultData[0]?.SGPASem5 | number:'1.2-2' }}
                   </td>
                   <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-                    {{FinalResultData[0]?.SGPASem6 | number:'1.2-2' }}
+                    {{FinalResultData[0]?.SGPASem6 == ""? '-' : FinalResultData[0]?.SGPASem6 | number:'1.2-2' }}
                   </td>
                 </tr>
                 <tr>
                   <td style="padding: 8px; border: 1px solid #444; text-align: left;">CGPA</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem1 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem2 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem3 | number:'1.2-2' }}</td>
-                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem4 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem1 == ""? '-' : FinalResultData[0]?.CGPASem1 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem2 == ""? '-' : FinalResultData[0]?.CGPASem2 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem3 == ""? '-' : FinalResultData[0]?.CGPASem3 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem4 == ""? '-' : FinalResultData[0]?.CGPASem4 | number:'1.2-2' }}</td>
                   <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-                    {{FinalResultData[0]?.CGPASem5 | number:'1.2-2' }}
+                    {{FinalResultData[0]?.CGPASem5 == ""? '-' : FinalResultData[0]?.CGPASem5 | number:'1.2-2' }}
                   </td>
                   <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-                    {{FinalResultData[0]?.CGPASem6 | number:'1.2-2' }}
+                    {{FinalResultData[0]?.CGPASem6 == ""? '-' : FinalResultData[0]?.CGPASem6 | number:'1.2-2' }}
                   </td>
 
                 </tr>

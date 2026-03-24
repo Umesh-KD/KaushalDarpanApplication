@@ -93,14 +93,16 @@ export class CitizenqueryDetailsComponent implements OnInit {
     this.ID = Number(
       this.activatedRoute.snapshot.queryParamMap.get('PK_ID')?.toString()
     );
+    
     this.Request.ModifyBy = this.sSOLoginDataModel.UserID;
-    await this.GetAllData();
+    await this.setCommIDRoleWise();
     await this.GetMasterDDL();
     await this.loadDropdownData('Institute');
     await this.GetMasterSubDDL();
     await this.CitizenQueryStatusDDL();
     await this.selectedStar();
     await  this.commonIDFix();
+    await this.GetAllData();
   }
 
   async GetMasterSubDDL() {
@@ -126,9 +128,8 @@ export class CitizenqueryDetailsComponent implements OnInit {
   }
 
   async commonIDFix() {
-    debugger;
     if (this.sSOLoginDataModel.DepartmentName === "ITI" && this.sSOLoginDataModel.InstituteID === 0) {
-      const excludedIDs = [89, 87, 274]; 
+      const excludedIDs = [89, 87, 88,1331]; 
       this.QueryForMasterList = this.QueryForMasterList.filter(item => !excludedIDs.includes(item.ID));
       this.CommnID = 88;
       this.GetMasterSubDDL();
@@ -138,7 +139,6 @@ export class CitizenqueryDetailsComponent implements OnInit {
       this.QueryForMasterList = this.QueryForMasterList.filter(item => !excludedIDs.includes(item.ID));
       this.CommnID = 89;
       this.GetMasterSubDDL();
-      console.log(this.QueryForMasterList, "gfgf")
     }
     else if (this.sSOLoginDataModel.DepartmentName === "ITI" && this.sSOLoginDataModel.InstituteID !== 0) {
       const excludedIDs = [87, 88, 89];
@@ -153,16 +153,6 @@ export class CitizenqueryDetailsComponent implements OnInit {
       this.GetMasterSubDDL();
     }
   }
-
-  //async OnchangeApplyFor() {
-  //  if (this.searchRequest.CommnID == 87) {
-  //    this.ResponseForCollege = true;
-  //    //this.GetAllData();
-  //  } else {
-  //    this.ResponseForCollege = false;
-  //    //this.GetAllData();
-  //  }
-  //}
 
   getStarIcon(starId: number, userRating: number): string {
     return starId <= userRating ? 'star' : 'star_border';
@@ -239,25 +229,6 @@ export class CitizenqueryDetailsComponent implements OnInit {
     try {
       this.file = event.target.files[0];
       if (this.file) {
-        //if (
-        //  this.file.type == 'image/jpeg' ||
-        //  this.file.type == 'image/jpg' ||
-        //  this.file.type == 'image/png'
-        //) {
-        //  //size validation
-        //  if (this.file.size > 2000000) {
-        //    this.toastr.error('Select less then 2MB File');
-        //    return;
-        //  }
-        //  //if (this.file.size < 100000) {
-        //  //  this.toastr.error('Select more then 100kb File')
-        //  //  return
-        //  //}
-        //} else {
-        //  // type validation
-        //  this.toastr.error('Select Only jpeg/jpg/png file');
-        //  return;
-        //}
         if (this.file.size > 2000000) {
           this.toastr.error('Select less then 2MB File');
           return;
@@ -276,15 +247,9 @@ export class CitizenqueryDetailsComponent implements OnInit {
 
             if (this.State == EnumStatus.Success) {
               if (Type == 'Photo') {
-                //this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
                 this.queryRequest.ReplayAttachment =
                   data['Data'][0]['FileName'];
               }
-              //else if (Type == "Sign") {
-              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
-              //}
-              /*              item.FilePath = data['Data'][0]["FilePath"];*/
               event.target.value = null;
             }
             if (this.State == EnumStatus.Error) {
@@ -318,10 +283,6 @@ export class CitizenqueryDetailsComponent implements OnInit {
               //this.request.Dis_CompanyName = '';
               this.queryRequest.ReplayAttachment = '';
             }
-            //else if (Type == "Sign") {
-            //  this.requestStudent.Dis_StudentSign = '';
-            //  this.requestStudent.StudentSign = '';
-            //}
             this.toastr.success(this.Message);
           }
           if (this.State == 1) {
@@ -375,27 +336,6 @@ export class CitizenqueryDetailsComponent implements OnInit {
       }, 200);
     }
   }
-
-  //async GetMasterSubDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.commonMasterService.GetCommonMasterDDLByType('SubjectFor')
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.SubMasterList = data['Data'];
-  //        console.log("QueryFor", this.SubMasterList);
-  //      }, (error: any) => console.error(error)
-  //      );
-  //  }
-  //  catch (ex) {
-  //    console.log(ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
 
   loadDropdownData(MasterCode: string): void {
     this.commonMasterService
@@ -465,8 +405,28 @@ export class CitizenqueryDetailsComponent implements OnInit {
     this.queryRequest = new CitizenSuggestionQueryModel();
   }
 
+  async setCommIDRoleWise() {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon){
+      this.searchRequest.CommnID = 89;
+    } else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE || this.sSOLoginDataModel.RoleID == EnumRole.DTENON){
+      this.searchRequest.CommnID = 88;
+    } else if (this.sSOLoginDataModel.RoleID == EnumRole.AdminNodel){
+      this.searchRequest.CommnID = 1331;
+    } else if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon){
+      this.searchRequest.CommnID = 87;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    } else if (this.sSOLoginDataModel.RoleID == 22) {
+      this.searchRequest.CommnID = 245;
+    } else if (this.sSOLoginDataModel.RoleID == 42) {
+      this.searchRequest.CommnID = 246;
+    } else if (this.sSOLoginDataModel.RoleID == EnumRole.DTETraing) {
+      this.searchRequest.CommnID = 310;
+    } else {
+      this.searchRequest.CommnID = 0;
+    }
+  }
+
   async GetAllData() {
-    debugger;
     try {
      
       this.searchRequest.InstituteID;
@@ -481,66 +441,6 @@ export class CitizenqueryDetailsComponent implements OnInit {
         this.searchRequest.SubjectId = this.sSOLoginDataModel.QueryType;
       }
 
-      if (
-        this.sSOLoginDataModel.RoleID == EnumRole.Admin ||
-        this.sSOLoginDataModel.RoleID == EnumRole.AdminNon
-      )
-      {
-        this.searchRequest.CommnID = 89;
-      }
-      else if (
-        this.sSOLoginDataModel.RoleID == EnumRole.DTE ||
-        this.sSOLoginDataModel.RoleID == EnumRole.DTENON
-      )
-      {
-        this.searchRequest.CommnID = 88;
-      }
-
-      else if (
-        this.sSOLoginDataModel.RoleID == EnumRole.AdminNodel 
-      ) {
-        this.searchRequest.CommnID = 1331;
-      }
-
-
-      else if (
-        this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-      ) {
-        this.searchRequest.CommnID = 87;
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      }
-
-
-
-      else if (
-        this.sSOLoginDataModel.RoleID == EnumRole.DTETraing 
-      ) {
-        this.searchRequest.CommnID = 293;
-      }
-      else if (
-        this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
-        this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-      ) {
-        this.searchRequest.CommnID = 87;
-       // this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      }
-
-      else if (
-        this.sSOLoginDataModel.RoleID == 22 // ITI SCVT
-      ) {
-        this.searchRequest.CommnID = 245;
-      }
-      else if (
-        this.sSOLoginDataModel.RoleID == 42 // ITI NCVT
-      ) {
-        this.searchRequest.CommnID = 246;
-      }
-
-
-
-      else {
-        this.searchRequest.CommnID = 0;
-      }
       //this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.loaderService.requestStarted();
       await this.CitizenSuggestionService.GetAllData(this.searchRequest).then(
