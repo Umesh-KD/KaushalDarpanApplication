@@ -73,7 +73,8 @@ export class ITIBankGuaranteeComponent implements OnInit {
       dateOfIssue: ['', Validators.required],
       maturityDate: ['', Validators.required],
       duration: ['', Validators.required],
-      amount: [{ value: '', disabled: true }],
+      //duration: [{ value: '', disabled: true }],
+      amount: ['', Validators.required],
       BankAgreementDocument: [''],
       Remarks: [''],
       CollageId: ['0', DropdownValidators],
@@ -108,16 +109,33 @@ export class ITIBankGuaranteeComponent implements OnInit {
     
   }
 
-
   calculateDuration() {
+    const issueDate = this.bankGuarantee.get('dateOfIssue')?.value;
+    const maturityDate = this.bankGuarantee.get('maturityDate')?.value;
 
-  const issueDate = new Date(this.request.dateOfIssue);
-  const maturityDate = new Date(this.request.maturityDate);
-  const diffTime = maturityDate.getTime() - issueDate.getTime();
-  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+    console.log('From date====>', issueDate)
+    console.log('TO date====>',maturityDate)
 
+    if (issueDate && maturityDate) {
+      const d1 = new Date(issueDate);
+      const d2 = new Date(maturityDate);
+
+      const diffTime = d2.getTime() - d1.getTime();
+
+      if (diffTime < 0) {
+        alert('Maturity date should be greater than Date of Issue');
+        this.bankGuarantee.patchValue({ duration: '' });
+        return;
+      }
+
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      this.bankGuarantee.patchValue({
+        //duration: diffDays + ' Days'
+        duration: diffDays
+      });
+    }
   }
-
 
 
   private formatDate(dateStr: string): string {
@@ -331,5 +349,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
       this.request.amount = data['Data'][0]['Name'];
     });
   }
+
+  
 
 }

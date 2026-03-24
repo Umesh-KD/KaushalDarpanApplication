@@ -32,6 +32,8 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
+  public MutiUserCollegeList: any = [];
+
   public SSOjson: any = [];
 
   public _EnumDepartment = EnumDepartment;
@@ -44,6 +46,8 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
 
   @ViewChild('modal_UserLoginType') modal_GenrateOTP: any;
   @ViewChild('modal_MultiDepartment') modal_MultiDepartment: any;
+  @ViewChild('modal_MultiInsitute') modal_MultiInsitute: any;
+
 
 
   constructor(private activatedRoute: ActivatedRoute, private sSOLoginService: SSOLoginService, private toastr: ToastrService, private loaderService: LoaderService, private router: ActivatedRoute, private routers: Router, private cdRef: ChangeDetectorRef, private commonMasterService: CommonFunctionService, private cookieService: CookieService, private appsettingConfig: AppsettingService, private modalService: NgbModal, private Swal2: SweetAlert2) { }
@@ -60,6 +64,7 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
   public configUrl: any = "";
   async ngOnInit() {
 
+    debugger;
     console.log("AppName", this.appsettingConfig.AppName);
     this.loaderService.requestStarted();
     if (this.cookieService.get(this.appsettingConfig.AppName) != null && this.cookieService.get(this.appsettingConfig.AppName) != '') {
@@ -68,7 +73,8 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
     }
     else {
       this.Username = this.router.snapshot.paramMap.get('id1')?.toString();
-      if (this.Username == undefined) {
+      if (this.Username == undefined)
+      {
         this.Username = this.router.snapshot.queryParams['id1'];
       }
     }
@@ -103,12 +109,13 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-
           if (this.State == EnumStatus.Success)
           {
             this.sSOLoginDataModel = await data['Data'];
+
             localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
             this.cookieService.set('LoginStatus', "OK");
+
             if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra)
             {
               this.routers.navigate(['/emitradashboard']);
@@ -121,11 +128,12 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
             {
               this.openModalCource(this.modal_GenrateOTP);
             }
-            else {
-              this.routers.navigate(['/dashboard']);
+            else
+            {
+              this.CheckMultiColleges();
+             // this.routers.navigate(['/dashboard']);
             }
           }
-
         }, error => console.error(error));
 
       if (this.sSOLoginDataModel.SSOID == '') {
@@ -271,6 +279,71 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
     this.CloseUserDepartmentModal();
     await this.Citizenlogin(this.Username); // login with departmentid
   }
+
+
+
+
+
+
+
+
+
+  async SetUserInsitute(item: any)
+  {
+    this.sSOLoginDataModel.InstituteID = item.InstituteID;
+    this.sSOLoginDataModel.InstituteName = item.CollegeName;
+    localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
+    this.CloseUserDepartmentModal();
+    this.routers.navigate(['/dashboard']);
+  }
+
+
+  //section multiple insitute 
+  // multi department modal
+  async openUsermultipletModal(content: any) {
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  async CheckMultiColleges() {
+
+    try
+    {
+      debugger;
+      // check and get multiple department of user
+      await this.sSOLoginService.CheckMultiInsituteUser(this.sSOLoginDataModel.SSOID, '')
+        .then(async (res: any) => {
+          if (res.State == EnumStatus.Success) {
+            this.MutiUserCollegeList = res.Data;
+
+            if (this.MutiUserCollegeList?.length > 1)
+            {
+              this.openUsermultipletModal(this.modal_MultiInsitute);
+
+            }
+            else
+            {
+              this.routers.navigate(['/dashboard']);
+            }
+          }
+          else { // any invalid
+            this.toastr.error(res.Message);
+            console.error(res.ErrorMessage);
+          }
+        }, error => console.error(error)
+        );
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+
+
 
 
 }

@@ -8,7 +8,7 @@
   <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
 </head>
 
-<form [formGroup]="LoginForm" class="form-horizontal" >
+<form [formGroup]="LoginForm" class="form-horizontal">
   <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6 flex justify-center" style="margin-top:100px">
     <a href="javascript:void(0);" class="flex logoTxt login">
       <img src="assets/images/logo.png" alt="logo" class="flex h-12" />
@@ -62,10 +62,10 @@
             <!--test sso core service-->
             <button style="display:none" type="button" class="btn bg-info text-white" (click)="SSOLogin_Dummy('http://localhost:5230/api/SSO/SSOLandingThenRedirectToApp')">SSO Login</button>
             <!--<button type="button" class="btn bg-info text-white" (click)="SSOLogin_Dummy('http://localhost:5230/api/SSO/SSOLandingThenRedirectToApp')">SSO Login</button>-->
-            <button style="display:none"  type="button" class="btn bg-info text-white" (click)="EmitraLOgin_Dummy(appsettingConfig.apiURL + 'sso/LandingPage')">Emitra Login</button>
-            <button style="display:none"  type="button" class="btn bg-info text-white" (click)="EmitraLOgin_Dummy('https://kdhteapi.rajasthan.gov.in/api/api/sso/LandingPage')">LIVE EMITRA Login</button>
-  <!--<button type="button" class="btn bg-info text-white" (click)="SSOLogin_Dummy('http://localhost:5230/api/SSO/SSOLogout')">SSO logout</button>
-  <button type="button" class="btn bg-info text-white" (click)="SSOLogin_Dummy('http://localhost:5230/api/SSO/SSOBackTo')">SSO Backto</button>-->
+            <button style="display:none" type="button" class="btn bg-info text-white" (click)="EmitraLOgin_Dummy(appsettingConfig.apiURL + 'sso/LandingPage')">Emitra Login</button>
+            <button style="display:none" type="button" class="btn bg-info text-white" (click)="EmitraLOgin_Dummy('https://kdhteapi.rajasthan.gov.in/api/api/sso/LandingPage')">LIVE EMITRA Login</button>
+            <!--<button type="button" class="btn bg-info text-white" (click)="SSOLogin_Dummy('http://localhost:5230/api/SSO/SSOLogout')">SSO logout</button>
+            <button type="button" class="btn bg-info text-white" (click)="SSOLogin_Dummy('http://localhost:5230/api/SSO/SSOBackTo')">SSO Backto</button>-->
             <!--/test sso core service-->
 
           </div>
@@ -320,6 +320,55 @@
                 </td>
               </tr>
             </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+
+<ng-template #modal_MultiInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Please Select Insitute Details </b>
+        <button class="btn bg-info text-white" (click)="CloseUserDepartmentModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="">
+        <div class="p-6">
+
+          <div class="grid xl:grid-cols-12 loginBox">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead>
+                <tr>
+                  <th>SR</th>
+                  <th>College Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of MutiUserCollegeList; let i = index">
+                  <td>
+                    {{i+1}}
+                  </td>
+
+                  <td>
+                    {{ item.CollegeName }}
+                  </td>
+                  <td>
+                    <a href="javascript:void(0);" class="btn bg-info btn-sm text-white text-center c-pointer" (click)="SetUserInsitute(item)">Proceed <i class="ti ti-chevron-right"></i></a>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+
+
 
           </div>
         </div>

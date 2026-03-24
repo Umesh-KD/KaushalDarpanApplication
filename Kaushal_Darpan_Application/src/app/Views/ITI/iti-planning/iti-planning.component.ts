@@ -174,7 +174,7 @@ export class ItiPlanningComponent {
       StreetRoadLane: [''],
       Latitude: ['', Validators.required],
       Longitude: ['', Validators.required],
-      InstituteSubDivisionID: ['', Validators.required],
+      InstituteSubDivisionID: ['', [DropdownValidators]],
       LandMark: [''],
       Ward: ['', Validators.required],
       KhasraKhataNo: ['', Validators.required],
@@ -303,6 +303,8 @@ export class ItiPlanningComponent {
     }
 
     this.AddressFormGroup.controls['AmountDifference'].disable()
+    this.AddressFormGroup.controls['AmountRequired'].disable()
+    this.AddressFormGroup.controls['AmountAvailable'].disable()
 
     
 
@@ -370,15 +372,15 @@ export class ItiPlanningComponent {
       }
 
       if (this.request.BankStatus == 'Approved') {
-        this.AddressFormGroup.controls['AmountAvailable'].disable()
-        this.AddressFormGroup.controls['AmountRequired'].disable()
+        //this.AddressFormGroup.controls['AmountAvailable'].disable()
+        //this.AddressFormGroup.controls['AmountRequired'].disable()
         this.AddressFormGroup.controls['IsCourt'].disable()
         this.AddressFormGroup.controls['HighCourt'].disable()
         this.AddressFormGroup.controls['CourtDate'].disable()
         this.AddressFormGroup.controls['WritNo'].disable()
       } else {
-        this.AddressFormGroup.controls['AmountAvailable'].enable()
-        this.AddressFormGroup.controls['AmountRequired'].enable()
+        //this.AddressFormGroup.controls['AmountAvailable'].enable()
+        //this.AddressFormGroup.controls['AmountRequired'].enable()
         this.AddressFormGroup.controls['IsCourt'].enable()
         this.AddressFormGroup.controls['HighCourt'].enable()
         this.AddressFormGroup.controls['CourtDate'].enable()
@@ -976,6 +978,11 @@ export class ItiPlanningComponent {
 
       if (this.request.InstituteManagementId == 0) {
         this.toastr.warning("Please Select Management Type")
+        return
+      }
+
+      if (this.request.BuildingPlan == '') {
+        this.toastr.error("Please Upload Building Plan Document")
         return
       }
 

@@ -250,6 +250,7 @@ export class MasterLayoutComponent implements OnInit {
   async ChangeRolenFY() {
     //debugger
     // set from session
+   
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.RoleID = this.sSOLoginDataModel.RoleID;
@@ -370,8 +371,9 @@ export class MasterLayoutComponent implements OnInit {
   // when role change
   async loadMenuByRoleID(SeletedUserId: any) {
     // filter by roleid
-    //debugger
 
+    console.log(SeletedUserId);
+    debugger
     var r = this.lstUserRole.filter((x: any) => x.RoleID == this.RoleID)[0];
     this.sSOLoginDataModel.RoleID = this.RoleID;
     this.sSOLoginDataModel.InstituteID = r?.['InstituteID'];
@@ -394,6 +396,8 @@ export class MasterLayoutComponent implements OnInit {
     await this.ChangeRolenFY()
 
   }
+
+
 
   // when year change
   async LoadByFYYearDDL() {

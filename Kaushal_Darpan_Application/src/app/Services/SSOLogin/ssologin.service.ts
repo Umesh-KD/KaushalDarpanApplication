@@ -199,4 +199,15 @@ export class SSOLoginService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async CheckMultiInsituteUser(SSOID: string, Pass: string) {
+    const headers = { 'content-type': 'application/json' }
+    const body = { UserName: SSOID, Password: Pass }
+    return await this.http.post(`${this.APIUrl}/CheckMultiInsituteUser`, body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 }

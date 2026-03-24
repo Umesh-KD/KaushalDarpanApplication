@@ -70,7 +70,8 @@ export class PrincipalDashboardITIComponent implements OnInit
 
       if (this.isprofile == 0) {
         this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
-          window.open("/ITIUpdateCollegeProfile?id=" + this.encryptionService.encryptData(this.sSOLoginDataModel.InstituteID), "_Self")
+          //window.open("/ITIUpdateCollegeProfile?id=" + this.encryptionService.encryptData(this.sSOLoginDataModel.InstituteID), "_Self")
+          window.open("/ItiPlanning?id=" + this.encryptionService.encryptData(this.sSOLoginDataModel.InstituteID), "_Self")
         }, 'OK', false);
 
       } else if (this.isfeeLoaced == 0) {
