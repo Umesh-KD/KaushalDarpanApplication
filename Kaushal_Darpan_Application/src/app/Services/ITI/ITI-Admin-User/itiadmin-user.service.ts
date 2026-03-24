@@ -98,5 +98,12 @@ export class ITIAdminUserService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async NodalUserdataDelete(request: AdminUserSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/NodalUserdataDelete`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }
