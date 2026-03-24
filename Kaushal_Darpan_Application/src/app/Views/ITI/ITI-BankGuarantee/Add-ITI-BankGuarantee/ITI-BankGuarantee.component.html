@@ -79,7 +79,7 @@
 
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Amount">Amount:<span class="StarMarking">*</span></label>
-          <input readonly formControlName="amount" class="form-input" type="text" id="amount"
+          <input formControlName="amount" class="form-input" type="text" id="amount"
                  (keypress)="numberOnly($event)" placeholder="Amount" [(ngModel)]="request.amount">
           <div *ngIf="isSubmitted && bankGuarantee.get('amount').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('amount').errors.required">
@@ -92,7 +92,7 @@
 
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Duration">Duration:<span class="StarMarking">*</span></label>
-          <input formControlName="duration" class="form-input" type="text" id="duration" readonly 
+          <input formControlName="duration" class="form-input" type="text" id="duration"  
                  placeholder="Duration" [(ngModel)]="request.duration">
           <div *ngIf="isSubmitted && bankGuarantee.get('duration').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('duration').errors.required">

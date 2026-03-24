@@ -72,9 +72,9 @@ export class ITIBankGuaranteeComponent implements OnInit {
       BankGuaranteeNumber: ['', Validators.required],
       dateOfIssue: ['', Validators.required],
       maturityDate: ['', Validators.required],
-      //duration: ['', Validators.required],
-      duration: [{ value: '', disabled: true }],
-      amount: [{ value: '', disabled: true }],
+      duration: ['', Validators.required],
+      //duration: [{ value: '', disabled: true }],
+      amount: ['', Validators.required],
       BankAgreementDocument: [''],
       Remarks: [''],
       CollageId: ['0', DropdownValidators],
@@ -131,7 +131,8 @@ export class ITIBankGuaranteeComponent implements OnInit {
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
       this.bankGuarantee.patchValue({
-        duration: diffDays + ' Days'
+        //duration: diffDays + ' Days'
+        duration: diffDays
       });
     }
   }
