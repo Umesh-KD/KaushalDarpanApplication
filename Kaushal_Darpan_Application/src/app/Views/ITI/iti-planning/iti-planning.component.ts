@@ -34,6 +34,7 @@ export class ItiPlanningComponent {
   public ReportForm!: FormGroup
   public AffFormGroup !: FormGroup
   formAction!: FormGroup;
+  public IsCourt: boolean=false
   public NewReportFormGroup!: FormGroup
   public AddressFormGroup!: FormGroup
   public ResidenceList: any = []
@@ -169,10 +170,11 @@ export class ItiPlanningComponent {
       ContactRemark: [''],
       ElectricalStatus: [''],
       ElectricalRemark: [''],
+      ContractDemand: [''],
       StreetRoadLane: [''],
       Latitude: ['', Validators.required],
       Longitude: ['', Validators.required],
-      InstituteSubDivisionID: ['', Validators.required],
+      InstituteSubDivisionID: ['', [DropdownValidators]],
       LandMark: [''],
       Ward: ['', Validators.required],
       KhasraKhataNo: ['', Validators.required],
@@ -180,9 +182,21 @@ export class ItiPlanningComponent {
       ContactNo: ['', [Validators.required, Validators.pattern(GlobalConstants.MobileNumberPattern)]],
       Email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
       Website: ['', [Validators.required]],
+      ContactName: ['', [Validators.required]],
+      LandlineNo: [''],
+      ContactDesignation: ['', [Validators.required]],
       KNo: ['', Validators.required],
       ConsumerName: ['', Validators.required],
-      ContractDemand: [''],
+      AmountAvailable: [''],
+      AmountDifference: [''],
+      AmountRequired: [''],
+      IsCourt: [''],
+      WritNo: [''],
+      CourtDate: [''],  
+      HighCourt: [''],  
+      CourtDocumernt: [''],
+      BankStatus: [''],
+      BankRemark: [''],
       SubDivOffice: ['', Validators.required],
       DISCOM: ['', [DropdownValidators]],
       SanctionLoad: ['', Validators.required],
@@ -284,9 +298,13 @@ export class ItiPlanningComponent {
       this.AddressFormGroup.controls['ContactStatus'].enable()
       this.AddressFormGroup.controls['ElectricalStatus'].enable()
       this.AddressFormGroup.controls['ElectricalRemark'].enable()
+      this.AddressFormGroup.controls['BankRemark'].enable()
+      this.AddressFormGroup.controls['BankStatus'].enable()
     }
 
-  
+    this.AddressFormGroup.controls['AmountDifference'].disable()
+    this.AddressFormGroup.controls['AmountRequired'].disable()
+    this.AddressFormGroup.controls['AmountAvailable'].disable()
 
     
 
@@ -351,6 +369,22 @@ export class ItiPlanningComponent {
         this.AddressFormGroup.controls['ContractDemand'].disable()
         this.AddressFormGroup.controls['DISCOM'].disable()
         this.AddressFormGroup.controls['SubDivOffice'].disable()
+      }
+
+      if (this.request.BankStatus == 'Approved') {
+        //this.AddressFormGroup.controls['AmountAvailable'].disable()
+        //this.AddressFormGroup.controls['AmountRequired'].disable()
+        this.AddressFormGroup.controls['IsCourt'].disable()
+        this.AddressFormGroup.controls['HighCourt'].disable()
+        this.AddressFormGroup.controls['CourtDate'].disable()
+        this.AddressFormGroup.controls['WritNo'].disable()
+      } else {
+        //this.AddressFormGroup.controls['AmountAvailable'].enable()
+        //this.AddressFormGroup.controls['AmountRequired'].enable()
+        this.AddressFormGroup.controls['IsCourt'].enable()
+        this.AddressFormGroup.controls['HighCourt'].enable()
+        this.AddressFormGroup.controls['CourtDate'].enable()
+        this.AddressFormGroup.controls['WritNo'].enable()
       }
 
     }
@@ -841,18 +875,37 @@ export class ItiPlanningComponent {
                   break;
                 case "Bill_Filename":
                   this.request.Bill_Filename = data['Data'][0]["FileName"];
-                  this.request.Bill_DisFilename = data['Data'][0]["FileName"];
+                  this.request.Bill_DisFilename = data['Data'][0]["Dis_FileName"];
 
 
                   break;
                 case "FileName":
                   this.addmore.FileName = data['Data'][0]["FileName"];
-                  this.addmore.Dis_Filename = data['Data'][0]["FileName"];
+                  this.addmore.Dis_Filename = data['Data'][0]["Dis_FileName"];
 
 
                  
 
                   break;
+
+                case "CourtDocumernt":
+                  this.request.CourtDocumernt = data['Data'][0]["FileName"];
+                  this.request.DisCourtDocumernt = data['Data'][0]["Dis_FileName"];
+
+
+
+
+                  break;
+
+                case "BuildingPlan":
+                  this.request.BuildingPlan = data['Data'][0]["FileName"];
+                  this.request.DisBuildingPlan = data['Data'][0]["Dis_FileName"];
+
+
+
+
+                  break;
+
                 default:
                   break;
               }
@@ -927,6 +980,59 @@ export class ItiPlanningComponent {
         this.toastr.warning("Please Select Management Type")
         return
       }
+
+      if (this.request.BuildingPlan == '') {
+        this.toastr.error("Please Upload Building Plan Document")
+        return
+      }
+
+
+      if (this.request.InstituteManagementId == 5) {
+        this.AddressFormGroup.controls['AmountAvailable'].setValidators(Validators.required)
+        this.AddressFormGroup.controls['AmountRequired'].setValidators(Validators.required)
+
+
+
+      } else {
+        this.AddressFormGroup.controls['AmountAvailable'].clearValidators()
+        this.AddressFormGroup.controls['AmountRequired'].clearValidators()
+      }
+
+      this.AddressFormGroup.controls['AmountAvailable'].updateValueAndValidity()
+      this.AddressFormGroup.controls['AmountRequired'].updateValueAndValidity()
+      if (this.request.InstituteManagementId != 5) {
+        this.request.IsCourt = false
+        this.request.AmountAvailable = ''
+        this.request.AmountDifference = ''
+        this.request.AmountRequired = ''
+        this.request.WritNo = ''
+        this.request.CourtDate = ''
+        this.request.CourtDocumernt = ''
+        this.request.DisCourtDocumernt = ''
+        this.request.HighCourt = 0
+      }
+
+
+      if (this.request.IsCourt == true) {
+        this.AddressFormGroup.controls['WritNo'].setValidators(Validators.required)
+        this.AddressFormGroup.controls['CourtDate'].setValidators(Validators.required)
+        if (this.request.CourtDocumernt == '') {
+          this.toastr.warning("Please Add Court Document")
+          return
+        }
+        this.AddressFormGroup.controls['HighCourt'].setValidators([DropdownValidators])
+      } else {
+        this.AddressFormGroup.controls['WritNo'].clearValidators()
+
+
+        this.AddressFormGroup.controls['CourtDate'].clearValidators()
+        this.AddressFormGroup.controls['HighCourt'].clearValidators()
+      }
+
+      this.AddressFormGroup.controls['HighCourt'].updateValueAndValidity()
+      this.AddressFormGroup.controls['CourtDate'].updateValueAndValidity()
+      this.AddressFormGroup.controls['WritNo'].updateValueAndValidity()
+
      
         if (this.AddressFormGroup.invalid) {
           return
@@ -1672,7 +1778,24 @@ export class ItiPlanningComponent {
     //}
 
     if (this.request.InstituteManagementId == 1) {
-      this.request.ManagementStatus='Approved'
+      this.request.ManagementStatus = 'Approved'
+      this.request.BankStatus='Approved'
+    }
+
+
+
+    if (this.request.BankStatus == '') {
+      this.toastr.warning("Please Select Status For Bank Guarantee Details")
+      return
+
+    }
+
+    if (this.request.BankStatus == 'Not Approved' && this.request.BankRemark == '') {
+      this.toastr.warning("Please Write Remarks For  Bank Guarantee Details")
+      return
+    }
+    if (this.request.BankStatus == 'Approved') {
+      this.request.BankRemark = ''
     }
 
     if (this.request.ManagementStatus == '') {
@@ -1759,6 +1882,7 @@ export class ItiPlanningComponent {
       || //this.request.ContactStatus == 'Not Approved' ||
       this.request.ManagementStatus == 'Not Approved'
       || this.request.TrustMemberStatus == 'Not Approved' || this.request.ElectricalStatus == 'Not Approved'
+      || this.request.BankStatus=='Not Approved'
     ) {
       this.request.Status = 4
       const remarks = [
@@ -1767,10 +1891,11 @@ export class ItiPlanningComponent {
         //this.request.ContactRemark,
         this.request.AffilationRemark,
         this.request.TrustMemberRemark,
-        this.request.ElectricalRemark
+        this.request.ElectricalRemark,
+        this.request.BankRemark
       ];
 
-      this.request.Remarks = remarks
+      this.request.Remarks = remarks  
         .filter(r => r?.trim())
         .join(', ');
 
@@ -1832,4 +1957,12 @@ export class ItiPlanningComponent {
     }
   }
 
+  onClickCheckbox() {
+    this.request.IsCourt = !this.request.IsCourt;
+    if (!this.request.IsCourt) {
+      this.request.IsCourt = false
+    } else {
+      this.request.IsCourt = true
+    }
+  }
 }

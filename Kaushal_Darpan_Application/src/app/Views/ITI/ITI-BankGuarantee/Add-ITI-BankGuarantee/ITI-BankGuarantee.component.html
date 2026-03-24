@@ -20,22 +20,33 @@
     <form [formGroup]="bankGuarantee" >
       <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
+
         <div>
-          <label for="BankName">Bank Name:<span class="StarMarking">*</span></label>
-          <input formControlName="BankName" class="form-input" type="text" id="BankName	"
-                 placeholder="Issue Bank" [(ngModel)]="request.BankName">
-          <div *ngIf="isSubmitted && bankGuarantee.get('BankName').errors" class="text-danger">
-            <p *ngIf="bankGuarantee.get('BankName').errors.required">
-              <i aria-hidden="true"></i>This field is
-              required.
-            </p>
-          </div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ITI Name</label>
+          <ng-select [(ngModel)]="request.CollageId" [clearable]="false" formControlName="CollageId" (change)="bankGuaranteeAmount()">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-option *ngFor="let item of CompanyMasterList; trackBy: trackById"
+                       [value]="item.ID">
+              {{item.Name}}
+            </ng-option>
+          </ng-select>
         </div>
 
         <div>
-          <label for="BankGuaranteeNumber">Bank Guarantee Number:<span class="StarMarking">*</span></label>
-          <input formControlName="BankGuaranteeNumber" class="form-input" type="text" id="BankGuaranteeNumber"
-                 (keypress)="numberOnly($event)" placeholder="Bank Guarantee Number" [(ngModel)]="request.BankGuaranteeNumber">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="BankName">Bank Name:<span class="StarMarking">*</span></label>
+          <ng-select [(ngModel)]="request.BankID" [clearable]="false" formControlName="BankID">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-option *ngFor="let item of BankList; trackBy: trackById"
+                       [value]="item.BankID">
+              {{item.BankName}}
+            </ng-option>
+          </ng-select>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="BankGuaranteeNumber">Bank Guarantee Number:<span class="StarMarking">*</span></label>
+          <input style="text-transform:uppercase" formControlName="BankGuaranteeNumber" class="form-input" type="text" id="BankGuaranteeNumber"
+                 placeholder="Bank Guarantee Number" [(ngModel)]="request.BankGuaranteeNumber">
           <div *ngIf="isSubmitted && bankGuarantee.get('BankGuaranteeNumber').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('BankGuaranteeNumber').errors.required">
               <i aria-hidden="true"></i>This field is
@@ -43,13 +54,10 @@
             </p>
           </div>
         </div>
-
-
-
         <div>
-          <label for="dateOfIssue">Date Of Issue:<span class="StarMarking">*</span></label>
-          <input formControlName="dateOfIssue" class="form-input" type="date" id="dateOfIssue"
-                (click)="openDatePicker($event)" placeholder="Date Of Issue" [(ngModel)]="request.dateOfIssue">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="dateOfIssue">Date Of Issue:<span class="StarMarking">*</span></label>
+          <input formControlName="dateOfIssue" class="form-input" type="date" id="dateOfIssue" (change)="calculateDuration()"
+                 (click)="openDatePicker($event)" placeholder="Date Of Issue" [(ngModel)]="request.dateOfIssue">
           <div *ngIf="isSubmitted && bankGuarantee.get('dateOfIssue').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('dateOfIssue').errors.required">
               <i aria-hidden="true"></i>This field is
@@ -57,11 +65,9 @@
             </p>
           </div>
         </div>
-
-
         <div>
-          <label for="maturityDate">Maturity date:<span class="StarMarking">*</span></label>
-          <input formControlName="maturityDate" class="form-input" type="date" id="maturityDate"
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="maturityDate">Maturity date:<span class="StarMarking">*</span></label>
+          <input formControlName="maturityDate" class="form-input" type="date" id="maturityDate" (change)="calculateDuration()"
                  (click)="openDatePicker($event)" placeholder="Maturity date" [(ngModel)]="request.maturityDate">
           <div *ngIf="isSubmitted && bankGuarantee.get('maturityDate').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('maturityDate').errors.required">
@@ -70,19 +76,9 @@
             </p>
           </div>
         </div>
+
         <div>
-          <label for="Duration">Duration:<span class="StarMarking">*</span></label>
-          <input formControlName="duration" class="form-input" type="text" id="duration"
-                  placeholder="Duration" [(ngModel)]="request.duration">
-          <div *ngIf="isSubmitted && bankGuarantee.get('duration').errors" class="text-danger">
-            <p *ngIf="bankGuarantee.get('duration').errors.required">
-              <i aria-hidden="true"></i>This field is
-              required.
-            </p>
-          </div>
-        </div>
-        <div>
-          <label for="Amount">Amount:<span class="StarMarking">*</span></label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Amount">Amount:<span class="StarMarking">*</span></label>
           <input formControlName="amount" class="form-input" type="text" id="amount"
                  (keypress)="numberOnly($event)" placeholder="Amount" [(ngModel)]="request.amount">
           <div *ngIf="isSubmitted && bankGuarantee.get('amount').errors" class="text-danger">
@@ -93,9 +89,22 @@
           </div>
         </div>
 
+
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Duration">Duration:<span class="StarMarking">*</span></label>
+          <input formControlName="duration" class="form-input" type="text" id="duration"  
+                 placeholder="Duration" [(ngModel)]="request.duration">
+          <div *ngIf="isSubmitted && bankGuarantee.get('duration').errors" class="text-danger">
+            <p *ngIf="bankGuarantee.get('duration').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                 for="BankAgreementDocument">Bank Agreement Document<span class="StarMarking">*</span></label>
+                 for="BankAgreementDocument">Bank Agreement Document</label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                    id="BankAgreementDocument" formControlName="BankAgreementDocument" type="file" (change)="onFilechange($event,'bankDocument')">
@@ -110,11 +119,7 @@
             </div>
           </div>
 
-          <div *ngIf="bankGuarantee.controls.BankAgreementDocument.errors" class="text-danger">
-            <p>
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>
+
 
         </div>
 
@@ -124,7 +129,7 @@
 
 
         <div>
-          <label for="remarks">Remark:<span class="StarMarking">*</span></label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="remarks">Remark:<span class="StarMarking">*</span></label>
           <textarea formControlName="Remarks" class="form-input" placeholder="remarks" type="text" [(ngModel)]="request.Remarks">
           </textarea>
         </div>
@@ -136,6 +141,17 @@
       <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
         <div class="text-center">
           <button type="submit" (click)="saveData()" class="btn bg-info text-white mt-6 me-1">Save</button>
+
+          <!-- Insert -->
+          <!--<button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="saveData('INSERT')">Save</button>-->
+
+          <!-- Update -->
+          <!--<button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="saveData('UPDATE')">Update</button>-->
+
+          <!-- Renew -->
+          <!--<button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="saveData('ReNew')">Renew</button>-->
+
+
           <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
             <i class="ti ti-refresh"></i> Reset
           </button>

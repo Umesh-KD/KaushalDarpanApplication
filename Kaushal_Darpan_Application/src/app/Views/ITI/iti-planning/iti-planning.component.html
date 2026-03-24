@@ -2,14 +2,14 @@
 
   <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
     <div>
-      <h4 class="text-slate-900 text-lg font-medium mb-2">ITI College Planning</h4>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Institute Profile</h4>
 
       <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
         <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
         <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
         <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
         <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>-->
-        <a class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>
+        <a class="text-sm font-medium text-slate-700" aria-current="page">ITI Institute Profile</a>
         <!--<a href="/ItiPlanningList" class="text-sm font-medium text-slate-700 btn btn-primary" aria-current="page">Back</a>-->
         <div>
         </div>
@@ -23,7 +23,7 @@
         <div class="mb-8">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Details</b>
-            <a *ngIf="request.Status != 1  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
+            <a *ngIf="request.Status == 3  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
             <a *ngIf="sSOLoginDataModel.RoleID == _enumrole.DTETraing" href="/ItiPlanningList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
           </div>
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
@@ -67,10 +67,10 @@
                 <i class="ti ti-plus"></i>
 
                 Management Details
-                </b>
+              </b>
 
               <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.ManagementStatus=='Not Approved' ||
- this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT  && request.ManagementStatus=='Not Approved'" class="text-danger ms-2 ">
+ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT  && request.ManagementStatus=='Not Approved'" class="text-danger ms-2 font-bold ">
                 {{request.ManagementRemark}}
 
               </p>
@@ -78,28 +78,7 @@
             </div>
 
             <!-- Right controls -->
-            <div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
- this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT && request.InstituteManagementId==5" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
 
-              <!-- Select -->
-              <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
-             focus:border-blue-500 focus:ring-1 focus:ring-blue-200
-             text-sm font-medium"
-                      [(ngModel)]="request.ManagementStatus"
-                      formControlName="ManagementStatus">
-                <option value="">-- Select --</option>
-                <option value="Approved">Approved.</option>
-                <option value="Not Approved">Not Approved</option>
-              </select>
-
-              <!-- Remark -->
-              <input *ngIf="request.ManagementStatus=='Not Approved'" type="text"
-                     class="h-9 w-[400px] px-3 rounded border border-gray-400 bg-white
-             focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
-                     formControlName="ManagementRemark"
-                     [(ngModel)]="request.ManagementRemark"
-                     placeholder="Remarks">
-            </div>
           </div>
 
 
@@ -232,16 +211,98 @@
           </div>
 
 
+          <!--<div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
+      this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT && request.InstituteManagementId==5" class="flex items-center gap-2 flex-1 min-w-0 justify-start mt-4">-->
+          <!-- Select -->
+          <!--<select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
+       focus:border-blue-500 focus:ring-1 focus:ring-blue-200
+       text-sm font-medium"
+              [(ngModel)]="request.ManagementStatus"
+              formControlName="ManagementStatus">
+        <option value="">-- Select --</option>
+        <option value="Approved">Approved.</option>
+        <option value="Not Approved">Not Approved</option>
+      </select>-->
+          <!-- Remark -->
+          <!--<input *ngIf="request.ManagementStatus=='Not Approved'" type="text"
+               class="h-9 w-[400px] px-3 rounded border border-gray-400 bg-white
+         focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+               formControlName="ManagementRemark"
+               [(ngModel)]="request.ManagementRemark"
+               placeholder="Remarks">
+      </div>-->
+          <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
+         this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT &&
+         request.InstituteManagementId == 5"
+               class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h3 class="text-base font-bold text-gray-800">Review Action</h3>
+                <p class="text-sm text-gray-600 font-semibold">
+                  Please verify the management details and choose approval status.
+                </p>
+              </div>
 
 
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+
+              <!-- Status -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Approval Status
+                </label>
+                <select formControlName="ManagementStatus"
+                        [(ngModel)]="request.ManagementStatus"
+                        class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
+               focus:outline-none focus:ring-2 focus:ring-blue-200"
+                        [ngClass]="{
+          'border-green-500 text-green-700 bg-green-50': request.ManagementStatus === 'Approved',
+          'border-red-500 text-red-700 bg-red-50': request.ManagementStatus === 'Not Approved',
+          'border-gray-300 bg-white text-gray-700': !request.ManagementStatus
+        }">
+                  <option value="">-- Select Status --</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+              </div>
+
+              <!-- Remark -->
+              <div class="md:col-span-2" *ngIf="request.ManagementStatus == 'Not Approved'">
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  Remark / Reason
+                </label>
+                <textarea rows="2"
+                          formControlName="ManagementRemark"
+                          [(ngModel)]="request.ManagementRemark"
+                          placeholder="Enter reason for not approval"
+                          class="w-full px-3 py-2 rounded-lg border border-red-300 bg-white shadow-sm
+               focus:outline-none focus:ring-2 focus:ring-red-200"></textarea>
+              </div>
+            </div>
+
+
+          </div>
 
         </div>
 
 
 
       </form>
-      <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 && request.TrustMemberStatus != 'Approved' ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 && request.TrustMemberStatus != 'Approved' " class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
-        <b class="text-1xl-5"><i class="ti ti-plus"></i>Member Of Trust/Society</b>
+      <div *ngIf="request.InstituteManagementId==5  "  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
+
+        <div   class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
+          <!--<b class="text-1xl-5">-->
+          <i class="ti ti-plus"></i>
+          Member Of Trust/Society
+          <!--</b>-->
+          <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.TrustMemberStatus=='Not Approved' ||
+this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMemberStatus=='Not Approved'" class="text-danger ms-2 ">
+            *  {{request.TrustMemberRemark}}
+
+          </p>
+        </div>
       </div>
       <form [formGroup]="NewReportFormGroup" id="HrMasterFormGroup" class="form-horizontal hide-in-pdf">
 
@@ -296,8 +357,8 @@
                    *ngIf="this.member.IDFileName  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -311,7 +372,7 @@
             <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
           </div>
 
-          <div *ngIf="this.Type!=1"></div>
+          <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1   ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1  "></div>
 
           <div class="mt-4">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date of Last Election<span class="StarMarking">*</span></label>
@@ -342,8 +403,8 @@
                    *ngIf="this.request.MemberIdProofName  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -353,55 +414,14 @@
         </div>
 
 
-        <!--<div *ngIf="request.ItiMembersModel?.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">-->
-        <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
-        <!--<b class="text-1xl-5">ITI MembersList </b>
-  </div>-->
-        <div *ngIf="request.ItiMembersModel?.length>0" class="flex items-center justify-between mb-3 mt-4 p-3 py-2 bg-light">
-
-          <!-- Heading -->
-
-          <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
-            <!--<b class="text-1xl-5">-->
-            <i class="ti ti-plus"></i>
-            ITI MembersList
-            <!--</b>-->
-            <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.TrustMemberStatus=='Not Approved' ||
-this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMemberStatus=='Not Approved'" class="text-danger ms-2 ">
-            *  {{request.TrustMemberRemark}}
-
-            </p>
-          </div>
-
-          <!-- Right controls -->
-          <div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
-
-            <!-- Select -->
-            <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
-            text-sm font-medium"
-                    formControlName="TrustMemberStatus" [(ngModel)]="request.TrustMemberStatus">
-              <option value="">-- Select --</option>
-              <option value="Approved">Approved.</option>
-              <option value="Not Approved">Not Approved</option>
-            </select>
-
-            <!-- Remark -->
-            <input *ngIf="request.TrustMemberStatus=='Not Approved'" type="text"
-                   formControlName="TrustMemberRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
-                   [(ngModel)]="request.TrustMemberRemark"
-                   placeholder="Remarks">
-          </div>
-        </div>
+    
 
       </form>
-      <div *ngIf="request.ItiMembersModel?.length>0" class="overflow-auto">
+      <div *ngIf="request.ItiMembersModel?.length>0" class="overflow-auto mt-6">
         <table class="w-full table-border" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
-            <tr>
+            <tr class="text-left">
               <th>S.No</th>
               <th>Member Name</th>
               <th> Post</th>
@@ -416,13 +436,13 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
 
           <tbody>
             <tr *ngFor="let row of request.ItiMembersModel; let idx = index">
-              <td class="text-center">{{idx+1}}</td>
-              <td class="text-center">{{row.MemberName}}</td>
-              <td class="text-center">{{row.PostName}}</td>
-              <td class="text-center">{{row.ContactNo}}</td>
-              <td class="text-center">{{row.IDdis_Filename}}</td>
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.MemberName}}</td>
+              <td class="text-left">{{row.PostName}}</td>
+              <td class="text-left">{{row.ContactNo}}</td>
+              <td class="text-left">{{row.IDdis_Filename}}</td>
 
-              <td class="text-center">
+              <td class="text-left">
                 <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.IDFileName}}">
                   <i class="ti ti-eye"></i>
                 </a>
@@ -435,19 +455,71 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
             </tr>
           </tbody>
         </table>
+
+        <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
+         this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+             class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-base font-bold text-gray-800">Review Action</h3>
+              <p class="text-sm text-gray-600 font-semibold">
+                Please verify the Trust/Society Member details and choose approval status.
+              </p>
+            </div>
+
+
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+
+            <!-- Status -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Approval Status
+              </label>
+              <select [(ngModel)]="request.TrustMemberStatus"
+                      class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
+               focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      [ngClass]="{
+          'border-green-500 text-green-700 bg-green-50': request.TrustMemberStatus === 'Approved',
+          'border-red-500 text-red-700 bg-red-50': request.TrustMemberStatus === 'Not Approved',
+          'border-gray-300 bg-white text-gray-700': !request.TrustMemberStatus
+        }">
+                <option value="">-- Select Status --</option>
+                <option value="Approved">Approved</option>
+                <option value="Not Approved">Not Approved</option>
+              </select>
+            </div>
+
+            <!-- Remark -->
+            <div class="md:col-span-2" *ngIf="request.TrustMemberStatus == 'Not Approved'">
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Remark / Reason
+              </label>
+              <textarea rows="2"
+                        [(ngModel)]="request.TrustMemberRemark"
+                        placeholder="Enter reason for not approval"
+                        class="w-full px-3 py-2 rounded-lg border border-red-300 bg-white shadow-sm
+               focus:outline-none focus:ring-2 focus:ring-red-200"></textarea>
+            </div>
+          </div>
+
+
+        </div>
+
+
+
       </div>
 
 
-      <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-    <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Address</b>
-  </div>-->
+
       <form [formGroup]="AddressFormGroup" id="HrMasterFormGroup" class="form-horizontal">
         <div class="flex items-center justify-between mb-3 mt-4 p-3 py-2 bg-light">
 
           <!-- Heading -->
           <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
             <i class="ti ti-plus"></i>
-            Institute Address
+            Institute Building Details
 
             <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.AddressStatus=='Not Approved' ||
 this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStatus=='Not Approved'" class="text-danger ms-2 ">
@@ -458,26 +530,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStat
           </div>
 
           <!-- Right controls -->
-          <div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
 
-            <!-- Select -->
-            <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
-            text-sm font-medium"
-                    formControlName="AddressStatus" [(ngModel)]="request.AddressStatus">
-              <option value="">-- Select --</option>
-              <option value="Approved">Approved.</option>
-              <option value="Not Approved">Not Approved</option>
-            </select>
-
-            <!-- Remark -->
-            <input *ngIf="request.AddressStatus=='Not Approved'" type="text"
-                   formControlName="AddressRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
-                   [(ngModel)]="request.AddressRemark"
-                   placeholder="Remarks">
-          </div>
         </div>
 
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
@@ -556,7 +609,7 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
           </div>
 
           <div class="">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> {{ request.OwnerShipID == 1 ? 'Rented' : 'Owned Property' }}Document (Lease deed) <span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document (Lease/Rent Agreement) <span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
               <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="AgreementFileName" type="file" (change)="onFilechange($event,'AgreementFileName')" />
@@ -569,9 +622,7 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AgreementFileName}}"
                    *ngIf="this.request.AgreementFileName  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            
               </div>
 
             </div>
@@ -591,26 +642,20 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Street/Road/Lane</label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="StreetRoadLane" [(ngModel)]="request.StreetRoadLane" placeholder="Enter Street/Road/Lane">
-            <!--<div *ngIf="isSubmitted && _AddressFormGroup.StreetRoadLane.errors" class="text-danger">
-        <p *ngIf="_AddressFormGroup.StreetRoadLane.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-      </div>-->
+ 
           </div>
 
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Area/Locality/Sector</label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="AreaLocalitySector" [(ngModel)]="request.AreaLocalitySector" placeholder=" Enter Area/Locality/Sector">
-            <!--<div *ngIf="isSubmitted && _AddressFormGroup.AreaLocalitySector.errors" class="text-danger">
-        <p *ngIf="_AddressFormGroup.AreaLocalitySector.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-      </div>-->
+ 
           </div>
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LandMark</label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="LandMark" [(ngModel)]="request.LandMark" placeholder="Enter LandMark">
-            <!--<div *ngIf="isSubmitted && _AddressFormGroup.LandMark.errors" class="text-danger">
-        <p *ngIf="_AddressFormGroup.LandMark.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-      </div>-->
+ 
           </div>
           <div>
             <label>Division<span class="StarMarking">*</span></label>
@@ -759,54 +804,6 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
             </div>
           </div>
 
-          <!--<div *ngIf="request.AdministrativeId == 1 && request.UrbanRural==75">
-      <label for="CantonmentBoard">CantonmentBoard Name:<span class="StarMarking">*</span></label>
-      <input formControlName="CantonmentBoard" class="form-input" type="text" id="CantonmentBoard"
-             placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
-      <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
-        <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
-          <i aria-hidden="true"></i>This field is
-          required.
-        </p>
-      </div>
-    </div>
-
-    <div *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
-      <label for="NagarNigam">Nagar Nigam Name:<span class="StarMarking">*</span></label>
-      <input formControlName="NagarNigam" class="form-input" type="text" id="NagarNigam"
-             placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
-      <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
-        <p *ngIf="instituteForm.get('NagarNigam').errors.required">
-          <i aria-hidden="true"></i>This field is
-          required.
-        </p>
-      </div>
-    </div>
-
-    <div *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
-      <label for="NagarPalika">Nagar Palika Name:<span class="StarMarking">*</span></label>
-      <input formControlName="NagarPalika" class="form-input" type="text" id="NagarPalika"
-             placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
-      <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
-        <p *ngIf="instituteForm.get('NagarPalika').errors.required">
-          <i aria-hidden="true"></i>This field is
-          required.
-        </p>
-      </div>
-    </div>
-
-    <div *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
-      <label for="NagarParishad">Nagar Parishad Name:<span class="StarMarking">*</span></label>
-      <input formControlName="NagarParishad" class="form-input" type="text" id="NagarParishad"
-             placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
-      <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
-        <p *ngIf="instituteForm.get('NagarParishad').errors.required">
-          <i aria-hidden="true"></i>This field is
-          required.
-        </p>
-      </div>
-    </div>-->
-
 
           <div>
             <label for="Ward">Ward number:<span class="StarMarking">*</span></label>
@@ -855,9 +852,7 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.LatLongFileName}}"
                    *ngIf="this.request.LatLongFileName  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+      
               </div>
 
             </div>
@@ -888,12 +883,81 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
 
 
 
+          <div class="">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Building Plan Document <span class="StarMarking">*</span> </label>
+            <div class="flex fileUploader">
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="BuildingPlan" type="file" (change)="onFilechange($event,'BuildingPlan')" />
+
+              <label for="BuildingPlan">
+                <span>Choose File</span>
+                {{ request.DisBuildingPlan === '' ? 'No File Chosen' : request.DisBuildingPlan }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.BuildingPlan}}"
+                   *ngIf="this.request.BuildingPlan  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+     
+              </div>
+
+            </div>
+          </div>
+
 
         </div>
 
-        <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-    <b class="text-1xl-5"><i class="ti ti-plus"></i>Contact Details</b>
-  </div>-->
+
+        <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
+         this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+             class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-base font-bold text-gray-800">Review Action</h3>
+              <p class="text-sm text-gray-600 font-semibold">
+                Please verify the Institute Building details and choose approval status.
+              </p>
+            </div>
+
+
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+
+            <!-- Status -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Approval Status
+              </label>
+              <select [(ngModel)]="request.AddressStatus"
+                      formControlName="AddressStatus" class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
+               focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      [ngClass]="{
+          'border-green-500 text-green-700 bg-green-50': request.AddressStatus === 'Approved',
+          'border-red-500 text-red-700 bg-red-50': request.AddressStatus === 'Not Approved',
+          'border-gray-300 bg-white text-gray-700': !request.AddressStatus
+        }">
+                <option value="">-- Select Status --</option>
+                <option value="Approved">Approved</option>
+                <option value="Not Approved">Not Approved</option>
+              </select>
+            </div>
+
+            <!-- Remark -->
+            <div class="md:col-span-2" *ngIf="request.AddressStatus == 'Not Approved'">
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Remark / Reason
+              </label>
+              <textarea rows="2"
+                        formControlName="AddressRemark" [(ngModel)]="request.AddressRemark"
+                        placeholder="Enter reason for not approval"
+                        class="w-full px-3 py-2 rounded-lg border border-red-300 bg-white shadow-sm
+               focus:outline-none focus:ring-2 focus:ring-red-200"></textarea>
+            </div>
+          </div>
+
+
+        </div>
+
         <div class="flex items-center justify-between mb-3 mt-4 p-3 py-2 bg-light">
 
           <!-- Heading -->
@@ -901,34 +965,14 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
             <i class="ti ti-plus"></i>
             Contact Details
             <!--<p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.ContactStatus=='Not Approved' ||
-this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ContactStatus=='Not Approved'" class="text-danger ms-2 ">
-              *  {{request.ContactRemark}}
+      this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ContactStatus=='Not Approved'" class="text-danger ms-2 ">
+                    *  {{request.ContactRemark}}
 
-            </p>-->
+                  </p>-->
 
           </div>
 
-          <!-- Right controls -->
-          <!--<div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-center gap-2 flex-1 min-w-0 justify-end">-->
 
-            <!-- Select -->
-            <!--<select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
-            text-sm font-medium"
-                    formControlName="ContactStatus" [(ngModel)]="request.ContactStatus">
-              <option value="">-- Select --</option>
-              <option value="Approved">Approved.</option>
-              <option value="Not Approved">Not Approved</option>
-            </select>-->
-
-            <!-- Remark -->
-            <!--<input *ngIf="request.ContactStatus=='Not Approved'" type="text"
-                   formControlName="ContactRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
-                   [(ngModel)]="request.ContactRemark "
-                   placeholder="Remarks">
-          </div>-->
         </div>
 
 
@@ -938,6 +982,25 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
 
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Contact Person Name:<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="ContactName" [(ngModel)]="request.ContactName" placeholder="Enter Contact Person Name">
+            <div *ngIf="isSubmitted && _AddressFormGroup.ContactName.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.ContactName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Contact Person Designation:<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="ContactDesignation" [(ngModel)]="request.ContactDesignation" placeholder="Enter Contact Designation Name">
+            <div *ngIf="isSubmitted && _AddressFormGroup.ContactDesignation.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.ContactDesignation.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+
+            </div>
+          </div>
+
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Contact No:<span class="StarMarking">*</span></label>
             <input (keypress)="numberOnly($event)" type="text" class="form-input" id="ApplicationId" maxlength="10" formControlName="ContactNo" [(ngModel)]="request.ContactNo" placeholder="Enter Contact No">
@@ -946,10 +1009,18 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
               <p *ngIf="_AddressFormGroup.ContactNo.errors.pattern"><i aria-hidden="true"></i>Enter Valid Number.!</p>
             </div>
           </div>
-
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LandLine No (With STD Code):</label>
+            <input (keypress)="numberOnly($event)" type="text" class="form-input" id="ApplicationId" formControlName="LandlineNo" [(ngModel)]="request.LandlineNo"
+                   placeholder="Enter Landline No">
+            <div *ngIf="isSubmitted && _AddressFormGroup.LandlineNo.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.LandlineNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              <p *ngIf="_AddressFormGroup.LandlineNo.errors.pattern"><i aria-hidden="true"></i>Enter Valid Number.!</p>
+            </div>
+          </div>
 
           <div>
-            <label for="Ward">Email:<span class="StarMarking">*</span></label>
+            <label for="Ward">Institute Email:<span class="StarMarking">*</span></label>
             <input formControlName="Email" class="form-input" type="text" id="Ward" placeholder="Enter Email"
                    [(ngModel)]="request.Email">
             <div *ngIf="isSubmitted&&_AddressFormGroup.Email.errors" class="text-danger">
@@ -987,9 +1058,205 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
 
         </div>
 
-        <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-    <b class="text-1xl-5"><i class="ti ti-plus"></i>Electrical load details</b>
-  </div>-->
+      
+
+
+
+
+
+
+
+
+
+        <div *ngIf="request.InstituteManagementId==5" class="flex items-center justify-between mb-3 mt-4 p-3 py-2 bg-light">
+
+          <!-- Heading -->
+          <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
+            <i class="ti ti-plus"></i>
+            Bank Guarantee Details
+            <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.BankStatus=='Not Approved' ||
+this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=='Not Approved'" class="text-danger ms-2 ">
+              *{{request.BankRemark}}
+
+            </p>
+          </div>
+
+  
+
+        </div>
+        <div *ngIf="request.InstituteManagementId==5" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+
+
+          <div>
+            <label for="Ward">Amount Required:<span class="StarMarking">*</span></label>
+            <input formControlName="AmountRequired" class="form-input" type="text" id="Ward" placeholder="Enter Required Amount "
+                   [(ngModel)]="request.AmountRequired">
+            <div *ngIf="isSubmitted&&_AddressFormGroup.AmountRequired.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.AmountRequired.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label for="Ward">Amount Available:<span class="StarMarking">*</span></label>
+            <input formControlName="AmountAvailable" class="form-input" type="text" id="Ward" placeholder="Enter Available Amount "
+                   [(ngModel)]="request.AmountAvailable">
+            <div *ngIf="isSubmitted&&_AddressFormGroup.AmountAvailable.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.AmountAvailable.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
+            <label for="Ward">Difference:<span class="StarMarking">*</span></label>
+            <input formControlName="AmountDifference" class="form-input" type="text" id="Ward" placeholder="Enter Difference Amount "
+                   [(ngModel)]="request.AmountDifference">
+            <div *ngIf="isSubmitted&&_AddressFormGroup.AmountDifference.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.AmountDifference.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+
+          <div class="flex flex-col justify-end mb-4 ms-2">
+            <label class="me-2">
+              <input type="checkbox" value="1" id="Box8THForm" (click)="onClickCheckbox()"
+                     [checked]="IsCourt" [(ngModel)]="request.IsCourt" formControlName="IsCourt" />
+              <span class="font-semibold ms-2">Is Court Case on Bank Gurantee.</span>
+            </label>
+          </div>
+
+
+          <div></div>
+          <div></div>
+
+
+          <div *ngIf="request.IsCourt==true">
+            <label for="Ward">Writ No:<span class="StarMarking">*</span></label>
+            <input formControlName="WritNo" class="form-input" type="text" id="Ward" placeholder="Enter Writ No "
+                   [(ngModel)]="request.WritNo">
+            <div *ngIf="isSubmitted&&_AddressFormGroup.WritNo.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.WritNo.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="request.IsCourt==true">
+            <label for="Ward">Date:<span class="StarMarking">*</span></label>
+            <input formControlName="CourtDate" class="form-input" type="date" id="Ward" placeholder="Enter Writ No "
+                   [(ngModel)]="request.CourtDate">
+            <div *ngIf="isSubmitted&&_AddressFormGroup.CourtDate.errors" class="text-danger">
+              <p *ngIf="_AddressFormGroup.CourtDate.errors.required">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+          <div class="" *ngIf="request.IsCourt==true">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Document </label>
+            <div class="flex fileUploader">
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="CourtDocumernt" type="file" (change)="onFilechange($event,'CourtDocumernt')" />
+
+              <label for="CourtDocumernt">
+                <span>Choose File</span>
+                {{ request.DisCourtDocumernt === '' ? 'No File Chosen' : request.DisCourtDocumernt }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CourtDocumernt}}"
+                   *ngIf="this.request.CourtDocumernt  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              </div>
+
+            </div>
+          </div>
+
+          <div *ngIf="request.IsCourt==true">
+            <label>High Court Bench:<span class="StarMarking">*</span></label>
+            <select formControlName="HighCourt" class="form-select" id="Administrative" [(ngModel)]="request.HighCourt">
+              <option value="0">---Select---</option>
+              <option value="1">Jodhpur</option>
+              <option value="2">Jaipur</option>
+
+            </select>
+            <div *ngIf="isSubmitted&&_AddressFormGroup.HighCourt.errors" class="text-danger">
+              <p *ngIf="!_AddressFormGroup.HighCourt.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+
+        <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
+        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+             class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-base font-bold text-gray-800">Review Action</h3>
+              <p class="text-sm text-gray-600 font-semibold">
+                Please verify the Bank Guarentee Details
+                and choose approval status.
+              </p>
+            </div>
+
+
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+
+            <!-- Status -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Approval Status
+              </label>
+              <select [(ngModel)]="request.BankStatus"
+                      formControlName="BankStatus" class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      [ngClass]="{
+         'border-green-500 text-green-700 bg-green-50': request.BankStatus === 'Approved',
+         'border-red-500 text-red-700 bg-red-50': request.BankStatus === 'Not Approved',
+         'border-gray-300 bg-white text-gray-700': !request.BankStatus
+       }">
+                <option value="">-- Select Status --</option>
+                <option value="Approved">Approved</option>
+                <option value="Not Approved">Not Approved</option>
+              </select>
+            </div>
+
+            <!-- Remark -->
+            <div class="md:col-span-2" *ngIf="request.BankStatus == 'Not Approved'">
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Remark / Reason
+              </label>
+              <textarea rows="2"
+                        formControlName="BankRemark" [(ngModel)]="request.BankRemark"
+                        placeholder="Enter reason for not approval"
+                        class="w-full px-3 py-2 rounded-lg border border-red-300 bg-white shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-red-200"></textarea>
+            </div>
+          </div>
+
+
+        </div>
+
+
+
 
         <div class="flex items-center justify-between mb-3 mt-4 p-3 py-2 bg-light">
 
@@ -1005,26 +1272,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ElectricalS
           </div>
 
           <!-- Right controls -->
-          <div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
 
-            <!-- Select -->
-            <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
-            text-sm font-medium"
-                    formControlName="ElectricalStatus" [(ngModel)]="request.ElectricalStatus">
-              <option value="">-- Select --</option>
-              <option value="Approved">Approved.</option>
-              <option value="Not Approved">Not Approved</option>
-            </select>
-
-            <!-- Remark -->
-            <input *ngIf="request.ElectricalStatus=='Not Approved'" type="text"
-                   formControlName="ElectricalRemark" class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
-                   [(ngModel)]="request.ElectricalRemark "
-                   placeholder="Remarks">
-          </div>
         </div>
 
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
@@ -1142,10 +1390,79 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
 
 
         </div>
+
+
+        <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
+        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+             class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-base font-bold text-gray-800">Review Action</h3>
+              <p class="text-sm text-gray-600 font-semibold">
+                Please verify the Electrical load details
+                and choose approval status.
+              </p>
+            </div>
+
+
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+
+            <!-- Status -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Approval Status
+              </label>
+              <select [(ngModel)]="request.ElectricalStatus"
+                      formControlName="ElectricalStatus" class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      [ngClass]="{
+         'border-green-500 text-green-700 bg-green-50': request.ElectricalStatus === 'Approved',
+         'border-red-500 text-red-700 bg-red-50': request.ElectricalStatus === 'Not Approved',
+         'border-gray-300 bg-white text-gray-700': !request.ElectricalStatus
+       }">
+                <option value="">-- Select Status --</option>
+                <option value="Approved">Approved</option>
+                <option value="Not Approved">Not Approved</option>
+              </select>
+            </div>
+
+            <!-- Remark -->
+            <div class="md:col-span-2" *ngIf="request.ElectricalStatus == 'Not Approved'">
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Remark / Reason
+              </label>
+              <textarea rows="2"
+                        formControlName="ElectricalRemark" [(ngModel)]="request.ElectricalRemark"
+                        placeholder="Enter reason for not approval"
+                        class="w-full px-3 py-2 rounded-lg border border-red-300 bg-white shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-red-200"></textarea>
+            </div>
+          </div>
+
+
+        </div>
+
+
       </form>
 
-      <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 && request.AffilationStatus!='Approved' ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 && request.AffilationStatus!='Approved'" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf">
-        <b class="text-1xl-5"><i class="ti ti-plus"></i>Affiliation Details </b>
+      <div  class="flex items-center justify-between mb-3 mt-4 p-3 py-2 bg-light">
+
+        <!-- Heading -->
+        <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
+          <i class="ti ti-plus"></i>
+          Affiliation Details
+          <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.AffilationStatus=='Not Approved' ||
+this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationStatus=='Not Approved'" class="text-danger ms-2 ">
+            *  {{request.AffilationRemark}}
+
+          </p>
+
+        </div>
+
+        <!-- Right controls -->
+
       </div>
       <form [formGroup]="AffFormGroup" id="HrMasterFormGroup" class="form-horizontal">
         <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 hide-in-pdf">
@@ -1166,13 +1483,7 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
             </div>
           </div>
 
-          <!--<div>
-      <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
-      <input type="date" class="form-input" id="ApplicationId" formControlName="OrderDate" [(ngModel)]="addmore.OrderDate">
-      <div *ngIf="isSubmitted &&_AffFormGroup.OrderDate.errors" class="text-danger">
-        <p *ngIf="_AffFormGroup.OrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-      </div>
-    </div>-->
+       
 
 
 
@@ -1200,27 +1511,7 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
             </div>
           </div>
 
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Affilation Document<span class="StarMarking">*</span> </label>
-    <div class="flex fileUploader">
-      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="FileName" type="file" (change)="onFilechange($event,'FileName')" />
-
-      <label for="FileName">
-        <span>Choose File</span>
-        {{ addmore.Dis_Filename === '' ? 'No File Chosen' : addmore.Dis_Filename }}
-      </label>
-      <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + addmore.FileName}}"
-           *ngIf="this.addmore.FileName  !=''"
-           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
-          <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-    (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-    *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-          <!--</div>
-
-      </div>
-    </div>-->
+        
 
           <div class="pt-30">
             <button (click)="AddChoice2()" type="button" class="btn bg-primary text-white">
@@ -1232,56 +1523,18 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
         </div>
 
 
-        <!--<div *ngIf="request.ItiAffiliationList.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">-->
-        <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
-        <!--<b class="text-1xl-5">Affiliation  List </b>
-  </div>-->
+   
 
-        <div *ngIf="request.ItiAffiliationList.length>0" class="flex items-center justify-between mb-3 mt-4 p-3 py-2 bg-light">
 
-          <!-- Heading -->
-          <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
-            <i class="ti ti-plus"></i>
-            Affiliation List
-            <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.AffilationStatus=='Not Approved' ||
-this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationStatus=='Not Approved'" class="text-danger ms-2 ">
-              *  {{request.AffilationRemark}}
-
-            </p>
-
-          </div>
-
-          <!-- Right controls -->
-          <div *ngIf=" this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-center gap-2 flex-1 min-w-0 justify-end">
-
-            <!-- Select -->
-            <select class="h-9 w-60 px-2 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200
-            text-sm font-medium"
-                formControlName="AffilationStatus"    [(ngModel)]="request.AffilationStatus">
-              <option value="">-- Select --</option>
-              <option value="Approved">Approved.</option>
-              <option value="Not Approved">Not Approved</option>
-            </select>
-
-            <!-- Remark -->
-            <input *ngIf="request.AffilationStatus=='Not Approved'" type="text"
-              formControlName="AffilationRemark"     class="h-9 w-[450px] px-3 rounded border border-gray-400 bg-white
-            focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
-                   [(ngModel)]="request.AffilationRemark"
-                   placeholder="Remarks">
-          </div>
-        </div>
 
       </form>
-      <div *ngIf="request.ItiAffiliationList.length>0" class="overflow-auto">
+      <div *ngIf="request.ItiAffiliationList.length>0" class="overflow-auto mt-6">
 
         <table class="w-full table-border" cellpadding="5">
 
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
-            <tr>
+            <tr class="text-left">
               <th>S.No</th>
               <th>Order No</th>
               <th> Order Date</th>
@@ -1298,14 +1551,15 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
 
           <tbody>
             <tr *ngFor="let row of request.ItiAffiliationList; let idx = index">
-              <td class="text-center">{{idx+1}}</td>
-              <td class="text-center">{{row.OrderNo}}</td>
-              <td class="text-center">{{row.OrderDate | date : 'dd-MM-yyyy'}}</td>
-              <td class="text-center">{{row.EffectFrom | date : 'dd-MM-yyyy'}}</td>
-              <td class="text-center">{{row.PageNo}}</td>
-              <td class="text-center">{{row.SerialNo}}</td>
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.OrderNo}}</td>
+              <td class="text-left">{{row.OrderDate | date : 'dd-MM-yyyy'}}</td>
+              <td class="text-left">{{row.EffectFrom | date : 'dd-MM-yyyy'}}</td>
+              <td class="text-left">{{row.PageNo}}</td>
+              <td class="text-left">{{row.SerialNo}}</td>
               <!--<td class="text-center">{{row.Dis_Filename}}</td>-->
-              <td *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="text-center">
+              <td *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||
+                  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="text-left">
                 <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow2(idx)">
                   <i class="ti ti-trash"></i>
                 </button>
@@ -1314,8 +1568,61 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
             </tr>
           </tbody>
         </table>
-      </div>
 
+
+        <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
+        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+             class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h3 class="text-base font-bold text-gray-800">Review Action</h3>
+              <p class="text-sm text-gray-600 font-semibold">
+                Please verify the Affiliation List
+                and choose approval status.
+              </p>
+            </div>
+
+
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+
+            <!-- Status -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Approval Status
+              </label>
+              <select [(ngModel)]="request.AffilationStatus"
+                      class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-blue-200"
+                      [ngClass]="{
+         'border-green-500 text-green-700 bg-green-50': request.AffilationStatus === 'Approved',
+         'border-red-500 text-red-700 bg-red-50': request.AffilationStatus === 'Not Approved',
+         'border-gray-300 bg-white text-gray-700': !request.AffilationStatus
+       }">
+                <option value="">-- Select Status --</option>
+                <option value="Approved">Approved</option>
+                <option value="Not Approved">Not Approved</option>
+              </select>
+            </div>
+
+            <!-- Remark -->
+            <div class="md:col-span-2" *ngIf="request.AffilationStatus == 'Not Approved'">
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Remark / Reason
+              </label>
+              <textarea rows="2"
+                        [(ngModel)]="request.AffilationRemark"
+                        placeholder="Enter reason for not approval"
+                        class="w-full px-3 py-2 rounded-lg border border-red-300 bg-white shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-red-200"></textarea>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
 
 
       <div *ngIf="request.ItiAffiliationList.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">
@@ -1359,13 +1666,11 @@ this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" class="flex items-cen
     </div>
     <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 hide-in-pdf ">
       <div class="text-center">
-        <button *ngIf="request.Status==0 || request.Status==4" type="submit" (click)="SaveData(1)" class="btn bg-info text-white mt-6 me-1">Save</button>
+        <button *ngIf="request.Status==0 || request.Status==4" type="submit" (click)="SaveData(1)" class="btn bg-info text-white mt-6 me-1">Submit</button>
         <button *ngIf="request.Status==1" type="submit" (click)="openOTP()" class="btn bg-info text-white mt-6 me-1">Lock & submit</button>
 
 
-        <!--<button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">-->
-        <!--<i class="ti ti-refresh"></i> Reset-->
-        <!--</button>-->
+      
       </div>
     </div>
 

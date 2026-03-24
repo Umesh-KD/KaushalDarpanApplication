@@ -161,6 +161,17 @@ export class CollegeWiseScholarshipService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async GetScholarship1InstituteData(data: ScholarshipApiDataModel) {
+    var body = JSON.stringify(data);
+    return await this.http.post(`${this.APIUrl}/GetScholarship1InstituteData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetAllData(data: ScholarshipApiSearchDataModel) {
     var body = JSON.stringify(data);
     return await this.http.post(`${this.APIUrl}/GetAllData`, body, this.headersOptions)

@@ -13,6 +13,7 @@ import { ITIPlanningBankGuarantee } from '../../../../Models/ItiPlanningDataMode
 import { ITIsService } from '../../../../Services/ITIs/itis.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { DocumentDetailsService } from '../../../../Common/document-details';
+import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
   selector: 'app-ITI-BankGuarantee',
@@ -37,6 +38,18 @@ export class ITIBankGuaranteeComponent implements OnInit {
   public CollageId: number = 0;
   public InstituteID: number = 0;
   public BankGuaranteeId: number = 0;
+  public status: string = '';
+  public isAction: string = '';
+  public BankList: any = [];
+  public BankGuranteeAmount: any = [];
+
+  public CollegeID: number = 0;
+  public CampusValidationListData: any = [];
+  public ITItypeID: number = 0;
+  public ApprovedStatus: number = 0;
+  public AllCompanyMasterList: any[] = [];
+  public CompanyMasterList: any = [];
+  public cal: any = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -53,19 +66,26 @@ export class ITIBankGuaranteeComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+
     this.bankGuarantee = this.formBuilder.group({
-      BankName: ['', Validators.required],
+      BankName: [''],
       BankGuaranteeNumber: ['', Validators.required],
       dateOfIssue: ['', Validators.required],
       maturityDate: ['', Validators.required],
       duration: ['', Validators.required],
-      amount: [0, Validators.required],
+      //duration: [{ value: '', disabled: true }],
+      amount: ['', Validators.required],
       BankAgreementDocument: [''],
-      Remarks: ['']
+      Remarks: [''],
+      CollageId: ['0', DropdownValidators],
+      BankID: ['0', DropdownValidators]
     });
 
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetPrivateITICollege();
+    await this.bankGuaranteeList('BankDetailsList');
+    await this.bankGuaranteeAmount();
+    await this.calculateDuration();
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -73,7 +93,51 @@ export class ITIBankGuaranteeComponent implements OnInit {
         this.getBankGuaranteeById(this.BankGuaranteeId);
       }
     });
+
+    // For ReNew
+    this.activatedRoute.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.BankGuaranteeId = +id;
+        this.getBankGuaranteeById(this.BankGuaranteeId);
+      }
+    });
+    // query param (status)
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.status = params['status'];  
+    });
+    
   }
+
+  calculateDuration() {
+    const issueDate = this.bankGuarantee.get('dateOfIssue')?.value;
+    const maturityDate = this.bankGuarantee.get('maturityDate')?.value;
+
+    console.log('From date====>', issueDate)
+    console.log('TO date====>',maturityDate)
+
+    if (issueDate && maturityDate) {
+      const d1 = new Date(issueDate);
+      const d2 = new Date(maturityDate);
+
+      const diffTime = d2.getTime() - d1.getTime();
+
+      if (diffTime < 0) {
+        alert('Maturity date should be greater than Date of Issue');
+        this.bankGuarantee.patchValue({ duration: '' });
+        return;
+      }
+
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      this.bankGuarantee.patchValue({
+        //duration: diffDays + ' Days'
+        duration: diffDays
+      });
+    }
+  }
+
+
   private formatDate(dateStr: string): string {
     if (!dateStr) return '';
     return dateStr.split('T')[0]; 
@@ -99,7 +163,8 @@ export class ITIBankGuaranteeComponent implements OnInit {
             duration: record.Duration,
             amount: record.Amount,
             BankAgreementDocument: record.BankAgreementDocument,
-            Remarks: record.Remarks
+            Remarks: record.Remarks,
+            CollageId: record.CollageId
           });
         });
 
@@ -122,9 +187,18 @@ export class ITIBankGuaranteeComponent implements OnInit {
     this.isLoading = true;
     this.loaderService.requestStarted();
 
-    this.request.CollageId = this.sSOLoginDataModel.InstituteID;
+    this.request.CollageId = this.request.CollageId;
     this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
 
+    if (this.status == 'ReNew')
+    {
+      this.request.ActionType = 'ReNew';
+    }
+    else {
+      this.request.ActionType = '';
+    }
+
+   
     const isUpdate = this.request.BankGuaranteeID && this.request.BankGuaranteeID > 0;
 
     try {
@@ -157,6 +231,8 @@ export class ITIBankGuaranteeComponent implements OnInit {
     }
   }
 
+
+  
 
 
   public file!: File;
@@ -220,5 +296,60 @@ export class ITIBankGuaranteeComponent implements OnInit {
   openDatePicker(event: any) {
     event.target.showPicker();
   }
+
+
+  
+
+  trackById(index: number, item: any): number {
+    return item.ID;
+  }
+
+  async GetPrivateITICollege() {
+    try {
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService
+        .GetCommonMasterData('PrivateITICollege', 5)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.AllCompanyMasterList = data['Data'];
+          this.CompanyMasterList = this.AllCompanyMasterList;
+
+          this.CollegeID = 0; //  default select
+          this.request.CollageId = 0;
+        }, error => console.error(error));
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  
+  async bankGuaranteeList(MasterCode: string): Promise<void> {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      switch (MasterCode) {
+        case 'BankDetailsList':
+          this.BankList = data['Data'];
+          console.log(this.BankList, "datatatata")
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  async bankGuaranteeAmount() {
+    this.commonMasterService.GetCommonMasterData('BankGurantee', this.request.CollageId).then((data: any) => {
+      debugger
+      this.request.amount = data['Data'][0]['Name'];
+    });
+  }
+
+  
 
 }

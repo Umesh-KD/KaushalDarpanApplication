@@ -66,8 +66,7 @@ export class ITIGOVTEMPersonalDetailsApplicationFormTabComponent implements OnIn
     private toastr: ToastrService
 
   ) { }
-  async ngOnInit()
-  {
+  async ngOnInit(){
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log("SSOLoginDataModel", this.SSOLoginDataModel)
 

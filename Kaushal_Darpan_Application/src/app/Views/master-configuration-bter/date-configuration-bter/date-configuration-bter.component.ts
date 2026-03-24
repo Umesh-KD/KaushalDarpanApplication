@@ -10,7 +10,7 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { DateConfigService } from '../../../Services/DateConfiguration/date-configuration.service';
-import { EnumConfigTypeTabs, EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumConfigTypeTabs, EnumConfigurationType, EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { UserMasterService } from '../../../Services/UserMaster/user-master.service';
@@ -43,6 +43,7 @@ export class DateConfigurationBTERComponent implements OnInit, OnDestroy {
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
+  public _EnumConfigurationType = EnumConfigurationType;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -87,6 +88,7 @@ export class DateConfigurationBTERComponent implements OnInit, OnDestroy {
   
     this.DateConfigurationFormGroup = this.formBuilder.group({
       ddlType: ['', [DropdownValidators]],
+      SemesterID: ['', [DropdownValidators]],
       txtFromDate: ['', [Validators.required]],
       txtToDate: ['', [Validators.required]],
       /*cbIsLateral: [false]*/
@@ -165,11 +167,21 @@ export class DateConfigurationBTERComponent implements OnInit, OnDestroy {
     }
   }
 
+  async resetValidators() {
+    if(!(this.request.TypeID == EnumConfigurationType.Reval_Date 
+      || this.request.TypeID == EnumConfigurationType.Reval
+      || this.request.TypeID == EnumConfigurationType.Revaluation_Fee)
+    ){
+      this.DateConfigurationFormGroup.get('SemesterID')?.clearValidators(); 
+      this.DateConfigurationFormGroup.get('SemesterID')?.updateValueAndValidity();
+    }
+  }
 
   async SaveData() {
     this.isFormSubmitted = true;
     try {
       if (this.DateConfigurationFormGroup.invalid) {
+        this.toastr.error("Please enter required fields");
         return
       }
       
@@ -383,8 +395,10 @@ export class DateConfigurationBTERComponent implements OnInit, OnDestroy {
 
   //Start Section Model
   async openModalGenerateOTP(content: any, item: DateConfigurationModel) {
+    await this.resetValidators();
     this.isFormSubmitted = true;
     if (this.DateConfigurationFormGroup.invalid) {
+      this.toastr.error("Please enter required fields");
       return
     }
     this.OTP = '';

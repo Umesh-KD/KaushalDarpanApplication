@@ -126,6 +126,10 @@ export class AddIIPEventsComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.SemesterMasterList = data['Data'];
+          if(this.sSOLoginDataModel.DepartmentID == 2){
+            const excludedIDs = [5,6,7,8,9]; 
+            this.SemesterMasterList = this.SemesterMasterList.filter((item: any) => !excludedIDs.includes(item.SemesterID));
+          }
         }, (error: any) => console.error(error));
 
       await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)

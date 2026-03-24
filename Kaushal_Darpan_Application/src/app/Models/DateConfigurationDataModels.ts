@@ -15,6 +15,7 @@ export class DateConfigurationModel {
   public FinancialYearName: string = ''
   public EndTermName: string = ''
   public SSOID: string = ''
+  public SemesterID?: number = 0
 }
 
 export class SessionConfigModelModel

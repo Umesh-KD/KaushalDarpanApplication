@@ -71,6 +71,7 @@ export class ScholarshipApiDataModel {
   public CollegeType: string = '';
   public RequestId: string = '';
   public InstituteID: number = 0;
+  public COURSEID:string=''
   public collegeCode: string = '';
 }
 

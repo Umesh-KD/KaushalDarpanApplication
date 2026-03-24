@@ -8,6 +8,7 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 
 import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   declarations: [
     listitibankguaranteeComponent
@@ -18,8 +19,8 @@ import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, Ng
     FormsModule,
     LoaderModule,
     ReactiveFormsModule,
+    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent, MatTooltipModule,
     TableSearchFilterModule
-    , NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent
   ]
 })
 export class listitibankguaranteeModule { }

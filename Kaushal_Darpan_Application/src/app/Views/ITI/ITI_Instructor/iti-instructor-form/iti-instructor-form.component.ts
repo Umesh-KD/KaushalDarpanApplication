@@ -1073,10 +1073,7 @@ export class ItiInstructorFormComponent {
         if (this.State === EnumStatus.Success) {
           //  Show success alert
           await this.Swal2.Success(this.Message || 'Instructor data saved successfully!');
-          this.InstructorForm.reset();
-          this.employeeRequestList = [];
-          this.techRequestList = [];
-          this.educationList = [];
+         
         } else {
           //  Show error alert
           await this.Swal2.Error(this.ErrorMessage || 'Something went wrong while saving data!');

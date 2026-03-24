@@ -14,6 +14,7 @@ import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as XLSX from 'xlsx';
+import { AppsettingService } from '../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-iti-planning-list',
@@ -42,8 +43,7 @@ export class ItiPlanningListComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
-  closeResult: string | undefined;
-  public request = new ITI_PlanningCollegesSearchModel()
+  closeResult: string | undefined;public request = new ITI_PlanningCollegesSearchModel()
 
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -54,11 +54,13 @@ export class ItiPlanningListComponent {
   public SearchStudentDataFormGroup!: FormGroup;
   
   public AllCompanyMasterList: any[] = [];
-
+  public FileName: string = ''
+  public Disfilename:string=''
 
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ITIsService, private loaderService: LoaderService,
-    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private activeroute: ActivatedRoute) {
+    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private appsettingConfig: AppsettingService,
+    private activeroute: ActivatedRoute) {
   }
 
   async ngOnInit()
@@ -99,9 +101,9 @@ export class ItiPlanningListComponent {
     debugger;
 
     try {
-    
+   
       this.loaderService.requestStarted();
-      await this.campusPostService.GetPlanningList(this.CollegeID, this.ITItypeID, this.ApprovedStatus)
+      await this.campusPostService.GetPlanningList(this.CollegeID, this.ITItypeID, this.ApprovedStatus, this.sSOLoginDataModel.DistrictID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
@@ -137,6 +139,9 @@ export class ItiPlanningListComponent {
       }, 200);
     }
   }
+
+
+
 
 
 
@@ -184,7 +189,10 @@ export class ItiPlanningListComponent {
       InstituteID: 0,
       Status: 0,
       Remarks: '',
-      UserID: 0
+      UserID: 0,
+      DisFileName: '',
+      FileName:''
+
     };
 
     this.CollegeID = 0;
@@ -198,6 +206,21 @@ export class ItiPlanningListComponent {
   }
 
 
+  async UploadCotent(content: any, ID: number,UploadDocument:string='',Disuploaddocument:string='') {
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+   
+    this.CollegeID = ID
+    this.FileName = UploadDocument,
+      this.Disfilename = Disuploaddocument
+    //this.requestAction.Action = "0";
+    //this.requestAction.ActionRemarks = "";
+  
+  }
 
 
   async ViewHistory(content: any, ID: number) {
@@ -235,6 +258,9 @@ export class ItiPlanningListComponent {
   }
   CloseModalPopup() {
     this.modalService.dismissAll();
+    this.CollegeID = 0
+    this.FileName = ''
+    this.Disfilename=''
   }
   async SaveData_ApprovedCampus() {
     
@@ -356,4 +382,181 @@ export class ItiPlanningListComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'CollegePlanningDetails.xlsx');
   }
+
+
+
+  public file!: File;
+
+  async onFilechange(event: any, Type: string) {
+    try {
+
+      this.file = event.target.files[0];
+      if (this.file) {
+
+        //if (!this.validateFileName(this.file.name))
+        //{
+        //  this.toastr.error('Invalid file name. Please remove special characters from file');
+        //  return;
+        //}
+        // Type validation
+        if (['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'].includes(this.file.type)) {
+          // Size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less than 2MB File');
+            return;
+          }
+        }
+        else {
+          this.toastr.error('Select Only jpeg/jpg/png file');
+          return;
+        }
+
+        //if (this.file.name.split('.').length > 2)
+        //{
+        //  this.toastr.error('Invalid file name. Please remove extra . from file');
+        //  return ;
+        //}
+
+
+
+        // Upload to server folder
+        this.loaderService.requestStarted();
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            console.log("photo data", data);
+            if (data.State === EnumStatus.Success) {
+
+
+
+
+
+              switch (Type) {
+                case "Photo":
+
+                  this.FileName = data['Data'][0]["FileName"];
+                  this.Disfilename = data['Data'][0]["Dis_FileName"];
+
+                  break;
+  
+
+
+
+
+              
+
+                default:
+                  break;
+              }
+            }
+            event.target.value = null;
+            if (data.State === EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage);
+
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            }
+          });
+      }
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
+
+  async Get_ITIsPlanningData_ByIDReport() {
+
+    try {
+
+      this.loaderService.requestStarted();
+
+
+      await this.campusPostService.Get_ITIsPlanningData_ByIDReport(this.CollegeID)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          data = JSON.parse(JSON.stringify(data));
+          debugger
+          if (data && data.Data) {
+            const base64 = data.Data;
+
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'ITIPlanningReport.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+          } else {
+            this.toastr.error(this.Message)
+          }
+        }, (error: any) => {
+          console.error(error);
+          this.toastr.error(this.ErrorMessage)
+        });
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async Uploaddocument() {
+
+    this.isSubmitted = true;
+
+   
+    this.requestAction.UserID = this.sSOLoginDataModel.UserID;
+    this.requestAction.FileName = this.FileName,
+      this.requestAction.DisFileName = this.Disfilename
+    this.requestAction.InstituteID = this.CollegeID
+
+    if (this.requestAction.FileName == '') {
+      this.toastr.warning("Please Upload Valid Document")
+      return
+    }
+    //Show Loading
+    this.loaderService.requestStarted();
+    console.log("this.requestAction", this.requestAction)
+    try {
+      await this.campusPostService.SaveItiworkdocument(this.requestAction)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message);
+            await this.CloseModalPopup();
+            await this.btn_SearchClick();
+          }
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+        })
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 }

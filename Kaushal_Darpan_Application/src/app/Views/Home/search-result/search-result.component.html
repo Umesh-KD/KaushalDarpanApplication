@@ -1,279 +1,346 @@
-<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
-  <h3 class="mt-0 text-white">Diploma Result</h3>
+<div class="container-fluid p-0 smallBanner">
+  <img src="../../../assets/KD5/images/bannerSmall.jpg" style="width:100%" />
 </div>
+<!--<section class="py-5 Admission school-choice-section0 wow bounceIn fadeInRight bgShapN">-->
+<section class="py-5 school-choice-section0 wow bounceIn fadeInRight">
+  <div class="container-fluid">
+    <div class="container text-center">
+      <h4>Diploma Result</h4>
+    </div>
+    <!-- content -->
+    <div class="container-fluid AboutSection position-relative">
+      <div class="row">
 
-<div class="container-fluid AboutSection position-relative" style="background: #deebff !important;">
-  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
-  <div class="container-xl position-relative" style="z-index:9999">
-    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <div class="card all-post-filer mb-3">
+            <div class="card-header">
+              <h4>Diploma Result (Semester Scheme)</h4>
+            </div>
+            <div class="card-body">
 
-      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-        <div class="card all-post-filer mb-3">
-          <div class="card-header">
-            <h4>Diploma Result (Semester Scheme)</h4>
+              <form class="row g-3 align-items-end" [formGroup]="_formGroup">
+
+                <div class="col-md-3">
+                  <label for="EndTermID" class="form-label">End Term<span class="StarMarking" style="color:red;">*</span></label>
+                  <select class="form-select mb-0" id="EndTermID" name="EndTermID" [(ngModel)]="resultSearchReq.EndTermID"
+                          (change)="onendtermchange($event)" formControlName="EndTermID">
+                    <option [value]="0">Choose Option</option>
+                    <option *ngFor="let item of FinancialYear" [value]="item.EndTermID">{{item.EndTermName}}</option>
+                  </select>
+                  <div *ngIf="isSubmitted && _formGroup.controls.EndTermID.errors" class="text-danger">
+                    <p *ngIf="!_formGroup.controls.EndTermID.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
+                </div>
+
+
+                <div class="col-md-3">
+                  <label for="SemesterID" class="form-label">Semester<span class="StarMarking" style="color:red;">*</span></label>
+                  <select class="form-select mb-0" id="SemesterID" name="SemesterID" [(ngModel)]="resultSearchReq.SemesterID"
+                          (change)="onsemesterchange($event)" formControlName="SemesterID">
+                    <option [value]="0">Choose Option</option>
+                    <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+                  </select>
+                  <div *ngIf="isSubmitted && _formGroup.controls.SemesterID.errors" class="text-danger">
+                    <p *ngIf="!_formGroup.controls.SemesterID.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
+                </div>
+
+
+                <div class="col-md-3">
+                  <label for="RollNo" class="form-label">Roll No<span class="StarMarking" style="color:red;">*</span></label>
+                  <input type="text" class="form-control" name="RollNo" placeholder="Enter Roll No"
+                         [(ngModel)]="resultSearchReq.RollNo"
+                         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" formControlName="RollNo">
+                  <div *ngIf="isSubmitted && _formGroup.controls.RollNo.errors" class="text-danger">
+                    <p *ngIf="_formGroup.controls.RollNo.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <label for="startDate" class="form-label">Date Of Birth<span class="StarMarking" style="color:red;">*</span></label>
+                  <input type="date" class="form-control" [(ngModel)]="resultSearchReq.DOB" name="DOB" formControlName="DOB">
+                  <div *ngIf="isSubmitted && _formGroup.controls.DOB.errors" class="text-danger">
+                    <p *ngIf="_formGroup.controls.DOB.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <button type="button" class="btn btn-primary d-flex align-items-center"
+                          (click)="GetStudentResult_public()">
+                    <i class="ti ti-search me-2"></i> Search
+                  </button>
+                </div>
+
+              </form>
+            </div>
           </div>
-          <div class="card-body">
+        </div>
+      </div>
 
-            <form class="row g-3 align-items-end">
+      <div *ngIf="showResult"
+           style="width: 1000px; margin: 20px auto; border: 2px solid #2e7d32; padding: 0; color: #333; background-color: #fff;">
 
-              <div class="col-md-3">
-                <label for="inputState" class="form-label">End Term<span class="StarMarking">*</span></label>
-                <select class="form-select mb-0" id="EndTermID" [(ngModel)]="resultSearchReq.EndTermID"
-                  (change)="onendtermchange($event)">
-                  <option [ngValue]="0">Choose Option</option>
-                  <option *ngFor="let item of FinancialYear" [value]="item.EndTermID">{{item.EndTermName}}</option>
-                </select>
+        <div style="background-color: #00c853; color: white; padding: 10px 20px; font-weight: bold; font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="letter-spacing: 0.5px;">Result</span>
+          <button (click)="downloadPDF()"
+                  style="background-color: #00a1ff; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+            <span style="font-size: 14px;">⬇</span> Download Result
+          </button>
+        </div>
+        <div id="resultContent" style="padding: 0px 50px 50px 50px;">
+          <div style="padding: 0px 5px 5px 5px;">
+            <div style="text-align: center; padding: 20px 10px 10px 10px;">
+              <h2 style="margin: 0; font-size: 16px !important; font-weight: 600 !important; letter-spacing: 1px;">
+                {{StudentData?.HeaderLine1}}
+              </h2>
+              <h3 style="margin: 0px; font-size: 15px !important; font-weight: 600 !important; letter-spacing: 1px;">
+                {{StudentData?.HeaderLine2}}
+              </h3>
+              <p style="margin: 5px 0; font-size: 13px; color: #444;">{{StudentData?.HeaderLine3}}</p>
+            </div>
+
+            <div style="padding: 10px 5px; font-size: 13px; line-height: 2.2;text-align: left;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px;">
+                <tr>
+                  <th>Name</th>
+                  <td style="border-bottom: 1px dotted #444;">{{StudentData?.StudentName}}</td>
+                  <th><span style="padding-left: 50px;">Enrollment No.</span></th>
+                  <td style="border-bottom: 1px dotted #444;">{{StudentData?.EnrollmentNo}}</td>
+                </tr>
+                <tr>
+                  <th>Father's Name</th>
+                  <td style="border-bottom: 1px dotted #444;">{{StudentData?.FatherName}}</td>
+                  <th><span style="padding-left: 50px;">Roll No.</span></th>
+                  <td style="border-bottom: 1px dotted #444;">{{StudentData?.RollNo}}</td>
+                </tr>
+                <tr>
+                  <th>Mother's Name</th>
+                  <td style="border-bottom: 1px dotted #444;">{{StudentData?.MotherName}}</td>
+                  <th><span style="padding-left: 50px;">Course</span></th>
+                  <td style="border-bottom: 1px dotted #444;">{{StudentData?.Branch}}</td>
+                </tr>
+                <tr>
+                  <th>Branch</th>
+                  <td style="border-bottom: 1px dotted #444;">{{StudentData?.StreamName}}</td>
+                  <th><span style="padding-left: 50px;">Class</span></th>
+                  <td style="border-bottom: 1px dotted #444;">{{StudentData?.YearSemester}}</td>
+                </tr>
+                <tr>
+                  <th>College</th>
+                  <td colspan="3" style="border-bottom: 1px dotted #444;">
+                    {{StudentData?.InstituteName}}
+                  </td>
+                </tr>
+
+              </table>
+
+
+
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px;">
+                <thead>
+                  <tr style="text-align: left; background-color: #fff;">
+                    <th style="padding: 8px; border: 1px solid #444; width: 80px;">CODE</th>
+                    <th style="padding: 8px; border: 1px solid #444;">SUBJECT(S)</th>
+                    <th style="padding: 8px; border: 1px solid #444; width: 140px;">Registered Credits</th>
+                    <th style="padding: 8px; border: 1px solid #444; width: 140px;">Earned Credits</th>
+                    <th style="padding: 8px; border: 1px solid #444; width: 120px;">Grade Award</th>
+                    <th style="padding: 8px; border: 1px solid #444; width: 100px;">Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let subject of SubjectDetailsData">
+                    <!-- Normal Row -->
+                    <ng-container *ngIf="subject?.IsStudentCenteredActivity != 1; else scaRow">
+                      <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCode}}</td>
+                      <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectName}}</td>
+                      <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCredits}}</td>
+                      <td style="padding: 6px; border: 1px solid #444;">{{subject?.EarnedCredits}}<span style="color: blue;" *ngIf="subject.IsExCurrent == 1"> *</span></td>
+                      <td style="padding: 6px; border: 1px solid #444;">{{subject?.Grade}}</td>
+                      <td style="padding: 6px; border: 1px solid #444;">{{subject?.Remarks}}</td>
+                    </ng-container>
+
+                    <!-- Special Row -->
+                    <ng-template #scaRow>
+                      <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCode}}</td>
+                      <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectName}}</td>
+                      <td colspan="4" style="padding: 6px; border: 1px solid #444; text-align: center;">
+                        <span>{{subject?.EarnedCredits}}</span>
+                      </td>
+                    </ng-template>
+
+                  </tr>
+                </tbody>
+              </table>
+
+              <div style="padding: 10px; font-weight: bold; font-size: 13px;">
+                DETAILS UP TO THIS END TERM EXAMINATION RESULT
               </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
+                <tr>
+                  <th style="padding: 8px; border: 1px solid #444; text-align: left; width: 180px;">Semester</th>
+                  <th style="padding: 8px; border: 1px solid #444; width: 50px;">1</th>
+                  <th style="padding: 8px; border: 1px solid #444; width: 50px;">2</th>
+                  <th style="padding: 8px; border: 1px solid #444; width: 50px;">3</th>
+                  <th style="padding: 8px; border: 1px solid #444; width: 50px;">4</th>
+                  <th style="padding: 8px; border: 1px solid #444; width: 50px;" *ngIf="StudentData?.StreamId !== 43">
+                    5
+                  </th>
+                  <th style="padding: 8px; border: 1px solid #444; width: 50px;" *ngIf="StudentData?.StreamId !== 43">
+                    6
+                  </th>
+                  <th colspan="3" *ngIf="StudentData?.StreamId === 43" style="padding: 8px; border: 1px solid #444;">Semester Result</th>
+                  <th *ngIf="StudentData?.StreamId !== 43" style="padding: 8px; border: 1px solid #444;">Semester Result</th>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #444; text-align: left;">Credit Registered</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem1 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem1 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem2 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem2 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem3 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem3 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem4 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem4 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
+                    {{FinalResultData[0]?.SubjectCreditsSem5 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem5 | number:'1.2-2' }}
+                  </td>
+                  <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
+                    {{FinalResultData[0]?.SubjectCreditsSem6 == ""? '-' : FinalResultData[0]?.SubjectCreditsSem6 | number:'1.2-2' }}
+                  </td>
 
+                  <td rowspan="4" *ngIf="StudentData?.StreamId === 43" colspan="3" style="padding: 8px; border: 1px solid #444; vertical-align: middle; text-align: center;">
+                    {{FinalResultData[0]?.Result}}
+                  </td>
+                  <td rowspan="4" *ngIf="StudentData?.StreamId !== 43" style="padding: 8px; border: 1px solid #444; vertical-align: middle; text-align: center;">
+                    {{FinalResultData[0]?.Result}}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #444; text-align: left;">Credit Earned</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem1 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem1 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem2 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem2 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem3 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem3 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem4 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem4 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
+                    {{FinalResultData[0]?.EarnedCreditsSem5 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem5 | number:'1.2-2' }}
+                  </td>
+                  <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
+                    {{FinalResultData[0]?.EarnedCreditsSem6 == ""? '-' : FinalResultData[0]?.EarnedCreditsSem6 | number:'1.2-2' }}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #444; text-align: left;">SGPA</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem1 == ""? '-' : FinalResultData[0]?.SGPASem1 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem2 == ""? '-' : FinalResultData[0]?.SGPASem2 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem3 == ""? '-' : FinalResultData[0]?.SGPASem3 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem4 == ""? '-' : FinalResultData[0]?.SGPASem4 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
+                    {{FinalResultData[0]?.SGPASem5 == ""? '-' : FinalResultData[0]?.SGPASem5 | number:'1.2-2' }}
+                  </td>
+                  <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
+                    {{FinalResultData[0]?.SGPASem6 == ""? '-' : FinalResultData[0]?.SGPASem6 | number:'1.2-2' }}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #444; text-align: left;">CGPA</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem1 == ""? '-' : FinalResultData[0]?.CGPASem1 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem2 == ""? '-' : FinalResultData[0]?.CGPASem2 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem3 == ""? '-' : FinalResultData[0]?.CGPASem3 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem4 == ""? '-' : FinalResultData[0]?.CGPASem4 | number:'1.2-2' }}</td>
+                  <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
+                    {{FinalResultData[0]?.CGPASem5 == ""? '-' : FinalResultData[0]?.CGPASem5 | number:'1.2-2' }}
+                  </td>
+                  <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
+                    {{FinalResultData[0]?.CGPASem6 == ""? '-' : FinalResultData[0]?.CGPASem6 | number:'1.2-2' }}
+                  </td>
 
-              <div class="col-md-3">
-                <label for="inputState" class="form-label">Semester<span class="StarMarking">*</span></label>
-                <select class="form-select mb-0" id="SemesterID" [(ngModel)]="resultSearchReq.SemesterID"
-                  (change)="onsemesterchange($event)">
-                  <option [ngValue]="0">Choose Option</option>
-                  <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
-                </select>
+                </tr>
+                <tr>
+                  <td rowspan="2" style="padding: 8px; border: 1px solid #444; text-align: left; vertical-align: middle;">
+                    Division Award Details
+                  </td>
+                  <td style="padding: 8px; border: 1px solid #444; text-align: left; " rowspan="1">
+                    Total Credit Earned
+                  </td>
+                  <td colspan="1" style="">{{FinalResultData[0]?.TotalEarnedCredits}}</td>
+                  <td rowspan="2" style="padding: 8px; border: 1px solid #444; vertical-align: middle;">
+                    Final CGPA
+                  </td>
+                  <td rowspan="2" style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.Percentage}}</td>
+                  <td rowspan="2" colspan="2" style="padding: 8px; border: 1px solid #444; vertical-align: middle;">
+                    Division
+                  </td>
+                  <td rowspan="2" style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.Division}}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #444; text-align: left; white-space: nowrap;">
+                    Total Credit Registered
+                  </td>
+                  <td colspan="" style="padding: 8px; border: 1px solid #444;">
+                    {{FinalResultData[0]?.TotalSubjectCredits}}
+                  </td>
+                </tr>
+              </table>
+
+              <div style="padding: 20px 10px; font-size: 11px; line-height: 1.6;">
+                <div style="margin-bottom: 5px;">{{StudentData?.District}}</div>
+                <div style="margin-bottom: 15px;">DATE OF RESULT DECLARATION: {{StudentData?.ResultDeclarationDate}}</div>
+
+                <div style="margin-bottom: 3px;">
+                  <strong>NOTE:</strong> LAST DATE FOR APPLYING ONLINE RE-EVALUATION
+                  FORM IS {{StudentData?.ReEvaluationDate}}.
+                </div>
+                <div style="margin-bottom: 3px;">
+                  <strong>NOTE:</strong> If student applying for Revaluation in final semester, then his/her
+                  marksheet will be issued after declaration of Revaluation result.
+                </div>
+                <div style="margin-bottom: 10px;">
+                  <strong>NOTE:</strong> Student appeared as Ex student in * marked
+                  subject in current session.
+                </div>
+
+                <div style="color: #444; text-align: justify;">
+                  <strong>Disclaimer:</strong> Though utmost care has
+                  been
+                  taken in providing information about result on this web portal, even if in case of any
+                  inadvertent
+                  error
+                  the information provided from Board of Technical Education Rajasthan, Jodhpur office will be
+                  treated
+                  as
+                  authentic and final.
+                </div>
               </div>
-
-
-              <div class="col-md-3">
-                <label for="rollNo" class="form-label">Roll No<span class="StarMarking">*</span></label>
-                <input type="text" class="form-control" name="rollNo" placeholder="Enter Roll No"
-                  [(ngModel)]="resultSearchReq.RollNo"
-                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-              </div>
-
-              <div class="col-md-3">
-                <label for="startDate" class="form-label">Date Of Birth<span class="StarMarking">*</span></label>
-                <input type="date" class="form-control" [(ngModel)]="resultSearchReq.DOB" name="CampusFromDate">
-              </div>
-
-              <div class="col-md-3">
-                <button type="button" class="btn btn-primary d-flex align-items-center"
-                  (click)="GetStudentResult_public()">
-                  <i class="ti ti-search me-2"></i> Search
-                </button>
-              </div>
-
-            </form>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div
-  style="width: 1000px; margin: 20px auto; border: 2px solid #2e7d32; padding: 0; color: #333; background-color: #fff;"
-  *ngIf="showResult">
-
-  <div
-    style="background-color: #00c853; color: white; padding: 10px 20px; font-weight: bold; font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
-    <span style="letter-spacing: 0.5px;">Result</span>
-    <!-- <button
-      style="background-color: #00a1ff; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 5px;">
-      <span style="font-size: 14px;">⬇</span> Download Result
-    </button> -->
+    <!-- content -->
   </div>
-
-  <div style="padding: 0px 5px 5px 5px;">
-    <div style="text-align: center; padding: 20px 10px 10px 10px;">
-      <h2 style="margin: 0; font-size: 18px; font-weight: 600; letter-spacing: 1px;">{{StudentData?.HeaderLine1}}
-      </h2>
-      <h3 style="margin: 0px; font-size: 19px; font-weight: 600; letter-spacing: 1px;">{{StudentData?.HeaderLine2}}</h3>
-      <p style="margin: 5px 0; font-size: 13px; color: #444;">{{StudentData?.HeaderLine3}}</p>
-    </div>
-
-    <div style="padding: 10px 5px; font-size: 13px; line-height: 2.2;text-align: left;">
-      <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px;">
-        <tr>
-          <th>Name</th>
-          <td style="border-bottom: 1px dotted #444;">{{StudentData?.StudentName}}</td>
-          <th><span style="padding-left: 50px;">Enrollment No.</span></th>
-          <td style="border-bottom: 1px dotted #444;">{{StudentData?.EnrollmentNo}}</td>
-        </tr>
-        <tr>
-          <th>Father's Name</th>
-          <td style="border-bottom: 1px dotted #444;">{{StudentData?.FatherName}}</td>
-          <th><span style="padding-left: 50px;">Roll No.</span></th>
-          <td style="border-bottom: 1px dotted #444;">{{StudentData?.RollNo}}</td>
-        </tr>
-        <tr>
-          <th>Mother's Name</th>
-          <td style="border-bottom: 1px dotted #444;">{{StudentData?.MotherName}}</td>
-          <th><span style="padding-left: 50px;">Course</span></th>
-          <td style="border-bottom: 1px dotted #444;">{{StudentData?.Branch}}</td>
-        </tr>
-        <tr>
-          <th>Branch</th>
-          <td style="border-bottom: 1px dotted #444;">{{StudentData?.StreamName}}</td>
-          <th><span style="padding-left: 50px;">Class</span></th>
-          <td style="border-bottom: 1px dotted #444;">{{StudentData?.YearSemester}}</td>
-        </tr>
-        <tr>
-          <th>College</th>
-          <td colspan="3" style="border-bottom: 1px dotted #444;">{{StudentData?.InstituteName}}
-          </td>
-        </tr>
-
-      </table>
+</section>
 
 
 
-      <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px;">
-        <thead>
-          <tr style="text-align: left; background-color: #fff;">
-            <th style="padding: 8px; border: 1px solid #444; width: 80px;">CODE</th>
-            <th style="padding: 8px; border: 1px solid #444;">SUBJECT(S)</th>
-            <th style="padding: 8px; border: 1px solid #444; width: 140px;">Registered Credits</th>
-            <th style="padding: 8px; border: 1px solid #444; width: 140px;">Earned Credits</th>
-            <th style="padding: 8px; border: 1px solid #444; width: 120px;">Grade Award</th>
-            <th style="padding: 8px; border: 1px solid #444; width: 100px;">Remarks</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- <tr *ngFor="let subject of SubjectDetailsData">
-            <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCode}}</td>
-            <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectName}} </td>
-            <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCredits}}</td>
-            <td style="padding: 6px; border: 1px solid #444;">{{subject?.EarnedCredits}}</td>
-            <td style="padding: 6px; border: 1px solid #444;">{{subject?.Grade}}</td>
-            <td style="padding: 6px; border: 1px solid #444;">{{subject?.Remarks}}</td>
-          </tr>
-          
-          <tr>
-            <td style="padding: 6px; border: 1px solid #444;">SCA</td>
-            <td style="padding: 6px; border: 1px solid #444;">STUDENTS CENTERED ACTIVITIES</td>
-            <td colspan="4" style="padding: 6px; border: 1px solid #444;"><span style="margin-left: 0px;">Very
-                Good</span></td>
-          </tr> -->
 
-          <tr *ngFor="let subject of SubjectDetailsData">
 
-            <!-- Normal Row -->
-            <ng-container *ngIf="subject?.SubjectName !== 'STUDENTS CENTERED ACTIVITIES'; else scaRow">
-              <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCode}}</td>
-              <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectName}}</td>
-              <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCredits}}</td>
-              <td style="padding: 6px; border: 1px solid #444;">{{subject?.EarnedCredits}}</td>
-              <td style="padding: 6px; border: 1px solid #444;">{{subject?.Grade}}</td>
-              <td style="padding: 6px; border: 1px solid #444;">{{subject?.Remarks}}</td>
-            </ng-container>
 
-            <!-- Special Row -->
-            <ng-template #scaRow>
-              <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectCode}}</td>
-              <td style="padding: 6px; border: 1px solid #444;">{{subject?.SubjectName}}</td>
-              <td colspan="4" style="padding: 6px; border: 1px solid #444;">
-                <span>{{subject?.EarnedCredits}}</span>
-              </td>
-            </ng-template>
 
-          </tr>
-        </tbody>
-      </table>
 
-      <div style="padding: 10px; font-weight: bold; font-size: 13px;">
-        DETAILS UP TO THIS END TERM EXAMINATION RESULT</div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
-        <tr>
-          <th style="padding: 8px; border: 1px solid #444; text-align: left; width: 180px;">Semester</th>
-          <th style="padding: 8px; border: 1px solid #444; width: 50px;">1</th>
-          <th style="padding: 8px; border: 1px solid #444; width: 50px;">2</th>
-          <th style="padding: 8px; border: 1px solid #444; width: 50px;">3</th>
-          <th style="padding: 8px; border: 1px solid #444; width: 50px;">4</th>
-          <th style="padding: 8px; border: 1px solid #444; width: 50px;" *ngIf="StudentData?.StreamId !== 43">5</th>
-          <th style="padding: 8px; border: 1px solid #444; width: 50px;" *ngIf="StudentData?.StreamId !== 43">6</th>
-          <th style="padding: 8px; border: 1px solid #444;">Semester Result</th>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #444; text-align: left;">Credit Registered</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem1}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem2}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem3}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SubjectCreditsSem4}}</td>
-          <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-            {{FinalResultData[0]?.SubjectCreditsSem5}}</td>
-          <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-            {{FinalResultData[0]?.SubjectCreditsSem6}}</td>
-          <td rowspan="4" style="padding: 8px; border: 1px solid #444; vertical-align: top; text-align: left;">
-            {{FinalResultData[0]?.Result}}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #444; text-align: left;">Credit Earned</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem1}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem2}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem3}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.EarnedCreditsSem4}}</td>
-          <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-            {{FinalResultData[0]?.EarnedCreditsSem5}}</td>
-          <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-            {{FinalResultData[0]?.EarnedCreditsSem6}}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #444; text-align: left;">SGPA</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem1}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem2}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem3}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.SGPASem4}}</td>
-          <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-            {{FinalResultData[0]?.SGPASem5}}</td>
-          <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-            {{FinalResultData[0]?.SGPASem6}}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #444; text-align: left;">CGPA</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem1}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem2}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem3}}</td>
-          <td style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.CGPASem4}}</td>
-          <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-            {{FinalResultData[0]?.CGPASem5}}</td>
-          <td style="padding: 8px; border: 1px solid #444;" *ngIf="StudentData?.StreamId !== 43">
-            {{FinalResultData[0]?.CGPASem6}}</td>
-        </tr>
-        <tr>
-          <td rowspan="2" style="padding: 8px; border: 1px solid #444; text-align: left; vertical-align: middle;">
-            Division Award Details</td>
-          <td style="padding: 8px; border: 1px solid #444; text-align: left; " rowspan="1">
-            Total Credit Earned
-          </td>
-          <td colspan="1" style="">{{FinalResultData[0]?.TotalEarnedCredits}}</td>
-          <td rowspan="2" style="padding: 8px; border: 1px solid #444; vertical-align: middle;">
-            Final CGPA</td>
-          <td rowspan="2" style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.Percentage}}</td>
-          <td rowspan="2" colspan="2" style="padding: 8px; border: 1px solid #444; vertical-align: middle;">
-            Division
-          </td>
-          <td rowspan="2" style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.Division}}</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; border: 1px solid #444; text-align: left; white-space: nowrap;">
-            Total Credit Registered
-          </td>
-          <td colspan="" style="padding: 8px; border: 1px solid #444;">{{FinalResultData[0]?.TotalSubjectCredits}}</td>
-        </tr>
-      </table>
 
-      <div style="padding: 20px 10px; font-size: 11px; line-height: 1.6;">
-        <div style="margin-bottom: 5px;">{{StudentData?.District}}</div>
-        <div style="margin-bottom: 15px;">DATE OF RESULT DECLARATION: {{StudentData?.ResultDeclarationDate}}</div>
 
-        <div style="margin-bottom: 3px;"><strong>NOTE:</strong> LAST DATE FOR APPLYING ONLINE RE-EVALUATION
-          FORM IS {{StudentData?.ReEvaluationDate}}.</div>
-        <div style="margin-bottom: 10px;"><strong>NOTE:</strong> Student appeared as Ex student in * marked
-          subject in current session.</div>
 
-        <div style="color: #444; text-align: justify;"><strong>Disclaimer:</strong> Though utmost care has
-          been
-          taken in providing information about result on this web portal, even if in case of any
-          inadvertent
-          error
-          the information provided from Board of Technical Education Rajasthan, Jodhpur office will be
-          treated
-          as
-          authentic and final.</div>
-      </div>
-    </div>
-  </div>
-  </div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

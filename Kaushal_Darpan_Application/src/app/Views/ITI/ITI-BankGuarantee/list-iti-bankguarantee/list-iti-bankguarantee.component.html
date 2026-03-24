@@ -1,5 +1,3 @@
-
-
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
@@ -24,47 +22,55 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-
-
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Name:</label>
-          <input type="text" class="form-input" placeholder="Enter Bank Name" [(ngModel)]="searchRequest.BankName" (ngModelChange)="onBankNameChange($event)">
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Guarantee Number:</label>
-          <input type="text" class="form-input" placeholder="Enter Bank Guarantee Number" [(ngModel)]="searchRequest.BankGuaranteeNumber">
-        </div>-->
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Status
           </label>
           <select class="form-select" [(ngModel)]="searchRequest.status">
-            <option value="0">Pending</option>
+            <option value="0">All</option>
             <option value="1">Active</option>
             <option value="2">Return</option>
-            
+            <option value="3">Due</option>
+
           </select>
         </div>
 
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
           <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollageId">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of CollegeMasterList" [value]="item.Id">
+            <option *ngFor="let item of CollegeMasterList" [value]="item.ID">
               {{item.Name}}
             </option>
           </select>
+        </div>-->
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
+          <ng-select [(ngModel)]="searchRequest.CollageId" [clearable]="false">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-option *ngFor="let item of CollegeMasterList; trackBy: trackById"
+                       [value]="item.ID">
+              {{item.Name}}
+            </ng-option>
+          </ng-select>
         </div>
+
+
+
+
+
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            date Wise:
+            Due Within Days:
           </label>
           <select class="form-select"
                   [(ngModel)]="searchRequest.dayWise">
             <option value="0">-- Select Day Wise --</option>
+            <option value="45">45 Day's</option>
             <option value="30">30 Day's</option>
             <option value="15">15 Day's</option>
             <option value="7">7 Day's</option>
@@ -84,7 +90,7 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-between flex-wrap items-center">
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
-       
+
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -108,58 +114,56 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-center">#</th>
-            <th class="text-center">Bank Guarantee Number</th>
-            <th class="text-center">Bank Name</th>
-            <th class="text-center">College  Name</th>
-            <th class="text-center">Date Of Issue</th>
-            <th class="text-center">Maturity Date</th>
-            <th class="text-center">Duration</th>
-            <th class="text-center">Amount</th>
-            <th class="text-center">Remark</th>
-            <th class="text-center">Status</th>
-            <th class="text-center">Bank Agreement Document</th>
-            <th class="text-center">Action</th>
+            <th class="text-left">#</th>
+            <th class="text-left">College  Name</th>
+            <th class="text-left">Bank Name</th>
+            <th class="text-left">Bank Guarantee No</th>
+            <th class="text-left">Date Of Issue</th>
+            <th class="text-left">Maturity Date</th>
+            <th class="text-left">Duration Years</th>
+            <th class="text-left">Amount</th>
+            <th class="text-left">Remark</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText ;let idx=index;">
-            <td class="text-center">{{(startInTableIndex+1)+idx}}</td>
-            <td class="text-center">{{item.BankGuaranteeNumber}}</td>
-            <td class="text-center">{{item.BankName}}</td>
-            <td class="text-center">{{item.CollageId}}</td>
-            <td class="text-center">{{item.DateOfIssue}}</td>
-            <td class="text-center">{{item.Maturitydate}}</td>
-            <td class="text-center">{{item.Duration}}</td>
-            <td class="text-center">{{item.Amount}}</td>
-            <td class="text-center">{{item.Remarks}}</td>
+            <td class="text-left">{{(startInTableIndex+1)+idx}}</td>
+            <td class="text-left">{{item.CollegeName}}</td>
+            <td class="text-left">{{item.BankName}}</td>
+            <td class="text-left">{{item.BankGuaranteeNumber}}</td>
+
+            <td class="text-left">{{item.DateOfIssue}}</td>
+            <td class="text-left">{{item.Maturitydate}}</td>
+            <td class="text-left">{{item.Duration}}</td>
+            <td class="text-left">{{item.Amount}}</td>
+            <td class="text-left">{{item.Remarks}}</td>
             <td>
               <span class="px-2 py-1 rounded text-xs font-semibold"
                     [ngClass]="
-  item.Status === 1
-    ? 'bg-green-100 text-green-700'
-    : item.Status === 2
-    ? 'bg-red-100 text-red-700'
-    : 'bg-yellow-100 text-yellow-700'
-">
-                {{
-  item.Status === 1
-    ? 'Active'
-    : item.Status === 2
-    ? 'Returned'
-    : 'Pending'
-                }}
+                              item.Status === 1
+                                ? 'bg-green-100 text-green-700'
+                                : item.Status === 2
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-yellow-100 text-yellow-700'
+                            ">
+                {{item.StatusName}}
+
+
               </span>
             </td>
 
-            <td class="text-center">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.BankAgreementDocument}}"
-                 target="_blank" class="btn bg-primary text-white btn-sm">
-                <i class="ti ti-eye"></i>
-              </a>
-            </td>
+
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Return" (click)="ViewandUpdate(MyModel_ViewDetails, item)"><i class="ti ti-arrow-back-up"></i>
+                </a>
+                <a *ngIf="item.Status === 1" href="javascript:void(0);" title="ReNew" (click)="ReNew(item.BankGuaranteeID)"><i class="ti ti-refresh"></i></a>
+                <a *ngIf="item.BankAgreementDocument!=''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.BankAgreementDocument}}"
+                   target="_blank" title="Download Document">
+                  <i class="ti ti-download"></i>
+                </a>
                 <a href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
               </div>
             </td>
@@ -190,3 +194,78 @@
 </div>
 
 <!-- end row -->
+
+
+<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="card">
+    <div class="card-header flex justify-between  items-center">
+      <b>Return Bank gaurantee</b>
+      <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="bankGuaranteeFormGroup">
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Status:
+    </label>
+    <select class="form-input" formControlName="status" [(ngModel)]="requestById.status">
+      <option value="1">Active</option>
+    </select>
+
+    <div *ngIf="isSubmitted && _bankGuaranteeFormGroup?.status?.errors" class="text-danger">
+      <p *ngIf="_bankGuaranteeFormGroup.status.errors.required">
+        This field is required!
+      </p>
+    </div>
+  </div>-->
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Order No:
+          </label>
+          <input type="text" class="form-input" id="OrderNo" formControlName="OrderNo"
+                 [(ngModel)]="requestById.OrderNo">
+          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.OrderNo.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.OrderNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Order date:
+          </label>
+          <input type="date" class="form-input" id="Orderdate" formControlName="Orderdate"
+                 [(ngModel)]="requestById.Orderdate">
+          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Orderdate.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.Orderdate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Remarks:
+          </label>
+          <input type="text" class="form-input" id="Remarks" formControlName="Remarks"
+                 [(ngModel)]="requestById.Remarks">
+          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Remarks.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+      </form>
+
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="statusUpdateById()">Submit</button>
+        </div>
+      </div>
+
+
+
+    </div>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+    </div>
+  </div>
+</ng-template>
+

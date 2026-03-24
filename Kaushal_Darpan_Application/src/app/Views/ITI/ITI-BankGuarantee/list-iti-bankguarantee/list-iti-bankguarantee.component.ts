@@ -11,7 +11,7 @@ import { ItiTradeService } from '../../../../Services/iti-trade/iti-trade.servic
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { ITIPlanningBankGuarantee } from '../../../../Models/ItiPlanningDataModel';
+import { ITIPlanningBankGuarantee, ITIPlanningStatusUpdateByIdModel } from '../../../../Models/ItiPlanningDataModel';
 import { ITIsService } from '../../../../Services/ITIs/itis.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ItiCollegesSearchModel } from '../../../../Models/CommonMasterDataModel';
@@ -36,6 +36,7 @@ export class listitibankguaranteeComponent {
   public TradeData: ITITradeSearchModel[] = [];
   request = new ITITradeDataModels()
   public searchRequest = new ITIPlanningBankGuarantee();
+  public requestById = new ITIPlanningStatusUpdateByIdModel();
   public Table_SearchText: string = '';
   public tbl_txtSearch: string = '';
   //table feature default
@@ -53,6 +54,8 @@ export class listitibankguaranteeComponent {
   InstituteMasterDDL: any[] = [];
   public CollegeMasterList: any = [];
   public collegeRequest = new ItiCollegesSearchModel();
+  modalReference: NgbModalRef | undefined;
+  public bankGuaranteeFormGroup!: FormGroup;
   //end table feature default
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -65,7 +68,7 @@ export class listitibankguaranteeComponent {
     private routers: ActivatedRoute,
     private modalService: NgbModal,
     public appsettingConfig: AppsettingService,
-
+    private fb: FormBuilder,
     private Swal2: SweetAlert2) {
   }
 
@@ -74,12 +77,20 @@ export class listitibankguaranteeComponent {
     this.sSOLoginDataModel.RoleID;
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    this.bankGuaranteeFormGroup = this.fb.group({
+      //status: ['1', Validators.required],  
+      Remarks: ['', Validators.required],
+      OrderNo: ['', Validators.required],
+      Orderdate: ['', Validators.required],
+    });
 
     this.getbankguaranteeList()
-    await this.ddlITIColleges();
-    //this.GetTradeTypesList();
+    await this.GetPrivateITICollege();
+
+    
+
   }
+  get _bankGuaranteeFormGroup() { return this.bankGuaranteeFormGroup.controls; }
 
   async GetTradeTypesList()
   {
@@ -101,10 +112,12 @@ export class listitibankguaranteeComponent {
   }
 
   async getbankguaranteeList() {
-    
+    debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.BankGuaranteeID = 0;
+   //   this.searchRequest.CollageId = this.id;
+
 
       await this.campusPostService.ITIPlanningBankGuaranteeList(this.searchRequest)
         .then((data: any) => {
@@ -151,46 +164,46 @@ export class listitibankguaranteeComponent {
 
 
 
-  async btnDeleteOnClick(TradeId: number) {
+  //async btnDeleteOnClick(TradeId: number) {
 
-    this.Swal2.Confirmation("Are you sure you want to delete this ?",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            //Show Loading
-            this.loaderService.requestStarted();
-            await this.ItiTradeService.DeleteDataByID(TradeId, this.request.ModifyBy)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
+  //  this.Swal2.Confirmation("Are you sure you want to delete this ?",
+  //    async (result: any) => {
+  //      //confirmed
+  //      if (result.isConfirmed) {
+  //        try {
+  //          //Show Loading
+  //          this.loaderService.requestStarted();
+  //          await this.ItiTradeService.DeleteDataByID(TradeId, this.request.ModifyBy)
+  //            .then(async (data: any) => {
+  //              data = JSON.parse(JSON.stringify(data));
 
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
+  //              this.State = data['State'];
+  //              this.Message = data['Message'];
+  //              this.ErrorMessage = data['ErrorMessage'];
 
-                if (this.State = EnumStatus.Success) {
-                  this.toastr.success(this.Message)
-                  //reload
-                  this.getbankguaranteeList();
-                }
-                else {
-                  this.toastr.error(this.ErrorMessage)
-                }
+  //              if (this.State = EnumStatus.Success) {
+  //                this.toastr.success(this.Message)
+  //                //reload
+  //                this.getbankguaranteeList();
+  //              }
+  //              else {
+  //                this.toastr.error(this.ErrorMessage)
+  //              }
 
-              }, (error: any) => console.error(error)
-              );
-          }
-          catch (ex) {
-            console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
-        }
-      });
-  }
+  //            }, (error: any) => console.error(error)
+  //            );
+  //        }
+  //        catch (ex) {
+  //          console.log(ex);
+  //        }
+  //        finally {
+  //          setTimeout(() => {
+  //            this.loaderService.requestEnded();
+  //          }, 200);
+  //        }
+  //      }
+  //    });
+  //}
 
   exportToExcel(): void {
     const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress'];
@@ -305,6 +318,27 @@ export class listitibankguaranteeComponent {
       }, 200);
     }
   }
+
+
+  async ReNew(BankGuaranteeID: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.router.navigate(['/iti-bank-guarantee', BankGuaranteeID]);
+
+
+      this.router.navigate(['/iti-bank-guarantee', BankGuaranteeID], {
+        queryParams: { status: 'ReNew' }
+      });
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   onBankNameChange(value: string) {
     this.searchRequest.BankName = value;
     this.searchRequest.BankGuaranteeNumber = value;
@@ -333,28 +367,122 @@ export class listitibankguaranteeComponent {
     })
   }
 
-  async ddlITIColleges() {
-    try {
+  //async ddlITIColleges() {
+  //  try {
 
+  //    this.loaderService.requestStarted();
+  //    this.collegeRequest.action = "_getDataITIcollege";
+  //    this.collegeRequest.DistrictID = 0;
+  //    this.collegeRequest.ManagementTypeID = 0;
+  //    await this.commonMasterService.ItiCollegesGetAllData(this.collegeRequest)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.CollegeMasterList = data['Data'];
+  //        console.log('College Master List', this.CollegeMasterList)
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+  public AllCompanyMasterList: any[] = [];
+  async GetPrivateITICollege() {
+    try {
       this.loaderService.requestStarted();
-      this.collegeRequest.action = "_getDataITIcollege";
-      this.collegeRequest.DistrictID = 0;
-      this.collegeRequest.ManagementTypeID = 0;
-      await this.commonMasterService.ItiCollegesGetAllData(this.collegeRequest)
+
+      await this.commonMasterService
+        .GetCommonMasterData('PrivateITICollege', 5)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.CollegeMasterList = data['Data'];
-          console.log('College Master List', this.CollegeMasterList)
+
+          this.AllCompanyMasterList = data['Data'];
+          this.CollegeMasterList = this.AllCompanyMasterList;
+
+          //this.CollegeID = 0; //  default select
+          //this.request.CollageId = 0;
         }, error => console.error(error));
-    }
-    catch (Ex) {
+
+    } catch (Ex) {
       console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+   
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+   
+  }
+
+
+  async ViewandUpdate(content: any, item: any) {
+    debugger
+    this.isSubmitted = false;
+    this.requestById.status = 2
+    this.requestById.Remarks = item.Remarks
+    this.requestById.OrderNo = this.requestById.OrderNo
+    this.requestById.Orderdate = this.requestById.Orderdate
+    this.requestById.BankGuaranteeID = item.BankGuaranteeID
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+
+  }
+
+  async statusUpdateById() {
+    debugger
+    try {
+      this.isSubmitted = true;
+      if (this.bankGuaranteeFormGroup.invalid) {
+        return;
+      }
+
+      this.isLoading = true;
+      this.loaderService.requestStarted();
+
+      await this.campusPostService.statusUpdateById(this.requestById)
+     
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State = EnumStatus.Success) {
+            this.toastr.success(this.Message)
+            this.bankGuaranteeFormGroup.reset();
+            this.requestById.status = 1;
+            this.requestById.Remarks = '';
+            this.CloseModalPopup();
+            this.getbankguaranteeList()
+          } 
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
     }
     finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  trackById(index: number, item: any): number {
+    return item.ID;
   }
 
 }
