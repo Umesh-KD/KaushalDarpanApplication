@@ -82,8 +82,13 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
               <th class="text-left">Sr No</th>
-              <th class="text-left">EnrollmentNo</th>
-              <th class="text-left">Company's Name</th>
+              <th class="text-left">Enrollment No</th>
+              <th class="text-left">Student Name</th>
+              <th *ngIf="sSOLoginDataModel.RoleID==_EnumRole.ITI_Placement_Admin" class="text-left">Institute Name</th>
+              <th class="text-left">StudentSSOID</th>
+              <th class="text-left">Trade Name</th>
+              <th class="text-left">Action</th>
+              <!-- <th class="text-left">Company's Name</th>
               <th class="text-left">Company's Type</th>
               <th class="text-left">Address</th>
               <th class="text-left">Job Type</th>
@@ -92,7 +97,7 @@
               <th class="text-left">Amount</th>
               <th class="text-left">Working From Date</th>
               <th class="text-left">Working Till</th>
-              <th class="text-center">Action</th>
+              <th class="text-center">Action</th> -->
 
            
           </tr>
@@ -101,7 +106,20 @@
           <tr *ngFor="let row of StudEmployementList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EnrollmentNo}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StudentName}}</td>
+            <td *ngIf="sSOLoginDataModel.RoleID==_EnumRole.ITI_Placement_Admin" class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.instituteName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.studentSSOID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.TradeName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6"> 
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="View Employement List" (click)="onStudentEmployementList(MyModel_StudentEmployementHistory, row.StudentID)"><i class="ti ti-list"></i></a>               
+                <!-- <a *ngIf="(company.Status=='Approved')" [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
+                  <i class="ti ti-eye"></i>
+                </a> -->
+              </div>
+            </td>
+
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyType}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyAddress}}</td>
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.JobType}}</td>
@@ -109,18 +127,18 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.SalaryType}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.SalaryAmount}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.WorkingFromDate}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.WorkingToDate}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.WorkingToDate}}</td> -->
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6"> 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a [routerLink]="'/add-student-employement'" [queryParams]="{ID:row.AID, key:2}" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" title="Delete"  (click)="DeleteById(row.AID)">
                   <i class="ti ti-trash"></i>
-                </a>
+                </a> -->
                 <!-- <a *ngIf="(company.Status=='Approved')" [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
                   <i class="ti ti-eye"></i>
                 </a> -->
-              </div>
-            </td>
+              <!-- </div>
+            </td> -->
             
           </tr>
         </tbody>
@@ -129,3 +147,100 @@
   </div>
 </div>
 <!-- end row -->
+
+
+<ng-template #MyModel_StudentEmployementHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+
+        <button class="btn bg-info text-white" (click)="CloseModalEmployementlist()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+
+      <div class="card-body">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Student's Employement History</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+          </div>
+        </div>
+
+
+        <!--{{UserProfileStatusHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Sr No</th>
+                <th class="text-left">Enrollment No</th>
+                <th class="text-left">Student's Name</th>
+                <th class="text-left">Company</th>
+                <th class="text-left">Company Type</th>
+                <th class="text-left">Address</th>
+                <th class="text-left">Job Type</th>
+                <th class="text-left">Experience</th>
+                <th class="text-left">Salary Type</th>
+                <th class="text-left">Amount</th>
+                <th class="text-left">Working From</th>
+                <th class="text-left">Working Till</th>
+                <th class="text-center">Action</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of StudEmployementList_ByID; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EnrollmentNo}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StudentName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyType}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyAddress}}</td>
+                 <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.JobType}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Experience}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.SalaryType}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.SalaryAmount}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.WorkingFromDate}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.WorkingToDate}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6"> 
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    
+                    <!-- <a  [routerLink]="'/add-student-employement'" [queryParams]="{ID:row.AID, key:2}" title="Edit"><i class="ti ti-pencil"></i></a> -->
+                    <a    (click)="goToEdit(row.AID,2)" title="Edit"><i class="ti ti-pencil"></i></a>
+                    <a href="javascript:void(0);" title="Delete"  (click)="DeleteById(row.AID)">
+                      <i class="ti ti-trash"></i>
+                    </a>
+                    <!-- <a *ngIf="(company.Status=='Approved')" [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
+                      <i class="ti ti-eye"></i>
+                    </a> -->
+                  </div>
+                </td>
+
+              </tr>
+              <tr *ngIf="UserProfileStatusHistoryList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalEmployementlist()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
+</ng-template>

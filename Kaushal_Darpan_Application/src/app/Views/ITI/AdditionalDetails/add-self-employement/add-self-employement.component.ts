@@ -54,6 +54,7 @@ export class AddStudentEmployementComponent implements OnInit {
   public DistrictMasterList: IDistrictMaster_StateIDWiseDataModel[] = []
   public StateMasterList: IStateMasterDataModel[] = []
   public CompanyTypeList: any = []
+  public StreamMasterList: any = []
   public StudEmployementList: StudentEmploymentDetailsModel[] = [];
 
   public ListEmployementDetails:StudentEmploymentDetailsModel[]=[];
@@ -89,7 +90,11 @@ export class AddStudentEmployementComponent implements OnInit {
         SalaryAmount: ['', Validators.required],
 
         StudentName: [{ value: '', disabled: true }],
-        StudFatherName: [{ value: '', disabled: true }]
+        StudFatherName: [{ value: '', disabled: true }],
+        DOB:[{value:'',disabled:true}],
+        Email:[{value:'',disabled:true}],
+        AadharNo:[{value:'',disabled:true}],
+        TradeID:['0',Validators.required]
 
       });
 
@@ -125,7 +130,7 @@ export class AddStudentEmployementComponent implements OnInit {
 
 
   async loadDropdownData(MasterCode: string) {
-    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+    await this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
       switch (MasterCode) {
         case 'CompanyType':
           this.CompanyTypeList = data['Data'];
@@ -135,17 +140,35 @@ export class AddStudentEmployementComponent implements OnInit {
           break;
       }
     });
+
+    await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterList = data['Data'];
+      }, error => console.error(error));
   }
+
+  formatDate(date: string): string {
+    const d = new Date(date);
+    return d.toISOString().split('T')[0];
+  }
+
 
   async getStudBasicDetails(EnrollmentNo:string){
     debugger;
     try {
       this.loaderService.requestStarted();
+      this.request.StudentName='';
+      this.request.StudFatherName='';
+      this.request.DOB='';
+      // this.request=new StudentEmploymentDetailsModel();
       await this.commonMasterService.getStudBasicDetailsEnrollmentWise(EnrollmentNo,this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.request.StudentName=data['Data'][0].StudentName;
           this.request.StudFatherName=data['Data'][0].FatherName;
+          this.request.DOB=this.formatDate(data['Data'][0].DOB); 
+          this.request.Email=data['Data'][0].Email;
           console.log(data['Data']);
         }, error => console.error(error));
     }
@@ -268,6 +291,7 @@ export class AddStudentEmployementComponent implements OnInit {
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       this.isCompanyTypeSelected=true
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        this.searchRequest.Action="GetAllDataBy_StudID";
       this.loaderService.requestStarted();
       await this.StudentdetailUpdateService.GetStudentEmployementData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -369,10 +393,6 @@ export class AddStudentEmployementComponent implements OnInit {
         }
         this.request.InstituteID=this.sSOLoginDataModel.InstituteID;
 
-
-       
-
-    
         this.ListEmployementDetails.push(this.request);
         this.request = new StudentEmploymentDetailsModel();
         this.isEmployementFormSubmitted = false;
