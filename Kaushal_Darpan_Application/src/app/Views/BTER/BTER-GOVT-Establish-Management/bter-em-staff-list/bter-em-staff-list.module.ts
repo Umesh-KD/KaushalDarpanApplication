@@ -8,6 +8,7 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
 import { StudentStatusHistoryModule } from '../../../Student/student-status-history/student-status-history.module';
 import { BTEREMStaffListComponent } from './bter-em-staff-list.component';
 import { BTEREMStaffListRoutingModule } from './bter-em-staff-list-routing.module';
+import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { BTEREMStaffListRoutingModule } from './bter-em-staff-list-routing.modul
     CommonModule, 
     LoaderModule, 
     TableSearchFilterModule,
-    StudentStatusHistoryModule
+    StudentStatusHistoryModule,
+    OTPModalModule
   ]
 })
 export class BTEREMStaffListModule { }

@@ -143,12 +143,16 @@ export class StudentEmploymentDetailsModel {
   public StudentID: number = 0;
   public InstituteID: number = 0;
   public EnrollmentNo?: string = '';
+  public DOB: string = '';
+  public Email:string='';
+  public AadharNo:string='';
 
   public CompanyType: string = '';           // self / firm
   public CompanyName: string = '';
   public StateID: number = 0;
   public DistrictID: number = 0;
   public CompanyAddress: string = '';
+  public TradeID: number = 0;
 
   public JobType: string = '';               // fulltime / parttime
   public Experience: string = '';            // current / past
@@ -172,6 +176,8 @@ export class StudentEmploymentDetailsModel {
   public StudentName:string='';
   public StudFatherName:string='';
 
+  public RoleID?:number=0;
+  public Action?:string='';
 }
 
 export class InternalMarksReportCollegeWiseSearchModel extends RequestBaseModel {

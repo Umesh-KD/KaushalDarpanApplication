@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { AllPostRoutingModule } from './iti-all-post-routing.module';
 import { ITIAllPostComponent } from './iti-all-post.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -12,8 +13,10 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     AllPostRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule.forRoot()
   ]
 })
 export class ITIAllPostModule { }

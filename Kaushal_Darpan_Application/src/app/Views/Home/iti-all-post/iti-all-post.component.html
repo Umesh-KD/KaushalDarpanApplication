@@ -15,26 +15,82 @@
           </div>
           <div class="card-body">
 
-            <form class="row g-3" [formGroup]="searchForm">
+            <!-- [formGroup]="searchForm" -->
+            <!-- formControlName="BranchId" -->
+            <form class="row g-3 align-items-end" >
+              <div class="col-md-3">
+                <label for="inputState" class="form-label">Trade</label>
+                <ng-multiselect-dropdown #multiSelect1 [placeholder]="'Choose Option'"
+                                   [settings]="settingsMultiselect"
+                                   [data]="TradeList"
+                                   [(ngModel)]="SelectedTradeID"
+                                   [disabled]="false"
+                                   name="SelectedTradeID"                                  
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)">
+                </ng-multiselect-dropdown>
+              </div>
 
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
                 <label for="inputState" class="form-label">Branch</label>
                 <select id="inputState" class="form-select" formControlName="BranchId" (change)="PerformSearch()">
                   <option value="0" selected>Choose...</option>
                   <option *ngFor="let item of TradeList" [value]="item.ID">{{item.Name}}</option>
                 </select>
-              </div>
+              </div> -->
 
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
                 <label for="exampleFormControlInput1" class="form-label">Start Date</label>
                 <input type="date" class="form-control" id="exampleFormControlInput1" formControlName="StartDate" (change)="PerformSearch()">
-              </div>
+              </div> -->
 
-              <div class="col-md-4">
+              <!-- <div class="col-md-4">
                 <label for="exampleFormControlInput1" class="form-label">End Date</label>
                 <input type="date" class="form-control" id="exampleFormControlInput1" formControlName="EndDate" (change)="PerformSearch()">
+              </div> -->
+
+              <!-- formControlName="StartDate" -->
+              <div class="col-md-3">
+                <label for="FormControlInput1" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="FormControlInput1" [(ngModel)]="postSearch.StartDate" name="StartDate">
               </div>
 
+              <!-- formControlName="EndDate" -->
+              <div class="col-md-3">
+                <label for="FormControlInput2" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="FormControlInput2" [(ngModel)]="postSearch.EndDate"  name="EndDate">
+              </div>
+
+              <!-- formControlName="AppointmentLocation" -->
+              <div class="col-md-3">
+                <label for="FormControlInput4" class="form-label">Appointment Location</label>
+                <input type="text" class="form-control" id="FormControlInput4" placeholder="Enter Appointment Location" [(ngModel)]="postSearch.AppointmentLocation"  name="AppointmentLocation">
+              </div>
+
+              <div class="col-md-3">
+                <label for="FormControlInput5" class="form-label">Campus Venue</label>
+                <input type="text" class="form-control" id="FormControlInput5" placeholder="Enter Campus Location" [(ngModel)]="postSearch.CampusLocation"  name="CampusLocation">
+              </div>
+
+              <div class="col-md-3">
+                <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2"> District </label>
+                <select class="form-select" id="ddlDistrict" name="District"
+                        [(ngModel)]="postSearch.DistrictID" >
+                  <option value="0" Selected >Select District</option>
+                  <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+                </select>
+              </div>
+              
+
+              <div class="col-md-3" >
+                <button type="button" class="btn btn-primary d-flex align-items-center" (click)="GetITIAllData()">
+                  <i class="ti ti-search me-2"></i> Search
+                </button>
+              </div>
             </form>
           </div>
         </div>
