@@ -136,6 +136,7 @@ export class RequestUserAddComponent implements OnInit {
     });
 
     await this.GetLevelList();
+    await this.GetOfficeList();
     //await this.getITICollege();
     //this.GetRoleMasterData();
     this.GetStaffTypeData();
@@ -147,12 +148,6 @@ export class RequestUserAddComponent implements OnInit {
       this.getstatuId=this.request.RequestType;
       await this.FunctionRequestType();
     }
-
-
-
-
-
-
 
 
     this.request.CreatedBy = this.sSOLoginDataModel.UserID

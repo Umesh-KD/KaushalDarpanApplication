@@ -69,7 +69,8 @@
                     *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
-                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree) &&
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO) &&
                       row.CompanyStatus != 1">
                     <i class="ti ti-pencil"></i></a>
 
@@ -78,7 +79,8 @@
                    *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
-                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree) &&
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO) &&
                       row.CompanyStatus != 1">
                   <i class="ti ti-trash"></i></a>
 

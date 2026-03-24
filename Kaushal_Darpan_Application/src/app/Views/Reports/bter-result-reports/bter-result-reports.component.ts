@@ -144,7 +144,7 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 10, Name: 'RMI Fail Student Report', URL: 'RMIFailStudentReport' },
       { ID: 11, Name: 'Theory Fail Student Report', URL: 'TheoryPaperFailStudent' },
       { ID: 12, Name: 'Student Examiner Detail Report', URL: 'StudentDetailsReport' },
-      { ID: 13, Name: 'Appeared/Passed Statistics Report', URL: 'Appeared-Passesd-Statistics'},
+      { ID: 13, Name: 'Appeared/Passed Statistics Report', URL: 'Appeared-Passesd-Statistics' },
       { ID: 14, Name: 'Appeared/Passed Statistics Institute wise Report', URL: 'Appeared-Passesd-Statistics-Institute-wise' },
       // vivek
       { ID: 15, Name: 'Exam Result Student Statics Report', URL: 'Exam-Result-Student-Statics-report' },
@@ -154,7 +154,7 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 18, Name: 'Student All Marks Report', URL: 'Student-All-Marks-Report' },
     ];
   }
- 
+
   onTypeChange(selectedType: string): void {
     this.filterModel.InstituteID = 0;
     this.filterModel.ResultType = 0;
@@ -179,7 +179,7 @@ export class BterResultReportsComponent implements OnInit {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       SchemeID: 0,
-      FileNo1:'',
+      FileNo1: '',
       FileNo2: '',
       FileDate: null
     };
@@ -191,7 +191,7 @@ export class BterResultReportsComponent implements OnInit {
     //this.GetAllData();
   }
 
-  async filterFormSubmit() {    
+  async filterFormSubmit() {
     if (this.filterModel.Action == "0") {
       this.toastrService.error('Please select Certificate Type');
       return;
@@ -250,7 +250,7 @@ export class BterResultReportsComponent implements OnInit {
         case "Appeared-Passesd-Statistics-Institute-wise":
           response = await this.reportService.DownloadAppearedPassedInstitutewise(this.filterModel);
           break;
-          // vivek 
+        // vivek 
         case "Exam-Result-Student-Statics-report":
           await this.GetExamResultStudentStaticsReport();
           break;
@@ -265,13 +265,13 @@ export class BterResultReportsComponent implements OnInit {
           await this.GetExamWiseStreamPapersreport();
           break;
         case "Student-All-Marks-Report":
-          
+
           await this.GetStudentAllMarksReport();
           break;
         //case "Appeared-Passesd-Statistics":
         //  response = await this.reportService.AppearedPassedStatisticsReportDownload(this.filterModel);
         //  return;
-          
+
         default:
           this.toastrService.warning("Unknown report type selected.");
           return;
@@ -291,7 +291,7 @@ export class BterResultReportsComponent implements OnInit {
 
     } catch (ex) {
       console.error(ex);
-    } 
+    }
   }
 
 
@@ -408,7 +408,7 @@ export class BterResultReportsComponent implements OnInit {
       await this.reportService.GetSessionalFailStudentReport(this.searchRequest).then((response: any) => {
         const data = JSON.parse(JSON.stringify(response));
         this.SessionalStudentFailReportList = data.Data;
-        
+
         this.exportToExcelSessional();
         if (this.SessionalStudentFailReportList.length > 0) {
           const firstRecord = this.SessionalStudentFailReportList[0];
@@ -435,7 +435,7 @@ export class BterResultReportsComponent implements OnInit {
   }
 
   async GetAllInstituteStudentReportData() {
-   
+
     let requestData: any = {
       AcademicYearID: this.ssoLoginUser.FinancialYearID,
       Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
@@ -458,7 +458,7 @@ export class BterResultReportsComponent implements OnInit {
             this.totalRecords = this.CollegesWiseReportsModellList.length;
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
             this.updateTable();
-            console.log('CollegesWiseReportsModellList ===>',this.CollegesWiseReportsModellList)
+            console.log('CollegesWiseReportsModellList ===>', this.CollegesWiseReportsModellList)
           }
         }, (error: any) => console.error(error));
     } catch (ex) {
@@ -481,7 +481,7 @@ export class BterResultReportsComponent implements OnInit {
     }));
 
     this.displayedColumns = this.columnSchema.map(col => col.key);
-}
+  }
 
   updateTable(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -520,7 +520,7 @@ export class BterResultReportsComponent implements OnInit {
       SemesterID: this.filterModel.SemesterID,
       DepartmentID: this.ssoLoginUser.DepartmentID,
       //Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      Eng_NonEng: this.ssoLoginUser.Eng_NonEng, 
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
       EndTermID: this.ssoLoginUser.EndTermID
     }
     try {
@@ -532,7 +532,7 @@ export class BterResultReportsComponent implements OnInit {
             this.ExamResultStudentStaticsList = data['Data'];
             this.exportToExcelExamResultStudentStaticsReport();
             this.dataSource = new MatTableDataSource(this.ExamResultStudentStaticsList);
-           
+
             console.log('ExamResultStudentStaticsReport ===>', this.ExamResultStudentStaticsList)
           }
         }, (error: any) => console.error(error));
@@ -546,10 +546,10 @@ export class BterResultReportsComponent implements OnInit {
   exportToExcelExamResultStudentStaticsReport(): void {
     const wantedColumns =
       ['SrNo', 'EnrollmentNo', 'Division', 'DiplomaFinalResult', 'EndTermSem1', 'EndTermSem2', 'EndTermSem3', 'EndTermSem4', 'EndTermSem5', 'EndTermSem6', 'EarnedCreditsSem1',
- 'EarnedCreditsSem2', 'EarnedCreditsSem3', 'EarnedCreditsSem4', 'EarnedCreditsSem5', 'EarnedCreditsSem6', 'PointsSecuredSem1', 'PointsSecuredSem2', 'PointsSecuredSem3', 'PointsSecuredSem4',
- 'PointsSecuredSem5', 'PointsSecuredSem6', 'GradePointSem1', 'GradePointSem2', 'GradePointSem3', 'GradePointSem4', 'GradePointSem5', 'GradePointSem6', 'SGPASem1', 'SGPASem2',
- 'SGPASem3', 'SGPASem4', 'SGPASem5', 'SGPASem6', 'CGPASem1', 'CGPASem2', 'CGPASem3', 'CGPASem4', 'CGPASem5', 'CGPASem6', 'ResultSem1', 'ResultSem2', 'ResultSem3', 'ResultSem4', 'ResultSem5', 'ResultSem6'
- ];
+        'EarnedCreditsSem2', 'EarnedCreditsSem3', 'EarnedCreditsSem4', 'EarnedCreditsSem5', 'EarnedCreditsSem6', 'PointsSecuredSem1', 'PointsSecuredSem2', 'PointsSecuredSem3', 'PointsSecuredSem4',
+        'PointsSecuredSem5', 'PointsSecuredSem6', 'GradePointSem1', 'GradePointSem2', 'GradePointSem3', 'GradePointSem4', 'GradePointSem5', 'GradePointSem6', 'SGPASem1', 'SGPASem2',
+        'SGPASem3', 'SGPASem4', 'SGPASem5', 'SGPASem6', 'CGPASem1', 'CGPASem2', 'CGPASem3', 'CGPASem4', 'CGPASem5', 'CGPASem6', 'ResultSem1', 'ResultSem2', 'ResultSem3', 'ResultSem4', 'ResultSem5', 'ResultSem6'
+      ];
 
     const exportData = this.ExamResultStudentStaticsList.map((row: any, index: number) => {
       const filteredRow: any = {};
@@ -586,7 +586,7 @@ export class BterResultReportsComponent implements OnInit {
       SemesterID: this.filterModel.SemesterID,
       DepartmentID: this.ssoLoginUser.DepartmentID,
       //Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      Eng_NonEng: this.ssoLoginUser.Eng_NonEng, 
+      Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
       EndTermID: this.ssoLoginUser.EndTermID
     }
     try {
@@ -656,7 +656,7 @@ export class BterResultReportsComponent implements OnInit {
       SchemeID: this.filterModel.SchemeID,
       FileNo1: this.filterModel.FileNo1,
       FileNo2: this.filterModel.FileNo2,
-      FileDate: this.filterModel.FileDate  
+      FileDate: this.filterModel.FileDate
     }
 
     this.reportService.getResultAppearedPassedStatisticsReport(request)
@@ -699,7 +699,7 @@ export class BterResultReportsComponent implements OnInit {
       SchemeID: this.filterModel.SchemeID,
       FileNo1: this.filterModel.FileNo1,
       FileNo2: this.filterModel.FileNo2,
-      FileDate: this.filterModel.FileDate      
+      FileDate: this.filterModel.FileDate
     }
     try {
       await this.reportService.GetExamWiseStreamPapersreport(request)
@@ -715,12 +715,12 @@ export class BterResultReportsComponent implements OnInit {
         }, (error: any) => console.error(error));
     } catch (ex) {
       console.log(ex);
-    } 
+    }
   }
 
   exportToExcelExamWiseStreamPapersReport(): void {
     const wantedColumns =
-      ['SrNo', 'SubjectCode', 'SemesterID','StreamSubjectcode','SubjectName','Credit','StreamName','StreamCode','AvMax','AvMaxi_Org','AvMaxi','PMax','XMaxi','Q','N_Student','N_Student_Paper' ];
+      ['SrNo', 'SubjectCode', 'SemesterID', 'StreamSubjectcode', 'SubjectName', 'Credit', 'StreamName', 'StreamCode', 'AvMax', 'AvMaxi_Org', 'AvMaxi', 'PMax', 'XMaxi', 'Q', 'N_Student', 'N_Student_Paper'];
 
     const exportData = this.ExamWiseStreamPapersrList.map((row: any, index: number) => {
       const filteredRow: any = {};
@@ -759,7 +759,7 @@ export class BterResultReportsComponent implements OnInit {
       EndTermID: this.ssoLoginUser.EndTermID,
       SemesterID: this.filterModel.SemesterID,
       SchemeID: this.filterModel.SchemeID,
-      
+
     }
     try {
       await this.reportService.GetStudentAllMarksReport(request)
@@ -779,39 +779,82 @@ export class BterResultReportsComponent implements OnInit {
   }
 
 
+  // exportToExcelStudentAllMarksReport(): void {
+
+  //   const wantedColumns =
+  //     ['SrNo', 'RollNo', 'Institute', 'StudentName', 'Stream', '6001_Th', '6001_IA', '6002_Th', '6002_IA', '6003_Th', '6003_IA', '6004_Th', '6004_IA', '6005_Th',
+  //       '6005_Pr', '6005_IA', '6006_Pr', '6006_IA', '6007_Pr', '6007_IA', '6008_Pr', '6008_IA', '6009_Pr', '6009_IA', '6010_Pr', '6010_IA', '6011_Pr', '6011_IA'];
+
+  //   const exportData = this.StudentAllMarksReport.map((row: any, index: number) => {
+  //     const filteredRow: any = {};
+  //     wantedColumns.forEach(col => {
+  //       filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+  //     });
+  //     return filteredRow;
+  //   });
+
+  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+  //   const colWidths = wantedColumns.map(col => {
+  //     const maxLength = Math.max(
+  //       col.length,
+  //       ...exportData.map(row =>
+  //         row[col] ? row[col].toString().length : 0
+  //       )
+  //     );
+  //     return { wch: maxLength + 2 };
+  //   });
+  //   ws['!cols'] = colWidths;
+
+  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, 'Student All Marks');
+  //   const todayDate = new Date().toISOString().split('T')[0];
+
+  //   const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+  //   XLSX.writeFile(wb, `Student_All_Marks_Report_${timestamp}.xlsx`);
+  // }
+
   exportToExcelStudentAllMarksReport(): void {
-    debugger
-    const wantedColumns =
-      ['SrNo', 'RollNo', 'Institute', 'StudentName', 'Stream', '6001_Th', '6001_IA', '6002_Th', '6002_IA', '6003_Th', '6003_IA', '6004_Th', '6004_IA', '6005_Th',
-      '6005_Pr','6005_IA','6006_Pr','6006_IA','6007_Pr','6007_IA','6008_Pr','6008_IA','6009_Pr','6009_IA','6010_Pr','6010_IA','6011_Pr','6011_IA' ];
+    if (!this.StudentAllMarksReport || this.StudentAllMarksReport.length === 0) return;
+
+    // Fixed columns
+    const fixedColumns = ['SrNo', 'RollNo', 'Institute', 'StudentName', 'Stream'];
+
+    // Get dynamic subject columns from first row
+    const dynamicColumns = Object.keys(this.StudentAllMarksReport[0])
+      .filter(key => !fixedColumns.includes(key));
+
+    // Final columns
+    const wantedColumns = [...fixedColumns, ...dynamicColumns];
 
     const exportData = this.StudentAllMarksReport.map((row: any, index: number) => {
       const filteredRow: any = {};
+
       wantedColumns.forEach(col => {
-        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+        filteredRow[col] = col === 'SrNo' ? index + 1 : (row[col] ?? '');
       });
+
       return filteredRow;
     });
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Auto column width
     const colWidths = wantedColumns.map(col => {
       const maxLength = Math.max(
         col.length,
-        ...exportData.map(row =>
-          row[col] ? row[col].toString().length : 0
-        )
+        ...exportData.map(row => row[col] ? row[col].toString().length : 0)
       );
       return { wch: maxLength + 2 };
     });
+
     ws['!cols'] = colWidths;
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Student All Marks');
-    const todayDate = new Date().toISOString().split('T')[0];
 
-    const fileName = `Student_All_Marks_Report_${todayDate}.xlsx`;
-    XLSX.writeFile(wb, fileName);
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Student_All_Marks_Report_${timestamp}.xlsx`);
   }
 
-  
+
 }
