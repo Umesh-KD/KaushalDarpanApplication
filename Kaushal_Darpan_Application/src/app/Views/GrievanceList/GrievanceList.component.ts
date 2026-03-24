@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { SeatSearchModel, SeatMetrixModel } from '../../Models/SeatMatrixDataModel';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
@@ -76,8 +76,7 @@ export class GrievanceListComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.GrievanceFormGroup = this.formBuilder.group(
-      {
+    this.GrievanceFormGroup = this.formBuilder.group({
         ddlCategoryID: ['', []],
         ddlDepartmentID: ['', []],
         ddlModuleID: ['', []],
@@ -85,9 +84,6 @@ export class GrievanceListComponent implements OnInit {
         ddlFinancialYearID: ['', []],
         ddlAllotmentId: ['', []],
         ddlStatusID: ['', []]
-
-
-
       })
     this.loadDropdownData('FinancialYears');
     this.loadDropdownData('AllotmentType');
@@ -153,119 +149,55 @@ export class GrievanceListComponent implements OnInit {
       this.GetMasterSubDDL();
     }
     else {
+      if(this.sSOLoginDataModel.RoleID === EnumRole.DTETraing) {
+        this.request.DepartmentID = 88;
+      }
       this.request.DepartmentID = 88;
       this.GetMasterSubDDL();
     }
   }
+
   async GetMasterSubDDL() {
-
-    
-
     try {
-
       this.selectedOption = this.request.DepartmentID
-
-      this.loaderService.requestStarted();
-
       await this.commonMasterService.GetSubjectForCitizenSugg(this.selectedOption)
-
         .then((data: any) => {
-
           data = JSON.parse(JSON.stringify(data));
-
           this.SubMasterList = data['Data'];
-
           console.log("QueryFor", this.SubMasterList);
-
         }, (error: any) => console.error(error)
-
         );
-
     }
-
     catch (ex) {
-
       console.log(ex);
-
     }
-
-    finally {
-
-      setTimeout(() => {
-
-        this.loaderService.requestEnded();
-
-      }, 200);
-
-    }
-
   }
 
 
   async GetStatusForGrivience() {
-
     this.commonMasterService.GetDDl_StatusForGrivience().then((data: any) => {
-
       this.StatusList = data['Data'];
-
     });
-
   }
 
-
- 
-
-
   async GetMaterData() {
-    
-    
-
     try {
-
       this.loaderService.requestStarted();
-
       this.SearchRequest.DepartmentID = this.request.DepartmentID;
-
       this.SearchRequest.CategoryID = this.request.CategoryID;
-
       this.SearchRequest.ModuleID = this.request.ModuleID;
-
       this.SearchRequest.StatusID = this.request.StatusID;
-
       this.SearchRequest.CreatedBy = 0;
-
       await this._GrievanceService.GetAllData(this.SearchRequest)
-
         .then((data: any) => {
-
           data = JSON.parse(JSON.stringify(data));
-
-         
-
           this.GrivienceList = data['Data'];
-
           console.log(this.GrivienceList,'RemarkData');
-
         }, error => console.error(error));
-
     }
-
     catch (Ex) {
-
       console.log(Ex);
-
     }
-
-    finally {
-
-      setTimeout(() => {
-
-        this.loaderService.requestEnded();
-
-      }, 200);
-
-    }
-
   }
 
 
