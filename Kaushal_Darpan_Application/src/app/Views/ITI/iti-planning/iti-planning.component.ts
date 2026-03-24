@@ -987,19 +987,19 @@ export class ItiPlanningComponent {
       }
 
 
-      //if (this.request.InstituteManagementId == 5) {
-      //  this.AddressFormGroup.controls['AmountAvailable'].setValidators(Validators.required)
-      //  this.AddressFormGroup.controls['AmountRequired'].setValidators(Validators.required)
+      if (this.request.InstituteManagementId == 5) {
+        this.AddressFormGroup.controls['AmountAvailable'].setValidators(Validators.required)
+        this.AddressFormGroup.controls['AmountRequired'].setValidators(Validators.required)
 
 
 
-      //} else {
-      //  this.AddressFormGroup.controls['AmountAvailable'].clearValidators()
-      //  this.AddressFormGroup.controls['AmountRequired'].clearValidators()
-      //}
+      } else {
+        this.AddressFormGroup.controls['AmountAvailable'].clearValidators()
+        this.AddressFormGroup.controls['AmountRequired'].clearValidators()
+      }
 
-      //this.AddressFormGroup.controls['AmountAvailable'].updateValueAndValidity()
-      //this.AddressFormGroup.controls['AmountRequired'].updateValueAndValidity()
+      this.AddressFormGroup.controls['AmountAvailable'].updateValueAndValidity()
+      this.AddressFormGroup.controls['AmountRequired'].updateValueAndValidity()
       if (this.request.InstituteManagementId != 5) {
         this.request.IsCourt = false
         this.request.AmountAvailable = ''
