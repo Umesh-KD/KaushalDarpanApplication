@@ -1599,7 +1599,7 @@ const routes: Routes = [
 
 
       { path: 'Add-Nodal-User', loadChildren: () => import('./Views/ITI/iti-Add-Nodel-User/iti-Add-Nodel-User.module').then(m => m.itiAddNodelUserModule) },
-      { path: 'Nodal-User-List', loadChildren: () => import('./Views/ITI/iti-Nodel-User-List/iti-Nodel-User-List.module').then(m => m.itiNodelUserListModule), title: 'Admin Sub User' },
+      { path: 'Nodal-User-List', loadChildren: () => import('./Views/ITI/iti-Nodel-User-List/iti-Nodel-User-List.module').then(m => m.itiNodelUserListModule), title: 'Nodal User List' },
 
 
 

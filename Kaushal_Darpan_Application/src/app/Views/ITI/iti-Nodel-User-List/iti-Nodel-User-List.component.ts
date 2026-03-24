@@ -44,6 +44,7 @@ export class itiNodelUserListComponent {
   public requestSSoApi = new CommonVerifierApiDataModel();
   public Isverifed: boolean = false
   public _enumrole = EnumRole
+  public ActiveStatus: number = 0;
   constructor(private commonMasterService: CommonFunctionService,
     private adminUserService: ITIAdminUserService,
     private formBuilder: FormBuilder,
@@ -111,59 +112,7 @@ export class itiNodelUserListComponent {
 
   }
 
-  //async ViewandUpdate(content: any, UserID: number, UserAdditionID: number, ProfileID: number,InstituteID:number,RoleID:number=0) {
-  //  debugger
-  //  this.UserID = UserID;
-  //  this.UserAdditionID = UserAdditionID;
-  //  this.ProfileID = ProfileID;
-  //  this.request.ProfileID = ProfileID;
-  //  this.request.UserAdditionID = ProfileID;
-  //  this.request.InstituteID = InstituteID
-  //  this.request.RoleID = RoleID
-
-  //  if (this.UserID > 0 || this.UserAdditionID > 0 || this.ProfileID > 0) {
-  //    await this.GetById();
-  //    this.IsView = true;
-  //  }
-  //  else {
-  //    this.IsView = false;
-  //  }
-
-  //  this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
-
-  //}
-
-  //async GetById() {
-  //  try {
-  //    ;
-  //    this.loaderService.requestStarted();
-  //    await this.adminUserService.GetById(this.UserID, this.UserAdditionID, this.ProfileID)
-
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        console.log(data, "rrrrrrrr");
-  //        ;
-  //        //this.request = data['Data'];
-  //        this.request.Name = data['Data']['Name'];
-  //        this.request.MobileNo = data['Data']['MobileNo'];
-  //        this.request.SSOID = data['Data']["SSOID"];
-  //        this.request.Email = data['Data']["Email"];
-
-  //        console.log(this.request.InstituteID)
-
-  //      }, (error: any) => console.error(error)
-  //      );
-  //  }
-  //  catch (ex) {
-  //    console.log(ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
+  
  
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
     this.Isverifed = false
@@ -203,7 +152,6 @@ export class itiNodelUserListComponent {
             this.request.SSOID = parsedData.SSOID;
             this.request.Email = parsedData.mailPersonal;
             this.Isverifed = true
-
           }
           else {
             this.toastr.error("Record Not Found");
@@ -220,9 +168,26 @@ export class itiNodelUserListComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
-
-
   }
 
+
+  async Delete(admi: any) {
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequest.UserID = admi;
+      this.searchRequest.ActiveStatus = false;
+      debugger
+      this.loaderService.requestStarted();
+      await this.adminUserService.NodalUserdataDelete(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+      }, (error: any) => console.error(error))
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }
