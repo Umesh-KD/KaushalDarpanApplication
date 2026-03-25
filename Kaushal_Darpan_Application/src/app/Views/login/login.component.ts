@@ -498,6 +498,7 @@ export class LoginComponent implements OnInit {
   {
     this.sSOLoginDataModel.InstituteID = item.InstituteID;
     this.sSOLoginDataModel.InstituteName = item.CollegeName;
+    this.sSOLoginDataModel.SelectedInsituteID = item.InstituteID;
     localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
     this.CloseUserDepartmentModal();
     this.routers.navigate(['/dashboard']);

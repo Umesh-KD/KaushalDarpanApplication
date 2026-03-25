@@ -319,6 +319,7 @@ export class MasterLayoutComponent implements OnInit {
       this.requestRoleList.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.requestRoleList.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.requestRoleList.InstituteId = this.sSOLoginDataModel.InstituteID;
+      this.requestRoleList.SelectedInsituteID = this.sSOLoginDataModel.SelectedInsituteID;
 
       await this.menuService.GetUserRoleList(this.requestRoleList)
         .then((RoleData: any) => {
