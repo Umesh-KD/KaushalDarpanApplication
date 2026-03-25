@@ -97,22 +97,12 @@
               </label>
               <select id="ddlConter" class="form-select" [(ngModel)]="adminRequest.RoleID" formControlName="RoleID">
                 <option value="0">--Select--</option>
-                <option value="20">ITI Principal</option>
-
+                <option value="253">Exam Incharge SCVT</option>
+                <option value="254">Exam Incharge NCVT</option>
+                <option value="255">Admission Incharge</option>
               </select>
             </div>
 
-            <div class="">
-              <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
-                ITI<span class="StarMarking">*</span>
-              </label>
-              <select id="ddlConter" class="form-select" [(ngModel)]="adminRequest.InstituteID" formControlName="InstituteID">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of CollegeList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-              
-
-              </select>
-            </div>
 
 
 

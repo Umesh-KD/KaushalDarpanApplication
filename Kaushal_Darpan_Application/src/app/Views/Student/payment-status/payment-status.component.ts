@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 import { ReportService } from '../../../Services/Report/report.service';
 import { EnumDepartment, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
@@ -32,15 +32,21 @@ export class PaymentStatusComponent implements OnInit {
   public TransctionDate: string = '';
   public TransId: number = 0;
   public DepartmentID: number = 0;
-  constructor(private router: ActivatedRoute,
+  public IsReval: boolean = false;
+  constructor(
+    private router: ActivatedRoute,
     private emitraPaymentService: EmitraPaymentService,
-    private loaderService: LoaderService, private reportService: ReportService,
-    private toastrService: ToastrService, private appsettingConfig: AppsettingService,
-    private http: HttpClient) { }
+    private loaderService: LoaderService, 
+    private reportService: ReportService,
+    private toastrService: ToastrService, 
+    private appsettingConfig: AppsettingService,
+    private http: HttpClient,
+    private route: Router
+  ) { }
 
-  async ngOnInit()
-  {
+  async ngOnInit(){
     this.PRNNo = this.router.snapshot.queryParamMap.get('TransID')?.toString();
+    this.IsReval = this.route.url.includes('PaymentStatus-reval');
     console.log(this.PRNNo);
     await this.GetEmitraTransactionDetails();
   }
@@ -82,8 +88,10 @@ export class PaymentStatusComponent implements OnInit {
     if (this.DepartmentID == EnumDepartment.ITI) {
       this.GetITIStudentFeeReceipt()
     }
-    else if (this.DepartmentID == EnumDepartment.BTER) {
+    else if (this.DepartmentID == EnumDepartment.BTER && this.IsReval == false) {
       this.GetStudentFeeReceipt()
+    } else if(this.DepartmentID == EnumDepartment.BTER && this.IsReval == true) {
+      await this.GetStudentRevalFeePaymentReceipt();
     }
   }
 
@@ -140,6 +148,32 @@ export class PaymentStatusComponent implements OnInit {
       }, 200);
     }
   }
+  async GetStudentRevalFeePaymentReceipt() {
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.GetStudentRevalFeePaymentReceipt(this.TransId)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          if (data.State == EnumStatus.Success) {
+            this.DownloadFile_RevalReceipt(data.Data);
+          }
+          else {
+            this.toastrService.error(data.ErrorMessage)
+            //    data.ErrorMessage
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   DownloadFile(FileName: string, DownloadfileName: any): void {
 
@@ -160,5 +194,18 @@ export class PaymentStatusComponent implements OnInit {
     return `file_${timestamp}.${extension}`;
   }
 
+  DownloadFile_RevalReceipt(FileName: string): void {
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
 
+      downloadLink.href = url;
+      downloadLink.download = FileName;
+
+      downloadLink.click();
+
+      window.URL.revokeObjectURL(url);
+    });
+  }
 }

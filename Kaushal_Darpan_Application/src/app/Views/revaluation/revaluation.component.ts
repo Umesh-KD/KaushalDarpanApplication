@@ -12,13 +12,14 @@ import { RevaluationModel, StudentDetailsByRollNoModel } from '../../Models/Reva
 import { RevaluationService } from '../../Services/Revaluation/revaluation.service';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { enumExamStudentStatus, EnumStatus } from '../../Common/GlobalConstants';
+import { enumExamStudentStatus, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { MatStepper } from '@angular/material/stepper';
 import { EmitraRequestDetails, StudentFeesTransactionItems, TransactionStatusDataModel } from '../../Models/PaymentDataModel';
 import { EmitraPaymentService } from '../../Services/EmitraPayment/emitra-payment.service';
 import { StudentDetailsModel } from '../../Models/StudentDetailsModel';
 import { DateConfigurationModel } from '../../Models/DateConfigurationDataModels';
 import { DateConfigService } from '../../Services/DateConfiguration/date-configuration.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-revaluation',
@@ -39,7 +40,7 @@ export class RevaluationComponent implements AfterViewInit {
   public dateConfiguration = new DateConfigurationModel()
   isStep2Disabled: boolean=false;
   isStep3Disabled: boolean= false;
-
+  public PDFURL: string = "";
 
   public transactionStatusDataModel = new TransactionStatusDataModel();
   public totalAmount: number = 0;
@@ -55,7 +56,8 @@ export class RevaluationComponent implements AfterViewInit {
   ErrorMessage: any;
   toastrService: any;
 
-  constructor(private commonFunctionService: CommonFunctionService,
+  constructor(
+    private commonFunctionService: CommonFunctionService,
     private revaluationService: RevaluationService,
     private loaderService: LoaderService,
     private modalService: NgbModal,
@@ -69,11 +71,11 @@ export class RevaluationComponent implements AfterViewInit {
     private emitraPaymentService: EmitraPaymentService,
     private cdr: ChangeDetectorRef,
     private dateMasterService: DateConfigService,
-    private Router: Router
+    private Router: Router,
   ) { }
 
   ngAfterViewInit(): void {
-
+    this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
   }
 
 
@@ -117,15 +119,14 @@ export class RevaluationComponent implements AfterViewInit {
 
   async GetRevalation(stepper: MatStepper, row: any): Promise<void> {
     try {
-      console.log(row, "dadadadadda")
-     
+      debugger
+      // for getting emitra service id 
+      row.IsKiosk = this.sSOLoginDataModel.IsKiosk
+
       await this.revaluationService.GetRevalation(row).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.state !== EnumStatus.Error) {
-
           this.GetStudentDetails = data['Data']
-          console.log(this.GetStudentDetails, "deeeemoooon")
-          console.log(data, 'hhhhh');
           this.switchSection('payment');
         } else {
           this.toastr.error('Invalid Roll Number or Date of Birth.');
@@ -165,8 +166,6 @@ export class RevaluationComponent implements AfterViewInit {
     }
   }
 
-
-
   async MultiPayment() {
 
     this.totalAmount = 0;
@@ -184,14 +183,6 @@ export class RevaluationComponent implements AfterViewInit {
           } as StudentFeesTransactionItems);
 
       });
-
-      //this.GetStudentDetails
-      //  .filter(f => f.IsSelected)
-      //  .map((student, index) => {
-      //    if (index === 0) {
-      //      this.emitraRequest.SsoID = student.SSOID;
-      //    }
-      //  });
 
       if (this.totalAmount > 0) {
         var message = "You are about to pay " + this.totalAmount + " for your fee.Would you like to proceed ? ";
@@ -219,32 +210,75 @@ export class RevaluationComponent implements AfterViewInit {
             this.emitraRequest.IsKiosk = false;
             //this.GetDateDataList();
             this.loaderService.requestStarted();
-            try {
-              await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
-                .then(async (data: any) => {
-                  data = JSON.parse(JSON.stringify(data));
-                  this.State = data['State'];
-                  this.Message = data['SuccessMessage'];
-                  this.ErrorMessage = data['ErrorMessage'];
-                  if (data.State == EnumStatus.Success) {
-                    await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
-                  }
-                  else {
-                    this.toastrService.error(this.ErrorMessage)
-                  }
-                })
-            }
-            catch (ex) { console.log(ex) }
-            finally {
-              setTimeout(() => {
-                this.loaderService.requestEnded();
-              }, 200);
+
+            // for payment by emitra 
+            if(this.sSOLoginDataModel.IsKiosk == true) {
+              this.emitraRequest.IsKiosk = true;
+              this.emitraRequest.FormCommision = this.studentDetailsModel.FormCommision;
+              try {
+                await this.emitraPaymentService.RevalFeePayment_Kiosk(this.emitraRequest)
+                  .then(async (data: any) => {
+                    data = JSON.parse(JSON.stringify(data));
+                    this.PDFURL = data['PDFURL'];
+                    if (data.State == EnumStatus.Success) {
+                      this.sweetAlert2.ConfirmationSuccess("Thank you! Your payment was successful.", async (result: any) => {
+                        if (result.isConfirmed) {
+                          try {
+                            //sms code missiog
+                            //await this.SendApplicationMessage();
+                            window.open(this.PDFURL, '_blank');
+                            setTimeout(function () { window.location.reload(); }, 200)
+                          }
+                          catch (ex) {
+                            console.log(ex)
+                          }
+                        }
+                        else {
+                          let displayMessage = data.Message ?? data.ErrorMessage;
+                          this.toastrService.error(displayMessage);
+                        }
+                      });
+                      //open
+                    }
+                    else {
+                      let displayMessage = data.Message ?? data.ErrorMessage;
+                      this.toastrService.error(displayMessage)
+                    }
+                  })
+              }
+              catch (ex) { console.log(ex) }
+              finally {
+                setTimeout(() => {
+                  this.loaderService.requestEnded();
+                }, 200);
+              }
+            } 
+            // for payment by other then emitra
+            else {
+              try {
+                await this.emitraPaymentService.RevalFeePayment_Student(this.emitraRequest)
+                  .then(async (data: any) => {
+                    data = JSON.parse(JSON.stringify(data));
+                    if (data.State == EnumStatus.Success) {
+                      await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+                    }
+                    else {
+                      this.toastrService.error(data.ErrorMessage)
+                    }
+                  })
+              }
+              catch (ex) { console.log(ex) }
+              finally {
+                setTimeout(() => {
+                  this.loaderService.requestEnded();
+                }, 200);
+              }
             }
           }
         });
       }
       else {
-        this.toastrService.warning('Payment amount is greater then 0')
+        this.toastrService.warning('Payment amount should be greater then 0')
       }
     }
     else {
@@ -282,11 +316,7 @@ export class RevaluationComponent implements AfterViewInit {
     form.submit();
     document.body.removeChild(form);
   }
-
-
-
-
-
+  
   proceedToPayment(): void {
     this.switchSection('payment');
   }

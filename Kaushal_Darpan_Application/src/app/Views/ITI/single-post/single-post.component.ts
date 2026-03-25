@@ -23,6 +23,10 @@ export class SinglePostComponent implements OnInit {
   public CampusPostDetail: any = null;
   public hasShortlisted:boolean=false
   public PlacementCompanyList: any[] = [];
+  public reqList: any[] = [];
+  public eligList: any[] = [];
+  public jobList: any[] = [];
+  public rows: any[] = [];
   public searchRequest = new CampusDetailsWebSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   // --- new changes ---
@@ -46,8 +50,27 @@ export class SinglePostComponent implements OnInit {
       await this.GetAllPost();
     }
     //await this.GetAllPlacementCompany();
+    this.prepareRows();
   }
 
+  prepareRows() {
+    const req = this.CampusPostDetail.Requirement || '';
+    const elig = this.CampusPostDetail.Eligibility || '';
+    const job = this.CampusPostDetail.JobDescription || '';
+  
+    this.reqList = req.split('<br/><br/>').filter((x:any) => x.trim());
+    this.eligList = elig.split('<br/><br/>').filter((x:any) => x.trim());
+    this.jobList = job.split('<br/><br/>').filter((x:any) => x.trim());
+  
+    // make equal length (important)
+    const maxLength = Math.max(this.reqList.length, this.eligList.length, this.jobList.length);
+  
+    this.rows = Array.from({ length: maxLength }, (_, i) => ({
+      requirement: this.reqList[i] || '',
+      eligibility: this.eligList[i] || '',
+      job: this.jobList[i] || ''
+    }));
+  }
   // get detail by id
   async GetAllPost() {
     

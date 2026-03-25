@@ -183,8 +183,8 @@ export class ItiCampusPostComponent implements OnInit {
       // ddlCampusType: [{ value: 'Institute Level Campus', disabled: true },Validators.required],
       ddlCampusType: ['',Validators.required],
       divisionId: ['0'],
-      // instituteId:[{ value: '0', disabled: true }],
-      instituteId:['0'],
+      instituteId:[{ value: '0', disabled: true }],
+      // instituteId:['0'],
       ddlInterviewType: [''],
       ddlEligibleInstitutes: ['', [DropdownValidators]],
       // ddlNoOfInterviewRound: [''],
@@ -1172,7 +1172,7 @@ debugger
      this.request_EligibilityCriteriaModel.divisionId=0;
     //  this.BranchList=[];
    } else {
-     this.request_EligibilityCriteriaModel.InstituteId=0;
+     this.request_EligibilityCriteriaModel.InstituteId=this.sSOLoginDataModel.InstituteID;
     //  this.BranchList=[];
    }
   }

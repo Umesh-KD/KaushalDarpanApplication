@@ -76,28 +76,30 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr.No.</th>
-            <th class="text-left">ITI Name</th>
-            <th class="text-left">Principal Name</th>
+            <th class="text-left"> Name</th>
             <th class="text-left">SSOID</th>
             <th class="text-left">Email</th>
+            <th class="text-left">Role</th>
             <th class="text-left">Mobile Number</th>
-            <!--<th class="text-center">Action</th>-->
+            <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let Admi of AdminUserList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+          <tr *ngFor="let Admi of AdminUserList | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
-            <td>{{Admi.CollegeName}}</td>
             <td>{{Admi.Name}}</td>
             <td>{{Admi.SSOID}}</td>
             <td>{{Admi.Email}}</td>
-            <!--<td>{{maskMobileNumber(Admi.MobileNo)}}</td>-->
+            <td>{{Admi.roleName}}</td>
             <td>{{Admi.MobileNo}}</td>
-            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+            <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,Admi.UserID,Admi.UserAdditionID,Admi.ProfileID,Admi.InstituteID,Admi.RoleID)" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a (click)="Delete(Admi.UserID)" target="_blank" title="Delete">
+                  <i class="ti ti-trash"></i>
+                </a>
               </div>
-            </td>-->
+            </td>
+
           </tr>
         </tbody>
       </table>

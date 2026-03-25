@@ -181,4 +181,20 @@ export class EmitraPaymentService
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async RevalFeePayment_Student(request: EmitraRequestDetails) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/RevalFeePayment_Student", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async RevalFeePayment_Kiosk(request: EmitraRequestDetails) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/RevalFeePayment_Kiosk", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

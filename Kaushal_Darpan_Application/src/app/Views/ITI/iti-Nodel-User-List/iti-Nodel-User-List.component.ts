@@ -181,6 +181,7 @@ export class itiNodelUserListComponent {
       await this.adminUserService.NodalUserdataDelete(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
       }, (error: any) => console.error(error))
+      this.GetAllData();
     } catch (error) {
       console.error(error);
     } finally {

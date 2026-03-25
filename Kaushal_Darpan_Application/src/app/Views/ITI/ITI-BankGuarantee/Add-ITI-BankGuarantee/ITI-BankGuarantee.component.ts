@@ -109,30 +109,82 @@ export class ITIBankGuaranteeComponent implements OnInit {
     
   }
 
+  //calculateDuration() {
+  //  const issueDate = this.bankGuarantee.get('dateOfIssue')?.value;
+  //  const maturityDate = this.bankGuarantee.get('maturityDate')?.value;
+
+  //  console.log('From date====>', issueDate)
+  //  console.log('TO date====>',maturityDate)
+
+  //  if (issueDate && maturityDate) {
+  //    const d1 = new Date(issueDate);
+  //    const d2 = new Date(maturityDate);
+
+  //    const diffTime = d2.getTime() - d1.getTime();
+
+  //    if (diffTime < 0) {
+  //      alert('Maturity date should be greater than Date of Issue');
+  //      this.bankGuarantee.patchValue({ duration: '' });
+  //      return;
+  //    }
+
+  //    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  //    this.bankGuarantee.patchValue({
+  //      //duration: diffDays + ' Days'
+  //      duration: diffDays
+  //    });
+  //  }
+  //}
+
+
   calculateDuration() {
     const issueDate = this.bankGuarantee.get('dateOfIssue')?.value;
     const maturityDate = this.bankGuarantee.get('maturityDate')?.value;
-
-    console.log('From date====>', issueDate)
-    console.log('TO date====>',maturityDate)
 
     if (issueDate && maturityDate) {
       const d1 = new Date(issueDate);
       const d2 = new Date(maturityDate);
 
-      const diffTime = d2.getTime() - d1.getTime();
-
-      if (diffTime < 0) {
+      if (d2 < d1) {
         alert('Maturity date should be greater than Date of Issue');
         this.bankGuarantee.patchValue({ duration: '' });
         return;
       }
 
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      let years = d2.getFullYear() - d1.getFullYear();
+      let months = d2.getMonth() - d1.getMonth();
+      let days = d2.getDate() - d1.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonth = new Date(d2.getFullYear(), d2.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      let result = '';
+
+      if (years > 0) {
+        result += years + (years === 1 ? ' Year ' : ' Years ');
+      }
+
+      if (months > 0) {
+        result += months + (months === 1 ? ' Month ' : ' Months ');
+      }
+
+      if (days > 0) {
+        result += days + (days === 1 ? ' Day' : ' Days');
+      }
+
+      result = result.trim();
 
       this.bankGuarantee.patchValue({
-        //duration: diffDays + ' Days'
-        duration: diffDays
+        duration: result
       });
     }
   }

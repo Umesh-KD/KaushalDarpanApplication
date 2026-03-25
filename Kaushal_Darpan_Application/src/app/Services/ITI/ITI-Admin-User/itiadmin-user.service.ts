@@ -105,5 +105,12 @@ export class ITIAdminUserService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async adminUserDataDelete(request: AdminUserSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/adminUserDataDelete`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

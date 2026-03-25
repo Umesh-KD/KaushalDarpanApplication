@@ -1896,6 +1896,12 @@ export class ReportService {
       ).toPromise();
   }
 
+  public async GetStudentRevalFeePaymentReceipt(TransactionId: any, StudentExamID: number = 0) {
+    return await this.http.get(this.APIUrl + "/GetStudentRevalFeePaymentReceipt/" + TransactionId + "/" + StudentExamID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 

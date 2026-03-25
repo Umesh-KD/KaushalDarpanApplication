@@ -75,6 +75,8 @@ export class SSOLoginDataModel {
   public ManagementTypeId?:number=0;
   public OfficeName:string='';
   public GuestHouseID?: string = ''
+  public SelectedInsituteID: number = 0;
+
 }
 
 
