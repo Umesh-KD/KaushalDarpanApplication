@@ -39,8 +39,8 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td rowspan="3" valign="top">
+                      <tr *ngFor="let row of rows; let idx=index;">
+                        <!-- <td rowspan="3" valign="top">
                           <div>
                             <b>{{CampusPostDetail.CompanyName}}</b>
                             <p>Post: {{CampusPostDetail.PostNo}}</p>
@@ -48,25 +48,60 @@
                               <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{CampusPostDetail.Logo}}" />
                             </a>
                           </div>
-                        </td>
-                        <td><span [innerHtml]="CampusPostDetail.Requirement"></span></td>
-                        <td><span [innerHtml]="CampusPostDetail.Eligibility"></span></td>
-                        <td><span [innerHtml]="CampusPostDetail.JobDescription"></span></td>
-                        <td>{{CampusPostDetail.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{CampusPostDetail.CampusAddress}}</td>
-                        <td>
-                          <!--{{CampusPostDetail.CampusVenueLocation|json}}-->
+                        </td> -->
+                         <!-- Company Info -->
+                          <td *ngIf="idx === 0" [attr.rowspan]="rows.length" valign="top">
+                            <div>
+                              <b>{{CampusPostDetail.CompanyName}}</b>
+                              <p>Post: {{CampusPostDetail.PostNo}}</p>
+                              <a [href]="CampusPostDetail.Website" target="_blank">
+                                <img class="img-fluid rounded-circle"
+                                    [src]="appsettingConfig.StaticFileRootPathURL + CampusPostDetail.Logo" />
+                              </a>
+                            </div>
+                          </td>
+<!-- ------------------------------------------------------------------------------------- -->
+                         <!-- Requirement -->
+                          <td [innerHTML]="row.requirement"></td>
+                          <!-- <td><span [innerHtml]="CampusPostDetail.Requirement"></span></td> -->
+<!-- ------------------------------------------------------------------------------------- -->
+                          <!-- Eligibility -->
+                          <td [innerHTML]="row.eligibility"></td>
+                          <!-- <td><span [innerHtml]="CampusPostDetail.Eligibility"></span></td> -->
+<!-- ------------------------------------------------------------------------------------- -->
+                          <!-- Job Description -->
+                          <td [innerHTML]="row.job"></td>
+                          <!-- <td><span [innerHtml]="CampusPostDetail.JobDescription"></span></td>  -->
+<!-- ------------------------------------------------------------------------------------- -->
+                          <td *ngIf="idx === 0" [attr.rowspan]="rows.length" valign="top">
+                            {{CampusPostDetail.CampusFromDate}} <br /> 
+                            <i class="fa fa-map-marker"></i> 
+                            {{CampusPostDetail.CampusAddress}}
+                          </td>
+                        <!-- <td>{{CampusPostDetail.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{CampusPostDetail.CampusAddress}}</td> -->
+ <!-- ------------------------------------------------------------------------------------- -->
+                        <!-- <td >
                           <div>
                             <a [href]="CampusPostDetail.CampusVenueLocation" target="_blank">
                               Get Location
                             </a>
                           </div>
                         </td>
-                        <td>
+                        <td> -->
+                          <td *ngIf="idx === 0" [attr.rowspan]="rows.length">
+                            <div>
+                              <a [href]="CampusPostDetail.CampusVenueLocation" target="_blank">
+                                Get Location
+                              </a>
+                            </div>
+                          </td>
+  <!-- ------------------------------------------------------------------------------------- -->                              
+                        <td *ngIf="idx === 0" [attr.rowspan]="rows.length">                       
                           <a [routerLink]="'/ITIViewplacedStudent'" [queryParams]="{post:CampusPostDetail.PostID,key:2}" class="btn btn-outline-primary btn-sm d-block mb-2" *ngIf="hasShortList==true"><i class="fa fa-eye"></i>&nbsp;First Shortlist Candidates</a>
                           <a [routerLink]="'/ITIViewplacedStudent'" [queryParams]="{post:CampusPostDetail.PostID,key:3}" class="btn btn-outline-primary btn-sm d-block" *ngIf="hasSelected==true"><i class="fa fa-eye"></i>&nbsp;Final Candidates</a>
                         </td>
-                        <td> {{CampusPostDetail.CampusModeType}}</td>
-                        <td>
+                        <td *ngIf="idx === 0" [attr.rowspan]="rows.length"> {{CampusPostDetail.CampusModeType}}</td>
+                        <td *ngIf="idx === 0" [attr.rowspan]="rows.length">
                           <!--{{CampusPostDetail.JobDiscription|json}}-->
                           <!-- <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a> -->
                           <!-- <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{CampusPostDetail.StaticFiles}}/{{CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a> -->
