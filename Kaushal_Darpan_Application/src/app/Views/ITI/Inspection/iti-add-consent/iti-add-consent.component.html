@@ -103,10 +103,10 @@
               <td class="text-left">{{row.DistrictName}}</td>
               <td class="text-left">{{row.InstituteName}}</td>
               <td class="text-left">{{row.TentativeDate | date:'dd-MM-yyyy' }}</td>
-              <td class="text-left">{{row.Amount}}</td>
               <td class="text-left">
                 {{ row.consentTypeID === 1 ? 'Planned (Affiliation)' : (row.consentTypeID === 3 ? 'General Inspection (Planned)' : '') }}
               </td>
+              <td class="text-left">{{row.Amount}}</td>
 
               <td class="text-center">
                 <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">

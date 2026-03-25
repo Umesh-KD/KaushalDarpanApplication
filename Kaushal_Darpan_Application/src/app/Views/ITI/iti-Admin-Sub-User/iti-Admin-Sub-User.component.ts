@@ -312,5 +312,25 @@ export class itiAdminSubUserComponent {
 
   }
 
+  async Delete(admi: any) {
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequest.UserID = admi;
+      this.searchRequest.ActiveStatus = false;
+      debugger
+      this.loaderService.requestStarted();
+      await this.adminUserService.adminUserDataDelete(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+      }, (error: any) => console.error(error))
+      this.GetAllData();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
 }

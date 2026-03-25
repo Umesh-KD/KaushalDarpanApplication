@@ -60,6 +60,7 @@
           <a *ngIf="item.SRC == 'checklist'" [routerLink]="['/ItiCampusPostList']" [queryParams]="{ flag: item.TotalTextHi }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
           <a *ngIf="item.SRC == 'group'" [routerLink]="['/ITIPlacementDashReport/', item.URL]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
           <a *ngIf="item.SRC == 'rule_folder'" [routerLink]="['/ItiCompanyMaster/']" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+          <a *ngIf="item.SRC == 'employement'" [routerLink]="['/student-employement-history/']" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnumRole } from '../../../../Common/GlobalConstants';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'employement-history',
     templateUrl: './employement-history.component.html',
@@ -18,16 +19,20 @@ import { EnumRole } from '../../../../Common/GlobalConstants';
 })
 export class StudentEmployementHistoryComponent implements OnInit {
   public StudEmployementList: StudentEmploymentDetailsModel[] = [];
+  public StudEmployementList_ByID: StudentEmploymentDetailsModel[] = [];
   public Table_SearchText: string = "";
   public searchRequest = new StudentEmploymentDetailsModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
 
   public _EnumRole = EnumRole;
+  modalReference: NgbModalRef | undefined;
 
   constructor(private commonMasterService: CommonFunctionService, private companyMasterService: CompanyMasterService,
     private StudentdetailUpdateService:StudentdetailUpdateService,
-    private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute) {
+    private toastr: ToastrService, private loaderService: LoaderService,
+    private modalService: NgbModal,
+    private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute) {
 
   }
 
@@ -40,7 +45,7 @@ export class StudentEmployementHistoryComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','InstituteID','StreamID','StudentID'
     ];
     const filteredData = this.StudEmployementList.map((item: any) => {
       const filteredItem: any = {};
@@ -60,12 +65,17 @@ export class StudentEmployementHistoryComponent implements OnInit {
   async GetStudentEmployementData() {
     debugger
     try {
+        // initially blank studentid and action 
+        this.searchRequest.Action='';
+        this.searchRequest.StudentID=0;
+
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         if(this._EnumRole.Student== this.sSOLoginDataModel.RoleID){
             this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
         }
         this.searchRequest.InstituteID=this.sSOLoginDataModel.InstituteID;
+        this.searchRequest.RoleID=this.sSOLoginDataModel.RoleID;
         // this.searchRequest.StudentID=this.sSOLoginDataModel.UserID;
 
       this.loaderService.requestStarted();
@@ -85,15 +95,67 @@ export class StudentEmployementHistoryComponent implements OnInit {
     }
   }
 
+  async onStudentEmployementList(model: any, StudentID: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      // this.searchRequestUserProfileStatus.StaffUserID = StaffUserID;
+      // this.searchRequestUserProfileStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      // await this.bterEstablishManagementService.UserProfileStatusHistoryList(this.searchRequestUserProfileStatus)
+      //   .then((data: any) => {
+      //     data = JSON.parse(JSON.stringify(data));
+      //     this.UserProfileStatusHistoryList = data.Data;
+
+
+      //   }, (error: any) => console.error(error))
+
+      // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.StudentID = StudentID;
+      this.searchRequest.InstituteID=this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.RoleID=this.sSOLoginDataModel.RoleID;
+      this.searchRequest.Action="GetAllDataBy_StudID";
+      // this.searchRequest.StudentID=this.sSOLoginDataModel.UserID;
+
+    this.loaderService.requestStarted();
+    await this.StudentdetailUpdateService.GetStudentEmployementData(this.searchRequest).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.StudEmployementList_ByID = data.Data;
+      console.log(this.StudEmployementList_ByID)
+    }, (error: any) => console.error(error))
+
+      console.log(StudentID, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   // get all data
   async ClearSearchData() {
     this.searchRequest.CompanyName = '';
-
+    this.searchRequest.EnrollmentNo='';
     await this.GetStudentEmployementData();
   }
 
 
+  CloseModalEmployementlist() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.StudEmployementList_ByID = [];
+  }
 
+  goToEdit(id: number,flag:number) {
+    this.CloseModalEmployementlist();
+    this.Router.navigate(['/add-student-employement'], {
+      queryParams: { ID: id, key: flag }
+    });
+  }
 
   async DeleteById(ID: number) {
     debugger
@@ -113,6 +175,7 @@ export class StudentEmployementHistoryComponent implements OnInit {
 
                 if (data.State) {
                   this.toastr.success(data.Message)
+                  this.CloseModalEmployementlist();
                   await this.GetStudentEmployementData();
                 }
                 else {

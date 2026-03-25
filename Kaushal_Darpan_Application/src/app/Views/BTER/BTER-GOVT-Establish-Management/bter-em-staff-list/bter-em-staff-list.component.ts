@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffDetailsServicePreviewDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -17,6 +17,7 @@ import { __values } from 'tslib';
 import { ActivatedRoute } from '@angular/router';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
+import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -75,6 +76,7 @@ export class BTEREMStaffListComponent {
   public GenderList: any = [];
   public InstituteMasterDDLList: any[] = [];
   public BugetHeadList:any=[];
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   public isApprove: boolean = false;
   public isModalOpen: boolean = false;
@@ -305,6 +307,7 @@ export class BTEREMStaffListComponent {
   }
 
   exportToExcel(): void {
+    debugger
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','LevelName','OfficeName','PostName','UserID','IsNodal','ProfileStatusID',
@@ -324,6 +327,19 @@ export class BTEREMStaffListComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'StaffListData.xlsx');
   }
+
+  
+  openOTP() {
+    debugger;
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    this.childComponent.OpenOTPPopup();
+
+    this.childComponent.onVerified.subscribe(() => {
+      console.log("otp verified on the page")
+      this.exportToExcel();
+    })
+  }
+
   async ResetControl() {
     this.searchRequest = new BTER_EM_StaffListSearchModel();
     await this.BTER_EM_GetStaffList();

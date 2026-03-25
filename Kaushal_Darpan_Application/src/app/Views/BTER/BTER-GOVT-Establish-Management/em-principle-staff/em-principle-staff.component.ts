@@ -88,6 +88,7 @@ export class EMPrincipleStaffComponent {
   public StaffIDforHostel: number = 0
   public isLoading: boolean = false;
   public isApprove: boolean = false;
+  public BugetHeadList: any= [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -188,6 +189,7 @@ export class EMPrincipleStaffComponent {
 
       DateOfRetirement: [''],
       Remark: [''],
+      BugetHeadID:['',[Validators.required]] 
     });
 
 
@@ -224,6 +226,7 @@ export class EMPrincipleStaffComponent {
     await this.StaffLevelType();
     await this.GetAllData();
     await this.GetOfficeList();
+    await this.GetBudgetList();
 
     await this.GetDesignationMasterData();
     await this.GetCategroyData();
@@ -323,6 +326,27 @@ export class EMPrincipleStaffComponent {
     }
   }
 
+  async GetBudgetList() {
+    debugger;  
+    try {
+      this.loaderService.requestStarted();
+
+        await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.BugetHeadList = data['Data'];
+          console.log(this.BugetHeadList, "BugetHeadList");
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   async refreshValidators() {
     debugger
     if(this.approveRequest.IsEmpWorkingOnDeputationFromOther == false) {

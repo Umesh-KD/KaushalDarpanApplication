@@ -427,8 +427,7 @@ export class CitizenqueryDetailsComponent implements OnInit {
   }
 
   async GetAllData() {
-    try {
-     
+    try {     
       this.searchRequest.InstituteID;
       this.searchRequest.SubjectId;
       this.searchRequest.CommnID;
