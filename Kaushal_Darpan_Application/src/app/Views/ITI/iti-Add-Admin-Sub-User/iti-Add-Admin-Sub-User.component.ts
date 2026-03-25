@@ -31,7 +31,7 @@ export class itiAddAdminSubUserComponent {
   public ScholarshipFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
   
-  public CollegeList: any = [];
+  //public CollegeList: any = [];
   public AdminUserList: any = [];
   public AdminUserFormGroup!: FormGroup;
   public adminRequest = new ITIAdminUserDetailModel()
@@ -52,36 +52,36 @@ export class itiAddAdminSubUserComponent {
         txtUserName: [{ value: '', disabled: true }, Validators.required],
         txtUserEmail: ['', Validators.required],
         RoleID: ['', [DropdownValidators]],
-        InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
+        //InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
         txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
         txtMobileNo: [{ value: '', disabled: true }, Validators.required],
       });
 
-    this.GetAllDataITI();
+    //this.GetAllDataITI();
   }
   get _AdminUserFormGroup() { return this.AdminUserFormGroup.controls; }
 
  
-  async GetAllDataITI() {
-    debugger
-    try {
-      this.loaderService.requestStarted();
-      await this.commonMasterService.Iticollege(2, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, 0).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        debugger
-        this.CollegeList = data.Data;
-        console.log(this.AdminUserList, "Admin User List")
-      }, (error: any) => console.error(error))
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
+  //async GetAllDataITI() {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.commonMasterService.Iticollege(2, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, 0).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      debugger
+  //      this.CollegeList = data.Data;
+  //      console.log(this.AdminUserList, "Admin User List")
+  //    }, (error: any) => console.error(error))
+  //  }
+  //  catch (ex) {
+  //    console.log(ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
 
   async SaveData() {
@@ -107,6 +107,7 @@ export class itiAddAdminSubUserComponent {
       this.adminRequest.ModifyBy = this.sSOLoginDataModel.UserID;
       this.adminRequest.CreatedBy = this.sSOLoginDataModel.UserID;
       this.adminRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.adminRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       debugger
       await this.adminUserService.adminUserDataSave(this.adminRequest)
         .then((data: any) => {
@@ -159,14 +160,11 @@ export class itiAddAdminSubUserComponent {
     const username = SSOID; // or hardcoded 'SIDDHA.AZAD'
     const appName = 'madarsa.test';
     const password = 'Test@1234';
-
     /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
 
-    this.requestSSoApi.SSOID = username;
+    this.requestSSoApi.SSOID = username; 
     this.requestSSoApi.appName = appName;
     this.requestSSoApi.password = password;
-
-
 
     try {
 

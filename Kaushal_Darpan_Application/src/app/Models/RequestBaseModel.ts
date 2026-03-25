@@ -6,5 +6,5 @@ export class RequestBaseModel {
   public FinancialYearID?: number = 0;
   public InstituteId?: number = 0;
   public SessionTypeID?: number = 0;
-
+  public SelectedInsituteID?: number = 0;
 }
