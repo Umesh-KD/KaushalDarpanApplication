@@ -65,6 +65,7 @@ export class ItiCollegeReportComponent {
   public stateMasterDDL: any = []
   public PassingYearList: any = []
   public maritialList: any = []
+  public TypeID:number=0
   public OrderList: any = []
   public CategoryBlist: any = []
   public CategoryAlist: any = []
@@ -293,6 +294,7 @@ export class ItiCollegeReportComponent {
     //this.searchrequest.DepartmentID = EnumDepartment.BTER;
     //this.request.DepartmentID = EnumDepartment.BTER;
     this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
+    this.TypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('TypeID')?.toString());
 
     //await this.loadDropdownData('Board')
     //await this.GetStateMatserDDL()
@@ -427,6 +429,14 @@ export class ItiCollegeReportComponent {
     //  });
     //}
 
+    if (this.TypeID == 1) {
+      this.ReportForm.disable()
+      this.NewReportFormGroup.disable()
+      this.BasicReportForm.disable()
+      this.AddReportFormGroup1.disable()
+    }
+
+
     if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43) {
       this.request.CollegeID = this.sSOLoginDataModel.InstituteID
       this.ReportForm.controls['CollegeID'].disable()
@@ -437,6 +447,10 @@ export class ItiCollegeReportComponent {
 
     if (this.ApplicationID > 0) {
       await this.GetById(this.ApplicationID)
+      if (this.sSOLoginDataModel.RoleID == 20 && this.TypeID != 1 && this.request.StatusID==1) {
+
+        window.open("/ItiEstablishmentList", "_Self")
+      }
 
     }
     /*    this.request.IsNewCollege=1*/
@@ -842,7 +856,7 @@ export class ItiCollegeReportComponent {
 
     }
 
-    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97) {
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 20) {
 
       const controlsToClear = [
         //'TradeOrderNo',
@@ -962,7 +976,7 @@ export class ItiCollegeReportComponent {
       });
     }
 
-    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97) {
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 20) {
 
       const controlsToClear = [
         //'TradeOrderNo',
@@ -1487,7 +1501,9 @@ export class ItiCollegeReportComponent {
       return
     }
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.request.OrderDetailsList.length < 1) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.request.OrderDetailsList.length < 1
+      || this.sSOLoginDataModel.RoleID == 20 && this.request.OrderDetailsList.length < 1
+    ) {
       this.toastr.warning("Please Add ITI sanction Details")
       return
     }

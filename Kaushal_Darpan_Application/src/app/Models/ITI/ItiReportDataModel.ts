@@ -126,6 +126,7 @@ export class ItiReportDataModel {
   public DISCOM: number = 0
   public PlanDocument: string = ''
   public PlanDocID:number=0
+  public StatusID:number=0
 
 }
 

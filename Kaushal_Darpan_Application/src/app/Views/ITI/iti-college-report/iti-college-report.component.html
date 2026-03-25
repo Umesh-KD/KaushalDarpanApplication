@@ -322,7 +322,7 @@
 
 
 
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Nodal ITI Name<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="NodalIti" [(ngModel)]="request.NodalIti" placeholder="Enter Name of Nodal Iti">
             <div *ngIf="isSubmitted && _ReportForm.NodalIti.errors" class="text-danger">
@@ -333,7 +333,7 @@
             </div>
           </div>
 
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20 || sSOLoginDataModel.RoleID==20">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Nodal ITI Code<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="NodalItiCode" [(ngModel)]="request.NodalItiCode" placeholder="Enter Code of Nodal Iti">
             <div *ngIf="isSubmitted && _ReportForm.NodalItiCode.errors" class="text-danger">
@@ -371,7 +371,7 @@
 
 
 
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20 || sSOLoginDataModel.RoleID==20">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Photo of Front View of Main Campus<span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -395,7 +395,7 @@
 
 
 
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Photo of Side View of Main Campus<span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -420,7 +420,7 @@
 
 
 
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Photo of Interior View of Main Campus<span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -458,13 +458,13 @@
 
 
 
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 " class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20 " class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5">ITI Details</b>
       </div>
 
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
-        <!--<div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <!--<div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name of Nodal Officer<span class="StarMarking">*</span></label>
         <input type="text" class="form-input" id="ApplicationId" formControlName="PrincipleName" [(ngModel)]="request.PrincipleName" placeholder="Enter Name of Nodal Officer">
         <div *ngIf="isSubmitted && _ReportForm.PrincipleName.errors" class="text-danger">
@@ -472,7 +472,7 @@
         </div>
       </div>-->
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No. of Principal/Superintendent<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" maxlength="10" formControlName="PrincipleMobile" [(ngModel)]="request.PrincipleMobile" placeholder="Enter Mobile No. of Nodal Officer">
           <div *ngIf="isSubmitted && _ReportForm.PrincipleMobile.errors" class="text-danger">
@@ -480,7 +480,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">EmailID of Principal/Superintendent<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="PrincipleEmailID" [(ngModel)]="request.PrincipleEmailID" placeholder="Enter EmailID of Nodal Officer">
           <div *ngIf="isSubmitted && _ReportForm.PrincipleEmailID.errors" class="text-danger">
@@ -489,7 +489,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Posting Address of Nodal Officer<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="NodalPostAddresss" [(ngModel)]="request.NodalPostAddresss" placeholder="Enter Posting Address of Nodal Officer">
           <div *ngIf="isSubmitted && _ReportForm.NodalPostAddresss.errors" class="text-danger">
@@ -521,10 +521,10 @@
       </div>
 
 
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5">Land Allocation Details</b>
       </div>
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Land (Ownership): <span class="StarMarking">*</span></label>
           <select class="form-select" id="CollegeID" [(ngModel)]="request.Ownership" formControlName="Ownership">
@@ -538,7 +538,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Lease Deed/ Land Document Order Copy<span class="StarMarking">*</span> </label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -651,7 +651,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="Ward">Ward number:<span class="StarMarking">*</span></label>
           <input formControlName="Ward" class="form-input" type="text" id="Ward" placeholder="Enter Ward"
                  [(ngModel)]="request.Ward">
@@ -662,7 +662,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="Ward">Khasra no/Khata No:<span class="StarMarking">*</span></label>
           <input formControlName="KhasraKhataNo" class="form-input" type="text" id="Ward" placeholder="Enter Khasra/Khata No"
                  [(ngModel)]="request.KhasraKhataNo">
@@ -674,7 +674,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Distance From Panchayat Samiti HQ(Km)<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="PanchayatDis" [(ngModel)]="request.PanchayatDis" placeholder="Enter Distance From Panchayat Samiti HQ">
           <div *ngIf="isSubmitted && _ReportForm.PanchayatDis.errors" class="text-danger">
@@ -719,7 +719,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Land Availablity Type<span class="StarMarking">*</span></label>
           <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
           <select class="form-select" id="LandTypeID" [(ngModel)]="request.LandTypeID" formControlName="LandTypeID">
@@ -738,7 +738,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Land Available (Bigha/Hectare)<span class="StarMarking">*</span></label>
 
 
@@ -758,7 +758,7 @@
       </div>-->
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Pincode <span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="Pincode" [(ngModel)]="request.Pincode" placeholder="Enter Pincode">
           <div *ngIf="isSubmitted && _ReportForm.Pincode.errors" class="text-danger">
@@ -771,12 +771,12 @@
       </div>
 
 
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5">Building Status Details</b>
       </div>
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97  && request.IsNewCollege==1  ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==20  && request.IsNewCollege==1  ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Operating Own Building/Camp<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -799,7 +799,7 @@
 
 
         <div *ngIf="request.IsOperatingOwn=='Yes' && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin
-         ||  request.IsOperatingOwn=='Yes' && sSOLoginDataModel.RoleID==97">
+         ||  request.IsOperatingOwn=='Yes' && sSOLoginDataModel.RoleID==97 ||  request.IsOperatingOwn=='Yes' && sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Building Plan Copy<span class="StarMarking">*</span> </label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -822,7 +822,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Percentage of Civil Work Progress<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="PercentCivilWork" (keypress)="numberOnly($event)" [(ngModel)]="request.PercentCivilWork" placeholder="Enter Percentage Of Civil Work Progress">
           <div *ngIf="isSubmitted && _ReportForm.PercentCivilWork.errors" class="text-danger">
@@ -832,7 +832,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approach Road CompleterM<span class="StarMarking"></span></label>
           <div class="flex items-center">
@@ -860,7 +860,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Internal Road Complete<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -880,7 +880,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Boundary Wall Complete<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -898,7 +898,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Shortage(If Any)</label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="BuildShortage" [(ngModel)]="request.BuildShortage" placeholder="Enter Building Shortage">
 
@@ -907,7 +907,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Water Supply Source<span class="StarMarking">*</span></label>
           <select class="form-select" name="DistrictID" id="ddlDistrictID" formControlName="WaterSupply"
                   [(ngModel)]="request.WaterSupply">
@@ -933,7 +933,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Water Harvesting Structure Available<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -954,7 +954,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Required(kw)<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ElectPhaserequired" [(ngModel)]="request.ElectPhaserequired" />
           <div *ngIf="isSubmitted && _ReportForm.ElectPhaserequired.errors" class="text-danger">
@@ -962,7 +962,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contract Load If Any(kw)<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ContractLoad" [(ngModel)]="request.ContractLoad" />
           <div *ngIf="isSubmitted && _ReportForm.ContractLoad.errors" class="text-danger">
@@ -970,7 +970,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Available<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1000,7 +1000,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Consumer Number Of Electrical Connection<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ElectConnection" (keypress)="numberOnly($event)" [(ngModel)]="request.ElectConnection" placeholder="Enter No of Electricirty Connection ">
           <div *ngIf="isSubmitted && _ReportForm.ElectConnection.errors" class="text-danger">
@@ -1084,7 +1084,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Solar Panel Available<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1113,7 +1113,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Available<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1131,7 +1131,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Utilized<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1150,7 +1150,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">No Of Tree Planted In Campus<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="NoOfTree" (keypress)="numberOnly($event)" [(ngModel)]="request.NoOfTree" placeholder="Enter No of Plants Planted">
           <div *ngIf="isSubmitted && _ReportForm.NoOfTree.errors" class="text-danger">
@@ -1159,14 +1159,14 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Project Director<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="PDName" [(ngModel)]="request.PDName" placeholder="Enter Name Of Project Director">
           <div *ngIf="isSubmitted && _ReportForm.PDName.errors" class="text-danger">
             <p *ngIf="_ReportForm.PDName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No Of Project Director<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="PDMobile" maxlength="10" (keypress)="numberOnly($event)" [(ngModel)]="request.PDMobile" placeholder="Enter Mobile No Of Project Director">
           <div *ngIf="isSubmitted && _ReportForm.PDMobile.errors" class="text-danger">
@@ -1174,14 +1174,14 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Contractor<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ContractorName" [(ngModel)]="request.ContractorName" placeholder="Enter Name Of Contractor">
           <div *ngIf="isSubmitted && _ReportForm.ContractorName.errors" class="text-danger">
             <p *ngIf="_ReportForm.ContractorName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No Of Contractor<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ContractorMobile" (keypress)="numberOnly($event)" maxlength="10" [(ngModel)]="request.ContractorMobile" placeholder="Enter Mobile No Of Contractor">
           <div *ngIf="isSubmitted && _ReportForm.ContractorMobile.errors" class="text-danger">
@@ -1189,14 +1189,14 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date of Work Started<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="StartDate" [(ngModel)]="request.StartDate">
           <div *ngIf="isSubmitted && _ReportForm.StartDate.errors" class="text-danger">
             <p *ngIf="_ReportForm.StartDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Expected Date of Work Complete<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="CompleteDate" [(ngModel)]="request.CompleteDate">
           <div *ngIf="isSubmitted && _ReportForm.CompleteDate.errors" class="text-danger">
@@ -1204,7 +1204,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Work Order Copy<span class="StarMarking">*</span> </label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -1228,7 +1228,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Land Disputed<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1246,7 +1246,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is MultiPurpose Hall Complete<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1269,7 +1269,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20  && request.IsNewCollege==1 ">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Main  ITI Building Complete<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1289,7 +1289,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Building TakenOver<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1309,7 +1309,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Post<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="LokarpanPost" [(ngModel)]="request.LokarpanPost" placeholder="Enter Post Name">
           <div *ngIf="isSubmitted && _ReportForm.LokarpanPost.errors" class="text-danger">
@@ -1326,51 +1326,7 @@
 
 
 
-
-        <!--<div>
-        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order No<span class="StarMarking">*</span></label>
-        <input type="text" class="form-input" id="ApplicationId" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Santion Order No">
-        <div *ngIf="isSubmitted && _NewReportForm.AdministrativeeOrderNo.errors" class="text-danger">
-          <p *ngIf="_NewReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-        </div>
-      </div>
-
-      <div>
-        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order Date<span class="StarMarking">*</span></label>
-        <input type="date" class="form-input" id="ApplicationId" formControlName="AdministrativeOrderDate" [(ngModel)]="request.AdministrativeOrderDate">
-        <div *ngIf="isSubmitted && _NewReportForm.AdministrativeOrderDate.errors" class="text-danger">
-          <p *ngIf="_NewReportForm.AdministrativeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-        </div>
-      </div>
-
-
-
-      <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Santion Order Copy<span class="StarMarking">*</span> </label>
-        <div class="flex fileUploader">
-          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                 id="AdministrativeCopy" type="file" (change)="onFilechange($event,'AdministrativeCopy')" />
-
-          <label for="AdministrativeCopy">
-            <span>Choose File</span>
-            {{ request.AdministrativeCopy === '' ? 'No File Chosen' : request.AdministrativeCopy }}
-          </label>
-          <div class="flex">
-            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AdministrativeCopy}}"
-               *ngIf="this.request.AdministrativeCopy  !=''"
-               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
-        <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-      (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-      *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-        <!--</div>
-
-
-
-        </div>
-      </div>-->
-
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Date<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="ShilanyasDate" [(ngModel)]="request.ShilanyasDate">
           <div *ngIf="isSubmitted && _ReportForm.ShilanyasDate.errors" class="text-danger">
@@ -1384,7 +1340,7 @@
 
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
 
 
 
@@ -1395,7 +1351,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Dignitary Post<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ShilanyasPost" [(ngModel)]="request.ShilanyasPost" placeholder="Enter Post Name">
           <div *ngIf="isSubmitted && _ReportForm.ShilanyasPost.errors" class="text-danger">
@@ -1404,7 +1360,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Date<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="LokarpanDate" [(ngModel)]="request.LokarpanDate">
           <div *ngIf="isSubmitted && _ReportForm.LokarpanDate.errors" class="text-danger">
@@ -1414,7 +1370,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Dignitary Name<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="LokarpanName" [(ngModel)]="request.LokarpanName" placeholder="Enter Dignitary Name">
           <div *ngIf="isSubmitted && _ReportForm.LokarpanName.errors" class="text-danger">
@@ -1430,7 +1386,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Civil Work Progress Date<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="PercentCivilDate" [(ngModel)]="request.PercentCivilDate">
           <div *ngIf="isSubmitted && _ReportForm.PercentCivilDate.errors" class="text-danger">
@@ -1443,7 +1399,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building TakenOver Date<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="TakenOverDate" [(ngModel)]="request.TakenOverDate">
           <div *ngIf="isSubmitted && _ReportForm.TakenOverDate.errors" class="text-danger">
@@ -1455,7 +1411,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1 ">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==97 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="Remarks" [(ngModel)]="request.Remarks" placeholder="Enter Remarks">
           <div *ngIf="isSubmitted && _ReportForm.Remarks.errors" class="text-danger">
@@ -1473,67 +1429,11 @@
 
 
     </form>
-    <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-    <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Sanction Details</b>
-  </div>
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
-    <div>
-      <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Sanction Order No<span class="StarMarking">*</span></label>
-      <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.SanctionOrderNo" placeholder="Enter Post Sanction Order No">-->
-    <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
-    <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-  </div>-->
-    <!--</div>
-
-  <div>
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Sanction Order Date<span class="StarMarking">*</span></label>
-    <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.SanctionOrderDate">-->
-    <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderDate.errors" class="text-danger">
-    <p *ngIf="_ReportForm.SanctionOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-  </div>-->
-    <!--</div>
-
-
-
-
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Post Sanction Order Copy<span class="StarMarking">*</span> </label>
-    <div class="flex fileUploader">
-      <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="SanctionOrderCopy" type="file" (change)="onFilechange($event,'SanctionOrderCopy')" />
-
-      <label for="SanctionOrderCopy">
-        <span>Choose File</span>
-        {{ request.SanctionOrderCopy === '' ? 'No File Chosen' : request.SanctionOrderCopy }}
-      </label>
-      <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.SanctionOrderCopy}}"
-           *ngIf="this.request.SanctionOrderCopy  !=''"
-           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
-    <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-  (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-  *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-    <!--</div>
-
-      </div>
-    </div>
-
-
-    <div class="pt-30">
-      <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
-        <i class="ti ti-plus"></i> Add
-        More
-      </button>
-
-    </div>
-
-
-
-  </div>-->
-    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+   
+    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20 && TypeID!=1 " class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Sanction Details</b>
     </div>
-    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20 && TypeID!=1 " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
 
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type: <span class="StarMarking">*</span></label>
@@ -1647,488 +1547,6 @@
     </div>
 
 
-    <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-    <b class="text-1xl-5"><i class="ti ti-plus"></i>AS Of Trade Sanction Details</b>
-  </div>
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
-
-    <div>
-      <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Sanction Order No<span class="StarMarking">*</span></label>
-      <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.TradeOrderNo" placeholder="Enter Trade Sanction Order No">-->
-    <!--<div *ngIf="isSubmitted && _ReportForm.TradeOrderNo.errors" class="text-danger">
-    <p *ngIf="_ReportForm.TradeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-  </div>-->
-    <!--</div>
-
-  <div>
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Sanction Order Date<span class="StarMarking">*</span></label>
-    <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.TradeOrderDate">-->
-    <!--<div *ngIf="isSubmitted && _ReportForm.TradeOrderDate.errors" class="text-danger">
-    <p *ngIf="_ReportForm.TradeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-  </div>-->
-    <!--</div>
-
-
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Trade Sanction Order Copy<span class="StarMarking">*</span> </label>
-    <div class="flex fileUploader">
-      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="TradeCopy" type="file" (change)="onFilechange($event,'TradeCopy')" />
-
-      <label for="TradeCopy">
-        <span>Choose File</span>
-        {{ request.TradeCopy === '' ? 'No File Chosen' : request.TradeCopy }}
-      </label>
-      <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.TradeCopy}}"
-           *ngIf="this.request.TradeCopy  !=''"
-           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
-    <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-  (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-  *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-    <!--</div>
-
-      </div>
-    </div>
-
-
-    <div class="pt-30">
-      <button (click)="AddTrade()" type="button" class="btn bg-primary text-white">
-        <i class="ti ti-plus"></i> Add
-        More
-      </button>
-
-    </div>
-
-
-
-  </div>
-  <div *ngIf="TradeSanctionList.length>0" class="overflow-auto mt-4">
-    <table class="w-full table-border" cellpadding="5">
-      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-
-        <tr>
-          <th>S.No</th>
-          <th>Order No</th>
-          <th>Order Date</th>
-          <th>Order Copy</th>
-          <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="text-left">Action</th>
-        </tr>
-
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let row of TradeSanctionList; let idx = index">
-          <td class="text-center">{{idx+1}}</td>
-          <td class="text-center">{{row.OrderNo}}</td>
-          <td class="text-center">{{row.OrderDate}}</td>
-          <td class="text-center">
-            <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
-              <i class="ti ti-eye"></i>
-            </a>
-          </td>
-
-          <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
-            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteTrade(idx)">
-              <i class="ti ti-trash"></i>
-            </button>
-
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-
-  <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-    <b class="text-1xl-5"><i class="ti ti-plus"></i>AS Of METP Sanction Details</b>
-  </div>
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
-    <div>
-      <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Sanction Order No<span class="StarMarking">*</span></label>
-      <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.MetpOrderNo" placeholder="Enter METP Sanction Order No">-->
-    <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderNo.errors" class="text-danger">
-    <p *ngIf="_ReportForm.MetpOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-  </div>-->
-    <!--</div>
-
-  <div>
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Sanction Order Date<span class="StarMarking">*</span></label>
-    <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.MetpOrderDate">-->
-    <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
-    <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-  </div>-->
-    <!--</div>
-
-
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of METP Sanction Order Copy<span class="StarMarking">*</span> </label>
-    <div class="flex fileUploader">
-      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="MetpCopy" type="file" (change)="onFilechange($event,'MetpCopy')" />
-
-      <label for="MetpCopy">
-        <span>Choose File</span>
-        {{ request.MetpCopy === '' ? 'No File Chosen' : request.MetpCopy}}
-      </label>
-      <div class="flex">
-        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.MetpCopy}}"
-           *ngIf="this.request.MetpCopy!=''"
-           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
-    <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-  (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-  *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-    <!--</div>
-
-      </div>
-    </div>
-
-
-    <div class="pt-30">
-      <button (click)="AddMetp()" type="button" class="btn bg-primary text-white">
-        <i class="ti ti-plus"></i> Add
-        More
-      </button>
-
-    </div>
-
-
-
-  </div>
-  <div *ngIf="MetpSanctionList.length>0" class="overflow-auto mt-4">
-    <table class="w-full table-border" cellpadding="5">
-      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-
-        <tr>
-          <th>S.No</th>
-          <th>Order No</th>
-          <th>Order Date</th>
-          <th>Order Copy</th>
-          <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="text-left">Action</th>
-        </tr>
-
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let row of MetpSanctionList; let idx = index">
-          <td class="text-center">{{idx+1}}</td>
-          <td class="text-center">{{row.OrderNo}}</td>
-          <td class="text-center">{{row.OrderDate}}</td>
-          <td class="text-center">
-            <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
-              <i class="ti ti-eye"></i>
-            </a>
-          </td>
-
-          <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
-            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteMetp(idx)">
-              <i class="ti ti-trash"></i>
-            </button>
-
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>-->
-    <!--<div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-    <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Basic Details</b>
-  </div>
-  <form [formGroup]="BasicReportForm" id="HrMasterFormGroup" class="form-horizontal">
-    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
-
-
-
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approach Road Complete<span class="StarMarking">*</span></label>
-        <div class="flex items-center">
-          <label class="flex items-center">
-            <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
-                   [(ngModel)]="request.ApproachRoad" value="Yes" />
-            Yes
-          </label>
-          <label class="flex items-center ms-2">
-            <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
-                   [(ngModel)]="request.ApproachRoad" value="No" /> No
-          </label>
-
-
-        </div>
-        <div *ngIf="isAddrequest1 && _BasicReportForm.ApproachRoad.errors" class="text-danger">
-          <p *ngIf="_BasicReportForm.ApproachRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-        </div>
-
-      </div>
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Internal Road Complete<span class="StarMarking">*</span></label>
-        <div class="flex items-center">
-          <label class="flex items-center">
-            <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
-                   [(ngModel)]="request.InternalRoad" value="Yes" />
-            Yes
-          </label>
-          <label class="flex items-center ms-2">
-            <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
-                   [(ngModel)]="request.InternalRoad" value="No" /> No
-          </label>
-        </div>
-        <div *ngIf="isAddrequest1 && _BasicReportForm.InternalRoad.errors" class="text-danger">
-          <p *ngIf="_BasicReportForm.InternalRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-        </div>
-      </div>
-
-
-
-
-
-
-
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Water Harvesting Structure Available<span class="StarMarking">*</span></label>
-        <div class="flex items-center">
-          <label class="flex items-center">
-            <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
-                   [(ngModel)]="request.Harvesting" value="Yes" />
-            Yes
-          </label>
-          <label class="flex items-center ms-2">
-            <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
-                   [(ngModel)]="request.Harvesting" value="No" /> No
-          </label>
-        </div>
-        <div *ngIf="isAddrequest1 && _BasicReportForm.Harvesting.errors" class="text-danger">
-          <p *ngIf="_BasicReportForm.Harvesting.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-        </div>
-      </div>
-
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Available<span class="StarMarking">*</span></label>
-        <div class="flex items-center">
-          <label class="flex items-center">
-            <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
-                   [(ngModel)]="request.ElectPhase" value="Yes" />
-            Yes
-          </label>
-          <label class="flex items-center ms-2">
-            <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
-                   [(ngModel)]="request.ElectPhase" value="No" /> No
-          </label>
-        </div>
-        <div *ngIf="isAddrequest1 && _BasicReportForm.ElectPhase.errors" class="text-danger">
-          <p *ngIf="_BasicReportForm.ElectPhase.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-        </div>
-      </div>
-
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.ElectPhase=='Yes'">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Required(kw)<span class="StarMarking">*</span></label>
-        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ElectPhaserequired" [(ngModel)]="request.ElectPhaserequired" />
-        <div *ngIf="isAddrequest1 && _BasicReportForm.ElectPhaserequired.errors" class="text-danger">
-          <p *ngIf="_BasicReportForm.ElectPhaserequired.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-        </div>
-      </div>
-
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contract Load If Any(kw)</label>
-        <input type="text" class="form-input" id="ApplicationId" placeholder="Enter Contract Load" (keypress)="numberOnly($event)" formControlName="ContractLoad" [(ngModel)]="request.ContractLoad" />
-    <!--<div *ngIf="isSubmitted && _ReportForm.ContractLoad.errors" class="text-danger">
-    <p *ngIf="!_ReportForm.ContractLoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-  </div>-->
-    <!--</div>
-
-
-
-
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Consumer Number Of Electrical Connection<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="ElectConnection" (keypress)="numberOnly($event)" [(ngModel)]="request.ElectConnection" placeholder="Enter No of Electricirty Connection ">
-    <div *ngIf="isAddrequest1 && _BasicReportForm.ElectConnection.errors" class="text-danger">
-      <p *ngIf="_BasicReportForm.ElectConnection.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Solar Panel Available<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
-               [(ngModel)]="request.IsSolarPanel" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
-               [(ngModel)]="request.IsSolarPanel" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isAddrequest1 && _BasicReportForm.IsSolarPanel.errors" class="text-danger">
-      <p *ngIf="_BasicReportForm.IsSolarPanel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-  <div *ngIf="request.IsSolarPanel=='Yes'">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Solar Panel Capacity<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="PanelCapacity" (keypress)="numberOnly($event)" [(ngModel)]="request.PanelCapacity" placeholder="Enter Solar Panel Capacity">
-    <div *ngIf="isAddrequest1 && _BasicReportForm.PanelCapacity.errors" class="text-danger">
-      <p *ngIf="_BasicReportForm.PanelCapacity.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Boundary Wall Complete<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
-               [(ngModel)]="request.IsBoundaryWall" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
-               [(ngModel)]="request.IsBoundaryWall" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isAddrequest1 && _BasicReportForm.IsBoundaryWall.errors" class="text-danger">
-      <p *ngIf="_BasicReportForm.IsBoundaryWall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Shortage(If Any)</label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="BuildShortage" [(ngModel)]="request.BuildShortage" placeholder="Enter Building Shortage">
-
-  </div>
-
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Available<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="IsHostel" id="IsHostel" formControlName="IsHostel"
-               [(ngModel)]="request.IsHostel" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="IsHostel" id="StaffStatus" formControlName="IsHostel"
-               [(ngModel)]="request.IsHostel" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isAddrequest1 && _BasicReportForm.IsHostel.errors" class="text-danger">
-      <p *ngIf="_BasicReportForm.IsHostel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsHostel=='Yes'">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Utilized<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
-               [(ngModel)]="request.HostelUtilized" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
-               [(ngModel)]="request.HostelUtilized" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isAddrequest1 && _BasicReportForm.HostelUtilized.errors" class="text-danger">
-      <p *ngIf="_BasicReportForm.HostelUtilized.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">No Of Tree Planted In Campus<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="NoOfTree" (keypress)="numberOnly($event)" [(ngModel)]="request.NoOfTree" placeholder="Enter No of Plants Planted">
-    <div *ngIf="isAddrequest1 && _BasicReportForm.NoOfTree.errors" class="text-danger">
-      <p *ngIf="_BasicReportForm.NoOfTree.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="Remarks" [(ngModel)]="request.Remarks" placeholder="Enter Remarks">
-    <div *ngIf="isAddrequest1 && _BasicReportForm.Remarks.errors" class="text-danger">
-      <p *ngIf="_BasicReportForm.Remarks.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-
-
-
-
-  <div class="pt-30">
-    <button (click)="AddChoice1()" type="button" class="btn bg-primary text-white">
-      <i class="ti ti-plus"></i> Add
-      More
-    </button>-->
-    <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
-    <!--</div>
-
-
-    </div>
-  </form>
-
-
-  <div *ngIf="request.BasicDetailsList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">-->
-    <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
-    <!--<b class="text-1xl-5">More Details List </b>
-  </div>
-
-  <div *ngIf="request.BasicDetailsList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="overflow-auto">
-    <table class="w-full table-border" cellpadding="5">
-      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-
-        <tr>
-          <th>S.No</th>
-          <th>App Road Complete</th>
-          <th>Internal Road Complete </th>
-          <th>Water Harvest Struct</th>
-          <th>3 Phase Elect Load</th>
-
-          <th>Contract Load</th>-->
-    <!--<th>Subject Type</th>-->
-    <!--<th>Consumer No</th>
-  <th>Solar Panel</th>
-  <th>Boundary Wall</th>
-  <th>Building Shortage</th>
-  <th>Hostel Available</th>
-  <th>Hostel Utilized</th>
-  <th>No of Tree</th>
-  <th>Remarks</th>-->
-    <!--<th>Self Operating</th>-->
-    <!--</tr>
-
-  </thead>
-
-  <tbody>
-    <tr *ngFor="let row of request.BasicDetailsList; let idx = index">
-      <td class="text-center">{{idx+1}}</td>
-      <td class="text-center">{{row.ApproachRoad}}</td>
-      <td class="text-center">{{row.InternalRoad}}</td>
-
-      <td class="text-center">{{row.Harvesting}}</td>
-      <td class="text-center">
-        {{ row.ElectPhase }}{{ row.ElectPhase === 'Yes' ? ' - (' + row.ElectPhaserequired + ')' : '' }}
-      </td>
-
-      <td class="text-center">{{row.ContractLoad}}</td>
-      <td class="text-center">{{row.ElectConnection}}</td>
-      <td class="text-center">{{row.IsSolarPanel}}</td>
-      <td class="text-center">{{row.IsBoundaryWall}}</td>
-      <td class="text-center">{{row.BuildShortage}}</td>
-      <td class="text-center">{{row.IsHostel}}</td>
-      <td class="text-center">{{row.HostelUtilized}}</td>
-      <td class="text-center">{{row.NoOfTree}}</td>
-      <td class="text-center">{{row.Remarks}}</td>-->
-    <!--<td class="text-center">{{row.IsOperatingOwn}}</td>-->
-    <!--<td>
-            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow1(idx)">
-              <i class="ti ti-trash"></i>
-            </button>
-
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>-->
 
     <div *ngIf="request.OrderDetailsList.length>0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Sanction Details List</b>
@@ -2138,14 +1556,14 @@
       <table class="w-full table-border" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
-          <tr>
+          <tr class="text-left">
 
             <th>S.No</th>
             <th>Name</th>
             <th>Order No</th>
             <th>Order Date</th>
             <th>Order Copy</th>
-            <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="text-left">Action</th>
+            <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20" class="text-left">Action</th>
           </tr>
 
         </thead>
@@ -2153,17 +1571,17 @@
         <tbody>
           <tr *ngFor="let row of request.OrderDetailsList; let idx = index">
 
-            <td class="text-center">{{idx+1}}</td>
-            <td class="text-center">{{row.OrderTypeName}}</td>
-            <td class="text-center">{{row.OrderNo}}</td>
-            <td class="text-center">{{row.OrderDate}}</td>
-            <td class="text-center">
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.OrderTypeName}}</td>
+            <td class="text-left">{{row.OrderNo}}</td>
+            <td class="text-left">{{row.OrderDate}}</td>
+            <td class="text-left">
               <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
                 <i class="ti ti-eye"></i>
               </a>
             </td>
 
-            <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
+            <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin  || sSOLoginDataModel.RoleID==20 && TypeID!=1">
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
                 <i class="ti ti-trash"></i>
               </button>
@@ -2180,7 +1598,7 @@
 
     <div *ngIf="request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin
 
-           || request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==97" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+           || request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==97 || request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==20" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5">For New Establish ITI</b>
     </div>
 
@@ -2193,14 +1611,14 @@
           <p *ngIf="_NewReportForm.ConstructionAgency.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
         </div>
       </div>-->
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Project Director<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="PDName" [(ngModel)]="request.PDName" placeholder="Enter Name Of Project Director">
           <div *ngIf="isSubmitted && _NewReportForm.PDName.errors" class="text-danger">
             <p *ngIf="_NewReportForm.PDName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No Of Project Director<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="PDMobile" maxlength="10" (keypress)="numberOnly($event)" [(ngModel)]="request.PDMobile" placeholder="Enter Mobile No Of Project Director">
           <div *ngIf="isSubmitted && _NewReportForm.PDMobile.errors" class="text-danger">
@@ -2208,14 +1626,14 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Contractor<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ContractorName" [(ngModel)]="request.ContractorName" placeholder="Enter Name Of Contractor">
           <div *ngIf="isSubmitted && _NewReportForm.ContractorName.errors" class="text-danger">
             <p *ngIf="_NewReportForm.ContractorName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No Of Contractor<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ContractorMobile" (keypress)="numberOnly($event)" maxlength="10" [(ngModel)]="request.ContractorMobile" placeholder="Enter Mobile No Of Contractor">
           <div *ngIf="isSubmitted && _NewReportForm.ContractorMobile.errors" class="text-danger">
@@ -2223,14 +1641,14 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date of Work Started<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="StartDate" [(ngModel)]="request.StartDate">
           <div *ngIf="isSubmitted && _NewReportForm.StartDate.errors" class="text-danger">
             <p *ngIf="_NewReportForm.StartDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Expected Date of Work Complete<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="CompleteDate" [(ngModel)]="request.CompleteDate">
           <div *ngIf="isSubmitted && _NewReportForm.CompleteDate.errors" class="text-danger">
@@ -2238,7 +1656,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Work Order Copy<span class="StarMarking">*</span> </label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -2262,7 +1680,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Land Disputed<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -2280,7 +1698,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is MultiPurpose Hall Complete<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -2303,7 +1721,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Main  ITI Building Complete<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -2323,7 +1741,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Building TakenOver<span class="StarMarking">*</span></label>
           <div class="flex items-center">
@@ -2344,7 +1762,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Post<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="LokarpanPost" [(ngModel)]="request.LokarpanPost" placeholder="Enter Post Name">
           <div *ngIf="isSubmitted && _NewReportForm.LokarpanPost.errors" class="text-danger">
@@ -2396,7 +1814,7 @@
       </div>-->
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">="Foundation Stone (Shilanyas) Date<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="ShilanyasDate" [(ngModel)]="request.ShilanyasDate">
           <div *ngIf="isSubmitted && _NewReportForm.ShilanyasDate.errors" class="text-danger">
@@ -2404,7 +1822,7 @@
             <p *ngIf="_NewReportForm.ShilanyasDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">" Foundation Stone (Shilanyas) Dignitary Name<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ShilanyasName" [(ngModel)]="request.ShilanyasName" placeholder="Enter Dignitary Name">
           <div *ngIf="isSubmitted && _NewReportForm.ShilanyasName.errors" class="text-danger">
@@ -2412,7 +1830,7 @@
           </div>
         </div>
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Dignitary Post<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ShilanyasPost" [(ngModel)]="request.ShilanyasPost" placeholder="Enter Post Name">
           <div *ngIf="isSubmitted && _NewReportForm.ShilanyasPost.errors" class="text-danger">
@@ -2421,7 +1839,7 @@
         </div>
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Date<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="LokarpanDate" [(ngModel)]="request.LokarpanDate">
           <div *ngIf="isSubmitted && _NewReportForm.LokarpanDate.errors" class="text-danger">
@@ -2431,7 +1849,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Dignitary Name<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="LokarpanName" [(ngModel)]="request.LokarpanName" placeholder="Enter Dignitary Name">
           <div *ngIf="isSubmitted && _NewReportForm.LokarpanName.errors" class="text-danger">
@@ -2446,7 +1864,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Civil Work Progress Date<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="PercentCivilDate" [(ngModel)]="request.PercentCivilDate">
           <div *ngIf="isSubmitted && _NewReportForm.PercentCivilDate.errors" class="text-danger">
@@ -2472,7 +1890,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97">
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Photo Of Front View Dome<span class="StarMarking">*</span> </label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -2504,7 +1922,7 @@
     <div *ngIf="request.IsNewCollege==0 && request.IsNewCollege!=undefined" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Upgradation Of Existing ITIs  </b>
     </div>
-    <div *ngIf="request.IsNewCollege==0 && request.IsNewCollege!=undefined" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+    <div *ngIf="request.IsNewCollege==0 && request.IsNewCollege!=undefined && TypeID!=1 " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name of Work<span class="StarMarking">*</span></label>
         <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="request.WorkName" placeholder="Enter Name of Work">
@@ -2842,7 +2260,7 @@
 
 
 
-          <tr>
+          <tr class="text-left">
 
             <th>
               S.No
@@ -2887,35 +2305,35 @@
 
         <tbody>
           <tr *ngFor="let row of request.UpdateWorkList; let idx = index">
-            <td class="text-center">{{idx+1}}</td>
-            <td class="text-center">{{row.WorkName}}</td>
-            <td class="text-center">
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.WorkName}}</td>
+            <td class="text-left">
               <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.WorkTradeCopy}}">
                 <i class="ti ti-eye"></i>
               </a>
             </td>
-            <td class="text-center">
+            <td class="text-left">
               <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.WorkFSCopy}}">
                 <i class="ti ti-eye"></i>
               </a>
             </td>
-            <td class="text-center">{{row.WorkConstructor}}</td>
-            <td class="text-center">
+            <td class="text-left">{{row.WorkConstructor}}</td>
+            <td class="text-left">
               <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.WorkSanctionCopy}}">
                 <i class="ti ti-eye"></i>
               </a>
             </td>
-            <td class="text-center">{{row.UpdateWorkStarted}}</td>
-            <td class="text-center">{{row.UpdateExpectedDate}}</td>
-            <td class="text-center">
+            <td class="text-left">{{row.UpdateWorkStarted}}</td>
+            <td class="text-left">{{row.UpdateExpectedDate}}</td>
+            <td class="text-left">
               <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.WorkCopy}}">
                 <i class="ti ti-eye"></i>
               </a>
             </td>
-            <td class="text-center">{{row.UpdatePercentWork}}</td>
-            <td class="text-center">{{row.UpdateRemarks}}</td>
+            <td class="text-left">{{row.UpdatePercentWork}}</td>
+            <td class="text-left">{{row.UpdateRemarks}}</td>
             <td>
-              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteUpdateWork(idx)">
+              <button *ngIf="TypeID!=1" class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteUpdateWork(idx)">
                 <i class="ti ti-trash"></i>
               </button>
 
@@ -2928,11 +2346,11 @@
 
     <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin
 
-        ||sSOLoginDataModel.RoleID==97" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        ||sSOLoginDataModel.RoleID==97 || sSOLoginDataModel.RoleID==20" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5">Other Document</b>
     </div>
 
-    <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+    <div *ngIf="TypeID!=1" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document Type: <span class="StarMarking">*</span></label>
         <select class="form-select" id="CollegeID" [(ngModel)]="request.PlanDocID">
@@ -2984,9 +2402,9 @@
 
 
 
-          <tr>
+          <tr class="text-left">
 
-            <th>
+            <th >
               S.No
 
             </th>
@@ -3008,17 +2426,17 @@
 
         <tbody>
           <tr *ngFor="let row of request.OtherDocument; let idx = index">
-            <td class="text-center">{{idx+1}}</td>
-            <td class="text-center">{{row.OrderTypeName}}</td>
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.OrderTypeName}}</td>
 
 
-            <td class="text-center">
+            <td class="text-left">
               <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
                 <i class="ti ti-eye"></i>
               </a>
             </td>
             <td>
-              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteUpdatePlan(idx)">
+              <button *ngIf="TypeID!=1" class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteUpdatePlan(idx)">
                 <i class="ti ti-trash"></i>
               </button>
 
@@ -3029,7 +2447,7 @@
     </div>
 
 
-    <div *ngIf="request.IsNewCollege!=undefined" class="card-footer text-center">
+    <div *ngIf="request.IsNewCollege!=undefined && TypeID!=1" class="card-footer text-center">
 
       <button type="button" class="btn bg-success text-white mt-6" (click)="openOTP()">Submit</button>
       <button type="button" class="btn bg-danger text-white mt-6" (click)="resetrow()">Reset</button>
