@@ -199,6 +199,7 @@ export class ITIIIPManageComponent {
   }
 
   async GetAllIMCFundData() {
+    debugger
     try {
       debugger;
       this.loaderService.requestStarted();

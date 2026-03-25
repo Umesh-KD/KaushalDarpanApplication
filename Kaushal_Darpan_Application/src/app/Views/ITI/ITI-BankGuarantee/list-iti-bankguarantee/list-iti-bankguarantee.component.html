@@ -201,27 +201,11 @@
 
   <div class="card">
     <div class="card-header flex justify-between  items-center">
-      <b>Return Bank gaurantee</b>
+      <b>Return at Maturity</b>
       <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
     </div>
     <div class="card-body">
       <form [formGroup]="bankGuaranteeFormGroup">
-        <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Status:
-    </label>
-    <select class="form-input" formControlName="status" [(ngModel)]="requestById.status">
-      <option value="1">Active</option>
-    </select>
-
-    <div *ngIf="isSubmitted && _bankGuaranteeFormGroup?.status?.errors" class="text-danger">
-      <p *ngIf="_bankGuaranteeFormGroup.status.errors.required">
-        This field is required!
-      </p>
-    </div>
-  </div>-->
-
-
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -260,9 +244,6 @@
           <button type="button" class="btn bg-info text-white mt-6" (click)="statusUpdateById()">Submit</button>
         </div>
       </div>
-
-
-
     </div>
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
     </div>
