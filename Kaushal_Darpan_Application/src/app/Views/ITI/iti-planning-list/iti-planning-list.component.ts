@@ -473,19 +473,23 @@ export class ItiPlanningListComponent {
 
       this.loaderService.requestStarted();
 
-
       await this.campusPostService.Get_ITIsPlanningData_ByIDReport(this.CollegeID)
         .then((data: any) => {
+
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
+
           data = JSON.parse(JSON.stringify(data));
-          debugger
+          debugger;
+
           if (data && data.Data) {
+
             const base64 = data.Data;
 
             const byteCharacters = atob(base64);
             const byteNumbers = new Array(byteCharacters.length);
+
             for (let i = 0; i < byteCharacters.length; i++) {
               byteNumbers[i] = byteCharacters.charCodeAt(i);
             }
@@ -494,19 +498,32 @@ export class ItiPlanningListComponent {
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
+            // ✅ Date in ddmmyyyy format
+            const today = new Date();
+            const formattedDate =
+              today.getDate().toString().padStart(2, '0') +
+              (today.getMonth() + 1).toString().padStart(2, '0') +
+              today.getFullYear();
+
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'ITIPlanningReport.pdf';
+
+            // ✅ Final filename
+            link.download = `ITIPlanningReport_${formattedDate}.pdf`;
+
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
             URL.revokeObjectURL(blobUrl);
+
           } else {
-            this.toastr.error(this.Message)
+            this.toastr.error(this.Message);
           }
+
         }, (error: any) => {
           console.error(error);
-          this.toastr.error(this.ErrorMessage)
+          this.toastr.error(this.ErrorMessage);
         });
 
     } catch (Ex) {
