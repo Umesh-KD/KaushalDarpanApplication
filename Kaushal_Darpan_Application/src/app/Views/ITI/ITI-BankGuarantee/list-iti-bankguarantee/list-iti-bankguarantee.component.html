@@ -157,14 +157,14 @@
 
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="Return" (click)="ViewandUpdate(MyModel_ViewDetails, item)"><i class="ti ti-arrow-back-up"></i>
+                <a *ngIf="item.Status === 3" href="javascript:void(0);" title="Return" (click)="ViewandUpdate(MyModel_ViewDetails, item)"><i class="ti ti-arrow-back-up"></i>
                 </a>
-                <a *ngIf="item.Status === 1" href="javascript:void(0);" title="ReNew" (click)="ReNew(item.BankGuaranteeID)"><i class="ti ti-refresh"></i></a>
+                <a *ngIf="item.Status === 2" href="javascript:void(0);" title="ReNew" (click)="ReNew(item.BankGuaranteeID)"><i class="ti ti-refresh"></i></a>
                 <a *ngIf="item.BankAgreementDocument!=''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.BankAgreementDocument}}"
                    target="_blank" title="Download Document">
                   <i class="ti ti-download"></i>
                 </a>
-                <a href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
+                <a *ngIf="item.Status === 1" href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
               </div>
             </td>
           </tr>

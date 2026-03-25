@@ -54,26 +54,12 @@ export class itiAdminSubUserComponent {
 
   async ngOnInit() {
 
-    //this.AdminUserFormGroup = this.formBuilder.group(
-    //  {
-    //    txtUserName: [{ value: '', disabled: true }, Validators.required],
-
-    //    txtUserEmail: ['', Validators.required],
-    //    RoleID: ['', [DropdownValidators]],
-    //    InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
-    //    txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
-    //    //txtMobileNo: ['', Validators.required],
-    //    txtMobileNo: [{ value: '', disabled: true }, Validators.required],
-    //  });
-
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
     await this.GetAllData();
-   // await this.GetAllDataITI();
-
-
+  
   }
-  get _AdminUserFormGroup() { return this.AdminUserFormGroup.controls; }
+  //get _AdminUserFormGroup() { return this.AdminUserFormGroup.controls; }
 
   maskMobileNumber(mobile: string): string {
     if (mobile && mobile.length > 4) {
@@ -86,6 +72,7 @@ export class itiAdminSubUserComponent {
 
 
   async GetAllData() {
+    debugger
     try {
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -116,32 +103,6 @@ export class itiAdminSubUserComponent {
   }
 
 
-  //async GetAllDataITI() {
-  //  try {
-
-
-
-  //    this.loaderService.requestStarted();
-  //    await this.commonMasterService.Iticollege(2, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID,0).then((data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      debugger
-  //      this.CollegeList = data.Data;
-  //      console.log(this.AdminUserList, "marksheetlist")
-  //    }, (error: any) => console.error(error))
-  //  }
-  //  catch (ex) {
-  //    console.log(ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
-
-
-  // get all data
   async ClearSearchData() {
     this.searchRequest = new ITIAdminUserSearchModel();
     this.AdminUserList = [];
@@ -151,10 +112,6 @@ export class itiAdminSubUserComponent {
 
   async ViewandUpdate(content: any, UserID: number, UserAdditionID: number, ProfileID: number,InstituteID:number,RoleID:number=0) {
 
-    //const initialState = {
-    //  MarksheetIssueDataId: MarksheetIssueDataId,
-    //  Type: "Admin",
-    //};
     debugger
     this.UserID = UserID;
     this.UserAdditionID = UserAdditionID;
@@ -176,10 +133,7 @@ export class itiAdminSubUserComponent {
 
   }
 
-  //CloseModalPopup() {
-  //  this.modalService.dismissAll();
-  //  this.ResetControls();
-  //}
+
 
   async GetById() {
     try {
@@ -298,7 +252,7 @@ export class itiAdminSubUserComponent {
             return;
           }
 
-          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
+
         }
       });
     } catch (error) {

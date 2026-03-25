@@ -79,16 +79,18 @@
             <th class="text-left"> Name</th>
             <th class="text-left">SSOID</th>
             <th class="text-left">Email</th>
+            <th class="text-left">Role</th>
             <th class="text-left">Mobile Number</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let Admi of AdminUserList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+          <tr *ngFor="let Admi of AdminUserList | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
             <td>{{Admi.Name}}</td>
             <td>{{Admi.SSOID}}</td>
             <td>{{Admi.Email}}</td>
+            <td>{{Admi.roleName}}</td>
             <td>{{Admi.MobileNo}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">

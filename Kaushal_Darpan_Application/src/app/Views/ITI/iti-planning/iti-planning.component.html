@@ -1089,7 +1089,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
 
 
           <div>
-            <label for="Ward">Amount Required:<span class="StarMarking">*</span></label>
+            <label for="Ward">Bank Guarantee  Required:<span class="StarMarking">*</span></label>
             <input formControlName="AmountRequired" class="form-input" type="text" id="Ward" placeholder="Enter Required Amount "
                    [(ngModel)]="request.AmountRequired">
             <div *ngIf="isSubmitted&&_AddressFormGroup.AmountRequired.errors" class="text-danger">
@@ -1100,7 +1100,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
           </div>
 
           <div>
-            <label for="Ward">Amount Available:<span class="StarMarking">*</span></label>
+            <label for="Ward">Bank Guarantee Available:<span class="StarMarking">*</span></label>
             <input formControlName="AmountAvailable" class="form-input" type="text" id="Ward" placeholder="Enter Available Amount "
                    [(ngModel)]="request.AmountAvailable">
             <div *ngIf="isSubmitted&&_AddressFormGroup.AmountAvailable.errors" class="text-danger">
@@ -1112,7 +1112,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
 
 
           <div>
-            <label for="Ward">Difference:<span class="StarMarking">*</span></label>
+            <label for="Ward">Bank Guarantee Due:<span class="StarMarking">*</span></label>
             <input formControlName="AmountDifference" class="form-input" type="text" id="Ward" placeholder="Enter Difference Amount "
                    [(ngModel)]="request.AmountDifference">
             <div *ngIf="isSubmitted&&_AddressFormGroup.AmountDifference.errors" class="text-danger">
