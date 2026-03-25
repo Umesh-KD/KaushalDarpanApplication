@@ -1694,6 +1694,7 @@ const routes: Routes = [
         path: 'ssologin/:id1', loadChildren: () => import('./Views/ssologin/ssologin.module').then(m => m.SSOLoginModule), title: 'SSO Login'
       },
       { path: 'PaymentStatus', loadChildren: () => import('./Views/Student/payment-status/payment-status.module').then(m => m.PaymentStatusModule), title: 'Payment Status' },
+      { path: 'PaymentStatus-reval', loadChildren: () => import('./Views/Student/payment-status/payment-status.module').then(m => m.PaymentStatusModule), title: 'Payment Status' },
       { path: 'DepartmentLogin', loadChildren: () => import('./Views/department-login/department-login.module').then(m => m.DepartmentLoginModule) },
 
 
