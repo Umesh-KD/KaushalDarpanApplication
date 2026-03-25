@@ -205,16 +205,20 @@ export class RevaluationComponent implements AfterViewInit {
             this.emitraRequest.CourseTypeID = this.studentDetailsModel.CourseTypeID;
             this.emitraRequest.ExamStudentStatus = enumExamStudentStatus.Revaluation;
             this.emitraRequest.FeeFor = "RevalFee";
+            this.emitraRequest.USEREMAIL = this.studentDetailsModel.Email ?? "";
             //common
            
             this.emitraRequest.IsKiosk = false;
             //this.GetDateDataList();
             this.loaderService.requestStarted();
-
+            debugger
             // for payment by emitra 
             if(this.sSOLoginDataModel.IsKiosk == true) {
               this.emitraRequest.IsKiosk = true;
               this.emitraRequest.FormCommision = this.studentDetailsModel.FormCommision;
+              this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
+              this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
+
               try {
                 await this.emitraPaymentService.RevalFeePayment_Kiosk(this.emitraRequest)
                   .then(async (data: any) => {
@@ -235,14 +239,14 @@ export class RevaluationComponent implements AfterViewInit {
                         }
                         else {
                           let displayMessage = data.Message ?? data.ErrorMessage;
-                          this.toastrService.error(displayMessage);
+                          this.toastr.error(displayMessage);
                         }
                       });
                       //open
                     }
                     else {
                       let displayMessage = data.Message ?? data.ErrorMessage;
-                      this.toastrService.error(displayMessage)
+                      this.toastr.error(displayMessage)
                     }
                   })
               }
