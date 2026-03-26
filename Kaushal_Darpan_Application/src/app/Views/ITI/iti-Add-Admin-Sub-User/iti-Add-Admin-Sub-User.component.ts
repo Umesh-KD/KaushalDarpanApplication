@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ItiSanctionOrderList } from '../../../Models/ITI/ItiReportDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -12,6 +12,7 @@ import { ITIAdminUserDetailModel } from '../../../Models/ITI/ITIAdminUserDataMod
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 import { ITIAdminUserService } from '../../../Services/ITI/ITI-Admin-User/itiadmin-user.service';
 import { Router } from '@angular/router';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-iti-Add-Admin-Sub-User',
@@ -38,6 +39,7 @@ export class itiAddAdminSubUserComponent {
   public Isverifed: boolean = false
   public requestSSoApi = new CommonVerifierApiDataModel();
   public IsView: boolean = false;
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
   constructor(private adminUserService: ITIAdminUserService,
     private commonMasterService: CommonFunctionService, 
     private toastr: ToastrService, private routers: Router,
@@ -108,7 +110,7 @@ export class itiAddAdminSubUserComponent {
       this.adminRequest.CreatedBy = this.sSOLoginDataModel.UserID;
       this.adminRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.adminRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      debugger
+      await this.openOTP();
       await this.adminUserService.adminUserDataSave(this.adminRequest)
         .then((data: any) => {
           ;
@@ -202,5 +204,15 @@ export class itiAddAdminSubUserComponent {
 
   }
 
+
+  async openOTP() {
+    debugger
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+
+  }
 
 }
