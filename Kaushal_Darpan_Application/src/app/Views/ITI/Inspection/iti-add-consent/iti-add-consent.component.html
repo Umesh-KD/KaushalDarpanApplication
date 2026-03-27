@@ -27,7 +27,8 @@
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College Name</label>
-              <select type="text" class="form-input" formControlName="InstituteID" [(ngModel)]="consentDeploy.InstituteID">
+              <select type="text" class="form-input" formControlName="InstituteID" [(ngModel)]="consentDeploy.InstituteID"
+                      (change)="calculateAmount()">
                 <option value="0">--Select--</option>
                 @for (item of InstituteMasterDDL; track item.Id) {
                 <option [value]="item.Id">{{item.Name}}</option>

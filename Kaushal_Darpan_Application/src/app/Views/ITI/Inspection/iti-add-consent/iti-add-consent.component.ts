@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ITIInspectionService } from '../../../../Services/ITI/ITI-Inspection/iti-inspection.service';
 import { EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/GlobalConstants';
 import { Router } from '@angular/router';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-iti-add-consent',
@@ -43,6 +44,7 @@ export class ITIAddConsentComponent {
     private toastr: ToastrService,
     private itiInspectionService: ITIInspectionService,
     private router: Router,
+    private commonMasterService: CommonFunctionService,
   ){}
 
   async ngOnInit() {
@@ -52,12 +54,14 @@ export class ITIAddConsentComponent {
       InstituteID: ['', [DropdownValidators]],
       TentativeDate: [''],
       consentTypeID: ['', [DropdownValidators]],
-      txtAmount: ['2000'],
+      txtAmount: [''],
       txtRemark: ['']
     });
     this.getMasterData();
+    this.calculateAmount()
   }
 
+  
   get _consentFromGroup() { return this.consentFromGroup.controls;}
 
   async getMasterData() {
@@ -139,19 +143,28 @@ export class ITIAddConsentComponent {
   //}
 
 
+  
+
   async AddDeployment() {
     this.isSubmitted = true;
     this.consentFromGroup.markAllAsTouched();
+
     if (this.consentFromGroup.invalid) {
       return;
     }
+
     const isDuplicate = this.consentDeployList.some(
       (element: any) => this.consentDeploy.InstituteID === element.InstituteID
     );
+
     if (isDuplicate) {
       this.toastr.error('College Already Listed!');
       return;
     }
+
+    //  ADD THIS LINE (MOST IMPORTANT)
+   // this.consentDeploy.Amount = this.currentAmount;
+
     this.consentDeploy.InstituteName = this.InstituteMasterDDL.find(
       (x: any) => x.Id == this.consentDeploy.InstituteID
     )?.Name;
@@ -162,26 +175,38 @@ export class ITIAddConsentComponent {
 
     this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
 
+    // push data
     this.consentDeployList.push({ ...this.consentDeploy });
+
     const remarkControl = this.consentFromGroup.get('txtRemark');
+
+    // reset model
     this.consentDeploy = new ConsentModel();
+
+    //  reset TS amount also
+    //this.currentAmount = 2000;
+
     this.consentDeploy.Amount = 2000;
     this.consentDeploy.Remark = '';
 
     this.showRemark = false;
+
     // reset validation
     remarkControl?.clearValidators();
     remarkControl?.setValue('');
     remarkControl?.updateValueAndValidity();
 
-    // reset form state
+    // reset form
     this.consentFromGroup.patchValue({
       txtAmount: 2000,
       txtRemark: ''
     });
+
     this.isSubmitted = false;
+
     console.log('Bind List ==>', this.consentDeployList);
   }
+
 
   async SaveData() {
     debugger
@@ -258,6 +283,14 @@ export class ITIAddConsentComponent {
     remarkControl?.updateValueAndValidity();
   }
 
+
+  async calculateAmount() {
+    debugger
+    this.commonMasterService.GetCommonMasterData('consentAmount', this.consentDeploy.InstituteID).then((data: any) => {
+      debugger
+      this.consentDeploy.Amount = data['Data'][0]['Name'];
+    });
+  }
 
 
 }
