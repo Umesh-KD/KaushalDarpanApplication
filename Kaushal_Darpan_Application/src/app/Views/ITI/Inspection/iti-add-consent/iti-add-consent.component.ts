@@ -1,6 +1,6 @@
 /// <reference path="iti-add-consent.module.ts" />
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CenterMasterDDLDataModel, ITI_InspectionSearchModel, ConsentModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ITIInspectionService } from '../../../../Services/ITI/ITI-Inspection/iti-inspection.service';
 import { EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/GlobalConstants';
 import { Router } from '@angular/router';
+import { CommonFunctionService } from '../../../../Common/common';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 @Component({
   selector: 'app-iti-add-consent',
@@ -34,9 +36,15 @@ export class ITIAddConsentComponent {
   isFormSubmitted: boolean = false;
   requestCenter = new CenterMasterDDLDataModel();
   _EnumInspectionDeploymentType = EnumInspectionDeploymentType;
-  DeploymentTypeList: any = []
+  DeploymentTypeList: any = [];
+  public State:number=0;
+  public Message:string='';
+  public ErrorMessage:string='';
+  public file!: File;
+  public Uploadfile: string = '';
 
   constructor(
+    private commonFunctionService: CommonFunctionService,
     private fb: FormBuilder,
     private loaderService: LoaderService,
     private toastr: ToastrService,
@@ -51,7 +59,12 @@ export class ITIAddConsentComponent {
       InstituteID: ['', [DropdownValidators]],
       TentativeDate: [''],
       consentTypeID: ['', [DropdownValidators]],
-      txtAmount:['']
+      txtAmount:[''],
+      IsAnyCourtCase:['0'],
+      txtCourtName:[''],
+      txtCaseNo:[''],
+      txtCourtDate:[''],
+      CourtDocFileName:[''],
     });
     this.getMasterData();
   }
@@ -73,6 +86,93 @@ export class ITIAddConsentComponent {
       console.error(error);
     }
   }
+
+  IsAnyCourtCase (){
+    console.log(this.consentDeploy.IsAnyCourtCase);
+    if(this.consentDeploy.IsAnyCourtCase == true){
+      this.consentFromGroup.get('txtCourtName')?.setValidators([Validators.required]);
+      this.consentFromGroup.get('txtCaseNo')?.setValidators([Validators.required]);
+      this.consentFromGroup.get('txtCourtDate')?.setValidators(Validators.required);
+      this.consentFromGroup.get('CourtDocFileName')?.setValidators(Validators.required);
+    }
+    else{
+      this.consentFromGroup.get('txtCourtName')?.clearValidators();
+      this.consentFromGroup.get('txtCaseNo')?.clearValidators();
+      this.consentFromGroup.get('txtCourtDate')?.clearValidators();
+      this.consentFromGroup.get('CourtDocFileName')?.clearValidators();
+    }
+    this.consentFromGroup.get('txtCourtName')?.updateValueAndValidity();
+    this.consentFromGroup.get('txtCaseNo')?.updateValueAndValidity();
+    this.consentFromGroup.get('txtCourtDate')?.updateValueAndValidity();
+    this.consentFromGroup.get('CourtDocFileName')?.updateValueAndValidity();
+
+  }
+  
+
+  async onFilechange(event: any) {
+    debugger;
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        // Type validation
+        if (this.file) {
+          if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type=='application/pdf') {
+            //size validation
+            if (this.file.size > 2000000) {
+              this.toastr.error('Select less then 2MB File')
+              return
+            }
+          }
+        else {
+          this.toastr.error('Select Only jpeg/jpg/png/pdf file')
+          //const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+          //if (fileInput) {
+          // fileInput.value = '';  // clear FileInput
+          //}
+          this.Uploadfile = '';
+          this.consentDeploy.DisCourtDocFileName = '';
+          event.target.value = null;
+          return;
+        }
+
+        //upload model
+        let uploadModel = new UploadFileModel();
+        uploadModel.FileExtention = this.file.type ?? "";
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = "ITI/InspectionManagerITI";
+
+        //Upload to server folder
+        await this.commonFunctionService.UploadDocument(this.file, uploadModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+
+              const fileName = data['Data'][0]["Dis_FileName"];
+              const actualFile = data['Data'][0]["FileName"];
+
+              this.Uploadfile = data['Data'][0]["FileName"];
+              this.consentDeploy.DisCourtDocFileName = this.Uploadfile;
+              this.consentDeploy.CourtDocFileName = this.Uploadfile;
+            }
+
+            if (data.State === EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage);
+
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            }
+          });
+      }
+    }
+   }
+    catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
 
   GetInstituteMaster_ByDistrictWise(ID: any) {
     this.requestCenter.action = 'GetInstituteMaster_ByDistrictWise'
