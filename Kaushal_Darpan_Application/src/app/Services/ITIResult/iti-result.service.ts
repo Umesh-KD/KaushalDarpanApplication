@@ -108,7 +108,6 @@ export class ITIResultService {
   }
 
 
-  // vivek
   public async GetCFormConsolidatedReport(requestObj: ItiGetResultDataModel) {
     var body = JSON.stringify(requestObj);
     return await this.http.post(`${this.APIUrl}/GetCFormConsolidatedReport`, body, this.headersOptions)

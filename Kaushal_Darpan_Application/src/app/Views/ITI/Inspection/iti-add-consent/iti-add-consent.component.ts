@@ -1,6 +1,6 @@
 /// <reference path="iti-add-consent.module.ts" />
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CenterMasterDDLDataModel, ITI_InspectionSearchModel, ConsentModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
@@ -35,6 +35,7 @@ export class ITIAddConsentComponent {
   requestCenter = new CenterMasterDDLDataModel();
   _EnumInspectionDeploymentType = EnumInspectionDeploymentType;
   DeploymentTypeList: any = []
+  showRemark: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +52,8 @@ export class ITIAddConsentComponent {
       InstituteID: ['', [DropdownValidators]],
       TentativeDate: [''],
       consentTypeID: ['', [DropdownValidators]],
-      txtAmount:['']
+      txtAmount: ['2000'],
+      txtRemark: ['']
     });
     this.getMasterData();
   }
@@ -109,9 +111,37 @@ export class ITIAddConsentComponent {
     this.InstituteMasterDDL = [];
   }
 
+  //async AddDeployment() {
+  //  debugger
+  //  this.isSubmitted = true;
+  //  if (this.consentFromGroup.invalid) {
+  //    return;
+  //  }
+  //  const isDuplicate = this.consentDeployList.some(
+  //    (element: any) => this.consentDeploy.InstituteID === element.InstituteID
+  //  );
+  //  if (isDuplicate) {
+  //    this.toastr.error('College Already Listed!');
+  //    return;
+  //  }
+  //  this.consentDeploy.InstituteName = this.InstituteMasterDDL.find(
+  //    (x: any) => x.Id == this.consentDeploy.InstituteID
+  //  )?.Name;
+  //  this.consentDeploy.DistrictName = this.DistrictMasterDDL.find(
+  //    (x: any) => x.ID == this.consentDeploy.DistrictID
+  //  )?.Name;
+  //  this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
+  //  this.consentDeployList.push({ ...this.consentDeploy });
+
+  //  this.consentDeploy = new ConsentModel();
+  //  this.isSubmitted = false;
+  //  console.log('Bind List ==>',this.consentDeployList)
+  //}
+
+
   async AddDeployment() {
-    debugger
     this.isSubmitted = true;
+    this.consentFromGroup.markAllAsTouched();
     if (this.consentFromGroup.invalid) {
       return;
     }
@@ -125,15 +155,32 @@ export class ITIAddConsentComponent {
     this.consentDeploy.InstituteName = this.InstituteMasterDDL.find(
       (x: any) => x.Id == this.consentDeploy.InstituteID
     )?.Name;
+
     this.consentDeploy.DistrictName = this.DistrictMasterDDL.find(
       (x: any) => x.ID == this.consentDeploy.DistrictID
     )?.Name;
-    this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
-    this.consentDeployList.push({ ...this.consentDeploy });
 
-    this.consentDeploy = new ConsentModel(); 
+    this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
+
+    this.consentDeployList.push({ ...this.consentDeploy });
+    const remarkControl = this.consentFromGroup.get('txtRemark');
+    this.consentDeploy = new ConsentModel();
+    this.consentDeploy.Amount = 2000;
+    this.consentDeploy.Remark = '';
+
+    this.showRemark = false;
+    // reset validation
+    remarkControl?.clearValidators();
+    remarkControl?.setValue('');
+    remarkControl?.updateValueAndValidity();
+
+    // reset form state
+    this.consentFromGroup.patchValue({
+      txtAmount: 2000,
+      txtRemark: ''
+    });
     this.isSubmitted = false;
-    console.log('Bind List ==>',this.consentDeployList)
+    console.log('Bind List ==>', this.consentDeployList);
   }
 
   async SaveData() {
@@ -190,5 +237,27 @@ export class ITIAddConsentComponent {
     return true;
 
   }
+
+
+
+  
+  onAmountChange() {
+    const amount = Number(this.consentDeploy.Amount);
+    const remarkControl = this.consentFromGroup.get('txtRemark');
+
+    if (amount !== 2000) {
+      this.showRemark = true;
+      remarkControl?.setValidators([Validators.required]);
+    } else {
+      this.showRemark = false;
+      remarkControl?.clearValidators();
+      remarkControl?.setValue('');
+      this.consentDeploy.Remark = '';
+    }
+
+    remarkControl?.updateValueAndValidity();
+  }
+
+
 
 }

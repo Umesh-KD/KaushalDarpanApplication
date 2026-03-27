@@ -146,7 +146,7 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 12, Name: 'Student Examiner Detail Report', URL: 'StudentDetailsReport' },
       { ID: 13, Name: 'Appeared/Passed Statistics Report', URL: 'Appeared-Passesd-Statistics' },
       { ID: 14, Name: 'Appeared/Passed Statistics Institute wise Report', URL: 'Appeared-Passesd-Statistics-Institute-wise' },
-      // vivek
+      
       { ID: 15, Name: 'Exam Result Student Statics Report', URL: 'Exam-Result-Student-Statics-report' },
       { ID: 15, Name: 'Subject Theory Practical Mark Statics', URL: 'Subject-Theory-Parctical-Mark-Statics-report' },
       { ID: 16, Name: 'Result Sheet', URL: 'Result-Appeared-Passed-Statistics-Report' },
@@ -250,7 +250,6 @@ export class BterResultReportsComponent implements OnInit {
         case "Appeared-Passesd-Statistics-Institute-wise":
           response = await this.reportService.DownloadAppearedPassedInstitutewise(this.filterModel);
           break;
-        // vivek 
         case "Exam-Result-Student-Statics-report":
           await this.GetExamResultStudentStaticsReport();
           break;

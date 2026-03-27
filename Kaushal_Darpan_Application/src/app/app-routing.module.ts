@@ -1602,6 +1602,8 @@ const routes: Routes = [
       { path: 'Add-Nodal-User', loadChildren: () => import('./Views/ITI/iti-Add-Nodel-User/iti-Add-Nodel-User.module').then(m => m.itiAddNodelUserModule) },
       { path: 'Nodal-User-List', loadChildren: () => import('./Views/ITI/iti-Nodel-User-List/iti-Nodel-User-List.module').then(m => m.itiNodelUserListModule), title: 'Nodal User List' },
 
+      { path: 'bter-Reval-Report', loadChildren: () => import('./Views/BTER/bter-Reval-Report/bter-Reval-Report.module').then(m => m.bterRevalReportModule), title: 'Reval Report' },
+
 
 
       { path: 'ITIStaffWorkRegularArrangementReort', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-StaffWorkRegularArrangementReort/ITI-StaffWorkRegularArrangementReort.module').then(m => m.ITIStaffWorkRegularArrangementReortModule) },
