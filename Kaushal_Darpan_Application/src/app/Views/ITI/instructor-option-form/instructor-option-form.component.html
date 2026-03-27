@@ -62,14 +62,31 @@
           </div>
         </div>
 
-
+        <div>
+          <label for="txtParentsincomefromallsources"
+                 class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Trade Name: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="ddlTrade" id="ddlTrade" formControlName="ddlTrade"
+                  [(ngModel)]="formData.TradeID"  (change)="GetTradeAndColleges()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">
+              {{item.TradeName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlTrade.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlTrade.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
 
         <div>
           <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Name of ITI: <span class="StarMarking">*</span>
           </label>
           <select class="form-select" name="ddlITI" id="ddlInstitute" formControlName="ddlInstitute"
-                  [(ngModel)]="formData.InstituteID" (change)="GetTradeListDDL()">
+                  [(ngModel)]="formData.InstituteID" >
             <option value="0">--Choose Option--</option>
             <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">
               {{item.CodeAndName}}
@@ -84,24 +101,7 @@
 
 
 
-        <div>
-          <label for="txtParentsincomefromallsources"
-                 class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Trade Name: <span class="StarMarking">*</span>
-          </label>
-          <select class="form-select" name="ddlTrade" id="ddlTrade" formControlName="ddlTrade"
-                  [(ngModel)]="formData.TradeID">
-            <option value="0">--Choose Option--</option>
-            <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">
-              {{item.TradeName}}
-            </option>
-          </select>
-          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlTrade.errors" class="text-danger">
-            <p *ngIf="!_OptionsFormGroup.ddlTrade.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>
-        </div>
+
         <div></div>
 
         <div class="pt-30 flex">

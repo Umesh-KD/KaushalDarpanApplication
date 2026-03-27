@@ -1203,8 +1203,8 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
 
         </div>
 
-        <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+        <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal&&
+        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT && request.InstituteManagementId!=1"
              class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
           <div class="flex items-center justify-between mb-3">
             <div>

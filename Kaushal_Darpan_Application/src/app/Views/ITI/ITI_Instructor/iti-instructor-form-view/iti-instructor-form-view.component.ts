@@ -846,7 +846,8 @@ export class ItiInstructorFormViewComponent {
       Tech_CITSCertifiedDocument: this.techRequest.Tech_CITSCertifiedDocument,
       QualificationName: QualificationName,
       StreamName: StreamName,
-      OtherCITSQualification: this.formData.OtherCITSQualification
+      OtherCITSQualification: this.formData.OtherCITSQualification,
+      TypeID: this.techRequest.TypeID
     });
     console.log('Request List===>', this.techRequestList)
     this.formData.OtherCITSQualification = [new ITI_InstructorTechnicalCITSQualificationList()];

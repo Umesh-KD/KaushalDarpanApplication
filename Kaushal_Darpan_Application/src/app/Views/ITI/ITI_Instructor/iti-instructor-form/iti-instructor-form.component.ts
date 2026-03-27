@@ -66,6 +66,7 @@ export class ItiInstructorFormComponent {
   public DistrictMasterList3: any[] = [];
   public verifyrequest = new Iti_InstructorVerification()
   public BoardList: any = []
+  totalOverallExperience: string = '0 Year 0 Month';
   closeResult: string | undefined;
   public maxDate:string=''
   public request = new ITI_InstructorDataModel()
@@ -361,6 +362,7 @@ export class ItiInstructorFormComponent {
 
       Tech_CITSTrade: [''],
       Tech_CITSYear: [''],
+      TypeID: ['',],
 
       OtherCITSQualification: this.formBuilder.array([])
     });
@@ -736,27 +738,59 @@ export class ItiInstructorFormComponent {
   //addTechQualificationCITS() {
   //  this.formData.OtherCITSQualification.push(new ITI_InstructorTechnicalCITSQualificationList());
   //}
-
   addTechQualificationCITS() {
-
-    const lastItem = this.formData.OtherCITSQualification[
-      this.formData.OtherCITSQualification.length - 1
-    ];
-
-    if (!this.validateCITSRow(lastItem)) {
-      return;  //  Do not add new row
+    if (!this.formData.OtherCITSQualification) {
+      this.formData.OtherCITSQualification = [];
+    }
+    debugger
+    if (this.formData.OtherCITSQualification.length === 0) {
+      this.formData.OtherCITSQualification.push(
+        new ITI_InstructorTechnicalCITSQualificationList()
+      );
+      return;
     }
 
-    //  Add new row
+    const lastItem =
+      this.formData.OtherCITSQualification[
+      this.formData.OtherCITSQualification.length - 1
+      ];
+
+    if (this.isCITSRowEmpty(lastItem)) {
+      return;
+    }
+
+    if (!this.validateCITSRow(lastItem)) {
+      return;
+    }
+
     this.formData.OtherCITSQualification.push(
       new ITI_InstructorTechnicalCITSQualificationList()
+    );
+  }
+  onCITSTradeChange(item: any) {
+    const selectedStream = this.CITSStreamList?.find(
+      (x: any) => x.StreamID == item.Tech_CITSTrade
+    );
+
+    item.Tech_CITSTradeName = selectedStream ? selectedStream.StreamName : '';
+  }
+
+
+  isCITSRowEmpty(item: any): boolean {
+    return (
+      !item ||
+      (
+        (!item.Tech_CITSYear || item.Tech_CITSYear === '') &&
+        (!item.Tech_CITSTrade || item.Tech_CITSTrade === '') &&
+        (!item.Tech_CITSCertifiedDocument || item.Tech_CITSCertifiedDocument === '')
+      )
     );
   }
 
   validateCITSRow(item: any): boolean {
     let isValid = true;
 
-    item.errors = {}; // reset error object
+    item.errors = {};
 
     if (!item.Tech_CITSYear || item.Tech_CITSYear === "") {
       item.errors.Tech_CITSYear = true;
@@ -847,7 +881,7 @@ export class ItiInstructorFormComponent {
 
 
   addTechQualification() {
-    if (!this.techRequest.QualificationID) {
+    if (!this.techRequest.QualificationID ) {
       alert("Please fill required fields before adding");
       return;
     }
@@ -864,6 +898,11 @@ export class ItiInstructorFormComponent {
         alert("Percentage must be between 0 and 100");
         return;
       }
+    }
+
+    if (this.TechnicalForm.get('CITSCertified')?.value == '1' && this.techRequest.TypeID==0) {
+      alert("Please Select Type");
+      return;
     }
 
     const QualificationName = this.QualificationDDL.find(
@@ -890,7 +929,8 @@ export class ItiInstructorFormComponent {
       Tech_CITSCertifiedDocument: this.techRequest.Tech_CITSCertifiedDocument,
       QualificationName: QualificationName,
       StreamName: StreamName,
-      OtherCITSQualification: this.formData.OtherCITSQualification
+      OtherCITSQualification: this.formData.OtherCITSQualification,
+      TypeID: this.techRequest.TypeID
     });
     console.log('Request List===>',this.techRequestList)
     this.formData.OtherCITSQualification = [new ITI_InstructorTechnicalCITSQualificationList()];
@@ -910,7 +950,8 @@ export class ItiInstructorFormComponent {
       CITSCertified: '0',   
       Tech_CITSCertifiedDocument: '',
       Tech_CITSTrade: '',
-      Tech_CITSYear: ''
+      Tech_CITSYear: '',
+      TypeID:0
     });
 
 
@@ -933,19 +974,90 @@ export class ItiInstructorFormComponent {
   //  });
   //  this.TechnicalForm.reset();
   //}
-
-
   addEmployeeQualification() {
     if (this.EmploymentForm.invalid) {
       alert("Please fill required fields before adding");
       return;
     }
 
+    const fromDate = this.employeeRequest.Employment_From
+      ? new Date(this.employeeRequest.Employment_From)
+      : null;
+
+    const toDate =
+      this.employeeRequest.Employer_presentlyWorking === 'true'
+        ? new Date()   // today date if presently working = yes
+        : this.employeeRequest.Employment_To
+          ? new Date(this.employeeRequest.Employment_To)
+          : null;
+
+    if (fromDate && toDate) {
+      if (toDate < fromDate) {
+        alert("Date of Leaving cannot be earlier than Date of Joining");
+        return;
+      }
+
+      const rowExperience = this.calculateExperience(fromDate, toDate);
+      this.employeeRequest.TotalExperience = `${rowExperience.years} Year ${rowExperience.months} Month`;
+    } else {
+      this.employeeRequest.TotalExperience = '';
+    }
+
     this.employeeRequestList.push({ ...this.employeeRequest });
+
     this.employeeRequest = new ITI_InstructorEmploymentDetails();
     this.EmploymentForm.reset();
-    this.isEmp=false
+    this.isEmp = false;
   }
+  calculateExperience(fromDate: Date, toDate: Date) {
+    let years = toDate.getFullYear() - fromDate.getFullYear();
+    let months = toDate.getMonth() - fromDate.getMonth();
+
+    if (toDate.getDate() < fromDate.getDate()) {
+      months--;
+    }
+
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    return { years, months };
+  }
+
+  getOverallExperience() {
+    let totalMonths = 0;
+
+    this.employeeRequestList.forEach((item: any) => {
+      const fromDate = item.Employment_From ? new Date(item.Employment_From) : null;
+
+      const toDate =
+        item.Employer_presentlyWorking === 'true'
+          ? new Date()
+          : item.Employment_To
+            ? new Date(item.Employment_To)
+            : null;
+
+      if (fromDate && toDate) {
+        let months =
+          (toDate.getFullYear() - fromDate.getFullYear()) * 12 +
+          (toDate.getMonth() - fromDate.getMonth());
+
+        // adjust if day is smaller
+        if (toDate.getDate() < fromDate.getDate()) {
+          months--;
+        }
+
+        totalMonths += months;
+      }
+    });
+
+    const years = Math.floor(totalMonths / 12);
+    const months = totalMonths % 12;
+
+    return `${years} Year ${months} Month`;
+  }
+
 
   removeEmployee(index: number) {
     this.employeeRequestList.splice(index, 1);
@@ -1123,6 +1235,10 @@ export class ItiInstructorFormComponent {
     }
     if (this.educationList.length == 0) {
       this.toastr.warning("Please Add Education Detail")
+      return
+    }
+    if (this.techRequestList.length < 1) {
+      this.toastr.warning("Please Add Technical Details")
       return
     }
     if (this.employeeRequestList.length == 0) {
