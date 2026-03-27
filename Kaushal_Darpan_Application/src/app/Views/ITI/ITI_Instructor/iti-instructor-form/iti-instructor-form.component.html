@@ -901,7 +901,7 @@
                                 [ngClass]="{ 'bg-gray-200 text-gray-700 cursor-not-allowed': isViewMode }"
                                 [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}"
                                 (change)="streamddl($event.target.value)">
-                          <option value="">-- Select Examination --</option>
+                          <option [value]="0">-- Select Examination --</option>
                           <option *ngFor="let item of QualificationDDL" [value]="item.QualificationID">
                             {{ item.QualificationName }}
                           </option>
@@ -922,7 +922,7 @@
                                 formControlName="StreamID"
                                 [(ngModel)]="techRequest.StreamID"
                                 [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
-                          <option [ngValue]="0">---Select Board---</option>
+                          <option value="">---Select Board---</option>
                           <option *ngFor="let s of StreamList" [value]="s.StreamID">{{ s.StreamName }}</option>
                         </select>
                       </div>
@@ -1030,9 +1030,26 @@
                           </div>
                         </div>
                       </div>
-                      <div *ngIf="isedu && TechnicalForm.get('CITSCertified')?.errors" class="text-danger mt-1">
-                        <p>This Field is Required .!</p>
+
+                      <div *ngIf="TechnicalForm.get('CITSCertified')?.value == '1'" class="mb-3">
+                        <label>Type<span class="StarMarking">*</span></label>
+                        <select class="form-select"
+                                formControlName="TypeID"
+                                [(ngModel)]="techRequest.TypeID">
+                          <option value="0">-- Select Type --</option>
+                          <option value="1">CITS</option>
+                          <option value="2">NAC</option>
+                        </select>
+
+                        <div *ngIf="isedu && TechnicalForm.get('TypeID')?.errors" class="text-danger mt-1">
+                          <p>This Field is Required .!</p>
+                        </div>
+
                       </div>
+
+
+
+                     
                     </div>
                     <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 sm:grid-col-1 gap-3 mt-3">
 
@@ -1061,16 +1078,22 @@
                                   </div>
                                 </td>
 
-                                <td>
-                                  <select class="form-select" [(ngModel)]="item.Tech_CITSTrade" [ngModelOptions]="{standalone: true}"
-                                          [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
-                                    <option [ngValue]="">---Select Board---</option>
-                                    <option *ngFor="let i of CITSStreamList" [value]="i.StreamID">{{ i.StreamName }}</option>
-                                  </select>
-                                  <div *ngIf="item.errors?.Tech_CITSTrade" class="text-danger">
-                                    <p>This field is required!</p>
-                                  </div>
-                                </td>
+                         <td>
+  <select class="form-select"
+          [(ngModel)]="item.Tech_CITSTrade"
+          [ngModelOptions]="{standalone: true}"
+          (change)="onCITSTradeChange(item)"
+          [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+    <option [ngValue]="''">---Select Board---</option>
+    <option *ngFor="let i of CITSStreamList" [value]="i.StreamID">
+      {{ i.StreamName }}
+    </option>
+  </select>
+
+  <div *ngIf="item.errors?.Tech_CITSTrade" class="text-danger">
+    <p>This field is required!</p>
+  </div>
+</td>
 
                                 <td>
                                   <div class="flex fileUploader">
@@ -1152,9 +1175,22 @@
                           {{ tech.Tech_MarksTypeID == '0' ? tech.Tech_Percentage : tech.Tech_CGPA }}
                         </td>
                         <td>
-                          <a href="javascript:void(0);" title="CITS Certified" class="btn bg-primary text-white btn-sm">
+                          <span class="">
+                            {{
+      tech.TypeID == '1' ? 'CITS' :
+      tech.TypeID == '2' ? 'NAC' : ''
+                            }}
+                          </span>
+
+                        
+
+                          <a *ngIf="tech.TypeID != '0'"
+                             href="javascript:void(0);"
+                             title="View Details"
+                             class="btn bg-primary text-white btn-sm">
                             <i class="ti ti-eye"
-                               (click)="ViewCTISTechQualification(MyModel_ViewCTISTechQualification, tech.ID,i)"></i>
+                               (click)="ViewCTISTechQualification(MyModel_ViewCTISTechQualification, tech.ID, i)">
+                            </i>
                           </a>
                         </td>
                         <td>
@@ -1293,7 +1329,7 @@
                         <p>This field is required .!</p>
                       </div>
                     </div>
-                    <div>
+                    <div *ngIf="employeeRequest.Employer_Registration">
                       <label>{{ dynamicLabel }}<span class="StarMarking">*</span></label>
 
                       <input maxlength="20"
@@ -1470,6 +1506,7 @@
                         <th>Registration Type of Employer</th>
                         <th>Basic Salary per Month</th>
                         <th>Basic salary document</th>
+                        <th>Total Experience</th>
                         <th>Document</th>
                         <th>Action</th>
                       </tr>
@@ -1478,39 +1515,51 @@
                     <tbody>
 
                       <tr *ngFor="let emp of employeeRequestList; let i = index">
-                        <td>{{i+1}}</td>
-                        <td>{{emp.EmployeeCode}}</td>
-                        <td>{{emp.Pan_No}}</td>
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ emp.EmployeeCode }}</td>
+                        <td>{{ emp.Pan_No }}</td>
+
                         <td>
                           <a *ngIf="emp.panDocument"
                              href="{{appsettingConfig.StaticFileRootPathURL + '/' + emp.panDocument}}"
-                             target="_blank" class="btn bg-primary text-white btn-sm">
+                             target="_blank"
+                             class="btn bg-primary text-white btn-sm">
                             <i class="ti ti-eye"></i>
                           </a>
                         </td>
-                        <td>{{emp.PostHeld}}</td>
-                        <td>{{emp.Employee_Type}}</td>
-                        <td>{{emp.Employer_Name}}</td>
-                        <td>{{emp.Employer_Address}}</td>
-                        <td>{{emp.Employer_Registration}}</td>
-                        <td>{{emp.Tan_No}}</td>
-                        <td>{{emp.Basic_Pay}}</td>
+
+                        <td>{{ emp.PostHeld }}</td>
+                        <td>{{ emp.Employee_Type }}</td>
+                        <td>{{ emp.Employer_Name }}</td>
+                        <td>{{ emp.Employer_Address }}</td>
+                        <td>{{ emp.Employer_Registration }}</td>
+                        <td>{{ emp.Tan_No }}</td>
+                        <td>{{ emp.Basic_Pay }}</td>
+
                         <td>
                           <a *ngIf="emp.BasicSalaryDocument"
                              href="{{appsettingConfig.StaticFileRootPathURL + '/' + emp.BasicSalaryDocument}}"
-                             target="_blank" class="btn bg-primary text-white btn-sm">
+                             target="_blank"
+                             class="btn bg-primary text-white btn-sm">
                             <i class="ti ti-eye"></i>
                           </a>
                         </td>
+
+                        <td>{{ emp.TotalExperience }}</td>
+
                         <td>
                           <a *ngIf="emp.EmploymentDocument"
                              href="{{appsettingConfig.StaticFileRootPathURL + '/' + emp.EmploymentDocument}}"
-                             target="_blank" class="btn bg-primary text-white btn-sm">
+                             target="_blank"
+                             class="btn bg-primary text-white btn-sm">
                             <i class="ti ti-eye"></i>
                           </a>
                         </td>
+
                         <td>
-                          <button type="button" class="btn bg-danger text-white btn-sm" (click)="removeEmployee(i)">Delete</button>
+                          <button type="button" class="btn bg-danger text-white btn-sm" (click)="removeEmployee(i)">
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     </tbody>
@@ -1607,13 +1656,13 @@
                 <tr *ngFor="let row of formData.OtherCITSQualification; let i = index">
                   <td align="left">{{ i + 1 }}</td>
                   <td align="left">{{row.Tech_CITSYear}}</td>
-                  <td align="left">{{row.Tech_CITSTrade}}</td>
+                  <td align="left">{{row.Tech_CITSTradeName}}</td>
                   <td align="left">
 
 
 
 
-                    <div class="flex align-center justify-center actionBtns w-auto"
+                    <div class="flex align-left actionBtns w-auto"
                          style="width:auto !important">
 
                       <a *ngIf="row.Tech_CITSCertifiedDocument"

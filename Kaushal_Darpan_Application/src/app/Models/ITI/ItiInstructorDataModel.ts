@@ -126,20 +126,22 @@ export class ITI_InstructorEmploymentDetails {
   public EmployeeCode?: string = '';
   public Employer_Registration?: string = '';
   public Employer_presentlyWorking = 'false';
+  public TotalOverallExperience: string = '0 Year 0 Month';
+  public TotalExperience: string = '0 Year 0 Month';
 
 
 }
 
 export class ITI_InstructorTechnicalQualification {
-  public Tech_Exam?: string;
-  public Tech_Board?: string;
-  public Tech_Subjects?: string;
-  public StreamName?: string;
-  public StreamID?: string;
+  public Tech_Exam?: string='';
+  public Tech_Board?: string='';
+  public Tech_Subjects?: string='';
+  public StreamName?: string='';
+  public StreamID?: string='';
   public techRequest?: number = 0;
-  public Tech_Year?: string;
-  public Tech_Percentage?: number;
-  public Tech_CGPA?: number;
+  public Tech_Year?: string='';
+  public Tech_Percentage?: number=0;
+  public Tech_CGPA?: number=0;
   public TechDocument?: string = '';
   public MarksType?: string = '';
   public MarkTypeName?: string = '';
@@ -151,6 +153,7 @@ export class ITI_InstructorTechnicalQualification {
   public Tech_MarksTypeID?: string = '';
   public Tech_CITSTrade?: string = '';
   public Tech_CITSYear?: string = '';
+  public TypeID:number=0
   public OtherCITSQualification: ITI_InstructorTechnicalCITSQualificationList[] = [new ITI_InstructorTechnicalCITSQualificationList()];
 }
 
@@ -162,6 +165,7 @@ export class ITI_InstructorTechnicalCITSQualificationList {
   public Tech_CITSCertifiedDocument?: string = '';
   public Tech_CITSTrade?: string = '';
   public Tech_CITSYear?: string = '';
+  public Tech_CITSTradeName?: string = '';
 }
 
 
@@ -184,7 +188,7 @@ export class ITI_InstructorTechnicalCITSQualification {
   public QualificationName?: string = '';
   public QualificationID?: number = 0;
   public Tech_MarksTypeID?: string = '';
-  public OtherCITSQualification: ITI_InstructorTechnicalCITSQualificationList[] = [new ITI_InstructorTechnicalCITSQualificationList()];
+  public OtherCITSQualification: any[] = [new ITI_InstructorTechnicalCITSQualificationList()];
   
 }
 
