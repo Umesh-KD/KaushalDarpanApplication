@@ -63,13 +63,50 @@
               </div>
             </div>
 
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Inspection Amount <span class="StarMarking">*</span></label>
+    <input type="text" class="form-input" (keypress)="numberOnly($event)" placeholder="Enter Total Amount" [(ngModel)]="consentDeploy.Amount" formControlName="txtAmount">
+    <div *ngIf="isSubmitted && _consentFromGroup.txtAmount.errors" class="text-danger">
+      <p *ngIf="!_consentFromGroup.txtAmount.errors.required"><i aria-hidden="true"></i> Amount is required .!</p>
+    </div>
+  </div>-->
+
+
+
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Inspection Amount <span class="StarMarking">*</span></label>
-              <input type="text" class="form-input" (keypress)="numberOnly($event)" placeholder="Enter Total Amount" [(ngModel)]="consentDeploy.Amount" formControlName="txtAmount">
+
+
+              <input type="text"
+                     class="form-input"
+                     (keypress)="numberOnly($event)"
+                     (input)="onAmountChange()"
+                     placeholder="Enter Total Amount"
+                     [(ngModel)]="consentDeploy.Amount"
+                     formControlName="txtAmount">
+
+
               <div *ngIf="isSubmitted && _consentFromGroup.txtAmount.errors" class="text-danger">
                 <p *ngIf="!_consentFromGroup.txtAmount.errors.required"><i aria-hidden="true"></i> Amount is required .!</p>
               </div>
             </div>
+
+            <div *ngIf="showRemark">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark <span class="StarMarking">*</span></label>
+
+              <input type="text"
+                     class="form-input"
+                     placeholder="Enter Remark" [(ngModel)]="consentDeploy.Remark"
+                     formControlName="txtRemark">
+
+              <div *ngIf="isSubmitted && consentFromGroup.controls.txtRemark.errors" class="text-danger">
+                <p *ngIf="consentFromGroup.controls.txtRemark.errors.required">
+                  Remark is required!
+                </p>
+              </div>
+            </div>
+
+
 
             <div>
               <div class="text-left">
@@ -93,6 +130,7 @@
               <th class="text-left">Tentative Date</th>
               <th class="text-left">Consent Type</th>
               <th class="text-left">Amount</th>
+              <th class="text-left">Remark </th>
               <th>Action</th>
             </tr>
 
@@ -107,6 +145,7 @@
                 {{ row.consentTypeID === 1 ? 'Planned (Affiliation)' : (row.consentTypeID === 3 ? 'General Inspection (Planned)' : '') }}
               </td>
               <td class="text-left">{{row.Amount}}</td>
+              <td class="text-left">{{row.Remark }}</td>
 
               <td class="text-center">
                 <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
