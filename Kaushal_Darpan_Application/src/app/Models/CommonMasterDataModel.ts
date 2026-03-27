@@ -30,6 +30,7 @@ export class ItiTradeSearchModel {
 
 export class ItiCollegesSearchModel {
   public DistrictID: number = 0
+  public TradeID: number = 0
   public action: string = ''
   public ManagementType: string = ''
   public ManagementTypeID?: number | undefined = 0;

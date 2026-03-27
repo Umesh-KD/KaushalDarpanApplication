@@ -144,6 +144,9 @@ export class DateConfigurationBTERComponent implements OnInit, OnDestroy {
 
 
   async GetDataUpadate(ID: number) {
+    if(this.request.TypeID == EnumConfigurationType.Reval_Date && this.request.SemesterID == 0){
+      return
+    }
     
     var Model = new DateConfigurationModel()
     if (ID > 0) {

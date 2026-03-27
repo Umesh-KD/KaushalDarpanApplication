@@ -962,9 +962,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetCommonMasterData(MasterCode: string, DepartmentID: number = 0, CourseType: number = 0,StaffTypeID:number=0) {
-
-    return await this.http.get(this.APIUrl + '/CommonMasterDataByCode/' + MasterCode + '/' + DepartmentID + '/' + CourseType+'/'+StaffTypeID, this.headersOptions)
+  public async GetCommonMasterData(MasterCode: string, DepartmentID: number = 0, CourseType: number = 0, StaffTypeID: number = 0) {
+    debugger
+    return await this.http.get(this.APIUrl + '/CommonMasterDataByCode/' + MasterCode + '/' + DepartmentID + '/' + CourseType + '/' + StaffTypeID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

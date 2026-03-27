@@ -34,6 +34,7 @@ export class RevaluationComponent implements AfterViewInit {
   public AllInTableSelect: boolean = false;
   public searchRequest = new RevaluationModel();
   public Request = new StudentDetailsByRollNoModel();
+  public Request1 = new StudentDetailsByRollNoModel();
   emitraRequest = new EmitraRequestDetails();
   sSOLoginDataModel = new SSOLoginDataModel();
   studentDetailsModel = new StudentDetailsModel();
@@ -128,6 +129,9 @@ export class RevaluationComponent implements AfterViewInit {
         data = JSON.parse(JSON.stringify(data));
         if (data.state !== EnumStatus.Error) {
           this.GetStudentDetails = data['Data']
+          this.Request1.Year = this.GetStudentDetails[0].SemesterName
+          this.Request1.RollNo = this.GetStudentDetails[0].RollNo
+          this.Request1.StudentType = this.GetStudentDetails[0].StudentType
           this.MaxPaperCount = this.GetStudentDetails[0].MaxPaperCount
           this.switchSection('payment');
         } else {
@@ -381,7 +385,7 @@ export class RevaluationComponent implements AfterViewInit {
       this.transactionStatusDataModel.DepartmentID = this.studentDetailsModel.DepartmentID;
       this.transactionStatusDataModel.PRN = this.studentDetailsModel.PRN;
       this.transactionStatusDataModel.ServiceID = this.studentDetailsModel.ServiceID;
-      
+
       await this.emitraPaymentService.GetTransactionStatus(this.transactionStatusDataModel)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));

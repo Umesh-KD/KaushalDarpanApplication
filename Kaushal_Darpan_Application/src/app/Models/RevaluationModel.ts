@@ -132,3 +132,21 @@ export class UploadTrainee_LogsModel{
   public RequestID:string='';
   public log_id:string='';
 }
+
+export class RevalationReportsearchModel {
+  public EnrollmentNo:string='';
+  public ResultDate:string='';
+  public RollNumber:string='';
+  public SubjectCode:string='';
+  public RevaluationTxnNo:string='';
+  public RevaluationChallan:string='';
+  public SemesterID:number = 0;
+  public DepartmentID:number = 0;
+  public Eng_NonEng:number = 0;
+  public EndTermID:number = 0;
+  public RoleID:number = 0;
+}
+
+
+
+

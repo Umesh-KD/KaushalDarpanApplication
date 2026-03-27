@@ -11,6 +11,7 @@ import { EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/Glo
 import { Router } from '@angular/router';
 import { CommonFunctionService } from '../../../../Common/common';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-iti-add-consent',
@@ -42,6 +43,8 @@ export class ITIAddConsentComponent {
   public ErrorMessage:string='';
   public file!: File;
   public Uploadfile: string = '';
+  DeploymentTypeList: any = []
+  showRemark: boolean = false;
 
   constructor(
     private commonFunctionService: CommonFunctionService,
@@ -50,6 +53,7 @@ export class ITIAddConsentComponent {
     private toastr: ToastrService,
     private itiInspectionService: ITIInspectionService,
     private router: Router,
+    private commonMasterService: CommonFunctionService,
   ){}
 
   async ngOnInit() {
@@ -65,10 +69,14 @@ export class ITIAddConsentComponent {
       txtCaseNo:[''],
       txtCourtDate:[''],
       CourtDocFileName:[''],
+      txtAmount: [''],
+      txtRemark: ['']
     });
     this.getMasterData();
+    this.calculateAmount()
   }
 
+  
   get _consentFromGroup() { return this.consentFromGroup.controls;}
 
   async getMasterData() {
@@ -209,32 +217,98 @@ export class ITIAddConsentComponent {
     this.InstituteMasterDDL = [];
   }
 
+  //async AddDeployment() {
+  //  debugger
+  //  this.isSubmitted = true;
+  //  if (this.consentFromGroup.invalid) {
+  //    return;
+  //  }
+  //  const isDuplicate = this.consentDeployList.some(
+  //    (element: any) => this.consentDeploy.InstituteID === element.InstituteID
+  //  );
+  //  if (isDuplicate) {
+  //    this.toastr.error('College Already Listed!');
+  //    return;
+  //  }
+  //  this.consentDeploy.InstituteName = this.InstituteMasterDDL.find(
+  //    (x: any) => x.Id == this.consentDeploy.InstituteID
+  //  )?.Name;
+  //  this.consentDeploy.DistrictName = this.DistrictMasterDDL.find(
+  //    (x: any) => x.ID == this.consentDeploy.DistrictID
+  //  )?.Name;
+  //  this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
+  //  this.consentDeployList.push({ ...this.consentDeploy });
+
+  //  this.consentDeploy = new ConsentModel();
+  //  this.isSubmitted = false;
+  //  console.log('Bind List ==>',this.consentDeployList)
+  //}
+
+
+  
+
   async AddDeployment() {
-    debugger
     this.isSubmitted = true;
+    this.consentFromGroup.markAllAsTouched();
+
     if (this.consentFromGroup.invalid) {
       return;
     }
+
     const isDuplicate = this.consentDeployList.some(
       (element: any) => this.consentDeploy.InstituteID === element.InstituteID
     );
+
     if (isDuplicate) {
       this.toastr.error('College Already Listed!');
       return;
     }
+
+    //  ADD THIS LINE (MOST IMPORTANT)
+   // this.consentDeploy.Amount = this.currentAmount;
+
     this.consentDeploy.InstituteName = this.InstituteMasterDDL.find(
       (x: any) => x.Id == this.consentDeploy.InstituteID
     )?.Name;
+
     this.consentDeploy.DistrictName = this.DistrictMasterDDL.find(
       (x: any) => x.ID == this.consentDeploy.DistrictID
     )?.Name;
+
     this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
+
+    // push data
     this.consentDeployList.push({ ...this.consentDeploy });
 
-    this.consentDeploy = new ConsentModel(); 
+    const remarkControl = this.consentFromGroup.get('txtRemark');
+
+    // reset model
+    this.consentDeploy = new ConsentModel();
+
+    //  reset TS amount also
+    //this.currentAmount = 2000;
+
+    this.consentDeploy.Amount = 2000;
+    this.consentDeploy.Remark = '';
+
+    this.showRemark = false;
+
+    // reset validation
+    remarkControl?.clearValidators();
+    remarkControl?.setValue('');
+    remarkControl?.updateValueAndValidity();
+
+    // reset form
+    this.consentFromGroup.patchValue({
+      txtAmount: 2000,
+      txtRemark: ''
+    });
+
     this.isSubmitted = false;
-    console.log('Bind List ==>',this.consentDeployList)
+
+    console.log('Bind List ==>', this.consentDeployList);
   }
+
 
   async SaveData() {
     debugger
@@ -290,5 +364,35 @@ export class ITIAddConsentComponent {
     return true;
 
   }
+
+
+
+  
+  onAmountChange() {
+    const amount = Number(this.consentDeploy.Amount);
+    const remarkControl = this.consentFromGroup.get('txtRemark');
+
+    if (amount !== 2000) {
+      this.showRemark = true;
+      remarkControl?.setValidators([Validators.required]);
+    } else {
+      this.showRemark = false;
+      remarkControl?.clearValidators();
+      remarkControl?.setValue('');
+      this.consentDeploy.Remark = '';
+    }
+
+    remarkControl?.updateValueAndValidity();
+  }
+
+
+  async calculateAmount() {
+    debugger
+    this.commonMasterService.GetCommonMasterData('consentAmount', this.consentDeploy.InstituteID).then((data: any) => {
+      debugger
+      this.consentDeploy.Amount = data['Data'][0]['Name'];
+    });
+  }
+
 
 }

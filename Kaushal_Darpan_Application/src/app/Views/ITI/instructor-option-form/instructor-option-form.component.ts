@@ -100,6 +100,7 @@ export class InstructorOptionFormComponent {
     this.GetManagmentType()
     this.GetDistrictMaster()
     this.GetTradeAndColleges()
+    this.GetTradeListDDL()
 /*    this.QualificationDataById()*/
   }
 
@@ -220,7 +221,7 @@ export class InstructorOptionFormComponent {
 
     this.AddedChoices?.forEach((e: any) => e.InstructorID = this.InstructorID)
 
-      this.formData.TradeID = 0
+    this.formData.InstituteID = 0
       this.isSubmitted = false
     
 
@@ -596,9 +597,11 @@ export class InstructorOptionFormComponent {
   async GetTradeAndColleges() {
    
     try {
+      this.formData.InstituteID=0
       this.collegeSearchRequest.ManagementTypeID = this.formData.ManagementTypeID
       this.collegeSearchRequest.DistrictID = this.formData.DistrictID
-      this.collegeSearchRequest.action = '_getAllData'
+      this.collegeSearchRequest.action = 'instructoroptioncollege'
+      this.collegeSearchRequest.TradeID = this.formData.TradeID
       await this.commonFunctionService.ItiCollegesGetAllData(this.collegeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiCollegesListAll = data.Data
