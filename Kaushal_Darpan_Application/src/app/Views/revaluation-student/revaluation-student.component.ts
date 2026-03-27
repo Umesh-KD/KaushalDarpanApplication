@@ -22,12 +22,12 @@ import { DateConfigService } from '../../Services/DateConfiguration/date-configu
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
-  selector: 'app-revaluation',
-  templateUrl: './revaluation.component.html',
-  styleUrls: ['./revaluation.component.css'],
-  standalone: false
+  selector: 'app-revaluation-student',
+  standalone: false,
+  templateUrl: './revaluation-student.component.html',
+  styleUrl: './revaluation-student.component.css'
 })
-export class RevaluationComponent implements AfterViewInit {
+export class RevaluationStudentComponent {
   rollDobSectionVisible: boolean = true;
   studentDetailsSectionVisible: boolean = false;
   paymentSectionVisible: boolean = false;
@@ -75,35 +75,31 @@ export class RevaluationComponent implements AfterViewInit {
     private Router: Router,
   ) { }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    this.submitRollDob(this.stepper);
   }
 
 
   async submitRollDob(stepper: MatStepper): Promise<void> {
     try {
+      // if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
+      //   this.toastr.error('Please fill in both Roll Number and Date of Birth.');
+      //   return;  // Exit the function if validation fails
+      // }
 
-      if (!this.searchRequest.EnrollmentNo || !this.searchRequest.DOB) {
-        this.toastr.error('Please fill in both Enrollment Number and Date of Birth.');
-        return;  // Exit the function if validation fails
-      }
+      this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+
       await this.revaluationService.GetDetails(this.searchRequest).then((data: any) => {
 
         if (data.State == EnumStatus.Success) {
-
           this.Request = data['Data'][0];
-
-          if (!this.Request.IsReval) {
-            this.Request.StudentName = data['Data'][0]['StudentName']
-            this.StudentSemesterDetails = data['Data']
-            this.GetDateDataList();
-            this.switchSection('studentDetails');
-            //go to next Step
-            stepper.next();
-          }
-          else {
-            this.toastr.error('you already applied for reval.');
-          }
+          this.StudentSemesterDetails = data['Data']
+          this.GetDateDataList();
+          this.switchSection('studentDetails');
         }
         else {
           this.toastr.error('No Record Found.');
@@ -120,10 +116,8 @@ export class RevaluationComponent implements AfterViewInit {
 
   async GetRevalation(stepper: MatStepper, row: any): Promise<void> {
     try {
-      
       // for getting emitra service id 
       row.IsKiosk = this.sSOLoginDataModel.IsKiosk
-
       await this.revaluationService.GetRevalation(row).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.state !== EnumStatus.Error) {
@@ -199,7 +193,6 @@ export class RevaluationComponent implements AfterViewInit {
             this.emitraRequest.IsKiosk = false;
             //this.GetDateDataList();
             this.loaderService.requestStarted();
-            
             // for payment by emitra 
             if(this.sSOLoginDataModel.IsKiosk == true) {
               this.emitraRequest.IsKiosk = true;
@@ -326,16 +319,10 @@ export class RevaluationComponent implements AfterViewInit {
 
   // Utility method to switch sections
   private switchSection(section: string): void {
-    if (section === 'rollDob') {
-      this.rollDobSectionVisible = true;
-      this.studentDetailsSectionVisible = false;
-      this.paymentSectionVisible = false;
-    } else if (section === 'studentDetails') {
-      this.rollDobSectionVisible = true;
+    if (section === 'studentDetails') {
       this.studentDetailsSectionVisible = true;
       this.paymentSectionVisible = false;
     } else if (section === 'payment') {
-      this.rollDobSectionVisible = true;
       this.studentDetailsSectionVisible = true;
       this.paymentSectionVisible = true;
     }
@@ -375,13 +362,12 @@ export class RevaluationComponent implements AfterViewInit {
 
 
   async CheckPaymentSataus() {
-    try {
+    try {   
       this.studentDetailsModel = this.GetStudentDetails[0];
       this.transactionStatusDataModel.TransactionID = this.studentDetailsModel.TransactionID
       this.transactionStatusDataModel.DepartmentID = this.studentDetailsModel.DepartmentID;
       this.transactionStatusDataModel.PRN = this.studentDetailsModel.PRN;
       this.transactionStatusDataModel.ServiceID = this.studentDetailsModel.ServiceID;
-      
       await this.emitraPaymentService.GetTransactionStatus(this.transactionStatusDataModel)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -410,7 +396,4 @@ export class RevaluationComponent implements AfterViewInit {
       }, 200);
     }
   }
-
-
-
 }

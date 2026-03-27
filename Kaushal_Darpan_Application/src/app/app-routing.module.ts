@@ -446,6 +446,7 @@ const routes: Routes = [
 
 
       { path: 'Revaluation', loadChildren: () => import('./Views/revaluation/revaluation.module').then(m => m.RevaluationModule), title: 'Revaluation' },
+      { path: 'revaluation-student', loadChildren: () => import('./Views/revaluation-student/revaluation-student.module').then(m => m.RevaluationStudentModule), title: 'Revaluation' },
       { path: 'DocumentSetting', loadChildren: () => import('./Views/result/document-setting/document-setting.module').then(m => m.DocumentSettingModule), title: 'Document Setting' },
       { path: 'AddDocumentSetting', loadChildren: () => import('./Views/result/add-document-setting/add-document-setting.module').then(m => m.AddDocumentSettingModule), title: 'Add Document Setting' },
       { path: 'upcomingcampus', loadChildren: () => import('./Views/Student/upcoming-campus/upcoming-campus.module').then(m => m.UpcomingCampusModule), title: 'Upcoming Campus' },

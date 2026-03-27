@@ -1,6 +1,10 @@
 export class RevaluationModel {
-  public RollNo?: number 
-  public DOB: string = ''
+  public RollNo?: number = 0
+  public StudentID?: number = 0
+  public RoleID?: number = 0
+  public EndTermID?: number = 0
+  public DOB?: string = ''
+  public EnrollmentNo?: string = ''
 }
 export class StudentDetailsByRollNoModel {
   public StudentID: number = 0
