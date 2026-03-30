@@ -118,8 +118,8 @@
             <th class="text-left">College  Name</th>
             <th class="text-left">Bank Name</th>
             <th class="text-left">Bank Guarantee No</th>
-            <th class="text-left">Date Of Issue</th>
-            <th class="text-left">Maturity Date</th>
+            <th class="text-left" width="8%">Date Of Issue</th>
+            <th class="text-left" width="8%">Maturity Date</th>
             <th class="text-left">Duration Years</th>
             <th class="text-left">Amount</th>
             <th class="text-left">Remark</th>
@@ -165,6 +165,7 @@
                   <i class="ti ti-download"></i>
                 </a>
                 <a *ngIf="item.Status === 1" href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
+                <a  *ngIf="this.sSOLoginDataModel.RoleID === 16" href="javascript:void(0);" title="Delete" (click)="btnDeleteOnClick(item)"><i class="ti ti-trash"></i></a>
               </div>
             </td>
           </tr>

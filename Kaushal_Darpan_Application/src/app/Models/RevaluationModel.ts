@@ -28,6 +28,7 @@ export class StudentDetailsByRollNoModel {
   public IsSelected: boolean = false;
   public IsReval: boolean = false;
   public Payment: number = 0
+  public ExamName?: string = ''
 
 }
 
