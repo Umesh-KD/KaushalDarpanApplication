@@ -47,6 +47,7 @@ export class InstructorSelectchoiceComponent {
   public box8thChecked: boolean = false
   public box12thChecked: boolean = false
   public AddedChoices: any[] = []
+  public IsEdit:boolean=false
   // public IsPriorityChange: boolean = false
   @Output() IsPriorityChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   public MathsMaxMarks10: number = 0
@@ -214,8 +215,8 @@ export class InstructorSelectchoiceComponent {
     this.formData.TradeID = 0
     this.isSubmitted = false
 
-
-    await this.instructorservice.SaveOptionDetailsData(this.AddedChoices)
+    var object = this.AddedChoices.filter((e) => e.OptionID == 0 || e.InstituteID != this.formData.InstituteID)
+    await this.instructorservice.SaveOptionDetailsData(object)
       .then(async (data: any) => {
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message)
@@ -437,7 +438,7 @@ export class InstructorSelectchoiceComponent {
     this.formData.TradeID = 0
 
     this.formData.ApplicationID = this.ApplicationID;
-    this.GetVerifiationList()
+    this.GetOptionList()
   }
 
 
@@ -469,6 +470,34 @@ export class InstructorSelectchoiceComponent {
     }
   }
 
+
+  async GetOptionList() {
+    try {
+      var obj = {
+        InstructorID: this.InstructorID,
+        ActiveStatus: 1,
+        StatusID: 0,
+        Action: "OptionList"
+      }
+      this.loaderService.requestStarted();
+      await this.instructorservice.GetverificationStatus(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AddedChoices = data['Data'];
+
+        }, (error: any) => console.error(error)
+        );
+
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
   async GetInstituteListDDL() {
@@ -563,7 +592,7 @@ export class InstructorSelectchoiceComponent {
 
 
   async GetTradeListDDL() {
-
+    debugger
     try {
       this.tradeSearchRequest.action = 'InstructorTrade'
 
@@ -603,9 +632,32 @@ export class InstructorSelectchoiceComponent {
       }, 200);
     }
   }
+  async Onupdate(row: any) {
+    
+    this.IsEdit = true
+  await  this.GetOptionList()
+    this.formData.DistrictID = row.DistrictID
+
+
+    this.formData.ManagementTypeID = row.ManagementTypeID
+    await this.GetTradeAndColleges()
+
+    this.OptionsFormGroup.disable()
+    this.OptionsFormGroup.get('ddlTrade')?.enable();
+
+    this.formData.InstituteID = row.InstituteID
+    await this.GetTradeListDDL()
+    debugger
+    this.OptionsFormGroup.patchValue({
+      ddlInstitute: this.formData.InstituteID
+    });
+    console.log(this.formData.InstituteID)
+    console.log(this.ItiCollegesListAll)
+  }
 
   async Back() {
-    this.formSaved.emit(true);
+    this.IsEdit = false
+   await this.GetVerifiationList()
   }
 
   async QualificationDataById() {

@@ -894,10 +894,7 @@ export class ItiInstructorComponent{
           this.loaderService.requestStarted();
           this.isSubmitted = true;
 
-          if (this.AddStaffBasicDetailFromGroup.invalid) {
-            return;
-          }
-
+         
           this.formData.IsInstructor = true;
           this.formData.OfficeID = this.sSOLoginDataModel.OfficeID;
 
@@ -905,7 +902,7 @@ export class ItiInstructorComponent{
             InstructorID: this.InstructorID,
             ActiveStatus: 1,
             StatusID: 4,
-            Action: "Sentrequest",
+            Action: "RejeCTRequest",
             InstituteID: this.sSOLoginDataModel.InstituteID,
             Seatintake: this.formData.Shift,
             TradeID: this.formData.BranchID,
