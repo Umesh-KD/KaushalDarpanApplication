@@ -74,7 +74,6 @@
                         <th class="text-left">Roll No.</th>
                         <th class="text-left">Regular/Ex</th>
                         <th class="text-left">Applied Status</th>
-                        <td>{{row.RevalAppliedStatus}}</td>
                         <th class="text-center">Action</th>
                       </tr>
                     </thead>
@@ -83,6 +82,7 @@
                         <td>{{row.Year}}</td>
                         <td>{{row.RollNo}}</td>
                         <td>{{row.StudentType}}</td>
+                        <td>{{row.RevalAppliedStatus}}</td>
                         <td align="center">
                           <span *ngIf="row.IsRevalDateOpen != 1" class="text-red-500">Reval Date is not open</span>
                           <button *ngIf="row.IsReval == 0 && row.IsRevalDateOpen == 1" 
