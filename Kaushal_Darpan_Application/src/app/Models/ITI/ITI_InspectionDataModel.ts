@@ -185,6 +185,12 @@ export class ConsentModel  {
   public UserID: number = 0
   public consentTypeID: number = 0
   public Amount?:number=0
+  public IsAnyCourtCase:boolean=false
+  public CourtName:string=''
+  public CourtDate:string=''
+  public CaseNo:string=''
+  public DisCourtDocFileName:string=''
+  public CourtDocFileName:string=''
 }
 
 

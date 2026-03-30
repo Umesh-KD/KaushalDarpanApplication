@@ -1877,12 +1877,12 @@ export class ItiPlanningComponent {
     if (this.request.AffilationStatus == 'Approved') {
       this.request.AffilationRemark = ''
     }
-
+    debugger
     if (this.request.AffilationStatus == 'Not Approved' || this.request.AddressStatus == 'Not Approved'
       || //this.request.ContactStatus == 'Not Approved' ||
       this.request.ManagementStatus == 'Not Approved'
       || this.request.TrustMemberStatus == 'Not Approved' || this.request.ElectricalStatus == 'Not Approved'
-      || this.request.BankStatus=='Not Approved'
+      || this.request.BankStatus=='Not Approved' 
     ) {
       this.request.Status = 4
       const remarks = [
@@ -1894,6 +1894,8 @@ export class ItiPlanningComponent {
         this.request.ElectricalRemark,
         this.request.BankRemark
       ];
+
+      debugger
 
       this.request.Remarks = remarks  
         .filter(r => r?.trim())

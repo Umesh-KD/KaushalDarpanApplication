@@ -446,6 +446,7 @@ const routes: Routes = [
 
 
       { path: 'Revaluation', loadChildren: () => import('./Views/revaluation/revaluation.module').then(m => m.RevaluationModule), title: 'Revaluation' },
+      { path: 'revaluation-student', loadChildren: () => import('./Views/revaluation-student/revaluation-student.module').then(m => m.RevaluationStudentModule), title: 'Revaluation' },
       { path: 'DocumentSetting', loadChildren: () => import('./Views/result/document-setting/document-setting.module').then(m => m.DocumentSettingModule), title: 'Document Setting' },
       { path: 'AddDocumentSetting', loadChildren: () => import('./Views/result/add-document-setting/add-document-setting.module').then(m => m.AddDocumentSettingModule), title: 'Add Document Setting' },
       { path: 'upcomingcampus', loadChildren: () => import('./Views/Student/upcoming-campus/upcoming-campus.module').then(m => m.UpcomingCampusModule), title: 'Upcoming Campus' },
@@ -1600,6 +1601,8 @@ const routes: Routes = [
 
       { path: 'Add-Nodal-User', loadChildren: () => import('./Views/ITI/iti-Add-Nodel-User/iti-Add-Nodel-User.module').then(m => m.itiAddNodelUserModule) },
       { path: 'Nodal-User-List', loadChildren: () => import('./Views/ITI/iti-Nodel-User-List/iti-Nodel-User-List.module').then(m => m.itiNodelUserListModule), title: 'Nodal User List' },
+
+      { path: 'bter-Reval-Report', loadChildren: () => import('./Views/BTER/bter-Reval-Report/bter-Reval-Report.module').then(m => m.bterRevalReportModule), title: 'Reval Report' },
 
 
 

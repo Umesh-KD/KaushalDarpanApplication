@@ -54,6 +54,26 @@
     </div>
   </div>
 </div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Revaluation</b> <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-chevron-down"></i></button>
+</div>
+<div class="collapse multi-collapse show" id="multiCollapseExample2">
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div class="col-lg-3" *ngFor="let item of RevaluationTilesList; let i = index">
+
+      <div class="card" *ngIf="item.ListType == 'Revaluation'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="['/',item.URL]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample4" aria-expanded="true" aria-controls="multiCollapseExample4">
   <b class="text-1xl-5"><i class="ti ti-list"></i>Inventory</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample4" aria-expanded="true" aria-controls="multiCollapseExample4"><i class="ti ti-chevron-down"></i></button>
 </div>

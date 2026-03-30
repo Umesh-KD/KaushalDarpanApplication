@@ -38,4 +38,14 @@ export class RevaluationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async GetAllRevalationReportList(row: any) {
+    var body = JSON.stringify(row);
+    return await this.http.post(this.APIUrl + "/GetAllRevalationReportList", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

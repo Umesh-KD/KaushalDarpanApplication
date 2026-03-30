@@ -30,6 +30,7 @@ import { CommonVerifierApiDataModel } from "../../../../Models/PublicInfoDataMod
 import { ITICollegeTradeSearchModel } from "../../../../Models/ITI/SeatIntakeDataModel";
 import { ItiSeatIntakeService } from "../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service";
 import { ItiTradeSearchModel } from "../../../../Models/CommonMasterDataModel";
+import { SweetAlert2 } from "../../../../Common/SweetAlert2";
 @Component({
   selector: 'app-marksheet',
   standalone: false,
@@ -128,7 +129,8 @@ export class ItiInstructorComponent{
     private router: Router,
     private modalService: NgbModal,
     private Staffservice: ITIGovtEMStaffMaster,
-    private ITICollegeTradeService: ItiSeatIntakeService
+    private ITICollegeTradeService: ItiSeatIntakeService,
+    public swat: SweetAlert2
   ) 
   {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -875,6 +877,63 @@ export class ItiInstructorComponent{
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+
+  async OnFormRevert() {
+    debugger;
+
+    this.swat.ConfirmationWithRemark(
+      "Are you sure you want to revert this application?",
+      async (result: any) => {
+        try {
+          if (!result) {
+            return;
+          }
+
+          this.loaderService.requestStarted();
+          this.isSubmitted = true;
+
+         
+          this.formData.IsInstructor = true;
+          this.formData.OfficeID = this.sSOLoginDataModel.OfficeID;
+
+          const obj = {
+            InstructorID: this.InstructorID,
+            ActiveStatus: 1,
+            StatusID: 4,
+            Action: "RejeCTRequest",
+            InstituteID: this.sSOLoginDataModel.InstituteID,
+            Seatintake: this.formData.Shift,
+            TradeID: this.formData.BranchID,
+            ModifyBy: this.sSOLoginDataModel.UserID,
+            Remark: result
+          };
+
+          const data: any = await this.ItiInstructorService.GetverificationStatus(obj);
+          const response = JSON.parse(JSON.stringify(data));
+
+          console.log(response);
+
+          this.State = response['State'];
+          this.Message = response['Message'];
+          this.ErrorMessage = response['ErrorMessage'];
+
+          debugger;
+
+          this.toastr.success("Updated Successfully");
+          this.CloseModalPopup();
+          this.ResetControls();
+          // this.GetAllData();
+        } catch (ex) {
+          console.log(ex);
+        } finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+    );
   }
 
 

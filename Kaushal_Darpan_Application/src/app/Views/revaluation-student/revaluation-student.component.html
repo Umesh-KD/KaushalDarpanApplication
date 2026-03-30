@@ -1,41 +1,7 @@
 <mat-stepper #stepper  >
-  <!-- Roll Number and DOB Section -->
-  <mat-step label="Step 1" state="phone">
-    <div *ngIf="rollDobSectionVisible" class="section">
-      <div class="">
-        <div class="card">
-          <div class="card-header backgoundheader" >
-            <b>{{Request.ExamName}}</b>
-          </div>
-          <div class="card-body p-5">
-            <div class="grid grid-cols-1 gap-3">
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.</label>
-                <input type="text" [(ngModel)]="searchRequest.EnrollmentNo" class="form-input" placeholder="Enter Enrollment No">
-              </div>
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth</label>
-                <input type="date"
-                       [(ngModel)]="searchRequest.DOB"
-                       class="form-input"
-                       placeholder="Enter Date of Birth" />
-              </div>
-              <div>
-                <button (click)="submitRollDob(stepper)"
-                        class="block text-center text-white bg-success btn w-full">
-                  Submit & Next <span class="fa fa-chevron-right"></span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </mat-step>
-
 
   <!-- Student Details Section -->
-  <mat-step  [label]="'Step 2'" state="chat"  >
+  <mat-step  [label]="'Step 1'" state="chat"  >
     <div  *ngIf="studentDetailsSectionVisible" class="section">
       <div class="">
         <div class="card">
@@ -70,7 +36,7 @@
                   <table class="table table-border w-full table-auto" cellpadding="5">
                     <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                       <tr>
-                        <th class="text-left">Year</th>
+                        <th class="text-left">Semester</th>
                         <th class="text-left">Roll No.</th>
                         <th class="text-left">Regular/Ex</th>
                         <th class="text-left">Applied Status</th>
@@ -84,7 +50,7 @@
                         <td>{{row.StudentType}}</td>
                         <td>{{row.RevalAppliedStatus}}</td>
                         <td align="center">
-                          <span *ngIf="row.IsRevalDateOpen != 1" class="text-red-500">Reval Date is not open</span>
+                            <span *ngIf="row.IsRevalDateOpen != 1" class="text-red-500">Reval Date is not open</span>
                           <button *ngIf="row.IsReval == 0 && row.IsRevalDateOpen == 1" 
                             (click)="GetRevalation(stepper, row)" class="btn bg-success text-white btn-sm centered-button">
                             Revaluation
@@ -106,7 +72,7 @@
     </div>
   </mat-step>
 
-  <mat-step  [label]="'Step 3'" >
+  <mat-step  [label]="'Step 2'" >
     <!-- Payment Section -->
     <div *ngIf="paymentSectionVisible" class="section" >
       <div class="">
