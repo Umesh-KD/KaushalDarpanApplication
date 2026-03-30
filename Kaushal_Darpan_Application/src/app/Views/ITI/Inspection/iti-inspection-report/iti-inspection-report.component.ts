@@ -41,6 +41,8 @@ export class ITIInspectionReportComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
+  public instituteNameRPT: string = '';
+  public inspectionDateRPT: string = '';
  // private modalService = inject(NgbModal);
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -335,8 +337,8 @@ export class ITIInspectionReportComponent {
   }
 
 
-  async DownloadReportPDF(DeploymentID: number) {
-  
+  async DownloadReportPDF(DeploymentID: number,instituteName:string,inspectionDate: string) {
+  debugger;
         var id = DeploymentID;
         try {
     
@@ -347,9 +349,9 @@ export class ITIInspectionReportComponent {
               if (data.State === EnumStatus.Success) {
                 debugger;
                 const pdfUrl = data.Data; // Assuming your API returns this
-
+                this.inspectionDateRPT = inspectionDate;
+                this.instituteNameRPT = instituteName??'';
                 this.DownloadPdf(pdfUrl); // Download using actual file path
-
                 this.toastr.success("PDF Genetrated Successfully");
                 this.CloseModal()
               } else if (data.State === EnumStatus.Warning) {
@@ -374,13 +376,14 @@ export class ITIInspectionReportComponent {
   }
 
   DownloadPdf(FileName: string): void {
+    debugger;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
     // Fetch the file as a blob
     this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
       const downloadLink = document.createElement('a');
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = "InspectionCheckListReport.pdf"; // Set the desired file name
+      downloadLink.download = `${this.instituteNameRPT}_${this.inspectionDateRPT}`; // Set the desired file name
       downloadLink.click();
       // Clean up the object URL
       window.URL.revokeObjectURL(url);
