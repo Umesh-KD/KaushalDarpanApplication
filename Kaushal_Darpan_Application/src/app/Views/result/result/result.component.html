@@ -20,8 +20,17 @@
         <div>
           <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result </label>
           <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
-            <option value="all">--All--</option>
+            <option value="all">--Choose Semester--</option>
             <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme </label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SchemeID">
+            <option value="all">-- Choose Scheme --</option>
+            <option value="1347">Old Semester Scheme</option>
+            <option value="1348">New Semester Scheme</option>
           </select>
         </div>
         <!--<div *ngIf="MapKeyEng == 1">

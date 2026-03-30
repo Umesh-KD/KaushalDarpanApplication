@@ -92,13 +92,14 @@ export class ResultComponent implements OnInit {
     });
     // Initialize forms
     this.filterForm = this.fb.group({
-      searchTerm: ['']
+      searchTerm: [''],
     });
     this.resultGenerateForm = this.fb.group({
-      selectedSemester: ['all']
+      selectedSemester: ['all'],
+      SchemeID: ['all'],
     });
     this.resultReGenerateForm = this.fb.group({
-      selectedSemester: ['all']
+      selectedSemester: ['all'],
     });
     
 
@@ -140,8 +141,15 @@ export class ResultComponent implements OnInit {
           UserID: ssoLoginUser.UserID,
           RoleID: ssoLoginUser.RoleID,
           SemesterID: this.resultGenerateForm.value.selectedSemester,
-          ResultType: this.url
+          ResultType: this.url,
+          SchemeID: this.resultGenerateForm.value.SchemeID
         };
+
+        if(requestData.SemesterID == 'all' || requestData.SchemeID == 'all'){
+          this.toastr.warning("Please select Scheme");
+          return;
+        }
+
         await this.resultService.GetStudentResults(requestData)
           .then((data: any) => {
             if (data['State'] === 1 || data['State'] === 3) {
