@@ -164,46 +164,7 @@ export class listitibankguaranteeComponent {
 
 
 
-  //async btnDeleteOnClick(TradeId: number) {
 
-  //  this.Swal2.Confirmation("Are you sure you want to delete this ?",
-  //    async (result: any) => {
-  //      //confirmed
-  //      if (result.isConfirmed) {
-  //        try {
-  //          //Show Loading
-  //          this.loaderService.requestStarted();
-  //          await this.ItiTradeService.DeleteDataByID(TradeId, this.request.ModifyBy)
-  //            .then(async (data: any) => {
-  //              data = JSON.parse(JSON.stringify(data));
-
-  //              this.State = data['State'];
-  //              this.Message = data['Message'];
-  //              this.ErrorMessage = data['ErrorMessage'];
-
-  //              if (this.State = EnumStatus.Success) {
-  //                this.toastr.success(this.Message)
-  //                //reload
-  //                this.getbankguaranteeList();
-  //              }
-  //              else {
-  //                this.toastr.error(this.ErrorMessage)
-  //              }
-
-  //            }, (error: any) => console.error(error)
-  //            );
-  //        }
-  //        catch (ex) {
-  //          console.log(ex);
-  //        }
-  //        finally {
-  //          setTimeout(() => {
-  //            this.loaderService.requestEnded();
-  //          }, 200);
-  //        }
-  //      }
-  //    });
-  //}
 
   exportToExcel(): void {
     const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress'];
@@ -483,6 +444,54 @@ export class listitibankguaranteeComponent {
 
   trackById(index: number, item: any): number {
     return item.ID;
+  }
+
+
+
+
+
+  async btnDeleteOnClick(item: any) {
+
+    this.Swal2.Confirmation("Are you sure you want to delete this ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            //Show Loading
+            this.loaderService.requestStarted();
+            this.searchRequest.BankGuaranteeID = item.BankGuaranteeID;
+            this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+            await this.campusPostService.DeleteGuarantee(this.searchRequest)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
+
+                if (this.State == EnumStatus.Success)
+                {
+                  this.toastr.success("Record Deleted Successfully");
+                  //reload
+                 
+                }
+                else {
+                  this.toastr.error(this.ErrorMessage)
+                }
+                this.getbankguaranteeList();
+              }, (error: any) => console.error(error)
+              );
+          }
+          catch (ex) {
+            console.log(ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+        }
+      });
   }
 
 }

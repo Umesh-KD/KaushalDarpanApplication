@@ -276,4 +276,14 @@ export class ITIsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async DeleteGuarantee(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DeleteGuarantee`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
