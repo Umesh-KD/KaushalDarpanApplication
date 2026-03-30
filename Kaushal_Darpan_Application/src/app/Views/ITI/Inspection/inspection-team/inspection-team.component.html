@@ -228,7 +228,7 @@
               <th class="text-left">Mobile No.</th>
               <th class="text-left">EmployeeID</th>
               <th class="text-left">Designation</th>
-              <th class="text-left">Member Type</th>
+              <!-- <th class="text-left">Member Type</th> -->
               <th>Action</th>
             </tr>
 
@@ -242,9 +242,9 @@
               <td class="text-left">{{row.MobileNo}}</td>
               <td class="text-left">{{row.EmployeeID}}</td>
               <td class="text-left">{{row.Designation}}</td>
-              <td class="text-left">
+              <!-- <td class="text-left">
                 <label><input *ngIf="row.SSOID" type="radio" name="memberType" [value]="row.IsIncharge" [checked]="row.IsIncharge" (change)="SetInchargeFlyingSquad(row, idx)"> <span *ngIf="row.SSOID">Set Incharge</span></label>
-              </td>
+              </td> -->
               <td class="text-center">
                 <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
                   <i class="ti ti-trash"></i>

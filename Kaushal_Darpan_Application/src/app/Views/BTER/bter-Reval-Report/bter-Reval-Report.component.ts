@@ -52,6 +52,11 @@ export class bterRevalReportComponent {
   async GetAllData() {
     try {
       this.loaderService.requestStarted();
+      this.searchRevalationReport.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRevalationReport.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRevalationReport.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRevalationReport.RoleID = this.sSOLoginDataModel.RoleID;
+
       await this.revaluationService.GetAllRevalationReportList(this.searchRevalationReport).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.RevalationReportList = data.Data;
@@ -116,7 +121,6 @@ export class bterRevalReportComponent {
   }
 
   DownloadFile_RevalReceipt(FileName: string): void {
-    debugger
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
     this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
       const downloadLink = document.createElement('a');

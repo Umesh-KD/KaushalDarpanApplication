@@ -5,7 +5,7 @@
       <div class="">
         <div class="card">
           <div class="card-header backgoundheader" >
-            <b>Engineering Revaluation Semester 2024-25 (May)</b>
+            <b>{{Request.ExamName}}</b>
           </div>
           <div class="card-body p-5">
             <div class="grid grid-cols-1 gap-3">
@@ -40,7 +40,7 @@
       <div class="">
         <div class="card">
           <div class="card-header backgoundheader">
-            <b>Engineering Revaluation Semester 2024-25 (May)</b>
+            <b>{{Request.ExamName}}</b>
           </div>
           <div class="card-body p-5">
             <div class="grid grid-cols-2 gap-3">
@@ -73,6 +73,8 @@
                         <th class="text-left">Year</th>
                         <th class="text-left">Roll No.</th>
                         <th class="text-left">Regular/Ex</th>
+                        <th class="text-left">Applied Status</th>
+                        <td>{{row.RevalAppliedStatus}}</td>
                         <th class="text-center">Action</th>
                       </tr>
                     </thead>
@@ -82,7 +84,9 @@
                         <td>{{row.RollNo}}</td>
                         <td>{{row.StudentType}}</td>
                         <td align="center">
-                          <button  (click)="GetRevalation(stepper, row)" class="btn bg-success text-white btn-sm centered-button">
+                          <span *ngIf="row.IsRevalDateOpen != 1" class="text-red-500">Reval Date is not open</span>
+                          <button *ngIf="row.IsReval == 0 && row.IsRevalDateOpen == 1" 
+                            (click)="GetRevalation(stepper, row)" class="btn bg-success text-white btn-sm centered-button">
                             Revaluation
                           </button>
                         </td>
@@ -113,16 +117,16 @@
           <div class="car-body p-5">
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year</label>
-                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request.Year">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request1.Year">
               </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No.</label>
-                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request.RollNo">
+                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request1.RollNo">
               </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Ragular/Ex</label>
-                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request.StudentType">
+                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request1.StudentType">
               </div>
 
               <div class="col-span-2">
