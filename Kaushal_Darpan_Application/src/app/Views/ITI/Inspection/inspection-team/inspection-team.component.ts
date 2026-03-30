@@ -222,6 +222,7 @@ export class InspectionTeamComponent {
     this.requestMember.MobileNo=this.formData.MobileNo??'';
     this.requestMember.StaffID = data.Data;
     this.requestMember.SSOID = this.requestSSoApi.SSOID;
+    this.requestMember.IsIncharge=true;
 
     console.log(this.requestMember);
 
@@ -304,13 +305,13 @@ export class InspectionTeamComponent {
     }
 
     // Check if any member has null / empty SSOID
-// const Member = this.request.InspectionMemberDetails
-// .find((x: any) => !x.SSOID || x.SSOID.trim() === '');
+    // const Member = this.request.InspectionMemberDetails
+    // .find((x: any) => !x.SSOID || x.SSOID.trim() === '');
 
-// if (Member) {
-// this.toastr.error("All team members must have a valid SSOID");
-// return;
-// }
+    // if (Member) {
+    // this.toastr.error("All team members must have a valid SSOID");
+    // return;
+    // }
 
     if(this.request.InspectionMemberDetails.length==1){
       const invalidMember=this.request.InspectionMemberDetails.find((x:any)=>!x.SSOID || x.SSOID.trim()==='');

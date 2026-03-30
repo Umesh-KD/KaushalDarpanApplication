@@ -9,6 +9,8 @@ import { ToastrService } from 'ngx-toastr';
 import { ITIInspectionService } from '../../../../Services/ITI/ITI-Inspection/iti-inspection.service';
 import { EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/GlobalConstants';
 import { Router } from '@angular/router';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-iti-add-consent',
@@ -34,15 +36,22 @@ export class ITIAddConsentComponent {
   isFormSubmitted: boolean = false;
   requestCenter = new CenterMasterDDLDataModel();
   _EnumInspectionDeploymentType = EnumInspectionDeploymentType;
-  DeploymentTypeList: any = []
+  DeploymentTypeList: any = [];
+  public State:number=0;
+  public Message:string='';
+  public ErrorMessage:string='';
+  public file!: File;
+  public Uploadfile: string = '';
   showRemark: boolean = false;
 
   constructor(
+    private commonFunctionService: CommonFunctionService,
     private fb: FormBuilder,
     private loaderService: LoaderService,
     private toastr: ToastrService,
     private itiInspectionService: ITIInspectionService,
     private router: Router,
+    private commonMasterService: CommonFunctionService,
   ){}
 
   async ngOnInit() {
@@ -52,12 +61,19 @@ export class ITIAddConsentComponent {
       InstituteID: ['', [DropdownValidators]],
       TentativeDate: [''],
       consentTypeID: ['', [DropdownValidators]],
-      txtAmount: ['2000'],
+      txtAmount:[''],
+      IsAnyCourtCase:['0'],
+      txtCourtName:[''],
+      txtCaseNo:[''],
+      txtCourtDate:[''],
+      CourtDocFileName:[''],
       txtRemark: ['']
     });
     this.getMasterData();
+    this.calculateAmount()
   }
 
+  
   get _consentFromGroup() { return this.consentFromGroup.controls;}
 
   async getMasterData() {
@@ -75,6 +91,93 @@ export class ITIAddConsentComponent {
       console.error(error);
     }
   }
+
+  IsAnyCourtCase (){
+    console.log(this.consentDeploy.IsAnyCourtCase);
+    if(this.consentDeploy.IsAnyCourtCase == true){
+      this.consentFromGroup.get('txtCourtName')?.setValidators([Validators.required]);
+      this.consentFromGroup.get('txtCaseNo')?.setValidators([Validators.required]);
+      this.consentFromGroup.get('txtCourtDate')?.setValidators(Validators.required);
+      this.consentFromGroup.get('CourtDocFileName')?.setValidators(Validators.required);
+    }
+    else{
+      this.consentFromGroup.get('txtCourtName')?.clearValidators();
+      this.consentFromGroup.get('txtCaseNo')?.clearValidators();
+      this.consentFromGroup.get('txtCourtDate')?.clearValidators();
+      this.consentFromGroup.get('CourtDocFileName')?.clearValidators();
+    }
+    this.consentFromGroup.get('txtCourtName')?.updateValueAndValidity();
+    this.consentFromGroup.get('txtCaseNo')?.updateValueAndValidity();
+    this.consentFromGroup.get('txtCourtDate')?.updateValueAndValidity();
+    this.consentFromGroup.get('CourtDocFileName')?.updateValueAndValidity();
+
+  }
+  
+
+  async onFilechange(event: any) {
+    debugger;
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        // Type validation
+        if (this.file) {
+          if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type=='application/pdf') {
+            //size validation
+            if (this.file.size > 2000000) {
+              this.toastr.error('Select less then 2MB File')
+              return
+            }
+          }
+        else {
+          this.toastr.error('Select Only jpeg/jpg/png/pdf file')
+          //const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+          //if (fileInput) {
+          // fileInput.value = '';  // clear FileInput
+          //}
+          this.Uploadfile = '';
+          this.consentDeploy.DisCourtDocFileName = '';
+          event.target.value = null;
+          return;
+        }
+
+        //upload model
+        let uploadModel = new UploadFileModel();
+        uploadModel.FileExtention = this.file.type ?? "";
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = "ITI/InspectionManagerITI";
+
+        //Upload to server folder
+        await this.commonFunctionService.UploadDocument(this.file, uploadModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+
+              const fileName = data['Data'][0]["Dis_FileName"];
+              const actualFile = data['Data'][0]["FileName"];
+
+              this.Uploadfile = data['Data'][0]["FileName"];
+              this.consentDeploy.DisCourtDocFileName = this.Uploadfile;
+              this.consentDeploy.CourtDocFileName = this.Uploadfile;
+            }
+
+            if (data.State === EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage);
+
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            }
+          });
+      }
+    }
+   }
+    catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
 
   GetInstituteMaster_ByDistrictWise(ID: any) {
     this.requestCenter.action = 'GetInstituteMaster_ByDistrictWise'
@@ -139,19 +242,28 @@ export class ITIAddConsentComponent {
   //}
 
 
+  
+
   async AddDeployment() {
     this.isSubmitted = true;
     this.consentFromGroup.markAllAsTouched();
+
     if (this.consentFromGroup.invalid) {
       return;
     }
+
     const isDuplicate = this.consentDeployList.some(
       (element: any) => this.consentDeploy.InstituteID === element.InstituteID
     );
+
     if (isDuplicate) {
       this.toastr.error('College Already Listed!');
       return;
     }
+
+    //  ADD THIS LINE (MOST IMPORTANT)
+   // this.consentDeploy.Amount = this.currentAmount;
+
     this.consentDeploy.InstituteName = this.InstituteMasterDDL.find(
       (x: any) => x.Id == this.consentDeploy.InstituteID
     )?.Name;
@@ -162,26 +274,38 @@ export class ITIAddConsentComponent {
 
     this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
 
+    // push data
     this.consentDeployList.push({ ...this.consentDeploy });
+
     const remarkControl = this.consentFromGroup.get('txtRemark');
+
+    // reset model
     this.consentDeploy = new ConsentModel();
+
+    //  reset TS amount also
+    //this.currentAmount = 2000;
+
     this.consentDeploy.Amount = 2000;
     this.consentDeploy.Remark = '';
 
     this.showRemark = false;
+
     // reset validation
     remarkControl?.clearValidators();
     remarkControl?.setValue('');
     remarkControl?.updateValueAndValidity();
 
-    // reset form state
+    // reset form
     this.consentFromGroup.patchValue({
       txtAmount: 2000,
       txtRemark: ''
     });
+
     this.isSubmitted = false;
+
     console.log('Bind List ==>', this.consentDeployList);
   }
+
 
   async SaveData() {
     debugger
@@ -258,6 +382,14 @@ export class ITIAddConsentComponent {
     remarkControl?.updateValueAndValidity();
   }
 
+
+  async calculateAmount() {
+    debugger
+    this.commonMasterService.GetCommonMasterData('consentAmount', this.consentDeploy.InstituteID).then((data: any) => {
+      debugger
+      this.consentDeploy.Amount = data['Data'][0]['Name'];
+    });
+  }
 
 
 }

@@ -13,6 +13,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { ITIPlacementStudentService } from '../../../../Services/ITI/ITIPlacementStudent/iti-placement-student.service';
 import { ActivatedRoute } from '@angular/router';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-iticampus-post-list',
@@ -57,7 +58,34 @@ export class ItiCampusPostListComponent {
     await this.GetMasterData();
     await this.btn_SearchClick();
   }
+
+  exportToExcel(): void {
+    const unwantedColumns = [
+      'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID','PostID','PostCollegeID','CompanyID','StateID','DistrictID',
+    ];
+    const filteredData = this.CampusValidationListData.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const today=new Date();
+    console.log(today.getFullYear);
+    const formatedDate= String(today.getDate()).padStart(2,'0')+ String(today.getMonth()+1).padStart(2,'0')+today.getFullYear();
+    const filename=`CampusData-${formatedDate}.xlsx`;
+    XLSX.writeFile(wb, filename);
+  }
+
   async GetMasterData() {
+    debugger
     try {
       this.loaderService.requestStarted();
     

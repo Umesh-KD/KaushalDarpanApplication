@@ -27,7 +27,8 @@
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College Name</label>
-              <select type="text" class="form-input" formControlName="InstituteID" [(ngModel)]="consentDeploy.InstituteID">
+              <select type="text" class="form-input" formControlName="InstituteID" [(ngModel)]="consentDeploy.InstituteID"
+                      (change)="calculateAmount()">
                 <option value="0">--Select--</option>
                 @for (item of InstituteMasterDDL; track item.Id) {
                 <option [value]="item.Id">{{item.Name}}</option>
@@ -57,7 +58,6 @@
                 <option [value]="_EnumInspectionDeploymentType.Planned">Planned (Affiliation)</option>
                 <option [value]="_EnumInspectionDeploymentType.GeneralInspPlanned">General Inspection (Planned)</option>
               </select>
-
               <div *ngIf="isSubmitted && _consentFromGroup.consentTypeID.errors" class="text-danger">
                 <p *ngIf="!_consentFromGroup.consentTypeID.errors.required"><i aria-hidden="true"></i> Consent Type is required .!</p>
               </div>
@@ -106,6 +106,65 @@
               </div>
             </div>
 
+              <!-- IsAnyCourtCase checkbox -->
+            <div>   
+              <label class="inline-flex items-center mt-3 m-2">
+                <input type="checkbox" [(ngModel)]="consentDeploy.IsAnyCourtCase" formControlName="IsAnyCourtCase" class="form-checkbox" (change)="IsAnyCourtCase()" />
+                <span class="ml-2 text-gray-800 text-sm font-medium p-1">Is Any Court Case</span>
+              </label>
+            </div>
+
+            <div *ngIf="consentDeploy.IsAnyCourtCase">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Court Name<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Court Name" [(ngModel)]="consentDeploy.CourtName" formControlName="txtCourtName">
+              <div *ngIf="isSubmitted && _consentFromGroup.txtCourtName.errors" class="text-danger">
+                <p *ngIf="_consentFromGroup.txtCourtName.errors.required"><i aria-hidden="true"></i> Court Name is required .!</p>
+              </div>
+            </div>
+
+            <div *ngIf="consentDeploy.IsAnyCourtCase">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date<span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" [(ngModel)]="consentDeploy.CourtDate" formControlName="txtCourtDate" (click)="openDatePicker($event)">
+              <div *ngIf="isSubmitted && _consentFromGroup.txtCourtDate.errors" class="text-danger">
+                <p *ngIf="_consentFromGroup.txtCourtDate.errors.required"><i aria-hidden="true"></i> Date is required .!</p>
+              </div>
+            </div>
+
+            <div *ngIf="consentDeploy.IsAnyCourtCase">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Case No. <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Case No." [(ngModel)]="consentDeploy.CaseNo" formControlName="txtCaseNo">
+              <div *ngIf="isSubmitted && _consentFromGroup.txtCaseNo.errors" class="text-danger">
+                <p *ngIf="_consentFromGroup.txtCaseNo.errors.required"><i aria-hidden="true"></i> Case No is required .!</p>
+              </div>
+            </div>
+
+             <!-- upload related documnet  -->
+             <div *ngIf="consentDeploy.IsAnyCourtCase">
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     for="fileStudentPhoto2">
+                Upload Document:<span class="StarMarking">*</span>
+              </label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="fileStudentPhoto2" type="file" (change)="onFilechange($event)" formControlName="CourtDocFileName">
+                <label for="fileStudentPhoto2">
+                  <span>Choose File</span>
+                  {{consentDeploy.DisCourtDocFileName === '' ? 'No File Choosen' : consentDeploy.DisCourtDocFileName}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + 'ITI/InspectionManagerITI/' + consentDeploy.CourtDocFileName}}"
+                     *ngIf="this.consentDeploy.CourtDocFileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                     (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+                    <i class="ti ti-trash"></i>
+                  </a>-->
+                </div>
+              </div>
+              <!--<div *ngIf="isSubmitted && _BudgetRequestForm.controls.CourtDocFileName.errors" class="text-danger mt-1">
+                <p *ngIf="_BudgetRequestForm.controls.CourtDocFileName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>-->
+            </div>
+
 
 
             <div>
@@ -117,7 +176,7 @@
         </form>
       </div>
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-list"></i> Added Consent List</b>
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Added Consent List</b>
       </div>
 
       <div class="overflow-auto max-height500">
