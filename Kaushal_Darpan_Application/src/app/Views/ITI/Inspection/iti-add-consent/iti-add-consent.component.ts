@@ -9,7 +9,6 @@ import { ToastrService } from 'ngx-toastr';
 import { ITIInspectionService } from '../../../../Services/ITI/ITI-Inspection/iti-inspection.service';
 import { EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/GlobalConstants';
 import { Router } from '@angular/router';
-import { CommonFunctionService } from '../../../../Common/common';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
@@ -43,7 +42,6 @@ export class ITIAddConsentComponent {
   public ErrorMessage:string='';
   public file!: File;
   public Uploadfile: string = '';
-  DeploymentTypeList: any = []
   showRemark: boolean = false;
 
   constructor(
@@ -69,7 +67,6 @@ export class ITIAddConsentComponent {
       txtCaseNo:[''],
       txtCourtDate:[''],
       CourtDocFileName:[''],
-      txtAmount: [''],
       txtRemark: ['']
     });
     this.getMasterData();

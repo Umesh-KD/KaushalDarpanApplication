@@ -191,7 +191,6 @@ export class ConsentModel  {
   public CaseNo:string=''
   public DisCourtDocFileName:string=''
   public CourtDocFileName:string=''
-  public Amount?:number = 0
 }
 
 
