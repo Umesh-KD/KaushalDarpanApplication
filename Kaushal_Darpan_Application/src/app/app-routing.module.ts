@@ -385,6 +385,14 @@ const routes: Routes = [
       { path: 'AdminDashboardITI', loadChildren: () => import('./Views/ITI/admin-dashboard-iti/admin-dashboard-iti.module').then(m => m.AdminDashboardITIModule), title: 'Admin Dashboard ITI' },
       { path: 'SeatIntakesList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list/seat-intakes-list.module').then(m => m.SeatIntakesListModule), title: 'Seat Intakes List' },
       { path: 'AddSeatIntakes', loadChildren: () => import('./Views/ITI/Intakes/add-seat-intakes/add-seat-intakes.module').then(m => m.AddSeatIntakesModule), title: 'Add Seat Intakes' },
+
+
+      //new pages changes
+      { path: 'SeatIntakesMasterList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-master/seat-intakes-list-master.module').then(m => m.SeatIntakesListMasterModule), title: 'Seat Intakes List Master' },
+      { path: 'AddSeatIntakesMaster', loadChildren: () => import('./Views/ITI/Intakes/add-seat-intakes-master/add-seat-intakes-master.module').then(m => m.AddSeatIntakesMasterModule), title: 'Add Seat Intakes Master' },
+
+
+
       { path: 'AddSeatsDistributions', loadChildren: () => import('./Views/ITI/Seats-Distributions/add-seats-distributions/add-seats-distributions.module').then(m => m.AddSeatsDistributionsModule), title: 'Add Seats Distributions' },
       { path: 'SeatsDistributionsList', loadChildren: () => import('./Views/ITI/Seats-Distributions/seats-distributions-list/seats-distributions-list.module').then(m => m.SeatsDistributionsListModule), title: 'Seats Distributions List' },
       { path: 'ImportantLinksList', loadChildren: () => import('./Views/ITI/Important-Links/important-links-list/important-links-list.module').then(m => m.ImportantLinksListModule), title: 'Important Links List' },
