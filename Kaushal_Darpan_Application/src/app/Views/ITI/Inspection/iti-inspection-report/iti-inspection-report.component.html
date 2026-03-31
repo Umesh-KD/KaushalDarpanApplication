@@ -119,7 +119,7 @@
               <!--<a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned"  (click)="openModalGenerateOTP(modal_GenrateOTP,row.DeploymentID)"> <i class="ti ti-download"></i></a>-->
                     <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
                        <a href="javascript:void(0);" title="Download Inspection Check List"
-                          (click)="DownloadReportPDF(row.DeploymentID)">
+                          (click)="DownloadReportPDF(row.DeploymentID,row.InstituteName,row.AnswerCreatedDate)">
                          <i class="ti ti-download"></i>
                        </a>
                     </div>

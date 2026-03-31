@@ -11,6 +11,7 @@ import { EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/Glo
 import { Router } from '@angular/router';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { AppsettingService } from '../../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-iti-add-consent',
@@ -43,6 +44,7 @@ export class ITIAddConsentComponent {
   public file!: File;
   public Uploadfile: string = '';
   showRemark: boolean = false;
+  public CalculatedAmount: number = 0;
 
   constructor(
     private commonFunctionService: CommonFunctionService,
@@ -52,6 +54,7 @@ export class ITIAddConsentComponent {
     private itiInspectionService: ITIInspectionService,
     private router: Router,
     private commonMasterService: CommonFunctionService,
+    private appsettingConfig: AppsettingService
   ){}
 
   async ngOnInit() {
@@ -157,8 +160,8 @@ export class ITIAddConsentComponent {
               const actualFile = data['Data'][0]["FileName"];
 
               this.Uploadfile = data['Data'][0]["FileName"];
-              this.consentDeploy.DisCourtDocFileName = this.Uploadfile;
-              this.consentDeploy.CourtDocFileName = this.Uploadfile;
+              this.consentDeploy.DisCourtDocFileName = fileName;
+              this.consentDeploy.CourtDocFileName = this.Uploadfile;;
             }
 
             if (data.State === EnumStatus.Error) {
@@ -245,13 +248,13 @@ export class ITIAddConsentComponent {
   
 
   async AddDeployment() {
+    debugger;
     this.isSubmitted = true;
     this.consentFromGroup.markAllAsTouched();
-
     if (this.consentFromGroup.invalid) {
+      this.toastr.error('Please fill the required fields!');
       return;
     }
-
     const isDuplicate = this.consentDeployList.some(
       (element: any) => this.consentDeploy.InstituteID === element.InstituteID
     );
@@ -285,7 +288,7 @@ export class ITIAddConsentComponent {
     //  reset TS amount also
     //this.currentAmount = 2000;
 
-    this.consentDeploy.Amount = 2000;
+    // this.consentDeploy.Amount = 2000;
     this.consentDeploy.Remark = '';
 
     this.showRemark = false;
@@ -295,11 +298,11 @@ export class ITIAddConsentComponent {
     remarkControl?.setValue('');
     remarkControl?.updateValueAndValidity();
 
-    // reset form
-    this.consentFromGroup.patchValue({
-      txtAmount: 2000,
-      txtRemark: ''
-    });
+    // // reset form
+    // this.consentFromGroup.patchValue({
+    //   txtAmount: 2000,
+    //   txtRemark: ''
+    // });
 
     this.isSubmitted = false;
 
@@ -369,7 +372,7 @@ export class ITIAddConsentComponent {
     const amount = Number(this.consentDeploy.Amount);
     const remarkControl = this.consentFromGroup.get('txtRemark');
 
-    if (amount !== 2000) {
+    if (amount !== this.CalculatedAmount) {
       this.showRemark = true;
       remarkControl?.setValidators([Validators.required]);
     } else {
@@ -388,6 +391,7 @@ export class ITIAddConsentComponent {
     this.commonMasterService.GetCommonMasterData('consentAmount', this.consentDeploy.InstituteID).then((data: any) => {
       debugger
       this.consentDeploy.Amount = data['Data'][0]['Name'];
+      this.CalculatedAmount=this.consentDeploy.Amount??0;
     });
   }
 

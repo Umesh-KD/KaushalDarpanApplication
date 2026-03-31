@@ -119,6 +119,7 @@ export class InspectionDeploymentComponent {
   }
 
   GetInstituteMaster_ByDistrictWise(ID: any) {
+    debugger
     this.requestCenter.action = 'GetInstituteMaster_ByDistrictWise'
     this.requestCenter.DistrictID = ID;
     this.requestCenter.RoleID = this.InspectionTeamID;
