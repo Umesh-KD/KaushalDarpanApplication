@@ -80,11 +80,21 @@ export class ItiPlanningListComponent {
     if (!idParam || isNaN(this.InstituteID)) {
       this.InstituteID = 0;
     }
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT)
+    {
       this.CollegeID = this.InstituteID
       //this.ITItypeID = this.ITItypeID
-    } else {
-      this.ApprovedStatus=2
+    }
+    else
+    {
+      if (this.sSOLoginDataModel.RoleID == 97)
+      {
+        this.ApprovedStatus = 0;
+      }
+      else
+      {
+        this.ApprovedStatus = 2
+      }
     }
 
 
