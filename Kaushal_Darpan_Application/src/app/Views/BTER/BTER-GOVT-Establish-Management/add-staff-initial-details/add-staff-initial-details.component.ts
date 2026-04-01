@@ -382,8 +382,7 @@ export class AddStaffInitialDetailsComponent {
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_Govt_RoleOfficeMapping_GetAllData(this.roleModel).then((data: any) => {
      
         data = JSON.parse(JSON.stringify(data));
-        this.RoleMasterList = data.Data;
-        
+        this.RoleMasterList = data.Data;        
 
         if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
           this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseIncharge)
@@ -446,8 +445,7 @@ export class AddStaffInitialDetailsComponent {
 
   async ddl_DivisionID_Wise_District() {}
 
-  async DuplicateNodal()
-  {
+  async DuplicateNodal(){
    
     this.NodalsearchRequest.DistrictID = this.formData.DistrictID;
     this.NodalsearchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;

@@ -199,3 +199,25 @@ export class SelectedRoomTyps {
   public ID: number = 0;
   public Name: string = '';
 }
+
+export class HostelInstituteMappingModel {
+  public HIMappingID: number = 0;
+  public EndTermID: number = 0;
+  public DepartmentID: number = 0;
+  public CourseTypeID: number = 0;
+  public InstituteID: string = '';
+  public HostelID: string = '';
+  public isParent: boolean = false
+  public SelectedinstituteList: InstituteMappingListModel[] = []
+}
+
+
+export class InstituteMappingListModel {
+  public InstituteID: number = 0;
+  public Institutename: string = '';
+ // public isParent: number = 0;
+  public HostelID: number = 0;
+  public HostelName: string = '';
+  isParent: boolean = false
+
+}

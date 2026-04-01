@@ -10,7 +10,7 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { RoomAllotmentDataModel } from '../../../Models/Hostel-Management/RoomAllotmentDataModel';
-import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants, EnumRole } from '../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
@@ -20,6 +20,7 @@ import { HostelRoomSeatSearchModel } from '../../../Models/Hostel-Management/Hos
 import { HostelRoomDetailsService } from '../../../Services/HostelRoomDetails/hostel-room-details.service';
 import * as XLSX from 'xlsx';
 import { SearchRequest } from '../../../Models/CitizenSuggestionDataModel';
+
 
 @Component({
   selector: 'app-room-allotment',
@@ -60,6 +61,7 @@ export class RoomAllotmentComponent {
   public ViewRequest: any = {};
   public StaticFileRootPathURL: any = {};
   public _GlobalConstants: any = {};
+  _EnumRole = EnumRole;
 
   timeLeft: number = GlobalConstants.DefaultTimerOTP;
   public OTP: string = '';
@@ -741,22 +743,67 @@ export class RoomAllotmentComponent {
     }
   }
 
+  //exportToExcel(): void {
+  //  const unwantedColumns = ['InstituteId', 'ApplicationId', 'StudentId', 'SemesterId', 'AllotmentStatus', 'BrachId', 'AllotmentStatus1', 'EndTermID'];
+
+  //  const filteredData = this.StudentReqListList.map((item: any) => {
+  //    const filteredItem: any = {};
+  //    Object.keys(item).forEach(key => {
+  //      if (!unwantedColumns.includes(key)) {
+  //        filteredItem[key] = item[key];
+  //      }
+  //    });
+  //    return filteredItem;
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //  const today = new Date();
+  //  const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
+
+  //  const fileName = `Student_Request_List_Report_${formattedDate}.xlsx`;
+
+  //  XLSX.writeFile(wb, fileName);
+  //}
+
+
+
   exportToExcel(): void {
-    const unwantedColumns = ['InstituteId','ApplicationId','StudentId','SemesterId','AllotmentStatus','BrachId','AllotmentStatus1','EndTermID'];
-    const filteredData = this.StudentReqListList.map((item: any) => {
-      const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
-        }
+    const wantedColumns =
+      ['SrNo', 'StudentName', 'HostelRequestNo', 'StreamName', 'SemesterName','TotalAvgPercentage'];
+
+    const exportData = this.StudentReqListList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
       });
-      return filteredItem;
+      return filteredRow;
     });
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map((row: any) =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 2 };
+    });
+    ws['!cols'] = colWidths;
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'VerifiedStudentHostelAppliedReportData.xlsx');
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName = `Student_Request_Room_Allotment_List_Report_${todayDate}.xlsx`;
+    XLSX.writeFile(wb, fileName);
   }
+
+
+
 
   async GetRoomPreference(ReqId: number) {
     try {

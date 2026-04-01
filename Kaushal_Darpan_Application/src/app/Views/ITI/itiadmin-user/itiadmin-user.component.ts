@@ -63,7 +63,7 @@ export class ITIAdminUserComponent {
         InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
         txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
         //txtMobileNo: ['', Validators.required],
-        txtMobileNo: [{ value: '', disabled: true }, Validators.required],
+        txtMobileNo: [{ value: '' }, Validators.required],
       });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));

@@ -41,6 +41,8 @@ export class ITIInspectionReportComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
+  public instituteNameRPT: string = '';
+  public inspectionDateRPT: string = '';
  // private modalService = inject(NgbModal);
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -334,9 +336,61 @@ export class ITIInspectionReportComponent {
     }
   }
 
+  async exportDocumentsToExcel(DeploymentID:number) {
+    console.log("heelelelelele");
+    debugger
+    var id = DeploymentID;
+    try {
+      this.loaderService.requestStarted();
+      await this.itiInspectionService.DownloadZipFolder(id)
+        .then((response: any) => {
+          debugger;
+          const contentType = response?.headers.get('Content-Type');
+          //
+          if (contentType === 'application/zip') {//1.
+            // Extract filename from header
+            const contentDisposition = response?.headers.get('Content-Disposition');
+            let fileName = 'Students.zip';
+            if (contentDisposition) {
+              const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+              if (match && match[1]) {
+                fileName = match[1].replace(/['"]/g, '');
+              }
+            }
+            // Download PDF
+            const blob = response?.body as Blob;
+            const a = document.createElement('a');
+            const objectUrl = URL.createObjectURL(blob);
+            a.href = objectUrl;
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(objectUrl);
 
-  async DownloadReportPDF(DeploymentID: number) {
-  
+          } else if (contentType?.includes('text/plain')) {//2.
+            // Handle plain text (like errors or "No data")
+            const reader = new FileReader();
+            reader.onload = () => {
+              //load text
+              const message = reader.result as string;
+              this.toastr.error(message);
+            };
+            //read text
+            reader.readAsText(response?.body as Blob);
+          } else {
+            //
+            this.toastr.error('Unexpected content type received.');
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
+
+
+  async DownloadReportPDF(DeploymentID: number,instituteName:string,inspectionDate: string) {
+  debugger;
         var id = DeploymentID;
         try {
     
@@ -347,9 +401,9 @@ export class ITIInspectionReportComponent {
               if (data.State === EnumStatus.Success) {
                 debugger;
                 const pdfUrl = data.Data; // Assuming your API returns this
-
+                this.inspectionDateRPT = inspectionDate;
+                this.instituteNameRPT = instituteName??'';
                 this.DownloadPdf(pdfUrl); // Download using actual file path
-
                 this.toastr.success("PDF Genetrated Successfully");
                 this.CloseModal()
               } else if (data.State === EnumStatus.Warning) {
@@ -374,13 +428,14 @@ export class ITIInspectionReportComponent {
   }
 
   DownloadPdf(FileName: string): void {
+    debugger;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
     // Fetch the file as a blob
     this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
       const downloadLink = document.createElement('a');
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = "InspectionCheckListReport.pdf"; // Set the desired file name
+      downloadLink.download = `${this.instituteNameRPT}_${this.inspectionDateRPT}`; // Set the desired file name
       downloadLink.click();
       // Clean up the object URL
       window.URL.revokeObjectURL(url);
