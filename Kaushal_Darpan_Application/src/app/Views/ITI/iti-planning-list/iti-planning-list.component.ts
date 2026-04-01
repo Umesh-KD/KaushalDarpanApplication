@@ -96,8 +96,6 @@ export class ItiPlanningListComponent {
         this.ApprovedStatus = 2
       }
     }
-
-
     await this.GetIti()
     await this.btn_SearchClick();
     await this.GetManagmentType();
