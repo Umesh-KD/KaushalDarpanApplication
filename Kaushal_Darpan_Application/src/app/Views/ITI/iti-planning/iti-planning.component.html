@@ -1466,6 +1466,17 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
       </div>
       <form [formGroup]="AffFormGroup" id="HrMasterFormGroup" class="form-horizontal">
         <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 hide-in-pdf">
+
+
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" id="ApplicationId" formControlName="OrderDate" [(ngModel)]="addmore.OrderDate" (change)="GetOrderList($event.target.value)">
+            <div *ngIf="isAddrequest2 &&_AffFormGroup.OrderDate.errors" class="text-danger">
+              <p *ngIf="_AffFormGroup.OrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="OrderNo" [(ngModel)]="addmore.OrderNo" placeholder="Enter Order No">
@@ -1475,22 +1486,11 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
           </div>
 
 
-          <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="OrderDate"  [(ngModel)]="addmore.OrderDate">
-            <div *ngIf="isAddrequest2 &&_AffFormGroup.OrderDate.errors" class="text-danger">
-              <p *ngIf="_AffFormGroup.OrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
-
-       
-
-
 
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">With Effect From:<span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="EffectFrom"  [(ngModel)]="addmore.EffectFrom" placeholder="Enter Contact No">
+            <input type="date" class="form-input" id="ApplicationId" formControlName="EffectFrom" [(ngModel)]="addmore.EffectFrom" placeholder="Enter Contact No">
             <div *ngIf="isAddrequest2 &&_AffFormGroup.EffectFrom.errors" class="text-danger">
               <p *ngIf="_AffFormGroup.EffectFrom.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
@@ -1511,7 +1511,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
             </div>
           </div>
 
-        
+
 
           <div class="pt-30">
             <button (click)="AddChoice2()" type="button" class="btn bg-primary text-white">

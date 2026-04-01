@@ -106,6 +106,7 @@ export class ITI_PlanningCollegesModel {
 export class ItiAffiliationList {
   public AffiliationID: number = 0;
   public CollegeID: number = 0;
+  public OrderID: number = 0;
   public OrderNo: string = '';
   public PageNo: string = '';
   public SerialNo: string = '';
