@@ -336,6 +336,58 @@ export class ITIInspectionReportComponent {
     }
   }
 
+  async exportDocumentsToExcel(DeploymentID:number) {
+    console.log("heelelelelele");
+    debugger
+    var id = DeploymentID;
+    try {
+      this.loaderService.requestStarted();
+      await this.itiInspectionService.DownloadZipFolder(id)
+        .then((response: any) => {
+          debugger;
+          const contentType = response?.headers.get('Content-Type');
+          //
+          if (contentType === 'application/zip') {//1.
+            // Extract filename from header
+            const contentDisposition = response?.headers.get('Content-Disposition');
+            let fileName = 'Students.zip';
+            if (contentDisposition) {
+              const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+              if (match && match[1]) {
+                fileName = match[1].replace(/['"]/g, '');
+              }
+            }
+            // Download PDF
+            const blob = response?.body as Blob;
+            const a = document.createElement('a');
+            const objectUrl = URL.createObjectURL(blob);
+            a.href = objectUrl;
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(objectUrl);
+
+          } else if (contentType?.includes('text/plain')) {//2.
+            // Handle plain text (like errors or "No data")
+            const reader = new FileReader();
+            reader.onload = () => {
+              //load text
+              const message = reader.result as string;
+              this.toastr.error(message);
+            };
+            //read text
+            reader.readAsText(response?.body as Blob);
+          } else {
+            //
+            this.toastr.error('Unexpected content type received.');
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
+
 
   async DownloadReportPDF(DeploymentID: number,instituteName:string,inspectionDate: string) {
   debugger;

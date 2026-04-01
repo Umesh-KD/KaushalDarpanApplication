@@ -154,6 +154,34 @@ export class ITIInspectionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  // Consolidate-Zip?id=${id}
+
+  // public async DownloadZipFolder(id:number): Promise<any>  {
+  //   const url = `${this.APIUrl}/Consolidate-Zip/${id}`;
+  //   return this.http.post(url, {
+  //     ...this.headersOptions,
+  //     observe: 'response',
+  //     responseType: 'blob' as 'json' // Tell Angular to treat it as binary
+  //   }).pipe(
+  //     catchError(this.handleErrorObservable)
+  //   ).toPromise();
+  // }
+
+  public async DownloadZipFolder(id: number): Promise<any> {
+    const url = `${this.APIUrl}/Consolidate-Zip/${id}`;
+  
+    return this.http.post(url, null, {   // ✅ body = null
+      headers: this.headersOptions.headers, // if you have headers
+      observe: 'response',
+      responseType: 'blob'   // ✅ NO 'as json'
+    })
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+  }
+
   public async RequestApprove(Deployeid: number) {
     return await this.http.post(this.APIUrl + '/RequestApprovedbyAdmin/' + Deployeid, this.headersOptions)
       .pipe(
