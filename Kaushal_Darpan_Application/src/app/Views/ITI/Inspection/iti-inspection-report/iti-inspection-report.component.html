@@ -122,6 +122,7 @@
                           (click)="DownloadReportPDF(row.DeploymentID,row.InstituteName,row.AnswerCreatedDate)">
                          <i class="ti ti-download"></i>
                        </a>
+                       <a href="javascript:void(0);" title="Consolidated Zip" (click)="exportDocumentsToExcel(row.DeploymentID)" ><i class="ti ti-download"></i></a>
                     </div>
             </td>
             <!--<td align="left">
