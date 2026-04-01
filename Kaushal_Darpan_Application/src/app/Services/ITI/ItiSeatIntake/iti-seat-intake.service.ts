@@ -270,4 +270,21 @@ export class ItiSeatIntakeService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetAllDataMasterList(request: SeatIntakeSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllDataMasterList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveSeatIntakeDataMaster(request: SeatIntakeDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveSeatIntakeDataMaster`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

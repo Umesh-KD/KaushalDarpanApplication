@@ -221,7 +221,8 @@ export enum EnumRole {
 
   ExamInchargeSCVT = 253,
   ExamInchargeNCVT = 254,
-  AdmissionIncharges = 255
+  AdmissionIncharges = 255,
+  HostelIncharge = 258
 
 }
 
