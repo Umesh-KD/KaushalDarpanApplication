@@ -69,8 +69,8 @@
                 Management Details
               </b>
 
-              <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.ManagementStatus=='Not Approved' ||
- this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT  && request.ManagementStatus=='Not Approved'" class="text-danger ms-2 font-bold ">
+              <p  *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.ManagementStatus=='Not Approved' ||
+ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT  && request.ManagementStatus=='Not Approved'" class="text-danger ms-2 font-bold textwrap">
                 {{request.ManagementRemark}}
 
               </p>
@@ -298,7 +298,7 @@
           Member Of Trust/Society
           <!--</b>-->
           <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.TrustMemberStatus=='Not Approved' ||
-this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMemberStatus=='Not Approved'" class="text-danger ms-2 ">
+this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMemberStatus=='Not Approved'" class="text-danger ms-2 textwrap">
             *  {{request.TrustMemberRemark}}
 
           </p>
@@ -522,7 +522,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMember
             Institute Building Details
 
             <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.AddressStatus=='Not Approved' ||
-this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStatus=='Not Approved'" class="text-danger ms-2 ">
+this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStatus=='Not Approved'" class="text-danger ms-2 textwrap">
               *  {{request.AddressRemark}}
 
             </p>
@@ -1075,7 +1075,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStat
             <i class="ti ti-plus"></i>
             Bank Guarantee Details
             <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.BankStatus=='Not Approved' ||
-this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=='Not Approved'" class="text-danger ms-2 ">
+this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=='Not Approved'" class="text-danger ms-2 textwrap">
               *{{request.BankRemark}}
 
             </p>
@@ -1265,7 +1265,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
             <i class="ti ti-plus"></i>
             Electrical load details
             <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.ElectricalStatus=='Not Approved' ||
-this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ElectricalStatus=='Not Approved'" class="text-danger ms-2 ">
+this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ElectricalStatus=='Not Approved'" class="text-danger ms-2 textwrap">
               *  {{request.ElectricalRemark}}
 
             </p>
@@ -1454,7 +1454,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ElectricalS
           <i class="ti ti-plus"></i>
           Affiliation Details
           <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.AffilationStatus=='Not Approved' ||
-this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationStatus=='Not Approved'" class="text-danger ms-2 ">
+this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationStatus=='Not Approved'" class="text-danger ms-2 textwrap">
             *  {{request.AffilationRemark}}
 
           </p>
