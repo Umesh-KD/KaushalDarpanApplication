@@ -445,8 +445,7 @@ export class AddStaffInitialDetailsComponent {
 
   async ddl_DivisionID_Wise_District() {}
 
-  async DuplicateNodal()
-  {
+  async DuplicateNodal(){
    
     this.NodalsearchRequest.DistrictID = this.formData.DistrictID;
     this.NodalsearchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
