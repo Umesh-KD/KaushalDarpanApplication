@@ -1407,9 +1407,17 @@ export class ItiPlanningComponent {
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
+
+            // format date
+            const today = new Date();
+            const formattedDate =
+              String(today.getDate()).padStart(2, '0') + '-' +
+              String(today.getMonth() + 1).padStart(2, '0') + '-' +
+              today.getFullYear();
+
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'ITIPlanningReport.pdf';
+            link.download = `${this.request.CollegeName}_ITIPlanningReport_${formattedDate}.pdf`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1809,7 +1817,8 @@ export class ItiPlanningComponent {
   {
 
 
-  
+
+
 
 
     this.nonApproveValidator();
@@ -1944,8 +1953,10 @@ export class ItiPlanningComponent {
         .filter(r => r?.trim())
         .join(', ');
 
-    } else {
-      this.request.Status=1
+    }
+    else
+    {
+      this.request.Status = 3;
     }
 
 
@@ -1965,6 +1976,13 @@ export class ItiPlanningComponent {
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message);
             await this.CloseModalPopup();
+
+
+            if (this.request.Status == 3)
+            {
+              this.Get_ITIsPlanningData_ByIDReport();
+            }
+
             this.router.navigate(['/ItiPlanningList'])
           }
           else {

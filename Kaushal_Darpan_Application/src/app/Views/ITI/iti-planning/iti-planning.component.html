@@ -23,7 +23,8 @@
         <div class="mb-8">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Details</b>
-            <a *ngIf="request.Status == 3  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
+            <!---->
+            <a *ngIf=" request.Status == 3  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
             <a *ngIf="sSOLoginDataModel.RoleID == _enumrole.DTETraing" href="/ItiPlanningList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
           </div>
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
