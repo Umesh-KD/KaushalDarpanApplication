@@ -835,6 +835,10 @@ const routes: Routes = [
 
       { path: 'ApplyForHostel', loadChildren: () => import('./Views/Student/apply-for-hostel/apply-for-hostel.module').then(m => m.ApplyForHostelModule) },
       { path: 'CreateHostel', loadChildren: () => import('./Views/Hostel-Management/create-hostel/create-hostel.module').then(m => m.CreateHostelModule), title: 'Create Hostel' },
+
+      { path: 'Hostel-Institute-Mapping-List', loadChildren: () => import('./Views/Hostel-Management/dte-hostel-institute-mapping-list/dte-hostel-institute-mapping-list.module').then(m => m.DTEHostelInstituteMappingListModule), title: 'Create Hostel' },
+
+      { path: 'Hostel-Institute-Mapping', loadChildren: () => import('./Views/Hostel-Management/dte-hostel-institute-mapping/dte-hostel-institute-mapping.module').then(m => m.DTEHostelInstituteMappingModule), title: 'Hostel Institute Mapping' },
       { path: 'RoomSeatMaster', loadChildren: () => import('./Views/Hostel-Management/room-seat-master/room-seat-master.module').then(m => m.RoomSeatMasterModule), title: 'Room Seat Master' },
       { path: 'HostelFacility', loadChildren: () => import('./Views/Hostel-Management/facilities/facilities.module').then(m => m.FacilitiesModule), title: 'Hostel Facility' },
 

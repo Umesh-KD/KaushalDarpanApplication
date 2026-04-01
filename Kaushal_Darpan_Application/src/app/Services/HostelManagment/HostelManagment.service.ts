@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { CreateHostelDataModel, HostelSearchModel, StudentDataModel, HostelStudentSearchModel, EditHostelStudentSearchModel, CreateHostelRoomSeatDataModel, HostelRoomSeatSearchModel, FacilitiesDataModel, FacilitiesSearchModel, CollegeHostelDetailsDataModel, CollegeHostelDetailsSearchModel, StatusChangeModel } from '../../Models/Hostel-Management/HostelManagmentDataModel';
+import { CreateHostelDataModel, HostelSearchModel, StudentDataModel, HostelStudentSearchModel, EditHostelStudentSearchModel, CreateHostelRoomSeatDataModel, HostelRoomSeatSearchModel, FacilitiesDataModel, FacilitiesSearchModel, CollegeHostelDetailsDataModel, CollegeHostelDetailsSearchModel, StatusChangeModel, HostelInstituteMappingModel } from '../../Models/Hostel-Management/HostelManagmentDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 @Injectable({
@@ -235,5 +235,41 @@ export class HostelManagmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async HostelInstituteMappingSaveData(request: HostelInstituteMappingModel) {
+    
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/HostelInstituteMappingSaveData', request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllddlHostelList(searchRequest: HostelSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllddlHostelList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllHostelInstituteMappingList(searchRequest: HostelInstituteMappingModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllHostelInstituteMappingList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  public async GetHostelInstituteMappingByID(PK_ID: number) {
+    return await this.http.get(this.APIUrl + "/GetHostelInstituteMappingByID/" + PK_ID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
 }
