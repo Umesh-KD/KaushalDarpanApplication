@@ -198,71 +198,23 @@ export class RevaluationStudentComponent {
             this.emitraRequest.IsKiosk = false;
             //this.GetDateDataList();
             this.loaderService.requestStarted();
-            // for payment by emitra 
-            if(this.sSOLoginDataModel.IsKiosk == true) {
-              this.emitraRequest.IsKiosk = true;
-              this.emitraRequest.FormCommision = this.studentDetailsModel.FormCommision;
-              this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
-              this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
-
-              try {
-                await this.emitraPaymentService.RevalFeePayment_Kiosk(this.emitraRequest)
-                  .then(async (data: any) => {
-                    data = JSON.parse(JSON.stringify(data));
-                    this.PDFURL = data['PDFURL'];
-                    if (data.State == EnumStatus.Success) {
-                      this.sweetAlert2.ConfirmationSuccess("Thank you! Your payment was successful.", async (result: any) => {
-                        if (result.isConfirmed) {
-                          try {
-                            //sms code missiog
-                            //await this.SendApplicationMessage();
-                            window.open(this.PDFURL, '_blank');
-                            setTimeout(function () { window.location.reload(); }, 200)
-                          }
-                          catch (ex) {
-                            console.log(ex)
-                          }
-                        }
-                        else {
-                          let displayMessage = data.Message ?? data.ErrorMessage;
-                          this.toastr.error(displayMessage);
-                        }
-                      });
-                      //open
-                    }
-                    else {
-                      let displayMessage = data.Message ?? data.ErrorMessage;
-                      this.toastr.error(displayMessage)
-                    }
-                  })
-              }
-              catch (ex) { console.log(ex) }
-              finally {
-                setTimeout(() => {
-                  this.loaderService.requestEnded();
-                }, 200);
-              }
-            } 
-            // for payment by other then emitra
-            else {
-              try {
-                await this.emitraPaymentService.RevalFeePayment_Student(this.emitraRequest)
-                  .then(async (data: any) => {
-                    data = JSON.parse(JSON.stringify(data));
-                    if (data.State == EnumStatus.Success) {
-                      await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
-                    }
-                    else {
-                      this.toastrService.error(data.ErrorMessage)
-                    }
-                  })
-              }
-              catch (ex) { console.log(ex) }
-              finally {
-                setTimeout(() => {
-                  this.loaderService.requestEnded();
-                }, 200);
-              }
+            try {
+              await this.emitraPaymentService.RevalFeePayment_Student(this.emitraRequest)
+                .then(async (data: any) => {
+                  data = JSON.parse(JSON.stringify(data));
+                  if (data.State == EnumStatus.Success) {
+                    await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+                  }
+                  else {
+                    this.toastrService.error(data.ErrorMessage)
+                  }
+                })
+            }
+            catch (ex) { console.log(ex) }
+            finally {
+              setTimeout(() => {
+                this.loaderService.requestEnded();
+              }, 200);
             }
           }
         });
