@@ -207,6 +207,7 @@ export class StudentDashboardComponent implements OnInit {
       this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
       this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
 
       this.loaderService.requestStarted();
       await this.studentService.GetProfileDashboard(this.searchRequest)

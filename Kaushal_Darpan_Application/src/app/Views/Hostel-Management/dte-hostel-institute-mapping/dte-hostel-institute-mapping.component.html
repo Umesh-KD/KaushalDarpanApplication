@@ -1,0 +1,180 @@
+<style>
+  .selectboader {
+    border: 1px solid #ddd !important;
+  }
+</style>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Hostel Institute Mapping' : 'Hostel Institute Mapping' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Hostel Management</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Hostel Institute Mapping</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{ isUpdate ? 'Update Hostel Institute Mapping' : 'Add Hostel Institute Mapping' }}
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Update Hostel Institute Mapping' : 'Add Hostel Institute Mapping' }}</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label>Hostel Name<span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="HostelInstituteMappingRequest.HostelID">
+            <option value="">--Select Hostel--</option>
+            <option *ngFor="let item of HostelListData" [value]="item.HostelID">
+              {{ item.HostelName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+          <mat-select class="form-select form-control CenterCode border selectboader"
+                      multiple
+                      [(ngModel)]="selected"
+                      (selectionChange)="onSelectionChange($event)"
+                      name="ItiIDs">
+            <!-- 🔍 Search box -->
+            <mat-option>
+              <ngx-mat-select-search [(ngModel)]="InstituteSearchText"
+                                     (ngModelChange)="filterInstitute()"
+                                     placeholderLabel="Search Iti..."
+                                     noEntriesFoundLabel="No center found">
+              </ngx-mat-select-search>
+            </mat-option>
+            <!-- Select / Unselect All -->
+            <mat-option *ngIf="InstituteMasterDDLList?.length > 0" [value]="'ALL'">
+              {{ isAllSelected1 ? 'Unselect All' : 'Select All' }}
+            </mat-option>
+            <!-- Center list -->
+            <mat-option *ngFor="let item of filteredInstituteList"
+                        [value]="item.ID"
+                        [disabled]="isAllSelected">
+              {{ item.Name }}
+            </mat-option>
+          </mat-select>
+        </div>
+
+
+
+
+
+        <div>
+          <div class="text-left">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="addHostelInstituteMap()">Add More</button>
+          </div>
+        </div>
+      </div>
+      <!--</form>-->
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Added Member List</b>
+
+    </div>
+
+    <div class="overflow-auto max-height500">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>#</th>
+            <th class="text-left">Hostel Name</th>
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">Member Type</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of SelectedinstituteList; let idx = index;">
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{item.hostelname}}</td>
+            <td class="text-left">{{item.InstituteName}}</td>
+            <td class="text-left">
+              <label>
+                <input type="radio" name="memberType" [value]="item.isParent" [checked]="item.isParent"
+                       (change)="SetParent(item, idx)">&nbsp; Set Parent
+              </label>
+            </td>
+</tbody>
+      </table>
+    </div>
+    <div class="p-4">
+      <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="saveData()">Submit</button>
+      <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+        <i class="ti ti-refresh"></i> Reset
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Hostel Institute Mapping List</b>
+</div>
+<div class="overflow-x-auto mt-3">
+  <table class="table table-border w-full table-auto" cellpadding="5">
+    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+      <tr>
+        <th class="text-left">#</th>
+        <th class="text-left">Institute Name</th>
+        <th class="text-left">Hostel Name</th>
+
+        <th style="width:125px;">Action</th>
+      </tr>
+    </thead>-->
+<!--{{HostelInstituteMappingList | json}}-->
+<!--<tbody>
+          <tr *ngFor="let item of HostelInstituteMappingList;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.InstituteNames}}</td>
+            <td>{{item.HostelName}}</td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit" (click)=" GetHostelInstituteMappingByID(item.HIMappingID)"><i class="ti ti-pencil"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>-->

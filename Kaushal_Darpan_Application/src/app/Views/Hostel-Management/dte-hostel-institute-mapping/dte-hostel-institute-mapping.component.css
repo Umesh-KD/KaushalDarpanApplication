@@ -1,0 +1,23 @@
+.custom-mat-select {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 6px 10px;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+}
+
+  .custom-mat-select .mat-mdc-select {
+    width: 100%;
+  }
+
+  .custom-mat-select .mat-mdc-select-trigger {
+    padding: 0;
+    min-height: auto;
+  }
+
+  .custom-mat-select:focus-within {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,.25);
+  }

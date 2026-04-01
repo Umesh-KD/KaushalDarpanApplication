@@ -96,7 +96,7 @@
             <th class="text-left">{{titleDDLBranchTrade}}</th>
             <th class="text-left">Semester</th>
             <th class="text-left">Percentage</th>
-            <th class="text-center">Action</th>
+            <th class="text-center" *ngIf="sSOLoginDataModel.RoleID !== _EnumRole.HostelIncharge">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -107,7 +107,7 @@
             <td align="left">{{item.StreamName}}</td>
             <td align="left">{{item.SemesterName}}</td>
             <td align="left">{{item.TotalAvgPercentage}}</td>
-            <td>
+            <td *ngIf="sSOLoginDataModel.RoleID !== _EnumRole.HostelIncharge">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="item.AllotmentStatus === 11">
                 <a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.AffidavitDocument}}" target="_blank" class="text-success"><i class="ti ti-eye"></i></a>
                 <a href="javascript:void(0)" (click)="onSubmit(modal_SubmitReq, item)" title="Approve Allotment"><i class="ti ti-check"></i> </a>

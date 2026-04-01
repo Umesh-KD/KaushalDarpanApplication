@@ -194,14 +194,10 @@ export class OfficeVacancyComponent implements OnInit {
     });
 
     // const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
-    // this.PostList = data['Data'];
-    
+    // this.PostList = data['Data'];    
 
     const getoffice = this.OfficeList.find((item:any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID)||[];
-
-    
-   
     const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);
 
     let getinstitute = [];

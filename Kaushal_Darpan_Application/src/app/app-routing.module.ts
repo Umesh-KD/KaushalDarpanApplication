@@ -1,4 +1,4 @@
- 
+
 import { Title } from '@angular/platform-browser';
 import { RouterModule, Routes, TitleStrategy, RouterStateSnapshot } from '@angular/router';
 import { MasterLayoutComponent } from './Views/Shared/master-layout/master-layout.component';
@@ -33,7 +33,7 @@ const routes: Routes = [
       { path: 'iti-Examination-public-info', loadChildren: () => import('./Views/iti-Examination-public-info/iti-Examination-public-info.module').then(m => m.ITIExaminationPublicInfoModule) },
       { path: 'InstructorTab', loadChildren: () => import('./Views/ITI/instructor-tab/instructor-tab.module').then(m => m.InstructorTabModule) },
       /* { path: 'itipublicinfotabs', loadChildren: () => import('./Views/itipublic-info-tabs/itipublic-info-tabs.module').then(m => m.ITIPublicInfoTabsModule) }*/
-      
+
     ]
   },
 
@@ -49,7 +49,7 @@ const routes: Routes = [
 
       { path: 'dtepublicinfotabs', loadChildren: () => import('./Views/dtepublic-info-tabs/dtepublic-info-tabs.module').then(m => m.DTEPublicInfoTabsModule) },
       { path: 'SearchResult', loadChildren: () => import('./Views/Home/search-result/search-result.module').then(m => m.SearchResultModule), title: 'Search Result' },
-    
+
     ]
   },
 
@@ -71,7 +71,7 @@ const routes: Routes = [
         path: 'allpost', loadChildren: () => import('./Views/Home/all-post/all-post.module').then(m => m.AllPostModule), title: 'All Campus List'
       },
       { path: 'iip-allpost', loadChildren: () => import('./Views/Home/iip-web-all-post/iip-web-all-post.module').then(m => m.IIPWebAllPostModule), title: 'IIP Post List' },
-      
+
       // {
       //   path: 'ITIallpost', loadChildren: () => import('./Views/Home/iti-all-post/iti-all-post.module').then(m => m.ITIAllPostModule), title: 'All Campus List'
       // },
@@ -106,8 +106,8 @@ const routes: Routes = [
   },
 
 
-  
-    {
+
+  {
     //front web - ITI home
     path: '', component: ITIHomeLayoutComponent,
     children: [
@@ -166,7 +166,7 @@ const routes: Routes = [
       { path: 'generate-cc-code', loadChildren: () => import('./Views/CenterAllotment/generate-cc-code/generate-cc-code.module').then(m => m.GenerateCcCodeModule), title: 'Generate CC Code' },
       { path: 'SubjectMaster', loadChildren: () => import('./Views/subject-master/subject-master-routing.module').then(m => m.SubjectMasterRoutingModule), title: 'Subject Master' },
       { path: 'SubjectCategory', loadChildren: () => import('./Views/subject-category/subject-category.module.ts').then(m => m.SubjectCategoryRoutingModule), title: 'Subject Category' },
-      { path: 'PlacementDashboard/:id', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },     
+      { path: 'PlacementDashboard/:id', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
       { path: 'PlacementDashReport/:id', loadChildren: () => import('./Views/placement-dash-report/placement-dash-report.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Placement Dashboard Report' },
       { path: 'ITIPlacementDashboard/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
       { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dash-report/placement-dash-report.routing.module').then(m => m.ITIPlacementDashReportModule), title: 'ITI Placement Dashboard Report' },
@@ -240,7 +240,7 @@ const routes: Routes = [
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
 
       { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
-  
+
       { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
       { path: 'ITICollegeWiseScholarship', loadChildren: () => import('./Views/ITI/ITIcollege-wise-scholarship/iticollege-wise-scholarship.module').then(m => m.ITICollegeWiseScholarshipModule), title: 'ITI CollegeWise Scholarship' },
       { path: 'CollegeWiseScholarshipReport', loadChildren: () => import('./Views/college-wise-scholarship-report/college-wise-scholarship-report.module').then(m => m.CollegeWiseScholarshipReportModule), title: 'CollegeWise Scholarship Report' },
@@ -264,7 +264,7 @@ const routes: Routes = [
       { path: 'addrooms', loadChildren: () => import('./Views/Rooms/add-rooms/add-rooms.module').then(m => m.AddRoomsModule), title: 'Add Room' },
       { path: 'scactivities', loadChildren: () => import('./Views/student-centered-activites-master/student-centered-activites.module').then(m => m.StudentCenteredActivitesModule), title: 'Student Centered Activites' },
       { path: 'scactivities/:Status', loadChildren: () => import('./Views/student-centered-activites-master/student-centered-activites.module').then(m => m.StudentCenteredActivitesModule), title: 'Student Centered Activites' },
-     
+
       //{ path: 'addexam', loadChildren: () => import('./Views/Exam Master/add-exam/add-exam.module').then(m => m.AddExamModule) },
 
       { path: 'setexamattendance', loadChildren: () => import('./Views/SetExamAttendance/set-exam-attendance/set-exam-attendance.module').then(m => m.SetExamAttendanceModule), title: 'Set Exam Attendance' },
@@ -282,7 +282,7 @@ const routes: Routes = [
       { path: 'StudentFailedFees', loadChildren: () => import('./Views/Student/paid-fees/paid-fees.module').then(m => m.PaidFeesModule), title: 'Student Paid Fees' },
       { path: 'StudentProfile', loadChildren: () => import('./Views/Student/student-profile/student-profile.module').then(m => m.StudentProfileModule), title: 'Student Profile' },
       { path: 'studentprofiledownload', loadChildren: () => import('./Views/Student/student-profile-download/student-profile-download.module').then(m => m.StudentProfileDownloadModule), title: 'Student Profile' },
-      {path: 'StudentSsoMapping', loadChildren: () => import('./Views/Student/student-sso-mapping/student-sso-mapping.module').then(m => m.StudentSsoMappingModule), title: 'Student SSO Mapping'},
+      { path: 'StudentSsoMapping', loadChildren: () => import('./Views/Student/student-sso-mapping/student-sso-mapping.module').then(m => m.StudentSsoMappingModule), title: 'Student SSO Mapping' },
 
       { path: 'CandidateSsoMapping', loadChildren: () => import('./Views/Counselling-Master/candidate-sso-mapping-module/candidate-sso-mapping-module.module').then(m => m.CandidateSsoMappingModuleModule) },
 
@@ -292,7 +292,7 @@ const routes: Routes = [
 
       { path: 'InternalPracticalStudent', loadChildren: () => import('./Views/internal-practical-student/internal-practical-student.module').then(m => m.InternalPracticalStudentModule), title: 'Internal Practical Student' },
       { path: 'InternalPracticalStudent/:Status', loadChildren: () => import('./Views/internal-practical-student/internal-practical-student.module').then(m => m.InternalPracticalStudentModule), title: 'Internal Practical Student' },
-      
+
       { path: 'InternalAssessmentStudents', loadChildren: () => import('./Views/internal-practical-student/internal-practical-student.module').then(m => m.InternalPracticalStudentModule), title: 'Internal Practical Student' },
       { path: 'GenerateRollnumber', loadChildren: () => import('./Views/generate-roll/generate-roll.module').then(m => m.GenerateRollModule), title: 'Generate Rollnumber' },
       { path: 'published-roll-no', loadChildren: () => import('./Views/published-roll-no/published-roll-no.module').then(m => m.PublishedRollNoModule), title: 'Published Roll No' },
@@ -336,7 +336,7 @@ const routes: Routes = [
       { path: 'documentdetailsform', loadChildren: () => import('./Views/ITI/document-details-form-tab/document-details-form-tab.module').then(m => m.DocumentDetailsFormTabModule), title: 'Document Details' },
       { path: 'optionsform', loadChildren: () => import('./Views/ITI/option-form-tab/option-form-tab.module').then(m => m.OptionFormTabModule), title: 'Options' },
       { path: 'Itipreviewform', loadChildren: () => import('./Views/ITI/preview-form-tab/preview-form-tab.module').then(m => m.PreviewFormTabModule), title: 'ITI Preview' },
-   
+
       //  { path: 'qualificationform', loadChildren: () => import('./Views/ITI/qualification-tab/qualification-tab.module').then(m => m.QualificationTabModule) },
 
       { path: 'Applicationform', loadChildren: () => import('./Views/Polytechnic/application-form/application-form.module').then(m => m.ApplicationFormModule), title: 'BTER-Application Form' },
@@ -385,6 +385,14 @@ const routes: Routes = [
       { path: 'AdminDashboardITI', loadChildren: () => import('./Views/ITI/admin-dashboard-iti/admin-dashboard-iti.module').then(m => m.AdminDashboardITIModule), title: 'Admin Dashboard ITI' },
       { path: 'SeatIntakesList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list/seat-intakes-list.module').then(m => m.SeatIntakesListModule), title: 'Seat Intakes List' },
       { path: 'AddSeatIntakes', loadChildren: () => import('./Views/ITI/Intakes/add-seat-intakes/add-seat-intakes.module').then(m => m.AddSeatIntakesModule), title: 'Add Seat Intakes' },
+
+
+      //new pages changes
+      { path: 'SeatIntakesMasterList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-master/seat-intakes-list-master.module').then(m => m.SeatIntakesListMasterModule), title: 'Seat Intakes List Master' },
+      { path: 'AddSeatIntakesMaster', loadChildren: () => import('./Views/ITI/Intakes/add-seat-intakes-master/add-seat-intakes-master.module').then(m => m.AddSeatIntakesMasterModule), title: 'Add Seat Intakes Master' },
+
+
+
       { path: 'AddSeatsDistributions', loadChildren: () => import('./Views/ITI/Seats-Distributions/add-seats-distributions/add-seats-distributions.module').then(m => m.AddSeatsDistributionsModule), title: 'Add Seats Distributions' },
       { path: 'SeatsDistributionsList', loadChildren: () => import('./Views/ITI/Seats-Distributions/seats-distributions-list/seats-distributions-list.module').then(m => m.SeatsDistributionsListModule), title: 'Seats Distributions List' },
       { path: 'ImportantLinksList', loadChildren: () => import('./Views/ITI/Important-Links/important-links-list/important-links-list.module').then(m => m.ImportantLinksListModule), title: 'Important Links List' },
@@ -493,7 +501,7 @@ const routes: Routes = [
       { path: 'application-fees-trn-history', loadChildren: () => import('./Views/Reports/application-fees-transaction-history/application-fees-transaction-history.module').then(m => m.ApplicationFeesTransactionHistoryModule), title: 'Student Fees Transaction History Report' },
       { path: 'AdminUser', loadChildren: () => import('./Views/BTER/admin-user/admin-user.module').then(m => m.AdminUserModule), title: 'Admin User' },
       { path: 'ITIAdministrativeStaff', loadChildren: () => import('./Views/ITI/itiadmin-user/itiadmin-user.module').then(m => m.ITIAdminUserModule), title: 'Administrative Staff' },
-      
+
       { path: 'master-configuration', loadChildren: () => import('./Views/master-configuration/master-configuration.module').then(m => m.MasterConfigurationModule), title: 'Master Configuration' },
       { path: 'master-configuration-bter', loadChildren: () => import('./Views/master-configuration-bter/master-configuration-bter.module').then(m => m.MasterConfigurationBTERModule), title: 'Master Configuration' },
       { path: 'RevaluationTab', loadChildren: () => import('./Views/Student/revaluation-tab/revaluation-tab.module').then(m => m.RevaluationTabModule) },
@@ -510,7 +518,7 @@ const routes: Routes = [
       { path: 'StudentsJoiningStatusMarks12th/:id', loadChildren: () => import('./Views/ITI/students-joining-status-marks/students-joining-status-marks.module').then(m => m.StudentsJoiningStatusMarksModule) },
 
 
-        
+
       { path: 'Verifierdashboard', loadChildren: () => import('./Views/verifier-dashboard/verifier-dashboard.module').then(m => m.VerifierDashboardModule), title: 'verifier Dashboard' },
       { path: 'EnrollmentList', loadChildren: () => import('./Views/enrollment-list/enrollment-list.module').then(m => m.EnrollmentListModule), title: 'Enrollment List' },
 
@@ -593,7 +601,7 @@ const routes: Routes = [
       { path: 'iti-sr6-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/sr6-report-iti/sr6-report-iti.module').then(m => m.SR6ReportITIModule), title: 'ITI SR6 Report' },
       { path: 'add-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/add-min-required-trade-items/add-min-required-trade-items.module').then(m => m.AddMinRequiredTradeItemsModule), title: 'Add Min Required Items' },
       { path: 'iti-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/min-required-trade-items/min-required-trade-items.module').then(m => m.MinRequiredTradeItemsModule), title: 'ITI Min Required Items' },
-      
+
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
       { path: 'inventory-Issue-History', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
       { path: 'allotted-item-details', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
@@ -630,8 +638,8 @@ const routes: Routes = [
       { path: 'HOD-DTEEquipmentVerifications', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/DTEEquipmentVerifications-mapping-list/DTEEquipmentVerifications-mapping-list-module').then(m => m.DTEEquipmentVerificationsMappingListModule) },
       { path: 'Auction-List', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/auction-list/auction-list.module').then(m => m.AuctionListModule) },
       { path: 'bter-sr5-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr5-report-bter/sr5-report-bter.module').then(m => m.SR5ReportBTERModule), title: 'SR5 Report' },
-      { path: 'bter-sr6-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr6-report-bter/sr6-report-bter.module').then(m => m.SR6ReportBTERModule), title: 'SR6 Report'  },
-      
+      { path: 'bter-sr6-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr6-report-bter/sr6-report-bter.module').then(m => m.SR6ReportBTERModule), title: 'SR6 Report' },
+
       { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
       { path: 'bter-lab-master', loadChildren: () => import('./Views/BTER/bter-item-manage/dtelaboratory-master/dtelaboratory-master-module').then(m => m.DteLaboratoryMasterModule) },
       { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
@@ -648,11 +656,11 @@ const routes: Routes = [
       { path: 'TeacherDashboardITI', loadChildren: () => import('./Views/ITI/iti-teacher-dashboard/iti-teacher-dashboard.module').then(m => m.ITITeacherDashboardModule) },
       { path: 'AddITITimeTable', loadChildren: () => import('./Views/ITI/ITITimeTable/add-ititime-table/add-ititime-table.module').then(m => m.AddITITimeTableModule) },
       { path: 'ItiTimeTable', loadChildren: () => import('./Views/ITI/ITITimeTable/ititime-table/ititime-table.module').then(m => m.ITITimeTableModule), title: "ITI TimeTable" },
-      
+
       // { path: 'ItiResult/:url', loadChildren: () => import('./Views/ITI/results/iti-result/iti-result.module').then(m => m.ItiResultModule), title: "ITI Result" },
       //{ path: 'result/:url', loadChildren: () => import('./Views/result/result/result.module').then(m => m.ResultModule), title: "Result" },
       { path: 'result', loadChildren: () => import('./Views/result/result/result.module').then(m => m.ResultModule), title: "Result" },
-     
+
 
       { path: 'ITIInternalSliding8th/:id', loadChildren: () => import('./Views/ITI/StudentInternalSliding/internal-sliding/internal-sliding.module').then(m => m.InternalSlidingModule) },
       { path: 'ITIInternalSliding10th/:id', loadChildren: () => import('./Views/ITI/StudentInternalSliding/internal-sliding/internal-sliding.module').then(m => m.InternalSlidingModule) },
@@ -827,6 +835,10 @@ const routes: Routes = [
 
       { path: 'ApplyForHostel', loadChildren: () => import('./Views/Student/apply-for-hostel/apply-for-hostel.module').then(m => m.ApplyForHostelModule) },
       { path: 'CreateHostel', loadChildren: () => import('./Views/Hostel-Management/create-hostel/create-hostel.module').then(m => m.CreateHostelModule), title: 'Create Hostel' },
+
+      { path: 'Hostel-Institute-Mapping-List', loadChildren: () => import('./Views/Hostel-Management/dte-hostel-institute-mapping-list/dte-hostel-institute-mapping-list.module').then(m => m.DTEHostelInstituteMappingListModule), title: 'Create Hostel' },
+
+      { path: 'Hostel-Institute-Mapping', loadChildren: () => import('./Views/Hostel-Management/dte-hostel-institute-mapping/dte-hostel-institute-mapping.module').then(m => m.DTEHostelInstituteMappingModule), title: 'Hostel Institute Mapping' },
       { path: 'RoomSeatMaster', loadChildren: () => import('./Views/Hostel-Management/room-seat-master/room-seat-master.module').then(m => m.RoomSeatMasterModule), title: 'Room Seat Master' },
       { path: 'HostelFacility', loadChildren: () => import('./Views/Hostel-Management/facilities/facilities.module').then(m => m.FacilitiesModule), title: 'Hostel Facility' },
 
@@ -858,10 +870,10 @@ const routes: Routes = [
 
 
 
-     
+
       { path: 'Iti-all-Result', loadChildren: () => import('./Views/ITI/reports/iti-All-Result/iti-All-Result.module').then(m => m.itiAllResultModule), title: "All data" },
 
-      { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule),title: "Live Result" },
+      { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule), title: "Live Result" },
 
 
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
@@ -885,16 +897,16 @@ const routes: Routes = [
       { path: 'AddItiCampusPost/:id', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post/iticampus-post.module').then(m => m.ItiCampusPostModule) },
       { path: 'ItiCampusPostList', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post-list/iticampus-post-list.module').then(m => m.ItiCampusPostListModule) },
       { path: 'ItiCampusPostList/:flag', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post-list/iticampus-post-list.module').then(m => m.ItiCampusPostListModule) },
-      
+
       { path: 'ItiCampusPostValidation', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-validation/iticampus-validation.module').then(m => m.ItiCampusValidationModule) },
       { path: 'ItiCampusPostValidation/:flag', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-validation/iticampus-validation.module').then(m => m.ItiCampusValidationModule) },
-      
+
       { path: 'Grievance', loadChildren: () => import('./Views/grievance/grievance.module').then(m => m.GrievanceModule) },
       { path: 'GrievanceList', loadChildren: () => import('./Views/GrievanceList/GrievanceList.module').then(m => m.GrievanceListModule) },
       { path: 'VerifyRollnumber/:id/:status', loadChildren: () => import('./Views/verify-roll-number/verify-roll-number.module').then(m => m.VerifyRollNumberModule) },
       { path: 'SchlorshipList', loadChildren: () => import('./Views/scholarship-list/scholarship-list.module').then(m => m.ScholarshipListModule) },
       { path: 'AddSchlorship', loadChildren: () => import('./Views/add-scholarship-list/add-scholarship-list.module').then(m => m.AddScholarshipListModule) },
-      
+
       { path: 'CreateGuestHouse', loadChildren: () => import('./Views/added-guest-house/added-guest-house.module').then(m => m.AddedGuestHouseModule) },
       { path: 'create-guest-house', loadChildren: () => import('./Views/GuestRoom-Management/Create-GuestRoom/Create-GuestRoom.module').then(m => m.CreateGuestRoomModule), title: 'Create GuestRoom' },
       { path: 'guest-room-details', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-details/guest-room-details.module').then(m => m.GuestRoomDetailsModule) },
@@ -1123,7 +1135,7 @@ const routes: Routes = [
 
       { path: 'iti-govt-office', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-Office/ITI-Govt-Office-routing.module').then(m => m.ITIGovtOfficeRoutingModule), title: 'ITI-Govt-Office' },
       { path: 'CollegeLoginInfoMaster', loadChildren: () => import('./Views/college-login-info-master/college-login-info-master.module').then(m => m.CollegeLoginInfoMasterModule) },
-      
+
       { path: 'iti-govt-post', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-Post/ITI-Govt-Post-routing.module').then(m => m.ITIGovtPostRoutingModule), title: 'ITI-Govt-Post' },
       { path: 'ITIGovtEMZonalOfficeMaster', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-ZonalOfficeMaster/ITI-Govt-EM-ZonalOfficeMaster.module').then(m => m.ITIGovtEMZonalOfficeMasterModule), title: 'ITI Govt EM Zonal Office ' },
       { path: 'ITIGovtEMStaffProfile', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-StaffProfile/ITI-Govt-EM-StaffProfile.module').then(m => m.ITIGovtEMStaffProfileModule), title: 'ITI Govt EM StaffProfile' },
@@ -1218,12 +1230,6 @@ const routes: Routes = [
       { path: 'ITI-AdminExaminerCode/:id', loadChildren: () => import('./Views/ITI/ITI-DispatchManagement/ITI-Principal-dispatch-group/ITI-Principal-dispatch-group.module').then(m => m.ITIPrincipalDispatchGroupModule) },
       { path: 'ITI-Examiner-Dispatch-Verify/:Status', loadChildren: () => import('./Views/ITI/ITI-DispatchManagement/ITI-Examiner-Dispatch-Verify/ITI-Examiner-Dispatch-Verify.module').then(m => m.ITIExaminerDispatchVerifyModule), title: 'ITI Examiner Dispatch Verify' },
 
-      { path: 'bter-em-stafflist', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-staff-list/bter-em-staff-list.module').then(m => m.BTEREMStaffListModule), title: 'Staff List' },
-      { path: 'bter-em-add-staff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/add-staff-initial-details/add-staff-initial-details.module').then(m => m.AddStaffInitialDetailsModule), title: 'Add Staff' },
-      { path: 'bter-em-add-staff-principle', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-principle-staff/em-principle-staff.module').then(m => m.EMPrincipleStaffModule), title: 'Add Staff' },
-      { path: 'bter-em-add-staff-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-add-staff-details/bter-em-add-staff-details.module').then(m => m.BterEMAddStaffDetailsModule), title: 'Add Staff' },
-      { path: 'em-budget-head', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-budget-head-master/em-budget-head-master.module').then(m => m.EMBudgetHeadMasterModule), title: 'Establishment BGT Head' },
-
       { path: 'Pdf-Download', loadChildren: () => import('./Views/ITI/Pdf-Download/Pdf-Download-routing.module').then(m => m.PdfDownloadRoutingModule), title: 'Pdf-Download' },
       /*{ path: 'certificate', loadChildren: () => import('./Views/ITI/results/iti-certificate/iti-certificate-routing.module').then(m => m.ItiCertificateRoutingModule), title: 'certificate' },*/
       { path: 'certificate', loadChildren: () => import('./Views/ITI/results/iti-certificate/iti-certificate.module').then(m => m.ItiCertificateModule), title: 'certificate' },
@@ -1245,7 +1251,7 @@ const routes: Routes = [
       { path: 'BterUserRequestList', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-request-list/bter-request-list.module').then(m => m.BterUserRequestListModule) },
       { path: 'BterEmDepartmentWiseRequestlist', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/Bter-Em-DepartmentWiseRequest-list/Bter-Em-DepartmentWiseRequest-list.module').then(m => m.BterEmDepartmentWiseRequestlistModule) },
       { path: 'BterUserRequestList/:id', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-request-list/bter-request-list.module').then(m => m.BterUserRequestListModule) },
-     
+
       { path: 'pass-fail-report', loadChildren: () => import('./Views/ITI/results/pass-fail-report/pass-fail-report.module').then(m => m.passfailreportDownloadModule), title: 'pass-fail-report' },
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'ACP-Dashboard', loadChildren: () => import('./Views/BTER/acp-dashboard/acp-dashboard.module').then(m => m.ACPDashboardModule) },
@@ -1313,7 +1319,7 @@ const routes: Routes = [
       { path: 'direct-student-allotment/:id/:TradeLevel', loadChildren: () => import('./Views/ITI/direct-allotment/direct-student-allotment/direct-student-allotment.module').then(m => m.VerifyStudentAllotModule) },
       /*{ path: 'AdminRollnumberList', loadChildren: () => import('./Views/generate-roll-AdminLevel/generate-roll-AdminLevelmodule').then(m => m.generateRollAdminLevelModule), title: 'List Rollnumber Show Admin' },*/
       { path: 'iti-student-pass-fail-result/:id', loadChildren: () => import('./Views/ITI/results/iti-student-pass-fail-result/iti-student-pass-fail-result.module').then(m => m.itiStudentPassFailResultModule), title: 'iti-student-pass-fail-result' },
-      
+
 
 
       { path: 'instructor', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor/iti-instructor.module').then(m => m.ItiInstructorModule) },
@@ -1366,7 +1372,7 @@ const routes: Routes = [
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'center-superitendent-exam-report/:id', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'CenterSuperitendentExamReport', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report-master/center-superitendent-exam-report-master.module').then(m => m.CenterSuperitendentExamReportMasterModule) },
-      
+
       { path: 'iti-remunerationInvigilatorApproved-list', loadChildren: () => import('./Views/ITI/iti-admin-remunerationInvigilator-list/iti-admin-remunerationInvigilator-list.module').then(m => m.ItiAdminRemunerationInvigilatorlistModule), title: 'Invigilation Remuneration Approved list' },
       { path: 'staff-management-report', loadChildren: () => import('./Views/Reports/staff-management-reports/staff-management-reports.module').then(m => m.StaffManagementReportsModule), title: 'staff-management-report' },
       { path: 'statistics-report', loadChildren: () => import('./Views/Reports/bter-statistics-reports/bter-statistics-reports.module').then(m => m.StatisticsReportsModule), title: 'Statistics-report' },
@@ -1379,18 +1385,18 @@ const routes: Routes = [
       { path: 'staff-management-report', loadChildren: () => import('./Views/Reports/staff-management-reports/staff-management-reports.module').then(m => m.StaffManagementReportsModule), title: 'staff-management-report' },
       { path: 'branch-wise-statistical-reports', loadChildren: () => import('./Views/Reports/bter-branch-wise-statistical-reports/bter-branch-wise-statistical-reports.module').then(m => m.BranchWiseStatisticalReportsModule), title: 'branch-wise-statistical-reports' },
 
-      { path: 'PMNAM-MelaReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report/pmnam-mela-report.module').then(m => m.PmnamMelaReportModule), title:'PMNUM' },
+      { path: 'PMNAM-MelaReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report/pmnam-mela-report.module').then(m => m.PmnamMelaReportModule), title: 'PMNUM' },
       { path: 'Workshop-progressReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report/workshop-progress-report.module').then(m => m.WorkshopProgressReportModule) },
 
 
 
       { path: 'NodalWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/nodal-workshop-report/nodal-workshop-report.module').then(m => m.NodalWorkshopReportModule) },
-      { path: 'QuaterWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/quater-workshop-report/quater-workshop-report.module').then(m => m.QuaterWorkshopReportModule), title:'Quarterly progress report by regional officer' },
+      { path: 'QuaterWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/quater-workshop-report/quater-workshop-report.module').then(m => m.QuaterWorkshopReportModule), title: 'Quarterly progress report by regional officer' },
 
       { path: 'ApprenticeshipRegistrationReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/apprenticeship-registration-report/apprenticeship-registration-report.module').then(m => m.ApprenticeshipRegistrationReportModule) },
       { path: 'ApprenticeshipRegistrationReport-list', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/apprenticeship-registration-report-list/apprenticeship-registration-report-list.module').then(m => m.ApprenticeshipRegistrationReportListModule) },
 
-      { path: 'Workshop-progressReport-List', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report-list/workshop-progress-report-list.module').then(m => m.WorkshopProgressReportListModule), title:'Workshop Progress Report By AAA' },
+      { path: 'Workshop-progressReport-List', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report-list/workshop-progress-report-list.module').then(m => m.WorkshopProgressReportListModule), title: 'Workshop Progress Report By AAA' },
 
       { path: 'PaasoutRegistrationReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report/passout-registration-report.module').then(m => m.PassoutRegistrationReportModule) },
 
@@ -1418,7 +1424,7 @@ const routes: Routes = [
       { path: 'DispatchPrincipalRevalGroupCode', loadChildren: () => import('./Views/DispatchManagementReval/DispatchPrincipalRevalGroupCode-form/DispatchPrincipalRevalGroupCode-form.module').then(m => m.DispatchPrincipalRevalGroupCodeFormModule), title: 'Dispatch Principal Reval Group Code Form' },
       { path: 'ExaminerDispatchRevalVerify', loadChildren: () => import('./Views/DispatchManagementReval/examiner-dispatch-reval-verify/examiner-dispatch-reval-verify.module').then(m => m.ExaminerDispatchRevalVerifyModule) },
       { path: 'PlacementDataReport', loadChildren: () => import('./Views/Reports/placement-data-report/placement-data-report.module').then(m => m.PlacementDataReportModule) },
-      
+
       { path: 'download-admit-card', loadChildren: () => import('./Views/BTER/download-admit-card-cs/download-admit-card-cs.module').then(m => m.DownloadAdmitCardCSModule), title: 'Download Admit Card' },
       { path: 'principle-reply-admin-reval-dispatch-list', loadChildren: () => import('./Views/DispatchManagementReval/principle-reply-admin-reval-dispatch-list/principle-reply-admin-reval-dispatch-list.module').then(m => m.PrincipleReplyAdminRevalDispatchListModule) },
       { path: 'AdminRevalGroupCodeReceivedlist', loadChildren: () => import('./Views/DispatchManagementReval/AdminRevalGroupCodeReceived-list/AdminRevalGroupCodeReceived-list.module').then(m => m.AdminRevalGroupCodeReceivedlistModule) },
@@ -1478,7 +1484,7 @@ const routes: Routes = [
 
       { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
 
-      
+
       { path: 'NcvtDataBulkUpload', loadChildren: () => import('./Views/ITI/ncvt-data-bulk-upload/ncvt-data-bulk-upload.module').then(m => m.NcvtDataBulkUploadModule) },
 
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
@@ -1510,8 +1516,7 @@ const routes: Routes = [
       { path: 'ScvtCenterAllocation', loadChildren: () => import('./Views/ITI/scvt-center-allocation/scvt-center-allocation.module').then(m => m.ScvtCenterAllocationModule) },
       { path: 'tabulation-report', loadChildren: () => import('./Views/BTER/tabulation-report/tabulation-report.module').then(m => m.TabulationReportModule) },
 
-      { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
-      { path: 'sanctioned-posts', loadChildren: () => import('./Views/BTER/bter-Sanctioned-posts/bter-Sanctioned-posts.module').then(m => m.bterSanctionedPostsModule), title:'Sanctioned Post' },
+      { path: 'sanctioned-posts', loadChildren: () => import('./Views/BTER/bter-Sanctioned-posts/bter-Sanctioned-posts.module').then(m => m.bterSanctionedPostsModule), title: 'Sanctioned Post' },
 
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
 
@@ -1525,20 +1530,20 @@ const routes: Routes = [
       { path: 'alloted-candidate-list', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list/alloted-candidate-list.module').then(m => m.AllotedCandidateListModule), title: 'Alloted Candidate List' },
       { path: 'alloted-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list-report/alloted-candidate-list-report.module').then(m => m.AllotedCandidateListReportModule), title: 'Alloted Candidate List' },
       { path: 'candidate-allotment-report', loadChildren: () => import('./Views/Counselling-Master/candidate-allotment-report/candidate-allotment-report.module').then(m => m.CandidateAllotmentListReportModule), title: 'Candidate Allotment List' },
-      { path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
+      { path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List' },
       { path: 'examiner-with-group-code-list', loadChildren: () => import('./Views/Reports/examiner-with-group-code-list/examiner-with-group-code-list.module').then(m => m.ExaminerWithGroupCodeListModule), title: 'ExaminerWithGroupCodeList' },
       { path: 'mass-copping-detail-report', loadChildren: () => import('./Views/Reports/mass-copping-detail-report/mass-copping-detail-report.module').then(m => m.MassCoppingDetailReportModule), title: 'MassCoppingDetailReport' },
-      
 
-      {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
-      {path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details'},
+
+      { path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List' },
+      { path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details' },
       { path: 'counselling-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/counselling-candidate-list-report/counselling-candidate-list-report.module').then(m => m.CounsellingCandidateListReportModule), title: 'Alloted Candidate List' },
-      
+
       { path: 'StudentCorrectionMaster', loadChildren: () => import('./Views/StudentDataCorrectionMaster/student-correction-master.module').then(m => m.StudentCorrectionMasterModule), title: 'Student Correction Master' },
-      { path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data'},
-      { path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
-      { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
-      { path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
+      { path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data' },
+      { path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details' },
+      { path: 'Upload-Status-Check', loadChildren: () => import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m => m.UploadTraineeLogsListModule), title: 'Trainee Logs List' },
+      { path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel' },
       { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'update student additional qualification' },
       { path: 'student-additional-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/student-additional-qualification/student-additional-qualification.module').then(m => m.StudentAdditionalQualiModule), title: 'student additional qualification' },
       { path: 'duplicate-doc', loadChildren: () => import('./Views/duplicate-document/duplicate-document.module').then(m => m.DuplicateDocumentModule), title: 'Duplicate Document' },
@@ -1550,18 +1555,18 @@ const routes: Routes = [
       { path: 'add-student-employement', loadChildren: () => import('./Views/ITI/AdditionalDetails/add-self-employement/add-self-employement.module').then(m => m.AddStudentEmployementModule), title: 'Add Student Employement' },
 
 
-      {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
+      { path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation' },
       { path: 'jan-aadhar-detail', loadChildren: () => import('./Views/new-jan-aadhar/new-jan-aadhar.module').then(m => m.JanAadharDetailModule), title: 'Jan AAdhar Detail Details' },
       { path: 'InternalMarksReportCollegeWise', loadChildren: () => import('./Views/InternalMarksReportCollegeWise/InternalMarksReportCollegeWise.module').then(m => m.InternalMarksReportCollegeWiseModule), title: 'InternalMarksReportCollegeWise' },
 
 
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
       { path: 'ITIChangeShift', loadChildren: () => import('./Views/ITI/iti-change-shift/iti-change-shift.module').then(m => m.ItiChangeShiftModule) },
-      { path: 'teacher-higher-education-application', loadChildren: () => import('./Views/BTER/THTE/teacher-higher-education-application/teacher-higher-education-application.module').then(m => m.TeacherHigherEducationApplicationModule)},
-      { path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views//BTER/THTE/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)},
-      { path: 'thte-application-verification', loadChildren: () => import('./Views//BTER/THTE/thte-principle-application-list/thte-principle-application-list.module').then(m => m.THTEPrincipleApplicationListModule), title: 'Application Verify'},
-      { path: 'thte-application-verify-committee', loadChildren: () => import('./Views//BTER/THTE/verify-application-committee/verify-application-committee.module').then(m => m.VerifyApplicationCommitteeModule), title: 'Application Verify'},
-      
+      { path: 'teacher-higher-education-application', loadChildren: () => import('./Views/BTER/THTE/teacher-higher-education-application/teacher-higher-education-application.module').then(m => m.TeacherHigherEducationApplicationModule) },
+      { path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views//BTER/THTE/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule) },
+      { path: 'thte-application-verification', loadChildren: () => import('./Views//BTER/THTE/thte-principle-application-list/thte-principle-application-list.module').then(m => m.THTEPrincipleApplicationListModule), title: 'Application Verify' },
+      { path: 'thte-application-verify-committee', loadChildren: () => import('./Views//BTER/THTE/verify-application-committee/verify-application-committee.module').then(m => m.VerifyApplicationCommitteeModule), title: 'Application Verify' },
+
       { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
       { path: 'ITIRevealuation', loadChildren: () => import('./Views/ITI/Examination/revealuation/revealuation.module').then(m => m.RevealuationModule) },
       //{ path: 'know-revealuation-iti', loadChildren: () => import('./Views//ITI/Examination/know-revealuation-iti/know-revealuation-iti.module').then(m => m.KnowRevealuationITIModule), title: 'Application Verify For DTE' },
@@ -1580,7 +1585,7 @@ const routes: Routes = [
       { path: 'institute-committee-list-dte', loadChildren: () => import('./Views//BTER/THTE/institute-committee-list-dte/institute-committee-list-dte.module').then(m => m.InstituteCommitteeListDTEModule), title: 'Institute Committee List' },
       { path: 'ITI-Office-Vacancy', loadChildren: () => import('./Views//ITI/ITI-GOVT-EstablishManagement/ITI-OfficeVacancy/ITI-OfficeVacancy.module').then(m => m.ITIOfficeVacancyModule), title: 'ITI Office Vacancy' },
 
-      
+
 
       { path: 'know-revealuation-iti', loadChildren: () => import('./Views/ITI/Examination/know-revealuation-iti/know-revealuation-iti.module').then(m => m.KnowRevealuationITIModule), title: 'Application Verify For DTE' },
       { path: 'AddQualificationList', loadChildren: () => import('./Views/ITI/add-qualification-list/add-qualification-list.module').then(m => m.AddQualificationListModule) },
@@ -1597,21 +1602,17 @@ const routes: Routes = [
       { path: 'PostPlanning', loadChildren: () => import('./Views/ITI/post-planning/post-planning.module').then(m => m.PostPlanningModule) },
       { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
 
-
-
       { path: 'Add-Nodal-User', loadChildren: () => import('./Views/ITI/iti-Add-Nodel-User/iti-Add-Nodel-User.module').then(m => m.itiAddNodelUserModule) },
       { path: 'Nodal-User-List', loadChildren: () => import('./Views/ITI/iti-Nodel-User-List/iti-Nodel-User-List.module').then(m => m.itiNodelUserListModule), title: 'Nodal User List' },
 
       { path: 'bter-Reval-Report', loadChildren: () => import('./Views/BTER/bter-Reval-Report/bter-Reval-Report.module').then(m => m.bterRevalReportModule), title: 'Reval Report' },
-
-
 
       { path: 'ITIStaffWorkRegularArrangementReort', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-StaffWorkRegularArrangementReort/ITI-StaffWorkRegularArrangementReort.module').then(m => m.ITIStaffWorkRegularArrangementReortModule) },
       { path: 'ReAssignTeacherForAttendance', loadChildren: () => import('./Views/ReAssignTeacherForAttendance/ReAssignTeacherForAttendance.module').then(m => m.ReAssignTeacherForAttendanceModule) },
       { path: 'ReAssignTeacherLCAttendance', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
       { path: 'ReAssignTeacherLCAttendance/:streamId/:semesterId/:subjectId/:sectionId/:From_Date/:To_Date', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
       { path: 'ReAttendanceTimeTable', loadChildren: () => import('./Views/BTER/attendance-time-table/ReAssignTimeTable/ReAssignTimeTable.module').then(m => m.ReAssignTimeTableModule), title: 'Re-Student-Attendance' },
-      { path: 'CenterRollList', loadChildren: () => import('./Views/ITI/Examination/center-roll-list/center-roll-list.module').then(m => m.CenterRollListModule), title:'Center Roll List' },
+      { path: 'CenterRollList', loadChildren: () => import('./Views/ITI/Examination/center-roll-list/center-roll-list.module').then(m => m.CenterRollListModule), title: 'Center Roll List' },
 
       { path: 'StudentPaperReport', loadChildren: () => import('./Views/ITI/Examination/student-paper-report/student-paper-report.module').then(m => m.StudentPaperReportModule) },
       { path: 'ScvtExamAttendence', loadChildren: () => import('./Views/ITI/Examination/scvt-exam-attendence/scvt-exam-attendence.module').then(m => m.ScvtExamAttendenceModule) },
@@ -1620,8 +1621,8 @@ const routes: Routes = [
 
 
       { path: 'ItiPaperUploadReport', loadChildren: () => import('./Views/ITI/iit-paper-upload-report/iit-paper-upload-report.module').then(m => m.IitPaperUploadReportModule) },
-      { path: 'itiPracticalExaminerReport', loadChildren: () => import('./Views/ITI/iti-Practical-Examiner-Report/iti-Practical-Examiner-Report.module').then(m => m.itiPracticalExaminerReportModule), title:'Practical Examiner Report' },
-      
+      { path: 'itiPracticalExaminerReport', loadChildren: () => import('./Views/ITI/iti-Practical-Examiner-Report/iti-Practical-Examiner-Report.module').then(m => m.itiPracticalExaminerReportModule), title: 'Practical Examiner Report' },
+
       { path: 'invigilatorattandancereport', loadChildren: () => import('./Views/ITI/invigilator-attandance-report/invigilator-attandance-report.module').then(m => m.InvigilatorAttandanceReportModule) },
       { path: 'itiPracticalExamMarks', loadChildren: () => import('./Views/ITI/iti-Practical-Exam-Marks/iti-Practical-Exam-Marks.module').then(m => m.itiPracticalExamMarksModule), title: 'Practical Exam Marks' },
       { path: 'practicalexamassigned', loadChildren: () => import('./Views/ITI/practical-exam-assigned/practical-exam-assigned.module').then(m => m.PracticalExamAssignedModule) },
@@ -1634,15 +1635,15 @@ const routes: Routes = [
       { path: 'surveyperform-List', loadChildren: () => import('./Views/ITI/iti_survey-perform_List/iti_survey-perform_List.module').then(m => m.ITIsurveyperformListModule), title: 'ITI Survey Perform' },
 
       { path: 'theoryexaminerreport', loadChildren: () => import('../Views/ITI/theory-examiner-report/theory-examiner-report.module').then(m => m.TheoryExaminerReportModule) },
-     
+
       { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
       { path: 'UploadAnnexture32', loadChildren: () => import('./Views/upload-annexture32/upload-annexture32.module').then(m => m.UploadAnnexture32Module) },
       { path: 'UploadAnnexture32List', loadChildren: () => import('./Views/upload-annexture32-list/upload-annexture32-list.module').then(m => m.UploadAnnexture32ListModule) },
       { path: 'CollegeTradeMaster', loadChildren: () => import('./Views/ITI/college-trade-master/college-trade-master.module').then(m => m.CollegeTradeMasterModule) },
-     
+
       { path: 'InstructorStatusList', loadChildren: () => import('./Views/ITI/instructor-status-list/instructor-status-list.module').then(m => m.InstructorStatusListModule) },
 
-            { path: 'AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
+      { path: 'AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
 
 
       { path: 'TestJan', loadChildren: () => import('./Views/ITI/test-jan-service/test-jan-service.module').then(m => m.TestJanServiceModule) },
@@ -1660,13 +1661,18 @@ const routes: Routes = [
 
       { path: 'file-upload', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
       { path: 'file-delete', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
-      { path: 'create-nodal-verifier', loadChildren: () => import('../Views/ITI/create-nodal-verifier/create-nodal-verifier.module').then(m => m.CreateNodalVerifierModule) }
+      { path: 'create-nodal-verifier', loadChildren: () => import('../Views/ITI/create-nodal-verifier/create-nodal-verifier.module').then(m => m.CreateNodalVerifierModule) },
+      { path: 'ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
 
-       ,{
-        path: 'ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m =>
-          m.ScholarshipGetDataModule)
-
-      },
+      // BTER Establishment
+      { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
+      { path: 'bter-em-stafflist', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-staff-list/bter-em-staff-list.module').then(m => m.BTEREMStaffListModule), title: 'Staff List' },
+      { path: 'bter-em-add-staff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/add-staff-initial-details/add-staff-initial-details.module').then(m => m.AddStaffInitialDetailsModule), title: 'Add Staff' },
+      { path: 'bter-em-add-staff-principle', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-principle-staff/em-principle-staff.module').then(m => m.EMPrincipleStaffModule), title: 'Add Staff' },
+      { path: 'bter-em-add-staff-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-add-staff-details/bter-em-add-staff-details.module').then(m => m.BterEMAddStaffDetailsModule), title: 'Add Staff' },
+      { path: 'em-budget-head', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-budget-head-master/em-budget-head-master.module').then(m => m.EMBudgetHeadMasterModule), title: 'Establishment BGT Head' },
+      
+      // BTER Establishment END
     ]
   },
 
@@ -1731,7 +1737,7 @@ const routes: Routes = [
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
 
 
-      
+
     ]
   },
 
@@ -1777,13 +1783,13 @@ const routes: Routes = [
 
 
 
-  
+
   { path: 'Views\ITI\InstructorOptionForm', loadChildren: () => import('./Views/ITI/instructor-option-form/instructor-option-form.module').then(m => m.InstructorOptionFormModule) },
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
-  
-  
+
+
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 

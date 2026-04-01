@@ -9,6 +9,7 @@ import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalCon
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-bter-Reval-Report',
@@ -132,5 +133,32 @@ export class bterRevalReportComponent {
     });
   }
 
+  exportToExcel(): void {
 
+    if (!this.RevalationReportList || this.RevalationReportList.length === 0) {
+      this.toastrService.warning("No data available to export.");
+      return;
+    }
+    const unwantedColumns = [''];
+
+    const columnOrder = [''];
+
+    const filteredData = this.RevalationReportList.map((item: any) => {
+      const row: any = {};
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
+        }
+      });
+
+      return row;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
+  }
 }

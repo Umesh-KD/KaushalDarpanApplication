@@ -78,6 +78,7 @@ export class CollegeHostelDetailsComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.UserID = this.sSOLoginDataModel.StudentID;
+      debugger
       await this._HostelManagmentService.CollegeHostelDetailsList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data)); // Make sure the data is parsed correctly
