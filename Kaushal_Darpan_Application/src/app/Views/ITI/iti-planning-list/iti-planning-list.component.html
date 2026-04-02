@@ -3,7 +3,7 @@
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Planning Details</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a routerLink="/Iti-Dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/ItiPlanningList" class="text-sm font-medium text-slate-700" aria-current="page">ITI Planning Details</a>
     </div>
@@ -87,6 +87,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
           <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="ApprovedStatus">
             <option value="0">--All--</option>
+            <option value="1">Pending To Submit</option>
             <option value="2">Pending For Approval</option>
             <option value="3">Approved</option>
             <option value="4">Rejected</option>

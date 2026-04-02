@@ -392,31 +392,36 @@ export class SeatIntakesListMasterComponent implements OnInit {
   // end table feature.
 
   exportToExcel(): void {
-    // Define only required columns
-    const wantedColumns =
-      [
-        'CollegeCode', 'CollegeName', 'TradeCode', 'TradeName', 'Shift', 'Unit_no', 'NCVT_SCVT',
-        'Sanctioned', 'OrderDate', 'Remark', 'NoOfSanctionedSeats', 'Key'
-      ];
+    const wantedColumns = [
+      'CollegeCode', 'CollegeName', 'TradeCode', 'TradeName', 'Shift', 'Unit_no', 'NCVT_SCVT',
+      'Sanctioned', 'Sanction_Order', 'OrderDate', 'Remark', 'NoOfSanctionedSeats',
+      'aff_date', 'wef_aff', 'file_ref', 'deaff_order', 'deaff_date', 'de_aff_wef', 'Key'
+    ];
 
     const filteredData = this.SeatIntakeDataList.map((item: any) => {
-      const filteredItem: any = {};
-
-      wantedColumns.forEach(col => {
-        filteredItem[col] = item[col];
-      });
-
-      return filteredItem;
+      const obj: any = {};
+      wantedColumns.forEach(col => obj[col] = item[col] ?? '');
+      return obj;
     });
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
 
+    // 🔥 Auto-fit column width
+    ws['!cols'] = wantedColumns.map(col => {
+      const maxLen = Math.max(
+        col.length,
+        ...filteredData.map((row:any) => String(row[col]).length)
+      );
+
+      return {
+        wch: Math.min(maxLen + 3, 40) // auto + limit width
+      };
+    });
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-    // Optional: Add date in file name
-    const today = new Date().toISOString().split('T')[0];
-    XLSX.writeFile(wb, `SeatIntakeDetails_${today}.xlsx`);
+    XLSX.writeFile(wb, `SeatIntakeDetails_${new Date().toISOString().split('T')[0]}.xlsx`);
   }
 
   @ViewChild('ModalStatusActiveInactive') ModalStatusActiveInactive!: TemplateRef<any>;

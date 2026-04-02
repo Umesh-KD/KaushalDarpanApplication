@@ -57,7 +57,7 @@ export class ItiPlanningListComponent {
   public FileName: string = ''
   public Disfilename:string=''
 
-
+  public QueryStatus: number = 0;
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ITIsService, private loaderService: LoaderService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private appsettingConfig: AppsettingService,
     private activeroute: ActivatedRoute) {
@@ -65,6 +65,10 @@ export class ItiPlanningListComponent {
 
   async ngOnInit()
   {
+
+    const param = this.activeroute.snapshot.queryParamMap.get('status');
+    this.QueryStatus = param !== null && !isNaN(Number(param)) ? Number(param) : 0;
+
 
     this.formAction = this.formBuilder.group(
       {
@@ -87,13 +91,18 @@ export class ItiPlanningListComponent {
     }
     else
     {
-      if (this.sSOLoginDataModel.RoleID == 97)
+      if (this.QueryStatus != 0)
       {
-        this.ApprovedStatus = 0;
+        this.ApprovedStatus = this.QueryStatus;
       }
       else
       {
-        this.ApprovedStatus = 2
+        if (this.sSOLoginDataModel.RoleID == 97) {
+          this.ApprovedStatus = 0;
+        }
+        else {
+          this.ApprovedStatus = 2
+        }
       }
     }
     await this.GetIti()
