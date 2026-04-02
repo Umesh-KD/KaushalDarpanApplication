@@ -651,6 +651,7 @@ export class OfficeVacancyModel {
 }
 
 export class StaffTrainingDetailDataModel {
+  public StaffTrainingDetailID: number = 0;
   public OrganizinglnstituteName: string = '';
   public CourseType: number = 0;
   public CourseName: string = '';
@@ -662,4 +663,11 @@ export class StaffTrainingDetailDataModel {
   public Venue: string = '';
   public UserID: number = 0;
   public StaffID: number = 0;
+}
+
+export class StaffTrainingDetailSearchData {
+  public StaffTrainingDetailID: number = 0;
+  public UserID: number = 0;
+  public StaffID: number = 0;
+  public Action?: string = '';
 }
