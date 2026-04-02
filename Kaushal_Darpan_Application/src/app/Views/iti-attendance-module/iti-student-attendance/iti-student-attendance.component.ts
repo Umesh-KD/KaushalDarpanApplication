@@ -61,6 +61,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   streamId!: number;
   semesterId!: number;
   subjectId!: number;
+  subjectIds!: string;
   ShiftID!: number;
   UnitID!: number;
   today: Date = new Date();
@@ -83,12 +84,12 @@ export class ITIStudentAttendanceComponent implements OnInit {
     // Access the route parameters
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
     this.semesterId = parseInt(this.route.snapshot.paramMap.get('semesterId') ?? "0");
-    this.subjectId = parseInt(this.route.snapshot.paramMap.get('subjectId') ?? "0");
+    this.subjectIds = this.route.snapshot.paramMap.get('subjectId') ?? "0";
     this.ShiftID = parseInt(this.route.snapshot.paramMap.get('ShiftID') ?? "0");
     this.UnitID = parseInt(this.route.snapshot.paramMap.get('UnitID') ?? "0");
     this.AttendanceStartDate = this.route.snapshot.paramMap.get('AttendanceStartDate') ?? "";
     this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "0";
-    
+
     this.getMasterData();
     const today = new Date();
     const yesterday = new Date();
@@ -132,17 +133,18 @@ export class ITIStudentAttendanceComponent implements OnInit {
       this.TableForm.controls['AttendanceEndDate'].disable();
       this.TableForm.controls['AttendanceStartDate'].disable();
     }
-
+    
 
     setTimeout(()=> {
       if (this.semesterId > 0) {
         this.TableForm.patchValue({
-          SubjectID: this.subjectId
+          SubjectID: 0
         });
         this.getData();
       }
     }, 1000);
-    
+
+    this.getMasterData()
   }
 
 
@@ -181,21 +183,46 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
   getSubjectMasterDDL(ID: any, SemesterID: any) {
     if (ID && SemesterID != "" && SemesterID != null) {
-      this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
+      this.commonMasterService.SubjectMaster_StreamIDWise(
+        ID,
+        this.sSOLoginDataModel.DepartmentID,
+        SemesterID
+      ).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.SubjectMasterDDL = data.Data;
-      })
+
+        const allSubjects = data?.Data ?? [];
+        const subjectIdsStr = this.subjectIds ?? ''; // example: "2707,2704,2705"
+
+        if (subjectIdsStr && typeof subjectIdsStr === 'string') {
+          const subjectIdsArr = subjectIdsStr
+            .split(',')
+            .map((x: string) => Number(x.trim()))
+            .filter((x: number) => !isNaN(x));
+
+          this.SubjectMasterDDL = allSubjects.filter((item: any) =>
+            subjectIdsArr.includes(Number(item?.ID))
+          );
+        } else {
+          this.SubjectMasterDDL = allSubjects;
+        }
+
+        console.log('Filtered SubjectMasterDDL:', this.SubjectMasterDDL);
+      });
     } else {
       console.error('Event or value is undefined');
+      this.SubjectMasterDDL = [];
     }
-
   }
   async GetAttendanceTimeTable() {
 
     try {
 
 
-
+      const today = new Date();
+      const todayDate =
+        today.getFullYear() + '-' +
+        String(today.getMonth() + 1).padStart(2, '0') + '-' +
+        String(today.getDate()).padStart(2, '0');
 
       const rawStart = this.TableForm.getRawValue().AttendanceStartDate;
       const rawEnd = this.TableForm.getRawValue().AttendanceEndDate;
@@ -224,7 +251,9 @@ export class ITIStudentAttendanceComponent implements OnInit {
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         UnitID: this.UnitID,
-        ShiftID: this.ShiftID
+        ShiftID: this.ShiftID,
+        TodayDate: todayDate,
+        SSOID: this.sSOLoginDataModel.SSOID
       };
 
       this.filterData = [];
@@ -269,16 +298,21 @@ export class ITIStudentAttendanceComponent implements OnInit {
                 ].includes(key)
               )
               .map(key => {
-
                 const match = key.match(/\((.*?)\)\s(.+)/);
+
+                const columnValues = this.filterData.map((row: any) => row[key]);
+
+                const isFrozen = columnValues.some((value: any) =>
+                  value != null && String(value).includes('(F)')
+                );
 
                 return {
                   originalKey: key,
                   dayType: match ? match[1] : '',
                   date: match ? match[2] : key,
-                  isHoliday: match ? match[1] === 'Holiday' : false
+                  isHoliday: match ? match[1] === 'Holiday' : false,
+                  isFrozen: isFrozen
                 };
-
               });
 
             // Add to displayedColumns
@@ -596,4 +630,13 @@ isPresent(value: any): boolean {
   //onAttendanceChange(event: MatSlideToggleChange, element: any) {
   //  element.Attendance = event.checked ? 'P' : 'A';
   //}
+
+
+  isDisabled(value: any): boolean {
+    if (!value) return false;
+    const v = String(value);
+    if (v.includes('(U)')) return false;
+    if (v.includes('(F)')) return true;
+    return false;
+  }
 }

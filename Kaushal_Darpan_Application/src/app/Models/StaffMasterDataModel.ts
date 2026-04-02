@@ -360,6 +360,7 @@ export class CalendarEventModelITI {
   public Day: number = 0;
   public CurrentMonth?: number = 0;
   public CurrentYear?: number = 0;
+  public InstituteID?: number = 0;
 }
 export class RosterDisplayTimeTableDataModel {
   public Action?: string = "";

@@ -2261,4 +2261,13 @@ export class CommonFunctionService {
   }
 
 
+  public async CommonMasterDataByAction(SearchRequest: any) {
+    var body = JSON.stringify(SearchRequest);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + '/CommonMasterDataByAction', body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

@@ -794,7 +794,49 @@ export class ItiPlanningComponent {
       }, 200);
     }
   }
+  async GetOrderList(Date: string = '') {
+    try {
+      const obj = {
+        DepartmentID: 2,
+        MasterCode: 'DGTOrder',
+        FilterBy: Date,
+        CollegeID: this.request.CollegeId
+      };
 
+      this.loaderService.requestStarted();
+
+      const data: any = await this.commonMasterService.CommonMasterDataByAction(obj);
+
+      const parsedData = JSON.parse(JSON.stringify(data));
+
+      // ✅ Safe extraction
+      debugger
+      const orderList = parsedData?.Data ?? [];
+
+      if (orderList.length > 0) {
+        this.addmore.OrderNo = orderList[0]?.Name ?? '';
+        this.addmore.OrderID = orderList[0]?.ID ?? 0;
+        this.AffFormGroup.get('OrderNo')?.disable();
+
+      } else {
+        // ✅ fallback if no data
+        this.addmore.OrderNo = '';
+        this.addmore.OrderID = 0;
+        this.AffFormGroup.get('OrderNo')?.enable();
+      }
+
+    } catch (Ex) {
+      console.error(Ex);
+
+      // optional fallback on error
+      this.addmore.OrderNo = '';
+      this.addmore.OrderID = 0;
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
 
@@ -1365,9 +1407,17 @@ export class ItiPlanningComponent {
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
+
+            // format date
+            const today = new Date();
+            const formattedDate =
+              String(today.getDate()).padStart(2, '0') + '-' +
+              String(today.getMonth() + 1).padStart(2, '0') + '-' +
+              today.getFullYear();
+
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'ITIPlanningReport.pdf';
+            link.download = `${this.request.CollegeName}_ITIPlanningReport_${formattedDate}.pdf`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1526,7 +1576,8 @@ export class ItiPlanningComponent {
       OrderDate: this.addmore.OrderDate,
       PageNo: this.addmore.PageNo,
       SerialNo: this.addmore.SerialNo,
-      EffectFrom: this.addmore.EffectFrom
+      EffectFrom: this.addmore.EffectFrom,
+      OrderID: this.addmore.OrderID
     });
 
 
@@ -1766,7 +1817,8 @@ export class ItiPlanningComponent {
   {
 
 
-  
+
+
 
 
     this.nonApproveValidator();
@@ -1901,8 +1953,10 @@ export class ItiPlanningComponent {
         .filter(r => r?.trim())
         .join(', ');
 
-    } else {
-      this.request.Status=1
+    }
+    else
+    {
+      this.request.Status = 3;
     }
 
 
@@ -1922,6 +1976,13 @@ export class ItiPlanningComponent {
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message);
             await this.CloseModalPopup();
+
+
+            if (this.request.Status == 3)
+            {
+              this.Get_ITIsPlanningData_ByIDReport();
+            }
+
             this.router.navigate(['/ItiPlanningList'])
           }
           else {
