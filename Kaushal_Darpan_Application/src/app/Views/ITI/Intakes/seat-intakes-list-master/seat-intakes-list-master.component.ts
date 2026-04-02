@@ -14,10 +14,10 @@ import * as XLSX from 'xlsx';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-seat-intakes-list-master',
+  selector: 'app-seat-intakes-list-master',
   templateUrl: './seat-intakes-list-master.component.html',
-    styleUrls: ['./seat-intakes-list-master.component.css'],
-    standalone: false
+  styleUrls: ['./seat-intakes-list-master.component.css'],
+  standalone: false
 })
 export class SeatIntakesListMasterComponent implements OnInit {
   public SSOLoginDataModel = new SSOLoginDataModel();
@@ -37,24 +37,24 @@ export class SeatIntakesListMasterComponent implements OnInit {
   public SanctionedList: any = [];
   public SeatIntakeDataList: any = [];
   public Table_SearchText: string = '';
-  public SeatIntakeIDnew: number=0;
+  public SeatIntakeIDnew: number = 0;
   CollegeTypeID: number = 0;
   State: any;
   Message: any;
   ErrorMessage: any;
 
-   //table feature default
-   public paginatedInTableData: any[] = [];//copy of main data
-   public currentInTablePage: number = 1;
-   public pageInTableSize: string = "50";
-   public totalInTablePage: number = 0;
-   public sortInTableColumn: string = '';
-   public sortInTableDirection: string = 'asc';
-   public startInTableIndex: number = 0;
-   public endInTableIndex: number = 0;
-   public AllInTableSelect: boolean = false;
-   public totalInTableRecord: number = 0;
-   //end table feature default
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,23 +83,23 @@ export class SeatIntakesListMasterComponent implements OnInit {
         ddlSanctioned: [''],
         ddlStatus: [''],
         CollegeCode: [''],
-        TradeCode:['']
+        TradeCode: ['']
 
       });
 
     this.SeatIntakeSearchFormGroupPopUp = this.formBuilder.group(
-      { 
+      {
         OrderDate: [''],
-        OrderNo: ['']    
+        OrderNo: ['']
       });
 
 
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    console.log(this.SSOLoginDataModel,"SSOLoginDataModel")
+    console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
-    
+
 
     this.route.queryParams.subscribe(params => {
       this.CollegeTypeID = +params['ManagementTypeId'];
@@ -130,11 +130,11 @@ export class SeatIntakesListMasterComponent implements OnInit {
         }, error => console.error(error));
 
       await this.commonFunctionService.GetCollegeCategory()
-      .then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.InstituteCategoryList = data['Data'];
-        console.log(this.InstituteCategoryList, "InstituteCategoryList")
-      }, error => console.error(error));
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.InstituteCategoryList = data['Data'];
+          console.log(this.InstituteCategoryList, "InstituteCategoryList")
+        }, error => console.error(error));
 
       await this.commonFunctionService.GetCommonMasterData("IITTradeScheme").then((data: any) => {
         const parsedData = JSON.parse(JSON.stringify(data));
@@ -196,7 +196,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
-       this.ItiSeatIntakeService.GetActiveSeatIntake(this.searchRequest)
+      this.ItiSeatIntakeService.GetActiveSeatIntake(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress'];
@@ -259,7 +259,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
       }, 200);
     }
   }
-  
+
   async onReset() {
     this.searchRequest = new SeatIntakeSearchModel()
     this.onSearch()
@@ -392,34 +392,45 @@ export class SeatIntakesListMasterComponent implements OnInit {
   // end table feature.
 
   exportToExcel(): void {
-    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress'];
+    // Define only required columns
+    const wantedColumns =
+      [
+        'CollegeCode', 'CollegeName', 'TradeCode', 'TradeName', 'Shift', 'Unit_no', 'NCVT_SCVT',
+        'Sanctioned', 'OrderDate', 'Remark', 'NoOfSanctionedSeats', 'Key'
+      ];
+
     const filteredData = this.SeatIntakeDataList.map((item: any) => {
       const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
-        }
+
+      wantedColumns.forEach(col => {
+        filteredItem[col] = item[col];
       });
+
       return filteredItem;
     });
+
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
+
+    // Optional: Add date in file name
+    const today = new Date().toISOString().split('T')[0];
+    XLSX.writeFile(wb, `SeatIntakeDetails_${today}.xlsx`);
   }
 
   @ViewChild('ModalStatusActiveInactive') ModalStatusActiveInactive!: TemplateRef<any>;
 
   async openModal(content: any, SeatIntakeID: number, ModifyBy: number) {
-    
+
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
-    
+
   }
 
   //new
   onToggleChange(event: MouseEvent, seatIntakeID: number, ModifyBy: number) {
     event.preventDefault();
-    
+
     this.Swal2.Confirmation("Are you sure you want to change status?", async (result: any) => {
       if (result.isConfirmed) {
         this.SeatIntakeIDnew = seatIntakeID;
@@ -439,7 +450,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
   //      //await this.openModalGenerateOTP('#ModalStatusActiveInactive',SeatIntakeID, ModifyBy);
   //      this.popUpsearchRequest.SeatIntakeID = SeatIntakeID;
   //      await this.openModal(this.ModalStatusActiveInactive, SeatIntakeID, ModifyBy);
-        
+
   //    }
   //  });
   //}
@@ -455,7 +466,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
       // Show loading indicator
 
       this.loaderService.requestStarted();
-     
+
       // Call the service to update the status
       //const IsActive = !IsActive; // Toggle the current state
       let searchRequest = new SeatIntakeDataModel();
