@@ -9,10 +9,10 @@
   </div>
 </div>
 
-<div class="card" style=" overflow: visible;">
+<div class="card">
   <div class="card-body p-5">
     <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Details</b>
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Service Details</b>
     </div>
     <form [formGroup]="AddTrainingDetailsFromGroup">
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
@@ -22,7 +22,7 @@
             Organizing lnstitute Name: <span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input" id="OrganizinglnstituteName" name="OrganizinglnstituteName" formControlName="OrganizinglnstituteName"
-                 [(ngModel)]="request.OrganizinglnstituteName">
+                 [(ngModel)]="request.OrganizinglnstituteName" placeholder="Organizing lnstitute Name">
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.OrganizinglnstituteName.errors?.required" class="text-danger">
             <p>This field is required!</p>
           </div>
@@ -32,8 +32,8 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Course Type: <span class="StarMarking">*</span>
           </label>
-          <select class="form-select" id="CourseType" [(ngModel)]="request.CourseType">
-            <option value="0">--- Choose Course Type --- </option>
+          <select class="form-select" id="CourseType" [(ngModel)]="request.CourseType" formControlName="CourseType">
+            <option [value]="0">--- Choose Course Type --- </option>
             <option *ngFor="let item of EM_TrainingCourseTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
 
@@ -49,7 +49,7 @@
             Course Name: <span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input" id="CourseName" name="CourseName" formControlName="CourseName"
-                 [(ngModel)]="request.CourseName">
+                 [(ngModel)]="request.CourseName" placeholder="Course Name">
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.CourseName.errors?.required" class="text-danger">
             <p>This field is required!</p>
           </div>
@@ -57,18 +57,30 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Course Type: <span class="StarMarking">*</span>
+            Duration Unit: <span class="StarMarking">*</span>
           </label>
-          <select class="form-select" id="DurationUnit" [(ngModel)]="request.DurationUnit">
-            <option value="0">--- Choose Duration Unit --- </option>
-            <option value="1">Days</option>
-            <option value="2">Weeks</option>
+          <select class="form-select" id="DurationUnit" [(ngModel)]="request.DurationUnit" formControlName="DurationUnit">
+            <option [value]="0">--- Choose Duration Unit --- </option>
+            <option [value]="1">Days</option>
+            <option [value]="2">Weeks</option>
           </select>
 
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.DurationUnit.errors" class="text-danger">
             <p *ngIf="!_AddTrainingDetailsFromGroup.DurationUnit.errors.DropdownValidators">
               <i aria-hidden="true"></i>This field is required.
             </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Duration" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Duration: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="Duration" name="Duration" formControlName="Duration"
+                 [(ngModel)]="request.Duration" maxlength="2" placeholder="Duration"
+                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.Duration.errors?.required" class="text-danger">
+            <p>This field is required!</p>
           </div>
         </div>
 
@@ -112,10 +124,10 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Mode of Training: <span class="StarMarking">*</span>
           </label>
-          <select class="form-select" id="ModeOfTraining" [(ngModel)]="request.ModeOfTraining">
-            <option value="0">--- Choose Mode of Training --- </option>
-            <option value="1">Online</option>
-            <option value="2">Offline</option>
+          <select class="form-select" id="ModeOfTraining" [(ngModel)]="request.ModeOfTraining" formControlName="ModeOfTraining">
+            <option [value]="0">--- Choose Mode of Training --- </option>
+            <option [value]="1">Online</option>
+            <option [value]="2">Offline</option>
           </select>
 
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.ModeOfTraining.errors" class="text-danger">
@@ -125,11 +137,11 @@
           </div>
         </div>
 
-        <div *ngIf="request.ModeOfTraining==2">
+        <div *ngIf="request.ModeOfTraining == 2">
           <label for="Venue" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Venue: <span class="StarMarking">*</span>
           </label>
-          <input type="text" class="form-input" id="Venue" name="Venue" formControlName="Venue"
+          <input type="text" class="form-input" id="Venue" name="Venue" formControlName="Venue" placeholder="Venue"
                  [(ngModel)]="request.Venue">
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.Venue.errors?.required" class="text-danger">
             <p>This field is required!</p>
@@ -143,7 +155,78 @@
                 <i class="ti ti-refresh"></i> Reset
             </button>
         </div>
-    </div>
+      </div>
     </form>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Service Details List</b>
+      <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openOTP()"><i class="ti ti-download"></i> Download Excel</a> -->
+    </div>
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <!-- <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select> -->
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th align="left">SSO ID</th>
+            <th align="left">Name</th>
+            <th align="left">Mobile</th>
+            <th align="left">Email</th>
+            <th align="left">Department Name</th>
+            <th class="left">Staff Type</th>
+            <th align="left">Role</th>
+            <th align="left">Profile Status</th>
+            <th align="left">Remark</th>
+            <th align="left">Is Nodal</th>
+            <th class="text-left">View Profile</th>
+            <th align="center" width="200">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of StaffTrainingDetailsDataList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.SSOID}}</td>
+            <td>{{row.Name}}</td>
+            <td>{{row.MobileNo}}</td>
+            <td>{{row.EmailID}}</td>
+            <td>{{row.InstituteName}}</td>
+            <td>{{row.StaffTypeName}}</td>
+            <td>{{row.RoleName}}</td>
+            <td>{{row.ProfileStatus}}</td>
+            <td>{{row.Remark}}</td>
+            <td>{{row.IsNodal}}</td>
+            <td align="left">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <!-- <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a> -->
+              </div>
+            </td>
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+                <!-- <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID, row.StaffID, row.SSOID)"><i class="ti ti-trash"></i></a>
+                <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
+                <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a> -->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

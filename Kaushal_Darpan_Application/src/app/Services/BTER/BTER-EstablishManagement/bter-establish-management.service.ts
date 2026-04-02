@@ -394,12 +394,4 @@ export class BTEREstablishManagementService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
-  public async Save_StaffTrainingDetails(request: StaffTrainingDetailDataModel) {
-    const body = JSON.stringify(request);
-    return this.http.post(`${this.APIUrl}/Save_StaffTrainingDetails`, body, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
-  }
 }
