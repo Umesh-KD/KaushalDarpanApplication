@@ -44,4 +44,12 @@ export class BTEREMStaffServiceDetailsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async StaffTrainingDetails_DeleteById(request: StaffTrainingDetailSearchData) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StaffTrainingDetails_DeleteById`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
