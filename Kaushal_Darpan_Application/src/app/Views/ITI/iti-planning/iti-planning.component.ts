@@ -90,6 +90,8 @@ export class ItiPlanningComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public Collegeid: number = 0
   public Type: number = 0
+  public ButtonText: string = 'Submit';
+
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   public StudentHistoryModelList: any = [];
   constructor(
@@ -2028,4 +2030,25 @@ export class ItiPlanningComponent {
       this.request.IsCourt = true
     }
   }
+  onStatusChange()
+  {
+
+    if (this.request.AffilationStatus == 'Not Approved' || this.request.AddressStatus == 'Not Approved'
+      || //this.request.ContactStatus == 'Not Approved' ||
+      this.request.ManagementStatus == 'Not Approved'
+      || this.request.TrustMemberStatus == 'Not Approved' || this.request.ElectricalStatus == 'Not Approved'
+      || this.request.BankStatus == 'Not Approved'
+    )
+    {
+      this.ButtonText = 'Objected';
+    }
+    else
+    {
+      this.ButtonText = 'Approved';
+    }
+   
+  }
+
+
+
 }
