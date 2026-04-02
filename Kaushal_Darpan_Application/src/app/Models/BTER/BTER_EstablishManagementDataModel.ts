@@ -650,4 +650,16 @@ export class OfficeVacancyModel {
   public BugetHeadTypeID?:number=0;
 }
 
-
+export class StaffTrainingDetailDataModel {
+  public OrganizinglnstituteName: string = '';
+  public CourseType: number = 0;
+  public CourseName: string = '';
+  public DurationUnit: number = 0;
+  public Duration: number = 0;
+  public StartDate: string = '';
+  public EndDate: string = '';
+  public ModeOfTraining: number = 0;
+  public Venue: string = '';
+  public UserID: number = 0;
+  public StaffID: number = 0;
+}

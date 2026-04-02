@@ -8,3 +8,142 @@
     </div>
   </div>
 </div>
+
+<div class="card" style=" overflow: visible;">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Details</b>
+    </div>
+    <form [formGroup]="AddTrainingDetailsFromGroup">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
+
+        <div>
+          <label for="OrganizinglnstituteName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Organizing lnstitute Name: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="OrganizinglnstituteName" name="OrganizinglnstituteName" formControlName="OrganizinglnstituteName"
+                 [(ngModel)]="request.OrganizinglnstituteName">
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.OrganizinglnstituteName.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Course Type: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="CourseType" [(ngModel)]="request.CourseType">
+            <option value="0">--- Choose Course Type --- </option>
+            <option *ngFor="let item of EM_TrainingCourseTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.CourseType.errors" class="text-danger">
+            <p *ngIf="!_AddTrainingDetailsFromGroup.CourseType.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="CourseName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Course Name: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="CourseName" name="CourseName" formControlName="CourseName"
+                 [(ngModel)]="request.CourseName">
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.CourseName.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Course Type: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="DurationUnit" [(ngModel)]="request.DurationUnit">
+            <option value="0">--- Choose Duration Unit --- </option>
+            <option value="1">Days</option>
+            <option value="2">Weeks</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.DurationUnit.errors" class="text-danger">
+            <p *ngIf="!_AddTrainingDetailsFromGroup.DurationUnit.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Start Date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date"
+                 id="StartDate"
+                 name="StartDate"
+                 class="form-input"
+                 formControlName="StartDate"
+                 [(ngModel)]="request.StartDate"/>
+
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.StartDate.errors" class="text-danger">
+            <p *ngIf="!_AddTrainingDetailsFromGroup.StartDate.errors.DropdownValidators">
+              <i aria-hidden="true"></i> This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            End Date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date"
+                 id="EndDate"
+                 name="EndDate"
+                 class="form-input"
+                 formControlName="EndDate"
+                 [(ngModel)]="request.EndDate"/>
+
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.EndDate.errors" class="text-danger">
+            <p *ngIf="!_AddTrainingDetailsFromGroup.EndDate.errors.DropdownValidators">
+              <i aria-hidden="true"></i> This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Mode of Training: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ModeOfTraining" [(ngModel)]="request.ModeOfTraining">
+            <option value="0">--- Choose Mode of Training --- </option>
+            <option value="1">Online</option>
+            <option value="2">Offline</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.ModeOfTraining.errors" class="text-danger">
+            <p *ngIf="!_AddTrainingDetailsFromGroup.ModeOfTraining.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.ModeOfTraining==2">
+          <label for="Venue" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Venue: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="Venue" name="Venue" formControlName="Venue"
+                 [(ngModel)]="request.Venue">
+          <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.Venue.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="text-center">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+                <i class="ti ti-refresh"></i> Reset
+            </button>
+        </div>
+    </div>
+    </form>
+  </div>
+</div>
