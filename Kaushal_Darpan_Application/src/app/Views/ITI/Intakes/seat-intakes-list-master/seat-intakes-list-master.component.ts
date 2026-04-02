@@ -391,7 +391,8 @@ export class SeatIntakesListMasterComponent implements OnInit {
   }
   // end table feature.
 
-  exportToExcel(): void {
+  exportToExcel(): void
+  {
     const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress'];
     const filteredData = this.SeatIntakeDataList.map((item: any) => {
       const filteredItem: any = {};
