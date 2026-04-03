@@ -89,8 +89,8 @@ export class EmitraDashboardComponent implements OnInit {
       { TabName: 'Student Exam. fee (engineering)', TabNameHI: 'छात्र परीक्षा शुल्क (इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: StudentEmitraFeePaymentComponent, ServiceID: EnumEmitraService.BTER_ExamFees_ENG, DepartmentID: 1 },
       { TabName: 'Student Exam. fee (non. engineering)', TabNameHI: 'छात्र परीक्षा शुल्क (गैर इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: StudentEmitraFeePaymentComponent, ServiceID: EnumEmitraService.BTER_ExamFees_NonENG, DepartmentID: 1 },
       
-      { TabName: 'Student Reval fee (engineering)', TabNameHI: 'छात्र परीक्षा शुल्क (इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: RevaluationComponent, ServiceID: EnumEmitraService.BTER_ExamFees_ENG, DepartmentID: 1 },
-      { TabName: 'Student Reval fee (non. engineering)', TabNameHI: 'छात्र परीक्षा शुल्क (गैर इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: RevaluationComponent, ServiceID: EnumEmitraService.BTER_ExamFees_NonENG, DepartmentID: 1 },
+      { TabName: 'Student Reval Exam fee (engineering)', TabNameHI: 'छात्र पुनर्मूल्यांकन परीक्षा शुल्क (इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: RevaluationComponent, ServiceID: EnumEmitraService.BTER_RevalFees_ENG, DepartmentID: 1 },
+      { TabName: 'Student Reval Exam fee (non. engineering)', TabNameHI: 'छात्र पुनर्मूल्यांकन परीक्षा शुल्क (गैर इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: RevaluationComponent, ServiceID: EnumEmitraService.BTER_RevalFees_NonENG, DepartmentID: 1 },
 
 
     ] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>, ServiceID: number, DepartmentID: number }[];

@@ -599,9 +599,10 @@ export enum EnumEmitraService {
   BTER_EnrollmentFees_NonENG = 2795,
 
   BTER_ExamFees_ENG = 7330,
-  BTER_ExamFees_NonENG = 7350
+  BTER_ExamFees_NonENG = 7350,
 
-
+  BTER_RevalFees_ENG = 7810,
+  BTER_RevalFees_NonENG = 7830
 
 }
 
@@ -850,3 +851,9 @@ export enum EnumITIBudgetDDLAction {
   GetBudgetHeadDDL = "GetBudgetHeadDDL",
 }
 
+export const QualificationLevel = [
+  { id: 1, name: 'Under Graduate' },
+  { id: 2, name: 'Post Graduate' },
+  { id: 3, name: 'Diploma/Certificate Course' },
+  { id: 4, name: 'School Education' },
+];
