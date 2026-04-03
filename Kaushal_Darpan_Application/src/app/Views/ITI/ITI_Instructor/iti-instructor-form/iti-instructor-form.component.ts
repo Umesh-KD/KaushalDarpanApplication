@@ -1185,6 +1185,7 @@ export class ItiInstructorFormComponent {
         if (this.State === EnumStatus.Success) {
           //  Show success alert
           await this.Swal2.Success(this.Message || 'Instructor data saved successfully!');
+         await this.GetById(this.urlId)
          
         } else {
           //  Show error alert
