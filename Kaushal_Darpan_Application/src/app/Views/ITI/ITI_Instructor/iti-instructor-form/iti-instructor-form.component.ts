@@ -1150,6 +1150,7 @@ export class ItiInstructorFormComponent {
       this.InstructorForm.controls['Correspondence_PropTehsilID'].clearValidators()
       this.InstructorForm.controls['Correspondence_PropTehsilID'].updateValueAndValidity()
     }
+   
     debugger
     Object.keys(this.InstructorForm.controls).forEach(key => {
       const control = this.InstructorForm.get(key);
@@ -1168,6 +1169,16 @@ export class ItiInstructorFormComponent {
       this.toastr.warning("Please Add Education Detail")
       return
     }
+
+    const hasSchoolEducation = this.educationList.some(
+      x => x.EduQualificationLevel?.toLowerCase() === 'school education'
+    );
+
+    if (!hasSchoolEducation) {
+      this.toastr.warning("Please add at least one School Education qualification");
+      return;
+    }
+
     if (this.employeeRequestList.length == 0) {
       this.toastr.warning("Please Add Employee Details")
       return
