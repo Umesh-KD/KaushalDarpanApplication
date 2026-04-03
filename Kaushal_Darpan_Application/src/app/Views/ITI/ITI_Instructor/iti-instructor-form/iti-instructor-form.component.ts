@@ -1141,12 +1141,26 @@ export class ItiInstructorFormComponent {
     //  return
     //}
     if (this.request.ddlState != '6') {
-      this.InstructorForm.controls['PropTehsilID'].clearAsyncValidators()
-      this.InstructorForm.controls['Correspondence_PropTehsilID'].clearAsyncValidators()
+      this.InstructorForm.controls['PropTehsilID'].clearValidators()
+
       this.InstructorForm.controls['PropTehsilID'].updateValueAndValidity()
+
+    }
+    if (this.request.Correspondence_ddlState != '6') {
+      this.InstructorForm.controls['Correspondence_PropTehsilID'].clearValidators()
       this.InstructorForm.controls['Correspondence_PropTehsilID'].updateValueAndValidity()
     }
+    debugger
+    Object.keys(this.InstructorForm.controls).forEach(key => {
+      const control = this.InstructorForm.get(key);
 
+      if (control && control.invalid) {
+        console.log(`Control ${key} is invalid`);
+        Object.keys(control.errors!).forEach(errorKey => {
+          console.log(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+        });
+      }
+    });
     if (this.InstructorForm.invalid) {
       return
     }
@@ -1185,6 +1199,7 @@ export class ItiInstructorFormComponent {
         if (this.State === EnumStatus.Success) {
           //  Show success alert
           await this.Swal2.Success(this.Message || 'Instructor data saved successfully!');
+         await this.GetById(this.urlId)
          
         } else {
           //  Show error alert

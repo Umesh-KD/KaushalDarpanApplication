@@ -900,7 +900,7 @@ this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-
                     <td>{{emp.Employer_Registration}}</td>
                     <td>{{emp.Tan_No}}</td>
                     <td>{{emp.Basic_Pay}}</td>
-                    <td>{{emp.TotalExperience}}</td>
+
                     <td>
 
                       <a *ngIf="emp.BasicSalaryDocument"
@@ -913,6 +913,9 @@ this.sSOLoginDataModel.RoleID ==97" class="flex items-center gap-2 flex-1 min-w-
                       </a>
 
                     </td>
+
+                    <td>{{emp.TotalExperience}}</td>
+
                     <td>
                       <a *ngIf="emp.EmploymentDocument"
                          href="{{appsettingConfig.StaticFileRootPathURL + '/' + emp.EmploymentDocument}}"
