@@ -1,0 +1,135 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Qualification Master</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Qualification Master</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Service Details</b>
+    </div>
+    <form [formGroup]="AddQualificationFromGroup">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Qualification Level: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="QualificationLevelID" [(ngModel)]="request.QualificationLevelID" formControlName="QualificationLevelID">
+            <option [value]="0">--- Choose Qualification Level --- </option>
+            <option *ngFor="let item of _QualificationLevel" [value]="item.id">{{item.name}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddQualificationFromGroup.QualificationLevelID.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="QualificationName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Qualification Name: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="QualificationName" name="QualificationName" formControlName="QualificationName"
+                 [(ngModel)]="request.QualificationName" placeholder="Qualification Name">
+          <div *ngIf="isSubmitted && _AddQualificationFromGroup.QualificationName.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Remarks" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Remarks: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="Remarks" name="Remarks" formControlName="Remarks"
+                 [(ngModel)]="request.Remarks" placeholder="Remarks">
+          <div *ngIf="isSubmitted && _AddQualificationFromGroup.Remarks.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>        
+      </div>
+      <div>
+        <div class="text-center">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+                <i class="ti ti-refresh"></i> Reset
+            </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Qualification Master List</b>
+    </div>
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <!-- <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select> -->
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th align="left">Qualification Level</th>
+            <th align="left">Qualification Name</th>
+            <th align="left">Organizing lnstitute Name</th>
+            <th align="left">Course Type</th>
+            <th align="left">Course Name</th>
+            <th class="left">Duration Unit</th>
+            <th align="left">Duration</th>
+            <th align="left">Start Date - End Date</th>
+            <th align="left">Venue</th>
+            <th align="left">Mode Of Training</th>
+            <th align="center" width="200">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of QualificationMasterDataList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.SSOID}}</td>
+            <td>{{row.StaffName}}</td>
+            <td>{{row.OrganizinglnstituteName}}</td>
+            <td>{{row.TrainingCourseType_str}}</td>
+            <td>{{row.TrainingCourseName}}</td>
+            <td>{{row.DurationUnit_str}}</td>
+            <td>{{row.Duration}}</td>
+            <td>{{row.StartDate}} - {{EndDate}}</td>
+            <td>{{row.Venue}}</td>
+            <td>{{row.ModeOfTraining_str}}</td>
+            
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+                <a href="javascript:void(0);" id="edit" title="Edit Training" 
+                  (click)="StaffTrainingDetails_GetDataById(row.StaffTrainingDetailID)"><i class="ti ti-pencil"></i>
+                </a>
+                <a href="javascript:void(0);" title="Delete" 
+                  (click)="StaffTrainingDetails_DeleteById(row.StaffTrainingDetailID)"><i class="ti ti-trash"></i>
+                </a>
+                
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
