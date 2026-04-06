@@ -136,3 +136,30 @@ td.selected {
     .calendar-toolbar .save-btn:hover {
       background-color: #0056b3;
     }
+td.holiday {
+  background-color: #e57373 !important;
+  color: #ffffff !important; /* 👈 make text white */
+  font-weight: 600;
+}
+
+td.finalSubmit {
+  background-color: green !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+td.exam {
+  background-color: #ffd54f !important;
+  color: #000 !important;
+  font-weight: 600;
+}
+
+td.empty {
+  background-color: #f1f1f1;
+  color: transparent;
+}
+.date-number {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 14px;
+}

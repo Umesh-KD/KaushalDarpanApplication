@@ -1,12 +1,12 @@
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Intakes</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Seat Intake Master</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/SeatIntakesListMaster" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>
+      <a routerLink="/SeatIntakesListMaster" class="text-sm font-medium text-slate-700" aria-current="page">Intake Master</a>
     </div>
   </div>
 </div>
@@ -73,7 +73,7 @@
                        [clearable]="false">
               <ng-option [value]="0" selected>--All--</ng-option>
               <ng-container *ngFor="let item of ItiCollegesListAll;">
-                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                <ng-option [value]="item.Id">{{item.Name}}</ng-option>
               </ng-container>
             </ng-select>
           </div>
@@ -191,7 +191,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake()"><i class="ti ti-download"></i> Active Intake For Admission</a>
+        <a href="javascript:void(0);" style="display:none" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake()"><i class="ti ti-download"></i> Active Intake For Admission</a>
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Intake Execl</a>
         <!--<a href="javascript:void(0);" class="btn btn-sm bg-info text-white"><i class="ti ti-download"></i> Export Intake</a>-->
       </div>
@@ -236,8 +236,8 @@
             <th class="text-left">Sno</th>
             <th class="text-left">College Name</th>
             <th class="text-left">Trade Name</th>
-            <th class="text-left">Trade Scheme</th>
-            <th class="text-left">Reservation Category</th>
+            <th class="text-left">Scheme</th>
+            <th class="text-left">Category</th>
             <!--<th class="text-left">Only For Women</th>-->
             <!--<th class="text-left">Min Percentage In Science</th>
             <th class="text-left">Min Percentage In Math</th>-->
@@ -245,7 +245,7 @@
               Shift
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Shift'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
-            <th class="text-left">Unit Number</th>
+            <th class="text-left">Unit No</th>
             <th class="text-left">Status</th>
             <!--<th class="text-left">Last Session</th>-->
             <!--<th class="text-left">Duration</th>-->
@@ -262,7 +262,7 @@
         <tbody>
           <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">{{(startInTableIndex+1)+idx}}</td>
-            <td align="left">{{row.CollegeName}}</td>
+            <td align="left" width="15%">{{row.CollegeName}}</td>
             <td align="left">{{row.TradeName}}</td>
             <td align="left">{{row.TradeScheme}}</td>
             <td align="left">{{row.Remark}}</td>

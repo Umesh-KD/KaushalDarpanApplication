@@ -16,7 +16,14 @@
         </div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-
+          <div *ngIf="SSOLoginDataModel.RoleID!=20 && SSOLoginDataModel.RoleID!=43">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI:</label>
+            <select class="form-select" id="ddlBranch"
+                    (change)="GetStaff_InstituteWise($event.target.value)" [(ngModel)]="InstituteID" >
+              <option value="0">--All--</option>
+              <option *ngFor="let item of InstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
+          </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
@@ -86,20 +93,20 @@
 
           <tr *ngFor="let week of [].constructor(6); let w = index">
             <td *ngFor="let d of weekDays; let i = index"
-                [class.empty]="(w*7 + i) < startDay || (w*7 + i - startDay + 1) > monthDays.length"
-                [class.holiday]="getEvent(w*7 + i - startDay + 1)?.EventType === 'Holiday'"
-                [class.exam]="getEvent(w*7 + i - startDay + 1)?.EventType === 'Exam'"
-                [class.finalSubmit]="getEvent(w*7 + i - startDay + 1)?.IsFinalSubmit"
+                [ngClass]="getCellClass(w, i)"
                 (click)="onDateClick(w*7 + i - startDay + 1)"
                 style="position: relative; cursor: pointer;">
 
-              <ng-container *ngIf="(w*7 + i) >= startDay && (w*7 + i - startDay + 1) <= monthDays.length">
-                {{ w*7 + i - startDay + 1 }}
-                <span class="tooltip" *ngIf="getEvent(w*7 + i - startDay + 1)?.Remark">
-                  {{ getEvent(w*7 + i - startDay + 1)?.Remark }}
+              <ng-container *ngIf="!isEmptyCell(w, i)">
+                <span class="date-number">
+                  {{ w * 7 + i - startDay + 1 }}
+                </span>
+
+                <span class="tooltip" *ngIf="getEvent(w * 7 + i - startDay + 1)?.Remark">
+                  {{ getEvent(w * 7 + i - startDay + 1)?.Remark }}
                 </span>
               </ng-container>
-             
+
             </td>
           </tr>
         </table>

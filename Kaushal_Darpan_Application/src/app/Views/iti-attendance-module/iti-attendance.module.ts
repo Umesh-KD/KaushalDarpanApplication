@@ -6,6 +6,7 @@ import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, Ng
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ITIAttendanceTimeTableComponent } from './iti-attendance-time-table/iti-attendance-time-table.component';
 import { ITIStudentAttendanceComponent } from './iti-student-attendance/iti-student-attendance.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 const routes: Routes = [
   {
   path: '', component: ITIAttendanceTimeTableComponent
@@ -20,7 +21,9 @@ const routes: Routes = [
   declarations: [ITIAttendanceTimeTableComponent, ITIStudentAttendanceComponent],
   imports: [
     FormsModule, ReactiveFormsModule,
-    CommonModule, MaterialModule, NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
+    CommonModule, MaterialModule, NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent
+    ,
+    NgxMatSelectSearchModule,
     RouterModule.forChild(routes)
   ]
 })

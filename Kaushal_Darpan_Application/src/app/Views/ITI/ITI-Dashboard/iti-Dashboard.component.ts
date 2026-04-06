@@ -38,6 +38,7 @@ export class itiDashboardComponent {
   public SeatInTakeCountListNonEng: any = []
   public OnRollTraineeListEng: any = []
   public OnRollTraineeListNonEng: any = []
+  public ItiPlaningCount: any = []
 
 
   public CollegeCountList: any = []
@@ -97,7 +98,10 @@ export class itiDashboardComponent {
 
             this.OnRollTraineeListNonEng = this.DashboardCountList.filter(
               (f: any) => f.TileType === 'OnRollTrainee' && f.TradeName == "Non Eng");
-                
+
+            this.ItiPlaningCount = this.DashboardCountList.filter(
+              (f: any) => f.TileType === 'Planing');
+
 
 
             console.log(this.OnRollTraineeListEng);

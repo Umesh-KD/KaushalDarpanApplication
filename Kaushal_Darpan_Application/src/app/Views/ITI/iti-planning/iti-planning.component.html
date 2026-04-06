@@ -23,7 +23,8 @@
         <div class="mb-8">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Details</b>
-            <a *ngIf="request.Status == 3  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
+            <!---->
+            <a *ngIf=" request.Status == 3  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
             <a *ngIf="sSOLoginDataModel.RoleID == _enumrole.DTETraing" href="/ItiPlanningList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
           </div>
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
@@ -253,7 +254,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">
                   Approval Status
                 </label>
-                <select formControlName="ManagementStatus"
+                <select (change)="onStatusChange()" formControlName="ManagementStatus"
                         [(ngModel)]="request.ManagementStatus"
                         class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
                focus:outline-none focus:ring-2 focus:ring-blue-200"
@@ -477,7 +478,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMember
               <label class="block text-sm font-medium text-gray-700 mb-1">
                 Approval Status
               </label>
-              <select [(ngModel)]="request.TrustMemberStatus"
+              <select (change)="onStatusChange()" [(ngModel)]="request.TrustMemberStatus"
                       class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
                focus:outline-none focus:ring-2 focus:ring-blue-200"
                       [ngClass]="{
@@ -928,7 +929,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStat
               <label class="block text-sm font-medium text-gray-700 mb-1">
                 Approval Status
               </label>
-              <select [(ngModel)]="request.AddressStatus"
+              <select (change)="onStatusChange()" [(ngModel)]="request.AddressStatus"
                       formControlName="AddressStatus" class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
                focus:outline-none focus:ring-2 focus:ring-blue-200"
                       [ngClass]="{
@@ -1225,7 +1226,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
               <label class="block text-sm font-medium text-gray-700 mb-1">
                 Approval Status
               </label>
-              <select [(ngModel)]="request.BankStatus"
+              <select (change)="onStatusChange()" [(ngModel)]="request.BankStatus"
                       formControlName="BankStatus" class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
               focus:outline-none focus:ring-2 focus:ring-blue-200"
                       [ngClass]="{
@@ -1414,7 +1415,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ElectricalS
               <label class="block text-sm font-medium text-gray-700 mb-1">
                 Approval Status
               </label>
-              <select [(ngModel)]="request.ElectricalStatus"
+              <select (change)="onStatusChange()" [(ngModel)]="request.ElectricalStatus"
                       formControlName="ElectricalStatus" class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
               focus:outline-none focus:ring-2 focus:ring-blue-200"
                       [ngClass]="{
@@ -1466,6 +1467,17 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
       </div>
       <form [formGroup]="AffFormGroup" id="HrMasterFormGroup" class="form-horizontal">
         <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 hide-in-pdf">
+
+
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" id="ApplicationId" formControlName="OrderDate" [(ngModel)]="addmore.OrderDate" (change)="GetOrderList($event.target.value)">
+            <div *ngIf="isAddrequest2 &&_AffFormGroup.OrderDate.errors" class="text-danger">
+              <p *ngIf="_AffFormGroup.OrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="OrderNo" [(ngModel)]="addmore.OrderNo" placeholder="Enter Order No">
@@ -1475,22 +1487,11 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
           </div>
 
 
-          <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="OrderDate"  [(ngModel)]="addmore.OrderDate">
-            <div *ngIf="isAddrequest2 &&_AffFormGroup.OrderDate.errors" class="text-danger">
-              <p *ngIf="_AffFormGroup.OrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
-
-       
-
-
 
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">With Effect From:<span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="EffectFrom"  [(ngModel)]="addmore.EffectFrom" placeholder="Enter Contact No">
+            <input type="date" class="form-input" id="ApplicationId" formControlName="EffectFrom" [(ngModel)]="addmore.EffectFrom" placeholder="Enter Contact No">
             <div *ngIf="isAddrequest2 &&_AffFormGroup.EffectFrom.errors" class="text-danger">
               <p *ngIf="_AffFormGroup.EffectFrom.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
@@ -1511,7 +1512,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
             </div>
           </div>
 
-        
+
 
           <div class="pt-30">
             <button (click)="AddChoice2()" type="button" class="btn bg-primary text-white">
@@ -1592,7 +1593,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
               <label class="block text-sm font-medium text-gray-700 mb-1">
                 Approval Status
               </label>
-              <select [(ngModel)]="request.AffilationStatus"
+              <select (change)="onStatusChange()" [(ngModel)]="request.AffilationStatus"
                       class="w-full h-11 px-3 rounded-lg border text-sm font-medium shadow-sm
               focus:outline-none focus:ring-2 focus:ring-blue-200"
                       [ngClass]="{
@@ -1676,7 +1677,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
 
     <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 hide-in-pdf " *ngIf="sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT">
       <div class="text-center mb-2">
-        <button *ngIf="sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" type="submit" (click)="SaveData_ApprovedCampus()" class="btn bg-info text-white mt-6 me-1">Submit</button>
+        <button *ngIf="(sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal && request.Status==2 &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT && request.Status==2) || (sSOLoginDataModel.RoleID == 16)" type="submit" (click)="SaveData_ApprovedCampus()" class="btn bg-info text-white mt-6 me-1">{{ButtonText}}</button>
       </div>
     </div>
 
@@ -1724,7 +1725,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
 
             <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
               <div class="text-center">
-                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_ApprovedCampus()">Submit</button>
+                <button  type="button" class="btn bg-info text-white mt-6" (click)="SaveData_ApprovedCampus()">Submit</button>
                 <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>-->
               </div>
             </div>

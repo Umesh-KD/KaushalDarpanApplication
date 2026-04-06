@@ -125,6 +125,7 @@
             </th>
             <th class="text-left">SNO</th>
             <th class="text-left">Issued to</th>
+            <th class="text-left">Item Code</th>
             <th class="text-left">Item Category</th>
             <th class="text-left">Equipment Name</th>
             <th class="text-left">Equipment Code</th>
@@ -146,9 +147,10 @@
             </td>
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
+            <td align="left">{{ item.ItemCode}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
-            <td align="left">{{ item.EquipmentName}}</td> 
-            <td align="left">{{ item.ItemCode}}</td> 
+            <td align="left">{{ item.EquipmentName}}</td>
+            <td align="left">{{ item.ItemCode}}</td>
             <td align="left">
               <span [ngClass]="item.IsConsumable == 1 ? 'badge-permanent' : 'badge-consumable'">
                 {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
@@ -161,11 +163,11 @@
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
-             <td align="left">
+            <td align="left">
               <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
-                  {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Serviceable' : 'Unserviceable' }}
-                </span>
-            </td> 
+                {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Serviceable' : 'Unserviceable' }}
+              </span>
+            </td>
             <td align="left">
               <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
                                  'InvStatus-issued': item.IssueStatus === 2,

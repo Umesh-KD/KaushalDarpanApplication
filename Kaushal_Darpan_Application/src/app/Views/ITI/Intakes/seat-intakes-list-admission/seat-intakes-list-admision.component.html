@@ -1,0 +1,351 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Admission Intakes List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/SeatIntakesAdmissionList" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a routerLink="/AddSeatIntakes" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <form [formGroup]="SeatIntakeSearchFormGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">District:</label>
+    <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID">
+      <option value="0">---Choose District---</option>
+      <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div>-->
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
+            <ng-select [(ngModel)]="searchRequest.DistrictID"
+                       formControlName="ddlDistrict"
+                       [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of DistrictList;">
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-container>
+            </ng-select>
+          </div>
+
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              College Type:
+            </label>
+            <select (change)="GetTradeAndColleges()" class="form-select" formControlName="ddlCollegeType" [(ngModel)]="searchRequest.CollegeTypeID">
+              <option value="0">---Choose College Type---</option>
+              <option *ngFor="let item of ManagmentTypeList" value="{{item.InstitutionManagementTypeID}}">{{item.InstitutionManagementType}}</option>
+            </select>
+          </div>
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      College:
+    </label>
+    <select class="form-select" formControlName="ddlCollege" [(ngModel)]="searchRequest.CollegeID">
+      <option value="0">---Choose College---</option>
+      <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
+    </select>
+  </div>-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College:</label>
+          <ng-select [(ngModel)]="searchRequest.CollegeID"
+                     formControlName="ddlCollege"
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of ItiCollegesListAll;">
+              <ng-option [value]="item.Id">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+
+
+        </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Institution Category:
+            </label>
+            <select class="form-select" formControlName="ddlInstitutionCategory" [(ngModel)]="searchRequest.InstituteCategoryID">
+              <option value="0">---Choose Option---</option>
+              <option value="18">Women</option>
+              <option value="19">Co-ed</option>
+              <!--<option *ngFor="let item of InstituteCategoryList" value="{{item.ID}}">{{item.Name}}</option>-->
+            </select>
+          </div>
+
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Trade:
+            </label>
+            <select class="form-select" formControlName="ddlTrade" [(ngModel)]="searchRequest.TradeID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
+            </select>
+          </div>-->
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
+            <ng-select [(ngModel)]="searchRequest.TradeID"
+                       formControlName="ddlTrade"
+                       [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of ItiTradeListAll;">
+                <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
+              </ng-container>
+            </ng-select>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Trade Scheme:
+            </label>
+            <select class="form-select" formControlName="ddlTradeScheme" [(ngModel)]="searchRequest.TradeSchemeID">
+              <option value="0">Choose Option</option>
+              <option value="1">NCVT</option>
+              <option value="2">SCVT</option>
+              <!--<option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>-->
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Reservation category	:
+            </label>
+            <select class="form-select" formControlName="ddlRemark" [(ngModel)]="searchRequest.RemarkID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ITIRemarkList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Shift:
+            </label>
+            <input type="text" class="form-input" placeholder="Shift" formControlName="txtShift" [(ngModel)]="searchRequest.Shift">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Unit No:
+            </label>
+            <input type="text" class="form-input" placeholder="Unit No" formControlName="txtUnitNo" [(ngModel)]="searchRequest.UnitNo">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Status:
+            </label>
+            <select class="form-select" formControlName="ddlSanctioned" [(ngModel)]="searchRequest.SanctionedID">
+              <option value="-2">All</option>
+            <option value="1">Active </option>
+            <option value="0">Inactive</option>
+            </select>
+          </div>
+          <!--<div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Status:
+  </label>
+  <select class="form-select" formControlName="ddlStatus" [(ngModel)]="searchRequest.StatusID">-->
+          <!--<option value="2">Choose Option</option>-->
+          <!--<option value="2">All</option>
+      <option value="1">Active</option>
+      <option value="0">Inactive</option>
+    </select>
+  </div>-->
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
+    <input type="text" class="form-input" formControlName="CollegeCode" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
+  </div>
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+    <input type="text" class="form-input" formControlName="TradeCode" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+  </div>-->
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch() ">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
+          </div>
+
+        </div>
+      </form>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake()"><i class="ti ti-download"></i> Active Intake For Admission</a>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Intake Execl</a>
+        <!--<a href="javascript:void(0);" class="btn btn-sm bg-info text-white"><i class="ti ti-download"></i> Export Intake</a>-->
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+          <option [value]="500">500</option>
+          <option [value]="1000">1000</option>
+          <option value="{{totalInTableRecord}}">Max</option>
+        </select>
+      </div>
+      <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="flex">
+          <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus" #examStatus="ngModel">
+            <option value="0">Choose Mark As (*)</option>
+            <option *ngFor="let item of ExamStudentStatusDDLList" [value]="item.Id">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && examStatus.invalid" class="text-danger">
+            <p *ngIf="examStatus.errors?.required">This field is required.</p>
+          </div>
+          <button type="button" class="btn bg-info text-white inline-block" (click)="SaveDataMarked()">Mark</button>
+        </div>
+        <div>
+          <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
+        </div>
+      </div> -->
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" (ngModelChange)="onSearchChange()"/>
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sno</th>
+            <th class="text-left" style="width: 23%;">College Name</th>
+            <th class="text-left">Trade Name</th>
+            <th class="text-left"  style="width:7%;">Scheme</th>
+            <th class="text-left">Category</th>
+
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Shift')">
+              Shift
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Shift'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left">Unit</th>
+            <th class="text-left">Last Updated</th>
+            <th class="text-left">Active</th>
+            <th style="width: 80px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>
+            <td align="left">{{row.CollegeName}}</td>
+            <td align="left">{{row.TradeName}}</td>
+            <td align="left">{{row.TradeScheme}}</td>
+            <td align="left">{{row.Remark}}</td>
+            <td align="left">{{row.Shift}}</td>
+            <td align="left">{{row.Unit_no}}</td>
+            <td align="left">{{row.LastUpdated}}</td>
+
+
+
+          <td align="center" [ngSwitch]="row.ActiveStatus">
+
+            <i *ngSwitchCase="true" class="fa fa-check text-success" title="Active"></i>
+
+            <i *ngSwitchCase="false" class="fa fa-times text-danger" title="Inactive"></i>
+            <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
+
+          </td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a [ngSwitch]="row.ActiveStatus" href="javascript:void(0);" title="ChangeStatis" (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveSeat')">
+                  <i *ngSwitchCase="false" class="fa fa-check text-success" title="Active"></i>
+                  <i *ngSwitchCase="true" class="fa fa-times text-danger" title="Inactive"></i>
+                </a>
+
+                <a [ngSwitch]="row.IsActiveColleges" *ngIf="row.CollegeID==searchRequest.CollegeID" href="javascript:void(0);" title="ChangeStatis" (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
+
+                  <i *ngSwitchCase=0 class="fa fa-check text-success" title="Active College"></i>
+                  <i *ngSwitchCase=1 class="fa fa-times text-danger" title="Inactive College"></i>
+            
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>
+
+<!-- end row -->
+
+<ng-template #ModalStatusActiveInactive let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="SeatIntakeSearchFormGroupPopUp">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b>
+            <i class="fa fa-refresh"></i>&nbsp; Status Update
+          </b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Order No: <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Unit No" formControlName="OrderNo" [(ngModel)]="popUpsearchRequest.OrderNo">
+
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Order Date: <span class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" placeholder="Enter Unit No" formControlName="OrderDate" [(ngModel)]="popUpsearchRequest.OrderDate">
+            </div>
+
+          </div>
+        </div>
+        <div class="card-footer text-center flex items-center justify-center mt-3">
+          <button class="btn bg-info btn-sm text-white" (click)="SaveDataModal()"><i class="fa fa-refresh"></i> Update</button>
+          <button class="btn bg-danger btn-sm text-white" (click)="CloseModal()"><i class="ti ti-x"></i> Close</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

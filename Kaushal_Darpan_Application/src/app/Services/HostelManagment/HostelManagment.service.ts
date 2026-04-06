@@ -2,7 +2,11 @@ import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { CreateHostelDataModel, HostelSearchModel, StudentDataModel, HostelStudentSearchModel, EditHostelStudentSearchModel, CreateHostelRoomSeatDataModel, HostelRoomSeatSearchModel, FacilitiesDataModel, FacilitiesSearchModel, CollegeHostelDetailsDataModel, CollegeHostelDetailsSearchModel, StatusChangeModel, HostelInstituteMappingModel } from '../../Models/Hostel-Management/HostelManagmentDataModel';
+import {
+  CreateHostelDataModel, HostelSearchModel, StudentDataModel, HostelStudentSearchModel, EditHostelStudentSearchModel, CreateHostelRoomSeatDataModel,
+  HostelRoomSeatSearchModel, FacilitiesDataModel, FacilitiesSearchModel, CollegeHostelDetailsDataModel, CollegeHostelDetailsSearchModel,
+  StatusChangeModel, HostelInstituteMappingModel, HostelFeeListModel, HostelFeeModel
+} from '../../Models/Hostel-Management/HostelManagmentDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 @Injectable({
@@ -265,6 +269,32 @@ export class HostelManagmentService {
 
   public async GetHostelInstituteMappingByID(PK_ID: number) {
     return await this.http.get(this.APIUrl + "/GetHostelInstituteMappingByID/" + PK_ID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async getHostelFeeList() {
+    debugger
+    return await this.http.get(this.APIUrl + "/getHostelFeeList", this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  public async SaveHostelFee(searchRequest: HostelFeeModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/SaveHostelFee`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetHostelFeeByID(PK_ID: number) {
+    return await this.http.get(this.APIUrl + "/GetHostelFeeByID/" + PK_ID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -63,10 +63,27 @@
 
       </div>
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 gap-6 mb-6">
-        <div>
+        <div *ngIf="!isreaasign">
           <label class="form-label">Attendance Date<span class="StarMarking">*</span></label>
           <div class="date-range-wrapper">
-            Start Date:
+
+            <input type="date"
+                   class="form-field w-60"
+                   formControlName="AttendanceStartDate"
+                   (change)="onStartDateChange($event)" />
+
+            <!--End Date:-->
+            <!--<input type="date"
+             class="form-field w-50"
+             formControlName="AttendanceEndDate"
+             [min]="minEndDate" />-->
+          </div>
+        </div>
+
+        <div *ngIf="isreaasign">
+          <label class="form-label">Attendance Date<span class="StarMarking">*</span></label>
+          <div class="date-range-wrapper">
+            Start Date
             <input type="date"
                    class="form-field w-60"
                    formControlName="AttendanceStartDate"
@@ -74,9 +91,9 @@
 
             End Date:
             <input type="date"
-                   class="form-field w-50"
-                   formControlName="AttendanceEndDate"
-                   [min]="minEndDate" />
+             class="form-field w-50"
+             formControlName="AttendanceEndDate"
+             [min]="minEndDate" />
           </div>
         </div>
         <div>
@@ -144,7 +161,7 @@
               </div>
 
               <!-- Checkbox only if not Holiday -->
-              <mat-checkbox *ngIf="!column.isHoliday"
+              <mat-checkbox *ngIf="!column.isHoliday && !column.isFrozen"
                             (change)="toggleAllAttendanceForColumn(column.originalKey, $event.checked)">
               </mat-checkbox>
 
@@ -153,7 +170,7 @@
             <!-- CELL -->
             <td mat-cell *matCellDef="let element">
 
-              <mat-slide-toggle [disabled]="column.isHoliday || isFinalSubmitted(element[column.originalKey])"
+              <mat-slide-toggle [disabled]="column.isHoliday || isDisabled(element[column.originalKey])"
                                 [checked]="isPresent(element[column.originalKey])"
                                 (change)="onAttendanceChange($event, element, column.originalKey)">
 

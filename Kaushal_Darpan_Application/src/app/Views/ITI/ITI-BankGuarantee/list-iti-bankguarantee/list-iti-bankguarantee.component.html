@@ -100,6 +100,7 @@
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
+          <option value="{{totalInTableRecord}}">Max</option>
         </select>
       </div>
       <div class="">
@@ -107,7 +108,7 @@
       <div class="">
       </div>
       <div class="">
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText"  (ngModelChange)="onSearchChange()" />
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
@@ -164,8 +165,8 @@
                    target="_blank" title="Download Document">
                   <i class="ti ti-download"></i>
                 </a>
-                <a *ngIf="item.Status === 1" href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
-                <a  *ngIf="this.sSOLoginDataModel.RoleID === 16" href="javascript:void(0);" title="Delete" (click)="btnDeleteOnClick(item)"><i class="ti ti-trash"></i></a>
+                <a  *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
+                <a  *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="Delete" (click)="btnDeleteOnClick(item)"><i class="ti ti-trash"></i></a>
               </div>
             </td>
           </tr>

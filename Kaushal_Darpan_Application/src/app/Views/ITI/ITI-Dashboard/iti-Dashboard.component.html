@@ -425,10 +425,33 @@
 
         </a>
       </div>
+
+    </div>
+    <!-- =================  Planing Dashboard Counts ================= -->
+    <div class="section-header">
+      <h3><i class="fa fa-list"></i> Planing Dashboard Counts</h3>
     </div>
 
-  </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div *ngFor="let item of ItiPlaningCount">
+        <a class="p-2 block" target="_blank"
+           [routerLink]="['/' + item.RedirectLink]"
+           [queryParams]="{ status: item.RouteValue }">
 
+          <div class="stat-card onroll-card">
+            <div>
+              <div class="stat-title">{{item.TradeName}} </div>
+              <div class="stat-value">{{item.TradeCount}}</div>
+            </div>
+
+            <div class="stat-icon">
+              <i class="bi bi-bank2"></i>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
 

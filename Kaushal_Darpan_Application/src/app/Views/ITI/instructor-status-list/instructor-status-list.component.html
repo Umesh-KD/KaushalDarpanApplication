@@ -45,7 +45,7 @@
                 <a (click)="onViewApp(app.Uid)" class="btn btn-primary btn-sm me-2">View</a>
                 <a *ngIf="app.StatusID==3 " (click)="onViewDetail(app.Uid)" class="btn btn-success btn-sm">Correct Details</a>
                 <a *ngIf="app.StatusID==2" (click)="onViewOption(app.ID)" class=" btn btn-success btn-sm">Add Choice</a>
-                <a *ngIf="app.StatusID==6 || app.PrincipalStatus==4" (click)="onViewSelect(app.ID)" class=" btn btn-success btn-sm">Join Iti</a>
+                <a *ngIf="app.StatusID==6 || app.CollegeStatus==4" (click)="onViewSelect(app.ID)" class=" btn btn-success btn-sm">Join Iti</a>
               </div>
                 </td>
           </tr>
