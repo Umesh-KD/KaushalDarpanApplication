@@ -61,14 +61,16 @@
         <div class="overflow-x-auto mt-3">
             <table class="table table-border w-full table-auto" cellpadding="5">
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-                    <tr>
-                        <!-- <th class="text-left">S.No</th> -->
-                        <th class="text-left">Room Type</th>
-                        <th class="text-left">Total Room</th>
-                        <th class="text-left">Total Bed</th>
-                        <th class="text-left">Alloted Bed</th>
-                        <th class="text-left">Available Bed</th>
-                    </tr>
+                  <tr>
+                    <!-- <th class="text-left">S.No</th> -->
+                    <th class="text-left">Room Type</th>
+                    <th class="text-left">Total Room</th>
+                    <th class="text-left">Total Bed</th>
+                    <th class="text-left">Alloted Bed</th>
+                    <th class="text-left">Available Bed</th>
+                   
+                  </tr>
+
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of RoomAvailabiltiesList  | tableSearchFilter:Table_SearchText;let idx=index;">
@@ -78,6 +80,7 @@
                         <td align="left">{{item.TotalBed}}</td>
                         <td align="left">{{item.AllotedBed}}</td>
                         <td align="left">{{item.AvailableBed}}</td>
+                       
                     </tr>
                 </tbody>
 
