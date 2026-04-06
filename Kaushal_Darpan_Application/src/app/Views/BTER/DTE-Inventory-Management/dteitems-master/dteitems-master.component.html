@@ -231,7 +231,7 @@
                 <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge)
                     && (item.Status == 0)"
                     class="btn btn-sm text-white"
-                    click="onSubmit(MyModel_ReplayQuery,item.ItemId)"
+                    (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
                     [ngClass]="'bg-revert'"
                     [title]="'Revert'">
                   Revert
@@ -253,7 +253,7 @@
                   Revert
                 </button>
 
-                @if((item.Status == 0) && sSOLoginDataModel.RoleID == EnumRole.StoreKeeper) {
+                @if(((item.Status == 0) || (item.Status == 2)) && sSOLoginDataModel.RoleID == EnumRole.StoreKeeper) {
                 <a [routerLink]="['/AddDteItemMaster']" [queryParams]="{ id: item.ItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
                 }
                 @if((item.Status != 2) && sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.AdminNon ||
