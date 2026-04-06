@@ -95,6 +95,9 @@
             <th class="text-left">Category</th>
             <th class="text-left">Mobile</th>
             <th class="text-left">Email</th>
+            <th class="text-left">Trade</th>
+            <th class="text-left">Shift</th>
+            <th class="text-left">Unit</th>
             <th class="text-left">Remark</th>
             <th class="text-left">Status</th>
             <th>Action</th>
@@ -109,6 +112,9 @@
             <td>{{ item.Category }}</td>
             <td>{{ item.Mobile }}</td>
             <td>{{ item.Email }}</td>
+            <td>{{ item.TradeName }}</td>
+            <td>{{ item.Shift }}</td>
+            <td>{{ item.UnitNo }}</td>
             <td>{{ item.Remarks }}</td>
             <td>{{ item.PrincipalStatus }}</td>
 
@@ -119,7 +125,8 @@
                 </a>
 
 
-                <a *ngIf="item.IsAssign != 1 && sSOLoginDataModel.RoleID==20 || item.IsAssign != 1 && sSOLoginDataModel.RoleID==43"
+                <a *ngIf="item.IsAssign != 1 && sSOLoginDataModel.RoleID==20 && item.PrincipalStatus=='Not Assigned' || item.IsAssign != 1 &&
+                   sSOLoginDataModel.RoleID==43 && item.PrincipalStatus=='Not Assigned'"
                    (click)="onAssign(modal_ItiInstructorPopup,item.Uid,item.ID)"
                    title="Assign"
                    class="p-1">

@@ -275,7 +275,7 @@ export class InstructorSelectchoiceComponent {
             this.formSaved.emit(true);
           }
           else {
-            this.toastr.error(data.ErrorMessage)
+            this.swat.Error(data.ErrorMessage)
           }
         })
         .catch((error: any) => {
