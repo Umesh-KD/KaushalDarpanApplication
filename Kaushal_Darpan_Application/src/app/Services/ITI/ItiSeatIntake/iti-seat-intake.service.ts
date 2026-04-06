@@ -287,4 +287,23 @@ export class ItiSeatIntakeService {
       ).toPromise();
   }
 
+  public async GetAllDataAdmissionList(request: SeatIntakeSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllDataAdmissionList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  public async ChangeStatusSeatIntake(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/ChangeStatusSeatIntake`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
+
 }
