@@ -215,10 +215,10 @@ export class AddBterReturnItemComponent {
     }
 
     const unwantedColumns = ['IssuedId', 'IsConsume', 'ItemId', 'issuedTo', 'equipmentStatus', 'Status_LabIncharge', 'isOption',
-      'AuctionStatus',	'ItemDetailsId', 'ItemCode'
+      'AuctionStatus',	'ItemDetailsId'
     ];
 
-    const columnOrder = ['Name', 'ItemCategoryName', 'ItemTypeName', 'EquipmentsCode',
+    const columnOrder = ['Name', 'ItemCategoryName', 'ItemTypeName','ItemCode', 'EquipmentsCode',
       'ItemStatus', 'Quantity', 'UsedQuantity', 'RemainingQunatity', 'ReturnIssueDate'
     ];
 

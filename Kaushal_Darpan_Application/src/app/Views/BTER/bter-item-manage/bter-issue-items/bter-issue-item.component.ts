@@ -565,7 +565,8 @@ export class AddBterIssueItemComponent {
       if (!this.SelectedItems.find(x => x.ItemCategoryId == item.ItemCategoryId && x.EquipmentsId == item.EquipmentsId)) {
         this.SelectedItems.push({
           ItemName: item.CompanyName,
-          ItemCategoryName: item.CategoryName,
+          // ItemCategoryName: item.CategoryName,
+          ItemCategoryName: item.ItemCategoryName,
           Quantity: item.Quantity,
           FileName: item.FileName || '',
           Dis_FileName: item.Dis_FileName || '',
