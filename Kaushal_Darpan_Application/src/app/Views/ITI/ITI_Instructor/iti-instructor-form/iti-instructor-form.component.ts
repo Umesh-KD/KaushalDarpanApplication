@@ -867,10 +867,10 @@ export class ItiInstructorFormComponent {
             event.target.value = null;
           }
           if (this.State == EnumStatus.Error) {
-            this.toastr.error(this.ErrorMessage)
+            this.swat.Error(this.ErrorMessage)
           }
           else if (this.State == EnumStatus.Warning) {
-            this.toastr.warning(this.ErrorMessage)
+            this.swat.Warning(this.ErrorMessage)
           }
         });
     }
@@ -1133,11 +1133,11 @@ export class ItiInstructorFormComponent {
 
     this.request.Aadhar = this.InstructorForm.value.Aadhar
     if (this.request.IsDomicile == true && this.request.JanAadhar == '') {
-      this.toastr.warning("Please Add Janaadhar Number ")
+      this.swat.Warning("Please Add Janaadhar Number ")
       return
     }
     //if (this.request.IsDomicile == true && this.IsJANVerify == false) {
-    //  this.toastr.warning("Please Verify or Add Valid JanAadhar ")
+    //  this.swat.Warning("Please Verify or Add Valid JanAadhar ")
     //  return
     //}
     if (this.request.ddlState != '6') {
@@ -1166,21 +1166,21 @@ export class ItiInstructorFormComponent {
       return
     }
     if (this.educationList.length == 0) {
-      this.toastr.warning("Please Add Education Detail")
+      this.swat.Warning("Please Add Education Detail")
       return
     }
 
     const hasSchoolEducation = this.educationList.some(
-      x => x.EduQualificationLevel?.toLowerCase() === 'school education'
+      x => x.Education_Exam?.toLowerCase() === 'school education'
     );
 
     if (!hasSchoolEducation) {
-      this.toastr.warning("Please add at least one School Education qualification");
+      this.swat.Warning("Please add at least one School Education qualification");
       return;
     }
 
     if (this.employeeRequestList.length == 0) {
-      this.toastr.warning("Please Add Employee Details")
+      this.swat.Warning("Please Add Employee Details")
       return
     }
   this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
@@ -1193,7 +1193,7 @@ export class ItiInstructorFormComponent {
         //this.request = this.InstructorForm.value as ITI_InstructorDataModel;
         this.request.CreatedBy = '0'
         this.request.DepartmentID ='2'
-        this.request.Uid = ssoid;
+        this.request.Uid = this.InstructorForm.getRawValue().Uid;
         this.request.EmploymentDetails = this.employeeRequestList;
         this.request.TechnicalQualifications = this.techRequestList;
         this.request.EducationalQualifications = this.educationList;
@@ -1210,7 +1210,7 @@ export class ItiInstructorFormComponent {
         if (this.State === EnumStatus.Success) {
           //  Show success alert
           await this.Swal2.Success(this.Message || 'Instructor data saved successfully!');
-         await this.GetById(this.urlId)
+          await this.GetById(this.InstructorForm.getRawValue().Uid)
          
         } else {
           //  Show error alert
@@ -1242,11 +1242,11 @@ export class ItiInstructorFormComponent {
 
     this.request.Aadhar = this.InstructorForm.value.Aadhar
     if (this.request.IsDomicile == true && this.request.JanAadhar == '') {
-      this.toastr.warning("Please Add Janaadhar Number ")
+      this.swat.Error("Please Add Janaadhar Number ")
       return
     }
     //if (this.request.IsDomicile == true && this.IsJANVerify == false) {
-    //  this.toastr.warning("Please Verify or Add Valid JanAadhar ")
+    //  this.swat.Warning("Please Verify or Add Valid JanAadhar ")
     //  return
     //}
     if (this.request.ddlState != '6') {
@@ -1260,15 +1260,15 @@ export class ItiInstructorFormComponent {
       return
     }
     if (this.educationList.length == 0) {
-      this.toastr.warning("Please Add Education Detail")
+      this.swat.Error("Please Add Education Detail")
       return
     }
     if (this.techRequestList.length < 1) {
-      this.toastr.warning("Please Add Technical Details")
+      this.swat.Error("Please Add Technical Details")
       return
     }
     if (this.employeeRequestList.length == 0) {
-      this.toastr.warning("Please Add Employee Details")
+      this.swat.Error("Please Add Employee Details")
       return
     }
     this.Swal2.Confirmation("Are you sure you want to final Submit?,you cannot make changes after this", async (result: any) => {
@@ -1301,10 +1301,11 @@ export class ItiInstructorFormComponent {
           if (this.State === EnumStatus.Success) {
             //  Show success alert
             await this.Swal2.Success(this.Message || 'Instructor data saved successfully!');
-            //this.InstructorForm.reset();
-            //this.employeeRequestList = [];
-            //this.techRequestList = [];
-            //this.educationList = [];
+            this.InstructorForm.reset();
+            this.employeeRequestList = [];
+            this.techRequestList = [];
+            this.educationList = [];
+
           } else {
             //  Show error alert
             await this.Swal2.Error(this.ErrorMessage || 'Something went wrong while saving data!');
@@ -1331,10 +1332,10 @@ export class ItiInstructorFormComponent {
 
 
   async GetById(ID: string) {
-
+    debugger
     try {
-      if (ID == "") {
-        this.toastr.error("Please Enter SSOID");
+      if (ID == "" && this.InstructorForm.getRawValue().Uid == '' || this.InstructorForm.getRawValue().Uid== undefined) {
+        this.swat.Error("Please Enter SSOID");
         return;
       }
 
@@ -1356,7 +1357,8 @@ export class ItiInstructorFormComponent {
 
           } else {
             if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43 && this.urlId == '' &&
-              data['Data']['Table'][0]['StatusID']!=9
+              data['Data']['Table'][0]['StatusID'] != 9 &&
+              data['Data']['Table'][0]['StatusID'] != 0
            
             ) {
 
@@ -1481,7 +1483,7 @@ export class ItiInstructorFormComponent {
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
     if (SSOID == "") {
-      this.toastr.error("Please Enter SSOID");
+      this.swat.Error("Please Enter SSOID");
       return;
     }
 
@@ -1535,7 +1537,7 @@ export class ItiInstructorFormComponent {
           }
           else {
             this.request.Uid = "";
-            this.toastr.error("Enter Valid SSO ID")
+            this.swat.Error("Enter Valid SSO ID")
             this.isSSOVisible = false;
             return;
           }
@@ -1552,7 +1554,7 @@ export class ItiInstructorFormComponent {
    
   async GetDetailsByJanAadhaar() {
     if (!this.request.JanAadhar || this.request.JanAadhar.length < 10 || this.request.JanAadhar.length > 12) {
-      this.toastr.error("Invalid Jan Aadhaar Number");
+      this.swat.Error("Invalid Jan Aadhaar Number");
       return;
     }
     this.IsJANVerify=false
@@ -1585,10 +1587,10 @@ export class ItiInstructorFormComponent {
         }
       }
       else if (data.State === EnumStatus.Warning) {
-        this.toastr.warning(data.Message + " Please check Jan Aadhaar number again");
+        this.swat.Warning(data.Message + " Please check Jan Aadhaar number again");
       }
       else {
-        this.toastr.error(data.ErrorMessage);
+        this.swat.Error(data.ErrorMessage);
       }
     } catch (error) {
       console.error("Error fetching Jan Aadhaar details", error);
@@ -1637,12 +1639,12 @@ export class ItiInstructorFormComponent {
 
         if (this.State == EnumStatus.Success) {
           this.startTimer();
-          this.toastr.success('OTP sent Successfully')
+          this.swat.Success('OTP sent Successfully')
           this.ResposeOTPModel = data['Data'];
           this.openModalGenerateOTP(this.modal_GenrateOTP, row);
         }
         else {
-          this.toastr.error(this.ErrorMessage)
+          this.swat.Error(this.ErrorMessage)
         }
 
       }, (error: any) => console.error(error)
@@ -1675,10 +1677,10 @@ export class ItiInstructorFormComponent {
               this.IsJANVerify=true
               this.Address = data.Data.Address;
               await this.FillMemberDetails();
-              this.toastr.success("Succesfully Verified")
+              this.swat.Success("Succesfully Verified")
             }
             else {
-              this.toastr.warning('Invalid OTP Please Try Again');
+              this.swat.Warning('Invalid OTP Please Try Again');
             }
 
           }, (error: any) => console.error(error)
@@ -1694,7 +1696,7 @@ export class ItiInstructorFormComponent {
       }
     }
     else {
-      this.toastr.warning('Please Enter OTP');
+      this.swat.Warning('Please Enter OTP');
     }
   }
 
@@ -1814,10 +1816,10 @@ export class ItiInstructorFormComponent {
               event.target.value = null;
             }
             if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage)
+              this.swat.Error(this.ErrorMessage)
             }
             else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.ErrorMessage)
+              this.swat.Warning(this.ErrorMessage)
             }
           });
       }
@@ -2555,7 +2557,7 @@ export class ItiInstructorFormComponent {
   {
     try {
       this.janMember = data as JanAadharVerifyMemberDetails
-      this.toastr.success("Succesfully Verified")
+      this.swat.Success("Succesfully Verified")
       console.log("getJanadharData", data);
     }
     catch (erro) {
@@ -2570,12 +2572,12 @@ export class ItiInstructorFormComponent {
 
     if (janAadhar=='')
     {
-      this.toastr.warning("Please Enter Janaadhar Details");
+      this.swat.Warning("Please Enter Janaadhar Details");
     }
 
     if (janAadhar.length < 10 || janAadhar.length > 12)
     {
-      this.toastr.error("Invalid Janadhar Details")
+      this.swat.Error("Invalid Janadhar Details")
     }
     this.janadharComponent.startVerification(janAadhar);
   }

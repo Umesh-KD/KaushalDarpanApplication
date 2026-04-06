@@ -812,6 +812,7 @@ export class ItiInstructorComponent{
     if (btnSave) btnSave.innerHTML = "Submit";
     this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
     this.isSSOVisible = false;
+     this.GetItiInstructorDatas();
   }
 
 
