@@ -72,8 +72,78 @@ export class QualificationMasterComponent {
   }
 
   async SaveData() {
+    try {
 
+      const selected = this._QualificationLevel.find(
+        (x: any) => x.id === Number(this.request.QualificationLevelID)
+      );
+      this.request.QualificationLevel = selected?.name || '';
+
+      if(this.request.QualificationLevel == '') {
+        this.toastr.error('Select Qualification Level');
+        return;
+      }
+
+      this.isSubmitted = true;
+      if(this.AddQualificationFromGroup.invalid) {
+        this.toastr.error('Please fill all required fields.');
+        return;
+      }
+
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.request.UserID = this.sSOLoginDataModel.UserID;
+      await this.qualificationMasterService.Save_QualificationMasterData(this.request).then(async (data: any) => {
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.ResetControl();
+          await this.QualificationMaster_GetData();
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-  async ResetControl() {}
+  async ResetControl() {
+    this.isSubmitted = false;
+    this.request = new QualificationMasterDataModel();
+  }
+
+  async Qualification_DeleteById(Id: number) {
+    try {
+      const deleteRequest: any = {};
+      deleteRequest.Action = 'DeleteById';
+      deleteRequest.QualificationID = Id;
+      deleteRequest.UserID = this.sSOLoginDataModel.UserID;
+      await this.qualificationMasterService.QualificationMaster_GetData(deleteRequest).then(async (data: any) => {
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.QualificationMaster_GetData();
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async QualificationData_GetByID(Id: number) {
+    try {
+      const Request: any = {};
+      Request.Action = 'GetByID';
+      Request.QualificationID = Id;
+      await this.qualificationMasterService.QualificationMaster_GetData(Request).then(async (data: any) => {
+        if(data.State === EnumStatus.Success) {
+          this.request = data.Data[0];
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
