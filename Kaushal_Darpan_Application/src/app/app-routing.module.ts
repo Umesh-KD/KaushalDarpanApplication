@@ -636,6 +636,7 @@ const routes: Routes = [
       { path: 'Auction-List', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/auction-list/auction-list.module').then(m => m.AuctionListModule) },
       { path: 'bter-sr5-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr5-report-bter/sr5-report-bter.module').then(m => m.SR5ReportBTERModule), title: 'SR5 Report' },
       { path: 'bter-sr6-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr6-report-bter/sr6-report-bter.module').then(m => m.SR6ReportBTERModule), title: 'SR6 Report' },
+      { path: 'DTELabInchargeStockRegister', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/dteitems-master/dte-lab-incharge-stock-register/dte-lab-incharge-stock-register-module').then(m => m.DTELabInchargeStockRegisterModule) },
 
       { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
       { path: 'bter-lab-master', loadChildren: () => import('./Views/BTER/bter-item-manage/dtelaboratory-master/dtelaboratory-master-module').then(m => m.DteLaboratoryMasterModule) },
