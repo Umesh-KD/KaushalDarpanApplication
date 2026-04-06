@@ -103,13 +103,12 @@
             <td>{{row.Remark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns">
-                <!-- <a href="javascript:void(0);" id="edit" title="Edit Training" 
-                  (click)="StaffTrainingDetails_GetDataById(row.StaffTrainingDetailID)"><i class="ti ti-pencil"></i>
+                <a href="javascript:void(0);" id="edit" title="Edit Training" 
+                  (click)="QualificationData_GetByID(row.QualificationID)"><i class="ti ti-pencil"></i>
                 </a>
                 <a href="javascript:void(0);" title="Delete" 
-                  (click)="StaffTrainingDetails_DeleteById(row.StaffTrainingDetailID)"><i class="ti ti-trash"></i>
-                </a> -->
-                
+                  (click)="Qualification_DeleteById(row.QualificationID)"><i class="ti ti-trash"></i>
+                </a>
               </div>
             </td>
           </tr>

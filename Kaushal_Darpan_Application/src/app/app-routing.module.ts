@@ -384,14 +384,16 @@ const routes: Routes = [
 
       { path: 'AdminDashboardITI', loadChildren: () => import('./Views/ITI/admin-dashboard-iti/admin-dashboard-iti.module').then(m => m.AdminDashboardITIModule), title: 'Admin Dashboard ITI' },
       { path: 'SeatIntakesList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list/seat-intakes-list.module').then(m => m.SeatIntakesListModule), title: 'Seat Intakes List' },
-      { path: 'AddSeatIntakes', loadChildren: () => import('./Views/ITI/Intakes/add-seat-intakes/add-seat-intakes.module').then(m => m.AddSeatIntakesModule), title: 'Add Seat Intakes' },
+
+
+      { path: 'SeatIntakesAdmissionList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-admission/seat-intakes-list-admision.module').then(m => m.SeatIntakesListAdmissionModule), title: 'Seat Intakes List' },
 
 
       //new pages changes
       { path: 'SeatIntakesMasterList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-master/seat-intakes-list-master.module').then(m => m.SeatIntakesListMasterModule), title: 'Seat Intakes List Master' },
       { path: 'AddSeatIntakesMaster', loadChildren: () => import('./Views/ITI/Intakes/add-seat-intakes-master/add-seat-intakes-master.module').then(m => m.AddSeatIntakesMasterModule), title: 'Add Seat Intakes Master' },
 
-
+      { path: 'SeatIntakesMasterList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-master/seat-intakes-list-master.module').then(m => m.SeatIntakesListMasterModule), title: 'Seat Intakes List Master' },
 
       { path: 'AddSeatsDistributions', loadChildren: () => import('./Views/ITI/Seats-Distributions/add-seats-distributions/add-seats-distributions.module').then(m => m.AddSeatsDistributionsModule), title: 'Add Seats Distributions' },
       { path: 'SeatsDistributionsList', loadChildren: () => import('./Views/ITI/Seats-Distributions/seats-distributions-list/seats-distributions-list.module').then(m => m.SeatsDistributionsListModule), title: 'Seats Distributions List' },
@@ -833,6 +835,10 @@ const routes: Routes = [
 
       { path: 'ApplyForHostel', loadChildren: () => import('./Views/Student/apply-for-hostel/apply-for-hostel.module').then(m => m.ApplyForHostelModule) },
       { path: 'CreateHostel', loadChildren: () => import('./Views/Hostel-Management/create-hostel/create-hostel.module').then(m => m.CreateHostelModule), title: 'Create Hostel' },
+      { path: 'bter-hostel-fee', loadChildren: () => import('./Views/Hostel-Management/bter-hostel-fee/bter-hostel-fee.module').then(m => m.BterHostelFeeModule), title: 'Hostel Fee' },
+      { path: 'hostel-fee-management', loadChildren: () => import('./Views/Hostel-Management/List-hostel-fee-management/List-hostel-fee-management.module').then(m => m.ListhostelfeemanagementModule), title: 'Hostel Fee' },
+      { path: 'Add-hostel-fee-management', loadChildren: () => import('./Views/Hostel-Management/Add-hostel-fee-management/Add-hostel-fee-management.module').then(m => m.AddhostelfeemanagementModule), title: '' },
+      { path: 'Add-hostel-fee-management/:id', loadChildren: () => import('./Views/Hostel-Management/Add-hostel-fee-management/Add-hostel-fee-management.module').then(m => m.AddhostelfeemanagementModule), title: '' },
 
       { path: 'Hostel-Institute-Mapping-List', loadChildren: () => import('./Views/Hostel-Management/dte-hostel-institute-mapping-list/dte-hostel-institute-mapping-list.module').then(m => m.DTEHostelInstituteMappingListModule), title: 'Create Hostel' },
 

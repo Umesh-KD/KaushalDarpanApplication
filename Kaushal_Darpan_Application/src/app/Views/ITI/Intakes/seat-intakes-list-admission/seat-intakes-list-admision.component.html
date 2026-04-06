@@ -1,12 +1,12 @@
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Intakes</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Admission Intakes List</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/SeatIntakesList" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>
+      <a routerLink="/SeatIntakesAdmissionList" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>
     </div>
   </div>
 </div>
@@ -17,7 +17,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a routerLink="/AddSeatIntakes" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+        <!--<a routerLink="/AddSeatIntakes" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
       </div>
       <form [formGroup]="SeatIntakeSearchFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -66,17 +66,19 @@
     </select>
   </div>-->
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College:</label>
-            <ng-select [(ngModel)]="searchRequest.CollegeID"
-                       formControlName="ddlCollege"
-                       [clearable]="false">
-              <ng-option [value]="0" selected>--All--</ng-option>
-              <ng-container *ngFor="let item of ItiCollegesListAll;">
-                <ng-option [value]="item.Id">{{item.Name}}</ng-option>
-              </ng-container>
-            </ng-select>
-          </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College:</label>
+          <ng-select [(ngModel)]="searchRequest.CollegeID"
+                     formControlName="ddlCollege"
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of ItiCollegesListAll;">
+              <ng-option [value]="item.Id">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+
+
+        </div>
 
 
           <div>
@@ -154,8 +156,9 @@
               Status:
             </label>
             <select class="form-select" formControlName="ddlSanctioned" [(ngModel)]="searchRequest.SanctionedID">
-              <option value="0">All</option>
-              <option *ngFor="let item of SanctionedList" value="{{item.ID}}">{{item.Name}}</option>
+              <option value="-2">All</option>
+            <option value="1">Active </option>
+            <option value="0">Inactive</option>
             </select>
           </div>
           <!--<div>
@@ -234,28 +237,18 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sno</th>
-            <th class="text-left">College Name</th>
+            <th class="text-left" style="width: 23%;">College Name</th>
             <th class="text-left">Trade Name</th>
-            <th class="text-left">Trade Scheme</th>
-            <th class="text-left">Reservation Category</th>
-            <!--<th class="text-left">Only For Women</th>-->
-            <!--<th class="text-left">Min Percentage In Science</th>
-            <th class="text-left">Min Percentage In Math</th>-->
+            <th class="text-left"  style="width:7%;">Scheme</th>
+            <th class="text-left">Category</th>
+
             <th class="text-left" title="Click to sorting" (click)="sortInTableData('Shift')">
               Shift
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Shift'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
-            <th class="text-left">Unit Number</th>
-            <th class="text-left">Status</th>
-            <!--<th class="text-left">Last Session</th>-->
-            <!--<th class="text-left">Duration</th>-->
-            <th class="text-left">Seat In Unit</th>
-            <th class="text-left">Sanction No</th>
-            <th class="text-left">Sanction Date</th>
+            <th class="text-left">Unit</th>
             <th class="text-left">Last Updated</th>
-
-            <!--<th class="text-left">Active/Inactive Remark</th>-->
-            <!--<th class="text-left">Status</th>-->
+            <th class="text-left">Active</th>
             <th style="width: 80px;">Action</th>
           </tr>
         </thead>
@@ -266,39 +259,36 @@
             <td align="left">{{row.TradeName}}</td>
             <td align="left">{{row.TradeScheme}}</td>
             <td align="left">{{row.Remark}}</td>
-            <!--<td align="left">{{row.OnlyForWomen}}</td>-->
-            <!--<td align="left">{{row.MinPercentageInScience}}</td>
-            <td align="left">{{row.MinPercentageInMath}}</td>-->
             <td align="left">{{row.Shift}}</td>
             <td align="left">{{row.Unit_no}}</td>
-            <td align="left">{{row.Sanctioned}}</td>
-            <!--<td align="left">{{row.LastSessionStr}}</td>-->
-            <!--<td align="left">{{row.DurationYear}}</td>-->
-            <td align="left">{{row.NoOfSanctionedSeats}}</td>
-            <td align="left">{{row.OrderNo}}</td>
-            <td align="left">{{row.OrderDate}}</td>
             <td align="left">{{row.LastUpdated}}</td>
-            <!--<td align="left">	{{ row.ActiveOrderNo }}{{ row.ActiveOrderDate }}{{ row.InActiveOrderNo }}{{ row.InActiveOrderDate }} </td>-->
-            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
-                <!--<label class="block">Status</label>-->
-                <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
-                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (click)="onToggleChange($event , row.SeatIntakeID, row.ActiveStatus)">
-                  <span class="toggleIcon">
-                    <span class="toggleTitle">{{ row.ActiveStatus === 1 ? '' : '' }}</span>
-                  </span>
-                </label>
-              </div>
-            </td>-->
 
+
+
+          <td align="center" [ngSwitch]="row.ActiveStatus">
+
+            <i *ngSwitchCase="true" class="fa fa-check text-success" title="Active"></i>
+
+            <i *ngSwitchCase="false" class="fa fa-times text-danger" title="Inactive"></i>
+            <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
+
+          </td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="Edit" [routerLink]="'/AddSeatIntakes'" [queryParams]="{id:row.SeatIntakeID}"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.SeatIntakeID)"><i class="ti ti-trash"></i></a>
+                <a [ngSwitch]="row.ActiveStatus" href="javascript:void(0);" title="ChangeStatis" (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveSeat')">
+                  <i *ngSwitchCase="false" class="fa fa-check text-success" title="Active"></i>
+                  <i *ngSwitchCase="true" class="fa fa-times text-danger" title="Inactive"></i>
+                </a>
+
+                <a [ngSwitch]="row.IsActiveColleges" *ngIf="row.CollegeID==searchRequest.CollegeID" href="javascript:void(0);" title="ChangeStatis" (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
+
+                  <i *ngSwitchCase=0 class="fa fa-check text-success" title="Active College"></i>
+                  <i *ngSwitchCase=1 class="fa fa-times text-danger" title="Inactive College"></i>
+            
+                </a>
               </div>
             </td>
           </tr>
-
         </tbody>
       </table>
     </div>
