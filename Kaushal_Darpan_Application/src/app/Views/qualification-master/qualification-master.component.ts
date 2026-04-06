@@ -8,7 +8,7 @@ import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { DropdownValidators, DropdownValidators1 } from '../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
-import { QualificationMasterDataModel } from '../../Models/QualificationMasterDataModel';
+import { QualificationMasterDataModel, QualificationMasterSearchModel } from '../../Models/QualificationMasterDataModel';
 import { EnumStatus, QualificationLevel } from '../../Common/GlobalConstants';
 
 @Component({
@@ -20,6 +20,7 @@ import { EnumStatus, QualificationLevel } from '../../Common/GlobalConstants';
 export class QualificationMasterComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new QualificationMasterDataModel();
+  public searchRequest = new QualificationMasterSearchModel();
 
   public AddQualificationFromGroup!: FormGroup;
 
@@ -57,7 +58,8 @@ export class QualificationMasterComponent {
 
   async QualificationMaster_GetData() {
     try {
-      await this.qualificationMasterService.QualificationMaster_GetData(this.request).then(async (data: any) => {
+      this.searchRequest.Action = 'GetAllData';
+      await this.qualificationMasterService.QualificationMaster_GetData(this.searchRequest).then(async (data: any) => {
         if(data.State === EnumStatus.Success) {
           this.QualificationMasterDataList = data.Data;
         } else {
