@@ -56,6 +56,9 @@ export class listitibankguaranteeComponent {
   public collegeRequest = new ItiCollegesSearchModel();
   modalReference: NgbModalRef | undefined;
   public bankGuaranteeFormGroup!: FormGroup;
+
+
+
   //end table feature default
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -492,6 +495,20 @@ export class listitibankguaranteeComponent {
           }
         }
       });
+  }
+
+
+  onSearchChange() {
+    debugger
+
+    if (this.Table_SearchText == '') {
+      this.pageInTableSize = "50"; // reset pagination
+      this.loadInTable();
+    }
+    else {
+      this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
+      this.loadInTable();
+    }
   }
 
 }
