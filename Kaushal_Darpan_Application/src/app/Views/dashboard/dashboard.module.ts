@@ -55,7 +55,7 @@ import { ApprenticeshipDirectorNCVTDashboardModule } from '../ITI/iti-Apprentice
 import { PracticalExaminerDashboardModule } from '../ITI/practical-examiner-dashboard/practical-examiner-dashboard.module';
 import { JDTEDashboardModule } from '../jdte-dashboard/jdte-dashboard.module';
 import { ITIPlanningDashboardModule } from '../ITI/ITI-Planning-Dashboard/ITI-Planning-Dashboard.module';
-
+import { ITIInspectionDashboardModule } from '../ITI/inspection-dashboard/inspection-dashboard.module';
 
 /// work here 
 
@@ -111,7 +111,8 @@ import { ITIPlanningDashboardModule } from '../ITI/ITI-Planning-Dashboard/ITI-Pl
     ApprenticeshipDirectorNCVTDashboardModule,
     PracticalExaminerDashboardModule,
     JDTEDashboardModule,
-    ITIPlanningDashboardModule
+    ITIPlanningDashboardModule,
+    ITIInspectionDashboardModule
   ]
 })
 export class dashboardModule { }

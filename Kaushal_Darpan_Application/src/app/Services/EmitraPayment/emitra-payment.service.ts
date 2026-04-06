@@ -77,7 +77,12 @@ export class EmitraPaymentService
       ).toPromise();
   }
 
-
+  public async GetEmitraTransactionDetails_Inspection(PRnNO?: string) {
+    return await this.http.get(this.APIUrl + "/GetEmitraTransactionDetails_Inspection/" + PRnNO, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 
@@ -193,6 +198,15 @@ export class EmitraPaymentService
   public async RevalFeePayment_Kiosk(request: EmitraRequestDetails) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + "/RevalFeePayment_Kiosk", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async InspectionFeePayment_Principle(request: EmitraRequestDetails) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/InspectionFeePayment_Principle", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -1089,6 +1089,7 @@ const routes: Routes = [
       { path: 'inspection-team', loadChildren: () => import('./Views/ITI/Inspection/inspection-team/inspection-team.module').then(m => m.InspectionTeamModule), title: 'ITI Inspection' },
       { path: 'inspection-deployment', loadChildren: () => import('./Views/ITI/Inspection/inspection-deployment/inspection-deployment.module').then(m => m.InspectionDeploymentModule), title: 'ITI Inspection' },
       { path: 'iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection/iti-inspection.module').then(m => m.ITIInspectionModule), title: 'ITI Inspection' },
+      { path: 'iti-inspection-members', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-members/iti-inspection-members.module').then(m => m.ITIInspectionMembersModule), title: 'ITI Inspection members' },
       { path: 'verify-iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/verify-iti-inspection/verify-iti-inspection.module').then(m => m.VerifyITIInspectionModule), title: 'ITI Inspection' },
       { path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
       { path: 'iti-consent', loadChildren: () => import('./Views/ITI/Inspection/iti-consent/iti-consent.module').then(m => m.ITIConsentModule), title: 'ITI Consent' },
@@ -1704,6 +1705,8 @@ const routes: Routes = [
       },
       { path: 'PaymentStatus', loadChildren: () => import('./Views/Student/payment-status/payment-status.module').then(m => m.PaymentStatusModule), title: 'Payment Status' },
       { path: 'PaymentStatus-reval', loadChildren: () => import('./Views/Student/payment-status/payment-status.module').then(m => m.PaymentStatusModule), title: 'Payment Status' },
+      { path: 'InspectionPaymentStatus', loadChildren: () => import('./Views/ITI/inpsection-payment-status/inpsection-payment-status.module').then(m => m.InspectionPaymentStatusModule), title: 'Inspection Payment Status' },
+      
       { path: 'DepartmentLogin', loadChildren: () => import('./Views/department-login/department-login.module').then(m => m.DepartmentLoginModule) },
 
 

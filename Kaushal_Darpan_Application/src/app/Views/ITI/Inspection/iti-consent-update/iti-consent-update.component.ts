@@ -16,6 +16,8 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { SearchRequest } from '../../../../Models/CitizenSuggestionDataModel';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
+import { EmitraRequestDetails } from '../../../../Models/PaymentDataModel';
+import { EmitraPaymentService } from '../../../../Services/EmitraPayment/emitra-payment.service';
 
 @Component({
   selector: 'app-iti-consent-update',
@@ -36,11 +38,14 @@ export class ITIConsentUpdateComponent {
   public DistrictMasterDDL: any = [];
   public requestCenter = new CenterMasterDDLDataModel();
   public consentDeploy = new ConsentModel();
-  public UpdateConsentRequest = new UpdateConsentModel()
+  public UpdateConsentRequest = new UpdateConsentModel();
+  emitraRequest = new EmitraRequestDetails();
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
   public isSubmitted: boolean = false;
+  public totalAmount: number = 0;
+  public PaymentStatus: boolean = false;
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   public Table_SearchText: string = '';
@@ -54,7 +59,8 @@ export class ITIConsentUpdateComponent {
     private modalService: NgbModal,
     private appsettingConfig: AppsettingService,
     private commonMasterService: CommonFunctionService,
-    private Swal2: SweetAlert2
+    private Swal2: SweetAlert2,
+    private emitraPaymentService: EmitraPaymentService,
 
   ) { }
 
@@ -149,7 +155,10 @@ export class ITIConsentUpdateComponent {
           Remark: row[0].Remark || '',
           DocConsent: null, 
           UserID: row[0].UserID || 0, 
-          InspectionConsentID: row[0].InspectionConsentID || InspectionConsentID 
+          InspectionConsentID: row[0].InspectionConsentID || InspectionConsentID ,
+          Amount:row[0].Amount || 0,
+          ServiceID:row[0].ServiceID || 0,
+          ID:row[0].ID || 0
         };
       } else {
         console.warn('No data found for the given ID:', InspectionConsentID);
@@ -158,7 +167,10 @@ export class ITIConsentUpdateComponent {
           Remark: '',
           DocConsent: null,
           UserID: 0,
-          InspectionConsentID: InspectionConsentID
+          InspectionConsentID: InspectionConsentID,
+          Amount:0,
+          ServiceID:0,
+          ID:0
         };
       }
 
@@ -234,34 +246,40 @@ export class ITIConsentUpdateComponent {
       this.toastr.error('Please fill all mandatory fields !');
       return;
     }
-    this.UpdateConsentRequest.UserID = this.sSOLoginDataModel.UserID;
-    this.UpdateConsentRequest.Remark = this.consentForm.get('Remarks')?.value;
-    this.UpdateConsentRequest.TentativeDate = this.consentForm.get('TentativeDate')?.value;
-    this.UpdateConsentRequest.InspectionConsentID = this.InspectionConsentID;
-    this.UpdateConsentRequest.Status=status;
-    try {
-      this.isSubmitted = true;
-      this.loaderService.requestStarted();
-      this.itiInspectionService.updateConsent(this.UpdateConsentRequest)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(data.Message);
-            this.CloseModalPopup();
-            this.GetAllData();
-          } else {
-            this.toastr.error(this.ErrorMessage);
-          }
-        });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+    if(status==1){
+      console.log(this.UpdateConsentRequest.Amount);
+       await this.submitPayment();
     }
+
+      this.UpdateConsentRequest.UserID = this.sSOLoginDataModel.UserID;
+      this.UpdateConsentRequest.Remark = this.consentForm.get('Remarks')?.value;
+      this.UpdateConsentRequest.TentativeDate = this.consentForm.get('TentativeDate')?.value;
+      this.UpdateConsentRequest.InspectionConsentID = this.InspectionConsentID;
+      this.UpdateConsentRequest.Status=status;
+      try {
+        this.isSubmitted = true;
+        this.loaderService.requestStarted();
+        this.itiInspectionService.updateConsent(this.UpdateConsentRequest)
+          .then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            if (this.State == EnumStatus.Success) {
+              this.toastr.success(data.Message);
+              this.CloseModalPopup();
+              this.GetAllData();
+            } else {
+              this.toastr.error(this.ErrorMessage);
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    
   }
 
   openDatePicker(event: any) {
@@ -393,4 +411,155 @@ export class ITIConsentUpdateComponent {
         }
       });
   }
+
+
+  async openOTPModal1(status:any) {
+    this.Swal2.Confirmation(`Are you sure you want to Pay ?`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+          // await for open model
+          await this.childComponent.OpenOTPPopup();
+
+          // await OTP verification
+          // await this.childComponent.waitForVerification();
+          let isVerified = false;
+
+          const timeout = new Promise<void>((resolve) => {
+            setTimeout(() => {
+              if (!isVerified) {
+                console.log('OTP timeout');
+                // optional: close popup
+                this.childComponent.CloseOTPModal?.();
+                resolve();
+              }
+            }, 60000);
+          });
+
+          const verify = this.childComponent.waitForVerification().then(() => {
+            isVerified = true;
+          });
+
+          await Promise.race([verify, timeout]);
+
+          if (isVerified) {         
+            await this.submitPayment();
+          } else {
+            alert('OTP verification timeout');
+          }
+
+        }
+      });
+  }
+
+  async submitPayment() {
+    debugger
+    this.totalAmount = this.UpdateConsentRequest.Amount ?? 0;
+    this.emitraRequest = new EmitraRequestDetails();
+    // this.studentDetailsModel = new StudentDetailsModel()
+    // if (this.GetStudentDetails.some(f => f.IsSelected == true)) {
+    //   this.GetStudentDetails.filter(f => f.IsSelected == true).forEach(item => {
+    //     this.totalAmount += Number(item.FeeAmount);
+    //     this.emitraRequest.StudentFeesTransactionItems.push(
+    //       {
+    //         itemAmount: Number(item.FeeAmount ?? 0),
+    //         status: item.ExamStudentStatus,
+    //         transactionApplicationID: item.StudentExamPaperID,
+    //         tranSemesterID: item.SemesterID
+    //       } as StudentFeesTransactionItems);
+
+    //   });
+
+      if (this.totalAmount > 0) {
+        var message = "You are about to pay " + this.totalAmount + " for your fee.Would you like to proceed ? ";
+        // confirm
+        this.Swal2.Confirmation(message, async (result: any) => {
+          //confirmed btn click
+          if (result.isConfirmed) {
+            ;
+
+            this.emitraRequest.Amount = Number(this.totalAmount);
+            // this.emitraRequest.ApplicationIdEnc = this.studentDetailsModel?.StudentExamID?.toString() 
+            this.emitraRequest.ServiceID = this.UpdateConsentRequest.ServiceID?.toString()?? '';
+            this.emitraRequest.ID = this.UpdateConsentRequest.ID ?? 0;
+            this.emitraRequest.UserName = this.sSOLoginDataModel.DisplayName;
+            this.emitraRequest.MobileNo = this.sSOLoginDataModel.Mobileno;
+            this.emitraRequest.StudentID = this.sSOLoginDataModel.UserID;
+            this.emitraRequest.SsoID=this.sSOLoginDataModel.SSOID;
+            // this.emitraRequest.SemesterID = this.studentDetailsModel.SemesterID;
+            this.emitraRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+            this.emitraRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+            this.emitraRequest.InstituteID=this.sSOLoginDataModel.InstituteID;
+            this.emitraRequest.InspectionConsentID=this.UpdateConsentRequest.InspectionConsentID;
+            // this.emitraRequest.ExamStudentStatus = enumExamStudentStatus.Revaluation;
+            this.emitraRequest.FeeFor = "InspectionFee";
+            this.emitraRequest.USEREMAIL = this.sSOLoginDataModel.Mailofficial ? this.sSOLoginDataModel.Mailpersonal:"";
+            //common
+           
+            this.emitraRequest.IsKiosk = false;
+            //this.GetDateDataList();
+            this.loaderService.requestStarted();
+            try {
+              await this.emitraPaymentService.InspectionFeePayment_Principle(this.emitraRequest)
+                .then(async (data: any) => {
+                  data = JSON.parse(JSON.stringify(data));
+                  if (data.State == EnumStatus.Success) {
+                    this.PaymentStatus=true;
+                    await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+                  }
+                  else {
+                    this.toastr.error(data.ErrorMessage)
+                  }
+                })
+            }
+            catch (ex) { console.log(ex) }
+            finally {
+              setTimeout(() => {
+                this.loaderService.requestEnded();
+              }, 200);
+            }
+          }
+        });
+      }
+      else {
+        this.toastr.warning('Payment amount should be greater then 0')
+      }
+    // }
+    // else {
+    //   this.toastr.error('Please select atleast one subject..');
+    // }
+
+  }
+
+  RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any) {
+    var form = document.createElement("form");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", pServiceURL);
+
+    //Hidden Encripted Data
+    var hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", "ENCDATA");
+    hiddenField.setAttribute("value", pENCDATA);
+    form.appendChild(hiddenField);
+
+    //Hidden Service ID
+    var hiddenFieldService = document.createElement("input");
+    hiddenFieldService.setAttribute("type", "hidden");
+    hiddenFieldService.setAttribute("name", "SERVICEID");
+    hiddenFieldService.setAttribute("value", this.emitraRequest.ServiceID);
+    form.appendChild(hiddenFieldService);
+    //Hidden Service ID
+    var MERCHANTCODE = document.createElement("input");
+    MERCHANTCODE.setAttribute("type", "hidden");
+    MERCHANTCODE.setAttribute("name", "MERCHANTCODE");
+    MERCHANTCODE.setAttribute("value", pMERCHANTCODE);
+    form.appendChild(MERCHANTCODE);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  }
+
 }
