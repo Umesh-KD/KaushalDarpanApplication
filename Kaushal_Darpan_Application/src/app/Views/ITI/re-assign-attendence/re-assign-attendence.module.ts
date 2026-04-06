@@ -8,6 +8,7 @@ import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
 import { MaterialModule } from '../../../material.module';
 import { RouterModule } from '@angular/router';
 import { routes } from '../../../routes';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import { routes } from '../../../routes';
     CommonModule,
     ReAssignAttendenceRoutingModule,
     FormsModule, ReactiveFormsModule,
-    MaterialModule, NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
+    MaterialModule, NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent, NgxMatSelectSearchModule,
     RouterModule.forChild(routes)
   ]
 })

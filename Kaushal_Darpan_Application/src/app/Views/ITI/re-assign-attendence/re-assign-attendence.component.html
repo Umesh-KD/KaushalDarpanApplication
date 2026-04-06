@@ -293,19 +293,38 @@
 
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject</label>
-              <ng-select formControlName="SubjectID" [clearable]="false">
-                <ng-option [value]="0">--Select--</ng-option>
-                @for (item of SubjectMasterDDL; track item.ID) {
-                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
-                }
-              </ng-select>
-              <div *ngIf="isSubmitted && formEditData.SubjectID.errors" class="text-danger">
-                <p *ngIf="formEditData.SubjectID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-              </div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject:</label>
+
+
+              <mat-select class="form-select form-control CenterCode border selectboader"
+                          multiple
+                          formControlName="SubjectIDs"
+                          (selectionChange)="onSelectionChange($event)">
+
+                <mat-option>
+                  <ngx-mat-select-search [(ngModel)]="centerSearchText"
+                                         [ngModelOptions]="{ standalone: true }"
+                                         (ngModelChange)="filterCenters()"
+                                         placeholderLabel="Search Subject..."
+                                         noEntriesFoundLabel="No Subject found">
+                  </ngx-mat-select-search>
+                </mat-option>
+
+                <mat-option *ngIf="SubjectMasterDDL?.length > 0" [value]="'ALL'">
+                  {{ isAllSelected ? 'Unselect All' : 'Select All' }}
+                </mat-option>
+
+                <mat-option *ngFor="let item of filteredCenterList"
+                            [value]="item.ID">
+                  {{ item.Name }}
+                </mat-option>
+
+              </mat-select>
+
+
             </div>
 
-            
+
             <div class="col-span-1 md:col-span-2 lg:col-span-3">
               <label class="text-gray-800 text-sm font-medium inline-block mb-2">
                 Attendance Date <span class="text-red-500">*</span>
@@ -331,8 +350,8 @@
 
               </div>
             </div>
- 
-      
+
+
 
 
 
