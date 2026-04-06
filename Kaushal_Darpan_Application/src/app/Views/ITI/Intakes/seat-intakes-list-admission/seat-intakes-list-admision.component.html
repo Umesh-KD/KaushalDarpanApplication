@@ -280,7 +280,7 @@
                   <i *ngSwitchCase="true" class="fa fa-times text-danger" title="Inactive"></i>
                 </a>
 
-                <a [ngSwitch]="row.IsActiveColleges" href="javascript:void(0);" title="ChangeStatis" (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
+                <a [ngSwitch]="row.IsActiveColleges" *ngIf="row.CollegeID==searchRequest.CollegeID" href="javascript:void(0);" title="ChangeStatis" (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
 
                   <i *ngSwitchCase=0 class="fa fa-check text-success" title="Active College"></i>
                   <i *ngSwitchCase=1 class="fa fa-times text-danger" title="Inactive College"></i>
