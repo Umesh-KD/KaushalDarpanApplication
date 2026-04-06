@@ -11,5 +11,6 @@ export class QualificationMasterDataModel {
 export class QualificationMasterSearchModel{
     public Action?: string = '';
     public QualificationID?: number = 0
+    public UserID?: number = 0
     public QualificationName?: string = '';
 }

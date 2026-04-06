@@ -91,40 +91,24 @@
             <th width="80px" align="left">Sr. No.</th>
             <th align="left">Qualification Level</th>
             <th align="left">Qualification Name</th>
-            <th align="left">Organizing lnstitute Name</th>
-            <th align="left">Course Type</th>
-            <th align="left">Course Name</th>
-            <th class="left">Duration Unit</th>
-            <th align="left">Duration</th>
-            <th align="left">Start Date - End Date</th>
-            <th align="left">Venue</th>
-            <th align="left">Mode Of Training</th>
+            <th align="left">Remarks</th>
             <th align="center" width="200">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of QualificationMasterDataList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td>{{idx+1}}</td>
-            <td>{{row.SSOID}}</td>
-            <td>{{row.StaffName}}</td>
-            <td>{{row.OrganizinglnstituteName}}</td>
-            <td>{{row.TrainingCourseType_str}}</td>
-            <td>{{row.TrainingCourseName}}</td>
-            <td>{{row.DurationUnit_str}}</td>
-            <td>{{row.Duration}}</td>
-            <td>{{row.StartDate}} - {{EndDate}}</td>
-            <td>{{row.Venue}}</td>
-            <td>{{row.ModeOfTraining_str}}</td>
-            
+            <td>{{row.QualificationLevel}}</td>
+            <td>{{row.QualificationName}}</td>
+            <td>{{row.Remark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns">
                 <a href="javascript:void(0);" id="edit" title="Edit Training" 
-                  (click)="StaffTrainingDetails_GetDataById(row.StaffTrainingDetailID)"><i class="ti ti-pencil"></i>
+                  (click)="QualificationData_GetByID(row.QualificationID)"><i class="ti ti-pencil"></i>
                 </a>
                 <a href="javascript:void(0);" title="Delete" 
-                  (click)="StaffTrainingDetails_DeleteById(row.StaffTrainingDetailID)"><i class="ti ti-trash"></i>
+                  (click)="Qualification_DeleteById(row.QualificationID)"><i class="ti ti-trash"></i>
                 </a>
-                
               </div>
             </td>
           </tr>

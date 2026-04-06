@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { QualificationMasterSearchModel } from '../../Models/QualificationMasterDataModel';
+import { QualificationMasterDataModel, QualificationMasterSearchModel } from '../../Models/QualificationMasterDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -37,4 +37,11 @@ export class QualificationMasterService {
       ).toPromise();
   }
 
+  public async Save_QualificationMasterData(request: QualificationMasterDataModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/Save_QualificationMasterData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
