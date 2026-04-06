@@ -314,7 +314,8 @@ export class ListItiTradeComponent {
   onSearchChange() {
     debugger
 
-    if (this.Table_SearchText == '') {
+    if (this.Table_SearchText == '')
+    {
       this.pageInTableSize = "50"; // reset pagination
       this.loadInTable();
     }
