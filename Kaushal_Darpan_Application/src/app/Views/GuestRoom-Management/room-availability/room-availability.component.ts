@@ -33,7 +33,7 @@ export class RoomAvailabilityComponent {
 
   constructor(
     private loaderService: LoaderService,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute, private route: ActivatedRoute,
     private guestRoomManagementService: GuestRoomManagmentService,
   ) { }
 
@@ -41,8 +41,21 @@ export class RoomAvailabilityComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
+
+    //this.route.queryParams.subscribe(params => {
+    //  this.ManagementTypeId = +params['ManagementTypeId'];
+
+    //  if (this.ManagementTypeId) {
+    //    this.searchRequest.ManagementTypeId = this.ManagementTypeId;
+    //  }
+    //});
+
+
     await this.GetGuestHouseNameList();
     await this.GetGuestHouseRoomAvailabilityData();
+
+
+
   }
 
   async GetGuestHouseNameList() {

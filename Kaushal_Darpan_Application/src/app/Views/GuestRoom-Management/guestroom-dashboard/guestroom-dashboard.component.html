@@ -1,6 +1,14 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
-  <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+  <h4 class="text-slate-900 text-lg font-medium mb-2">Guest House Admin Dashboard</h4>
 </div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Guest House Admin </b>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
+    <i class="ti ti-chevron-down"></i>
+  </button>
+</div>
+
 <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
   <div class="card" *ngFor="let row of HostelDashboardList">
     <div class="p-5">
@@ -11,6 +19,12 @@
     </div>
   </div>
 </div>
+
+
+
+
+
+
 
 
 

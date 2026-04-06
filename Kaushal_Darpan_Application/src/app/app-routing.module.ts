@@ -834,6 +834,10 @@ const routes: Routes = [
 
       { path: 'ApplyForHostel', loadChildren: () => import('./Views/Student/apply-for-hostel/apply-for-hostel.module').then(m => m.ApplyForHostelModule) },
       { path: 'CreateHostel', loadChildren: () => import('./Views/Hostel-Management/create-hostel/create-hostel.module').then(m => m.CreateHostelModule), title: 'Create Hostel' },
+      { path: 'bter-hostel-fee', loadChildren: () => import('./Views/Hostel-Management/bter-hostel-fee/bter-hostel-fee.module').then(m => m.BterHostelFeeModule), title: 'Hostel Fee' },
+      { path: 'hostel-fee-management', loadChildren: () => import('./Views/Hostel-Management/List-hostel-fee-management/List-hostel-fee-management.module').then(m => m.ListhostelfeemanagementModule), title: 'Hostel Fee' },
+      { path: 'Add-hostel-fee-management', loadChildren: () => import('./Views/Hostel-Management/Add-hostel-fee-management/Add-hostel-fee-management.module').then(m => m.AddhostelfeemanagementModule), title: '' },
+      { path: 'Add-hostel-fee-management/:id', loadChildren: () => import('./Views/Hostel-Management/Add-hostel-fee-management/Add-hostel-fee-management.module').then(m => m.AddhostelfeemanagementModule), title: '' },
 
       { path: 'Hostel-Institute-Mapping-List', loadChildren: () => import('./Views/Hostel-Management/dte-hostel-institute-mapping-list/dte-hostel-institute-mapping-list.module').then(m => m.DTEHostelInstituteMappingListModule), title: 'Create Hostel' },
 

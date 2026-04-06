@@ -173,8 +173,9 @@
           <select formControlName="RoomStatus" class="form-input" type="text" id="RoomStatus" placeholder="Enter Room Type"
                   [(ngModel)]="request.RoomStatus">
             <option value="0">--- Select ---</option>
-            <option value="1">Operational</option>
+            <option value="1">Available</option>
             <option value="2">Under Maintainance</option>
+            <option value="3">Reserved</option>
           </select>
           <div *ngIf="isSubmitted && groupForm.controls.RoomStatus.errors" class="text-danger">
             <p *ngIf="!_groupForm.RoomStatus.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
