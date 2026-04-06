@@ -204,9 +204,9 @@ export class bterinventoryIssueHistoryComponent {
       this.toastr.warning("No data available to export.");
       return;
     }
-    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'ItemCode', 'IsOption','Name',];
+    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'IsOption','Name',];
 
-    const columnOrder = ['IssuedTo', 'ItemCategoryName', 'ItemType', 'EquipmentName',
+    const columnOrder = ['IssuedTo', 'ItemCategoryName', 'ItemCode', 'ItemType', 'EquipmentName',
       'EquipmentsCode', 'IndentNo', 'Quantity', 'UsedQuantity', 'RemainingQuantity', 'IssueDate', 'ReturnDate'
     ];
 

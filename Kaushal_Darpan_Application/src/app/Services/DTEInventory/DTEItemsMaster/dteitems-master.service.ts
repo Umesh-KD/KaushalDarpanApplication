@@ -332,4 +332,11 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+   public async ApproveSR5Items(searchRequest: any[]) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/ApproveSR5Items`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

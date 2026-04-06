@@ -55,6 +55,8 @@ export class RoomAllotmentComponent {
   public BrachDDLList: any = [];
   public RelationQueryDDL: any = [];
   public StudentRoomPreferenceList: any = [];
+  public HostelFeeList: any = [];
+  public CautionFeeList: any = [];
   public CancelRequest: any;
   public Allotmentrequest = new RoomAllotmentDataModel();
   public request: any;
@@ -312,7 +314,7 @@ export class RoomAllotmentComponent {
     this.RequestFormGroup.reset();
     this.GetAllData();
   }
-
+    
 
   async onSubmit(model: any, userSubmitData: any) {
     await this.GetRoomPreference(userSubmitData.ReqId);
@@ -813,6 +815,34 @@ export class RoomAllotmentComponent {
       await this.studentRequestService.GetRoomPreference(obj).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StudentRoomPreferenceList = data.Data
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async GetCautionFee(ReqId: number) {
+    try {
+      let obj = {
+        ReqId: ReqId
+      }
+      await this.studentRequestService.GetRoomPreference(obj).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.CautionFeeList = data.Data
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async GetHostelFee(ReqId: number) {
+    try {
+      let obj = {
+        ReqId: ReqId
+      }
+      await this.studentRequestService.GetRoomPreference(obj).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.HostelFeeList = data.Data
       })
     } catch (error) {
       console.error(error)

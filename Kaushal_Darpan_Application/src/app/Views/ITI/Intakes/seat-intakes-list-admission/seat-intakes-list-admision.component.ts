@@ -435,8 +435,14 @@ export class SeatIntakesListAdmissionComponent implements OnInit {
 
   changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
   {
+    var msg = "Are you sure you want to change status";
 
-    this.Swal2.Confirmation(`Are you sure you want to change status`, async (result: any) => {
+    if (action == 'ActiveInactiveCollege')
+    {
+      msg = 'Are you sure you want to change status of </br>' + `<b>${item.CollegeName}</b>`;
+    }
+
+    this.Swal2.Confirmation(`${msg}`, async (result: any) => {
       if (result.isConfirmed)
       {
         try {

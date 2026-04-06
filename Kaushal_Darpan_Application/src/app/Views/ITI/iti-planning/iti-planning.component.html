@@ -1677,7 +1677,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
 
     <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 hide-in-pdf " *ngIf="sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT">
       <div class="text-center mb-2">
-        <button *ngIf="sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal && request.Status==2 &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT && request.Status==2 " type="submit" (click)="SaveData_ApprovedCampus()" class="btn bg-info text-white mt-6 me-1">{{ButtonText}}</button>
+        <button *ngIf="(sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal && request.Status==2 &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT && request.Status==2) || (sSOLoginDataModel.RoleID == 16)" type="submit" (click)="SaveData_ApprovedCampus()" class="btn bg-info text-white mt-6 me-1">{{ButtonText}}</button>
       </div>
     </div>
 
