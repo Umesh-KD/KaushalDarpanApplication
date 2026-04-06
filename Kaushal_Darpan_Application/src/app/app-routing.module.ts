@@ -452,9 +452,6 @@ const routes: Routes = [
       { path: 'itiplacementshortlistedstudents', loadChildren: () => import('./Views/ITI/placement-shortlisted-students/placement-shortlisted-students/placement-shortlisted-students.module').then(m => m.PlacementShortlistedStudentsModule), title: 'Placement Shortlisted Student' },
       { path: 'itiplacementselectedstudents', loadChildren: () => import('./Views/ITI/placement-selected-students/placement-selected-students.module').then(m => m.PlacementSelectedStudentsModule), title: 'Placement Selected Student' },
 
-
-
-
       { path: 'Revaluation', loadChildren: () => import('./Views/revaluation/revaluation.module').then(m => m.RevaluationModule), title: 'Revaluation' },
       { path: 'revaluation-student', loadChildren: () => import('./Views/revaluation-student/revaluation-student.module').then(m => m.RevaluationStudentModule), title: 'Revaluation' },
       { path: 'DocumentSetting', loadChildren: () => import('./Views/result/document-setting/document-setting.module').then(m => m.DocumentSettingModule), title: 'Document Setting' },
@@ -1248,6 +1245,7 @@ const routes: Routes = [
       { path: 'iti-college-search', loadChildren: () => import('./Views/ITI/results/iti-college-search/iti-college-search.module').then(m => m.ItiCollegeSearchModule), title: 'iti-college-search' },
 
       { path: 'ACP-Dashboard', loadChildren: () => import('./Views/BTER/acp-dashboard/acp-dashboard.module').then(m => m.ACPDashboardModule) },
+      { path: 'qualification-master', loadChildren: () => import('./Views/qualification-master/qualification-master.module').then(m => m.QualificationMasterModule), title: 'Qualification Master' },
       
       // BTER Establishment
       { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },

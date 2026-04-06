@@ -147,6 +147,25 @@
             <p>This field is required!</p>
           </div>
         </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  for="TrainingDoc">
+            Upload Document:<span class="StarMarking">*</span>
+          </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="TrainingDoc" type="file" (change)="onFilechange($event)" formControlName="TrainingDoc">
+            <label for="TrainingDoc">
+              <span>Choose File</span>
+              {{request.TrainingDoc === '' ? 'No File Choosen' : request.Dis_TrainingDoc}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + request.TrainingDoc}}"
+                  *ngIf="request.TrainingDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+        </div>
       </div>
       <div>
         <div class="text-center">
@@ -187,14 +206,14 @@
             <th width="80px" align="left">Sr. No.</th>
             <th align="left">SSO ID</th>
             <th align="left">Name</th>
-            <th align="left">Mobile</th>
-            <th align="left">Email</th>
-            <th align="left">Department Name</th>
-            <th class="left">Staff Type</th>
-            <th align="left">Role</th>
-            <th align="left">Profile Status</th>
-            <th align="left">Remark</th>
-            <th align="left">Is Nodal</th>
+            <th align="left">Organizing lnstitute Name</th>
+            <th align="left">Course Type</th>
+            <th align="left">Course Name</th>
+            <th class="left">Duration Unit</th>
+            <th align="left">Duration</th>
+            <th align="left">Start Date - End Date</th>
+            <th align="left">Venue</th>
+            <th align="left">Mode Of Training</th>
             <th class="text-left">View Profile</th>
             <th align="center" width="200">Action</th>
           </tr>
@@ -203,25 +222,30 @@
           <tr *ngFor="let row of StaffTrainingDetailsDataList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td>{{idx+1}}</td>
             <td>{{row.SSOID}}</td>
-            <td>{{row.Name}}</td>
-            <td>{{row.MobileNo}}</td>
-            <td>{{row.EmailID}}</td>
-            <td>{{row.InstituteName}}</td>
-            <td>{{row.StaffTypeName}}</td>
-            <td>{{row.RoleName}}</td>
-            <td>{{row.ProfileStatus}}</td>
-            <td>{{row.Remark}}</td>
-            <td>{{row.IsNodal}}</td>
+            <td>{{row.StaffName}}</td>
+            <td>{{row.OrganizinglnstituteName}}</td>
+            <td>{{row.TrainingCourseType_str}}</td>
+            <td>{{row.TrainingCourseName}}</td>
+            <td>{{row.DurationUnit_str}}</td>
+            <td>{{row.Duration}}</td>
+            <td>{{row.StartDate}} - {{EndDate}}</td>
+            <td>{{row.Venue}}</td>
+            <td>{{row.ModeOfTraining_str}}</td>
             <td align="left">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <!-- <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a> -->
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc}}"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
               </div>
             </td>
             <td>
               <div class="flex align-center justify-center actionBtns">
-                <!-- <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID, row.StaffID, row.SSOID)"><i class="ti ti-trash"></i></a>
-                <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
-                <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a> -->
+                <!-- <a href="javascript:void(0);" id="edit" title="Edit Training" 
+                  (click)="StaffTrainingDetails_GetDataById(row.StaffTrainingDetailID)"><i class="ti ti-pencil"></i>
+                </a> -->
+                <a href="javascript:void(0);" title="Delete" 
+                  (click)="StaffTrainingDetails_DeleteById(row.StaffTrainingDetailID)"><i class="ti ti-trash"></i>
+                </a>
+                
               </div>
             </td>
           </tr>

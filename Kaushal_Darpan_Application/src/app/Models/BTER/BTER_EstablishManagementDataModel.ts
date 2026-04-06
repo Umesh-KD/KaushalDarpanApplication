@@ -663,6 +663,8 @@ export class StaffTrainingDetailDataModel {
   public Venue: string = '';
   public UserID: number = 0;
   public StaffID: number = 0;
+  public TrainingDoc: string = '';
+  public Dis_TrainingDoc: string = '';
 }
 
 export class StaffTrainingDetailSearchData {

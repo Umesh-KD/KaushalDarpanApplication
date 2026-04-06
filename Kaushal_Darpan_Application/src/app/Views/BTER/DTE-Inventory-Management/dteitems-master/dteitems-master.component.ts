@@ -357,7 +357,7 @@ export class DteItemsMasterComponent {
 
 
   async onSubmit(model: any,ItemId:number) {
-    debugger
+    debugger;
     try {
      
       this.ItemId = ItemId;

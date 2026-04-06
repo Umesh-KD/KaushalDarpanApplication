@@ -10,6 +10,8 @@ import { StaffTrainingDetailDataModel, StaffTrainingDetailSearchData } from '../
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { BTEREMStaffServiceDetailsService } from '../../../../Services/BTER/BTER_EM_StaffServiceDetails/bter-em-staff-service-details.service';
 import { DropdownValidators1 } from '../../../../Services/CustomValidators/custom-validators.service';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 @Component({
   selector: 'app-em-add-training-details',
@@ -29,6 +31,8 @@ export class EMAddTrainingDetailsComponent {
 
   isSubmitted: boolean = false;
   Table_SearchText: string = '';
+  public file!: File;
+  public Uploadfile: string = '';
 
   constructor(
     private toastr: ToastrService,
@@ -39,6 +43,7 @@ export class EMAddTrainingDetailsComponent {
     private routers: Router,
     private bterEstablishManagementService: BTEREstablishManagementService,
     private staffServiceDetailsService: BTEREMStaffServiceDetailsService,
+    private appsettingConfig: AppsettingService,
   ) { }
 
   async ngOnInit() {
@@ -53,6 +58,7 @@ export class EMAddTrainingDetailsComponent {
       EndDate: ['', [Validators.required]],
       ModeOfTraining: ['', [DropdownValidators1]],
       Venue: ['', [Validators.required]],
+      TrainingDoc: ['', [Validators.required]],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -99,8 +105,9 @@ export class EMAddTrainingDetailsComponent {
       await this.staffServiceDetailsService.Save_StaffTrainingDetails(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.ErrorMessage);
+          this.toastr.success(data.Message);
           this.ResetControl();
+          await this.StaffTrainingDetails_GetData();
         } else {
           this.toastr.error(data.ErrorMessage);
         }
@@ -112,6 +119,7 @@ export class EMAddTrainingDetailsComponent {
 
   async ResetControl() {
     this.request = new StaffTrainingDetailDataModel();
+    this.isSubmitted = false;
   }
 
   async StaffTrainingDetails_GetData() {
@@ -146,6 +154,76 @@ export class EMAddTrainingDetailsComponent {
       })
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async StaffTrainingDetails_DeleteById(ID: number) {
+    try {
+      this.searchRequest.StaffID=this.sSOLoginDataModel.StaffID
+      this.searchRequest.UserID=this.sSOLoginDataModel.UserID
+      this.searchRequest.StaffTrainingDetailID = ID
+      this.searchRequest.Action = "DeleteByID";
+
+      await this.staffServiceDetailsService.StaffTrainingDetails_DeleteById(this.searchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.toastr.success("Updated Successfully")
+          await this.StaffTrainingDetails_GetData();
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async onFilechange(event: any) {
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        // Type validation
+        if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+          // Size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less than 2MB File');
+            return;
+          }
+        }
+        else {
+          this.toastr.error('Select valid file type jpg/jpeg/png/pdf');
+          this.Uploadfile = '';
+          this.request.TrainingDoc = '';
+          event.target.value = null;
+          return;
+        }
+
+        //upload model
+        let uploadModel = new UploadFileModel();
+        uploadModel.FileExtention = this.file.type ?? "";
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = "BTER_Establishment/StaffTrainingDocument";
+
+        //Upload to server folder
+        await this.commonFunctionService.UploadDocument(this.file, uploadModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.request.TrainingDoc = data['Data'][0]["FileName"];
+              this.request.Dis_TrainingDoc = data['Data'][0]["Dis_FileName"];
+            }
+
+            if (data.State === EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage);
+
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            }
+          });
+      }
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
     }
   }
 }
