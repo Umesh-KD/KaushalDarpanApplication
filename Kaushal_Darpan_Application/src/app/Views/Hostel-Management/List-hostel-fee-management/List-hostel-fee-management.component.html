@@ -43,6 +43,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr. No.</th>
+            <th class="text-center">Institute Name</th>
             <th class="text-center">Caution Fee</th>
             <th class="text-center">Hostel Fee</th>
             <th class="text-center">Action</th>
@@ -51,6 +52,7 @@
         <tbody>
           <tr *ngFor="let row of HostelFeeList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
+            <td align="left">{{row.InstituteName}}</td>
             <td align="left">{{row.Cautionfee}}</td>
             <td align="left">{{row.HostelFee}}</td>
             <td>
