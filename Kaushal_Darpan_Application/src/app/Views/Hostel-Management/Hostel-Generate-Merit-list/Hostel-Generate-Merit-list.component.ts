@@ -199,22 +199,70 @@ export class HostelGenerateMeritlistComponent {
     }
   }
 
+  //exportToExcel(): void {
+  //  const unwantedColumns = ['InstituteId', 'InstituteId', 'ApplicationId', 'StudentId', 'SemesterId', 'AllotmentStatus', 'BrachId', 'AllotmentStatus1', 'EndTermID'];
+  //  const filteredData = this.StudentReqListList.map((item: any) => {
+  //    const filteredItem: any = {};
+  //    Object.keys(item).forEach(key => {
+  //      if (!unwantedColumns.includes(key)) {
+  //        filteredItem[key] = item[key];
+  //      }
+  //    });
+  //    return filteredItem;
+  //  });
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'StudentApplyHostelReportData.xlsx');
+  //}
+
   exportToExcel(): void {
-    const unwantedColumns = ['InstituteId', 'InstituteId', 'ApplicationId', 'StudentId', 'SemesterId', 'AllotmentStatus', 'BrachId', 'AllotmentStatus1', 'EndTermID'];
-    const filteredData = this.StudentReqListList.map((item: any) => {
-      const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
+
+    const columnMapping: any = {
+      SrNo: 'Sr. No.',
+      InstituteName: 'Institute Name',
+      StudentName: 'Student Name',
+      ApplicationId: 'Application No',
+      StreamName: 'Branch',
+      SemesterName: 'Semester',
+      EndTermName: 'Session',
+      ClassPercentage: 'Percentage (%)'
+    };
+
+    const wantedColumns = Object.keys(columnMapping);
+
+    const exportData = this.StudentReqListList.map((row: any, index: number) => {
+      const formattedRow: any = {};
+
+      wantedColumns.forEach(col => {
+        const header = columnMapping[col];
+
+        if (col === 'SrNo') {
+          formattedRow[header] = index + 1;
+        } else {
+          formattedRow[header] = row[col];
         }
       });
-      return filteredItem;
+
+      return formattedRow;
     });
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = [
+      { wch: 8 }, { wch: 40 }, { wch: 25 }, { wch: 18 }, { wch: 20 }, { wch: 15 }, { wch: 15 }, { wch: 18 }
+    ];
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'StudentApplyHostelReportData.xlsx');
+
+    const todayDate = new Date().toISOString().split('T')[0];
+    const fileName = `Student_Apply_Hostel_Report_Data_${todayDate}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
   }
+
+
 
 
   async GetBranchMaster() {
