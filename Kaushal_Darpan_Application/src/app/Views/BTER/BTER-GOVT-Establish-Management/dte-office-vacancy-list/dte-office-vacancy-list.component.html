@@ -1,0 +1,152 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">DTE Office Vacancy List</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">DTE Office Vacancy List</a>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a [routerLink]="['/add-dte-office-vacancy']" class="btn bg-info btn-sm text-white"> Add New Post</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="SearchData.Name">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="SearchData.OfficeID" >
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type<span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="SearchData.StaffTypeID" >
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="SearchData.DesignationID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+          <select class="form-select" [(ngModel)]="SearchData.InstituteID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+          <select class="form-select" id="BranchID" [(ngModel)]="SearchData.BranchID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+              {{item.StreamName}}
+            </option>
+          </select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="OfficeVacancyDataList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For List</b>
+    </div>
+    <div class="overflow-x-auto mt-4">
+      <table class="table table-bordered" *ngIf="OfficeVacancyList.length > 0">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Office Name</th>
+            <th>College</th>
+            <th>Staff Type</th>
+            <!-- <th>Institute Name</th> -->
+            <th>Designation Name</th> 
+            <th>Branch</th> 
+            <th>Budget Name</th>
+            <th>Total Seat</th>
+            <th>Posted Seat</th>
+            <th>Remaining Seat</th>
+            <th>Order Details</th>
+            <th>Comments</th>
+            <th>Active/Inactive</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of OfficeVacancyList;  let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td>{{ leave.OfficeName }}</td>
+            <td>{{ leave.InstituteName }}</td>
+            <td>{{ leave.StaffTypeName }}</td>
+            <!-- <td>{{ leave.InstituteName }}</td> -->
+            <td>{{ leave.DesignationName }}</td>
+            <td>{{ leave.BranchName }}</td>
+            <td>{{ leave.BudgetTypeName }}</td>
+            <td>{{ leave.TotalSeatID }}</td>
+            <td>{{ leave.PostedSeat }}</td>
+            <td>{{ leave.RemainingSeatID }}</td>
+            <td>
+              <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <span style="white-space: nowrap;"><b>Order No:</b> {{leave.OrderNumber}}</span>
+                <span style="white-space: nowrap;"><b>Order Date:</b> {{leave.OrderDate}}</span>
+                <span style="white-space: nowrap;">
+                  <b>Order Doc:</b> 
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/VacancyOrderDocument/' + leave.orderDoc"
+                    class="text-info" target="_blank"> Order</a>
+                </span>
+              </div>
+            </td>
+            <td>{{ leave.Comments }}</td>
+            <td>
+              <label class="switch">
+                <input type="checkbox"
+                       [checked]="leave.ActiveStatus"
+                       (change)="OfficeVacancyActiveDeActive(leave.ID, $event.target.checked)" />
+                <span class="slider round"></span>
+              </label>
+            </td>
+            <td class="gap-2">
+              <button class="btn bg-info text-white" 
+                *ngIf="!IsView" 
+                [routerLink]="['/add-dte-office-vacancy']"
+                [queryParams]="{ id: leave.ID }">Update
+              </button>
+              <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm" (click)="removeVacancy(leave.ID)">
+                Remove
+              </button>
+            </td>
+            <!-- <td>
+              <div class="flex actionBtns">
+                <a id="edit" title="Edit Vacancy" 
+                  [routerLink]="['/add-dte-office-vacancy']"
+                  [queryParams]="{ id: leave.ID }"><i class="ti ti-pencil"></i>
+                </a>
+                <a href="javascript:void(0);" title="Delete Vacancy" 
+                  (click)="removeLeave(leave.Index, leave.ID)"><i class="ti ti-trash"></i>
+                </a>
+                
+              </div>
+            </td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

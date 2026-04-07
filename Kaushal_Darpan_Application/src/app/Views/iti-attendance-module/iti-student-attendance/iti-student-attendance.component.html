@@ -32,7 +32,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester<span class="StarMarking">*</span></label>
-          <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL(TableForm.value.StreamID, TableForm.value.SemesterID)">
+          <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL(TableForm.getRawValue().StreamID, TableForm.value.SemesterID)">
             <ng-option [value]="0">--Select--</ng-option>
             <ng-option [value]="1">1st Year</ng-option>
             <ng-option [value]="2">2nd Year</ng-option>

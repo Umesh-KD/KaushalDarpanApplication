@@ -7,4 +7,5 @@ export class RequestBaseModel {
   public InstituteId?: number = 0;
   public SessionTypeID?: number = 0;
   public SelectedInsituteID?: number = 0;
+  public SchemeID?: number = 0;
 }

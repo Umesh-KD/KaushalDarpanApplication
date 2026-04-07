@@ -39,8 +39,8 @@ export class RevaluationStudentComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   studentDetailsModel = new StudentDetailsModel();
   public dateConfiguration = new DateConfigurationModel()
-  isStep2Disabled: boolean=false;
-  isStep3Disabled: boolean= false;
+  isStep2Disabled: boolean = false;
+  isStep3Disabled: boolean = false;
   public PDFURL: string = "";
   public MaxPaperCount: number = 0;
 
@@ -122,7 +122,7 @@ export class RevaluationStudentComponent {
       await this.revaluationService.GetRevalation(row).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.state !== EnumStatus.Error) {
-        
+
           this.GetStudentDetails = data['Data']
           this.Request1.Year = this.GetStudentDetails[0].SemesterName
           this.Request1.RollNo = this.GetStudentDetails[0].RollNo
@@ -140,9 +140,9 @@ export class RevaluationStudentComponent {
     }
   }
 
-  onCheckboxChange(row: any) {    
+  onCheckboxChange(row: any) {
     var selectedCount = this.GetStudentDetails.filter((f: any) => f.IsSelected).length;
-    if(this.MaxPaperCount > 3){
+    if (this.MaxPaperCount > 3) {
       this.MaxPaperCount = 3
     }
     if (selectedCount > this.MaxPaperCount) {
@@ -155,10 +155,13 @@ export class RevaluationStudentComponent {
 
   async MultiPayment() {
 
-    this.totalAmount = 0;
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
+    this.totalAmount = 0;
+    let selectedSubjects = '';
+
     if (this.GetStudentDetails.some(f => f.IsSelected == true)) {
+      const selectedItems = this.GetStudentDetails.filter(f => f.IsSelected == true)
       this.GetStudentDetails.filter(f => f.IsSelected == true).forEach(item => {
         this.totalAmount += Number(item.FeeAmount);
         this.emitraRequest.StudentFeesTransactionItems.push(
@@ -169,10 +172,14 @@ export class RevaluationStudentComponent {
             tranSemesterID: item.SemesterID
           } as StudentFeesTransactionItems);
 
+        // subjects
+        selectedSubjects = selectedItems
+          .map(item => item?.SubjectCode)
+          .join(', ');
       });
 
       if (this.totalAmount > 0) {
-        var message = "You are about to pay " + this.totalAmount + " for your fee.Would you like to proceed ? ";
+        var message = `You are about to pay '${this.totalAmount}' for (${selectedSubjects}) your fee. <br/>Would you like to proceed?`;
         // confirm
         this.sweetAlert2.Confirmation(message, async (result: any) => {
           //confirmed btn click
@@ -194,7 +201,7 @@ export class RevaluationStudentComponent {
             this.emitraRequest.FeeFor = "RevalFee";
             this.emitraRequest.USEREMAIL = this.studentDetailsModel.Email ?? "";
             //common
-           
+
             this.emitraRequest.IsKiosk = false;
             //this.GetDateDataList();
             this.loaderService.requestStarted();
@@ -258,7 +265,7 @@ export class RevaluationStudentComponent {
     form.submit();
     document.body.removeChild(form);
   }
-  
+
   proceedToPayment(): void {
     this.switchSection('payment');
   }
@@ -319,7 +326,7 @@ export class RevaluationStudentComponent {
 
 
   async CheckPaymentSataus() {
-    try {   
+    try {
       this.studentDetailsModel = this.GetStudentDetails[0];
       this.transactionStatusDataModel.TransactionID = this.studentDetailsModel.TransactionID
       this.transactionStatusDataModel.DepartmentID = this.studentDetailsModel.DepartmentID;
