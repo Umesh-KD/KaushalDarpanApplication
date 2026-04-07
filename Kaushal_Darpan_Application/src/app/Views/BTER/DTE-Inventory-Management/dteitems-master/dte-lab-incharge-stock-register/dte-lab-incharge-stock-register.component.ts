@@ -15,7 +15,7 @@ import { ItiTradeService } from '../../../../../Services/iti-trade/iti-trade.ser
 import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
 import {  ItemsDataModels, ItemsSearchModel } from '../../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
-import { DTEItemsSearchModel, inventoryIssueHistorySearchModel, itemStatusRevertModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSearchModel, DTEItemsSearchModel4Lab, inventoryIssueHistorySearchModel, itemStatusRevertModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import { DteItemsMasterService } from '../../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { DTEEquipmentsMasterService } from '../../../../../Services/DTEInventory/DTEEquipmentsMaster/dteequipments-master.service';
 import * as XLSX from 'xlsx';
@@ -31,7 +31,7 @@ import { AppsettingService } from '../../../../../Common/appsetting.service';
 })
 export class DTELabInchargeStockRegisterComponent {
   //public Searchrequest = new DTEItemsSearchModel()
-  public Searchrequest = new DTEItemsSearchModel();
+  public Searchrequest = new DTEItemsSearchModel4Lab();
   public Revertrequest = new itemStatusRevertModel();
   public searchTradeRequest = new ITITradeSearchModel();
   public issueSearchReq = new inventoryIssueHistorySearchModel() 
@@ -89,7 +89,7 @@ export class DTELabInchargeStockRegisterComponent {
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID
       
-      await this.dteItemsMasterService.GetAllData(this.Searchrequest)
+      await this.dteItemsMasterService.GetAllData4LabIncharge(this.Searchrequest)
         .then((data: any) => {
 
           data = JSON.parse(JSON.stringify(data));
