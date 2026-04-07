@@ -109,10 +109,21 @@ export class AddhostelfeemanagementComponent implements OnInit {
       return;
     }
 
+    const formValue = this.requestFormGroup.value;
+
+    if (formValue.Cautionfee <= 0 || formValue.HostelFee <= 0) {
+      this.toastr.error('Value must be greater than 0');
+      return;
+    }
+
     this.isLoading = true;
     this.loaderService.requestStarted();
 
-    
+    this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.request.CourseTypeID = 0
+    this.request.HostelId = 0;
    
     const isUpdate = this.request.HostelFeeId && this.request.HostelFeeId > 0;
 

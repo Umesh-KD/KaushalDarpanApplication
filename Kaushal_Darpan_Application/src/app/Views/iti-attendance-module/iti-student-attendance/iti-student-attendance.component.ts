@@ -72,7 +72,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
+  public isreaasign: boolean=false
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
@@ -88,8 +88,12 @@ export class ITIStudentAttendanceComponent implements OnInit {
     this.ShiftID = parseInt(this.route.snapshot.paramMap.get('ShiftID') ?? "0");
     this.UnitID = parseInt(this.route.snapshot.paramMap.get('UnitID') ?? "0");
     this.AttendanceStartDate = this.route.snapshot.paramMap.get('AttendanceStartDate') ?? "";
-    this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "0";
-
+    this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "";
+    if (this.AttendanceStartDate != '' && this.AttendanceEndDate != '') {
+      this.isreaasign = true
+    } else {
+      this.isreaasign = false
+    }
     this.getMasterData();
     const today = new Date();
     const yesterday = new Date();

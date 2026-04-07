@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionDropdownModel, ITI_InspectionSearchModel, InspectionMemberDetailsDataModel, SaveCheckSSODataModel, ConsentModel, ConsentSearchModel, UpdateConsentModel } from '../../../Models/ITI/ITI_InspectionDataModel';
+import { InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionDropdownModel, ITI_InspectionSearchModel, InspectionMemberDetailsDataModel, SaveCheckSSODataModel, ConsentModel, ConsentSearchModel, UpdateConsentModel, ITIInspectionDashboardModel } from '../../../Models/ITI/ITI_InspectionDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +42,14 @@ export class ITIInspectionService {
   public async GetAllData(request: ITI_InspectionSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetAllData`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllData_members(request: ITI_InspectionSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllData_members`, body, this.headersOptions1)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -249,6 +257,14 @@ export class ITIInspectionService {
   public async GetAllConsentbyPrincipal(request: ConsentModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetAllConsentbyPrincipal`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetITIInspectionAllData(request: ITIInspectionDashboardModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetITIInspectionAllData", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

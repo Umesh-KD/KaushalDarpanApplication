@@ -7,6 +7,7 @@ export class ITI_InspectionDataModel extends RequestBaseModel{
     public TeamInitials: string = ''
     public InspectionMemberDetails: InspectionMemberDetailsDataModel[] = []
     public InspectionDeploymentDetails: InspectionDeploymentDataModel[] = []
+    public InspectionInstituteDetails?:[]=[]
     public TeamTypeID: number = 0
     public DeploymentDateFrom: string = ''
     public DeploymentDateTo: string = ''
@@ -201,6 +202,9 @@ export class UpdateConsentModel {
   public Remark: string = ''
   public UserID: number = 0
   public Status?: number=0;
+  public Amount?:number=0;
+  public ServiceID?: number = 0;
+  public ID?: number = 0;
 }
 
 export class ConsentSearchModel {
@@ -229,4 +233,14 @@ export class ConsentSearchModel {
 
   public DeploymentDateFrom: string = ''
   public DeploymentDateTo: string = ''
+}
+
+
+export class ITIInspectionDashboardModel {
+  public DepartmentID:number=0
+  public CollegeID: number = 0
+  public EndTermID: number = 0
+  public UserId: number = 0
+  public RoleId: number = 0
+
 }

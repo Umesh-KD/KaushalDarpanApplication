@@ -372,17 +372,27 @@ export class InspectionTeamComponent {
     }
   }
 
+  // formatDateToInput(dateStr: string): string {
+  //   debugger
+  //   if (!dateStr) return '';
+
+  //   const [datePart] = dateStr.split(' '); // get "20-06-2025"
+  //   const [day, month, year] = datePart.split('-');
+
+  //   return `${year}-${month}-${day}`; // returns "2025-06-20"
+  // }
+
   formatDateToInput(dateStr: string): string {
     if (!dateStr) return '';
-
-    const [datePart] = dateStr.split(' '); // get "20-06-2025"
-    const [day, month, year] = datePart.split('-');
-
-    return `${year}-${month}-${day}`; // returns "2025-06-20"
+  
+    const datePart = dateStr.split(' ')[0]; // "03/31/2026"
+    const [month, day, year] = datePart.split('/');
+  
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 
   async GetById_Team(id: number) {
-
+debugger;
     try {
       this.loaderService.requestStarted();
       await this.itiInspectionService.GetById_Team(id).then((data: any) => {

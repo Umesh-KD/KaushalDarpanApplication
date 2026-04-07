@@ -235,3 +235,19 @@ export class HandoverInventoryItemsDataModel {
   public HandoverDocument: string = '';
   public Dis_HandoverDocument: string = '';
 }
+export class DTEItemsSearchModel4Lab {
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public RoleID: number = 0;
+  public EquipmentsId: number = 0;
+  public CollegeId: number = 0;
+  public OfficeID: number = 0;
+  public StatusID: number = 3;
+  public ItemType: number = 2;
+  public ItemFor?: number = 0;
+  public StaffID?: number = 0;
+  public TradeId?: number = 0;
+  public UserId?: number = 0;
+
+}

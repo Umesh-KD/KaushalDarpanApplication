@@ -105,8 +105,9 @@
                      bindValue="UnitId"
                      placeholder="--Select Unit--"
                      [searchable]="true"
-                     [clearable]="false" readonly>
+                     [clearable]="false" >
           </ng-select>
+          <!-- readonly -->
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.UnitId.errors" class="text-danger">
             <p *ngIf="!_AddItemsRequestFormGroup.UnitId.errors.DropdownValidators">
               <i aria-hidden="true"></i>This field is required.

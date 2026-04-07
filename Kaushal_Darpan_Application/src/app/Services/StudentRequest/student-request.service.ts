@@ -280,4 +280,12 @@ export class StudentRequestService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetRoomFee() {
+  
+    return await this.http.post(`${this.APIUrl}/GetRoomFee`,  this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
