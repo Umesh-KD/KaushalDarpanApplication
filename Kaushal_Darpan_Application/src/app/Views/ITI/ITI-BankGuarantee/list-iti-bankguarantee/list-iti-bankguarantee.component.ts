@@ -119,7 +119,14 @@ export class listitibankguaranteeComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.BankGuaranteeID = 0;
-   //   this.searchRequest.CollageId = this.id;
+      //   this.searchRequest.CollageId = this.id;
+
+
+
+      if (!this.searchRequest.CollageId) {
+        this.searchRequest.CollageId = 0; // fallback to All
+      }
+
 
 
       await this.campusPostService.ITIPlanningBankGuaranteeList(this.searchRequest)

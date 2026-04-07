@@ -26,7 +26,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Status
           </label>
-          <select class="form-select" [(ngModel)]="searchRequest.status">
+          <select class="form-select" [(ngModel)]="searchRequest.status" (change)="getbankguaranteeList()">
             <option value="0">All</option>
             <option value="1">Active</option>
             <option value="2">Return</option>
@@ -49,7 +49,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
-          <ng-select [(ngModel)]="searchRequest.CollageId" [clearable]="false">
+          <ng-select [(ngModel)]="searchRequest.CollageId" [clearable]="true" (change)="getbankguaranteeList()">
             <ng-option [value]="0">--All--</ng-option>
             <ng-option *ngFor="let item of CollegeMasterList; trackBy: trackById"
                        [value]="item.ID">
@@ -68,7 +68,7 @@
             Due Within Days:
           </label>
           <select class="form-select"
-                  [(ngModel)]="searchRequest.dayWise">
+                  [(ngModel)]="searchRequest.dayWise" (change)="getbankguaranteeList()">
             <option value="0">-- Select Day Wise --</option>
             <option value="45">45 Day's</option>
             <option value="30">30 Day's</option>
