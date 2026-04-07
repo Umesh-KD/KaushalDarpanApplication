@@ -371,7 +371,7 @@ export class ItiPlanningListComponent {
   exportToExcel(): void {
     const wantedColumns = ['Sno', 'CollegeName', 'Email', 'InstituteCategoryName', 'InstituteManagement', 'PlotHouseBuildingNo',
       'StreetRoadLane', 'AreaLocalitySector', 'LandMark', 'DivisionName', 'SubDivision', 'DistrictName', 'TehsilName', 'Urban/Rural',
-      'CityName', 'PanchayatSamitiName', 'GramPanchayatSamitiName','VillageName'
+      'CityName', 'PanchayatSamitiName', 'GramPanchayatSamitiName', 'VillageName','StatusName'
     ];
 
     const exportData = this.CampusValidationListData.map((row: any, index: number) => {
