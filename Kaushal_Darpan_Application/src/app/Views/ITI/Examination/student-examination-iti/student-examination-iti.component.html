@@ -254,10 +254,10 @@
 
                 <a *ngIf="row.AdmitCard && row.IsShowAdmitCard==1" (click)="DownloadAdmitCard(row)" title="Download Admit Cards"><i class="ti ti-download"></i></a>
 
-                <!--<a *ngIf="sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal || row.status==4  " href="javascript:void(0);"
+                <a *ngIf="sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal || row.status==4  " href="javascript:void(0);"
                    title="Dropout student" (click)="EditEnrollmentNo(MyModel_EditEnrollmentNo, row.StudentID,row.StudentExamID)">
                   <i class="ti ti-clipboard-text"></i>
-                </a>-->
+                </a>
               </div>
 
 
@@ -1030,7 +1030,9 @@
                 </label>
                 <div class="flex">
                   <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestUpdateEnrollmentNo.FileName}}"
-                     *ngIf="this.requestUpdateEnrollmentNo.FileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                     *ngIf="this.requestUpdateEnrollmentNo.FileName !=''
+
+                  && this.requestUpdateEnrollmentNo.FileName !=null" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                   <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
            (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
           <i class="ti ti-trash"></i>

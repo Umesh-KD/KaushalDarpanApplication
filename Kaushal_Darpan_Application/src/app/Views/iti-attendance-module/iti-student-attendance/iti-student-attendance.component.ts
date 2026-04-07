@@ -119,12 +119,13 @@ export class ITIStudentAttendanceComponent implements OnInit {
     });
 
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
-
+ 
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
 
     });
+    this.TableForm.controls['StreamID'].disable();
     if (this.AttendanceStartDate != '' && this.AttendanceStartDate != null && this.AttendanceStartDate != undefined
       && this.AttendanceEndDate != '' && this.AttendanceEndDate != null && this.AttendanceEndDate != undefined
     ) {
@@ -136,6 +137,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
       });
       this.TableForm.controls['AttendanceEndDate'].disable();
       this.TableForm.controls['AttendanceStartDate'].disable();
+  
     }
     
 
@@ -237,11 +239,14 @@ export class ITIStudentAttendanceComponent implements OnInit {
         String(dateStart.getDate()).padStart(2, '0');
 
       const dateEnd = new Date(rawEnd);
-      const formattedDateEnd =
+      let formattedDateEnd =
         dateEnd.getFullYear() + '-' +
         String(dateEnd.getMonth() + 1).padStart(2, '0') + '-' +
         String(dateEnd.getDate()).padStart(2, '0');
-    
+
+      if (this.isreaasign == false) {
+        formattedDateEnd = formattedDateStart
+      }
 
       let obj = {
         SemesterID: this.TableForm.value.SemesterID,
@@ -250,7 +255,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
         InstituteID: this.sSOLoginDataModel.InstituteID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.TableForm.value.StreamID,
+        StreamID: this.TableForm.getRawValue().StreamID,
         SubjectID: this.TableForm.value.SubjectID,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
@@ -367,7 +372,8 @@ isPresent(value: any): boolean {
 
   getData() {
     this.isSubmitted = true;
-    if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
+    debugger
+    if( this.TableForm.getRawValue().StreamID != null && this.TableForm.value.SubjectID) {
       this.GetAttendanceTimeTable();
     }
   }
@@ -471,7 +477,7 @@ isPresent(value: any): boolean {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
       SemesterID: this.TableForm.value.SemesterID,
-      StreamID: this.TableForm.value.StreamID,
+      StreamID: this.TableForm.getRawValue().StreamID,
       SubjectID: this.TableForm.value.SubjectID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
@@ -542,7 +548,7 @@ isPresent(value: any): boolean {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
       SemesterID: this.TableForm.value.SemesterID,
-      StreamID: this.TableForm.value.StreamID,
+      StreamID: this.TableForm.getRawValue().StreamID,
       SubjectID: this.TableForm.value.SubjectID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
