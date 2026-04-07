@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel, BTERExtraOrdinaryLeavesForStaffModel, OfficeVacancyModel, StaffDetailsServicePreviewDataModel, StaffTrainingDetailDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel, BTERExtraOrdinaryLeavesForStaffModel, OfficeVacancyModel, StaffDetailsServicePreviewDataModel, StaffTrainingDetailDataModel, OfficeVacancySearchModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { HODDashboardSearchModel, RequestUpdateStatus } from '../../../Models/ITIGovtEMStaffMasterDataModel';
 
 
@@ -284,7 +284,7 @@ export class BTEREstablishManagementService {
       ).toPromise();
   }
 
-  public async OfficeVacancyList(request: OfficeVacancyModel) {
+  public async OfficeVacancyList(request: OfficeVacancySearchModel) {
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/OfficeVacancyList`, body, this.headersOptions)
