@@ -1,0 +1,52 @@
+<!--<div class="flex items-center justify-between flex-wrap mb-2">
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Update College Details</h4>
+</div>-->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add hostel fee</h4>
+  </div>
+  <a routerLink="/hostel-fee-management" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+<!--Page Title End-->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Add hostel fee</b>
+    </div>
+
+    <form [formGroup]="requestFormGroup" >
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Caution Fee: <span class="StarMarking">*</span>
+          </label>
+          <input type="number" maxlength="5" placeholder="Caution Fee" class="form-input" id="Cautionfee" name="Cautionfee"
+                 formControlName="Cautionfee" [(ngModel)]="request.Cautionfee">
+          <div *ngIf="isSubmitted && _requestFormGroup.Cautionfee.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Hostel Fee: <span class="StarMarking">*</span>
+          </label>
+          <input type="number" maxlength="5" placeholder="Hostel Fee" class="form-input" id="HostelFee" name="HostelFee"
+                 formControlName="HostelFee" [(ngModel)]="request.HostelFee">
+          <div *ngIf="isSubmitted && _requestFormGroup.HostelFee.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" (click)="saveData()" class="btn bg-info text-white mt-6 me-1">Save</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Reset</button>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+</div>

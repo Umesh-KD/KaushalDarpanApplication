@@ -96,6 +96,7 @@
             <th class="text-left">Required Qty as per DGT norms</th>
             <th class="text-left">Available Qty</th>
             <th class="text-left">Deficiency/Shortfall</th>
+            <th class="text-left" *ngIf="this.sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT">Edit</th>
             <!-- <th class="text-left">Details</th> -->
             <th class="text-left" *ngIf="this.sSOLoginDataModel.RoleID == EnumRole.DTETrainingT3Purchase">Action</th>
           </tr>
@@ -111,6 +112,12 @@
             <td align="left">{{item.AvailableQty}}</td>
             <td align="left">{{ item.Dificiency < 0 ? (item.Dificiency * -1) : item.Dificiency }}</td>
             <!-- <td align="left">{{item.ItemDetail}}</td> -->
+            <td *ngIf="this.sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a [routerLink]="['/iti-add-item-master']" [queryParams]="{ id: item.RequiredItemId,key:1 }" title="Edit"><i class="ti ti-pencil"></i></a>
+                <!-- <a href="javascript:void(0)" (click)="btnDelete_OnClick(item.RequiredItemId)" title="Delete"><i class="ti ti-trash"></i> </a> -->
+              </div>
+            </td>
             <td *ngIf="this.sSOLoginDataModel.RoleID == EnumRole.DTETrainingT3Purchase">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a [routerLink]="['/add-min-required-item']" [queryParams]="{ id: item.RequiredItemId }" title="Edit"><i class="ti ti-pencil"></i></a>

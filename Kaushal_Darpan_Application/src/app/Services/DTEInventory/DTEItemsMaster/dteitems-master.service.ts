@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTEItemsSaveModel, DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTELabMasterModel, ApproveIssuedItemsDataModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel, DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTELabMasterModel, ApproveIssuedItemsDataModel, DTEItemsSearchModel4Lab } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -328,6 +328,20 @@ export class DteItemsMasterService {
   public async ApproveIssuedItems(searchRequest: any[]) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/ApproveIssuedItems`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+   public async ApproveSR5Items(searchRequest: any[]) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/ApproveSR5Items`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+    public async GetAllData4LabIncharge(searchRequest: DTEItemsSearchModel4Lab) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllData4LabIncharge`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

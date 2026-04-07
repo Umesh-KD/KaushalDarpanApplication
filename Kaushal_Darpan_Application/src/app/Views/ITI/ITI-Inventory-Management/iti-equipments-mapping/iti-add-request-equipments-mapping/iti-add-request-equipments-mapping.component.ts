@@ -107,7 +107,13 @@ export class ITIAddRequestEquipmentsMappingComponent {
       txtRemarks: ['', Validators.required],
       fileIndentPhoto: [null, Validators.required]
     });
-    this.RequestFormGroup.get('ddlInstituteID')?.disable();
+    if(this.sSOLoginDataModel.RoleID!=EnumRole.DTETrainingT3Purchase){
+        this.RequestFormGroup.get('ddlInstituteID')?.disable();
+    }
+    else{
+        this.RequestFormGroup.get('ddlInstituteID')?.enable();
+    }
+
     this.CategoriesRequestFormGroup = this.formBuilder.group({
       ItemCategoryName: ['', [Validators.required, Validators.pattern(GlobalConstants.NameNoNumbersPattern),]],
     });
@@ -159,6 +165,7 @@ export class ITIAddRequestEquipmentsMappingComponent {
   }
 
   async GetAllData() {
+    //debugger
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -175,6 +182,9 @@ export class ITIAddRequestEquipmentsMappingComponent {
           this.ErrorMessage = data['ErrorMessage'];
           this.MappingList = data['Data'];
           this.MappingList1 = data['Data'];
+          if(this.Searchrequest.InstituteID!=0){
+            this.MappingList=this.MappingList.filter((x:any)=>x.EquipmentsStatus=='Accepted')
+          }
           console.log(this.MappingList, "MappingList")
         }, error => console.error(error));
     }

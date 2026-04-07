@@ -136,31 +136,31 @@
 
 
             <td>
-              <!--<div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPlanningAdmin && examiner.Status !='Approved' || sSOLoginDataModel.RoleID == _enumrole.ITIBuildingAdmin &&
+              <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPlanningAdmin && examiner.Status !='Approved' || sSOLoginDataModel.RoleID == _enumrole.ITIBuildingAdmin &&
                     examiner.Status!='Pending Adding Trade' &&
                     examiner.Status!='Pending Adding Post' || sSOLoginDataModel.RoleID == 97 &&
                     examiner.Status!='Pending Adding Trade' &&
                     examiner.Status!='Pending Adding Post'
                    " class="flex align-center justify-center actionBtns w-auto"
                    style="width:auto !important">
-                <a [routerLink]="'/ItiCollegeReport'" [queryParams]="{ID:examiner.EId}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>-->
-                <!--<a href="javascript:void(0);" title="Remove"
-    (click)="btnDelete_OnClick(examiner.ScholarshipID)"><i class="ti ti-trash"></i></a>-->
+                <a [routerLink]="'/ItiCollegeReport'" [queryParams]="{ID:examiner.EId}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Remove"
+    (click)="btnDelete_OnClick(examiner.ScholarshipID)"><i class="ti ti-trash"></i></a>
 
-              <!--</div>-->
+              </div>
 
-              <div class="flex align-center justify-center actionBtns w-auto"
+              <!--<div class="flex align-center justify-center actionBtns w-auto"
                    style="width:auto !important">
-                <a *ngIf="sSOLoginDataModel.RoleID == 20 && examiner.Status !='Approved'
-          " [routerLink]="'/ItiCollegeReport'" [queryParams]="{ID:examiner.EId}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+                <a *ngIf="sSOLoginDataModel.RoleID == 20 && examiner.Status !='Approved' || sSOLoginDataModel.RoleID ==  97 ||  
+          " [routerLink]="'/ItiCollegeReport'" [queryParams]="{ID:examiner.EId}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>-->
                 <!--<a href="javascript:void(0);" title="Remove"
   (click)="btnDelete_OnClick(examiner.ScholarshipID)"><i class="ti ti-trash"></i></a>-->
-                <a [routerLink]="['/ItiCollegeReport']"
+                <!--<a [routerLink]="['/ItiCollegeReport']"
                    [queryParams]="{ ID: examiner.EId, TypeID: 1 }"
                    title="View">
                   <i class="ti ti-eye"></i>
                 </a>
-              </div>
+              </div>-->
 
             </td>
           </tr>

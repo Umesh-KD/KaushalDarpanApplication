@@ -40,7 +40,8 @@ export class SR5ReportBTERComponent {
   public ItemId: number = 0;
   public UserID: number = 0;
   public today: Date = new Date();
-
+  public ItemStatus: number = 0;
+  public AllInTableSelect: boolean = false;
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
@@ -325,4 +326,66 @@ export class SR5ReportBTERComponent {
       window.URL.revokeObjectURL(url);
     });
   }
+    //checked all (replace org. list here)
+  selectInTableAllCheckbox() {
+    this.ItemMasterList.forEach((x: any) => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+    const data = this.ItemMasterList.filter((x: any) => x.IssuedId == item.IssuedId);
+    data.forEach((x: any) => {
+      x.Selected = isSelected;
+    });
+    //select all(toggle)
+    this.AllInTableSelect = this.ItemMasterList.every((r: any) => r.Selected);
+  }
+  get totalInTableSelected(): number {
+    return this.ItemMasterList.filter((x: any) => x.Selected)?.length;
+  }
+  async ApproveSR5Items() {
+      try {
+        let selected = this.ItemMasterList.filter((x: any) => x.Selected);
+        if (selected.length === 0) {
+          this.toastr.warning("Please select at least one item to mark for approval.", "Warning", {
+            toastClass: "ngx-toastr my-warning-toast"
+          });
+          return;
+        }
+  
+        if(this.ItemStatus == 0){
+          this.toastr.warning("Please select status.", "Warning", {
+            toastClass: "ngx-toastr my-warning-toast"
+          });
+          return;
+        }
+  
+        selected.forEach((x: any) => {
+          x.UserID = this.sSOLoginDataModel.UserID 
+          x.IssueStatus = this.ItemStatus
+        })
+  
+        if(this.ItemStatus == 3) {
+          selected.forEach((x: any) => {
+            x.ApproveIssueQuantity = 0
+          });
+        }
+  
+        await this.bterInventoryService.ApproveSR5Items(selected).then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.toastr.success(data.Message, 'Success', {
+              toastClass: 'ngx-toastr my-success-toast'
+            });
+            await this.GetAllData();
+          } else {
+            this.toastr.error(data.ErrorMessage, 'Error', {
+              toastClass: 'ngx-toastr my-error-toast'
+            });
+          }
+        })
+      } catch (error) {
+        console.error(error);
+      }
+    }
 }

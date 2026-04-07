@@ -221,3 +221,22 @@ export class InstituteMappingListModel {
   isParent: boolean = false
 
 }
+
+export class HostelFeeModel {
+  public HostelFeeId: number = 0;
+  public InstituteID: number = 0;
+  public HostelId: number = 0;
+  public Cautionfee: number = 0;
+  public HostelFee: number = 0;
+  public CourseTypeID: number = 0;
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+}
+
+export class HostelFeeListModel {
+  public HostelFeeId: number = 0;
+  public InstituteID: number = 0;
+  public HostelId: number = 0;
+  public Cautionfee: number = 0;
+  public HostelFee: number = 0;
+}

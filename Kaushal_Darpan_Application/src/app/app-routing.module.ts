@@ -384,14 +384,16 @@ const routes: Routes = [
 
       { path: 'AdminDashboardITI', loadChildren: () => import('./Views/ITI/admin-dashboard-iti/admin-dashboard-iti.module').then(m => m.AdminDashboardITIModule), title: 'Admin Dashboard ITI' },
       { path: 'SeatIntakesList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list/seat-intakes-list.module').then(m => m.SeatIntakesListModule), title: 'Seat Intakes List' },
-      { path: 'AddSeatIntakes', loadChildren: () => import('./Views/ITI/Intakes/add-seat-intakes/add-seat-intakes.module').then(m => m.AddSeatIntakesModule), title: 'Add Seat Intakes' },
+
+
+      { path: 'SeatIntakesAdmissionList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-admission/seat-intakes-list-admision.module').then(m => m.SeatIntakesListAdmissionModule), title: 'Seat Intakes List' },
 
 
       //new pages changes
       { path: 'SeatIntakesMasterList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-master/seat-intakes-list-master.module').then(m => m.SeatIntakesListMasterModule), title: 'Seat Intakes List Master' },
       { path: 'AddSeatIntakesMaster', loadChildren: () => import('./Views/ITI/Intakes/add-seat-intakes-master/add-seat-intakes-master.module').then(m => m.AddSeatIntakesMasterModule), title: 'Add Seat Intakes Master' },
 
-
+      { path: 'SeatIntakesMasterList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-master/seat-intakes-list-master.module').then(m => m.SeatIntakesListMasterModule), title: 'Seat Intakes List Master' },
 
       { path: 'AddSeatsDistributions', loadChildren: () => import('./Views/ITI/Seats-Distributions/add-seats-distributions/add-seats-distributions.module').then(m => m.AddSeatsDistributionsModule), title: 'Add Seats Distributions' },
       { path: 'SeatsDistributionsList', loadChildren: () => import('./Views/ITI/Seats-Distributions/seats-distributions-list/seats-distributions-list.module').then(m => m.SeatsDistributionsListModule), title: 'Seats Distributions List' },
@@ -636,6 +638,7 @@ const routes: Routes = [
       { path: 'Auction-List', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/auction-list/auction-list.module').then(m => m.AuctionListModule) },
       { path: 'bter-sr5-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr5-report-bter/sr5-report-bter.module').then(m => m.SR5ReportBTERModule), title: 'SR5 Report' },
       { path: 'bter-sr6-report', loadChildren: () => import('./Views/BTER/bter-item-manage/sr6-report-bter/sr6-report-bter.module').then(m => m.SR6ReportBTERModule), title: 'SR6 Report' },
+      { path: 'DTELabInchargeStockRegister', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/dteitems-master/dte-lab-incharge-stock-register/dte-lab-incharge-stock-register-module').then(m => m.DTELabInchargeStockRegisterModule) },
 
       { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
       { path: 'bter-lab-master', loadChildren: () => import('./Views/BTER/bter-item-manage/dtelaboratory-master/dtelaboratory-master-module').then(m => m.DteLaboratoryMasterModule) },
@@ -832,6 +835,10 @@ const routes: Routes = [
 
       { path: 'ApplyForHostel', loadChildren: () => import('./Views/Student/apply-for-hostel/apply-for-hostel.module').then(m => m.ApplyForHostelModule) },
       { path: 'CreateHostel', loadChildren: () => import('./Views/Hostel-Management/create-hostel/create-hostel.module').then(m => m.CreateHostelModule), title: 'Create Hostel' },
+      { path: 'bter-hostel-fee', loadChildren: () => import('./Views/Hostel-Management/bter-hostel-fee/bter-hostel-fee.module').then(m => m.BterHostelFeeModule), title: 'Hostel Fee' },
+      { path: 'hostel-fee-management', loadChildren: () => import('./Views/Hostel-Management/List-hostel-fee-management/List-hostel-fee-management.module').then(m => m.ListhostelfeemanagementModule), title: 'Hostel Fee' },
+      { path: 'Add-hostel-fee-management', loadChildren: () => import('./Views/Hostel-Management/Add-hostel-fee-management/Add-hostel-fee-management.module').then(m => m.AddhostelfeemanagementModule), title: '' },
+      { path: 'Add-hostel-fee-management/:id', loadChildren: () => import('./Views/Hostel-Management/Add-hostel-fee-management/Add-hostel-fee-management.module').then(m => m.AddhostelfeemanagementModule), title: '' },
 
       { path: 'Hostel-Institute-Mapping-List', loadChildren: () => import('./Views/Hostel-Management/dte-hostel-institute-mapping-list/dte-hostel-institute-mapping-list.module').then(m => m.DTEHostelInstituteMappingListModule), title: 'Create Hostel' },
 
@@ -1086,6 +1093,7 @@ const routes: Routes = [
       { path: 'inspection-team', loadChildren: () => import('./Views/ITI/Inspection/inspection-team/inspection-team.module').then(m => m.InspectionTeamModule), title: 'ITI Inspection' },
       { path: 'inspection-deployment', loadChildren: () => import('./Views/ITI/Inspection/inspection-deployment/inspection-deployment.module').then(m => m.InspectionDeploymentModule), title: 'ITI Inspection' },
       { path: 'iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection/iti-inspection.module').then(m => m.ITIInspectionModule), title: 'ITI Inspection' },
+      { path: 'iti-inspection-members', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-members/iti-inspection-members.module').then(m => m.ITIInspectionMembersModule), title: 'ITI Inspection members' },
       { path: 'verify-iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/verify-iti-inspection/verify-iti-inspection.module').then(m => m.VerifyITIInspectionModule), title: 'ITI Inspection' },
       { path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
       { path: 'iti-consent', loadChildren: () => import('./Views/ITI/Inspection/iti-consent/iti-consent.module').then(m => m.ITIConsentModule), title: 'ITI Consent' },
@@ -1707,6 +1715,8 @@ const routes: Routes = [
       },
       { path: 'PaymentStatus', loadChildren: () => import('./Views/Student/payment-status/payment-status.module').then(m => m.PaymentStatusModule), title: 'Payment Status' },
       { path: 'PaymentStatus-reval', loadChildren: () => import('./Views/Student/payment-status/payment-status.module').then(m => m.PaymentStatusModule), title: 'Payment Status' },
+      { path: 'InspectionPaymentStatus', loadChildren: () => import('./Views/ITI/inpsection-payment-status/inpsection-payment-status.module').then(m => m.InspectionPaymentStatusModule), title: 'Inspection Payment Status' },
+      
       { path: 'DepartmentLogin', loadChildren: () => import('./Views/department-login/department-login.module').then(m => m.DepartmentLoginModule) },
 
 

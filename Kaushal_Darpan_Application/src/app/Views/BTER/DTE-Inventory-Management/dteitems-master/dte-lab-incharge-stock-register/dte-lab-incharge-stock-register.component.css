@@ -1,0 +1,21 @@
+.bg-revert {
+  background-color: #ff9800 !important; /* Orange color */
+  color: #fff !important;
+}
+.badge-working {
+  background-color: #28a745; /* green */
+  color: white;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-notworking {
+  background-color: #ff0000; /* blue */
+  color: white;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}

@@ -55,6 +55,8 @@ export class RoomAllotmentComponent {
   public BrachDDLList: any = [];
   public RelationQueryDDL: any = [];
   public StudentRoomPreferenceList: any = [];
+  public HostelFeeList: any = [];
+  public RoomFeeList: any = [];
   public CancelRequest: any;
   public Allotmentrequest = new RoomAllotmentDataModel();
   public request: any;
@@ -312,10 +314,11 @@ export class RoomAllotmentComponent {
     this.RequestFormGroup.reset();
     this.GetAllData();
   }
-
+    
 
   async onSubmit(model: any, userSubmitData: any) {
     await this.GetRoomPreference(userSubmitData.ReqId);
+    await this.GetRoomFee();
     try {
       this.request = { ...userSubmitData };
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
@@ -818,4 +821,18 @@ export class RoomAllotmentComponent {
       console.error(error)
     }
   }
+
+  async GetRoomFee() {
+    try {
+     
+      await this.studentRequestService.GetRoomFee().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoomFeeList = data.Data
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+ 
 }

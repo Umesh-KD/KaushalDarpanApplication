@@ -32,7 +32,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester<span class="StarMarking">*</span></label>
-          <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL(TableForm.value.StreamID, TableForm.value.SemesterID)">
+          <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL(TableForm.getRawValue().StreamID, TableForm.value.SemesterID)">
             <ng-option [value]="0">--Select--</ng-option>
             <ng-option [value]="1">1st Year</ng-option>
             <ng-option [value]="2">2nd Year</ng-option>
@@ -63,10 +63,10 @@
 
       </div>
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 gap-6 mb-6">
-        <div>
+        <div *ngIf="!isreaasign">
           <label class="form-label">Attendance Date<span class="StarMarking">*</span></label>
           <div class="date-range-wrapper">
-          
+
             <input type="date"
                    class="form-field w-60"
                    formControlName="AttendanceStartDate"
@@ -74,9 +74,26 @@
 
             <!--End Date:-->
             <!--<input type="date"
-                   class="form-field w-50"
-                   formControlName="AttendanceEndDate"
-                   [min]="minEndDate" />-->
+             class="form-field w-50"
+             formControlName="AttendanceEndDate"
+             [min]="minEndDate" />-->
+          </div>
+        </div>
+
+        <div *ngIf="isreaasign">
+          <label class="form-label">Attendance Date<span class="StarMarking">*</span></label>
+          <div class="date-range-wrapper">
+            Start Date
+            <input type="date"
+                   class="form-field w-60"
+                   formControlName="AttendanceStartDate"
+                   (change)="onStartDateChange($event)" />
+
+            End Date:
+            <input type="date"
+             class="form-field w-50"
+             formControlName="AttendanceEndDate"
+             [min]="minEndDate" />
           </div>
         </div>
         <div>

@@ -355,6 +355,7 @@ export class AuctionListComponent {
       const updatedItem = {
         CollegeName: item.CollegeName ?? "BTER",
         ItemCategoryName: item.ItemCategoryName,
+        ItemCode: item.ItemCode,
         EquipmentsName: item.EquipmentsName,
         EquipmentsCode: item.EquipmentsCode,
         EquipmentWorking: item.EquipmentWorking == 1 ? "Working" : "Not Working",

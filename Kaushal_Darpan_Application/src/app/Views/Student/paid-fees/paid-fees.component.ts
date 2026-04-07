@@ -115,17 +115,56 @@ export class PaidFeesComponent implements OnInit
   }
 
 
-  async FeeReceipt(item:any)
-  {
-    if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI)
-    {
-      this.GetITIStudentFeeReceipt(item)
+  //async FeeReceipt(item:any)
+  //{
+  //  if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI)
+  //  {
+  //    this.GetITIStudentFeeReceipt(item)
+  //  }
+  //  else if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
+  //  {
+  //    this.GetStudentFeeReceipt(item)
+  //  }
+  //}
+
+  async GetStudentRevalFeePaymentReceipt(TransactionId: any) {
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.GetStudentRevalFeePaymentReceipt(TransactionId)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          if (data.State == EnumStatus.Success) {
+            this.DownloadFile_RevalReceipt(data.Data);
+          }
+          else {
+            this.toastrService.error(data.ErrorMessage)
+          }
+        }, (error: any) => console.error(error)
+        );
     }
-    else if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
-    {
-      this.GetStudentFeeReceipt(item)
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
+
+  DownloadFile_RevalReceipt(FileName: string): void {
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = FileName;
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
   async GetITIStudentFeeReceipt(item: any)
   {
     try {

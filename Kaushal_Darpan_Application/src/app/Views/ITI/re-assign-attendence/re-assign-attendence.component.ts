@@ -56,7 +56,10 @@ export class ReAssignAttendenceComponent {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
+  isAllSelected: boolean = false;
+  centerSearchText = '';
+  selectedCenters: any[] = [];  
+  filteredCenterList: any[] = [];  
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
@@ -84,7 +87,7 @@ export class ReAssignAttendenceComponent {
       StreamID: [0, Validators.required],
       SemesterID: [0, Validators.required],
       ShiftId: [0, Validators.required],
-    
+      SubjectIDs: [[]] ,
       AttendanceEndDate:[''],
       AttendanceStartDate:[''],
     });
@@ -181,6 +184,7 @@ export class ReAssignAttendenceComponent {
       this.commonMasterService.GetAssignedSubject(this.SSOID, this.sSOLoginDataModel.EndTermID, SemesterID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SubjectMasterDDL = data.Data;
+        this.filteredCenterList = [...this.SubjectMasterDDL];
       })
     } else {
       console.error('Event or value is undefined');
@@ -194,6 +198,7 @@ export class ReAssignAttendenceComponent {
     this.commonMasterService.GetAssignedSubject(this.SSOID, this.sSOLoginDataModel.EndTermID,ID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SubjectMasterDDL = data.Data;
+      this.filteredCenterList = [...this.SubjectMasterDDL];
     })
   }
 
@@ -397,23 +402,77 @@ export class ReAssignAttendenceComponent {
       }
     });
   }
-
   async EditData(content: any, rowData?: any) {
-    this.isSubmitted = true;
-    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason: any) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-    if (rowData != null && rowData != undefined) {
-      if (rowData.StreamID != null) {
-        this.SSOID = rowData.StaffSSOID
-        await this.getSubjectMasterDDL(rowData.StreamID, rowData.SemesterID);
+    this.isSubmitted = false;
 
+    this.modalService.open(content, {
+      size: 'xl',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
+    }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+
+    // reset first
+    this.EditDataFormGroup.reset({
+      ID: 0,
+      SubjectID: 0,
+      SubjectIDs: [],
+      AssignToSSOID: '',
+      StreamID: 0,
+      SemesterID: 0,
+      ShiftId: 0
+    });
+
+    this.SSOID=''
+    this.SubjectMasterDDL = [];
+    this.filteredCenterList = [];
+    this.centerSearchText = '';
+    this.isAllSelected = false;
+
+    // if no row data, open blank modal safely
+    if (!rowData) {
+      return;
+    }
+    debugger
+    try {
+      const streamID = Number(rowData?.StreamID ?? 0);
+      const semesterID = Number(rowData?.SemesterID ?? 0);
+      const shiftId = Number(rowData?.shiftId ?? 0);
+      const id = Number(rowData?.ID ?? 0);
+      const assignToSSOID = rowData?.StaffSSOID ?? rowData?.AssignToSSOID ?? '';
+      this.SSOID = rowData?.AssignFromSSOID ?? rowData?.AssignFromSSOID ?? '';
+
+      // safely parse comma separated subject ids
+      let subjectIDs: number[] = [];
+
+      const rawSubjectIDs = rowData?.SubjectID ?? rowData?.SubjectIDs ?? '';
+
+      if (rawSubjectIDs !== null && rawSubjectIDs !== undefined && rawSubjectIDs !== '') {
+        subjectIDs = String(rawSubjectIDs)
+          .split(',')
+          .map((x: string) => Number(x.trim()))
+          .filter((x: number) => !isNaN(x) && x > 0);
+      }
+
+      // load subject dropdown first
+      if (streamID > 0 && semesterID > 0) {
+        await this.getSubjectMasterDDL(streamID, semesterID);
         await this.getStaff_Reassign(rowData.AssignFromSSOID)
       }
-      this.SSOIDExists = true;
+      debugger
+      // patch form values
       this.EditDataFormGroup.patchValue({
+       
+      
+        SubjectIDs: subjectIDs,
+     
+
         ID: rowData.ID,
         SubjectID: rowData.SubjectID,
         AssignToSSOID: rowData.StaffSSOID,
@@ -424,24 +483,74 @@ export class ReAssignAttendenceComponent {
         StreamID: rowData.StreamID,
         SemesterID: rowData.SemesterID,
         ShiftId: rowData.ShiftId
-      })
-    } else {
-      this.isSubmitted = false;
-      this.EditDataFormGroup.patchValue({
-        ID: 0,
-        SubjectID: 0,
-        AssignToSSOID: '',
-        StreamID: 0,
-        SemesterID: 0,
-        ShiftId: 0
-      })
-      //this.EditDataFormGroup.reset();
-      //this.clearValidationErrors();
-   
-      await this.Onyearchange(rowData.SemesterID, rowData.StreamID);
+      });
 
+      // optional: mark select all if all loaded subjects selected
+      if (
+        Array.isArray(this.filteredCenterList) &&
+        this.filteredCenterList.length > 0 &&
+        subjectIDs.length === this.filteredCenterList.length
+      ) {
+        this.isAllSelected = true;
+      } else {
+        this.isAllSelected = false;
+      }
+
+      this.EditDataFormGroup.get('StreamID')?.disable();
+      this.EditDataFormGroup.get('ShiftId')?.disable();
+     
+
+      this.SSOIDExists = true;
+    } catch (error) {
+      console.error('Error in EditData:', error);
+      this.toastr.error('Unable to load edit data');
     }
   }
+
+  //async EditData(content: any, rowData?: any) {
+  //  this.isSubmitted = true;
+  //  this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+  //    this.closeResult = `Closed with: ${result}`;
+  //  }, (reason: any) => {
+  //    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //  });
+  //  if (rowData != null && rowData != undefined) {
+  //    if (rowData.StreamID != null) {
+  //      this.SSOID = rowData.StaffSSOID
+  //      await this.getSubjectMasterDDL(rowData.StreamID, rowData.SemesterID);
+
+     
+  //    }
+  //    this.SSOIDExists = true;
+  //    this.EditDataFormGroup.patchValue({
+  //      ID: rowData.ID,
+  //      SubjectID: rowData.SubjectID,
+  //      AssignToSSOID: rowData.StaffSSOID,
+  //      AssignFromSSOID: rowData.AssignFromSSOID,
+  //      AttendanceStartDate: rowData.AttendanceStartDate,
+  //      AttendanceEndDate: rowData.AttendanceEndDate,
+
+  //      StreamID: rowData.StreamID,
+  //      SemesterID: rowData.SemesterID,
+  //      ShiftId: rowData.ShiftId
+  //    })
+  //  } else {
+  //    this.isSubmitted = false;
+  //    this.EditDataFormGroup.patchValue({
+  //      ID: 0,
+  //      SubjectID: 0,
+  //      AssignToSSOID: '',
+  //      StreamID: 0,
+  //      SemesterID: 0,
+  //      ShiftId: 0
+  //    })
+  //    //this.EditDataFormGroup.reset();
+  //    //this.clearValidationErrors();
+   
+  //    await this.Onyearchange(rowData.SemesterID, rowData.StreamID);
+
+  //  }
+  //}
   AttendanceData(rowData: any) {
     if (rowData != null && rowData != undefined) {
       if (rowData.StreamID != null) {
@@ -496,7 +605,8 @@ export class ReAssignAttendenceComponent {
     //  this.toastr.warning("SSOID Not Exists.!")
     //  return;
     //}
-    if (this.EditDataFormGroup.getRawValue().StreamID > 0 && this.EditDataFormGroup.value.SemesterID > 0 && this.EditDataFormGroup.value.SubjectID > 0) {
+    const formValue = this.EditDataFormGroup.getRawValue();
+    if (this.EditDataFormGroup.getRawValue().StreamID > 0 && this.EditDataFormGroup.value.SemesterID > 0 ) {
       if (this.EditDataFormGroup.valid) {
         try {
           let obj = {
@@ -516,8 +626,8 @@ export class ReAssignAttendenceComponent {
             ActiveStatus: 1,
             InstituteID: this.sSOLoginDataModel.InstituteID,
             AttendanceStartDate: this.EditDataFormGroup.value.AttendanceStartDate,
-            AttendanceEndDate: this.EditDataFormGroup.value.AttendanceEndDate
-
+            AttendanceEndDate: this.EditDataFormGroup.value.AttendanceEndDate,
+             SubjectIDs: formValue.SubjectIDs.join(',')
 
           };
           this.attendanceServiceService.RePostAttendanceTimeTable(obj)
@@ -614,5 +724,29 @@ export class ReAssignAttendenceComponent {
     console.log(this.EditDataFormGroup.value)
   }
 
+  onSelectionChange(event: any): void {
+    const value = event.value || [];
+    const control = this.EditDataFormGroup.get('SubjectIDs');
 
+    if (!control) return;
+
+    if (value.includes('ALL')) {
+      if (this.isAllSelected) {
+        this.isAllSelected = false;
+        control.setValue([]);
+      } else {
+        this.isAllSelected = true;
+        control.setValue(this.filteredCenterList.map((x: any) => x.ID));
+      }
+    } else {
+      this.isAllSelected = false;
+      control.setValue(value);
+    }
+  }
+  filterCenters() {
+    const search = this.centerSearchText.toLowerCase();
+    this.filteredCenterList = this.SubjectMasterDDL.filter((x: any) =>
+      x.Name.toLowerCase().includes(search)
+    );
+  }
 }

@@ -133,6 +133,7 @@
             </th>
             <th class="text-left" *ngIf="Searchrequest.status == 1">Sr No</th>
             <th class="text-left" *ngIf="Searchrequest.status != 1">Merit No</th>
+            <th class="text-left">Institute Name</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Hostel Request No</th>
             <!--<th class="text-left">Type</th>-->
@@ -157,6 +158,7 @@
               *ngIf="Searchrequest.status == 9">
               {{item.MeritNo}}
             </td>
+            <td align="left">{{item.InstituteName}}</td>
             <td align="left">{{item.StudentName}}</td>
             <td align="left">{{item.HostelRequestNo}}</td>
             <!--<td align="left">{{item.StudentType}}</td>-->

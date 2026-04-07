@@ -31,6 +31,20 @@
 
     <form [formGroup]="TableForm" (ngSubmit)="getData()">
       <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teacher</label>
+
+          <select formControlName="SSOID"
+                  class="form-select"
+                  (change)="GetstaffDetails($event.target.value)">
+            <option value="">--Select--</option>
+            @for (item of StaffList; track item.SSOID) {
+            <option [value]="item.SSOID">{{ item.NameWithSSOID }}</option>
+            }
+          </select>
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream<span class="StarMarking">*</span></label>
           <ng-select formControlName="StreamID" [clearable]="false" (change)="getSubjectMasterDDL($event,TableForm.value.SemesterID)">
@@ -46,13 +60,13 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester<span class="StarMarking">*</span></label>
-          <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL(TableForm.value.StreamID, TableForm.value.SemesterID)">
+          <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL(TableForm.getRawValue().StreamID, TableForm.value.SemesterID)">
             <ng-option [value]="0">--Select--</ng-option>
             <ng-option [value]="1">1st Year</ng-option>
             <ng-option [value]="2">2nd Year</ng-option>
             <!--@for (item of SemesterMasterDDL; track item.SemesterID) {
-            <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
-            }-->
+      <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+      }-->
           </ng-select>
           <div *ngIf="isSubmitted && formTable.SemesterID.errors" class="text-danger">
             <p *ngIf="formTable.SemesterID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
@@ -86,7 +100,20 @@
             <p *ngIf="formTable.SubjectID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
         </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Percent</label>
 
+          <select formControlName="Percent"
+                  class="form-select">
+            <option value="">--All--</option>
+
+            <option value="1">Above 80</option>
+            <option value="2">Between 60-80</option>
+            <option value="3">Between 40-60</option>
+            <option value="4">Below 60</option>
+
+          </select>
+        </div>
 
       </div>
       <div class="col-span-1 md:col-span-2 lg:col-span-3">
@@ -115,11 +142,11 @@
             <button type="submit" class="btn bg-info text-white mt-6 me-1">Search</button>
           </div>
         </div>
-
+       
 
       </div>
 
-
+    
     </form>
     <hr />
 
@@ -186,7 +213,14 @@
           <!-- Dynamic Date Columns -->
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row
+              *matRowDef="let row; columns: displayedColumns;"
+              [ngClass]="{
+              'row-red' : row.TotalPercent < 40,
+      'row-orange': row.TotalPercent >= 40 && row.TotalPercent < 80,
+      'row-green': row.TotalPercent >= 80
+    }">
+</tr>
           <!-- Table Header and Rows -->
 
 
