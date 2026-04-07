@@ -446,6 +446,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit {
       if (result.isConfirmed)
       {
         try {
+          
           var request =
           {
             SeatIntakeID: seatIntakeID,
@@ -453,7 +454,9 @@ export class SeatIntakesListAdmissionComponent implements OnInit {
             ModifyBy: this.SSOLoginDataModel.UserID,
             ActiveStatus: item.ActiveStatus,
             AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
-            Action: action
+            Action: action,
+            TradeId: item.TradeID,
+            TradeSchemeId: item.TradeSchemeID
           };
 
           this.loaderService.requestStarted();
