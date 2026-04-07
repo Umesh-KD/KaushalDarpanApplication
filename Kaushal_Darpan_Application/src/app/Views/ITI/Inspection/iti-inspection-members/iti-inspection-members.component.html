@@ -121,7 +121,7 @@
               <!--<a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending" (click)="UpdateDeployment(row.InspectionTeamID)" class="py-1 px-2 bg-warning text-white">Deployed Pending</a>-->
               <a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending && row.DeployTeamStatus!=_EnumDeploymentStatus.Pending" (click)="openModalGenerateOTP(modal_GenrateOTP, row.InspectionTeamID)" class="py-1 px-2 bg-warning text-white">Deployed Pending</a>
               <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned" class="py-1 px-2 bg-success text-white me-1">Deployed</span>
-              <a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned" class="py-1 px-2 bg-primary text-white" (click)="DownloadPdf(row.InspectionOrder)">Export PDF</a>
+              <a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned && !(_EnumRole.InspectionManager)" class="py-1 px-2 bg-primary text-white" (click)="DownloadPdf(row.InspectionOrder)">Export PDF</a>
             </td>
             <td align="left">
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
@@ -130,7 +130,7 @@
                   <i class="ti ti-eye"></i>
                 </a>
 
-                <a [routerLink]="'/add-inspection'" [queryParams]="{id:row.InspectionTeamID}" title="Edit" *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending">
+                <a [routerLink]="'/add-inspection'" [queryParams]="{id:row.InspectionTeamID}" title="Edit" *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending && !(_EnumRole.InspectionManager)">
                   <i class="ti ti-pencil"></i>
                 </a>
                 <button href="javascript:void(0);" title="{{row.Req_Remark}}" (click)="RequestApproveByAdmin(row.Req_Remark, row.DeploymentID)"
@@ -213,6 +213,31 @@
                   <td align="left">{{ i + 1 }}</td>
                   <td align="left">{{row.DistrictName}}</td>
                   <td align="left">{{row.InstituteName}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="overflow-x-auto mt-3">
+            <h5>Other Details</h5>
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+                  <th class="text-left">Total Staff </th>
+                  <th class="text-left">Total Instructor </th>
+                  <th class="text-left">Total Trade </th>
+                  <th class="text-left">Total Inventory </th>
+                  <th class="text-left">Total Unit </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of this.request.InspectionInstituteDetails; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.TotalStaffCount}}</td>
+                  <td align="left">{{row.TotalInstructorCount}}</td>
+                  <td align="left">{{row.TotalTradeCount}}</td>
+                  <td align="left">{{row.TotalInventory}}</td>
+                  <td align="left">{{row.TotalUnitCount}}</td>
                 </tr>
               </tbody>
             </table>

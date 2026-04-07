@@ -1,5 +1,5 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
-import { ItemsDataModels } from '../../../../../Models/ItemsDataModels';
+import { ItemsDataModels, MinRequiredItemSearchModel } from '../../../../../Models/ItemsDataModels';
 import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -31,8 +31,10 @@ export class ITIAddItemsMasterComponent {
   public ErrorMessage: string = '';
   public AddItemsRequestFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public searchReq_stock = new MinRequiredItemSearchModel();
   modalReference: NgbModalRef | undefined;
   public ItemId: number = 0;
+  public key:number=0
   public Table_SearchText: string = "";
   public EquipmentsDDLList: any = [];
   public TradeDDLList: any = [];
@@ -77,13 +79,21 @@ export class ITIAddItemsMasterComponent {
     // this.AddItemsRequestFormGroup.controls.get("IsConsume").disable();
     this.AddItemsRequestFormGroup.get('IsConsume')?.disable();
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    this.key=Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     //await this.GetEquipmentDDL();
     await this.ddlCategory_Change();
     await this.GetTradeDDL();
     await this.GetAllUnitData();
-    if (this.ItemId > 0) {
+    if(this.key==1){
+      await this.GetById_Stock();
+      //this.AddItemsRequestFormGroup.get('IsConsume')?.enable();
+    }
+    else if (this.ItemId > 0) {
+      await this.GetByID(this.ItemId);
+    }
+    else {
       await this.GetByID(this.ItemId);
     }
     this.ItemtypeList = [{ID:0,Name:'Select'}, { ID: 1, Name: 'Building' }, {ID:2,Name:'Trade'}];
@@ -201,6 +211,34 @@ export class ITIAddItemsMasterComponent {
     }
   }
 
+  async GetById_Stock() {
+    debugger
+    try {
+      this.searchReq_stock.RequiredItemId = this.ItemId;
+      this.searchReq_stock.Action = 'GetDataById';
+
+      await this.itiInventoryService.GetMinRequiredItem_ITI_INV(this.searchReq_stock).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        // this.request = data.Data[0];
+        this.request.ItemType=2;
+        this.request.TradeId=data.Data[0].TradeId;
+        // this.request.ItemId = data.Data[0].ItemId;
+        this.request.ItemCategoryId = data.Data[0].ItemCategoryId;
+ 
+        this.AddItemsRequestFormGroup.patchValue({
+          ItemCategoryId: this.request.ItemCategoryId
+        });
+        // this.request.RequiredItemId =  data.Data[0].RequiredItemId;
+        await this.ddlEquipment_Change1();
+          this.request.EquipmentsId = data['Data'][0].EquipmentsId;
+        await this.DGET_Details();
+        this.request.UnitId = data.Data[0].UnitId;
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async GetByID(id: number) {
     debugger
     try {
@@ -274,6 +312,9 @@ export class ITIAddItemsMasterComponent {
     this.AddItemsRequestFormGroup.get('EquipmentsId')?.disable();
     this.AddItemsRequestFormGroup.get('TradeId')?.disable();
     this.AddItemsRequestFormGroup.get('IsConsume')?.disable();
+    if(this.key==1){
+      this.AddItemsRequestFormGroup.get('UnitId')?.enable();
+    }
   }
 
   //async GetTradeDDL() {
@@ -418,6 +459,7 @@ export class ITIAddItemsMasterComponent {
   }
 
   async ddlEquipment_Change1() {
+    debugger
     try {
       this.loaderService.requestStarted();
       
@@ -431,7 +473,7 @@ export class ITIAddItemsMasterComponent {
       await this.itiInventoryService.GetEquipment_Branch_Wise_CategoryWise(categoryId)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
+          console.log(data);
           const selectOption = { EquipmentsId: 0, Name: '--Select--' };
           this.EquipmentsDDLList = [selectOption, ...data['Data']];
  

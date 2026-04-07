@@ -56,7 +56,7 @@ export class RoomAllotmentComponent {
   public RelationQueryDDL: any = [];
   public StudentRoomPreferenceList: any = [];
   public HostelFeeList: any = [];
-  public CautionFeeList: any = [];
+  public RoomFeeList: any = [];
   public CancelRequest: any;
   public Allotmentrequest = new RoomAllotmentDataModel();
   public request: any;
@@ -318,6 +318,7 @@ export class RoomAllotmentComponent {
 
   async onSubmit(model: any, userSubmitData: any) {
     await this.GetRoomPreference(userSubmitData.ReqId);
+    await this.GetRoomFee();
     try {
       this.request = { ...userSubmitData };
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
@@ -821,31 +822,17 @@ export class RoomAllotmentComponent {
     }
   }
 
-  async GetCautionFee(ReqId: number) {
+  async GetRoomFee() {
     try {
-      let obj = {
-        ReqId: ReqId
-      }
-      await this.studentRequestService.GetRoomPreference(obj).then(async (data: any) => {
+     
+      await this.studentRequestService.GetRoomFee().then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.CautionFeeList = data.Data
+        this.RoomFeeList = data.Data
       })
     } catch (error) {
       console.error(error)
     }
   }
 
-  async GetHostelFee(ReqId: number) {
-    try {
-      let obj = {
-        ReqId: ReqId
-      }
-      await this.studentRequestService.GetRoomPreference(obj).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.HostelFeeList = data.Data
-      })
-    } catch (error) {
-      console.error(error)
-    }
-  }
+ 
 }

@@ -106,6 +106,9 @@ export class EmitraRequestDetails {
 
 
   public RevalRequestID:number=0;
+
+  public InspectionConsentID?:number=0;
+
 }
 
 export class TransactionStatusDataModel
