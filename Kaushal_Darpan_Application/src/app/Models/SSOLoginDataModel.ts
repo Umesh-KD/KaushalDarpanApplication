@@ -98,5 +98,7 @@ export class ItiPlanningSearchModel {
   public InstituteID:number=0
   public DistrictID:number=0
   public IsNewCollege: number = 2
-  public CollegeName:string=''
+  public CollegeName: string = ''
+  public RoleID:number=0
+  public UserID:number=0
 }

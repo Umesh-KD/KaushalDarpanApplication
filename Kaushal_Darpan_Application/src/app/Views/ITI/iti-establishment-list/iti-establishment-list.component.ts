@@ -109,6 +109,8 @@ export class ItiEstablishmentListComponent {
     try {
 
       this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID
       this.loaderService.requestStarted();
       await this.ITIsService.GetAllEstablishmentIti(this.searchRequest)
         .then((data: any) => {

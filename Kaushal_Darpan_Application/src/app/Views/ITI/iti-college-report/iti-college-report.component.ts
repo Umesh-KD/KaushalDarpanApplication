@@ -116,12 +116,12 @@ export class ItiCollegeReportComponent {
         Vidhansabha: ['', Validators.required],
         PanchayatDis: ['', Validators.required],
         ItiCode: ['', Validators.required],
-        MISCode: ['', Validators.required],
+       /* MISCode: ['', Validators.required],*/
         //SanctionOrderNo: ['', Validators.required],
         //SanctionOrderDate: ['', Validators.required],
         //TradeOrderNo: ['', Validators.required],
         //TradeOrderDate: ['', Validators.required],
-        //PrincipleName: ['', Validators.required],
+        PrincipleName: ['', Validators.required],
         PrincipleMobile: ['', Validators.required],
         PrincipleEmailID: ['', Validators.required],
         ApproachRoad: ['', Validators.required],
@@ -158,8 +158,8 @@ export class ItiCollegeReportComponent {
         Category: ['', [DropdownValidators]],
         Ownership: ['', [DropdownValidators]],
         CollegeID: ['',],
-        AdministrativeeOrderNo: ['', Validators.required],
-        AdministrativeOrderDate: ['', Validators.required],
+        //AdministrativeeOrderNo: ['', Validators.required],
+        //AdministrativeOrderDate: ['', Validators.required],
         FinancialSanction: ['', Validators.required],
         Ward: ['', Validators.required],
         KhasraKhataNo: ['', Validators.required],
@@ -307,7 +307,7 @@ export class ItiCollegeReportComponent {
       this.resetValidatoresIPA();
     }
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin || this.sSOLoginDataModel.RoleID == 97) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin || this.sSOLoginDataModel.RoleID == 260) {
       const controlsToFreeze = [
         'txtName',
         'Loksabha',
@@ -330,11 +330,11 @@ export class ItiCollegeReportComponent {
         //'VillageID',
         //'CityID',
         //'AdministrativeBodyId',
-        'AdministrativeeOrderNo',
-        'AdministrativeOrderDate',
+        //'AdministrativeeOrderNo',
+        //'AdministrativeOrderDate',
         'FinancialSanction',
         'ItiCode',
-        'MISCode',
+        //'MISCode',
         'ConstructionAgency'
 
 
@@ -370,11 +370,11 @@ export class ItiCollegeReportComponent {
         //'VillageID',
         //'CityID',
         //'AdministrativeBodyId',
-        'AdministrativeeOrderNo',
-        'AdministrativeOrderDate',
+        //'AdministrativeeOrderNo',
+        //'AdministrativeOrderDate',
         'FinancialSanction',
         'ItiCode',
-        'MISCode',
+        //'MISCode',
         'ConstructionAgency'
       ];
 
@@ -720,6 +720,11 @@ export class ItiCollegeReportComponent {
 
                   break;
 
+                case "PrincipalOrderCopy ":
+                  this.request.PrincipalOrderCopy = data['Data'][0]["FileName"];
+
+                  break;
+
                 default:
                   break;
               }
@@ -778,10 +783,6 @@ export class ItiCollegeReportComponent {
 
       //}
 
-      //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin && this.request.FinancialSanctionList.length < 1 && this.request.IsNewCollege == 1) {
-      //  this.toastr.warning("Please Add Financials sanction Details")
-      //  return
-      //}
 
 
       if (this.request.IsNewCollege == 0) {
@@ -852,11 +853,11 @@ export class ItiCollegeReportComponent {
 
     //this.ReportForm.controls['PanelCapacity'].updateValueAndValidity();
 
-    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97) {
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 260) {
 
     }
 
-    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 20) {
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 260 && this.sSOLoginDataModel.RoleID != 20) {
 
       const controlsToClear = [
         //'TradeOrderNo',
@@ -876,7 +877,7 @@ export class ItiCollegeReportComponent {
         'ContractLoad',
 
         'IsHostel',
-        //'PrincipleName',
+        'PrincipleName',
         'PrincipleMobile',
         'PrincipleEmailID',
         'LandTypeID',
@@ -935,7 +936,7 @@ export class ItiCollegeReportComponent {
         'ContractLoad',
 
         'IsHostel',
-        //'PrincipleName',
+         'PrincipleName',
         'PrincipleMobile',
         'PrincipleEmailID',
         'LandTypeID',
@@ -976,7 +977,7 @@ export class ItiCollegeReportComponent {
       });
     }
 
-    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 20) {
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin && this.sSOLoginDataModel.RoleID != 260 && this.sSOLoginDataModel.RoleID != 20) {
 
       const controlsToClear = [
         //'TradeOrderNo',
@@ -1172,7 +1173,8 @@ export class ItiCollegeReportComponent {
       // Format specific date fields
       const dateFields: (keyof ItiReportDataModel)[] = [
         'SanctionOrderDate', 'TradeOrderDate', 'AdministrativeOrderDate',
-        'PercentCivilDate', 'TakenOverDate', 'ShilanyasDate', 'LokarpanDate'
+        'PercentCivilDate', 'TakenOverDate', 'ShilanyasDate', 'LokarpanDate',
+        'StartDate', 'CompleteDate'
       ];
 
       dateFields.forEach((field) => {
@@ -1425,7 +1427,16 @@ export class ItiCollegeReportComponent {
     //}
 
 
-    if (this.sSOLoginDataModel.RoleID == 97) {
+
+
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin && this.request.PrincipalOrderCopy == ''
+      || this.sSOLoginDataModel.RoleID == 260 && this.request.PrincipalOrderCopy == '') {
+
+      this.toastr.warning("Please Add Nodal Officer Order Copy")
+      return
+    }
+    if (this.sSOLoginDataModel.RoleID == 260) {
       if (this.request.InteriorPhoto == '') {
         this.toastr.warning("Please Upload Photo of Interior View of Main Campus")
         return
@@ -1448,15 +1459,17 @@ export class ItiCollegeReportComponent {
 
       if (this.request.IsNewCollege == 1 && this.request.AllotmentLetter == '' && this.request.IsOperatingOwn == 'Yes') {
         this.toastr.warning("Please Upload Allotment Letter Copy")
+        return
       }
 
       if (this.request.IsNewCollege == 1 && this.request.BuildingPlanCopy == '' && this.request.IsOperatingOwn == 'Yes') {
         this.toastr.warning("Please Upload Building Plan Copy")
+        return
       }
 
-      if (this.request.IsNewCollege == 1 && this.request.DomeViewCopy == '') {
-        this.toastr.warning("Please Upload  Front Dome View Copy")
-      }
+      //if (this.request.IsNewCollege == 1 && this.request.DomeViewCopy == '') {
+      //  this.toastr.warning("Please Upload  Front Dome View Copy")
+      //}
 
     }
 
@@ -1496,10 +1509,10 @@ export class ItiCollegeReportComponent {
     //  this.toastr.warning("Please Add Financial Sanction Order Copy")
     //  return
     //}
-    if (this.request.AdministrativeCopy == '') {
-      this.toastr.warning("Please Add Administrative Order Copy")
-      return
-    }
+    //if (this.request.AdministrativeCopy == '') {
+    //  this.toastr.warning("Please Add Administrative Order Copy")
+    //  return
+    //}
 
     if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.request.OrderDetailsList.length < 1
       || this.sSOLoginDataModel.RoleID == 20 && this.request.OrderDetailsList.length < 1
@@ -2212,7 +2225,7 @@ export class ItiCollegeReportComponent {
         this.request.Pincode = parsedData['Data']["Pincode"]
         this.request.Pincode = parsedData['Data']["Pincode"]
         this.request.ItiCode = parsedData['Data']["Code"]
-        this.request.MISCode = parsedData['Data']["DgetCode"]
+        //this.request.MISCode = parsedData['Data']["DgetCode"]
 
         this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionId"]);
         this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictId"]);
@@ -2450,8 +2463,37 @@ export class ItiCollegeReportComponent {
     this.request.PlanDocument = '',
       this.request.PlanDocID = 0
 
-  }
+  } async GetPrincipal(event: any) {
+    try {
+      const code = event.target.value;
 
+      if (!code || code.length < 4) return; // optional debounce condition
+
+      let obj = {
+        MasterCode: 'Getprincipalinfo',
+        FilterBy: code
+      };
+
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.CommonMasterDataByAction(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.request.NodalIti = data['Data'][0]['Name'];
+          this.request.PrincipleName = data['Data'][0]['Principalname'];
+          this.request.PrincipleMobile = data['Data'][0]['MobileNo'];
+          this.request.PrincipleEmailID = data['Data'][0]['Email'];
+          this.request.PrincipleUserID = data['Data'][0]['UserID'];
+        }, error => console.error(error));
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   }
 
