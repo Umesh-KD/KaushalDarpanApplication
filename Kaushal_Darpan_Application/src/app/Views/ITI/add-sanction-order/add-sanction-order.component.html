@@ -49,7 +49,7 @@
       </div>
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No<span class="StarMarking">*</span></label>
-        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.OrderNo" placeholder="Enter Post Sanction Order No">
+        <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="request.OrderNo" placeholder="Enter Post Sanction Order No">
         <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
       <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
     </div>-->

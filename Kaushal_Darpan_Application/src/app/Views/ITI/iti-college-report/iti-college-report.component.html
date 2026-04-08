@@ -56,7 +56,7 @@
         <div *ngIf="request.IsNewCollege!=undefined" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Annoucement Type: <span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type: <span class="StarMarking">*</span></label>
             <select class="form-select" id="CollegeID" [(ngModel)]="request.AnnoucementType" formControlName="AnnoucementType">
               <option value="0">--Select--</option>
               <option [value]="1">Budget Annoucement</option>
@@ -253,7 +253,7 @@
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Sanction Order No<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Sanction Order No">
+            <input type="text" class="form-input" id="ApplicationId"  formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Sanction Order No">
             <div *ngIf="isSubmitted && _ReportForm.AdministrativeeOrderNo.errors" class="text-danger">
               <p *ngIf="_ReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
@@ -500,7 +500,7 @@
 
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="NodalOrderNo" [(ngModel)]="request.NodalOrderNo" placeholder="Enter Order No">
+          <input type="text" class="form-input" id="ApplicationId"  formControlName="NodalOrderNo" [(ngModel)]="request.NodalOrderNo" placeholder="Enter Order No">
           <div *ngIf="isSubmitted && _ReportForm.NodalOrderNo.errors" class="text-danger">
             <p *ngIf="_ReportForm.NodalOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
@@ -1446,6 +1446,8 @@
 
       </div>
 
+
+
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type: <span class="StarMarking">*</span></label>
         <select class="form-select" id="CollegeID" (change)="getExaminerData()" [(ngModel)]="request.OrderType">
@@ -1454,52 +1456,28 @@
         </select>
 
       </div>
-      <!--<div>
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.SanctionOrderNo" placeholder="Enter Post Sanction Order No">-->
-      <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
-      <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>-->
-      <!--</div>
-    <div>
-      <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
-      <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.SanctionOrderDate">-->
-      <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderDate.errors" class="text-danger">
-      <p *ngIf="_ReportForm.SanctionOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>-->
-      <!--</div>
 
-
-
-
-    <div>
-      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Copy<span class="StarMarking">*</span> </label>
-      <div class="flex fileUploader">
-        <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-               id="SanctionOrderCopy" type="file" (change)="onFilechange($event,'SanctionOrderCopy')" />
-
-        <label for="SanctionOrderCopy">
-          <span>Choose File</span>
-          {{ request.SanctionOrderCopy === '' ? 'No File Chosen' : request.SanctionOrderCopy }}
-        </label>
-        <div class="flex">
-          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.SanctionOrderCopy}}"
-             *ngIf="this.request.SanctionOrderCopy  !=''"
-             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
-      <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-    (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-    *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-      <!--</div>
-
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId"  [(ngModel)]="request.OrderDate" (change)="getExaminerData()" >
+      
       </div>
-    </div>-->
+
+
 
 
       <div *ngIf="request.OrderType!=0" class="pt-30">
+  
         <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
           <i class="ti ti-plus"></i> Add
+  
         </button>
+
       </div>
+
+
+
+
 
 
 
@@ -1528,7 +1506,7 @@
             <td class="text-center">{{idx+1}}</td>
             <td class="text-center">{{row.OrderTypeName}}</td>
             <td class="text-center">{{row.OrderNo}}</td>
-            <td class="text-center">{{row.OrderDate}}</td>
+            <td class="text-center">{{row.DisOrderDate}}</td>
             <td class="text-center">
               <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
                 <i class="ti ti-eye"></i>
@@ -1574,7 +1552,7 @@
             <td class="text-left">{{idx+1}}</td>
             <td class="text-left">{{row.OrderTypeName}}</td>
             <td class="text-left">{{row.OrderNo}}</td>
-            <td class="text-left">{{row.OrderDate}}</td>
+            <td class="text-left">{{row.DisOrderDate}}</td>
             <td class="text-left">
               <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
                 <i class="ti ti-eye"></i>
@@ -2350,7 +2328,8 @@
       <b class="text-1xl-5">Other Document</b>
     </div>
 
-    <div *ngIf="TypeID!=1" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin  && TypeID!=1||sSOLoginDataModel.RoleID==97 && TypeID!=1 ||
+         sSOLoginDataModel.RoleID==20 &&  TypeID!=1" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document Type: <span class="StarMarking">*</span></label>
         <select class="form-select" id="CollegeID" [(ngModel)]="request.PlanDocID">

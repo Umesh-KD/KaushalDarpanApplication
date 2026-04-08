@@ -602,17 +602,17 @@ export class ItiCollegeReportComponent {
         //  return;
         //}
         //// Type validation
-        //if (['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'].includes(this.file.type)) {
-        //  // Size validation
-        //  if (this.file.size > 2000000) {
-        //    this.toastr.error('Select less than 2MB File');
-        //    return;
-        //  }
-        //}
-        //else {
-        //  this.toastr.error('Select Only jpeg/jpg/png file');
-        //  return;
-        //}
+        if (['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'].includes(this.file.type)) {
+          // Size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less than 2MB File');
+            return;
+          }
+        }
+        else {
+          this.toastr.error('Select Only jpeg/jpg/png file');
+          return;
+        }
 
         //if (this.file.name.split('.').length > 2)
         //{
@@ -2349,6 +2349,7 @@ export class ItiCollegeReportComponent {
 
   async getExaminerData() {
     this.searchRequest.OrderType = this.request.OrderType
+    this.searchRequest.OrderDate = this.request.OrderDate
     this.PostSanctionList = []
     try {
       await this.ScholarshipService.GetsanctionOrderNotAssign(this.searchRequest).then((data: any) => {
