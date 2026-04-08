@@ -168,7 +168,7 @@
                    id="btnEdit" title="Preview"><i class="ti ti-eye"></i></a>
                 <a href="javascript:void(0);" title="View History" (click)="ViewHistory(modal_StudentReverteDocument,row.CollegeId)"><i class="ti ti-list"></i></a>
 
-                <a *ngIf="(sSOLoginDataModel.RoleID == 97 || sSOLoginDataModel.RoleID == 257) && row.Status==3" href="javascript:void(0);" title="Upload Doc"
+                <a *ngIf="(sSOLoginDataModel.RoleID == 97 || sSOLoginDataModel.RoleID == 256) && row.Status==3" href="javascript:void(0);" title="Upload Doc"
                    (click)="UploadCotent(MyModel_UploadDocument,row.CollegeId,row.Approvaldocument,row.DiisApprovaldocument)"><i class="ti ti-upload"></i></a>
 
                 <a *ngIf="row.Approvaldocument" href="javascript:void(0);" title="Download Doc"
