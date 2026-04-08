@@ -83,7 +83,7 @@ export class EMAddTrainingDetailsComponent {
   }
 
   async refreshValidators() {
-    if(this.request.ModeOfTraining == 2) {
+    if(this.request.ModeOfTraining == 1) {
       this.AddTrainingDetailsFromGroup.get('Venue')?.clearValidators();
       this.AddTrainingDetailsFromGroup.get('Venue')?.updateValueAndValidity();
     }
@@ -96,6 +96,16 @@ export class EMAddTrainingDetailsComponent {
       if(this.AddTrainingDetailsFromGroup.invalid){
         this.AddTrainingDetailsFromGroup.markAllAsTouched();
         this.toastr.error('Please fill all the required fields.', 'Error');
+        Object.keys(this.AddTrainingDetailsFromGroup.controls).forEach(key => {
+          const control = this.AddTrainingDetailsFromGroup.get(key);
+
+          if (control && control.invalid) {
+            this.toastr.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
         return;
       }
 

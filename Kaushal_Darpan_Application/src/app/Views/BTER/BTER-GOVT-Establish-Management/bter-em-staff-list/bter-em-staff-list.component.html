@@ -119,7 +119,8 @@
             <td>{{row.IsNodal}}</td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a>
+                <!-- <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a> -->
+                <a (click)="OpenStaffProfileViewModal(row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a>
               </div>
             </td>
             <td>
@@ -820,6 +821,53 @@
                 </div>
               </div>
 
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Physical Disability - More than 40%<span class="StarMarking">*</span></label>
+
+                <div class="flex gap-4">
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="PhysicalDisability" [value]="true" formControlName="PhysicalDisability"
+                           [(ngModel)]="approveRequest.PhysicalDisability" />
+                    <span>Yes</span>
+                  </label>
+
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="PhysicalDisability" [value]="false" formControlName="PhysicalDisability"
+                           [(ngModel)]="approveRequest.PhysicalDisability" />
+                    <span>No</span>
+                  </label>
+                </div>
+
+                <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.PhysicalDisability.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroup.PhysicalDisability.errors.required">
+                    <i aria-hidden="true"></i> This field is required.!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Sports Quota<span class="StarMarking">*</span></label>
+
+                <div class="flex gap-4">
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="SportsQuota" [value]="true" formControlName="SportsQuota"
+                           [(ngModel)]="approveRequest.SportsQuota" />
+                    <span>Yes</span>
+                  </label>
+
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="SportsQuota" [value]="false" formControlName="SportsQuota"
+                           [(ngModel)]="approveRequest.SportsQuota" />
+                    <span>No</span>
+                  </label>
+                </div>
+
+                <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.SportsQuota.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroup.SportsQuota.errors.required">
+                    <i aria-hidden="true"></i> This field is required.!
+                  </p>
+                </div>
+              </div>
 
                <!-- <select class="form-select " name="SelectionCategory" id="SelectionCategory" formControlName="SelectionCategory"
                         [(ngModel)]="approveRequest.SelectionCategory">
@@ -1594,7 +1642,5 @@
   </div>
 </ng-template>
 
-
-
-
 <app-otpmodal #otpModal></app-otpmodal>
+<app-view-staff-profile-modal #Modal_StaffDetailsViewModal></app-view-staff-profile-modal>

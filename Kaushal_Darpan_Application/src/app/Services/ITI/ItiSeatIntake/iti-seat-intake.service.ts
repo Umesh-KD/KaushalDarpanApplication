@@ -305,5 +305,11 @@ export class ItiSeatIntakeService {
       ).toPromise();
   }
   
-
+  public async GetActiveSeatIntakeAdmission(request: SeatIntakeSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetActiveSeatIntakeAdmission`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

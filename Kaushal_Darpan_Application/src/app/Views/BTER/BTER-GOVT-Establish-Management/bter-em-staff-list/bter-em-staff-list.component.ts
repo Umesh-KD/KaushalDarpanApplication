@@ -18,6 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
+import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -78,6 +79,8 @@ export class BTEREMStaffListComponent {
   public BugetHeadList:any=[];
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
+  @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
+
   public isApprove: boolean = false;
   public isModalOpen: boolean = false;
   _EnumRole = EnumRole;
@@ -121,19 +124,17 @@ export class BTEREMStaffListComponent {
       SelectionCategory: ['', [Validators.required]],
       HigherEduPermission: ['', [Validators.required]],
       HigherEduInstitute: ['', [Validators.required]],
-
       DateOfBirth: ['', [Validators.required]],
-
       MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       SSOID: ['', [Validators.required]],
       EmployeeID: [''],
-
       Experience: ['', [Validators.required]],
-
       DateOfRetirement: [''],
       Remark: [''],
       WorkOfficeID: [0, [DropdownValidators]],
-      BugetHeadID:['',[Validators.required]] 
+      BugetHeadID:['',[Validators.required]] ,
+      PhysicalDisability:['',[Validators.required]], 
+      SportsQuota:['',[Validators.required]], 
     });
 
 
@@ -1110,6 +1111,13 @@ debugger
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+    //debugger
+    this.childComponentViewStaffProfile.StaffID = StaffID;
+    this.childComponentViewStaffProfile.UserID = UserID;
+    await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 
 }

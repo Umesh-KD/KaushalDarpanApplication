@@ -311,11 +311,11 @@ export class DTELabInchargeStockRegisterComponent {
       this.toastr.warning("No data available to export.");
       return;
     }
-    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'ItemCode', 'IsOption', 'Code'];
+    const unwantedColumns = ['IsOption','IndentNo','IssueStatus','EquipmentWorking','ConditionOnReturn','IsConsumable',
+'ItemDetailsId','ReturnDate','InvStatus','ItemCode','EquipmentsCode','RemainingQuantity','Name'];
 
-    const columnOrder = ['CollegeName', 'ItemCategoryName', 'EquipmentsName', 'CampanyName',
-      'batchId', 'VoucherNumber', 'IdentificationMark', 'PricePerUnit', 'TotalPrice', 'InitialQuantity',
-      'Working', 'NotWorking', 'Auctioned', 'AvailableQuantity', 'QuantityIssued', 'Status'
+    const columnOrder = ['InstituteName','IssuedTo','EntryDate','ItemType','ItemCategoryName', 'EquipmentName','ItemSpecification', 'CampanyName',
+      'IssueDate', 'Quantity', 'UsedQuantity','ItemStatus','Auctioned', 
     ];
 
     const filteredData = this.ItemMasterList1.map((item: any) => {
@@ -334,7 +334,7 @@ export class DTELabInchargeStockRegisterComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
 
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
-    XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
+    XLSX.writeFile(wb, `Lab_Incharge_Stock_Register_Report_${timestamp}.xlsx`);
   }
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
