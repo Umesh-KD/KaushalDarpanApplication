@@ -84,7 +84,7 @@
                 <a *ngIf="(!(row.status == 1 || row.status == 2) && row.PaymentStatus==0)" href="javascript:void(0);" (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">
                   <i class="ti ti-pencil"></i>
                 </a>
-                <!-- <button class="btn bg-success text-white" *ngIf="row.status==1" (Click)="openOTPModal1()">Pay</button> -->
+                <button class="btn bg-success text-white" *ngIf="row.status==1 && row.Amount!=0" (click)="openOTPModal1(row.InspectionConsentID)">Pay</button>
               </div>
             </td>
           </tr>
