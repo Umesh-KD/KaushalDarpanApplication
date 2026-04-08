@@ -17,6 +17,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { GlobalConstants } from '../../../Common/GlobalConstants';
 import { AttendanceServiceService } from '../../../Services/AttendanceServices/attendance-service.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { StaffMasterDDLDataModel } from '../../../Models/CenterObserverDataModel';
 interface DynamicColumn {
   originalKey: string;
   dayType: string;
@@ -35,14 +36,17 @@ export class ItiAttendencePercentComponent {
   displayedColumns: string[] = [];
 
   filterData: any[] = [];
-
+  public requestStaff = new StaffMasterDDLDataModel();
+  SubjectMasterDDL: any[] = [];
+  StaffList: any[] = [];
+  SSOID: string = ''
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
   shiftddl: any[] = [];
 
-  SubjectMasterDDL: any[] = [];
+
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
   private _liveAnnouncer = inject(LiveAnnouncer);
@@ -90,6 +94,7 @@ export class ItiAttendencePercentComponent {
     this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "0";
 
     this.getMasterData();
+  
 
   }
 
@@ -103,11 +108,13 @@ export class ItiAttendencePercentComponent {
       SemesterID: ['', Validators.required],
       AttendanceStartDate: [this.selectedRange?.start],
       AttendanceEndDate: [this.selectedRange?.end],
-      ShiftId: ['']
+      ShiftId: [''],
+      SSOID: [''],
+      Percent: [''],
     });
 
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
-
+    this.GetStaff_InstituteWise()
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
@@ -122,6 +129,17 @@ export class ItiAttendencePercentComponent {
         AttendanceEndDate: this.AttendanceEndDate,
 
       });
+
+      if (this.sSOLoginDataModel.RoleID == 222) {
+        this.TableForm.patchValue({
+          SSOID: this.sSOLoginDataModel.SSOID
+
+
+        });
+        this.TableForm.controls['SSOID'].disable();
+        this.GetstaffDetails(this.sSOLoginDataModel.SSOID)
+      }
+
       this.TableForm.controls['AttendanceEndDate'].disable();
       this.TableForm.controls['AttendanceStartDate'].disable();
     }
@@ -191,11 +209,19 @@ export class ItiAttendencePercentComponent {
 
   getSubjectMasterDDL(ID: any, SemesterID: any) {
 
+
     this.TableForm.patchValue({
       SubjectID: 0,
-      ShiftId: 0
+
     })
     this.ItiShiftUnitDDL(ID)
+    if (this.SSOID) {
+      this.Onyearchange()
+      return
+    }
+
+
+
     if (ID && SemesterID != "" && SemesterID != null) {
       this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -239,13 +265,14 @@ export class ItiAttendencePercentComponent {
         InstituteID: this.sSOLoginDataModel.InstituteID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.TableForm.value.StreamID,
+        StreamID: this.TableForm.getRawValue().StreamID,
         SubjectID: this.TableForm.value.SubjectID,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         UnitID: this.UnitID,
         ShiftID: this.ShiftID,
-        Seatintake: this.TableForm.value.ShiftId
+        Seatintake: this.TableForm.value.ShiftId,
+        Percent: this.TableForm.value.Percent
       };
 
       console.log(obj); // check values
@@ -401,7 +428,7 @@ export class ItiAttendencePercentComponent {
       downloadLink.href = url;
       downloadLink.download = this.generateFileName(DownloadfileName); // Use DownloadfileName
       downloadLink.click();
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(url);this.TableForm.getRawValue().StreamID
     });
   }
 
@@ -417,7 +444,7 @@ export class ItiAttendencePercentComponent {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
       SemesterID: this.TableForm.value.SemesterID,
-      StreamID: this.TableForm.value.StreamID,
+      StreamID: this.TableForm.getRawValue().StreamID,
       SubjectID: this.TableForm.value.SubjectID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
@@ -480,7 +507,7 @@ export class ItiAttendencePercentComponent {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
       SemesterID: this.TableForm.value.SemesterID,
-      StreamID: this.TableForm.value.StreamID,
+      StreamID: this.TableForm.getRawValue().StreamID,
       SubjectID: this.TableForm.value.SubjectID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
@@ -565,4 +592,68 @@ export class ItiAttendencePercentComponent {
   }
 
 
+  GetStaff_InstituteWise() {
+
+
+    this.requestStaff.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.requestStaff.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.requestStaff.DepartmentID = this.sSOLoginDataModel.Eng_NonEng;
+    this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      debugger;
+      if (data.Data.length > 0) {
+        this.StaffList = data.Data;
+      }
+      else {
+        this.StaffList = [];
+      }
+
+      //this.ExaminerDDL = [{ StaffID: 1, Name: 'Staff 1', SSOID: 'Staff1' },{ StaffID: 2, Name: 'Staff 2', SSOID: 'Staff2' },{ StaffID: 3, Name: 'Staff 3', SSOID: 'Staff3' }];
+    })
+  }
+
+
+  async GetstaffDetails(SSOID: any) {
+    this.SSOID = SSOID;
+
+    const ssoid = this.TableForm.get('SSOID')?.value;
+
+    if (ssoid == null || ssoid === '' || ssoid === 'null') {
+      this.TableForm.get('StreamID')?.enable();
+      this.TableForm.get('ShiftId')?.enable();
+
+      this.TableForm.patchValue({
+        StreamID: null,
+        ShiftId: null
+      });
+
+      this.SSOID = '';
+      return;
+    } else {
+      this.TableForm.get('StreamID')?.disable();
+      this.TableForm.get('ShiftId')?.disable();
+    }
+
+    const item = this.StaffList.find((e: any) => e.SSOID == ssoid);
+    if (!item) return;
+
+    this.TableForm.patchValue({
+      StreamID: item.TradeID,
+      ShiftId: item.SeatIntakeID
+    });
+
+    await this.getSubjectMasterDDL(item.TradeID, this.TableForm.getRawValue().SemesterID);
+
+    console.log(this.TableForm.getRawValue());
+  }
+  Onyearchange() {
+    debugger
+
+    this.ItiShiftUnitDDL(this.TableForm.getRawValue().StreamID)
+    this.SubjectMasterDDL = []
+    this.commonMasterService.GetAssignedSubject(this.SSOID, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.SubjectMasterDDL = data.Data;
+    })
+  }
 }

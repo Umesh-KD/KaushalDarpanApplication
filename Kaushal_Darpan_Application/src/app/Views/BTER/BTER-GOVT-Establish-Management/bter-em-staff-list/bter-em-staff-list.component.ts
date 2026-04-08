@@ -18,6 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
+import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -77,6 +78,8 @@ export class BTEREMStaffListComponent {
   public InstituteMasterDDLList: any[] = [];
   public BugetHeadList:any=[];
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+
+  @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
   public isApprove: boolean = false;
   public isModalOpen: boolean = false;
@@ -1110,6 +1113,13 @@ debugger
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+    //debugger
+    this.childComponentViewStaffProfile.StaffID = StaffID;
+    this.childComponentViewStaffProfile.UserID = UserID;
+    await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 
 }

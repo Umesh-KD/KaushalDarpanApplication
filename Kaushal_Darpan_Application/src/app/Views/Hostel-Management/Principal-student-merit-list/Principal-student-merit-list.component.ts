@@ -165,21 +165,166 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
     }
   }
 
+  //exportToExcel(): void {
+  //  const unwantedColumns = ['InstituteId', 'InstituteId', 'ApplicationId', 'StudentId', 'SemesterId', 'AllotmentStatus',
+  //    'BrachId', 'AllotmentStatus1', 'EndTermID', 'ReqId'
+
+  //  ];
+  //  const filteredData = this.StudentReqListList.map((item: any) => {
+  //    const filteredItem: any = {};
+  //    Object.keys(item).forEach(key => {
+  //      if (!unwantedColumns.includes(key)) {
+  //        filteredItem[key] = item[key];
+  //      }
+  //    });
+  //    return filteredItem;
+  //  });
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'StudentApplyHostelReportData.xlsx');
+  //}
+
+
+  //exportToExcel(): void {
+
+  //  const columnMapping = {
+  //    SrNo: 'Sr. No.',
+  //    InstituteName: 'Institute Name',
+  //    StudentName: 'Student Name',
+  //    HostelRequestNo: 'Request No',
+  //    StreamName: 'Branch',
+  //    SemesterName: 'Semester',
+  //    EndTermName: 'Session',
+  //    TotalAvgPercentage: 'Percentage (%)'
+  //  };
+
+  //  const wantedColumns = Object.keys(columnMapping);
+
+
+  //  const exportData = this.StudentReqListList.map((row: any, index: number) => {
+  //    const filteredRow: any = {};
+  //    wantedColumns.forEach(col => {
+  //      filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+  //    });
+  //    return filteredRow;
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+  //  const colWidths = wantedColumns.map(col => {
+  //    const maxLength = Math.max(
+  //      col.length,
+  //      ...exportData.map((row: any) =>
+  //        row[col] ? row[col].toString().length : 0
+  //      )
+  //    );
+  //    return { wch: maxLength + 2 };
+  //  });
+  //  ws['!cols'] = colWidths;
+
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  const todayDate = new Date().toISOString().split('T')[0];
+
+  //  const fileName = `Student_Apply_Hostel_Report_Data_${todayDate}.xlsx`;
+  //  XLSX.writeFile(wb, fileName);
+  //}
+
+
+  //exportToExcel(): void {
+
+  //  const columnMapping: any = {
+  //    SrNo: 'Sr. No.',
+  //    InstituteName: 'Institute Name',
+  //    StudentName: 'Student Name',
+  //    HostelRequestNo: 'Request No',
+  //    StreamName: 'Branch',
+  //    SemesterName: 'Semester',
+  //    EndTermName: 'Session',
+  //    TotalAvgPercentage: 'Percentage (%)'
+  //  };
+
+  //  const wantedColumns = Object.keys(columnMapping);
+
+  //  const exportData = this.StudentReqListList.map((row: any, index: number) => {
+  //    const formattedRow: any = {};
+
+  //    wantedColumns.forEach(col => {
+  //      const header = columnMapping[col];
+
+  //      if (col === 'SrNo') {
+  //        formattedRow[header] = index + 1;
+  //      } else {
+  //        formattedRow[header] = row[col];
+  //      }
+  //    });
+
+  //    return formattedRow;
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //  const todayDate = new Date().toISOString().split('T')[0];
+  //  const fileName = `Student_Apply_Hostel_Report_Data_${todayDate}.xlsx`;
+
+  //  XLSX.writeFile(wb, fileName);
+  //}
+
   exportToExcel(): void {
-    const unwantedColumns = ['InstituteId', 'InstituteId', 'ApplicationId', 'StudentId', 'SemesterId', 'AllotmentStatus', 'BrachId', 'AllotmentStatus1', 'EndTermID'];
-    const filteredData = this.StudentReqListList.map((item: any) => {
-      const filteredItem: any = {};
-      Object.keys(item).forEach(key => {
-        if (!unwantedColumns.includes(key)) {
-          filteredItem[key] = item[key];
+
+    const columnMapping: any = {
+      SrNo: 'Sr. No.',
+      InstituteName: 'Institute Name',
+      StudentName: 'Student Name',
+      HostelRequestNo: 'Request No',
+      StreamName: 'Branch',
+      SemesterName: 'Semester',
+      EndTermName: 'Session',
+      TotalAvgPercentage: 'Percentage (%)'
+    };
+
+    const wantedColumns = Object.keys(columnMapping);
+
+    const exportData = this.StudentReqListList.map((row: any, index: number) => {
+      const formattedRow: any = {};
+
+      wantedColumns.forEach(col => {
+        const header = columnMapping[col];
+
+        if (col === 'SrNo') {
+          formattedRow[header] = index + 1;
+        } else {
+          formattedRow[header] = row[col];
         }
       });
-      return filteredItem;
+
+      return formattedRow;
     });
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // ✅ Column Width Fix
+    ws['!cols'] = [
+      { wch: 8 },
+      { wch: 40 },
+      { wch: 25 },
+      { wch: 18 },
+      { wch: 20 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 18 }
+    ];
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'StudentApplyHostelReportData.xlsx');
+
+    const todayDate = new Date().toISOString().split('T')[0];
+    const fileName = `Student_Apply_Hostel_Report_Data_${todayDate}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
   }
 
 

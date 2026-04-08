@@ -72,7 +72,7 @@ export class EligibleStudentListMasterComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email','FinancialYearID'
     ];
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
@@ -199,6 +199,15 @@ export class EligibleStudentListMasterComponent implements OnInit {
 
         this.totalRecord=this.StudentList[0]?.TotalRecords;
         this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+
+        // this.GetSessionYear();
+
+        this.StudentList.forEach((student: any) => {
+          const match = this.SessionYearList.find(
+            (y: any) => y.FinancialYearID == student.FinancialYearID
+          );      
+          student.FinancialYearName = match ? match.FinancialYearName : '';
+        });
 
         console.log(this.StudentList)
       }, (error: any) => console.error(error))

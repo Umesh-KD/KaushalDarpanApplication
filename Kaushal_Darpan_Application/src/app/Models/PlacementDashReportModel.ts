@@ -5,6 +5,7 @@ export class PlacementReportSearchModels {
   public DepartmentID: number = 0
   public Eng_NonEng: number = 0
   public CollegeID: number = 0
+  public RoleID?: number = 0
 }
 export class PlacementDashboardModel {
   public DepartmentID:number=0

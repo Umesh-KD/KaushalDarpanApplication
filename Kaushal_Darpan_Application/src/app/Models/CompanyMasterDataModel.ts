@@ -185,7 +185,6 @@ export class InternalMarksReportCollegeWiseSearchModel extends RequestBaseModel 
   public InstituteID?:number=0
   public StreamID?:number=0
   public Type?:number=0
-  public SchemeID?:number=0
   public TypeID?:number=0
   public PageSize: number = 50
   public PageNumber: number = 1

@@ -111,7 +111,7 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 
 <app-hostel-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.HostelWarden || this.sSOLoginDataModel.RoleID == _EnumRole.HostelWardenITINCVT || this.sSOLoginDataModel.RoleID == _EnumRole.HostelWardenITISCVT"></app-hostel-dashboard>
 <app-examiner-incharge-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge_NonEng"></app-examiner-incharge-dashboard>
-<app-guestroom-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.GuestRoomWarden || this.sSOLoginDataModel.RoleID == _EnumRole.GuestHouseAdmin || this.sSOLoginDataModel.RoleID == _EnumRole.GuestHouseIncharge || this.sSOLoginDataModel.RoleID == _EnumRole.GuestRoomWarden "></app-guestroom-dashboard>
+<app-guestroom-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.GuestHouseAdmin"></app-guestroom-dashboard>
 <app-admin-dashboard-scvt *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER || this.sSOLoginDataModel.RoleID == _EnumRole.ITI_ResultAdmin || this.sSOLoginDataModel.RoleID == _EnumRole.ExamInchargeSCVT  "></app-admin-dashboard-scvt>
 
 <app-admin-dashboard-ncvt *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER "></app-admin-dashboard-ncvt>  <!--// New Dashboard Create for ITI NCVT-->

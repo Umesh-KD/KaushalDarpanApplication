@@ -113,7 +113,7 @@ export class PersonalDetailsTabComponent implements OnInit {
         txtMotherEngname: [{ value: '', disabled: true }, Validators.required],
         Gender: [{ value: '', disabled: true }],
         MobileNumber: [{ value: '', disabled: true }, Validators.required],
-        txtWhatsappMobileNumber: [''],
+        txtWhatsappMobileNumber: ['', Validators.pattern(/^[0-9]{10}$/)],
         txtMotherHindiname: [{ value: '' }, Validators.required],
         txtLandlineNumber: [''],
         txtDetailsofIDProof: ['', Validators.required],
@@ -777,6 +777,8 @@ export class PersonalDetailsTabComponent implements OnInit {
     return true;
 
   }
+
+
 
 
 }

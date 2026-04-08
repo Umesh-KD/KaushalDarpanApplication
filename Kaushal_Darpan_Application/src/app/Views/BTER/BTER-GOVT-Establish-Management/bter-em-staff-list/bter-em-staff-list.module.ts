@@ -9,6 +9,7 @@ import { StudentStatusHistoryModule } from '../../../Student/student-status-hist
 import { BTEREMStaffListComponent } from './bter-em-staff-list.component';
 import { BTEREMStaffListRoutingModule } from './bter-em-staff-list-routing.module';
 import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
+import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-staff-profile-modal.model';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
     LoaderModule, 
     TableSearchFilterModule,
     StudentStatusHistoryModule,
-    OTPModalModule
+    OTPModalModule,
+    ViewStaffProfileModalModule
   ]
 })
 export class BTEREMStaffListModule { }

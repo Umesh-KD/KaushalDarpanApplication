@@ -97,7 +97,8 @@ export class ItiPlanningListComponent {
       }
       else
       {
-        if (this.sSOLoginDataModel.RoleID == 97) {
+        if (this.sSOLoginDataModel.RoleID == 97 || this.sSOLoginDataModel.RoleID == 256 )
+        {
           this.ApprovedStatus = 0;
         }
         else {
@@ -371,7 +372,7 @@ export class ItiPlanningListComponent {
   exportToExcel(): void {
     const wantedColumns = ['Sno', 'CollegeName', 'Email', 'InstituteCategoryName', 'InstituteManagement', 'PlotHouseBuildingNo',
       'StreetRoadLane', 'AreaLocalitySector', 'LandMark', 'DivisionName', 'SubDivision', 'DistrictName', 'TehsilName', 'Urban/Rural',
-      'CityName', 'PanchayatSamitiName', 'GramPanchayatSamitiName','VillageName'
+      'CityName', 'PanchayatSamitiName', 'GramPanchayatSamitiName', 'VillageName','StatusName'
     ];
 
     const exportData = this.CampusValidationListData.map((row: any, index: number) => {

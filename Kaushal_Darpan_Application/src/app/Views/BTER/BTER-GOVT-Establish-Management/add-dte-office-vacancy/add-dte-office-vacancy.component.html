@@ -1,0 +1,277 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add DTE Office Vacancy</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Add DTE Office Vacancy</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Office Sanctioned Posts</b>
+      <a [routerLink]="['/dte-office-vacancy-list']" class="btn bg-info btn-sm text-white"><i class="ti ti-pencil"></i> Back</a>
+    </div>
+
+    <form [formGroup]="AddOfficeVacancyForm">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
+
+        <!-- Office -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID" (change)="fillupDesignation()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _AddOfficeVacancyForm.OfficeID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.OfficeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <!-- Institute (shows only when OfficeID == 11) -->
+        <div *ngIf="formData.OfficeID == 21">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+          <select class="form-select" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _AddOfficeVacancyForm.InstituteID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.InstituteID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <!-- Staff Type -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type<span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm?.StaffTypeID?.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm?.StaffTypeID?.errors?.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.DesignationID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.DesignationID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <!-- // show only when StaffType is Teaching -->
+        <div *ngIf="formData.StaffTypeID==30">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+          <select class="form-select" id="BranchID" [(ngModel)]="formData.BranchID" formControlName="BranchID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+              {{item.StreamName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.BranchID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.BranchID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Type<span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.BugetHeadTypeID" formControlName="BugetHeadTypeID" (change)="GetBTER_BGT_BudgetType()">
+            <option value="0">--Select--</option>
+            <option value="1">Planned Budget</option>
+            <option value="2">Non-Planned Budget</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.BugetHeadTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.BugetHeadTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.BugetHeadID" formControlName="BugetHeadID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.BugetHeadID.errors" class="text-danger">
+            <p *ngIf="!_AddOfficeVacancyForm.BugetHeadID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <!-- Total Seat -->
+        <div>
+          <label for="TotalSeatID">Total Seat <span class="StarMarking">*</span></label>
+          <div>
+            <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
+                 [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+          </div>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.TotalSeatID.errors" class="text-danger">
+            <p *ngIf="_AddOfficeVacancyForm.TotalSeatID.errors?.required">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="OrderNumber">Order Number <span class="StarMarking">*</span></label>
+          <div>
+            <input type="text" id="OrderNumber" formControlName="OrderNumber" class="form-control"
+                 [(ngModel)]="formData.OrderNumber">
+          </div>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.OrderNumber.errors" class="text-danger">
+            <p *ngIf="_AddOfficeVacancyForm.OrderNumber.errors?.required">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="OrderDate">Order Date <span class="StarMarking">*</span></label>
+          <div>
+            <input type="date" id="OrderDate" formControlName="OrderDate" class="form-control"
+                 [(ngModel)]="formData.OrderDate">
+          </div>
+          <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.OrderDate.errors" class="text-danger">
+            <p *ngIf="_AddOfficeVacancyForm.OrderDate.errors?.required">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div >
+          <label class="block text-sm font-medium text-gray-900 dark:text-white"
+                 for="orderDoc">Order Document <span class="StarMarking">*</span></label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="orderDoc" type="file" (change)="onFilechange($event,'Photo')" formControlName="orderDoc">
+            <label for="orderDoc">
+              <span>Choose File</span>
+              {{formData.orderDoc === '' ? 'No File Choosen' : formData.Dis_orderDoc}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/VacancyOrderDocument/' + formData.orderDoc}}"
+                 *ngIf="this.formData.Dis_orderDoc!='' " class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="Comments">Comments <span class="StarMarking">*</span></label>
+          <div>
+            <textarea
+              id="Comments"
+              formControlName="Comments"
+              class="form-control"
+              [(ngModel)]="formData.Comments"
+              rows="4">
+            </textarea>
+          </div>
+
+          <div *ngIf="isSubmitted && _AddOfficeVacancyForm.Comments.errors" class="text-danger">
+            <p *ngIf="_AddOfficeVacancyForm.Comments.errors?.required">
+              This field is required .!
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex gap-4 mt-6 justify-center">
+        <button type="submit" class="btn btn-primary" (click)="addOfficeVacancy()">Add </button>
+        <!-- <button type="submit" class="btn btn-success" (click)="SaveData()">Final Save</button> -->
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy List</b>
+    </div>
+    <div class="overflow-x-auto mt-4">
+      <table class="table table-bordered" *ngIf="OfficeVacancyList?.length > 0">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Office Name</th>
+            <th>College</th>
+            <th>Staff Type</th>
+            <!-- <th>Institute Name</th> -->
+            <th>Designation Name</th>
+            <th>Branch</th>
+            <th>Budget Type Name</th>
+            <th>Budget Head Name</th>
+            <th>Total Seat</th>
+            <th>Order Number</th>
+            <th>Order Date</th>
+            <th>Order Document</th>
+            <th>Comments</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of OfficeVacancyList;  let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td>{{ row.OfficeName }}</td>
+            <td>{{ row.InstituteName }}</td>
+            <td>{{ row.StaffTypeName }}</td>
+            <td>{{ row.DesignationName }}</td>
+            <td>{{ row.BranchName }}</td>
+            <td>{{ row.BudgetTypeName }}</td>
+            <td>{{ row.BudgetHeadName }}</td>
+            <td>{{ row.TotalSeatID }}</td>
+            <td>{{ row.OrderNumber }}</td>
+            <td>{{ row.OrderDate | date: 'dd-MM-yyyy' }}</td>
+            <td>
+              <div class="flex">
+                <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/VacancyOrderDocument/' + row.orderDoc"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
+            <td>{{ row.Comments }}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" (click)="removeVacancy(row)">
+                Remove
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex gap-4 mt-6 justify-center">
+      <button type="submit" class="btn btn-success"  
+        *ngIf="OfficeVacancyList.length > 0" 
+        (click)="SaveData()">Final Save
+      </button>
+    </div>
+  </div>
+</div>
