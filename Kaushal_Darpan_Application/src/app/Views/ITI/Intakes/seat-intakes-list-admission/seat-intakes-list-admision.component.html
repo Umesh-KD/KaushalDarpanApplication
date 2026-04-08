@@ -194,7 +194,8 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake()"><i class="ti ti-download"></i> Active Intake For Admission</a>
+        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntakeColleges')"><i class="ti ti-download"></i> Active Colleges For Admission</a>
+        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntake')"><i class="ti ti-download"></i> Active Intake For Admission</a>
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Intake Execl</a>
         <!--<a href="javascript:void(0);" class="btn btn-sm bg-info text-white"><i class="ti ti-download"></i> Export Intake</a>-->
       </div>
@@ -209,21 +210,7 @@
           <option value="{{totalInTableRecord}}">Max</option>
         </select>
       </div>
-      <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-        <div class="flex">
-          <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus" #examStatus="ngModel">
-            <option value="0">Choose Mark As (*)</option>
-            <option *ngFor="let item of ExamStudentStatusDDLList" [value]="item.Id">{{item.Name}}</option>
-          </select>
-          <div *ngIf="isSubmitted && examStatus.invalid" class="text-danger">
-            <p *ngIf="examStatus.errors?.required">This field is required.</p>
-          </div>
-          <button type="button" class="btn bg-info text-white inline-block" (click)="SaveDataMarked()">Mark</button>
-        </div>
-        <div>
-          <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
-        </div>
-      </div> -->
+     
       <div class="">
       </div>
       <div class="">
@@ -235,63 +222,76 @@
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-          <tr>
-            <th class="text-left">Sno</th>
-            <th class="text-left" style="width: 23%;">College Name</th>
-            <th class="text-left">Trade Name</th>
-            <th class="text-left" style="width:7%;">Scheme</th>
-            <th class="text-left">No Of Seats</th>
-            <th class="text-left">Category</th>
+            <tr>
+                <th class="text-left">Sno</th>
+                <th class="text-left" style="width: 22%;">College Name</th>
+                <th class="text-left" style="width: 13%;">Trade Name</th>
+                <th class="text-left" style="width:7%;">Scheme</th>
+                <th class="text-left">No Of Seats</th>
+                <th class="text-left">Category</th>
 
-            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Shift')">
-              Shift
-              <span class="shortingSpan" *ngIf="sortInTableColumn=='Shift'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>
-            <th class="text-left">Unit</th>
-            <th class="text-left">Last Updated</th>
-            <th class="text-left">Active</th>
-            <th style="width: 80px;">Action</th>
-          </tr>
+                <th class="text-left" title="Click to sorting" (click)="sortInTableData('Shift')">
+                    Shift
+                    <span class="shortingSpan" *ngIf="sortInTableColumn=='Shift'" [innerHTML]="sortInTableDirectionAero"></span>
+                </th>
+                <th class="text-left">Unit</th>
+
+
+                <th class="text-left">Seat Status</th>
+
+                <th class="text-left">College Status</th>
+                <th class="text-left">Last Updated</th>
+                <th style="width: 80px;">Action</th>
+            </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td align="left">{{(startInTableIndex+1)+idx}}</td>
-            <td align="left">{{row.CollegeName}}</td>
-            <td align="left">{{row.TradeName}}</td>
-            <td align="left">{{row.TradeScheme}}</td>
-            <td align="left">{{row.NoOfSanctionedSeats}}</td>
-            <td align="left">{{row.Remark}}</td>
-            <td align="left">{{row.Shift}}</td>
-            <td align="left">{{row.Unit_no}}</td>
-            <td align="left">{{row.LastUpdated}}</td>
+            <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
+                <td align="left">{{(startInTableIndex+1)+idx}}</td>
+                <td align="left">{{row.CollegeName}}</td>
+                <td align="left">{{row.TradeName}}</td>
+                <td align="left">{{row.TradeScheme}}</td>
+                <td align="left">{{row.NoOfSanctionedSeats}}</td>
+                <td align="left">{{row.Remark}}</td>
+                <td align="left">{{row.Shift}}</td>
+                <td align="left">{{row.Unit_no}}</td>
 
 
+                <td align="center" [ngSwitch]="row.ActiveStatus">
+                    <i *ngSwitchCase="true" class="fa fa-check text-success" title="Active"></i>
+                    <i *ngSwitchCase="false" class="fa fa-times text-danger" title="Inactive"></i>
+                    <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
+                </td>
+
+                <td align="center" [ngSwitch]="row.IsActiveColleges">
+                    <i *ngSwitchCase="1" class="fa fa-check text-success" title="Active"></i>
+                    <i *ngSwitchCase="0" class="fa fa-times text-danger" title="Inactive"></i>
+                    <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
+                </td>
+
+                <td align="left">{{row.LastUpdated}}</td>
+                <td>
+                    <button class="dropdown" mat-raised-button [matMenuTriggerFor]="menuAdmit" style="width: 130px; padding: 5px;">
+                        Actions <i class="ti ti-chevron-down"></i>
+                    </button>
+
+                    <mat-menu #menuAdmit="matMenu">
 
 
-            <td align="center" [ngSwitch]="row.ActiveStatus">
+                        <!--First Semester-->
+                        <button mat-menu-item
+                                (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveSeat')">
+                            {{row.ActiveStatus==true?'Inactive Seats':'Active Seats'}}
+                        </button>
+                        <!--Second Semester-->
+                        <button mat-menu-item (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
+                            {{row.IsActiveColleges==1?'Inactive College':'Active Colleges'}}
+                        </button>
 
-              <i *ngSwitchCase="true" class="fa fa-check text-success" title="Active"></i>
+                    </mat-menu>
 
-              <i *ngSwitchCase="false" class="fa fa-times text-danger" title="Inactive"></i>
-              <i *ngSwitchDefault class="fa fa-question text-muted" title="Unknown"></i>
-
-            </td>
-            <td>
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [ngSwitch]="row.ActiveStatus" href="javascript:void(0);" title="ChangeStatis" (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveSeat')">
-                  <i *ngSwitchCase="false" class="fa fa-check text-success" title="Active"></i>
-                  <i *ngSwitchCase="true" class="fa fa-times text-danger" title="Inactive"></i>
-                </a>
-
-                <a [ngSwitch]="row.IsActiveColleges" *ngIf="row.CollegeID==searchRequest.CollegeID" href="javascript:void(0);" title="ChangeStatis" (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
-
-                  <i *ngSwitchCase=0 class="fa fa-check text-success" title="Active College"></i>
-                  <i *ngSwitchCase=1 class="fa fa-times text-danger" title="Inactive College"></i>
-
-                </a>
-              </div>
-            </td>
-          </tr>
+                
+                </td>
+            </tr>
         </tbody>
       </table>
     </div>

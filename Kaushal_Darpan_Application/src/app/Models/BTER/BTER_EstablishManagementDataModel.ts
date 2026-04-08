@@ -246,6 +246,8 @@ export class StaffDetailsServicePreviewDataModel {
   public QualificationAtJoining?: string = ''
   public QualificationAfterJoining?: string = ''
   public DateOfRetirement?: string = ''
+  public PhysicalDisability_str?: string = ''
+  public SportsQuota_str?: string = ''
 
   public StaffID: number = 0
   public StaffUserID: number = 0
@@ -254,6 +256,7 @@ export class StaffDetailsServicePreviewDataModel {
 
   // service history 
   public ServiceHistoryList:BTER_EM_AddServiceHistoryDataModel[]=[]
+  public TrainingDetailsList: StaffTrainingDetailDataModel[] = []
 }
 
 
@@ -343,6 +346,8 @@ export class BTER_EM_ApproveStaffDataModel extends RequestBaseModel {
   public StaffTypeID: number = 0
   public WorkOfficeID: number = 0
   public BugetHeadID?:number=0
+  public SportsQuota?:boolean=false
+  public PhysicalDisability?:boolean=false
 }
 
 export class BTER_EM_DeleteModel extends RequestBaseModel {
@@ -691,6 +696,10 @@ export class StaffTrainingDetailDataModel {
   public StaffID: number = 0;
   public TrainingDoc: string = '';
   public Dis_TrainingDoc: string = '';
+
+  public TrainingCourseType_str: string = '';
+  public DurationUnit_str: string = '';
+  public ModeOfTraining_str: string = '';
 }
 
 export class StaffTrainingDetailSearchData {

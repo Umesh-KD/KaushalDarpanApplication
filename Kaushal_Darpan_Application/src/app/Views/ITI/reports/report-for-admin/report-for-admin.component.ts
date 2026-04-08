@@ -207,6 +207,32 @@ debugger
     this.updateInTablePaginatedData();
   }
 
+
+
+
+
+
+
+
+  searchTimeout: any;
+
+  onSearchChange() {
+    clearTimeout(this.searchTimeout);
+
+    this.searchTimeout = setTimeout(() => {
+      this.loaderService.requestStarted();
+
+      if (!this.Table_SearchText || this.Table_SearchText.trim() === '') {
+        this.pageInTableSize = "50";
+      } else {
+        this.pageInTableSize = this.totalInTableRecord?.toString() ?? "50";
+      }
+      this.loadInTable();
+
+    }, 400); // 300–500ms is ideal
+  }
+
+
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
   }
@@ -262,6 +288,15 @@ debugger
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.AllotedSeatList.length;
+
+
   }
+
+
+
+
+
+
+
 
 }

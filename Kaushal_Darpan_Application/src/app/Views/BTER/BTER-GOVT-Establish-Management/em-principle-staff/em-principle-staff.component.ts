@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus, EnumRole } from '../../../../Common/GlobalConstants';
@@ -17,6 +17,7 @@ import { StaffMasterService } from '../../../../Services/StaffMaster/staff-maste
 import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
+import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -89,6 +90,8 @@ export class EMPrincipleStaffComponent {
   public isLoading: boolean = false;
   public isApprove: boolean = false;
   public BugetHeadList: any= [];
+
+  @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -171,6 +174,8 @@ export class EMPrincipleStaffComponent {
       IsEmpWorkingOnDeputationToOther: [false],
       IsEmpWorkingOnPost: [false],
       IsSalaryDrawnFromSamePost: [false],
+      PhysicalDisability: [false],
+      SportsQuota: [false],
       HigherEduInstitute: [''],
       
       //IsEmpWorkingOnDeputationToOther: [false, [Validators.required]],
@@ -1564,6 +1569,12 @@ async GetCategroyData() {
     }
   }
 
+  async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+    //debugger
+    this.childComponentViewStaffProfile.StaffID = StaffID;
+    this.childComponentViewStaffProfile.UserID = UserID;
+    await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
+  }
 
   async exportToExcel() {}
 }

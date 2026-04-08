@@ -71,6 +71,7 @@ export class ItiReportDataModel {
   public WorkOrderCopy: string = ''
   public ShilanyasName: string = ''
   public PrincipleName: string = ''
+  public PrincipleSSOID: string = ''
   public PrincipleMobile: string = ''
   public PrincipleEmailID: string = ''
   public Pincode: string = ''
@@ -125,8 +126,11 @@ export class ItiReportDataModel {
   public ConnectionType:number=0
   public DISCOM: number = 0
   public PlanDocument: string = ''
+  public OrderDate: string = ''
+  public PrincipalOrderCopy: string = ''
   public PlanDocID:number=0
   public StatusID:number=0
+  public PrincipleUserID:number=0
 
 }
 

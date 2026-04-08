@@ -1,0 +1,352 @@
+<ng-template #Modal_StaffDetailsViewModal let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="modal-content">
+    <div class="card">
+
+      <!-- Header -->
+      <div class="card-header flex justify-between items-center">
+        <div class="flex-1 text-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Preview</b>
+        </div>
+        <button class="btn bg-info text-white" (click)="ClosePreviewPopup()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="card-body p-5">
+
+        <!-- ================= Institute & Branch Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 mt-3 rounded">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Institute & Branch Details
+          </b>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4 mb-6">
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">Office</label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsServicePreview?.Office}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">
+              Designation as per Service Book
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsServicePreview.ServiceBookDesignation}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-700 text-sm font-semibold mb-1 block">
+              Branch as per Service Book
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2 min-h-[40px] flex items-center">
+              {{staffDetailsServicePreview?.ServiceBookBranch}}
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- ================= Employee Personal Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Employee Personal Details
+          </b>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4 mb-6">
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Name</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">{{staffDetailsServicePreview.Name}}</div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Gender</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">{{staffDetailsServicePreview.Gender}}</div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Birth</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">{{staffDetailsServicePreview.DateofBirth}}</div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Date of First Appointment
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.DateOfFirstAppointment}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Department Joining</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.DepartmentJoiningDate}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Date of Appointment
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.DateOfAppointment}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">
+              Date of Joining in Institute
+            </label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.DateOfJoining}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Mobile</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.MobileNumber}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">SSO ID</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.SSOID}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Employee ID</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.EmployeeID}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Physical Disability - More than 40%</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.PhysicalDisability_str}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Sports Quota</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.SportsQuota_str}}
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- ================= Employment Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Employment Details
+          </b>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4 mb-6">
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Current Designation</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.CurrentDesignation}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Current Branch</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.CurrentBranch}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Experience</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.Experience}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Qualification at Joining</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.QualificationAtJoining}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Qualification After Joining</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.QualificationAfterJoining}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Retirement</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.DateOfRetirement}}
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- ================= Service History ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Service History
+          </b>
+        </div>
+
+        <div *ngIf="staffDetailsServicePreview.ServiceHistoryList?.length > 0" class="overflow-auto">
+
+          <table class="w-full table-border text-sm">
+            <thead class="bg-gray-200">
+              <tr>
+                <th>S.No</th>
+                <th>Department</th>
+                <th>Institute</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Designation</th>
+                <th>Movement</th>
+                <th>Documents</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let row of staffDetailsServicePreview.ServiceHistoryList; let i=index">
+
+                <td>{{i+1}}</td>
+                <td>{{row.OfficeName}}</td>
+                <td>{{row.InstituteName}}</td>
+                <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
+                <td>{{row.DesignationName}}</td>
+
+                <td>
+
+                  <div *ngIf="row.IsTransfer">
+                    <b class="text-blue-600">Transfer</b>
+                    <div>{{row.TransferToOfficeName}}</div>
+                    <div>{{row.TransferToInstituteName}}</div>
+                    <div class="text-xs">
+                      {{row.DateOfTransfer | date:'yyyy-MM-dd'}}
+                    </div>
+                  </div>
+
+                  <div *ngIf="row.IsPromotion" class="mt-1">
+                    <b class="text-green-600">Promotion</b>
+                    <div>{{row.ToDesignationNamePromotion}}</div>
+                    <div class="text-xs">
+                      {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
+                    </div>
+                  </div>
+
+                </td>
+
+                <td>
+
+                  <div *ngFor="let doc of row.TransferDocuments">
+                    <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc"
+                       target="_blank"
+                       class="text-blue-600 underline">
+                      Transfer Document
+                    </a>
+                  </div>
+
+                  <div *ngFor="let doc of row.PromotionDocuments">
+                    <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + doc.UploadDoc"
+                       target="_blank"
+                       class="text-green-600 underline">
+                      Promotion Document
+                    </a>
+                  </div>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+        <div *ngIf="staffDetailsServicePreview.ServiceHistoryList?.length == 0"
+             class="text-center text-gray-500 py-4">
+          No Service History Available
+        </div>
+
+        <!-- ================= Training Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded mt-3">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Training Details
+          </b>
+        </div>
+
+        <div *ngIf="staffDetailsServicePreview.TrainingDetailsList?.length > 0" class="overflow-auto">
+
+          <table class="w-full table-border text-sm">
+            <thead class="bg-gray-200">
+              <tr>
+                <th>S.No</th>
+                <th>Organizing lnstitute Name</th>
+                <th>Course Type</th>
+                <th>Course Name</th>
+                <th>Duration Unit</th>
+                <th>Duration</th>
+                <th>Start Date - End Date</th>
+                <th>Mode Of Training</th>
+                <th>Venue</th>
+                <th>View Document</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let row of staffDetailsServicePreview.TrainingDetailsList; let i=index">
+
+                <td>{{i+1}}</td>
+                <td>{{row.OrganizinglnstituteName}}</td>
+                <td>{{row.TrainingCourseType_str}}</td>
+                <td>{{row.CourseName}}</td>
+                <td>{{row.DurationUnit_str}}</td>
+                <td>{{row.Duration}}</td>
+                <td>{{row.StartDate}} - {{row.EndDate}}</td>
+                <td>{{row.ModeOfTraining_str}}</td>
+                <td>{{row.Venue}}</td>
+                <td align="left">
+                    <div class="flex">
+                        <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc}}"
+                        class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                    </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+        <div *ngIf="staffDetailsServicePreview.TrainingDetailsList?.length == 0"
+             class="text-center text-gray-500 py-4">
+          No Training Details Available
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
