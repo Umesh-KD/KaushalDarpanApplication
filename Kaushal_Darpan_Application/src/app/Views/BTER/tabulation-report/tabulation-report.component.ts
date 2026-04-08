@@ -156,6 +156,10 @@ export class TabulationReportComponent {
         this.toastr.error("Please select Semester/Year!.");
         return;
       }
+      else if ((this.request.SchemeID ?? 0) <= 0) {
+        this.toastr.error("Please select Scheme!.");
+        return;
+      }
       await this.GetBterTabulationReport();
     }
     catch (Ex) {

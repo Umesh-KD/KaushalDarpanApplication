@@ -648,6 +648,32 @@ export class OfficeVacancyModel {
   public PostSanctionDate: string = ''
   public PostSanctionedID: number = 0;
   public BugetHeadTypeID?:number=0;
+  public BranchID?:number=0;
+  public orderDoc?:string='';
+  public Dis_orderDoc?:string='';
+  public OrderNumber?:string='';
+  public OrderDate?:string='';
+  public BudgetHeadName?:string='';
+  public BudgetTypeName?:string='';
+  public BranchName?:string='';
+}
+
+export class OfficeVacancySearchModel {
+  public Index: number = 0;
+  public ID: number = 0;
+  public OfficeID: number = 0;
+  public PlanningID: number = 0;
+  public InstituteID: number = 0;
+  public DesignationID: number = 0;
+  public BugetHeadID?:number=0;
+  public StaffTypeID: number = 0;
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public CourseTypeID: number = 0;
+  public Name?: string = '';
+  public PostSanctionedID: number = 0;
+  public BugetHeadTypeID?:number=0;
+  public BranchID?:number=0;
 }
 
 export class StaffTrainingDetailDataModel {

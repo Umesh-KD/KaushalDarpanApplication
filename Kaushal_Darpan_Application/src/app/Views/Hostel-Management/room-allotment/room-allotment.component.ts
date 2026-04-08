@@ -775,7 +775,7 @@ export class RoomAllotmentComponent {
 
   exportToExcel(): void {
     const wantedColumns =
-      ['SrNo', 'StudentName', 'HostelRequestNo', 'StreamName', 'SemesterName','TotalAvgPercentage'];
+      ['SrNo','InstituteName', 'StudentName', 'HostelRequestNo', 'StreamName', 'SemesterName','TotalAvgPercentage'];
 
     const exportData = this.StudentReqListList.map((row: any, index: number) => {
       const filteredRow: any = {};

@@ -77,10 +77,12 @@ export class PlacementDashReportComponent implements OnInit {
   }
 
   async GetAllData() {
+//    debugger
     let requestData: PlacementReportSearchModels = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       CollegeID : this.sSOLoginDataModel.InstituteID,
+      RoleID:this.sSOLoginDataModel.RoleID,
       Id: this.id,
       Gender: '',
       StudentName: ''

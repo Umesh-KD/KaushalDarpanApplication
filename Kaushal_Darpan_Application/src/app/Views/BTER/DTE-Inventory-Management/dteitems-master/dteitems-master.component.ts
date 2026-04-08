@@ -311,11 +311,11 @@ export class DteItemsMasterComponent {
       this.toastr.warning("No data available to export.");
       return;
     }
-    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'ItemCode', 'IsOption', 'Code'];
+    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'ItemCode', 'IsOption', 'Code', 'Working', 'NotWorking'];
 
     const columnOrder = ['CollegeName', 'ItemCategoryName', 'EquipmentsName', 'CampanyName',
       'batchId', 'VoucherNumber', 'IdentificationMark', 'PricePerUnit', 'TotalPrice', 'InitialQuantity',
-      'Working', 'NotWorking', 'Auctioned', 'AvailableQuantity', 'QuantityIssued', 'Status'
+      'Auctioned', 'AvailableQuantity', 'QuantityIssued', 'Status'
     ];
 
     const filteredData = this.ItemMasterList1.map((item: any) => {

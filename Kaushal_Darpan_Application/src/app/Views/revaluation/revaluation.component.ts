@@ -39,8 +39,8 @@ export class RevaluationComponent implements AfterViewInit {
   sSOLoginDataModel = new SSOLoginDataModel();
   studentDetailsModel = new StudentDetailsModel();
   public dateConfiguration = new DateConfigurationModel()
-  isStep2Disabled: boolean=false;
-  isStep3Disabled: boolean= false;
+  isStep2Disabled: boolean = false;
+  isStep3Disabled: boolean = false;
   public PDFURL: string = "";
   public MaxPaperCount: number = 0;
 
@@ -121,7 +121,7 @@ export class RevaluationComponent implements AfterViewInit {
 
   async GetRevalation(stepper: MatStepper, row: any): Promise<void> {
     try {
-      
+
       // for getting emitra service id 
       row.IsKiosk = 1;
 
@@ -145,9 +145,9 @@ export class RevaluationComponent implements AfterViewInit {
     }
   }
 
-  onCheckboxChange(row: any) {    
+  onCheckboxChange(row: any) {
     var selectedCount = this.GetStudentDetails.filter((f: any) => f.IsSelected).length;
-    if(this.MaxPaperCount > 3){
+    if (this.MaxPaperCount > 3) {
       this.MaxPaperCount = 3
     }
     if (selectedCount > this.MaxPaperCount) {
@@ -160,12 +160,15 @@ export class RevaluationComponent implements AfterViewInit {
 
   async MultiPayment() {
 
-    this.totalAmount = 0;
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
+    this.totalAmount = 0;
+    let selectedSubjects = '';
+
     if (this.GetStudentDetails.some(f => f.IsSelected == true)) {
-      this.GetStudentDetails.filter(f => f.IsSelected == true).forEach(item => {
-        this.totalAmount += Number(item.FeeAmount);
+      const selectedItems = this.GetStudentDetails.filter(f => f.IsSelected == true);
+      selectedItems.forEach(item => {
+        this.totalAmount += Number(item.FeeAmount ?? 0);
         this.emitraRequest.StudentFeesTransactionItems.push(
           {
             itemAmount: Number(item.FeeAmount ?? 0),
@@ -174,10 +177,14 @@ export class RevaluationComponent implements AfterViewInit {
             tranSemesterID: item.SemesterID
           } as StudentFeesTransactionItems);
 
+        // subjects
+        selectedSubjects = selectedItems
+          .map(item => item?.SubjectCode)
+          .join(', ');
       });
 
       if (this.totalAmount > 0) {
-        var message = "You are about to pay " + this.totalAmount + " for your fee.Would you like to proceed ? ";
+        var message = `You are about to pay '${this.totalAmount}' for (${selectedSubjects}) your fee. <br/>Would you like to proceed?`;
         // confirm
         this.sweetAlert2.Confirmation(message, async (result: any) => {
           //confirmed btn click
@@ -201,7 +208,7 @@ export class RevaluationComponent implements AfterViewInit {
             //common
             //this.GetDateDataList();
             this.loaderService.requestStarted();
-            
+
             // for payment by emitra 
             this.emitraRequest.IsKiosk = true;
             this.emitraRequest.FormCommision = this.studentDetailsModel.FormCommision;
@@ -287,7 +294,7 @@ export class RevaluationComponent implements AfterViewInit {
     form.submit();
     document.body.removeChild(form);
   }
-  
+
   proceedToPayment(): void {
     this.switchSection('payment');
   }

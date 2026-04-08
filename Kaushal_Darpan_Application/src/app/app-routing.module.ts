@@ -1255,6 +1255,8 @@ const routes: Routes = [
       
       // BTER Establishment
       { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
+      { path: 'dte-office-vacancy-list', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/dte-office-vacancy-list/dte-office-vacancy-list.module').then(m => m.DTEOfficeVacancyListModule), title: 'DTE Office Vacancy List' },
+      { path: 'add-dte-office-vacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/add-dte-office-vacancy/add-dte-office-vacancy.module').then(m => m.AddDTEOfficeVacancyModule), title: 'Add DTE Office Vacancy' },
       { path: 'bter-em-stafflist', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-staff-list/bter-em-staff-list.module').then(m => m.BTEREMStaffListModule), title: 'Staff List' },
       { path: 'bter-em-add-staff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/add-staff-initial-details/add-staff-initial-details.module').then(m => m.AddStaffInitialDetailsModule), title: 'Add Staff' },
       { path: 'bter-em-add-staff-principle', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-principle-staff/em-principle-staff.module').then(m => m.EMPrincipleStaffModule), title: 'Add Staff' },

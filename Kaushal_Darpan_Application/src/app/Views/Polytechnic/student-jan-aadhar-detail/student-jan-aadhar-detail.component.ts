@@ -138,7 +138,7 @@ export class StudentJanAadharDetailComponent implements OnInit {
         Domicile: ['', [DropdownValidators]],
         ddlPreferentialCategory: ['', Validators.required],
         txtJanAadhaar: [''],
-        txtName: ['', Validators.required],
+        txtName: ['', Validators.required, Validators.pattern(/^[A-Za-z\u0900-\u097F ]+$/)],
         txtFather: ['', Validators.required],
         txtMotherEngname: ['', Validators.required],
         txtDOB: ['', [Validators.required, this.minimumAgeValidator(14)]],
@@ -1405,4 +1405,56 @@ export class StudentJanAadharDetailComponent implements OnInit {
     await this.janadharComponent.startVerification(this.request.JAN_AADHAR);
 
   }
+
+
+
+  allowOnlyAlphabets(event: any) {
+    const charCode = event.which ? event.which : event.keyCode;
+
+    // A-Z, a-z, space, Hindi range
+    if (
+      (charCode >= 65 && charCode <= 90) ||   // A-Z
+      (charCode >= 97 && charCode <= 122) ||  // a-z
+      (charCode >= 2304 && charCode <= 2431) || // Hindi
+      charCode === 32                         // space
+    ) {
+      return true;
+    }
+
+    event.preventDefault();
+    return false;
+  }
+
+  onPasteClean(event: ClipboardEvent, controlName: string) {
+    event.preventDefault();
+
+    const pastedData = event.clipboardData?.getData('text') || '';
+    let cleaned = pastedData.replace(/[^A-Za-z\u0900-\u097F ]/g, '');
+    cleaned = cleaned.replace(/\s+/g, ' ').trim();
+    cleaned = cleaned.replace(/\b\w/g, (char: string) => char.toUpperCase());
+    this.StudentJanDetailFormGroup.get(controlName)?.setValue(cleaned);
+    switch (controlName) {
+      case 'txtName':
+        this.model.StudentName = cleaned;
+        break;
+      case 'txtFather':
+        this.model.FatherName = cleaned;
+        break;
+      case 'txtMotherEngname':
+        this.model.MotherName = cleaned;
+        break;
+      case 'DepartmentName':
+        this.model.DepartmentName = cleaned;
+        break;
+    }
+  }
+
+
+  formatEmail() {
+    let value = this.StudentJanDetailFormGroup.get('email')?.value || '';
+    value = value.trim();
+    value = value.toLowerCase();
+    this.StudentJanDetailFormGroup.get('email')?.setValue(value, { emitEvent: false });
+  }
+
 }
