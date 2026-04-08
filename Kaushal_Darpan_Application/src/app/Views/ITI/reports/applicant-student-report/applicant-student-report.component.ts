@@ -266,4 +266,24 @@ export class ApplicantStudentReportComponent {
     this.totalInTableRecord = this.AllotedSeatList.length;
   }
 
+
+  searchTimeout: any;
+
+  onSearchChange() {
+    clearTimeout(this.searchTimeout);
+
+    this.searchTimeout = setTimeout(() => {
+      this.loaderService.requestStarted();
+
+      if (!this.Table_SearchText || this.Table_SearchText.trim() === '') {
+        this.pageInTableSize = "50";
+      } else {
+        this.pageInTableSize = this.totalInTableRecord?.toString() ?? "50";
+      }
+
+
+    }, 400); // 300–500ms is ideal
+  }
+
+
 }

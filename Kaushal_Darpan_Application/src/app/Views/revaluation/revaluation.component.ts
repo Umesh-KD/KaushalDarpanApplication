@@ -88,29 +88,22 @@ export class RevaluationComponent implements AfterViewInit {
         this.toastr.error('Please fill in both Enrollment Number and Date of Birth.');
         return;  // Exit the function if validation fails
       }
-      await this.revaluationService.GetDetails(this.searchRequest).then((data: any) => {
-
-        if (data.State == EnumStatus.Success) {
-
-          this.Request = data['Data'][0];
-
-          if (!this.Request.IsReval) {
+      await this.revaluationService.GetDetails(this.searchRequest)
+        .then(async (data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.Request = data['Data'][0];
             this.Request.StudentName = data['Data'][0]['StudentName']
             this.StudentSemesterDetails = data['Data']
-            this.GetDateDataList();
+            await this.GetDateDataList();
             this.switchSection('studentDetails');
             //go to next Step
             stepper.next();
           }
           else {
-            this.toastr.error('you already applied for reval.');
+            this.toastr.error('No Record Found.');
           }
-        }
-        else {
-          this.toastr.error('No Record Found.');
-        }
 
-      });
+        });
 
     } catch (error) {
       console.error('Error fetching student details:', error);
