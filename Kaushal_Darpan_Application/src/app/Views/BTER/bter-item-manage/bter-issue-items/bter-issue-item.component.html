@@ -441,6 +441,7 @@
                   <th class="text-left">Return Date</th>
                   <th class="text-left">Equipment Status on Return</th>
                   <th class="text-left">Status</th>
+                  <th class="text-left">Approval Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -472,6 +473,14 @@
                                  'InvStatus-returned': item.InvStatus === 1
                                }">
                       {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus ===1 ? 'Returned' : 'Unknown' }}
+                    </span>
+                  </td>
+                    <td align="left">
+                    <span [ngClass]="{
+                                 'InvStatus-issued': item.IssueStatus === 1,
+                                 'InvStatus-returned': item.IssueStatus === 2
+                               }">
+                      {{ item.IssueStatus === 1 ? 'Pending at Store Incharge' : item.IssueStatus ===2 ? 'Approved' : 'Unknown' }}
                     </span>
                   </td>
                 </tr>

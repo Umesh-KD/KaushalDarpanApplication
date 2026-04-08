@@ -125,8 +125,8 @@ this.itemsFormArray.get('items')?.valueChanges
       if (data.State === EnumStatus.Success) {
         console.log('Item Details List==>', data.data)
         this.ItemDetailsList = data.Data;
-
-        this.isAllEquipCodeUpdated = this.ItemDetailsList.every(item => item.EquipmentCode !== null && item.EquipmentCode !== undefined && item.EquipmentCode !== '');
+console.log("ItemDetailsList: "+this.ItemDetailsList)
+        this.isAllEquipCodeUpdated = this.ItemDetailsList.every(item => item.EquipmentCode !== null && item.EquipmentCode !== undefined && item.EquipmentCode !== '' && item.EquipmentCode !== '0');
 
         this.addItemsControls();
       }
