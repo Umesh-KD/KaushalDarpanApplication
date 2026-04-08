@@ -124,19 +124,17 @@ export class BTEREMStaffListComponent {
       SelectionCategory: ['', [Validators.required]],
       HigherEduPermission: ['', [Validators.required]],
       HigherEduInstitute: ['', [Validators.required]],
-
       DateOfBirth: ['', [Validators.required]],
-
       MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
       SSOID: ['', [Validators.required]],
       EmployeeID: [''],
-
       Experience: ['', [Validators.required]],
-
       DateOfRetirement: [''],
       Remark: [''],
       WorkOfficeID: [0, [DropdownValidators]],
-      BugetHeadID:['',[Validators.required]] 
+      BugetHeadID:['',[Validators.required]] ,
+      PhysicalDisability:['',[Validators.required]], 
+      SportsQuota:['',[Validators.required]], 
     });
 
 

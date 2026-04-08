@@ -132,6 +132,20 @@
             </div>
           </div>
 
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Physical Disability - More than 40%</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.PhysicalDisability_str}}
+            </div>
+          </div>
+
+          <div>
+            <label class="text-sm font-semibold text-gray-700 block mb-1">Sports Quota</label>
+            <div class="bg-gray-50 border rounded px-3 py-2">
+              {{staffDetailsServicePreview.SportsQuota_str}}
+            </div>
+          </div>
+
         </div>
 
 
@@ -274,6 +288,62 @@
         <div *ngIf="staffDetailsServicePreview.ServiceHistoryList?.length == 0"
              class="text-center text-gray-500 py-4">
           No Service History Available
+        </div>
+
+        <!-- ================= Training Details ================= -->
+        <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-gray-100 rounded mt-3">
+          <b class="text-lg">
+            <i class="ti ti-plus"></i> Training Details
+          </b>
+        </div>
+
+        <div *ngIf="staffDetailsServicePreview.TrainingDetailsList?.length > 0" class="overflow-auto">
+
+          <table class="w-full table-border text-sm">
+            <thead class="bg-gray-200">
+              <tr>
+                <th>S.No</th>
+                <th>Organizing lnstitute Name</th>
+                <th>Course Type</th>
+                <th>Course Name</th>
+                <th>Duration Unit</th>
+                <th>Duration</th>
+                <th>Start Date - End Date</th>
+                <th>Mode Of Training</th>
+                <th>Venue</th>
+                <th>View Document</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let row of staffDetailsServicePreview.TrainingDetailsList; let i=index">
+
+                <td>{{i+1}}</td>
+                <td>{{row.OrganizinglnstituteName}}</td>
+                <td>{{row.TrainingCourseType_str}}</td>
+                <td>{{row.CourseName}}</td>
+                <td>{{row.DurationUnit_str}}</td>
+                <td>{{row.Duration}}</td>
+                <td>{{row.StartDate}} - {{row.EndDate}}</td>
+                <td>{{row.ModeOfTraining_str}}</td>
+                <td>{{row.Venue}}</td>
+                <td align="left">
+                    <div class="flex">
+                        <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc}}"
+                        class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                    </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+        <div *ngIf="staffDetailsServicePreview.TrainingDetailsList?.length == 0"
+             class="text-center text-gray-500 py-4">
+          No Training Details Available
         </div>
 
       </div>
