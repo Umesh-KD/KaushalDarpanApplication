@@ -194,7 +194,8 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake()"><i class="ti ti-download"></i> Active Intake For Admission</a>
+        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntakeColleges')"><i class="ti ti-download"></i> Active Colleges For Admission</a>
+        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntake')"><i class="ti ti-download"></i> Active Intake For Admission</a>
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Intake Execl</a>
         <!--<a href="javascript:void(0);" class="btn btn-sm bg-info text-white"><i class="ti ti-download"></i> Export Intake</a>-->
       </div>

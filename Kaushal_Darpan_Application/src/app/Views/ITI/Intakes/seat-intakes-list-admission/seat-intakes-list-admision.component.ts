@@ -196,10 +196,12 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
 
 
-  ExportActiveSeatIntake(): void {
+  ExportActiveSeatIntake(Action: string ='_getActiveSeatIntake'): void {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
+      this.searchRequest.Action = Action;
+
       this.ItiSeatIntakeService.GetActiveSeatIntakeAdmission(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -228,6 +230,8 @@ export class SeatIntakesListAdmissionComponent implements OnInit
           const minutes = String(now.getMinutes()).padStart(2, '0');
 
           const second = String(now.getSeconds()).padStart(2, '0');
+
+
           const fileName = `ActiveSeatIntakeDetails_${day}-${month}-${year}_${hours}_${minutes}_${second}.xlsx`;
 
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);

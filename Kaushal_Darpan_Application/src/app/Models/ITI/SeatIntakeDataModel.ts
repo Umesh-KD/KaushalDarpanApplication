@@ -46,6 +46,9 @@ export class SeatIntakeSearchModel {
   public OnlyForWomen: boolean = false;
   public CollegeCode: string = '';
   public TradeCode: string = '';
+  public Action: string = '';
+
+
 }
 
 export class ITICollegeTradeSearchModel {
