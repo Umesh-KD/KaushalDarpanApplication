@@ -10,6 +10,7 @@ export class MiscellaneousModel {
   public SchemeID: number = 0;
   public PresentStatus: number = 0;
   public Type: number = 0;
+  public CourseType: number = 0;
 }
 
 
