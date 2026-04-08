@@ -177,11 +177,9 @@ export class HostelReportsComponent {
     await this.GetReportData();
   }
 
-  exportToExcel(): void {
-    // List of columns to exclude from export
+  exportToExcel1(): void {
     const unwantedColumns = ['InstituteId', 'ApplicationId', 'StudentId', 'SemesterId', 'AllotmentStatus', 'BrachId', 'AllotmentStatus1', 'EndTermID'];
 
-    // Filter the data based on unwanted columns
     const filteredData = this.ReportList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -192,43 +190,87 @@ export class HostelReportsComponent {
       return filteredItem;
     });
 
-    // Create worksheet from filtered data
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
 
-    // Calculate column widths based on max length of content in each column
     const columnWidths = Object.keys(filteredData[0] || {}).map(key => ({
       wch: Math.max(
         key.length, // Header length
         ...filteredData.map((item: any) => (item[key] ? item[key].toString().length : 0)) // Max content length
-      ) + 2 // Add extra padding
+      ) + 2
     }));
 
-    // Apply column widths
     ws['!cols'] = columnWidths;
 
-    // Apply header styling (bold + background color)
     const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
     if (range.s && range.e) {
       for (let col = range.s.c; col <= range.e.c; col++) {
-        const cellAddress = XLSX.utils.encode_col(col) + '1'; // First row (headers)
+        const cellAddress = XLSX.utils.encode_col(col) + '1'; 
         if (!ws[cellAddress]) continue;
 
         ws[cellAddress].s = {
-          font: { bold: true, color: { rgb: "FFFFFF" } }, // Bold text, white color
-          fill: { fgColor: { rgb: "#f3f3f3" } }, // Light background color
-          alignment: { horizontal: "center", vertical: "center" } // Center-align text
+          font: { bold: true, color: { rgb: "FFFFFF" } }, 
+          fill: { fgColor: { rgb: "#f3f3f3" } }, 
+          alignment: { horizontal: "center", vertical: "center" }
         };
       }
     }
 
-    // Create a new workbook and append the sheet
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    // Export the file as "HostelAllotedRoomAndSeatReportData.xlsx"
     XLSX.writeFile(wb, 'HostelAllotedRoomAndSeatReportData.xlsx');
   }
 
+  exportToExcel(): void {
+
+    const columnMapping: any = {
+      SrNo: 'Sr. No.',
+      InstituteName: 'Institute Name',
+      StudentName: 'Student Name',
+      ApplicationId: 'Application No',
+      StreamName: 'Branch',
+      SemesterName: 'Semester',
+      EndTermName: 'Session',
+      RoomType: 'Room Type',
+      MobileNo: 'Mobile No',
+      Status: 'Status',
+      
+    };
+
+    const wantedColumns = Object.keys(columnMapping);
+
+    const exportData = this.ReportList.map((row: any, index: number) => {
+      const formattedRow: any = {};
+
+      wantedColumns.forEach(col => {
+        const header = columnMapping[col];
+
+        if (col === 'SrNo') {
+          formattedRow[header] = index + 1;
+        } else {
+          formattedRow[header] = row[col];
+        }
+      });
+
+      return formattedRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = [
+      { wch: 8 }, { wch: 38 }, { wch: 25 }, { wch: 18 }, { wch: 20 }, { wch: 15 }, { wch: 15 }, { wch: 18 }
+    ];
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const todayDate = new Date().toISOString().split('T')[0];
+    const fileName = `Student_Apply_Hostel_Report_Data_${todayDate}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+  }
+
+
+  
   
 
   async deallocationRoomRemark(item: any) {

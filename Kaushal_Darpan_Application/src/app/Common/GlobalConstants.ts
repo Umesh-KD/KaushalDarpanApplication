@@ -859,3 +859,8 @@ export const QualificationLevel = [
   { id: 3, name: 'Diploma/Certificate Course' },
   { id: 4, name: 'School Education' },
 ];
+
+export const BudgetType = [
+  { id: 1, name: 'Planned Budget' },
+  { id: 2, name: 'Non-Planned Budget' },
+];
