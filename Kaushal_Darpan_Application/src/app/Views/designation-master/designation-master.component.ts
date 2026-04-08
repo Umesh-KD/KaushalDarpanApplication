@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as XLSX from 'xlsx';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
-import { DesignationMasterDataModel } from '../../Models/DesignationMasterDataModel';
+import { DesignationMasterDataModel, DesignationMasterSearchModel } from '../../Models/DesignationMasterDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
@@ -27,6 +27,7 @@ export class DesignationMasterComponent implements OnInit {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public DesignationMasterList: any = [];
+  public StaffTypeList: any = [];
   public UserID: number = 0;
   searchText: string = ''; // This is for search input
   Table_SearchText: string = ''; // Add this property
@@ -36,10 +37,24 @@ export class DesignationMasterComponent implements OnInit {
   public isLoadingExport: boolean = false;
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
-  public LevelMasterList: any = [];
 
   request = new DesignationMasterDataModel();
+  searchRequest = new DesignationMasterSearchModel();
+  activeRequest = new DesignationMasterSearchModel();
   sSOLoginDataModel = new SSOLoginDataModel();
+
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -58,12 +73,13 @@ export class DesignationMasterComponent implements OnInit {
       txtDesignationName: ['', Validators.required],
       txtDesignationNameHindi: ['', Validators.required],
       txtDesignationNameShort: ['', Validators.required],
-      ActiveStatus: ['true'],
+      IsActive: ['true'],
+      StaffTypeID: ['', [DropdownValidators]],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.request.UserID = this.sSOLoginDataModel.UserID;
-    await this.GetMasterData();
+    
+    await this.GetStaffTypeData();
     await this.GetDesignationMasterList();
   }
 
@@ -71,35 +87,15 @@ export class DesignationMasterComponent implements OnInit {
     return this.DesignationMasterFormGroup.controls;
   }
 
-  async GetMasterData() {
-    try {
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetLevelMaster()
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.LevelMasterList = data['Data'];
-        }, error => console.error(error));
-    } catch (Ex) {
-      console.log(Ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
   async GetDesignationMasterList() {
 
     try {
       this.loaderService.requestStarted();
-      await this.designationMasterService.GetAllDesignations()
+      await this.designationMasterService.GetAllDesignations(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.DesignationMasterList = data['Data'];
-          console.log(data)
+          this.loadInTable();
         }, error => console.error(error));
     } catch (Ex) {
       console.log(Ex);
@@ -112,37 +108,25 @@ export class DesignationMasterComponent implements OnInit {
   async SaveData() {
     this.isSubmitted = true;
     if (this.DesignationMasterFormGroup.invalid) {
+      this.toastr.error('Form is invalid');
       return
     }
-    //Show Loading
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-    this.request.UserID = this.sSOLoginDataModel.UserID
+    this.request.UserID = this.sSOLoginDataModel.UserID;
     try {
       await this.designationMasterService.SaveData(this.request)
       
         .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          if (this.State = EnumStatus.Success) {
+          if (data.State = EnumStatus.Success) {
             this.toastr.success(this.Message)
             this.ResetControl();
             this.GetDesignationMasterList()
           }
           else {
-            this.toastr.error(this.ErrorMessage)
+            this.toastr.error(data.ErrorMessage)
           }
         })
     }
     catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-
-      }, 200);
-    }
   }
 
   async btnEdit_OnClick(DesignationID: number) {
@@ -185,7 +169,7 @@ export class DesignationMasterComponent implements OnInit {
         if (result.isConfirmed) {
           try {
             this.loaderService.requestStarted();
-            await this.designationMasterService.DeleteDataByID(DesignationID, this.UserID)
+            await this.designationMasterService.DeleteDataByID(DesignationID, this.sSOLoginDataModel.UserID)
               .then(async (data: any) => {
                 this.State = data['State'];
                 this.Message = data['Message'];
@@ -210,7 +194,6 @@ export class DesignationMasterComponent implements OnInit {
 
   async ResetControl() {
     this.isSubmitted = false;
-
     // Reset the request object
     this.request = new DesignationMasterDataModel();
 
@@ -222,68 +205,170 @@ export class DesignationMasterComponent implements OnInit {
       ActiveStatus: 'true', // Assuming true is the default active status
     });
 
-    // Reset other UI elements
-    this.isDisabledGrid = false;
-    const btnSave = document.getElementById('btnSave');
-    if (btnSave) btnSave.innerHTML = "Save";
-    const btnReset = document.getElementById('btnReset');
-    if (btnReset) btnReset.innerHTML = "Reset";
+    await this.CloseModalPopup();
   }
 
-
-  btnExportTable_Click(): void {
-    this.loaderService.requestStarted();
-    if (this.DesignationMasterList.length > 0) {
-      try {
-        this.isLoadingExport = true;
-        let element = document.getElementById('tabellist');
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        ws['!cols'] = [];
-        ws['!cols'][3] = { hidden: true };
-        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-        XLSX.writeFile(wb, "DesignationMaster.xlsx");
-      } catch (Ex) {
-        console.log(Ex);
-      } finally {
-        setTimeout(() => {
-          this.loaderService.requestEnded();
-          this.isLoadingExport = false;
-        }, 200);
-      }
-    } else {
-      this.toastr.warning("No Record Found.!");
+  async GetStaffTypeData() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffTypeList = data.Data;
+        console.log("StaffTypeList", this.StaffTypeList);
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
-        this.isLoadingExport = false;
       }, 200);
     }
   }
 
-  @ViewChild('content') content: ElementRef | any;
-
-  open(content: any, BookingId: string) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
+  async ViewandUpdate(content: any, id : number = 0) {
+    if(id > 0) {
+      await this.btnEdit_OnClick(id);
+    }
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });    
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
+  async CloseModalPopup() {
+    this.request = new DesignationMasterDataModel();
+    this.modalService.dismissAll();
+  }
+
+  async ResetSearch() {
+    this.searchRequest = new DesignationMasterSearchModel();
+    await this.GetDesignationMasterList();
+  }
+
+  async DesignationActiveDeActive(ID: number, IsActive: boolean) {
+    if (ID != 0) {
+      this.activeRequest.DesignationID = ID;
+      this.activeRequest.IsActive = IsActive;
+      this.activeRequest.UserID = this.sSOLoginDataModel.UserID;
+      await this.designationMasterService.DesignationActiveDeActive(this.activeRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.GetDesignationMasterList();
+          this.activeRequest = new DesignationMasterSearchModel();
+          // Clear array after successful save
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      });
     }
   }
 
-  async SetUserRoleRights(DesignationID: number) {
-    this.routers.navigate(['/userrolerights' + '/', DesignationID]);
+  exportToExcel(): void {
+    if (!this.DesignationMasterList || this.DesignationMasterList.length === 0) {
+      this.toastr.warning("No data available to export.");
+      return;
+    }
+    const unwantedColumns = ['DesignationID'];
+
+    const columnOrder = [
+      'StaffType_str', 'DesignationNameEnglish', 'DesignationNameHindi' ,'DesignationNameShort' ,'Status' 
+    ];
+
+    const filteredData = this.DesignationMasterList.map((item: any) => {
+      const row: any = {};
+      columnOrder.forEach(col => {
+        if (!unwantedColumns.includes(col)) {
+          row[col] = item[col] ?? ''; // fallback if value missing
+        }
+      });
+
+      return row;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `designation_master_${timestamp}.xlsx`);
   }
+
+  //table feature 
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org. list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.DesignationMasterList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org. list here)
+  async sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.DesignationMasterList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.DesignationMasterList.length;
+  }
+  // (replace org. list here)
+  
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  
+  // end table feature
 }
