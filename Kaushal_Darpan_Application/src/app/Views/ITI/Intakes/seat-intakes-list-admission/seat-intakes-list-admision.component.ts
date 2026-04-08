@@ -19,7 +19,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./seat-intakes-list-admision.component.css'],
   standalone: false
 })
-export class SeatIntakesListAdmissionComponent implements OnInit {
+export class SeatIntakesListAdmissionComponent implements OnInit
+{
   public SSOLoginDataModel = new SSOLoginDataModel();
   public SeatIntakeSearchFormGroup!: FormGroup;
   public SeatIntakeSearchFormGroupPopUp!: FormGroup;
@@ -199,7 +200,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
-      this.ItiSeatIntakeService.GetActiveSeatIntake(this.searchRequest)
+      this.ItiSeatIntakeService.GetActiveSeatIntakeAdmission(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress'];
@@ -212,10 +213,30 @@ export class SeatIntakesListAdmissionComponent implements OnInit {
             });
             return filteredItem;
           });
+          //const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+          //const wb: XLSX.WorkBook = XLSX.utils.book_new();
+          //XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+          //XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
+
+
+          const now = new Date();
+
+          const day = String(now.getDate()).padStart(2, '0');
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const year = String(now.getFullYear()).slice(-2);
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+
+          const second = String(now.getSeconds()).padStart(2, '0');
+          const fileName = `ActiveSeatIntakeDetails_${day}-${month}-${year}_${hours}_${minutes}_${second}.xlsx`;
+
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-          XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
+
+          XLSX.writeFile(wb, fileName);
+
+
 
 
         }, (error: any) => console.error(error)
@@ -409,6 +430,22 @@ export class SeatIntakesListAdmissionComponent implements OnInit {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
+
+
+    const now = new Date();
+
+    const formattedDateTime = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0') + '_' +
+      String(now.getHours()).padStart(2, '0') + '-' +
+      String(now.getMinutes()).padStart(2, '0') + '-' +
+      String(now.getSeconds()).padStart(2, '0');
+
+    const fileName = `SeatIntakeDetails_${formattedDateTime}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+
+
   }
 
   @ViewChild('ModalStatusActiveInactive') ModalStatusActiveInactive!: TemplateRef<any>;

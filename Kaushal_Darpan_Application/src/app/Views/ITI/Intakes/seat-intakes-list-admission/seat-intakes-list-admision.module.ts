@@ -8,6 +8,8 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MatMenu } from '@angular/material/menu';
+import { MaterialModule } from '../../../../material.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     ReactiveFormsModule,
     LoaderModule,
     TableSearchFilterModule,
-    NgMultiSelectDropDownModule.forRoot(),
+    MatMenu,
+    NgMultiSelectDropDownModule.forRoot(), MaterialModule,
     NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
   ]
 })
