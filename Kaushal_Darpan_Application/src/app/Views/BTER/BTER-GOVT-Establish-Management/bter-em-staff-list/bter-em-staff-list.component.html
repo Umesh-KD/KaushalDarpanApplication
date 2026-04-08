@@ -119,7 +119,8 @@
             <td>{{row.IsNodal}}</td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a>
+                <!-- <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a> -->
+                <a (click)="OpenStaffProfileViewModal(row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a>
               </div>
             </td>
             <td>
@@ -1594,7 +1595,5 @@
   </div>
 </ng-template>
 
-
-
-
 <app-otpmodal #otpModal></app-otpmodal>
+<app-view-staff-profile-modal #Modal_StaffDetailsViewModal></app-view-staff-profile-modal>
