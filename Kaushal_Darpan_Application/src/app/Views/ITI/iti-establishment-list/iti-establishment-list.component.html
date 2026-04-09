@@ -146,13 +146,13 @@
                   <i class="ti ti-pencil"></i>
                 </a>
 
-                <a *ngIf="(sSOLoginDataModel.RoleID == _enumrole.ITIPlanningAdmin && examiner.Status != 'Completed')
+                <!--<a *ngIf="(sSOLoginDataModel.RoleID == _enumrole.ITIPlanningAdmin && examiner.Status != 'Completed')
               || sSOLoginDataModel.RoleID == _enumrole.ITIBuildingAdmin  || sSOLoginDataModel.RoleID == 260"
                    href="javascript:void(0);"
                    title="Remove"
-                   (click)="btnDelete_OnClick(examiner.ScholarshipID)">
+                   (click)="btnDelete_OnClick(examiner.Eid)">
                   <i class="ti ti-trash"></i>
-                </a>
+                </a>-->
 
                 <a [routerLink]="['/ItiCollegeReport']"
                    [queryParams]="{ ID: examiner.EId, TypeID: 1 }"
