@@ -35,6 +35,9 @@ export class ITIAdminUserComponent {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
+  public DisplayCollegeName: string = '';
+
+
   public AdminUserFormGroup!: FormGroup;
   public AdminUserList: any = [];
   public CollegeList: any = [];
@@ -60,7 +63,6 @@ export class ITIAdminUserComponent {
 
         txtUserEmail: ['', Validators.required],
         RoleID: ['', [DropdownValidators]],
-        InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
         txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
         //txtMobileNo: ['', Validators.required],
         txtMobileNo: [{ value: '' }, Validators.required],
@@ -211,7 +213,7 @@ export class ITIAdminUserComponent {
 
   }
 
-  async ViewandUpdate(content: any, UserID: number, UserAdditionID: number, ProfileID: number,InstituteID:number,RoleID:number=0) {
+  async ViewandUpdate(content: any, UserID: number, UserAdditionID: number, ProfileID: number, InstituteID: number, RoleID: number = 0, CollegeName:string='') {
 
     //const initialState = {
     //  MarksheetIssueDataId: MarksheetIssueDataId,
@@ -223,9 +225,9 @@ export class ITIAdminUserComponent {
     this.ProfileID = ProfileID;
     this.request.ProfileID = ProfileID;
     this.request.UserAdditionID = ProfileID;
-    this.request.InstituteID = InstituteID
+    this.request.InstituteID = InstituteID;
     this.request.RoleID = RoleID
-
+    this.DisplayCollegeName = CollegeName;
     if (this.UserID > 0 || this.UserAdditionID > 0 || this.ProfileID > 0) {
       await this.GetById();
       this.IsView = true;
