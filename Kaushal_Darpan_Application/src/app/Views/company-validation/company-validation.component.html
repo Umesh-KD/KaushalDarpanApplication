@@ -185,8 +185,8 @@
                   <th>Company Name</th>
                   <th>Address</th>
                   <!-- <th>District</th> -->
-                  <th>Action</th>
-                  <th>Action By</th>
+                  <th>Status</th>
+                  <th>Modified By</th>
                   <th>Remarks</th>
                   <th>Action Date</th>
                 </tr>
@@ -202,9 +202,9 @@
                   <td>
                     <span 
                       [ngClass]="{
-                        'bg-green-600 text-white px-2 py-1 rounded': row.Action == 'Approved',
-                        'bg-yellow-500 text-white px-2 py-1 rounded': row.Action == 'Pending',
-                        'bg-danger text-white px-2 py-1 rounded': row.Action == 'Rejected'
+                        'bg-green-100 text-white px-3 py-3 rounded': row.Action == 'Approved',
+                        'bg-yellow-100 text-white px-3 py-3 rounded': row.Action == 'Pending',
+                        'bg-danger text-white px-3 py-3 rounded': row.Action == 'Rejected'
                       }">
                       {{ row.Action }}
                     </span>
@@ -234,8 +234,8 @@
                   <th>Email</th>
                   <th>Mobile</th>
                   <th>Company Name</th>
-                  <th>Action</th>
-                  <th>Action By</th>
+                  <th>Status</th>
+                  <th>Modified By</th>
                   <th>Remarks</th>
                   <th>Action Date</th>
                 </tr>
@@ -251,8 +251,8 @@
             
                   <td>
                     <span [ngClass]="{
-                      'bg-green-600 text-white px-2 py-1 rounded': row.Action == 'Approved',
-                      'bg-yellow-500 text-white px-2 py-1 rounded': row.Action == 'Pending',
+                      'bg-green-100 text-white px-2 py-1 rounded': row.Action == 'Approved',
+                      'bg-yellow-100 text-white px-2 py-1 rounded': row.Action == 'Pending',
                       'bg-danger text-white px-2 py-1 rounded': row.Action == 'Rejected'
                     }">
                       {{ row.Action }}
