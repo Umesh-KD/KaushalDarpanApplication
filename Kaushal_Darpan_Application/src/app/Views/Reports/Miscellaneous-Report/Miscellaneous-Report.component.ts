@@ -133,6 +133,8 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 2, Name: 'Download UFM Report' },
       { ID: 3, Name: 'Download Consolidated Detain Student List report' },
       { ID: 4, Name: 'Download Examiners With Group Code And Marking report' },
+      { ID: 5, Name: 'Download Grace Marks Student report' },
+      { ID: 6, Name: 'Download Detain Marks Student report' },
 
     ];
   }
@@ -152,7 +154,14 @@ export class MiscellaneousReportComponent implements OnInit {
       this.requestData.Type = !isNaN(Number(this.groupForm.value.Type)) ? Number(this.groupForm.value.Type) : 0;
       this.requestData.Action = '_get_UFM_data'
       this.requestData.PresentStatus = this.requestData.Type;
-      this.requestData.SchemeID = !isNaN(Number(this.groupForm.value.SchemeID)) ? Number(this.groupForm.value.SchemeID) : 0;;
+      this.requestData.SchemeID = !isNaN(Number(this.groupForm.value.SchemeID)) ? Number(this.groupForm.value.SchemeID) : 0;
+
+
+      if ([5, 6].includes(this.requestData.Type)) {
+        this.requestData.CourseType = this.sSOLoginDataModel.Eng_NonEng;
+      } else {
+        this.requestData.CourseType = 0;
+      }
 
       try {
         await this.reportService.GetMiscellaneousReport(this.requestData)
@@ -165,6 +174,12 @@ export class MiscellaneousReportComponent implements OnInit {
               this.GetfilteredList = data["Data"];// list
               if (this.requestData.Type == 4) {
                 this.exportToExcelstaticType();
+              }
+              else if (this.requestData.Type == 5) {
+                this.exportToExcelTpye5();
+              }
+              else if (this.requestData.Type == 6) {
+                this.exportToExcelTpye6();
               }
               else {
                 this.exportToExcelTpye2();
@@ -316,5 +331,75 @@ export class MiscellaneousReportComponent implements OnInit {
 
     XLSX.writeFile(wb, fileName);
   }
+
+
+    exportToExcelTpye5(): void {
+     
+      const wantedColumns =
+        ['SrNo', 'StudentName', 'FatherName', 'MotherName', 'EnrollmentNo', 'RollNo', 'SemesterID', 'StudentType',
+          'SubjectCode', 'MaxTheory', 'MaxPractical', 'MaxInternalAssisment', 'ObtainedTheory', 'ObtainedPractical',
+          'ObtainedInternalAssisment', 'ATM', 'GraceMarks', 'Result'];
+
+      const exportData = this.GetfilteredList.map((row: any, index: number) => {
+        const filteredRow: any = {};
+        wantedColumns.forEach(col => {
+          filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+        });
+        return filteredRow;
+      });
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+      const colWidths = wantedColumns.map(col => {
+        const maxLength = Math.max(
+          col.length,
+          ...exportData.map((row: { [x: string]: { toString: () => { (): any; new(): any; length: any; }; }; }) =>
+            row[col] ? row[col].toString().length : 0
+          )
+        );
+        return { wch: maxLength + 2 };
+      });
+      ws['!cols'] = colWidths;
+
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      const todayDate = new Date().toISOString().split('T')[0];
+
+      const fileName = `Download_Grace_Marks_Student_report_${todayDate}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+    }
+
+    exportToExcelTpye6(): void {
+     
+      const wantedColumns =
+        ['SrNo', 'StudentName', 'FatherName', 'MotherName', 'EnrollmentNo', 'RollNo', 'SemesterID', 'StudentType',
+          'SubjectCode'];
+
+      const exportData = this.GetfilteredList.map((row: any, index: number) => {
+        const filteredRow: any = {};
+        wantedColumns.forEach(col => {
+          filteredRow[col] = col === 'SrNo' ? index + 1 : row[col];
+        });
+        return filteredRow;
+      });
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+      const colWidths = wantedColumns.map(col => {
+        const maxLength = Math.max(
+          col.length,
+          ...exportData.map((row: { [x: string]: { toString: () => { (): any; new(): any; length: any; }; }; }) =>
+            row[col] ? row[col].toString().length : 0
+          )
+        );
+        return { wch: maxLength + 2 };
+      });
+      ws['!cols'] = colWidths;
+
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      const todayDate = new Date().toISOString().split('T')[0];
+
+      const fileName = `Download_Detain_Marks_Student_reportreport_${todayDate}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+    }
 
 }

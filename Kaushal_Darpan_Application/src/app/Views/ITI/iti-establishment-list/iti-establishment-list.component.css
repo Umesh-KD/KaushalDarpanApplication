@@ -1,0 +1,35 @@
+/* Center whole column */
+.action-cell {
+  padding: 0 !important;
+}
+
+.actionBtns {
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center; /* center vertically */
+  gap: 10px;
+  width: 100%; /* VERY IMPORTANT */
+  height: 100%; /* ensures vertical center */
+}
+.mat-column-Action {
+  text-align: center;
+}
+
+
+  /* Icon button styling */
+  .actionBtns a {
+    width: 34px;
+    height: 34px;
+    border: 1px solid #999;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .actionBtns i {
+    font-size: 18px;
+  }
+td.mat-cell, th.mat-header-cell {
+  vertical-align: middle;
+}

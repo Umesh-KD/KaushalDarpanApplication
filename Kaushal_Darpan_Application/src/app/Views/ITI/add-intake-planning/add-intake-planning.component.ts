@@ -239,7 +239,13 @@ export class AddIntakePlanningComponent {
     if (this.SeatIntakeFormGroup.invalid) {
       this.toastr.error("invalid Form Data")
       return
-    }
+      }
+      const unitNo = Number(this.request.UnitNo);
+
+      if (!unitNo || unitNo < 2 || unitNo % 2 !== 0) {
+        this.toastr.warning('Unit must be an even number and at least 2');
+        return;
+      }
     try {
       this.loaderService.requestStarted();
 

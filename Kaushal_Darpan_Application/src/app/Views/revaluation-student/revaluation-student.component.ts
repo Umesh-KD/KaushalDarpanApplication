@@ -94,12 +94,12 @@ export class RevaluationStudentComponent {
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
 
-      await this.revaluationService.GetDetails(this.searchRequest).then((data: any) => {
+      await this.revaluationService.GetDetails(this.searchRequest).then(async (data: any) => {
 
         if (data.State == EnumStatus.Success) {
           this.Request = data['Data'][0];
           this.StudentSemesterDetails = data['Data']
-          this.GetDateDataList();
+          await this.GetDateDataList();
           this.switchSection('studentDetails');
         }
         else {

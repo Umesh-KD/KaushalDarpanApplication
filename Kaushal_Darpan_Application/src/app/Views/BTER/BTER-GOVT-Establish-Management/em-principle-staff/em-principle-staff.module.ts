@@ -10,6 +10,7 @@ import { StudentStatusHistoryModule } from '../../../Student/student-status-hist
 import { EMPrincipleStaffComponent } from './em-principle-staff.component';
 import { EMPrincipleStaffRoutingModule } from './em-principle-staff-routing.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-staff-profile-modal.model';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
+    ViewStaffProfileModalModule
   ]
 })
 export class EMPrincipleStaffModule { }
