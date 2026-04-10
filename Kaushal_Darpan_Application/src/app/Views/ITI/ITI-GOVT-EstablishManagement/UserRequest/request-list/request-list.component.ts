@@ -98,16 +98,21 @@ export class UserRequestListComponent implements OnInit {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
 
-  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
-    private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,
-    private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private activatedRoute: ActivatedRoute,
+    private routers: Router, 
+    private modalService: NgbModal, 
+    private Swal2: SweetAlert2,
     private ITICollegeTradeService: ItiSeatIntakeService,
-    private userRequestService: UserRequestService, private fb: FormBuilder, public appsettingConfig: AppsettingService
-
-
-  ) {
-
-  }
+    private userRequestService: UserRequestService, 
+    private fb: FormBuilder, 
+    public appsettingConfig: AppsettingService
+  ) { }
 
 
 
@@ -131,7 +136,8 @@ export class UserRequestListComponent implements OnInit {
 
     this.groupForm = this.fb.group({
       ddlStatus: [0, [DropdownValidators]],
-      txtRemark: ['', Validators.required]
+      txtRemark: ['', Validators.required],
+      txtJoiningDate: ['', Validators.required],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -141,11 +147,7 @@ export class UserRequestListComponent implements OnInit {
       txtSSOID: ['',[Validators.required]]
     });
 
- 
     //this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID
-   
-
-
 
     this.formData.LevelOfExamID = 0;
     this.formData.ExamTypeID = 0;
@@ -174,12 +176,13 @@ export class UserRequestListComponent implements OnInit {
       }
     }
 
-    this.getlist();
-    
+    // this.getlist();
+    await this.UserRequest_GetData();
     
     console.log(this.sSOLoginDataModel);
   }
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
+  get _groupForm() { return this.groupForm.controls; }
 
 
   async GetLevelOfExamList() {
@@ -606,8 +609,40 @@ export class UserRequestListComponent implements OnInit {
       this.searchRequest.PageSize = 0
       this.searchRequest.Action = "LIST";
       this.searchRequest.UserId = this.sSOLoginDataModel.UserID;
+      this.searchRequest.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
       this.loaderService.requestStarted();
       await this.userRequestService.UserRequest(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserRequestList = data.Data;
+
+          this.loadInTable();
+          //this.UserRequestList = this.UserRequestList.filter((item: any) => item.UserId == this.sSOLoginDataModel.UserID);
+
+          this.totalRecord = this.UserRequestList[0]?.TotalRecords;
+          this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+
+        }, (error: any) => console.error(error))
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async UserRequest_GetData() {
+    try {
+      this.searchRequest.PageNumber =0
+      this.searchRequest.PageSize = 0
+      this.searchRequest.Action = "LIST";
+      this.searchRequest.UserId = this.sSOLoginDataModel.UserID;
+      this.loaderService.requestStarted();
+      await this.userRequestService.UserRequest_GetData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.UserRequestList = data.Data;
@@ -760,71 +795,71 @@ export class UserRequestListComponent implements OnInit {
     }
   }
 
-  async updateReqStatus() {
+  // async updateReqStatus() {
     
-    this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
-    this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
-    this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+  //   this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+  //   this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+  //   this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
 
-    this.isSubmitted = true;
-    if (this.groupForm.invalid) {
-      return console.log("error")
-    }
-    this.loaderService.requestStarted();
-    this.isLoading = true;
+  //   this.isSubmitted = true;
+  //   if (this.groupForm.invalid) {
+  //     return console.log("error")
+  //   }
+  //   this.loaderService.requestStarted();
+  //   this.isLoading = true;
 
-    try {
-      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+  //   try {
+  //     this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
 
-      this.RequestUpdateStatus.UserID = this.sSOLoginDataModel.UserID;
-      this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      await this.userRequestService.StafffJoiningRequestUpdateAndPromotions(this.RequestUpdateStatus)
-        .then(async (data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
-            this.CloseModal();
-            this.getlist();
-          }
-          else if (this.State == EnumStatus.Warning) {
-            this.toastr.warning(this.Message)
-          }
-          else {
-            this.toastr.error(this.ErrorMessage)
-          }
-        })
+  //     this.RequestUpdateStatus.UserID = this.sSOLoginDataModel.UserID;
+  //     this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //     this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //     this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //     await this.userRequestService.StafffJoiningRequestUpdateAndPromotions(this.RequestUpdateStatus)
+  //       .then(async (data: any) => {
+  //         this.State = data['State'];
+  //         this.Message = data['Message'];
+  //         this.ErrorMessage = data['ErrorMessage'];
+  //         if (this.State == EnumStatus.Success) {
+  //           this.toastr.success(this.Message)
+  //           this.CloseModal();
+  //           this.getlist();
+  //         }
+  //         else if (this.State == EnumStatus.Warning) {
+  //           this.toastr.warning(this.Message)
+  //         }
+  //         else {
+  //           this.toastr.error(this.ErrorMessage)
+  //         }
+  //       })
 
-      //await this.userRequestService.UserRequestUpdateStatus(this.RequestUpdateStatus)
-      //  .then(async (data: any) => {
-      //    this.State = data['State'];
-      //    this.Message = data['Message'];
-      //    this.ErrorMessage = data['ErrorMessage'];
-      //    if (this.State == EnumStatus.Success) {
-      //      this.toastr.success(this.Message)
-      //      this.CloseModal();
-      //      this.getlist();
-      //    }
-      //    else if (this.State == EnumStatus.Warning) {
-      //      this.toastr.warning(this.Message)
-      //    }
-      //    else {
-      //      this.toastr.error(this.ErrorMessage)
-      //    }
-      //  })
-    }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
+  //     //await this.userRequestService.UserRequestUpdateStatus(this.RequestUpdateStatus)
+  //     //  .then(async (data: any) => {
+  //     //    this.State = data['State'];
+  //     //    this.Message = data['Message'];
+  //     //    this.ErrorMessage = data['ErrorMessage'];
+  //     //    if (this.State == EnumStatus.Success) {
+  //     //      this.toastr.success(this.Message)
+  //     //      this.CloseModal();
+  //     //      this.getlist();
+  //     //    }
+  //     //    else if (this.State == EnumStatus.Warning) {
+  //     //      this.toastr.warning(this.Message)
+  //     //    }
+  //     //    else {
+  //     //      this.toastr.error(this.ErrorMessage)
+  //     //    }
+  //     //  })
+  //   }
+  //   catch (ex) { console.log(ex) }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //       this.isLoading = false;
 
-      }, 200);
-    }
-  }
+  //     }, 200);
+  //   }
+  // }
  
 
   async EditInfo(id: number) {
@@ -832,7 +867,7 @@ export class UserRequestListComponent implements OnInit {
       this.loaderService.requestStarted();
 
 
-      this.routers.navigate(['/AddUserRequest', id]);
+      this.routers.navigate(['/add-request-ddo-office', id]);
 
     } catch (error) {
       console.error(error);
@@ -941,5 +976,51 @@ export class UserRequestListComponent implements OnInit {
     this.totalInTableRecord = this.UserRequestList.length;
   }
 
+  async onSubmitStaffRequest(model: any, userSubmitData: any) {
+    try {
+      this.RowlistData = { ...userSubmitData };
+      console.log(this.RequestUpdateStatus, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  async updateReqStatus() {
+    this.isSubmitted = true;
+    if (this.groupForm.invalid) {
+      return console.log("error")
+    }
+    this.isLoading = true;
+
+    try {
+      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+      this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+      this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+
+      await this.userRequestService.UserRequestUpdateStatus(this.RequestUpdateStatus)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message)
+            this.CloseModal();
+            this.getlist();
+            this.RequestUpdateStatus = new RequestUpdateStatus();
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.Message)
+          }
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+        })
+    }
+    catch (ex) { console.log(ex) }
+  }
 
 }

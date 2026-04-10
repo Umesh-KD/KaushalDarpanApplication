@@ -791,3 +791,9 @@ export class ITI_EM_StaffListSearchModel {
   BranchID: number = 0;
   Name: string = "";
 }
+
+export class ITI_EM_DroupdownDataModel{
+  public Action?: string = '';
+  public InstituteID?: number = 0;
+  public DepartmentID?: number = 0;
+}

@@ -34,7 +34,9 @@ export class CampusPostListComponent {
   public studentconsentlist: any = [];
   public InstituteMasterList: any = [];
   public CompanyMasterList: any = [];
+  public CompanyTypeList:any=[];
   public CompanyID: number = 0;
+  public CompanyTypeID:number=0;
   public InstituteID: number = 0;
   public ApprovedStatus: string = "0";
   public searchrequest = new StudentConsentSearchModel()
@@ -181,6 +183,12 @@ export class CampusPostListComponent {
           this.CompanyMasterList = data['Data'];
           console.log(this.CompanyMasterList,"tCompanyMasterList")
         }, error => console.error(error));
+
+        await this.commonMasterService.GetCommonMasterData('CompanyType')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CompanyTypeList = data['Data'];
+        }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
@@ -196,7 +204,7 @@ export class CampusPostListComponent {
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       this.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.loaderService.requestStarted();
-      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID)
+      await this.campusPostService.CampusValidationList(this.CompanyID,this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,this.CompanyTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
