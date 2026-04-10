@@ -137,11 +137,11 @@
             </a>
           </td>
           <td class="px-2 py-2">
-            <span *ngIf="row.status == 0"
+            <span *ngIf="row.status == 0 || (row.status==1 && !(row.Amount==0 ||(row.Amount!=0 &&  row.PaymentStatus==1)))"
                   class="bg-yellow-500 text-white px-3 py-1 rounded text-sm">
               Pending
             </span>
-            <span *ngIf="row.status == 1"
+            <span *ngIf="row.status == 1 && ( row.Amount==0 || ( row.Amount!=0 && row.PaymentStatus==1))"
                   class="bg-green-600 text-white px-3 py-1 rounded text-sm">
               Approved
             </span>
@@ -160,7 +160,6 @@
   </div>
   </div>
 </div>
-
 
 <ng-template #MyModel_UserProfileStatusHistory let-modal>
   <div class="modal-content">

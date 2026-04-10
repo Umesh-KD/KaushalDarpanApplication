@@ -34,6 +34,7 @@ export class CampusValidationComponent {
   public ApprovedStatus: string = "0";
   public CheckStatus: string = "";
   public currentStatus: number = 0;
+  public CompanyTypeID: number = 0;
 
   public reactiveSuspened:boolean=false;
 
@@ -152,7 +153,7 @@ export class CampusValidationComponent {
       }
 
      
-      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID, this.flagName)
+      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,this.CompanyTypeID, this.flagName)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];

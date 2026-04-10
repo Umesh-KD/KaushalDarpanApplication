@@ -95,13 +95,11 @@
                 <a href="javascript:void(0);" title="Company On Action" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a>
                 <!--<a href="javascript:void(0);" title="View & Update Company" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,company.ID)"><i class="ti ti-eye"></i></a>-->
                 <a [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:3}"
-                   title="View & Update Company"
-                
+                   title="View & Update Company"             
                  >
                   <i class="ti ti-eye"></i>
                 </a>
-
-
+                <a href="javascript:void(0);"  title="View Company History" (click)="openModal(modal_Open,company.ID)"><i class="ti ti-list"></i></a>
               </div>
             </td>
           </tr>
@@ -163,3 +161,122 @@
     </form>
   </div>
 </ng-template>
+
+
+
+<ng-template #modal_Open let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Company Trail</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <table class="w-full table-border" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                <tr>
+                  <th colspan="8" class="text-left font-bold">Company History</th>
+                </tr>
+            
+                <tr>
+                  <th>Sr No</th>
+                  <th>Company Name</th>
+                  <th>Address</th>
+                  <!-- <th>District</th> -->
+                  <th>Status</th>
+                  <th>Modified By</th>
+                  <th>Remarks</th>
+                  <th>Action Date</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let row of CompanyTrailList | tableSearchFilter:Table_SearchText;let i=index;">
+                  <td>{{ i + 1 }}</td>
+
+                  <td>{{ row.Name }}</td>
+                  <td>{{ row.Address }}</td>
+                  <!-- <td>{{ row.DistrictID }}</td> -->         
+                  <td>
+                    <span 
+                      [ngClass]="{
+                        'bg-green-100 text-white px-3 py-3 rounded': row.Action == 'Approved',
+                        'bg-yellow-100 text-white px-3 py-3 rounded': row.Action == 'Pending',
+                        'bg-danger text-white px-3 py-3 rounded': row.Action == 'Rejected'
+                      }">
+                      {{ row.Action }}
+                    </span>
+                  </td>
+            
+                  <td>{{ row.ActionByName || '-' }}</td>
+                  <td>{{ row.ActionRemarks || '-' }}</td>
+                  <td>{{ row.ActionRTS | date:'dd-MM-yyyy HH:mm' }}</td>
+                </tr>
+
+                <tr *ngIf="CompanyTrailList?.length == 0">
+                  <td colspan="8" class="text-center">No Company History Found</td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <table class="w-full table-border" cellpadding="5">
+              <thead class="bg-light/40 border-b">
+                <tr>
+                  <th colspan="9" class="text-left font-bold">HR History</th>
+                </tr>
+            
+                <tr>
+                  <th>Sr No</th>
+                  <th>HR Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>Company Name</th>
+                  <th>Status</th>
+                  <th>Modified By</th>
+                  <th>Remarks</th>
+                  <th>Action Date</th>
+                </tr>
+              </thead>
+            
+              <tbody>
+                <tr *ngFor="let row of HrTrailList; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ row.Name }}</td>
+                  <td>{{ row.EmailId }}</td>
+                  <td>{{ row.MobileNo }}</td>
+                  <td>{{ row.companyName }}</td>
+            
+                  <td>
+                    <span [ngClass]="{
+                      'bg-green-100 text-white px-2 py-1 rounded': row.Action == 'Approved',
+                      'bg-yellow-100 text-white px-2 py-1 rounded': row.Action == 'Pending',
+                      'bg-danger text-white px-2 py-1 rounded': row.Action == 'Rejected'
+                    }">
+                      {{ row.Action }}
+                    </span>
+                  </td>
+            
+                  <td>{{ row.ActionByName || '-' }}</td>
+                  <td>{{ row.ActionRemarks || '-' }}</td>
+                  <td>{{ row.ActionRTS | date:'dd-MM-yyyy HH:mm' }}</td>
+                </tr>
+            
+                <tr *ngIf="HrTrailList?.length == 0">
+                  <td colspan="9" class="text-center">No HR History Found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer text-center">
+            <!--<button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+

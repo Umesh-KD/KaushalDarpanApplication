@@ -185,6 +185,48 @@ export class ITIConsentUpdateComponent {
     }
   }
 
+  async ViewForPayment( InspectionConsentID: number) {
+    debugger
+    try {
+      this.InspectionConsentID = InspectionConsentID;
+
+      // const response: any = await this.GetById_Consent(InspectionConsentID);
+      const response: any = await this.itiInspectionService.GetById_Consent(InspectionConsentID);
+
+      if (response && response.State === EnumStatus.Success && response.Data) {
+        const row = response.Data;
+        console.log(row.TentativeDate);
+        console.log(row[0].TentativeDate)
+
+        this.UpdateConsentRequest = {
+          TentativeDate: row[0].TentativeDate ? row[0].TentativeDate.split('T')[0] : '', 
+          Remark: row[0].Remark || '',
+          DocConsent: null, 
+          UserID: row[0].UserID || 0, 
+          InspectionConsentID: row[0].InspectionConsentID || InspectionConsentID ,
+          Amount:row[0].Amount || 0,
+          ServiceID:row[0].ServiceID || 0,
+          ID:row[0].ID || 0
+        };
+      } else {
+        console.warn('No data found for the given ID:', InspectionConsentID);
+        this.UpdateConsentRequest = {
+          TentativeDate: '',
+          Remark: '',
+          DocConsent: null,
+          UserID: 0,
+          InspectionConsentID: InspectionConsentID,
+          Amount:0,
+          ServiceID:0,
+          ID:0
+        };
+      }
+
+    } catch (error) {
+      console.error('Error fetching consent details:', error);
+    }
+  }
+
   public file!: File;
   async onFilechange(event: any, Type: string) {
     try {
@@ -246,10 +288,10 @@ export class ITIConsentUpdateComponent {
       this.toastr.error('Please fill all mandatory fields !');
       return;
     }
-    if(status==1){
-      console.log(this.UpdateConsentRequest.Amount);
-       await this.submitPayment();
-    }
+    // if(status==1){
+    //   console.log(this.UpdateConsentRequest.Amount);
+    //    await this.submitPayment();
+    // }
 
       this.UpdateConsentRequest.UserID = this.sSOLoginDataModel.UserID;
       this.UpdateConsentRequest.Remark = this.consentForm.get('Remarks')?.value;
@@ -413,7 +455,8 @@ export class ITIConsentUpdateComponent {
   }
 
 
-  async openOTPModal1(status:any) {
+  async openOTPModal1(InspectionConsentID:number) {
+   // debugger;
     this.Swal2.Confirmation(`Are you sure you want to Pay ?`,
       async (result: any) => {
         if (result.isConfirmed) {
@@ -444,7 +487,7 @@ export class ITIConsentUpdateComponent {
           await Promise.race([verify, timeout]);
 
           if (isVerified) {         
-            await this.submitPayment();
+            await this.submitPayment(InspectionConsentID);
           } else {
             alert('OTP verification timeout');
           }
@@ -453,7 +496,8 @@ export class ITIConsentUpdateComponent {
       });
   }
 
-  async submitPayment() {
+  async submitPayment(InspectionConsentID:number) {
+    await this.ViewForPayment(InspectionConsentID);
     debugger
     this.totalAmount = this.UpdateConsentRequest.Amount ?? 0;
     this.emitraRequest = new EmitraRequestDetails();

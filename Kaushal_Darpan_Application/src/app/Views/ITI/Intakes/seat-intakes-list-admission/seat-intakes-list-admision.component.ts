@@ -232,7 +232,16 @@ export class SeatIntakesListAdmissionComponent implements OnInit
           const second = String(now.getSeconds()).padStart(2, '0');
 
 
-          const fileName = `ActiveSeatIntakeDetails_${day}-${month}-${year}_${hours}_${minutes}_${second}.xlsx`;
+          var filename = 'ActiveSeatIntakeDetails';
+
+          if (Action == '_getActiveSeatIntakeColleges')
+          
+          {
+           filename = 'ActiveSeatCollegeDetails';
+       
+          }
+
+          const fileName = `${filename}_${day}-${month}-${year}_${hours}_${minutes}_${second}.xlsx`;
 
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();

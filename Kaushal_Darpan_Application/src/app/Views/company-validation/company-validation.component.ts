@@ -22,6 +22,8 @@ export class CompanyValidationComponent implements OnInit {
   public Message: any = [];
   public ErrorMessage: any = [];
   public CompanyMasterList: ICompanyMasterDataModel[] = [];
+  public CompanyTrailList:[]=[];
+  public HrTrailList:[]=[];
   public Table_SearchText: string = "";
   public searchRequest = new CompanyMasterSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -115,6 +117,39 @@ export class CompanyValidationComponent implements OnInit {
     this.requestAction.Action = "0";
     this.requestAction.ActionRemarks = "";
   }
+
+  async openModal(content: any, CompanyID: number) {
+
+    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    this.GetCampusHr_Trail(CompanyID)
+  }
+  
+  async GetCampusHr_Trail(CompanyID:number){
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.companyMasterService.GetCampusHr_Trail(CompanyID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.CompanyTrailList = data.Data.Table;
+        this.HrTrailList=data.Data.Table1;
+        console.log(this.CompanyTrailList)
+        console.log(this.HrTrailList)
+      }, (error: any) => console.error(error))
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async ViewandUpdate(content: any, ID: number) {
 
     const initialState = {
