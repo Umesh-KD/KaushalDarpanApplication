@@ -86,7 +86,7 @@
         <tbody>
           <tr *ngFor="let item of paginatedInTableData; let idx=index;">
             <td>
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="item.Selected"
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="item.Selected" *ngIf="!(item.IsOption == '1' && item.AuctionStatus == '1')"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,item)">
             </td>
             <td align="left">{{(startInTableIndex+1)+idx}}</td>

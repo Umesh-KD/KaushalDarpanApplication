@@ -1393,6 +1393,9 @@ export class ItiCollegeReportComponent {
     this.ReportForm.controls['AdministrativeBodyId'].clearValidators();
     this.ReportForm.controls['AdministrativeBodyId'].updateValueAndValidity();
     this.isSubmitted = true;
+
+    this.applyRoleBasedValidation()
+
     Object.keys(this.ReportForm.controls).forEach(key => {
       const control = this.ReportForm.get(key);
 
@@ -1403,6 +1406,11 @@ export class ItiCollegeReportComponent {
         });
       }
     });
+
+
+
+  
+
     if (this.ReportForm.invalid) {
       return
     }
@@ -2494,6 +2502,45 @@ export class ItiCollegeReportComponent {
       }, 200);
     }
   }
+
+
+  applyRoleBasedValidation() {
+    if (this.sSOLoginDataModel.RoleID == 232) {
+
+      // remove all validators from all controls
+      Object.keys(this.ReportForm.controls).forEach(key => {
+        const control = this.ReportForm.get(key);
+        control?.clearValidators();
+        control?.setErrors(null);
+        control?.updateValueAndValidity();
+      });
+
+      // only these fields remain required
+      this.ReportForm.get('NodalIti')?.setValidators([Validators.required]);
+      this.ReportForm.get('NodalItiCode')?.setValidators([Validators.required]);
+      this.ReportForm.get('PrincipleName')?.setValidators([Validators.required]);
+      this.ReportForm.get('PrincipleMobile')?.setValidators([Validators.required]);
+      this.ReportForm.get('PrincipleEmailID')?.setValidators([Validators.required]);
+      this.ReportForm.get('NodalPostAddresss')?.setValidators([Validators.required]);
+      this.ReportForm.get('NodalOrderNo')?.setValidators([Validators.required]);
+      this.ReportForm.get('NodalOrderDate')?.setValidators([Validators.required]);
+
+      // update validity again
+      [
+        'NodalIti',
+        'NodalItiCode',
+        'PrincipleName',
+        'PrincipleMobile',
+        'PrincipleEmailID',
+        'NodalPostAddresss',
+        'NodalOrderNo',
+        'NodalOrderDate'
+      ].forEach(key => {
+        this.ReportForm.get(key)?.updateValueAndValidity();
+      });
+    }
+  }
+
 
   }
 

@@ -169,12 +169,19 @@
               </span>
             </td>
             <td align="left">
-              <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
+              <!-- <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
                                  'InvStatus-issued': item.IssueStatus === 2,
                                  'InvStatus-reject': item.IssueStatus === 3,
                                  'InvStatus-returned': item.IssueStatus === 4
                                }">
                 {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
+              </span> -->
+                  <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
+                                 'InvStatus-issued': item.IssueStatus === 2 && item.ReturnStatus === 0,
+                                 'InvStatus-reject': item.IssueStatus === 3,
+                                 'InvStatus-returned': item.IssueStatus === 2 && item.ReturnStatus === 1
+                               }">
+                {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2  && item.ReturnStatus === 0 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' :  item.IssueStatus ===2  && item.ReturnStatus === 1  ? 'Returned' : 'Unknown' }}
               </span>
             </td>
           </tr>
