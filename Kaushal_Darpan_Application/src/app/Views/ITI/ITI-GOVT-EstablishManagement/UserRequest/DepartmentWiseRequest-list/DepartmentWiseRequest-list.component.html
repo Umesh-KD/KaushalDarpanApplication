@@ -19,9 +19,11 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <!--<a routerLink="/AddUserRequest" class="btn bg-success btn-sm text-white">
-        <i class="ti ti-plus"></i> Add Request
-      </a>-->
+
+        <a routerLink="/add-request-ddo-office" class="btn bg-success btn-sm text-white" 
+          *ngIf="(sSOLoginDataModel.RoleID ==_EnumRole.Principal_SCVT || sSOLoginDataModel.RoleID ==_EnumRole.Principal_NCVT)">
+          <i class="ti ti-plus"></i> Add Request
+        </a>
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -214,6 +216,7 @@
 
   </div>
 </div>
+
 <ng-template #MyModel_ReplayQuery let-modal>
   <div class="modal-content">
     <div class="card">
@@ -222,12 +225,8 @@
         <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
       </div>
       <form [formGroup]="groupForm">
-
-
         <div class="card-body">
-
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Status <span class="StarMarking">*</span>
@@ -240,15 +239,6 @@
                 <p *ngIf="!groupForm.controls.ddlStatus.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
               </div>
             </div>
-            <!--<div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Remark <span class="StarMarking">*</span>
-              </label>
-              <textarea class="form-input" [(ngModel)]="RequestUpdateStatus.Remark" formControlName="txtRemark"></textarea>
-              <div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
-                <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>-->
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -265,8 +255,6 @@
                 </p>
               </div>
             </div>
-
-
             <div *ngIf="searchRequest.RequestType == 1 && RequestUpdateStatus.StatusIDs==247">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Last Working Date: <span class="StarMarking">*</span>
@@ -286,15 +274,6 @@
                 <p *ngIf="groupForm.controls.txtJoiningDate.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
               </div>
             </div>
-
-
-
-
-
-
-
-
-
           </div>
         </div> <!-- Close this div here for card-body -->
         <div class="card-footer text-right">
