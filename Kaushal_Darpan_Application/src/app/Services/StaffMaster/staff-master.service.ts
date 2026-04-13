@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { AddStaffBasicDetailDataModel, BranchHODApplyModel, BranchHODModel, StaffDetailsDataModel, StaffMasterSearchModel, StudentEnrCancelReqModel } from '../../Models/StaffMasterDataModel';
+import { AddStaffBasicDetailDataModel, BranchHODApplyModel, BranchHODModel, GetHODWiseSemesterDataModel, StaffDetailsDataModel, StaffMasterSearchModel, StudentEnrCancelReqModel } from '../../Models/StaffMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 @Injectable({
@@ -311,6 +311,23 @@ export class StaffMasterService {
     return await this.http.post(this.APIUrl + '/DeleteBranchSection', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
+  }
+
+  public async InsertStaffAssignmentHierarchy(request: any) {
+  var body = JSON.stringify(request);
+
+  return await this.http.post(`${this.APIUrl}/InsertStaffAssignmentHierarchy`, body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+}
+
+  public async GetHODWiseSemester(searchRequest: GetHODWiseSemesterDataModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetHODWiseSemester`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
   }
 
 }

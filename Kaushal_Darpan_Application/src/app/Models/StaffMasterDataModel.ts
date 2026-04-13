@@ -380,4 +380,11 @@ export class RosterDisplayTimeTableDataModel {
 }
 
 
+export class GetHODWiseSemesterDataModel {
+
+  public SSOID?: string = "";
+  public InstituteID?: number = 0;
+
+}
+
 

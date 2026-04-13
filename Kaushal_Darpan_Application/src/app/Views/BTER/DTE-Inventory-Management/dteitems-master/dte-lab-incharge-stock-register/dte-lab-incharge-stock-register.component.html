@@ -2,7 +2,7 @@
 <app-loader></app-loader>
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">DTE Items Master</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Lab Incharge Stock Register</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
@@ -42,7 +42,9 @@
                     sSOLoginDataModel.RoleID === EnumRole.PrincipalNon || 
                     sSOLoginDataModel.RoleID === EnumRole.Admin ||
                     sSOLoginDataModel.RoleID === EnumRole.AdminNon ||
-                    sSOLoginDataModel.RoleID === EnumRole.BTER_StoreIncharge">
+                    sSOLoginDataModel.RoleID === EnumRole.BTER_StoreIncharge ||
+                    sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge
+                    ">
             <option [value]="0">Choose Option</option>
             <option *ngFor="let item of CollegeDDLList" [value]="item.InstituteID">
               {{ item.InstituteName }}

@@ -27,8 +27,8 @@
           </div>
 
           <!--<div *ngIf="isSubmit && _SSOIDFormGroup.SSOID.errors" class="form-text text-danger">
-            <p *ngIf="_SSOIDFormGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          </div>-->
+          <p *ngIf="_SSOIDFormGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+        </div>-->
         </div>
         <div>
           <div class="text-left">
@@ -56,10 +56,10 @@
             <ng-option [value]="3">3rd, 4th, 5th Semester</ng-option>
             <ng-option [value]="6">6th Semester</ng-option>
             <!-- @for (item of SemesterMasterDDL; track item.SemesterID) {
-            <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
-            } -->
+          <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+          } -->
           </ng-select>
-          
+
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Branch <span class="StarMarking">*</span></label>
@@ -127,6 +127,10 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> HOD Apply list</b>
     </div>
 
+    <!--{{this.ApplyList|json}}-->
+    <!--{{this.SemesterMasterDDL|json}}
+    {{this.SemesterStreamList|json}}-->
+
     <div class="table-container">
       <mat-form-field appearance="outline">
         <mat-label>Filter</mat-label>
@@ -176,22 +180,22 @@
           <td mat-cell *matCellDef="let row">{{ row.SemesterName }}</td>
         </ng-container>
         <!--<ng-container matColumnDef="Action">
-  <th mat-header-cell *matHeaderCellDef>Action</th>
-  <td mat-cell *matCellDef="let row">-->
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let row">-->
         <!--<button mat-icon-button color="warn"
-          *ngIf="row.StatusID === 215"
-          (click)="btnDeleteOnClick(row.GuestReqID)">
-    <mat-icon>delete</mat-icon>
-  </button>-->
+              *ngIf="row.StatusID === 215"
+              (click)="btnDeleteOnClick(row.GuestReqID)">
+        <mat-icon>delete</mat-icon>
+      </button>-->
         <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-    <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete"><i class="ti ti-trash"></i> </a>
-  </div>-->
+        <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete"><i class="ti ti-trash"></i> </a>
+      </div>-->
         <!--</td>
-  </ng-container>-->
+      </ng-container>-->
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef> Actions </th>
-          <td  mat-cell *matCellDef="let row">
+          <td mat-cell *matCellDef="let row">
             <div *ngIf="row.IsAllow==1" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
               <a href="javascript:void(0)" (click)="EditDataSection(row)" title="edit">
                 <i class="ti ti-pencil"></i>

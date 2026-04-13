@@ -237,6 +237,17 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+
+
+  public async HODSemesterMaster(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/HODSemesterMaster/' + UserID + '/' + StreamType + '/' + EndTermId, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async Stream_InstituteIdWise(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0,InstituteID:number=0,AcademicYearID:number=0) {
 
     return await this.http.get(this.APIUrl + '/Stream_InstituteIdWise/' + DepartmentID + '/' + StreamType + '/' + EndTermId +'/'+InstituteID +'/' + AcademicYearID, this.headersOptions)
