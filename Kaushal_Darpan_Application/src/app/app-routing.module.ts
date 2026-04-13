@@ -563,6 +563,8 @@ const routes: Routes = [
       { path: 'student-attendance-reports', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-reports/student-attendance-reports-component.module').then(m => m.StudentAttendanceReportsModule), title: 'Student-Enrollment' },
       { path: 'student-attendance-subjectwise-reports', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-subjectwise-report/student-attendance-subjectwise-report.module').then(m => m.StudentAttendanceSubjectwiseReportModule), title: 'Student-Enrollment' },
       { path: 'branch-wise-hod', loadChildren: () => import('./Views/BTER/attendance-time-table/branch-wise-hod/branch-wise-hod.module').then(m => m.BranchWiseHodModule), title: 'Add Group Code' },
+      { path: 'staff-assignment', loadChildren: () => import('./Views/BTER/attendance-time-table/staff-assignment/staff-assignment.module').then(m => m.StaffAssignmentModule), title: 'Add Group Code' },
+      
       { path: 'branch-section-create', loadChildren: () => import('./Views/BTER/attendance-time-table/branch-section-create/branch-section-create.module').then(m => m.BranchSectionCreateModule), title: 'Add Group Code' },
 
       { path: 'iti-attendance', loadChildren: () => import('./Views/iti-attendance-module/iti-attendance.module').then(m => m.ITIAttendanceTimeTableModule), title: 'ITI-Student-Enrollment' },

@@ -64,7 +64,7 @@ export class AddCompanyMasterComponent implements OnInit {
         ddlState: ['', [DropdownValidators]],
         ddlDistrict: ['', [DropdownValidators]],
         ddlCompanyType: ['', [DropdownValidators]],
-
+        ISIIP: [false]
         // HRName: ['', Validators.required],
         // EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
         // MobileNo: ['', Validators.required],
@@ -262,9 +262,10 @@ export class AddCompanyMasterComponent implements OnInit {
 
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-
+      this.request.ISIIP = this.CompanyMasterFormGroup.value.ISIIP;
 
       //save
+      debugger
       await this.CompanyMasterService.SaveData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -411,5 +412,4 @@ export class AddCompanyMasterComponent implements OnInit {
       console.log(error);
     }
   }
-
 }
