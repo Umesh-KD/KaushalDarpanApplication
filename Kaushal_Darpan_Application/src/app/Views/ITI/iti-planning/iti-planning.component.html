@@ -1555,7 +1555,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
               <th>Effect From</th>
               <th>Page No</th>
               <th>Serial No</th>
-              <!--<th>Document</th>-->
+              <th>Document</th>
               <!--<th>Subject Type</th>-->
               <th *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1">Action</th>
             </tr>
@@ -1573,14 +1573,14 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
               <!--<td class="text-center">{{row.Dis_Filename}}</td>-->
 
 
-              <!--<td class="text-left">
+              <td class="text-left">
                 <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.IDFileName}}">
                   <i class="ti ti-eye"></i>
                 </a>
 
                
 
-              </td>-->
+              </td>
    
 
               <td *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||
