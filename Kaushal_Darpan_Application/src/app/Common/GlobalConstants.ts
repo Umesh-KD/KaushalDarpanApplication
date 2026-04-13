@@ -864,3 +864,9 @@ export const BudgetType = [
   { id: 1, name: 'Planned Budget' },
   { id: 2, name: 'Non-Planned Budget' },
 ];
+
+export enum EnumTransferStatus {
+  Relieved = 4354,
+	Request_for_Join = 4355,
+	Joined = 4356
+}

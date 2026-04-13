@@ -1204,6 +1204,8 @@ const routes: Routes = [
 
       { path: 'add-request-ddo-office', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/add-request-ddo-office/add-request-ddo-office.module').then(m => m.AddRequestDDOOfficeModule), title: 'Add User Request' },
       { path: 'add-request-ddo-office/:id', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/add-request-ddo-office/add-request-ddo-office.module').then(m => m.AddRequestDDOOfficeModule), title: 'Add User Request' },
+      { path: 'user-transfer-request', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/user-request-list-transfer/user-request-list-transfer.module').then(m => m.UserRequestListTransferModule), title: 'User Request List' },
+      { path: 'transfer-request-accept', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/transfer-request-accept/transfer-request-accept.module').then(m => m.TransferRequestAcceptModule), title: 'User Request List' },
       
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, ITI Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 

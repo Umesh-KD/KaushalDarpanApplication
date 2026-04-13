@@ -40,8 +40,7 @@ export class RequestSearchModel {
   
   public EmployeeNumber: string = '';
   public EmployeeDesignation: string = '';
-
-
+  public LastworkingDate?: string = '';
 }
 
 

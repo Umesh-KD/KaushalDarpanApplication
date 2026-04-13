@@ -796,4 +796,6 @@ export class ITI_EM_DroupdownDataModel{
   public Action?: string = '';
   public InstituteID?: number = 0;
   public DepartmentID?: number = 0;
+  public RoleID?: number = 0;
+  public UserID?: number = 0;
 }
