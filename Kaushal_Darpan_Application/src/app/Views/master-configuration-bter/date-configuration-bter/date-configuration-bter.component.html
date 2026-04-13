@@ -55,6 +55,20 @@
             </div>
           </div>
 
+          <div *ngIf="request.TypeID == _EnumConfigurationType.Reval_Date || request.TypeID == _EnumConfigurationType.Revaluation_Fee || request.TypeID == _EnumConfigurationType.Reval">
+            <label>Scheme</label><span class="StarMarking">*</span>
+            <select class="form-select" id="SchemeID" formControlName="SchemeID" [(ngModel)]="request.SchemeID">
+              <option value="0" selected>All</option>
+              <option value="1347"> Old Semester Scheme </option>
+              <option value="1348"> New Semester Scheme </option>
+            </select>
+            <div *ngIf="isFormSubmitted && _DateConfigurationFormGroup.SchemeID.errors" class="text-danger">
+              <p *ngIf="!_DateConfigurationFormGroup.SchemeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
           <div>
             <label>From Date</label>
             <input type="datetime-local" class="form-input" name="Date" id="txtFromDate" formControlName="txtFromDate"
@@ -167,6 +181,10 @@
               Semester
               <span class="shortingSpan" *ngIf="sortInTableColumn=='SemesterName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('SemesterName')">
+              Scheme
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SemesterName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('From_Date')">
               From Date
               <span class="shortingSpan" *ngIf="sortInTableColumn=='From_Date'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -183,6 +201,7 @@
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td>{{row.Name}}  <label *ngIf="row.CourseSubTypeID==3">(Lateral)</label></td>
             <td>{{row.SemesterName}}</td>
+            <td>{{row.Scheme_str}}</td>
             <td>{{row.From_Date | date:'dd-MM-yyyy hh:mm a'}}
             <td>{{row.To_Date | date:'dd-MM-yyyy hh:mm a'}}</td>
             <td>
