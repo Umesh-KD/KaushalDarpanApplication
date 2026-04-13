@@ -92,7 +92,7 @@
 
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="Duration">Duration:<span class="StarMarking">*</span></label>
-          <input formControlName="duration" class="form-input" type="text" id="duration"  
+          <input formControlName="duration" class="form-input" type="text" id="duration"
                  placeholder="Duration" [(ngModel)]="request.duration">
           <div *ngIf="isSubmitted && bankGuarantee.get('duration').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('duration').errors.required">
@@ -128,11 +128,46 @@
 
 
 
-        <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="remarks">Remark:<span class="StarMarking">*</span></label>
-          <textarea formControlName="Remarks" class="form-input" placeholder="remarks" type="text" [(ngModel)]="request.Remarks">
-          </textarea>
+        <div *ngIf="request?.BankGuaranteeID>0">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="remarks">Return Remark:</label>
+          <!--<textarea formControlName="Remarks" class="form-input" placeholder="remarks" type="text" [(ngModel)]="request.Remarks">
+    </textarea>-->
+
+          <select class="form-select"
+                  [(ngModel)]="request.Remarks" id="Remarks" formControlName="Remarks">
+            <option value="">-- Select Remarks --</option>
+            <option value="Return at Maturity">Return on maturity </option>
+            <option value="Return on insitute closed">Return on insitute closed</option>
+          </select>
+
         </div>
+
+        <div *ngIf="request.Remarks!='' ||  request?.BankGuaranteeID>0 ">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Order No:
+          </label>
+          <input type="number" class="form-input" id="OrderNo" formControlName="OrderNo" (keypress)="numberOnly($event)"
+                 [(ngModel)]="request.OrderNo" placeholder="Please Enter Order No">
+          <!--<div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.OrderNo.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.OrderNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>-->
+        </div>
+        <div *ngIf="request.Remarks!='' ||  request?.BankGuaranteeID>0 ">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Order date:
+          </label>
+          <input type="date" class="form-input" id="Orderdate" formControlName="Orderdate"
+                 [(ngModel)]="request.Orderdate"
+                 min="1980-01-01"
+                 max="2099-01-01">
+
+          <!--<div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Orderdate.errors" class="text-danger">
+            <p *ngIf="_bankGuaranteeFormGroup.Orderdate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>-->
+        </div>
+
+
+
       </div>
      
 

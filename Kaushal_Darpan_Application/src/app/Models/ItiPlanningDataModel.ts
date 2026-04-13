@@ -165,7 +165,14 @@ export class ITIPlanningBankGuarantee {
   public dayWise?: number = 0 ;
   public BankID: number = 0 ;
   public ActionType: string = '' ;
-  public UserID: number = 0 ;
+  public UserID: number = 0;
+  public OrderNo?: number = 0;
+  public Orderdate?: string = '';
+
+
+
+  
+
 }
 export class ITIPlanningBankGuaranteeReturn {
   public BankGuaranteeID: number = 0;

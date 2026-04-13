@@ -78,7 +78,9 @@ export class ITIBankGuaranteeComponent implements OnInit {
       BankAgreementDocument: [''],
       Remarks: [''],
       CollageId: ['0', DropdownValidators],
-      BankID: ['0', DropdownValidators]
+      BankID: ['0', DropdownValidators],
+      OrderNo: ['', Validators.required],
+      Orderdate: ['', Validators.required],
     });
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -214,9 +216,12 @@ export class ITIBankGuaranteeComponent implements OnInit {
             maturityDate: this.formatDate(record.Maturitydate),
             duration: record.Duration,
             amount: record.Amount,
-            BankAgreementDocument: record.BankAgreementDocument,
+    
             Remarks: record.Remarks,
-            CollageId: record.CollageId
+            CollageId: record.CollageId,
+            OrderNo: record.OrderNo,
+            Orderdate: this.formatDate(record.Orderdate),
+  BankAgreementDocument: record.BankAgreementDocument,
           });
         });
 
@@ -398,9 +403,12 @@ export class ITIBankGuaranteeComponent implements OnInit {
   async bankGuaranteeAmount() {
     this.commonMasterService.GetCommonMasterData('BankGurantee', this.request.CollageId).then((data: any) => {
       debugger
-      this.request.amount = data['Data'][0]['Name'];
+     // this.request.amount = data['Data'][0]['Name'];
+
+      this.request.amount = data?.Data?.[0]?.Name ?? 0;
     });
   }
+
 
   
 
