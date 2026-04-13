@@ -177,7 +177,7 @@ export class ITIPlanningStatusUpdateByIdModel {
   public CollageId: number = 0;
   public status: number = 1;
   public Remarks: string = '';
-  public OrderNo: number = 0;
+  public OrderNo?: number = 0;
   public Orderdate: string = '';
 }
 

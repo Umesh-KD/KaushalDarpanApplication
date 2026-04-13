@@ -18,55 +18,55 @@
       <div class="card-body p-5">
         <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6">
           <!--<div *ngIf="this.DepartmentID==_enumDepartment.BTER">
-            <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
-              पाठ्यक्रम प्रकार (Course Type):
-            </label>
-            <div class="btn-group" role="group" aria-label="Course Type">
-              <button *ngIf="IsFirst" type="button"
-                      class="btn bg-info text-white mt-6"
-                      (click)="selectCourseType(_EnumCourseType1.Diploma1stYearEng)">
-                Diploma 1st Year Eng
-              </button>
-              <button *ngIf="IsSecond" type="button"
-                      class="btn bg-info text-white mt-6"
-                      (click)="selectCourseType(_EnumCourseType1.DiplomaNonEngineering1stYear)">
-                Diploma Non-Engineering 1stYear
-              </button>
-              <button *ngIf="IsThird" type="button"
-                      class="btn bg-info text-white mt-6"
-                      (click)="selectCourseType(_EnumCourseType1.Diploma2ndYearEngLateralAdmission)">
-                Diploma 2nd Year Eng Lateral Admission
-              </button>
-              <button *ngIf="IsBack" type="button"
-                      class="btn bg-black text-white mt-6"
-                      (click)="OnBack()">
-             Back
-              </button>
+    <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
+      पाठ्यक्रम प्रकार (Course Type):
+    </label>
+    <div class="btn-group" role="group" aria-label="Course Type">
+      <button *ngIf="IsFirst" type="button"
+              class="btn bg-info text-white mt-6"
+              (click)="selectCourseType(_EnumCourseType1.Diploma1stYearEng)">DropdownValidatorsString
+        Diploma 1st Year Eng
+      </button>
+      <button *ngIf="IsSecond" type="button"
+              class="btn bg-info text-white mt-6"
+              (click)="selectCourseType(_EnumCourseType1.DiplomaNonEngineering1stYear)">
+        Diploma Non-Engineering 1stYear
+      </button>
+      <button *ngIf="IsThird" type="button"
+              class="btn bg-info text-white mt-6"
+              (click)="selectCourseType(_EnumCourseType1.Diploma2ndYearEngLateralAdmission)">
+        Diploma 2nd Year Eng Lateral Admission
+      </button>
+      <button *ngIf="IsBack" type="button"
+              class="btn bg-black text-white mt-6"
+              (click)="OnBack()">
+     Back
+      </button>
 
-            </div>-->
-            <!--<select class="form-select normal-size-dropdown hidden" id="ddlCourseType" name="ddlCourseType"
-                    [(ngModel)]="model.coursetype" formControlName="ddlCourseType" (change)="onSelectCourseType($event)">
-              <option value="0">-- Select --</option>
-              <option *ngFor="let item of courseTypeList" [value]="item.value">{{item.key}}</option>
-            </select>
-            <div *ngIf="isSubmitted&&_StudentJanDetailFormGroup.ddlCourseType.errors" class="text-danger">
-              <p *ngIf="!_StudentJanDetailFormGroup.ddlCourseType.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This field
-                is required .!
-              </p>
-            </div>-->
+    </div>-->
+          <!--<select class="form-select normal-size-dropdown hidden" id="ddlCourseType" name="ddlCourseType"
+          [(ngModel)]="model.coursetype" formControlName="ddlCourseType" (change)="onSelectCourseType($event)">
+    <option value="0">-- Select --</option>
+    <option *ngFor="let item of courseTypeList" [value]="item.value">{{item.key}}</option>
+  </select>
+  <div *ngIf="isSubmitted&&_StudentJanDetailFormGroup.ddlCourseType.errors" class="text-danger">
+    <p *ngIf="!_StudentJanDetailFormGroup.ddlCourseType.errors.DropdownValidators">
+      <i aria-hidden="true"></i>This field
+      is required .!
+    </p>
+  </div>-->
           <!--</div>-->
           <!--<div *ngIf="this.DepartmentID==1">
-            <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
+    <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
 
-              {{this.DepartmentID == _enumDepartment.BTER ? 'प्राथमिकता श्रेणी (Preferential Category)' : 'निवासी (Please Select Your Domicile)'}}:
-            </label>
-            <select class="form-select normal-size-dropdown" id="ddlPreferentialCategory" name="ddlPreferentialCategory"
-                    [(ngModel)]="request.ENR_ID" (change)="Showdropdown()" formControlName="ddlPreferentialCategory">
-              <option value="0">-- Select --</option>
-              <option *ngFor="let item of PrefentialCategoryList" value="{{item.ID}}">{{item.Name}}</option>
-            </select>
-          </div>-->
+      {{this.DepartmentID == _enumDepartment.BTER ? 'प्राथमिकता श्रेणी (Preferential Category)' : 'निवासी (Please Select Your Domicile)'}}:
+    </label>
+    <select class="form-select normal-size-dropdown" id="ddlPreferentialCategory" name="ddlPreferentialCategory"
+            [(ngModel)]="request.ENR_ID" (change)="Showdropdown()" formControlName="ddlPreferentialCategory">
+      <option value="0">-- Select --</option>
+      <option *ngFor="let item of PrefentialCategoryList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div>-->
         </div>
 
         <div *ngIf="this.DepartmentID==_enumDepartment.BTER && model.coursetype==3" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="DivLateral">
