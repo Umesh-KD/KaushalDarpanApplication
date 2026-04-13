@@ -5,7 +5,7 @@
       <h4 class="text-slate-900 text-lg font-medium mb-2">
         {{
 (sSOLoginDataModel.RoleID == 20 || sSOLoginDataModel.RoleID == 43)
-     ? 'Institute Profile Update'
+     ? 'Institute Profile'
      : 'Institute Profile Verification'
         }}
       </h4>
@@ -18,7 +18,7 @@
         <a class="text-sm font-medium text-slate-700" aria-current="page">
           {{
  (sSOLoginDataModel.RoleID == 20 || sSOLoginDataModel.RoleID == 43)
-      ? 'ITI Institute Profile Update'
+      ? 'ITI Institute Profile'
       : 'ITI Institute Profile Verification'
           }}
         </a>
@@ -39,7 +39,7 @@
             <a *ngIf=" request.Status == 3  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
             <a *ngIf="sSOLoginDataModel.RoleID == _enumrole.DTETraing" href="/ItiPlanningList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
           </div>
-          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
             <div>
               <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name</label>
               <input type="text" class="form-input disabled" id="ApplicationId" formControlName="txtName" [(ngModel)]="request.CollegeName">
@@ -532,7 +532,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMember
           <!-- Heading -->
           <div class="flex items-center gap-2 font-bold text-lg whitespace-nowrap">
             <i class="ti ti-plus"></i>
-            Institute Building Details
+            Institute Address Details
 
             <p *ngIf=" this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && request.AddressStatus=='Not Approved' ||
 this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStatus=='Not Approved'" class="text-danger ms-2 textwrap">
@@ -1652,7 +1652,7 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
 
 
       <div *ngIf="request.ItiAffiliationList.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">
-        <b class="text-1xl-5">ITI Planning Details</b>
+        <b class="text-1xl-5">Institute Summary</b>
       </div>
 
       <div class="overflow-auto">
@@ -1662,10 +1662,12 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
             <tr class="text-left">
               <th>Sr. No.</th>
-              <th>College Name</th>
-              <th>Status</th>
-              <th>Remark</th>
+              <!--<th>College Name</th>-->
               <th>Create Date</th>
+              <th>Remark</th>
+              <th>Status</th>
+
+
               <th>Action Date</th>
 
             </tr>
@@ -1674,10 +1676,12 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
             <tr *ngFor="let student of StudentHistoryModelList; let idx=index;  ">
               <td>{{idx+1}}</td>
 
-              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.CodeAndName}}</td>
-              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.StatusName}}</td>
-              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.Remark}}</td>
+              <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.CodeAndName}}</td>-->
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.GenrateDate}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.Remark}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.StatusName}}</td>
+
+
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.ActionDate}}</td>
 
             </tr>
