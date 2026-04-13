@@ -110,7 +110,7 @@
             <td align="left">{{item.SemesterName}}</td>
             <td align="left">{{item.TotalAvgPercentage}}</td>
             <td *ngIf="sSOLoginDataModel.RoleID !== _EnumRole.HostelIncharge">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="item.AllotmentStatus === 11">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="item.AllotmentStatus === 11 || item.AllotmentStatus === 12">
                 <a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.AffidavitDocument}}" target="_blank" class="text-success"><i class="ti ti-eye"></i></a>
                 <a href="javascript:void(0)" (click)="onSubmit(modal_SubmitReq, item)" title="Approve Allotment"><i class="ti ti-check"></i> </a>
                 <a href="javascript:void(0)" (click)="openModalGenerateOTP(modal_GenrateOTP,item)" title="Cancel Allotment"><i class="ti ti-x"></i></a>
@@ -143,7 +143,7 @@
         <form [formGroup]="AllotRequestFormGroup">
           <div class="mb-8">
             <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-              <div>
+              <div *ngIf="getAllStudentdataList?.AllotmentStatus !== 12">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Caution Fee: <span class="StarMarking">*</span></label>
                 <div *ngFor="let row of RoomFeeList">{{row.Cautionfee}}</div>
               </div>

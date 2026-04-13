@@ -57,6 +57,8 @@
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="dateOfIssue">Date Of Issue:<span class="StarMarking">*</span></label>
           <input formControlName="dateOfIssue" class="form-input" type="date" id="dateOfIssue" (change)="calculateDuration()"
+                 min="1980-01-01"
+                 max="2099-01-01"
                  (click)="openDatePicker($event)" placeholder="Date Of Issue" [(ngModel)]="request.dateOfIssue">
           <div *ngIf="isSubmitted && bankGuarantee.get('dateOfIssue').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('dateOfIssue').errors.required">
@@ -68,7 +70,9 @@
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="maturityDate">Maturity date:<span class="StarMarking">*</span></label>
           <input formControlName="maturityDate" class="form-input" type="date" id="maturityDate" (change)="calculateDuration()"
-                 (click)="openDatePicker($event)" placeholder="Maturity date" [(ngModel)]="request.maturityDate">
+                 (click)="openDatePicker($event)" placeholder="Maturity date" [(ngModel)]="request.maturityDate"
+                 min="1980-01-01"
+                 max="2099-01-01">
           <div *ngIf="isSubmitted && bankGuarantee.get('maturityDate').errors" class="text-danger">
             <p *ngIf="bankGuarantee.get('maturityDate').errors.required">
               <i aria-hidden="true"></i>This field is
@@ -129,19 +133,17 @@
 
 
         <div *ngIf="request?.BankGuaranteeID>0">
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="remarks">Return Remark:</label>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="remarks">Return Remark: </label>
           <!--<textarea formControlName="Remarks" class="form-input" placeholder="remarks" type="text" [(ngModel)]="request.Remarks">
     </textarea>-->
 
           <select class="form-select"
-                  [(ngModel)]="request.Remarks" id="Remarks" formControlName="Remarks">
+                  [(ngModel)]="request.Remarks" id="Remarks" formControlName="Remarks" (change)="changeremark()">
             <option value="">-- Select Remarks --</option>
-            <option value="Return at Maturity">Return on maturity </option>
+            <option value="Return at Maturity"> Return on maturity </option>
             <option value="Return on insitute closed">Return on insitute closed</option>
           </select>
-
         </div>
-
         <div *ngIf="request.Remarks!='' ||  request?.BankGuaranteeID>0 ">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Order No:
@@ -149,8 +151,8 @@
           <input type="number" class="form-input" id="OrderNo" formControlName="OrderNo" (keypress)="numberOnly($event)"
                  [(ngModel)]="request.OrderNo" placeholder="Please Enter Order No">
           <!--<div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.OrderNo.errors" class="text-danger">
-            <p *ngIf="_bankGuaranteeFormGroup.OrderNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          </div>-->
+      <p *ngIf="_bankGuaranteeFormGroup.OrderNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>-->
         </div>
         <div *ngIf="request.Remarks!='' ||  request?.BankGuaranteeID>0 ">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -162,8 +164,8 @@
                  max="2099-01-01">
 
           <!--<div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Orderdate.errors" class="text-danger">
-            <p *ngIf="_bankGuaranteeFormGroup.Orderdate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          </div>-->
+      <p *ngIf="_bankGuaranteeFormGroup.Orderdate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>-->
         </div>
 
 

@@ -55,6 +55,7 @@ export class RoomAllotmentComponent {
   public BrachDDLList: any = [];
   public RelationQueryDDL: any = [];
   public StudentRoomPreferenceList: any = [];
+  public getAllStudentdataList: any = [];
   public HostelFeeList: any = [];
   public RoomFeeList: any = [];
   public CancelRequest: any;
@@ -242,7 +243,7 @@ export class RoomAllotmentComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.RoomNoDDLList = data['Data'];
-          this.Allotmentrequest.FessAmount = this.RoomNoDDLList[0].FeePerBad
+       //   this.Allotmentrequest.FessAmount = this.RoomNoDDLList[0].FeePerBad
           console.log('Room DDL List',this.RoomNoDDLList)
         }, error => console.error(error));
     }
@@ -318,6 +319,7 @@ export class RoomAllotmentComponent {
 
   async onSubmit(model: any, userSubmitData: any) {
     await this.GetRoomPreference(userSubmitData.ReqId);
+    await this.GetStudentdata(userSubmitData.ReqId);
     await this.GetRoomFee();
     try {
       this.request = { ...userSubmitData };
@@ -822,17 +824,46 @@ export class RoomAllotmentComponent {
     }
   }
 
-  async GetRoomFee() {
+
+
+  async GetStudentdata(ReqId: number) {
     try {
-     
-      await this.studentRequestService.GetRoomFee().then(async (data: any) => {
+      let obj = {
+        ReqId: ReqId
+      }
+      await this.studentRequestService.GetStudentdata(obj).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.RoomFeeList = data.Data
+        this.getAllStudentdataList = data.Data
+        console.log('All Student data List ===>',this.getAllStudentdataList)
       })
     } catch (error) {
       console.error(error)
     }
   }
+
+  async GetRoomFee() {
+    debugger
+    try {
+
+      await this.studentRequestService.GetRoomFee().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoomFeeList = data.Data
+        if (this.getAllStudentdataList?.length > 0) {
+          this.Allotmentrequest.FessAmount = this.RoomFeeList[0].HostelFee
+        } else {
+          this.Allotmentrequest.FessAmount = this.RoomFeeList[0].HostelFee + this.RoomFeeList[0].Cautionfee
+        }
+        
+        console.log('Room DDL List', this.Allotmentrequest.FessAmount)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
+
+  
 
  
 }
