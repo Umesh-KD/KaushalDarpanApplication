@@ -237,6 +237,7 @@ export class RevaluationStudentComponent {
   }
   async EmitraPaymentCheckStatus(item: StudentDetailsModel) { console.log(item); }
   RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any) {
+    debugger;
     var form = document.createElement("form");
     form.setAttribute("method", "post");
     form.setAttribute("action", pServiceURL);
