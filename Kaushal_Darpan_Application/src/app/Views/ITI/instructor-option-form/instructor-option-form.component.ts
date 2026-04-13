@@ -253,7 +253,8 @@ export class InstructorOptionFormComponent {
       }
       await this.instructorservice.GetverificationStatus(obj)
         .then(async (data: any) => {
-          if (data.State == EnumStatus.Success) {
+          debugger
+          if (data.State == 2) {
             this.toastr.success(data.Message)
 
             this.ResetOptions();
