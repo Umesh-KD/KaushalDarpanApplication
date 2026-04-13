@@ -313,6 +313,14 @@ export class StaffMasterService {
     ).toPromise();
   }
 
+  public async InsertStaffAssignmentHierarchy(request: any) {
+  var body = JSON.stringify(request);
+
+  return await this.http.post(`${this.APIUrl}/InsertStaffAssignmentHierarchy`, body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+}
 
   public async GetHODWiseSemester(searchRequest: GetHODWiseSemesterDataModel) {
     var body = JSON.stringify(searchRequest);
