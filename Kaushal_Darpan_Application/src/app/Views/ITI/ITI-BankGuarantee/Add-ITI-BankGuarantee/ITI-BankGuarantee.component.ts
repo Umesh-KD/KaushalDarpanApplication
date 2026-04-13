@@ -79,8 +79,8 @@ export class ITIBankGuaranteeComponent implements OnInit {
       Remarks: [''],
       CollageId: ['0', DropdownValidators],
       BankID: ['0', DropdownValidators],
-      OrderNo: ['', Validators.required],
-      Orderdate: ['', Validators.required],
+      OrderNo: [''],
+      Orderdate: [''],
     });
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -247,12 +247,42 @@ export class ITIBankGuaranteeComponent implements OnInit {
     this.request.CollageId = this.request.CollageId;
     this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
 
+
     if (this.status == 'ReNew')
     {
       this.request.ActionType = 'ReNew';
     }
-    else {
+    else
+    {
       this.request.ActionType = '';
+    }
+
+    if (this.request.Remarks == "Return at Maturity" || this.request.Remarks == "Return on insitute closed")
+    {
+      if (
+        this.request.OrderNo == null ||
+        this.request.OrderNo == undefined ||
+        this.request.OrderNo == 0 ||
+        this.request.OrderNo.toString().trim() == ''
+      ) {
+        // Invalid
+
+        this.toastr.error("Please Enter Order No");
+        return;
+      }
+
+      else
+        if (
+        this.request.Orderdate == null ||
+          this.request.Orderdate == undefined ||
+          this.request.Orderdate.toString().trim() == ''
+      ) {
+        // Invalid
+
+          this.toastr.error("Please Enter Order Date");
+        return;
+      }
+
     }
 
    
@@ -409,6 +439,15 @@ export class ITIBankGuaranteeComponent implements OnInit {
     });
   }
 
+  changeremark() {
+
+    if (this.request.Remarks == "")
+    {
+      this.request.Orderdate = '';
+      this.request.OrderNo = undefined;
+    }
+
+  }
 
   
 
