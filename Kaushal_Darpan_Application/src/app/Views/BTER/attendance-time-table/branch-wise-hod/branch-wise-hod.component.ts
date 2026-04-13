@@ -39,6 +39,7 @@ export class BranchWiseHodComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApplyList: any[] = []
   public BranchHideList: any[] = []
+  public SemesterStreamList: any[] = []
   public searchRequest = new GuestApplyForGuestRoomSearchModel();
   public searchRequestGuestStaffProfileSearchModel = new GuestStaffProfileSearchModel()
   displayedColumns: string[] = [
@@ -47,6 +48,8 @@ export class BranchWiseHodComponent {
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+
 
   constructor(private staffMasterService: StaffMasterService, private commonMasterService: CommonFunctionService, private guestRoomManagmentService: GuestRoomManagmentService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
@@ -73,6 +76,10 @@ export class BranchWiseHodComponent {
 
     await this.GetBranchHODApplyList();
 
+    if (this.ApplyList.length > 0) {
+      this.createSemesterStreamMap();
+    }
+
     //await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
     //  data = JSON.parse(JSON.stringify(data));
     //  this.StreamMasterDDL = data.Data;
@@ -80,7 +87,8 @@ export class BranchWiseHodComponent {
     await this.SemesterMaster();
     
   }
-  async  SemesterMaster() {
+  async SemesterMaster() {
+    debugger
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterDDL = data.Data;
@@ -419,17 +427,46 @@ export class BranchWiseHodComponent {
   }
 
 
+  //async onSemesterChange(event: any) {
+  //  if (this.request.SemesterID == 1) {
+  //    this.request.SemesterIDs = "1,2";
+  //  }
+  //  else if (this.request.SemesterID == 3) {
+  //    this.request.SemesterIDs = "3,4,5";
+  //  }
+
+  //  debugger
+  //  if (this.request.SemesterID && this.request.SemesterID != 0) {
+  //    debugger
+  //    await this.commonMasterService.Stream_InstituteIdWise(
+  //      this.sSOLoginDataModel.DepartmentID,
+  //      this.sSOLoginDataModel.Eng_NonEng,
+  //      this.sSOLoginDataModel.EndTermID,
+  //      this.sSOLoginDataModel.InstituteID,
+  //      this.sSOLoginDataModel.FinancialYearID
+  //    ).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      this.StreamMasterDDL = data.Data;
+  //    });
+
+
+  //    await this.GetBranchHideList();
+  //  }
+  //}
+
+
   async onSemesterChange(event: any) {
+    debugger
     if (this.request.SemesterID == 1) {
       this.request.SemesterIDs = "1,2";
-    } 
+    }
     else if (this.request.SemesterID == 3) {
       this.request.SemesterIDs = "3,4,5";
     }
 
-    debugger
     if (this.request.SemesterID && this.request.SemesterID != 0) {
-      debugger
+
+      // 👉 1. Load all streams
       await this.commonMasterService.Stream_InstituteIdWise(
         this.sSOLoginDataModel.DepartmentID,
         this.sSOLoginDataModel.Eng_NonEng,
@@ -437,11 +474,31 @@ export class BranchWiseHodComponent {
         this.sSOLoginDataModel.InstituteID,
         this.sSOLoginDataModel.FinancialYearID
       ).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
       });
 
-    
+      const selectedSem = this.request.SemesterID.toString();
+
+      // 👉 2. Get streams to REMOVE
+      const semData = this.SemesterStreamList.find(
+        (x: any) => x.SemesterID === selectedSem
+      );
+
+      if (semData && semData.StreamID) {
+
+        const removeStreams = semData.StreamID
+          .split(',')
+          .map((x: string) => x.trim());
+
+        // 👉 3. Show ONLY those streams which are NOT in SemesterStreamList
+        this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) =>
+          !removeStreams.includes((item.StreamID || item.ID).toString())
+        );
+
+      }
+
+      console.log('Final DDL:', this.StreamMasterDDL);
+
       await this.GetBranchHideList();
     }
   }
@@ -489,6 +546,54 @@ export class BranchWiseHodComponent {
     await this.onSemesterChange(this.request.SemesterID);
   
 
+  }
+
+
+  createSemesterStreamMap() {
+
+    const map = new Map<string, Set<string>>();
+
+    this.ApplyList.forEach((item: any) => {
+
+      const semesters = (item.SemesterID || '')
+        .split(',')
+        .map((x: string) => x.trim())
+        .filter((x: string) => x !== '');
+
+      const streams = (item.StreamID || '')
+        .split(',')
+        .map((x: string) => x.trim())
+        .filter((x: string) => x !== '');
+
+      semesters.forEach((sem: string) => {
+
+        if (!map.has(sem)) {
+          map.set(sem, new Set<string>());
+        }
+
+        const streamSet = map.get(sem);
+
+        streams.forEach((str: string) => {
+          streamSet?.add(str); // ✅ auto removes duplicates
+        });
+
+      });
+
+    });
+
+    // 👉 Final result
+    const result: any[] = [];
+
+    map.forEach((streamSet, sem) => {
+      result.push({
+        SemesterID: sem,
+        StreamID: Array.from(streamSet).join(',') // ✅ unique + merged
+      });
+    });
+
+    console.log('Final Clean Result:', result);
+
+    this.SemesterStreamList = result;
   }
 
 }

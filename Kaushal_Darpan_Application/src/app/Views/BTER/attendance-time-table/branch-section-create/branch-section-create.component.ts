@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { AddStaffSubjectSectionModel, BranchHODModel, PostAttendanceTimeTable } from '../../../../Models/StaffMasterDataModel';
+import { AddStaffSubjectSectionModel, BranchHODModel, GetHODWiseSemesterDataModel, PostAttendanceTimeTable } from '../../../../Models/StaffMasterDataModel';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -59,6 +59,7 @@ export class BranchSectionCreateComponent {
 
   availSectionData: any[] = [];
   SemesterMasterDDL: any[] = [];
+  GetdataHODWiseSemester: any[] = [];
   SubjectMasterDDL: any[] = [];
   GetSectionData: any[] = [];
   SSOIDExists: boolean = false;
@@ -101,6 +102,9 @@ export class BranchSectionCreateComponent {
   EditDataFormGroup!: FormGroup;
   TableForm!: FormGroup;
   public StudentList: any[] = [];
+  public GetHODWiseSemester = new GetHODWiseSemesterDataModel();
+
+    
 
   constructor(
     private staffMasterService: StaffMasterService,
@@ -119,11 +123,31 @@ export class BranchSectionCreateComponent {
     // this.IIPMasterFormGroup.value.SemesterID=0;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+
+    this.GetHODWiseSemester.SSOID = this.sSOLoginDataModel.SSOID;
+    this.GetHODWiseSemester.InstituteID = this.sSOLoginDataModel.InstituteID;
+    
+
+    await this.staffMasterService.GetHODWiseSemester(this.GetHODWiseSemester)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        debugger
+        this.GetdataHODWiseSemester = data.Data  
+      }, error => console.error(error));
+
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterDDL = data.Data;
       debugger
       if (this.SemesterMasterDDL.length > 0) {
+        const allowedSemesters = this.GetdataHODWiseSemester?.[0]?.SemesterID
+          ?.split(',')
+          ?.map((id: string) => id.trim()) || [];
+
+        this.SemesterMasterDDL = this.SemesterMasterDDL.filter((x: any) =>
+          allowedSemesters.includes(x.SemesterID?.toString())
+        );
+
         this.SemesterMasterDDL = this.SemesterMasterDDL.filter((x: any) => x.SemesterID != 7 && x.SemesterID != 8 && x.SemesterID != 9)
       }
     })
