@@ -108,7 +108,7 @@
       <div class="">
       </div>
       <div class="">
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText"  (ngModelChange)="onSearchChange()" />
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" (ngModelChange)="onSearchChange()" />
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
@@ -158,15 +158,16 @@
 
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="item.Status === 3" href="javascript:void(0);" title="Return" (click)="ViewandUpdate(MyModel_ViewDetails, item)"><i class="ti ti-arrow-back-up"></i>
+                <a *ngIf="item.Status === 3" href="javascript:void(0);" title="Return" (click)="ViewandUpdate(MyModel_ViewDetails, item)">
+                  <i class="ti ti-arrow-back-up"></i>
                 </a>
                 <a *ngIf="item.Status === 2" href="javascript:void(0);" title="ReNew" (click)="ReNew(item.BankGuaranteeID)"><i class="ti ti-refresh"></i></a>
                 <a *ngIf="item.BankAgreementDocument!=''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.BankAgreementDocument}}"
                    target="_blank" title="Download Document">
                   <i class="ti ti-download"></i>
                 </a>
-                <a  *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
-                <a  *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="Delete" (click)="btnDeleteOnClick(item)"><i class="ti ti-trash"></i></a>
+                <a *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
+                <a *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="Delete" (click)="btnDeleteOnClick(item)"><i class="ti ti-trash"></i></a>
               </div>
             </td>
           </tr>
@@ -213,8 +214,8 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Order No:
           </label>
-          <input type="text" class="form-input" id="OrderNo" formControlName="OrderNo"
-                 [(ngModel)]="requestById.OrderNo">
+          <input type="number" class="form-input" id="OrderNo" formControlName="OrderNo" (keypress)="numberOnly($event)"
+                 [(ngModel)]="requestById.OrderNo" placeholder="Please Enter Order No" >
           <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.OrderNo.errors" class="text-danger">
             <p *ngIf="_bankGuaranteeFormGroup.OrderNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
@@ -223,8 +224,11 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Order date:
           </label>
-          <input type="date" class="form-input" id="Orderdate" formControlName="Orderdate"
-                 [(ngModel)]="requestById.Orderdate">
+          <input type="date" class="form-input" id="Orderdate" formControlName="Orderdate" 
+                 [(ngModel)]="requestById.Orderdate"
+                    min="1980-01-01"
+       max="2099-01-01">
+                 
           <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Orderdate.errors" class="text-danger">
             <p *ngIf="_bankGuaranteeFormGroup.Orderdate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
@@ -233,11 +237,18 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Remarks:
           </label>
-          <input type="text" class="form-input" id="Remarks" formControlName="Remarks"
-                 [(ngModel)]="requestById.Remarks">
-          <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Remarks.errors" class="text-danger">
-            <p *ngIf="_bankGuaranteeFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+
+          <select class="form-select"
+                  [(ngModel)]="requestById.Remarks" id="Remarks" formControlName="Remarks">
+            <option value="">-- Select Remarks --</option>
+            <option value="Return at Maturity">Return on maturity </option>
+            <option value="Return on insitute closed">Return on insitute closed</option>
+          </select>
+  
+          <div *ngIf="isSubmitted && _bankGuaranteeFormGroup.Remarks.errors" class="text-danger">
+            <p *ngIf="!_bankGuaranteeFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
           </div>
+
         </div>
       </form>
 

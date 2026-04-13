@@ -22,7 +22,9 @@ export class GlobalConstants {
   public static AccountNoPattern: RegExp = /^[0-9]{9,18}$/;
   public static PositionPattern: RegExp = /^[1-9]$/;
   public static MobileNumberPattern: RegExp = /^[6-9]\d{9}$/;
-  public static EmailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+ // public static EmailPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  public static EmailPattern: RegExp =/^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+$/;
   public static SSOIDPattern: RegExp = /^[a-zA-Z0-9._]+[a-zA-Z0-9]$/
   public static NameNoNumbersPattern: RegExp = /^[^\d]*$/;
   public static AllowNumbersPattern: RegExp = /^[0-9]+(\.[0-9]+)?$/;
