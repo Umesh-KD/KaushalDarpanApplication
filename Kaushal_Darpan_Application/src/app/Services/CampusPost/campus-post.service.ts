@@ -69,8 +69,8 @@ export class CampusPostService {
       ).toPromise();
   }
 
-  public async CampusValidationList(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number,Flag:string='') {
-    return await this.http.get(this.APIUrl + "/CampusValidationList" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID + "/" + Flag, this.headersOptions)
+  public async CampusValidationList(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number ,CompanyTypeID:number=0,Flag:string='') {
+    return await this.http.get(this.APIUrl + "/CampusValidationList" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID + "/" + CompanyTypeID + "/" + Flag , this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

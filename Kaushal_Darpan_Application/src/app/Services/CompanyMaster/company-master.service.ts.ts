@@ -58,6 +58,14 @@ export class CompanyMasterService {
         ).toPromise();
     }
 
+    public async GetCampusHr_Trail(CompanyID:number ) {
+      var body = JSON.stringify({"CompanyID":CompanyID});
+      return await this.http.post(`${this.APIUrl}/GetCampusHr_Trail/${CompanyID}`, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
   //save data
   public async SaveData(request: CompanyMasterDataModels) {
     var body = JSON.stringify(request);

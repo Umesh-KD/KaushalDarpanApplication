@@ -21,6 +21,7 @@ export class CompanyMasterDataModels {
   public HRName: string = '';
   public EmailId: string = '';
   public MobileNo: String = '';
+  public ISIIP : boolean = false;
 
   public ListCompanyHRDetails: HrMasterDataModel[] = [];
 }

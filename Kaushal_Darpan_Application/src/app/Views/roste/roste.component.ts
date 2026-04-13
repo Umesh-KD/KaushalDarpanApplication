@@ -123,11 +123,12 @@ export class RosteComponent implements OnInit {
 
       await this.GetStaff_InstituteWise();
 
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
+      await this.commonMasterService.StreamMasterHOD(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
+        , this.TableForm.value.SemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
-      })
-      await this.commonMasterService.SemesterMaster().then((data: any) => {
+        })
+      await this.commonMasterService.HODSemesterMaster(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SemesterMasterDDL = data.Data;
       })
@@ -140,6 +141,24 @@ export class RosteComponent implements OnInit {
       console.error(error);
     }
   }
+
+  async getstreamData() {
+    try {
+
+  
+
+      await this.commonMasterService.StreamMasterHOD(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
+        , this.TableForm.value.SemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterDDL = data.Data;
+        })
+     
+      /*    this.getSubjectMasterDDL(this.streamId, this.semesterId);*/
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   async getSubjectMasterDDL(ID: any, SemesterID: any) {
     if (ID && SemesterID != "" && SemesterID != null) {
@@ -229,6 +248,7 @@ export class RosteComponent implements OnInit {
       SubjectID: 0,
       StreamID: 0,
     });
+    this.getstreamData()
   }
 
   //SemesterChange() {

@@ -244,9 +244,10 @@ export class InstructorSelectchoiceComponent {
       }
       await this.instructorservice.GetverificationStatus(obj)
         .then(async (data: any) => {
-          if (data.State == EnumStatus.Success) {
-            this.toastr.success(data.Message)
-
+          debugger
+          if (data.State == 2) { 
+     
+         
             this.ResetOptions();
             // this.tabChange.emit(5)
           }

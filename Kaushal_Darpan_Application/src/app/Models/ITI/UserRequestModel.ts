@@ -33,6 +33,10 @@ export class RequestSearchModel {
   public DivisionID: number = 0;
   public StaffTypeID: number = 0;
   public ReqRoleID: number = 0;
+  public StaffID?: number = 0;
+  public RequestedUserID?: number = 0;
+  public RequestCreatedRoleID?: number = 0;
+  public RequestCreatedInstituteID?: number = 0;
   
   public EmployeeNumber: string = '';
   public EmployeeDesignation: string = '';

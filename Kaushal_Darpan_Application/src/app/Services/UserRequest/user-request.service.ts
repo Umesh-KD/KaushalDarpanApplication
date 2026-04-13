@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { UserRequestModel } from '../../Models/UserRequestDataModel';
 import { BterRequestSearchModel, RequestSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_EM_UnlockProfileDataModel } from '../../Models/ITI/UserRequestModel';
-import { Bter_Govt_EM_SanctionedPostBasedInstituteSearchDataModel,  BTERRequestUpdateStatus, BterStaffUserRequestReportSearchModel, RequestUpdateStatus, } from '../../Models/ITIGovtEMStaffMasterDataModel';
+import { Bter_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, BTERRequestUpdateStatus, BterStaffUserRequestReportSearchModel, RequestUpdateStatus, } from '../../Models/ITIGovtEMStaffMasterDataModel';
 import { BTER_EM_UnlockProfileDataModel } from '../../Models/BTER/BTER_EstablishManagementDataModel';
 
 @Injectable({
@@ -79,7 +79,7 @@ export class UserRequestService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
   public async UserRequestUpdateStatus(searchRequest: RequestUpdateStatus) {
     var body = JSON.stringify(searchRequest);
 
@@ -194,10 +194,18 @@ export class UserRequestService {
       ).toPromise();
   }
 
-    public async GetITI_GetStaffDetailsVRS(searchRequest: ITI_EM_UnlockProfileDataModel) {
+  public async GetITI_GetStaffDetailsVRS(searchRequest: ITI_EM_UnlockProfileDataModel) {
     var body = JSON.stringify(searchRequest);
-      debugger  
+    debugger
     return await this.http.post(`${this.APIUrl}/GetITI_GetStaffDetailsVRS`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UserRequest_GetData(request: RequestSearchModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/UserRequest_GetData', body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

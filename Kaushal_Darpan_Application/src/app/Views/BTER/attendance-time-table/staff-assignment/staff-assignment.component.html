@@ -1,0 +1,97 @@
+<form [formGroup]="IIPMasterFormGroup" class="form-horizontal" *ngIf="IIPMasterFormGroup">
+
+  <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5"><i class="ti ti-plus"></i> Assign Teacher</b>
+  </div>
+
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+    <!-- Semester -->
+    <div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Semester <span class="StarMarking">*</span>
+  </label>
+
+  <ng-select formControlName="SemesterIDs"
+             [items]="SemesterMasterDDL"
+             bindLabel="SemesterName"
+             bindValue="SemesterID"
+             [multiple]="true"
+             [closeOnSelect]="false"
+             (change)="onSemesterChange()"
+             placeholder="--Select Semester--">
+
+    <ng-template ng-option-tmp let-item="item" let-item$="item$">
+      <input type="checkbox" [checked]="item$.selected" class="me-2" />
+      {{ item.SemesterName }}
+    </ng-template>
+
+  </ng-select>
+</div>
+
+    <!-- Branch -->
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Branch <span class="StarMarking">*</span>
+      </label>
+
+      <ng-select formControlName="StreamIDs"
+                 [items]="StreamMasterDDL"
+                 bindLabel="StreamName"
+                 bindValue="StreamID"
+                 [multiple]="true"
+                 [closeOnSelect]="false"
+                 placeholder="--Select Branch--">
+
+        <ng-template ng-option-tmp let-item="item" let-item$="item$">
+          <input type="checkbox" [checked]="item$.selected" class="me-2" />
+          {{ item.StreamName }}
+        </ng-template>
+      </ng-select>
+    </div>
+
+    <!-- Teacher -->
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Teacher <span class="StarMarking">*</span>
+      </label>
+
+      <ng-select formControlName="TeacherID"
+                 [items]="ExaminerDDL"
+                 bindLabel="Name"
+                 bindValue="StaffID"
+                 placeholder="--Select Teacher--">
+      </ng-select>
+    </div>
+
+    <!-- From Date -->
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        From Date <span class="StarMarking">*</span>
+      </label>
+
+      <input type="date" class="form-input" formControlName="FromDate">
+    </div>
+
+    <!-- To Date -->
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        To Date
+      </label>
+
+      <input type="date" class="form-input" formControlName="ToDate">
+    </div>
+
+    <!-- Buttons -->
+    <div>
+      <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">
+        Submit
+      </button>
+
+      <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+        Reset
+      </button>
+    </div>
+
+  </div>
+</form>
