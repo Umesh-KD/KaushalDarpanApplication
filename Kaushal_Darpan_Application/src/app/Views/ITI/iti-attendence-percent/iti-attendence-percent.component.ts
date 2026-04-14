@@ -99,7 +99,7 @@ export class ItiAttendencePercentComponent {
   }
 
 
-  ngOnInit() {
+ async ngOnInit() {
 
 
     this.TableForm = this.fb.group({
@@ -113,8 +113,8 @@ export class ItiAttendencePercentComponent {
       Percent: [''],
     });
 
-    this.getSubjectMasterDDL(this.streamId, this.semesterId);
-    this.GetStaff_InstituteWise()
+  await this.getSubjectMasterDDL(this.streamId, this.semesterId);
+  await  this.GetStaff_InstituteWise()
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
@@ -130,20 +130,21 @@ export class ItiAttendencePercentComponent {
 
       });
 
-      if (this.sSOLoginDataModel.RoleID == 222) {
-        this.TableForm.patchValue({
-          SSOID: this.sSOLoginDataModel.SSOID
 
-
-        });
-        this.TableForm.controls['SSOID'].disable();
-        this.GetstaffDetails(this.sSOLoginDataModel.SSOID)
-      }
 
       this.TableForm.controls['AttendanceEndDate'].disable();
       this.TableForm.controls['AttendanceStartDate'].disable();
     }
 
+    if (this.sSOLoginDataModel.RoleID == 222) {
+      this.TableForm.patchValue({
+        SSOID: this.sSOLoginDataModel.SSOID
+
+
+      });
+      this.TableForm.controls['SSOID'].disable();
+     await this.GetstaffDetails(this.sSOLoginDataModel.SSOID)
+    }
 
     setTimeout(() => {
       if (this.semesterId > 0) {
@@ -592,13 +593,13 @@ export class ItiAttendencePercentComponent {
   }
 
 
-  GetStaff_InstituteWise() {
+ async GetStaff_InstituteWise() {
 
 
     this.requestStaff.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.Eng_NonEng;
-    this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
+   await this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       debugger;
       if (data.Data.length > 0) {
@@ -634,7 +635,9 @@ export class ItiAttendencePercentComponent {
       this.TableForm.get('ShiftId')?.disable();
     }
 
-    const item = this.StaffList.find((e: any) => e.SSOID == ssoid);
+    const item = this.StaffList.find(
+      (e: any) => e.SSOID?.trim().toLowerCase() === ssoid?.trim().toLowerCase()
+    );
     if (!item) return;
 
     this.TableForm.patchValue({

@@ -104,7 +104,7 @@ export class ReAssignAttendenceListComponent {
   }
 
 
-  ngOnInit() {
+ async  ngOnInit() {
 
 
     this.TableForm = this.fb.group({
@@ -117,14 +117,17 @@ export class ReAssignAttendenceListComponent {
       SSOID:['']
     });
 
-    this.getSubjectMasterDDL(this.streamId, this.semesterId);
-     this.GetStaff_InstituteWise()
+  await  this.getSubjectMasterDDL(this.streamId, this.semesterId);
+    await this.GetStaff_InstituteWise()
 
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
 
     });
+
+
+
     if (this.AttendanceStartDate != '' && this.AttendanceStartDate != null && this.AttendanceStartDate != undefined
       && this.AttendanceEndDate != '' && this.AttendanceEndDate != null && this.AttendanceEndDate != undefined
     ) {
@@ -135,18 +138,22 @@ export class ReAssignAttendenceListComponent {
 
       });
 
-      if (this.sSOLoginDataModel.RoleID == 222) {
-        this.TableForm.patchValue({
-          SSOID: this.sSOLoginDataModel.SSOID
-        
-
-        });
-        this.TableForm.controls['SSOID'].disable();
-        this.GetstaffDetails(this.sSOLoginDataModel.SSOID)
-      }
+      
+   
 
       this.TableForm.controls['AttendanceEndDate'].disable();
       this.TableForm.controls['AttendanceStartDate'].disable();
+    }
+
+    debugger
+    if (this.sSOLoginDataModel.RoleID == 222) {
+      this.TableForm.patchValue({
+        SSOID: this.sSOLoginDataModel.SSOID
+
+
+      });
+      this.TableForm.controls['SSOID'].disable();
+     await this.GetstaffDetails(this.sSOLoginDataModel.SSOID)
     }
 
 
@@ -636,13 +643,13 @@ export class ReAssignAttendenceListComponent {
   //}
 
 
-  GetStaff_InstituteWise() {
+async  GetStaff_InstituteWise() {
 
 
     this.requestStaff.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.Eng_NonEng;
-    this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
+  await  this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       debugger;
       if (data.Data.length > 0) {
@@ -660,6 +667,7 @@ export class ReAssignAttendenceListComponent {
   async GetstaffDetails(SSOID: any) {
     this.SSOID = SSOID;
 
+    debugger
     const ssoid = this.TableForm.get('SSOID')?.value;
 
     if (ssoid == null || ssoid === '' || ssoid === 'null') {
@@ -678,7 +686,12 @@ export class ReAssignAttendenceListComponent {
       this.TableForm.get('ShiftId')?.disable();
     }
 
-    const item = this.StaffList.find((e: any) => e.SSOID == ssoid);
+    const item = this.StaffList.find(
+      (e: any) => e.SSOID?.trim().toLowerCase() === ssoid?.trim().toLowerCase()
+    );
+
+    debugger
+
     if (!item) return;
 
     this.TableForm.patchValue({

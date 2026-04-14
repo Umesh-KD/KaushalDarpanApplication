@@ -289,6 +289,7 @@
       <p *ngIf="!form_Eligibility.ddlNoofBackPapersAllowed.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
     </div>-->
             </div>
+            
             <div>
               <div class="grid 2xl:grid-cols-2 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
                 <div>
@@ -460,6 +461,7 @@
                 </p>
               </div>
             </div>
+            
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Campus Level<span class="StarMarking">*</span>
@@ -534,10 +536,26 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of CampusPostTypeList;" [value]="item.ID">{{item.Name}}</option>
               </select>
-
             </div>
 
-
+            <!-- start location of appointment  -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Appointment Location : <span class="StarMarking">*</span>
+              </label>
+              <textarea formControlName="txtappointmentLocation" class="form-input" placeholder="Enter Appointment Location"
+                        maxlength="500" type="text" id="txtappointmentLocation" [(ngModel)]="request_EligibilityCriteriaModel.appointmentLocation"></textarea>
+              <!-- <div *ngIf="isSubmitted&&form.txtappointmentLocation.errors" class="text-danger">
+                <p *ngIf="form.txtappointmentLocation.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div> -->
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtappointmentLocation.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.txtappointmentLocation.errors.required">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+            <!-- end  location of appointment  -->
 
           </div>
 
@@ -608,6 +626,7 @@
                   <th class="text-center">Campus Type</th>
                   <th class="text-center">Interview Type</th>
                   <th class="text-center">Interview Round</th>
+                  <th class="text-center">Appointment Location</th>
                   <th class="text-center">Action</th>
                 </tr>
               </thead>
@@ -641,6 +660,7 @@
                   <td>{{row.CampusType}}</td>
                   <td>{{row.InterviewType}}</td>
                   <td>{{row.NoOfInterviewRound}}</td>
+                  <td>{{row.appointmentLocation}}</td>
                   <td align="center">
                     <div class="flex align-center justify-center actionBtns" style="width:auto !important">
                       <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnRowDelete_OnClick(row)">
@@ -764,11 +784,36 @@
               </div>
             </div>
           </div>
+        
+                
+          <!--START STUDENT Consent LAST DATE AND TIME   -->
 
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Student Consent's Last Date : <span class="StarMarking">*</span>
+            </label>
+            <input formControlName="txtStudentConsentDate" class="form-input" placeholder="txtStudentConsentDate" type="date"
+                  id="txtStudentConsentDate" [(ngModel)]="request.StudentConsentDate" [min]="mincampusDate">
+            <div *ngIf="isSubmitted&&form.txtStudentConsentDate.errors" class="text-danger">
+              <p *ngIf="form.txtStudentConsentDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
 
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Student Consent's Time :
+            </label>
+            <input formControlName="txtStudentConsentTime" class="form-input" placeholder="txtStudentConsentTime" type="time"
+                  id="txtStudentConsentTime" [(ngModel)]="request.StudentConsentTime">
+            <div *ngIf="isSubmitted&&form.txtStudentConsentTime.errors" class="text-danger">
+              <p *ngIf="form.txtStudentConsentTime.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+          <!--END STUDENT Consent LAST DATE AND TIME  -->
         </div>
 
-        <div>
+        <div class="mt-3">
           <input formControlName="txtMarked" type="checkbox"
                  id="txtMarked" [(ngModel)]="request.Marked">
           घोषणा : उपरोक्त कंपनी के कैंपस हेतु हमे अधिकारिक ईमेल प्राप्त हो गई है एवं समस्त विवरण की सत्यता जाँच लिया गया है |
