@@ -115,6 +115,7 @@ export class FeeConfigurationBTERComponent implements OnInit {
 
       ddlType: ['', [DropdownValidators]],
       ddlSemester: ['0'],
+      SchemeID: ['0', [DropdownValidators]],
       ddlStream: [''],
       ddlCategory: [[]],
       feeAmount: ['', [Validators.required]],
@@ -125,8 +126,6 @@ export class FeeConfigurationBTERComponent implements OnInit {
       txtRemark: [''],
 
     });
-
-
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
@@ -169,11 +168,6 @@ export class FeeConfigurationBTERComponent implements OnInit {
   //  }
   //}
 
-
-
-
-
-
   get _FeeConfigurationFromGroup() { return this.FeeConfigurationFromGroup.controls; }
 
   async VerifyOTP() {
@@ -195,15 +189,9 @@ export class FeeConfigurationBTERComponent implements OnInit {
           if (this.FeeConfigurationFromGroup.invalid) {
             return
           }
-
-
           const formValues = this.FeeConfigurationFromGroup.value;
-
-
           const selectedCategories = formValues.ddlCategory;
-
           this.request.CasteCatogaryList = selectedCategories;
-
           //alert(JSON.stringify(this.request.CasteCatogaryList));
 
           this.isLoading = true;
@@ -809,6 +797,11 @@ export class FeeConfigurationBTERComponent implements OnInit {
     }
     //update
     this.FeeConfigurationFromGroup.controls['ddlCategory'].updateValueAndValidity();
+
+    if(this.request.TypeID!=EnumConfigurationType.Revaluation_Fee) {
+      this.FeeConfigurationFromGroup.get('SchemeID')?.clearValidators();
+      this.FeeConfigurationFromGroup.get('SchemeID')?.updateValueAndValidity();
+    }
   }
 
 }

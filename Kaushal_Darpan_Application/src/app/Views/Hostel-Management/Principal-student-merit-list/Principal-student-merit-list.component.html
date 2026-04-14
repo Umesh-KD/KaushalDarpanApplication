@@ -131,7 +131,7 @@
             <th class="text-left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
               <input type="checkbox" [(ngModel)]="meritMultiSelected" (change)="selectAllItems()" />
             </th>
-            <th class="text-left" *ngIf="Searchrequest.status == 1">Sr No</th>
+            <th class="text-left" *ngIf="Searchrequest.status == 1 || Searchrequest.status == 0">Sr No</th>
             <th class="text-left" *ngIf="Searchrequest.status != 1">Merit No</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Student Name</th>
