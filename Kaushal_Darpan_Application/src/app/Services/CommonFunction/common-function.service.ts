@@ -823,6 +823,21 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async GetCompanyTierMaster() {
+    return await this.http.get(this.APIUrl + '/GetCompanyTierMaster/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetTierBasedPackageMaster(TierID:number) {
+    return await this.http.get(`${this.APIUrl}/GetTierBasedPackageMaster/${TierID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   
   public async getStudBasicDetailsEnrollmentWise( EnrollmentNo:string , DepartmentID:number) {
     debugger

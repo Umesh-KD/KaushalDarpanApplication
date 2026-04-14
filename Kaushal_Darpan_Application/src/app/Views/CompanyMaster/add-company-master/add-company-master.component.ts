@@ -13,6 +13,7 @@ import { IDistrictMaster_StateIDWiseDataModel, IStateMasterDataModel } from '../
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HrMasterDataModel } from '../../../Models/HrMasterDataModel';
+import { VerifyRollNumberList } from '../../../Models/GenerateRollDataModels';
 
 @Component({
     selector: 'app-add-company-master',
@@ -44,6 +45,8 @@ export class AddCompanyMasterComponent implements OnInit {
   public DistrictMasterList: IDistrictMaster_StateIDWiseDataModel[] = []
   public StateMasterList: IStateMasterDataModel[] = []
   public CompanyTypeList: any = []
+  public CompanyStatusList: any = []
+  public PackageList: any = []
 
   constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
@@ -64,7 +67,9 @@ export class AddCompanyMasterComponent implements OnInit {
         ddlState: ['', [DropdownValidators]],
         ddlDistrict: ['', [DropdownValidators]],
         ddlCompanyType: ['', [DropdownValidators]],
-        ISIIP: [false]
+        ISIIP: [false],
+        ddlCompanyStatus: ['', [DropdownValidators]],
+        ddlPackage: ['', [DropdownValidators]],
         // HRName: ['', Validators.required],
         // EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
         // MobileNo: ['', Validators.required],
@@ -111,6 +116,28 @@ export class AddCompanyMasterComponent implements OnInit {
     });
   }
 
+  async GetTierBasedPackageMaster() {
+    try{
+     // debugger
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetTierBasedPackageMaster(this.request.TierID)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        console.log(data['Data']);
+        this.PackageList = data['Data'];
+        console.log(this.PackageList);
+      }, error => console.error(error));
+    }
+    catch(Ex){
+      console.log(Ex);
+    }
+    finally{
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async GetMaterData() {
     try {
       this.loaderService.requestStarted();
@@ -120,6 +147,14 @@ export class AddCompanyMasterComponent implements OnInit {
           console.log(data['Data']);
           this.StateMasterList = data['Data'];
           console.log(this.StateMasterList);
+        }, error => console.error(error));
+
+        await this.commonMasterService.GetCompanyTierMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data['Data']);
+          this.CompanyStatusList = data['Data'];
+          console.log(this.CompanyStatusList);
         }, error => console.error(error));
     }
     catch (Ex) {
