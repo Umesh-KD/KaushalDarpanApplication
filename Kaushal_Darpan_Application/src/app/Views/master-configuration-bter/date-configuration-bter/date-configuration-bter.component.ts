@@ -89,6 +89,7 @@ export class DateConfigurationBTERComponent implements OnInit, OnDestroy {
     this.DateConfigurationFormGroup = this.formBuilder.group({
       ddlType: ['', [DropdownValidators]],
       SemesterID: ['', [DropdownValidators]],
+      SchemeID: ['', [DropdownValidators]],
       txtFromDate: ['', [Validators.required]],
       txtToDate: ['', [Validators.required]],
       /*cbIsLateral: [false]*/
@@ -177,6 +178,8 @@ export class DateConfigurationBTERComponent implements OnInit, OnDestroy {
     ){
       this.DateConfigurationFormGroup.get('SemesterID')?.clearValidators(); 
       this.DateConfigurationFormGroup.get('SemesterID')?.updateValueAndValidity();
+      this.DateConfigurationFormGroup.get('SchemeID')?.clearValidators(); 
+      this.DateConfigurationFormGroup.get('SchemeID')?.updateValueAndValidity();
     }
   }
 

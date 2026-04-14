@@ -15,6 +15,7 @@ import { ITIPlanningBankGuarantee, ITIPlanningStatusUpdateByIdModel } from '../.
 import { ITIsService } from '../../../../Services/ITIs/itis.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ItiCollegesSearchModel } from '../../../../Models/CommonMasterDataModel';
+import { DropdownValidatorsString, DropdownValidatorsString1 } from '../../../../Services/CustomValidators/custom-validators.service';
 @Component({
   selector: 'app-list-iti-bankguarantee',
   templateUrl: './list-iti-bankguarantee.component.html',
@@ -82,9 +83,10 @@ export class listitibankguaranteeComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.bankGuaranteeFormGroup = this.fb.group({
       //status: ['1', Validators.required],  
-      Remarks: ['', Validators.required],
+      Remarks: ['', DropdownValidatorsString1],
       OrderNo: ['', Validators.required],
       Orderdate: ['', Validators.required],
+
     });
 
     this.getbankguaranteeList()
@@ -399,9 +401,10 @@ export class listitibankguaranteeComponent {
     debugger
     this.isSubmitted = false;
     this.requestById.status = 2
-    this.requestById.Remarks = item.Remarks
-    this.requestById.OrderNo = this.requestById.OrderNo
-    this.requestById.Orderdate = this.requestById.Orderdate
+
+    //this.requestById.Remarks = item.Remarks
+    this.requestById.OrderNo = undefined;
+    //this.requestById.Orderdate = this.requestById.Orderdate
     this.requestById.BankGuaranteeID = item.BankGuaranteeID
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
 
@@ -516,6 +519,16 @@ export class listitibankguaranteeComponent {
       this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
       this.loadInTable();
     }
+  }
+
+
+  numberOnly(event: KeyboardEvent): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+
   }
 
 }

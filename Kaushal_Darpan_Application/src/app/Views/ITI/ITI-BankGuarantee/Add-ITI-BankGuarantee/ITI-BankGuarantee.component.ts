@@ -78,7 +78,9 @@ export class ITIBankGuaranteeComponent implements OnInit {
       BankAgreementDocument: [''],
       Remarks: [''],
       CollageId: ['0', DropdownValidators],
-      BankID: ['0', DropdownValidators]
+      BankID: ['0', DropdownValidators],
+      OrderNo: [''],
+      Orderdate: [''],
     });
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -214,9 +216,12 @@ export class ITIBankGuaranteeComponent implements OnInit {
             maturityDate: this.formatDate(record.Maturitydate),
             duration: record.Duration,
             amount: record.Amount,
-            BankAgreementDocument: record.BankAgreementDocument,
+    
             Remarks: record.Remarks,
-            CollageId: record.CollageId
+            CollageId: record.CollageId,
+            OrderNo: record.OrderNo,
+            Orderdate: this.formatDate(record.Orderdate),
+  BankAgreementDocument: record.BankAgreementDocument,
           });
         });
 
@@ -242,12 +247,42 @@ export class ITIBankGuaranteeComponent implements OnInit {
     this.request.CollageId = this.request.CollageId;
     this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
 
+
     if (this.status == 'ReNew')
     {
       this.request.ActionType = 'ReNew';
     }
-    else {
+    else
+    {
       this.request.ActionType = '';
+    }
+
+    if (this.request.Remarks == "Return at Maturity" || this.request.Remarks == "Return on insitute closed")
+    {
+      if (
+        this.request.OrderNo == null ||
+        this.request.OrderNo == undefined ||
+        this.request.OrderNo == 0 ||
+        this.request.OrderNo.toString().trim() == ''
+      ) {
+        // Invalid
+
+        this.toastr.error("Please Enter Order No");
+        return;
+      }
+
+      else
+        if (
+        this.request.Orderdate == null ||
+          this.request.Orderdate == undefined ||
+          this.request.Orderdate.toString().trim() == ''
+      ) {
+        // Invalid
+
+          this.toastr.error("Please Enter Order Date");
+        return;
+      }
+
     }
 
    
@@ -398,8 +433,20 @@ export class ITIBankGuaranteeComponent implements OnInit {
   async bankGuaranteeAmount() {
     this.commonMasterService.GetCommonMasterData('BankGurantee', this.request.CollageId).then((data: any) => {
       debugger
-      this.request.amount = data['Data'][0]['Name'];
+     // this.request.amount = data['Data'][0]['Name'];
+
+      this.request.amount = data?.Data?.[0]?.Name ?? 0;
     });
+  }
+
+  changeremark() {
+
+    if (this.request.Remarks == "")
+    {
+      this.request.Orderdate = '';
+      this.request.OrderNo = undefined;
+    }
+
   }
 
   

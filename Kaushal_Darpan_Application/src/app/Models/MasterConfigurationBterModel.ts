@@ -24,7 +24,7 @@ export class FeeConfigurationBterModel {
   public BackFeeAmount: number = 0;
   public BackSubjectCount: number = 0;
   public CasteCatogaryList: CasteCatogaryBterList[] = [];
-
+  public SchemeID?: number = 0;
 }
 
 export class CasteCatogaryBterList {

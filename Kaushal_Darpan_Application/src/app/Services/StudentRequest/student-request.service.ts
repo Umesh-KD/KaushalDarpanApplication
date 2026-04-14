@@ -288,4 +288,13 @@ export class StudentRequestService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetStudentdata(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStudentdata`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

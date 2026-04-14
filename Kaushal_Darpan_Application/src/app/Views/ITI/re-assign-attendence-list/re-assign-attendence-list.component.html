@@ -31,7 +31,7 @@
     <form [formGroup]="TableForm" (ngSubmit)="getData()">
       <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
 
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID!=222"> 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teacher</label>
 
           <select formControlName="SSOID"

@@ -271,11 +271,28 @@ export class ItiPlanningComponent {
 
     }
 
+
    
     if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
       this.request.CollegeId = this.sSOLoginDataModel.InstituteID
     } else {
       this.request.CollegeId = this.Collegeid
+
+    }
+
+
+    if (this.request.CollegeId > 0) {
+      await this.GetById(this.request.CollegeId)
+      if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43) {
+        if (this.request.Status == 2 || this.request.Status == 3) {
+          this.Type = 1
+        }
+      }
+      if (this.Type != 1) {
+        //if (this.request.Status == 2 && this.sSOLoginDataModel.RoleID != EnumRole.DTETraing || this.request.Status == 3 && this.sSOLoginDataModel.RoleID != EnumRole.DTETraing) {
+        //  window.open("/ItiPlanningList?id=" + this.sSOLoginDataModel.InstituteID, "_Self")
+        //}
+      }
 
     }
 
@@ -310,15 +327,7 @@ export class ItiPlanningComponent {
 
     
 
-    if (this.request.CollegeId > 0) {
-      await this.GetById(this.request.CollegeId)
-      if (this.Type != 1) {
-        if (this.request.Status == 2 && this.sSOLoginDataModel.RoleID != EnumRole.DTETraing || this.request.Status == 3 && this.sSOLoginDataModel.RoleID != EnumRole.DTETraing) {
-          window.open("/ItiPlanningList?id=" + this.sSOLoginDataModel.InstituteID, "_Self")
-        }
-      }
-      
-    }
+
 
     if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal && this.Type != 1 ||
       this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT && this.Type != 1) {

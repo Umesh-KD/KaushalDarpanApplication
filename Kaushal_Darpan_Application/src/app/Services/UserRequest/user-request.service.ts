@@ -211,4 +211,12 @@ export class UserRequestService {
       ).toPromise();
   }
 
+  public async UserRequestJoiningApprove_ITI_EM(request: RequestUpdateStatus) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/UserRequestJoiningApprove_ITI_EM', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

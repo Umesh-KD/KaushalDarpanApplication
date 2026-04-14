@@ -138,13 +138,14 @@ export class StudentJanAadharDetailComponent implements OnInit {
         Domicile: ['', [DropdownValidators]],
         ddlPreferentialCategory: ['', Validators.required],
         txtJanAadhaar: [''],
-        txtName: ['', Validators.required, Validators.pattern(/^[A-Za-z\u0900-\u097F ]+$/)],
+        
+        txtName: ['', [Validators.required, Validators.pattern(/^[A-Za-z\u0900-\u097F ]+$/)]],
         txtFather: ['', Validators.required],
         txtMotherEngname: ['', Validators.required],
         txtDOB: ['', [Validators.required, this.minimumAgeValidator(14)]],
         email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
         /*  txtMobileNumber: ['', Validators.required],*/
-        ddlCategoryA: ['', [DropdownValidators]],
+        ddlCategoryA: [0, [DropdownValidatorsString]],
         Gender: [0, [DropdownValidatorsString]],
         CertificateNo: ['', Validators.required],
         txtGeneratDate: ['', Validators.required],

@@ -185,18 +185,18 @@
                  class="btn bg-info text-white btn-sm"> View</a>
 
 
-              <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit !== 2 && isITIAddmissionOpen || row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit !== 2 && isITIAddmissionOpen || row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
   [routerLink]="'/ApplicationFormTab'"
   [queryParams]="{ AppID: row.encryptedApplicationID }"
-  class="btn bg-info text-white btn-sm"> Complete Application</a>-->
-              <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 &&  row.IsPaymentSuccess == true && isITIAddmissionOpen"
+  class="btn bg-info text-white btn-sm"> Complete Application</a>
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 &&  row.IsPaymentSuccess == true && isITIAddmissionOpen"
   [routerLink]="'/ApplicationFormTab'"
   [queryParams]="{ AppID: row.encryptedApplicationID }"
-  class="btn bg-info text-white btn-sm"> Edit Application</a>-->
-              <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit === 2 && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
+  class="btn bg-info text-white btn-sm"> Edit Application</a>
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit === 2 && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
   [routerLink]="'/Itipreviewform'"
   [queryParams]="{ AppID: row.encryptedApplicationID }"
-  class="btn bg-info text-white btn-sm"> View & Make Payment</a>-->
+  class="btn bg-info text-white btn-sm"> View & Make Payment</a>
               <!--<a *ngIf="row.DepartmentID == _EnumDepartment.BTER && row.SeatAllotmentStatus == 0
    && row.DirectAdmissionType != 0 && row.IsPaymentSuccess == true
    && sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon"
