@@ -42,6 +42,8 @@ export class CampusPostMasterModel {
   public DepartmentID: number = 0;
   public CampusPostType: number = 234;
   public EligibilityCriteriaModel: CampusPostMaster_EligibilityCriteriaModel[] = [];
+  public StudentConsentTime?: string = '';
+  public StudentConsentDate?: string = '';
 }
 export class CampusPostMaster_EligibilityCriteriaModel {
   public AID: number = 0;
@@ -77,6 +79,7 @@ export class CampusPostMaster_EligibilityCriteriaModel {
   public EligibleInstitutesID: number = 96;
   public EligibleInstitutesName: string ='';
   public SalaryName: string ='';
+  public appointmentLocation?: string = '';
 }
 
 export class CampusPostMaster_Action {

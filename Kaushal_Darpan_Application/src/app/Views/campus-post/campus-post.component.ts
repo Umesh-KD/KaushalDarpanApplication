@@ -141,9 +141,10 @@ export class CampusPostComponent implements OnInit {
       txtCampusToDate: ['', Validators.required],
       txtCampusToTime: [''],
       txtCampusAddress: ['', Validators.required],
-      txtMarked: [false, Validators.requiredTrue]
+      txtMarked: [false, Validators.requiredTrue],
 
-
+      txtStudentConsentTime: [''],
+      txtStudentConsentDate: ['',Validators.required],
 
     });
 
@@ -178,6 +179,7 @@ export class CampusPostComponent implements OnInit {
       ddlEligibleInstitutes: ['', [DropdownValidators]],
      
       ddlNoOfInterviewRound: [''],
+      txtappointmentLocation:['',Validators.required]
     });
     this.request.EligibilityCriteriaModel = [];
     this.filteredPassingYears = this.PassingYearMasterList;
@@ -794,7 +796,8 @@ export class CampusPostComponent implements OnInit {
             ActiveStatus: this.request_EligibilityCriteriaModel.ActiveStatus,
             DeleteStatus: this.request_EligibilityCriteriaModel.DeleteStatus,
             SalaryName: this.request_EligibilityCriteriaModel.SalaryName,
-            SalaryTypeID: this.request_EligibilityCriteriaModel.SalaryTypeID
+            SalaryTypeID: this.request_EligibilityCriteriaModel.SalaryTypeID,
+            appointmentLocation:this.request_EligibilityCriteriaModel.appointmentLocation
           }
         );
 

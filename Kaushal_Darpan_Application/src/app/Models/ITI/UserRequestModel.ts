@@ -37,6 +37,7 @@ export class RequestSearchModel {
   public RequestedUserID?: number = 0;
   public RequestCreatedRoleID?: number = 0;
   public RequestCreatedInstituteID?: number = 0;
+  public RoleID?: number = 0;
   
   public EmployeeNumber: string = '';
   public EmployeeDesignation: string = '';
