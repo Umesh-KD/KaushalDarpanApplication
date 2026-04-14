@@ -198,19 +198,19 @@ export class DateConfigurationBTERComponent implements OnInit, OnDestroy {
       else if (this.request.TypeID == 1)
         this.request.CourseSubTypeID = 1;
       await this.DateConfigService.SaveData(this.request)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State == EnumStatus.Success) {
             this.toastr.success(this.Message);
-            this.GetAllData();
+            await this.GetAllData();
             this.ResetControls();
           }
           else if (data.State == EnumStatus.Warning) {
             this.toastr.warning(this.ErrorMessage);
-            this.GetAllData();
+            await this.GetAllData();
             this.ResetControls();
           }
           else {

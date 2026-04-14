@@ -100,18 +100,21 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
 
-
-
-  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
-    private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute,
-    private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private activatedRoute: ActivatedRoute,
+    private routers: Router, 
+    private modalService: NgbModal, 
+    private Swal2: SweetAlert2,
     private ITICollegeTradeService: ItiSeatIntakeService,
-    private userRequestService: UserRequestService, private fb: FormBuilder, public appsettingConfig: AppsettingService
-
-
-  ) {
-
-  }
+    private userRequestService: UserRequestService, 
+    private fb: FormBuilder, 
+    public appsettingConfig: AppsettingService,
+  ) { }
 
 
 
@@ -172,8 +175,12 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       this.searchRequest.PageSize = 0
      
       this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.UserId = this.sSOLoginDataModel.UserID;
+
       this.loaderService.requestStarted();
-      await this.userRequestService.UserRequest(this.searchRequest)
+      await this.userRequestService.GetUserRequestList_DDO(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.UserRequestList = data.Data;
