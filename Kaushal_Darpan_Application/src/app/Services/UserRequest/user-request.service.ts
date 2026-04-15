@@ -219,4 +219,12 @@ export class UserRequestService {
       ).toPromise();
   }
 
+  public async GetUserRequestList_DDO(request: RequestSearchModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetUserRequestList_DDO', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
