@@ -50,10 +50,10 @@
             <td>{{row.TransctionMSG}}</td>
             <td>{{row.TransctionDate}}</td>
             <td class="text-center">
-              <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <div *ngIf="row.FeeFor == 'EnrollmentFee' || row.FeeFor == 'ExamFee'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" *ngIf="row.TransctionStatus=='SUCCESS'" (click)="FeeReceipt(row)" title="Download Reciept"><i class="ti ti-download"></i></a>
-              </div>-->
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              </div>
+              <div *ngIf="row.FeeFor == 'RevalFee' && row.TransctionStatus=='SUCCESS'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a target="_blank" title="Download Receipt" (click)="GetStudentRevalFeePaymentReceipt(row.TransactionId)">
                   <i class="ti ti-download"></i>
                 </a>

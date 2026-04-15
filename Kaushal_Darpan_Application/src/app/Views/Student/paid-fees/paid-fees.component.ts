@@ -115,17 +115,14 @@ export class PaidFeesComponent implements OnInit
   }
 
 
-  //async FeeReceipt(item:any)
-  //{
-  //  if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI)
-  //  {
-  //    this.GetITIStudentFeeReceipt(item)
-  //  }
-  //  else if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
-  //  {
-  //    this.GetStudentFeeReceipt(item)
-  //  }
-  //}
+  async FeeReceipt(item:any) {
+   if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI)  {
+     this.GetITIStudentFeeReceipt(item)
+   }
+   else if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER) {
+     this.GetStudentFeeReceipt(item)
+   }
+  }
 
   async GetStudentRevalFeePaymentReceipt(TransactionId: any) {
     try {
