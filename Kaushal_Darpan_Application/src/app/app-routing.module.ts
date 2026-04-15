@@ -498,6 +498,7 @@ const routes: Routes = [
       { path: 'StudentFeesTransactionHistoryRpt', loadChildren: () => import('./Views/Reports/student-fees-transaction-history-rpt/student-fees-transaction-history-rpt.module').then(m => m.StudentFeesTransactionHistoryRptModule), title: 'Student Fees Transaction History Report' },
       { path: 'ITIStudentFeesTransactionHistoryRpt', loadChildren: () => import('./Views/ITI/itistudent-fees-transaction-history/itistudent-fees-transaction-history.module').then(m => m.ITIStudentFeesTransactionHistoryModule), title: 'ITI Student Fees Transaction History Report' },
       { path: 'application-fees-trn-history', loadChildren: () => import('./Views/Reports/application-fees-transaction-history/application-fees-transaction-history.module').then(m => m.ApplicationFeesTransactionHistoryModule), title: 'Student Fees Transaction History Report' },
+
       { path: 'AdminUser', loadChildren: () => import('./Views/BTER/admin-user/admin-user.module').then(m => m.AdminUserModule), title: 'Admin User' },
       { path: 'ITIAdministrativeStaff', loadChildren: () => import('./Views/ITI/itiadmin-user/itiadmin-user.module').then(m => m.ITIAdminUserModule), title: 'Administrative Staff' },
 
