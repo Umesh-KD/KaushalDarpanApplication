@@ -157,7 +157,7 @@ export class AddRequestDDOOfficeComponent {
       this.groupForm.controls['ddlLevelID'].enable();
       this.request.LevelID = 1;
     } else {
-      this.groupForm.controls['ddlLevelID'].disable();
+      // this.groupForm.controls['ddlLevelID'].disable();
       if(this.sSOLoginDataModel.RoleID == EnumRole.Principal_SCVT 
         || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT
       ){
@@ -298,7 +298,7 @@ export class AddRequestDDOOfficeComponent {
       await this.userRequestService.UserRequest(this.request).then((data: any) => {
         if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
-          this.router.navigate(['/Department-Wise-Request-list'])
+          this.router.navigate(['/transfer-request-accept'])
           setTimeout(() => {
             this.groupForm.reset();
           }, 2000);
@@ -321,7 +321,7 @@ export class AddRequestDDOOfficeComponent {
   }
 
   async goBack() {
-    window.location.href = '/Department-Wise-Request-list';
+    window.location.href = '/transfer-request-accept';
   }
 
   async Get_ITIsData_ByID(Id: number) {    

@@ -176,7 +176,9 @@ export class PostPlanningComponent {
 
     const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
-    const gettrade = this.TradeList.find((item4: any) => item4.Id == formValues.TradeID);
+    const gettrade = this.TradeList?.find(
+      (item4: any) => item4.Id == formValues?.TradeID
+    ) || '';
     const OrderName = this.AcademicOrderNoList.find((item5: any) => item5.SanctionID == formValues.PostSanctionedID);
 
     const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);
@@ -459,8 +461,8 @@ export class PostPlanningComponent {
 
   async GetTradeData() {
 
-    this.tradeSearchRequest.action = '_getAllData'
-    this.tradeSearchRequest.TradeLevel = 0
+    this.tradeSearchRequest.action = 'Posttrade'
+    this.tradeSearchRequest.CollegeID = this.formData.PlanningID
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
@@ -655,6 +657,7 @@ export class PostPlanningComponent {
 
   async GetOrderDetailsList() {
     debugger
+
     try {
       this.loaderService.requestStarted();
       this.ItiSanctionOrderList.InstituteID = this.formData.PlanningID
@@ -665,6 +668,9 @@ export class PostPlanningComponent {
         this.OrderNoList = data.Data;
         this.AcademicOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 3);
         this.FinancialOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 2);
+
+
+        this.GetTradeData()
 
         console.log(this.OrderNoList, "orderlist");
       });

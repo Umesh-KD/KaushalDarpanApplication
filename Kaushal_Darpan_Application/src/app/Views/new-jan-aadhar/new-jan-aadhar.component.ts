@@ -382,6 +382,9 @@ export class JanAadharDetailComponent implements OnInit {
   
   }
 
-
+  ResendOTP() {
+    this.SendOTP(this.resendModel)
+    this.resendModel = new NewJanAadharAPIModel()
+  }
 
 }
