@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-staff-assignment',
@@ -22,13 +26,49 @@ export class StaffAssignmentComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public SemesterMasterDDL: any[] = [];
   ExaminerDDL: any[] = [];
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
+  public ApplyList: any[] = []
+  public totalRecord: number = 0;
 
+  displayedColumns: string[] = [
+  'SNo',
+  'Name',
+  'BranchNames',
+  'SemesterNames',
+  'FromDate',
+  'ToDate',
+  'Status',
+  'actions'
+];
+
+historyData: any[] = [];
+historyDataSource = new MatTableDataSource<any>();
+
+historyColumns: string[] = [
+  'SNo',
+  'Name',
+  'BranchNames',
+  'SemesterNames',
+  'FromDate',
+  'ToDate',
+  'Status'
+];
+selectedAssignmentId: number | null = null;
+isManualReassign: boolean = false;
+isHistoryModalOpen: boolean = false;
+dataSource!: MatTableDataSource<any>;
+ @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
     private staffService: StaffMasterService,
     private commonService: CommonFunctionService,
     private loader: LoaderService,
+    private Swal2: SweetAlert2
   ) { }
 
   async ngOnInit() {
@@ -45,6 +85,7 @@ export class StaffAssignmentComponent implements OnInit {
      await this.SemesterMaster();  
      await this.GetStaff_InstituteWise();
     //await this.loadTeacherList();
+    await this.GetStaffAssignmentList()
   }
 
   // Load Teachers
@@ -156,7 +197,7 @@ async GetBranchHideList() {
   }
 }
   // Save Data
-  async SaveData() {
+async SaveData() {
 
   const form = this.IIPMasterFormGroup.value;
 
@@ -168,25 +209,40 @@ async GetBranchHideList() {
   try {
     this.loader.requestStarted();
 
-    // 🔥 Convert to comma separated
-    const semesterCSV = form.SemesterIDs?.join(',');
-    const branchCSV = form.StreamIDs?.join(',');
+    const isReassign = this.selectedAssignmentId != null;
 
-    let payload = {
+    const payload = {
+      AssignmentId: this.selectedAssignmentId, // null = assign, value = reassign
       StaffId: form.TeacherID,
       InstituteId: this.sSOLoginDataModel.InstituteID,
-      BranchIds: branchCSV,        // 🔥 CSV
-      SemesterIds: semesterCSV,    // 🔥 CSV
+      BranchIds: form.StreamIDs.join(','),
+      SemesterIds: form.SemesterIDs.join(','),
       FromDate: form.FromDate,
       ToDate: form.ToDate,
-      Status: 1,
+      Status: 247,
       CreatedBy: this.sSOLoginDataModel.UserID
     };
 
-    await this.staffService.InsertStaffAssignmentHierarchy(payload);
+    const res: any = await this.staffService.InsertStaffAssignmentHierarchy(payload);
+    const response = JSON.parse(JSON.stringify(res));
 
-    this.toastr.success('Assignment saved successfully');
-    this.ResetControls();
+    // 🔥 HANDLE RESPONSE FROM SP
+    if (response.State === 1) {
+
+      if (isReassign) {
+        this.toastr.success('Reassigned successfully');
+      } else {
+        this.toastr.success('Assigned successfully');
+      }
+
+      this.selectedAssignmentId = null;
+      this.ResetControls();
+      this.GetStaffAssignmentList();
+
+    } else {
+      // 🔥 SP message (like "Teacher already active")
+      this.toastr.warning(response.Message);
+    }
 
   } catch (err) {
     console.error(err);
@@ -197,13 +253,14 @@ async GetBranchHideList() {
 }
   // Reset
   ResetControls() {
-    this.IIPMasterFormGroup.reset();
-    this.IIPMasterFormGroup.patchValue({
-      SemesterID: 0,
-      StreamIDs: [],
-      TeacherID: 0
-    });
-  }
+  this.IIPMasterFormGroup.reset();
+  this.IIPMasterFormGroup.patchValue({
+    SemesterIDs: [],   // ✅ FIXED
+    StreamIDs: [],
+    TeacherID: 0
+  });
+  this.selectedAssignmentId = null; // 🔥 IMPORTANT
+}
 
   async GetStaff_InstituteWise() {
     let obj = {
@@ -213,10 +270,142 @@ async GetBranchHideList() {
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       RoleID: this.sSOLoginDataModel.RoleID
     }
-    this.commonService.GetStaff_InstituteWise(obj).then((data: any) => {
+    this.commonService.Get_Staff_Ac_Year(obj).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ExaminerDDL = data.Data;
     })
   }
 
+  async GetStaffAssignmentList() {
+  try {
+
+     let request = {
+        CreatedBy: this.sSOLoginDataModel.UserID,
+        InstituteID: this.sSOLoginDataModel.InstituteID
+      };
+
+    await this.staffService.GetStaffAssignmentHierarchy(request)
+      .then((data: any) => {
+
+        data = JSON.parse(JSON.stringify(data));
+
+        this.State = data['State'];
+        this.Message = data['Message'];
+        this.ErrorMessage = data['ErrorMessage'];
+
+        this.ApplyList = data['Data'];
+        this.totalRecord = this.ApplyList.length;
+
+        this.initTable();
+
+      }, (error: any) => console.error(error));
+  }
+  catch (ex) {
+    console.log(ex);
+  }
+}
+initTable() {
+  this.dataSource = new MatTableDataSource(this.ApplyList);
+  this.dataSource.paginator = this.paginator;
+  this.dataSource.sort = this.sort;
+
+  this.dataSource.filterPredicate = (data: any, filter: string) => {
+    return Object.values(data).join(' ').toLowerCase().includes(filter);
+  };
+}
+
+applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+  this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  if (this.dataSource.paginator) {
+    this.dataSource.paginator.firstPage();
+  }
+}
+
+isExpired(toDate: string): boolean {
+  if (!toDate) return false;
+
+  const today = new Date();
+  const endDate = new Date(toDate);
+
+  // 🔥 Remove time part
+  today.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+
+  return endDate < today;
+}
+reassign(row: any) {
+  debugger;
+
+  this.selectedAssignmentId = row.AssignmentId;
+
+  // 🔥 Prefill form
+  this.IIPMasterFormGroup.patchValue({
+    TeacherID: row.StaffId,
+    FromDate: new Date().toISOString().split('T')[0],
+    ToDate: ''
+  });
+
+  // 🔥 Optional: prefill branch & semester (if needed)
+}
+
+enableManualReassign() {
+  this.isManualReassign = true;
+}
+
+disableManualReassign() {
+  this.isManualReassign = false;
+}
+
+confirmReassign(row: any) {
+  this.Swal2.Confirmation(
+    "Are you sure you want to reassign this teacher?",
+    (result: any) => {
+      if (result.isConfirmed) {
+        this.reassign(row);
+      }
+    }
+  );
+}
+
+async viewHistory(row: any) {
+
+  const request = {
+    InstituteId: this.sSOLoginDataModel.InstituteID,
+    CreatedBy: this.sSOLoginDataModel.UserID,
+    StaffId: row.StaffId
+  };
+
+  await this.staffService.GetStaffAssignmentHistory(request)
+    .then((res: any) => {
+
+      res = JSON.parse(JSON.stringify(res));
+
+      console.log('API Response:', res);
+
+      this.historyData = res.Data || [];
+
+      console.log('History Data:', this.historyData);
+
+      this.historyDataSource = new MatTableDataSource(this.historyData);
+
+      this.openModal();
+
+      setTimeout(() => {
+        this.historyDataSource._updateChangeSubscription();
+      }, 100);
+
+    });
+}
+
+openModal() {
+  this.isHistoryModalOpen = true;
+  document.body.classList.add('modal-open');
+}
+
+closeModal() {
+  this.isHistoryModalOpen = false;
+  document.body.classList.remove('modal-open');
+}
 }
