@@ -86,6 +86,8 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
   public personalDetailsRequest = new ITI_Govt_EM_PersonalDetailByUserIDSearchModel();
   @ViewChild('MyModel_ReplayQuery') MyModel_ReplayQuery: any;
   closeResult: string | undefined;
+  public alreadyExists: any = [];
+  public postNotExists: any = [];
 
   constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
     private ITICollegeTradeService: ItiSeatIntakeService
@@ -764,10 +766,23 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
           this.routers.navigate(['/ITIGovtEMZonalOfficeList']);
         }
         else if (data.State == EnumStatus.Warning) {
-          const duplicateSSOIDs = data.Data.map((item: any) => item.SSOID).join(', ');
-          const msg = `SSOID ${duplicateSSOIDs} is already mapped.To assign a new role, please use the Additional Role Mapping section.`;
-          this.toastr.warning(msg);
-          this.AddedZonalList = [];
+          if(data.Data?.length > 0){
+            data.Data.forEach((element: any) => {
+              if(element.ErrorType == 'AlreadyExists'){
+                const duplicateSSOIDs = data.Data.map((item: any) => item.SSOID).join(', ');
+                const msg = `SSOID ${duplicateSSOIDs} is already mapped.To assign a new role, please use the Additional Role Mapping section.`;
+                this.toastr.warning(msg);
+              } else if(element.ErrorType == 'PostNotExists'){
+                const duplicateSSOIDs = data.Data.map((item: any) => item.SSOID).join(', ');
+                const msg = `For SSOID ${duplicateSSOIDs} their is no vacancy is available.`;
+                this.toastr.warning(msg);
+              }
+            })
+          }
+          // const duplicateSSOIDs = data.Data.map((item: any) => item.SSOID).join(', ');
+          // const msg = `SSOID ${duplicateSSOIDs} is already mapped.To assign a new role, please use the Additional Role Mapping section.`;
+          // this.toastr.warning(msg);
+          // this.AddedZonalList = [];
         }
         else {
           this.toastr.error(data.ErrorMessage);
