@@ -638,7 +638,7 @@ export class CampusPostComponent implements OnInit {
 
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-
+//debugger
       this.request.PostSSOID = this.sSOLoginDataModel.SSOID;
       /*this.request.PostCollegeID = this.request_EligibilityCriteriaModel.EligibleInstitutesID,*/
       this.request.PostCollegeID = this.sSOLoginDataModel.InstituteID;
@@ -646,6 +646,11 @@ export class CampusPostComponent implements OnInit {
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      if(this.request.StudentConsentDate==null || this.request.StudentConsentDate=='' || this.request.StudentConsentDate==undefined ||
+         this.request.StudentConsentTime==null || this.request.StudentConsentTime=='' || this.request.StudentConsentTime==undefined){
+        this.request.StudentConsentDate=this.request.CampusToDate;
+        this.request.StudentConsentTime='23:59:59'
+      }
       await this.CampusPostService.SaveData(this.request)
         .then((data: any) => {
           this.State = data['State'];
@@ -676,6 +681,23 @@ export class CampusPostComponent implements OnInit {
       }, 200);
     }
   }
+
+
+ validateDates() {
+  const campusDate = this.request.CampusToDate;
+  const consentDate = this.request.StudentConsentDate;
+
+  if (campusDate && consentDate) {
+    const campus = new Date(campusDate);
+    const consent = new Date(consentDate);
+
+    if (consent > campus) {
+      this.form.txtStudentConsentDate.setErrors({ invalidDate: true });
+    } else {
+      this.form.txtStudentConsentDate.setErrors(null);
+    }
+  }
+}
   async AddNewRole() {
     debugger;
     this.isSubmittedItemDetails = true;
