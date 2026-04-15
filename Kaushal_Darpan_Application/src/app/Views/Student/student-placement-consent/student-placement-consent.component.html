@@ -97,10 +97,18 @@
            
               <td align="center">
                 <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                  <button class="btn bg-info text-white btn-sm" (click)="openModal(modal_Open,row.PostID)" type="button">View</button>
+                  <!-- <button class="btn bg-info text-white btn-sm" (click)="openModal(modal_Open,row.PostID)" type="button">View</button>
                   <button *ngIf="row.ConsentID==0" class="btn bg-success text-white btn-sm" (click)="Savedata(row.PostID)" type="button">Consent</button>
-                  <button *ngIf="row.ConsentID!=0" class="btn bg-success text-white btn-sm" type="button">Already consent</button>
+                  <button *ngIf="row.ConsentID!=0" class="btn bg-success text-white btn-sm" type="button">Already consent</button> -->
+                  
+                   <button class="btn bg-info text-white btn-sm" (click)="openModal(modal_Open,row.PostID)" type="button">View</button>
+                  <button *ngIf="row.ConsentFlag == 1" class="btn bg-success text-white btn-sm" (click)="Savedata(row.PostID)" type="button">Consent</button>
+                  <button *ngIf="row.ConsentFlag == 2" class="btn bg-success text-white btn-sm" type="button">Already consent</button>
+                  <button *ngIf="row.ConsentFlag == 0" class="btn bg-success text-white btn-sm" type="button">Applied date is out</button>
 
+                  <!-- <button *ngIf="isConsentAllowed(row)">Consent</button> -->
+                  <!-- <button *ngIf="row.ConsentID!=0" class="btn bg-success text-white btn-sm" type="button">Already consent</button>
+                  <button *ngIf="isConsentExpired(row)" class="btn bg-success text-white btn-sm" type="button">Applied Date is Out</button> -->
                 </div>
               </td>
             </tr>

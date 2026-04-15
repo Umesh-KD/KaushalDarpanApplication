@@ -1576,3 +1576,86 @@ input, textarea {
   background: #f8f9fa !important;
 }
 
+.verify-btn,
+.close-btn {
+  min-width: 160px;
+  height: 44px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Verify OTP button */
+.verify-btn {
+  background: #0d6efd;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(13, 110, 253, 0.25);
+}
+
+  .verify-btn:hover {
+    background: #0b5ed7;
+    transform: translateY(-1px);
+  }
+
+/* Re-Send OTP button */
+.close-btn {
+  background: #fff;
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
+}
+
+  .close-btn:hover {
+    background: #f1f7ff;
+    transform: translateY(-1px);
+  }
+.otp-footer {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.verify-btn,
+.resend-btn {
+  min-width: 160px;
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.verify-btn {
+  background: #28a745;
+  color: #fff;
+  border: none;
+}
+
+  .verify-btn:hover {
+    background: #0b5ed7;
+  }
+
+.resend-btn {
+  background: #fff;
+  color: #22a440;
+  border: 1px solid #e2e4e5;
+}
+
+  .resend-btn:hover {
+    background: #f1f7ff;
+  }

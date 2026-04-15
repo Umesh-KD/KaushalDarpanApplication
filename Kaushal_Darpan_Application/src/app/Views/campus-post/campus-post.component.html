@@ -719,7 +719,7 @@
               Campus Time :
             </label>
             <input formControlName="txtCampusFromTime" class="form-input" placeholder="txtCampusFromTime" type="time"
-                   id="txtCampusFromTime" [(ngModel)]="request.CampusFromTime">
+                   id="txtCampusFromTime" [(ngModel)]="request.CampusFromTime"  (change)="validateDates()">
             <div *ngIf="isSubmitted&&form.txtCampusFromTime.errors" class="text-danger">
               <p *ngIf="form.txtCampusFromTime.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
             </div>
@@ -742,7 +742,7 @@
               Campus Venue Location Link:
             </label>
             <input formControlName="txtCampusVenueLocation" class="form-input" maxlength="200" placeholder="Campus Venue Location Link"
-                   type="text" id="txtCampusVenueLocation" [(ngModel)]="request.CampusVenueLocation">
+                   type="text" id="txtCampusVenueLocation" [(ngModel)]="request.CampusVenueLocation"  (change)="validateDates()">
             <div *ngIf="isSubmitted&&form.txtCampusVenueLocation.errors" class="text-danger">
               <p *ngIf="form.txtCampusVenueLocation.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
             </div>
@@ -793,9 +793,10 @@
               Student Consent's Last Date : <span class="StarMarking">*</span>
             </label>
             <input formControlName="txtStudentConsentDate" class="form-input" placeholder="txtStudentConsentDate" type="date"
-                  id="txtStudentConsentDate" [(ngModel)]="request.StudentConsentDate" [min]="mincampusDate">
+                  id="txtStudentConsentDate" [(ngModel)]="request.StudentConsentDate" [min]="request.CampusFromDate"  (change)="validateDates()">
             <div *ngIf="isSubmitted&&form.txtStudentConsentDate.errors" class="text-danger">
               <p *ngIf="form.txtStudentConsentDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              <p *ngIf="form.txtStudentConsentDate.errors?.invalidDate" ><i aria-hidden="true"></i>  Student Consent Date cannot be greater than Campus To Date .!</p>
             </div>
           </div>
 
@@ -804,9 +805,10 @@
               Student Consent's Time :
             </label>
             <input formControlName="txtStudentConsentTime" class="form-input" placeholder="txtStudentConsentTime" type="time"
-                  id="txtStudentConsentTime" [(ngModel)]="request.StudentConsentTime">
+                  id="txtStudentConsentTime" [(ngModel)]="request.StudentConsentTime"  (change)="validateDates()">
             <div *ngIf="isSubmitted&&form.txtStudentConsentTime.errors" class="text-danger">
               <p *ngIf="form.txtStudentConsentTime.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              <p *ngIf="form.txtStudentConsentTime.errors.required"><i aria-hidden="true"></i>  Student Consent Time cannot be greater than Campus Time .!</p>
             </div>
           </div>
 
