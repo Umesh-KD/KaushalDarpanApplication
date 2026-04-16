@@ -322,6 +322,7 @@ export class ITI_Govt_EM_ZonalOFFICERSDataModel {
   public MobileNo: string = ''
   public EmailID: string = ''
   public DistrictID: number=0
+  public StaffPostTypeID: number=0
 
 }
 

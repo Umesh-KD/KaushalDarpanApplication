@@ -18,7 +18,6 @@ import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataMod
 @Component({
   selector: 'app-ITI-Govt-EM-ZonalOfficeMaster',
   standalone: false,
-  
   templateUrl: './ITI-Govt-EM-ZonalOfficeMaster.component.html',
   styleUrl: './ITI-Govt-EM-ZonalOfficeMaster.component.css'
 })
@@ -43,6 +42,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
   public ITIGovtEMOFFICERSList: any[] = [];
   public Govt_EM_GetUserLevelDetails: any[] = [];
   public StaffTypeList: any[] = []
+  public StaffPostTypeList: any[] = []
   public sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
@@ -89,19 +89,22 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
   public alreadyExists: any = [];
   public postNotExists: any = [];
 
-  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
-    private ITICollegeTradeService: ItiSeatIntakeService
-  ) {
-
-  }
-
-
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private routers: Router, 
+    private ITICollegeTradeService: ItiSeatIntakeService,
+  ) { }
 
   async ngOnInit() {
     
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
       ddlRoleID: ['', [DropdownValidators]],
       ddlStaffType: ['', [DropdownValidators]],
+      StaffPostTypeID: ['', [DropdownValidators]],
       ddlOffice: ['', [DropdownValidators]],
       ddlITICollegeTrade: [''],
       ddlLevelID: [{ value: ''}, [DropdownValidators]],      
@@ -121,48 +124,20 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       txtSSOID: ['',[Validators.required]]
     });
     this.IsHodIsDisable = true;
- debugger
-    //this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID
-
-    //if(this.LevelID === 1)
-    //{
-    //  this.formData.LevelID = 3;
-    //  this.IsDisable = true;
-
-    //}
-    //if (this.LevelID === 3) {
-    //  this.formData.LevelID = 2;
-    //  this.IsDisable = true;
-    //}
-   
-    
-
     await this.GetITI_Govt_EM_GetUserLevel();
-
-    
-    this.GetLevelList();
+    await this.GetStaffPostTypeList();
+    await this.GetLevelList();
    // this.GetRoleMasterData();
-    this.GetStaffTypeData();
-    this.GetPostList();
+    await this.GetStaffTypeData();
+    await this.GetPostList();
    
     /*await this.getITICollege();*/
    /* await this.GetAllData()*/
-
-   
-
-   
-    
-    console.log(this.sSOLoginDataModel);
   }
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
 
-
-
-
   async ddl_DivisionID_Wise_District() {
-
     try {
-      this.loaderService.requestStarted();
       this.DistrictList = [];
       await this.commonMasterService.DistrictMaster_DivisionIDWise(this.DivisionID)
         .then((data: any) => {
@@ -173,57 +148,34 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   async GetITI_Govt_EM_GetUserLevel() {
     
     try {
-      this.loaderService.requestStarted();
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_ITI_Govt_EM_GetUserLevel(this.sSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
+          
           this.Govt_EM_GetUserLevelDetails = data['Data'];
           this.LevelID = data['Data'][0]["LevelID"];
           this.DivisionID = data['Data'][0]["DivisionID"];
-         /* alert(this.LevelID);*/
-          console.log(this.Govt_EM_GetUserLevelDetails, "Govt_EM_GetUserLevelDetails")
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
   async GetOfficeList() {
-    debugger
     this.formData.OfficeID = 0;
     try {
-      this.loaderService.requestStarted();
-
-     
-
-
-
-
       await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, this.formData.LevelID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeList = data['Data'];
 
           if (this.formData.LevelID == 1 && this.sSOLoginDataModel.StaffID > 0) {
-            debugger
+            
             if (this.sSOLoginDataModel.OfficeID != 0) {
 
               this.OfficeList = this.OfficeList.filter((item: any) => item.ID == this.sSOLoginDataModel.OfficeID)
@@ -248,7 +200,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
           this.GetLevelOldID = data['Data']['iTIGovtEMStaffPersonalDetails']['LevelID'];
           this.GetIsHodOldID = data['Data']['iTIGovtEMStaffPersonalDetails']['IsHod'];
           this.OldNodalDistrictID = data['Data']['iTIGovtEMStaffPersonalDetails']['NodalDistrictID'];
-          debugger
+          
 
           if (this.GetLevelOldID != 0 && this.formData.LevelID == this.GetLevelOldID) {
             if (data?.Data?.iTIGovtEMStaffPersonalDetails?.IsHod === true) {
@@ -259,27 +211,14 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
           } else {
             this.GetIsHodOldID = 0;
           }
-
-
-
-
-        }, error => console.error(error));
-          
-
+        }, error => console.error(error)); 
     }
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
-
-  async OfficeITIWiseCollegeAndDirstrict() {
-    debugger
+  async OfficeITIWiseCollegeAndDirstrict() {    
     await this.GetRoleMasterData();
     this.formData.InstituteID = 0;
     this.formData.RoleID = 0;
@@ -299,20 +238,14 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
 
     this.AddStaffBasicDetailFromGroup.controls['ddlITICollegeTrade'].updateValueAndValidity();
     this.AddStaffBasicDetailFromGroup.controls['ddlDistrictID'].updateValueAndValidity();
-   
-    
   }
 
-
-
-  async DuplicateNodal()
-  {
+  async DuplicateNodal() {
    
     this.NodalsearchRequest.DistrictID = this.formData.DistrictID;
     this.NodalsearchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.NodalsearchRequest.LevelID = this.formData.LevelID;
     try {
-      this.loaderService.requestStarted();
       await this.ITIGovtEMStaffMasterService.GetITI_Govt_CheckDistrictNodalOffice(this.NodalsearchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -334,16 +267,9 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
-
-  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
-   
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {   
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
       return;
@@ -353,14 +279,9 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     const appName = 'madarsa.test';
     const password = 'Test@1234';
 
-    /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
-
     this.requestSSoApi.SSOID = username;
     this.requestSSoApi.appName = appName;
     this.requestSSoApi.password = password;
-
-
-
     try {
 
       this.loaderService.requestStarted();
@@ -383,10 +304,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
               this.GetDesignationID = this.PostList.find((item: any) =>
                 item.Name?.toLowerCase().trim() === parsedData.designation?.toLowerCase().trim()
               )?.ID ?? 0;
-
               this.formData.PostID = this.GetDesignationID;
-
-           
             }
             else {
               this.formData.PostID = 0;
@@ -404,42 +322,16 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       });
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
-
-
-
-
-    //try {
-    //  this.loaderService.requestStarted();
-
-    //  const result = await this.http.get<any>(url).toPromise();
-    //  console.log('SSO Details:', result);
-
-
-
-    //  return result;
-
-    //} catch (ex) {
-    //  console.error('Error fetching SSO details:', ex);
-    //} finally {
-    //  setTimeout(() => {
-    //    this.loaderService.requestEnded();
-    //  }, 200);
-    //}
   }
 
   async getITICollege() {
-    debugger
+    
     try {
       this.searchRequestITi.Action = "_ITICollegeWithoutAcademicYearID";
       this.searchRequestITi.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequestITi.ManagementTypeId = 1;
 
-      this.loaderService.requestStarted();
       await this.ITICollegeTradeService.getITICollegeByManagement(this.searchRequestITi)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -452,22 +344,16 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   //old
   async GetLevelList() {
     try {
-      this.loaderService.requestStarted();
       await this.commonMasterService.GetLevelMaster()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.LevelList = data['Data'];
-          debugger
+          
           if (this.sSOLoginDataModel.StaffID > 0) {
             if (this.LevelID === 1 && this.sSOLoginDataModel.RoleID == this._EnumRole.DTE_TrainingT2_establishment) {
               this.LevelList = this.LevelList.filter((item: any) => item.ID != 2)
@@ -499,33 +385,11 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
-
-  //onRoleChange(event: any) {
-  //  debugger
-  //  const selectedRoleId = +event.target.value;
-
-  //  // Example: If role ID 3 is HOD role, show the checkbox
-  //  if (selectedRoleId === 101) {
-  //    this.showIsHod = true;
-  //    this.IsHodIsDisable = false; // Enable it
-  //  } else {
-  //    this.showIsHod = false;
-  //    this.formData.IsHod = false; // Reset value if hidden
-  //  }
-  //}
-  onRoleChange(event: any) {
-    debugger
+  onRoleChange(event: any) {    
     const selectedRoleId = +event.target.value;
   
-
-    // Find the selected role by ID
     const selectedRole = this.RoleMasterList.find((item: any) => item.ID === selectedRoleId);
 
     if (selectedRole && selectedRole.IsHod) {
@@ -536,45 +400,13 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       this.IsHodIsDisable = true;  // disable the checkbox
       this.formData.IsHod = false; // reset value
     }
-
-    /// this code use duplicate check office and role wise ////////////////////  uncommt 27-08-2025 
-
-    //try {
-    //  let request = {
-    //    RoleID: this.sSOLoginDataModel.RoleID,
-    //    OfficeID: this.sSOLoginDataModel.OfficeID
-    //  };
-
-    //  this.loaderService.requestStarted();
-    //  this.ITIGovtEMStaffMasterService.ITIEMStaffDuplicateCheck(request)
-    //    .then((data: any) => {
-    //      data = JSON.parse(JSON.stringify(data));
-    //      if (data.State == EnumStatus.Warning) {
-    //        this.toastr.warning("This role is already assigned in this office");
-    //        this.formData.RoleID = 0;
-    //      }
-
-
-         
-    //    }, error => console.error(error));
-    //}
-    //catch (Ex) {
-    //  console.log(Ex);
-    //}
-    //finally {
-    //  setTimeout(() => {
-    //    this.loaderService.requestEnded();
-    //  }, 200);
-    //}
   }
 
 
 
 
-  async GetRoleMasterData() {
-    debugger
+  async GetRoleMasterData() {    
     try {
-      this.loaderService.requestStarted();
       // await this.commonMasterService.GetRoleMasterDDL(, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
       this.roleModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.roleModel.RoleID = this.sSOLoginDataModel.RoleID;
@@ -593,47 +425,30 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
         } else {
           if (this.GetIsHodOldID > 0) {
             this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.IsHod != true)
-          } 
-          // else {
-          //   this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.IsHod == true)
-          // }
+          }
         }
         console.log("RoleMasterList", this.RoleMasterList);
       })
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
   async GetPostList() {
    
     try {
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID)
+      await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
-          /*this.PostList = this.PostList.filter((itme: any) => itme.IsPostTypeID == 1)*/
-          console.log(this.PostList, "PostList")
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   async GetStaffTypeData() {
-
     try {
-      this.loaderService.requestStarted();
       await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffTypeList = data.Data;
@@ -641,16 +456,10 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       })
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
   async AddZonal() {
-    
-    debugger
     this.isSubmitted = true;
     // If the form is invalid, return early
     if (this.AddStaffBasicDetailFromGroup.invalid) {
@@ -684,7 +493,6 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       this.isSubmitted = false;
       this.isSSOVisible = false;
       this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.enable();
-
     }
   }
 
@@ -697,14 +505,8 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     }
   }
 
-
-
-
   async DuplicateCheck(SSOID : string) {
-  
-   // console.log('id test ', this.searchRequest.DivisionID);
     try {
-      this.loaderService.requestStarted();
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_SSOIDCheck(SSOID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -729,16 +531,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-
-
-  
+  } 
 
   async SaveData() {
 
@@ -756,7 +549,6 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     })
 
     try {
-      this.loaderService.requestStarted();
 
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_Govt_AdminT2Zonal_Save(this.AddedZonalList).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -790,13 +582,8 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       })
     } catch (error) {
       console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200)
     }
   }
-
 
   async goBack() {
     window.location.href = '/ITIGovtEMZonalOfficeList';
@@ -812,24 +599,19 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     //if (btnSave) btnSave.innerHTML = "Submit";
   }
 
-
-
-
- 
-
-
-  
-
-
-
-
-
-
- 
-
-
-
-
-
-
+  async GetStaffPostTypeList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('PostType').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffPostTypeList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }
