@@ -1542,6 +1542,15 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async Get_Staff_Ac_Year(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/Get_Staff_Ac_Year', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
   public async GetITIStaffInstituteWise(request: any) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/GetITIStaffInstituteWise', body, this.headersOptions)

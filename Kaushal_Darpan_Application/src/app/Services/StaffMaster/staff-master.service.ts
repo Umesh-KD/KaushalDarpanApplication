@@ -330,6 +330,24 @@ export class StaffMasterService {
       ).toPromise();
   }
 
+  public async GetStaffAssignmentHierarchy(searchRequest: any) {
+    debugger
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStaffAssignmentHierarchy`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetStaffAssignmentHistory(searchRequest: any) {
+    debugger
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStaffAssignmentHistory`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 

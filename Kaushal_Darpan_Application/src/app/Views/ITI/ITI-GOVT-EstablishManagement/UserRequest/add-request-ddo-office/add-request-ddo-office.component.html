@@ -43,7 +43,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Request Type: <span class="StarMarking">*</span></label>
               <select class="form-select" id="ddlRequestType" [(ngModel)]="request.RequestType" formControlName="ddlRequestType" (change)="FunctionRequestType()">
                 <option value="0">--Select--</option>
-                <option value="1">Transfer</option>
+                <option value="1">Relieving</option>
               </select>
               <div *ngIf="isSubmitted && _groupForm.ddlRequestType.errors" class="text-danger">
                 <p *ngIf="!_groupForm.ddlRequestType.errors.DropdownValidators">

@@ -151,7 +151,7 @@ export class PostPlanningComponent {
   tempIndex: number = 1;
 
   async addOfficeVacancy() {
-    debugger;
+    
     const formValues = this.AddOfficeVacancyForm.value;
 
     // Validate required fields before adding
@@ -260,7 +260,7 @@ export class PostPlanningComponent {
 
 
   async SaveData() {
-    debugger;
+    
     this.loaderService.requestStarted();
     this.isLoading = true;
     this.isSubmitted = true;
@@ -302,7 +302,7 @@ export class PostPlanningComponent {
 
 
   async removeLeave(index: number, ID: number) {
-    debugger
+    
 
 
     if (ID === undefined || ID === null) {
@@ -362,7 +362,7 @@ export class PostPlanningComponent {
   }
 
   async OfficeVacancyDataList() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -392,7 +392,7 @@ export class PostPlanningComponent {
 
 
   async GetOfficeList() {
-    debugger;
+    
 
     try {
       this.loaderService.requestStarted();
@@ -531,7 +531,7 @@ export class PostPlanningComponent {
   }
 
   async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
-    debugger;
+    
     try {
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
 
@@ -590,7 +590,7 @@ export class PostPlanningComponent {
   }
 
   async VacancyPostUpdate() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
 
@@ -656,7 +656,7 @@ export class PostPlanningComponent {
   }
 
   async GetOrderDetailsList() {
-    debugger
+    
 
     try {
       this.loaderService.requestStarted();
@@ -687,7 +687,7 @@ export class PostPlanningComponent {
 
 
   async OnOrderChange(type: number) {
-    debugger
+    
     if (type == 1) {
       const item = this.AcademicOrderNoList.find(
         (e: any) => e.ID == this.formData.PostSanctionedID

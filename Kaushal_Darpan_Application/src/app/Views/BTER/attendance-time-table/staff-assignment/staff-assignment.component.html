@@ -95,3 +95,222 @@
 
   </div>
 </form>
+
+<div class="table-container">
+  <div class="flex justify-between items-center mb-2">
+
+  <!-- LEFT: Filter -->
+  <mat-form-field appearance="outline" class="w-1/3">
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search Staff">
+  </mat-form-field>
+
+  <!-- RIGHT: Buttons -->
+  <div class="flex gap-2">
+
+    <button class="btn bg-warning text-white"
+            (click)="enableManualReassign()">
+      Reassign (Manual)
+    </button>
+
+    <button *ngIf="isManualReassign"
+            class="btn bg-danger text-white"
+            (click)="disableManualReassign()">
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <!-- SNo -->
+    <ng-container matColumnDef="SNo">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+
+    <!-- Name -->
+    <ng-container matColumnDef="Name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let row">{{ row.Name }}</td>
+    </ng-container>
+
+    <!-- Branch -->
+    <ng-container matColumnDef="BranchNames">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Branch</th>
+      <td mat-cell *matCellDef="let row">{{ row.BranchNames }}</td>
+    </ng-container>
+
+    <!-- Semester -->
+    <ng-container matColumnDef="SemesterNames">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Semester</th>
+      <td mat-cell *matCellDef="let row">{{ row.SemesterNames }}</td>
+    </ng-container>
+
+    <!-- From Date -->
+    <ng-container matColumnDef="FromDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>From Date</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.FromDate | date:'dd-MM-yyyy' }}
+      </td>
+    </ng-container>
+
+    <!-- To Date -->
+    <ng-container matColumnDef="ToDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>To Date</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.ToDate | date:'dd-MM-yyyy' }}
+      </td>
+    </ng-container>
+
+    <!-- Status -->
+    <ng-container matColumnDef="Status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let row">
+        <span [ngClass]="row.Status == 247 ? 'text-success' : 'text-danger'">
+          {{ row.Status == 247 ? 'Active' : 'Inactive' }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <!-- <td mat-cell *matCellDef="let row">
+        <div class="flex align-center justify-center actionBtns">
+          <a href="javascript:void(0)" (click)="edit(row)" title="Edit">
+            <i class="ti ti-pencil"></i>
+          </a>
+          <a href="javascript:void(0)" (click)="delete(row)" title="Delete">
+            <i class="ti ti-trash"></i>
+          </a>
+        </div>
+      </td> -->
+      <td mat-cell *matCellDef="let row">
+  <div class="flex align-center justify-center actionBtns">
+
+    <!-- 🔥 Reassign -->
+    <a *ngIf="(row.IsActive && isExpired(row.ToDate)) || isManualReassign"
+       href="javascript:void(0)"
+       (click)="confirmReassign(row)"
+       title="Reassign">
+      <i class="ti ti-refresh"></i>
+    </a>
+
+    <a *ngIf="row.TotalRecords > 1" (click)="viewHistory(row)" title="View History">
+      <i class="ti ti-eye"></i>
+    </a>
+
+    <!-- Delete -->
+    <!-- <a href="javascript:void(0)" (click)="delete(row)">
+      <i class="ti ti-trash"></i>
+    </a> -->
+
+  </div>
+</td>
+    </ng-container>
+
+    <!-- Header & Rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+
+  <div class="alert alert-warning text-center" *ngIf="totalRecord == 0">
+    No Record Found
+  </div>
+
+  <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+</div>
+
+<!-- 🔥 HISTORY MODAL -->
+
+
+<div *ngIf="isHistoryModalOpen" class="custom-modal-overlay">
+
+  <div class="custom-modal">
+
+    <!-- Header -->
+    <div class="modal-header">
+      <h5>Staff Assignment History</h5>
+
+      <button class="close-btn" (click)="closeModal()">×</button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+
+    <table mat-table [dataSource]="historyDataSource"
+       class="mat-elevation-z8 w-100">
+
+  <!-- SNo -->
+  <ng-container matColumnDef="SNo">
+    <th mat-header-cell *matHeaderCellDef>#</th>
+    <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+  </ng-container>
+
+  <!-- Name -->
+  <ng-container matColumnDef="Name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let row">{{ row.Name }}</td>
+  </ng-container>
+
+  <!-- Branch -->
+  <ng-container matColumnDef="BranchNames">
+    <th mat-header-cell *matHeaderCellDef>Branch</th>
+    <td mat-cell *matCellDef="let row">{{ row.BranchNames }}</td>
+  </ng-container>
+
+  <!-- Semester -->
+  <ng-container matColumnDef="SemesterNames">
+    <th mat-header-cell *matHeaderCellDef>Semester</th>
+    <td mat-cell *matCellDef="let row">{{ row.SemesterNames }}</td>
+  </ng-container>
+
+  <!-- From Date -->
+  <ng-container matColumnDef="FromDate">
+    <th mat-header-cell *matHeaderCellDef>From</th>
+    <td mat-cell *matCellDef="let row">
+      {{ row.FromDate | date:'dd-MM-yyyy' }}
+    </td>
+  </ng-container>
+
+  <!-- To Date -->
+  <ng-container matColumnDef="ToDate">
+    <th mat-header-cell *matHeaderCellDef>To</th>
+    <td mat-cell *matCellDef="let row">
+      {{ row.ToDate | date:'dd-MM-yyyy' }}
+    </td>
+  </ng-container>
+
+  <!-- Status -->
+  <ng-container matColumnDef="Status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let row">
+      <span [ngClass]="row.IsActive ? 'text-success' : 'text-danger'">
+        {{ row.IsActive ? 'Active' : 'Inactive' }}
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Header + Rows -->
+  <tr mat-header-row *matHeaderRowDef="historyColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: historyColumns;"></tr>
+
+</table>
+
+      <div *ngIf="historyData.length == 0" class="no-data">
+        No Record Found
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-danger" (click)="closeModal()">Close</button>
+    </div>
+
+  </div>
+
+</div>

@@ -88,6 +88,7 @@ export class StudentPlacementConsentComponent {
   //  }
   //}
   async btn_SearchClick() {
+    debugger;
     try {
       this.searchrequest.StudentID = this.sSOLoginDataModel.StudentID
       this.searchrequest.SSOID = this.sSOLoginDataModel.SSOID
@@ -112,6 +113,37 @@ export class StudentPlacementConsentComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  isConsentAllowed(row: any): boolean {
+    debugger
+    if (!row.StudentConsentDate || !row.StudentConsentTime) return false;
+  
+    const date = row.StudentConsentDate;
+    const time = row.StudentConsentTime || '23:59'; // fallback
+
+    const consentDateTime = new Date(`${date}T${time}:00`);
+    console.log(consentDateTime);
+    // const consentDateTime = new Date(
+    //   row.StudentConsentDate + 'T' + row.StudentConsentTime
+    // );
+    // console.log(consentDateTime);
+    if(row.ConsentID == 0 && consentDateTime < this.TodayDate){
+      console.log("true");
+    }
+  
+    return row.ConsentID == 0 && consentDateTime < this.TodayDate;
+  }
+
+  isConsentExpired(row: any): boolean {
+    // debugger
+    if (!row.StudentConsentDate || !row.StudentConsentTime) return false;
+  
+    const consentDateTime = new Date(
+      row.StudentConsentDate + 'T' + row.StudentConsentTime
+    );
+  
+    return row.ConsentID == 0 && consentDateTime >= this.TodayDate;
   }
   async btn_Clear() {
 

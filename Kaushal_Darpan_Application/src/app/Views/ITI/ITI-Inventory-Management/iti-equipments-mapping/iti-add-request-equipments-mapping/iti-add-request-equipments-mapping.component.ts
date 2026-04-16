@@ -677,6 +677,7 @@ export class ITIAddRequestEquipmentsMappingComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.InstituteMasterList = data['Data'];
+          this.InstituteMasterList=data['Data'].filter((x:any)=>x.ManagementTypeId==1)
           console.log(this.InstituteMasterList, "InstituteMasterList")
         }, (error: any) => console.error(error));
     }
