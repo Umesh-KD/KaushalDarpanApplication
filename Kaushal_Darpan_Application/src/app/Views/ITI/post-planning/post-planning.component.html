@@ -15,21 +15,21 @@
     </div>
 
     <form [formGroup]="AddOfficeVacancyForm">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">        
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
-          <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID" (change)="GetOrderDetailsList()">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
-        </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div *ngIf="formData.OfficeID==11">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID" (change)="GetOrderDetailsList()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
           </select>
         </div>
 
