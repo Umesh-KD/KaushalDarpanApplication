@@ -130,7 +130,10 @@ export class ItiReportDataModel {
   public PrincipalOrderCopy: string = ''
   public PlanDocID:number=0
   public StatusID:number=0
-  public PrincipleUserID:number=0
+  public PrincipleUserID: number = 0
+  public Islanddetail:boolean=false
+  public IsConstructdetail:boolean=false
+  public IsElectricdetail:boolean=false
 
 }
 

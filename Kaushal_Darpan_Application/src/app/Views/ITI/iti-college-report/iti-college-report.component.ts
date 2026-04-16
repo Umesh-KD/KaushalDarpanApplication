@@ -158,6 +158,9 @@ export class ItiCollegeReportComponent {
         Category: ['', [DropdownValidators]],
         Ownership: ['', [DropdownValidators]],
         CollegeID: ['',],
+        Islanddetail: ['',],
+        IsConstructdetail: ['',],
+        IsElectricdetail: ['',],
         //AdministrativeeOrderNo: ['', Validators.required],
         //AdministrativeOrderDate: ['', Validators.required],
         FinancialSanction: ['', Validators.required],
@@ -1137,6 +1140,8 @@ export class ItiCollegeReportComponent {
     this.ReportForm.controls['PanchayatId'].updateValueAndValidity();
 
 
+    this.onIslandDetailChange()
+
   }
 
 
@@ -1394,6 +1399,10 @@ export class ItiCollegeReportComponent {
     this.ReportForm.controls['AdministrativeBodyId'].updateValueAndValidity();
     this.isSubmitted = true;
 
+    this.onConstructDetailChange()
+
+
+    this.onElectricDetailChange()
     this.applyRoleBasedValidation()
 
     Object.keys(this.ReportForm.controls).forEach(key => {
@@ -2540,7 +2549,262 @@ export class ItiCollegeReportComponent {
       });
     }
   }
+ async onIslandDetailChange() {
+ 
+    if (this.request.Islanddetail === false) {
+      this.clearLandValidators();
+    } else {
+      this.setLandValidators();
+    }
+  }
+  clearLandValidators() {
+    const controls = [
+      'Ownership',
+      'UrbanRural',
+      'PanchayatId',
+      'GramPanchayatSamiti',
+      'VillageID',
+      'CityID',
+      'AdministrativeBodyId',
+      'Ward',
+      'KhasraKhataNo',
+      'PanchayatDis',
+      'PlotHouseBuildingNo',
+      'LandTypeID',
+      'LandAvailable',
+      'Pincode'
+    ];
 
+    controls.forEach(control => {
+      this.ReportForm.get(control)?.clearValidators();
+      this.ReportForm.get(control)?.updateValueAndValidity();
+    });
+  }
+
+  setLandValidators() {
+    this.ReportForm.get('Ownership')?.setValidators([DropdownValidators]);
+    this.ReportForm.get('UrbanRural')?.setValidators([DropdownValidators]);
+    this.ReportForm.get('Ward')?.setValidators([Validators.required]);
+    this.ReportForm.get('KhasraKhataNo')?.setValidators([Validators.required]);
+    this.ReportForm.get('PanchayatDis')?.setValidators([Validators.required]);
+    this.ReportForm.get('PlotHouseBuildingNo')?.setValidators([Validators.required]);
+    this.ReportForm.get('LandTypeID')?.setValidators([Validators.required]);
+    this.ReportForm.get('LandAvailable')?.setValidators([Validators.required]);
+    this.ReportForm.get('Pincode')?.setValidators([Validators.required]);
+
+    // Add conditional ones if needed (Urban/Rural based)
+
+    this.ReportForm.updateValueAndValidity();
+  }
+
+
+  //resetConstructionFields() {
+  //  const controls = [
+  //    'IsOperatingOwn',
+  //    'PDName',
+  //    'PDMobile',
+  //    'ContractorName',
+  //    'ContractorMobile',
+  //    'StartDate',
+  //    'CompleteDate',
+  //    'PercentCivilWork',
+  //    'ApproachRoad',
+  //    'InternalRoad',
+  //    'IsBoundaryWall',
+  //    'BuildShortage',
+  //    'WaterSupply',
+  //    'Harvesting',
+  //    'IsSolarPanel',
+  //    'PanelCapacity',
+  //    'IsHostel',
+  //    'HostelUtilized',
+  //    'NoOfTree',
+  //    'IsDispute',
+  //    'IsPurposeHall',
+  //    'IsMainITI',
+  //    'IsBuildingTaken',
+  //    'LokarpanPost',
+  //    'ShilanyasDate',
+  //    'ShilanyasName',
+  //    'ShilanyasPost',
+  //    'LokarpanDate',
+  //    'LokarpanName',
+  //    'PercentCivilDate',
+  //    'TakenOverDate',
+  //    'Remarks'
+  //  ];
+
+  //  controls.forEach(control => {
+  //    this.ReportForm.get(control)?.setValue('');
+  //  });
+/*  }*/
+
+
+  onConstructDetailChange() {
+    
+
+    if (this.request.IsConstructdetail === false) {
+      this.clearConstructionValidators();
+    } else {
+      this.setConstructionValidators();
+    }
+  }
+  clearConstructionValidators() {
+    const controls = [
+      'IsOperatingOwn',
+      'PDName',
+      'PDMobile',
+      'ContractorName',
+      'ContractorMobile',
+      'StartDate',
+      'CompleteDate',
+      'PercentCivilWork',
+      'ApproachRoad',
+      'InternalRoad',
+      'IsBoundaryWall',
+      'WaterSupply',
+      'Harvesting',
+      'IsSolarPanel',
+      'PanelCapacity',
+      'IsHostel',
+      'HostelUtilized',
+      'NoOfTree',
+      'IsDispute',
+      'IsPurposeHall',
+      'IsMainITI',
+      'IsBuildingTaken',
+      'LokarpanPost',
+      'ShilanyasDate',
+      'ShilanyasName',
+      'ShilanyasPost',
+      'LokarpanDate',
+      'LokarpanName',
+      'PercentCivilDate',
+      'TakenOverDate',
+      'Remarks'
+    ];
+
+    controls.forEach(control => {
+      this.ReportForm.get(control)?.clearValidators();
+      this.ReportForm.get(control)?.updateValueAndValidity();
+    });
+  }
+  setConstructionValidators() {
+    this.ReportForm.get('IsOperatingOwn')?.setValidators([Validators.required]);
+    this.ReportForm.get('PDName')?.setValidators([Validators.required]);
+    this.ReportForm.get('PDMobile')?.setValidators([Validators.required]);
+    this.ReportForm.get('ContractorName')?.setValidators([Validators.required]);
+    this.ReportForm.get('ContractorMobile')?.setValidators([Validators.required]);
+    this.ReportForm.get('StartDate')?.setValidators([Validators.required]);
+    this.ReportForm.get('CompleteDate')?.setValidators([Validators.required]);
+    this.ReportForm.get('PercentCivilWork')?.setValidators([Validators.required]);
+    this.ReportForm.get('ApproachRoad')?.setValidators([Validators.required]);
+    this.ReportForm.get('InternalRoad')?.setValidators([Validators.required]);
+    this.ReportForm.get('IsBoundaryWall')?.setValidators([Validators.required]);
+    this.ReportForm.get('WaterSupply')?.setValidators([Validators.required]);
+    this.ReportForm.get('Harvesting')?.setValidators([Validators.required]);
+    this.ReportForm.get('IsSolarPanel')?.setValidators([Validators.required]);
+    this.ReportForm.get('IsHostel')?.setValidators([Validators.required]);
+    this.ReportForm.get('HostelUtilized')?.setValidators([Validators.required]);
+    this.ReportForm.get('NoOfTree')?.setValidators([Validators.required]);
+    this.ReportForm.get('IsDispute')?.setValidators([Validators.required]);
+    this.ReportForm.get('IsPurposeHall')?.setValidators([Validators.required]);
+    this.ReportForm.get('IsMainITI')?.setValidators([Validators.required]);
+    this.ReportForm.get('IsBuildingTaken')?.setValidators([Validators.required]);
+    this.ReportForm.get('LokarpanPost')?.setValidators([Validators.required]);
+    this.ReportForm.get('ShilanyasDate')?.setValidators([Validators.required]);
+    this.ReportForm.get('ShilanyasName')?.setValidators([Validators.required]);
+    this.ReportForm.get('ShilanyasPost')?.setValidators([Validators.required]);
+    this.ReportForm.get('LokarpanDate')?.setValidators([Validators.required]);
+    this.ReportForm.get('LokarpanName')?.setValidators([Validators.required]);
+    this.ReportForm.get('PercentCivilDate')?.setValidators([Validators.required]);
+    this.ReportForm.get('TakenOverDate')?.setValidators([Validators.required]);
+
+    // conditional validator
+    if (this.request.IsSolarPanel === 'Yes') {
+      this.ReportForm.get('PanelCapacity')?.setValidators([Validators.required]);
+    } else {
+      this.ReportForm.get('PanelCapacity')?.clearValidators();
+    }
+
+    this.ReportForm.get('PanelCapacity')?.updateValueAndValidity();
+
+    Object.keys(this.ReportForm.controls).forEach(key => {
+      this.ReportForm.get(key)?.updateValueAndValidity();
+    });
+  }
+
+
+  onElectricDetailChange() {
+     
+
+    if (this.request.IsElectricdetail === false) {
+      this.clearElectricValidators();
+  /*    this.resetElectricFields(); // optional*/
+    } else {
+      this.setElectricValidators();
+    }
+  }
+  clearElectricValidators() {
+    const controls = [
+      'ElectPhase',
+      'ElectPhaserequired',
+      'ContractLoad',
+      'ElectConnection',
+      'ConsumerName',
+      'ConnectionType',
+      'SanctionLoad',
+      'ContractDemand',
+      'DISCOM',
+      'SubDivOffice'
+    ];
+
+    controls.forEach(control => {
+      this.ReportForm.get(control)?.clearValidators();
+      this.ReportForm.get(control)?.updateValueAndValidity();
+    });
+  }
+  setElectricValidators() {
+    this.ReportForm.get('ElectPhase')?.setValidators([Validators.required]);
+    this.ReportForm.get('ElectPhaserequired')?.setValidators([Validators.required]);
+    this.ReportForm.get('ContractLoad')?.setValidators([Validators.required]);
+    this.ReportForm.get('ElectConnection')?.setValidators([Validators.required]);
+    this.ReportForm.get('ConsumerName')?.setValidators([Validators.required]);
+    this.ReportForm.get('ConnectionType')?.setValidators([DropdownValidators]);
+    this.ReportForm.get('SanctionLoad')?.setValidators([Validators.required]);
+    this.ReportForm.get('DISCOM')?.setValidators([DropdownValidators]);
+    this.ReportForm.get('SubDivOffice')?.setValidators([Validators.required]);
+
+    // ContractDemand is optional in your HTML, so no required validator
+
+    [
+      'ElectPhase',
+      'ElectPhaserequired',
+      'ContractLoad',
+      'ElectConnection',
+      'ConsumerName',
+      'ConnectionType',
+      'SanctionLoad',
+      'ContractDemand',
+      'DISCOM',
+      'SubDivOffice'
+    ].forEach(control => {
+      this.ReportForm.get(control)?.updateValueAndValidity();
+    });
+  }
+
+  //resetElectricFields() {
+  //  this._ReportForm.get('ElectPhase')?.setValue('');
+  //  this._ReportForm.get('ElectPhaserequired')?.setValue('');
+  //  this._ReportForm.get('ContractLoad')?.setValue('');
+  //  this._ReportForm.get('ElectConnection')?.setValue('');
+  //  this._ReportForm.get('ConsumerName')?.setValue('');
+  //  this._ReportForm.get('ConnectionType')?.setValue(0);
+  //  this._ReportForm.get('SanctionLoad')?.setValue('');
+  //  this._ReportForm.get('ContractDemand')?.setValue('');
+  //  this._ReportForm.get('DISCOM')?.setValue(0);
+  //  this._ReportForm.get('SubDivOffice')?.setValue('');
+  //}
 
   }
 
