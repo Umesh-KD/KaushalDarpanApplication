@@ -120,6 +120,16 @@ export class IIP_EventDataModel extends RequestBaseModel {
   public UserID: number = 0
   public Branchlist: BranchList[] = []
   public Semesterlist: BranchList[] = []
+  public FileUpload: string = '';
+  public Dis_FileUpload: string = '';
+  public EventLevelID:number = 0
+  public Remark : string = '';
+  public SSOID: string = '';
+  public MobileNo: string = '';
+  public Email: string = '';
+  public Designation: string = '';
+  public TrainingDuration: number = 0;
+  public AreaOfDomain: string = '';
 }
 
 export class BranchList {
