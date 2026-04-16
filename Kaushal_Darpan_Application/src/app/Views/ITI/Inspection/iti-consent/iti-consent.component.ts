@@ -111,6 +111,28 @@ export class ITIConsentComponent {
     }
   }
 
+  async DeleteConsentByID(id:number){
+    //debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.itiInspectionService.DeleteConsentByID(id,this.sSOLoginDataModel.UserID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success){
+          this.toastr.success(data.Message);
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+  }
   async DownloadPdf(FileName: string) {
     debugger;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; 

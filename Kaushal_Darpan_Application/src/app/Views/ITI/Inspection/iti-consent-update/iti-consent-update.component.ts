@@ -149,6 +149,7 @@ export class ITIConsentUpdateComponent {
         const row = response.Data;
         console.log(row.TentativeDate);
         console.log(row[0].TentativeDate)
+        console.log(row[0].IsAnyCourtCase);
 
         this.UpdateConsentRequest = {
           TentativeDate: row[0].TentativeDate ? row[0].TentativeDate.split('T')[0] : '', 
@@ -158,8 +159,10 @@ export class ITIConsentUpdateComponent {
           InspectionConsentID: row[0].InspectionConsentID || InspectionConsentID ,
           Amount:row[0].Amount || 0,
           ServiceID:row[0].ServiceID || 0,
-          ID:row[0].ID || 0
+          ID:row[0].ID || 0,
+          IsAnyCourtCase:row[0].IsAnyCourtCase || false
         };
+        console.log("update", this.UpdateConsentRequest);
       } else {
         console.warn('No data found for the given ID:', InspectionConsentID);
         this.UpdateConsentRequest = {
@@ -413,6 +416,15 @@ export class ITIConsentUpdateComponent {
     }
     else{
       dymsg='Decline';
+    }
+
+    if (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '') {
+      this.toastr.error('Please upload the required document.');
+      return;
+    }
+    if(this.consentForm.invalid){
+      this.toastr.error('Please fill all mandatory fields !');
+      return;
     }
 
     this.Swal2.Confirmation(`Are you sure you want to ${dymsg} ?`,

@@ -162,7 +162,7 @@
 
         <div class="card-footer flex justify-end gap-3 border-t p-3 bg-gray-50">
           <button class="btn bg-success text-white" type="button" (click)="openOTPModal(1)">Submit</button>
-          <button class="btn bg-danger text-white" type="button" (click)="openOTPModal(2)">Decline</button>
+          <button *ngIf="!UpdateConsentRequest.IsAnyCourtCase" class="btn bg-danger text-white" type="button" (click)="openOTPModal(2)">Decline</button>
           <button class="btn bg-gray-400 text-white" type="button" (click)="CloseModalPopup()">Cancel</button>
         </div>
     </div>

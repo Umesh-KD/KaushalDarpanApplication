@@ -205,6 +205,7 @@ export class UpdateConsentModel {
   public Amount?:number=0;
   public ServiceID?: number = 0;
   public ID?: number = 0;
+  public IsAnyCourtCase?:boolean=false;
 }
 
 export class ConsentSearchModel {

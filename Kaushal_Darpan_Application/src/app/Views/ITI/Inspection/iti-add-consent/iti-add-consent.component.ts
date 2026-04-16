@@ -390,7 +390,12 @@ export class ITIAddConsentComponent {
     debugger
     this.commonMasterService.GetCommonMasterData('consentAmount', this.consentDeploy.InstituteID).then((data: any) => {
       debugger
-      this.consentDeploy.Amount = data['Data'][0]['Name'];
+      if (data && data.Data && data.Data.length > 0) {
+        this.consentDeploy.Amount = data.Data[0].Name ?? 0;
+      } else {
+        this.consentDeploy.Amount = 0;
+      }
+      // this.consentDeploy.Amount = data['Data'][0]['Name']??0;
       this.CalculatedAmount=this.consentDeploy.Amount??0;
     });
   }

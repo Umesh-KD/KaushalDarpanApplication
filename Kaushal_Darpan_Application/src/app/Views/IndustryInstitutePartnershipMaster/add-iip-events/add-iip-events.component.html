@@ -1,4 +1,3 @@
-
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Industry Institute Partnership Events</h4>
@@ -6,12 +5,13 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Master</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Industry-Institute-Partnership Master</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700"
+        aria-current="page">Industry-Institute-Partnership Master</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Events</a>
     </div>
   </div>
-  
+
 </div>
 
 
@@ -22,19 +22,29 @@
       <form [formGroup]="EventFormGroup" id="IIPMasterFormGroup" class="form-horizontal">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Industry-Institute-Partnership Details</b>
-          <a routerLink="/IndustryInstitutePartnershipList" class="inline-flex items-center btn bg-dark text-white btn-sm">
+          <a routerLink="/IndustryInstitutePartnershipList"
+            class="inline-flex items-center btn bg-dark text-white btn-sm">
             <i class="ti ti-chevron-left"></i>Back
           </a>
         </div>
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-          
+
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Type<span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" [(ngModel)]="request.EventTypeID" formControlName="EventTypeID">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Type<span
+                class="StarMarking">*</span></label>
+            <!-- <select class="form-select" id="PlacementCompanyID" [(ngModel)]="request.EventTypeID"
+              formControlName="EventTypeID">
               <option value="0">--Select--</option>
               <option value="1">Online</option>
               <option value="2">Offline</option>
+              <option value="3">OJT</option>
+            </select> -->
+            <select class="form-select" [(ngModel)]="request.EventTypeID" formControlName="EventTypeID" (change)="onEventTypeChange($event)">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of EventTypeList" [value]="item.Code">
+                {{item.NameEng}}
+              </option>
             </select>
             <div *ngIf="isSubmitted &&_EventFormGroup.EventTypeID.errors" class="text-danger">
               <p *ngIf="!_EventFormGroup.EventTypeID.errors.DropdownValidators">
@@ -44,15 +54,35 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event<span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" [(ngModel)]="request.Event" formControlName="Event">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event<span
+                class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="request.Event" formControlName="Event">
               <option value="0">--Select--</option>
-              <option value="1">Webinar</option>
-              <option value="2">Job Fair</option>
+              <option *ngFor="let item of EventList" [value]="item.Code">
+                {{item.NameEng}}
+              </option>
             </select>
             <div *ngIf="isSubmitted &&_EventFormGroup.Event.errors" class="text-danger">
               <p *ngIf="!_EventFormGroup.Event.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Event Level<span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" [(ngModel)]="request.EventLevelID" formControlName="EventLevelID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of EventLevelList" [value]="item.Code">
+                {{item.NameEng}}
+              </option>
+            </select>
+
+            <div *ngIf="isSubmitted && _EventFormGroup.EventLevelID.errors" class="text-danger">
+              <p *ngIf="!_EventFormGroup.EventLevelID.errors.DropdownValidators">
+                This field is required.!
               </p>
             </div>
           </div>
@@ -72,12 +102,13 @@
           </div> -->
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event For<span class="StarMarking">*</span></label>
-            <select class="form-select" id="EventForID" [(ngModel)]="request.EventForID" formControlName="EventForID">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event For<span
+                class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="request.EventForID" formControlName="EventForID">
               <option value="0">--Select--</option>
-              <option value="1">Student</option>
-              <option value="2">Faculty</option>
-              <option value="3">Both</option>
+              <option *ngFor="let item of EventForList" [value]="item.Code">
+                {{item.NameEng}}
+              </option>
             </select>
             <div *ngIf="isSubmitted &&_EventFormGroup.EventForID.errors" class="text-danger">
               <p *ngIf="!_EventFormGroup.EventForID.errors.DropdownValidators">
@@ -88,10 +119,9 @@
 
           <div>
             <label>From Date</label>
-            <input type="datetime-local" class="form-input" name="Date" id="txtFromDate" formControlName="EventStartDate"
-                   [(ngModel)]="request.EventStartDate" [min]="todayDate" />
-            <div *ngIf="isSubmitted && _EventFormGroup.EventStartDate.errors"
-                 class="text-danger">
+            <input type="datetime-local" class="form-input" name="Date" id="txtFromDate"
+              formControlName="EventStartDate" [(ngModel)]="request.EventStartDate" [min]="todayDate" />
+            <div *ngIf="isSubmitted && _EventFormGroup.EventStartDate.errors" class="text-danger">
               <p *ngIf="_EventFormGroup.EventStartDate.errors.required">
                 <i aria-hidden="true"></i>This field is required.!
               </p>
@@ -99,10 +129,9 @@
           </div>
           <div>
             <label>To Date</label>
-            <input type="datetime-local" class="form-input" name="ToDate" id="EventEndDate" formControlName="EventEndDate"
-                   [(ngModel)]="request.EventEndDate" [min]="request.EventStartDate" />
-            <div *ngIf="isSubmitted && _EventFormGroup.EventEndDate.errors"
-                 class="text-danger">
+            <input type="datetime-local" class="form-input" name="ToDate" id="EventEndDate"
+              formControlName="EventEndDate" [(ngModel)]="request.EventEndDate" [min]="request.EventStartDate" />
+            <div *ngIf="isSubmitted && _EventFormGroup.EventEndDate.errors" class="text-danger">
               <p *ngIf="_EventFormGroup.EventEndDate.errors.required">
                 <i aria-hidden="true"></i>This field is required.!
               </p>
@@ -111,38 +140,64 @@
 
           <div class="mb-8">
             <label>Branch<span class="text-danger">*</span></label>
-            <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
-                                    [settings]="settingsMultiselect"
-                                    [data]="StreamMasterList"
-                                    [(ngModel)]="request.Branchlist"
-                                    [disabled]="false"
-                                    (onFilterChange)="onFilterChange($event)"
-                                    (onDropDownClose)="onDropDownClose($event)"
-                                    (onSelect)="onItemSelect($event)"
-                                    (onDeSelect)="onDeSelect($event)"
-                                    (onSelectAll)="onSelectAll($event)"
-                                    (onDeSelectAll)="onDeSelectAll($event)"
-                                    formControlName="Branchlist">
+            <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'" [settings]="settingsMultiselect"
+              [data]="StreamMasterList" [(ngModel)]="request.Branchlist" [disabled]="false"
+              (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
+              (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+              (onDeSelectAll)="onDeSelectAll($event)" formControlName="Branchlist">
             </ng-multiselect-dropdown>
           </div>
 
           <div class="mb-8 h-full">
             <label>Semester<span class="text-danger">*</span></label>
-            <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
-                                    [settings]="settingsMultiselectSem"
-                                    [data]="SemesterMasterList"
-                                    [(ngModel)]="request.Semesterlist"
-                                    [disabled]="false"
-                                    (onFilterChange)="onFilterChange($event)"
-                                    (onDropDownClose)="onDropDownClose($event)"
-                                    (onSelect)="onItemSelect($event)"
-                                    (onDeSelect)="onDeSelect($event)"
-                                    (onSelectAll)="onSelectAll($event)"
-                                    (onDeSelectAll)="onDeSelectAll($event)"
-                                    formControlName="Semesterlist">
+            <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'" [settings]="settingsMultiselectSem"
+              [data]="SemesterMasterList" [(ngModel)]="request.Semesterlist" [disabled]="false"
+              (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
+              (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+              (onDeSelectAll)="onDeSelectAll($event)" formControlName="Semesterlist">
             </ng-multiselect-dropdown>
           </div>
 
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="eventFileUpload">
+              Upload File :
+            </label>
+            <div class="flex fileUploader">
+              <input
+                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                id="eventFileUpload" type="file" (change)="onFilechange($event,'Photo')">
+              <label for="eventFileUpload">
+                <span>Choose File</span>
+                {{request.Dis_FileUpload === '' ? 'No File Choosen' : request.Dis_FileUpload}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileUpload}}"
+                  *ngIf="this.request.FileUpload !=''" class="btn bg-primary text-white m-0" target="_blank"><i
+                    class="ti ti-eye"></i></a>
+
+                <!--<a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
+                 *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                 (click)="DeleteImage(request.Dis_JobDiscription,'Photo')" *ngIf="this.request.Dis_JobDiscription !=''">
+                <i class="ti ti-trash"></i>
+              </a>-->
+              </div>
+            </div>
+          </div>
+
+          <div class="col-span-1 md:col-span-2 lg:col-span-3">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Remark
+            </label>
+            <textarea class="form-input" rows="3" placeholder="Enter remark..." [(ngModel)]="request.Remark"
+              formControlName="Remark">
+            </textarea>
+          </div>
+
+          <div>
+            <label>Area of Domain</label>
+            <input type="text" class="form-input" [(ngModel)]="request.AreaOfDomain" formControlName="AreaOfDomain">
+          </div>
           <!-- <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                    for="fileStudentCompany">Company Document</label>
@@ -161,9 +216,43 @@
             </div>
           </div> -->
 
-          
-        </div>
 
+        </div>
+        <div *ngIf="isOJTSelected">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Additional Information</b>
+        </div>
+        <div 
+          class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4">
+
+          <div>
+            <label>SSO ID</label>
+            <input type="text" class="form-input" [(ngModel)]="request.SSOID" formControlName="SSOID">
+          </div>
+
+          <div>
+            <label>Mobile No</label>
+            <input type="text" class="form-input" [(ngModel)]="request.MobileNo" formControlName="MobileNo">
+          </div>
+
+          <div>
+            <label>Email</label>
+            <input type="email" class="form-input" [(ngModel)]="request.Email" formControlName="Email">
+          </div>
+
+          <div>
+            <label>Designation</label>
+            <input type="text" class="form-input" [(ngModel)]="request.Designation" formControlName="Designation">
+          </div>
+
+          <div>
+            <label>Duration of Training (Hours)</label>
+            <input type="number" class="form-input" [(ngModel)]="request.TrainingDuration"
+              formControlName="TrainingDuration">
+          </div>
+
+        </div>
+        </div>
         <div class="flex justify-center mt-6">
           <button type="button" class="btn bg-info text-white mt-6" (click)="SaveEventData()">Save Event Data</button>
           <!-- <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
@@ -175,4 +264,3 @@
     </div>
   </div>
 </div>
-
