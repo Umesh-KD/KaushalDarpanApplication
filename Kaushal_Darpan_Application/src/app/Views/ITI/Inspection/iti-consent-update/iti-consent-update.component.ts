@@ -71,7 +71,7 @@ export class ITIConsentUpdateComponent {
     this.GetAllData()
     //this.getMasterData()
     this.consentForm = this.fb.group({
-      Remarks: ['', Validators.required],
+      Remarks: ['',Validators.required],
       TentativeDate: ['', Validators.required]
     });
     this.consentDeploy = new ConsentModel();
@@ -82,6 +82,26 @@ export class ITIConsentUpdateComponent {
     this.GetAllData();
   }
 
+  async GetCollegeDDL() {
+    //
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.InstituteMasterDDL = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  
   async GetAllData() {
     try {
       this.loaderService.requestStarted();
@@ -283,7 +303,9 @@ export class ITIConsentUpdateComponent {
   async onSubmitConsent(status:any) {
     debugger
     this.isSubmitted = true;
-    if (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '') {
+    debugger;
+    console.log(status);
+    if (status==1 && (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '')) {
       this.toastr.error('Please upload the required document.');
       return;
     }
@@ -418,7 +440,7 @@ export class ITIConsentUpdateComponent {
       dymsg='Decline';
     }
 
-    if (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '') {
+    if (status == 1 && (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '')) {
       this.toastr.error('Please upload the required document.');
       return;
     }

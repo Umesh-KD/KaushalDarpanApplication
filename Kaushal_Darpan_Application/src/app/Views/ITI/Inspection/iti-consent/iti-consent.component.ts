@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumInspectionDeploymentType, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import {
          InspectionMemberDetailsDataModel, ITI_InspectionDataModel,
@@ -32,8 +32,9 @@ export class ITIConsentComponent {
   public DistrictMasterDDL: any = [];
   public StatusHistoryList:any=[];
   requestCenter = new CenterMasterDDLDataModel();
-  public consentDeploy = new ConsentModel();
+  // public consentDeploy = new ConsentModel();
   modalReference: NgbModalRef | undefined;
+  _EnumInspectionDeploymentType = EnumInspectionDeploymentType;
 
 
   sortColumn: string = '';
@@ -65,6 +66,10 @@ export class ITIConsentComponent {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID
     this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId
+    this.consentRequest.InstituteID= 0
+    this.consentRequest.DistrictID= 0
+    this.consentRequest.TentativeDate= ''
+    this.consentRequest.consentTypeID= 0
     this.GetAllData();
   }
   async GetAllData() {
@@ -73,8 +78,8 @@ export class ITIConsentComponent {
       this.loaderService.requestStarted();
      
       this.consentRequest.UserID = this.sSOLoginDataModel.UserID
-      this.consentRequest.DistrictID = this.consentDeploy.DistrictID;
-      this.consentRequest.InstituteID = this.consentDeploy.InstituteID;
+      this.consentRequest.DistrictID //= this.consentDeploy.DistrictID;
+      this.consentRequest.InstituteID //= this.consentDeploy.InstituteID;
 
       await this.itiInspectionService.GetAllConsentData(this.consentRequest).then((data: any) => {
      
