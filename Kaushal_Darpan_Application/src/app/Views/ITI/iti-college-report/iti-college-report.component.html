@@ -26,12 +26,12 @@
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Is This ITI Is Under New Establishment</b>
 
         <label class="flex ms-4">
-          <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 43" type="radio" name="IsNewCollege" id="IsNewCollege"
+          <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 260 " type="radio" name="IsNewCollege" id="IsNewCollege"
                  [(ngModel)]="request.IsNewCollege" [value]="1" />
           Yes
         </label>
         <label class="flex ms-2">
-          <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 43" type="radio" name="IsNewCollege" id="IsNewCollege"
+          <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 260" type="radio" name="IsNewCollege" id="IsNewCollege"
                  [(ngModel)]="request.IsNewCollege" [value]="0" /> No
         </label>
 
@@ -43,6 +43,151 @@
         </a>
       </div>
     </div>
+
+
+
+
+    <div *ngIf="(sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20 && TypeID!=1) && request.IsNewCollege==1 " class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Sanction Details</b>
+    </div>
+    <div *ngIf="(sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20 && TypeID!=1 ) && request.IsNewCollege==1" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type: <span class="StarMarking">*</span></label>
+        <select class="form-select" id="CollegeID" (change)="GetOrderList()" [(ngModel)]="ParentID">
+          <option value="0">--Select--</option>
+          <option value="1">Administrative Sanction</option>
+          <option value="2">Financial Sanction</option>
+          <option value="3">Post Sanction</option>
+        </select>
+
+      </div>
+
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type: <span class="StarMarking">*</span></label>
+        <select class="form-select" id="CollegeID" (change)="getExaminerData()" [(ngModel)]="request.OrderType">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of OrderList" [value]="item.ID">{{item.Name}}</option>
+        </select>
+
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.OrderDate" (change)="getExaminerData()">
+
+      </div>
+
+
+
+
+      <div *ngIf="request.OrderType!=0" class="pt-30">
+
+        <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+
+        </button>
+
+      </div>
+
+
+
+
+
+
+
+    </div>
+    <div *ngIf="PostSanctionList.length>0 && request.IsNewCollege==1" class="overflow-auto mt-4">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>Mark</th>
+            <th>S.No</th>
+            <th>Name</th>
+            <th>Order No</th>
+            <th>Order Date</th>
+            <th>Order Copy</th>
+            <!--<th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="text-left">Action</th>-->
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of PostSanctionList; let idx = index">
+            <td align="center">
+              <input type="checkbox" name="MarkCheck" [(ngModel)]="row.Marked" />
+            </td>
+            <td class="text-center">{{idx+1}}</td>
+            <td class="text-center">{{row.OrderTypeName}}</td>
+            <td class="text-center">{{row.OrderNo}}</td>
+            <td class="text-center">{{row.DisOrderDate}}</td>
+            <td class="text-center">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+
+            <!--<td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
+            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
+              <i class="ti ti-trash"></i>
+            </button>
+
+          </td>-->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+    <div *ngIf="request.OrderDetailsList?.length>0 && request.IsNewCollege==1" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Sanction Details List</b>
+    </div>
+
+    <div *ngIf="request.OrderDetailsList?.length>0 && request.IsNewCollege==1" class="overflow-auto mt-4">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr class="text-left">
+
+            <th>S.No</th>
+            <th>Name</th>
+            <th>Order No</th>
+            <th>Order Date</th>
+            <th>Order Copy</th>
+            <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20" class="text-left">Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of request.OrderDetailsList; let idx = index">
+
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.OrderTypeName}}</td>
+            <td class="text-left">{{row.OrderNo}}</td>
+            <td class="text-left">{{row.DisOrderDate}}</td>
+            <td class="text-left">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+
+            <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin  || sSOLoginDataModel.RoleID==20 && TypeID!=1">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
 
 
     <form [formGroup]="ReportForm" id="HrMasterFormGroup" class="form-horizontal">
@@ -68,7 +213,7 @@
           </div>
 
           <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Establishment Year <span class="StarMarking">*</span></label>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Establishment Date <span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" maxlength="4" (input)="onYearInput($event)" (keypress)="numberOnly($event)" formControlName="txtYear" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
             <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
               <p *ngIf="!_ReportForm.txtYear.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
@@ -294,7 +439,7 @@
         </div>-->
 
 
-          <div>
+          <!--<div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Construction Agency<span class="StarMarking">*</span> </label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="ConstructionAgency" [(ngModel)]="request.ConstructionAgency" placeholder="Enter Construction Agency">
             <div *ngIf="isSubmitted && _ReportForm.ConstructionAgency.errors" class="text-danger">
@@ -317,38 +462,8 @@
 
             </div>
 
-          </div>
+          </div>-->
 
-
-
-
-
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20 || sSOLoginDataModel.RoleID==20">
-            <label for="ApplicationId" (input)="GetPrincipal($event.target.value)" class="text-gray-800 text-sm font-medium inline-block mb-2">Nodal ITI Code<span class="StarMarking">*</span></label>
-            <input type="text"
-                   class="form-input"
-                   id="ApplicationId"
-                   [(ngModel)]="request.NodalItiCode"
-                   formControlName="NodalItiCode"
-                   (input)="GetPrincipal($event)"
-                   placeholder="Enter Code of Nodal Iti">
-            <div *ngIf="isSubmitted && _ReportForm.NodalItiCode.errors" class="text-danger">
-              <p *ngIf="_ReportForm.NodalItiCode.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
-
-
-
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20">
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Nodal ITI Name<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" id="ApplicationId" formControlName="NodalIti" [(ngModel)]="request.NodalIti" placeholder="Enter Name of Nodal Iti">
-            <div *ngIf="isSubmitted && _ReportForm.NodalIti.errors" class="text-danger">
-              <p *ngIf="_ReportForm.NodalIti.errors.required">
-                <i aria-hidden="true"></i>This field is required.!
-              </p>
-
-            </div>
-          </div>
 
 
 
@@ -468,10 +583,45 @@
 
 
       <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20 " class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5">ITI Details</b>
+        <b class="text-1xl-5">Nodal ITI Details</b>
       </div>
 
       <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20 || sSOLoginDataModel.RoleID==20">
+          <label for="ApplicationId" (input)="GetPrincipal($event.target.value)" class="text-gray-800 text-sm font-medium inline-block mb-2">Nodal ITI Code<span class="StarMarking">*</span></label>
+          <input type="text"
+                 class="form-input"
+                 id="ApplicationId"
+                 [(ngModel)]="request.NodalItiCode"
+                 formControlName="NodalItiCode"
+                 (input)="GetPrincipal($event)"
+                 placeholder="Enter Code of Nodal Iti">
+          <div *ngIf="isSubmitted && _ReportForm.NodalItiCode.errors" class="text-danger">
+            <p *ngIf="_ReportForm.NodalItiCode.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Nodal ITI Name<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" formControlName="NodalIti" [(ngModel)]="request.NodalIti" placeholder="Enter Name of Nodal Iti">
+          <div *ngIf="isSubmitted && _ReportForm.NodalIti.errors" class="text-danger">
+            <p *ngIf="_ReportForm.NodalIti.errors.required">
+              <i aria-hidden="true"></i>This field is required.!
+            </p>
+
+          </div>
+        </div>
+
+
+
+
+
 
         <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name of Nodal Officer<span class="StarMarking">*</span></label>
@@ -563,8 +713,8 @@
             <input type="radio"
                    name="Islanddetail"
                    [(ngModel)]="request.Islanddetail"
-                    formControlName="Islanddetail"
-                    [value]="true" />
+                   formControlName="Islanddetail"
+                   [value]="true" />
             <span>Available</span>
           </label>
 
@@ -572,8 +722,8 @@
             <input type="radio"
                    name="Islanddetail"
                    [(ngModel)]="request.Islanddetail"
-                    formControlName="Islanddetail"
-                    [value]="false" />
+                   formControlName="Islanddetail"
+                   [value]="false" />
             <span>Not Available</span>
           </label>
 
@@ -1540,10 +1690,10 @@
       </div>
     </form>
 
-    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20 && TypeID!=1 " class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+    <div *ngIf="(sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20 && TypeID!=1) && request.IsNewCollege==0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Sanction Details</b>
     </div>
-    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20 && TypeID!=1 " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+    <div *ngIf="(sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20 && TypeID!=1)&& request.IsNewCollege==0 " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
 
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type: <span class="StarMarking">*</span></label>
@@ -1592,7 +1742,7 @@
 
 
     </div>
-    <div *ngIf="PostSanctionList.length>0" class="overflow-auto mt-4">
+    <div *ngIf="PostSanctionList.length>0 && request.IsNewCollege==0" class="overflow-auto mt-4">
       <table class="w-full table-border" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
@@ -1636,11 +1786,11 @@
 
 
 
-    <div *ngIf="request.OrderDetailsList  .length>0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+    <div *ngIf="request.OrderDetailsList .length>0 && request.IsNewCollege==0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Sanction Details List</b>
     </div>
 
-    <div *ngIf="request.OrderDetailsList.length>0" class="overflow-auto mt-4">
+    <div *ngIf="request.OrderDetailsList.length>0 && request.IsNewCollege==0" class="overflow-auto mt-4">
       <table class="w-full table-border" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
@@ -1683,7 +1833,7 @@
 
     <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin
 
-        ||sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        ||sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20 " class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5">Other Document</b>
     </div>
 
