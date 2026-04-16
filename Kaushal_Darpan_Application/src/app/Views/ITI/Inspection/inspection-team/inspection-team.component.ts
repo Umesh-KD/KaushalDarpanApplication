@@ -269,6 +269,7 @@ export class InspectionTeamComponent {
       this.toastr.error("Already Exist !");
       return;
     }
+    // this.requestNonSSOMember.IsIncharge=true;
     
     console.log(this.requestNonSSOMember);
 
@@ -299,10 +300,11 @@ export class InspectionTeamComponent {
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.request.UserID = this.sSOLoginDataModel.UserID;
 
-    if (this.request.InspectionMemberDetails.length == 0) {
-      this.toastr.error("Please Add At Least One Member in Team");
+    if (this.request.InspectionMemberDetails.length < 2) {
+      this.toastr.error("Please Add At Least Two Member in Team");
       return;
     }
+    
 
     // Check if any member has null / empty SSOID
     // const Member = this.request.InspectionMemberDetails
@@ -313,16 +315,24 @@ export class InspectionTeamComponent {
     // return;
     // }
 
-    if(this.request.InspectionMemberDetails.length==1){
-      const invalidMember=this.request.InspectionMemberDetails.find((x:any)=>!x.SSOID || x.SSOID.trim()==='');
-      if(invalidMember){
-        this.toastr.error("Add At Least One Member With SSOID To Set Incharge !");
+    if(this.request.InspectionMemberDetails.length>1){
+      const hasValidMember = this.request.InspectionMemberDetails.some(
+        (x: any) => x.SSOID && x.SSOID.trim() !== ''
+      );
+      if(!hasValidMember)
+      {
+        this.toastr.error("Add At Least One Member With SSOID !");
         return;
       }
+      // const invalidMember=this.request.InspectionMemberDetails.find((x:any)=>!x.SSOID || x.SSOID.trim()==='');
+      // if(invalidMember){
+      //   this.toastr.error("Add At Least One Member With SSOID !");
+      //   return;
+      // }
     }
 
 
-    if (this.request.InspectionMemberDetails.length == 1) {
+    if (this.request.InspectionMemberDetails.length == 2) {
       this.request.InspectionMemberDetails.forEach(element => {
         element.IsIncharge = true
       })
