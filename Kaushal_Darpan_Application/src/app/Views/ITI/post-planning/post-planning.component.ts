@@ -151,13 +151,13 @@ export class PostPlanningComponent {
   tempIndex: number = 1;
 
   async addOfficeVacancy() {
-    debugger;
+    
     const formValues = this.AddOfficeVacancyForm.value;
 
     // Validate required fields before adding
     if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID
       || !formValues.TotalSeatID
-      || !formValues.PostSanctionedID
+      || !formValues.ddlCollege || !formValues.PostSanctionedID
     ) {
       this.toastr.warning("Please fill all required fields before adding.");
       return;
@@ -165,14 +165,14 @@ export class PostPlanningComponent {
 
 
     if (formValues.StaffTypeID == 2 && !formValues.TradeID) {
-      this.toastr.warning("Please add trade before adding.");
+      this.toastr.warning("Please fill all required fields before adding.");
       return;
     }
 
-    if(this.formData.OfficeID == 11 && !formValues.ddlCollege) {
-      this.toastr.warning("Please add college before adding.");
-      return;
-    }
+
+ 
+
+
 
     const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
@@ -260,7 +260,7 @@ export class PostPlanningComponent {
 
 
   async SaveData() {
-    debugger;
+    
     this.loaderService.requestStarted();
     this.isLoading = true;
     this.isSubmitted = true;
@@ -302,7 +302,7 @@ export class PostPlanningComponent {
 
 
   async removeLeave(index: number, ID: number) {
-    debugger
+    
 
 
     if (ID === undefined || ID === null) {
@@ -362,7 +362,7 @@ export class PostPlanningComponent {
   }
 
   async OfficeVacancyDataList() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -392,7 +392,7 @@ export class PostPlanningComponent {
 
 
   async GetOfficeList() {
-    debugger;
+    
 
     try {
       this.loaderService.requestStarted();
@@ -531,7 +531,7 @@ export class PostPlanningComponent {
   }
 
   async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
-    debugger;
+    
     try {
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
 
@@ -590,7 +590,7 @@ export class PostPlanningComponent {
   }
 
   async VacancyPostUpdate() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
 
@@ -656,7 +656,7 @@ export class PostPlanningComponent {
   }
 
   async GetOrderDetailsList() {
-    debugger
+    
 
     try {
       this.loaderService.requestStarted();
@@ -687,7 +687,7 @@ export class PostPlanningComponent {
 
 
   async OnOrderChange(type: number) {
-    debugger
+    
     if (type == 1) {
       const item = this.AcademicOrderNoList.find(
         (e: any) => e.ID == this.formData.PostSanctionedID
