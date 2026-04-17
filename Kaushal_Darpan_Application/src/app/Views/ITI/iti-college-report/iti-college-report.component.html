@@ -1853,7 +1853,7 @@
 
 
     </div>
-    <div *ngIf="PostSanctionList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && TypeID!=1" class="overflow-auto mt-4">
+    <div *ngIf="PostSanctionList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && TypeID!=1 || PostSanctionList.length>0 && sSOLoginDataModel.RoleID==260 && TypeID!=1" class="overflow-auto mt-4">
       <table class="w-full table-border" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
@@ -1897,11 +1897,11 @@
 
 
 
-    <div *ngIf="filterbuildorderList?.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && TypeID!=1" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+    <div *ngIf="filterbuildorderList?.length> 0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && TypeID!=1 || filterbuildorderList?.length>0 && sSOLoginDataModel.RoleID==260 && TypeID!=1" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Building Sanction Details List</b>
     </div>
 
-    <div *ngIf="filterbuildorderList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && TypeID!=1" class="overflow-auto mt-4">
+    <div *ngIf="filterbuildorderList?.length> 0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && TypeID!=1 || filterbuildorderList?.length>0 && sSOLoginDataModel.RoleID==260 && TypeID!=1" class="overflow-auto mt-4">
       <table class="w-full table-border" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
@@ -1912,7 +1912,7 @@
             <th>Order No</th>
             <th>Order Date</th>
             <th>Order Copy</th>
-            <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==20" class="text-left">Action</th>
+            <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260" class="text-left">Action</th>
           </tr>
 
         </thead>
@@ -1930,8 +1930,8 @@
               </a>
             </td>
 
-            <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin  || sSOLoginDataModel.RoleID==20 && TypeID!=1">
-              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
+            <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin  || sSOLoginDataModel.RoleID==260 && TypeID!=1">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost2(idx)">
                 <i class="ti ti-trash"></i>
               </button>
 

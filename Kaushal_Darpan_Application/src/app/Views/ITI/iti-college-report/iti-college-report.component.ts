@@ -1539,12 +1539,24 @@ export class ItiCollegeReportComponent {
     //  return
     //}
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.request.OrderDetailsList.length < 1
-      || this.sSOLoginDataModel.RoleID == 20 && this.request.OrderDetailsList.length < 1
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.filterplanorderList.length < 1
+      || this.sSOLoginDataModel.RoleID == 20 && this.filterplanorderList.length < 1
     ) {
-      this.toastr.warning("Please Add ITI sanction Details")
+      this.toastr.warning("Please Add ITI Planning sanction Details")
       return
     }
+
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin && this.filterbuildorderList.length < 1
+      || this.sSOLoginDataModel.RoleID == 20 && this.filterbuildorderList.length < 1
+    ) {
+      this.toastr.warning("Please Add ITI Building sanction Details")
+      return
+    }
+
+    this.request.OrderDetailsList = []
+    this.request.OrderDetailsList = [...this.filterbuildorderList, ...this.filterplanorderList]
+
 
     //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.TradeSanctionList.length < 1 ) {
     //    this.toastr.warning("Please Add Trade sanction Details")
@@ -2032,12 +2044,7 @@ export class ItiCollegeReportComponent {
     }
     // Reset other unrelated fields (if required)
 
-    if (!this.request.OrderDetailsList) {
-      this.request.OrderDetailsList = [];
-      // }
-
-    }
-
+  
 
     if (!this.filterplanorderList) {
       this.filterplanorderList = [];
@@ -2046,13 +2053,13 @@ export class ItiCollegeReportComponent {
     }
 
 
-    this.request.OrderDetailsList = [
-      ...this.request.OrderDetailsList,
+    this.filterplanorderList = [
+      ...this.filterplanorderList,
       ...IsSelect
     ];
 
 
-    this.filterplanorderList = this.request.OrderDetailsList.filter((e: any) => e.TypeID == 1)
+
 
   }
 
@@ -2141,11 +2148,11 @@ export class ItiCollegeReportComponent {
     }
     // Reset other unrelated fields (if required)
 
-    if (!this.request.OrderDetailsList) {
-      this.request.OrderDetailsList = [];
-      // }
+    //if (!this.request.OrderDetailsList) {
+    //  this.request.OrderDetailsList = [];
+    //  // }
 
-    }
+    //}
 
     if (!this.filterbuildorderList) {
       this.filterbuildorderList = [];
@@ -2153,12 +2160,12 @@ export class ItiCollegeReportComponent {
 
     }
 
-    this.request.OrderDetailsList = [
-      ...this.request.OrderDetailsList,
+    this.filterbuildorderList = [
+      ...this.filterbuildorderList,
       ...IsSelect
     ];
 
-    this.filterbuildorderList = this.request.OrderDetailsList.filter((e: any) => e.TypeID == 2)
+ 
 
   }
 
@@ -2313,10 +2320,19 @@ export class ItiCollegeReportComponent {
 
 
 
-  deletePost(index: number): void {
-    this.request.OrderDetailsList.splice(index, 1);
+  deletePost(index: any): void {
+    debugger
+    this.filterplanorderList.splice(index, 1);
 
   }
+
+
+  deletePost2(index: any): void {
+    debugger
+    this.filterbuildorderList.splice(index, 1);
+
+  }
+
   deleteTrade(index: number): void {
     this.TradeSanctionList.splice(index, 1);
 
