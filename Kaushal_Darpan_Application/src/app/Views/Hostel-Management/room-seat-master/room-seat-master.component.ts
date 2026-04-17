@@ -71,7 +71,7 @@ export class RoomSeatMasterComponent {
     this.groupForm = this.fb.group({
       ddlHostelID: ['', [DropdownValidators]],
       txtRoomType: ['', [DropdownValidators]],
-      txtRoomFee: ['', Validators.required],
+      // txtRoomFee: ['', Validators.required],
       txtSeatCapacity: [{ value: '', disabled: true }, Validators.required],
       txtRoomQuantity: ['', Validators.required]
     });

@@ -453,7 +453,8 @@ export class QualificationTabComponent implements OnInit {
     let scienceMax = this.formData10th.ScienceMaxMarks10 || 0;
     let scienceObtained = this.formData10th.ScienceMarksObtained10 || 0;
 
-    if (marktype === "83") { // Calculation using Marks
+    if (marktype === "83")
+    { // Calculation using Marks
       this.mathPercentage = (mathMax === 0)
         ? '0.00'
         : ((mathObtained / mathMax) * 100).toFixed(2);
@@ -462,7 +463,9 @@ export class QualificationTabComponent implements OnInit {
         ? '0.00'
         : ((scienceObtained / scienceMax) * 100).toFixed(2);
 
-    } else if (marktype === "84") { // Calculation using CGPA
+    }
+    else if (marktype === "84")
+    { // Calculation using CGPA
       scienceMax = 10; // CGPA Max value
       scienceObtained = this.formData10th.ScienceMarksObtained10 || 0; // CGPA Value
 
@@ -503,7 +506,9 @@ export class QualificationTabComponent implements OnInit {
       this.QualificationForm10th.get('txtMaxMarks10')?.disable();
       this.QualificationForm10th.get('txtMathsMaxMarks10')?.disable();
       this.QualificationForm10th.get('txtScienceMaxMarks10')?.disable();
-    } else if (this.formData10th.MarksTypeID10 == 83) {
+    }
+    else if (this.formData10th.MarksTypeID10 == 83)
+    {
       this.QualificationForm10th.get('txtMaxMarks10')?.enable();
       this.QualificationForm10th.get('txtMathsMaxMarks10')?.enable();
       this.QualificationForm10th.get('txtScienceMaxMarks10')?.enable();
@@ -511,7 +516,8 @@ export class QualificationTabComponent implements OnInit {
     let maxMarks = this.formData10th.MaxMarks10;
     let marksObtained = this.formData10th.MarksObtained10;
 
-    if (this.formData10th.MarksTypeID10 == 84) {
+    if (this.formData10th.MarksTypeID10 == 84)
+    {
 
       if (maxMarks > 0 && marksObtained > 0 && marksObtained <= maxMarks) {
         const percentage = marksObtained * 9.5;
@@ -522,7 +528,9 @@ export class QualificationTabComponent implements OnInit {
         } else {
           this.formData10th.Percentage10 = percentage.toFixed(2);
         }
-      } else {
+      }
+      else
+      {
         if (maxMarks != 0 && marksObtained != 0) {
           this.toastr.warning('Aggregate Marks Obtained cannot be greater than Aggregate Maximum Marks');
           this.formData10th.Percentage10 = '';
@@ -531,18 +539,25 @@ export class QualificationTabComponent implements OnInit {
           this.formData10th.ScienceMarksObtained10 = 0;
         }
       }
-    } else if (this.formData10th.MarksTypeID10 == 83) {
-      if (maxMarks > 0 && marksObtained > 0 && marksObtained <= maxMarks) {
+    }
+    else if (this.formData10th.MarksTypeID10 == 83)
+    {
+      if (maxMarks > 0 && marksObtained > 0 && marksObtained <= maxMarks)
+      {
         const percentage = (marksObtained / maxMarks) * 100;
         if (percentage <= 33) {
           this.toastr.warning('Aggregate Marks Obtained cannot be less than 33%');
           this.formData10th.Percentage10 = '';
           this.formData10th.MarksObtained10 = 0;
-        } else {
+        }
+        else
+        {
           this.formData10th.Percentage10 = percentage.toFixed(2);
         }
-      } else {
-        if (maxMarks != 0 && marksObtained != 0) {
+      }
+      else
+      {
+if (maxMarks != 0 && marksObtained != 0) {
           this.toastr.warning('Aggregate Marks Obtained cannot be greater than Aggregate Maximum Marks');
           this.formData10th.Percentage10 = '';
           this.formData10th.MarksObtained10 = 0;
@@ -553,7 +568,12 @@ export class QualificationTabComponent implements OnInit {
     }
   }
 
-  ScienceAndMathsMarksValidation() {
+  ScienceAndMathsMarksValidation()
+  {
+
+
+
+
     if (this.formData10th.ScienceMarksObtained10 != 0 && this.formData10th.ScienceMaxMarks10 != 0 &&
       this.formData10th.ScienceMarksObtained10 > this.formData10th.ScienceMaxMarks10) {
       this.toastr.warning('Science Marks Obtained cannot be greater than Science Maximum Marks', 'Error');
@@ -670,21 +690,41 @@ export class QualificationTabComponent implements OnInit {
       const count2 = this.AddedChoices.filter((x: any) => x.TradeTypeId === 2 && x.TradeLevel == 10).length;
       if (count2 > 0 && count2 == count1) {
         /*this is condition for if applicant choose only non eng trades. in this case skip validation for Science & Maths Marks (non) */
-      } else {
-        if (this.box10Checked) {
-          if (this.formData10th.ScienceMarksObtained10 <= 0) {
-            this.toastr.warning("Science Obtain Marks Should be greater than zero")
-            return
-          } else if (this.formData10th.ScienceMaxMarks10 <= 0) {
-            this.toastr.warning("Science Max Marks Should be greater than zero")
-            return
-          } else if (this.formData10th.MathsMarksObtained10 <= 0) {
-            this.toastr.warning("Maths Obtain Marks Should be greater than zero")
-            return
-          } else if (this.formData10th.MathsMaxMarks10 <= 0) {
-            this.toastr.warning("Maths Max Marks Should be greater than zero")
+      } else
+      {
+        if (this.box10Checked)
+        {
+          debugger;
+          if ( this.formData10th.MathsMarksObtained10 > this.formData10th.MathsMaxMarks10)
+          {
+            this.toastr.warning(`Match Obtain Marks Should be less than equal to ${this.formData10th.MathsMaxMarks10}`)
             return
           }
+
+          if (this.formData10th.ScienceMarksObtained10 > this.formData10th.ScienceMaxMarks10) {
+            this.toastr.warning(`Science Obtain Marks Should be less than equal to ${this.formData10th.ScienceMaxMarks10}`)
+            return
+          }
+
+
+
+
+          //if (this.formData10th.ScienceMarksObtained10 <= 0)
+          //{
+          //  this.toastr.warning("Science Obtain Marks Should be greater than zero")
+          //  return
+          //} else if (this.formData10th.ScienceMaxMarks10 <= 0) {
+          //  this.toastr.warning("Science Max Marks Should be greater than zero")
+          //  return
+          //} else if (this.formData10th.MathsMarksObtained10 <= 0) {
+          //  this.toastr.warning("Maths Obtain Marks Should be greater than zero")
+          //  return
+          //}
+          //else if (this.formData10th.MathsMaxMarks10 <= 0) {
+          //  this.toastr.warning("Maths Max Marks Should be greater than zero")
+          //  return
+          //}
+
         }
       }
 

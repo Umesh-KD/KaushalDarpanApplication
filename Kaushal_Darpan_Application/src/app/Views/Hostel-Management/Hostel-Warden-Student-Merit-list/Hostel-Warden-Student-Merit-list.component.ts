@@ -50,7 +50,7 @@ export class HostelWardenStudentMeritlistComponent {
   public titleDDLBranchTrade: string = ''
   meritMultiSelected: boolean = false;
   decryptedIdsArray: any[] = [];
-
+showCheckbox: boolean = true;
 
 
 
@@ -177,7 +177,7 @@ export class HostelWardenStudentMeritlistComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.StudentReqListList = data['Data'];
-
+this.showCheckbox = !this.StudentReqListList.some((x: any) => x.AllotmentStatus != 9);
           this.StudentReqListList.forEach((item: any) => {
             item.selected = false;
           });
@@ -410,11 +410,19 @@ export class HostelWardenStudentMeritlistComponent {
     return this.StudentReqListList.filter((item: any) => item.selected);
   }
 
+  // selectAllItems() {
+  //   for (let item of this.StudentReqListList) {
+  //     item.selected = this.meritMultiSelected;
+  //   }
+  // }
+
   selectAllItems() {
-    for (let item of this.StudentReqListList) {
+  for (let item of this.StudentReqListList) {
+    if (item.AllotmentStatus != 9) {
       item.selected = this.meritMultiSelected;
     }
   }
+}
 
 
   onAffidavitApproved() {

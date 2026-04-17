@@ -34,7 +34,8 @@ import { ITIHomeLayoutComponent } from './Views/Shared/itihome-layout/itihome-la
 
 
 // load this before app initiliaze
-export function initializeApp(appsettingService: AppsettingService): () => any {
+export function initializeApp(appsettingService: AppsettingService): () => any
+{
   return () => appsettingService.loadAppsetting().subscribe(appsetting => {
     appsettingService.setAppsetting(appsetting);
   });
