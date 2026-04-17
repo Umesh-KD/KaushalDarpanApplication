@@ -124,6 +124,7 @@ export class ITIConsentComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success){
           this.toastr.success(data.Message);
+          this.GetAllData();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {

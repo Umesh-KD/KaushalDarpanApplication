@@ -671,6 +671,7 @@ export class ITIAddRequestEquipmentsMappingComponent {
   }
 
   async GetMasterData() {
+   // debugger;
     try {
       this.loaderService.requestStarted();
       await this.commonFunctionService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
