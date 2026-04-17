@@ -47,8 +47,7 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left">
-              <input type="checkbox" [(ngModel)]="meritMultiSelected" (change)="selectAllItems()" />
+            <th class="text-left" >
             </th>
             <th class="text-left">Merit NO</th>
             <th class="text-left">Student Name </th>
@@ -64,8 +63,14 @@
         <tbody>
           <tr *ngFor="let item of StudentReqListList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">
-              <input type="checkbox" [(ngModel)]="item.selected" (change)="checkIfAllSelected()" />
-            </td>
+  <input *ngIf="item.AllotmentStatus != 9"
+         type="checkbox"
+         [(ngModel)]="item.selected" />
+         
+  <span *ngIf="item.AllotmentStatus == 9" class="text-gray-400">
+    -
+  </span>
+</td>
             <td align="left">{{idx+1}}</td>
             <td align="left">{{item.StudentName}}</td>
             <td align="left">{{item.HostelRequestNo}}</td>
