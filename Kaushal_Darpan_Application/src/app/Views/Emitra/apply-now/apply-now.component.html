@@ -70,18 +70,21 @@
               <td class="text-center">
 
                 <!--<a *ngIf="item.DepartmentID!=1" routerLink="/iti-direct-admission-student-initial-detail"
-     [queryParams]="{deptid:encryptParameter(item.DepartmentID),isDirectAdmission: this.encryptionService.encryptData(true)}"
-     class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Now </a>-->
-
-
+  [queryParams]="{deptid:encryptParameter(item.DepartmentID),isDirectAdmission: this.encryptionService.encryptData(true)}"
+  class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Now </a>-->
                 <!--<a *ngIf="item.DepartmentID!=1" routerLink="/iti-direct-admission-student-initial-detail"
-                   [queryParams]="{deptid:encryptParameter(item.DepartmentID),isDirectAdmission: this.encryptionService.encryptData(true)}"
-                   class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Addmission </a>-->
+     [queryParams]="{deptid:encryptParameter(item.DepartmentID),isDirectAdmission: this.encryptionService.encryptData(true)}"
+     class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Addmission </a>-->
 
 
-                <a *ngIf="item.DepartmentID!=1" routerLink="/iti-direct-admission-student-initial-private-detail"
+                <!--<a *ngIf="item.DepartmentID!=1" routerLink="/iti-direct-admission-student-initial-private-detail"
                    [queryParams]="{deptid:encryptParameter(item.DepartmentID),isDirectAdmission: this.encryptionService.encryptData(true)}"
-                   class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Addmission Private </a>
+                   class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Direct Addmission Private </a>-->
+
+
+
+
+                <a *ngIf="item.DepartmentID!=1" routerLink="/StudentJanAadharDetail" [queryParams]="{deptid:encryptParameter(item.DepartmentID)}" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Apply Now </a>
 
                 <a *ngIf="item.DepartmentID==1" routerLink="/dtepublicinfo" [queryParams]="{type:1}" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Apply Now </a>
               </td>

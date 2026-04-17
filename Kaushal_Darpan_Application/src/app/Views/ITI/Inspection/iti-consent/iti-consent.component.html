@@ -131,6 +131,7 @@
 
           <th class="text-left px-2 py-2 border-b">Uploaded Document</th>
           <th class="text-left px-2 py-2 border-b">Status</th>
+          <th class="text-left px-2 py-2 border-b">Action</th>
         </tr>
       </thead>
 
@@ -157,22 +158,27 @@
             </a>
           </td>
           <td class="px-2 py-2">
-            <span *ngIf="row.status == 0 || (row.status==1 && !(row.Amount==0 ||(row.Amount!=0 &&  row.PaymentStatus==1)))"
+            <div class=" flex items-center gap-2">
+              <span *ngIf="row.status == 0 || (row.status==1 && !(row.Amount==0 ||(row.Amount!=0 &&  row.PaymentStatus==1)))"
                   class="bg-yellow-500 text-white px-3 py-1 rounded text-sm">
-              Pending
-            </span>
-            <span *ngIf="row.status == 1 && ( row.Amount==0 || ( row.Amount!=0 && row.PaymentStatus==1))"
-                  class="bg-green-600 text-white px-3 py-1 rounded text-sm">
-              Accepted
-            </span>
-            <span *ngIf="row.status==2"
-                  class="bg-danger text-white px-3 py-1 rounded text-sm">
-              Declined
-            </span>
-            <a class="bg-blue-600 text-white px-3 py-1 rounded text-sm" href="javascript:void(0);" title="Inspection Consent History" (click)="onStatusHistorylist(MyModel_UserProfileStatusHistory, row.InspectionConsentID)">
-              <i class="ti ti-eye"></i>
-            </a>    
-            <button *ngIf="row.status==0" class="btn bg-danger text-white" (click)="DeleteConsentByID(row.InspectionConsentID)" type="button"><i class="ti ti-trash"></i></button>           
+                Pending
+              </span>
+              <span class="px-2 py-2" *ngIf="row.status == 1 && ( row.Amount==0 || ( row.Amount!=0 && row.PaymentStatus==1))"
+                    class="bg-green-600 text-white px-3 py-1 rounded text-sm">
+                Accepted
+              </span>
+              <span class="px-2 py-2" *ngIf="row.status==2"
+                    class="bg-danger text-white px-3 py-1 rounded text-sm">
+                Declined
+              </span>
+              <a  class="bg-gray-400 text-white px-3 py-1 me-1 rounded text-sm" href="javascript:void(0);" title="Inspection Consent History" (click)="onStatusHistorylist(MyModel_UserProfileStatusHistory, row.InspectionConsentID)">
+                <i class="ti ti-eye"></i>
+              </a>                       
+            </div>
+          </td>
+          <td>
+            <a href="javascript:void(0);" *ngIf="row.status==0" class="btn bg-blue-600 text-white" title="Edit" [routerLink]="'/iti-add-consent'" [queryParams]="{id:row.InspectionConsentID}"><i class="ti ti-pencil"></i></a>
+            <button *ngIf="row.status==0" class="btn bg-danger text-white" (click)="DeleteConsentByID(row.InspectionConsentID)" type="button"><i class="ti ti-trash"></i></button>                     
           </td>
         </tr>
       </tbody>

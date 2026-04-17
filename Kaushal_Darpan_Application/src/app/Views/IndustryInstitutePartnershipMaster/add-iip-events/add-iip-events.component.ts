@@ -148,7 +148,7 @@ export class AddIIPEventsComponent {
           }
         }, (error: any) => console.error(error));
 
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+      await this.commonMasterService.Stream_InstituteIdWise(this.sSOLoginDataModel.DepartmentID,1,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID,this.sSOLoginDataModel.FinancialYearID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StreamMasterList = data['Data'];
