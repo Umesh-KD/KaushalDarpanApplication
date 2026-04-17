@@ -156,22 +156,9 @@ export class TheoryMarksRptViewComponent {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      // this.searchRequest.IsConfirmed = this.IsConfirmed = true;
-
-      // //group code id
-      // if (this.IsCountShow == false) {
-      //   this.searchRequest.ExaminerCode = this.examinerCodeLoginModel.ExaminerCode
-      // } else {
-      //   this.searchRequest.ExaminerCode = this.ExaminerCode
-      // }
-      // this.searchRequest.GroupCodeID = this.TheoryMarksDashBoardCount[0].GroupCodeID;
-      // //call
-
       await this.reportService.TheorymarksReportPdf_BTER(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          //this.TheoryMarksRptDataList = data['Data'];
-          //this.DownloadFile(data.Data, '')
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
             this.commonFunctionHelper.downloadBase64OfPdf(data.Data, 'TheoryMarksReport.pdf');
@@ -338,6 +325,42 @@ export class TheoryMarksRptViewComponent {
     });
   }
 
+
+
+  DownloadFile1(FileName: string, DownloadfileName: any): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName1('pdf'); // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+
+
+  generateFileName1(extension: string): string {
+    const now = new Date();
+
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
+
+    return `Ufm_Letter${timestamp}.${extension}`;
+  }
+
+
+
   generateFileName(extension: string): string {
     const now = new Date();
 
@@ -353,44 +376,37 @@ export class TheoryMarksRptViewComponent {
     return `Theory_marks_report_data_${timestamp}.${extension}`;
   }
 
-  //async GetUFMLetter(row: any) {
-  //  try {
-  //    //session
-  //    const request: any = {}
-  //    request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-  //    request.EndTermID = this.sSOLoginDataModel.EndTermID;
-  //    request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-  //    request.isUFM = 1;
-  //    EnrollmentNo: row?.EnrollmentNo
-
-
-  //    await this.reportService.GetUFMLetter(request)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-          
-  //      }, (error: any) => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //}
-
   async GetUFMLetter(row: any) {
     try {
       const request: any = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         EndTermID: this.sSOLoginDataModel.EndTermID,
-        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         isUFM: 1,
         EnrollmentNo: row?.EnrollmentNo   // assuming row contains it
       };
 
-      const data = await this.reportService.GetUFMLetter(request);
+      let data: any = await this.reportService.GetUFMLetter(request);
+
+      if (data && data.Data) {
+        this.DownloadFile1(data.Data, 'UFMLetter');
+      } else {
+        this.toastr.error(data?.Message || 'No file received');
+      }
+
+
+
 
       console.log(data); // handle response here
     } catch (error) {
       console.error(error);
     }
   }
+
+
+
+
+
+
 
 }
