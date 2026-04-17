@@ -157,7 +157,7 @@ export class PostPlanningComponent {
     // Validate required fields before adding
     if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID
       || !formValues.TotalSeatID
-      || !formValues.ddlCollege || !formValues.PostSanctionedID
+      || !formValues.PostSanctionedID
     ) {
       this.toastr.warning("Please fill all required fields before adding.");
       return;
@@ -169,10 +169,10 @@ export class PostPlanningComponent {
       return;
     }
 
-
- 
-
-
+    if(formValues.OfficeID == 11 && !formValues.ddlCollege){
+      this.toastr.warning("Please fill all required fields before adding.");
+      return;
+    }
 
     const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);

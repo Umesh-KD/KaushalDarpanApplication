@@ -2305,4 +2305,11 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async GetEventCommonMaster(type: string) {
+    debugger
+    return await this.http.get(this.APIUrl + `/EventCommonMaster?type=${type}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

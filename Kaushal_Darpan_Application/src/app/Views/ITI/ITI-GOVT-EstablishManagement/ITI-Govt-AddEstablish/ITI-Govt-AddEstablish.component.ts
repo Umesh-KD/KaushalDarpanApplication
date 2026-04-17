@@ -57,6 +57,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   public DepartmentID: number = 0;
   public InstituteID: number = 0;
   public ListITICollegeByManagement: any = [];
+  public StaffPostTypeList: any = [];
   public QueryReqFormGroup!: FormGroup;
   public _EnumRole = EnumRole
   public GetRoleID: number = 0
@@ -114,9 +115,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       DateOfRetirement: [''],
       AnyCourtCasePending: ['', [Validators.required]],
       AnyDisciplinaryActionPending: ['', [Validators.required]],
-
-      
-
     });
 
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
@@ -131,20 +129,15 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       txtMobileNo: [{ value: '', disabled: true }],
       txtEmailID: [{ value: '', disabled: true }],
       ddlHostel: [''],
-      ddlPost: ['', [DropdownValidators]]
+      ddlPost: ['', [DropdownValidators]],
+      StaffPostTypeID: [0, [DropdownValidators]],
     })
-   /* txtName: [{ value: '', disabled: true }],*/
-   /* Applied: [{ value: '', disabled: true }, Validators.required],*/
-
 
     this.QueryReqFormGroup = this.formBuilder.group({
       txtSSOID: ['',[Validators.required]]
     });
-
  
     this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID
-   
-
 
     this.settingsMultiselect = {
       singleSelection: false,
@@ -165,16 +158,13 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       defaultOpen: false,
       IsVerified: false,
     };
-
-
     
     await this.GetStaffTypeData();
     await this.GetStatusList();
     await this.getITICollege();
-    await this.GetAllData();
-
-   
-
+    await this.GetAllData();   
+    
+    await this.GetStaffPostTypeList();
     await this.StaffLevelType();
     await this.GetOfficeList();
     await this.StaffLevelChild();
@@ -185,11 +175,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     await this.GetPostList();
     await this.GetDesignationMasterData();
     this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
-
-
     this.AddStaffBasicDetailFromGroup.get('ddlITICollegeTrade')?.disable();
-
-    console.log(this.sSOLoginDataModel);
   }
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
@@ -474,40 +460,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
   }
 
-  //async GetRoleMasterData() {
-    
-  //  this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-
-
-
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.commonMasterService.GetRoleMasterDDL().then((data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      console.log("RoleMasterList", data);
-  //      if ((this.sSOLoginDataModel.DepartmentID) == EnumDepartment.BTER) {
-  //        this.RoleMasterList = data.Data.filter((item: any) => item.ID == EnumRole.Principal || item.ID == EnumRole.Invigilator || item.ID == EnumRole.Teacher);
-  //      }
-  //      else if ((this.sSOLoginDataModel.DepartmentID) == EnumDepartment.ITI) {
-  //        this.RoleMasterList = data.Data.filter((item: any) => item.ID == EnumRole.ITIPrincipal || item.ID == EnumRole.ITIInvisilator || item.ID == EnumRole.ITITeacherNonEngNonEng);
-
-  //      }
-  //      else {
-  //        this.RoleMasterList = data.Data.filter((item: any) => item.ID == EnumRole.Principal || item.ID == EnumRole.Invigilator || item.ID == EnumRole.Teacher);
-  //      }
-  //    })
-  //  } catch (error) {
-  //    console.error(error);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
- 
-
-
   async GetStaffTypeData() {
     try {
       this.loaderService.requestStarted();
@@ -524,25 +476,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       }, 200);
     }
   }
-
-
-
-  //async GetDesignationMasterData() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.commonMasterService.GetDesignationMaster().then((data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      this.DesignationMasterList = data.Data;
-  //      console.log("DesignationMasterList", this.DesignationMasterList);
-  //    }, error => console.error(error))
-  //  } catch (error) {
-  //    console.error(error);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
 
   async OnFormSubmit() {
   
@@ -1009,13 +942,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
           setTimeout(() => {
             this.loaderService.requestEnded();
           }, 200);
-        }
-
-
-
-
-
-       
+        }       
       }
       else {
         window.location.reload();
@@ -1041,12 +968,10 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID)
+      await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
-          //this.PostList = this.PostList.filter((itme: any) => itme.TypeID == this.formData.StaffTypeID)
-          console.log(this.PostList, "PostList")
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -1722,6 +1647,22 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       this.approveRequest.IsSalaryDrawnFromSamePost = true;
       this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
       this.approveRequest.IsEmpWorkingOnDeputationFromOther = true;
+    }
+  }
+
+  async GetStaffPostTypeList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('PostType').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffPostTypeList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
 }
