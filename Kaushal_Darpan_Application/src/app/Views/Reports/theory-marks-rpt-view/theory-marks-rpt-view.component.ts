@@ -353,4 +353,44 @@ export class TheoryMarksRptViewComponent {
     return `Theory_marks_report_data_${timestamp}.${extension}`;
   }
 
+  //async GetUFMLetter(row: any) {
+  //  try {
+  //    //session
+  //    const request: any = {}
+  //    request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //    request.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+  //    request.isUFM = 1;
+  //    EnrollmentNo: row?.EnrollmentNo
+
+
+  //    await this.reportService.GetUFMLetter(request)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+          
+  //      }, (error: any) => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //}
+
+  async GetUFMLetter(row: any) {
+    try {
+      const request: any = {
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        isUFM: 1,
+        EnrollmentNo: row?.EnrollmentNo   // assuming row contains it
+      };
+
+      const data = await this.reportService.GetUFMLetter(request);
+
+      console.log(data); // handle response here
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 }
