@@ -672,11 +672,13 @@ export class ITIAddRequestEquipmentsMappingComponent {
 
   async GetMasterData() {
     try {
+      debugger;
       this.loaderService.requestStarted();
       await this.commonFunctionService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.InstituteMasterList = data['Data'];
+          this.InstituteMasterList=this.InstituteMasterList?.filter((x:any)=>x.ManagementTypeId==1)
           console.log(this.InstituteMasterList, "InstituteMasterList")
         }, (error: any) => console.error(error));
     }

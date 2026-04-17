@@ -137,6 +137,22 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Post Type <span
+              class="StarMarking">*</span></label>
+          <select class="form-select" name="StaffPostTypeID" id="StaffPostTypeID" formControlName="StaffPostTypeID"
+            [(ngModel)]="formData.StaffPostTypeID" (change)="GetPostList()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffPostTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.StaffPostTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.StaffPostTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="ddlPost">
             <option value="0">--Select--</option>

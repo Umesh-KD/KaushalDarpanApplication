@@ -389,7 +389,7 @@ export class ITIInspectionReportComponent {
   }
 
 
-  async DownloadReportPDF(DeploymentID: number,instituteName:string,inspectionDate: string) {
+  async DownloadReportPDF(DeploymentID: number,CodeAndName:string,inspectionDate: string) {
   debugger;
         var id = DeploymentID;
         try {
@@ -402,7 +402,7 @@ export class ITIInspectionReportComponent {
                 debugger;
                 const pdfUrl = data.Data; // Assuming your API returns this
                 this.inspectionDateRPT = inspectionDate;
-                this.instituteNameRPT = instituteName??'';
+                this.instituteNameRPT = CodeAndName??'';
                 this.DownloadPdf(pdfUrl); // Download using actual file path
                 this.toastr.success("PDF Genetrated Successfully");
                 this.CloseModal()
@@ -435,7 +435,7 @@ export class ITIInspectionReportComponent {
       const downloadLink = document.createElement('a');
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = `${this.instituteNameRPT}_${this.inspectionDateRPT}`; // Set the desired file name
+      downloadLink.download = `${this.instituteNameRPT}_${this.inspectionDateRPT}.pdf`; // Set the desired file name  _${this.inspectionDateRPT}
       downloadLink.click();
       // Clean up the object URL
       window.URL.revokeObjectURL(url);

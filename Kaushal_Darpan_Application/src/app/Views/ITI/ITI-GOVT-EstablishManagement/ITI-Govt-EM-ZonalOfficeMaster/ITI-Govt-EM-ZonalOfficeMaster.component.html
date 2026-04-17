@@ -2,7 +2,7 @@
 <!-- Page Title Start -->
 
 
-<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Govt EM Office</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
@@ -27,40 +27,51 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
 
         <div>
-          <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">SSO ID<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="txtSSOID" name="txtSSOID" formControlName="txtSSOID" [(ngModel)]="formData.SSOID" placeholder="Enter SSO ID">
+          <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">SSO ID<span
+              class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtSSOID" name="txtSSOID" formControlName="txtSSOID"
+            [(ngModel)]="formData.SSOID" placeholder="Enter SSO ID">
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
-            <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required"><i aria-hidden="true"></i> This field is
+              required .!</p>
           </div>
         </div>
         <div>
-          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SSOIDGetSomeDetails(formData.SSOID)">Get Details</button>
+          <button type="submit" class="btn bg-info text-white mt-6 me-1"
+            (click)="SSOIDGetSomeDetails(formData.SSOID)">Get Details</button>
         </div>
       </div>
 
-      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+      <div *ngIf="isSSOVisible"
+        class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
 
         <div>
           <label for="txtName" class="text-gray-800 text-sm font-medium inline-block mb-2">Name</label>
-          <input type="text" class="form-input" id="txtName" name="txtName" formControlName="txtName" [(ngModel)]="formData.Name"  placeholder="Enter Name">
+          <input type="text" class="form-input" id="txtName" name="txtName" formControlName="txtName"
+            [(ngModel)]="formData.Name" placeholder="Enter Name">
         </div>
 
         <div>
           <label for="txtMobile" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile</label>
-          <input type="text" class="form-input" id="txtMobile" name="txtMobile" formControlName="txtMobile" [(ngModel)]="formData.MobileNo"  placeholder="Enter Mobile">
+          <input type="text" class="form-input" id="txtMobile" name="txtMobile" formControlName="txtMobile"
+            [(ngModel)]="formData.MobileNo" placeholder="Enter Mobile">
         </div>
         <div>
           <label for="txtEmailID" class="text-gray-800 text-sm font-medium inline-block mb-2">Email</label>
-          <input type="text" class="form-input" id="txtEmailID" name="txtEmailID" formControlName="txtEmailID" [(ngModel)]="formData.EmailID"  placeholder="Enter EmailID">
+          <input type="text" class="form-input" id="txtEmailID" name="txtEmailID" formControlName="txtEmailID"
+            [(ngModel)]="formData.EmailID" placeholder="Enter EmailID">
         </div>
       </div>
 
 
 
-      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+      <div *ngIf="isSSOVisible"
+        class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.LevelID" formControlName="ddlLevelID" (change)="GetOfficeList()">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span
+              class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.LevelID" formControlName="ddlLevelID"
+            (change)="GetOfficeList()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -73,8 +84,10 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="ddlOffice" (change)="OfficeITIWiseCollegeAndDirstrict()">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span
+              class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="ddlOffice"
+            (change)="OfficeITIWiseCollegeAndDirstrict()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -86,7 +99,8 @@
           </div>
         </div>
         <div *ngIf="formData.LevelID==2 && formData.OfficeID== 11">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span
+              class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="ddlITICollegeTrade">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
@@ -103,7 +117,8 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             District:<span class="StarMarking">*</span>
           </label>
-          <select class="form-select" [(ngModel)]="formData.DistrictID" formControlName="ddlDistrictID" (change)="DuplicateNodal()">
+          <select class="form-select" [(ngModel)]="formData.DistrictID" formControlName="ddlDistrictID"
+            (change)="DuplicateNodal()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -114,16 +129,12 @@
               field is required .!
             </p>
           </div>
-
-
         </div>
-
-
-
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span
+              class="StarMarking">*</span></label>
           <select class="form-select" name="StaffType" id="ddlStaffType" formControlName="ddlStaffType"
-                  [(ngModel)]="formData.StaffTypeID">
+            [(ngModel)]="formData.StaffTypeID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -136,9 +147,10 @@
         </div>
         <!--{{GetIsHodOldID|json}}-->
         <div>
-          <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span class="StarMarking">*</span></label>
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span
+              class="StarMarking">*</span></label>
           <select class="form-select " name="RoleID" id="ddlRoleID" formControlName="ddlRoleID"
-                  [(ngModel)]="formData.RoleID" (change)="onRoleChange($event)">
+            [(ngModel)]="formData.RoleID" (change)="onRoleChange($event)">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of RoleMasterList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -149,8 +161,26 @@
             </p>
           </div>
         </div>
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Post Type <span
+              class="StarMarking">*</span></label>
+          <select class="form-select" name="StaffPostTypeID" id="StaffPostTypeID" formControlName="StaffPostTypeID"
+            [(ngModel)]="formData.StaffPostTypeID" (change)="GetPostList()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffPostTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.StaffPostTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.StaffPostTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span
+              class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
             <option value="0">--Select--</option>
             <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
@@ -168,18 +198,15 @@
 
         <div *ngIf="showIsHod">
           <label for="chkIsHod" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            <input type="checkbox"
-                   id="chkIsHod"
-                   name="chkIsHod"
-                   formControlName="chkIsHod"
-                   [(ngModel)]="formData.IsHod"
-                   [disabled]="IsHodIsDisable">
+            <input type="checkbox" id="chkIsHod" name="chkIsHod" formControlName="chkIsHod" [(ngModel)]="formData.IsHod"
+              [disabled]="IsHodIsDisable">
             Is Hod
           </label>
         </div>
 
       </div>
-      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+      <div *ngIf="isSSOVisible"
+        class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
         <div>
           <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddZonal()">Add More</button>
         </div>
@@ -251,7 +278,8 @@
 
 
 
-<ng-template #SttafModelPriview let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<ng-template #SttafModelPriview let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
       <div *ngIf="isModalOpen" class="card-header flex justify-between items-center">
@@ -341,12 +369,16 @@
                 <b class="text-1xl-5"> Permanent Address</b>
               </div>
               <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
-                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
-                <div><b>State        </b></div><div>{{staffDetailsFormData.StateName}}</div>
-                <div><b>District     </b></div><div>{{staffDetailsFormData.District}}</div>
+                <div><b>Address Line 1</b></div>
+                <div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State </b></div>
+                <div>{{staffDetailsFormData.StateName}}</div>
+                <div><b>District </b></div>
+                <div>{{staffDetailsFormData.District}}</div>
                 <!--<div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.City}}</div>
                 <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>-->
-                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+                <div><b>Pincode </b></div>
+                <div>{{staffDetailsFormData.Pincode}}</div>
               </div>
             </div>
 
@@ -370,12 +402,18 @@
                 <b class="text-1xl-5"> Bank Account Details</b>
               </div>
               <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
-                <div><b>Bank Name</b></div><div>{{staffDetailsFormData.BankName}}</div>
-                <div><b>Branch Name</b></div><div>{{staffDetailsFormData.BranchName}}</div>
-                <div><b>Name In Bank Account</b></div><div>{{staffDetailsFormData.Name}}</div>
-                <div><b>Account No.</b></div><div>{{staffDetailsFormData.BankAccountNo}}</div>
-                <div><b>IFSC Code</b></div><div>{{staffDetailsFormData.IFSCCode}}</div>
-                <div><b>PAN Card</b></div><div>{{staffDetailsFormData.PanCardNumber}}</div>
+                <div><b>Bank Name</b></div>
+                <div>{{staffDetailsFormData.BankName}}</div>
+                <div><b>Branch Name</b></div>
+                <div>{{staffDetailsFormData.BranchName}}</div>
+                <div><b>Name In Bank Account</b></div>
+                <div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Account No.</b></div>
+                <div>{{staffDetailsFormData.BankAccountNo}}</div>
+                <div><b>IFSC Code</b></div>
+                <div>{{staffDetailsFormData.IFSCCode}}</div>
+                <div><b>PAN Card</b></div>
+                <div>{{staffDetailsFormData.PanCardNumber}}</div>
               </div>
             </div>
 
@@ -400,7 +438,8 @@
   </div>
 </ng-template>
 
-<ng-template #MyModel_ReplayQuery let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<ng-template #MyModel_ReplayQuery let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
@@ -415,8 +454,8 @@
 
 
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
-            <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtSSOID"
-                   formControlName="txtSSOID" [(ngModel)]="searchRequestUpdateSSOIDByPricipleModel.SSOID" />
+            <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtSSOID" formControlName="txtSSOID"
+              [(ngModel)]="searchRequestUpdateSSOIDByPricipleModel.SSOID" />
             <div *ngIf="isSubmitted && _QueryReqFormGroup.txtSSOID.errors" class="text-danger">
               <p *ngIf="_QueryReqFormGroup.txtSSOID.errors.required">
                 <i aria-hidden="true"></i>

@@ -1209,7 +1209,9 @@ const routes: Routes = [
       { path: 'add-request-ddo-office/:id', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/add-request-ddo-office/add-request-ddo-office.module').then(m => m.AddRequestDDOOfficeModule), title: 'Add User Request' },
       { path: 'user-transfer-request', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/user-request-list-transfer/user-request-list-transfer.module').then(m => m.UserRequestListTransferModule), title: 'User Request List' },
       { path: 'transfer-request-accept', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/transfer-request-accept/transfer-request-accept.module').then(m => m.TransferRequestAcceptModule), title: 'User Request List' },
-      
+      { path: 'PostPlanning', loadChildren: () => import('./Views/ITI/post-planning/post-planning.module').then(m => m.PostPlanningModule) },
+      { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
+
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, ITI Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
       { path: 'PaperSetterProfessorDashboard', loadChildren: () => import('./Views/ITI/itipapper-setter/itipaper-setter-professor-dashboard/itipaper-setter-professor-dashboard.module').then(m => m.ITIPaperSetterProfessorDashboardModule) },
@@ -1630,9 +1632,7 @@ const routes: Routes = [
       { path: 'SeatIntakePlanning', loadChildren: () => import('./Views/ITI/seat-intake-planning/seat-intake-planning.module').then(m => m.SeatIntakePlanningModule) },
       { path: 'AddIntakePlanning', loadChildren: () => import('./Views/ITI/add-intake-planning/add-intake-planning.module').then(m => m.AddIntakePlanningModule) },
 
-      { path: 'PostPlanning', loadChildren: () => import('./Views/ITI/post-planning/post-planning.module').then(m => m.PostPlanningModule) },
-      { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
-
+      
       { path: 'Add-Nodal-User', loadChildren: () => import('./Views/ITI/iti-Add-Nodel-User/iti-Add-Nodel-User.module').then(m => m.itiAddNodelUserModule) },
       { path: 'Nodal-User-List', loadChildren: () => import('./Views/ITI/iti-Nodel-User-List/iti-Nodel-User-List.module').then(m => m.itiNodelUserListModule), title: 'Nodal User List' },
 

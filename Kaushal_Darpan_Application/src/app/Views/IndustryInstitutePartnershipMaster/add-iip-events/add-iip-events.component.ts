@@ -37,7 +37,14 @@ export class AddIIPEventsComponent {
   public todayDate: any;
   public CompanyID: number = 0;
   public EventID: number = 0;
-  
+  public State: number = -1;
+  public Message: any = [];
+  public ErrorMessage: any = [];
+  public EventTypeList: any = [];
+  public EventList: any = [];
+  public EventLevelList: any = [];
+  public EventForList: any = [];
+  isOJTSelected: boolean = false;
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -61,6 +68,14 @@ export class AddIIPEventsComponent {
         EventForID: ['', Validators.required],
         Semesterlist: ['',],
         Branchlist: ['', ],
+        EventLevelID: ['', [DropdownValidators]],
+        Remark: [''],
+        SSOID: [''],
+        MobileNo: [''],
+        Email: [''],
+        Designation: [''],
+        TrainingDuration: [''],
+        AreaOfDomain: [''],
       });
     
     this.settingsMultiselect = {
@@ -115,6 +130,7 @@ export class AddIIPEventsComponent {
       this.searchRequest.EventID = this.EventID;
       await this.GetEvent_ById();
     }
+    this.GetEventMasterData()
   }
 
   get _EventFormGroup() { return this.EventFormGroup.controls; }
@@ -132,7 +148,7 @@ export class AddIIPEventsComponent {
           }
         }, (error: any) => console.error(error));
 
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+      await this.commonMasterService.Stream_InstituteIdWise(this.sSOLoginDataModel.DepartmentID,1,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID,this.sSOLoginDataModel.FinancialYearID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StreamMasterList = data['Data'];
@@ -215,4 +231,105 @@ export class AddIIPEventsComponent {
     // Handle dropdown close event
     console.log(event);
   }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type == 'application/pdf') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+          //if (this.file.size < 100000) {
+          //  this.toastr.error('Select more then 100kb File')
+          //  return
+          //}
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png file')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "Photo") {
+                //this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+                this.request.FileUpload = data['Data'][0]["FileName"];
+                this.request.Dis_FileUpload = data['Data'][0]["Dis_FileName"];
+
+              }
+              //else if (Type == "Sign") {
+              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+              //}
+              /*              item.FilePath = data['Data'][0]["FilePath"];*/
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+
+  async GetEventMasterData() {
+  try {
+    this.loaderService.requestStarted();
+
+    // ✅ Event Type
+    debugger
+    const eventTypeRes: any = await this.commonMasterService.GetEventCommonMaster('EventType');
+    debugger
+    this.EventTypeList = eventTypeRes.Data;
+    console.log(this.EventTypeList);
+
+    // ✅ Event
+    const eventRes: any = await this.commonMasterService.GetEventCommonMaster('Event');
+    this.EventList = eventRes.Data;
+
+    // ✅ Event Level
+    const eventLevelRes: any = await this.commonMasterService.GetEventCommonMaster('EventLevel');
+    this.EventLevelList = eventLevelRes.Data;
+
+    // ✅ Event For
+    const eventForRes: any = await this.commonMasterService.GetEventCommonMaster('EventFor');
+    this.EventForList = eventForRes.Data;
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    this.loaderService.requestEnded();
+  }
+}
+
+onEventTypeChange(event: any) {
+  const selectedValue = event.target.value;
+
+  // ⚠️ IMPORTANT: check using CODE or NAME
+  this.isOJTSelected = selectedValue == 3; // if Code = 3 for OJT
+}
 }

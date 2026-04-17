@@ -19,7 +19,7 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
-          <select type="text" class="form-input"  [(ngModel)]="consentDeploy.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event.target.value)">
+          <select type="text" class="form-input"  [(ngModel)]="consentRequest.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event.target.value)">
             <option value="0">--Select--</option>
             @for (item of DistrictMasterDDL; track item.ID) {
             <option [value]="item.ID">{{item.Name}}</option>
@@ -29,12 +29,32 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College Name</label>
-          <select type="text" class="form-input" [(ngModel)]="consentDeploy.InstituteID">
+          <select type="text" class="form-input" [(ngModel)]="consentRequest.InstituteID">
             <option value="0">--Select--</option>
             @for (item of InstituteMasterDDL; track item.Id) {
             <option [value]="item.Id">{{item.Name}}</option>
             }
           </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Consent Type</label>
+          <select type="text" class="form-input" [(ngModel)]="consentRequest.consentTypeID" >
+            <option [value]="0">--Select--</option>
+            <option [value]="_EnumInspectionDeploymentType.Planned">Affiliation (Planned)</option>
+            <option [value]="_EnumInspectionDeploymentType.Unplanned">Complaint (Unplanned)</option>
+            <option [value]="_EnumInspectionDeploymentType.GeneralInspPlanned">General Inspection (Planned)</option>
+            <option [value]="_EnumInspectionDeploymentType.GeneralInspPlanned">General Inspection (Unplanned)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tentative Date</label>
+          <input type="date"
+                 [(ngModel)]="consentRequest.TentativeDate"
+                 class="form-input"
+                 min="1900-01-01"
+                 max="2099-12-31" />
         </div>
 
         <div>
@@ -143,7 +163,7 @@
             </span>
             <span *ngIf="row.status == 1 && ( row.Amount==0 || ( row.Amount!=0 && row.PaymentStatus==1))"
                   class="bg-green-600 text-white px-3 py-1 rounded text-sm">
-              Approved
+              Accepted
             </span>
             <span *ngIf="row.status==2"
                   class="bg-danger text-white px-3 py-1 rounded text-sm">
@@ -151,7 +171,8 @@
             </span>
             <a class="bg-blue-600 text-white px-3 py-1 rounded text-sm" href="javascript:void(0);" title="Inspection Consent History" (click)="onStatusHistorylist(MyModel_UserProfileStatusHistory, row.InspectionConsentID)">
               <i class="ti ti-eye"></i>
-            </a>               
+            </a>    
+            <button *ngIf="row.status==0" class="btn bg-danger text-white" (click)="DeleteConsentByID(row.InspectionConsentID)" type="button"><i class="ti ti-trash"></i></button>           
           </td>
         </tr>
       </tbody>

@@ -70,13 +70,13 @@
             <p *ngIf="_groupForm.txtRoomQuantity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
         </div>
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fee Per Bed</label>
           <input formControlName="txtRoomFee" class="form-input" type="text" id="RoomFee" placeholder="Enter Fee Per Bed" [(ngModel)]="request.RoomFee">
           <div *ngIf="isSubmitted && groupForm.controls.txtRoomFee.errors" class="text-danger">
             <p *ngIf="groupForm.controls.txtRoomFee.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
-        </div>
+        </div> -->
         <div>
           <!--<button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveRoomSeatData()">Submit</button>-->
 
@@ -130,7 +130,7 @@
             <th class="text-left">Room Type</th>
             <th class="text-left">Seat Capacity</th>
             <th class="text-left">Room Quantity</th>
-            <th class="text-left">Room Fee</th>
+            <!-- <th class="text-left">Room Fee</th> -->
 
             <th style="width:125px;">Action</th>
           </tr>
@@ -146,7 +146,7 @@
             <td>{{item.RoomTypeName}}</td>
             <td>{{item.SeatCapacity}}</td>
             <td>{{item.RoomQuantity}}</td>
-            <td>{{item.FeePerBad}}</td>
+            <!-- <td>{{item.FeePerBad}}</td> -->
             <!--<td>
       <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
         <a href="javascript:void(0);" title="Edit" (click)="onEditClick(item.HRSMasterID)"><i class="ti ti-pencil"></i></a>

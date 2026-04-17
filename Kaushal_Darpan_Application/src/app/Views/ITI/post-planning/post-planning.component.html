@@ -15,20 +15,7 @@
     </div>
 
     <form [formGroup]="AddOfficeVacancyForm">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- Office -->
-
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
-          <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID" (change)="GetOrderDetailsList()">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
-
-        </div>
-
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
@@ -38,15 +25,14 @@
           </select>
         </div>
 
-        <!-- Institute (shows only when OfficeID == 11) -->
-        <!--<div *ngIf="formData.OfficeID == 11">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-    <select class="form-select" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
-      <option value="0">--Select--</option>
-      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-    </select>
-  </div>-->
-        <!-- Staff Type -->
+        <div *ngIf="formData.OfficeID==11">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID" (change)="GetOrderDetailsList()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
           <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
@@ -55,19 +41,13 @@
           </select>
         </div>
 
-        <!-- Post -->
-
-
         <div *ngIf="formData.StaffTypeID==2">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
           <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
           </select>
-
         </div>
-
-
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
@@ -77,7 +57,6 @@
           </select>
         </div>
 
-        <!-- Total Seat -->
         <div>
           <label for="TotalSeatID">Total Seat <span class="StarMarking">*</span></label>
           <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
@@ -92,8 +71,7 @@
           <select class="form-select" formControlName="PostSanctionedID"  (change)="OnOrderChange(1)" [(ngModel)]="formData.PostSanctionedID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of AcademicOrderNoList" value="{{item.ID}}">{{item.OrderNo}}</option>
-          </select>
-         
+          </select>         
         </div>
 
 
@@ -102,17 +80,14 @@
             Post Sanction Date: <span class="StarMarking">*</span>
           </label>
           <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="PostSanctionDate" [(ngModel)]="formData.PostSanctionDate">
-         
         </div>
-        <!-- Comments -->
+      
         <div class="form-group col-span-3">
           <label for="Comments">Comments:</label>
           <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
         </div>
-
       </div>
 
-      <!-- Buttons -->
       <div class="flex gap-4 mt-6">
         <button type="submit" class="btn btn-primary" (click)="addOfficeVacancy()">Add</button>
         <button type="submit" class="btn btn-success" (click)="OnfinalSave()">Final Save</button>

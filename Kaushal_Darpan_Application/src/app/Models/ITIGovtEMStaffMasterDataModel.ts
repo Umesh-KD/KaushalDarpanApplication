@@ -145,6 +145,7 @@ export class ITIGovtEMAddStaffBasicDetailDataModel extends RequestBaseModel {
   public ModifyBy: number = 0
   public StatusOfStaff: number = 0;
   public CreatedBy: number = 0
+  public StaffPostTypeID?: number = 0
 
 
   // New Work  18-02-2025
@@ -322,6 +323,7 @@ export class ITI_Govt_EM_ZonalOFFICERSDataModel {
   public MobileNo: string = ''
   public EmailID: string = ''
   public DistrictID: number=0
+  public StaffPostTypeID: number=0
 
 }
 

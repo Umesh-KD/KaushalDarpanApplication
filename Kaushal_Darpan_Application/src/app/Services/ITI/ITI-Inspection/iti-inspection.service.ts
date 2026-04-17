@@ -98,6 +98,15 @@ export class ITIInspectionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async DeleteConsentByID(id: number,UserId:number) {
+
+    return await this.http.get(`${this.APIUrl}/DeleteConsentByID/${id}/${UserId}`, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetHistoryDataById_Team(id: number) {
     return await this.http.post(`${this.APIUrl}/GetHistoryDataById_Team/${id}`, this.headersOptions1)
       .pipe(

@@ -32,66 +32,67 @@
         </div>
       </div>
       <!--{{ConsentData | json}}-->
-    <div class="overflow-x-auto mt-3">
-      <table class="table" id="consentTable">
-        <thead>
-          <tr>
-            <th style="width:80px">Sr. No.</th>
-            <th class="sortable" (click)="onSort('DistrictName')">
-              District
-              <span class="sort-indicator" *ngIf="sortColumn === 'DistrictName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-            </th>
-            <th class="sortable" (click)="onSort('consentTypeID')">
-              Consent Type
-              <span class="sort-indicator" *ngIf="sortColumn === 'consentTypeID'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-            </th>
-            <th class="sortable" (click)="onSort('InstituteName')">
-              Institute Name
-              <span class="sort-indicator" *ngIf="sortColumn === 'InstituteName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-            </th>
-            <th class="sortable" (click)="onSort('TentativeDate')">
-              Tentative Date
-              <span class="sort-indicator" *ngIf="sortColumn === 'TentativeDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-            </th>
-            <th class="sortable" (click)="onSort('UpdatedDate')">
-              Updated Date
-              <span class="sort-indicator" *ngIf="sortColumn === 'UpdatedDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-            </th>
-            <th class="sortable" (click)="onSort('UpdatedDate')">
-              Fee Amount
-              <span class="sort-indicator" *ngIf="sortColumn === 'UpdatedDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
-            </th>
-            <th>Action</th>
-          </tr>
-        </thead>
+      <div class="overflow-x-auto mt-3">
+        <table class="table" id="consentTable">
+          <thead>
+            <tr>
+              <th style="width:80px">Sr. No.</th>
+              <th class="sortable" (click)="onSort('DistrictName')">
+                District
+                <span class="sort-indicator" *ngIf="sortColumn === 'DistrictName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+              </th>
+              <th class="sortable" (click)="onSort('consentTypeID')">
+                Consent Type
+                <span class="sort-indicator" *ngIf="sortColumn === 'consentTypeID'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+              </th>
+              <th class="sortable" (click)="onSort('InstituteName')">
+                Institute Name
+                <span class="sort-indicator" *ngIf="sortColumn === 'InstituteName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+              </th>
+              <th class="sortable" (click)="onSort('TentativeDate')">
+                Tentative Date
+                <span class="sort-indicator" *ngIf="sortColumn === 'TentativeDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+              </th>
+              <th class="sortable" (click)="onSort('UpdatedDate')">
+                Updated Date
+                <span class="sort-indicator" *ngIf="sortColumn === 'UpdatedDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+              </th>
+              <th class="sortable" (click)="onSort('UpdatedDate')">
+                Fee Amount
+                <span class="sort-indicator" *ngIf="sortColumn === 'UpdatedDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+              </th>
+              <th>Action</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          <tr *ngFor="let row of ConsentData | tableSearchFilter:Table_SearchText;let i=index;">
-            <td>{{ i + 1 }}</td>
-            <td>{{ row.DistrictName }}</td>
-            <td>
-              {{
-                row.consentTypeID === 1 ? 'Planned (Affiliation)'
-                : (row.consentTypeID === 3 ? 'General Inspection (Planned)' : '')
-              }}
-            </td>
-            <td>{{ row.InstituteName }}</td>
-            <td>{{ row.TentativeDate | date:'dd/MM/yyyy' }}</td>
-            <td>{{ row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
-            <td>{{ row.Amount }}</td>
-            <td>
-              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="(!(row.status == 1 || row.status == 2) && row.PaymentStatus==0)" href="javascript:void(0);" (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">
-                  <i class="ti ti-pencil"></i>
-                </a>
-                <button class="btn bg-success text-white" *ngIf="row.status==1 && row.Amount!=0" (click)="openOTPModal1(row.InspectionConsentID)">Pay</button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <tbody>
+            <tr *ngFor="let row of ConsentData | tableSearchFilter:Table_SearchText;let i=index;">
+              <td>{{ i + 1 }}</td>
+              <td>{{ row.DistrictName }}</td>
+              <td>
+                {{
+                  row.consentTypeID === 1 ? 'Planned (Affiliation)'
+                  : (row.consentTypeID === 3 ? 'General Inspection (Planned)' : '')
+                }}
+              </td>
+              <td>{{ row.InstituteName }}</td>
+              <td>{{ row.TentativeDate | date:'dd/MM/yyyy' }}</td>
+              <td>{{ row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
+              <td>{{ row.Amount }}</td>
+              <td>
+                <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                  <!-- *ngIf="(!(row.status == 1 || row.status == 2) && row.PaymentStatus==0)" -->
+                  <a *ngIf="(row.status == 0 )" href="javascript:void(0);" (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">
+                    <i class="ti ti-pencil"></i>
+                  </a>
+                  <button class="btn bg-success text-white" *ngIf="row.status==1 && row.Amount!=0" (click)="openOTPModal1(row.InspectionConsentID)">Pay</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-    </div>
+      </div>
     </div>
   </div>
 </div>
@@ -110,7 +111,7 @@
             <div>
               <label for="fileStudentPhoto"
                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Attachments <span class="text-red-500">*</span>
+                Attachments     <!--<span class="text-red-500">*</span> -->
               </label>
 
               <div class="flex items-center space-x-3">
@@ -160,8 +161,8 @@
       </form>
 
         <div class="card-footer flex justify-end gap-3 border-t p-3 bg-gray-50">
-          <button class="btn bg-success text-white" type="button" (click)="openOTPModal(1)">Submit</button>
-          <button class="btn bg-danger text-white" type="button" (click)="openOTPModal(2)">Decline</button>
+          <button class="btn bg-success text-white" type="button" (click)="openOTPModal(1)">Accept</button>
+          <button *ngIf="!UpdateConsentRequest.IsAnyCourtCase" class="btn bg-danger text-white" type="button" (click)="openOTPModal(2)">Reject</button>
           <button class="btn bg-gray-400 text-white" type="button" (click)="CloseModalPopup()">Cancel</button>
         </div>
     </div>
