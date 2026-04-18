@@ -672,8 +672,8 @@ export enum ITIPEM_EnumStaffLevelChild {
 
 
 export enum ITIGovtEM_EnumStaffType {
-  Teaching = 30,
-  NonTeaching = 31,
+  Teaching = 5354,
+  NonTeaching = 5355,
 }
 export enum ITIGovtEM_EnumStaffLevel {
   Administrative = 1,

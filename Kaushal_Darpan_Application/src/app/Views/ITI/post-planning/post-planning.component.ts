@@ -447,7 +447,6 @@ export class PostPlanningComponent {
       await this.commonMasterService.GetCommonMasterData('PostType').then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffTypeList = data.Data;
-        console.log("StaffTypeList", this.StaffTypeList);
       });
     } catch (error) {
       console.error(error);
