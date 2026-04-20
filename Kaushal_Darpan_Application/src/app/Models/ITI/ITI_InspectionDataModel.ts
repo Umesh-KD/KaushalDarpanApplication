@@ -194,6 +194,8 @@ export class ConsentModel  {
   public CaseNo:string=''
   public DisCourtDocFileName:string=''
   public CourtDocFileName:string=''
+  public EndTermID?: number = 0
+  public FinancialYearID?: number = 0
 }
 
 
