@@ -671,6 +671,7 @@ export class ITIAddRequestEquipmentsMappingComponent {
   }
 
   async GetMasterData() {
+   // debugger;
     try {
       debugger;
       this.loaderService.requestStarted();

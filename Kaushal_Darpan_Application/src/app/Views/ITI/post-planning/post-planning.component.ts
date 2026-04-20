@@ -372,11 +372,7 @@ export class PostPlanningComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeVacancyList = data['Data'];
-
-
         }, error => console.error(error));
-
-      console.log(this.OfficeVacancyList, "leaves data")
     }
     catch (Ex) {
       console.log(Ex);
@@ -447,7 +443,6 @@ export class PostPlanningComponent {
       await this.commonMasterService.GetCommonMasterData('PostType').then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffTypeList = data.Data;
-        console.log("StaffTypeList", this.StaffTypeList);
       });
     } catch (error) {
       console.error(error);
@@ -589,51 +584,27 @@ export class PostPlanningComponent {
     this.SaveData()
   }
 
-  async VacancyPostUpdate() {
-    
+  async VacancyPostUpdate() {    
     try {
-      this.loaderService.requestStarted();
-
-
       if (this.formData.ID != 0) {
-        await this.ITIGovtEMStaffMaster.UpdateOfficeVacancy(this.formData).then((data: any) => {
+        await this.ITIGovtEMStaffMaster.UpdateOfficeVacancy(this.formData).then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
           if (data.State === EnumStatus.Success) {
             this.toastr.success(data.Message);
-
             this.CloseModal();
-            this.OfficeVacancyDataList();
+            await this.OfficeVacancyDataList();
             this.formData = new ITIOfficeVacancyModel();
-
-            setTimeout(() => {
-              window.location.reload();
-            }, 1500);
-
           } else if (data.State === EnumStatus.Warning) {
             this.toastr.warning(data.Message);
-
-            setTimeout(() => {
-              window.location.reload();
-            }, 1500);
-
           } else {
             this.toastr.error('Some error! Please check.');
           }
-
-
-
         });
       }
-
-
     } catch (error) {
       console.error("Error saving data:", error);
       this.toastr.error("An unexpected error occurred while saving data.");
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
