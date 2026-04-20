@@ -68,14 +68,12 @@ export class UserRequestListTransferComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    this.GetStatusList();
-    this.GetLevelList();
-    this.GetStaffTypeData();
-    this.GetPostList();
+    await this.GetStatusList();
+    await this.GetLevelList();
+    await this.GetStaffTypeData();
+    await this.GetPostList();
     
     await this.UserRequest_GetData();
-    
-    console.log(this.sSOLoginDataModel);
   }
   get _groupForm() { return this.groupForm.controls; }
 
@@ -83,10 +81,9 @@ export class UserRequestListTransferComponent {
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+      await this.commonMasterService.GetCommonMasterData('ITI_StaffType').then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffTypeList = data.Data;
-        console.log("StaffTypeList", this.StaffTypeList);
       })
     } catch (error) {
       console.error(error);
@@ -121,28 +118,19 @@ export class UserRequestListTransferComponent {
   }
   async GetPostList() {
     try {
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationAndPostMaster()
+      await this.commonMasterService.GetCommonMasterData('PostMaster', -1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
-          /*this.PostList = this.PostList.filter((itme: any) => itme.IsPostTypeID == 1)*/
-          console.log(this.PostList, "PostList")
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   async GetLevelList() {
     try {
-      this.loaderService.requestStarted();
       await this.commonMasterService.GetLevelMaster()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -152,11 +140,6 @@ export class UserRequestListTransferComponent {
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 

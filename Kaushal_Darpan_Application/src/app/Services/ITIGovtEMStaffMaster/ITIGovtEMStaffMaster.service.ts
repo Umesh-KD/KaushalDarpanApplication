@@ -481,7 +481,6 @@ export class ITIGovtEMStaffMaster {
   }
 
   public async JoiningLetter(request: JoiningLetterSearchModel) {
-
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/GetJoiningLetter', body, this.headersOptions)
@@ -642,6 +641,21 @@ export class ITIGovtEMStaffMaster {
   public async ITI_EM_DropdownGetData(searchRequest: ITI_EM_DroupdownDataModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/ITI_EM_DropdownGetData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DownloadJoiningLetter_pdf(request: JoiningLetterSearchModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/DownloadJoiningLetter_pdf', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async DownloadRelievingLetter_pdf(request: RelievingLetterSearchModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/DownloadRelievingLetter_pdf', body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

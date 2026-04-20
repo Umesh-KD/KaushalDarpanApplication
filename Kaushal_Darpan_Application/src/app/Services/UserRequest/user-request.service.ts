@@ -99,7 +99,7 @@ export class UserRequestService {
   }
 
   public async UserRequestHistoryList(request: RequestSearchModel) {
-    debugger
+    
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/UserRequestHistory', body, this.headersOptions)
@@ -138,7 +138,7 @@ export class UserRequestService {
   }
 
   public async BterEmUserRequestHistoryList(request: BterRequestSearchModel) {
-    debugger
+    
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/BterEmUserRequestHistory', body, this.headersOptions)
@@ -148,7 +148,7 @@ export class UserRequestService {
   }
 
   public async BterEmJoiningLetter(request: JoiningLetterSearchModel) {
-    debugger
+    
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/GetJoiningLetter', body, this.headersOptions)
@@ -157,7 +157,7 @@ export class UserRequestService {
       ).toPromise();
   }
   public async BterEmRelievingLetter(request: RelievingLetterSearchModel) {
-    debugger
+    
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/GetRelievingLetter', body, this.headersOptions)
@@ -196,7 +196,7 @@ export class UserRequestService {
 
   public async GetITI_GetStaffDetailsVRS(searchRequest: ITI_EM_UnlockProfileDataModel) {
     var body = JSON.stringify(searchRequest);
-    debugger
+    
     return await this.http.post(`${this.APIUrl}/GetITI_GetStaffDetailsVRS`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

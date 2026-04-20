@@ -9,13 +9,14 @@ import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMast
 import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus } from '../../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntakeDataModel';
 import { RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-transfer-request-accept',
@@ -114,6 +115,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     private userRequestService: UserRequestService, 
     private fb: FormBuilder, 
     public appsettingConfig: AppsettingService,
+    private http: HttpClient,
   ) { }
 
 
@@ -143,13 +145,13 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       txtSSOID: ['',[Validators.required]]
     });
 
-    this.GetStatusList();
+    await this.GetStatusList();
 
     this.formData.LevelOfExamID = 0;
     this.formData.ExamTypeID = 0;
-    this.GetLevelList();
-    this.GetPostList();
-    this.GetStaffTypeData();
+    await this.GetLevelList();
+    await this.GetPostList();
+    await this.GetStaffTypeData();
   /*  this.getlist();*/
     }
 
@@ -319,7 +321,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+      await this.commonMasterService.GetCommonMasterData('ITI_StaffType').then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffTypeList = data.Data;
         console.log("StaffTypeList", this.StaffTypeList);
@@ -337,12 +339,10 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationAndPostMaster()
+      await this.commonMasterService.GetCommonMasterData('PostMaster', -1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
-          /*this.PostList = this.PostList.filter((itme: any) => itme.IsPostTypeID == 1)*/
-          console.log(this.PostList, "PostList")
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -671,43 +671,30 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     }
   }
 
-  
+  DownloadFile(FileName: string): void {
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;;
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = FileName; // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
 
   async RelievingLetter(UserID: number) {
-    debugger
     try {
       this.searchRequestRelieving.UserID = UserID;
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.RelievingLetter(this.searchRequestRelieving)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
+      await this.ITIGovtEMStaffMasterService.DownloadRelievingLetter_pdf(this.searchRequestRelieving)
+        .then((data: any) => {          
           data = JSON.parse(JSON.stringify(data));
-
-          if (data && data.Data) {
-            const base64 = data.Data;
-
-            const byteCharacters = atob(base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'application/pdf' });
-            const blobUrl = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = 'RelievingLetter.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
-          } else {
-            this.toastr.error(this.Message)
+          if(data.State == EnumStatus.Success){
+            this.DownloadFile(data.Data);
           }
         }, (error: any) => {
           console.error(error);
@@ -724,41 +711,17 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   }
 
   async JoiningLetter(UserID: number) {
-    debugger
     try {
       this.searchRequestJoining.UserID = UserID;
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.JoiningLetter(this.searchRequestJoining)
+      await this.ITIGovtEMStaffMasterService.DownloadJoiningLetter_pdf(this.searchRequestJoining)
         .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           data = JSON.parse(JSON.stringify(data));
-
-          if (data && data.Data) {
-            const base64 = data.Data;
-
-            const byteCharacters = atob(base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'application/pdf' });
-            const blobUrl = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = 'JoiningLetter.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
-          } else {
-            this.toastr.error(this.Message)
+          if(data.State == EnumStatus.Success){
+            this.DownloadFile(data.Data);
           }
+          
         }, (error: any) => {
           console.error(error);
           this.toastr.error(this.ErrorMessage)

@@ -189,7 +189,7 @@ export class AddRequestDDOOfficeComponent {
   }
   async GetPostList() {
     try {
-      await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID)
+      await this.commonMasterService.GetCommonMasterData('PostMaster', -1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
@@ -202,10 +202,9 @@ export class AddRequestDDOOfficeComponent {
 
   async GetStaffTypeData() {
     try {
-      await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+      await this.commonMasterService.GetCommonMasterData('ITI_StaffType').then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffTypeList = data.Data;
-        console.log("StaffTypeList", this.StaffTypeList);
       })
     } catch (error) {
       console.error(error);
