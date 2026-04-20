@@ -275,6 +275,16 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+
+  public async MultiStreamMasterHOD(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, SemesterID: string = '', InstituteId: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/MultiStreamMasterHOD/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + SemesterID + '/' + InstituteId, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async SemesterList(DepartmentID: number=0) {
 
     return await this.http.get(this.APIUrl + '/SemesterList/'  + DepartmentID, this.headersOptions)

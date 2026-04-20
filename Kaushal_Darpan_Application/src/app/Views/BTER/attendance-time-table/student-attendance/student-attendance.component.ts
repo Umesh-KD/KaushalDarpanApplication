@@ -20,6 +20,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { LeaveMasterSearchModel } from '../../../../Models/LeaveMasterDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { LeaveMasterService } from '../../../../Services/LeaveMaster/leave-master.service';
+import { CommonDDLSubjectMasterModel } from '../../../../Models/CommonDDLSubjectMasterModel';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class StudentAttendanceComponent implements OnInit {
   SemesterMasterDDL: any[] = [];
   SubjectMasterDDL: any[] = [];
   GetSectionData: any[] = [];
+  subjectsearch = new CommonDDLSubjectMasterModel()
   StudentAttandanceTimeDDL: any[] = [];
   public GetLeaveList: any = [];
   public searchRequest = new LeaveMasterSearchModel();
@@ -213,8 +215,15 @@ export class StudentAttendanceComponent implements OnInit {
 
   getSubjectMasterDDL(ID: any, SemesterID: any) {
     debugger
+
+    this.subjectsearch.StreamID = ID
+
+    this.subjectsearch.SemesterID = SemesterID
+    this.subjectsearch.DepartmentID = 1
+    this.subjectsearch.SchemeID = 1348
+
     if (ID && SemesterID != "" && SemesterID != null) {
-      this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
+      this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SubjectMasterDDL = data.Data;
       })
@@ -371,7 +380,17 @@ export class StudentAttendanceComponent implements OnInit {
   //    console.log(Ex);
   //  }
   //}
+  formatDate(value: any): string {
+    if (!value) return '';
 
+    const d = value instanceof Date ? value : new Date(value);
+
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
  
   async GetAttendanceTimeTable() {
     try {
@@ -381,13 +400,15 @@ export class StudentAttendanceComponent implements OnInit {
       const rawEnd = this.TableForm.value.AttendanceEndDate;
 
       // Parse correctly whether string or Date
-      const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
-      dateStart.setDate(dateStart.getDate() + 1);
-      const formattedDateStart = dateStart.toISOString().split('T')[0];
+      const formattedDateStart =
+        typeof rawStart === 'string'
+          ? rawStart
+          : this.formatDate(rawStart);
 
-      const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
-      dateEnd.setDate(dateEnd.getDate() + 1);
-      const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+      const formattedDateEnd =
+        typeof rawEnd === 'string'
+          ? rawEnd
+          : this.formatDate(rawEnd);
 
       let obj = {
         SemesterID: this.TableForm.value.SemesterID,

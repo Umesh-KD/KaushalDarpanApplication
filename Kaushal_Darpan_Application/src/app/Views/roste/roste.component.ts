@@ -17,6 +17,7 @@ import { EnumStatus } from '../../Common/GlobalConstants';
 import { BTERSectionAddDataModel } from '../../Models/BTER/BTERSectionAddDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { BranchHODModel } from '../../Models/StaffMasterDataModel';
+import { CommonDDLSubjectMasterModel } from '../../Models/CommonDDLSubjectMasterModel';
 
 @Component({
   selector: 'app-roste',
@@ -30,6 +31,7 @@ export class RosteComponent implements OnInit {
   columnSchema: Array<{ key: string; label: string; isAction?: boolean; isDate?: boolean }> = [];
   public request = new BranchHODModel()
   dataSource = new MatTableDataSource<any>();
+  subjectsearch = new CommonDDLSubjectMasterModel()
   dynamicColumns: string[] = [];
   filterData: any[] = [];
   EditDataFormGroup!: FormGroup;
@@ -128,6 +130,9 @@ export class RosteComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
         })
+
+
+
       await this.commonMasterService.HODSemesterMaster(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SemesterMasterDDL = data.Data;
@@ -162,7 +167,11 @@ export class RosteComponent implements OnInit {
 
   async getSubjectMasterDDL(ID: any, SemesterID: any) {
     if (ID && SemesterID != "" && SemesterID != null) {
-      this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
+      this.subjectsearch.StreamID = ID
+      this.subjectsearch.SemesterID = SemesterID
+      this.subjectsearch.DepartmentID = 1
+      this.subjectsearch.SchemeID = 1348
+      this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SubjectMasterDDL = data.Data;
       })

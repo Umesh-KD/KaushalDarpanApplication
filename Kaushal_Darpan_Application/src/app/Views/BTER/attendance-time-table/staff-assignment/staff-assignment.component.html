@@ -41,12 +41,14 @@
                  bindValue="StreamID"
                  [multiple]="true"
                  [closeOnSelect]="false"
-                 placeholder="--Select Branch--">
+                 placeholder="--Select Branch--"
+                 (change)="GetStaff_InstituteWise1($event)">
 
         <ng-template ng-option-tmp let-item="item" let-item$="item$">
           <input type="checkbox" [checked]="item$.selected" class="me-2" />
           {{ item.StreamName }}
         </ng-template>
+
       </ng-select>
     </div>
 

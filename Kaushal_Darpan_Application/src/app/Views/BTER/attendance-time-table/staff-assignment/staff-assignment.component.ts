@@ -98,6 +98,9 @@ dataSource!: MatTableDataSource<any>;
   // }
 
   // Semester change
+
+
+
   async onSemesterChange() {
 debugger
   const selectedSemesters = this.IIPMasterFormGroup.value.SemesterIDs;
@@ -108,23 +111,20 @@ debugger
   }
 
   // 🔥 Load all branches (same as before)
-  await this.commonService.Stream_InstituteIdWise(
-    this.sSOLoginDataModel.DepartmentID,
-    this.sSOLoginDataModel.Eng_NonEng,
-    this.sSOLoginDataModel.EndTermID,
-    this.sSOLoginDataModel.InstituteID,
-    this.sSOLoginDataModel.FinancialYearID
-  ).then((res: any) => {
+    await this.commonService.MultiStreamMasterHOD(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID,
+      selectedSemesters
+      ,this.sSOLoginDataModel.InstituteID).then((res: any) => {
     res = JSON.parse(JSON.stringify(res));
     this.StreamMasterDDL = res.Data;
   });
 
   // 🔥 Filter branches based on selected semesters
   await this.GetBranchHideList();
+    await this.GetStaff_InstituteWise();
 }
 
   async SemesterMaster() {
-  await this.commonService.SemesterMaster().then((data: any) => {
+    await this.commonService.HODSemesterMaster(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
     data = JSON.parse(JSON.stringify(data));
     this.SemesterMasterDDL = data.Data;
   });
@@ -189,6 +189,8 @@ async GetBranchHideList() {
         // 🔥 AUTO SELECT
         const allBranchIds = this.StreamMasterDDL.map((x: any) => x.StreamID);
         this.IIPMasterFormGroup.get('StreamIDs')?.setValue(allBranchIds);
+
+ 
 
       });
 
@@ -262,20 +264,60 @@ async SaveData() {
   this.selectedAssignmentId = null; // 🔥 IMPORTANT
 }
 
-  async GetStaff_InstituteWise() {
-    let obj = {
-      InstituteID: this.sSOLoginDataModel.InstituteID,
-      DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      EndTermID: this.sSOLoginDataModel.EndTermID,
-      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      RoleID: this.sSOLoginDataModel.RoleID
+
+
+
+    // call your API
+
+  async GetStaff_InstituteWise1(selected: any = '') {
+    try {
+      const streamIdsValue = this.IIPMasterFormGroup.get('StreamIDs')?.value;
+
+      const streamIds = Array.isArray(streamIdsValue)
+        ? streamIdsValue.join(',')
+        : '';
+
+      const obj = {
+        InstituteID: this.sSOLoginDataModel.InstituteID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        RoleID: this.sSOLoginDataModel.RoleID,
+        StreamIDs: streamIds
+      };
+
+      const data: any = await this.commonService.Get_Staff_Ac_Year(obj);
+      const result = JSON.parse(JSON.stringify(data));
+      this.ExaminerDDL = result.Data;
+    } catch (error) {
+      console.error(error);
     }
-    this.commonService.Get_Staff_Ac_Year(obj).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.ExaminerDDL = data.Data;
-    })
   }
 
+  async GetStaff_InstituteWise() {
+    try {
+      const streamIdsValue = this.IIPMasterFormGroup.get('StreamIDs')?.value;
+
+      const streamIds = Array.isArray(streamIdsValue)
+        ? streamIdsValue.join(',')
+        : '';
+
+      let obj = {
+        InstituteID: this.sSOLoginDataModel.InstituteID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        RoleID: this.sSOLoginDataModel.RoleID,
+        StreamIDs: streamIds
+      };
+
+      const data: any = await this.commonService.Get_Staff_Ac_Year(obj);
+      const result = JSON.parse(JSON.stringify(data));
+      this.ExaminerDDL = result.Data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
   async GetStaffAssignmentList() {
   try {
 
