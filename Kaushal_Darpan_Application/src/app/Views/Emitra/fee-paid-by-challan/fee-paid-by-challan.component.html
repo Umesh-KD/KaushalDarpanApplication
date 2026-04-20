@@ -11,7 +11,7 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Challan No.<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" placeholder="Enter Challan No" formControlName="ChallanNo" [(ngModel)]="searchRequest.ChallanNo">
+            <input type="number" class="form-input" placeholder="Enter Challan No" formControlName="ChallanNo" [(ngModel)]="searchRequest.ChallanNo">
             <div *ngIf="isSubmitted && _searchssoform.ChallanNo.errors" class="text-danger">
               <p *ngIf="_searchssoform.ChallanNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
             </div>
@@ -92,7 +92,7 @@
                 <!--<button *ngIf="row.StatusID==_EnumVerfication.Notified" class="btn bg-success text-white btn-sm" (click)="openModal(modal_Open,row.ApplicationID)" type="button">Action</button>-->
               </td>
             </tr>
-            <tr *ngIf="StudentDetailsModelList?.length === 0"><td colspan="15"> No Pending Fee Found</td></tr>
+            <tr *ngIf="encryptedRows?.length === 0"><td colspan="15"> No Pending Fee Found</td></tr>
           </tbody>
         </table>
       </div>

@@ -189,10 +189,10 @@
   [routerLink]="'/ApplicationFormTab'"
   [queryParams]="{ AppID: row.encryptedApplicationID }"
   class="btn bg-info text-white btn-sm"> Complete Application</a>
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 &&  row.IsPaymentSuccess == true && isITIAddmissionOpen"
+              <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 &&  row.IsPaymentSuccess == true && isITIAddmissionOpen"
   [routerLink]="'/ApplicationFormTab'"
   [queryParams]="{ AppID: row.encryptedApplicationID }"
-  class="btn bg-info text-white btn-sm"> Edit Application</a>
+  class="btn bg-info text-white btn-sm"> Edit Application</a>-->
               <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit === 2 && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
   [routerLink]="'/Itipreviewform'"
   [queryParams]="{ AppID: row.encryptedApplicationID }"

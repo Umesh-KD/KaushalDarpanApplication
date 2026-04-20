@@ -8,7 +8,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { ITIInspectionService } from '../../../../Services/ITI/ITI-Inspection/iti-inspection.service';
 import { EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/GlobalConstants';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -45,6 +45,7 @@ export class ITIAddConsentComponent {
   public Uploadfile: string = '';
   showRemark: boolean = false;
   public CalculatedAmount: number = 0;
+  public id:number=0;
 
   constructor(
     private commonFunctionService: CommonFunctionService,
@@ -53,11 +54,15 @@ export class ITIAddConsentComponent {
     private toastr: ToastrService,
     private itiInspectionService: ITIInspectionService,
     private router: Router,
+    private activatedRoute:ActivatedRoute,
     private commonMasterService: CommonFunctionService,
     private appsettingConfig: AppsettingService
   ){}
 
   async ngOnInit() {
+    
+    this.id=Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.consentFromGroup = this.fb.group({
       DistrictID: ['', [DropdownValidators]],
@@ -72,8 +77,14 @@ export class ITIAddConsentComponent {
       CourtDocFileName:[''],
       txtRemark: ['']
     });
-    this.getMasterData();
-    this.calculateAmount()
+    await this.getMasterData();
+    //debugger
+    if(this.id>0){
+      await this.getById(this.id);
+    }
+    else{
+      this.calculateAmount();
+    }
   }
 
   
@@ -116,6 +127,54 @@ export class ITIAddConsentComponent {
 
   }
   
+
+  async getById(id:number){
+    //debugger
+    this.loaderService.requestStarted();
+    try{
+      await this.itiInspectionService.GetById_Consent(id).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.consentDeploy = data.Data[0];
+           this.GetInstituteMaster_ByDistrictWise(this.consentDeploy.DistrictID)
+           this.consentFromGroup.patchValue({
+            InstituteID:this.consentDeploy.InstituteID,
+            TentativeDate:this.consentDeploy.TentativeDate?this.consentDeploy.TentativeDate.split('T')[0]:'',
+            // txtCourtDate:this.consentDeploy.CourtDate?this.consentDeploy.CourtDate.split('T')[0]:''
+           })
+           this.consentDeploy.CourtDate=this.consentDeploy.CourtDate?this.consentDeploy.CourtDate.split('T')[0]:'';
+           if(this.consentDeploy.Remark!=''){
+            this.onAmountChange();
+           }
+          //  this.onAmountChange();
+          // this.consentFromGroup.patchValue({
+          //   DistrictID: this.consentDeploy.DistrictID,
+          //   InstituteID: this.consentDeploy.InstituteID,
+          //   consentTypeID: this.consentDeploy.consentTypeID,
+          //   Amount: this.consentDeploy.Amount,
+          //   IsAnyCourtCase: this.consentDeploy.IsAnyCourtCase,
+          //   txtCourtName: this.consentDeploy.CourtName,
+          //   // txtCaseNo: this.consentDeploy.CourtCaseNo,
+          //   txtCourtDate: this.consentDeploy.CourtDate,
+          //   CourtDocFileName: this.consentDeploy.DisCourtDocFileName,
+          //   txtRemark: this.consentDeploy.Remark,
+          //   InspectionConsentID:this.consentDeploy.InspectionConsentID,
+          //   TentativeDate:this.consentDeploy.TentativeDate,
+          //   DocConsent:this.consentDeploy.DocConsent,
+          //   Remark:this.consentDeploy.Remark,
+
+          // });
+          console.log(this.consentFromGroup.value);
+          // this.calculateAmount();
+        }
+        this.loaderService.requestEnded();
+      })
+    }
+    catch (error) {
+      console.error(error);
+      this.loaderService.requestEnded();
+    }
+  }
 
   async onFilechange(event: any) {
     debugger;

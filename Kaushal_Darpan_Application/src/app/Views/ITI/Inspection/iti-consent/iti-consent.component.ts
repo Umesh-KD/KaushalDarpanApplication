@@ -80,6 +80,8 @@ export class ITIConsentComponent {
       this.consentRequest.UserID = this.sSOLoginDataModel.UserID
       this.consentRequest.DistrictID //= this.consentDeploy.DistrictID;
       this.consentRequest.InstituteID //= this.consentDeploy.InstituteID;
+      this.consentRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.consentRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID
 
       await this.itiInspectionService.GetAllConsentData(this.consentRequest).then((data: any) => {
      
@@ -124,6 +126,7 @@ export class ITIConsentComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success){
           this.toastr.success(data.Message);
+          this.GetAllData();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {

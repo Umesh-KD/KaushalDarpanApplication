@@ -128,11 +128,12 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+            <th class="text-left" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon)
+                                            && Searchrequest.status != 0">
               <input type="checkbox" [(ngModel)]="meritMultiSelected" (change)="selectAllItems()" />
             </th>
             <th class="text-left" *ngIf="Searchrequest.status == 1 || Searchrequest.status == 0">Sr No</th>
-            <th class="text-left" *ngIf="Searchrequest.status != 1">Merit No</th>
+            <th class="text-left" *ngIf="Searchrequest.status == 9">Merit No</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Hostel Request No</th>
@@ -147,11 +148,12 @@
         <tbody>
           <tr *ngFor="let item of StudentReqListList | tableSearchFilter:Table_SearchText; let idx = index">
             <td align="left" 
-              *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+              *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon)
+                       && Searchrequest.status != 0">
               <input type="checkbox" [(ngModel)]="item.selected" (change)="checkIfAllSelected()" />
             </td>
             <td align="left" 
-              *ngIf="Searchrequest.status == 1 || Searchrequest.status == 15">
+              *ngIf="Searchrequest.status == 1 || Searchrequest.status == 0">
               {{idx + 1}}
             </td>
             <td align="left" 

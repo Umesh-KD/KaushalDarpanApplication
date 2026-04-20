@@ -13,30 +13,51 @@
 <!-- Page Title End -->
 <div class="card">
   <div class="card-body p-5">
-    <!--<div class="mb-8">
+    <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>-->
-        <!--<a routerLink="/add-inspection" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Team</a>-->
-      <!--</div>
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a routerLink="/add-inspection" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Team</a>
+      </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Filter By Status.<span class="StarMarking">*</span></label>
           <select class="form-select" id="ddlFilterByStatus" [(ngModel)]="searchRequest.DeploymentStatus">
             <option value="">Select Status</option>
             <option value="0">Pending</option>
-            <option value="1">Deployed</option>-->
-            <!--<option value="{{_EnumDeploymentStatus.Verified}}">Verified</option>
+            <option value="1">Deployed</option>
+            <option value="{{_EnumDeploymentStatus.Verified}}">Verified</option>
             <option value="{{_EnumDeploymentStatus.OrderGenerated}}">OrderGenerated</option>
-            <option value="{{_EnumDeploymentStatus.Completed }}">Completed</option>-->
-          <!--</select>
-        </div>-->
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date</label>
-          <input [(ngModel)]="searchRequest.DeploymentDate" class="form-input" type="date">
-        </div>-->
+            <option value="{{_EnumDeploymentStatus.Completed }}">Completed</option>
+          </select>
+        </div> -->
 
-        <!--<div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+          <select type="text" class="form-input"  [(ngModel)]="searchRequest.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event.target.value)">
+            <option value="0">--Select--</option>
+            @for (item of DistrictMasterDDL; track item.ID) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College Name</label>
+          <select type="text" class="form-input" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">--Select--</option>
+            @for (item of InstituteMasterDDL; track item.Id) {
+            <option [value]="item.Id">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Inspection Date</label>
+          <input [(ngModel)]="searchRequest.DeploymentDate" class="form-input" type="date">
+        </div>
+
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Team Name</label>
           <input [(ngModel)]="searchRequest.InspectionTeamName" class="form-input" type="text" placeholder="Team Name">
         </div>
@@ -46,7 +67,7 @@
         <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetAllData()">Search</button>
         <button type="button" class="btn bg-danger text-white mt-6 me-1" (click)="ResetControl()">Reset</button>
       </div>
-    </div>-->
+    </div>
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>List of Inspection Report</b>
@@ -82,6 +103,7 @@
               <input  type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th> -->
             <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Team Name</th>
             <th class="text-left">College Name</th>
             <th class="text-left">College Code</th>
             <!--<th class="text-left">Deployed Institute</th>-->
@@ -102,6 +124,7 @@
             </td> -->
 
             <td>{{idx+1}}</td>
+            <td>{{row.InspectionTeamName}}</td>
             <td>{{row.InstituteName}}</td>
             <td>{{row.Code}}</td>
             <!--<td align="left">{{row.InstituteName}}</td>-->

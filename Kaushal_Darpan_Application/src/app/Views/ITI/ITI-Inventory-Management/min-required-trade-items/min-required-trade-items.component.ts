@@ -119,6 +119,7 @@ export class MinRequiredTradeItemsComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CollegeDDLList = data['Data'];
+          this.CollegeDDLList = this.CollegeDDLList.filter((x: any) => x.ManagementTypeId == 1);
         }, error => console.error(error));
     }
     catch (Ex) {

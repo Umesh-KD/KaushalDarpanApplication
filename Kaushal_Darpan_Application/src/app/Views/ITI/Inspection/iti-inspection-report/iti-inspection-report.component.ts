@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { EnumDeploymentStatus, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionSearchModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
+import { InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionSearchModel, ITI_InspectionDropdownModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -24,10 +24,14 @@ export class ITIInspectionReportComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   _EnumDeploymentStatus = EnumDeploymentStatus
   searchRequest = new ITI_InspectionSearchModel();
+  searchDDL=new ITI_InspectionDropdownModel();
   InspectionData: any = [];
   InspectionTeamID: number = 0
   public request = new ITI_InspectionDataModel();
   public requestMember = new InspectionMemberDetailsDataModel();
+
+  public InstituteMasterDDL: any = [];
+  public DistrictMasterDDL: any = [];
 
   modalReference: NgbModalRef | undefined;
   modalReference1: NgbModalRef | undefined;
@@ -65,7 +69,8 @@ export class ITIInspectionReportComponent {
     
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    this.GetAllData()
+    this.GetAllData();
+    await this.getMasterData();
   }
 
   async ResetControl() {
@@ -76,7 +81,35 @@ export class ITIInspectionReportComponent {
     this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId
     this.GetAllData();
   }
+
+  async getMasterData() {
+    //debugger
+    try {
+      this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId;
+      this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID;
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+      await this.itiInspectionService.GetDistrictMaster(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DistrictMasterDDL = data.Data;
+        console.log('District ==>', this.DistrictMasterDDL)
+      })
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  GetInstituteMaster_ByDistrictWise(ID: any) {
+    this.searchDDL.action = 'GetInstituteMaster_ByDistrictWise'
+  this.searchDDL.DistrictID = this.searchRequest.DistrictID || 0;
+    this.itiInspectionService.GetITIInspectionDropdown(this.searchDDL).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.InstituteMasterDDL = data.Data;
+      console.log("this.InstituteMasterDDL", this.InstituteMasterDDL)
+    })
+  }
   async GetAllData () {
+    //debugger
     try {
       this.loaderService.requestStarted();
      
