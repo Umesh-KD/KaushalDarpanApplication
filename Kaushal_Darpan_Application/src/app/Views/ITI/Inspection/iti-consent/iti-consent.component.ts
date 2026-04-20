@@ -80,6 +80,8 @@ export class ITIConsentComponent {
       this.consentRequest.UserID = this.sSOLoginDataModel.UserID
       this.consentRequest.DistrictID //= this.consentDeploy.DistrictID;
       this.consentRequest.InstituteID //= this.consentDeploy.InstituteID;
+      this.consentRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.consentRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID
 
       await this.itiInspectionService.GetAllConsentData(this.consentRequest).then((data: any) => {
      
