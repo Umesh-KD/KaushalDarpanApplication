@@ -82,6 +82,8 @@ export class ITIInspectionMembersComponent {
      
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID
       this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId
+      this.searchRequest.EndTermID=this.sSOLoginDataModel.EndTermID
+      this.searchRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID
       await this.itiInspectionService.GetAllData_members(this.searchRequest).then((data: any) => {
      
         data = JSON.parse(JSON.stringify(data));

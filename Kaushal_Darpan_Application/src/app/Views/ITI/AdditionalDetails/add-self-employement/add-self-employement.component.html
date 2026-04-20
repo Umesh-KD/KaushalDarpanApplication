@@ -37,7 +37,7 @@
               </label>
               <input type="text" class="form-input" placeholder="Enter Enrollment No" id="EnrollmentNo" name="EnrollmentNo"
                     [(ngModel)]="request.EnrollmentNo" formControlName="EnrollmentNo" (input)="getStudBasicDetails($event.target.value)">
-              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.EnrollmentNo.errors" class="text-danger">
+              <div *ngIf="!isEmployementFormSubmitted && _EmployementDetailFormGroup.EnrollmentNo.errors" class="text-danger">
                 <p *ngIf="_EmployementDetailFormGroup.EnrollmentNo.errors?.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
@@ -88,6 +88,23 @@
               </div> -->
             </div>
 
+            <div >
+              <label for="txtMobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile Number:<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="MobileNo" placeholder="Enter 10 Digits Mobile Number" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" minlength="10" (keypress)="validateNumber($event)">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.MobileNo.errors"
+                   class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.MobileNo.errors?.['pattern']">
+                  <i aria-hidden="true"></i> Please enter a valid mobile number!
+                </p>
+                <p *ngIf="_EmployementDetailFormGroup.MobileNo.errors?.['minlength'] || _EmployementDetailFormGroup.MobileNo.errors?.['maxlength']">
+                  <i aria-hidden="true"></i> Mobile number must be 10 digits!
+                </p>
+                <p *ngIf="_EmployementDetailFormGroup.MobileNo.errors?.required">
+                  <i aria-hidden="true"></i> This field is required!
+                </p>
+              </div> 
+            </div>
+
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Email
@@ -116,6 +133,34 @@
                   required.!
                 </p>
               </div> -->
+            </div>
+
+            <div >
+              <label for="txtPinCode" class="text-gray-800 text-sm font-medium inline-block mb-2">Pin Code:<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="PinCode" placeholder="Enter PinCode Number" [(ngModel)]="request.PinCode" formControlName="PinCode">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.PinCode.errors"
+                   class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.PinCode.errors?.['pattern']">
+                  <i aria-hidden="true"></i> Please enter a valid PinCode number!
+                </p>
+                <!-- <p *ngIf="_EmployementDetailFormGroup.PinCode.errors?.['minlength'] || _EmployementDetailFormGroup.PinCode.errors?.['maxlength']">
+                  <i aria-hidden="true"></i> Mobile number must be 10 digits!
+                </p> -->
+              </div> 
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Employed Via:<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlEmploymentVia" class="form-select" id="EmploymentVia" [(ngModel)]="request.EmploymentViaID" > 
+                <option value="0">--Select--</option>
+                <option value="1">Campus Interview</option>
+                <option value="2">Other Method</option>
+              </select>
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.ddlEmploymentVia.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.ddlEmploymentVia.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
             </div>
 
             <div>
@@ -184,7 +229,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 District<span class="StarMarking">*</span>
               </label>
-              <select formControlName="ddlDistrictID" class="form-select" id="ddlDistrictID" [(ngModel)]="request.DistrictID">
+              <select formControlName="ddlDistrictID" class="form-select" id="ddlDistrictID" [(ngModel)]="request.DistrictID" (change)="GetPanchayatBy_ID()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
               </select>
@@ -194,6 +239,16 @@
                   field is required .!
                 </p>
               </div>
+            </div>
+
+            <div>
+              <label class="form-label" for="PanchayatSamiti">Panchayat Samiti:</label>
+              <select disabled class="form-select" id="PanchayatSamiti" formControlName="ddlPanchayatSamitiID" 
+                      [(ngModel)]="request.PanchayatSamiti">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+  
             </div>
 
              <div>

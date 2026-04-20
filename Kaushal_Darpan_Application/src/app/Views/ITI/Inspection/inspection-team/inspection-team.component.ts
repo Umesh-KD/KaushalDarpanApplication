@@ -299,6 +299,7 @@ export class InspectionTeamComponent {
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.request.UserID = this.sSOLoginDataModel.UserID;
+    this.request.FinancialYearID=this.sSOLoginDataModel.FinancialYearID
 
     if (this.request.InspectionMemberDetails.length < 2) {
       this.toastr.error("Please Add At Least Two Member in Team");

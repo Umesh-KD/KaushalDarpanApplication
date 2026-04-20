@@ -180,6 +180,11 @@ export class StudentEmploymentDetailsModel {
   public StudentName:string='';
   public StudFatherName:string='';
 
+  public MobileNo:string='';
+  public PinCode:string='';
+  public EmploymentViaID:number=0;
+  public PanchayatSamiti:number=0;
+
   public RoleID?:number=0;
   public Action?:string='';
 }
