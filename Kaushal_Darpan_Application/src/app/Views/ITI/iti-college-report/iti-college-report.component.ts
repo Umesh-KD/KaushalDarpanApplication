@@ -37,6 +37,7 @@ export class ItiCollegeReportComponent {
   public DivisionMasterList: any[] = [];
   public DISCOM: any[] = [];
   public ItiDDLlist: any[] = [];
+  minDate: string = '';
   public ParliamentMaster: any[] = [];
   public AssemblyMaster: any[] = [];
   public PanchayatSamitiList: any[] = [];
@@ -145,7 +146,7 @@ export class ItiCollegeReportComponent {
         ContractLoad: [''],
         BuildShortage: [''],
         IsHostel: ['', Validators.required],
-        txtYear: ['', [DropdownValidators]],
+        txtYear: ['', [Validators.required]],
         PanchayatId: ['', [DropdownValidators]],
         AnnoucementType: ['', [DropdownValidators]],
         DivisionID: ['', [DropdownValidators]],
@@ -291,8 +292,11 @@ export class ItiCollegeReportComponent {
 
 
     })
-
-
+    const today = new Date();   // ✅ declared here
+    this.minDate =
+      today.getFullYear() + '-' +
+      String(today.getMonth() + 1).padStart(2, '0') + '-' +
+      String(today.getDate()).padStart(2, '0');
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //this.searchrequest.SSOID = this.sSOLoginDataModel.SSOID
@@ -1161,6 +1165,12 @@ export class ItiCollegeReportComponent {
         this.request = parsedData['Data'];
       }
       const defaultModel = new ItiReportDataModel();
+      this.request.StartDate = this.fixDate(data.StartDate);
+      this.request.CompleteDate = this.fixDate(data.CompleteDate);
+      this.request.ShilanyasDate = this.fixDate(data.ShilanyasDate);
+      this.request.LokarpanDate = this.fixDate(data.LokarpanDate);
+      this.request.PercentCivilDate = this.fixDate(data.PercentCivilDate);
+      this.request.TakenOverDate = this.fixDate(data.TakenOverDate);
 
       //Object.keys(defaultModel).forEach((key) => {
       //  const value = this.request[key as keyof ItiReportDataModel];
@@ -1190,13 +1200,26 @@ export class ItiCollegeReportComponent {
 
       dateFields.forEach((field) => {
         const value = this.request[field];
-        if (value) {
-          const rawDate = new Date(value as string);
-          const year = rawDate.getFullYear();
-          const month = String(rawDate.getMonth() + 1).padStart(2, '0');
-          const day = String(rawDate.getDate()).padStart(2, '0');
-          (this.request as any)[field] = `${year}-${month}-${day}`;
+
+        // ✅ Skip null / empty / invalid
+        if (!value) {
+          (this.request as any)[field] = '';
+          return;
         }
+
+        const rawDate = new Date(value as string);
+
+        // ✅ Check invalid date
+        if (isNaN(rawDate.getTime())) {
+          (this.request as any)[field] = '';
+          return;
+        }
+
+        const year = rawDate.getFullYear();
+        const month = String(rawDate.getMonth() + 1).padStart(2, '0');
+        const day = String(rawDate.getDate()).padStart(2, '0');
+
+        (this.request as any)[field] = `${year}-${month}-${day}`;
       });
 
 
@@ -1482,10 +1505,10 @@ export class ItiCollegeReportComponent {
       //}
 
 
-      if (this.request.IsNewCollege == 1 && this.request.AllotmentLetter == '' && this.request.IsOperatingOwn == 'Yes') {
-        this.toastr.warning("Please Upload Allotment Letter Copy")
-        return
-      }
+      //if (this.request.IsNewCollege == 1 && this.request.AllotmentLetter == '' && this.request.IsOperatingOwn == 'Yes') {
+      //  this.toastr.warning("Please Upload Allotment Letter Copy")
+      //  return
+      //}
 
       if (this.request.IsNewCollege == 1 && this.request.BuildingPlanCopy == '' && this.request.IsOperatingOwn == 'Yes') {
         this.toastr.warning("Please Upload Building Plan Copy")
@@ -1838,7 +1861,11 @@ export class ItiCollegeReportComponent {
     }
   }
 
-
+  fixDate(value: any) {
+    if (!value) return '';
+    const str = String(value).substring(0, 10);
+    return str === '1900-01-01' ? '' : str;
+  }
   async GetDocumentPlan() {
     try {
       this.loaderService.requestStarted();
@@ -1960,213 +1987,57 @@ export class ItiCollegeReportComponent {
   }
 
 
-
   AddPost() {
-
     this.isAddrequest1 = true;
 
-
-    //if (this.request.IsBuildingTaken != 'Yes') {
-    //  this.AddReportFormGroup1.controls['TakenOverDate'].clearValidators();
-    //} else {
-    //  this.AddReportFormGroup1.controls['TakenOverDate'].setValidators(Validators.required);
-    //}
-
-    //this.AddReportFormGroup1.controls['TakenOverDate'].updateValueAndValidity();
-
-
-
-
-    // Get the selected values
-
-    // if (this.request.OrderType == 0) {
-    //   this.toastr.warning("Please Select Order Type")
-    //   return
-    // }
-    // if (this.request.SanctionOrderDate == '') {
-    //   this.toastr.warning("Please Add Order Date")
-    //   return
-    // }
-    // if (this.request.SanctionOrderNo == '') {
-    //   this.toastr.warning("Please Enter Order No")
-    //   return
-    // }
-    // if (this.request.SanctionOrderCopy == '') {
-    //   this.toastr.warning("Please Add Order Copy")
-    //   return
-    // }
-
-
-    // if (!this.PostSanctionList) {
-    //   this.PostSanctionList = [];
-    // }
-
-
-    // //if (this.request.PostID != 7 && this.request.PostID != 8) {
-    // //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
-    // //  if (Exist) {
-    // //    this.toastr.warning("Already Have request with selected Post ID")
-    // //    return
-    // //  }
-    // //}
-
-    // const OrderTypeName = this.OrderList.find((e: any) => e.ID == this.request.OrderType)?.Name || '';
-
-
-
-    // this.PostSanctionList.push({
-
-    //   OrderCopy: this.request.SanctionOrderCopy,
-    //   OrderDate: this.request.SanctionOrderDate,
-    //   OrderNo: this.request.SanctionOrderNo,
-    //   OrderType: this.request.OrderType,
-    //   OrderTypeName: OrderTypeName
-
-    // });
-    ///* this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType==1)*/
-
-
-    // this.request.SanctionOrderCopy = '';
-    // this.request.SanctionOrderDate = '';
-    // this.request.SanctionOrderNo = '';
-    // this.request.SanctionOrderNo = '';
-    // this.request.OrderType = 0;
-    // OrderTypeName:''
-
-    debugger
-
-    const IsSelect = this.PostSanctionList.filter((e: any) => e.Marked == true)
-    IsSelect.forEach((e: any) => e.TypeID=1)
+    const IsSelect = this.PostSanctionList.filter((e: any) => e.Marked == true);
 
     if (IsSelect.length == 0) {
-      this.toastr.warning("Please Select Any Order First")
-      return
+      this.toastr.warning("Please Select Any Order First");
+      return;
     }
-    // Reset other unrelated fields (if required)
-
-  
 
     if (!this.filterplanorderList) {
       this.filterplanorderList = [];
-      // }
-
     }
 
+    IsSelect.forEach((item: any) => {
+      const exists = this.filterplanorderList.some(
+        (x: any) => x.SanctionID === item.SanctionID
+      );
 
-    this.filterplanorderList = [
-      ...this.filterplanorderList,
-      ...IsSelect
-    ];
-
-
-
-
+      if (!exists) {
+        item.TypeID = 1;
+        this.filterplanorderList.push(item);
+      }
+    });
   }
 
 
-
   AddPost2() {
-
     this.isAddrequest1 = true;
 
-
-    //if (this.request.IsBuildingTaken != 'Yes') {
-    //  this.AddReportFormGroup1.controls['TakenOverDate'].clearValidators();
-    //} else {
-    //  this.AddReportFormGroup1.controls['TakenOverDate'].setValidators(Validators.required);
-    //}
-
-    //this.AddReportFormGroup1.controls['TakenOverDate'].updateValueAndValidity();
-
-
-
-
-    // Get the selected values
-
-    // if (this.request.OrderType == 0) {
-    //   this.toastr.warning("Please Select Order Type")
-    //   return
-    // }
-    // if (this.request.SanctionOrderDate == '') {
-    //   this.toastr.warning("Please Add Order Date")
-    //   return
-    // }
-    // if (this.request.SanctionOrderNo == '') {
-    //   this.toastr.warning("Please Enter Order No")
-    //   return
-    // }
-    // if (this.request.SanctionOrderCopy == '') {
-    //   this.toastr.warning("Please Add Order Copy")
-    //   return
-    // }
-
-
-    // if (!this.PostSanctionList) {
-    //   this.PostSanctionList = [];
-    // }
-
-
-    // //if (this.request.PostID != 7 && this.request.PostID != 8) {
-    // //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
-    // //  if (Exist) {
-    // //    this.toastr.warning("Already Have request with selected Post ID")
-    // //    return
-    // //  }
-    // //}
-
-    // const OrderTypeName = this.OrderList.find((e: any) => e.ID == this.request.OrderType)?.Name || '';
-
-
-
-    // this.PostSanctionList.push({
-
-    //   OrderCopy: this.request.SanctionOrderCopy,
-    //   OrderDate: this.request.SanctionOrderDate,
-    //   OrderNo: this.request.SanctionOrderNo,
-    //   OrderType: this.request.OrderType,
-    //   OrderTypeName: OrderTypeName
-
-    // });
-    ///* this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType==1)*/
-
-
-    // this.request.SanctionOrderCopy = '';
-    // this.request.SanctionOrderDate = '';
-    // this.request.SanctionOrderNo = '';
-    // this.request.SanctionOrderNo = '';
-    // this.request.OrderType = 0;
-    // OrderTypeName:''
-
-    debugger
-
-    const IsSelect = this.PostSanctionList.filter((e: any) => e.Marked == true)
-    IsSelect.forEach((e: any) => e.TypeID = 2)
+    const IsSelect = this.PostSanctionList.filter((e: any) => e.Marked == true);
 
     if (IsSelect.length == 0) {
-      this.toastr.warning("Please Select Any Order First")
-      return
+      this.toastr.warning("Please Select Any Order First");
+      return;
     }
-    // Reset other unrelated fields (if required)
-
-    //if (!this.request.OrderDetailsList) {
-    //  this.request.OrderDetailsList = [];
-    //  // }
-
-    //}
 
     if (!this.filterbuildorderList) {
       this.filterbuildorderList = [];
-      // }
-
     }
 
-    this.filterbuildorderList = [
-      ...this.filterbuildorderList,
-      ...IsSelect
-    ];
+    IsSelect.forEach((item: any) => {
+      const exists = this.filterbuildorderList.some(
+        (x: any) => x.SanctionID === item.SanctionID
+      );
 
- 
-
+      if (!exists) {
+        item.TypeID = 2;
+        this.filterbuildorderList.push(item);
+      }
+    });
   }
 
 

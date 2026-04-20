@@ -19,6 +19,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
         <!--<a href="/AddCompany" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Marksheet Issue Date</a>-->
         <!--<a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,0,0,0,0,0)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New ITI Admin User</a>-->
       </div>
@@ -54,6 +55,7 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" class="btn bg-info text-white me-1" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Execl</a>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -97,7 +99,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Name}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.SSOID}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Email}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{maskMobileNumber(Admi.MobileNo)}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.MobileNo}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,Admi.UserID,Admi.UserAdditionID,Admi.ProfileID,Admi.InstituteID,Admi.RoleID,Admi.CollegeName)" title="Edit"><i class="ti ti-pencil"></i></a>

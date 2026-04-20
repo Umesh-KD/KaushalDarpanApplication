@@ -15,6 +15,7 @@ import { AttendanceServiceService } from '../../../../Services/AttendanceService
 import { StudentService } from '../../../../Services/Student/student.service';
 import { stream } from 'xlsx';
 import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { CommonDDLSubjectMasterModel } from '../../../../Models/CommonDDLSubjectMasterModel';
 
 @Component({
   selector: 'app-branch-section-create',
@@ -31,6 +32,7 @@ export class BranchSectionCreateComponent {
   GetBranchSectionStudentData: any[] = [];
   ApprovedTeacherList: any[] = [];
   allSections: any[] = [];
+  subjectsearch = new CommonDDLSubjectMasterModel()
   isSubmitted = false;
   isEdit = false;
   iSHOD = false;
@@ -900,14 +902,23 @@ export class BranchSectionCreateComponent {
 
   async getSubjectMasterDDL(StreamID: number, SemesterID: number | null) {
     debugger
+
+
+      
+    
+
     this.AddStaffSubjectSectionModel.SubjectID = 0;
     const GetstreamId = this.AddStaffSubjectSectionModel.StreamID;
     const GetSemesterID = this.AddStaffSubjectSectionModel.SemesterID;
+    this.subjectsearch.StreamID = this.AddStaffSubjectSectionModel.StreamID;
+    this.subjectsearch.SemesterID = this.AddStaffSubjectSectionModel.SemesterID;
+    this.subjectsearch.DepartmentID=1
+    this.subjectsearch.SchemeID=1348
     /* await this.getupBranchHodData();*/
 
     if (GetstreamId && GetSemesterID) {
       this.commonMasterService
-        .SubjectMaster_StreamIDWise(GetstreamId, this.sSOLoginDataModel.DepartmentID, GetSemesterID)
+        .GetSubjectMasterDDL_New(this.subjectsearch)
         .then((data: any) => {
           this.SubjectMasterDDL = data?.Data || [];
         })

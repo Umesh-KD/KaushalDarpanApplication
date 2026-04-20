@@ -14,7 +14,7 @@ import { ITIAdminUserService } from '../../../Services/ITI/ITI-Admin-User/itiadm
 import { ITIAdminUserDetailModel, ITIAdminUserSearchModel } from '../../../Models/ITI/ITIAdminUserDataModel';
 import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-itiadmin-user',
   templateUrl: './itiadmin-user.component.html',
@@ -374,6 +374,38 @@ export class ITIAdminUserComponent {
     }
 
 
+  }
+
+
+  exportToExcel(): void {
+    const wantedColumns = ['Sno', 'CollegeName', 'Name', 'SSOID', 'Email', 'MobileNo'
+
+    ];
+
+    const exportData = this.AdminUserList.map((row: any, index: number) => {
+      const filteredRow: any = {};
+      wantedColumns.forEach(col => {
+        filteredRow[col] = (col === 'SrNo') ? index + 1 : row[col];
+      });
+      return filteredRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // 🧠 Auto-width calculation
+    const colWidths = wantedColumns.map(col => {
+      const maxLength = Math.max(
+        col.length,
+        ...exportData.map((row: any) => (row[col] ? row[col].toString().length : 0))
+      );
+      return { wch: maxLength + 2 }; // Add padding
+    });
+
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'PrinciaplList.xlsx');
   }
 
 
