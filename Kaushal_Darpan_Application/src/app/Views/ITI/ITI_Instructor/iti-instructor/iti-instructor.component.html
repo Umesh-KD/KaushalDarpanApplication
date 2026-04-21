@@ -245,7 +245,7 @@
               </div>
             </div>
 
-            <div *ngIf="formData.StaffLevelID == _ITIGovtEM_EnumStaffLevel.TeachingRole && formData.StaffTypeID !=_ITIGovtEM_EnumStaffType.NonTeaching">
+            <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade <span class="StarMarking">*</span></label>
 
               <select class="form-select" name="SearchByBranchs" id="SearchByBranchs" formControlName="ddlTrade" [ngModelOptions]="{standalone: true}"
