@@ -58,6 +58,7 @@ export class AddStudentEmployementComponent implements OnInit {
   public StudEmployementList: StudentEmploymentDetailsModel[] = [];
 
   public ListEmployementDetails:StudentEmploymentDetailsModel[]=[];
+  public PanchayatSamitiList:any=[];
 
   constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService, private StudentdetailUpdateService:StudentdetailUpdateService,
     private toaster: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
@@ -94,7 +95,11 @@ export class AddStudentEmployementComponent implements OnInit {
         DOB:[{value:'',disabled:true}],
         Email:[{value:'',disabled:true}],
         AadharNo:[{value:'',disabled:true}],
-        TradeID:['0',Validators.required]
+        TradeID:['0',Validators.required],
+        MobileNo:['',[Validators.pattern(GlobalConstants.MobileNumberPattern), Validators.minLength(10), Validators.maxLength(10),Validators.required]],
+        PinCode:['',Validators.required],
+        ddlEmploymentVia: ['0',Validators.required],
+        ddlPanchayatSamitiID:['0',Validators.required]
 
       });
 
@@ -165,6 +170,8 @@ export class AddStudentEmployementComponent implements OnInit {
       await this.commonMasterService.getStudBasicDetailsEnrollmentWise(EnrollmentNo,this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
+          // this.request=data['Data'][0];
+          this.request.AadharNo=data['Data'][0].AadharNo;
           this.request.StudentName=data['Data'][0].StudentName;
           this.request.StudFatherName=data['Data'][0].FatherName;
           this.request.DOB=this.formatDate(data['Data'][0].DOB); 
@@ -194,6 +201,16 @@ export class AddStudentEmployementComponent implements OnInit {
           this.StateMasterList = data['Data'];
           console.log(this.StateMasterList);
         }, error => console.error(error));
+
+        await this.commonMasterService.PanchayatSamiti(this.request.DistrictID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.PanchayatSamitiList = data['Data'];
+        }, error => console.error(error));
+
     }
     catch (Ex) {
       console.log(Ex);
@@ -204,6 +221,32 @@ export class AddStudentEmployementComponent implements OnInit {
       }, 200);
     }
   }
+
+
+  async GetPanchayatBy_ID() {
+    try {
+      this.loaderService.requestStarted();
+debugger;
+        await this.commonMasterService.PanchayatSamiti(this.request.DistrictID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.PanchayatSamitiList = data['Data'];
+        }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   validateNumber(event: KeyboardEvent) {
     const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];

@@ -107,6 +107,8 @@ export class ITIConsentUpdateComponent {
       this.loaderService.requestStarted();
       this.consentRequest.UserID = this.sSOLoginDataModel.UserID
       this.consentRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.consentRequest.EndTermID=this.sSOLoginDataModel.EndTermID;
+      this.consentRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID
       await this.itiInspectionService.GetAllConsentbyPrincipal(this.consentRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success){

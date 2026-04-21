@@ -176,7 +176,7 @@ export class bterRevalReportComponent {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'StudentsData.xlsx');
+    XLSX.writeFile(wb, 'RevalReport.xlsx');
   }
 
 
