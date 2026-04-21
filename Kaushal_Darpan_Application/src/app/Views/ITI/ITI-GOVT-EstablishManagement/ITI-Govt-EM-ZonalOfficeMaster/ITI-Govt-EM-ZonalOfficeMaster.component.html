@@ -103,7 +103,7 @@
               class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="ddlITICollegeTrade">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
+            <option *ngFor="let item of ListITICollegeByManagement" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlITICollegeTrade.errors" class="text-danger">
             <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlITICollegeTrade.errors.DropdownValidators">

@@ -325,24 +325,46 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     }
   }
 
-  async getITICollege() {
+  // async getITICollege() {
     
-    try {
-      this.searchRequestITi.Action = "_ITICollegeWithoutAcademicYearID";
-      this.searchRequestITi.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
-      this.searchRequestITi.ManagementTypeId = 1;
+  //   try {
+  //     this.searchRequestITi.Action = "_ITICollegeWithoutAcademicYearID";
+  //     this.searchRequestITi.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+  //     this.searchRequestITi.ManagementTypeId = 1;
 
-      await this.ITICollegeTradeService.getITICollegeByManagement(this.searchRequestITi)
+  //     await this.ITICollegeTradeService.getITICollegeByManagement(this.searchRequestITi)
+  //       .then((data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         this.ListITICollegeByManagement = data['Data'];
+  //         this.ListITICollegeByManagement = this.ListITICollegeByManagement.filter((item: any) => item.DivisionId == this.DivisionID)
+  //         console.log(this.DivisionID,'DivisionID')
+  //         console.log(this.ListITICollegeByManagement, "ListITICollegeByManagement")
+  //       }, error => console.error(error));
+  //   }
+  //   catch (Ex) {
+  //     console.log(Ex);
+  //   }
+  // }
+
+  async getITICollege() {
+    //
+    // this.ID = this.sSOLoginDataModel.DepartmentID;
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ListITICollegeByManagement = data['Data'];
-          this.ListITICollegeByManagement = this.ListITICollegeByManagement.filter((item: any) => item.DivisionId == this.DivisionID)
-          console.log(this.DivisionID,'DivisionID')
-          console.log(this.ListITICollegeByManagement, "ListITICollegeByManagement")
+          this.ListITICollegeByManagement = this.ListITICollegeByManagement.filter((x: any) => x.ManagementTypeId == 1);
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
 
