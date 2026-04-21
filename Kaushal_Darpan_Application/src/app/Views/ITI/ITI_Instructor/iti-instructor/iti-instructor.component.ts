@@ -149,13 +149,13 @@ export class ItiInstructorComponent{
     //this.InstructorBindSearch.ApplicationNo = '';
 
     this.AddStaffBasicDetailFromGroup = this.fb.group({
-      ddlStaffType: [{ value: 30, disabled: true }, [DropdownValidators]],
+      ddlStaffType: [{ value: 30, disabled: true }],
       ddlStaffLevel: [''],
       ddlStaffLevelChild: [''],
       ddlTrade: [''],
       ddlTechnician: [''],
-      ddlITICollegeTrade: [{ value: this.formData.InstituteID, disabled: true }, [DropdownValidators]],
-      txtSSOID: [{ value: this.formData.SSOID, disabled: true }, [Validators.required]],
+      ddlITICollegeTrade: [{ value: this.formData.InstituteID, disabled: true }],
+      txtSSOID: [{ value: this.formData.SSOID, disabled: true }],
       txtName: [{ value: '', disabled: true }],
       txtMobileNo: [{ value: '', disabled: true }],
       txtEmailID: [{ value :'', disabled: true } ],
@@ -769,8 +769,9 @@ export class ItiInstructorComponent{
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "sss");
+          debugger
           this.StaffLevelList = data['Data'];
-          this.StaffLevelList = this.StaffLevelList.filter((item: any) => item.ID == 30 || item.ID == 30 || item.ID == 30);
+       
           console.log(this.StaffLevelList, "StaffLevelList")
         }, (error: any) => console.error(error)
         );
@@ -823,9 +824,14 @@ export class ItiInstructorComponent{
     try {
       this.loaderService.requestStarted();
       this.isSubmitted = true;
-      if (!this.AddStaffBasicDetailFromGroup.invalid) {
-        return
-      }
+
+      //if (this.formData.Shift == "0" || this.formData.BranchID==0) {
+      //  return
+      //}
+
+      //if (!this.AddStaffBasicDetailFromGroup.invalid) {
+      //  return
+      //}
       var obj = {
         InstructorID: this.InstructorID,
         ActiveStatus: 1,
