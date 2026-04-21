@@ -39,6 +39,7 @@ export class AddDTEOfficeVacancyComponent {
   public Uploadfile: string = '';
   public isSubmitted: boolean = false;
   public isFinalSave:boolean=true;
+  public isShow:boolean=true;
   public VacancyID: number = 0;
 
   _BudgetType = BudgetType;
@@ -94,8 +95,13 @@ export class AddDTEOfficeVacancyComponent {
       await this.getStreamMasterList();
     } else {
       this.StreamMasterDDLList = [];
+    }    
+  }
+
+  async showAddButton() {
+    if(this.VacancyID>0 && this.OfficeVacancyList?.length > 0){
+      this.isShow = false;
     }
-    
   }
   
   async GetPostList() {
@@ -180,21 +186,14 @@ export class AddDTEOfficeVacancyComponent {
 
   async GetBTER_BGT_BudgetType() {
     try {
-      this.loaderService.requestStarted();
         await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1,this.formData.BugetHeadTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.BugetHeadList = data['Data'];
-          console.log(this.BugetHeadList, "BugetHeadList");
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -342,6 +341,7 @@ export class AddDTEOfficeVacancyComponent {
 
     this.AddOfficeVacancyForm.reset(); // Reset form after adding
     this.formData = new OfficeVacancyModel();
+    await this.showAddButton();
   }
 
   async SaveData() {
@@ -388,8 +388,16 @@ export class AddDTEOfficeVacancyComponent {
 
   async getStreamMasterList() {
     try {
+      var Eng_NonEng: number = 0
+      if(this.formData.DesignationID == 75) {
+        Eng_NonEng = 1
+      } else if (this.formData.DesignationID == 77) {
+        Eng_NonEng = 2
+      } else {
+        Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      }
       this.loaderService.requestStarted();
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, Eng_NonEng).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDLList = data.Data;
       })

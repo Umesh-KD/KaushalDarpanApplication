@@ -64,7 +64,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
+          <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID" (change)="getStreamMasterList()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -204,7 +204,7 @@
       </div>
 
       <!-- Buttons -->
-      <div class="flex gap-4 mt-6 justify-center">
+      <div class="flex gap-4 mt-6 justify-center" *ngIf="isShow">
         <button type="submit" class="btn btn-primary" (click)="addOfficeVacancy()">Add </button>
         <!-- <button type="submit" class="btn btn-success" (click)="SaveData()">Final Save</button> -->
       </div>
@@ -216,6 +216,9 @@
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy List</b>
+      <span class="text-red-600 font-semibold text-sm" *ngIf="isShow">
+        Only one vacancy can be updated at a time
+      </span>
     </div>
     <div class="overflow-x-auto mt-4">
       <table class="table table-bordered" *ngIf="OfficeVacancyList?.length > 0">

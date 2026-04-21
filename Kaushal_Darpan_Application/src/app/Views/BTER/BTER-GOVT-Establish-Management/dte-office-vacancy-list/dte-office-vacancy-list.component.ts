@@ -32,6 +32,7 @@ export class DTEOfficeVacancyListComponent {
   public PostList: any[] = [];
   OfficeVacancy: OfficeVacancyModel[] = [];
   public StreamMasterDDLList: any[] = [];
+  public BugetHeadList: any = [];
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -95,6 +96,12 @@ export class DTEOfficeVacancyListComponent {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDLList = data.Data;
     })
+
+    await this.commonMasterService.BTER_BGT_BudgetType(this.sSOLoginDataModel.DepartmentID, 1,0)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.BugetHeadList = data['Data'];
+        }, error => console.error(error));
   }
 
   async OfficeVacancyDataList() {

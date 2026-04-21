@@ -59,6 +59,13 @@
           </select>
         </div>
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head</label>
+          <select class="form-select" [(ngModel)]="SearchData.BugetHeadID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="OfficeVacancyDataList()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()"><i class="ti ti-refresh"></i> Reset</button>
         </div>
