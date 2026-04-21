@@ -1544,7 +1544,84 @@ export class ItiCollegeReportComponent {
 
     this.onElectricDetailChange()
     this.onIslandDetailChange()
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin || this.request.IsNewCollege == 0 || this.request.IsConstructdetail == false) {
+
+      const controlsToClear = [
+        'ShilanyasDate',
+        'LokarpanDate',
+        'LokarpanName',
+        'LokarpanPost',
+        'ShilanyasPost',
+        'ShilanyasName',
+        'IsOperatingOwn',
+        /*   'ConstructionAgency',*/
+        'PDName',
+        'ContractorName',
+        'PDMobile',
+        'ContractorMobile',
+        'IsDispute',
+        'PercentCivilWork',
+        'PercentCivilDate',
+        'IsPurposeHall',
+        'IsMainITI',
+        'IsBuildingTaken',
+        'TakenOverDate',
+        'CompleteDate',
+        'StartDate'
+
+      ];
+
+
+
+      controlsToClear.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.clearValidators();
+          control.updateValueAndValidity();
+        }
+      });
+
+    } else {
+
+      const requiredControls = [
+        'ShilanyasDate',
+        'LokarpanDate',
+        'LokarpanName',
+        'LokarpanPost',
+        'ShilanyasPost',
+        'ShilanyasName',
+        'IsOperatingOwn',
+        /*  'ConstructionAgency',*/
+        'PDName',
+        'ContractorName',
+        'PDMobile',
+        'ContractorMobile',
+        'IsDispute',
+        'PercentCivilWork',
+        'PercentCivilDate',
+        'IsPurposeHall',
+        'IsMainITI',
+        'IsBuildingTaken',
+        'TakenOverDate',
+        'CompleteDate',
+        'StartDate'
+      ];
+
+      requiredControls.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.setValidators(Validators.required);
+          control.updateValueAndValidity();
+        }
+      });
+    }
+
     this.applyRoleBasedValidation()
+
+
+
+
 
     Object.keys(this.ReportForm.controls).forEach(key => {
       const control = this.ReportForm.get(key);
@@ -2807,7 +2884,9 @@ export class ItiCollegeReportComponent {
       'LokarpanName',
       'PercentCivilDate',
       'TakenOverDate',
-      'Remarks'
+      'Remarks',
+      'ConstructionAgency',
+      'FinancialSanction'
     ];
 
     controls.forEach(control => {
@@ -2845,6 +2924,8 @@ export class ItiCollegeReportComponent {
     this.ReportForm.get('LokarpanName')?.setValidators([Validators.required]);
     this.ReportForm.get('PercentCivilDate')?.setValidators([Validators.required]);
     this.ReportForm.get('TakenOverDate')?.setValidators([Validators.required]);
+    this.ReportForm.get('ConstructionAgency')?.setValidators([Validators.required]);
+    this.ReportForm.get('FinancialSanction')?.setValidators([Validators.required]);
 
     // conditional validator
     if (this.request.IsSolarPanel === 'Yes') {
