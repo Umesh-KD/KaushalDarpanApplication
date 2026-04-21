@@ -343,6 +343,7 @@ export class ItiCollegeReportComponent {
         //'AdministrativeOrderDate',
         //'FinancialSanction',
         'ItiCode',
+        'AnnoucementType'
         //'MISCode',
         //'ConstructionAgency'
 
@@ -1153,106 +1154,77 @@ export class ItiCollegeReportComponent {
     this.onIslandDetailChange()
 
   }
+  normalizeDate(value: any): string {
+    if (!value) return '';
+
+    const str = String(value).split('T')[0];
+
+    if (str === '1900-01-01' || str === '0001-01-01') {
+      return '';
+    }
+
+    return str;
+  }
 
 
   async GetById(ID: number) {
     try {
       this.loaderService.requestStarted();
-      const data: any = await this.ApplicationService.Get_ITIsReportData_ByID(ID);
-      const parsedData = JSON.parse(JSON.stringify(data));
-      debugger
-      if (parsedData['Data'] != null) {
-        this.request = parsedData['Data'];
+
+      const response: any = await this.ApplicationService.Get_ITIsReportData_ByID(ID);
+      const parsedData = JSON.parse(JSON.stringify(response));
+
+      if (parsedData?.Data) {
+        this.request = parsedData.Data;
+      } else {
+        return;
       }
-      const defaultModel = new ItiReportDataModel();
-      this.request.StartDate = this.fixDate(data.StartDate);
-      this.request.CompleteDate = this.fixDate(data.CompleteDate);
-      this.request.ShilanyasDate = this.fixDate(data.ShilanyasDate);
-      this.request.LokarpanDate = this.fixDate(data.LokarpanDate);
-      this.request.PercentCivilDate = this.fixDate(data.PercentCivilDate);
-      this.request.TakenOverDate = this.fixDate(data.TakenOverDate);
 
-      //Object.keys(defaultModel).forEach((key) => {
-      //  const value = this.request[key as keyof ItiReportDataModel];
-
-      //  if (value == null || value == undefined) {
-      //    if (typeof (defaultModel as any)[key] === 'number') {
-      //      (this.request as any)[key] = 0;
-      //    } else {
-      //      (this.request as any)[key] = '';
-      //    }
-      //  }
-      //});
-      console.log(this.request.WorkCopy)
-      //});
-      //if (data['Data']['CollegeName'] == null) {
-      //  this.request.CollegeName=''
-      //}
-      // Optional: override with login data
-      /*     this.request.CollegeName = this.sSOLoginDataModel.InstituteName;*/
-
-      // Format specific date fields
       const dateFields: (keyof ItiReportDataModel)[] = [
-        'SanctionOrderDate', 'TradeOrderDate', 'AdministrativeOrderDate',
-        'PercentCivilDate', 'TakenOverDate', 'ShilanyasDate', 'LokarpanDate',
-        'StartDate', 'CompleteDate'
+        'SanctionOrderDate',
+        'TradeOrderDate',
+        'AdministrativeOrderDate',
+        'PercentCivilDate',
+        'TakenOverDate',
+        'ShilanyasDate',
+        'LokarpanDate',
+        'StartDate',
+        'CompleteDate'
       ];
 
       dateFields.forEach((field) => {
-        const value = this.request[field];
-
-        // ✅ Skip null / empty / invalid
-        if (!value) {
-          (this.request as any)[field] = '';
-          return;
-        }
-
-        const rawDate = new Date(value as string);
-
-        // ✅ Check invalid date
-        if (isNaN(rawDate.getTime())) {
-          (this.request as any)[field] = '';
-          return;
-        }
-
-        const year = rawDate.getFullYear();
-        const month = String(rawDate.getMonth() + 1).padStart(2, '0');
-        const day = String(rawDate.getDate()).padStart(2, '0');
-
-        (this.request as any)[field] = `${year}-${month}-${day}`;
+        (this.request as any)[field] = this.normalizeDate((this.request as any)[field]);
       });
 
+      console.log(this.request.WorkCopy);
 
-      await this.ddlDivision_Change()
-      await this.ddlDistrict_Change()
-      await this.GetAssemblyITI()
-      await this.GetGramPanchayatSamiti()
-      await this.villageMaster()
+      await this.ddlDivision_Change();
+      await this.ddlDistrict_Change();
+      await this.GetAssemblyITI();
+      await this.GetGramPanchayatSamiti();
+      await this.villageMaster();
 
+      this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData.Data['GramPanchayatSamiti']);
+      this.ReportForm.get('DivisionID')?.setValue(parsedData.Data['DivisionID']);
+      this.ReportForm.get('DistrictID')?.setValue(parsedData.Data['DistrictID']);
+      this.ReportForm.get('SubDivisionID')?.setValue(parsedData.Data['SubDivisionID']);
+      this.ReportForm.get('Loksabha')?.setValue(parsedData.Data['Loksabha']);
+      this.ReportForm.get('Vidhansabha')?.setValue(parsedData.Data['Vidhansabha']);
+      this.ReportForm.get('TehsilID')?.setValue(parsedData.Data['TehsilID']);
+      this.ReportForm.get('CityID')?.setValue(parsedData.Data['CityID']);
+      this.ReportForm.get('VillageID')?.setValue(parsedData.Data['VillageID']);
+      this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData.Data['AdministrativeBodyId']);
+      this.ReportForm.get('UrbanRural')?.setValue(parsedData.Data['UrbanRural']);
+      this.ReportForm.get('Pincode')?.setValue(parsedData.Data['Pincode']);
 
-      this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData['Data']["GramPanchayatSamiti"]);
-      this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionID"]);
-      this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictID"]);
-      this.ReportForm.get('SubDivisionID')?.setValue(parsedData['Data']["SubDivisionID"]);
-      this.ReportForm.get('Loksabha')?.setValue(parsedData['Data']["Loksabha"]);
-      this.ReportForm.get('Vidhansabha')?.setValue(parsedData['Data']["Vidhansabha"]);
-      this.ReportForm.get('TehsilID')?.setValue(parsedData['Data']["TehsilID"]);
-      this.ReportForm.get('CityID')?.setValue(parsedData['Data']["CityID"]);
-
-      this.ReportForm.get('VillageID')?.setValue(parsedData['Data']["VillageID"]);
-      this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData['Data']["AdministrativeBodyId"]);
-      this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
-      this.ReportForm.get('Pincode')?.setValue(parsedData['Data']["Pincode"]);
-      /*  this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
-      /*  this.PostSanctionList = this.request.OrderDetailsList*/
       setTimeout(() => {
-        this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatId"]);
-        this.request.PanchayatId = parsedData['Data']['PanchayatId'];
+        this.ReportForm.get('PanchayatId')?.setValue(parsedData.Data['PanchayatId']);
+        this.request.PanchayatId = parsedData.Data['PanchayatId'];
       }, 300);
 
-      this.filterplanorderList = this.request.OrderDetailsList.filter((e: any) => e.TypeID == 1)||[]
-      this.filterbuildorderList = this.request.OrderDetailsList.filter((e: any) => e.TypeID == 2)||[]
-      /*      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)*/
+      this.filterplanorderList = this.request.OrderDetailsList?.filter((e: any) => e.TypeID == 1) || [];
+      this.filterbuildorderList = this.request.OrderDetailsList?.filter((e: any) => e.TypeID == 2) || [];
+
       console.log(parsedData);
     } catch (ex) {
       console.log(ex);
@@ -1262,6 +1234,143 @@ export class ItiCollegeReportComponent {
       }, 4000);
     }
   }
+
+  //normalizeDate(value: any): string {
+  //  if (value === null || value === undefined || value === '') {
+  //    return '';
+  //  }
+
+  //  const str = String(value).split('T')[0];
+
+  //  if (str === '1900-01-01' || str === '0001-01-01') {
+  //    return '';
+  //  }
+
+  //  const rawDate = new Date(str);
+  //  if (isNaN(rawDate.getTime())) {
+  //    return '';
+  //  }
+
+  //  const year = rawDate.getFullYear();
+  //  const month = String(rawDate.getMonth() + 1).padStart(2, '0');
+  //  const day = String(rawDate.getDate()).padStart(2, '0');
+
+  //  return `${year}-${month}-${day}`;
+  //}
+
+
+  //async GetById(ID: number) {
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    const data: any = await this.ApplicationService.Get_ITIsReportData_ByID(ID);
+  //    const parsedData = JSON.parse(JSON.stringify(data));
+  //    debugger
+  //    if (parsedData['Data'] != null) {
+  //      this.request = parsedData['Data'];
+  //    }
+  //    const defaultModel = new ItiReportDataModel();
+
+  //    if (this.request.StartDate == '1900-01-01' || this.request.StartDate == null || this.request.StartDate == undefined) {
+  //      this.request.StartDate = this.fixDate(data.StartDate);
+  //    }
+
+    
+  //    this.request.CompleteDate = this.fixDate(data.CompleteDate);
+  //    this.request.ShilanyasDate = this.fixDate(data.ShilanyasDate);
+  //    this.request.LokarpanDate = this.fixDate(data.LokarpanDate);
+  //    this.request.PercentCivilDate = this.fixDate(data.PercentCivilDate);
+  //    this.request.TakenOverDate = this.fixDate(data.TakenOverDate);
+
+  //    //Object.keys(defaultModel).forEach((key) => {
+  //    //  const value = this.request[key as keyof ItiReportDataModel];
+
+  //    //  if (value == null || value == undefined) {
+  //    //    if (typeof (defaultModel as any)[key] === 'number') {
+  //    //      (this.request as any)[key] = 0;
+  //    //    } else {
+  //    //      (this.request as any)[key] = '';
+  //    //    }
+  //    //  }
+  //    //});
+  //    console.log(this.request.WorkCopy)
+  //    //});
+  //    //if (data['Data']['CollegeName'] == null) {
+  //    //  this.request.CollegeName=''
+  //    //}
+  //    // Optional: override with login data
+  //    /*     this.request.CollegeName = this.sSOLoginDataModel.InstituteName;*/
+
+  //    // Format specific date fields
+  //    const dateFields: (keyof ItiReportDataModel)[] = [
+  //      'SanctionOrderDate', 'TradeOrderDate', 'AdministrativeOrderDate',
+  //      'PercentCivilDate', 'TakenOverDate', 'ShilanyasDate', 'LokarpanDate',
+  //      'StartDate', 'CompleteDate'
+  //    ];
+
+  //    dateFields.forEach((field) => {
+  //      const value = this.request[field];
+
+  //      // ✅ Skip null / empty / invalid
+  //      if (!value) {
+  //        (this.request as any)[field] = '';
+  //        return;
+  //      }
+
+  //      const rawDate = new Date(value as string);
+
+  //      // ✅ Check invalid date
+  //      if (isNaN(rawDate.getTime())) {
+  //        (this.request as any)[field] = '';
+  //        return;
+  //      }
+
+  //      const year = rawDate.getFullYear();
+  //      const month = String(rawDate.getMonth() + 1).padStart(2, '0');
+  //      const day = String(rawDate.getDate()).padStart(2, '0');
+
+  //      (this.request as any)[field] = `${year}-${month}-${day}`;
+  //    });
+
+
+  //    await this.ddlDivision_Change()
+  //    await this.ddlDistrict_Change()
+  //    await this.GetAssemblyITI()
+  //    await this.GetGramPanchayatSamiti()
+  //    await this.villageMaster()
+
+
+  //    this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData['Data']["GramPanchayatSamiti"]);
+  //    this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionID"]);
+  //    this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictID"]);
+  //    this.ReportForm.get('SubDivisionID')?.setValue(parsedData['Data']["SubDivisionID"]);
+  //    this.ReportForm.get('Loksabha')?.setValue(parsedData['Data']["Loksabha"]);
+  //    this.ReportForm.get('Vidhansabha')?.setValue(parsedData['Data']["Vidhansabha"]);
+  //    this.ReportForm.get('TehsilID')?.setValue(parsedData['Data']["TehsilID"]);
+  //    this.ReportForm.get('CityID')?.setValue(parsedData['Data']["CityID"]);
+
+  //    this.ReportForm.get('VillageID')?.setValue(parsedData['Data']["VillageID"]);
+  //    this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData['Data']["AdministrativeBodyId"]);
+  //    this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
+  //    this.ReportForm.get('Pincode')?.setValue(parsedData['Data']["Pincode"]);
+  //    /*  this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
+  //    /*  this.PostSanctionList = this.request.OrderDetailsList*/
+  //    setTimeout(() => {
+  //      this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatId"]);
+  //      this.request.PanchayatId = parsedData['Data']['PanchayatId'];
+  //    }, 300);
+
+  //    this.filterplanorderList = this.request.OrderDetailsList.filter((e: any) => e.TypeID == 1)||[]
+  //    this.filterbuildorderList = this.request.OrderDetailsList.filter((e: any) => e.TypeID == 2)||[]
+  //    /*      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)*/
+  //    console.log(parsedData);
+  //  } catch (ex) {
+  //    console.log(ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 4000);
+  //  }
+  //}
 
   async resetrow() {
     this.isSubmitted = false
@@ -1433,7 +1542,8 @@ export class ItiCollegeReportComponent {
     this.onConstructDetailChange()
 
 
-    this.applyRoleBasedValidation()
+    this.onElectricDetailChange()
+    this.onIslandDetailChange()
     this.applyRoleBasedValidation()
 
     Object.keys(this.ReportForm.controls).forEach(key => {
@@ -2566,8 +2676,8 @@ export class ItiCollegeReportComponent {
     }
   }
  async onIslandDetailChange() {
- 
-    if (this.request.Islanddetail === false) {
+
+   if (this.request.Islanddetail === false || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
       this.clearLandValidators();
     } else {
       this.setLandValidators();
@@ -2659,7 +2769,7 @@ export class ItiCollegeReportComponent {
   onConstructDetailChange() {
     
 
-    if (this.request.IsConstructdetail === false) {
+    if (this.request.IsConstructdetail === false || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
       this.clearConstructionValidators();
     } else {
       this.setConstructionValidators();
@@ -2754,7 +2864,7 @@ export class ItiCollegeReportComponent {
   onElectricDetailChange() {
      
 
-    if (this.request.IsElectricdetail === false) {
+    if (this.request.IsElectricdetail === false || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
       this.clearElectricValidators();
   /*    this.resetElectricFields(); // optional*/
     } else {
