@@ -168,7 +168,7 @@
         <div class="card-body">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: </label>
             <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
@@ -233,7 +233,7 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
             <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
               <option value="0">--Select--</option>
-              <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+              <option *ngFor="let item of PostList" value="item.ID">{{item.Name}}</option>
             </select>
             <div *ngIf="isSubmitted&&_groupForm.ddlPost.errors" class="text-danger">
               <p *ngIf="!_groupForm.ddlPost.errors.DropdownValidators">
