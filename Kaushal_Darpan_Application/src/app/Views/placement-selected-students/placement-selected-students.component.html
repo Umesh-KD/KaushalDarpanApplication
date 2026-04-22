@@ -38,6 +38,7 @@
             [clearable]="true"
             [virtualScroll]="true"
             [loading]="isLoading"
+            (change)="GetCampusWiseHiringRoleDDL()"
             >              
           </ng-select>
           <div *ngIf="isSubmitted && PlacementSelectedListStudentForm.get('CampusPostID').errors" class="text-danger">
