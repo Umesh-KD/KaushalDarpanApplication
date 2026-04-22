@@ -41,7 +41,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
-
+  maxDate: string = ''; 
   SubjectMasterDDL: any[] = [];
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -94,6 +94,8 @@ export class ITIStudentAttendanceComponent implements OnInit {
     } else {
       this.isreaasign = false
     }
+
+
     this.getMasterData();
     const today = new Date();
     const yesterday = new Date();
@@ -108,7 +110,11 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
 
   ngOnInit() {
-    
+    const today = new Date();
+    const sevenDaysBefore = new Date();
+    sevenDaysBefore.setDate(today.getDate() - 7);
+
+    this.maxDate = this.formatDateOnly(today);
     
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
@@ -118,8 +124,20 @@ export class ITIStudentAttendanceComponent implements OnInit {
       AttendanceEndDate: [this.selectedRange?.end]
     });
 
+
+    this.TableForm.get('AttendanceStartDate')?.valueChanges.subscribe((val: string) => {
+      if (val && val > this.maxDate) {
+        this.TableForm.get('AttendanceStartDate')?.setValue(this.maxDate, { emitEvent: false });
+      }
+    });
+  
+
+
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
- 
+
+
+
+
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
@@ -153,6 +171,12 @@ export class ITIStudentAttendanceComponent implements OnInit {
     this.getMasterData()
   }
 
+  formatDateOnly(value: Date): string {
+    const y = value.getFullYear();
+    const m = String(value.getMonth() + 1).padStart(2, '0');
+    const d = String(value.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
 
   onStartDateChange(event: any) {
     const startDate = event.target.value;
