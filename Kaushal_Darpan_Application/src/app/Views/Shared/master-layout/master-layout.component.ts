@@ -374,7 +374,7 @@ export class MasterLayoutComponent implements OnInit {
     // filter by roleid
 
     console.log(SeletedUserId);
-    debugger
+    //debugger
     var r = this.lstUserRole.filter((x: any) => x.RoleID == this.RoleID)[0];
     this.sSOLoginDataModel.RoleID = this.RoleID;
     this.sSOLoginDataModel.InstituteID = r?.['InstituteID'];
@@ -383,12 +383,14 @@ export class MasterLayoutComponent implements OnInit {
     this.sSOLoginDataModel.OfficeID = r?.['OfficeID']; //eng(1) / noneng(2)
     this.sSOLoginDataModel.DistrictID = r?.['DistrictID']; //eng(1) / noneng(2)
 
-    if (this.sSOLoginDataModel.FinancialYearID_Session > 0) {
-      this.sSOLoginDataModel.FinancialYearID = this.sSOLoginDataModel.FinancialYearID_Session;
-    }
-    if (this.sSOLoginDataModel.EndTermID_Session > 0) {
-      this.sSOLoginDataModel.EndTermID = this.sSOLoginDataModel.EndTermID_Session;
-    }
+    // commented bcz don't want reset fyddl
+    //if (this.sSOLoginDataModel.FinancialYearID_Session > 0) {
+    //  this.sSOLoginDataModel.FinancialYearID = this.sSOLoginDataModel.FinancialYearID_Session;
+    //}
+    //if (this.sSOLoginDataModel.EndTermID_Session > 0) {
+    //  this.sSOLoginDataModel.EndTermID = this.sSOLoginDataModel.EndTermID_Session;
+    //}
+
     //session
     localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
     //redirect
@@ -403,7 +405,7 @@ export class MasterLayoutComponent implements OnInit {
   // when year change
   async LoadByFYYearDDL() {
     // filter by endtermid
-    debugger;
+    //debugger;
     var r = this.lstAcedmicYear.filter((x: any) => x.EndTermID == this.EndTermID)[0];
     this.sSOLoginDataModel.FinancialYearID = r?.YearID;
     this.sSOLoginDataModel.EndTermID = r?.EndTermID;
@@ -824,7 +826,7 @@ export class MasterLayoutComponent implements OnInit {
   // new added 05082025
   async DDLSessionTypeChange(TypeID: number) {
     console.log("SessionTypeID", TypeID);
-    debugger;
+    //debugger;
     this.sSOLoginDataModel.SelectedValue = TypeID;
     this.commonFunctionService.setsSOLoginDataModel(this.sSOLoginDataModel);
     await this.loadMenuByRoleID(0);
