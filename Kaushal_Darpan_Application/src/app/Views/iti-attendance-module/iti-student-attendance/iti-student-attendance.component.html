@@ -161,7 +161,7 @@
               </div>
 
               <!-- Checkbox only if not Holiday -->
-              <mat-checkbox *ngIf="!column.isHoliday && !column.isFrozen"
+              <mat-checkbox *ngIf="!column.isHoliday && !isColumnFrozen(column.originalKey)"
                             (change)="toggleAllAttendanceForColumn(column.originalKey, $event.checked)">
               </mat-checkbox>
 

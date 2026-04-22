@@ -311,9 +311,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
                 const columnValues = this.filterData.map((row: any) => row[key]);
 
-                const isFrozen = columnValues.some((value: any) =>
-                  value != null && String(value).includes('(F)')
-                );
+                const isFrozen = columnValues.some((value: any) => this.isFinalSubmitted(String(value || '')));
 
                 return {
                   originalKey: key,
@@ -349,6 +347,12 @@ export class ITIStudentAttendanceComponent implements OnInit {
     }
 
   }
+
+  isColumnFrozen(columnKey: string): boolean {
+    return this.filterData.some((row: any) => this.isDisabled(row[columnKey]));
+  }
+
+
   isFinalSubmitted(value: any): boolean {
   return value?.includes('(F)');
 }
