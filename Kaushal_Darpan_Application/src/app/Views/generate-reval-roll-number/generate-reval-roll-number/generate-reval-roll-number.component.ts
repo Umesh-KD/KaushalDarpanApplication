@@ -281,13 +281,13 @@ export class GenerateRevalRollNumberComponent {
     //   return;
     // }
 
-    //// Collect names of students without a roll number
-    //const studentsWithoutRollNumber = this.StudentList.filter(x => !x.RollNumber || x.RollNumber == '' || x.RollNumber == '0' || x.RollNumber == null || x.RollNumber == undefined);
-    //if (studentsWithoutRollNumber.length > 0) {
-    //  const names = studentsWithoutRollNumber.map(student => student.StudentName).join(', ');
-    //  this.toastr.error(`The Selected students do not have a roll number: ${names}`);
-    //  return;
-    //}
+    // Collect names of students without a roll number
+    const studentsWithoutRollNumber = this.StudentList.filter(x => !x.RollNumber || x.RollNumber == '' || x.RollNumber == '0' || x.RollNumber == null || x.RollNumber == undefined);
+    if (studentsWithoutRollNumber.length > 0) {
+      const names = studentsWithoutRollNumber.map(student => student.StudentName).join(', ');
+      this.toastr.error(`The Selected students do not have a roll number: ${names}`);
+      return;
+    }
 
     this.Swal2.Confirmation("Are you sure you want to Publish Reval Roll No?", async (result: any) => {
       // Check if the user confirmed the action
