@@ -569,6 +569,7 @@ const routes: Routes = [
       { path: 'branch-section-create', loadChildren: () => import('./Views/BTER/attendance-time-table/branch-section-create/branch-section-create.module').then(m => m.BranchSectionCreateModule), title: 'Add Group Code' },
 
       { path: 'iti-attendance', loadChildren: () => import('./Views/iti-attendance-module/iti-attendance.module').then(m => m.ITIAttendanceTimeTableModule), title: 'ITI-Student-Enrollment' },
+      { path: 'iti-rpt-admission-seatoffered', loadChildren: () => import('./Views/iti-rpt-admission-seat-offered/iti-rpt-admission-seat-offered.module').then(m => m.ITIRPTAdmissionSeatOfferedModule), title: 'ITI-RPT-Admission-SeatOffered' },
 
 
       /*ITI-Inventory-Management-START*/

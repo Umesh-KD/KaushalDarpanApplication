@@ -526,10 +526,9 @@ export class PostPlanningComponent {
   }
 
   async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
-    
+    debugger
     try {
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
-
       if (userSubmitData) {
         this.formData = userSubmitData;
 
@@ -539,7 +538,8 @@ export class PostPlanningComponent {
           this.groupForm.get('StaffTypeID')?.disable();
           /* this.groupForm.get('DesignationID')?.disable();*/
           if (this.formData.InstituteID !== 0) {
-            this.groupForm.get('InstituteID')?.disable();
+            this.formData.PlanningID = this.formData.InstituteID
+            this.groupForm.get('ddlCollege')?.disable();
           }
         } else {
           this.groupForm.get('OfficeID')?.enable();
@@ -550,14 +550,15 @@ export class PostPlanningComponent {
           }
         }
 
-        // No need to re-assign DesignationID if it's part of userSubmitData
-        // this.formData.DesignationID = userSubmitData.DesignationID;
+        await this.fillupDesignation();
+
+        this.formData.DesignationID=userSubmitData.DesignationID
       } else {
         this.formData = new ITIOfficeVacancyModel(); // or initialize with default values if needed
       }
 
       // If fillupDesignation is async, await it
-      await this.fillupDesignation();
+      
 
     } catch (error) {
       console.error('Error fetching data:', error);
