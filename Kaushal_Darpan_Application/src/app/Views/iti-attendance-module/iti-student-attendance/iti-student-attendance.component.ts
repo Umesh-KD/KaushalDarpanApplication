@@ -41,7 +41,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
-
+  todayDate: string = '';
   SubjectMasterDDL: any[] = [];
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -89,9 +89,17 @@ export class ITIStudentAttendanceComponent implements OnInit {
     this.UnitID = parseInt(this.route.snapshot.paramMap.get('UnitID') ?? "0");
     this.AttendanceStartDate = this.route.snapshot.paramMap.get('AttendanceStartDate') ?? "";
     this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "";
+
+
+
+
+ 
+
     if (this.AttendanceStartDate != '' && this.AttendanceEndDate != '') {
       this.isreaasign = true
-    } else {
+    }
+    else
+    {
       this.isreaasign = false
     }
     this.getMasterData();
@@ -107,15 +115,36 @@ export class ITIStudentAttendanceComponent implements OnInit {
   }
 
 
+
+  formatDate(date: string): string {
+    const d = new Date(date);
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${d.getFullYear()}-${month}-${day}`;
+  }
+
+
+
+
+
   ngOnInit() {
+
+
+
+    this.getcurrentdate();
+
+
+    this.AttendanceStartDate = this.AttendanceStartDate ? this.formatDate(this.AttendanceStartDate) : "";
+    this.AttendanceEndDate = this.AttendanceEndDate ? this.formatDate(this.AttendanceEndDate) : "";
     
     
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
       StreamID: ['', Validators.required],
       SemesterID: ['', Validators.required],
-      AttendanceStartDate: [this.selectedRange?.start],
-      AttendanceEndDate: [this.selectedRange?.end]
+      AttendanceStartDate: [''],
+      //AttendanceEndDate: [this.selectedRange?.end],
+      AttendanceStartDateRavi:[]
     });
 
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
@@ -126,19 +155,19 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
     });
     this.TableForm.controls['StreamID'].disable();
-    if (this.AttendanceStartDate != '' && this.AttendanceStartDate != null && this.AttendanceStartDate != undefined
-      && this.AttendanceEndDate != '' && this.AttendanceEndDate != null && this.AttendanceEndDate != undefined
-    ) {
+    //if (this.AttendanceStartDate != '' && this.AttendanceStartDate != null && this.AttendanceStartDate != undefined
+    //  && this.AttendanceEndDate != '' && this.AttendanceEndDate != null && this.AttendanceEndDate != undefined
+    //) {
 
-      this.TableForm.patchValue({
-        AttendanceStartDate: this.AttendanceStartDate,
-        AttendanceEndDate: this.AttendanceEndDate,
+    //  this.TableForm.patchValue({
+    //    AttendanceStartDate: this.AttendanceStartDate,
+    //    AttendanceEndDate: this.AttendanceEndDate,
 
-      });
-      this.TableForm.controls['AttendanceEndDate'].disable();
-      this.TableForm.controls['AttendanceStartDate'].disable();
+    //  });
+    //  this.TableForm.controls['AttendanceEndDate'].disable();
+    //  this.TableForm.controls['AttendanceStartDate'].disable();
   
-    }
+    //}
     
 
     setTimeout(()=> {
@@ -223,7 +252,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
     try {
 
-
+      debugger;
       const today = new Date();
       const todayDate =
         today.getFullYear() + '-' +
@@ -231,22 +260,34 @@ export class ITIStudentAttendanceComponent implements OnInit {
         String(today.getDate()).padStart(2, '0');
 
       const rawStart = this.TableForm.getRawValue().AttendanceStartDate;
-      const rawEnd = this.TableForm.getRawValue().AttendanceEndDate;
+
+      if (rawStart == '' || rawStart == null || rawStart.length == 0) {
+
+        this.toastr.warning('Please Select Attendance Date');
+        return;
+
+      }
+
+
+    
       const dateStart = new Date(rawStart);
       const formattedDateStart =
         dateStart.getFullYear() + '-' +
         String(dateStart.getMonth() + 1).padStart(2, '0') + '-' +
         String(dateStart.getDate()).padStart(2, '0');
 
-      const dateEnd = new Date(rawEnd);
-      let formattedDateEnd =
-        dateEnd.getFullYear() + '-' +
-        String(dateEnd.getMonth() + 1).padStart(2, '0') + '-' +
-        String(dateEnd.getDate()).padStart(2, '0');
+      //const dateEnd = new Date(rawEnd);
+      //let formattedDateEnd =
+      //  dateEnd.getFullYear() + '-' +
+      //  String(dateEnd.getMonth() + 1).padStart(2, '0') + '-' +
+      //  String(dateEnd.getDate()).padStart(2, '0');
 
-      if (this.isreaasign == false) {
-        formattedDateEnd = formattedDateStart
-      }
+      //if (this.isreaasign == false) {
+      //  formattedDateEnd = formattedDateStart
+      //}
+
+ 
+   
 
       let obj = {
         SemesterID: this.TableForm.value.SemesterID,
@@ -258,7 +299,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
         StreamID: this.TableForm.getRawValue().StreamID,
         SubjectID: this.TableForm.value.SubjectID,
         AttendanceStartDate: formattedDateStart,
-        AttendanceEndDate: formattedDateEnd,
+        AttendanceEndDate: formattedDateStart,
         UnitID: this.UnitID,
         ShiftID: this.ShiftID,
         TodayDate: todayDate,
@@ -642,11 +683,24 @@ isPresent(value: any): boolean {
   //}
 
 
-  isDisabled(value: any): boolean {
+  isDisabled(value: any): boolean
+  {
     if (!value) return false;
     const v = String(value);
     if (v.includes('(U)')) return false;
     if (v.includes('(F)')) return true;
     return false;
   }
+
+
+
+
+  getcurrentdate() {
+    const today = new Date();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+
+    this.todayDate = `${today.getFullYear()}-${month}-${day}`;
+  }
+
 }
