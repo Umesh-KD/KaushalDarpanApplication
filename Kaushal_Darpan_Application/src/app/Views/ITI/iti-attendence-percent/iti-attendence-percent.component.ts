@@ -632,7 +632,8 @@ export class ItiAttendencePercentComponent {
       return;
     } else {
       this.TableForm.get('StreamID')?.disable();
-      this.TableForm.get('ShiftId')?.disable();
+     // this.EditDataFormGroup.get('StreamID')?.disable();
+     
     }
 
     const item = this.StaffList.find(
