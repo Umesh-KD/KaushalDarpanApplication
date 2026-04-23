@@ -5,4 +5,5 @@ export class ResponseBaseModel {
   public ModifyBy?: number = 0;
   public IPAddress?: string = '';
   public RoleID?: number = 0;
+  public TermPart?: number = 0;
 }

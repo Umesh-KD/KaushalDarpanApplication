@@ -22,16 +22,16 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <!-- <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Group code</label>
-        <select class="form-select" id="GroupID" [(ngModel)]="searchRequest.GroupCodeID">
-          <option value="0">--All--</option>
-          <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-      </div> -->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Group code</label>
+          <select class="form-select" id="GroupID" [(ngModel)]="searchRequest.GroupCodeID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div> -->
 
         <div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon
           || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">
-          
+
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
           <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID">
             <option value="0">--All--</option>
@@ -71,7 +71,7 @@
             <option value="1">UFM</option>
           </select>
         </div>
-        
+
         <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Center C-Code:<span class="StarMarking"></span>
@@ -82,15 +82,14 @@
             <option *ngFor="let item of CenterCodeList" [value]="item?.CCCode">{{item.CCCode}}</option>
           </select>
         </div>-->
-
         <!-- <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
-        <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
-          <option value="0">--All--</option>
-          <option value="1">Marks Pending</option>
-          <option value="2">Marks Entered</option>
-        </select>
-      </div> -->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
+            <option value="0">--All--</option>
+            <option value="1">Marks Pending</option>
+            <option value="2">Marks Entered</option>
+          </select>
+        </div> -->
       </div>
       <div class="flex justify-center">
         <button type="button" class="btn bg-info text-white mt-6" (click)="GetTheoryMarksDetailList()">Search</button>
@@ -102,9 +101,10 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="PDFDownload()"><i class="ti ti-download"></i> Download PDF</a>
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" 
-          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng"
-          (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
+           *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng"
+           (click)="exportToExcel()">
+          <i class="ti ti-download"></i> Download Excel
         </a>
       </div>
     </div>
@@ -127,22 +127,22 @@
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
-      <table class="table table-border w-full table-auto" cellpadding="5"  *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Examiner || this.sSOLoginDataModel.RoleID == _EnumRole.Examiner_NonEng">
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Examiner || this.sSOLoginDataModel.RoleID == _EnumRole.Examiner_NonEng">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>SNo</th>
             <th title="Click to sorting" (click)="sortInTableData('ExaminerName')">
-             Examiner
+              Examiner
               <span class="shortingSpan" *ngIf="sortInTableColumn=='ExaminerName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th title="Click to sorting" (click)="sortInTableData('CCCode')">
-             CC-Code
+              CC-Code
               <span class="shortingSpan" *ngIf="sortInTableColumn=='CCCode'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th title="Click to sorting" (click)="sortInTableData('RollNo')">
               Roll Number
               <span class="shortingSpan" *ngIf="sortInTableColumn=='RollNo'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>            
+            </th>
             <th title="Click to sorting" (click)="sortInTableData('SubjectName')">
               Subject
               <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectName'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -155,7 +155,7 @@
             <th>Marks Obtained</th>
             <th>Student Status</th>
             <!--<th>Status</th>
-        <th *ngIf="isAnyUFMSelected">Document Required</th>-->
+            <th *ngIf="isAnyUFMSelected">Document Required</th>-->
           </tr>
         </thead>
 
@@ -226,7 +226,7 @@
             <th>Student Status</th>
             <th *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin ||sSOLoginDataModel.RoleID==_EnumRole.AdminNon ||sSOLoginDataModel.RoleID==_EnumRole.JDConfidential_Eng ||sSOLoginDataModel.RoleID==_EnumRole.JDConfidential_NonEng">UFM Document</th>
             <!--<th>Status</th>
-  <th *ngIf="isAnyUFMSelected">Document Required</th>-->
+            <th *ngIf="isAnyUFMSelected">Document Required</th>-->
           </tr>
         </thead>
 
@@ -248,11 +248,29 @@
             <td align="left">{{ row.StudentStatus }}</td>
 
             <td align="left" *ngIf="sSOLoginDataModel.RoleID==_EnumRole.Admin ||sSOLoginDataModel.RoleID==_EnumRole.AdminNon ||sSOLoginDataModel.RoleID==_EnumRole.JDConfidential_Eng ||sSOLoginDataModel.RoleID==_EnumRole.JDConfidential_NonEng">
-              <a *ngIf="row.IsUFM==1" href="{{appsettingConfig.StaticFileRootPathURL+ _GlobalConstants.StudentsFolder+'/'+ row.UFMDocument}}"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
 
-              <a *ngIf="row.IsUFM==1" (click)="GetUFMLetter(row)"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="fa fa-download"></i></a>
+              <!-- view ufm -->
+              <a *ngIf="row.IsUFM==1"
+                 href="{{appsettingConfig.StaticFileRootPathURL+ _GlobalConstants.StudentsFolder+'/'+ row.UFMDocument}}"
+                 class="btn btn-outline-info m-1"
+                 target="_blank" title="View UFM Document">
+                <i class="ti ti-eye"></i>
+              </a>
+              <!-- edit to fill ufm letter info -->
+              <a *ngIf="row.IsUFM==1 && row.UFMStuExtraInfoID==0"
+                 (click)="OpenGetUFMStudentExtraInfo(modal_UFMStudentExtraInfo, row)"
+                 class="btn btn-outline-success m-1"
+                 title="Fill UFM Letter">
+                <i class="fa fa-plus"></i>
+              </a>
+              <!-- Ufm Letter download -->
+              <a *ngIf="row.IsUFM==1 && row.UFMStuExtraInfoID>0"
+                 (click)="GetUFMLetter(row)"
+                 class="btn btn-outline-warning m-1"
+                 target="_blank"
+                 title="Download UFM Letter">
+                <i class="fa fa-download"></i>
+              </a>
             </td>
 
           </tr>
@@ -276,5 +294,94 @@
     <!--end pagination-->
   </div>
 </div>
+
+<!-- model UFM Student Extra Info-->
+<ng-template #modal_UFMStudentExtraInfo let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">UFM Letter <!--<small class="text-danger" style="font-size:11px;">(* fields are mandatory)</small>--></b>
+        <button class="btn bg-info text-white" (click)="CloseUFMStudentExtraInfoModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+      <form [formGroup]="ufmLetterForm">
+        <div class="card-body">
+          <div>
+            <label for="txtEnrollmentNo">Enrollment :</label>
+            <input type="text" name="txtEnrollmentNo" formControlName="txtEnrollmentNo" class="form-control"
+                   [(ngModel)]="saveufmStudentExtraInfo.EnrollmentNo">
+            <div *ngIf="isSubmitted && ufmLetterForm.get('txtEnrollmentNo').errors" class="text-danger">
+              <p *ngIf="ufmLetterForm.get('txtEnrollmentNo').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="txtSerialNo">Serial No :</label>
+            <input type="text" name="txtSerialNo" formControlName="txtSerialNo" class="form-control"
+                   [(ngModel)]="saveufmStudentExtraInfo.SerialNo">
+            <div *ngIf="isSubmitted && ufmLetterForm.get('txtSerialNo').errors" class="text-danger">
+              <p *ngIf="ufmLetterForm.get('txtSerialNo').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="txtSerialNo2">Serial No2 :</label>
+            <input type="text" name="txtSerialNo2" formControlName="txtSerialNo2" class="form-control"
+                   [(ngModel)]="saveufmStudentExtraInfo.SerialNo2">
+            <div *ngIf="isSubmitted && ufmLetterForm.get('txtSerialNo2').errors" class="text-danger">
+              <p *ngIf="ufmLetterForm.get('txtSerialNo2').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="ddlExamCategory">Exam Category :</label>
+            <select class="form-select" name="ddlExamCategory" formControlName="ddlExamCategory"
+                    [(ngModel)]="saveufmStudentExtraInfo.StudentExamType">
+              <option [ngValue]="0">-- Select --</option>
+              <option [ngValue]="78">Main</option>
+              <option [ngValue]="77">Special</option>
+            </select>
+            <div *ngIf="isSubmitted && ufmLetterForm.get('ddlExamCategory').errors" class="text-danger">
+              <p *ngIf="ufmLetterForm.get('ddlExamCategory').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="txtIssueDate">Issue Date :</label>
+            <input type="date" name="txtIssueDate" formControlName="txtIssueDate" class="form-control"
+                   [(ngModel)]="saveufmStudentExtraInfo.IssueDate">
+            <div *ngIf="isSubmitted && ufmLetterForm.get('txtIssueDate').errors" class="text-danger">
+              <p *ngIf="ufmLetterForm.get('txtIssueDate').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="txtBundleSendDate">Bundle Sending Date :</label>
+            <input type="date" name="txtBundleSendDate" formControlName="txtBundleSendDate" class="form-control"
+                   [(ngModel)]="saveufmStudentExtraInfo.BundleSendDate">
+            <div *ngIf="isSubmitted && ufmLetterForm.get('txtBundleSendDate').errors" class="text-danger">
+              <p *ngIf="ufmLetterForm.get('txtBundleSendDate').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="txtDate2">Date2 :</label>
+            <input type="date" name="txtDate2" formControlName="txtDate2" class="form-control"
+                   [(ngModel)]="saveufmStudentExtraInfo.Date2">
+            <div *ngIf="isSubmitted && ufmLetterForm.get('txtDate2').errors" class="text-danger">
+              <p *ngIf="ufmLetterForm.get('txtDate2').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
+          </div>
+
+          <div>
+            <button type="submit" class="btn btn-primary" (click)="SaveUFMStudentExtraInfo()">Save</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</ng-template>
 
 

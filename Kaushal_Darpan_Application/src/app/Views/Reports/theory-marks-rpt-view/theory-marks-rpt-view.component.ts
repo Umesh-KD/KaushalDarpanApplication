@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TheoryMarksSearchModel } from '../../../Models/TheoryMarksDataModels';
+import { TheoryMarksSearchModel, UFMStudentExtraInfoGetModel, UFMStudentExtraInfoSaveModel } from '../../../Models/TheoryMarksDataModels';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -12,6 +12,10 @@ import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
 import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-theory-marks-rpt-view',
@@ -44,6 +48,12 @@ export class TheoryMarksRptViewComponent {
   public totalInTableRecord: number = 0;
   //end table feature default
 
+  public ufmLetterForm!: FormGroup;
+  modalReference: NgbModalRef | undefined;
+  public isSubmitted: boolean = false;
+  public getufmStudentExtraInfo = new UFMStudentExtraInfoGetModel();
+  public saveufmStudentExtraInfo = new UFMStudentExtraInfoSaveModel();
+
   constructor(
     private TheoryMarksService: TheoryMarksService,
     private loaderService: LoaderService,
@@ -52,11 +62,25 @@ export class TheoryMarksRptViewComponent {
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
     private toastr: ToastrService,
-    private commonFunctionHelper: CommonFunctionHelper
+    private commonFunctionHelper: CommonFunctionHelper,
+    private formBuilder: FormBuilder,
+    private Swal2: SweetAlert2,
+    private modalService: NgbModal
   ) {
   }
 
   async ngOnInit() {
+
+    this.ufmLetterForm = this.formBuilder.group({
+      txtEnrollmentNo: ['', [Validators.required]],
+      txtSerialNo: ['', [Validators.required]],
+      txtSerialNo2: ['', [Validators.required]],
+      txtIssueDate: ['', [Validators.required]],
+      txtBundleSendDate: ['', [Validators.required]],
+      txtDate2: ['', [Validators.required]],
+      ddlExamCategory: [0, [DropdownValidators]]
+    });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     // if(this.sSOLoginDataModel.RoleID == EnumRole.Examiner) {
@@ -107,14 +131,14 @@ export class TheoryMarksRptViewComponent {
   }
 
   async GetTheoryMarksDetailList() {
-    debugger
+    //debugger
     try {
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      
+
       // this.searchRequest.IsConfirmed = this.IsConfirmed = true;
 
       // //group code id
@@ -372,7 +396,7 @@ export class TheoryMarksRptViewComponent {
     const minutes = String(now.getMinutes()).padStart(2, '0');
 
     const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
-    
+
     return `Theory_marks_report_data_${timestamp}.${extension}`;
   }
 
@@ -381,9 +405,13 @@ export class TheoryMarksRptViewComponent {
       const request: any = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         EndTermID: this.sSOLoginDataModel.EndTermID,
-        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
         isUFM: 1,
-        EnrollmentNo: row?.EnrollmentNo   // assuming row contains it
+        EnrollmentNo: row?.EnrollmentNo,   // assuming row contains it
+        UFMStuExtraInfoID: row?.UFMStuExtraInfoID,  // assuming row contains it
+        StudentID: row?.StudentID,  // assuming row contains it
+        StudentExamID: row?.StudentExamID,   // assuming row contains it
+        StudentExamPaperID: row?.StudentExamPaperID   // assuming row contains it
       };
 
       let data: any = await this.reportService.GetUFMLetter(request);
@@ -394,9 +422,6 @@ export class TheoryMarksRptViewComponent {
         this.toastr.error(data?.Message || 'No file received');
       }
 
-
-
-
       console.log(data); // handle response here
     } catch (error) {
       console.error(error);
@@ -404,9 +429,94 @@ export class TheoryMarksRptViewComponent {
   }
 
 
+  // for ufm letter extra information to be print in ufm letter    
+  async OpenGetUFMStudentExtraInfo(ngTempleteModel: any, itemRow: any) {
+    try {
+      // get
+      await this.GetUFMStudentExtraInfo(itemRow);
+      // model
+      this.modalReference = this.modalService.open(ngTempleteModel, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async GetUFMStudentExtraInfo(itemRow: any) {
+    try {
+      //debugger
+      // model
+      this.getufmStudentExtraInfo.StudentID = itemRow.StudentID;
+      this.getufmStudentExtraInfo.UFMStuExtraInfoID = itemRow.UFMStuExtraInfoID;
+      this.getufmStudentExtraInfo.StudentExamID = itemRow.StudentExamID;
+      this.getufmStudentExtraInfo.StudentExamPaperID = itemRow.StudentExamPaperID;
+      // session
+      this.getufmStudentExtraInfo.RoleID = this.sSOLoginDataModel.RoleID;
+      this.getufmStudentExtraInfo.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.getufmStudentExtraInfo.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.getufmStudentExtraInfo.EndTermID = this.sSOLoginDataModel.EndTermID;
+
+      // get
+      await this.TheoryMarksService.GetUFMStudentExtraInfo(this.getufmStudentExtraInfo)
+        .then((res: any) => {
+          let _data = JSON.parse(JSON.stringify(res));  
+          if (res.State == EnumStatus.Success) {
+            this.saveufmStudentExtraInfo = _data['Data'];
+          }
+          else if (res.State == EnumStatus.Warning) {
+            this.toastr.warning(res.Message);
+          }
+          else {
+            this.toastr.error(res.Message);
+            console.log(res.ErrorMessage);
+          }
+        }, (error: any) => console.log(error));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async SaveUFMStudentExtraInfo() {
+    try {
+      //debugger
+      this.isSubmitted = true;
+
+      if (this.ufmLetterForm.invalid) {
+        return;
+      }
+
+      // model
+      this.saveufmStudentExtraInfo.RoleID = this.sSOLoginDataModel.RoleID;
+      this.saveufmStudentExtraInfo.ModifyBy = this.sSOLoginDataModel.UserID;
 
 
+      // save
+      await this.TheoryMarksService.SaveUFMStudentExtraInfo(this.saveufmStudentExtraInfo)
+        .then(async (res: any) => {
+          if (res.State == EnumStatus.Success) {
+            this.CloseUFMStudentExtraInfoModal();
+            await this.GetTheoryMarksDetailList(); // grid list refresh after save
+            this.toastr.success(res.Message);
+          }
+          else if (res.State == EnumStatus.Warning) {
+            this.toastr.warning(res.Message);
+          }
+          else {
+            this.toastr.error(res.Message);
+            console.log(res.ErrorMessage);
+          }
+        }, (error: any) => console.log(error));
 
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
+  CloseUFMStudentExtraInfoModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.getufmStudentExtraInfo = new UFMStudentExtraInfoGetModel();
+    this.saveufmStudentExtraInfo = new UFMStudentExtraInfoSaveModel();
+    this.isSubmitted = false;
+  }
 
 }
