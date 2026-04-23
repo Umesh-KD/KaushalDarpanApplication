@@ -628,7 +628,12 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
     });
    
     this.EditDataFormGroup.get('StreamID')?.disable();
-    this.EditDataFormGroup.get('ShiftId')?.disable();
+
+    if (item.SeatIntakeID > 0) {
+      this.EditDataFormGroup.get('ShiftId')?.disable();
+    }
+
+   
     console.log(this.EditDataFormGroup.value)
   }
 
