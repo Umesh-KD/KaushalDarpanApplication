@@ -34,43 +34,59 @@
           </div>
 
           <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+                      <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
 
-          <ng-select [(ngModel)]="searchRequest.InstituteID"
-                     formControlName="ddlInstitute" [clearable]="false">
-            <ng-option [value]="0" selected>--All--</ng-option>
-            @for (item of InstituteMasterList; track item.InstituteID) {
-            <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
-            }
-          </ng-select>
+                    <ng-select [(ngModel)]="searchRequest.InstituteID"
+                               formControlName="ddlInstitute" [clearable]="false">
+                      <ng-option [value]="0" selected>--All--</ng-option>
+                      @for (item of InstituteMasterList; track item.InstituteID) {
+                      <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+                      }
+                    </ng-select>
+                    </div>
+
+
+                    <div>
+                      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+
+
+                    <ng-select [(ngModel)]="searchRequest.StreamID"
+                               formControlName="ddlStream" [clearable]="false">
+                      <ng-option [value]="0" selected>--All--</ng-option>
+                      @for (item of StreamMasterDDLList; track item.StreamID) {
+                      <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+                      }
+                    </ng-select>
+                    </div>
+          -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+            <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID"
+                    formControlName="ddlSemester" (change)="GetRevelData()">
+              <option [ngValue]="0">-- Select --</option>
+              <option *ngFor="let item of SemesterMasterDDLList" [ngValue]="item.SemesterID">
+                {{item.SemesterName}}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted && SearchForm.get('ddlSemester').errors" class="text-danger">
+              <p *ngIf="!SearchForm.get('ddlSemester').errors.DropdownValidators"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
           </div>
-
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
-
-
-          <ng-select [(ngModel)]="searchRequest.StreamID"
-                     formControlName="ddlStream" [clearable]="false">
-            <ng-option [value]="0" selected>--All--</ng-option>
-            @for (item of StreamMasterDDLList; track item.StreamID) {
-            <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
-            }
-          </ng-select>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+            <select class="form-select" id="SchemeID" [(ngModel)]="searchRequest.SchemeID"
+                    formControlName="ddlSchemeID" (change)="GetRevelData()">
+              <option [ngValue]="0">-- Select --</option>
+              <option [ngValue]="1347">Old</option>
+              <option [ngValue]="1348">New</option>
+            </select>
+            <div *ngIf="isSubmitted && SearchForm.get('ddlSchemeID').errors" class="text-danger">
+              <p *ngIf="!SearchForm.get('ddlSchemeID').errors.DropdownValidators"><i aria-hidden="true"></i>This field is required!</p>
+            </div>
           </div>
 
-            <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
-                <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID"
-                    formControlName="ddlSemester">
-                    <option value="0">--All--</option>
-                    <option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
-                        {{item.SemesterName}}
-                    </option>
-                </select>
-            </div> -->
-
-          <div class="flex">
+          <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="GetRevelData()">
               Search
             </button>
@@ -94,23 +110,28 @@
             Generate Reval Roll No
           </button>
 
-          <button class="btn bg-success text-white" *ngIf="(_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus == _EnumRollNoStatus.Verified"
+          <!--<button class="btn bg-success text-white" *ngIf="(_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus == _EnumRollNoStatus.Verified"
+                  (click)="openModalGenerateOTP(modal_GenrateOTP)"
+                  type="button">
+            Publish Reval
+          </button>-->
+
+          <button class="btn bg-success text-white" *ngIf="(_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus == _EnumRollNoStatus.Generated"
                   (click)="openModalGenerateOTP(modal_GenrateOTP)"
                   type="button">
             Publish Reval
           </button>
 
-          <button *ngIf=" (_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus==_EnumRollNoStatus.Generated"
+          <!--<button *ngIf=" (_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus==_EnumRollNoStatus.Generated"
                   class="btn bg-success text-white" (click)="ForwardRevalRollNo()" type="button">
             <i class="fa fa-check"></i> Forward for Verify
-          </button>
-
-          @if((isAnyForwarded()==true || isAnyVerified()==true) && isAllVerified()==false)
+          </button>-->
+          <!--@if((isAnyForwarded()==true || isAnyVerified()==true) && isAllVerified()==false)
           {
           <b class="text-danger pull-right">
             "Reval Roll number forwarded for verification. After successful verification, the 'Publish' button will be displayed to publish the reval roll number."
           </b>
-          }
+          }-->
 
         </div>
         <div class="flex justify-between">
@@ -143,13 +164,17 @@
                       (change)="checkboxthView_checkboxchange(checkboxSeletedAll.checked)">
               </th> -->
 
+              <th class="text-left">Group Code </th>
+              <th class="text-left">CC Code </th>
+              <th class="text-left">Branch Name </th>
+              <th class="text-left">Roll No </th>
+              <th class="text-left">Enrollment No</th>
               <th class="text-left">Student Name </th>
               <th class="text-left">Father's Name</th>
               <th class="text-left">Institute Name </th>
-              <th class="text-left">Branch Name </th>
               <th class="text-left">Semester Name</th>
-              <th class="text-left">Enrollment No</th>
-              <th class="text-left">Roll No</th>
+              <th class="text-left">Subject Code</th>
+              <th class="text-left">Revel Roll No</th>
               <th class="text-left">Status</th>
 
             </tr>
@@ -161,12 +186,16 @@
 
                   <input type="checkbox" name="MarkCheck" [(ngModel)]="row.Marked" />
               </td> -->
+              <td class="text-left">{{row.GroupCode}} </td>
+              <td class="text-left">{{row.CCCode}} </td>
+              <td class="text-left">{{row.StreamName}}</td>
+              <td class="text-left">{{row.Org_Stu_RollNumber}} </td>
+              <td class="text-left">{{row.EnrollmentNo}}</td>
               <td class="text-left">{{row.StudentName}} </td>
               <td class="text-left">{{row.FatherName}}</td>
               <td class="text-left">{{row.InstituteName}}</td>
-              <td class="text-left">{{row.StreamName}}</td>
               <td class="text-left">{{row.SemesterName}}</td>
-              <td class="text-left">{{row.EnrollmentNo}}</td>
+              <td class="text-left">{{row.SubjectCode}}</td>
               <td class="text-left">{{row.RollNumber}}</td>
               <td class="text-left">{{row.Status}}</td>
             </tr>

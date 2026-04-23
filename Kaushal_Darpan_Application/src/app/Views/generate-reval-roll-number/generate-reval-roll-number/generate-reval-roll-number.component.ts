@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { EnumRole, EnumRollNoStatus, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { GenerateRollData, GenerateRollSearchModel } from '../../../Models/GenerateRollDataModels';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { GenerateRevalRollData, GenerateRollData, GenerateRollSearchModel } from '../../../Models/GenerateRollDataModels';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
@@ -12,6 +12,7 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { GetRollService } from '../../../Services/GenerateRoll/generate-roll.service';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
   selector: 'app-generate-reval-roll-number',
@@ -72,10 +73,12 @@ export class GenerateRevalRollNumberComponent {
     this.SearchForm = this.formBuilder.group(
       {
         // ddlInstitute: [''],
-        // ddlSemester: [''],
+        ddlSemester: ['', [DropdownValidators]],
+        ddlSchemeID: ['', [DropdownValidators]],
         // ddlStream: [''],
         VerifierStatusID: ['']
       })
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     await this.getSemesterMasterList();
@@ -93,7 +96,7 @@ export class GenerateRevalRollNumberComponent {
         .then((data: any) => {
           this.VerifierStatusDDL = data['Data'];
 
-          this.VerifierStatusDDL = this.VerifierStatusDDL.filter((f: any) => f.ID != EnumRollNoStatus.Published);
+          this.VerifierStatusDDL = this.VerifierStatusDDL.filter((f: any) => f.ID == EnumRollNoStatus.Generated || f.ID == EnumRollNoStatus.Published);
         }, (error: any) => console.error(error)
         );
     }
@@ -277,16 +280,16 @@ export class GenerateRevalRollNumberComponent {
     //   this.toastr.error('Please select at least one students(s)!');
     //   return;
     // }
-    const studentsWithoutRollNumber = this.StudentList.filter(x => !x.RollNumber || x.RollNumber == '' || x.RollNumber == '0' || x.RollNumber == null || x.RollNumber == undefined);
 
+    // Collect names of students without a roll number
+    const studentsWithoutRollNumber = this.StudentList.filter(x => !x.RollNumber || x.RollNumber == '' || x.RollNumber == '0' || x.RollNumber == null || x.RollNumber == undefined);
     if (studentsWithoutRollNumber.length > 0) {
-      // Collect names of students without a roll number
       const names = studentsWithoutRollNumber.map(student => student.StudentName).join(', ');
       this.toastr.error(`The Selected students do not have a roll number: ${names}`);
       return;
     }
 
-    this.Swal2.Confirmation("Are you sure you want to publish?", async (result: any) => {
+    this.Swal2.Confirmation("Are you sure you want to Publish Reval Roll No?", async (result: any) => {
       // Check if the user confirmed the action
       if (result.isConfirmed) {
         this.isSubmitted = true;
@@ -364,16 +367,19 @@ export class GenerateRevalRollNumberComponent {
   //For Revel
   async GetRevelData() {
     try {
+
       this.isSubmitted = true;
       if (this.SearchForm.invalid) {
         return
       }
+      this.isSubmitted = false;
+
       this.StudentList = []
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      this.loaderService.requestStarted();
+
       //call
       await this.GetRollService.GetGenerateRevelData(this.searchRequest)
         .then((data: any) => {
@@ -389,11 +395,6 @@ export class GenerateRevalRollNumberComponent {
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
   //Generate Revel
   async SaveAllRevelData() {
@@ -405,10 +406,10 @@ export class GenerateRevalRollNumberComponent {
       }
 
       //if any pending to publish
-      if (this.isAnyForwarded() || this.isAnyVerified()) {
-        this.toastr.warning("Please clear the pending process of verifier then generate!");
-        return;
-      }
+      //if (this.isAnyForwarded() || this.isAnyVerified()) {
+      //  this.toastr.warning("Please clear the pending process of verifier then generate!");
+      //  return;
+      //}
 
       this.Swal2.Confirmation("Are you sure you want to Generate Reval Roll No?", async (result: any) => {
         if (result.isConfirmed) {
@@ -421,13 +422,40 @@ export class GenerateRevalRollNumberComponent {
           this.isSubmitted = true;
 
           // const selectedStudents = this.StudentList.filter(student => student.Marked)
-          this.StudentList.forEach((item) => {
-            item.ModifyBy = this.sSOLoginDataModel.UserID
-            item.VerifyerStatus = EnumRollNoStatus.Generated
-            item.RoleID = this.sSOLoginDataModel.RoleID
-          })
+
+          // set new model
+          let generateRevalRollDataModel: GenerateRevalRollData[] =
+            this.StudentList.map(item => {
+              let model = new GenerateRevalRollData();
+
+              model.StudentID = item.StudentID;
+              model.StudentExamID = item.StudentExamID;
+              model.EnrollmentNo = item.EnrollmentNo;
+              model.InstituteID = item.InstituteID;
+              model.StreamID = item.StreamID;
+              model.SemesterID = item.SemesterID;
+              model.PublishOrder = item.PublishOrder;
+
+              model.SubjectCode = item.SubjectCode;
+              model.CCCode = item.CCCode;
+              model.GroupCode = item.GroupCode;
+              model.StreamCode = item.StreamCode;
+              model.StudentExamPaperID = item.StudentExamPaperID;
+              model.EndTermID = item.EndTermID;
+              model.Eng_NonEng = item.Eng_NonEng;
+              model.DepartmentID = item.DepartmentID;
+              model.SchemeID = item.SchemeID;
+
+              // session / extra fields
+              model.ModifyBy = this.sSOLoginDataModel.UserID;
+              model.VerifyerStatus = EnumRollNoStatus.Generated;
+              model.RoleID = this.sSOLoginDataModel.RoleID;
+
+              return model;
+            });
+
           // call
-          await this.GetRollService.SaveAllRevelData(this.StudentList)
+          await this.GetRollService.SaveAllRevelData(generateRevalRollDataModel)
             .then(async (data: any) => {
 
               if (data.State == EnumStatus.Success) {
@@ -457,15 +485,44 @@ export class GenerateRevalRollNumberComponent {
     //debugger
     this.isSubmitted = true;
     try {
+      //debugger
+      // verified
+      //let selectedStudents = this.StudentList.filter(student => student.VerifyerStatus == EnumRollNoStatus.Verified)
+      let selectedStudents = this.StudentList.filter(student => student.VerifyerStatus == EnumRollNoStatus.Generated)
 
-      this.StudentList.forEach((item) => {
-        item.ModifyBy = this.sSOLoginDataModel.UserID
-        item.RoleID = this.sSOLoginDataModel.RoleID
-      })
+      // set new model
+      let generateRevalRollDataModel: GenerateRevalRollData[] =
+        selectedStudents.map(item => {
+          let model = new GenerateRevalRollData();
 
-      const selectedStudents = this.StudentList.filter(student => student.VerifyerStatus == EnumRollNoStatus.Verified)
+          model.StudentID = item.StudentID;
+          model.StudentExamID = item.StudentExamID;
+          model.EnrollmentNo = item.EnrollmentNo;
+          model.InstituteID = item.InstituteID;
+          model.StreamID = item.StreamID;
+          model.SemesterID = item.SemesterID;
+          model.PublishOrder = item.PublishOrder;
+
+          model.SubjectCode = item.SubjectCode;
+          model.CCCode = item.CCCode;
+          model.GroupCode = item.GroupCode;
+          model.StreamCode = item.StreamCode;
+          model.StudentExamPaperID = item.StudentExamPaperID;
+          model.EndTermID = item.EndTermID;
+          model.Eng_NonEng = item.Eng_NonEng;
+          model.DepartmentID = item.DepartmentID;
+          model.SchemeID = item.SchemeID;
+
+          // session / extra fields
+          model.ModifyBy = this.sSOLoginDataModel.UserID;
+          model.VerifyerStatus = EnumRollNoStatus.Published;
+          model.RoleID = this.sSOLoginDataModel.RoleID;
+
+          return model;
+        });
+
       // call
-      await this.GetRollService.OnPublishRevelData(selectedStudents)
+      await this.GetRollService.OnPublishRevelData(generateRevalRollDataModel)
         .then(async (data: any) => {
 
           if (data.State == EnumStatus.Success) {
