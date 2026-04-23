@@ -448,6 +448,34 @@ export class ItiCollegeReportComponent {
     //  });
     //}
 
+
+    if (this.sSOLoginDataModel.RoleID == 260) {
+      const controlsToFreeze = [
+        'NodalOrderDate',
+        'NodalOrderNo',
+        'NodalPostAddresss',
+        'PrincipleEmailID',
+        'PrincipleMobile',
+        'PrincipleName',
+        'NodalIti',
+        'NodalItiCode'
+
+        //'MISCode',
+        //'ConstructionAgency'
+
+
+      ];
+
+      controlsToFreeze.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.disable();  // ❄️ Freeze input
+        }
+      });
+    }
+
+
+
     if (this.TypeID == 1) {
       this.ReportForm.disable()
       this.NewReportFormGroup.disable()
@@ -1251,7 +1279,7 @@ export class ItiCollegeReportComponent {
       await this.GetAssemblyITI();
       await this.GetGramPanchayatSamiti();
       await this.villageMaster();
-
+     
       this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData.Data['GramPanchayatSamiti']);
       this.ReportForm.get('DivisionID')?.setValue(parsedData.Data['DivisionID']);
       this.ReportForm.get('DistrictID')?.setValue(parsedData.Data['DistrictID']);

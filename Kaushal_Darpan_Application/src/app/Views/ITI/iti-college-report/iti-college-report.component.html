@@ -457,7 +457,7 @@
           </div>
 
 
-          <div *ngIf="request.IsNewCollege==1 && ApplicationID==0" class="mt-6">
+          <div *ngIf="request.IsNewCollege==1 && request.Eid==0" class="mt-6">
             <button type="button"
                     class="btn bg-info text-white px-4 py-2 rounded"
                     (click)="GetDetails()">
@@ -523,7 +523,7 @@
 
 
 
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20 " class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5">Nodal ITI Details</b>
       </div>
 
@@ -619,7 +619,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Copy<span class="StarMarking">*</span> </label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="PrincipalOrderCopy " type="file" (change)="onFilechange($event,'PrincipalOrderCopy ')" />
+                   id="PrincipalOrderCopy " type="file" (change)="onFilechange($event,'PrincipalOrderCopy ')" [disabled]="sSOLoginDataModel.RoleID==260 || sSOLoginDataModel.RoleID==20" />
 
             <label for="PrincipalOrderCopy ">
               <span>Choose File</span>
