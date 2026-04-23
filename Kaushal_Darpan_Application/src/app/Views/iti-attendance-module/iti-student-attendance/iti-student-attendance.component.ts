@@ -72,6 +72,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   yesterdayDate: string;
   sevenDaysLater: Date = new Date();
   selectedRange: { start: Date, end: Date } | null = null;
+  isDisabledButton: boolean = false;
 
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
@@ -711,10 +712,13 @@ isPresent(value: any): boolean {
     if (!value) return false;
     const v = String(value);
     if (v.includes('(U)')) return false;
-    if (v.includes('(F)'))
-    {
+    if (v.includes('(F)')) {
+      this.isDisabledButton = true;
 
       return true;
+    }
+    else {
+      this.isDisabledButton = false;
     }
     return false;
   }
