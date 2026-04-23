@@ -42,6 +42,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
   todayDate: string = '';
+  maxDate: string = ''; 
   SubjectMasterDDL: any[] = [];
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -102,6 +103,8 @@ export class ITIStudentAttendanceComponent implements OnInit {
     {
       this.isreaasign = false
     }
+
+
     this.getMasterData();
     const today = new Date();
     const yesterday = new Date();
@@ -147,8 +150,16 @@ export class ITIStudentAttendanceComponent implements OnInit {
       AttendanceStartDateRavi:[]
     });
 
-    this.getSubjectMasterDDL(this.streamId, this.semesterId);
+
  
+  
+
+
+    this.getSubjectMasterDDL(this.streamId, this.semesterId);
+
+
+
+
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
@@ -182,6 +193,12 @@ export class ITIStudentAttendanceComponent implements OnInit {
     this.getMasterData()
   }
 
+  formatDateOnly(value: Date): string {
+    const y = value.getFullYear();
+    const m = String(value.getMonth() + 1).padStart(2, '0');
+    const d = String(value.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
 
   onStartDateChange(event: any) {
     const startDate = event.target.value;
@@ -352,9 +369,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
                 const columnValues = this.filterData.map((row: any) => row[key]);
 
-                const isFrozen = columnValues.some((value: any) =>
-                  value != null && String(value).includes('(F)')
-                );
+                const isFrozen = columnValues.some((value: any) => this.isFinalSubmitted(String(value || '')));
 
                 return {
                   originalKey: key,
@@ -390,6 +405,12 @@ export class ITIStudentAttendanceComponent implements OnInit {
     }
 
   }
+
+  isColumnFrozen(columnKey: string): boolean {
+    return this.filterData.some((row: any) => this.isDisabled(row[columnKey]));
+  }
+
+
   isFinalSubmitted(value: any): boolean {
   return value?.includes('(F)');
 }

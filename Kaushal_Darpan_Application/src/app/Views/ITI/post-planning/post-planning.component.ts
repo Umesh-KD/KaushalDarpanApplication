@@ -524,45 +524,171 @@ export class PostPlanningComponent {
       }, 200);
     }
   }
-
   async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
-    
+    debugger;
     try {
-      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
 
-      if (userSubmitData) {
+      // ✅ FIX: remove focus from background element
+      (document.activeElement as HTMLElement)?.blur();
+
+      this.modalReference = this.modalService.open(model, {
+        size: 'sm',
+        backdrop: 'static'
+      });
+
+      if (userSubmitData != null) {
+
         this.formData = userSubmitData;
 
+        // ✅ Load dropdown first
+        await this.fillupDesignation();
+        this.formData.PlanningID = this.formData.InstituteID;
+        await this.GetTradeData();
+        // ✅ Then patch values
+       
+
+        this.groupForm.patchValue({
+          DesignationID: Number(this.formData.DesignationID),
+          TradeID: Number(this.formData.TradeID),
+          InstituteID: Number(this.formData.InstituteID)
+        });
+
+        // ✅ Your original logic (unchanged)
         if (this.formData.PostedSeat !== 0) {
 
           this.groupForm.get('OfficeID')?.disable();
           this.groupForm.get('StaffTypeID')?.disable();
-          /* this.groupForm.get('DesignationID')?.disable();*/
+          this.groupForm.get('DesignationID')?.disable();
+
           if (this.formData.InstituteID !== 0) {
-            this.groupForm.get('InstituteID')?.disable();
+            this.formData.PlanningID = this.formData.InstituteID;
+            this.groupForm.get('ddlCollege')?.disable();
           }
+
         } else {
+
           this.groupForm.get('OfficeID')?.enable();
           this.groupForm.get('StaffTypeID')?.enable();
-          /* this.groupForm.get('DesignationID')?.enable();*/
+          this.groupForm.get('DesignationID')?.enable();
+
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.enable();
           }
         }
 
-        // No need to re-assign DesignationID if it's part of userSubmitData
-        // this.formData.DesignationID = userSubmitData.DesignationID;
       } else {
-        this.formData = new ITIOfficeVacancyModel(); // or initialize with default values if needed
+        this.formData = new ITIOfficeVacancyModel();
+        this.groupForm.reset();
       }
-
-      // If fillupDesignation is async, await it
-      await this.fillupDesignation();
 
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   }
+  //async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
+  //  debugger;
+  //  try {
+  //    this.modalReference = this.modalService.open(model, {
+  //      size: 'sm',
+  //      backdrop: 'static'
+  //    });
+
+  //    if (userSubmitData != null) {
+
+  //      // Assign data
+  //      this.formData = { ...userSubmitData };
+
+  //      // ✅ FIRST load dropdown data
+  //      await this.fillupDesignation();
+
+  //      // ✅ THEN patch values (important)
+  //      this.groupForm.patchValue({
+  //        DesignationID: Number(this.formData.DesignationID),
+  //        TradeID: Number(this.formData.TradeID),
+  //        InstituteID: Number(this.formData.InstituteID)
+  //      });
+
+  //      // ✅ Handle disable/enable logic
+  //      if (this.formData.PostedSeat !== 0) {
+
+  //        this.groupForm.get('OfficeID')?.disable();
+  //        this.groupForm.get('StaffTypeID')?.disable();
+
+  //        if (this.formData.InstituteID !== 0) {
+  //          this.formData.PlanningID = this.formData.InstituteID;
+  //          this.groupForm.get('ddlCollege')?.disable();
+  //        }
+
+  //      } else {
+
+  //        this.groupForm.get('OfficeID')?.enable();
+  //        this.groupForm.get('StaffTypeID')?.enable();
+
+  //        if (this.formData.InstituteID !== 0) {
+  //          this.groupForm.get('InstituteID')?.enable();
+  //        }
+  //      }
+
+  //    } else {
+  //      this.formData = new ITIOfficeVacancyModel();
+  //      this.groupForm.reset();
+  //    }
+
+  //  } catch (error) {
+  //    console.error('Error fetching data:', error);
+  //  }
+  //}
+  //async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
+  //  debugger
+  //  try {
+  //    this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+  //    if (userSubmitData!=null) {
+  //      this.formData = userSubmitData;
+  //      this.formData.DesignationID = userSubmitData.DesignationID
+
+  //      this.formData.InstituteID = this.formData.InstituteID
+
+  //      this.groupForm.patchValue({
+  //        DesignationID: this.formData.DesignationID,
+  //        TradeID: this.formData.TradeID,
+  //        InstituteID: this.formData.InstituteID
+
+  //      });
+  //      await this.fillupDesignation();
+  //      if (this.formData.PostedSeat !== 0) {
+
+  //        this.groupForm.get('OfficeID')?.disable();
+  //        this.groupForm.get('StaffTypeID')?.disable();
+  //        //this.groupForm.get('DesignationID')?.disable();
+  //        if (this.formData.InstituteID !== 0) {
+  //          this.formData.PlanningID = this.formData.InstituteID
+  //          this.groupForm.get('ddlCollege')?.disable();
+  //        }
+  //      } else {
+
+
+  //        this.groupForm.get('OfficeID')?.enable();
+  //        this.groupForm.get('StaffTypeID')?.enable();
+  //        //this.groupForm.get('DesignationID')?.enable();
+  //        if (this.formData.InstituteID !== 0) {
+  //          this.groupForm.get('InstituteID')?.enable();
+  //        }
+  //      }
+
+        
+
+       
+  //    } else {
+  //      this.formData = new ITIOfficeVacancyModel(); // or initialize with default values if needed
+  //    }
+
+  //    // If fillupDesignation is async, await it
+      
+
+  //  } catch (error) {
+  //    console.error('Error fetching data:', error);
+  //  }
+  //}
 
 
 
@@ -584,7 +710,8 @@ export class PostPlanningComponent {
     this.SaveData()
   }
 
-  async VacancyPostUpdate() {    
+  async VacancyPostUpdate() {
+    debugger
     try {
       if (this.formData.ID != 0) {
         await this.ITIGovtEMStaffMaster.UpdateOfficeVacancy(this.formData).then(async (data: any) => {

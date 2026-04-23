@@ -5,6 +5,7 @@ import { ItiCollegeReportRoutingModule } from './iti-college-report-routing.modu
 import { ItiCollegeReportComponent } from './iti-college-report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OTPModalModule } from '../../otpmodal/otpmodal.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { OTPModalModule } from '../../otpmodal/otpmodal.module';
     ItiCollegeReportRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    OTPModalModule
+    OTPModalModule,
+    NgSelectModule
   ]
 })
 export class ItiCollegeReportModule { }

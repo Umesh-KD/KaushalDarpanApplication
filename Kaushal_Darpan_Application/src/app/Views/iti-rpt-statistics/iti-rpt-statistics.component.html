@@ -1,0 +1,76 @@
+<app-loader></app-loader>
+
+<div class="card">
+    <div class="card-body p-5">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> ITI RPT Statistics</b>
+            <div class="flex justify-end flex-wrap items-center">
+                <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadExcel()"><i
+                        class="ti ti-download"></i> Download Excel Sheet</a>
+                <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadPDF()"><i
+                        class="ti ti-download"></i> Download Pdf</a>
+                
+            </div>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div class="flex gap-3 items-center">
+
+                <div class="flex-1">
+                </div>
+            </div>
+            <div class="">
+            </div>
+        </div>
+        <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full text-center">
+                <thead>
+                    <tr>
+                        <th rowspan="2">Session</th>
+                        <th colspan="3">Government ITI</th>
+                        <th colspan="3">Private ITI</th>
+                        <th colspan="2">Female Participation</th>
+                        <th colspan="3">Dev Narayan Yojna</th>
+                    </tr>
+
+                    <tr>
+                        <th>No of ITI</th>
+                        <th>Training Seats</th>
+                        <th>Enroll Trainees</th>
+
+                        <th>No of ITI</th>
+                        <th>Training Seats</th>
+                        <th>Enroll Trainees</th>
+
+                        <th>Available Seats</th>
+                        <th>Enroll Trainees</th>
+
+                        <th>No of ITI</th>
+                        <th>Available Seats</th>
+                        <th>Enroll Trainees</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let x of data">
+                        <td>{{x.Session}}</td>
+
+                        <td>{{x.GovtITI_No}}</td>
+                        <td>{{x.GovtITI_TrainingSeats}}</td>
+                        <td>{{x.GovtITI_Enrolled}}</td>
+
+                        <td>{{x.PvtITI_No}}</td>
+                        <td>{{x.PvtITI_TrainingSeats}}</td>
+                        <td>{{x.PvtITI_Enrolled}}</td>
+
+                        <td>{{x.FemaleSeats}}</td>
+                        <td>{{x.FemaleEnrolled}}</td>
+
+                        <td>{{x.DevITI_No}}</td>
+                        <td>{{x.DevSeats}}</td>
+                        <td>{{x.DevEnrolled}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

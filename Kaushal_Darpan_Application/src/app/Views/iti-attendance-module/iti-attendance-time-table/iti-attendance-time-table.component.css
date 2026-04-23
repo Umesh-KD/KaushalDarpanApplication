@@ -1,1 +1,10 @@
 
+.mat-mdc-select {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+::ng-deep .mat-mdc-text-field-wrapper {
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 6px;
+}

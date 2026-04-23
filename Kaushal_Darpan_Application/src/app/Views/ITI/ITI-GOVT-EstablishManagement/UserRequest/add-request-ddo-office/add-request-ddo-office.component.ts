@@ -189,7 +189,7 @@ export class AddRequestDDOOfficeComponent {
   }
   async GetPostList() {
     try {
-      await this.commonMasterService.GetCommonMasterData('PostMaster', -1)
+      await this.commonMasterService.GetCommonMasterData('PostMaster', 0)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];

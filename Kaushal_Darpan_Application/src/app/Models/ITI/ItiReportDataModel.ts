@@ -2,7 +2,7 @@ export class ItiReportDataModel {
   public Eid:number=0
   public RoleID:number=0
   public PanchayatId:number=0
-  public CollegeID: number = 0
+  public CollegeID: number | null = null;
   public CollegeName: string = ''
   public LandTypeID: string = ''
   public Loksabha:string=''
@@ -93,6 +93,7 @@ export class ItiReportDataModel {
   public CityID: number = 0
   public AdministrativeBodyId: number = 0
   public SubDivisionID: number = 0
+  public InstitutionCategoryId: number = 0
   public OrderType: number = 0
   public OrderDetailsList: any[] = []
   public OtherDocument: any[] = []
@@ -128,12 +129,14 @@ export class ItiReportDataModel {
   public PlanDocument: string = ''
   public OrderDate: string = ''
   public PrincipalOrderCopy: string = ''
+  public CollegePlace: string = ''
   public PlanDocID:number=0
   public StatusID:number=0
   public PrincipleUserID: number = 0
   public Islanddetail:boolean=false
   public IsConstructdetail:boolean=false
   public IsElectricdetail:boolean=false
+  public IsDistrictHq:boolean=false
 
 }
 

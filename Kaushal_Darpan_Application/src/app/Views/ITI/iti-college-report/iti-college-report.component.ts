@@ -37,6 +37,7 @@ export class ItiCollegeReportComponent {
   public DivisionMasterList: any[] = [];
   public DISCOM: any[] = [];
   public ItiDDLlist: any[] = [];
+  public InstituteCategoryList: any[] = [];
   minDate: string = '';
   public ParliamentMaster: any[] = [];
   public AssemblyMaster: any[] = [];
@@ -144,6 +145,7 @@ export class ItiCollegeReportComponent {
         Pincode: ['', Validators.required],
 
         ContractLoad: [''],
+        CollegePlace: [''],
         BuildShortage: [''],
         IsHostel: ['', Validators.required],
         txtYear: ['', [Validators.required]],
@@ -160,10 +162,12 @@ export class ItiCollegeReportComponent {
         AdministrativeBodyId: ['', [DropdownValidators]],
         Category: ['', [DropdownValidators]],
         Ownership: ['', [DropdownValidators]],
-        CollegeID: ['',],
-        Islanddetail: ['',],
-        IsConstructdetail: ['',],
-        IsElectricdetail: ['',],
+        InstitutionCategoryId: ['', [DropdownValidators]],
+        CollegeID: [''],
+        Islanddetail: [''],
+        IsConstructdetail: [''],
+        IsElectricdetail: [''],
+        IsDistrictHq:[''],
         //AdministrativeeOrderNo: ['', Validators.required],
         //AdministrativeOrderDate: ['', Validators.required],
         FinancialSanction: ['', Validators.required],
@@ -305,6 +309,8 @@ export class ItiCollegeReportComponent {
     this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
     this.TypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('TypeID')?.toString());
 
+
+
     //await this.loadDropdownData('Board')
     //await this.GetStateMatserDDL()
     //await this.GetPassingYearDDL()
@@ -315,7 +321,7 @@ export class ItiCollegeReportComponent {
     if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
       this.resetValidatoresIPA();
     }
-
+    
     if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin || this.sSOLoginDataModel.RoleID == 260) {
       const controlsToFreeze = [
         'txtName',
@@ -343,7 +349,10 @@ export class ItiCollegeReportComponent {
         //'AdministrativeOrderDate',
         //'FinancialSanction',
         'ItiCode',
-        'AnnoucementType'
+        'AnnoucementType',
+        'IsDistrictHq',
+        'CollegePlace',
+        'InstitutionCategoryId'
         //'MISCode',
         //'ConstructionAgency'
 
@@ -439,6 +448,34 @@ export class ItiCollegeReportComponent {
     //  });
     //}
 
+
+    if (this.sSOLoginDataModel.RoleID == 260) {
+      const controlsToFreeze = [
+        'NodalOrderDate',
+        'NodalOrderNo',
+        'NodalPostAddresss',
+        'PrincipleEmailID',
+        'PrincipleMobile',
+        'PrincipleName',
+        'NodalIti',
+        'NodalItiCode'
+
+        //'MISCode',
+        //'ConstructionAgency'
+
+
+      ];
+
+      controlsToFreeze.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.disable();  // ❄️ Freeze input
+        }
+      });
+    }
+
+
+
     if (this.TypeID == 1) {
       this.ReportForm.disable()
       this.NewReportFormGroup.disable()
@@ -470,6 +507,7 @@ export class ItiCollegeReportComponent {
     await this.GetLateralCourse()
     await this.GetcOmmonData()
     await this.GetDocumentPlan()
+    await this.GetInstituteCategoryList()
     /*    await this.GetOrderList()*/
 
 
@@ -558,6 +596,22 @@ export class ItiCollegeReportComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+
+
+  async GetInstituteCategoryList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCollegeCategory().then((data: any) => {
+        this.InstituteCategoryList = data.Data;
+        this.InstituteCategoryList = this.InstituteCategoryList.filter((e: any) => e.ID != 20)
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loaderService.requestEnded();
     }
   }
 
@@ -759,10 +813,27 @@ export class ItiCollegeReportComponent {
 
     /*    this.nonItiValidator()*/
 
-    if (this.request.IsNewCollege == 0 && this.request.CollegeID == 0) {
+    if (this.request.IsNewCollege == 0 && this.request.CollegeID == 0 || this.request.CollegeID == null && this.request.IsNewCollege == 0) {
       this.toastr.warning("Please Select Iti")
       return
     }
+
+
+    if (this.request.IsNewCollege == 0) {
+      this.request.IsDistrictHq = false
+      this.request.CollegePlace = ''
+    }
+
+    if (this.request.IsDistrictHq == true) {
+      this.request.CollegePlace=''
+    }
+
+    if (this.request.IsNewCollege == 1 && this.request.CollegePlace == '' && this.request.IsDistrictHq==true) {
+      this.toastr.warning("Please Enter Iti Place")
+      return
+    }
+
+
 
 
     if (this.request.IsNewCollege == 1 && this.request.CollegeName == '') {
@@ -812,6 +883,11 @@ export class ItiCollegeReportComponent {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
 
       this.request.RoleID = this.sSOLoginDataModel.RoleID
+
+      if (this.request.CollegeID == null) {
+        this.request.CollegeID=0
+      }
+
       //save
       await this.ApplicationService.SaveDataReport(this.request)
         .then((data: any) => {
@@ -1203,7 +1279,7 @@ export class ItiCollegeReportComponent {
       await this.GetAssemblyITI();
       await this.GetGramPanchayatSamiti();
       await this.villageMaster();
-
+     
       this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData.Data['GramPanchayatSamiti']);
       this.ReportForm.get('DivisionID')?.setValue(parsedData.Data['DivisionID']);
       this.ReportForm.get('DistrictID')?.setValue(parsedData.Data['DistrictID']);
@@ -1458,7 +1534,7 @@ export class ItiCollegeReportComponent {
       IsMainITI: this.request.IsMainITI,
       IsBuildingTaken: this.request.IsBuildingTaken,
       TakenOverDate: this.request.TakenOverDate,
-      CollegeID: this.request.CollegeID,
+      CollegeID: this.request.CollegeID || 0,
       IsOperatingOwn: ''
     });
 
@@ -1470,7 +1546,7 @@ export class ItiCollegeReportComponent {
     this.request.IsMainITI = '';
     this.request.IsBuildingTaken = '';
     this.request.TakenOverDate = '';
-    this.request.CollegeID = 0;
+
 
 
     // Reset other unrelated fields (if required)
@@ -2683,7 +2759,8 @@ export class ItiCollegeReportComponent {
     this.request.PlanDocument = '',
       this.request.PlanDocID = 0
 
-  } async GetPrincipal(event: any) {
+  }
+  async GetPrincipal(event: any) {
     try {
       const code = event.target.value;
 
@@ -3012,6 +3089,51 @@ export class ItiCollegeReportComponent {
   //  this._ReportForm.get('DISCOM')?.setValue(0);
   //  this._ReportForm.get('SubDivOffice')?.setValue('');
   //}
+
+
+
+
+  async GetDetails() {
+    try {
+      let code = this.request.CollegePlace
+
+
+
+    
+
+
+      if (this.request.IsDistrictHq == true) {
+        code=''
+      }
+
+      let obj = {
+        MasterCode: 'Generatecollege',
+        FilterBy: code,
+        DistrictID: this.request.DistrictID,
+        CategoryID: this.request.InstitutionCategoryId
+      };
+
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.CommonMasterDataByAction(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.request.CollegeName = data['Data'][0]['CollegeName'];
+          this.request.ItiCode = data['Data'][0]['NextCode'];
+    
+        }, error => console.error(error));
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
 
   }
 

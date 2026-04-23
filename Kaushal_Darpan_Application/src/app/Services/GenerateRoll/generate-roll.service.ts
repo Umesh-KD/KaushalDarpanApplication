@@ -9,7 +9,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel';
 import { CommonSubjectDetailsMasterModel } from '../../Models/CommonSubjectDetailsMasterModel';
 import { GenerateEnrollData, GenerateEnrollSearchModel } from '../../Models/GenerateEnrollDataModel';
-import { DownloadnRollNoModel, GenerateRollData, GenerateRollSearchModel, VerifyRollNumberList } from '../../Models/GenerateRollDataModels';
+import { DownloadnRollNoModel, GenerateRevalRollData, GenerateRollData, GenerateRollSearchModel, VerifyRollNumberList } from '../../Models/GenerateRollDataModels';
 import { CollegeMasterSearchModel } from '../../Models/CollegeMasterDataModels';
 @Injectable({
   providedIn: 'root'
@@ -54,7 +54,7 @@ export class GetRollService {
       ).toPromise();
   }
 
-  public async SaveAllRevelData(request: GenerateRollData[]) {
+  public async SaveAllRevelData(request: GenerateRevalRollData[]) {
     const body = JSON.stringify(request);
 
     return this.http.post(`${this.APIUrl}/SaveAllRevelData`, body, this.headersOptions)
@@ -72,7 +72,7 @@ export class GetRollService {
       ).toPromise();
   }
 
-  public async OnPublishRevelData(request: GenerateRollData[]) {
+  public async OnPublishRevelData(request: GenerateRevalRollData[]) {
     const body = JSON.stringify(request);
 
     return this.http.post(`${this.APIUrl}/OnPublishRevelData`, body, this.headersOptions)

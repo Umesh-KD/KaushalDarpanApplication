@@ -52,6 +52,12 @@ export class GenerateRollData extends RequestBaseModel
   public VerifyerStatus: number = 0
   public PublishOrder: number = 0
   public VerifyerStatusName: string = ''
+  public SubjectCode?: string = ''
+  public CCCode?: string = ''
+  public GroupCode?: string = ''
+  public StreamCode?: string = ''
+  public StudentExamPaperID?: number = 0
+  public StudentExamID?: number = 0
   
   /*public Initialvalue :number=0*/
 }
@@ -113,4 +119,22 @@ export class VerifyRollNumberList {
 export class StudentAdmitCardDownloadModel extends RequestBaseModel {
   public RollNo?: string = '';
   public UserID?: number = 0; 
+}
+
+export class GenerateRevalRollData extends RequestBaseModel {
+  public StudentID: number = 0
+  public StudentExamID?: number = 0
+  public ApplicationID: number = 0
+  public EnrollmentNo: string = ''
+  public InstituteID: number = 0
+  public StreamID: number = 0
+  public SemesterID: number = 0
+  public ModifyBy: number = 0
+  public VerifyerStatus: number = 0
+  public PublishOrder: number = 0
+  public SubjectCode?: string = ''
+  public CCCode?: string = ''
+  public GroupCode?: string = ''
+  public StreamCode?: string = ''
+  public StudentExamPaperID?: number = 0
 }

@@ -1,0 +1,82 @@
+<app-loader></app-loader>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> ITI RPT Admission Seat Offered</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadPDF()"><i class="ti ti-download"></i> Download Pdf</a>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadExcel()"><i class="ti ti-download"></i> Download Excel Sheet</a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <!-- <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div> -->
+
+      <div class="flex gap-3 items-center">
+
+        <div class="flex-1">
+          <!-- <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">Gender:</label> -->
+          <!-- <select class="form-select" id="ddlIdentityProof" [(ngModel)]="Searchrequest.Gender" (change)="GetAllfinalHostelStudentMeritlist()">
+            <option value="0" selected>--Select Gender--</option>
+            <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+          </select> -->
+        </div>
+      </div>
+      <!-- <div class="">
+        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="onFinalMeritList()">Final Publish merit List</a>
+
+      </div> -->
+      <div class="">
+      </div>
+      <!-- <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div> -->
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto text-center">
+  <thead>
+    <tr>
+      <th rowspan="2">Session</th>
+      <th colspan="4">Government ITI</th>
+      <th colspan="4">Private ITI</th>
+      <th colspan="4">Total</th>
+    </tr>
+
+    <tr>
+      <th>No. Of ITI</th><th>Seat Offered</th><th>Admission</th><th>%</th>
+      <th>No. Of ITI</th><th>Seat Offered</th><th>Admission</th><th>%</th>
+      <th>No. Of ITI</th><th>Seat Offered</th><th>Admission</th><th>%</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let x of data">
+      <td>{{x.Session}}</td>
+
+      <td>{{x.Govt_ITI_Count}}</td>
+      <td>{{x.Govt_Seat_Offered}}</td>
+      <td>{{x.Govt_Admission}}</td>
+      <td>{{x.Govt_Percentage}}</td>
+
+      <td>{{x.Pvt_ITI_Count}}</td>
+      <td>{{x.Pvt_Seat_Offered}}</td>
+      <td>{{x.Pvt_Admission}}</td>
+      <td>{{x.Pvt_Percentage}}</td>
+
+      <td>{{x.Total_ITI_Count}}</td>
+      <td>{{x.Total_Seat_Offered}}</td>
+      <td>{{x.Total_Admission}}</td>
+      <td>{{x.Total_Percentage}}</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+  </div>
+</div>
