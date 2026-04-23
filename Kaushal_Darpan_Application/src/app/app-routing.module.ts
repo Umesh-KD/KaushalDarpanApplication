@@ -570,6 +570,8 @@ const routes: Routes = [
 
       { path: 'iti-attendance', loadChildren: () => import('./Views/iti-attendance-module/iti-attendance.module').then(m => m.ITIAttendanceTimeTableModule), title: 'ITI-Student-Enrollment' },
       { path: 'iti-rpt-admission-seatoffered', loadChildren: () => import('./Views/iti-rpt-admission-seat-offered/iti-rpt-admission-seat-offered.module').then(m => m.ITIRPTAdmissionSeatOfferedModule), title: 'ITI-RPT-Admission-SeatOffered' },
+      { path: 'iti-rpt-statistics', loadChildren: () => import('./Views/iti-rpt-statistics/iti-rpt-statistics.module').then(m => m.ItiRptStatisticsModule), title: 'ITI-RPT-statistics' },
+
 
 
       /*ITI-Inventory-Management-START*/
