@@ -113,7 +113,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       txtName: [{ value: '', disabled: true }],
       txtMobile: [{ value: '', disabled: true }],
       txtEmailID: [{ value: '', disabled: true }],
-      chkIsHod: [false],
+      // chkIsHod: [false],
       ddlDistrictID:['']
 
     })

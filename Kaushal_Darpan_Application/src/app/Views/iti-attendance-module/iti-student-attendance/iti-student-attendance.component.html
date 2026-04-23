@@ -1,3 +1,8 @@
+<style>
+  ::ng-deep .custom-button.mat-mdc-button-disabled {
+    background-color: #b0b0b0 !important;
+  }
+</style>
 <div class="card">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -62,15 +67,16 @@
 
 
       </div>
-      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 gap-6 mb-6">
+      <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 gap-6 mb-6">
         <div *ngIf="!isreaasign">
           <label class="form-label">Attendance Date<span class="StarMarking">*</span></label>
-          <div class="date-range-wrapper">
+          <div class="">
 
             <input type="date"
                    class="form-field w-60"
                    formControlName="AttendanceStartDate"
-                   (change)="onStartDateChange($event)" />
+                   [max]="todayDate"
+                   />
 
             <!--End Date:-->
             <!--<input type="date"
@@ -82,7 +88,14 @@
 
         <div *ngIf="isreaasign">
           <label class="form-label">Attendance Date<span class="StarMarking">*</span></label>
-          <div class="date-range-wrapper">
+          <input type="date"
+                 class="form-field w-60"
+                 formControlName="AttendanceStartDate"
+                 [min]="AttendanceStartDate"
+                 [max]="AttendanceEndDate" />
+
+
+          <!--<div class="date-range-wrapper">
             Start Date
             <input type="date"
                    class="form-field w-60"
@@ -92,10 +105,10 @@
 
             End Date:
             <input type="date"
-             class="form-field w-50"
-             formControlName="AttendanceEndDate"
-             [min]="minEndDate" />
-          </div>
+                   class="form-field w-50"
+                   formControlName="AttendanceEndDate"
+                   [min]="minEndDate" />
+          </div>-->
         </div>
         <div>
 
@@ -195,8 +208,8 @@
       <div class="table-footer">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2">
           <div>
-            <button mat-raised-button class="custom-button" type="button" (click)="saveAttendance()" *ngIf="filterData && filterData.length > 0">Save</button>
-            <button mat-raised-button class="custom-button ms-2" type="button" (click)="saveAttendancefinal()" *ngIf="filterData && filterData.length > 0">Final Save</button>
+            <button mat-raised-button [disabled]="isDisabled"  class="custom-button" type="button" (click)="saveAttendance()" *ngIf="filterData && filterData.length > 0">Save</button>
+            <button mat-raised-button  [disabled]="isDisabled"  class="custom-button ms-2" type="button" (click)="saveAttendancefinal()" *ngIf="filterData && filterData.length > 0">Final Save</button>
 
           </div>
           <div class="flex justify-end flex-wrap items-center">
