@@ -127,7 +127,8 @@
             <td>{{ leave.OfficeName }}</td>
             <td>{{ leave.StaffTypeName }}</td>
             <td>{{ leave.InstituteName }}</td>
-            <td>{{ leave.TradeName }}</td>
+            <!--<td>{{ leave.TradeName }}</td>-->
+            <td style="text-align: center;">{{ leave.TradeName ?? '-----' }}</td>
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.TotalSeatID }}</td>
             <td>{{ leave.PostedSeat }}</td>
@@ -136,10 +137,10 @@
             <td>{{ leave.Comments }}</td>
             <td>
               <!--<button class="btn btn-sm"
-                      [ngClass]="leave.ActiveStatus ? 'btn-success' : 'btn-danger'"
-                      (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">
-                {{ leave.ActiveStatus ? 'Active' : 'Inactive' }}
-              </button>-->
+            [ngClass]="leave.ActiveStatus ? 'btn-success' : 'btn-danger'"
+            (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">
+      {{ leave.ActiveStatus ? 'Active' : 'Inactive' }}
+    </button>-->
               <label class="switch">
                 <input type="checkbox"
                        [checked]="leave.ActiveStatus"
@@ -167,18 +168,18 @@
       <form [formGroup]="groupForm">
         <div class="card-body">
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: </label>
-            <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
-            </select>
-            <div *ngIf="isSubmitted&&_groupForm.ddlCollege.errors" class="text-danger">
-              <p *ngIf="!_groupForm.ddlCollege.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This field is required .!
-              </p>
-            </div>
-          </div>
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: </label>
+    <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+    <div *ngIf="isSubmitted&&_groupForm.ddlCollege.errors" class="text-danger">
+      <p *ngIf="!_groupForm.ddlCollege.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+  </div>-->
 
 
           <div>
@@ -194,12 +195,20 @@
             </div>
 
           </div>
+
           <div *ngIf="formData.OfficeID==11">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-            <select class="form-select" id="StudentExamYear" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [ngValue]="item.InstituteID">
+                {{item.InstituteName}}
+              </option>
             </select>
+
+            <!--<select class="form-select" id="StudentExamYear" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+    </select>-->
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -216,15 +225,34 @@
               </p>
             </div>
           </div>
+          <!--{{TradeList|json}}-->
+          <div *ngIf="groupForm.get('StaffTypeID')?.value == 2">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Trade: <span class="StarMarking">*</span>
+            </label>
 
-          <div *ngIf="formData.StaffTypeID==2">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
             <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of TradeList" [ngValue]="item.Id">
+                {{ item.TradeName }}
+              </option>
             </select>
-
           </div>
+
+          <!--<div *ngIf="formData.StaffTypeID==2">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
+    <select class="form-select" [(ngModel)]="formData.TradeID" formControlName="TradeID">
+      <option [ngValue]="0">--Select--</option>
+      <option *ngFor="let item of TradeList" [ngValue]="item.ID">
+        {{item.TradeName}}
+      </option>
+    </select>
+          <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
+    <option value="0">Choose Option</option>
+    <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
+  </select>
+
+        </div>-->
 
 
           <!--{{formData.PostedSeat|json}}-->
@@ -232,9 +260,15 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
             <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of PostList" value="item.ID">{{item.Name}}</option>
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of PostList" [ngValue]="item.ID">
+                {{item.Name}}
+              </option>
             </select>
+            <!--<select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of PostList" value="item.ID">{{item.Name}}</option>
+    </select>-->
             <div *ngIf="isSubmitted&&_groupForm.ddlPost.errors" class="text-danger">
               <p *ngIf="!_groupForm.ddlPost.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This
