@@ -139,9 +139,12 @@
             <td>{{row.InstituteName}}</td>
             <td>{{row.DistrictName}}</td>
             <!--<td>{{row.StaffTypeName}}</td>-->
-            <td>{{row.StaffTypeName}} || {{row.PostName}}</td>
+            <td>{{row.StaffTypeName}} <br> {{row.PostName}}</td>
             <td>{{row.RoleName}}</td>
-            <td>{{ row.ProfileStatus === 'Approve' ? 'Approved' : row.ProfileStatus }} ({{row.Remark}})</td>
+            <td>
+              {{ row.ProfileStatus === 'Approve' ? 'Approved' : row.ProfileStatus }} 
+              {{row.Remark != null && row.Remark != '' ? ' (' + row.Remark + ')' : ''}}
+            </td>
             <!--<td>{{row.Remark}}</td>-->
             <td>{{row.IsHod}}</td>
             <td>
