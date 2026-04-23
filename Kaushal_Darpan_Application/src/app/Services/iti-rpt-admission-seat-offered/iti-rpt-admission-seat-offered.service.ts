@@ -48,4 +48,22 @@ readonly APIUrl = this.appsettingConfig.apiURL + "ITIAdmissionReports";
       .pipe(catchError(this.handleErrorObservable))
       .toPromise();
   }
+
+  public async getITIStatisticsList() {
+  return await this.http.get(this.APIUrl + '/getITIStatisticsList', this.headersOptions)
+    .pipe(catchError(this.handleErrorObservable))
+    .toPromise();
+}
+
+public async downloadITIStatisticsPDF() {
+  return await this.http.get(this.APIUrl + '/downloadITIStatisticsPDF',
+    { responseType: 'blob' })
+    .toPromise();
+}
+public async downloadITIStatisticsExcel() {
+    return await this.http.get(this.APIUrl + '/downloadITIStatisticsExcel',
+      { responseType: 'blob' })
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
 }

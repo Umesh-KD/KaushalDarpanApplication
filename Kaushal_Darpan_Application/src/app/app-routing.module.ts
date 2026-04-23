@@ -570,6 +570,8 @@ const routes: Routes = [
 
       { path: 'iti-attendance', loadChildren: () => import('./Views/iti-attendance-module/iti-attendance.module').then(m => m.ITIAttendanceTimeTableModule), title: 'ITI-Student-Enrollment' },
       { path: 'iti-rpt-admission-seatoffered', loadChildren: () => import('./Views/iti-rpt-admission-seat-offered/iti-rpt-admission-seat-offered.module').then(m => m.ITIRPTAdmissionSeatOfferedModule), title: 'ITI-RPT-Admission-SeatOffered' },
+      { path: 'iti-rpt-statistics', loadChildren: () => import('./Views/iti-rpt-statistics/iti-rpt-statistics.module').then(m => m.ItiRptStatisticsModule), title: 'ITI-RPT-statistics' },
+
 
 
       /*ITI-Inventory-Management-START*/
@@ -604,6 +606,7 @@ const routes: Routes = [
       { path: 'iti-sr6-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/sr6-report-iti/sr6-report-iti.module').then(m => m.SR6ReportITIModule), title: 'ITI SR6 Report' },
       { path: 'add-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/add-min-required-trade-items/add-min-required-trade-items.module').then(m => m.AddMinRequiredTradeItemsModule), title: 'Add Min Required Items' },
       { path: 'iti-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/min-required-trade-items/min-required-trade-items.module').then(m => m.MinRequiredTradeItemsModule), title: 'ITI Min Required Items' },
+      { path: 'required-item-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/required-trade-items-report/required-trade-items-report.module').then(m => m.RequiredTradeItemsReportModule), title: 'ITI Min Required Items Report' },
 
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
       { path: 'inventory-Issue-History', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },

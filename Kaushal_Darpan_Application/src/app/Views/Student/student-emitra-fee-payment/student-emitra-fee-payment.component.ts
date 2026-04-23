@@ -269,7 +269,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    this.MobileNo = item.MobileNo;
+    this.MobileNo = item.MobileNo || '';
     this.studentDetailsModel = item;
   }
   private getDismissReason(reason: any): string {

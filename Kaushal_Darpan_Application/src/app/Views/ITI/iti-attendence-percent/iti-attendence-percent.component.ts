@@ -273,7 +273,8 @@ export class ItiAttendencePercentComponent {
         UnitID: this.UnitID,
         ShiftID: this.ShiftID,
         Seatintake: this.TableForm.value.ShiftId,
-        Percent: this.TableForm.value.Percent
+        Percent: this.TableForm.value.Percent,
+        SSOID: this.TableForm.value.SSOID
       };
 
       console.log(obj); // check values
@@ -395,30 +396,41 @@ export class ItiAttendencePercentComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Reports.xlsx');
   }
-
   public downloadPDF() {
-    const margin = 10;
-    const pageWidth = 210 - 2 * margin;
-    const pageHeight = 200 - 2 * margin;
-
     const doc = new jsPDF({
       orientation: 'p',
       unit: 'mm',
       format: [210, 300],
     });
 
-    const pdfTable = this.pdfTable.nativeElement;
+    const pdfTable = this.pdfTable.nativeElement as HTMLElement;
+
+    // store old styles
+    const oldOverflow = pdfTable.style.overflow;
+    const oldMaxHeight = pdfTable.style.maxHeight;
+    const oldHeight = pdfTable.style.height;
+
+    // expand full content
+    pdfTable.style.overflow = 'visible';
+    pdfTable.style.maxHeight = 'none';
+    pdfTable.style.height = 'auto';
 
     doc.html(pdfTable, {
-      callback: function (doc) {
+      callback: (doc) => {
         doc.save('Report.pdf');
+
+        // restore old styles
+        pdfTable.style.overflow = oldOverflow;
+        pdfTable.style.maxHeight = oldMaxHeight;
+        pdfTable.style.height = oldHeight;
       },
-      x: margin,
-      y: margin,
-      width: pageWidth,
+      x: 10,
+      y: 10,
+      width: 190,
       windowWidth: pdfTable.scrollWidth,
     });
   }
+
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;
@@ -632,7 +644,8 @@ export class ItiAttendencePercentComponent {
       return;
     } else {
       this.TableForm.get('StreamID')?.disable();
-      this.TableForm.get('ShiftId')?.disable();
+     // this.EditDataFormGroup.get('StreamID')?.disable();
+     
     }
 
     const item = this.StaffList.find(

@@ -73,6 +73,28 @@ export class ITIRPTAdmissionSeatOfferedComponent implements OnInit{
   async downloadExcel() {
     try {
       const blob: any = await this.itiRptAdmissionSeatOfferedService.downloadExcel();
+      // 👉 Generate timestamp (YYYY-MM-DD_HH-mm-ss)
+    const now = new Date();
+    const timestamp = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0') + '_' +
+      String(now.getHours()).padStart(2, '0') + '-' +
+      String(now.getMinutes()).padStart(2, '0') + '-' +
+      String(now.getSeconds()).padStart(2, '0');
+
+    const fileName = `ITI_Report_Seatoffered_${timestamp}.xlsx`;
+
+      
+             
+              const blobUrl = URL.createObjectURL(blob);
+  
+              const link = document.createElement('a');
+              link.href = blobUrl;
+              link.download = fileName;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(blobUrl);
       saveAs(blob, 'ITI_Report.xlsx');
     } catch (error) {
       console.error(error);
