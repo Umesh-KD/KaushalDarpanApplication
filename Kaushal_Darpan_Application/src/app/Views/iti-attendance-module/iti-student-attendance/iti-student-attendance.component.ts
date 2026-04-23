@@ -41,8 +41,11 @@ export class ITIStudentAttendanceComponent implements OnInit {
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
+
   todayDate: string = '';
+
   maxDate: string = ''; 
+
   SubjectMasterDDL: any[] = [];
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -134,12 +137,14 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
 
 
+
     this.getcurrentdate();
 
 
     this.AttendanceStartDate = this.AttendanceStartDate ? this.formatDate(this.AttendanceStartDate) : "";
     this.AttendanceEndDate = this.AttendanceEndDate ? this.formatDate(this.AttendanceEndDate) : "";
     
+
     
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
@@ -150,9 +155,6 @@ export class ITIStudentAttendanceComponent implements OnInit {
       AttendanceStartDateRavi:[]
     });
 
-
- 
-  
 
 
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
@@ -709,7 +711,11 @@ isPresent(value: any): boolean {
     if (!value) return false;
     const v = String(value);
     if (v.includes('(U)')) return false;
-    if (v.includes('(F)')) return true;
+    if (v.includes('(F)'))
+    {
+
+      return true;
+    }
     return false;
   }
 
