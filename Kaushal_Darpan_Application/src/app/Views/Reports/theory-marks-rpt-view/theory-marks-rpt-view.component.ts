@@ -62,7 +62,7 @@ export class TheoryMarksRptViewComponent {
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
     private toastr: ToastrService,
-    private commonFunctionHelper: CommonFunctionHelper,
+    public commonFunctionHelper: CommonFunctionHelper,
     private formBuilder: FormBuilder,
     private Swal2: SweetAlert2,
     private modalService: NgbModal
@@ -72,13 +72,13 @@ export class TheoryMarksRptViewComponent {
   async ngOnInit() {
 
     this.ufmLetterForm = this.formBuilder.group({
-      txtEnrollmentNo: ['', [Validators.required]],
+      txtEnrollmentNo: [{ value: '', disabled: true }, [Validators.required]],
       txtSerialNo: ['', [Validators.required]],
       txtSerialNo2: ['', [Validators.required]],
       txtIssueDate: ['', [Validators.required]],
       txtBundleSendDate: ['', [Validators.required]],
       txtDate2: ['', [Validators.required]],
-      ddlExamCategory: [0, [DropdownValidators]]
+      ddlExamCategory: ['', [DropdownValidators]]
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
