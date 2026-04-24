@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ExaminerFeedbackDataModel, TheoryMarksSearchModel } from '../../Models/TheoryMarksDataModels';
+import { ExaminerFeedbackDataModel, TheoryMarksSearchModel, UFMStudentExtraInfoGetModel, UFMStudentExtraInfoSaveModel } from '../../Models/TheoryMarksDataModels';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { RoleMasterDataModel, UserRoleRightsDataModel } from '../../Models/RoleMasterDataModel';
@@ -58,7 +58,7 @@ export class TheoryMarksService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
   public async GetTheoryMarks_Admin(searchRequest: TheoryMarksSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetTheoryMarks_Admin`, body, this.headersOptions)
@@ -74,4 +74,21 @@ export class TheoryMarksService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetUFMStudentExtraInfo(searchRequest: UFMStudentExtraInfoGetModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetUFMStudentExtraInfo`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveUFMStudentExtraInfo(request: UFMStudentExtraInfoSaveModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/SaveUFMStudentExtraInfo', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

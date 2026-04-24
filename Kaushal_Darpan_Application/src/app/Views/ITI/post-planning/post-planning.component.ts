@@ -205,7 +205,7 @@ export class PostPlanningComponent {
       PlanningID: formValues.ddlCollege||0,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       CreatedBy: this.sSOLoginDataModel.UserID,
-      DepartmentID: 1,
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
       CourseTypeID: 1,
       ActiveStatus: true,
       DeleteStatus: false,
@@ -260,7 +260,7 @@ export class PostPlanningComponent {
 
 
   async SaveData() {
-    
+    debugger
     this.loaderService.requestStarted();
     this.isLoading = true;
     this.isSubmitted = true;

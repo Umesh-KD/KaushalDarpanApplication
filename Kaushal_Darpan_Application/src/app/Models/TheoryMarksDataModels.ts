@@ -1,4 +1,5 @@
 import { RequestBaseModel } from "./RequestBaseModel";
+import { ResponseBaseModel } from "./ResponseBaseModel";
 
 export class TheoryMarksDataModels {
 
@@ -73,8 +74,8 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public centerpresentstatus?: number = 0;
   public StudentStatus?: number = -1;
   public StrKey?: string = '';
-  public CenterCode?:number=0;
-  public isUFM?:number=0;
+  public CenterCode?: number = 0;
+  public isUFM?: number = 0;
 }
 
 
@@ -107,10 +108,10 @@ export class ITIAddmissionReportSearchModel {
 }
 
 export class FinalAdmissionListRequestModel {
- public TradeLevelId: number = 0;
- public AllotmentStatus: number = 0;
- public EndTerms: number = 0;
- public FinancialYearID: number = 0;
+  public TradeLevelId: number = 0;
+  public AllotmentStatus: number = 0;
+  public EndTerms: number = 0;
+  public FinancialYearID: number = 0;
 }
 
 
@@ -153,11 +154,11 @@ export class StudentDataAgeBetween15And29RequestModel {
 }
 
 export class AllotmentReportCollegeRequestModel {
- public AcademicYearID: number = 0;
- public TradeLevelID: number = 0;
- public TradeTypeID: number = 0;
- public TradeId: number = 0;
- public CollegeId: number = 0;
+  public AcademicYearID: number = 0;
+  public TradeLevelID: number = 0;
+  public TradeTypeID: number = 0;
+  public TradeId: number = 0;
+  public CollegeId: number = 0;
 }
 
 
@@ -208,10 +209,10 @@ export class IMCAllotmentReportRequestModel {
 
 export class StudentItiSearchmodel {
   public CollegeID: number = 0
-  public EnrollmentNo:string=''
-  public StudentName:string=''
+  public EnrollmentNo: string = ''
+  public StudentName: string = ''
   public TradeID: string = ''
-  public Code:string=''
+  public Code: string = ''
 }
 export class InternalSlidingReportRequestModel {
   public AcademicYearID: number = 0;
@@ -256,7 +257,7 @@ export class ExaminerFeedbackDataModel extends RequestBaseModel {
 export class ApplicantReportForAdmin {
   public AcademicYearID: number = 0;
   public DepartmentID: number = 0;
- 
+
 }
 
 export class ReportedStudentReport {
@@ -289,5 +290,26 @@ export class updateUnlockInternalMarksModel {
   public ModifyBy: number = 0;
   public InstituteID: number = 0;
   public EndTermID: number = 0;
+
+}
+export class UFMStudentExtraInfoSaveModel extends ResponseBaseModel {
+  public UFMStuExtraInfoID?: number = 0;
+  public StudentID: number = 0;
+  public SerialNo: number = 0;
+  public SerialNo2: number = 0;
+  public IssueDate?: string;
+  public BundleSendDate?: string;
+  public Date2?: string;
+  public StudentExamType: number = 0;
+  public StudentExamID: number = 0;
+  public StudentExamPaperID: number = 0;
+  public EnrollmentNo: string = '';
+
+}
+export class UFMStudentExtraInfoGetModel extends RequestBaseModel {
+  public StudentID: number = 0;
+  public StudentExamID: number = 0;
+  public StudentExamPaperID: number = 0;
+  public UFMStuExtraInfoID: number = 0;
 
 }

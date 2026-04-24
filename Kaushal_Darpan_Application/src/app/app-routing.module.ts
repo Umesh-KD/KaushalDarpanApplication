@@ -606,6 +606,7 @@ const routes: Routes = [
       { path: 'iti-sr6-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/sr6-report-iti/sr6-report-iti.module').then(m => m.SR6ReportITIModule), title: 'ITI SR6 Report' },
       { path: 'add-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/add-min-required-trade-items/add-min-required-trade-items.module').then(m => m.AddMinRequiredTradeItemsModule), title: 'Add Min Required Items' },
       { path: 'iti-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/min-required-trade-items/min-required-trade-items.module').then(m => m.MinRequiredTradeItemsModule), title: 'ITI Min Required Items' },
+      { path: 'required-item-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/required-trade-items-report/required-trade-items-report.module').then(m => m.RequiredTradeItemsReportModule), title: 'ITI Min Required Items Report' },
 
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
       { path: 'inventory-Issue-History', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
@@ -1214,7 +1215,7 @@ const routes: Routes = [
       { path: 'transfer-request-accept', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/transfer-request-accept/transfer-request-accept.module').then(m => m.TransferRequestAcceptModule), title: 'User Request List' },
       { path: 'PostPlanning', loadChildren: () => import('./Views/ITI/post-planning/post-planning.module').then(m => m.PostPlanningModule) },
       { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
-
+      { path: 'OfficeVacancyList', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/office-vacancy-list/office-vacancy-list.module').then(m => m.OfficeVacancyListModule) },
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, ITI Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
       { path: 'PaperSetterProfessorDashboard', loadChildren: () => import('./Views/ITI/itipapper-setter/itipaper-setter-professor-dashboard/itipaper-setter-professor-dashboard.module').then(m => m.ITIPaperSetterProfessorDashboardModule) },
