@@ -67,4 +67,20 @@ export class CommonFunctionHelper {
     URL.revokeObjectURL(blobUrl);
   }
 
+  numbersOnly(event: KeyboardEvent) {
+    // Allow control keys
+    const allowedKeys = [
+      'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
+    ];
+
+    if (allowedKeys.includes(event.key)) {
+      return;
+    }
+
+    // Allow only digits
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
 }

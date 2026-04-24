@@ -208,8 +208,23 @@
       <div class="table-footer">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2">
           <div>
-            <button mat-raised-button [disabled]="isDisabled"  class="custom-button" type="button" (click)="saveAttendance()" *ngIf="filterData && filterData.length > 0">Save</button>
-            <button mat-raised-button  [disabled]="isDisabled"  class="custom-button ms-2" type="button" (click)="saveAttendancefinal()" *ngIf="filterData && filterData.length > 0">Final Save</button>
+            <button mat-raised-button
+                    class="custom-button"
+                    type="button"
+                    (click)="saveAttendance()"
+                    [disabled]="isDateFrozen"
+                    *ngIf="filterData && filterData.length > 0">
+              Save
+            </button>
+
+            <button mat-raised-button
+                    class="custom-button ms-2"
+                    type="button"
+                    (click)="saveAttendancefinal()"
+                    [disabled]="isDateFrozen"
+                    *ngIf="filterData && filterData.length > 0">
+              Final Save
+            </button>
 
           </div>
           <div class="flex justify-end flex-wrap items-center">

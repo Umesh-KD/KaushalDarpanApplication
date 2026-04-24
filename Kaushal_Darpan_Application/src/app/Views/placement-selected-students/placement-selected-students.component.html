@@ -88,7 +88,9 @@
             [loading]="isLoading"
             >              
           </ng-select>
-
+          <div *ngIf="isSubmitted && PlacementSelectedListStudentForm.get('HiringRoleID').errors" class="text-danger">
+            <p *ngIf="!PlacementSelectedListStudentForm.get('HiringRoleID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
         </div>
         <div>
           <button type="button" class="btn bg-success text-white mt-6" (click)="GetAllData()">Search</button>

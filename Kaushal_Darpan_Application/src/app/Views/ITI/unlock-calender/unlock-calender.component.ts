@@ -477,7 +477,7 @@ export class UnlockCalenderComponent {
   Onyearchange() {
     debugger
     this.SubjectMasterDDL = []
-    this.commonFunctionService.GetAssignedSubject(this.SSOID, this.SSOLoginDataModel.EndTermID).then((data: any) => {
+    this.commonFunctionService.GetNonsubstitutesubject(this.SSOID, this.SSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SubjectMasterDDL = data.Data;
     })
