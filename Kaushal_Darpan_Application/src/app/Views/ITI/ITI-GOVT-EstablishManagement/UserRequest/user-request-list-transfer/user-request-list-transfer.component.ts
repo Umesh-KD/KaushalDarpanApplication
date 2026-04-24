@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
-import { EnumEMProfileStatus, EnumRole, EnumStatus, EnumTransferStatus } from '../../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumRole, EnumStatus, EnumTransferStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
 import { RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { JoiningLetterSearchModel, RelievingLetterSearchModel, RequestUpdateStatus } from '../../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
@@ -11,6 +11,7 @@ import { CommonFunctionService } from '../../../../../Services/CommonFunction/co
 import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-user-request-list-transfer',
@@ -56,7 +57,8 @@ export class UserRequestListTransferComponent {
     private modalService: NgbModal, 
     private userRequestService: UserRequestService, 
     private fb: FormBuilder, 
-    public appsettingConfig: AppsettingService
+    public appsettingConfig: AppsettingService,
+    public http: HttpClient,
   ) { }
 
   async ngOnInit() {
@@ -206,42 +208,35 @@ export class UserRequestListTransferComponent {
     }
   }
 
+  DownloadFile(FileName: string): void {
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;;
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = FileName; // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
   async JoiningLetter(UserID: number) {
-    debugger
     try {
       this.searchRequestJoining.UserID = UserID;
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.JoiningLetter(this.searchRequestJoining)
+      await this.ITIGovtEMStaffMasterService.DownloadJoiningLetter_pdf(this.searchRequestJoining)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
-          if (data && data.Data) {
-            const base64 = data.Data;
-            const byteCharacters = atob(base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'application/pdf' });
-            const blobUrl = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = 'JoiningLetter.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
-          } else {
-            this.toastr.error(data.ErrorMessage)
+          if(data.State == EnumStatus.Success){
+            this.DownloadFile(data.Data);
           }
+          
         }, (error: any) => {
           console.error(error);
         });
-
     } catch (Ex) {
       console.log(Ex);
     } finally {
@@ -253,37 +248,15 @@ export class UserRequestListTransferComponent {
 
   
   async RelievingLetter(UserID: number) {
-    debugger
     try {
       this.searchRequestRelieving.UserID = UserID;
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.RelievingLetter(this.searchRequestRelieving)
-        .then((data: any) => {
+      await this.ITIGovtEMStaffMasterService.DownloadRelievingLetter_pdf(this.searchRequestRelieving)
+        .then((data: any) => {          
           data = JSON.parse(JSON.stringify(data));
-
-          if (data && data.Data) {
-            const base64 = data.Data;
-
-            const byteCharacters = atob(base64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-              byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'application/pdf' });
-            const blobUrl = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = 'RelievingLetter.pdf';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
-          } else {
-            this.toastr.error(data.ErrorMessage)
+          if(data.State == EnumStatus.Success){
+            this.DownloadFile(data.Data);
           }
         }, (error: any) => {
           console.error(error);

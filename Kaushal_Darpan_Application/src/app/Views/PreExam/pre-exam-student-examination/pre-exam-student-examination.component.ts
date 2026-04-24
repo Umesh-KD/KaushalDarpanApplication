@@ -2241,14 +2241,7 @@ export class PreExamStudentExaminationComponent {
     }
   }
   checkStatusForOptional(status: number) {
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
-      return ([
-        enumExamStudentStatus.SelectedForExamination,
-        enumExamStudentStatus.VerifiedForExamination,
-        enumExamStudentStatus.ExaminationFeesPaid
-      ]).includes(status);
-    }
-    else if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.Registrar) {
       return ([
         enumExamStudentStatus.SelectedForExamination,
         enumExamStudentStatus.VerifiedForExamination,

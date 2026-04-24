@@ -45,6 +45,7 @@ export class StudentPlacementConsentComponent {
   public getSSOIDDetailData: any[]=[];
 
   public messageModel= new ApplicationMessageDataModel();
+  public ConsentCount:number=0;
 
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
@@ -56,13 +57,14 @@ export class StudentPlacementConsentComponent {
 
   constructor(private commonMasterService: CommonFunctionService, private smsMailService:SMSMailService, private campusPostService: CampusPostService, private loaderService: LoaderService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private Swal2: SweetAlert2,
-    private placemenrservice: PlacementStudentService,
+    private placementservice: PlacementStudentService,
     private homeService: HomeService, private appsettingConfig: AppsettingService) {
   }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.btn_SearchClick();
+    await this.GetStudentConsentCount();
   }
   //async GetMasterData() {
   //  try {
@@ -97,7 +99,7 @@ export class StudentPlacementConsentComponent {
       this.searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.searchrequest.Status = this.ApprovedStatus
       this.loaderService.requestStarted();
-      await this.placemenrservice.GetPlacementconsent(this.searchrequest)
+      await this.placementservice.GetPlacementconsent(this.searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
@@ -310,9 +312,35 @@ export class StudentPlacementConsentComponent {
     this.GetAllPost(PostID)
     this.GetAllPlacementCompany()
   }
+
+  async GetStudentConsentCount() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ConsentCount = data['Data'][0]['ConsentCount'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
  
   async Savedata(PostID: number) {
     debugger
+    await this.GetStudentConsentCount();
+    if(this.ConsentCount==5){
+      this.Swal2.Warning("You have already given consent for 5 companies");
+      return;
+    }
     this.Swal2.Confirmation("Are you sure you want to processed?", async (result: any) => {
       if (result.isConfirmed) {
         try {
@@ -322,7 +350,7 @@ export class StudentPlacementConsentComponent {
           this.Request.ModifyBy = this.sSOLoginDataModel.StudentID
           this.Request.CreatedBy = this.sSOLoginDataModel.StudentID
           this.loaderService.requestStarted();
-          await this.placemenrservice.SaveData(this.Request).then((data: any) => {
+          await this.placementservice.SaveData(this.Request).then((data: any) => {
 
             data = JSON.parse(JSON.stringify(data));
             this.State = data['State'];

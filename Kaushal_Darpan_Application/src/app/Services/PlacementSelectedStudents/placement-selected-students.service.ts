@@ -45,4 +45,11 @@ export class PlacementSelectedStudentsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetStudentPlacedCount() {
+    return await this.http.get(this.APIUrl + "/GetStudentPlacedCount", this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

@@ -425,7 +425,7 @@
           </div>
           <div>
             <label for="ddlCategoryA" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी ए(Category A):<span class="StarMarking">*</span></label>
-            <select class="form-select" formControlName="ddlCategoryA" [(ngModel)]="model.CategoryA">
+            <select class="form-select" formControlName="ddlCategoryA" [(ngModel)]="model.CategoryA" (change)="onCategoryChange($event)">
               <option value="0">--Select--</option>
               <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
             </select>

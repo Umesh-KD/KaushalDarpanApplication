@@ -105,7 +105,7 @@
 
         <div class="flex justify-between">
           <button type="button" class="btn bg-info text-white"
-                  *ngIf="(_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus==0"
+                  *ngIf="(_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID || _EnumRole.JDConfidential_Eng == sSOLoginDataModel.RoleID || _EnumRole.JDConfidential_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus != _EnumRollNoStatus.Published"
                   (click)="SaveAllRevelData()">
             Generate Reval Roll No
           </button>
@@ -116,7 +116,7 @@
             Publish Reval
           </button>-->
 
-          <button class="btn bg-success text-white" *ngIf="(_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus == _EnumRollNoStatus.Generated"
+          <button class="btn bg-success text-white" *ngIf="(_EnumRole.ACP == sSOLoginDataModel.RoleID || _EnumRole.ACP_NonEng == sSOLoginDataModel.RoleID || _EnumRole.JDConfidential_Eng == sSOLoginDataModel.RoleID || _EnumRole.JDConfidential_NonEng == sSOLoginDataModel.RoleID) && StudentList.length>0 && searchRequest.VerifierStatus == _EnumRollNoStatus.Generated"
                   (click)="openModalGenerateOTP(modal_GenrateOTP)"
                   type="button">
             Publish Reval
