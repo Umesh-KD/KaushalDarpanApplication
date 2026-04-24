@@ -41,7 +41,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
-
+  isDateFrozen: boolean = false;
   todayDate: string = '';
 
   maxDate: string = ''; 
@@ -409,8 +409,11 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
   }
 
+
+
   isColumnFrozen(columnKey: string): boolean {
-    return this.filterData.some((row: any) => this.isDisabled(row[columnKey]));
+    this.isDateFrozen = this.filterData.some((row: any) => this.isDisabled(row[columnKey]));
+    return this.isDateFrozen;
   }
 
 
@@ -548,6 +551,7 @@ isPresent(value: any): boolean {
       CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
       InstituteID: this.sSOLoginDataModel.InstituteID,
       AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID
+  
     };
 
     saveAttendanceData.forEach(item => {
@@ -561,7 +565,10 @@ isPresent(value: any): boolean {
       item.InstituteID = attendanceData.InstituteID,
       item.CourseTypeID = attendanceData.CourseTypeID;
       item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
-      item.StaffID = this.sSOLoginDataModel.UserID;
+      item.StaffID = this.sSOLoginDataModel.UserID
+      item.isreaasign = this.isreaasign,
+        item.Shift = this.ShiftID,
+        item.Unit = this.UnitID
     });
     // Iterate over each student record to transform attendance dates into an "Attendance" column
     saveAttendanceData.forEach(item => {
@@ -577,7 +584,7 @@ isPresent(value: any): boolean {
           && key.trim() !== "CourseTypeID" && key.trim() !== "AssignTeacherForSubjectID"
           && key.trim() !== "SubjectID1" && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance"
           && key.trim() !== "InstituteID" && key.trim() !== "StudentID"
-        && key.trim() !=="StaffID"
+          && key.trim() !== "StaffID" && key.trim() !== "Shift" && key.trim() !== "Unit" && key.trim() !== "isreaasign"
         ) {
 
           // Push the date and its status as an object into the attendance array
@@ -633,7 +640,11 @@ isPresent(value: any): boolean {
         item.CourseTypeID = attendanceData.CourseTypeID;
       item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
       item.IsFinalSubmit = 1;
-      item.StaffID = this.sSOLoginDataModel.UserID;
+      item.StaffID = this.sSOLoginDataModel.UserID,
+        item.isreaasign = this.isreaasign,
+        item.Shift = this.ShiftID,
+        item.Unit = this.UnitID
+
     });
     debugger
     // Iterate over each student record to transform attendance dates into an "Attendance" column
@@ -648,7 +659,7 @@ isPresent(value: any): boolean {
           && key.trim() !== "AssignTeacherForSubjectID" && key.trim() !== "SubjectID1"
           && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance" && key.trim() !== "InstituteID"
           && key.trim() !== "StudentID" && key.trim() !== "IsFinalSubmit"
-          && key.trim() !== "StaffID"
+          && key.trim() !== "StaffID" && key.trim() !== "isreaasign" && key.trim() !== "Shift" && key.trim() !== "Unit"
         ) {
 
           // Push the date and its status as an object into the attendance array
