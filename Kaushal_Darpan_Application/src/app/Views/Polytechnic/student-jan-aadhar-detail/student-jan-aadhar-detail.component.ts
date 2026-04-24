@@ -268,21 +268,40 @@ export class StudentJanAadharDetailComponent implements OnInit {
 
 
 
-  Showdropdown() {
+  // Showdropdown() {
+  //   debugger
+  //   if (this.request.ENR_ID == 5) {
+  //     this.IsShowDropdown = true
+  //   }
+  //   else {
+  //     this.IsShowDropdown = false
+  //   }
+  //   if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0) {
+  //     this.IsShow = true
+  //   }
+  //   else {
+  //     this.IsShow = false
+  //   }
+  // }
 
-    if (this.request.ENR_ID == 5) {
-      this.IsShowDropdown = true
-    }
-    else {
-      this.IsShowDropdown = false
-    }
-    if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0) {
-      this.IsShow = true
-    }
-    else {
-      this.IsShow = false
-    }
+  Showdropdown() {
+  // ✅ Partial reset only
+  this.resetDepartment();
+  
+  // Optional cleanup
+  this.AdharMemberList = [];
+  this.IsShow = false;
+  this.IsShowDropdown = false;
+
+  // Existing logic
+  if (this.request.ENR_ID == 5) {
+    this.IsShowDropdown = true;
   }
+
+  if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0) {
+    this.IsShow = true;
+  }
+}
 
   Showdrop() {
     if (this.request.JAN_AADHAR > '0') {
@@ -1366,6 +1385,7 @@ export class StudentJanAadharDetailComponent implements OnInit {
       this.Showdropdown()
     }
     else if (val == 2) {
+      this.request.JAN_AADHAR = '' 
       this.showPref = true
       this.AdharMemberList = [];
       this.request.ENR_ID = 0
@@ -1457,5 +1477,45 @@ export class StudentJanAadharDetailComponent implements OnInit {
     value = value.toLowerCase();
     this.StudentJanDetailFormGroup.get('email')?.setValue(value, { emitEvent: false });
   }
+  
+  resetDepartment()
+   {
+  
+   this.model.DepartmentName = '';
+   this.StudentJanDetailFormGroup.patchValue({
+    
+    DepartmentName: ''
+  });
+ 
+  this.StudentJanDetailFormGroup.get('DepartmentName')?.setErrors(null);
+}
 
+onCategoryChange(event: any) {
+  const value = Number(event.target.value);
+
+  // If NOT OBC (4), reset fields
+  if (value !== 4) {
+    
+    // Reset model
+    this.model.CasteCertificateNo = '';
+    this.model.CertificateGeneratDate = '';
+
+    // Reset form controls
+    this.StudentJanDetailFormGroup.patchValue({
+      CertificateNo: '',
+      txtGeneratDate: ''
+    });
+
+    // Remove validation errors
+    this.StudentJanDetailFormGroup.get('CertificateNo')?.setErrors(null);
+    this.StudentJanDetailFormGroup.get('txtGeneratDate')?.setErrors(null);
+  }
+
+  // Optional: trigger your existing validator logic
+  if (value === 4) {
+    this.refreshBranchRefValidation(true);
+  } else {
+    this.refreshBranchRefValidation(false);
+  }
+}
 }
