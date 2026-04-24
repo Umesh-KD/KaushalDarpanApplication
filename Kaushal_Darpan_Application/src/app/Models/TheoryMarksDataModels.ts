@@ -313,3 +313,12 @@ export class UFMStudentExtraInfoGetModel extends RequestBaseModel {
   public UFMStuExtraInfoID: number = 0;
 
 }
+
+export class UFMExtraInfoSaveModel extends ResponseBaseModel {
+  public UFMExtraInfoID?: number = 0;
+  public SerialNo: number = 0;
+  public SerialNo2: number = 0;
+  public IssueDate?: string;
+  public BundleSendDate?: string;
+  public Date2?: string;
+}
