@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CampusPostService } from '../../Services/CampusPost/campus-post.service';
 import { CampusPostComponent } from '../campus-post/campus-post.component';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute } from '@angular/router';
@@ -35,7 +35,8 @@ export class CampusValidationComponent {
   public CheckStatus: string = "";
   public currentStatus: number = 0;
   public CompanyTypeID: number = 0;
-
+  _EnumRole = EnumRole
+  
   public reactiveSuspened:boolean=false;
 
   public messageModel = new ApplicationMessageDataModel()

@@ -98,9 +98,16 @@
         </div>
 
       </form>
+
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-list"></i>All Student List</b>
       </div>
+
+      <!-- excel export-->
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white mb-1" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel Data</a>
+      </div>
+
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div class="flex justify-between">
@@ -168,12 +175,12 @@
               <th class="text-left">CC Code </th>
               <th class="text-left">Branch Name </th>
               <th class="text-left">Roll No </th>
+              <th class="text-left">Subject Code</th>
               <th class="text-left">Enrollment No</th>
               <th class="text-left">Student Name </th>
               <th class="text-left">Father's Name</th>
               <th class="text-left">Institute Name </th>
               <th class="text-left">Semester Name</th>
-              <th class="text-left">Subject Code</th>
               <th class="text-left">Revel Roll No</th>
               <th class="text-left">Status</th>
 
@@ -190,12 +197,12 @@
               <td class="text-left">{{row.CCCode}} </td>
               <td class="text-left">{{row.StreamName}}</td>
               <td class="text-left">{{row.Org_Stu_RollNumber}} </td>
+              <td class="text-left">{{row.SubjectCode}}</td>
               <td class="text-left">{{row.EnrollmentNo}}</td>
               <td class="text-left">{{row.StudentName}} </td>
               <td class="text-left">{{row.FatherName}}</td>
               <td class="text-left">{{row.InstituteName}}</td>
               <td class="text-left">{{row.SemesterName}}</td>
-              <td class="text-left">{{row.SubjectCode}}</td>
               <td class="text-left">{{row.RollNumber}}</td>
               <td class="text-left">{{row.Status}}</td>
             </tr>

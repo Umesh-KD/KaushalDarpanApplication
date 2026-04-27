@@ -237,6 +237,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async StreamMaster_streamType(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0,action:string="") {
+debugger
+    return await this.http.get(this.APIUrl + '/StreamMaster_streamType/' + DepartmentID + '/' + StreamType + '/' + EndTermId +'/' + action, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 
   public async HODSemesterMaster(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0) {

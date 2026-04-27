@@ -17,7 +17,10 @@
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
+      <a *ngIf="this.UFMExtraInfoFilled==0" href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="OpenGetUFMExtraInfo(modal_UFMStudentExtraInfo)">
+      <i class="ti ti-download"></i> Fill UFM Letter </a>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()">
+      <i class="ti ti-download"></i> Export Excel</a>
     </div>
 
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
@@ -51,6 +54,7 @@
             <th class="text-left">Name</th>
             <th class="text-left">CIC</th>
             <th class="text-left">CCode</th>
+            <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -61,6 +65,16 @@
             <td>{{ item.Name }}</td>
             <td>{{ item.CIC}}</td>
             <td>{{ item.CCode}}</td>
+            <td>
+              <!-- Ufm Letter download -->
+              <a *ngIf="item.UFMExtraInfoID>0"
+                 (click)="GetUFMLetter(item)"
+                 class="me-2 btn-outline-warning m-1"
+                 target="_blank"
+                 title="Download UFM Letter">
+                <i class="fa fa-download"></i>
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -81,3 +95,74 @@
   </div>
 
 </div>
+
+<!-- model UFM Student Extra Info-->
+<ng-template #modal_UFMStudentExtraInfo let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">UFM Letter <!--<small class="text-danger" style="font-size:11px;">(* fields are mandatory)</small>--></b>
+        <button class="btn bg-info text-white" (click)="CloseUFMStudentExtraInfoModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+      <form [formGroup]="ufmLetterForm">
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="txtSerialNo">Serial No :</label>
+                <input type="text" name="txtSerialNo" formControlName="txtSerialNo" class="form-input"
+                       [(ngModel)]="saveufmExtraInfo.SerialNo" (keydown)="commonFunctionHelper.numbersOnly($event)" maxlength="8">
+                <div *ngIf="isSubmitted && ufmLetterForm.get('txtSerialNo').errors" class="text-danger">
+                  <p *ngIf="ufmLetterForm.get('txtSerialNo').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="txtSerialNo2">Serial No2 :</label>
+                <input type="text" name="txtSerialNo2" formControlName="txtSerialNo2" class="form-input"
+                       [(ngModel)]="saveufmExtraInfo.SerialNo2" (keydown)="commonFunctionHelper.numbersOnly($event)" maxlength="8">
+                <div *ngIf="isSubmitted && ufmLetterForm.get('txtSerialNo2').errors" class="text-danger">
+                  <p *ngIf="ufmLetterForm.get('txtSerialNo2').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="txtIssueDate">Issue Date :</label>
+                <input type="date" name="txtIssueDate" formControlName="txtIssueDate" class="form-input"
+                       [(ngModel)]="saveufmExtraInfo.IssueDate">
+                <div *ngIf="isSubmitted && ufmLetterForm.get('txtIssueDate').errors" class="text-danger">
+                  <p *ngIf="ufmLetterForm.get('txtIssueDate').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="txtBundleSendDate">Bundle Sending Date :</label>
+                <input type="date" name="txtBundleSendDate" formControlName="txtBundleSendDate" class="form-input"
+                       [(ngModel)]="saveufmExtraInfo.BundleSendDate">
+                <div *ngIf="isSubmitted && ufmLetterForm.get('txtBundleSendDate').errors" class="text-danger">
+                  <p *ngIf="ufmLetterForm.get('txtBundleSendDate').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="txtDate2">Date2 :</label>
+                <input type="date" name="txtDate2" formControlName="txtDate2" class="form-input"
+                       [(ngModel)]="saveufmExtraInfo.Date2">
+                <div *ngIf="isSubmitted && ufmLetterForm.get('txtDate2').errors" class="text-danger">
+                  <p *ngIf="ufmLetterForm.get('txtDate2').errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn bg-primary text-white mt-6" (click)="SaveUFMExtraInfo()">Save</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</ng-template>

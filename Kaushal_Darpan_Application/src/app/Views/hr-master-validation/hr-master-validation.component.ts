@@ -10,7 +10,7 @@ import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HrMasterComponent } from '../Hr-Master/hr-master/hr-master.component';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-hr-master-validation',
@@ -37,6 +37,8 @@ export class HrMasterValidationComponent implements OnInit {
   modalReference: NgbModalRef | undefined;
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+    _EnumRole = EnumRole
+    
   formAction!: FormGroup;
   constructor(
     private commonMasterService: CommonFunctionService,
