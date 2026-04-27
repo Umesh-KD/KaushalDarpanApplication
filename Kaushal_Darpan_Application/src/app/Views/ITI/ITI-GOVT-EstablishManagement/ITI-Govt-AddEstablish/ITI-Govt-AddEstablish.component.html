@@ -186,8 +186,8 @@
           <select class="form-select" name="SearchByBranchs" id="SearchByBranchs" formControlName="ddlTrade" [ngModelOptions]="{standalone: true}"
                   [(ngModel)]="formData.BranchID" (change)="GetChange()">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of BranchesMasterList" [value]="item.StreamID">
-              {{item.StreamName}}
+            <option *ngFor="let item of TradeList" [value]="item.Id">
+              {{item.TradeName}}
             </option>
           </select>
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlTrade.errors" class="text-danger">

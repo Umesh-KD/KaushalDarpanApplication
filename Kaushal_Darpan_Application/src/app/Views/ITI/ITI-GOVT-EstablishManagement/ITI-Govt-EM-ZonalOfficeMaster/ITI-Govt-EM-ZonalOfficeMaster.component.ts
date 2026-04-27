@@ -38,6 +38,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
   public ErrorMessage: string = '';
   public RoleMasterList: any[] = [];
   public DesignationMasterList: any[] = [];
+  public ItiCollegesListAll: any[] = [];
   
   public ITIGovtEMOFFICERSList: any[] = [];
   public Govt_EM_GetUserLevelDetails: any[] = [];
@@ -174,16 +175,16 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeList = data['Data'];
 
-          if (this.formData.LevelID == 1 && this.sSOLoginDataModel.StaffID > 0) {
-            
+          if (this.formData.LevelID == 1 && this.sSOLoginDataModel.StaffID > 0) {            
             if (this.sSOLoginDataModel.OfficeID != 0) {
-
               this.OfficeList = this.OfficeList.filter((item: any) => item.ID == this.sSOLoginDataModel.OfficeID)
-
             }
 
           } else {
             this.OfficeList = this.OfficeList;
+            if(this.sSOLoginDataModel.RoleID == EnumRole.DTETraing){
+              this.OfficeList = this.OfficeList.filter((item: any) => item.ID != 15)
+            }
           }
           console.log(this.OfficeList, "OfficeList")          
         }, error => console.error(error));
@@ -223,7 +224,8 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     this.formData.InstituteID = 0;
     this.formData.RoleID = 0;
     if (this.formData.LevelID == 2 && this.formData.OfficeID == 11) {
-      await this.getITICollege();
+      // await this.getITICollege();
+      await this.GetCollegesListAll();
       this.AddStaffBasicDetailFromGroup.controls['ddlITICollegeTrade'].setValidators([DropdownValidators]);
     }
     else if (this.formData.LevelID == 2 && this.formData.OfficeID == 15 && this.OldNodalDistrictID==0) {
@@ -375,7 +377,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.LevelList = data['Data'];
-          
+          debugger
           if (this.sSOLoginDataModel.StaffID > 0) {
             if (this.LevelID === 1 && this.sSOLoginDataModel.RoleID == this._EnumRole.DTE_TrainingT2_establishment) {
               this.LevelList = this.LevelList.filter((item: any) => item.ID != 2)
@@ -389,18 +391,13 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
             }
             if (this.LevelID === 2 && this.sSOLoginDataModel.OfficeID == 15) {
               this.LevelList = this.LevelList.filter((item: any) => item.ID == 2)
-
-             
-
             }
           } else {
             if (this.sSOLoginDataModel.StaffID == 0) {
-              this.LevelList = this.LevelList.filter((item: any) => item.ID == 1)
+              this.LevelList = this.LevelList.filter((item: any) => item.ID == 1 || item.ID == 2)
             }
           }
           this.LevelID
-         
-          console.log(this.LevelList, "LevelList")
           
         }, error => console.error(error));
     }
@@ -629,6 +626,25 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       });
     } catch (error) {
       console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetCollegesListAll() {
+    try {
+      const request: any = {}
+      request.Action = 'GovtCollegesDDL_Planning';
+
+      await this.ITIGovtEMStaffMasterService.ITI_EM_DropdownGetData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.ItiCollegesListAll = data.Data
+        console.log(this.ItiCollegesListAll, "ItiCollegesListAll")
+      })
+    } catch (error) {
+      console.error(error)
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
