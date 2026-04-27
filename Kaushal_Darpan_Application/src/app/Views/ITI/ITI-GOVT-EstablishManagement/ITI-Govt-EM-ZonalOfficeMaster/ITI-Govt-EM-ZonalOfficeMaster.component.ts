@@ -426,6 +426,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
 
   async GetRoleMasterData() {    
     try {
+      debugger
       // await this.commonMasterService.GetRoleMasterDDL(, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
       this.roleModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.roleModel.RoleID = this.sSOLoginDataModel.RoleID;
@@ -637,6 +638,8 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     try {
       const request: any = {}
       request.Action = 'GovtCollegesDDL_Planning';
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
 
       await this.ITIGovtEMStaffMasterService.ITI_EM_DropdownGetData(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

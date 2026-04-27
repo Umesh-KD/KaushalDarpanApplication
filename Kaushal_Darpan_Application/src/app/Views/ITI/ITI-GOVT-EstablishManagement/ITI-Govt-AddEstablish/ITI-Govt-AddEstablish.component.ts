@@ -1666,7 +1666,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
   async GetTradeData() {
 
-    this.tradeSearchRequest.action = 'Posttrade'
+    this.tradeSearchRequest.action = 'Posttrade_EM'
 
     this.tradeSearchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
     try {
