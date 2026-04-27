@@ -1698,6 +1698,8 @@ const routes: Routes = [
       { path: 'file-delete', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
       { path: 'create-nodal-verifier', loadChildren: () => import('../Views/ITI/create-nodal-verifier/create-nodal-verifier.module').then(m => m.CreateNodalVerifierModule) },
       { path: 'ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
+      { path: 'iti-examination-college', loadChildren: () => import('./Views/ITI/iti-examination-college/iti-examination-college.module').then(m => m.ItiExaminationCollegeModule) },
+      { path: 'iti-examination-trade', loadChildren: () => import('./Views/ITI/iti-examination-trade/iti-examination-trade.module').then(m => m.ItiExaminationTradeModule) },
 
 
     ]
