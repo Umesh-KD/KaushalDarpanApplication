@@ -91,25 +91,25 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
         if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID==EnumRole.PrincipalNon) {
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) =>  item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.PrincipalApprove)
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Applied  || item.ID == EnumStaffTrainingStatus.PrincipalApprove)
+          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.Applied  || item.ID == EnumStaffTrainingStatus.PrincipalApprove)
 
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.Applied);
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) =>  item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE)
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.PrincipalApprove ||  item.ID == EnumStaffTrainingStatus.ADTE)
+          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.PrincipalApprove ||  item.ID == EnumStaffTrainingStatus.ADTE)
 
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.PrincipalApprove);
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
           debugger
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE || item.ID == EnumStaffTrainingStatus.ADTE)
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.ADTE  || item.ID == EnumStaffTrainingStatus.JDTE)
+          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE  || item.ID == EnumStaffTrainingStatus.JDTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.ADTE);
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.DTE || item.ID == EnumStaffTrainingStatus.JDTE)
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.JDTE ||  item.ID == EnumStaffTrainingStatus.DTE)
+          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE ||  item.ID == EnumStaffTrainingStatus.DTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.JDTE);
         }else{
           this.StaffTrainingStatusList = [];
@@ -134,18 +134,18 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
       
       try {
         this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
-        this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+        this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
         this.searchRequest.Action = "GetAllDataNewTraining";
-
+        this.searchRequest.StatusID = this.statusID;
         await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
             this.StaffTrainingDetailsNewTrainingDataList = data.Data;
-            if (this.statusID != 0) {
-              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.StatusID == this.statusID);
-            } else {
+            if (this.statusID == 0) {
               this.StaffTrainingDetailsNewTrainingDataList = data.Data;
             }
+          } else {
+            this.StaffTrainingDetailsNewTrainingDataList = [];
           }
         })
       } catch (error) {
@@ -204,6 +204,11 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
               this.Status = "0";
               this.Remark = "";
 
+              this.StaffTrainingDetailsNewTrainingDataList =
+                this.StaffTrainingDetailsNewTrainingDataList.map((item: any) => ({
+                  ...item,
+                  Selected: false
+                }));
               await this.StaffTrainingDetailsNewTraining_GetData();
             } else {
               this.toastr.error(data.ErrorMessage);

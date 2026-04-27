@@ -79,6 +79,7 @@ export class emtrainingdetailshistoryComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Status = "0";
+    this.SearchStatus = EnumStaffTrainingStatus.Applied;
     debugger
     await this.commonFunctionService.GetCommonMasterDDLByType('StaffTrainingStatus')
       .then((data: any) => {
@@ -88,7 +89,7 @@ export class emtrainingdetailshistoryComponent {
 
         if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject  || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Applied || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
+          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.Applied || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
         }else {
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Applied);
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Applied);
@@ -96,8 +97,8 @@ export class emtrainingdetailshistoryComponent {
         
       }, (error: any) => console.error(error));
 
-
-    await this.StaffTrainingDetailsCompletedTraining_GetData();
+    this.StaffTrainingDetailsCompleted_Search(EnumStaffTrainingStatus.Applied);
+    
 
     }
 
@@ -109,12 +110,17 @@ export class emtrainingdetailshistoryComponent {
       this.searchRequest.StaffID=this.sSOLoginDataModel.StaffID
       this.searchRequest.UserID=this.sSOLoginDataModel.UserID
       this.searchRequest.Action = "GetAllDataCompletedTraining";
+      this.searchRequest.StatusID = this.SearchStatus;
 
       await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.StaffTrainingDetailsCompletedTrainingDataList = data.Data;
         }
+        else {
+          this.StaffTrainingDetailsNewTrainingDataList = [];
+        }
+
         if (this.statusID != 0) {
           this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.StatusID == this.statusID);
         } else {
@@ -179,6 +185,14 @@ export class emtrainingdetailshistoryComponent {
               this.updateSearch.jsonData = "";
               this.Status = "0";
               this.Remark = "";
+
+              this.StaffTrainingDetailsCompletedTrainingDataList =
+                this.StaffTrainingDetailsCompletedTrainingDataList.map((item: any) => ({
+                  ...item,
+                  Selected: false
+                }));
+
+  
 
               await this.StaffTrainingDetailsCompletedTraining_GetData();
             } else {
