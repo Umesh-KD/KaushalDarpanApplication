@@ -174,7 +174,7 @@ export class GroupcodeAllocationComponent {
       this.requestSerialMaster.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.requestSerialMaster.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.requestSerialMaster.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.loaderService.requestStarted();
+      // get
       await this.commonMasterService.GetSerialMasterData(this.requestSerialMaster)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
