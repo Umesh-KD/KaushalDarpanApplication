@@ -48,11 +48,6 @@ export class TheoryMarksRptViewComponent {
   public totalInTableRecord: number = 0;
   //end table feature default
 
-  public ufmLetterForm!: FormGroup;
-  modalReference: NgbModalRef | undefined;
-  public isSubmitted: boolean = false;
-  public getufmStudentExtraInfo = new UFMStudentExtraInfoGetModel();
-  public saveufmStudentExtraInfo = new UFMStudentExtraInfoSaveModel();
 
   constructor(
     private TheoryMarksService: TheoryMarksService,
@@ -62,7 +57,7 @@ export class TheoryMarksRptViewComponent {
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
     private toastr: ToastrService,
-    private commonFunctionHelper: CommonFunctionHelper,
+    public commonFunctionHelper: CommonFunctionHelper,
     private formBuilder: FormBuilder,
     private Swal2: SweetAlert2,
     private modalService: NgbModal
@@ -70,16 +65,6 @@ export class TheoryMarksRptViewComponent {
   }
 
   async ngOnInit() {
-
-    this.ufmLetterForm = this.formBuilder.group({
-      txtEnrollmentNo: ['', [Validators.required]],
-      txtSerialNo: ['', [Validators.required]],
-      txtSerialNo2: ['', [Validators.required]],
-      txtIssueDate: ['', [Validators.required]],
-      txtBundleSendDate: ['', [Validators.required]],
-      txtDate2: ['', [Validators.required]],
-      ddlExamCategory: [0, [DropdownValidators]]
-    });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -202,9 +187,9 @@ export class TheoryMarksRptViewComponent {
   }
 
 
-  ResetControl() {
+  async ResetControl() {
     this.searchRequest = new TheoryMarksSearchModel();
-    this.GetTheoryMarksDetailList();
+    await this.GetTheoryMarksDetailList();
   }
 
   //table feature
@@ -332,8 +317,6 @@ export class TheoryMarksRptViewComponent {
     XLSX.writeFile(wb, fileName);
   }
 
-
-
   DownloadFile(FileName: string, DownloadfileName: any): void {
 
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
@@ -349,42 +332,6 @@ export class TheoryMarksRptViewComponent {
     });
   }
 
-
-
-  DownloadFile1(FileName: string, DownloadfileName: any): void {
-
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
-    // Fetch the file as a blob
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      downloadLink.download = this.generateFileName1('pdf'); // Set the desired file name
-      downloadLink.click();
-      // Clean up the object URL
-      window.URL.revokeObjectURL(url);
-    });
-  }
-
-
-
-  generateFileName1(extension: string): string {
-    const now = new Date();
-
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const year = now.getFullYear();
-
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
-
-    return `Ufm_Letter${timestamp}.${extension}`;
-  }
-
-
-
   generateFileName(extension: string): string {
     const now = new Date();
 
@@ -398,125 +345,6 @@ export class TheoryMarksRptViewComponent {
     const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
 
     return `Theory_marks_report_data_${timestamp}.${extension}`;
-  }
-
-  async GetUFMLetter(row: any) {
-    try {
-      const request: any = {
-        DepartmentID: this.sSOLoginDataModel.DepartmentID,
-        EndTermID: this.sSOLoginDataModel.EndTermID,
-        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-        isUFM: 1,
-        EnrollmentNo: row?.EnrollmentNo,   // assuming row contains it
-        UFMStuExtraInfoID: row?.UFMStuExtraInfoID,  // assuming row contains it
-        StudentID: row?.StudentID,  // assuming row contains it
-        StudentExamID: row?.StudentExamID,   // assuming row contains it
-        StudentExamPaperID: row?.StudentExamPaperID   // assuming row contains it
-      };
-
-      let data: any = await this.reportService.GetUFMLetter(request);
-
-      if (data && data.Data) {
-        this.DownloadFile1(data.Data, 'UFMLetter');
-      } else {
-        this.toastr.error(data?.Message || 'No file received');
-      }
-
-      console.log(data); // handle response here
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-
-  // for ufm letter extra information to be print in ufm letter    
-  async OpenGetUFMStudentExtraInfo(ngTempleteModel: any, itemRow: any) {
-    try {
-      // get
-      await this.GetUFMStudentExtraInfo(itemRow);
-      // model
-      this.modalReference = this.modalService.open(ngTempleteModel, { size: 'sm', backdrop: 'static' });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async GetUFMStudentExtraInfo(itemRow: any) {
-    try {
-      //debugger
-      // model
-      this.getufmStudentExtraInfo.StudentID = itemRow.StudentID;
-      this.getufmStudentExtraInfo.UFMStuExtraInfoID = itemRow.UFMStuExtraInfoID;
-      this.getufmStudentExtraInfo.StudentExamID = itemRow.StudentExamID;
-      this.getufmStudentExtraInfo.StudentExamPaperID = itemRow.StudentExamPaperID;
-      // session
-      this.getufmStudentExtraInfo.RoleID = this.sSOLoginDataModel.RoleID;
-      this.getufmStudentExtraInfo.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      this.getufmStudentExtraInfo.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.getufmStudentExtraInfo.EndTermID = this.sSOLoginDataModel.EndTermID;
-
-      // get
-      await this.TheoryMarksService.GetUFMStudentExtraInfo(this.getufmStudentExtraInfo)
-        .then((res: any) => {
-          let _data = JSON.parse(JSON.stringify(res));  
-          if (res.State == EnumStatus.Success) {
-            this.saveufmStudentExtraInfo = _data['Data'];
-          }
-          else if (res.State == EnumStatus.Warning) {
-            this.toastr.warning(res.Message);
-          }
-          else {
-            this.toastr.error(res.Message);
-            console.log(res.ErrorMessage);
-          }
-        }, (error: any) => console.log(error));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async SaveUFMStudentExtraInfo() {
-    try {
-      //debugger
-      this.isSubmitted = true;
-
-      if (this.ufmLetterForm.invalid) {
-        return;
-      }
-
-      // model
-      this.saveufmStudentExtraInfo.RoleID = this.sSOLoginDataModel.RoleID;
-      this.saveufmStudentExtraInfo.ModifyBy = this.sSOLoginDataModel.UserID;
-
-
-      // save
-      await this.TheoryMarksService.SaveUFMStudentExtraInfo(this.saveufmStudentExtraInfo)
-        .then(async (res: any) => {
-          if (res.State == EnumStatus.Success) {
-            this.CloseUFMStudentExtraInfoModal();
-            await this.GetTheoryMarksDetailList(); // grid list refresh after save
-            this.toastr.success(res.Message);
-          }
-          else if (res.State == EnumStatus.Warning) {
-            this.toastr.warning(res.Message);
-          }
-          else {
-            this.toastr.error(res.Message);
-            console.log(res.ErrorMessage);
-          }
-        }, (error: any) => console.log(error));
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  CloseUFMStudentExtraInfoModal() {
-    this.modalService.dismissAll();
-    this.modalReference?.close();
-    this.getufmStudentExtraInfo = new UFMStudentExtraInfoGetModel();
-    this.saveufmStudentExtraInfo = new UFMStudentExtraInfoSaveModel();
-    this.isSubmitted = false;
   }
 
 }

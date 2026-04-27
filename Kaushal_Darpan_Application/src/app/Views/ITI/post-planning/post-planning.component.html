@@ -141,7 +141,8 @@
             (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">
       {{ leave.ActiveStatus ? 'Active' : 'Inactive' }}
     </button>-->
-              <label class="switch">
+          <div class="row-line-btn">
+                <label class="switch">
                 <input type="checkbox"
                        [checked]="leave.ActiveStatus"
                        (change)="OfficeVacancyActiveDeActive(leave.ID, $event.target.checked)" />
@@ -151,6 +152,7 @@
               <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">
                 Remove
               </button>
+          </div>
             </td>
           </tr>
         </tbody>

@@ -783,7 +783,74 @@ export class PersonalDetailsTabComponent implements OnInit {
 
   }
 
+allowOnlyAlphabets(event: any) {
+  const charCode = event.which ? event.which : event.keyCode;
+  const input = event.target as HTMLInputElement;
+  const value = input.value;
 
+  // Allow A-Z, a-z, Hindi
+  if (
+    (charCode >= 65 && charCode <= 90) ||   // A-Z
+    (charCode >= 97 && charCode <= 122) ||  // a-z
+    (charCode >= 2304 && charCode <= 2431)  // Hindi
+  ) {
+    return true;
+  }
 
+  // Handle space
+  if (charCode === 32) {
+    // ❌ prevent space at start
+    if (value.length === 0) {
+      event.preventDefault();
+      return false;
+    }
 
+    // ❌ prevent multiple consecutive spaces
+    if (value[value.length - 1] === ' ') {
+      event.preventDefault();
+      return false;
+    }
+
+    return true;
+  }
+
+  // ❌ block everything else
+  event.preventDefault();
+  return false;
+}
+removeExtraSpaces(field: keyof PersonalDetailsDatamodel) {
+  const value = this.request[field];
+
+  if (typeof value === 'string') {
+    (this.request as any)[field] = value
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+}
+
+onPasteClean(event: ClipboardEvent, field: keyof PersonalDetailsDatamodel) {
+  event.preventDefault();
+
+  let pasted = event.clipboardData?.getData('text') || '';
+
+  pasted = pasted
+    .replace(/[^A-Za-z\u0900-\u097F\s]/g, '') // remove invalid chars
+    .replace(/\s+/g, ' ')                    // single space
+    .trim();                                // remove leading/trailing
+
+  (this.request as any)[field] = pasted;
+}
+
+onCategoryCChange() {
+  if (this.request.CategoryC != 69) {
+    this.request.PWDCategoryID = 0;
+
+    const pwdControl = this.PersonalDetailForm.get('ddlPWDCategoryID');
+
+    if (pwdControl) {
+      pwdControl.setValue(0);
+      pwdControl.markAsUntouched();
+    }
+  }
+}
 }

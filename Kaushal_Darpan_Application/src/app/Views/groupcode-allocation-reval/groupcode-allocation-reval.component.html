@@ -31,9 +31,18 @@
         <!--semester-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
-          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterId" >
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterId">
             <option value="0">--All--</option>
             <option *ngFor="let item of SemestarMasterDDLList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+          </select>
+        </div>
+        <!--scheme-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.schemeId">
+            <option value="0">--All--</option>
+            <option value="1347">Old</option>
+            <option value="1348">New</option>
           </select>
         </div>
 
@@ -56,14 +65,14 @@
           <option value="500">500</option>
           <option value="1000">1000</option>
         </select>-->
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        <input class="form-input" style="width:30em;" placeholder="Search..." [(ngModel)]="Table_SearchText" />
       </div>
     </div>
 
 
 
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="">
+    <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="col-md-2">
         <form [formGroup]="GroupCodeAllocationSaveForm">
           <div class="flex items-center">
             <label for="StartValue" class="me-1" style="white-space:nowrap;">Start Value: <span class="StarMarking">*</span></label>
@@ -79,6 +88,14 @@
 
         </form>
       </div>
+
+      <div class="col-md-10">
+        <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
+        <a href="javascript:void(0)" (click)="downloadGroupCodeMasterReport()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download Group Report</a>
+        <a href="javascript:void(0)" (click)="downloadGroupCodeMasterReportBranchwise()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download Group Report Branch Wise</a>
+        <a href="javascript:void(0)" (click)="downloadExamLetterReport()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Exam Letter Report</a>
+      </div>
+
     </div>
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">

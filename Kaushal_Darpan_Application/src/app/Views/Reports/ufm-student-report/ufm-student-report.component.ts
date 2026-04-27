@@ -5,11 +5,20 @@ import { MatSort } from '@angular/material/sort';  // Import MatSort
 import { GetUFMStudentReport } from '../../../Models/GenerateAdmitCardDataModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ReportService } from '../../../Services/Report/report.service';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
 import { OnlineMarkingReportModel, OnlineMarkingSearchModel } from '../../../Models/OnlineMarkingReportDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { UFMExtraInfoSaveModel, UFMStudentExtraInfoSaveModel } from '../../../Models/TheoryMarksDataModels';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.service';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
 
 @Component({
   selector: 'app-ufm-student-report',
@@ -19,7 +28,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 })
 export class UFMStudentReportComponent {
 
-  public UFMStudentReportList: GetUFMStudentReport[] = [];
+  public UFMStudentReportList: any[] = [];
   public searchRequest = new GetUFMStudentReport();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public InstituteMasterList: any[] = [];
@@ -43,11 +52,37 @@ export class UFMStudentReportComponent {
   public isSubmitted: boolean = false;
   public isVisibleList: boolean = false;
 
-  constructor(private loaderService: LoaderService, private reportService: ReportService, private commonMasterService: CommonFunctionService) { }
+  public ufmLetterForm!: FormGroup;
+  modalReference: NgbModalRef | undefined;
+  public saveufmExtraInfo = new UFMExtraInfoSaveModel();
+  public UFMExtraInfoFilled: number = 1;
+
+  constructor(private loaderService: LoaderService,
+    private reportService: ReportService,
+    private commonMasterService: CommonFunctionService,
+    private toastr: ToastrService,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private http: HttpClient,
+    private TheoryMarksService: TheoryMarksService,
+    public appsettingConfig: AppsettingService,
+    public commonFunctionHelper: CommonFunctionHelper,
+  ) { }
 
   async ngOnInit() {
+    // ufm letter form
+    this.ufmLetterForm = this.formBuilder.group({
+      txtSerialNo: ['', [Validators.required]],
+      txtSerialNo2: ['', [Validators.required]],
+      txtIssueDate: ['', [Validators.required]],
+      txtBundleSendDate: ['', [Validators.required]],
+      txtDate2: ['', [Validators.required]]
+    });
+    // session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.GetAllData();
+
+    // load
+    await this.GetAllData();
   }
 
   exportToExcel() {
@@ -61,15 +96,21 @@ export class UFMStudentReportComponent {
 
   async GetAllData() {
     try {
+      //debugger
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
- 
+
       this.loaderService.requestStarted();
       await this.reportService.GetUFMStudentReport(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.UFMStudentReportList = data.Data;
+
         this.totalInTableRecord = this.UFMStudentReportList.length;
+        // set ufm extra information filled or not for showing button
+        if (this.UFMStudentReportList?.length > 0) {
+          this.UFMExtraInfoFilled = Number(this.UFMStudentReportList[0]["UFMExtraInfoID"] || 0);
+        }
         this.loadInTable();
       }, (error: any) => console.error(error))
     }
@@ -144,6 +185,120 @@ export class UFMStudentReportComponent {
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.UFMStudentReportList.length;
+  }
+
+  async GetUFMLetter(row: any) {
+    try {
+      debugger
+      const request: any = {
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        isUFM: 1,
+        EnrollmentNo: row?.SPNNo,   // assuming row contains it
+        UFMExtraInfoID: row?.UFMExtraInfoID,  // assuming row contains it
+        StudentID: row?.StudentID,  // assuming row contains it
+        StudentExamID: row?.StudentExamID
+      };
+
+      let data: any = await this.reportService.GetUFMLetter(request);
+
+      if (data && data.Data) {
+        this.DownloadFile1(data.Data, 'UFMLetter');
+      } else {
+        this.toastr.error(data?.Message || 'No file received');
+      }
+
+      console.log(data); // handle response here
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  DownloadFile1(FileName: string, DownloadfileName: any): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName1('pdf'); // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  generateFileName1(extension: string): string {
+    const now = new Date();
+
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
+
+    return `Ufm_Letter${timestamp}.${extension}`;
+  }
+
+  // for ufm letter extra information to be print in ufm letter    
+  async OpenGetUFMExtraInfo(ngTempleteModel: any) {
+    try {
+      // model
+      this.modalReference = this.modalService.open(ngTempleteModel, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async SaveUFMExtraInfo() {
+    try {
+      //debugger
+      this.isSubmitted = true;
+
+      if (this.ufmLetterForm.invalid) {
+        return;
+      }
+
+      // model
+      this.saveufmExtraInfo.RoleID = this.sSOLoginDataModel.RoleID;
+      this.saveufmExtraInfo.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.saveufmExtraInfo.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.saveufmExtraInfo.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+
+
+      // save
+      await this.TheoryMarksService.SaveUFMExtraInfo(this.saveufmExtraInfo)
+        .then(async (res: any) => {
+          if (res.State == EnumStatus.Success) {
+            this.CloseUFMStudentExtraInfoModal();
+            await this.GetAllData(); // grid list refresh after save
+            this.toastr.success(res.Message);
+          }
+          else if (res.State == EnumStatus.Warning) {
+            this.toastr.warning(res.Message);
+          }
+          else {
+            this.toastr.error(res.Message);
+            console.log(res.ErrorMessage);
+          }
+        }, (error: any) => console.log(error));
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  CloseUFMStudentExtraInfoModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.saveufmExtraInfo = new UFMExtraInfoSaveModel();
+    this.isSubmitted = false;
+    this.UFMExtraInfoFilled = 1;
   }
 
 }

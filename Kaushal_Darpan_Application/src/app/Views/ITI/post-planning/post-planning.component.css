@@ -49,11 +49,11 @@ textarea {
    Buttons
 ------------------------------ */
 .btn {
-  padding: 8px 16px;
+  padding: 4px 16px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 12px;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -188,3 +188,8 @@ textarea {
   .slider.round:before {
     border-radius: 50%;
   }
+.row-line-btn{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}

@@ -39,7 +39,7 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   public getSSOIDDetailData: any[]=[];
   public messageModel= new ApplicationMessageDataModel();
   
-
+  public PlacedCountList:any[]=[];
   public InstituteMasterList: any[] = [];
   public StreamMasterList: any[] = [];
   public CampusMasterList: any[] = [];
@@ -60,7 +60,7 @@ export class PlacementSelectedStudentsComponent implements OnInit {
     this.PlacementSelectedListStudentForm = this.formBuilder.group({
       CampusPostID: ['', [DropdownValidators]],
       BranchID: ['', [DropdownValidators]],
-      HiringRoleID: [''],
+      HiringRoleID: ['',[DropdownValidators]],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -178,6 +178,28 @@ export class PlacementSelectedStudentsComponent implements OnInit {
       }, 200);
     }
   }
+
+    async GetStudentPlacedCount() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.placementShortListStudentService.GetStudentPlacedCount()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PlacedCountList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   //clear search
   ClearSearchData() {
     this.isSubmitted = false;
