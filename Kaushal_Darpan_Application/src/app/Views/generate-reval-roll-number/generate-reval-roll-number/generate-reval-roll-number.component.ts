@@ -669,7 +669,7 @@ export class GenerateRevalRollNumberComponent {
         if (column === 'SrNo') {
           filteredItem[column] = index + 1;
         } else if (!unwantedColumns.includes(column)) {
-          // 👇 Always include column even if value is empty
+          // always include column even if value is empty
           filteredItem[column] = item[column] ?? '';
         }
       });
