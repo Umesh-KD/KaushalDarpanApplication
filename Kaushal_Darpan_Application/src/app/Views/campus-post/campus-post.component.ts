@@ -292,9 +292,11 @@ export class CampusPostComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.StateMasterList = data['Data'];
         }, error => console.error(error));
-
-
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+debugger
+        let action='getEng_NonEng_Stream';
+      // await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+      // get stream VIA ACTION
+        await this.commonMasterService.StreamMaster_streamType(this.sSOLoginDataModel.DepartmentID, 0, this.sSOLoginDataModel.EndTermID,action)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StreamMasterList = data['Data'];
