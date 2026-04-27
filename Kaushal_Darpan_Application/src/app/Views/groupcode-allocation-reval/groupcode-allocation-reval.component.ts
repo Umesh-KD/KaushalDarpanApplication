@@ -174,7 +174,7 @@ export class GroupcodeAllocationRevalComponent {
       this.requestSerialMaster.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.requestSerialMaster.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.requestSerialMaster.RoleID = this.sSOLoginDataModel.RoleID;
-      this.loaderService.requestStarted();
+      // get
       await this.commonMasterService.GetSerialMasterData(this.requestSerialMaster)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -201,7 +201,7 @@ export class GroupcodeAllocationRevalComponent {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Key: "GroupCodeAllocation"
     }
-
+    // get
     await this.commonMasterService.GetDateConfigSetting(data)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
