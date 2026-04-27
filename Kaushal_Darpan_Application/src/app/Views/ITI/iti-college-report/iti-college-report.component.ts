@@ -302,6 +302,9 @@ export class ItiCollegeReportComponent {
       String(today.getMonth() + 1).padStart(2, '0') + '-' +
       String(today.getDate()).padStart(2, '0');
 
+
+
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //this.searchrequest.SSOID = this.sSOLoginDataModel.SSOID
     //this.searchrequest.DepartmentID = EnumDepartment.BTER;
