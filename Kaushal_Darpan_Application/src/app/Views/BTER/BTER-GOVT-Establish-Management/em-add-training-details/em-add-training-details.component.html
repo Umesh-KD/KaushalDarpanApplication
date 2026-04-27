@@ -17,6 +17,29 @@
     <form [formGroup]="AddTrainingDetailsFromGroup">
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
 
+        <div class="flex gap-4">
+          <label>
+            <input type="radio"
+                   name="TrainingType"
+                   formControlName="TrainingType"
+                   [value]="1"
+                   (change)="onTrainingTypeChange(1)">
+            Completed Training History
+          </label>
+
+          <label>
+            <input type="radio"
+                   name="TrainingType"
+                   formControlName="TrainingType"
+                   [value]="2"
+                   (change)="onTrainingTypeChange(2)">
+            New Training
+          </label>
+        </div>
+
+
+
+
         <div>
           <label for="OrganizinglnstituteName" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Organizing lnstitute Name: <span class="StarMarking">*</span>
@@ -93,7 +116,7 @@
                  name="StartDate"
                  class="form-input"
                  formControlName="StartDate"
-                 [(ngModel)]="request.StartDate"/>
+                 [(ngModel)]="request.StartDate"  (change)="onDateChange()" />
 
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.StartDate.errors" class="text-danger">
             <p *ngIf="!_AddTrainingDetailsFromGroup.StartDate.errors.DropdownValidators">
@@ -111,7 +134,7 @@
                  name="EndDate"
                  class="form-input"
                  formControlName="EndDate"
-                 [(ngModel)]="request.EndDate"/>
+                 [(ngModel)]="request.EndDate" [min]="request.StartDate" (change)="onDateChange()"  />
 
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.EndDate.errors" class="text-danger">
             <p *ngIf="!_AddTrainingDetailsFromGroup.EndDate.errors.DropdownValidators">
@@ -150,107 +173,245 @@
 
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  for="TrainingDoc">
+                 for="TrainingDoc">
             Upload Document:<span class="StarMarking">*</span>
           </label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    id="TrainingDoc" type="file" (change)="onFilechange($event)" formControlName="TrainingDoc">
+                   id="TrainingDoc" type="file" (change)="onFilechange($event, 'TrainingDoc')" formControlName="TrainingDoc">
             <label for="TrainingDoc">
               <span>Choose File</span>
               {{request.TrainingDoc === '' ? 'No File Choosen' : request.Dis_TrainingDoc}}
             </label>
             <div class="flex">
               <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + request.TrainingDoc}}"
-                  *ngIf="request.TrainingDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                 *ngIf="request.TrainingDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
             </div>
           </div>
         </div>
+        <!--{{request.TrainingTypeID|json}}-->
+        <div *ngIf="request.TrainingTypeID == 1">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="ComplitionDoc">
+            Complition Training  Upload Document
+          </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="ComplitionDoc" type="file" (change)="onFilechange($event, 'ComplitionDoc')" formControlName="ComplitionTrainingDoc">
+            <label for="ComplitionDoc">
+              <span>Choose File</span>
+              {{request.ComplitionTrainingDoc === '' ? 'No File Choosen' : request.Dis_complitionTrainingDoc}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + request.ComplitionTrainingDoc}}"
+                 *ngIf="request.ComplitionTrainingDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+        </div>
+
+
+
+
       </div>
       <div>
         <div class="text-center">
-            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
-            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
-                <i class="ti ti-refresh"></i> Reset
-            </button>
+          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
         </div>
       </div>
     </form>
 
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Service Details List</b>
-      <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openOTP()"><i class="ti ti-download"></i> Download Excel</a> -->
-    </div>
-    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
-      <div class="">
-        <!-- <select id="ddlConter" class="form-select  couterDropDown">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Staff  Details Completed Training</b>
+        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openOTP()"><i class="ti ti-download"></i> Download Excel</a> -->
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+        <div class="">
+          <!-- <select id="ddlConter" class="form-select  couterDropDown">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
         </select> -->
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+        </div>
       </div>
-      <div class="">
-      </div>
-      <div class="">
-      </div>
-      <div class="">
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
-      </div>
-    </div>
 
-    <div class="overflow-auto mt-3">
-      <table class="table table-border w-full" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-          <tr>
-            <th width="80px" align="left">Sr. No.</th>
-            <th align="left">SSO ID</th>
-            <th align="left">Name</th>
-            <th align="left">Organizing lnstitute Name</th>
-            <th align="left">Course Type</th>
-            <th align="left">Course Name</th>
-            <th class="left">Duration Unit</th>
-            <th align="left">Duration</th>
-            <th align="left">Start Date - End Date</th>
-            <th align="left">Venue</th>
-            <th align="left">Mode Of Training</th>
-            <th class="text-left">View Document</th>
-            <th align="center" width="200">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of StaffTrainingDetailsDataList | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td>{{idx+1}}</td>
-            <td>{{row.SSOID}}</td>
-            <td>{{row.StaffName}}</td>
-            <td>{{row.OrganizinglnstituteName}}</td>
-            <td>{{row.TrainingCourseType_str}}</td>
-            <td>{{row.TrainingCourseName}}</td>
-            <td>{{row.DurationUnit_str}}</td>
-            <td>{{row.Duration}}</td>
-            <td>{{row.StartDate}} - {{row.EndDate}}</td>
-            <td>{{row.Venue}}</td>
-            <td>{{row.ModeOfTraining_str}}</td>
-            <td align="left">
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc}}"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-              </div>
-            </td>
-            <td>
+      <div class="overflow-auto mt-3">
+        <table class="table table-border w-full" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th width="80px" align="left">Sr. No.</th>
+              <th align="left">SSO ID</th>
+              <th align="left">Name</th>
+              <th align="left">Organizing lnstitute Name</th>
+              <th align="left">Course Type</th>
+              <th align="left">Course Name</th>
+              <th class="left">Duration Unit</th>
+              <th align="left">Duration</th>
+              <th align="left">Start Date - End Date</th>
+              <th align="left">Venue</th>
+              <th align="left">Mode Of Training</th>
+              <th class="text-left">View Document</th>
+              <th class="text-left">View Complition Training Document</th>
+              <!--<th align="center" width="200">Action</th>-->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of StaffTrainingDetailsCompletedTrainingDataList | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{row.SSOID}}</td>
+              <td>{{row.StaffName}}</td>
+              <td>{{row.OrganizinglnstituteName}}</td>
+              <td>{{row.TrainingCourseType_str}}</td>
+              <td>{{row.TrainingCourseName}}</td>
+              <td>{{row.DurationUnit_str}}</td>
+              <td>{{row.Duration}}</td>
+              <td>{{row.StartDate}} - {{row.EndDate}}</td>
+              <td>{{row.Venue}}</td>
+              <td>{{row.ModeOfTraining_str}}</td>
+              <td align="left">
+                <div class="flex" *ngIf="row.TrainingDoc; else noDoc1">
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc"
+                     class="btn bg-primary text-white m-0"
+                     target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
+                </div>
+                <ng-template #noDoc1>-----</ng-template>
+              </td>
+
+              <td align="left">
+                <div class="flex" *ngIf="row.ComplitionTrainingDoc; else noDoc2">
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.ComplitionTrainingDoc"
+                     class="btn bg-primary text-white m-0"
+                     target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
+                </div>
+                <ng-template #noDoc2>-----</ng-template>
+              </td>
+              <!--<td>
               <div class="flex align-center justify-center actionBtns">
-                <!-- <a href="javascript:void(0);" id="edit" title="Edit Training" 
-                  (click)="StaffTrainingDetails_GetDataById(row.StaffTrainingDetailID)"><i class="ti ti-pencil"></i>
-                </a> -->
-                <a href="javascript:void(0);" title="Delete" 
+                <a href="javascript:void(0);" title="Delete"
                   (click)="StaffTrainingDetails_DeleteById(row.StaffTrainingDetailID)"><i class="ti ti-trash"></i>
                 </a>
-                
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </td>-->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
+    </div>
+
+    <div class="card-body p-5">
+
+
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Staff  Details New Training</b>
+        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openOTP()"><i class="ti ti-download"></i> Download Excel</a> -->
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+        <div class="">
+          <!-- <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select> -->
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+        </div>
+      </div>
+
+      <div class="overflow-auto mt-3">
+        <table class="table table-border w-full" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th width="80px" align="left">Sr. No.</th>
+              <th align="left">SSO ID</th>
+              <th align="left">Name</th>
+              <th align="left">Organizing lnstitute Name</th>
+              <th align="left">Course Type</th>
+              <th align="left">Course Name</th>
+              <th class="left">Duration Unit</th>
+              <th align="left">Duration</th>
+              <th align="left">Start Date - End Date</th>
+              <th align="left">Venue</th>
+              <th align="left">Mode Of Training</th>
+              <th class="text-left">View Document</th>
+              <th class="text-left">View Complition Training Document</th>
+              <!--<th align="center" width="200">Action</th>-->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of StaffTrainingDetailsNewTrainingDataList | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{row.SSOID}}</td>
+              <td>{{row.StaffName}}</td>
+              <td>{{row.OrganizinglnstituteName}}</td>
+              <td>{{row.TrainingCourseType_str}}</td>
+              <td>{{row.TrainingCourseName}}</td>
+              <td>{{row.DurationUnit_str}}</td>
+              <td>{{row.Duration}}</td>
+              <td>{{row.StartDate}} - {{row.EndDate}}</td>
+              <td>{{row.Venue}}</td>
+              <td>{{row.ModeOfTraining_str}}</td>
+              <td align="left">
+                <div class="flex" *ngIf="row.TrainingDoc; else noDoc1">
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc"
+                     class="btn bg-primary text-white m-0"
+                     target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
+                </div>
+                <ng-template #noDoc1>-----</ng-template>
+              </td>
+
+              <td align="left">
+                <div class="flex" *ngIf="row.ComplitionTrainingDoc; else noDoc2">
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.ComplitionTrainingDoc"
+                     class="btn bg-primary text-white m-0"
+                     target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
+                </div>
+                <ng-template #noDoc2>-----</ng-template>
+              </td>
+              <!--<td>
+              <div class="flex align-center justify-center actionBtns">
+                <a href="javascript:void(0);" title="Delete"
+                  (click)="StaffTrainingDetails_DeleteById(row.StaffTrainingDetailID)"><i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>-->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
     </div>
   </div>
 </div>
+
+

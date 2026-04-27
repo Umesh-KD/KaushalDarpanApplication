@@ -28,6 +28,8 @@ export class EMAddTrainingDetailsComponent {
 
   public EM_TrainingCourseTypeList: any = [];
   public StaffTrainingDetailsDataList: any = [];
+  public StaffTrainingDetailsCompletedTrainingDataList: any = [];
+  public StaffTrainingDetailsNewTrainingDataList: any = [];
 
   isSubmitted: boolean = false;
   Table_SearchText: string = '';
@@ -59,12 +61,16 @@ export class EMAddTrainingDetailsComponent {
       ModeOfTraining: ['', [DropdownValidators1]],
       Venue: ['', [Validators.required]],
       TrainingDoc: ['', [Validators.required]],
+      TrainingType: [''],
+      ComplitionTrainingDoc: ['']
+      
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     await this.GetEM_TrainingCourseType();
-    await this.StaffTrainingDetails_GetData();
+    await this.StaffTrainingDetailsCompletedTraining_GetData();
+    await this.StaffTrainingDetailsNewTraining_GetData();
   }
 
   get _AddTrainingDetailsFromGroup() { return this.AddTrainingDetailsFromGroup.controls; }
@@ -112,12 +118,14 @@ export class EMAddTrainingDetailsComponent {
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.StaffID = this.sSOLoginDataModel.StaffID;
 
+      
       await this.staffServiceDetailsService.Save_StaffTrainingDetails(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.ResetControl();
-          await this.StaffTrainingDetails_GetData();
+          await this.StaffTrainingDetailsCompletedTraining_GetData();
+          await this.StaffTrainingDetailsNewTraining_GetData();
         } else {
           this.toastr.error(data.ErrorMessage);
         }
@@ -132,22 +140,22 @@ export class EMAddTrainingDetailsComponent {
     this.isSubmitted = false;
   }
 
-  async StaffTrainingDetails_GetData() {
-    try {
-      this.searchRequest.StaffID=this.sSOLoginDataModel.StaffID
-      this.searchRequest.UserID=this.sSOLoginDataModel.UserID
-      this.searchRequest.Action = "GetAllData";
+  //async StaffTrainingDetails_GetData() {
+  //  try {
+  //    this.searchRequest.StaffID=this.sSOLoginDataModel.StaffID
+  //    this.searchRequest.UserID=this.sSOLoginDataModel.UserID
+  //    this.searchRequest.Action = "GetAllData";
 
-      await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State === EnumStatus.Success) {
-          this.StaffTrainingDetailsDataList = data.Data;
-        }
-      })
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  //    await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      if (data.State === EnumStatus.Success) {
+  //        this.StaffTrainingDetailsDataList = data.Data;
+  //      }
+  //    })
+  //  } catch (error) {
+  //    console.error(error);
+  //  }
+  //}
 
   async StaffTrainingDetails_GetDataById(ID: number) {
     try {
@@ -178,7 +186,8 @@ export class EMAddTrainingDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.toastr.success("Updated Successfully")
-          await this.StaffTrainingDetails_GetData();
+          await this.StaffTrainingDetailsCompletedTraining_GetData();
+          await this.StaffTrainingDetailsNewTraining_GetData();
         }
       })
     } catch (error) {
@@ -186,7 +195,7 @@ export class EMAddTrainingDetailsComponent {
     }
   }
 
-  async onFilechange(event: any) {
+  async onFilechange(event: any, Name: any) {
     try {
       this.file = event.target.files[0];
       if (this.file) {
@@ -218,8 +227,16 @@ export class EMAddTrainingDetailsComponent {
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             if (data.State === EnumStatus.Success) {
-              this.request.TrainingDoc = data['Data'][0]["FileName"];
-              this.request.Dis_TrainingDoc = data['Data'][0]["Dis_FileName"];
+              if (Name == 'TrainingDoc') {
+                this.request.TrainingDoc = data['Data'][0]["FileName"];
+                this.request.Dis_TrainingDoc = data['Data'][0]["Dis_FileName"];
+              } else if (Name == 'ComplitionDoc') {
+                this.request.ComplitionTrainingDoc = data['Data'][0]["FileName"];
+                this.request.Dis_complitionTrainingDoc = data['Data'][0]["Dis_FileName"];
+              } else {
+                this.toastr.warning("no action provided")
+              }
+              
             }
 
             if (data.State === EnumStatus.Error) {
@@ -234,6 +251,63 @@ export class EMAddTrainingDetailsComponent {
       console.log(Ex);
     } finally {
       this.loaderService.requestEnded();
+    }
+  }
+
+  async StaffTrainingDetailsCompletedTraining_GetData() {
+    debugger
+    try {
+      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+      this.searchRequest.Action = "GetAllDataCompletedTraining";
+
+      await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.StaffTrainingDetailsCompletedTrainingDataList = data.Data;
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async StaffTrainingDetailsNewTraining_GetData() {
+    debugger
+    try {
+      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+      this.searchRequest.Action = "GetAllDataNewTraining";
+
+      await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.StaffTrainingDetailsNewTrainingDataList = data.Data;
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+  onTrainingTypeChange(event: any) {
+    debugger
+   
+    this.request.TrainingTypeID = event;
+  }
+
+  onDateChange() {
+    const start = this.AddTrainingDetailsFromGroup.get('StartDate')?.value;
+    const end = this.AddTrainingDetailsFromGroup.get('EndDate')?.value;
+
+    if (start && end && new Date(end) < new Date(start)) {
+      alert("End Date cannot be less than Start Date");
+
+      // clear EndDate properly
+      this.AddTrainingDetailsFromGroup.get('EndDate')?.setValue(null);
+
+      // if you are still using request object
+      this.request.EndDate = "null";
     }
   }
 }
