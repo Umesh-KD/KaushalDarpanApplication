@@ -76,7 +76,7 @@
 
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date<span class="StarMarking">*</span></label>
-        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.OrderDate" (change)="getExaminerData()">
+        <input type="date" class="form-input" id="ApplicationId"   [max]="minDate" [(ngModel)]="request.OrderDate" (change)="getExaminerData()">
 
       </div>
 
@@ -214,7 +214,7 @@
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Establishment Date <span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="txtYear" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
+            <input type="date" class="form-input" id="ApplicationId" formControlName="txtYear" [max]="minDate" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
             <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
               <p *ngIf="_ReportForm.txtYear.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
@@ -608,7 +608,7 @@
 
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
-          <input type="date" class="form-input" id="ApplicationId" formControlName="NodalOrderDate" [(ngModel)]="request.NodalOrderDate">
+          <input type="date" class="form-input" id="ApplicationId" formControlName="NodalOrderDate" [max]="minDate" [(ngModel)]="request.NodalOrderDate">
           <div *ngIf="isSubmitted && _ReportForm.NodalOrderDate.errors" class="text-danger">
             <p *ngIf="_ReportForm.NodalOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
@@ -1399,7 +1399,7 @@
 
         <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==260 && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Date<span class="StarMarking">*</span></label>
-          <input type="date" class="form-input" id="ApplicationId" formControlName="ShilanyasDate" [(ngModel)]="request.ShilanyasDate">
+          <input type="date" class="form-input" id="ApplicationId" formControlName="ShilanyasDate" [max]="minDate" [(ngModel)]="request.ShilanyasDate">
           <div *ngIf="isSubmitted && _ReportForm.ShilanyasDate.errors" class="text-danger">
 
             <p *ngIf="_ReportForm.ShilanyasDate.errors.required">
@@ -1433,7 +1433,7 @@
 
         <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==260 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Date<span class="StarMarking">*</span></label>
-          <input type="date" class="form-input" id="ApplicationId" formControlName="LokarpanDate" [(ngModel)]="request.LokarpanDate">
+          <input type="date" class="form-input" id="ApplicationId" formControlName="LokarpanDate" [max]="minDate" [(ngModel)]="request.LokarpanDate">
           <div *ngIf="isSubmitted && _ReportForm.LokarpanDate.errors" class="text-danger">
             <p *ngIf="_ReportForm.LokarpanDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
@@ -1459,7 +1459,7 @@
 
         <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==260 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Civil Work Progress Date<span class="StarMarking">*</span></label>
-          <input type="date" class="form-input" id="ApplicationId" formControlName="PercentCivilDate" [(ngModel)]="request.PercentCivilDate">
+          <input type="date" class="form-input" id="ApplicationId" formControlName="PercentCivilDate" [max]="minDate"  [(ngModel)]="request.PercentCivilDate">
           <div *ngIf="isSubmitted && _ReportForm.PercentCivilDate.errors" class="text-danger">
             <p *ngIf="_ReportForm.PercentCivilDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
@@ -1472,7 +1472,7 @@
 
         <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsNewCollege==1 || sSOLoginDataModel.RoleID==260 && request.IsNewCollege==1  || sSOLoginDataModel.RoleID==20 && request.IsNewCollege==1  && request.IsNewCollege==1 ">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building TakenOver Date<span class="StarMarking">*</span></label>
-          <input type="date" class="form-input" id="ApplicationId" formControlName="TakenOverDate" [(ngModel)]="request.TakenOverDate">
+          <input type="date" class="form-input" id="ApplicationId" formControlName="TakenOverDate" [max]="minDate" [(ngModel)]="request.TakenOverDate">
           <div *ngIf="isSubmitted && _ReportForm.TakenOverDate.errors" class="text-danger">
             <p *ngIf="_ReportForm.TakenOverDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
@@ -1759,7 +1759,7 @@
 
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date<span class="StarMarking">*</span></label>
-        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.OrderDate" (change)="getExaminerData()">
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.OrderDate" [max]="minDate" (change)="getExaminerData()">
 
       </div>
 
@@ -1902,7 +1902,7 @@
 
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date<span class="StarMarking">*</span></label>
-        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.OrderDate" (change)="getExaminerData()">
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.OrderDate" [max]="minDate" (change)="getExaminerData()">
 
       </div>
 
@@ -2456,7 +2456,7 @@
 
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date Of Work Started<span class="StarMarking">*</span></label>
-        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.WorkStarted">
+        <input type="date" class="form-input" id="ApplicationId" [max]="minDate" [(ngModel)]="request.WorkStarted">
         <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
         <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
       </div>-->
@@ -2546,7 +2546,7 @@
 
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date Of Work Started<span class="StarMarking">*</span></label>
-        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.UpdateWorkStarted">
+        <input type="date" class="form-input" id="ApplicationId" [max]="minDate" [(ngModel)]="request.UpdateWorkStarted">
         <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
         <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
       </div>-->
@@ -2557,7 +2557,7 @@
 
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Expected Date of Complition <span class="StarMarking">*</span></label>
-        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.UpdateExpectedDate">
+        <input type="date" class="form-input" id="ApplicationId" [min]="UpdateWorkStarted" [(ngModel)]="request.UpdateExpectedDate">
         <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
         <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
       </div>-->
