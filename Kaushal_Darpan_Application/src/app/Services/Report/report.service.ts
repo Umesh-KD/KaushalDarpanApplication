@@ -1910,6 +1910,37 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetRevalExamLetterReport(obj: any) {
+
+    var body = JSON.stringify(obj);
+    console.log(body);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + "/GetRevalExamLetterReport", body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public GetRevalGroupCodeMasterReportBranchwise(payload: any) {
+    //debugger
+    return this.http.post(`${this.APIUrl}/GetRevalGroupCodeMasterReportBranchwise/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
+
+  public GetRevalGroupCodeMasterReport(payload: any) {
+    //debugger
+    return this.http.post(`${this.APIUrl}/GetRevalGroupCodeMasterReport/`,
+      payload,
+      {
+        responseType: 'blob'
+      }
+    );
+  }
 }
 
 
