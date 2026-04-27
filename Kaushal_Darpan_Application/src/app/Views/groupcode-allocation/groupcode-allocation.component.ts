@@ -97,13 +97,13 @@ export class GroupcodeAllocationComponent {
   }
 
   async GetAllData() {
-    debugger
+    //debugger
     try {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       //this.searchRequest.schemeId = this.searchRequest.schemeId;
-      debugger
+      //debugger
       await this.groupcodeAllocationService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -215,7 +215,7 @@ export class GroupcodeAllocationComponent {
   
 
   async exportExcelData() {
-    debugger;
+    //debugger;
     try {
       // Prepare request
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -306,7 +306,7 @@ export class GroupcodeAllocationComponent {
   
   async downloadGroupCodeMasterReport() {
 
-    debugger
+    //debugger
 
 
     this.GroupCodeMasterReportlist.SemesterId = this.searchRequest.SemesterId
@@ -347,7 +347,7 @@ export class GroupcodeAllocationComponent {
 
   async downloadGroupCodeMasterReportBranchwise() {
 
-    debugger
+    //debugger
 
 
     this.GroupCodeMasterReportlist.SemesterId = this.searchRequest.SemesterId

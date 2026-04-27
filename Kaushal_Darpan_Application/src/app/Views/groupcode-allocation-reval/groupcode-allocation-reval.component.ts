@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
-import { GroupCodeAllocationAddEditModel, GroupCodeAllocationSearchModel } from '../../Models/GroupCodeAllocationModel';
+import { GroupCodeAllocationAddEditModel, GroupCodeAllocationReportModel, GroupCodeAllocationSearchModel } from '../../Models/GroupCodeAllocationModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
-import { GroupcodeAllocationService } from '../../Services/groupcode-allocation/groupcode-allocation.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumConfigurationType, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { RequestBaseModel } from '../../Models/RequestBaseModel';
 import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel } from '../../Models/CommonDDLSubjectMasterModel';
 import { CommonSerialMasterRequestModel } from '../../Models/CommonSerialMasterRequestModel';
@@ -16,6 +15,10 @@ import { CommonSerialMasterResponseModel } from '../../Models/CommonSerialMaster
 import { CommonDDLCommonSubjectModel } from '../../Models/CommonDDLCommonSubjectModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { GroupcodeAllocationRevalService } from '../../Services/groupcode-allocation-reval/groupcode-allocation-reval.service';
+import * as XLSX from 'xlsx';
+import { CommonFunctionHelper } from '../../Common/commonFunctionHelper';
+import { ReportService } from '../../Services/Report/report.service';
+import { AppsettingService } from '../../Common/appsetting.service';
 
 
 @Component({
@@ -42,14 +45,20 @@ export class GroupcodeAllocationRevalComponent {
   public SerialMasterDataList: CommonSerialMasterResponseModel[] = [];
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public GroupCodeMasterReportlist = new GroupCodeAllocationReportModel();
+
+
   constructor(private commonMasterService: CommonFunctionService,
     private router: Router,
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private groupcodeAllocationService: GroupcodeAllocationRevalService,
-    private Swal2: SweetAlert2
+    private revalGroupCodeAllocationService: GroupcodeAllocationRevalService,
+    private Swal2: SweetAlert2,
+    private commonFunctionHelper: CommonFunctionHelper,
+    private reportService: ReportService,
+    private appsettingConfig: AppsettingService,
   ) {
   }
 
@@ -92,7 +101,8 @@ export class GroupcodeAllocationRevalComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
-      await this.groupcodeAllocationService.GetAllData(this.searchRequest)
+      // get
+      await this.revalGroupCodeAllocationService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
@@ -111,7 +121,7 @@ export class GroupcodeAllocationRevalComponent {
       if (this.GroupCodeAllocationSaveForm.invalid) {
         return;
       }
-      this.Swal2.Confirmation("Are you sure?,<br/>'GroupCode Generate' is the one time process, Please create all 'Group Partition' first then proceed.",
+      this.Swal2.Confirmation("Are you sure?,<br/>'Reval GroupCode Generate' is the one time process, Please create all 'Reval Group Partition' first then proceed.",
         async (result: any) => {
           //confirmed
           if (result.isConfirmed) {
@@ -124,7 +134,7 @@ export class GroupcodeAllocationRevalComponent {
               x.RoleID = this.sSOLoginDataModel.RoleID;
             });
             //save
-            await this.groupcodeAllocationService.SaveData(this.GroupCodeAllocationList, this.StartValue)
+            await this.revalGroupCodeAllocationService.SaveData(this.GroupCodeAllocationList, this.StartValue)
               .then(async (data: any) => {
                 //
                 this.State = data['State'];
@@ -183,7 +193,7 @@ export class GroupcodeAllocationRevalComponent {
   }
 
   async GetDateConfig() {
-    
+
     var data = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
@@ -201,4 +211,174 @@ export class GroupcodeAllocationRevalComponent {
       );
   }
 
+  async exportExcelData() {
+    //debugger;
+    try {
+      // Prepare request
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+
+      // get
+      const data: any = await this.revalGroupCodeAllocationService.GetAllData(this.searchRequest);
+
+      if (data.State !== EnumStatus.Success) {
+        this.toastr.error(data.ErrorMessage);
+        return;
+      }
+
+      const DataExcel = data.Data || [];
+
+      if (!DataExcel || DataExcel.length === 0) {
+        this.toastr.error("No data available for export.");
+        return;
+      }
+
+      const unwantedColumns = [
+        "SubjectName", "DepartmentID", "Eng_NonEng", "EndTermID",
+        "TermPart", "ModifyBy", "IPAddress", "RoleID",
+        "StartValue", "GroupCodeID", "SemesterId", "CommonSubjectID"
+      ];
+
+      const filteredData = DataExcel.map((item: any) => {
+        const obj: any = {};
+        Object.keys(item).forEach(key => {
+          if (!unwantedColumns.includes(key)) {
+            obj[key] = item[key];
+          }
+        });
+        return obj;
+      });
+
+      const headerMap = [
+        { header: 'S No', key: 'SNo' },
+        { header: 'Semester Name', key: 'SemesterName' },
+        { header: 'Group Code', key: 'GroupCode' },
+        { header: 'Total', key: 'Total' },
+        { header: 'Common Subject Name', key: 'CommonSubjectName' },
+        { header: 'Subject Code', key: 'SubjectCode' }
+      ];
+
+      const excelData = filteredData.map((item: any, index: number) => {
+        const row: any = {};
+        headerMap.forEach(h => {
+          row[h.header] = h.key === 'SNo' ? index + 1 : (item[h.key] ?? '');
+        });
+        return row;
+      });
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+
+      const MIN_WIDTH = 10;
+      const PADDING = 2;
+
+      ws['!cols'] = headerMap.map(h => {
+        let maxLength = h.header.length;
+        excelData.forEach((row: any) => {
+          const text = row[h.header] == null ? '' : String(row[h.header]);
+          maxLength = Math.max(maxLength, text.length);
+        });
+        return { wch: Math.max(MIN_WIDTH, maxLength + PADDING) };
+      });
+
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'GroupCodeAllocation');
+
+      const now = new Date();
+      const fileName = `GroupCodeAllocation_${now.getFullYear()}-${String(
+        now.getMonth() + 1
+      ).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}.xlsx`;
+
+      XLSX.writeFile(wb, fileName);
+
+    } catch (ex) {
+      console.error(ex);
+      this.toastr.error("Unexpected error during export.");
+    }
+  }
+
+  async downloadGroupCodeMasterReport() {
+
+    this.GroupCodeMasterReportlist.SemesterId = this.searchRequest.SemesterId
+    this.GroupCodeMasterReportlist.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.GroupCodeMasterReportlist.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.GroupCodeMasterReportlist.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.GroupCodeMasterReportlist.schemeid = this.searchRequest.schemeId
+    this.GroupCodeMasterReportlist.action = "_getAllData";
+
+    this.reportService.GetRevalGroupCodeMasterReport(this.GroupCodeMasterReportlist)
+      .subscribe({
+        next: async (blob: Blob) => {
+
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `RevalGroup_Code_Master_Report_${dateTime}.pdf`;
+          let base64 = await this.commonFunctionHelper.blobToBase64(blob);
+          this.commonFunctionHelper.downloadBase64OfPdf(base64, fileName);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
+  }
+
+  async downloadGroupCodeMasterReportBranchwise() {
+
+    this.GroupCodeMasterReportlist.SemesterId = this.searchRequest.SemesterId
+    this.GroupCodeMasterReportlist.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.GroupCodeMasterReportlist.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.GroupCodeMasterReportlist.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.GroupCodeMasterReportlist.schemeid = this.searchRequest.schemeId
+    this.GroupCodeMasterReportlist.action = "_getAllData";
+    // get
+    this.reportService.GetRevalGroupCodeMasterReportBranchwise(this.GroupCodeMasterReportlist)
+      .subscribe({
+        next: async (blob: Blob) => {
+
+          const now = new Date();
+          const dateTime =
+            now.getFullYear().toString() +
+            ('0' + (now.getMonth() + 1)).slice(-2) +
+            ('0' + now.getDate()).slice(-2) + '_' +
+            ('0' + now.getHours()).slice(-2) +
+            ('0' + now.getMinutes()).slice(-2);
+
+          const fileName = `RevalGroup_Report_Branchwise${dateTime}.pdf`;
+          let base64 = await this.commonFunctionHelper.blobToBase64(blob);
+          this.commonFunctionHelper.downloadBase64OfPdf(base64, fileName);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Failed to download report');
+        }
+      });
+  }
+
+  async downloadExamLetterReport() {
+    try {
+      // get
+      await this.reportService.GetRevalExamLetterReport(this.searchRequest)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            // this.toastr.success(data.Message);
+            let fileName = data.Data;
+            const fileFolder = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder; // Replace with your
+            await this.commonFunctionHelper.downloadFileFromServer(fileFolder, fileName);
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 }

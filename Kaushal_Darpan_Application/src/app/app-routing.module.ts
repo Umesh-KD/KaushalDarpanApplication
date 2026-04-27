@@ -367,10 +367,11 @@ const routes: Routes = [
       { path: 'DirectStudentJanAadharDetail', loadChildren: () => import('./Views/BTER/direct-student-jan-aadhar-detail/direct-student-jan-aadhar-detail.module').then(m => m.DirectStudentJanAadharDetailModule), title: 'Direct Student JanAadhaar Detail' },
       { path: 'DirectStudentJanAadharDetail/:depid', loadChildren: () => import('./Views/BTER/direct-student-jan-aadhar-detail/direct-student-jan-aadhar-detail.module').then(m => m.DirectStudentJanAadharDetailModule), title: 'Direct Student JanAadhaar Detail' },
 
+      // group code 
       { path: 'groupcodeallocation', loadChildren: () => import('./Views/groupcode-allocation/groupcode-allocation.module').then(m => m.GroupcodeAllocationModule), title: 'Group Code Allocation' },
       { path: 'groupcodeadd', loadChildren: () => import('./Views/groupcode-allocation/add-groupcode/add-groupcode.module').then(m => m.GroupcodeAddModule), title: 'Add Group Code' },
 
-      //reval
+      //group code reval
       { path: 'groupcodeallocationreval', loadChildren: () => import('./Views/groupcode-allocation-reval/groupcode-allocation-reval.module').then(m => m.GroupcodeAllocationModule), title: 'Group Code Allocation' },
       { path: 'groupcodeaddreval', loadChildren: () => import('./Views/groupcode-allocation-reval/add-groupcode-reval/add-groupcode-reval.module').then(m => m.GroupcodeAddRevalModule), title: 'Add Group Code' },
 
