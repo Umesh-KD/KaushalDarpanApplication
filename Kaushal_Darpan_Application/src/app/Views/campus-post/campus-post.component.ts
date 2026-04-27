@@ -10,7 +10,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CampusPostMasterModel, CampusPostMaster_EligibilityCriteriaModel } from '../../Models/CampusPostDataModel';
-import { EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { CompanyMasterDataModels } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
@@ -68,6 +68,7 @@ export class CampusPostComponent implements OnInit {
   public HiringRoleMasterList: any = []
   public EligibleInstitutesList: any = []
   public CompanyTypeList: any = []
+    _EnumRole = EnumRole
 
   public HRDetailsList: any = []
   public NoRangeList: any[] = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70];

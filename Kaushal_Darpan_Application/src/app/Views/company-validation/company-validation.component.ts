@@ -8,7 +8,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyMasterComponent } from '../CompanyMaster/company-master/company-master.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-company-validation',
@@ -34,6 +34,8 @@ export class CompanyValidationComponent implements OnInit {
   modalReference: NgbModalRef | undefined;
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+    _EnumRole = EnumRole
+    
   formAction!: FormGroup;
   constructor(private commonMasterService: CommonFunctionService, private companyMasterService: CompanyMasterService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private loaderService: LoaderService) {

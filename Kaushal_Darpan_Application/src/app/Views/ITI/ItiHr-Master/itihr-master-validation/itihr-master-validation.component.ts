@@ -10,7 +10,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ItiHrMasterComponent } from '../itihr-master/itihr-master.component';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 
 
 @Component({
@@ -37,6 +37,7 @@ export class ItiHrMasterValidationComponent implements OnInit {
   modalReference: NgbModalRef | undefined;
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+    _EnumRole = EnumRole
   formAction!: FormGroup;
   constructor(
     private commonMasterService: CommonFunctionService,
