@@ -1580,16 +1580,16 @@ export class ItiPlanningComponent {
     let date = new Date(this.addmore.OrderDate!);
 
     let formattedDate =
-      String(date.getDate()).padStart(2, '0') + '-' +
+      date.getFullYear() + '-' +
       String(date.getMonth() + 1).padStart(2, '0') + '-' +
-      date.getFullYear();
+      String(date.getDate()).padStart(2, '0');
 
 
    
     this.request.ItiAffiliationList.push({
       AffiliationID: this.addmore.AffiliationID,
       CollegeID: this.addmore.CollegeID,
-      Dis_Filename: 'DGTorders/' + date +'.pdf',
+      Dis_Filename: 'DGTorders/' + formattedDate +'.pdf',
       FileName: this.addmore.FileName,
       OrderNo: this.addmore.OrderNo,
       OrderDate: this.addmore.OrderDate,
