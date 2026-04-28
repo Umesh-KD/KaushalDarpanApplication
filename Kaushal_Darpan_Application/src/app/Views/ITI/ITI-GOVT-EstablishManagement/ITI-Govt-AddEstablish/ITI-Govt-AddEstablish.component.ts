@@ -14,7 +14,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
-import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
+import { ItiTradeSearchModel, StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
 
 @Component({
   selector: 'app-ITI-Govt-AddEstablish',
@@ -70,6 +70,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   @ViewChild('MyModel_ReplayQuery') MyModel_ReplayQuery: any;
   closeResult: string | undefined;
   public filteredStatusList: any[] = [];
+  public TradeList: any[] = [];
   public type: string = ''
   StaffMasterFormGroup!: FormGroup;
   public _ITIGovtEM_EnumStaffType = ITIGovtEM_EnumStaffType
@@ -84,6 +85,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   public InstituteMasterDDLList: any[] = [];
   public DesignationMasterDDLList: any = [];
   public _EnumEMProfileStatus = EnumEMProfileStatus;
+  public tradeSearchRequest = new ItiTradeSearchModel()
   constructor(private commonMasterService: CommonFunctionService, private Staffservice: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
     private ITICollegeTradeService: ItiSeatIntakeService
   ) {
@@ -171,6 +173,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     await this.GetTechnicianDll();
    /* await this.GetHostelData()*/
     await this.GetBranchesMasterData();
+    await this.GetTradeData();
     await this.getInstituteMasterList();
     await this.GetPostList();
     await this.GetDesignationMasterData();
@@ -716,11 +719,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.BranchesMasterList = data.Data;
-        console.log("StreamMasterList", this.BranchesMasterList);
-
-       
-        
-        
+        console.log("StreamMasterList", this.BranchesMasterList);  
       })
     } catch (error) {
       console.error(error);
@@ -1658,6 +1657,27 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       });
     } catch (error) {
       console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetTradeData() {
+
+    this.tradeSearchRequest.action = 'Posttrade_EM'
+
+    this.tradeSearchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.TradeList = data.Data
+        console.log(this.TradeList, "ItiTradeListAll")
+      })
+    } catch (error) {
+      console.error(error)
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();

@@ -64,6 +64,7 @@ export class AddRequestDDOOfficeComponent {
   public OldOfficeID: number = 0
  
   public getstatuId:number=0;
+  public TodayDate:string='';
 
   constructor(
     private fb: FormBuilder,
@@ -97,11 +98,12 @@ export class AddRequestDDOOfficeComponent {
       txtOrderDate: ['', Validators.required],
       /* txtJoiningDate: [''],*/
       txtRequestDate: ['', Validators.required],
-      LastworkingDate: ['', Validators.required],
+      // LastworkingDate: ['', Validators.required],
       Upload: [''],
       ddlDistrictID: [''],
       divisionID: [''],
       ddlStaffType: ['', [DropdownValidators]],
+      RelievingTimeID: ['', [DropdownValidators]],
       StaffID: ['', [DropdownValidators]],
       txtEmployeeName: [{ value: '', disabled: true }],
       txtEmployeeNumber: [{ value: '', disabled: true }],
@@ -112,7 +114,7 @@ export class AddRequestDDOOfficeComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.LevelID = 1;
-
+    await this.GetTodayData();
     await this.setRolewiseLevel(); 
     await this.GetStaffListDDL();
     await this.GetRoleListDDL();
@@ -138,6 +140,14 @@ export class AddRequestDDOOfficeComponent {
   }
 
   get _groupForm() { return this.groupForm.controls; }
+
+  async GetTodayData(){
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    this.TodayDate = `${yyyy}-${mm}-${dd}`
+  }
   async GetLevelList() {   
     try {
       await this.commonMasterService.GetLevelMaster()

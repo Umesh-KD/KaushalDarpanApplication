@@ -498,7 +498,7 @@
               </div>
             </div>
 
-            <div>
+            <div *ngIf="RequestUpdateStatus.StatusIDs==247">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Joining Date: <span class="StarMarking">*</span>
               </label>
@@ -507,6 +507,38 @@
                 <p *ngIf="groupForm.controls.txtJoiningDate.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
               </div>
             </div>
+
+            <div *ngIf="RequestUpdateStatus.StatusIDs==247">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Joining Time: <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="RequestUpdateStatus.JoiningTimeID" formControlName="JoiningTimeID">
+                <option value="0">--Select--</option>
+                <option value="1">First Half</option>
+                <option value="2">Second Half</option>
+              </select>
+              <div *ngIf="isSubmitted&&groupForm.JoiningTimeID.errors" class="text-danger">
+                <p *ngIf="!groupForm.JoiningTimeID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="RequestUpdateStatus.StatusIDs==247">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Role <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="RequestUpdateStatus.JoiningRoleID" formControlName="JoiningRoleID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of RoleListDDL" [value]="item.RoleID">{{item.RoleNameEnglish}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&groupForm.JoiningRoleID.errors" class="text-danger">
+                <p *ngIf="!groupForm.JoiningRoleID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
           </div>
         </div> <!-- Close this div here for card-body -->
         <div class="card-footer text-right">

@@ -8,7 +8,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { ItiCompanyMasterService } from '../../../../Services/ITI/ItiCompanyMaster/iticompany-master.service.ts';
 import { ItiCompanyMasterComponent } from '../iticompany-master/iticompany-master.component';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-iticompany-validation',
@@ -32,6 +32,7 @@ export class ItiCompanyValidationComponent implements OnInit {
   modalReference: NgbModalRef | undefined;
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  _EnumRole = EnumRole;
   formAction!: FormGroup;
   constructor(private commonMasterService: CommonFunctionService, private companyMasterService: ItiCompanyMasterService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private loaderService: LoaderService) {

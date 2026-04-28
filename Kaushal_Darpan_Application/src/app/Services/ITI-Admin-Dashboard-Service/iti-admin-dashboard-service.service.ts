@@ -82,5 +82,17 @@ export class ITIAdminDashboardServiceService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetExaminationCollegeTrade(searchRequest: any) {
+  const body = JSON.stringify(searchRequest);
+
+  return await this.http.post(
+    this.APIUrl + "/GetExaminationCollegeTrade",
+    body,
+    this.headersOptions
+  ).pipe(
+    catchError(this.handleErrorObservable)
+  ).toPromise();
+}
 }
 

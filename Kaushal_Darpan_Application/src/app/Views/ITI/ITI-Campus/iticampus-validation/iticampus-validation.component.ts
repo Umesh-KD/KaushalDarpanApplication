@@ -8,7 +8,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { ItiCampusPostService } from '../../../../Services/ITI/ITICampusPost/iticampus-post.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ItiCampusPostComponent } from '../iticampus-post/iticampus-post.component';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -27,7 +27,8 @@ export class ItiCampusValidationComponent {
   public CompanyID: number = 0;
   public InstituteID: number = 0;
   public ApprovedStatus: string = "0";
-
+  _EnumRole = EnumRole
+  
   request = new ItiCampusPostMasterModel();
   requestAction = new ItiCampusPostMaster_Action();
   requestEligibilityCriteria = new ItiCampusPostMaster_EligibilityCriteriaModel();

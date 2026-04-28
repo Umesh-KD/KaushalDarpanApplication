@@ -14,6 +14,7 @@ import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagme
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-branch-wise-hod',
@@ -37,23 +38,30 @@ export class BranchWiseHodComponent {
   public IIPMasterFormGroup!: FormGroup;
   public SSOIDFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  GetBranchStreamData: any = [];
   public ApplyList: any[] = []
   public BranchHideList: any[] = []
+  totalRecord1 = 0;
   public SemesterStreamList: any[] = []
   public searchRequest = new GuestApplyForGuestRoomSearchModel();
   public searchRequestGuestStaffProfileSearchModel = new GuestStaffProfileSearchModel()
   displayedColumns: string[] = [
     'SNo', 'FirstName', 'SSOID', 'MobileNo', 'MailPersonal', 'StreamName', 'InstituteName', 'SemesterName','actions'
   ];
+  @ViewChild('paginator1') paginator1!: MatPaginator;
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
-
+  dataSource1!: MatTableDataSource<any>;
+  closeResult: string | undefined;
+  modalRef1: NgbModalRef | null = null;
+  displayedColumns1: string[] = [
+    'SNo', 'FirstName', 'SSOID', 'MobileNo', 'MailPersonal', 'StreamName', 'InstituteName', 'SemesterName', 'EndTermName'
+  ];
 
   constructor(private staffMasterService: StaffMasterService, private commonMasterService: CommonFunctionService, private guestRoomManagmentService: GuestRoomManagmentService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
-    private Swal2: SweetAlert2, private routers: Router) {
+    private Swal2: SweetAlert2, private routers: Router, private modalService: NgbModal,) {
   }
 
   async ngOnInit() {
@@ -594,6 +602,86 @@ export class BranchWiseHodComponent {
     console.log('Final Clean Result:', result);
 
     this.SemesterStreamList = result;
+  }
+
+
+  async ViewHistory(content: any, rowData?: any) {
+    this.isSubmitted = true;
+    debugger
+    // Open only once, store reference
+    this.modalRef1 = this.modalService.open(content, {
+      size: 'xl',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
+    });
+
+    // Handle result or dismissal
+    this.modalRef1.result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+    if (rowData != null && rowData != undefined) {
+      if (rowData.StreamID != null) {
+        const obj: any = {
+          StreamID: 0,
+          ModifyBy: this.sSOLoginDataModel?.UserID || 0,
+          SSOID: this.SSOIDFormGroup?.value?.SSOID || '',
+
+          StreamIDs: this.IIPMasterFormGroup?.value?.StreamIDs?.join(',') || '',
+
+          Action: "gethistory",
+          DepartmentID: this.sSOLoginDataModel?.DepartmentID || 0,
+          UserID: rowData.UserID,
+          RoleID: this.sSOLoginDataModel?.RoleID || 0,
+          EndTermID: this.sSOLoginDataModel?.EndTermID || 0,
+          Eng_NonEng: this.sSOLoginDataModel?.Eng_NonEng || 0,
+
+          SemesterID: this.IIPMasterFormGroup?.value?.SemesterID || '',
+          CollegeID: this.sSOLoginDataModel?.InstituteID || 0
+        };
+
+        await this.staffMasterService.AllBranchHOD(obj)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.GetBranchStreamData = data.Data;
+            // this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.createdby==this.sSOLoginDataModel.UserID)
+            debugger
+            // this.GetBranchStreamData = data.Data
+            this.totalRecord1 = data['Data'].length;
+ 
+            this.initTable1(this.GetBranchStreamData);
+          }, (error: any) => console.error(error)
+          );
+      }
+    }
+  }
+
+
+  CloseModal1() {
+    if (this.modalRef1) {
+      this.modalRef1.dismiss();
+      this.modalRef1 = null;
+      this.isSubmitted = false;
+    }
+  }
+  initTable1(data: any) {
+    this.dataSource1 = new MatTableDataSource(data);
+    this.dataSource1.paginator = this.paginator1;
+    this.dataSource1.sort = this.sort;
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
 }

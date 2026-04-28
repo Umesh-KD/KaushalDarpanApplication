@@ -57,8 +57,8 @@ export class GroupCodeAllocationReportModel {
   public SemesterId: number = 0;
   public DepartmentID: number = 0;
   public semesterName: string = '';
-  public groupCode: number= 0;
-  public total: number= 0;
+  public groupCode: any = 0 || '';
+  public total: number = 0;
   public startValue: number = 0;
   public commonSubjectID: number = 0;
   public commonSubjectName: string = '';

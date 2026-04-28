@@ -22,6 +22,7 @@ import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 import { ApplicationMessageDataModel } from '../../../../Models/ApplicationMessageDataModel';
 import { JanAadharVerifyMemberDetails } from '../../../../Models/NewJanAadharAPIModel';
 import { JanAadharDetailComponent } from '../../../new-jan-aadhar/new-jan-aadhar.component';
+import { CommonFunctionHelper } from '../../../../Common/commonFunctionHelper';
 
 @Component({
   selector: 'app-iti-direct-student-jan-aadhar-detail',
@@ -131,6 +132,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
     private dataService: DataServiceService,
     private dateMasterService: DateConfigService,
     private encryptionService: EncryptionService,
+    public commonFunctionHelper: CommonFunctionHelper
   ) { }
 
   async ngOnInit() {
@@ -144,7 +146,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
         txtFather: ['', Validators.required],
         txtMotherEngname: ['', Validators.required],
         txtDOB: ['', [Validators.required, this.minimumAgeValidator(14)]],
-        email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+        email: ['', [Validators.pattern(GlobalConstants.EmailPattern)]],
          /*   email: ['',],
         /*  txtMobileNumber: ['', Validators.required],*/
         ddlCategoryA: ['', [DropdownValidators]],
@@ -178,7 +180,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
       } else if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.BTER) {
         this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
       }
-    } else if (this.IsJailAdmission) {
+    } else if (this.IsJailAdmission) 
+      {
       this.model.InstituteID = this.sSOLoginDataModel.InstituteID
       this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.JailAdmission
     } else {
@@ -675,6 +678,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
         this.refreshDepartmentNameRefValidation(false)
       }
 
+      this.refereshEmailValidator(this.IsJailAdmission);
+
       if (this.StudentJanDetailFormGroup.invalid) {
         return;
       }
@@ -1128,7 +1133,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
     this.StudentJanDetailFormGroup.get('CertificateNo')?.clearValidators();
 
     // set
-    if (isValidate) {
+    if (isValidate)
+       {
       this.StudentJanDetailFormGroup.get('txtGeneratDate')?.setValidators(Validators.required);
       this.StudentJanDetailFormGroup.get('CertificateNo')?.setValidators(Validators.required);
 
@@ -1139,9 +1145,28 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
   }
 
-  filterString(input: string): string {
-    return input.replace(/[^a-zA-Z0-9. ]/g, '');
+
+
+  refereshEmailValidator(isJailAdmission: boolean) {
+    this.StudentJanDetailFormGroup.get('email')?.clearValidators();
+    if (!isJailAdmission) 
+    {
+      this.StudentJanDetailFormGroup.get('email')?.setValidators(Validators.required);
+    }
+    this.StudentJanDetailFormGroup.get('email')?.updateValueAndValidity();
   }
+
+
+  // filterString(input: string): string {
+  //   return input.replace(/[^a-zA-Z0-9. ]/g, '');
+  // }
+
+  filterString(input: string): string {
+  return input
+    .replace(/[^a-zA-Z\s]/g, '')   // allow only letters + space
+    .replace(/\s+/g, ' ')          // multiple space → single
+    .trimStart();                  // remove starting space
+}
 
   async GetTradeListDDL() {
     try {
@@ -1241,8 +1266,73 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
 
 
+onCategoryChange(event: any) {
+  const value = Number(event.target.value);
 
+  // If NOT OBC (4), reset fields
+  if (value !== 4) {
+    
+    // Reset model
+    this.model.CasteCertificateNo = '';
+    this.model.CertificateGeneratDate = '';
 
+    // Reset form controls
+    this.StudentJanDetailFormGroup.patchValue({
+      CertificateNo: '',
+      txtGeneratDate: ''
+    });
 
+    // Remove validation errors
+    this.StudentJanDetailFormGroup.get('CertificateNo')?.setErrors(null);
+    this.StudentJanDetailFormGroup.get('txtGeneratDate')?.setErrors(null);
+  }
 
+  // Optional: trigger your existing validator logic
+  if (value === 4) {
+    this.refreshBranchRefValidation(true);
+  } else {
+    this.refreshBranchRefValidation(false);
+  }
+}
+
+onNameInput(event: any, field: 'StudentName' | 'FatherName' | 'MotherName') {
+  let value = event.target.value;
+
+  // Clean input
+  value = value
+    .replace(/[^a-zA-Z\s]/g, '')   // remove special chars (no dot also)
+    .replace(/\s{2,}/g, ' ')       // multiple spaces → single
+    .replace(/^\s+/g, '');         // remove starting spaces
+
+  // IMPORTANT: update both model + input box
+  this.model[field] = value;
+  event.target.value = value;
+}
+
+onPasteClean(event: ClipboardEvent, field: 'StudentName' | 'FatherName' | 'MotherName') {
+  event.preventDefault();
+
+  let pasted = event.clipboardData?.getData('text') || '';
+
+  pasted = pasted
+    .replace(/[^a-zA-Z\s]/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/^\s+/g, '')
+    .trim(); // remove trailing also
+
+  this.model[field] = pasted;
+
+  // update UI
+  const input = event.target as HTMLInputElement;
+  input.value = pasted;
+}
+
+onNameBlur(event: any, field: 'StudentName' | 'FatherName' | 'MotherName') {
+  let value = event.target.value;
+
+  value = value.trim();  // removes trailing + leading space
+
+  this.model[field] = value;
+  event.target.value = value;
+}
 }

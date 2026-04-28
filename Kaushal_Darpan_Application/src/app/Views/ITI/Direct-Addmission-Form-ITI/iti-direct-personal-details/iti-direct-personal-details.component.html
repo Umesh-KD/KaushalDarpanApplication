@@ -25,7 +25,11 @@
           (Applicant's Name in Hindi):<span class="StarMarking">*</span>
         </label>
         <input type="text" class="form-input" id="ApplicationId" placeholder="Enter Applicant's Name"
-          (keypress)="noNumbersAllowed($event)"     formControlName="txtnameHindi" gtranslate="true" [(ngModel)]="request.StudentNameHindi" 
+          (keypress)="noNumbersAllowed($event)" 
+          (keypress)="allowOnlyAlphabets($event)"
+               (blur)="removeExtraSpaces('StudentNameHindi')"
+               (paste)="onPasteClean($event, 'StudentNameHindi')"
+                formControlName="txtnameHindi" gtranslate="true" [(ngModel)]="request.StudentNameHindi" 
           (focus)="showTooltip($event)" (blur)="hideTooltip($event)"
           matTooltip="Please type word in english and enter space to convert in hindi"
           matTooltipPosition="above"
@@ -42,9 +46,9 @@
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
           ईमेल (Email
-          Address):<span class="StarMarking">*</span>
+          Address):<span class="StarMarking" *ngIf="request.DirectAdmissionType!= 181">*</span>
         </label>
-        <input type="email" class="form-input " id="ApplicationId" value="TEST@gmail.com"
+        <input type="email" class="form-input " placeholder="Enter Email" id="ApplicationId" value="TEST@gmail.com"
                formControlName="txtEmail" [(ngModel)]="request.Email">
         <div *ngIf="isSubmitted && _PersonalDetailForm.txtEmail.errors" class="text-danger">
           <p *ngIf="_PersonalDetailForm.txtEmail.errors.required">
@@ -80,6 +84,9 @@
         </label>
         <input type="text" class="form-input " id="ApplicationId" placeholder="Enter Father's Name in Hindi"
                formControlName="txtFatherHindi" gtranslate="true" [(ngModel)]="request.FatherNameHindi" (keypress)="noNumbersAllowed($event)" 
+               (keypress)="allowOnlyAlphabets($event)"
+               (blur)="removeExtraSpaces('FatherNameHindi')"
+               (paste)="onPasteClean($event, 'FatherNameHindi')"
                matTooltip="Please type word in english and enter space to convert in hindi"
           matTooltipPosition="above"
           matTooltipClass="custom-tooltip">
@@ -122,6 +129,9 @@
           में (Mother's Name in Hindi)::<span class="StarMarking">*</span>
         </label>
         <input type="text" class="form-input " id="txtMotherHindiname" (keypress)="noNumbersAllowed($event)"  placeholder="Enter Mother's Name in Hindi"
+               (keypress)="allowOnlyAlphabets($event)"
+               (blur)="removeExtraSpaces('MotherNameHindi')"
+               (paste)="onPasteClean($event, 'MotherNameHindi')"
                formControlName="txtMotherHindiname" gtranslate="true" [(ngModel)]="request.MotherNameHindi"
                matTooltip="Please type word in english and enter space to convert in hindi"
           matTooltipPosition="above"
@@ -434,7 +444,8 @@
           श्रेणी सी (Category C)
           (PH):<span class="StarMarking">*</span>
         </label>
-        <select class="form-select" id="ddlCategoryC" formControlName="ddlCategoryc" [(ngModel)]="request.CategoryC">
+        <select class="form-select" id="ddlCategoryC" formControlName="ddlCategoryc" [(ngModel)]="request.CategoryC"
+        (change)="onCategoryCChange()">
           <option value="0">Select Category C</option>
           <option *ngFor="let item of category_CList" value="{{item.ID}}">{{item.Name}}</option>
         </select>

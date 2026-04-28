@@ -62,7 +62,7 @@ export class GetUFMStudentReport {
   public DepartmentID: number = 0;
   public EndTermID: number = 0;
   public Eng_NonEng: number = 0;
-
+  public UFMExtraInfoID: number = 0;
 
 }
 
@@ -145,7 +145,7 @@ export class StudentAllMarksReportModel {
 export class UFMLetterModel extends RequestBaseModel {
   public EnrollmentNo: string = ''
   public isUFM: number = 0;
-  public UFMStuExtraInfoID?: number = 0;
+  public UFMExtraInfoID?: number = 0;
   public StudentExamID?: number = 0;
   public StudentExamPaperID?: number = 0;
 }

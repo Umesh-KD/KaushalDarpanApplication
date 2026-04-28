@@ -367,10 +367,11 @@ const routes: Routes = [
       { path: 'DirectStudentJanAadharDetail', loadChildren: () => import('./Views/BTER/direct-student-jan-aadhar-detail/direct-student-jan-aadhar-detail.module').then(m => m.DirectStudentJanAadharDetailModule), title: 'Direct Student JanAadhaar Detail' },
       { path: 'DirectStudentJanAadharDetail/:depid', loadChildren: () => import('./Views/BTER/direct-student-jan-aadhar-detail/direct-student-jan-aadhar-detail.module').then(m => m.DirectStudentJanAadharDetailModule), title: 'Direct Student JanAadhaar Detail' },
 
+      // group code 
       { path: 'groupcodeallocation', loadChildren: () => import('./Views/groupcode-allocation/groupcode-allocation.module').then(m => m.GroupcodeAllocationModule), title: 'Group Code Allocation' },
       { path: 'groupcodeadd', loadChildren: () => import('./Views/groupcode-allocation/add-groupcode/add-groupcode.module').then(m => m.GroupcodeAddModule), title: 'Add Group Code' },
 
-      //reval
+      //group code reval
       { path: 'groupcodeallocationreval', loadChildren: () => import('./Views/groupcode-allocation-reval/groupcode-allocation-reval.module').then(m => m.GroupcodeAllocationModule), title: 'Group Code Allocation' },
       { path: 'groupcodeaddreval', loadChildren: () => import('./Views/groupcode-allocation-reval/add-groupcode-reval/add-groupcode-reval.module').then(m => m.GroupcodeAddRevalModule), title: 'Add Group Code' },
 
@@ -1171,6 +1172,8 @@ const routes: Routes = [
       { path: 'bter-em-add-staff-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-add-staff-details/bter-em-add-staff-details.module').then(m => m.BterEMAddStaffDetailsModule), title: 'Add Staff' },
       { path: 'em-budget-head', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-budget-head-master/em-budget-head-master.module').then(m => m.EMBudgetHeadMasterModule), title: 'Establishment BGT Head' },
       { path: 'em-add-training-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-add-training-details/em-add-training-details.module').then(m => m.EMAddTrainingDetailsModule), title: 'Training Details' },
+      { path: 'Staff-Completed-Process-Training', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-training-details-history/em-training-details-history.module').then(m => m.emtrainingdetailshistoryModule), title: 'Training Details' },
+      { path: 'Staff-New-Process-Training', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/EM-Staff-New-Process-Training/EM-Staff-New-Process-Training.module').then(m => m.EMStaffNewProcessTrainingModule), title: 'Training Details' },
       
       { path: 'Bter-AddUserRequest', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
       { path: 'Bter-AddUserRequest/:id', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
@@ -1698,6 +1701,10 @@ const routes: Routes = [
       { path: 'file-delete', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
       { path: 'create-nodal-verifier', loadChildren: () => import('../Views/ITI/create-nodal-verifier/create-nodal-verifier.module').then(m => m.CreateNodalVerifierModule) },
       { path: 'ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
+      { path: 'iti-examination-college', loadChildren: () => import('./Views/ITI/iti-examination-college/iti-examination-college.module').then(m => m.ItiExaminationCollegeModule) },
+      { path: 'iti-examination-trade', loadChildren: () => import('./Views/ITI/iti-examination-trade/iti-examination-trade.module').then(m => m.ItiExaminationTradeModule) },
+      { path: 'BterStudentAttendenceReport', loadChildren: () => import('./Views/bter-student-attendence-report/bter-student-attendence-report.module').then(m => m.BterStudentAttendenceReportModule) },
+
 
 
     ]
@@ -1818,7 +1825,6 @@ const routes: Routes = [
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   { path: 'PostMaster', loadChildren: () => import('./Views/ITI/post-master/post-master.module').then(m => m.PostMasterModule) },
-
 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },

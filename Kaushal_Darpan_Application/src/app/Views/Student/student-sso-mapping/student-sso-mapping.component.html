@@ -167,7 +167,8 @@
             <a [routerLink]="'/dtepublicinfo'" *ngIf="ShowBTERApply" [queryParams]="{deptid:BTER,type:1}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3 xl py-4 c-pointer">Polytechnic <br /> Admission<i class="ti ti-chevron-right"></i></a>
             <a  [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:ITI}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3 xl py-4 c-pointer">ITI <br /> Admission<i class="ti ti-chevron-right"></i></a>
 
-            <a (click)="Redirect(2,_EnumAdmissionType.DirectAdmissionITI)" *ngIf="DirectAdmissionMapKey==1"
+            <!-- <a (click)="Redirect(2,_EnumAdmissionType.DirectAdmissionITI)" *ngIf="DirectAdmissionMapKey==1" -->
+            <a (click)="Redirect(2,_EnumAdmissionType.DirectAdmissionITI)"
                class="btn bg-info btn-lg text-white text-center py-4 c-pointer">
               ITI Direct Admission<i class="ti ti-chevron-right"></i>
             </a>

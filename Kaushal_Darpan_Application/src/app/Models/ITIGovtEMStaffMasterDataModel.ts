@@ -541,7 +541,8 @@ export class RequestUpdateStatus {
   JoiningDate: string = '';
   UserID: number = 0;
   StaffID: number = 0;
-  
+  JoiningRoleID: number = 0;
+  JoiningTimeID: number = 0;  
 
   IsEOL: boolean = false;
   EOLFromDate: string = '';

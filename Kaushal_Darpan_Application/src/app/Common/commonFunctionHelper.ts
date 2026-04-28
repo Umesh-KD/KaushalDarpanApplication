@@ -1,3 +1,4 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 
@@ -6,6 +7,10 @@ import { Injectable } from "@angular/core";
 })
 
 export class CommonFunctionHelper {
+
+  constructor(private http: HttpClient) {
+
+  }
 
   public truncateText(text: string, limit: number = 25): string {
     return text.length > limit ? text.substring(0, limit) + '...' : text;
@@ -81,6 +86,30 @@ export class CommonFunctionHelper {
     if (!/^\d$/.test(event.key)) {
       event.preventDefault();
     }
+  }
+
+  async downloadFileFromServer(fileFolder: string, fileName: string) {
+    let fullfilepath = fileFolder + "/" + fileName;
+    // Fetch the file as a blob
+    this.http.get(fullfilepath, { responseType: 'blob' }).subscribe((blob: any) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = fileName; // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
+  async blobToBase64(blob: Blob) {
+    const buffer = await blob.arrayBuffer();
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+
+    bytes.forEach(byte => binary += String.fromCharCode(byte));
+
+    return btoa(binary);
   }
 
 }

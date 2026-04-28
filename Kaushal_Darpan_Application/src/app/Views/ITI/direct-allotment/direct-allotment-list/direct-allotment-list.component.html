@@ -13,9 +13,11 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" >
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a *ngIf="isAdmission==1" href="javascript:void(0);" (click)="AddNewAllotment(MyModel_AddNewAllotment)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Allotment</a>
+        <a  *ngIf="isAdmission==1" href="javascript:void(0);" (click)="AddNewAllotment(MyModel_AddNewAllotment)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Allotment</a>
+        <!--<a *ngIf="isAdmission==1" href="javascript:void(0);" (click)="AddNewAllotment(MyModel_AddNewAllotment)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Allotment</a>-->
+
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
@@ -107,8 +109,8 @@
             <input type="number" class="form-input" placeholder="Search By Application ID" [(ngModel)]="searchRequest.ApplicationID">
           </div>
           <div>
-            <!--(click)="getTradetblListList()" (click)="onResetCancel()"-->
-            <a class="btn bg-info text-white mt-6" (click)="CloseAddNewAllotment()" [routerLink]="'/direct-student-allotment/' + searchRequest.ApplicationID +'/' + searchRequest.TradeLevel">Search</a>
+            <!--(click)="getTradetblListList()" (click)="onResetCancel()  [routerLink]="'/direct-student-allotment/' + searchRequest.ApplicationID +'/' + searchRequest.TradeLevel""-->
+            <a class="btn bg-info text-white mt-6" (click)="onSearch()">Search</a>
 
           </div>
         </div>

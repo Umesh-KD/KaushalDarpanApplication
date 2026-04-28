@@ -24,6 +24,7 @@ import { ApplicationMessageDataModel } from '../../../Models/ApplicationMessageD
 
 import { JanAadharVerifyMemberDetails } from '../../../Models/NewJanAadharAPIModel';
 import { JanAadharDetailComponent } from '../../new-jan-aadhar/new-jan-aadhar.component';
+import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
 
 @Component({
   selector: 'app-student-jan-aadhar-detail',
@@ -129,6 +130,7 @@ export class StudentJanAadharDetailComponent implements OnInit {
     private dataService: DataServiceService,
     private dateMasterService: DateConfigService,
     private encryptionService: EncryptionService,
+    public commonFunctionHelper: CommonFunctionHelper
   ) { }
 
   async ngOnInit() {
@@ -268,21 +270,40 @@ export class StudentJanAadharDetailComponent implements OnInit {
 
 
 
-  Showdropdown() {
+  // Showdropdown() {
+  //   debugger
+  //   if (this.request.ENR_ID == 5) {
+  //     this.IsShowDropdown = true
+  //   }
+  //   else {
+  //     this.IsShowDropdown = false
+  //   }
+  //   if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0) {
+  //     this.IsShow = true
+  //   }
+  //   else {
+  //     this.IsShow = false
+  //   }
+  // }
 
-    if (this.request.ENR_ID == 5) {
-      this.IsShowDropdown = true
-    }
-    else {
-      this.IsShowDropdown = false
-    }
-    if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0) {
-      this.IsShow = true
-    }
-    else {
-      this.IsShow = false
-    }
+  Showdropdown() {
+  // ✅ Partial reset only
+  this.resetDepartment();
+  
+  // Optional cleanup
+  this.AdharMemberList = [];
+  this.IsShow = false;
+  this.IsShowDropdown = false;
+
+  // Existing logic
+  if (this.request.ENR_ID == 5) {
+    this.IsShowDropdown = true;
   }
+
+  if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0) {
+    this.IsShow = true;
+  }
+}
 
   Showdrop() {
     if (this.request.JAN_AADHAR > '0') {
@@ -1267,9 +1288,17 @@ export class StudentJanAadharDetailComponent implements OnInit {
 
   }
 
+  // filterString(input: string): string {
+  //   return input.replace(/[^a-zA-Z0-9. ]/g, '');
+  // }
+
   filterString(input: string): string {
-    return input.replace(/[^a-zA-Z0-9. ]/g, '');
-  }
+  return input
+    .replace(/[^a-zA-Z\s]/g, '')   // allow only letters + space
+    .replace(/\s+/g, ' ')          // multiple space → single
+    .trimStart();                  // remove starting space
+}
+
 
   async GetTradeListDDL() {
     try {
@@ -1366,6 +1395,7 @@ export class StudentJanAadharDetailComponent implements OnInit {
       this.Showdropdown()
     }
     else if (val == 2) {
+      this.request.JAN_AADHAR = '' 
       this.showPref = true
       this.AdharMemberList = [];
       this.request.ENR_ID = 0
@@ -1426,29 +1456,29 @@ export class StudentJanAadharDetailComponent implements OnInit {
     return false;
   }
 
-  onPasteClean(event: ClipboardEvent, controlName: string) {
-    event.preventDefault();
+  // onPasteClean(event: ClipboardEvent, controlName: string) {
+  //   event.preventDefault();
 
-    const pastedData = event.clipboardData?.getData('text') || '';
-    let cleaned = pastedData.replace(/[^A-Za-z\u0900-\u097F ]/g, '');
-    cleaned = cleaned.replace(/\s+/g, ' ').trim();
-    cleaned = cleaned.replace(/\b\w/g, (char: string) => char.toUpperCase());
-    this.StudentJanDetailFormGroup.get(controlName)?.setValue(cleaned);
-    switch (controlName) {
-      case 'txtName':
-        this.model.StudentName = cleaned;
-        break;
-      case 'txtFather':
-        this.model.FatherName = cleaned;
-        break;
-      case 'txtMotherEngname':
-        this.model.MotherName = cleaned;
-        break;
-      case 'DepartmentName':
-        this.model.DepartmentName = cleaned;
-        break;
-    }
-  }
+  //   const pastedData = event.clipboardData?.getData('text') || '';
+  //   let cleaned = pastedData.replace(/[^A-Za-z\u0900-\u097F ]/g, '');
+  //   cleaned = cleaned.replace(/\s+/g, ' ').trim();
+  //   cleaned = cleaned.replace(/\b\w/g, (char: string) => char.toUpperCase());
+  //   this.StudentJanDetailFormGroup.get(controlName)?.setValue(cleaned);
+  //   switch (controlName) {
+  //     case 'txtName':
+  //       this.model.StudentName = cleaned;
+  //       break;
+  //     case 'txtFather':
+  //       this.model.FatherName = cleaned;
+  //       break;
+  //     case 'txtMotherEngname':
+  //       this.model.MotherName = cleaned;
+  //       break;
+  //     case 'DepartmentName':
+  //       this.model.DepartmentName = cleaned;
+  //       break;
+  //   }
+  // }
 
 
   formatEmail() {
@@ -1457,5 +1487,86 @@ export class StudentJanAadharDetailComponent implements OnInit {
     value = value.toLowerCase();
     this.StudentJanDetailFormGroup.get('email')?.setValue(value, { emitEvent: false });
   }
+  
+  resetDepartment()
+   {
+  
+   this.model.DepartmentName = '';
+   this.StudentJanDetailFormGroup.patchValue({
+    
+    DepartmentName: ''
+  });
+ 
+  this.StudentJanDetailFormGroup.get('DepartmentName')?.setErrors(null);
+}
 
+onCategoryChange(event: any) {
+  const value = Number(event.target.value);
+
+  // If NOT OBC (4), reset fields
+  if (value !== 4) {
+    
+    // Reset model
+    this.model.CasteCertificateNo = '';
+    this.model.CertificateGeneratDate = '';
+
+    // Reset form controls
+    this.StudentJanDetailFormGroup.patchValue({
+      CertificateNo: '',
+      txtGeneratDate: ''
+    });
+
+    // Remove validation errors
+    this.StudentJanDetailFormGroup.get('CertificateNo')?.setErrors(null);
+    this.StudentJanDetailFormGroup.get('txtGeneratDate')?.setErrors(null);
+  }
+
+  // Optional: trigger your existing validator logic
+  if (value === 4) {
+    this.refreshBranchRefValidation(true);
+  } else {
+    this.refreshBranchRefValidation(false);
+  }
+}
+
+onNameInput(event: any, field: 'StudentName' | 'FatherName' | 'MotherName') {
+  let value = event.target.value;
+
+  // Clean input
+  value = value
+    .replace(/[^a-zA-Z\s]/g, '')   // remove special chars (no dot also)
+    .replace(/\s{2,}/g, ' ')       // multiple spaces → single
+    .replace(/^\s+/g, '');         // remove starting spaces
+
+  // IMPORTANT: update both model + input box
+  this.model[field] = value;
+  event.target.value = value;
+}
+
+onPasteClean(event: ClipboardEvent, field: 'StudentName' | 'FatherName' | 'MotherName') {
+  event.preventDefault();
+
+  let pasted = event.clipboardData?.getData('text') || '';
+
+  pasted = pasted
+    .replace(/[^a-zA-Z\s]/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/^\s+/g, '')
+    .trim(); // remove trailing also
+
+  this.model[field] = pasted;
+
+  // update UI
+  const input = event.target as HTMLInputElement;
+  input.value = pasted;
+}
+
+onNameBlur(event: any, field: 'StudentName' | 'FatherName' | 'MotherName') {
+  let value = event.target.value;
+
+  value = value.trim();  // removes trailing + leading space
+
+  this.model[field] = value;
+  event.target.value = value;
+}
 }

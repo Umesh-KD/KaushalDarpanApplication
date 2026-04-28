@@ -288,7 +288,7 @@ export class ITIStudentAttendanceComponent implements OnInit {
 
       }
 
-
+      this.isDateFrozen = false;
     
       const dateStart = new Date(rawStart);
       const formattedDateStart =
@@ -388,6 +388,13 @@ export class ITIStudentAttendanceComponent implements OnInit {
               ...this.displayedColumns,
               ...this.dynamicColumns.map(x => x.originalKey)
             ];
+
+
+            this.isDateFrozen = this.dynamicColumns.some((column: any) =>
+              this.filterData.some((row: any) =>
+                String(row[column.originalKey] || '').includes('(F)')
+              )
+            );
 
           }
 
