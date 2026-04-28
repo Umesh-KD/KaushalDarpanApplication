@@ -67,6 +67,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public LevelList: any = [];
   public PostList: any = [];
   public ExamTypeList: any = [];
+  public RoleListDDL: any = [];
   public QueryReqFormGroup!: FormGroup;
   public _EnumRole = EnumRole
   public GetRoleID: number=0
@@ -126,6 +127,8 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       txtRemark: ['', Validators.required],
       txtLastworkingDate: [''],
       txtJoiningDate: [''],
+      JoiningRoleID: [0, [DropdownValidators]],
+      JoiningTimeID: [0, [DropdownValidators]],
     });
 
     this.groupFormVRS = this.fb.group({
@@ -146,7 +149,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     });
 
     await this.GetStatusList();
-
+    await this.GetRoleListDDL();
     this.formData.LevelOfExamID = 0;
     this.formData.ExamTypeID = 0;
     await this.GetLevelList();
@@ -462,8 +465,20 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     }
   }
 
+  async refreshValidators() {
+    if(this.RequestUpdateStatus.StatusIDs!=247) {
+      this.groupForm.get('txtJoiningDate')?.clearValidators();
+      this.groupForm.get('JoiningTimeID')?.clearValidators();
+      this.groupForm.get('JoiningRoleID')?.clearValidators();
+
+      this.groupForm.get('txtJoiningDate')?.updateValueAndValidity();
+      this.groupForm.get('JoiningTimeID')?.updateValueAndValidity();
+      this.groupForm.get('JoiningRoleID')?.updateValueAndValidity();
+    }
+  }
   async UserRequestJoiningApprove_ITI_EM() {
     debugger
+    await this.refreshValidators();
     this.isSubmitted = true;
     this.groupForm.get('txtLastworkingDate')?.clearValidators();
     this.groupForm.get('txtLastworkingDate')?.updateValueAndValidity();
@@ -798,5 +813,22 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.UserRequestList.length;
+  }
+
+  async GetRoleListDDL() {
+    try {
+      const request: any = {};
+      request.InstituteID = this.sSOLoginDataModel.InstituteID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = 'RoleListDDL'
+      await this.ITIGovtEMStaffMasterService.ITI_EM_DropdownGetData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoleListDDL = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
