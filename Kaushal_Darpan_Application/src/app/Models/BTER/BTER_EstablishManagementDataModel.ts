@@ -696,10 +696,14 @@ export class StaffTrainingDetailDataModel {
   public StaffID: number = 0;
   public TrainingDoc: string = '';
   public Dis_TrainingDoc: string = '';
-
   public TrainingCourseType_str: string = '';
   public DurationUnit_str: string = '';
   public ModeOfTraining_str: string = '';
+  public TrainingTypeID: number = 0;
+  public TrainingStatus: number = 0;
+  public ComplitionTrainingDoc: string = '';
+  public Dis_complitionTrainingDoc: string = '';
+  public Remark: string = '';
 }
 
 export class StaffTrainingDetailSearchData {
@@ -707,4 +711,15 @@ export class StaffTrainingDetailSearchData {
   public UserID: number = 0;
   public StaffID: number = 0;
   public Action?: string = '';
+  public StatusID: number = 0;
+}
+
+
+
+export class StaffTrainingStatusUpdateDataModel {
+  public StaffTrainingDetailID: number = 0;
+  public TrainingStatus: number = 0;
+  public CreatedBy: number = 0;
+  public Remark?: string = '';
+  public jsonData?: string = '';
 }

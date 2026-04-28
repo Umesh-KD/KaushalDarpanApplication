@@ -195,7 +195,10 @@
 
             <div>
               <label for="txtOrderDate" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
-              <input type="date" class="form-input" id="txtOrderDate" name="txtOrderDate" formControlName="txtOrderDate" [(ngModel)]="request.OrderDate">
+              <input type="date" class="form-input" id="txtOrderDate" name="txtOrderDate" 
+                formControlName="txtOrderDate" 
+                [(ngModel)]="request.OrderDate"
+                [max]="TodayDate">
               <div *ngIf="isSubmitted&&_groupForm.txtOrderDate.errors" class="text-danger">
                 <p *ngIf="_groupForm.txtOrderDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>
@@ -214,7 +217,22 @@
               </div>
             </div>
 
-            <div>
+            <div >
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Relieving Time <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.RelievingTimeID" formControlName="RelievingTimeID">
+                <option value="0">--Select--</option>
+                <option value="1">First Half</option>
+                <option value="2">Second Half</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.RelievingTimeID.errors" class="text-danger">
+                <p *ngIf="!_groupForm.RelievingTimeID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <!-- <div>
               <label
                      [attr.for]="'LastworkingDate'"
                      class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -226,7 +244,7 @@
               <div *ngIf="isSubmitted&&_groupForm.LastworkingDate.errors" class="text-danger">
                 <p *ngIf="_groupForm.LastworkingDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>
-            </div>
+            </div> -->
 
             <div>
               <label for="txtRequestRemarks" class="text-gray-800 text-sm font-medium inline-block mb-2">Request Remarks <span class="StarMarking">*</span></label>

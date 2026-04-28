@@ -872,3 +872,13 @@ export enum EnumTransferStatus {
 	Request_for_Join = 4355,
 	Joined = 4356
 }
+
+export enum EnumStaffTrainingStatus {
+  Applied = 6356,
+  Revert = 6357,
+  Reject = 6358,
+  PrincipalApprove = 6359,
+  ADTE = 6360,
+  JDTE = 6361,
+  DTE = 6362
+}

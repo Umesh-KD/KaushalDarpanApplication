@@ -104,24 +104,23 @@
             </td>
             <td align="center">
               <div class="flex align-center justify-center actionBtns" *ngIf="DateConfigSetting[0]['INTERNAL SLIDING']==1 && IsPublishSeatMetrix==true">
-                <a href="javascript:void(0);" title="Change To Internal Sliding" (click)="OpenInternalsliding('ALLOT',MyModel_Action,item)" *ngIf="item.AllotmentMasterId!=6">
-                  <i class="ti ti-pencil"></i>
-                </a>
+                <!--<div class="flex align-center justify-center actionBtns">-->
+                  <a href="javascript:void(0);" title="Change To Internal Sliding" (click)="OpenInternalsliding('ALLOT',MyModel_Action,item)" *ngIf="item.AllotmentMasterId!=6">
+                    <i class="ti ti-pencil"></i>
+                  </a>
+                  <a href="javascript:void(0);" title="Swap Trade" (click)="OpenInternalsliding('SWAP',MyModel_SwapAction,item)" *ngIf="item.AllotmentMasterId!=6">
+                    <i class="ti ti-transfer"></i>
+                  </a>
 
-                <a href="javascript:void(0);" title="Swap Trade" (click)="OpenInternalsliding('SWAP',MyModel_SwapAction,item)" *ngIf="item.AllotmentMasterId!=6">
-                  <i class="ti ti-transfer"></i>
-                </a>
+                  <a href="javascript:void(0);" title="Revert Application" (click)="openRevertOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId==0">
+                    <i class="ti ti-arrow-back-up"></i>
+                  </a>
+                  <a href="javascript:void(0);" title="Revert Application" (click)="openRevertSwapOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId!=0">
+                    <i class="ti ti-arrow-back-up"></i>
+                  </a>
 
-                <a href="javascript:void(0);" title="Revert Application" (click)="openRevertOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId==0">
-                  <i class="ti ti-arrow-back-up"></i>
-                </a>
-
-                <a href="javascript:void(0);" title="Revert Application" (click)="openRevertSwapOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId!=0">
-                  <i class="ti ti-arrow-back-up"></i>
-                </a>
-
-              </div>
-            </td>
+                </div>
+</td>
           </tr>
 
         </tbody>

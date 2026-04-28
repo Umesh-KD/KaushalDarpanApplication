@@ -11,6 +11,7 @@ import { EnumDepartment, EnumStatus } from '../../../Common/GlobalConstants';
 import { ItiApplicationSearchmodel } from '../../../Models/ItiApplicationPreviewDataModel';
 import { ActivatedRoute } from '@angular/router';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
+import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
 
 @Component({
     selector: 'app-address-details-form-tab',
@@ -38,7 +39,8 @@ constructor(
     private toastr: ToastrService,
   private ItiApplicationFormService: ItiApplicationFormService,
   private activatedRoute: ActivatedRoute,
-  private encryptionService: EncryptionService
+  private encryptionService: EncryptionService,
+  public _CommonFunctionHelper:CommonFunctionHelper,
   ) { }
 
   ngOnInit(): void {
@@ -206,6 +208,7 @@ constructor(
           console.log(data);
           this.formData = data['Data']
           this.formData.StateID = data.Data.StateID
+          this.ValidateBlockTehsil();
           this.ddlState_Change()
           this.formData.DistrictID = data.Data.DistrictID
           this.ddlDistrict_Change()
@@ -255,4 +258,60 @@ constructor(
       }, 200);
     }
   }
+  async onStateChange() {
+  // Reset dependent fields
+  this.formData.DistrictID = 0;
+  this.formData.TehsilID = 0;
+  this.formData.NonRajasthanBlockName = '';
+  this.formData.CityVillage = '';
+  this.formData.Pincode = '';
+
+  // Reset dropdown lists
+  this.DistrictMasterList = [];
+  this.TehsilMasterList = [];
+
+  // Reset form controls
+  this.AddressDetailsFormGroup.patchValue({
+    District: 0,
+    BlockTehsil: 0,
+    NonRajasthanBlockName: '',
+    CityVillage: '',
+    Pincode: ''
+  });
+
+  // Apply validation logic
+  this.ValidateBlockTehsil();
+
+  // Load districts
+  await this.ddlState_Change();
+}
+
+async onDistrictChange() {
+  // Reset dependent fields
+  this.formData.TehsilID = 0;
+  this.formData.NonRajasthanBlockName = '';
+  this.formData.CityVillage = '';
+  this.formData.Pincode = '';
+
+  this.TehsilMasterList = [];
+
+  this.AddressDetailsFormGroup.patchValue({
+    BlockTehsil: 0,
+    NonRajasthanBlockName: '',
+    CityVillage: '',
+    Pincode: ''
+  });
+
+  await this.ddlDistrict_Change();
+}
+
+onTehsilChange() {
+  this.formData.CityVillage = '';
+  this.formData.Pincode = '';
+
+  this.AddressDetailsFormGroup.patchValue({
+    CityVillage: '',
+    Pincode: ''
+  });
+}
 }
