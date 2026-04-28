@@ -636,7 +636,7 @@ export class GenerateRevalRollNumberComponent {
     const columnOrder = [
       'SrNo', 'GroupCode', 'CCCode', 'StreamName', 'Org_Stu_RollNumber',
       'SubjectCode', 'EnrollmentNo', 'StudentName', 'FatherName',
-      'InstituteName', 'SemesterName', 'RollNumber'
+      'InstituteName', 'SemesterName', 'RollNumber', 'ObtainedTheoryOld'
     ];
 
     // remove unwanted column
@@ -659,7 +659,8 @@ export class GenerateRevalRollNumberComponent {
       FatherName: 'Father Name',
       InstituteName: 'Institute Name',
       SemesterName: 'Semester',
-      RollNumber: 'Reval Roll Number'
+      RollNumber: 'Reval Roll Number',
+      ObtainedTheoryOld: 'Old Theory Marks'
     };
 
     const filteredData = this.StudentList.map((item: any, index: number) => {

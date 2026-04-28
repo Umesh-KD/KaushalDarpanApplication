@@ -321,7 +321,10 @@
             <label for="StudentName" class="text-gray-800 text-sm font-medium inline-block mb-2">आवेदक का नाम (Applicant's Name):<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="StudentName" placeholder="Enter Applicant's Name"
                    [(ngModel)]="model.StudentName" formControlName="txtName" (change)="model.StudentName = filterString(model.StudentName)"
-                   (keypress)="allowOnlyAlphabets($event)" (paste)="onPasteClean($event, 'txtName')" maxlength="100">
+                   (input)="onNameInput($event, 'StudentName')"
+                    (blur)="onNameBlur($event, 'StudentName')"
+                     (paste)="onPasteClean($event, 'StudentName')"
+                   (keypress)="allowOnlyAlphabets($event)" maxlength="100">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtName.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.txtName.errors.required">
                 <i aria-hidden="true"></i> <span class="redAlertMsg">कृपया बिना अनुवादन के अपना नाम अंग्रेजी में लिखें</span>
@@ -336,6 +339,9 @@
             <label for="txtFather" class="text-gray-800 text-sm font-medium inline-block mb-2">पिता का नाम (Father's Name):<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="txtFather" placeholder="Enter Father's Name"
                    [(ngModel)]="model.FatherName" formControlName="txtFather" (change)="model.FatherName = filterString(model.FatherName)"
+                   (input)="onNameInput($event, 'FatherName')"
+                   (blur)="onNameBlur($event, 'FatherName')"
+                   (paste)="onPasteClean($event, 'FatherName')"
                    (keypress)="allowOnlyAlphabets($event)" (paste)="onPasteClean($event, 'txtFather')" maxlength="100">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtFather.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.txtFather.errors.required">
@@ -347,6 +353,9 @@
             <label for="txtMotherEngname" class="text-gray-800 text-sm font-medium inline-block mb-2">माता का नाम (Mother's Name):<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="txtMotherEngname" placeholder="Enter Mother's Name"
                    [(ngModel)]="model.MotherName" formControlName="txtMotherEngname" (change)="model.MotherName = filterString(model.MotherName)"
+                    (input)="onNameInput($event, 'MotherName')"
+                   (blur)="onNameBlur($event, 'MotherName')"
+                   (paste)="onPasteClean($event, 'MotherName')"
                    (keypress)="allowOnlyAlphabets($event)" (paste)="onPasteClean($event, 'txtMotherEngname')" maxlength="100">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtMotherEngname.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.txtMotherEngname.errors.required">
@@ -438,7 +447,9 @@
           </div>
           <div *ngIf="model.CategoryA == 4">
             <label for="txtOBCCasteCert" class="text-gray-800 text-sm font-medium inline-block mb-2">ओबीसी जाति प्रमाण पत्र संख्या (OBC Caste Certificate No):<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" formControlName="CertificateNo" id="txtOBCCasteCert" [(ngModel)]="model.CasteCertificateNo" maxlength="12" placeholder="Enter OBC Caste Certificate No">
+            <input type="text" class="form-input" formControlName="CertificateNo" id="txtOBCCasteCert" [(ngModel)]="model.CasteCertificateNo" 
+            maxlength="12" placeholder="Enter OBC Caste Certificate No"
+            (keypress)="this.commonFunctionHelper.numbersOnly($event)">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.CertificateNo.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.CertificateNo.errors.required"><i aria-hidden="true"></i>This field is required.</p>
 

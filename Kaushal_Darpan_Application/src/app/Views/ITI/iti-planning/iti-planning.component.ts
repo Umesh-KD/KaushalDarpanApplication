@@ -1577,11 +1577,19 @@ export class ItiPlanningComponent {
     }
 
 
+    let date = new Date(this.addmore.OrderDate!);
+
+    let formattedDate =
+      date.getFullYear() + '-' +
+      String(date.getMonth() + 1).padStart(2, '0') + '-' +
+      String(date.getDate()).padStart(2, '0');
+
+
    
     this.request.ItiAffiliationList.push({
       AffiliationID: this.addmore.AffiliationID,
       CollegeID: this.addmore.CollegeID,
-      Dis_Filename: this.addmore.Dis_Filename,
+      Dis_Filename: 'DGTorders/' + formattedDate +'.pdf',
       FileName: this.addmore.FileName,
       OrderNo: this.addmore.OrderNo,
       OrderDate: this.addmore.OrderDate,
@@ -1589,6 +1597,7 @@ export class ItiPlanningComponent {
       SerialNo: this.addmore.SerialNo,
       EffectFrom: this.addmore.EffectFrom,
       OrderID: this.addmore.OrderID
+
     });
 
 
