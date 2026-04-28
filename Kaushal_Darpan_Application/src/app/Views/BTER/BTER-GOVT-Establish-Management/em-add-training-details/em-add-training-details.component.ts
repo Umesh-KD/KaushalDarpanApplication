@@ -259,7 +259,7 @@ export class EMAddTrainingDetailsComponent {
     try {
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID
-      this.searchRequest.Action = "GetAllDataCompletedTraining";
+      this.searchRequest.Action = "GetAllDataCompletedTrainingList";
 
       await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -276,7 +276,7 @@ export class EMAddTrainingDetailsComponent {
     try {
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID
-      this.searchRequest.Action = "GetAllDataNewTraining";
+      this.searchRequest.Action = "GetAllDataNewTrainingList";
 
       await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -294,6 +294,17 @@ export class EMAddTrainingDetailsComponent {
     debugger
    
     this.request.TrainingTypeID = event;
+
+    if (this.request.TrainingTypeID == 1) {
+      this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].setValidators([Validators.required]);
+      } 
+    else {
+      this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].clearValidators();
+    }
+    this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].updateValueAndValidity();
+
+    
+
   }
 
   onDateChange() {
