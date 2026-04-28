@@ -35,6 +35,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   public AllSelect: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
 
+  public PlacedStudentsCountList: any[] = [];
   public CampusMasterList: any[] = [];
   public StreamMasterList: any[] = [];
   public HiringRoleMasterList: any[] = []
@@ -72,6 +73,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     await this.GetCampusPostMasterDDL();
+    await this.GetPlacedStudentsCountList();
     //await this.GetAllData();
 
   }
@@ -166,6 +168,30 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
           console.log(data);
           if (data.State == EnumStatus.Success) {
             this.StudentList = data['Data'];
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetPlacedStudentsCountList(){
+    try {
+      this.loaderService.requestStarted();
+      debugger;
+      await this.placementShortListStudentService.GetPlacedStudentsCountList()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          if (data.State == EnumStatus.Success) {
+            this.PlacedStudentsCountList = data['Data'];
           }
         }, (error: any) => console.error(error)
         );

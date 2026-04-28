@@ -38,6 +38,14 @@ export class PlacementShortlistedStudentsService {
       ).toPromise();
   }
 
+  public async GetPlacedStudentsCountList() {
+    // var body = JSON.stringify(searchReq);
+    return await this.http.post(`${this.APIUrl}/GetPlacedStudentsCountList`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async SaveAllData(request: PlacementShortListStudentResponseModel[]) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/SaveAllData', body, this.headersOptions)
