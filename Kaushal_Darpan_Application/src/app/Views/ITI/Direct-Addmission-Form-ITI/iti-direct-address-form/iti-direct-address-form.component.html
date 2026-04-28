@@ -54,7 +54,7 @@
             राज्य (State): <span class="StarMarking">*</span>
           </label>
           <select class="form-select" id="State" name="State" formControlName="State"
-                  [(ngModel)]="formData.StateID" (change)="ddlState_Change()">
+                  [(ngModel)]="formData.StateID" (change)="onStateChange()">
 
             <option value="0">Select State</option>
             <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
@@ -71,7 +71,7 @@
             जिला (District): <span class="StarMarking">*</span>
           </label>
           <select class="form-select" id="District" name="District" formControlName="District"
-                  [(ngModel)]="formData.DistrictID" (change)="ddlDistrict_Change()">
+                  [(ngModel)]="formData.DistrictID" (change)="onDistrictChange()">
             <option value="0">Select District</option>
             <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -88,6 +88,7 @@
             (Block/Tehsil): <span class="StarMarking">*</span>
           </label>
           <select class="form-select" id="ddlPreferentialCategory" name="BlockTehsil" formControlName="BlockTehsil"
+                   (change)="onTehsilChange()"
                   [(ngModel)]="formData.TehsilID">
 
             <option value="0">Select Block/Tehsil</option>
@@ -100,7 +101,8 @@
             (Block/Tehsil): <span class="StarMarking">*</span>
           </label>
           <input maxlength="50" type="text" class="form-input" id="NonRajasthanBlockName" placeholder="Enter Block/Tehsil" name="NonRajasthanBlockName"
-                 formControlName="NonRajasthanBlockName" [(ngModel)]="formData.NonRajasthanBlockName">
+                 formControlName="NonRajasthanBlockName" [(ngModel)]="formData.NonRajasthanBlockName"
+                 (change)="onTehsilChange()">
           <div *ngIf="isSubmitted && _AddressDetailsFormGroup.NonRajasthanBlockName.errors" class="text-danger">
             <p *ngIf="_AddressDetailsFormGroup.NonRajasthanBlockName.errors.required">
               <i aria-hidden="true"></i> This field is
@@ -131,6 +133,7 @@
           </label>
           <input type="text" class="form-input" id="Pincode" placeholder="Enter Pincode" name="Pincode"
                  formControlName="Pincode" [(ngModel)]="formData.Pincode" (change)="formData.Pincode = filterNumber(formData.Pincode)"
+                 (keypress)="commonFunctionHelper.numbersOnly($event)"
                  maxlength="6" minlength="6">
           <div *ngIf="isSubmitted && _AddressDetailsFormGroup.Pincode.errors" class="text-danger">
             <p *ngIf="_AddressDetailsFormGroup.Pincode.errors.required">

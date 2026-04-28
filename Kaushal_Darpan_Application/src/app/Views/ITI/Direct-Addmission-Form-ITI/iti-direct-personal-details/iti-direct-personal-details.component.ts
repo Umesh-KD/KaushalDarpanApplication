@@ -16,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { TspAreasService } from '../../../../Services/Tsp-Areas/Tsp-Areas.service';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
+import { CommonFunctionHelper } from '../../../../Common/commonFunctionHelper';
 declare function LoadData(): any;
 
 @Component({
@@ -80,6 +81,7 @@ export class ITIDirectPersonalDetailsComponent {
     private activatedRoute: ActivatedRoute,
     private tspAreaService: TspAreasService,
     private encryptionService: EncryptionService,
+    public _CommonFunctionHelper:CommonFunctionHelper,
     private routers: Router
   ) { }
   async ngOnInit() {
@@ -109,7 +111,7 @@ export class ITIDirectPersonalDetailsComponent {
         txtName: [{ value: '', disabled: true }, Validators.required],
         txtnameHindi: [{ value: '' }, Validators.required],
        // txtEmail: [{ value: '', }, Validators.required],
-        txtEmail: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+        txtEmail: ['', [ Validators.pattern(GlobalConstants.EmailPattern)]],
         txtFather: [{ value: '',}, Validators.required],
         txtFatherHindi: [{ value: '' }, Validators.required],
         txtDOB: [{ value: '', disabled: true }, Validators.required],
@@ -159,7 +161,7 @@ export class ITIDirectPersonalDetailsComponent {
     if (this.ApplicationID > 0) {
       this.searchRequest.ApplicationID = this.ApplicationID;
       this.request.ApplicationID = this.ApplicationID;
-      this.GetById()
+     await this.GetById()
     }
 
 
@@ -229,6 +231,15 @@ export class ITIDirectPersonalDetailsComponent {
     }
   }
 
+   refereshEmailValidator(DirectAdmissionType: number) {
+    this.PersonalDetailForm.get('email')?.clearValidators();
+    if (DirectAdmissionType==1) 
+    {
+      this.PersonalDetailForm.get('email')?.setValidators(Validators.required);
+    }
+    this.PersonalDetailForm.get('email')?.updateValueAndValidity();
+  }
+
   async SavePersonalDetails() {
 
     console.log(this.PersonalDetailForm.value);
@@ -244,8 +255,15 @@ export class ITIDirectPersonalDetailsComponent {
     this.request.PH10thTradeList = JSON.parse(this.request.PH10thTradeList).join(',');
     console.log("PH10thTradeList", this.request.PH10thTradeList )
 
+
+
+    
+
     try {
       this.isSubmitted = true;
+
+
+      this.refereshEmailValidator(this.request.DirectAdmissionType)
 
       if (this.PersonalDetailForm.invalid) {
         this.toastr.error('Invalid form Details');
@@ -793,4 +811,74 @@ export class ITIDirectPersonalDetailsComponent {
     }
   }
 
+  allowOnlyAlphabets(event: any) {
+  const charCode = event.which ? event.which : event.keyCode;
+  const input = event.target as HTMLInputElement;
+  const value = input.value;
+
+  // Allow A-Z, a-z, Hindi
+  if (
+    (charCode >= 65 && charCode <= 90) ||   // A-Z
+    (charCode >= 97 && charCode <= 122) ||  // a-z
+    (charCode >= 2304 && charCode <= 2431)  // Hindi
+  ) {
+    return true;
+  }
+
+  // Handle space
+  if (charCode === 32) {
+    // ❌ prevent space at start
+    if (value.length === 0) {
+      event.preventDefault();
+      return false;
+    }
+
+    // ❌ prevent multiple consecutive spaces
+    if (value[value.length - 1] === ' ') {
+      event.preventDefault();
+      return false;
+    }
+
+    return true;
+  }
+
+  // ❌ block everything else
+  event.preventDefault();
+  return false;
+}
+removeExtraSpaces(field: keyof PersonalDetailsDatamodel) {
+  const value = this.request[field];
+
+  if (typeof value === 'string') {
+    (this.request as any)[field] = value
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+}
+
+onPasteClean(event: ClipboardEvent, field: keyof PersonalDetailsDatamodel) {
+  event.preventDefault();
+
+  let pasted = event.clipboardData?.getData('text') || '';
+
+  pasted = pasted
+    .replace(/[^A-Za-z\u0900-\u097F\s]/g, '') // remove invalid chars
+    .replace(/\s+/g, ' ')                    // single space
+    .trim();                                // remove leading/trailing
+
+  (this.request as any)[field] = pasted;
+}
+
+onCategoryCChange() {
+  if (this.request.CategoryC != 69) {
+    this.request.PWDCategoryID = 0;
+
+    const pwdControl = this.PersonalDetailForm.get('ddlPWDCategoryID');
+
+    if (pwdControl) {
+      pwdControl.setValue(0);
+      pwdControl.markAsUntouched();
+    }
+  }
+}
 }
