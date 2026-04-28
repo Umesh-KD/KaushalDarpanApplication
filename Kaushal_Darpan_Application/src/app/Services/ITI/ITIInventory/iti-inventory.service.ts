@@ -575,6 +575,14 @@ export class ITIInventoryService {
       ).toPromise();
   }
 
+  public async GetMinRequiredItem_ITI_INV_Report(request: MinRequiredItemSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetMinRequiredItem_ITI_INV_Report`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async DeleteMinRequiredItem_ITI_INV(request: AddMinRequiredItemDataModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/DeleteMinRequiredItem_ITI_INV`, body, this.headersOptions)

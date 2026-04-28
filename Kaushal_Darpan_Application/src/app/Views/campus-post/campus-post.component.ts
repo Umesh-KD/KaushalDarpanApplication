@@ -10,7 +10,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CampusPostMasterModel, CampusPostMaster_EligibilityCriteriaModel } from '../../Models/CampusPostDataModel';
-import { EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { CompanyMasterDataModels } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
@@ -68,6 +68,7 @@ export class CampusPostComponent implements OnInit {
   public HiringRoleMasterList: any = []
   public EligibleInstitutesList: any = []
   public CompanyTypeList: any = []
+    _EnumRole = EnumRole
 
   public HRDetailsList: any = []
   public NoRangeList: any[] = [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70];
@@ -292,9 +293,11 @@ export class CampusPostComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.StateMasterList = data['Data'];
         }, error => console.error(error));
-
-
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+debugger
+        let action='getEng_NonEng_Stream';
+      // await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+      // get stream VIA ACTION
+        await this.commonMasterService.StreamMaster_streamType(this.sSOLoginDataModel.DepartmentID, 0, this.sSOLoginDataModel.EndTermID,action)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StreamMasterList = data['Data'];

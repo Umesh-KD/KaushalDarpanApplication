@@ -367,10 +367,11 @@ const routes: Routes = [
       { path: 'DirectStudentJanAadharDetail', loadChildren: () => import('./Views/BTER/direct-student-jan-aadhar-detail/direct-student-jan-aadhar-detail.module').then(m => m.DirectStudentJanAadharDetailModule), title: 'Direct Student JanAadhaar Detail' },
       { path: 'DirectStudentJanAadharDetail/:depid', loadChildren: () => import('./Views/BTER/direct-student-jan-aadhar-detail/direct-student-jan-aadhar-detail.module').then(m => m.DirectStudentJanAadharDetailModule), title: 'Direct Student JanAadhaar Detail' },
 
+      // group code 
       { path: 'groupcodeallocation', loadChildren: () => import('./Views/groupcode-allocation/groupcode-allocation.module').then(m => m.GroupcodeAllocationModule), title: 'Group Code Allocation' },
       { path: 'groupcodeadd', loadChildren: () => import('./Views/groupcode-allocation/add-groupcode/add-groupcode.module').then(m => m.GroupcodeAddModule), title: 'Add Group Code' },
 
-      //reval
+      //group code reval
       { path: 'groupcodeallocationreval', loadChildren: () => import('./Views/groupcode-allocation-reval/groupcode-allocation-reval.module').then(m => m.GroupcodeAllocationModule), title: 'Group Code Allocation' },
       { path: 'groupcodeaddreval', loadChildren: () => import('./Views/groupcode-allocation-reval/add-groupcode-reval/add-groupcode-reval.module').then(m => m.GroupcodeAddRevalModule), title: 'Add Group Code' },
 
@@ -606,6 +607,7 @@ const routes: Routes = [
       { path: 'iti-sr6-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/sr6-report-iti/sr6-report-iti.module').then(m => m.SR6ReportITIModule), title: 'ITI SR6 Report' },
       { path: 'add-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/add-min-required-trade-items/add-min-required-trade-items.module').then(m => m.AddMinRequiredTradeItemsModule), title: 'Add Min Required Items' },
       { path: 'iti-min-required-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/min-required-trade-items/min-required-trade-items.module').then(m => m.MinRequiredTradeItemsModule), title: 'ITI Min Required Items' },
+      { path: 'required-item-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/required-trade-items-report/required-trade-items-report.module').then(m => m.RequiredTradeItemsReportModule), title: 'ITI Min Required Items Report' },
 
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
       { path: 'inventory-Issue-History', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title: 'Inventory Issue History' },
@@ -1170,6 +1172,8 @@ const routes: Routes = [
       { path: 'bter-em-add-staff-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-add-staff-details/bter-em-add-staff-details.module').then(m => m.BterEMAddStaffDetailsModule), title: 'Add Staff' },
       { path: 'em-budget-head', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-budget-head-master/em-budget-head-master.module').then(m => m.EMBudgetHeadMasterModule), title: 'Establishment BGT Head' },
       { path: 'em-add-training-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-add-training-details/em-add-training-details.module').then(m => m.EMAddTrainingDetailsModule), title: 'Training Details' },
+      { path: 'Staff-Completed-Process-Training', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-training-details-history/em-training-details-history.module').then(m => m.emtrainingdetailshistoryModule), title: 'Training Details' },
+      { path: 'Staff-New-Process-Training', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/EM-Staff-New-Process-Training/EM-Staff-New-Process-Training.module').then(m => m.EMStaffNewProcessTrainingModule), title: 'Training Details' },
       
       { path: 'Bter-AddUserRequest', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
       { path: 'Bter-AddUserRequest/:id', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
@@ -1214,7 +1218,7 @@ const routes: Routes = [
       { path: 'transfer-request-accept', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/transfer-request-accept/transfer-request-accept.module').then(m => m.TransferRequestAcceptModule), title: 'User Request List' },
       { path: 'PostPlanning', loadChildren: () => import('./Views/ITI/post-planning/post-planning.module').then(m => m.PostPlanningModule) },
       { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
-
+      { path: 'OfficeVacancyList', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/office-vacancy-list/office-vacancy-list.module').then(m => m.OfficeVacancyListModule) },
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, ITI Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
       { path: 'PaperSetterProfessorDashboard', loadChildren: () => import('./Views/ITI/itipapper-setter/itipaper-setter-professor-dashboard/itipaper-setter-professor-dashboard.module').then(m => m.ITIPaperSetterProfessorDashboardModule) },
@@ -1697,6 +1701,8 @@ const routes: Routes = [
       { path: 'file-delete', loadChildren: () => import('./Views/BTER/file-uupload/file-uupload.module').then(m => m.FileUuploadModule) },
       { path: 'create-nodal-verifier', loadChildren: () => import('../Views/ITI/create-nodal-verifier/create-nodal-verifier.module').then(m => m.CreateNodalVerifierModule) },
       { path: 'ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
+      { path: 'iti-examination-college', loadChildren: () => import('./Views/ITI/iti-examination-college/iti-examination-college.module').then(m => m.ItiExaminationCollegeModule) },
+      { path: 'iti-examination-trade', loadChildren: () => import('./Views/ITI/iti-examination-trade/iti-examination-trade.module').then(m => m.ItiExaminationTradeModule) },
 
 
     ]

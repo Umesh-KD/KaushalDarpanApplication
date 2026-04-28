@@ -661,6 +661,15 @@ export class ITIGovtEMStaffMaster {
       ).toPromise();
   }
 
+  public async ITI_OfficeVacancyReport(request: ITIOfficeVacancyModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/ITI_OfficeVacancyReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 

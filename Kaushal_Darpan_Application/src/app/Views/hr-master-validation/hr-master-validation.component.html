@@ -93,7 +93,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Status}}</td>
             <td align="center">
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                <a href="javascript:void(0);" title="HR On Action" *ngIf="(row.Status=='Pending' || row.Status=='Hold')" (click)="CompanyOnAction(MyModel_Action,row.HRManagerID)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="HR On Action" *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel && (row.Status=='Pending' || row.Status=='Hold'))" (click)="CompanyOnAction(MyModel_Action,row.HRManagerID)"><i class="ti ti-check"></i></a>
                 <!--<a href="javascript:void(0);" title="View & Update Company" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,company.ID)"><i class="ti ti-eye"></i></a>-->
                 <a [routerLink]="'/AddHrmaster'" [queryParams]="{HRManagerID:row.HRManagerID,key:2}"
                    title="View & Update Company"

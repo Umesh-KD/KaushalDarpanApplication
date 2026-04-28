@@ -312,6 +312,8 @@ export class PersonalDetailsDatamodel {
   public PH8thTradeList: string = ''
   public PH10thTradeList: string = ''
   public Apaarid: string = ''
+public DirectAdmissionType :number=0;
+
 }
 
 export class PHTradeList {
@@ -392,4 +394,6 @@ export class PersonalDetailsDatamodell {
   public Apaarid: string = ''
   public FatherOccupation: string = ''
   public OfficeAddress: string = ''
+   public DirectAdmissionType :number=0;
+
 }

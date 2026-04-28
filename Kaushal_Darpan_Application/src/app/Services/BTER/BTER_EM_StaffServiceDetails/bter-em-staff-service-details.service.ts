@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { StaffTrainingDetailDataModel, StaffTrainingDetailSearchData } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { StaffTrainingDetailDataModel, StaffTrainingDetailSearchData, StaffTrainingStatusUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -52,4 +52,14 @@ export class BTEREMStaffServiceDetailsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async StaffTrainingStatusUpdate(request: StaffTrainingStatusUpdateDataModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StaffTrainingStatusUpdate`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

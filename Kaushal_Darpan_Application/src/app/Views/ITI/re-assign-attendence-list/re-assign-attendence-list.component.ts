@@ -245,6 +245,20 @@ export class ReAssignAttendenceListComponent {
     }
 
   }
+
+  isPresent(value: any): boolean {
+    return value?.includes('P');
+  }
+
+  getAttendanceText(value: any): string {
+    if (!value) return ''; // 👈 IMPORTANT (blank)
+
+    if (value.includes('P')) return 'Present';
+    if (value.includes('A')) return 'Absent';
+
+    return '';
+  }
+
   async GetAttendanceTimeTable() {
 
     try {
@@ -280,7 +294,9 @@ export class ReAssignAttendenceListComponent {
         AttendanceEndDate: formattedDateEnd,
         UnitID: this.UnitID,
         ShiftID: this.ShiftID,
-        Seatintake: this.TableForm.value.ShiftId
+        Seatintake: this.TableForm.getRawValue().ShiftId,
+        SSOID: this.TableForm.getRawValue().SSOID,
+
       };
 
       this.filterData = [];
@@ -301,6 +317,9 @@ export class ReAssignAttendenceListComponent {
               'SrNo',
               'EnrollmentNo',
               'StudentName',
+
+              'TradeName',
+              'SemesterName',
               'SubjectName'
             ];
 
@@ -321,7 +340,9 @@ export class ReAssignAttendenceListComponent {
                   'Attendance',
                   'EndTermID',
                   'CourseTypeID',
-                  'IsFinalSubmit'
+                  'IsFinalSubmit',
+                    'TradeName',
+                  'SemesterName',
                 ].includes(key)
               )
               .map(key => {
@@ -366,9 +387,7 @@ export class ReAssignAttendenceListComponent {
     return value?.includes('(F)');
   }
 
-  isPresent(value: any): boolean {
-    return value?.startsWith('P');
-  }
+
   // Method to handle attendance change (can be customized)
   onAttendanceChange(event: any, element: any, column: string) {
     const attendanceStatus = event.checked ? 'P' : 'A';
@@ -385,9 +404,9 @@ export class ReAssignAttendenceListComponent {
 
   getData() {
     this.isSubmitted = true;
-    if (this.TableForm.getRawValue().StreamID != null && this.TableForm.value.SubjectID) {
+   
       this.GetAttendanceTimeTable();
-    }
+    
   }
 
   onPaginationChange(event: PageEvent): void {
@@ -441,25 +460,36 @@ export class ReAssignAttendenceListComponent {
   }
 
   public downloadPDF() {
-    const margin = 10;
-    const pageWidth = 210 - 2 * margin;
-    const pageHeight = 200 - 2 * margin;
-
     const doc = new jsPDF({
       orientation: 'p',
       unit: 'mm',
       format: [210, 300],
     });
 
-    const pdfTable = this.pdfTable.nativeElement;
+    const pdfTable = this.pdfTable.nativeElement as HTMLElement;
+
+    // store old styles
+    const oldOverflow = pdfTable.style.overflow;
+    const oldMaxHeight = pdfTable.style.maxHeight;
+    const oldHeight = pdfTable.style.height;
+
+    // expand full content
+    pdfTable.style.overflow = 'visible';
+    pdfTable.style.maxHeight = 'none';
+    pdfTable.style.height = 'auto';
 
     doc.html(pdfTable, {
-      callback: function (doc) {
+      callback: (doc) => {
         doc.save('Report.pdf');
+
+        // restore old styles
+        pdfTable.style.overflow = oldOverflow;
+        pdfTable.style.maxHeight = oldMaxHeight;
+        pdfTable.style.height = oldHeight;
       },
-      x: margin,
-      y: margin,
-      width: pageWidth,
+      x: 10,
+      y: 10,
+      width: 190,
       windowWidth: pdfTable.scrollWidth,
     });
   }
@@ -683,14 +713,14 @@ async  GetStaff_InstituteWise() {
       return;
     } else {
       this.TableForm.get('StreamID')?.disable();
-      this.TableForm.get('ShiftId')?.disable();
+   /*   this.TableForm.get('ShiftId')?.disable();*/
     }
 
     const item = this.StaffList.find(
       (e: any) => e.SSOID?.trim().toLowerCase() === ssoid?.trim().toLowerCase()
     );
 
-    debugger
+  
 
     if (!item) return;
 
@@ -698,6 +728,13 @@ async  GetStaff_InstituteWise() {
       StreamID: item.TradeID,
       ShiftId: item.SeatIntakeID
     });
+    debugger
+    //if (item.SeatIntakeID > 0) {
+    //  this.TableForm.get('ShiftId')?.disable();
+    //} else {
+    //  this.TableForm.get('ShiftId')?.enable();
+    //}
+
 
     await this.getSubjectMasterDDL(item.TradeID, this.TableForm.getRawValue().SemesterID);
 

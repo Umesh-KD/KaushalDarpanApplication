@@ -1,1 +1,109 @@
-<p>office-vacancy-list works!</p>
+<div class="modal-content">
+  <div class="card">
+    <form [formGroup]="groupForm">
+      <div class="card-body">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office </label>
+            <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+            <select class="form-select" [(ngModel)]="formData.InstituteID" (change)="GetTradeDDl()" formControlName="InstituteID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [ngValue]="item.InstituteID">
+                {{item.InstituteName}}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="formData.InstituteID!=0">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Trade:
+            </label>
+            <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of TradeList" [ngValue]="item.Id">
+                {{ item.TradeName }}
+              </option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Staff Type
+            </label>
+            <select class="form-select" formControlName="StaffTypeID">
+              <option [value]="0">--Select--</option>
+              <option *ngFor="let item of StaffTypeList" [value]="item.ID">
+                {{ item.Name }}
+              </option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post </label>
+            <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of PostList" [ngValue]="item.ID">
+                {{item.Name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-6 flex justify-center">
+          <button type="submit" class="btn bg-info text-white" (click)="Search()">Search</button>
+          <button type="submit" class="btn bg-danger text-white" (click)="Clear()">Clear</button>
+          
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!--{{OfficeVacancyList|json}}-->
+<div class="card mt-3">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For  Report</b>
+      <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
+    </div>
+    <div class="overflow-x-auto mt-4">
+      <table class="table table-bordered" *ngIf="OfficeVacancyList.length > 0">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Office Name</th>
+            <th>Staff Type</th>
+            <th>Institute Name</th>
+            <th>Trade Name</th>
+            <th>Designation Name</th>
+            <th>Total Seat</th>
+            <th>Posted Seat</th>
+            <th>Remaining Seat</th>
+            <th>Order No</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of OfficeVacancyList;  let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td>{{ leave.OfficeName }}</td>
+            <td>{{ leave.StaffTypeName }}</td>
+            <td>{{ leave.InstituteName }}</td>
+            <td style="text-align: center;">{{ leave.TradeName ?? '-----' }}</td>
+            <td>{{ leave.DesignationName }}</td>
+            <td>{{ leave.TotalSeatID }}</td>
+            <td>{{ leave.PostedSeat }}</td>
+            <td>{{ leave.RemainingSeatID }}</td>
+            <td>{{ leave.OrderName }}</td>
+            <td>{{ leave.Comments }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+

@@ -66,7 +66,10 @@
           <div>
             <label for="StudentName" class="text-gray-800 text-sm font-medium inline-block mb-2">आवेदक का नाम (Applicant's Name):<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="StudentName" placeholder="Enter Applicant's Name"
-                   [(ngModel)]="model.StudentName" formControlName="txtName" (change)="model.StudentName = filterString(model.StudentName)">
+                   [(ngModel)]="model.StudentName" formControlName="txtName" (change)="model.StudentName = filterString(model.StudentName)"
+                    (input)="onNameInput($event, 'StudentName')"
+                    (blur)="onNameBlur($event, 'StudentName')"
+                     (paste)="onPasteClean($event, 'StudentName')">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtName.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.txtName.errors.required">
                 <i aria-hidden="true"></i> <span class="redAlertMsg">कृपया बिना अभिवादन के अपना नाम अंग्रेजी में लिखें</span>
@@ -76,7 +79,10 @@
           <div>
             <label for="txtFather" class="text-gray-800 text-sm font-medium inline-block mb-2">पिता का नाम (Father's Name):<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="txtFather" placeholder="Enter Father's Name"
-                   [(ngModel)]="model.FatherName" formControlName="txtFather" (change)="model.FatherName = filterString(model.FatherName)">
+                   [(ngModel)]="model.FatherName" formControlName="txtFather" (change)="model.FatherName = filterString(model.FatherName)"
+                   (input)="onNameInput($event, 'FatherName')"
+                   (blur)="onNameBlur($event, 'FatherName')"
+                   (paste)="onPasteClean($event, 'FatherName')">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtFather.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.txtFather.errors.required">
                 <i aria-hidden="true"></i> <span class="redAlertMsg">कृपया बिना अभिवादन के पिता का नाम अंग्रेजी में लिखें</span>
@@ -86,7 +92,10 @@
           <div>
             <label for="txtMotherEngname" class="text-gray-800 text-sm font-medium inline-block mb-2">माता का नाम (Mother's Name):<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="txtMotherEngname" placeholder="Enter Mother's Name"
-                   [(ngModel)]="model.MotherName" formControlName="txtMotherEngname" (change)="model.MotherName = filterString(model.MotherName)">
+                   [(ngModel)]="model.MotherName" formControlName="txtMotherEngname" (change)="model.MotherName = filterString(model.MotherName)"
+                   (input)="onNameInput($event, 'MotherName')"
+                   (blur)="onNameBlur($event, 'MotherName')"
+                   (paste)="onPasteClean($event, 'MotherName')">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtMotherEngname.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.txtMotherEngname.errors.required">
                 <i aria-hidden="true"></i> <span class="redAlertMsg">कृपया बिना अभिवादन के माता का नाम अंग्रेजी में लिखें</span>
@@ -149,7 +158,7 @@
 <!-- [max]="maxDate"  -->
 
           <div>
-            <label for="email" class="text-gray-800 text-sm font-medium inline-block mb-2">ईमेल (Email Address): <span class="StarMarking">*</span></label>
+            <label for="email" class="text-gray-800 text-sm font-medium inline-block mb-2">ईमेल (Email Address): <span *ngIf="!IsJailAdmission" class="StarMarking">*</span></label>
             <input type="email" formControlName="email" class="form-input" id="email" placeholder="Enter Email Address" [(ngModel)]="model.Email">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.email.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.email.errors.required"><i aria-hidden="true"></i>This field is required.</p>
@@ -169,7 +178,7 @@
 
           <div>
             <label for="ddlCategoryA" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी ए(Category A):<span class="StarMarking">*</span></label>
-            <select class="form-select" formControlName="ddlCategoryA" [(ngModel)]="model.CategoryA">
+            <select class="form-select" formControlName="ddlCategoryA" [(ngModel)]="model.CategoryA" (change)="onCategoryChange($event)">
               <option value="0">--Select--</option>
               <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
             </select>
@@ -183,7 +192,9 @@
 
           <div *ngIf="model.CategoryA == 4">
             <label for="txtOBCCasteCert" class="text-gray-800 text-sm font-medium inline-block mb-2">ओबीसी जाति प्रमाण पत्र संख्या (OBC Caste Certificate No):<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" formControlName="CertificateNo" id="txtOBCCasteCert" [(ngModel)]="model.CasteCertificateNo" maxlength="12" placeholder="Enter OBC Caste Certificate No">
+            <input type="text" class="form-input" formControlName="CertificateNo" id="txtOBCCasteCert" 
+             (keypress)="this.commonFunctionHelper.numbersOnly($event)" 
+            [(ngModel)]="model.CasteCertificateNo" maxlength="12" placeholder="Enter OBC Caste Certificate No">
             <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.CertificateNo.errors" class="text-danger">
               <p *ngIf="_StudentJanDetailFormGroup.CertificateNo.errors.required"><i aria-hidden="true"></i>This field is required.</p>
 

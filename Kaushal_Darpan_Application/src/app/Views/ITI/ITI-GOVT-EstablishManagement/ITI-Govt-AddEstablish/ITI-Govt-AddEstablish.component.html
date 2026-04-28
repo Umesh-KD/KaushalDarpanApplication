@@ -186,8 +186,8 @@
           <select class="form-select" name="SearchByBranchs" id="SearchByBranchs" formControlName="ddlTrade" [ngModelOptions]="{standalone: true}"
                   [(ngModel)]="formData.BranchID" (change)="GetChange()">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of BranchesMasterList" [value]="item.StreamID">
-              {{item.StreamName}}
+            <option *ngFor="let item of TradeList" [value]="item.Id">
+              {{item.TradeName}}
             </option>
           </select>
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlTrade.errors" class="text-danger">
@@ -401,11 +401,11 @@
           </td>-->
             <td>
               <span *ngIf="row.ProfileStatus==0">Pending</span>
-              <span *ngIf="row.ProfileStatus==1">Complete</span>
-              <span *ngIf="row.ProfileStatus==2">Final Submit</span>
-              <span *ngIf="row.ProfileStatus==3">Approve</span>
-              <span *ngIf="row.ProfileStatus==4">Revert</span>
-              <span *ngIf="row.ProfileStatus==5">Reject</span>
+              <span *ngIf="row.ProfileStatus==1 || row.ProfileStatus==_EnumEMProfileStatus.Completed">Complete</span>
+              <span *ngIf="row.ProfileStatus==2 || row.ProfileStatus==_EnumEMProfileStatus.LockAndSubmit">Final Submit</span>
+              <span *ngIf="row.ProfileStatus==3 || row.ProfileStatus==_EnumEMProfileStatus.Approve">Approve</span>
+              <span *ngIf="row.ProfileStatus==4 || row.ProfileStatus==_EnumEMProfileStatus.Revert">Revert</span>
+              <span *ngIf="row.ProfileStatus==5 || row.ProfileStatus==_EnumEMProfileStatus.Reject">Reject</span>
 
             </td>
             <!--<td>{{ row.Remarks}}</td>-->
@@ -426,7 +426,7 @@
                 <a *ngIf="row.ProfileStatus>0" href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>
                 <a *ngIf="row.ProfileStatus!=247" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>
                 <!--<a href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
-                <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.MainStaffUserID)"><i class="ti ti-eye"></i></a>
+                <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.MainStaffUserID)"><i class="ti ti-list"></i></a>
               </div>
 
 

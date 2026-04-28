@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TheoryMarksSearchModel } from '../../../Models/TheoryMarksDataModels';
+import { TheoryMarksSearchModel, UFMStudentExtraInfoGetModel, UFMStudentExtraInfoSaveModel } from '../../../Models/TheoryMarksDataModels';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -12,6 +12,10 @@ import { HttpClient } from '@angular/common/http';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
 import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-theory-marks-rpt-view',
@@ -44,6 +48,7 @@ export class TheoryMarksRptViewComponent {
   public totalInTableRecord: number = 0;
   //end table feature default
 
+
   constructor(
     private TheoryMarksService: TheoryMarksService,
     private loaderService: LoaderService,
@@ -52,11 +57,15 @@ export class TheoryMarksRptViewComponent {
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
     private toastr: ToastrService,
-    private commonFunctionHelper: CommonFunctionHelper
+    public commonFunctionHelper: CommonFunctionHelper,
+    private formBuilder: FormBuilder,
+    private Swal2: SweetAlert2,
+    private modalService: NgbModal
   ) {
   }
 
   async ngOnInit() {
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     // if(this.sSOLoginDataModel.RoleID == EnumRole.Examiner) {
@@ -107,14 +116,14 @@ export class TheoryMarksRptViewComponent {
   }
 
   async GetTheoryMarksDetailList() {
-    debugger
+    //debugger
     try {
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      
+
       // this.searchRequest.IsConfirmed = this.IsConfirmed = true;
 
       // //group code id
@@ -178,9 +187,9 @@ export class TheoryMarksRptViewComponent {
   }
 
 
-  ResetControl() {
+  async ResetControl() {
     this.searchRequest = new TheoryMarksSearchModel();
-    this.GetTheoryMarksDetailList();
+    await this.GetTheoryMarksDetailList();
   }
 
   //table feature
@@ -308,8 +317,6 @@ export class TheoryMarksRptViewComponent {
     XLSX.writeFile(wb, fileName);
   }
 
-
-
   DownloadFile(FileName: string, DownloadfileName: any): void {
 
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
@@ -325,42 +332,6 @@ export class TheoryMarksRptViewComponent {
     });
   }
 
-
-
-  DownloadFile1(FileName: string, DownloadfileName: any): void {
-
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
-    // Fetch the file as a blob
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      downloadLink.download = this.generateFileName1('pdf'); // Set the desired file name
-      downloadLink.click();
-      // Clean up the object URL
-      window.URL.revokeObjectURL(url);
-    });
-  }
-
-
-
-  generateFileName1(extension: string): string {
-    const now = new Date();
-
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const year = now.getFullYear();
-
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-
-    const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
-
-    return `Ufm_Letter${timestamp}.${extension}`;
-  }
-
-
-
   generateFileName(extension: string): string {
     const now = new Date();
 
@@ -372,41 +343,8 @@ export class TheoryMarksRptViewComponent {
     const minutes = String(now.getMinutes()).padStart(2, '0');
 
     const timestamp = `${day}-${month}-${year}_${hours}-${minutes}`;
-    
+
     return `Theory_marks_report_data_${timestamp}.${extension}`;
   }
-
-  async GetUFMLetter(row: any) {
-    try {
-      const request: any = {
-        DepartmentID: this.sSOLoginDataModel.DepartmentID,
-        EndTermID: this.sSOLoginDataModel.EndTermID,
-        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        isUFM: 1,
-        EnrollmentNo: row?.EnrollmentNo   // assuming row contains it
-      };
-
-      let data: any = await this.reportService.GetUFMLetter(request);
-
-      if (data && data.Data) {
-        this.DownloadFile1(data.Data, 'UFMLetter');
-      } else {
-        this.toastr.error(data?.Message || 'No file received');
-      }
-
-
-
-
-      console.log(data); // handle response here
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-
-
-
-
-
 
 }

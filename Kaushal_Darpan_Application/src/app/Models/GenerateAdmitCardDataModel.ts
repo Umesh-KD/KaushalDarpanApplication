@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "./RequestBaseModel";
+
 export class GenerateAdmitCardSearchModel {
   public InstituteID: number = 0
   public StreamID: number = 0
@@ -6,8 +8,8 @@ export class GenerateAdmitCardSearchModel {
   public RoleID: number = 0;
   public DepartmentID: number = 0
   public Eng_NonEng: number = 0
-  public EndTermID: number = 0  
-  public StudentID: number = 0  
+  public EndTermID: number = 0
+  public StudentID: number = 0
   public StudentExamID: number = 0
   public EnrollmentNo: string = ''
   public AdmitCard?: string = ''
@@ -40,7 +42,7 @@ export class GenerateAdmitCardModel {
 
 export class GetCollegeInformationReport {
 
- public AcademicYearID: number = 0;
+  public AcademicYearID: number = 0;
 
 }
 
@@ -49,7 +51,7 @@ export class GetEWSReport {
 
   public AcademicYearID: number = 0;
   public StreamID: number = 0;
-  public InstituteID : number = 0;
+  public InstituteID: number = 0;
 
 
 }
@@ -60,7 +62,7 @@ export class GetUFMStudentReport {
   public DepartmentID: number = 0;
   public EndTermID: number = 0;
   public Eng_NonEng: number = 0;
-
+  public UFMExtraInfoID: number = 0;
 
 }
 
@@ -131,7 +133,7 @@ export class ExamWiseStreamPapersReportModelModel {
   public StreamID: number = 0;
   public SemesterId: number = 0;
   public SchemeID: number = 0;
- }
+}
 export class StudentAllMarksReportModel {
   public DepartmentID: number = 0;
   public Eng_NonEng: number = 0;
@@ -140,10 +142,10 @@ export class StudentAllMarksReportModel {
   public SchemeID: number = 0;
 }
 
-export class UFMLetterModel {
-  public DepartmentID: number = 0;
-  public Eng_NonEng: number = 0;
-  public EndTermID: number = 0;
+export class UFMLetterModel extends RequestBaseModel {
   public EnrollmentNo: string = ''
   public isUFM: number = 0;
+  public UFMExtraInfoID?: number = 0;
+  public StudentExamID?: number = 0;
+  public StudentExamPaperID?: number = 0;
 }
