@@ -1701,6 +1701,8 @@ const routes: Routes = [
       { path: 'ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
       { path: 'iti-examination-college', loadChildren: () => import('./Views/ITI/iti-examination-college/iti-examination-college.module').then(m => m.ItiExaminationCollegeModule) },
       { path: 'iti-examination-trade', loadChildren: () => import('./Views/ITI/iti-examination-trade/iti-examination-trade.module').then(m => m.ItiExaminationTradeModule) },
+      { path: 'BterStudentAttendenceReport', loadChildren: () => import('./Views/bter-student-attendence-report/bter-student-attendence-report.module').then(m => m.BterStudentAttendenceReportModule) },
+
 
 
     ]
@@ -1820,7 +1822,6 @@ const routes: Routes = [
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
-
 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },

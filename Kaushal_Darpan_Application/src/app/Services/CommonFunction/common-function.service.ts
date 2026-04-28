@@ -237,6 +237,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+
+
+
   public async StreamMaster_streamType(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0,action:string="") {
 debugger
     return await this.http.get(this.APIUrl + '/StreamMaster_streamType/' + DepartmentID + '/' + StreamType + '/' + EndTermId +'/' + action, this.headersOptions)
@@ -254,6 +257,35 @@ debugger
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async SemesterRolewise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0,RoleID:number=0) {
+
+    return await this.http.get(this.APIUrl + '/SemesterRolewise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async StreamRoleWise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0,SemesterID:number=0,InstituteID:number=0) {
+
+    return await this.http.get(this.APIUrl + '/StreamRoleWise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' + SemesterID + '/' + InstituteID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async StaffAttendence(SSOID: string= '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/StaffAttendence/' + SSOID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 
   public async Stream_InstituteIdWise(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0,InstituteID:number=0,AcademicYearID:number=0) {
