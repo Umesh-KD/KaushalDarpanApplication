@@ -1336,6 +1336,3 @@ onNameBlur(event: any, field: 'StudentName' | 'FatherName' | 'MotherName') {
   event.target.value = value;
 }
 }
-
-
-// change started 270426
