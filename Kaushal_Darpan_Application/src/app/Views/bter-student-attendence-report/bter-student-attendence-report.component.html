@@ -16,6 +16,21 @@
     <form [formGroup]="TableForm" (ngSubmit)="getData()">
       <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
 
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Staff<span class="StarMarking">*</span></label>
+          <ng-select formControlName="StaffID" [clearable]="false" (change)="OnStaffChange($event)">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of StaffMasterList; track item.StaffID) {
+            <ng-option [value]="item.StaffID">{{item.SSOID}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.StaffID.errors" class="text-danger">
+            <p *ngIf="formTable.StaffID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester<span class="StarMarking">*</span></label>
           <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL1(TableForm.value.StreamID, TableForm.value.SemesterID)">

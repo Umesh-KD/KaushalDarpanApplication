@@ -35,7 +35,9 @@ export class BterStudentAttendenceReportComponent {
   filterData: any[] = [];
   dynamicColumns: { name: string, locked: boolean }[] = [];
 
-
+  UserID: number = 0
+  RoleID:number=0
+  StaffID:number=0
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
@@ -87,6 +89,17 @@ export class BterStudentAttendenceReportComponent {
 
   ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
+      this.RoleID = this.sSOLoginDataModel.RoleID
+      this.UserID = this.sSOLoginDataModel.UserID
+      this.StaffID = this.sSOLoginDataModel.StaffID
+
+      this.RoleID = this.sSOLoginDataModel.RoleID
+      this.UserID = this.sSOLoginDataModel.UserID
+      this.StaffID = this.sSOLoginDataModel.StaffID
+    
+
     // Access the route parameters
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
     this.sectionId = parseInt(this.route.snapshot.paramMap.get('sectionId') ?? "0");
@@ -114,6 +127,7 @@ export class BterStudentAttendenceReportComponent {
       StreamID: ['', Validators.required],
       SectionID: ['', Validators.required],
       SemesterID: ['', Validators.required],
+      StaffID: [''],
       AttendanceStartDate: [this.selectedRange?.start],
       AttendanceEndDate: [this.selectedRange?.end]
     });
@@ -121,6 +135,7 @@ export class BterStudentAttendenceReportComponent {
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
     this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
+    this.getstaffmaster();
 
     this.TableForm.patchValue({
       StreamID: this.streamId,
@@ -872,6 +887,7 @@ export class BterStudentAttendenceReportComponent {
 
 
   onStartDateChange(event: any) {
+
     const startDate = event.target.value;
     if (startDate) {
       this.minEndDate = startDate; // set min for end date
@@ -884,4 +900,78 @@ export class BterStudentAttendenceReportComponent {
     }
   }
 
+
+  async OnStaffChange(row: any) {
+    debugger
+
+
+      const id = Number(row);
+
+    if (id > 0) {
+      this.StaffID = id
+    } else {
+      this.StaffID=0
+    }
+    this.getMasterData()
+    this.getbranchmaster()
+
+
+
+
+
+
+
+    //  if (id > 0) {
+    //    this.UserID=
+    //    const staff = this.StaffMasterList.find((x: any) => Number(x.StaffID) === id);
+
+    //    const UserID = staff.UserID
+
+    //    let RoleID = 0
+    //    if (this.sSOLoginDataModel.Eng_NonEng == 1) {
+    //      RoleID = 8
+    //    } else {
+    //      RoleID = 14
+    //    }
+    //    this.StaffID = id
+    //    this.RoleID = RoleID
+    //    this.UserID = UserID
+    //    await this.commonMasterService.SemesterRolewise(UserID,
+    //      this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
+    //      , RoleID).then((data: any) => {
+    //        data = JSON.parse(JSON.stringify(data));
+    //        this.SemesterMasterDDL = data.Data;
+    //      })
+
+    //    let obj = {
+    //      SemesterID: this.semesterId,
+    //      StreamID: this.streamId,
+    //      SubjectID: this.subjectId,
+    //      StaffID: id,
+    //      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+    //      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+    //    }
+    //    await this.staffMasterService.GetBranchSectionAcRosterData(obj)
+    //      .then((data: any) => {
+    //        data = JSON.parse(JSON.stringify(data));
+    //        this.GetSectionData = data.Data;
+
+    //      }, (error: any) => console.error(error)
+    //    );
+
+
+    //    await this.commonMasterService.StreamRoleWise(UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
+    //      , RoleID, this.TableForm.value.SemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+    //        data = JSON.parse(JSON.stringify(data));
+    //        this.StreamMasterDDL = data.Data;
+    //      })
+
+
+    //  } else {
+
+    //    this.getMasterData()
+    //    this.getbranchmaster()
+    //  }
+    //}
+  }
 }
