@@ -539,6 +539,7 @@ export class RequestUpdateStatus {
   RequestTypeID: number = 0;
   LastWorkingDate: string = '';
   JoiningDate: string = '';
+  RequestDate: string = '';
   UserID: number = 0;
   StaffID: number = 0;
   JoiningRoleID: number = 0;
