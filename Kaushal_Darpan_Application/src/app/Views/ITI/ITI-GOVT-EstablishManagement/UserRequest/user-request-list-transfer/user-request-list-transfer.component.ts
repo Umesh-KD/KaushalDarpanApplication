@@ -312,6 +312,10 @@ export class UserRequestListTransferComponent {
     }
   }
 
+  parseDDMMYYYY(dateStr: string): Date {
+    const [dd, mm, yyyy] = dateStr.split('-');
+    return new Date(+yyyy, +mm - 1, +dd);
+  }
   async updateReqStatus() {
     this.isSubmitted = true;
     if (this.groupForm.invalid) {
@@ -320,14 +324,14 @@ export class UserRequestListTransferComponent {
 
 
     const joiningDate = new Date(this.RequestUpdateStatus.JoiningDate);
-    const requestDate = new Date(this.RowlistData.RequestDate);
+    const requestDate = this.parseDDMMYYYY(this.RowlistData.RequestDate);
 
     // remove time part (important for accurate comparison)
     joiningDate.setHours(0, 0, 0, 0);
     requestDate.setHours(0, 0, 0, 0);
 
     if (joiningDate < requestDate) {
-      this.toastr.error("Joining Date should not be greater than Request Date");
+      this.toastr.error("Joining Date should be greater than or equal to Relieving Date");
       return;
     }
 
