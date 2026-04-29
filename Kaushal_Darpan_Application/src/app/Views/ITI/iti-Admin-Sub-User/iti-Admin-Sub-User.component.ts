@@ -319,5 +319,45 @@ export class itiAdminSubUserComponent {
     }
   }
 
+async ToggleStatus(user: any) {
+  try {
+    const newStatus = !user.ActiveStatus;
 
+    this.Swal2.Confirmation(
+      `Do you want to ${newStatus ? 'Activate' : 'Deactivate'} this user?`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          try {
+            this.loaderService.requestStarted();
+
+            this.searchRequest.UserID = user.UserID;
+            this.searchRequest.ActiveStatus = newStatus;
+
+            await this.adminUserService.adminUserDataDelete(this.searchRequest)
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+
+                if (data.State === EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  this.GetAllData();
+                } else {
+                  this.toastr.error(data.ErrorMessage);
+                }
+              });
+
+          } catch (error) {
+            console.error(error);
+          } finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+        }
+      }
+    );
+
+  } catch (error) {
+    console.error(error);
+  }
+}
 }

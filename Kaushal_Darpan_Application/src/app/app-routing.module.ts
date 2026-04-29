@@ -1704,6 +1704,7 @@ const routes: Routes = [
       { path: 'iti-examination-college', loadChildren: () => import('./Views/ITI/iti-examination-college/iti-examination-college.module').then(m => m.ItiExaminationCollegeModule) },
       { path: 'iti-examination-trade', loadChildren: () => import('./Views/ITI/iti-examination-trade/iti-examination-trade.module').then(m => m.ItiExaminationTradeModule) },
       { path: 'BterStudentAttendenceReport', loadChildren: () => import('./Views/bter-student-attendence-report/bter-student-attendence-report.module').then(m => m.BterStudentAttendenceReportModule) },
+      { path: 'iip-event-common-master', loadChildren: () => import('./Views/iip-event-common-master/iip-event-common-master.module').then(m => m.IipEventCommonMasterModule) },
 
 
 
