@@ -9,7 +9,7 @@ import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMast
 import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus, GlobalConstants, EnumTransferStatus_ITI_EM } from '../../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntakeDataModel';
@@ -67,6 +67,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public LevelList: any = [];
   public PostList: any = [];
   public ExamTypeList: any = [];
+  public RoleListDDL: any = [];
   public QueryReqFormGroup!: FormGroup;
   public _EnumRole = EnumRole
   public GetRoleID: number=0
@@ -89,6 +90,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   totalRecord: any = 0;
   TotalPages: any = 0;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
+  public _EnumTransferStatus_ITI_EM = EnumTransferStatus_ITI_EM;
   public RequestTypeSHowID: number = 0
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -126,6 +128,8 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       txtRemark: ['', Validators.required],
       txtLastworkingDate: [''],
       txtJoiningDate: [''],
+      JoiningRoleID: [0, [DropdownValidators]],
+      JoiningTimeID: [0, [DropdownValidators]],
     });
 
     this.groupFormVRS = this.fb.group({
@@ -146,7 +150,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     });
 
     await this.GetStatusList();
-
+    await this.GetRoleListDDL();
     this.formData.LevelOfExamID = 0;
     this.formData.ExamTypeID = 0;
     await this.GetLevelList();
@@ -382,6 +386,11 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.modalReference?.close();
     this.RequestUpdateStatus.StatusIDs = 0;
     this.RequestUpdateStatus.Remark = '';
+    this.RequestUpdateStatus.OnHoldDoc = '';
+    this.RequestUpdateStatus.Dis_OnHoldDoc = '';
+    this.RequestUpdateStatus.JoiningDate = '';
+    this.RequestUpdateStatus.JoiningTimeID = 0;
+    this.RequestUpdateStatus.JoiningRoleID = 0;
     this.isSubmitted = false;
   }
 
@@ -462,48 +471,72 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     }
   }
 
+  async refreshValidators() {
+    if(this.RequestUpdateStatus.StatusIDs!=247) {
+      this.groupForm.get('txtJoiningDate')?.clearValidators();
+      this.groupForm.get('JoiningTimeID')?.clearValidators();
+      this.groupForm.get('JoiningRoleID')?.clearValidators();
+
+      this.groupForm.get('txtJoiningDate')?.updateValueAndValidity();
+      this.groupForm.get('JoiningTimeID')?.updateValueAndValidity();
+      this.groupForm.get('JoiningRoleID')?.updateValueAndValidity();
+    }
+  }
   async UserRequestJoiningApprove_ITI_EM() {
     debugger
+    await this.refreshValidators();
     this.isSubmitted = true;
     this.groupForm.get('txtLastworkingDate')?.clearValidators();
     this.groupForm.get('txtLastworkingDate')?.updateValueAndValidity();
     if (this.groupForm.invalid) {
-      return console.log("error")
+      this.toastr.error("Please fill all required fields");
+      return;
+    }
+    if(this.RequestUpdateStatus.StatusIDs==EnumTransferStatus_ITI_EM.On_Hold && (this.RequestUpdateStatus.OnHoldDoc == '')) {
+      this.toastr.error("Please upload document");
+      return;
     }
     this.loaderService.requestStarted();
     this.isLoading = true;
 
-    try {
-      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
-      this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
-      this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
-      this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+    this.Swal2.Confirmation("Are you sure you want to update request ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+            this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+            this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+            this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+            this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
 
-      await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
-        .then(async (data: any) => {
-          
-          if (data.State == EnumStatus.Success) {
-            this.toastr.success(data.Message)
-            this.CloseModal();
-            this.getlist();
-            this.RequestUpdateStatus = new RequestUpdateStatus();
+            await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
+              .then(async (data: any) => {
+                
+                if (data.State == EnumStatus.Success) {
+                  this.toastr.success(data.Message)
+                  this.CloseModal();
+                  this.getlist();
+                  this.RequestUpdateStatus = new RequestUpdateStatus();
+                }
+                else if (data.State == EnumStatus.Warning) {
+                  this.toastr.warning(data.Message)
+                }
+                else {
+                  this.toastr.error(data.ErrorMessage)
+                }
+              })
           }
-          else if (data.State == EnumStatus.Warning) {
-            this.toastr.warning(data.Message)
+          catch (ex) { console.log(ex) }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+              this.isLoading = false;
+            }, 200);
           }
-          else {
-            this.toastr.error(data.ErrorMessage)
-          }
-        })
-    }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-      }, 200);
-    }
+        }
+      });
+    
   }
 
   async onSubmitModel_VRS(model: any, userSubmitData: any) {
@@ -798,5 +831,66 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.startInTableIndex = 0;
     this.endInTableIndex = 0;
     this.totalInTableRecord = this.UserRequestList.length;
+  }
+
+  async GetRoleListDDL() {
+    try {
+      const request: any = {};
+      request.InstituteID = this.sSOLoginDataModel.InstituteID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = 'RoleListDDL'
+      await this.ITIGovtEMStaffMasterService.ITI_EM_DropdownGetData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoleListDDL = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+        }
+        else {// type validation
+          this.toastr.error('error this file ?')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+        await this.commonMasterService.UploadPublicInfoDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              if (Type == "OnHoldDoc") {                
+                this.RequestUpdateStatus.Dis_OnHoldDoc = data['Data'][0]["Dis_FileName"];
+                this.RequestUpdateStatus.OnHoldDoc = data['Data'][0]["FileName"];
+              }
+              event.target.value = null;
+            }
+            if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
+            }
+            else if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
   }
 }

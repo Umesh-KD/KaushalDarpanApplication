@@ -52,6 +52,7 @@ export class HostelStudentMeritListWardenViewComponent {
   public Allotmentrequest = new RoomAllotmentDataModel();
   public titleDDLBranchTrade: string = ''
   meritMultiSelected: boolean = false;
+  public InstituteMasterDDLList: any = [];
 
   HostelDetails = new HostelStudentSearchModel();
   EditHostelDetails = new EditHostelStudentSearchModel();
@@ -60,6 +61,7 @@ export class HostelStudentMeritListWardenViewComponent {
   public showRegenerateMerit: boolean = false;
 
   constructor(
+    private commonMasterService: CommonFunctionService, 
     private toastr: ToastrService,
     private studentRequestService: StudentRequestService,
     private commonFunctionService: CommonFunctionService,
@@ -100,6 +102,8 @@ export class HostelStudentMeritListWardenViewComponent {
     await this.GetSemesterMaster();
     await this.GetGenderList();
     await this.GetAllPrincipalstudentmeritlist();
+    await this.GetInstitute();
+  
     //await this.GetMarksDetails();
   }
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
@@ -119,7 +123,7 @@ export class HostelStudentMeritListWardenViewComponent {
   async GetAllPrincipalstudentmeritlist() {
      debugger
     try {
-      this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequest.InstituteID = this.Searchrequest.InstituteID;
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -253,4 +257,25 @@ export class HostelStudentMeritListWardenViewComponent {
     return this.StudentReqListList.filter((item: any) => item.selected);
   }
 
+
+  async GetInstitute() {
+    await this.commonMasterService
+      .InstituteMaster(
+        this.sSOLoginDataModel.DepartmentID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID
+      )
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+
+        //  Filter only InstitutionManagementTypeID = 1
+        this.InstituteMasterDDLList = data.Data.filter(
+          (x: any) => x.InstitutionManagementTypeID === 1
+        );
+
+        console.log("Filtered Institute Master List ==>", this.InstituteMasterDDLList);
+      });
+  }
+
+  
 }

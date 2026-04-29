@@ -105,7 +105,7 @@ export class DirectAllotmentListComponent {
         data = JSON.parse(JSON.stringify(data));
         
         this.DateConfigSetting = data['Data'];
-        this.isAdmission = this.DateConfigSetting[0]['IsOpenn']
+        this.isAdmission = this.DateConfigSetting[0]['DIRECT ALLOTMENT REPORTING'];// this.DateConfigSetting[0]['IsOpenn']
         console.log(this.DateConfigSetting[0]['DIRECT ALLOTMENT REPORTING']);
 
       }, (error: any) => console.error(error)
@@ -298,6 +298,25 @@ export class DirectAllotmentListComponent {
   getIMCLink() {
     return ['/ITIIMCAllocationList' + this.searchRequest.TradeLevel + 'th', this.searchRequest.TradeLevel];
   }
+
+  onSearch() {
+    if (!this.searchRequest.ApplicationID) {
+      this.toastr.warning('Please enter Application ID');
+      return;
+    }
+
+    this.CloseAddNewAllotment();
+
+    this.router.navigate([
+      '/direct-student-allotment',
+      this.searchRequest.ApplicationID,
+      this.searchRequest.TradeLevel
+    ]);
+  }
+
+
+
+
 
 }
 

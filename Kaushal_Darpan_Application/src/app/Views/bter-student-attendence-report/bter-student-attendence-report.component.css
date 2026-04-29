@@ -1,0 +1,36 @@
+td {
+  text-align: center;
+}
+
+/* Attendance cell common design */
+.present-cell,
+.absent-cell,
+.holiday-cell,
+.tl-cell {
+  font-weight: 600;
+  border-radius: 6px;
+}
+
+/* Present */
+.present-cell {
+  background-color: #d9fbe0 !important;
+  color: #087b16 !important;
+}
+
+/* Absent */
+.absent-cell {
+  background-color: #ffd6d6 !important;
+  color: #b00020 !important;
+}
+
+/* Holiday */
+.holiday-cell {
+  background-color: #fff3cd !important;
+  color: #9a6700 !important;
+}
+
+/* Teacher Leave */
+.tl-cell {
+  background-color: #efe3ff !important;
+  color: #6f42c1 !important;
+}

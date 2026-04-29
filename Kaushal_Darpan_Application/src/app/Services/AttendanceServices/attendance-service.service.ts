@@ -59,6 +59,17 @@ export class AttendanceServiceService {
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+
+
+
+
+  public async GetStudentAttendanceReport(model: any) {
+    return await this.http.post(this.APIUrl + '/GetStudentAttendanceReport', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
   public async GetStudentAttendanceSubjectWise(model: any) {
     return await this.http.post(this.APIUrl + '/GetStudentAttendanceSubjectWise', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)

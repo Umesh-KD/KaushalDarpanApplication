@@ -9,6 +9,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PlacementDashboardModel } from '../../../Models/PlacementDashReportModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { Subscription } from 'rxjs';
+import { EnumRole } from '../../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-iti-placement-dashboard',
@@ -26,6 +27,7 @@ export class PlacementDashboardComponent implements OnInit {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
+  _enumRole = EnumRole;
   private userDataSubscription!: Subscription;
   constructor(private PlacementDashService: PlacementDashService, private commonFunctionService: CommonFunctionService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal) {
 
@@ -53,8 +55,8 @@ export class PlacementDashboardComponent implements OnInit {
   async GetAllData() {
     try {
       this.loaderService.requestStarted();
-
-      if (this.sSOLoginDataModel.RoleID!=6)
+debugger
+      if (this.sSOLoginDataModel.RoleID!=this._enumRole.ITI_Placement_TPO)
       {
         this.request.CollegeID = 0;
       }

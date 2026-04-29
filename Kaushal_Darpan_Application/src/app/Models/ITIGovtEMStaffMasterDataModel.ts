@@ -541,7 +541,8 @@ export class RequestUpdateStatus {
   JoiningDate: string = '';
   UserID: number = 0;
   StaffID: number = 0;
-  
+  JoiningRoleID: number = 0;
+  JoiningTimeID: number = 0;  
 
   IsEOL: boolean = false;
   EOLFromDate: string = '';
@@ -550,6 +551,8 @@ export class RequestUpdateStatus {
   Comments: string = '';
   IsAccount: boolean = false;
   AccountComments: string = '';
+  OnHoldDoc: string = '';
+  Dis_OnHoldDoc: string = '';
   RoleID: number = 0;
 }
 

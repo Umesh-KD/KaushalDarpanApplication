@@ -16,6 +16,7 @@ import { ITISeatIntakesModel, ITIsSearchModel } from '../../../../../Models/ITIs
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
+import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-add-request-ddo-office',
@@ -64,6 +65,7 @@ export class AddRequestDDOOfficeComponent {
   public OldOfficeID: number = 0
  
   public getstatuId:number=0;
+  public TodayDate:string='';
 
   constructor(
     private fb: FormBuilder,
@@ -76,6 +78,7 @@ export class AddRequestDDOOfficeComponent {
     private ITICollegeTradeService: ItiSeatIntakeService,
     public appsettingConfig: AppsettingService,
     private  ITIGovtEMStaffMaster: ITIGovtEMStaffMaster,
+    private Swal2: SweetAlert2,
 
   ) { }
 
@@ -97,11 +100,12 @@ export class AddRequestDDOOfficeComponent {
       txtOrderDate: ['', Validators.required],
       /* txtJoiningDate: [''],*/
       txtRequestDate: ['', Validators.required],
-      LastworkingDate: ['', Validators.required],
+      // LastworkingDate: ['', Validators.required],
       Upload: [''],
       ddlDistrictID: [''],
       divisionID: [''],
       ddlStaffType: ['', [DropdownValidators]],
+      RelievingTimeID: ['', [DropdownValidators]],
       StaffID: ['', [DropdownValidators]],
       txtEmployeeName: [{ value: '', disabled: true }],
       txtEmployeeNumber: [{ value: '', disabled: true }],
@@ -112,7 +116,7 @@ export class AddRequestDDOOfficeComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.LevelID = 1;
-
+    await this.GetTodayData();
     await this.setRolewiseLevel(); 
     await this.GetStaffListDDL();
     await this.GetRoleListDDL();
@@ -138,6 +142,14 @@ export class AddRequestDDOOfficeComponent {
   }
 
   get _groupForm() { return this.groupForm.controls; }
+
+  async GetTodayData(){
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    this.TodayDate = `${yyyy}-${mm}-${dd}`
+  }
   async GetLevelList() {   
     try {
       await this.commonMasterService.GetLevelMaster()
@@ -176,6 +188,7 @@ export class AddRequestDDOOfficeComponent {
 
   async GetOfficeList() {
     this.request.OfficeID = 0;
+    this.request.InstituteID=0
     try {
       await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, this.request.LevelID)
         .then((data: any) => {
@@ -189,7 +202,11 @@ export class AddRequestDDOOfficeComponent {
   }
   async GetPostList() {
     try {
-      await this.commonMasterService.GetCommonMasterData('PostMaster', 0)
+      var obj = {
+        OfficeID: this.request.OfficeID,
+        InstituteID: this.request.InstituteID
+      }
+      await this.commonMasterService.GetItiVacantPost(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
@@ -273,50 +290,55 @@ export class AddRequestDDOOfficeComponent {
   }
 
   async SaveData() {
-   debugger
     this.isSubmitted = true;
-    // if (this.groupForm.invalid) {
-    //   return;
-    // }
+    if (this.groupForm.invalid) {
+      this.toastr.error("Please enter required fields");
+      return;
+    }
+    this.Swal2.Confirmation("Are you sure you want to make transfer request ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
 
-    //this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+          this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
 
-    this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
+          console.log()
+          this.loaderService.requestStarted();
+          this.isLoading = true;
+          this.request.UserId = this.sSOLoginDataModel.UserID;
+          this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
+          this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
 
-    console.log()
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-    this.request.UserId = this.sSOLoginDataModel.UserID;
-    this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
-    this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
+          try {
+            this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
+          
+            console.log( "request",this.request)
+            await this.userRequestService.UserRequest(this.request).then((data: any) => {
+              if (data.State === EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                this.router.navigate(['/transfer-request-accept'])
+                setTimeout(() => {
+                  this.groupForm.reset();
+                }, 2000);
+              }
+              else if (data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              }
 
-    try {
-      this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
-     
-      console.log( "request",this.request)
-      await this.userRequestService.UserRequest(this.request).then((data: any) => {
-        if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          this.router.navigate(['/transfer-request-accept'])
-          setTimeout(() => {
-            this.groupForm.reset();
-          }, 2000);
-        }
-        else if (data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        }
-
-        else {
-          this.toastr.error(data.ErrorMessage);
+              else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            });
+          } catch (error) {
+            console.error(error);
+            this.toastr.error("An error occurred while saving the data.");
+          } finally {
+            this.loaderService.requestEnded();
+            this.isLoading = false;
+          }
         }
       });
-    } catch (error) {
-      console.error(error);
-      this.toastr.error("An error occurred while saving the data.");
-    } finally {
-      this.loaderService.requestEnded();
-      this.isLoading = false;
-    }
+    
   }
 
   async goBack() {
@@ -429,6 +451,7 @@ export class AddRequestDDOOfficeComponent {
     this.groupForm.controls['ddlITICollegeTrade'].updateValueAndValidity();
     this.groupForm.controls['ddlDistrictID'].updateValueAndValidity();
     await this.GetDivisionMasterList();
+    await this.GetPostList();
   }
 
   dateSetter(date: any) {
