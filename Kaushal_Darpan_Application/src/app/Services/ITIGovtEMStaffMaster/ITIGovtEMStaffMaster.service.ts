@@ -651,7 +651,7 @@ export class ITIGovtEMStaffMaster {
     const body = JSON.stringify(request);
 
     return await this.http.get(
-      this.APIUrl + '/downloadRelievingLetterPDF' + '/' + request.UserID,
+      this.APIUrl + '/downloadRelievingLetterPDF1' + '/' + request.UserID,
   
       {
      
@@ -668,7 +668,7 @@ export class ITIGovtEMStaffMaster {
     const body = JSON.stringify(request);
 
     return await this.http.get(
-      this.APIUrl + '/downloadJoinningLetterPDF' + '/' + request.UserID,
+      this.APIUrl + '/downloadJoinningLetterPDF1' + '/' + request.UserID,
 
       {
      
