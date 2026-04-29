@@ -97,7 +97,7 @@
 
             <div *ngIf="request.LevelID==2 && request.OfficeID== 11">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
-              <select class="form-select" [(ngModel)]="request.InstituteID" formControlName="ddlITICollegeTrade">
+              <select class="form-select" [(ngModel)]="request.InstituteID" formControlName="ddlITICollegeTrade" (change)="GetPostList()">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
               </select>
