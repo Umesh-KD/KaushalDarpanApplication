@@ -1,0 +1,28 @@
+ <form [formGroup]="form">
+<div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+  <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID"  >
+    <option value="0">Choose Option</option>
+    <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+  </select>
+</div>
+
+<div *ngIf="formData.StaffTypeID==2">
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
+  <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
+    <option value="0">Choose Option</option>
+    <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
+  </select>
+</div>
+<div>
+<label class="text-gray-800 text-sm font-medium inline-block mb-1">
+  Post <span class="StarMarking">*</span>
+</label>
+<input type="text"
+       class="form-control"
+       formControlName="Post"
+       [(ngModel)]="formData.Post"
+       placeholder="Enter Post" />
+</div>
+</form>
+

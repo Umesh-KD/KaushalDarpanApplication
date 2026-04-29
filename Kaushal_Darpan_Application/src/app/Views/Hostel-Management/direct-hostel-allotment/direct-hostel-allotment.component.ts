@@ -45,6 +45,11 @@ export class DirectHostelAllotmentComponent {
   public showStudentDetails: boolean = false;
   public isSubmitted: boolean = false;
   modalReference: NgbModalRef | undefined;
+  
+  public getAllStudentdataList: any = [];
+
+  public RoomFeeList: any = [];
+  public studentHostelFeeData: any = [];
 
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
@@ -200,6 +205,9 @@ export class DirectHostelAllotmentComponent {
   }
 
   async openAllotmentModal(model: any) {
+    await this.GetRoomFee();
+    await this.GetStudentHostelFeeData(this.Allotmentrequest.StudentID!);
+
     if(this.studentRequest.AffidavitPhoto == '') {
       this.toastr.error('Please upload affidavit photo');
       return;
@@ -355,6 +363,47 @@ export class DirectHostelAllotmentComponent {
     const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
     if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
       event.preventDefault();
+    }
+  }
+
+
+  async GetRoomFee() {
+    debugger
+    try {
+
+      await this.studentRequestService.GetRoomFee().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.RoomFeeList = data.Data
+        if (this.getAllStudentdataList?.length > 0) {
+          this.Allotmentrequest.FessAmount = this.RoomFeeList[0].HostelFee
+        } else {
+          this.Allotmentrequest.FessAmount = this.RoomFeeList[0].HostelFee + this.RoomFeeList[0].Cautionfee
+        }
+
+        console.log('Room DDL List', this.Allotmentrequest.FessAmount)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  
+  }
+
+  async GetStudentHostelFeeData(studentId: number) {
+    try {
+      let obj = {
+        StudentID: studentId
+      };
+
+      await this.studentRequestService.GetStudentHostelFeeData(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.studentHostelFeeData = data.Data;
+
+          console.log('Student Hostel Fee Data ===>', this.studentHostelFeeData);
+        });
+
+    } catch (error) {
+      console.error(error);
     }
   }
 }
