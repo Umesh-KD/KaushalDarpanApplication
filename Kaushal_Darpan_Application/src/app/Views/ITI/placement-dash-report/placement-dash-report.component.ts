@@ -105,10 +105,11 @@ export class ITIPlacementDashReportComponent implements OnInit {
       CollegeID : this.sSOLoginDataModel.InstituteID,
       Id: this.id,
       Gender: '',
-      StudentName: ''
+      StudentName: '',
+      RoleID: this.sSOLoginDataModel.RoleID
     }
 
-    await this.PlacementDashService.GetAllData(requestData)
+    await this.PlacementDashService.GetITIAllData(requestData)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
 
