@@ -181,29 +181,6 @@ export class GroupcodeAddRevalComponent
     }
   }
 
-  upwardLastRowOfGroupCode(groupNo: number, pageNumber: number) {
-    if (pageNumber <= 1) {
-      this.toastr.warning("Invalid!");
-      return;
-    }
-    //
-    //get upshift  row
-    let upShiftRow = this.GroupCodeList.find(x => x.GroupNo == groupNo && x.PageNumber == pageNumber);
-    //update prev. row
-    let prevParentRow = this.GroupCodeList.filter(x => x.GroupNo == groupNo && x.PageNumber == (pageNumber - 1));
-    prevParentRow.forEach(x => {
-      x.Total += upShiftRow?.Total ?? 0;
-      x.StudentExamPaperMarksIDs = (x.StudentExamPaperMarksIDs ?? '') + ',' + (upShiftRow?.StudentExamPaperMarksIDs ?? '');
-    });
-    //delete the up shifted
-    let index = this.GroupCodeList.findIndex(x => x.GroupNo == groupNo && x.PageNumber == pageNumber)
-    if (index != -1) {
-      this.GroupCodeList.splice(index, 1);
-    }
-    //
-    console.log("1", this.GroupCodeList);
-  }
-
   OpenPopupAndMergeGroupSubject(content: any, item: GroupCodeAddEditModel) {
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

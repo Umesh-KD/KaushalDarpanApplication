@@ -63,4 +63,13 @@ export class GroupcodeAllocationRevalService
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  //Get all data
+  public async GetOldNewRollNoGroupCodeData(searchRequest: GroupCodeAllocationSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetOldNewRollNoGroupCodeData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
