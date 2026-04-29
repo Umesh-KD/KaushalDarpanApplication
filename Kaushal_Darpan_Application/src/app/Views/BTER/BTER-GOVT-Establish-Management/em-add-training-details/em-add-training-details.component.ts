@@ -12,7 +12,7 @@ import { BTEREMStaffServiceDetailsService } from '../../../../Services/BTER/BTER
 import { DropdownValidators1 } from '../../../../Services/CustomValidators/custom-validators.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
-
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-em-add-training-details',
   standalone: false,
@@ -25,6 +25,7 @@ export class EMAddTrainingDetailsComponent {
   public searchRequest = new StaffTrainingDetailSearchData();
 
   public AddTrainingDetailsFromGroup!: FormGroup;
+  public TrainingDocFromGroup!: FormGroup;
 
   public EM_TrainingCourseTypeList: any = [];
   public StaffTrainingDetailsDataList: any = [];
@@ -35,7 +36,9 @@ export class EMAddTrainingDetailsComponent {
   Table_SearchText: string = '';
   public file!: File;
   public Uploadfile: string = '';
-
+  modalReference: NgbModalRef | undefined;
+  public StaffTrainingHTS_GetDataList: any = [];
+  isTrainingCom: boolean = false;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -46,6 +49,7 @@ export class EMAddTrainingDetailsComponent {
     private bterEstablishManagementService: BTEREstablishManagementService,
     private staffServiceDetailsService: BTEREMStaffServiceDetailsService,
     private appsettingConfig: AppsettingService,
+    private modalService: NgbModal,
   ) { }
 
   async ngOnInit() {
@@ -66,11 +70,19 @@ export class EMAddTrainingDetailsComponent {
       
     });
 
+    this.TrainingDocFromGroup = this.formBuilder.group({
+      ComplitionTrainingDoc: ['', [Validators.required]]
+    });
+
+
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     await this.GetEM_TrainingCourseType();
     await this.StaffTrainingDetailsCompletedTraining_GetData();
     await this.StaffTrainingDetailsNewTraining_GetData();
+
+    this.isTrainingCom = true;
   }
 
   get _AddTrainingDetailsFromGroup() { return this.AddTrainingDetailsFromGroup.controls; }
@@ -139,23 +151,6 @@ export class EMAddTrainingDetailsComponent {
     this.request = new StaffTrainingDetailDataModel();
     this.isSubmitted = false;
   }
-
-  //async StaffTrainingDetails_GetData() {
-  //  try {
-  //    this.searchRequest.StaffID=this.sSOLoginDataModel.StaffID
-  //    this.searchRequest.UserID=this.sSOLoginDataModel.UserID
-  //    this.searchRequest.Action = "GetAllData";
-
-  //    await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      if (data.State === EnumStatus.Success) {
-  //        this.StaffTrainingDetailsDataList = data.Data;
-  //      }
-  //    })
-  //  } catch (error) {
-  //    console.error(error);
-  //  }
-  //}
 
   async StaffTrainingDetails_GetDataById(ID: number) {
     try {
@@ -289,7 +284,6 @@ export class EMAddTrainingDetailsComponent {
     }
   }
 
-
   onTrainingTypeChange(event: any) {
     debugger
    
@@ -306,8 +300,7 @@ export class EMAddTrainingDetailsComponent {
     
 
   }
-
-  onDateChange() {
+    onDateChange() {
     const start = this.AddTrainingDetailsFromGroup.get('StartDate')?.value;
     const end = this.AddTrainingDetailsFromGroup.get('EndDate')?.value;
 
@@ -320,5 +313,95 @@ export class EMAddTrainingDetailsComponent {
       // if you are still using request object
       this.request.EndDate = "null";
     }
+  }
+
+  async StaffTrainingHTS_GetData(id: number) {
+    try {
+      debugger
+      this.searchRequest.StaffTrainingDetailID = id;
+      await this.staffServiceDetailsService.StaffTrainingHTS_GetData(this.searchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.StaffTrainingHTS_GetDataList = data.Data;
+        }
+        else {
+          this.StaffTrainingHTS_GetDataList = [];
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+  }
+
+  async onEmtrainingStatusHistory(model: any, StaffTrainingDetailId: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.StaffTrainingHTS_GetData(StaffTrainingDetailId)
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async onEmtrainingDocUpdate(model: any, StaffTrainingDetailId: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.request.StaffTrainingDetailID = StaffTrainingDetailId;
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async SubmitDocUpdate() {
+
+    this.isSubmitted = true;
+    if (this.TrainingDocFromGroup.invalid) {
+      this.TrainingDocFromGroup.markAllAsTouched();
+      this.toastr.error('Please fill all the required fields.', 'Error');
+      Object.keys(this.TrainingDocFromGroup.controls).forEach(key => {
+        const control = this.TrainingDocFromGroup.get(key);
+
+        if (control && control.invalid) {
+          this.toastr.error(`Control ${key} is invalid`);
+          Object.keys(control.errors!).forEach(errorKey => {
+            this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+          });
+        }
+      });
+      return;
+    }
+    await this.staffServiceDetailsService.StaffTrainingDocUpdate(this.request).then(async (data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State === EnumStatus.Success) {
+        this.toastr.success(data.Message);
+        this.CloseModal();
+        this.ResetControl();
+        window.location.reload();
+      } else {
+        this.toastr.error(data.ErrorMessage);
+      }
+    })
+
   }
 }

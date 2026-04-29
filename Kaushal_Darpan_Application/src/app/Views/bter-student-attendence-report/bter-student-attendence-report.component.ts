@@ -92,13 +92,14 @@ export class BterStudentAttendenceReportComponent {
 
 
       this.RoleID = this.sSOLoginDataModel.RoleID
-      this.UserID = this.sSOLoginDataModel.UserID
-      this.StaffID = this.sSOLoginDataModel.StaffID
+    this.UserID = this.sSOLoginDataModel.UserID
 
-      this.RoleID = this.sSOLoginDataModel.RoleID
-      this.UserID = this.sSOLoginDataModel.UserID
+    if (this.sSOLoginDataModel.RoleID == 8 || this.sSOLoginDataModel.RoleID == 14) {
       this.StaffID = this.sSOLoginDataModel.StaffID
-    
+    } else {
+      this.StaffID=0
+    }
+
 
     // Access the route parameters
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
@@ -167,7 +168,7 @@ export class BterStudentAttendenceReportComponent {
 
       await this.commonMasterService.SemesterRolewise(this.sSOLoginDataModel.UserID,
         this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
-        , this.sSOLoginDataModel.RoleID).then((data: any) => {
+        , this.sSOLoginDataModel.RoleID, this.StaffID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SemesterMasterDDL = data.Data;
       })
@@ -222,7 +223,7 @@ export class BterStudentAttendenceReportComponent {
   async getbranchmaster(SemesterID:number=0){
 
     await this.commonMasterService.StreamRoleWise(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
-      , this.sSOLoginDataModel.RoleID, SemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+      , this.sSOLoginDataModel.RoleID, SemesterID, this.sSOLoginDataModel.InstituteID, this.StaffID).then((data: any) => {
     data = JSON.parse(JSON.stringify(data));
     this.StreamMasterDDL = data.Data;
   })
@@ -269,6 +270,7 @@ export class BterStudentAttendenceReportComponent {
     this.subjectsearch.RoleID = this.sSOLoginDataModel.RoleID
     this.subjectsearch.UserID = this.sSOLoginDataModel.UserID
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.subjectsearch.StaffID = this.StaffID
 
   
       this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
@@ -293,7 +295,7 @@ export class BterStudentAttendenceReportComponent {
     this.subjectsearch.RoleID = this.sSOLoginDataModel.RoleID
     this.subjectsearch.UserID = this.sSOLoginDataModel.UserID
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
-
+    this.subjectsearch.StaffID = this.StaffID
   
       this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -323,7 +325,7 @@ export class BterStudentAttendenceReportComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
-      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      this.searchRequest.StaffID = this.StaffID;
       this.searchRequest.From_Date = formattedDateStart;
       this.searchRequest.To_Date = formattedDateEnd;
 
@@ -488,7 +490,7 @@ export class BterStudentAttendenceReportComponent {
         SubjectID: this.TableForm.value.SubjectID,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
-        StaffID: this.sSOLoginDataModel.StaffID,
+        StaffID: this.StaffID,
         TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
       };
 

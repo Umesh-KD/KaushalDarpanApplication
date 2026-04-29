@@ -260,18 +260,18 @@ debugger
 
 
 
-  public async SemesterRolewise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0,RoleID:number=0) {
+  public async SemesterRolewise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0,RoleID:number=0,StaffID:number=0) {
 
-    return await this.http.get(this.APIUrl + '/SemesterRolewise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/SemesterRolewise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' +StaffID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
 
-  public async StreamRoleWise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0,SemesterID:number=0,InstituteID:number=0) {
+  public async StreamRoleWise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0,SemesterID:number=0,InstituteID:number=0,StaffID:number=0) {
 
-    return await this.http.get(this.APIUrl + '/StreamRoleWise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' + SemesterID + '/' + InstituteID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/StreamRoleWise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' + SemesterID + '/' + InstituteID + '/' + StaffID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
