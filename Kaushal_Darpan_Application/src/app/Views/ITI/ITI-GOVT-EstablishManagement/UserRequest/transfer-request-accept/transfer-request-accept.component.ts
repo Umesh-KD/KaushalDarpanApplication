@@ -482,6 +482,11 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       this.groupForm.get('JoiningRoleID')?.updateValueAndValidity();
     }
   }
+
+  parseDDMMYYYY(dateStr: string): Date {
+    const [dd, mm, yyyy] = dateStr.split('-');
+    return new Date(+yyyy, +mm - 1, +dd);
+  }
   async UserRequestJoiningApprove_ITI_EM() {
     debugger
     await this.refreshValidators();
@@ -494,6 +499,19 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     }
     if(this.RequestUpdateStatus.StatusIDs==EnumTransferStatus_ITI_EM.On_Hold && (this.RequestUpdateStatus.OnHoldDoc == '')) {
       this.toastr.error("Please upload document");
+      return;
+    }
+
+    const joiningDate = new Date(this.RequestUpdateStatus.JoiningDate);
+    const requestDate = this.parseDDMMYYYY(this.RowlistData.RequestDate);
+
+    // remove time part (important for accurate comparison)
+    joiningDate.setHours(0, 0, 0, 0);
+    requestDate.setHours(0, 0, 0, 0);
+
+    if (joiningDate < requestDate) {
+      this.CloseModal();
+      this.toastr.error("Joining Date should be greater than or equal to Relieving Date");
       return;
     }
     this.loaderService.requestStarted();

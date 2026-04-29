@@ -1,0 +1,104 @@
+<div class="card">
+  <div class="card-body p-5">
+    
+    <h4 class="text-lg font-medium mb-4">Add Event Common Master</h4>
+
+    <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <!-- TYPE DROPDOWN -->
+      <div>
+        <label>Type<span class="text-danger">*</span></label>
+        <select class="form-select" formControlName="Type">
+          <option value="">--Select Type--</option>
+          <option *ngFor="let item of typeList" [value]="item.Type">
+            {{item.Type}}
+          </option>
+        </select>
+
+        <div *ngIf="submitted && form.controls.Type.errors" class="text-danger">
+          Type is required
+        </div>
+      </div>
+
+      <!-- NAME ENG -->
+      <div>
+        <label>Name (English)<span class="text-danger">*</span></label>
+        <input type="text" class="form-input" formControlName="NameEng">
+
+        <div *ngIf="submitted && form.controls.NameEng.errors" class="text-danger">
+          Required
+        </div>
+      </div>
+
+      <!-- NAME HINDI -->
+      <div>
+        <label>Name (Hindi)</label>
+        <input type="text" class="form-input" formControlName="NameHi">
+      </div>
+
+      <!-- SAVE BUTTON -->
+      <div class="col-span-3 text-center mt-4">
+        <button type="button" class="btn bg-info text-white" (click)="save()">
+          Save
+        </button>
+      </div>
+
+    </form>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+
+      <div>
+        <label>Filter by Type</label>
+        <select class="form-select" [(ngModel)]="selectedType" (change)="onTypeChange()">
+          <option value="">--All--</option>
+          <option *ngFor="let item of typeList" [value]="item.Type">
+            {{item.Type}}
+          </option>
+        </select>
+      </div>
+
+      <div class="flex items-end gap-2">
+        <button class="btn bg-info text-white" (click)="loadList()">Search</button>
+        <button class="btn bg-gray-500 text-white" (click)="resetFilter()">Reset</button>
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="overflow-auto">
+      <table class="table-auto w-full border border-gray-300">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="p-2 border">#</th>
+            <th class="p-2 border">Type</th>
+            <th class="p-2 border">Code</th>
+            <th class="p-2 border">Name (Eng)</th>
+            <th class="p-2 border">Name (Hindi)</th>
+            <th class="p-2 border">Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of eventList; let i = index">
+            <td class="p-2 border">{{i + 1}}</td>
+            <td class="p-2 border">{{item.Type}}</td>
+            <td class="p-2 border">{{item.Code}}</td>
+            <td class="p-2 border">{{item.NameEng}}</td>
+            <td class="p-2 border">{{item.NameHi}}</td>
+            <td class="p-2 border">
+              <span [ngClass]="item.IsActive ? 'text-green-600' : 'text-red-600'">
+                {{item.IsActive ? 'Active' : 'Inactive'}}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="eventList.length === 0">
+            <td colspan="6" class="text-center p-3 text-gray-500">
+              No Data Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

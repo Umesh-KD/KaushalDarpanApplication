@@ -318,6 +318,19 @@ export class UserRequestListTransferComponent {
       return console.log("error")
     }
 
+
+    const joiningDate = new Date(this.RequestUpdateStatus.JoiningDate);
+    const requestDate = new Date(this.RowlistData.RequestDate);
+
+    // remove time part (important for accurate comparison)
+    joiningDate.setHours(0, 0, 0, 0);
+    requestDate.setHours(0, 0, 0, 0);
+
+    if (joiningDate < requestDate) {
+      this.toastr.error("Joining Date should not be greater than Request Date");
+      return;
+    }
+
     try {
       this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
       this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;

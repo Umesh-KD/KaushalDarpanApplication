@@ -189,12 +189,33 @@
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <!-- Principal Approval -->
-                <a *ngIf="row.StaffRequestType != 'Transfer'  && row.RelievingStatusId != 247 && row.RequestTypeID == 2"  href="javascript:void(0);" title="VRS Approve By Principal" (click)="onSubmitModel_VRS(MyModel_VRS, row)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="VRS Approve By Principal" 
+                  *ngIf="row.StaffRequestType != 'Transfer'  && row.RelievingStatusId != 247 && row.RequestTypeID == 2" 
+                  (click)="onSubmitModel_VRS(MyModel_VRS, row)"><i class="ti ti-check"></i>
+                </a>
+
                 <!-- <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 1  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Staff Request" (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a> -->
-                <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 &&  row.RequestStatusId ==4355" href="javascript:void(0);" title="Joining Request" (click)="onSubmitJoiningRequest(MyModel_ReplayQueryJoining, row)"><i class="ti ti-check"></i></a>
-                <a *ngIf="RequestTypeSHowID === 1" href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i></a>
-                <a *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247" href="javascript:void(0);" title="Relieving Letter" (click)="RelievingLetter(row.ServiceRequestId)"><i class="ti ti-download"></i></a>
-                <a *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1" href="javascript:void(0);" title="Joining Letter" (click)="JoiningLetter(row.ServiceRequestId)"><i class="ti ti-download"></i></a>
+                <a  href="javascript:void(0);" title="Joining Request" 
+                  *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 && 
+                    (row.RequestStatusId ==_EnumTransferStatus_ITI_EM.Request_for_Join || row.RequestStatusId==_EnumTransferStatus_ITI_EM.On_Hold)"
+                  (click)="onSubmitJoiningRequest(MyModel_ReplayQueryJoining, row)"><i class="ti ti-check"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="History"
+                  *ngIf="RequestTypeSHowID === 1"  
+                  (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Relieving Letter"
+                  *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247"  
+                  (click)="RelievingLetter(row.ServiceRequestId)"><i class="ti ti-download"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Joining Letter"
+                  *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1"  
+                  (click)="JoiningLetter(row.ServiceRequestId)"><i class="ti ti-download"></i>
+                </a>
+
               </div>
 
             </td>
