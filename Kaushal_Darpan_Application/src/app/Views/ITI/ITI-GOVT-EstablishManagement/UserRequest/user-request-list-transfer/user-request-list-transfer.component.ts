@@ -222,54 +222,54 @@ export class UserRequestListTransferComponent {
     });
   }
 
-  async JoiningLetter(UserID: number) {
-    try {
-      this.searchRequestJoining.UserID = UserID;
-      this.loaderService.requestStarted();
+  //async JoiningLetter(UserID: number) {
+  //  try {
+  //    this.searchRequestJoining.UserID = UserID;
+  //    this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.DownloadJoiningLetter_pdf(this.searchRequestJoining)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if(data.State == EnumStatus.Success){
-            this.DownloadFile(data.Data);
-          }
+  //    await this.ITIGovtEMStaffMasterService.DownloadJoiningLetter_pdf(this.searchRequestJoining)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        if(data.State == EnumStatus.Success){
+  //          this.DownloadFile(data.Data);
+  //        }
           
-        }, (error: any) => {
-          console.error(error);
-        });
-    } catch (Ex) {
-      console.log(Ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
+  //      }, (error: any) => {
+  //        console.error(error);
+  //      });
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
   
-  async RelievingLetter(UserID: number) {
-    try {
-      this.searchRequestRelieving.UserID = UserID;
-      this.loaderService.requestStarted();
+  //async RelievingLetter(UserID: number) {
+  //  try {
+  //    this.searchRequestRelieving.UserID = UserID;
+  //    this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.DownloadRelievingLetter_pdf(this.searchRequestRelieving)
-        .then((data: any) => {          
-          data = JSON.parse(JSON.stringify(data));
-          if(data.State == EnumStatus.Success){
-            this.DownloadFile(data.Data);
-          }
-        }, (error: any) => {
-          console.error(error);
-        });
+  //    await this.ITIGovtEMStaffMasterService.DownloadRelievingLetter_pdf(this.searchRequestRelieving)
+  //      .then((data: any) => {          
+  //        data = JSON.parse(JSON.stringify(data));
+  //        if(data.State == EnumStatus.Success){
+  //          this.DownloadFile(data.Data);
+  //        }
+  //      }, (error: any) => {
+  //        console.error(error);
+  //      });
 
-    } catch (Ex) {
-      console.log(Ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
   async onUserRequestHistorylist(model: any, ServiceRequestId: number) {
     try {
@@ -357,4 +357,97 @@ export class UserRequestListTransferComponent {
     }
     catch (ex) { console.log(ex) }
   }
+
+
+  async RelievingLetter(UserID: number) {
+    try {
+      this.searchRequestRelieving.UserID = UserID;
+      this.loaderService.requestStarted();
+
+      const blob: any = await this.ITIGovtEMStaffMasterService
+        .DownloadRelievingLetter_pdf(this.searchRequestRelieving);
+
+      const now = new Date();
+      const timestamp =
+        now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + '_' +
+        String(now.getHours()).padStart(2, '0') + '-' +
+        String(now.getMinutes()).padStart(2, '0') + '-' +
+        String(now.getSeconds()).padStart(2, '0');
+
+      const fileName = `ITI_Relieving_Letter_${timestamp}.pdf`;
+
+      // Create blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Create anchor and trigger download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+    } catch (error: any) {
+      console.error(error);
+
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+
+
+  async JoiningLetter(UserID: number) {
+    try {
+      this.searchRequestRelieving.UserID = UserID;
+      this.loaderService.requestStarted();
+
+      const blob: any = await this.ITIGovtEMStaffMasterService
+        .DownloadJoiningLetter_pdf(this.searchRequestRelieving);
+
+      const now = new Date();
+      const timestamp =
+        now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + '_' +
+        String(now.getHours()).padStart(2, '0') + '-' +
+        String(now.getMinutes()).padStart(2, '0') + '-' +
+        String(now.getSeconds()).padStart(2, '0');
+
+      const fileName = `ITI_Joining_Letter_${timestamp}.pdf`;
+
+      // Create blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Create anchor and trigger download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+    } catch (error: any) {
+      console.error(error);
+
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
 }
