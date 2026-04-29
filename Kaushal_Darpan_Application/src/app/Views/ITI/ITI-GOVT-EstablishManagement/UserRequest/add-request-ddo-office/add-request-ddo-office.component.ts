@@ -16,6 +16,7 @@ import { ITISeatIntakesModel, ITIsSearchModel } from '../../../../../Models/ITIs
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
+import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-add-request-ddo-office',
@@ -77,6 +78,7 @@ export class AddRequestDDOOfficeComponent {
     private ITICollegeTradeService: ItiSeatIntakeService,
     public appsettingConfig: AppsettingService,
     private  ITIGovtEMStaffMaster: ITIGovtEMStaffMaster,
+    private Swal2: SweetAlert2,
 
   ) { }
 
@@ -283,50 +285,55 @@ export class AddRequestDDOOfficeComponent {
   }
 
   async SaveData() {
-   debugger
     this.isSubmitted = true;
-    // if (this.groupForm.invalid) {
-    //   return;
-    // }
+    if (this.groupForm.invalid) {
+      this.toastr.error("Please enter required fields");
+      return;
+    }
+    this.Swal2.Confirmation("Are you sure you want to make transfer request ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
 
-    //this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+          this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
 
-    this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
+          console.log()
+          this.loaderService.requestStarted();
+          this.isLoading = true;
+          this.request.UserId = this.sSOLoginDataModel.UserID;
+          this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
+          this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
 
-    console.log()
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-    this.request.UserId = this.sSOLoginDataModel.UserID;
-    this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
-    this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
+          try {
+            this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
+          
+            console.log( "request",this.request)
+            await this.userRequestService.UserRequest(this.request).then((data: any) => {
+              if (data.State === EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                this.router.navigate(['/transfer-request-accept'])
+                setTimeout(() => {
+                  this.groupForm.reset();
+                }, 2000);
+              }
+              else if (data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              }
 
-    try {
-      this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
-     
-      console.log( "request",this.request)
-      await this.userRequestService.UserRequest(this.request).then((data: any) => {
-        if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          this.router.navigate(['/transfer-request-accept'])
-          setTimeout(() => {
-            this.groupForm.reset();
-          }, 2000);
-        }
-        else if (data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        }
-
-        else {
-          this.toastr.error(data.ErrorMessage);
+              else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            });
+          } catch (error) {
+            console.error(error);
+            this.toastr.error("An error occurred while saving the data.");
+          } finally {
+            this.loaderService.requestEnded();
+            this.isLoading = false;
+          }
         }
       });
-    } catch (error) {
-      console.error(error);
-      this.toastr.error("An error occurred while saving the data.");
-    } finally {
-      this.loaderService.requestEnded();
-      this.isLoading = false;
-    }
+    
   }
 
   async goBack() {
