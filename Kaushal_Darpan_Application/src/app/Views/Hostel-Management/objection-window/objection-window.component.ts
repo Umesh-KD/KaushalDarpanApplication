@@ -520,7 +520,12 @@ export class objectionwindowComponent {
   //  }
   //}
 
-
+  getYesNoNA(value: any): string {
+    if (value === 1 || value === '1') return 'Yes';
+    if (value === 0 || value === '0') return 'No';
+    if (value === 2 || value === '2') return 'N/A';
+    return '';
+  }
 
  
 }

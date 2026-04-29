@@ -59,12 +59,22 @@
           </select>
         </div>
 
+
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllPrincipalstudentmeritlist()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+          <select class="form-select" id="InstituteID"
+                   [(ngModel)]="Searchrequest.InstituteID" (change)="GetAllPrincipalstudentmeritlist()">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div>
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllPrincipalstudentmeritlist()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+          </div>
         </div>
       </div>
-    </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
       <div class="flex justify-end flex-wrap items-center">

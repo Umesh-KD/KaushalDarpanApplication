@@ -188,6 +188,7 @@ export class AddRequestDDOOfficeComponent {
 
   async GetOfficeList() {
     this.request.OfficeID = 0;
+    this.request.InstituteID=0
     try {
       await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, this.request.LevelID)
         .then((data: any) => {
@@ -201,7 +202,11 @@ export class AddRequestDDOOfficeComponent {
   }
   async GetPostList() {
     try {
-      await this.commonMasterService.GetCommonMasterData('PostMaster', 0)
+      var obj = {
+        OfficeID: this.request.OfficeID,
+        InstituteID: this.request.InstituteID
+      }
+      await this.commonMasterService.GetItiVacantPost(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
@@ -446,6 +451,7 @@ export class AddRequestDDOOfficeComponent {
     this.groupForm.controls['ddlITICollegeTrade'].updateValueAndValidity();
     this.groupForm.controls['ddlDistrictID'].updateValueAndValidity();
     await this.GetDivisionMasterList();
+    await this.GetPostList();
   }
 
   dateSetter(date: any) {

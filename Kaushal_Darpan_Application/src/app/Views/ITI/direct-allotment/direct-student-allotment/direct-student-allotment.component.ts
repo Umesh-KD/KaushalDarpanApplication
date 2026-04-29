@@ -105,6 +105,9 @@ export class VerifyStudentAllotComponent {
   showResendButton: boolean = false; // Whether to show the "Resend OTP" button
   private interval: any; // Holds the interval reference
   public filteredDocumentDetails: AllotmentDocumentModel[] = []
+
+  public isAdmission: number = 0
+  public DateConfigSetting: any = [];
   constructor(
     private commonMasterService: CommonFunctionService,
     private Router: Router,
@@ -122,9 +125,14 @@ export class VerifyStudentAllotComponent {
     private Swal2: SweetAlert2) {
   }
 
-  async ngOnInit() {
+  async ngOnInit()
+  {
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+
+    await this.GetDateConfig();
+
 
     this.routers.paramMap.subscribe(params => {
       this.ApplicationIdS = params.get('id')
@@ -135,7 +143,8 @@ export class VerifyStudentAllotComponent {
 
 
 
-    if (this.ApplicationIdS) {
+    if (this.ApplicationIdS)
+    {
       this.searchRequest.ApplicationID = parseInt(this.ApplicationIdS);
       await this.getAllDataList();
       this.GetStudentDetailsList();
@@ -220,36 +229,65 @@ export class VerifyStudentAllotComponent {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          this.StudentVerifyPhoneData = data['Data'].Table;
-          this.request.MobileNo = data['Data'].Table[0].MobileNo;
-          this.request.ApplicationID = data['Data'].Table[0].ApplicationID;
-          this.request.TradeLevel = data['Data'].Table[0].ApplicationID;
-          this.requestReporting = data['Data'].Table[0];
-          this.requestReporting.AllotmentDocumentModel = data['Data'].Table1;
-          this.requestReporting.AllotmentDocumentModel.forEach(e => e.DocumentStatus=true)
-          //alert(this.StudentVerifyPhoneData[0].ApplicationVerified);
-          //if (this.StudentVerifyPhoneData[0].ApplicationVerified !== 0) {
-          //  this.ApplicationAlloted = false;
-          //} else {
-          //  this.ApplicationAlloted == true;
-          //}
 
-          if (this.StudentVerifyPhoneData[0].ApplicationAllotedDir == 1) {
-            this.ApplicationAlloted = true;
-            this.TradeBox = false;
-          } else {
-            this.ApplicationAlloted = false;
-            this.TradeBox = true;
+          if (data && data.Data && data.Data.Table && data.Data.Table.length > 0) {
+
+            this.StudentVerifyPhoneData = data['Data'].Table;
+
+
+
+
+            this.request.MobileNo = data['Data'].Table[0].MobileNo;
+            this.request.ApplicationID = data['Data'].Table[0].ApplicationID;
+            this.request.TradeLevel = data['Data'].Table[0].ApplicationID;
+            this.requestReporting = data['Data'].Table[0];
+            this.requestReporting.AllotmentDocumentModel = data['Data'].Table1;
+            this.requestReporting.AllotmentDocumentModel.forEach(e => e.DocumentStatus = true)
+            //alert(this.StudentVerifyPhoneData[0].ApplicationVerified);
+            //if (this.StudentVerifyPhoneData[0].ApplicationVerified !== 0) {
+            //  this.ApplicationAlloted = false;
+            //} else {
+            //  this.ApplicationAlloted == true;
+            //}
+
+            if (this.StudentVerifyPhoneData[0].ApplicationAllotedDir == 1) {
+              this.ApplicationAlloted = true;
+              this.TradeBox = false;
+            } else {
+              this.ApplicationAlloted = false;
+              this.TradeBox = true;
+            }
+            //if (this.requestReporting.AllotmentDocumentModel.length > 0)
+            const photoDoc = this.requestReporting.AllotmentDocumentModel.find((x: any) => x.ColumnName === 'StudentPhoto');
+            this.studentPhoto = photoDoc ? photoDoc.FileName : "";
+            this.studentPhotoFolder = photoDoc ? photoDoc.FolderName : "";
+
+
+            //this.GetTradeListByCollege();
+            // alert(this.request.MobileNo);
+            console.log(this.StudentVerifyPhoneData, "StudentVerifyPhoneData")
           }
-          //if (this.requestReporting.AllotmentDocumentModel.length > 0)
-          const photoDoc = this.requestReporting.AllotmentDocumentModel.find((x: any) => x.ColumnName === 'StudentPhoto');
-          this.studentPhoto = photoDoc ? photoDoc.FileName : "";
-          this.studentPhotoFolder = photoDoc ? photoDoc.FolderName : "";
+          else
+          {
+
+            this.Swal2.Confirmation("No Application Found", async (result: any) => {
+              if (result.isConfirmed)
+              {
+
+                this.router.navigate([ this.getRouterLink()]);
+                
+              }
+              else
+              {
+                let displayMessage = this.Message ?? this.ErrorMessage;
+                this.toastr.error(displayMessage);
+                this.isLoading = false;
+              }
+            },'Ok',false);
 
 
-          //this.GetTradeListByCollege();
-          // alert(this.request.MobileNo);
-          console.log(this.StudentVerifyPhoneData, "StudentVerifyPhoneData")
+
+          }
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -787,7 +825,41 @@ export class VerifyStudentAllotComponent {
   }
 
 
-  
 
+  async GetDateConfig()
+  {
+    var data = {
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      //CourseTypeId: this.searchRequest.CourseTypeId,
+      AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
+      EndTermId: this.sSOLoginDataModel.EndTermID,
+      Key: "DIRECT ALLOTMENT REPORTING",
+      SSOID: this.sSOLoginDataModel.SSOID
+    }
+    await this.commonMasterService.GetDateConfigSetting(data)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DateConfigSetting = data['Data'];
+        this.isAdmission = this.DateConfigSetting[0]['DIRECT ALLOTMENT REPORTING'];
+        console.log(this.DateConfigSetting[0]['DIRECT ALLOTMENT REPORTING']);
+
+      }, (error: any) => console.error(error)
+    );
+
+
+    if (this.isAdmission==0)
+    {
+
+      this.Swal2.Confirmation("Reporting Date Is Closed", async (result: any) => {
+        if (result.isConfirmed) {
+
+          this.router.navigate([this.getRouterLink()]);
+
+        }
+      }, 'Ok', false);
+
+    }
+
+  }
 
 }

@@ -297,4 +297,14 @@ export class StudentRequestService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetStudentHostelFeeData(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStudentHostelFeeData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
 }

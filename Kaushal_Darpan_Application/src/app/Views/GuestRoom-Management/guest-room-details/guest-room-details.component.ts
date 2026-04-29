@@ -138,8 +138,8 @@ export class GuestRoomDetailsComponent {
 
       // Count existing rooms with the same GuestHouseID and RoomTypeID
       const existingCount = this.RoomDetailsList?.filter((room: { GuestHouseID: number; RoomTypeID: number }) =>
-        room.GuestHouseID === Number(this.request.GuestHouseID) &&
-        room.RoomTypeID === Number(this.request.RoomTypeID)
+        room.GuestHouseID == Number(this.request.GuestHouseID) &&
+        room.RoomTypeID == Number(this.request.RoomTypeID)
       ).length;
 
       // If the allowed quantity is already met or exceeded
