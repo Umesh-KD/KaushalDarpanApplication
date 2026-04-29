@@ -229,6 +229,7 @@ export class GroupcodeAddRevalComponent
     mergeToShiftRow.forEach(x => {
       x.Total += this.FromShiftableGroupSubjects.Total;
       x.StudentExamPaperMarksIDs += ',' + this.FromShiftableGroupSubjects.StudentExamPaperMarksIDs;
+      x.StudentExamPaperRevaluationIDs += ',' + this.FromShiftableGroupSubjects.StudentExamPaperRevaluationIDs;
     });
 
     //delete the source shifted row
