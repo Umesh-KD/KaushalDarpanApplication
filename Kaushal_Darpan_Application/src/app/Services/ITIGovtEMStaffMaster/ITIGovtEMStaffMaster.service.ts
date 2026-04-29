@@ -650,11 +650,11 @@ export class ITIGovtEMStaffMaster {
   public async DownloadRelievingLetter_pdf(request: RelievingLetterSearchModel) {
     const body = JSON.stringify(request);
 
-    return await this.http.post(
-      this.APIUrl + '/downloadRelievingLetterPDF',
-      body,
+    return await this.http.get(
+      this.APIUrl + '/downloadRelievingLetterPDF' + '/' + request.UserID,
+  
       {
-        ...this.headersOptions,
+     
         responseType: 'blob' as 'json'
       }
     )
@@ -667,11 +667,11 @@ export class ITIGovtEMStaffMaster {
   public async DownloadJoiningLetter_pdf(request: RelievingLetterSearchModel) {
     const body = JSON.stringify(request);
 
-    return await this.http.post(
-      this.APIUrl + '/downloadJoinningLetterPDF',
-      body,
+    return await this.http.get(
+      this.APIUrl + '/downloadJoinningLetterPDF' + '/' + request.UserID,
+
       {
-        ...this.headersOptions,
+     
         responseType: 'blob' as 'json'
       }
     )
