@@ -193,8 +193,8 @@
                 <!-- <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 1  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Staff Request" (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a> -->
                 <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 &&  row.RequestStatusId ==4355" href="javascript:void(0);" title="Joining Request" (click)="onSubmitJoiningRequest(MyModel_ReplayQueryJoining, row)"><i class="ti ti-check"></i></a>
                 <a *ngIf="RequestTypeSHowID === 1" href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i></a>
-                <a *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247" href="javascript:void(0);" title="Relieving Letter" (click)="RelievingLetter(row.UserId)"><i class="ti ti-download"></i></a>
-                <a *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1" href="javascript:void(0);" title="Joining Letter" (click)="JoiningLetter(row.UserId)"><i class="ti ti-download"></i></a>
+                <a *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247" href="javascript:void(0);" title="Relieving Letter" (click)="RelievingLetter(row.ServiceRequestId)"><i class="ti ti-download"></i></a>
+                <a *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1" href="javascript:void(0);" title="Joining Letter" (click)="JoiningLetter(row.ServiceRequestId)"><i class="ti ti-download"></i></a>
               </div>
 
             </td>

@@ -723,51 +723,120 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       this.searchRequestRelieving.UserID = UserID;
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.DownloadRelievingLetter_pdf(this.searchRequestRelieving)
-        .then((data: any) => {          
-          data = JSON.parse(JSON.stringify(data));
-          if(data.State == EnumStatus.Success){
-            this.DownloadFile(data.Data);
-          }
-        }, (error: any) => {
-          console.error(error);
-          this.toastr.error(this.ErrorMessage)
-        });
+      const blob: any = await this.ITIGovtEMStaffMasterService
+        .DownloadRelievingLetter_pdf(this.searchRequestRelieving);
 
-    } catch (Ex) {
-      console.log(Ex);
+      const now = new Date();
+      const timestamp =
+        now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + '_' +
+        String(now.getHours()).padStart(2, '0') + '-' +
+        String(now.getMinutes()).padStart(2, '0') + '-' +
+        String(now.getSeconds()).padStart(2, '0');
+
+      const fileName = `ITI_Relieving_Letter_${timestamp}.pdf`;
+
+      // Create blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Create anchor and trigger download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+    } catch (error: any) {
+      console.error(error);
+     
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
   }
+
+
+
+
 
   async JoiningLetter(UserID: number) {
     try {
-      this.searchRequestJoining.UserID = UserID;
+      this.searchRequestRelieving.UserID = UserID;
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.DownloadJoiningLetter_pdf(this.searchRequestJoining)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if(data.State == EnumStatus.Success){
-            this.DownloadFile(data.Data);
-          }
-          
-        }, (error: any) => {
-          console.error(error);
-          this.toastr.error(this.ErrorMessage)
-        });
+      const blob: any = await this.ITIGovtEMStaffMasterService
+        .DownloadJoiningLetter_pdf(this.searchRequestRelieving);
 
-    } catch (Ex) {
-      console.log(Ex);
+      const now = new Date();
+      const timestamp =
+        now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + '_' +
+        String(now.getHours()).padStart(2, '0') + '-' +
+        String(now.getMinutes()).padStart(2, '0') + '-' +
+        String(now.getSeconds()).padStart(2, '0');
+
+      const fileName = `ITI_Joining_Letter_${timestamp}.pdf`;
+
+      // Create blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Create anchor and trigger download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+    } catch (error: any) {
+      console.error(error);
+     
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
   }
+
+    // ✅ Download PDF
+
+
+
+  //async JoiningLetter(UserID: number) {
+  //  try {
+  //    this.searchRequestJoining.UserID = UserID;
+  //    this.loaderService.requestStarted();
+
+  //    await this.ITIGovtEMStaffMasterService.DownloadJoiningLetter_pdf(this.searchRequestJoining)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        if(data.State == EnumStatus.Success){
+  //          this.DownloadFile(data.Data);
+  //        }
+          
+  //      }, (error: any) => {
+  //        console.error(error);
+  //        this.toastr.error(this.ErrorMessage)
+  //      });
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
   loadInTable() {
     this.resetInTableValiable();
@@ -893,4 +962,12 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       console.log(Ex);
     }
   }
+
+
+
+
 }
+function saveAs(blob: any, arg1: string) {
+  throw new Error('Function not implemented.');
+}
+

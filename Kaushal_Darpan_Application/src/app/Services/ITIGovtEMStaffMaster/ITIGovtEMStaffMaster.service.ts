@@ -646,20 +646,42 @@ export class ITIGovtEMStaffMaster {
       ).toPromise();
   }
 
-  public async DownloadJoiningLetter_pdf(request: JoiningLetterSearchModel) {
-    const body = JSON.stringify(request);
-    return await this.http.post(this.APIUrl + '/DownloadJoiningLetter_pdf', body, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
-  }
+ 
   public async DownloadRelievingLetter_pdf(request: RelievingLetterSearchModel) {
     const body = JSON.stringify(request);
-    return await this.http.post(this.APIUrl + '/DownloadRelievingLetter_pdf', body, this.headersOptions)
+
+    return await this.http.post(
+      this.APIUrl + '/downloadRelievingLetterPDF',
+      body,
+      {
+        ...this.headersOptions,
+        responseType: 'blob' as 'json'
+      }
+    )
       .pipe(
         catchError(this.handleErrorObservable)
-      ).toPromise();
+      )
+      .toPromise();
   }
+
+  public async DownloadJoiningLetter_pdf(request: RelievingLetterSearchModel) {
+    const body = JSON.stringify(request);
+
+    return await this.http.post(
+      this.APIUrl + '/downloadJoinningLetterPDF',
+      body,
+      {
+        ...this.headersOptions,
+        responseType: 'blob' as 'json'
+      }
+    )
+      .pipe(
+        catchError(this.handleErrorObservable)
+      )
+      .toPromise();
+  }
+
+
 
   public async ITI_OfficeVacancyReport(request: ITIOfficeVacancyModel) {
     var body = JSON.stringify(request);
