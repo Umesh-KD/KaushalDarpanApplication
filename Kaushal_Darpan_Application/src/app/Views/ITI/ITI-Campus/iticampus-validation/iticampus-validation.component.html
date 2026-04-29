@@ -131,8 +131,7 @@
             <td align="center">
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
                 <a href="javascript:void(0);" title="Campus On Action" *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.ITI_Placement_Admin && ( row.Status=='Pending' || row.Status=='Hold' || row.Status=='Unlock'))" (click)="CampusOnPostAction(MyModel_Action,row.PostID)"><i class="ti ti-check"></i></a>
-                <a href="javascript:void(0);" title="Campus On Action" *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.ITI_Placement_Admin && ( row.Status=='Approved'))" (click)="CampusOnPostAction(MyModel_Action1,row.PostID)"><i class="ti ti-lock-open"></i></a>
-                
+                <a href="javascript:void(0);" title="Campus On Action" *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.ITI_Placement_Admin && ( row.Status=='Approved'))" (click)="CampusOnPostAction(MyModel_Action1,row.PostID)"><i class="ti ti-lock-open"></i></a>            
                 <!-- <a href="javascript:void(0);" title="View & Update Campus" *ngIf="(row.Status=='Pending' || row.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,row.PostID)"><i class="ti ti-eye"></i></a> -->
               </div>
             </td>
@@ -178,7 +177,6 @@
                   <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
               </div>
-
 
             </div>
 
