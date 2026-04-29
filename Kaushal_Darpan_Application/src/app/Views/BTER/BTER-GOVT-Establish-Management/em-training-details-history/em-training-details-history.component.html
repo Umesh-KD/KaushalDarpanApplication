@@ -5,7 +5,7 @@
 
       <div class=" ">
         <label>Searcg By Status</label>
-        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus">
+        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (click)="onChangeSearchStatus()">
           <option value="0">--select--</option>
           <option *ngFor="let item of StaffTrainingStatusSearchList" [value]="item.ID">
             {{item.Name}}
@@ -49,12 +49,12 @@
         </button>
       </div>
     </div>
-
+    <!--{{StaffTrainingDetailsCompletedTrainingDataList|json}}-->
     <div class="overflow-auto mt-3">
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th width="50px">
+            <th width="50px" *ngIf="ShowCheckBoxId ==1">
               <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
                      [checked]="AllSelect"
                      (change)="checkboxthView_checkboxchange($event.target.checked)">
@@ -74,11 +74,12 @@
             <th class="text-left">View Complition Training Document</th>
             <th align="center" width="200">Status</th>
             <th align="center" width="200">Remark</th>
+            <th align="center" width="200">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of StaffTrainingDetailsCompletedTrainingDataList | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td>
+            <td *ngIf="ShowCheckBoxId ==1">
               <input type="checkbox" name="MarkCheck"
                      [(ngModel)]="row.Selected" />
             </td>
@@ -103,7 +104,6 @@
               </div>
               <ng-template #noDoc1>-----</ng-template>
             </td>
-
             <td align="left">
               <div class="flex" *ngIf="row.ComplitionTrainingDoc; else noDoc2">
                 <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.ComplitionTrainingDoc"
@@ -120,116 +120,61 @@
             <td>
               {{row.Remark}}
             </td>
-            
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-
-
-  </div>
-
-
-  
-</div>
-<!--<div class="card mt-4">
-  <div class="card-body p-5">
-
-
-
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>Staff  Details New Training</b>-->
-      <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openOTP()"><i class="ti ti-download"></i> Download Excel</a> -->
-    <!--</div>
-    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
-      <div class="">-->
-        <!-- <select id="ddlConter" class="form-select  couterDropDown">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select> -->
-      <!--</div>
-      <div class="">
-      </div>
-      <div class="">
-      </div>
-      <div class="">
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
-      </div>
-    </div>
-
-    <div class="overflow-auto mt-3">
-      <table class="table table-border w-full" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-          <tr>
-            <th width="80px" align="left">Sr. No.</th>
-            <th align="left">SSO ID</th>
-            <th align="left">Name</th>
-            <th align="left">Organizing lnstitute Name</th>
-            <th align="left">Course Type</th>
-            <th align="left">Course Name</th>
-            <th class="left">Duration Unit</th>
-            <th align="left">Duration</th>
-            <th align="left">Start Date - End Date</th>
-            <th align="left">Venue</th>
-            <th align="left">Mode Of Training</th>
-            <th class="text-left">View Document</th>
-            <th class="text-left">View Complition Training Document</th>
-            <th align="center" width="200">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of StaffTrainingDetailsNewTrainingDataList | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td>{{idx+1}}</td>
-            <td>{{row.SSOID}}</td>
-            <td>{{row.StaffName}}</td>
-            <td>{{row.OrganizinglnstituteName}}</td>
-            <td>{{row.TrainingCourseType_str}}</td>
-            <td>{{row.TrainingCourseName}}</td>
-            <td>{{row.DurationUnit_str}}</td>
-            <td>{{row.Duration}}</td>
-            <td>{{row.StartDate}} - {{row.EndDate}}</td>
-            <td>{{row.Venue}}</td>
-            <td>{{row.ModeOfTraining_str}}</td>
-            <td align="left">
-              <div class="flex" *ngIf="row.TrainingDoc; else noDoc1">
-                <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc"
-                   class="btn bg-primary text-white m-0"
-                   target="_blank">
-                  <i class="ti ti-eye"></i>
-                </a>
-              </div>
-              <ng-template #noDoc1>-----</ng-template>
-            </td>
-
-            <td align="left">
-              <div class="flex" *ngIf="row.ComplitionTrainingDoc; else noDoc2">
-                <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.ComplitionTrainingDoc"
-                   class="btn bg-primary text-white m-0"
-                   target="_blank">
-                  <i class="ti ti-eye"></i>
-                </a>
-              </div>
-              <ng-template #noDoc2>-----</ng-template>
-            </td>
             <td>
-              {{row.statusName}}
-            </td>-->
-            <!--<td>
-    <div class="flex align-center justify-center actionBtns">
-      <a href="javascript:void(0);" title="Delete"
-        (click)="StaffTrainingDetails_DeleteById(row.StaffTrainingDetailID)"><i class="ti ti-trash"></i>
-      </a>
-    </div>
-  </td>-->
-          <!--</tr>
+              <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-
-
-
   </div>
-</div>-->
+</div>
+
+<ng-template #EmtrainingStatusHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Training Status History</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+          </div>
+        </div>
+        <!--{{StaffTrainingHTS_GetDataList|json}}-->
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Remark</th>
+                <th class="text-left">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of StaffTrainingHTS_GetDataList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.StatusName }}</td>
+                <td align="left">{{ row.Remarks}}</td>
+                <td align="left">{{ row.ActionDate }}</td>
+              </tr>
+              <tr *ngIf="StaffTrainingHTS_GetDataList?.length==0">
+                <td colspan="5" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> 
+  </div>
+
+</ng-template>

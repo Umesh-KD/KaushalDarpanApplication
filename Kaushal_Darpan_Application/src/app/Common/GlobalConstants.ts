@@ -882,3 +882,13 @@ export enum EnumStaffTrainingStatus {
   JDTE = 6361,
   DTE = 6362
 }
+
+export enum EnumTransferStatus_ITI_EM {
+  Approve = 247,
+  Reject = 248,
+  Revert = 249,
+  Relieved = 4354,
+	Request_for_Join = 4355,
+	Joined = 4356,
+  On_Hold = 7354,
+}

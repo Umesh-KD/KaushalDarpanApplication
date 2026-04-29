@@ -130,22 +130,23 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">S No</th>
-            <th class="text-left">Staff Request Type</th>
             <th class="text-left">Request Type</th>
             <th class="text-left">User</th>
             <th class="text-left">Level</th>
+            
+            <th class="text-left">Transfer Office</th>
+            <th class="text-left">Transfer Post</th>
+            <th class="text-left">Relieving Institute</th>
+            <th class="text-left">Transfer Institute</th>
             <th class="text-left">Staff Type</th>
-            <th class="text-left">Post</th>
-            <th class="text-left">Office</th>
-            <th class="text-left">Institute</th>
             <th class="text-left">Order No</th>
             <th class="text-left">Order Date</th>
-            <th class="text-left">Last Working Date</th>
+            <th class="text-left">Relieving Date</th>
             <th class="text-left">Joining Date</th>
             <th class="text-left">Request Date</th>
             <th class="text-left">Staff Request Status</th>
-            <th class="text-left">Relieving Status</th>
-            <th class="text-left">Joining Status</th>
+            <!-- <th class="text-left">Relieving Status</th>
+            <th class="text-left">Joining Status</th> -->
             <th class="text-left">Request Remarks</th>
             <th class="text-left">File</th>
             <th class="text-center">Action</th>
@@ -155,21 +156,27 @@
           <tr *ngFor="let row of UserRequestList; let idx=index;  ">
             <td align="left">{{idx+1}}</td>
             <td align="left">{{ row.RequestType }}</td>
-            <td align="left">{{ row.RequestType }}</td>
             <td align="left">{{ row.UserName }}</td>
             <td align="left">{{ row.LevelName }}</td>
-            <td align="left">{{ row.StaffType }}</td>
-            <td align="left">{{ row.PostName }}</td>
+            
             <td align="left">{{ row.OfficeName }}</td>
+            <td align="left">{{ row.PostName }}</td>
+            <td align="left">{{ row.RelievingInstitute }}</td>
             <td align="left">{{ row.InstituteName }}</td>
+            <td align="left">{{ row.StaffType }}</td>
             <td align="left">{{ row.OrderNo }}</td>
             <td align="left">{{ row.OrderDate }}</td>
-            <td align="left">{{ row.LastWorkingDate }}</td>
+            <td align="left">{{ row.RequestDate }}</td>
             <td align="left">{{ row.JoiningDate }}</td>
             <td align="left">{{ row.RequestDate }}</td>
-            <td align="left">{{ row.RequestStatus }}</td>
-            <td align="left">{{ row.RelievingStatus }}</td>
-            <td align="left">{{ row.JoiningStatus }}</td>
+            <td align="left">{{ row.RequestStatus }}
+              <span *ngIf="row.RequestStatusId == _EnumTransferStatus_ITI_EM.On_Hold">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + row.OnHoldDoc}}"
+                   *ngIf="row.AttachDocument_fileName !=''" target="_blank"><i class="ti ti-eye"></i></a>
+              </span>
+            </td>
+            <!-- <td align="left">{{ row.RelievingStatus }}</td>
+            <td align="left">{{ row.JoiningStatus }}</td> -->
 
             <td align="left">{{ row.RequestRemarks }}</td>
             <td>
@@ -498,7 +505,7 @@
               </div>
             </div>
 
-            <div *ngIf="RequestUpdateStatus.StatusIDs==247">
+            <div *ngIf="RequestUpdateStatus.StatusIDs==_EnumTransferStatus_ITI_EM.Approve">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Joining Date: <span class="StarMarking">*</span>
               </label>
@@ -508,7 +515,7 @@
               </div>
             </div>
 
-            <div *ngIf="RequestUpdateStatus.StatusIDs==247">
+            <div *ngIf="RequestUpdateStatus.StatusIDs==_EnumTransferStatus_ITI_EM.Approve">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Joining Time: <span class="StarMarking">*</span>
               </label>
@@ -525,7 +532,7 @@
               </div>
             </div>
 
-            <div *ngIf="RequestUpdateStatus.StatusIDs==247">
+            <div *ngIf="RequestUpdateStatus.StatusIDs==_EnumTransferStatus_ITI_EM.Approve">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Role <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="RequestUpdateStatus.JoiningRoleID" formControlName="JoiningRoleID">
                 <option value="0">--Select--</option>
@@ -536,6 +543,23 @@
                   <i aria-hidden="true"></i>This
                   field is required .!
                 </p>
+              </div>
+            </div>
+
+            <div *ngIf="RequestUpdateStatus.StatusIDs==_EnumTransferStatus_ITI_EM.On_Hold">
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="OnHoldDoc">Upload Document</label>
+              
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="OnHoldDoc" type="file" formControlName="Upload" (change)="onFilechange($event,'OnHoldDoc')">
+                <label for="OnHoldDoc">
+                  <span>Choose File</span>
+                  {{RequestUpdateStatus.OnHoldDoc === '' ? 'No File Choosen' : RequestUpdateStatus.Dis_OnHoldDoc}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + RequestUpdateStatus.OnHoldDoc}}"
+                     *ngIf="this.RequestUpdateStatus.OnHoldDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
               </div>
             </div>
 

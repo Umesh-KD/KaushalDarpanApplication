@@ -551,6 +551,8 @@ export class RequestUpdateStatus {
   Comments: string = '';
   IsAccount: boolean = false;
   AccountComments: string = '';
+  OnHoldDoc: string = '';
+  Dis_OnHoldDoc: string = '';
   RoleID: number = 0;
 }
 

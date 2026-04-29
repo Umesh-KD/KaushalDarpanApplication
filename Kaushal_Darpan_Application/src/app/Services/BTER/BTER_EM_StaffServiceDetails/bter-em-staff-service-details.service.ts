@@ -62,4 +62,20 @@ export class BTEREMStaffServiceDetailsService {
       ).toPromise();
   }
 
+  public async StaffTrainingHTS_GetData(request: StaffTrainingDetailSearchData) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StaffTrainingHTS_GetData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async StaffTrainingDocUpdate(request: StaffTrainingDetailDataModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StaffTrainingDocUpdate`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
