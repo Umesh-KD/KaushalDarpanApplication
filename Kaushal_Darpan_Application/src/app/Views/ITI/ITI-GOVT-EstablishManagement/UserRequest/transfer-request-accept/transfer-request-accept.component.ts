@@ -502,18 +502,21 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       return;
     }
 
-    const joiningDate = new Date(this.RequestUpdateStatus.JoiningDate);
-    const requestDate = this.parseDDMMYYYY(this.RowlistData.RequestDate);
+    if(this.RequestUpdateStatus.StatusIDs==EnumTransferStatus_ITI_EM.Approve){
+      const joiningDate = new Date(this.RequestUpdateStatus.JoiningDate);
+      const requestDate = this.parseDDMMYYYY(this.RowlistData.RequestDate);
 
-    // remove time part (important for accurate comparison)
-    joiningDate.setHours(0, 0, 0, 0);
-    requestDate.setHours(0, 0, 0, 0);
+      // remove time part (important for accurate comparison)
+      joiningDate.setHours(0, 0, 0, 0);
+      requestDate.setHours(0, 0, 0, 0);
 
-    if (joiningDate < requestDate) {
-      this.CloseModal();
-      this.toastr.error("Joining Date should be greater than or equal to Relieving Date");
-      return;
+      if (joiningDate < requestDate) {
+        this.CloseModal();
+        this.toastr.error("Joining Date should be greater than or equal to Relieving Date");
+        return;
+      }
     }
+    
     this.loaderService.requestStarted();
     this.isLoading = true;
 
