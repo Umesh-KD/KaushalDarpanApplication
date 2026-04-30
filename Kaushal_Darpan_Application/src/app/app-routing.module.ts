@@ -1706,6 +1706,7 @@ const routes: Routes = [
       { path: 'BterStudentAttendenceReport', loadChildren: () => import('./Views/bter-student-attendence-report/bter-student-attendence-report.module').then(m => m.BterStudentAttendenceReportModule) },
       { path: 'iip-event-common-master', loadChildren: () => import('./Views/iip-event-common-master/iip-event-common-master.module').then(m => m.IipEventCommonMasterModule) },
 
+      { path: 'AddTransferRequest', loadChildren: () => import('./Views/BTER/EM-TransferModule/AddTransferRequest/AddTransferRequest.module').then(m => m.AddTransferRequestModule) },
 
 
     ]
