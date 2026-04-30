@@ -1828,6 +1828,7 @@ const routes: Routes = [
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   { path: 'PostMaster', loadChildren: () => import('./Views/ITI/post-master/post-master.module').then(m => m.PostMasterModule) },
+  { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
