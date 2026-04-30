@@ -914,3 +914,11 @@ export enum EnumOffice {
   TTC_LRDC = 19,
   COLLEGE = 21
 }
+
+export enum EnumResultType {
+  MainResult = 1,
+  RevaluationResult = 2,
+  RwhResult = 3,
+  Ufm = 4,
+  RwhRevalEffected = 5
+}
