@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { BTER_EM_TransferSystemModle, BTER_GetStaffPersonalDetailsModel, StaffTrainingDetailDataModel, StaffTrainingDetailSearchData, StaffTrainingStatusUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
-import { BTER_GetStaffPersonalDetailsModel, EM_TransferSystemSearchModel, StaffTrainingDetailDataModel, StaffTrainingDetailSearchData, StaffTrainingStatusUpdateDataModel, TransferSystemUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import {  EM_TransferSystemSearchModel,    TransferSystemUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 
 
 @Injectable({
