@@ -735,7 +735,7 @@ export class BTER_GetStaffPersonalDetailsModel {
 
 
 export class BTERStaffTransferSystemModel {
-  public SSOID: string = '';
+  // public SSOID: string = '';
   public EmployeeDesignation: string = '';
   public EmployeeName: string = '';
   public NonGazetteName: string = '';
@@ -753,11 +753,6 @@ export class BTERStaffTransferSystemModel {
   public InstituteID: number = 0;
   public DesignationID: number = 0;
   public PriorityID: number = 0;
-  
-  
-
-
-
 }
 
 export class EM_TransferSystemSearchModel {
@@ -778,3 +773,42 @@ export class TransferSystemUpdateDataModel {
 }
 
 
+export class BTER_EM_TransferSystemModle {
+  public TransferSystemID: number = 0;
+  public UserID: number = 0;
+  public StaffID: number = 0;
+  public SSOID: string = '';
+  public NonGazettedID: number = 0;
+  public EmployeeDesignation: string = '';
+  public EmployeeName: string = '';
+  public NonGazetteName: string = '';
+  
+  public TransferCategoryID: number = 0;
+  public ReasonDescription: string = '';
+  public SupportingDocuments: string = '';
+  public SupportingDocumentsDis: string = '';
+  public IsActive: boolean = false;
+  public IsDeleted: boolean = false;
+  public CreatedDate: Date | null = null;
+  public CreatedBy: number = 0;
+  public UpdatedDate: Date | null = null;
+  public UpdatedBy: number = 0;
+  public TransferStatus: number = 0;
+ 
+  public TransferExtDetails: BTER_EM_TransferSystemExtModle[] = [];
+}
+
+export class BTER_EM_TransferSystemExtModle {
+ public ID: number = 0;
+ public TransferSystemID: number = 0;
+ public OfficeID: number = 0;
+ public PostID: number = 0;
+ public DistrictID: number = 0;
+ public InstituteID: number = 0;
+ public Priority: number = 0;
+ public IsActive: boolean = false;
+ public IsDeleted: boolean = false;
+ public UpdatedDate: Date | null = null;
+ public UpdatedBy: number = 0;
+ public FinalApproveStatus: number = 0;
+}

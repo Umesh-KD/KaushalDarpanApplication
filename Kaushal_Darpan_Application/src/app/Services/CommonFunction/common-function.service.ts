@@ -260,16 +260,16 @@ export class CommonFunctionService {
 
 
 
-  public async SemesterRolewise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0,RoleID:number=0,StaffID:number=0) {
+  public async SemesterRolewise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0, StaffID: number = 0) {
 
-    return await this.http.get(this.APIUrl + '/SemesterRolewise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' +StaffID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/SemesterRolewise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' + StaffID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
 
-  public async StreamRoleWise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0,SemesterID:number=0,InstituteID:number=0,StaffID:number=0) {
+  public async StreamRoleWise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0, SemesterID: number = 0, InstituteID: number = 0, StaffID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/StreamRoleWise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' + SemesterID + '/' + InstituteID + '/' + StaffID, this.headersOptions)
       .pipe(
@@ -1055,7 +1055,7 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
   public async GetItiVacantPost(model: any) {
 
     return await this.http.post(this.APIUrl + '/GetItiVacantPost/', model, this.headersOptions)
@@ -2406,22 +2406,41 @@ export class CommonFunctionService {
   }
 
   public async GetEventCommonMasterList(type: string) {
-  return await this.http.get(
-    this.APIUrl + `/EventCommonMaster?type=${type}`,
-    this.headersOptions
-  )
-  .pipe(
-    catchError(this.handleErrorObservable)
-  )
-  .toPromise();
-  }
-
-
-  public async GetCommonMasterDDLByAction1(ActionType: string) {
-
-    return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByAction1/${ActionType}`, this.headersOptions)
+    return await this.http.get(
+      this.APIUrl + `/EventCommonMaster?type=${type}`,
+      this.headersOptions
+    )
       .pipe(
         catchError(this.handleErrorObservable)
-      ).toPromise();
+      )
+      .toPromise();
   }
+
+  public async GetEffectiveFinYear() {
+    return await this.http.get(
+      this.APIUrl + `/GetEffectiveFinYear`,
+      this.headersOptions
+    ).pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+    }
+
+    public async GetEventCommonMasterList(type: string) {
+        return await this.http.get(
+            this.APIUrl + `/EventCommonMaster?type=${type}`,
+            this.headersOptions
+        )
+            .pipe(
+                catchError(this.handleErrorObservable)
+            )
+            .toPromise();
+    }
+
+
+    public async GetCommonMasterDDLByAction1(ActionType: string) {
+
+        return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByAction1/${ActionType}`, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
 }

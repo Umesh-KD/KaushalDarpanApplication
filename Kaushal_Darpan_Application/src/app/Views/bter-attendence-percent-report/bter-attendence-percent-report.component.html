@@ -20,7 +20,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Staff<span class="StarMarking">*</span></label>
           <ng-select formControlName="StaffID" [clearable]="false" (change)="OnStaffChange($event)">
-            <ng-option [value]="0">--Select--</ng-option>
+            <ng-option value="">--Select--</ng-option>
             @for (item of StaffMasterList; track item.StaffID) {
             <ng-option [value]="item.StaffID">{{item.SSOID}}</ng-option>
             }
@@ -63,7 +63,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject<span class="StarMarking">*</span></label>
           <ng-select formControlName="SubjectID" [clearable]="false" (change)="ChangeSubjectDDL()">
-            <ng-option [value]="0">--Select--</ng-option>
+            <ng-option value="">--Select--</ng-option>
             @for (item of SubjectMasterDDL; track item.ID) {
             <ng-option [value]="item.ID">{{item.Name}}</ng-option>
             }
@@ -109,7 +109,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Attandance Time<span class="StarMarking">*</span></label>
           <ng-select formControlName="AttandanceTimeID" [clearable]="false">
-            <ng-option [value]="0">--Select--</ng-option>
+            <ng-option value="">--Select--</ng-option>
             @for (item of StudentAttandanceTimeDDL; track item.ID) {
             <ng-option [value]="item.ID">{{item.Name}}</ng-option>
             }
@@ -119,7 +119,20 @@
           </div>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Percent</label>
 
+          <select formControlName="Percent"
+                  class="form-select">
+            <option value="">--All--</option>
+
+            <option value="1">Above 80</option>
+            <option value="2">Between 60-80</option>
+            <option value="3">Between 40-60</option>
+            <option value="4">Below 60</option>
+
+          </select>
+        </div>
 
         <div>
 
@@ -167,31 +180,31 @@
           </ng-container>
 
           <!-- Dynamic Columns -->
-          <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
-
-            <!-- Header -->
-            <th mat-header-cell *matHeaderCellDef style="width:130px !important">
-              {{ column.name }}
-            </th>
-
-            <!-- Cell -->
-            <td mat-cell *matCellDef="let element"
-                [ngClass]="{
-      'present-cell': element[column.name] === 'Present',
-      'absent-cell': element[column.name] === 'Absent',
-      'holiday-cell': element[column.name] === 'Holiday',
-      'tl-cell': element[column.name] === 'Leave (TL)'
-    }">
-              <span>{{ element[column.name] }}</span>
+          <ng-container matColumnDef="PresentDays">
+            <th mat-header-cell *matHeaderCellDef class="text-center fw-bold"> Present</th>
+            <td mat-cell *matCellDef="let element" class="text-center fw-bold">
+              {{ element.PresentDays }}
             </td>
-
-
-
           </ng-container>
 
+          <ng-container matColumnDef="TotalWorkingDays">
+            <th mat-header-cell *matHeaderCellDef class="text-center fw-bold"> Total Period</th>
+            <td mat-cell *matCellDef="let element" class="text-center fw-bold">
+              {{ element.TotalLectures }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="TotalPercent">
+            <th mat-header-cell *matHeaderCellDef> Total Percent </th>
+            <td mat-cell *matCellDef="let element">{{ element.TotalPercent }}</td>
+          </ng-container>
           <!-- Header & Row -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"[ngClass]="{
+          'row-red' : row.TotalPercent < 40,
+  'row-orange': row.TotalPercent >= 40 && row.TotalPercent < 80,
+  'row-green': row.TotalPercent >= 80
+}"></tr>
 
         </table>
       </div>
@@ -310,7 +323,7 @@
 
       <div class="table-footer">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2">
-  
+
           <div class="flex justify-end flex-wrap items-center">
             <mat-paginator [length]="totalRecords"
                            [pageSize]="pageSize"

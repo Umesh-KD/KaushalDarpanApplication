@@ -1,0 +1,25 @@
+<h2>Json Encryption Tool</h2>
+
+<div>
+  <label>Upload .json:</label><br>
+  <input type="file" (change)="onFileSelected($event)" accept=".json">
+</div>
+
+<br>
+
+<div>
+  <label>Or paste JSON:</label>
+  <textarea [(ngModel)]="inputJson" rows="8" style="width:100%"></textarea>
+</div>
+
+<br>
+
+<button (click)="encrypt()">Encrypt</button>
+<button (click)="copyOutput()">Copy Output</button>
+<button (click)="downloadFile()">Download enc.json</button>
+
+<br>
+<br>
+
+<h3>Encrypted Output</h3>
+<textarea [value]="outputJson" rows="8" style="width:100%"></textarea>

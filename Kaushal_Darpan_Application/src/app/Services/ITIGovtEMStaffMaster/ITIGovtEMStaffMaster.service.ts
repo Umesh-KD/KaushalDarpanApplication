@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { ITIGovtEMAddStaffBasicDetailDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, ITIGovtEMStaffHostelListModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITIGovtUserPrincipMasterSerchModel, ITIGovtEMStaffMasterDataModel, ITIGovtEMStaffMasterSearchModel, ITIGovtEMStaffSubjectList, ITIGovtEMStaff_EduQualificationDetailsModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITIGovtEM_OfficeSearchModel, ITIGovtEM_OfficeSaveDataModel, ITIGovtEM_PostSearchModel, ITIGovtEM_PostSaveDataModel, ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel, ITIGovtEMStaff_ServiceDetailsOfPersonalModel, ITIGovtEMStaff_PersonalDetailsModel, ITI_Govt_EM_SanctionedPostBasedInstituteModel, ITI_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, RequestUpdateStatus, ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel, ITI_Govt_EM_PersonalDetailByUserIDSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_Govt_EM_NodalSearchDataModel, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITI_Govt_EM_PersonalDetailByUserIDDeleteModel, ITI_Govt_EM_EducationDeleteModel, ITI_Govt_EM_ServiceDeleteModel, ITIOfficeVacancyModel, ITT_EM_ApproveStaffDataModel, ITI_EM_StaffListSearchModel, ITI_EM_DroupdownDataModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
+import { ITIGovtEMAddStaffBasicDetailDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, ITIGovtEMStaffHostelListModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITIGovtUserPrincipMasterSerchModel, ITIGovtEMStaffMasterDataModel, ITIGovtEMStaffMasterSearchModel, ITIGovtEMStaffSubjectList, ITIGovtEMStaff_EduQualificationDetailsModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITIGovtEM_OfficeSearchModel, ITIGovtEM_OfficeSaveDataModel, ITIGovtEM_PostSearchModel, ITIGovtEM_PostSaveDataModel, ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel, ITIGovtEMStaff_ServiceDetailsOfPersonalModel, ITIGovtEMStaff_PersonalDetailsModel, ITI_Govt_EM_SanctionedPostBasedInstituteModel, ITI_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, RequestUpdateStatus, ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel, ITI_Govt_EM_PersonalDetailByUserIDSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_Govt_EM_NodalSearchDataModel, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITI_Govt_EM_PersonalDetailByUserIDDeleteModel, ITI_Govt_EM_EducationDeleteModel, ITI_Govt_EM_ServiceDeleteModel, ITIOfficeVacancyModel, ITT_EM_ApproveStaffDataModel, ITI_EM_StaffListSearchModel, ITI_EM_DroupdownDataModel, UserOfficePostDataModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
 
 import { AppsettingService } from '../../Common/appsetting.service';
 
@@ -38,7 +38,7 @@ export class ITIGovtEMStaffMaster {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
 
   public async GetAllTotalExaminerData(searchRequest: ITIGovtEMStaffMasterSearchModel) {
     var body = JSON.stringify(searchRequest);
@@ -113,12 +113,12 @@ export class ITIGovtEMStaffMaster {
 
 
   public async GetSSOIDDetails(SSOId: string, SSOUserName: string, SSOPassword: string) {
-    
-    return await this.http.get(this.APIUrl + "/getSsoDetaislBySSOId?SSOId=" + SSOId ).pipe(
+
+    return await this.http.get(this.APIUrl + "/getSsoDetaislBySSOId?SSOId=" + SSOId).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
 
-    
+
   }
 
   // New Work Pawan 18-02-2025
@@ -131,9 +131,9 @@ export class ITIGovtEMStaffMaster {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
   public async StaffLevelChild(searchRequest: ITIGovtEMStaffMasterSearchModel) {
-    
+
     var body = JSON.stringify(searchRequest);
 
     return await this.http.post(`${this.APIUrl}/StaffLevelChild`, body, this.headersOptions)
@@ -179,7 +179,7 @@ export class ITIGovtEMStaffMaster {
   }
 
   public async IsDeleteHostelWarden(SSOID: string) {
-    return await this.http.delete(this.APIUrl + '/IsDeleteHostelWarden/' + SSOID , this.headersOptions)
+    return await this.http.delete(this.APIUrl + '/IsDeleteHostelWarden/' + SSOID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -377,7 +377,7 @@ export class ITIGovtEMStaffMaster {
   }
 
 
-  public async ITIGovtEM_ITI_Govt_EM_GetUserLevel(UserID: number=0) {
+  public async ITIGovtEM_ITI_Govt_EM_GetUserLevel(UserID: number = 0) {
     return await this.http.get(this.APIUrl + "/ITIGovtEM_ITI_Govt_EM_GetUserLevel/" + UserID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -473,7 +473,7 @@ export class ITIGovtEMStaffMaster {
 
 
   public async ITIGovtEM_GetSSOID(StaffId: number = 0) {
-   
+
     return await this.http.get(this.APIUrl + "/ITIGovtEM_GetSSOID/" + StaffId, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -516,7 +516,7 @@ export class ITIGovtEMStaffMaster {
   //}
 
   public async UserProfileStatusHistoryList(request: ITI_Govt_EM_UserRequestHistoryListSearchDataModel) {
-   
+
     const headers = { 'content-type': 'application/json' }
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/GetITI_Govt_EM_UserProfileStatusHt', body, this.headersOptions)
@@ -646,15 +646,15 @@ export class ITIGovtEMStaffMaster {
       ).toPromise();
   }
 
- 
+
   public async DownloadRelievingLetter_pdf(request: RelievingLetterSearchModel) {
     const body = JSON.stringify(request);
 
     return await this.http.get(
       this.APIUrl + '/downloadRelievingLetterPDF1' + '/' + request.UserID,
-  
+
       {
-     
+
         responseType: 'blob' as 'json'
       }
     )
@@ -665,20 +665,11 @@ export class ITIGovtEMStaffMaster {
   }
 
   public async DownloadJoiningLetter_pdf(request: RelievingLetterSearchModel) {
-    const body = JSON.stringify(request);
-
     return await this.http.get(
-      this.APIUrl + '/downloadJoinningLetterPDF1' + '/' + request.UserID,
-
-      {
-     
-        responseType: 'blob' as 'json'
-      }
-    )
-      .pipe(
+      this.APIUrl + '/downloadJoinningLetterPDF1' + '/' + request.UserID, {responseType: 'blob' as 'json'}
+    ).pipe(
         catchError(this.handleErrorObservable)
-      )
-      .toPromise();
+      ).toPromise();
   }
 
 
@@ -687,6 +678,23 @@ export class ITIGovtEMStaffMaster {
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/ITI_OfficeVacancyReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async ITI_EM_GetUserOfficePostDetails(request: UserOfficePostDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/ITI_EM_GetUserOfficePostDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UpdateUserOfficePost_ITI_EM(request: UserOfficePostDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UpdateUserOfficePost_ITI_EM`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

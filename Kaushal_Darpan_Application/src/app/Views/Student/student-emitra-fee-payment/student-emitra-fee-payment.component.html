@@ -122,7 +122,7 @@
                 <!--<button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.Enrolled && row.FeeStatus=='PENDING'" class="btn bg-success text-white btn-sm" (click)="EmitraPaymentCheckStatus(row)" type="button">Check Pay Status </button>-->
 
                 <button 
-                  *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForExamination && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'failed')" 
+                  *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForExamination && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'failed' || row.TransctionStatus == 'pending' || row.TransctionStatus == 'PENDING')" 
                   class="btn bg-success text-white btn-sm" 
                   (click)="PayExamFee(row)" 
                   type="button">Pay Exam Fee 

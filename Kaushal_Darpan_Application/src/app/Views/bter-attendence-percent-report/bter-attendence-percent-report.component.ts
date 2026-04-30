@@ -20,24 +20,22 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { LeaveMasterService } from '../../Services/LeaveMaster/leave-master.service';
 import { GlobalConstants } from '../../Common/GlobalConstants';
-
-
 @Component({
-  selector: 'app-bter-student-attendence-report',
+  selector: 'app-bter-attendence-percent-report',
   standalone: false,
-  templateUrl: './bter-student-attendence-report.component.html',
-  styleUrl: './bter-student-attendence-report.component.css'
+  templateUrl: './bter-attendence-percent-report.component.html',
+  styleUrl: './bter-attendence-percent-report.component.css'
 })
-export class BterStudentAttendenceReportComponent {
-  displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName','StreamName', 'SubjectName'];
+export class BterAttendencePercentReportComponent {
+  displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'StreamName', 'SubjectName','SectionName' ,'PresentDays','TotalWorkingDays','TotalPercent'];
   /* dynamicColumns: string[] = [];*/
 
   filterData: any[] = [];
   dynamicColumns: { name: string, locked: boolean }[] = [];
 
   UserID: number = 0
-  RoleID:number=0
-  StaffID:number=0
+  RoleID: number = 0
+  StaffID: number = 0
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
@@ -91,13 +89,13 @@ export class BterStudentAttendenceReportComponent {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
 
-      this.RoleID = this.sSOLoginDataModel.RoleID
+    this.RoleID = this.sSOLoginDataModel.RoleID
     this.UserID = this.sSOLoginDataModel.UserID
 
     if (this.sSOLoginDataModel.RoleID == 8 || this.sSOLoginDataModel.RoleID == 14) {
       this.StaffID = this.sSOLoginDataModel.StaffID
     } else {
-      this.StaffID=0
+      this.StaffID = 0
     }
 
 
@@ -129,6 +127,7 @@ export class BterStudentAttendenceReportComponent {
       SectionID: ['', Validators.required],
       SemesterID: ['', Validators.required],
       StaffID: [''],
+      Percent: [''],
       AttendanceStartDate: [this.selectedRange?.start],
       AttendanceEndDate: [this.selectedRange?.end]
     });
@@ -169,9 +168,9 @@ export class BterStudentAttendenceReportComponent {
       await this.commonMasterService.SemesterRolewise(this.sSOLoginDataModel.UserID,
         this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
         , this.sSOLoginDataModel.RoleID, this.StaffID).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.SemesterMasterDDL = data.Data;
-      })
+          data = JSON.parse(JSON.stringify(data));
+          this.SemesterMasterDDL = data.Data;
+        })
 
       let obj = {
         SemesterID: this.semesterId,
@@ -220,13 +219,13 @@ export class BterStudentAttendenceReportComponent {
   }
 
 
-  async getbranchmaster(SemesterID:number=0){
+  async getbranchmaster(SemesterID: number = 0) {
 
     await this.commonMasterService.StreamRoleWise(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
       , this.sSOLoginDataModel.RoleID, SemesterID, this.sSOLoginDataModel.InstituteID, this.StaffID).then((data: any) => {
-    data = JSON.parse(JSON.stringify(data));
-    this.StreamMasterDDL = data.Data;
-  })
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterDDL = data.Data;
+      })
   }
 
 
@@ -237,14 +236,14 @@ export class BterStudentAttendenceReportComponent {
     if (this.sSOLoginDataModel.RoleID == 60 || this.sSOLoginDataModel.RoleID == 61) {
       SSOID = this.sSOLoginDataModel.SSOID
 
-    } else{
-      SSOID=''
+    } else {
+      SSOID = ''
     }
 
     await this.commonMasterService.StaffAttendence(SSOID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
+      data = JSON.parse(JSON.stringify(data));
       this.StaffMasterList = data.Data;
-      })
+    })
   }
 
 
@@ -259,7 +258,7 @@ export class BterStudentAttendenceReportComponent {
 
   }
 
-  getSubjectMasterDDL(ID: any=0, SemesterID: any=0) {
+  getSubjectMasterDDL(ID: any = 0, SemesterID: any = 0) {
     debugger
 
     this.subjectsearch.StreamID = ID
@@ -272,12 +271,12 @@ export class BterStudentAttendenceReportComponent {
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
     this.subjectsearch.StaffID = this.StaffID
 
-  
-      this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.SubjectMasterDDL = data.Data;
-      })
- 
+
+    this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.SubjectMasterDDL = data.Data;
+    })
+
 
 
   }
@@ -296,13 +295,13 @@ export class BterStudentAttendenceReportComponent {
     this.subjectsearch.UserID = this.sSOLoginDataModel.UserID
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
     this.subjectsearch.StaffID = this.StaffID
-  
-      this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.SubjectMasterDDL = data.Data;
-      })
-   
-     this.getbranchmaster(SemesterID)
+
+    this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.SubjectMasterDDL = data.Data;
+    })
+
+    this.getbranchmaster(SemesterID)
   }
 
   async GetStaffLeaveAllData() {
@@ -487,16 +486,17 @@ export class BterStudentAttendenceReportComponent {
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.TableForm.value.StreamID,
         SectionID: this.TableForm.value.SectionID,
-        SubjectID: this.TableForm.value.SubjectID|| 0,
+        SubjectID: this.TableForm.value.SubjectID || 0,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         StaffID: this.StaffID,
         TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
+        Percent: this.TableForm.value.Percent || 0,
       };
 
       this.filterData = [];
 
-      await this.attendanceServiceService.GetStudentAttendanceReport(obj).then((data: any) => {
+      await this.attendanceServiceService.GetStudentAttendancePercentReport(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         this.filterData = data;
 
@@ -504,50 +504,11 @@ export class BterStudentAttendenceReportComponent {
 
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
-          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName','StreamName' ,'SubjectName', 'SectionName'];
+          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'StreamName', 'SubjectName', 'SectionName','PresentDays','TotalWorkingDays','TotalPercent'];
 
           // Generate dynamic columns
-          this.dynamicColumns = Object.keys(this.filterData[0])
-            .filter(key => ![
-              'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
-              'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
-              'EndTermID', 'CourseTypeID', 'StudentID'
-            ].includes(key))
-            .map(key => {
-              const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
-              const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
-              return { name: key, locked: isLeaveDate };
-            });
+         
 
-          // Apply attendance logic
-          this.filterData.forEach((student: any) => {
-            this.dynamicColumns.forEach((col: any) => {
-
-              const key = col.name;
-              const rawValue = student[key];
-
-              const attendanceValue = rawValue == null
-                ? ''
-                : rawValue.toString().trim().toUpperCase();
-
-              if (attendanceValue === 'A') {
-                student[key] = 'Absent';
-              }
-              else if (attendanceValue === 'P' || attendanceValue === 'O') {
-                student[key] = 'Present';
-              }
-              else if (attendanceValue === 'H') {
-                student[key] = 'Holiday';
-              }
-              else if (attendanceValue === 'TL') {
-                student[key] = 'Leave (TL)';
-              }
-              else {
-                student[key] = '';
-              }
-
-            });
-          });
 
           this.displayedColumns = [
             ...this.displayedColumns,
@@ -617,11 +578,11 @@ export class BterStudentAttendenceReportComponent {
     this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
 
-   
 
 
-      this.GetAttendanceTimeTable();
-    
+
+    this.GetAttendanceTimeTable();
+
   }
 
   onPaginationChange(event: PageEvent): void {
@@ -907,14 +868,14 @@ export class BterStudentAttendenceReportComponent {
     debugger
 
 
-      const id = Number(row);
+    const id = Number(row);
 
     if (id > 0) {
       this.StaffID = id
     } else {
       this.StaffID = 0
 
-     
+
     }
 
 

@@ -148,6 +148,18 @@ export class RevalationReportsearchModel {
   public RoleID:number = 0;
 }
 
+export class StudentEnrollmentModel{
+  public Enrollment:string='';
+}
 
-
+export interface UpdateStudentWithHistoryModel {
+  EnrollmentNo: string;
+  DOB: string;
+  FatherName: string;
+  MotherName: string;
+  StudentName: string;
+  CreatedBy: number;
+  SelectedEndTermID: number;
+  CreatedSsoID: string;
+}
 

@@ -117,3 +117,7 @@ export class ItiTradeSearch_PrivateModel {
   //public MathPercentage: string = '0.00'
   //public SciencePercentage: string ='0.00'
 }
+export class EndTermFinYearModel {
+  public EndTermID: number = 0;
+  public EndTermName: string = '';
+}

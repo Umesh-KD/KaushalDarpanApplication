@@ -70,7 +70,7 @@
 
               <button 
                 style="margin-bottom:5px" 
-                *ngIf="row.ServiceType==_EnumFeeFor.ExamFee && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'failed')" 
+                *ngIf="row.ServiceType==_EnumFeeFor.ExamFee && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'failed' || row.TransctionStatus == 'pending' || row.TransctionStatus == 'PENDING')" 
                 class="btn bg-success text-white btn-sm" 
                 (click)="PayExamFee(row)" 
                 type="button">Pay Exam Fee 
