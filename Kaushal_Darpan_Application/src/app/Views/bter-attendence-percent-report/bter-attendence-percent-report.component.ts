@@ -27,7 +27,7 @@ import { GlobalConstants } from '../../Common/GlobalConstants';
   styleUrl: './bter-attendence-percent-report.component.css'
 })
 export class BterAttendencePercentReportComponent {
-  displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'StreamName', 'SubjectName','TotalPercent'];
+  displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'StreamName', 'SubjectName','SectionName' ,'PresentDays','TotalWorkingDays','TotalPercent'];
   /* dynamicColumns: string[] = [];*/
 
   filterData: any[] = [];
@@ -486,7 +486,7 @@ export class BterAttendencePercentReportComponent {
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.TableForm.value.StreamID,
         SectionID: this.TableForm.value.SectionID,
-        SubjectID: this.TableForm.value.SubjectID,
+        SubjectID: this.TableForm.value.SubjectID || 0,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         StaffID: this.StaffID,
@@ -496,7 +496,7 @@ export class BterAttendencePercentReportComponent {
 
       this.filterData = [];
 
-      await this.attendanceServiceService.GetStudentAttendanceReport(obj).then((data: any) => {
+      await this.attendanceServiceService.GetStudentAttendancePercentReport(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         this.filterData = data;
 
@@ -504,7 +504,7 @@ export class BterAttendencePercentReportComponent {
 
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
-          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'StreamName', 'SubjectName', 'SectionName','TotalPercent'];
+          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'StreamName', 'SubjectName', 'SectionName','PresentDays','TotalWorkingDays','TotalPercent'];
 
           // Generate dynamic columns
          

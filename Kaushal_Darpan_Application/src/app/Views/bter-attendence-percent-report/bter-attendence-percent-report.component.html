@@ -180,6 +180,19 @@
           </ng-container>
 
           <!-- Dynamic Columns -->
+          <ng-container matColumnDef="PresentDays">
+            <th mat-header-cell *matHeaderCellDef class="text-center fw-bold"> Present</th>
+            <td mat-cell *matCellDef="let element" class="text-center fw-bold">
+              {{ element.PresentDays }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="TotalWorkingDays">
+            <th mat-header-cell *matHeaderCellDef class="text-center fw-bold"> Total Period</th>
+            <td mat-cell *matCellDef="let element" class="text-center fw-bold">
+              {{ element.TotalLectures }}
+            </td>
+          </ng-container>
 
           <ng-container matColumnDef="TotalPercent">
             <th mat-header-cell *matHeaderCellDef> Total Percent </th>
@@ -187,7 +200,11 @@
           </ng-container>
           <!-- Header & Row -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"[ngClass]="{
+          'row-red' : row.TotalPercent < 40,
+  'row-orange': row.TotalPercent >= 40 && row.TotalPercent < 80,
+  'row-green': row.TotalPercent >= 80
+}"></tr>
 
         </table>
       </div>
