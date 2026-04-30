@@ -303,28 +303,15 @@ export class AddRequestDDOOfficeComponent {
     }
   }
   async getITICollege_search() {
-    debugger
     try {
-      this.searchRequestITi.Action = "_ITICollegeByManagementType";
-      this.searchRequestITi.FinancialYearID = 9 ;
-      this.searchRequestITi.ManagementTypeId = 1;
-
-      this.loaderService.requestStarted();
-      await this.ITICollegeTradeService.getITICollegeByManagement(this.searchRequestITi)
+      await this.commonMasterService.GetCommonMasterData('GovtIti', this.searchReq.DivisionID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ListITICollegeByManagement_search = data['Data'];
-          this.ListITICollegeByManagement_search = this.ListITICollegeByManagement_search.filter((item: any) => item.DivisionId == this.searchReq.DivisionID)
-
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 

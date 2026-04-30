@@ -805,3 +805,9 @@ export class ITI_EM_DroupdownDataModel{
   public RoleID?: number = 0;
   public UserID?: number = 0;
 }
+
+export class UserOfficePostDataModel {
+  public UserID: number = 0;
+  public DepartmentID: number = 0;
+  public Action: string = '';
+}

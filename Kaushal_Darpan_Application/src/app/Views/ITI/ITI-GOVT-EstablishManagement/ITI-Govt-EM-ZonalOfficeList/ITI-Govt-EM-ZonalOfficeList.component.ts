@@ -41,6 +41,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public ErrorMessage: string = '';
 /*  public RoleMasterList: any[] = [];*/
   public DesignationMasterList: any[] = [];
+  public UserOfficePostDetails: any[] = [];
   
   public ITIGovtEMOFFICERSList: any[] = [];
   public StaffTypeList: any[] = []
@@ -100,13 +101,21 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public OfficeWorkList: any = [];
 
 
-  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
-    private ITICollegeTradeService: ItiSeatIntakeService, private UserMasterService: UserMasterService, private fb: FormBuilder, private assignRoleRightsService: AssignRoleRightsService
-  ) {
-
-  }
-
-
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private activatedRoute: ActivatedRoute, 
+    private routers: Router, 
+    private modalService: NgbModal, 
+    private Swal2: SweetAlert2,
+    private ITICollegeTradeService: ItiSeatIntakeService, 
+    private UserMasterService: UserMasterService, 
+    private fb: FormBuilder, 
+    private assignRoleRightsService: AssignRoleRightsService
+  ) { }
 
   async ngOnInit() {
 
@@ -159,17 +168,8 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     await this.GetStatusList();
     await this.GetZonalList();
     await this.GetLevelList();
-    await this.GetStaffTypeData();
-   
-    
-   
-
-   
-    
-    console.log(this.sSOLoginDataModel);
-
-    await this.GetRoleMasterData();
-    
+    await this.GetStaffTypeData(); 
+    await this.GetRoleMasterData();   
 
     //this.filteredStatusList = [
     //  { ID: 1, Name: 'Approved' },
@@ -1006,5 +1006,38 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     }
   }
 
+  async getUserOfficePostDetails(StaffUserID: number) {
+    try {
+      const request: any = {};
+      request.Action = 'GetUserOfficePostDetails_ById'
+      request.USerID = StaffUserID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
+      await this.ITIGovtEMStaffMasterService.ITI_EM_GetUserOfficePostDetails(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.UserOfficePostDetails = data.Data;
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+          this.UserOfficePostDetails = [];
+        } else {
+          this.toastr.error(data.Message);
+          this.UserOfficePostDetails = [];
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async onClick_UserPost(modal: any, StaffUserId: number){
+    await this.getUserOfficePostDetails(StaffUserId);
+    this.modalReference = this.modalService.open(modal, { size: 'md', backdrop: 'static' });
+  }
+
+  CloseModalPopup_updatePost() {
+    this.modalService.dismissAll();
+  }
+
+  async updateStaffPost() {}
 
 }
