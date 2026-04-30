@@ -760,4 +760,21 @@ export class BTERStaffTransferSystemModel {
 
 }
 
+export class EM_TransferSystemSearchModel {
+  public TransferSystemID: number = 0;
+  public StaffID: number = 0;
+  public ActionBy: number = 0;
+  public Action ?: string = '';
+  public Remark ?: string = '';
+  public StatusID: number = 0;
+}
+
+export class TransferSystemUpdateDataModel {
+  public TransferSystemID: number = 0;
+  public TrainingStatus: number = 0;
+  public CreatedBy: number = 0;
+  public Remark?: string = '';
+  public jsonData?: string = '';
+}
+
 

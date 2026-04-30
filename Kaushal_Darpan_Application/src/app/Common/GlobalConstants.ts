@@ -892,3 +892,13 @@ export enum EnumTransferStatus_ITI_EM {
 	Joined = 4356,
   On_Hold = 7354,
 }
+
+
+export enum EnumTransferSystemStatus {
+  Submitted=1,
+  UnderADTEReview=2,
+  UnderJDTEReview=3,
+  UnderDTEReview=4,
+  Appnoved=5,
+  Rejected=6
+}

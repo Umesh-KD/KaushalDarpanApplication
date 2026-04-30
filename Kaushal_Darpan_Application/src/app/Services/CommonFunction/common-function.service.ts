@@ -2414,5 +2414,14 @@ export class CommonFunctionService {
     catchError(this.handleErrorObservable)
   )
   .toPromise();
-}
+  }
+
+
+  public async GetCommonMasterDDLByAction1(ActionType: string) {
+
+    return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByAction1/${ActionType}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
