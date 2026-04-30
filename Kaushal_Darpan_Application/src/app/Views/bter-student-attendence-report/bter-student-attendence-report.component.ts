@@ -29,7 +29,7 @@ import { GlobalConstants } from '../../Common/GlobalConstants';
   styleUrl: './bter-student-attendence-report.component.css'
 })
 export class BterStudentAttendenceReportComponent {
-  displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName'];
+  displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName','StreamName', 'SubjectName'];
   /* dynamicColumns: string[] = [];*/
 
   filterData: any[] = [];
@@ -250,7 +250,7 @@ export class BterStudentAttendenceReportComponent {
 
   async GetStudentAttandanceTimeDDL() {
 
-    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
+    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
 
       debugger
@@ -259,7 +259,7 @@ export class BterStudentAttendenceReportComponent {
 
   }
 
-  getSubjectMasterDDL(ID: any, SemesterID: any) {
+  getSubjectMasterDDL(ID: any=0, SemesterID: any=0) {
     debugger
 
     this.subjectsearch.StreamID = ID
@@ -504,7 +504,7 @@ export class BterStudentAttendenceReportComponent {
 
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
-          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
+          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName','StreamName' ,'SubjectName', 'SectionName'];
 
           // Generate dynamic columns
           this.dynamicColumns = Object.keys(this.filterData[0])
@@ -806,7 +806,7 @@ export class BterStudentAttendenceReportComponent {
       SemesterID: GetSemesterID,
       StreamID: GetstreamId,
       SubjectID: GetSubjectID,
-      StaffID: this.sSOLoginDataModel.StaffID,
+      StaffID: this.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
     }
@@ -835,7 +835,7 @@ export class BterStudentAttendenceReportComponent {
 
 
 
-
+    this.GetStudentAttandanceTimeDDL()
 
 
   }
@@ -912,10 +912,17 @@ export class BterStudentAttendenceReportComponent {
     if (id > 0) {
       this.StaffID = id
     } else {
-      this.StaffID=0
+      this.StaffID = 0
+
+     
     }
+
+
+
     this.getMasterData()
     this.getbranchmaster()
+    this.getSubjectMasterDDL()
+    this.GetStudentAttandanceTimeDDL();
 
 
 
