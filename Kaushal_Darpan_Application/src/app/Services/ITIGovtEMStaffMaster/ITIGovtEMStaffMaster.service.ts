@@ -686,8 +686,15 @@ export class ITIGovtEMStaffMaster {
 
   public async ITI_EM_GetUserOfficePostDetails(request: UserOfficePostDataModel) {
     var body = JSON.stringify(request);
-
     return await this.http.post(`${this.APIUrl}/ITI_EM_GetUserOfficePostDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UpdateUserOfficePost_ITI_EM(request: UserOfficePostDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UpdateUserOfficePost_ITI_EM`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
