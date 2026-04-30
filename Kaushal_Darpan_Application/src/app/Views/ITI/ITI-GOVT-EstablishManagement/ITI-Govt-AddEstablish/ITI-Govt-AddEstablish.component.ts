@@ -190,7 +190,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       this.searchRequestITi.ManagementTypeId = 0;
      
       this.loaderService.requestStarted();
-      await this.ITICollegeTradeService.getITICollegeByManagement(this.searchRequestITi)
+      await this.commonMasterService.GetCommonMasterData('GovtIti')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ListITICollegeByManagement = data['Data'];
