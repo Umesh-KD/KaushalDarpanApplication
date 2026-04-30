@@ -102,7 +102,7 @@
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="flex"> 
+      <div *ngIf="sSOLoginDataModel.RoleID==7 || sSOLoginDataModel.RoleID==13" class="flex"> 
 
          <select class="form-select" id="ItemStatus" [(ngModel)]="ItemStatus" name="ItemStatus">
           <option value="0">Choose Mark As (*)</option>
