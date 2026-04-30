@@ -1708,6 +1708,7 @@ const routes: Routes = [
 
       { path: 'AddTransferRequest', loadChildren: () => import('./Views/BTER/EM-TransferModule/AddTransferRequest/AddTransferRequest.module').then(m => m.AddTransferRequestModule) },
       { path: 'BterAttendencePercentReport', loadChildren: () => import('./Views/bter-attendence-percent-report/bter-attendence-percent-report.module').then(m => m.BterAttendencePercentReportModule) },
+      { path: 'iti-studentdetail-by-enrollment', loadChildren: () => import('./Views/iti-studentdetail-by-enrollment/iti-studentdetail-by-enrollment.module').then(m => m.ItiStudentdetailByEnrollmentModule) },
 
 
     ]

@@ -1,0 +1,91 @@
+<!-- 🔹 BOX 1: ENROLLMENT SEARCH -->
+<div class="card mb-4">
+
+  <div class="card-header">
+    <b><i class="fa fa-search"></i> Search Student</b>
+  </div>
+  <div class="card-body p-5">
+
+    <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <div>
+        <label>Enrollment No<span class="text-danger">*</span></label>
+        <input type="text" class="form-input" formControlName="Enrollment">
+
+        <div *ngIf="submitted && form.controls.Enrollment.errors" class="text-danger">
+          Required
+        </div>
+      </div>
+
+      <div class="flex items-end">
+        <button type="button" class="btn bg-info text-white" (click)="search()">
+          Search
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<!-- 🔹 BOX 2: STUDENT DETAILS (AFTER SEARCH) -->
+<div class="card" *ngIf="showFields">
+
+<div class="card-header" >
+    <b><i class="fa fa-th-list"></i> Search Result</b>
+  </div>
+
+  <div class="card-body p-5">
+
+    <form [formGroup]="form" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <div>
+        <label>Student Name<span class="text-danger">*</span></label>
+        <input type="text" class="form-input" formControlName="StudentName" (input)="onInput($event)">
+        <div *ngIf="submitted && form.controls.StudentName.errors" class="text-danger">
+          Required
+        </div>
+      </div>
+
+      <div>
+        <label>Father Name<span class="text-danger">*</span></label>
+        <input type="text" class="form-input" formControlName="FatherName" (input)="onInput($event)">
+        <div *ngIf="submitted && form.controls.FatherName.errors" class="text-danger">
+          Required
+        </div>
+      </div>
+
+      <div>
+        <label>Mother Name<span class="text-danger">*</span></label>
+        <input type="text" class="form-input" formControlName="MotherName" (input)="onInput($event)">
+        <div *ngIf="submitted && form.controls.MotherName.errors" class="text-danger">
+          Required
+        </div>
+      </div>
+
+      <div>
+        <label>Date of Birth<span class="text-danger">*</span></label>
+        <input type="date" class="form-input" formControlName="DOB">
+        <div *ngIf="submitted && form.controls.DOB.errors" class="text-danger">
+          Required
+        </div>
+      </div>
+
+      <!-- UPDATE BUTTON -->
+      <div class="col-span-3 text-center mt-4">
+        <button type="button"
+                class="btn bg-green-600 text-white px-6"
+                (click)="update()">
+          Update
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+</div>
+
+
+<!-- OTP MODAL -->
+<app-otpmodal #otpModal></app-otpmodal>
