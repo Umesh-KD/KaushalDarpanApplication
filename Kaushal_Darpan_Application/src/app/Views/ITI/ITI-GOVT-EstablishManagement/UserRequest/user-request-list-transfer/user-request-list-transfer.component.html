@@ -163,11 +163,11 @@
                 </a>
                 <a href="javascript:void(0);" title="Joining Letter"
                   *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1" 
-                   (click)="JoiningLetter(row.UserId)"><i class="ti ti-download"></i>
+                   (click)="JoiningLetter(row.ServiceRequestId)"><i class="ti ti-download"></i>
                 </a>
                 <a href="javascript:void(0);" title="Relieving Letter" 
                   *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247"                   
-                  (click)="RelievingLetter(row.UserId)"><i class="ti ti-download"></i>
+                  (click)="RelievingLetter(row.ServiceRequestId)"><i class="ti ti-download"></i>
                 </a>
               </div>
             </td>
