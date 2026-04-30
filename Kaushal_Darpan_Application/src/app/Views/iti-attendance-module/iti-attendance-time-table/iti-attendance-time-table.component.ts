@@ -236,11 +236,9 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
 
   getData() {
     this.isSubmitted = true;
-    if (this.TableForm.getRawValue().StreamID > 0 && this.TableForm.value.SemesterID > 0 && this.TableForm.value.SubjectID > 0) {
+   
       this.GetAttendanceTimeTable();
-    } else {
-      this.toastr.warning("please select Stream, Subject, Semester")
-    }
+   
   }  
 
   onPaginationChange(event: PageEvent): void {
