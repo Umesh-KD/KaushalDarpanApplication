@@ -617,11 +617,11 @@ export class BterStudentAttendenceReportComponent {
     this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
 
-    if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
+   
 
 
       this.GetAttendanceTimeTable();
-    }
+    
   }
 
   onPaginationChange(event: PageEvent): void {

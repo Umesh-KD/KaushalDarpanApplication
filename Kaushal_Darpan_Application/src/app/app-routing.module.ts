@@ -1707,6 +1707,7 @@ const routes: Routes = [
       { path: 'iip-event-common-master', loadChildren: () => import('./Views/iip-event-common-master/iip-event-common-master.module').then(m => m.IipEventCommonMasterModule) },
 
       { path: 'AddTransferRequest', loadChildren: () => import('./Views/BTER/EM-TransferModule/AddTransferRequest/AddTransferRequest.module').then(m => m.AddTransferRequestModule) },
+      { path: 'BterAttendencePercentReport', loadChildren: () => import('./Views/bter-attendence-percent-report/bter-attendence-percent-report.module').then(m => m.BterAttendencePercentReportModule) },
 
 
     ]
@@ -1827,7 +1828,6 @@ const routes: Routes = [
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   { path: 'PostMaster', loadChildren: () => import('./Views/ITI/post-master/post-master.module').then(m => m.PostMasterModule) },
-  { path: 'Views\BterAttendencePercentReport', loadChildren: () => import('./Views/bter-attendence-percent-report/bter-attendence-percent-report.module').then(m => m.BterAttendencePercentReportModule) },
 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
