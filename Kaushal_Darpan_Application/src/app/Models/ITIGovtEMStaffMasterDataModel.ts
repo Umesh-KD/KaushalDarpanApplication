@@ -808,6 +808,20 @@ export class ITI_EM_DroupdownDataModel{
 
 export class UserOfficePostDataModel {
   public UserID: number = 0;
+  public UserOfficeDetailsId: number = 0;
   public DepartmentID: number = 0;
+  public OfficeID: number = 0;
+  public NodalDistrictID: number = 0;
+  public InstituteID: number = 0;
+  public DivisionID: number = 0;
+  public CurrentPostID: number = 0;
+  public UpdatePostID: number = 0;
+  public ModifyBy: number = 0;
+
   public Action: string = '';
+  public Office: string = '';
+  public NodalDistrict: string = '';
+  public College: string = '';
+  public Division: string = '';
+  public CurrentPost: string = '';
 }
