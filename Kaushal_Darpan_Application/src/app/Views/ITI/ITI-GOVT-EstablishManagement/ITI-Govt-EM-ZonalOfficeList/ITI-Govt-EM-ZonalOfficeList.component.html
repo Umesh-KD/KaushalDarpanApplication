@@ -151,15 +151,38 @@
               <div class="flex align-center justify-center actionBtns">
                 <!--<button *ngIf="row.ProfileStatusID>1" type="button" class="bg-info btn text-white btn-sm" (click)="onCheckData(row)"><i class="ti ti-eye"></i></button>-->
 
-                <a *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Pending" href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>
+                <a  href="javascript:void(0);" title="View"
+                  *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Pending" 
+                  (click)="onCheckData(row)"><i class="ti ti-eye"></i>
+                </a>
+
                 <!--<button *ngIf="row.ProfileStatusID>1" type="button" class="bg-info btn text-white btn-sm" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></button>-->
-                <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.LockAndSubmit || row.ProfileStatusID === _EnumEMProfileStatus.Revert" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="Assign Status" 
+                  *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.LockAndSubmit || row.ProfileStatusID === _EnumEMProfileStatus.Revert" 
+                  (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i>
+                </a>
+
                 <!--<a href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
-                <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Approve " href="javascript:void(0);" title="Assign Role Rights" (click)="ViewandUpdate(MyModel_Action,row.StaffUserID)"><i class="ti ti-playlist-add"></i></a>
-                <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
+                <a  href="javascript:void(0);" title="Assign Role Rights" 
+                  *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Approve "
+                  (click)="ViewandUpdate(MyModel_Action,row.StaffUserID)"><i class="ti ti-playlist-add"></i>
+                </a>
+
+                <a href="javascript:void(0);" id="btnDelete" title="Delete" 
+                  *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" 
+                  (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i>
+                </a>
+
                 <!--<a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.SubjectID)"><i class="ti ti-pencil"></i></a>
                 -->
-                <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-history"></i></a>
+                <a href="javascript:void(0);" title="User Profile Status History" 
+                  (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-history"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Update User Post" 
+                  (click)="onClick_UserPost(UpdatePost_Modal, row.StaffUserID)"><i class="ti ti-user-edit"></i>
+                </a>
+
               </div>
             </td>
           </tr>
@@ -787,5 +810,74 @@
   </div>
 </ng-template>
 
+<ng-template #UpdatePost_Modal let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
 
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Update Post</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup_updatePost()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-auto mt-3">
+            <form [formGroup]="SearchFormGroup">
+              <!-- <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+                <div >
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
+                  <select class="form-select" [(ngModel)]="searchReq.LevelID" formControlName="LevelID" (change)="GetOfficeList_search()">
+                    <option value="0">--Select--</option>
+                    <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
+                  </select>
+                </div>
+                <div >
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+                  <select class="form-select" [(ngModel)]="searchReq.OfficeID" formControlName="OfficeID" (change)="OfficeITIWiseCollege_search()">
+                    <option value="0">--Select--</option>
+                    <option *ngFor="let item of OfficeList_search" [value]="item.ID">{{item.Name}}</option>
+                  </select>
+                </div>
+
+                <div *ngIf="searchReq.LevelID==2 &&  (searchReq.OfficeID== 11 ||  searchReq.OfficeID== 15)">
+                  <label> Division<span class="StarMarking">*</span></label>
+                  <select formControlName="DivisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change_search()"
+                          [(ngModel)]="searchReq.DivisionID">
+                    <option value="0">--Select--</option>
+                    <option *ngFor="let division of DivisionMasterList_search" [value]="division.ID">{{division.Name}}</option>
+                  </select>
+                </div>
+
+                <div *ngIf="searchReq.LevelID==2 && searchReq.OfficeID== 11">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
+                  <select class="form-select" [(ngModel)]="searchReq.InstituteID" formControlName="InstituteID">
+                    <option value="0">Choose Option</option>
+                    <option *ngFor="let item of ListITICollegeByManagement_search" [value]="item.ID">{{item.Name}}</option>
+                  </select>
+                </div>
+
+                <div *ngIf="searchReq.LevelID==2 && searchReq.OfficeID== 15">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    District:<span class="StarMarking">*</span>
+                  </label>
+                  <select class="form-select" [(ngModel)]="searchReq.NodalDistrictID" formControlName="NodalDistrictID">
+                    <option value="0">--Select--</option>
+                    <option *ngFor="let item of DistrictList_search" [value]="item.ID">{{item.Name}}</option>
+                  </select>
+                </div>
+
+              </div> -->
+
+              <div class="text-center">
+                <button type="button" (click)="updateStaffPost()" class="btn bg-info text-white mt-6">Update</button>
+                <button type="button" (click)="CloseModalPopup_updatePost()" class="btn bg-danger text-white mt-6">Cancel</button>
+              </div>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
 
