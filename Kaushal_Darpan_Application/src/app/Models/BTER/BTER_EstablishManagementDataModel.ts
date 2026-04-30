@@ -723,3 +723,41 @@ export class StaffTrainingStatusUpdateDataModel {
   public Remark?: string = '';
   public jsonData?: string = '';
 }
+
+
+export class BTER_GetStaffPersonalDetailsModel {
+  public StaffUserID: number = 0;
+  public StaffID: number = 0;
+  public ModifyBy: number = 0;
+  public SSOID?: string = '';
+  public Remark?: string = '';
+}
+
+
+export class BTERStaffTransferSystemModel {
+  public SSOID: string = '';
+  public EmployeeDesignation: string = '';
+  public EmployeeName: string = '';
+  public NonGazetteName: string = '';
+  
+
+  public StaffID: number = 0;
+  public TransfercateID: number = 0;
+  public ReasonDescription: string = '';
+  public SupportingDocuments: string = '';
+  public SupportingDocuments_Dis: string = '';
+  public vReasonDescription: string = '';
+  public NonGazettedID: number = 0;
+  public OfficeID: number = 0;
+  public DistrictID: number = 0;
+  public InstituteID: number = 0;
+  public DesignationID: number = 0;
+  public PriorityID: number = 0;
+  
+  
+
+
+
+}
+
+
