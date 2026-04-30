@@ -487,7 +487,7 @@ export class BterStudentAttendenceReportComponent {
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.TableForm.value.StreamID,
         SectionID: this.TableForm.value.SectionID,
-        SubjectID: this.TableForm.value.SubjectID,
+        SubjectID: this.TableForm.value.SubjectID|| 0,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         StaffID: this.StaffID,
@@ -617,11 +617,11 @@ export class BterStudentAttendenceReportComponent {
     this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
 
-    if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
+   
 
 
       this.GetAttendanceTimeTable();
-    }
+    
   }
 
   onPaginationChange(event: PageEvent): void {
