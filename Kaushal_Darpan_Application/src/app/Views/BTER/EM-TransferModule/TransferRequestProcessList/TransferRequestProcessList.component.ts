@@ -53,6 +53,16 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     modalReference: NgbModalRef | undefined;
     public StaffTrainingHTS_GetDataList: any = [];
     public ShowCheckBoxId: number = 0;
+    public GazettedList: any[] = [
+      { ID: 1, Name: 'Gazetted' },
+      { ID: 2, Name: 'Non-Gazetted' }
+    ];
+    public GetTransfercateList: any = [];
+    public ItiCollegesListAll: any = [];
+    public SearchCategoryID: number = 0;
+    public SearchInstituteID: number = 0;
+    public SearchEmployeeType: number = 0;
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -87,7 +97,17 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Status = "0";
 
-    
+
+    await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.ItiCollegesListAll = data.Data;
+    })
+
+    await this.commonFunctionService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.GetTransfercateList = data['Data'];
+      console.log(this.GetTransfercateList, "GetTransfercateList");
+    });
     
 
     await this.commonFunctionService.GetCommonMasterDDLByAction1('TransferSystemStatus')
@@ -95,7 +115,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         data = JSON.parse(JSON.stringify(data));
         this.TransferSystemStatusList = data['Data'];
         this.TransferSystemStatusSearchList = data['Data'];
-        
+
+    
 
          if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
            this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Submitted || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
