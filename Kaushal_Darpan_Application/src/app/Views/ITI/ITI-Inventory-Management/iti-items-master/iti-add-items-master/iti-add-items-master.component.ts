@@ -86,8 +86,10 @@ export class ITIAddItemsMasterComponent {
     await this.ddlCategory_Change();
     await this.GetTradeDDL();
     await this.GetAllUnitData();
-    if(this.key==1){
+    if (this.key == 1) {
+      
       await this.GetById_Stock();
+      this.ItemId = 0
       //this.AddItemsRequestFormGroup.get('IsConsume')?.enable();
     }
     else if (this.ItemId > 0) {

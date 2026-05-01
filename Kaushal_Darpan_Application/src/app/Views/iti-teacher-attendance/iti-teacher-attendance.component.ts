@@ -1,4 +1,3 @@
-
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, ViewChild, inject } from '@angular/core';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -12,12 +11,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute } from '@angular/router';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { AppsettingService } from '../../../Common/appsetting.service';
-import { GlobalConstants } from '../../../Common/GlobalConstants';
-import { AttendanceServiceService } from '../../../Services/AttendanceServices/attendance-service.service';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { StaffMasterDDLDataModel } from '../../../Models/CenterObserverDataModel';
+import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
+import { AppsettingService } from '../../Common/appsetting.service';
+import { GlobalConstants } from '../../Common/GlobalConstants';
+import { AttendanceServiceService } from '../../Services/AttendanceServices/attendance-service.service';
+import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
+import { StaffMasterDDLDataModel } from '../../Models/CenterObserverDataModel';
 interface DynamicColumn {
   originalKey: string;
   dayType: string;
@@ -25,29 +24,28 @@ interface DynamicColumn {
   isHoliday: boolean;
 }
 @Component({
-  selector: 'app-iti-attendence-percent',
+  selector: 'app-iti-teacher-attendance',
   standalone: false,
-  templateUrl: './iti-attendence-percent.component.html',
-  styleUrl: './iti-attendence-percent.component.css'
+  templateUrl: './iti-teacher-attendance.component.html',
+  styleUrl: './iti-teacher-attendance.component.css'
 })
-export class ItiAttendencePercentComponent {
+export class ItiTeacherAttendanceComponent {
   dynamicColumns: DynamicColumn[] = [];
 
   displayedColumns: string[] = [];
-  public InstituteID:number=0
+
   filterData: any[] = [];
-  public requestStaff = new StaffMasterDDLDataModel();
-  SubjectMasterDDL: any[] = [];
-  StaffList: any[] = [];
   InstituteList: any[] = [];
-  SSOID: string = ''
+
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
   SemesterMasterDDL: any[] = [];
   shiftddl: any[] = [];
-
-
+  public requestStaff = new StaffMasterDDLDataModel();
+  SubjectMasterDDL: any[] = [];
+  StaffList: any[] = [];
+  SSOID: string = ''
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
   private _liveAnnouncer = inject(LiveAnnouncer);
@@ -69,7 +67,7 @@ export class ItiAttendencePercentComponent {
   ShiftID!: number;
   UnitID!: number;
   today: Date = new Date();
-  yesterdayDate: string='';
+  yesterdayDate: string;
   sevenDaysLater: Date = new Date();
   selectedRange: { start: Date, end: Date } | null = null;
 
@@ -80,14 +78,11 @@ export class ItiAttendencePercentComponent {
   constructor(
     private attendanceServiceService: AttendanceServiceService,
     private fb: FormBuilder,
-    private http: HttpClient, private route: ActivatedRoute,  
+    private http: HttpClient, private route: ActivatedRoute,
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
     public appsettingConfig: AppsettingService) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-    this.InstituteID = this.sSOLoginDataModel.InstituteID
-
     // Access the route parameters
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
     this.semesterId = parseInt(this.route.snapshot.paramMap.get('semesterId') ?? "0");
@@ -97,13 +92,20 @@ export class ItiAttendencePercentComponent {
     this.AttendanceStartDate = this.route.snapshot.paramMap.get('AttendanceStartDate') ?? "";
     this.AttendanceEndDate = this.route.snapshot.paramMap.get('AttendanceEndDate') ?? "0";
 
-    this.getMasterData();
-  
-
+/*    this.getMasterData();*/
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1); // Move to the previous day
+    this.yesterdayDate = yesterday.toISOString().split('T')[0];
+    this.sevenDaysLater.setDate(this.today.getDate() - 7);
+    this.selectedRange = {
+      start: this.sevenDaysLater,
+      end: this.today
+    };
   }
 
 
- async ngOnInit() {
+  async ngOnInit() {
 
 
     this.TableForm = this.fb.group({
@@ -114,20 +116,23 @@ export class ItiAttendencePercentComponent {
       AttendanceEndDate: [this.selectedRange?.end],
       ShiftId: [''],
       SSOID: [''],
-      Percent: [''],
-      InstituteID: [''],
-
+      InstituteID: ['']
     });
-   if (this.sSOLoginDataModel.InstituteID == 0) {
-     await this.GetInstituteList()
-   }
-  await this.getSubjectMasterDDL(this.streamId, this.semesterId);
-  await  this.GetStaff_InstituteWise()
+
+    if (this.sSOLoginDataModel.InstituteID == 0) {
+      await this.GetInstituteList()
+    }
+
+    await this.GetStaff_InstituteWise()
+
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
 
     });
+
+
+
     if (this.AttendanceStartDate != '' && this.AttendanceStartDate != null && this.AttendanceStartDate != undefined
       && this.AttendanceEndDate != '' && this.AttendanceEndDate != null && this.AttendanceEndDate != undefined
     ) {
@@ -140,10 +145,12 @@ export class ItiAttendencePercentComponent {
 
 
 
+
       this.TableForm.controls['AttendanceEndDate'].disable();
       this.TableForm.controls['AttendanceStartDate'].disable();
     }
 
+    debugger
     if (this.sSOLoginDataModel.RoleID == 222) {
       this.TableForm.patchValue({
         SSOID: this.sSOLoginDataModel.SSOID
@@ -151,8 +158,9 @@ export class ItiAttendencePercentComponent {
 
       });
       this.TableForm.controls['SSOID'].disable();
-     await this.GetstaffDetails(this.sSOLoginDataModel.SSOID)
+      await this.GetstaffDetails(this.sSOLoginDataModel.SSOID)
     }
+
 
     setTimeout(() => {
       if (this.semesterId > 0) {
@@ -184,7 +192,7 @@ export class ItiAttendencePercentComponent {
 
   async getMasterData() {
     try {
-      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.InstituteID).then((data: any) => {
+      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
       })
@@ -205,10 +213,7 @@ export class ItiAttendencePercentComponent {
   async ItiShiftUnitDDL(ID: number) {
     try {
       debugger
-
-      
-
-      await this.commonMasterService.ItiShiftUnitDDL(ID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.InstituteID).then((data: any) => {
+      await this.commonMasterService.ItiShiftUnitDDL(ID, this.sSOLoginDataModel.FinancialYearID, 2, this.sSOLoginDataModel.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.shiftddl = data.Data;
       })
@@ -217,6 +222,7 @@ export class ItiAttendencePercentComponent {
       console.error(error);
     }
   }
+
 
 
   getSubjectMasterDDL(ID: any, SemesterID: any) {
@@ -244,62 +250,75 @@ export class ItiAttendencePercentComponent {
     }
 
   }
+
+  isPresent(value: any): boolean {
+    return value?.includes('P');
+  }
+
+  getAttendanceText(value: any): string {
+    if (!value) return ''; // 👈 IMPORTANT (blank)
+
+    if (value.includes('P')) return 'Present';
+    if (value.includes('A')) return 'Absent';
+
+    return '';
+  }
+
   async GetAttendanceTimeTable() {
 
     try {
 
-      if (this.InstituteID == 0) {
-        this.toastr.warning("Please Select Iti")
-        return
-      }
 
-      debugger
+
+
       const rawStart = this.TableForm.getRawValue().AttendanceStartDate;
       const rawEnd = this.TableForm.getRawValue().AttendanceEndDate;
+      const dateStart = new Date(rawStart);
+      const formattedDateStart =
+        dateStart.getFullYear() + '-' +
+        String(dateStart.getMonth() + 1).padStart(2, '0') + '-' +
+        String(dateStart.getDate()).padStart(2, '0');
 
-      let formattedDateStart = null;
-      let formattedDateEnd = null;
+      const dateEnd = new Date(rawEnd);
+      const formattedDateEnd =
+        dateEnd.getFullYear() + '-' +
+        String(dateEnd.getMonth() + 1).padStart(2, '0') + '-' +
+        String(dateEnd.getDate()).padStart(2, '0');
 
-      if (rawStart) {
-        const dateStart = new Date(rawStart);
-        formattedDateStart =
-          dateStart.getFullYear() + '-' +
-          String(dateStart.getMonth() + 1).padStart(2, '0') + '-' +
-          String(dateStart.getDate()).padStart(2, '0');
+
+      let InstituteID = 0
+      if (this.sSOLoginDataModel.InstituteID > 0) {
+     
+        InstituteID = this.sSOLoginDataModel.InstituteID
+      } else {
+        InstituteID = this.TableForm.value.InstituteID || 0
+ 
       }
 
-      if (rawEnd) {
-        const dateEnd = new Date(rawEnd);
-        formattedDateEnd =
-          dateEnd.getFullYear() + '-' +
-          String(dateEnd.getMonth() + 1).padStart(2, '0') + '-' +
-          String(dateEnd.getDate()).padStart(2, '0');
-      }
+   
 
       let obj = {
         SemesterID: this.TableForm.value.SemesterID,
         EndTermID: this.sSOLoginDataModel.EndTermID,
         FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
-        InstituteID: this.InstituteID,
+        InstituteID: InstituteID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.TableForm.getRawValue().StreamID,
-        SubjectID: this.TableForm.value.SubjectID,
+        SubjectID: this.TableForm.value.SubjectID ||0,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         UnitID: this.UnitID,
         ShiftID: this.ShiftID,
-        Seatintake: this.TableForm.value.ShiftId,
-        Percent: this.TableForm.value.Percent,
-        SSOID: this.TableForm.value.SSOID
-      };
+        Seatintake: this.TableForm.getRawValue().ShiftId,
+        SSOID: this.TableForm.getRawValue().SSOID
 
-      console.log(obj); // check values
+      };
 
       this.filterData = [];
 
       await this.attendanceServiceService
-        .GetStudentAttendance_PercentReport(obj)
+        .GetTeacherAttendence(obj)
         .then((data: any) => {
 
           data = JSON.parse(JSON.stringify(data['Data']));
@@ -307,14 +326,66 @@ export class ItiAttendencePercentComponent {
 
           if (this.filterData.length > 0) {
 
+            // Reset columns
+            this.dynamicColumns = [];
+
             this.displayedColumns = [
               'SrNo',
-              'EnrollmentNo',
-              'StudentName',
-              'SubjectName',
-              'PresentDays',
+              'SSOID',
+              'InstituteName',
+
+              'StreamName',
               'TotalWorkingDays',
-              'Percent'
+              'TotalPresentDays',
+              'AttendancePercentage'
+
+       
+            ];
+
+            // Extract dynamic columns properly
+            this.dynamicColumns = Object.keys(this.filterData[0])
+              .filter(key =>
+                ![
+                  'StudentID',
+                  'EnrollmentNo',
+                  'StudentName',
+                  'SubjectName',
+                  'SemesterID',
+                  'StreamID',
+                  'SubjectID',
+                  'SubjectID1',
+                  'InstituteID',
+                  'AttendanceDate',
+                  'Attendance',
+                  'EndTermID',
+                  'CourseTypeID',
+                  'IsFinalSubmit',
+                  'StreamName',
+                  'SemesterName',
+                  'InstituteName',
+                  'TotalWorkingDays',
+                  'TotalPresentDays',
+                  'AttendancePercentage',
+                  'SSOID'
+                ].includes(key)
+              )
+              .map(key => {
+
+                const match = key.match(/\((.*?)\)\s(.+)/);
+
+                return {
+                  originalKey: key,
+                  dayType: match ? match[1] : '',
+                  date: match ? match[2] : key,
+                  isHoliday: match ? match[1] === 'Holiday' : false
+                };
+
+              });
+
+            // Add to displayedColumns
+            this.displayedColumns = [
+              ...this.displayedColumns,
+              ...this.dynamicColumns.map(x => x.originalKey)
             ];
 
           }
@@ -327,7 +398,7 @@ export class ItiAttendencePercentComponent {
 
           this.updateTable();
 
-        });
+        }, error => console.error(error));
 
     } catch (Ex) {
 
@@ -340,9 +411,7 @@ export class ItiAttendencePercentComponent {
     return value?.includes('(F)');
   }
 
-  isPresent(value: any): boolean {
-    return value?.startsWith('P');
-  }
+
   // Method to handle attendance change (can be customized)
   onAttendanceChange(event: any, element: any, column: string) {
     const attendanceStatus = event.checked ? 'P' : 'A';
@@ -359,9 +428,9 @@ export class ItiAttendencePercentComponent {
 
   getData() {
     this.isSubmitted = true;
-   
-      this.GetAttendanceTimeTable();
-    
+
+    this.GetAttendanceTimeTable();
+
   }
 
   onPaginationChange(event: PageEvent): void {
@@ -413,6 +482,7 @@ export class ItiAttendencePercentComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Reports.xlsx');
   }
+
   public downloadPDF() {
     const doc = new jsPDF({
       orientation: 'p',
@@ -448,7 +518,6 @@ export class ItiAttendencePercentComponent {
     });
   }
 
-
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;
 
@@ -458,7 +527,7 @@ export class ItiAttendencePercentComponent {
       downloadLink.href = url;
       downloadLink.download = this.generateFileName(DownloadfileName); // Use DownloadfileName
       downloadLink.click();
-      window.URL.revokeObjectURL(url);this.TableForm.getRawValue().StreamID
+      window.URL.revokeObjectURL(url);
     });
   }
 
@@ -622,17 +691,24 @@ export class ItiAttendencePercentComponent {
   }
 
 
- async GetStaff_InstituteWise(ID:any='') {
+  // Method to handle individual attendance toggle change
+  //onAttendanceChange(event: MatSlideToggleChange, element: any) {
+  //  element.Attendance = event.checked ? 'P' : 'A';
+  //}
 
-   if (ID > 0) {
-     this.InstituteID = ID
-   } else {
-     this.InstituteID = this.sSOLoginDataModel.InstituteID
-   }
-    this.requestStaff.InstituteID =this.InstituteID;
+
+  async GetStaff_InstituteWise(ID:any='') {
+
+
+    this.requestStaff.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.Eng_NonEng;
-   await this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
+
+    if (ID > 0) {
+      this.requestStaff.InstituteID=ID
+    }
+
+    await this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       debugger;
       if (data.Data.length > 0) {
@@ -650,36 +726,15 @@ export class ItiAttendencePercentComponent {
   async GetstaffDetails(SSOID: any) {
     this.SSOID = SSOID;
 
-    const ssoid = this.TableForm.get('SSOID')?.value;
 
-    if (ssoid == null || ssoid === '' || ssoid === 'null') {
-      this.TableForm.get('StreamID')?.enable();
-      this.TableForm.get('ShiftId')?.enable();
+    //if (item.SeatIntakeID > 0) {
+    //  this.TableForm.get('ShiftId')?.disable();
+    //} else {
+    //  this.TableForm.get('ShiftId')?.enable();
+    //}
 
-      this.TableForm.patchValue({
-        StreamID: null,
-        ShiftId: null
-      });
 
-      this.SSOID = '';
-      return;
-    } else {
-      this.TableForm.get('StreamID')?.disable();
-     // this.EditDataFormGroup.get('StreamID')?.disable();
-     
-    }
 
-    const item = this.StaffList.find(
-      (e: any) => e.SSOID?.trim().toLowerCase() === ssoid?.trim().toLowerCase()
-    );
-    if (!item) return;
-
-    this.TableForm.patchValue({
-      StreamID: item.TradeID,
-      ShiftId: item.SeatIntakeID
-    });
-
-    await this.getSubjectMasterDDL(item.TradeID, this.TableForm.getRawValue().SemesterID);
 
     console.log(this.TableForm.getRawValue());
   }
@@ -693,6 +748,7 @@ export class ItiAttendencePercentComponent {
       this.SubjectMasterDDL = data.Data;
     })
   }
+
 
 
 
