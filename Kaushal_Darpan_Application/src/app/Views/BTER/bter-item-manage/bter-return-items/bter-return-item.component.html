@@ -176,7 +176,7 @@
 
                      <!-- [disabled]="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1"  -->
                         <!-- [ngClass]="{'bg-gray-200 cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1}"> -->
-                  <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
+                  <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" [disabled]="item.IsIssuedToLab" required> 
                   <option value="1">Working</option>
                   <option value="2">Not Working</option>
                   </select>
@@ -189,12 +189,8 @@
               </td>
               <td class="border p-2">
                 <label>
-                      <ng-container
-                          *ngIf="
-                          item.Selected ;
-                          else notSelected"
-                      >
-                      <!-- formControlName="isOption" -->
+                  <ng-container *ngIf="item.Selected && !item.IsIssuedToLab; else notSelected">
+                    <!-- formControlName="isOption" -->
                     <input type="checkbox"
                            name="isOption" [(ngModel)]="item.isOption"
                            (click)="ItemMasterList[i]?.AuctionStatus === '1' || ItemMasterList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />

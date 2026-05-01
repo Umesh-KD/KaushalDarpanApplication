@@ -204,10 +204,25 @@
             <td>
               <div class="row-line-btn">
                 <!--<button class="btn bg-info text-white" (click)="Function_UpdateVacancyPost(modal_UpdateVacancyPost,leave)">Update</button>-->
-                <button class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">
+                <!--<button class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">
                   Remove
-                </button>
-              </div>
+                </button>-->
+
+     
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+              <button class="btn bg-primary text-white" type="button" title="Priority Up" (click)="priorityUp(idx)" [disabled]="idx === 0">
+                <i class="ti ti-arrow-narrow-up"></i>
+              </button>
+              <button class="btn bg-info text-white" type="button" title="Priority Down" (click)="priorityDown(idx)" [disabled]="idx === StaffTransferList.length - 1">
+                <i class="ti ti-arrow-narrow-down"></i>
+              </button>
+     
+
+
+
+</div>
             </td>
           </tr>
         </tbody>

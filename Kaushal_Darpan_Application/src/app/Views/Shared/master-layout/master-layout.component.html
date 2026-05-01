@@ -5,6 +5,21 @@
   <!-- Icons CSS -->
   <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css">
   <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
+  <style>
+    .college-strip
+    {
+      padding: 6px 12px;
+/*      background: #e8eaf6;*/
+      border-left: 3px solid #3f51b5;
+      font-weight: 600;
+      font-size: 15px;
+      color: #1a237e;
+      max-width: 400px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
 
  
 </head>
@@ -206,7 +221,9 @@
 
 
 
-
+          <div *ngIf="sSOLoginDataModel.InstituteID !== 0" class="college-strip" title="{{InstituteName}}">
+            {{ InstituteName }}
+          </div>
 
           <mat-form-field class="mt-3" appearance="fill" *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.HostelWarden || this.sSOLoginDataModel.RoleID == _EnumRole.HostelWardenITINCVT || this.sSOLoginDataModel.RoleID == _EnumRole.HostelWardenITISCVT" style="width: 20%; max-width: 240px;margin-right:10px">
             <mat-label>Hostel Name</mat-label>
@@ -227,12 +244,12 @@
           </mat-form-field>
 
 
-          <!-- College Name (Visible for specific roles) -->
-          <mat-form-field class="mt-3 mx-2" id="InstituteName" appearance="fill" *ngIf="sSOLoginDataModel.InstituteID !== 0"
-                          style="width: 35%; max-width: 240px;">
-            <mat-label>College Name</mat-label>
-            <input [disabled]="true" style="font-weight: bold;" class="text-xs" matInput [(ngModel)]="InstituteName" name="InstituteName">
-          </mat-form-field>
+          <!-- College Name (Visible for specific roles) commented Code -->
+          <!--<mat-form-field class="mt-3 mx-2" id="InstituteName" appearance="fill" *ngIf="sSOLoginDataModel.InstituteID !== 0"
+                  style="width: 35%; max-width: 240px;">
+    <mat-label>College Name</mat-label>
+    <input [disabled]="true" style="font-weight: bold;" class="text-xs" matInput [(ngModel)]="InstituteName" name="InstituteName">
+  </mat-form-field>-->
           <!--// Session Type new added 05082025-->
           <mat-form-field class="mt-3" appearance="fill" style="width: 20%; max-width: 240px;margin-right:10px" *ngIf="sSOLoginDataModel.ShowSessionSelection == 1">
             <mat-label>Session Type</mat-label>
@@ -244,6 +261,8 @@
 
           <!--*ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal"-->
           <!-- Academic Year Dropdown (Visible for specific roles) -->
+          @if(sSOLoginDataModel.IsShowFinYearDDL==1)
+          {
           <mat-form-field class="mt-3 mr-3" id="divAcademicYear" appearance="fill" *ngIf="this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID!=_EnumRole.Student && this.sSOLoginDataModel.RoleID!=_EnumRole.Emitra && this.sSOLoginDataModel.RoleID!=_EnumRole.CandidateRole" style="width: 20%; max-width: 240px;">
             <mat-label>Academic Year</mat-label>
             <mat-select [(ngModel)]="EndTermID" name="EndTermID" (selectionChange)="LoadByFYYearDDL()">
@@ -252,6 +271,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+          }
 
           <!-- Role Dropdown -->
           @if(this.sSOLoginDataModel.RoleID==_EnumRole.CandidateRole)

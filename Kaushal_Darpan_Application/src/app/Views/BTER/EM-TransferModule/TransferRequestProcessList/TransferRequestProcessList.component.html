@@ -67,9 +67,9 @@
             <th align="left">Name</th>
             <th align="left">Transfer Category</th>
             <th align="left">Reason Description</th>
-            <th align="left">Supporting Documents</th>
-            <th class="left">Created Date</th>
+            <th class="left">Application Date</th>
             <th align="left">Status</th>
+            <th align="left">Supporting Documents</th>
             <th align="center" width="200">Action</th>
           </tr>
         </thead>
@@ -84,23 +84,24 @@
             <td>{{row.NAME}}</td>
             <td>{{row.TransferCategory}}</td>
             <td>{{row.ReasonDescription}}</td>
-            <td>{{row.SupportingDocuments}}</td>
+            <!--<td>{{row.SupportingDocuments}}</td>-->
             <td>{{row.CreatedDate}}</td>
-            <td>{{row.TransferStatus}}</td>
-           
-            <!--<td align="left">
-              <div class="flex" *ngIf="row.TrainingDoc; else noDoc1">
-                <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc"
-                   class="btn bg-primary text-white m-0"
-                   target="_blank">
-                  <i class="ti ti-eye"></i>
-                </a>
-              </div>
-              <ng-template #noDoc1>-----</ng-template>
-            </td>-->
-            
+            <td>{{row.TransferStatusName}}</td>
+
+                <td align="left">
+                <div class="flex" *ngIf="row.SupportingDocuments; else noDoc1">
+               <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.SupportingDocuments"
+                  class="btn bg-primary text-white m-0"
+                  target="_blank">
+                 <i class="ti ti-eye"></i>
+               </a>
+             </div>
+             <ng-template #noDoc1>-----</ng-template>
+           </td>
+
             <td>
-              <a href="javascript:void(0);" title="Status History" (click)="onTransferSystemEXT(TransferSystemEXT, row.TransferSystemID)"><i class="ti ti-list"></i></a>
+              <a href="javascript:void(0);" title="Transfer EXT" (click)="onTransferSystemEXT(TransferSystemEXT, row.TransferSystemID)"><i class="ti ti-list"></i></a>
+              <a href="javascript:void(0);" title="Status History" (click)="EM_TransferSystemHST_GetData(EM_TransferSystemHST, row.TransferSystemID)"><i class="ti ti-list"></i></a>
             </td>
           </tr>
         </tbody>
@@ -143,6 +144,56 @@
                 <td align="left">{{ row.InstituteName }}</td>
               </tr>
               <tr *ngIf="EM_TransferSystemEXTList?.length==0">
+                <td colspan="5" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
+
+<ng-template #EM_TransferSystemHST let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Training Status History</b>
+          <div class="flex justify-end flex-wrap items-center">
+          </div>
+        </div>
+      
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Remarks</th>
+                <th class="text-left">Action Date</th>
+              
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of EM_TransferSystemHSTList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.StatusName }}</td>
+                <td align="left">{{ row.Remarks}}</td>
+                <td align="left">{{ row.ActionDate }}</td>
+                
+              </tr>
+              <tr *ngIf="EM_TransferSystemHSTList?.length==0">
                 <td colspan="5" class="text-center">No Record Found </td>
               </tr>
             </tbody>
