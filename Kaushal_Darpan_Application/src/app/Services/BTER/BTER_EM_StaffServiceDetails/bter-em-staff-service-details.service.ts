@@ -115,5 +115,13 @@ export class BTEREMStaffServiceDetailsService {
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();
-    }
+  }
+
+  public async TransferSystemEXTStatusUpdate(request: EM_TransferSystemSearchModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/TransferSystemEXTStatusUpdate`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

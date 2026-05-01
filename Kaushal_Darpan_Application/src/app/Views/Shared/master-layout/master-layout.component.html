@@ -12,7 +12,7 @@
 /*      background: #e8eaf6;*/
       border-left: 3px solid #3f51b5;
       font-weight: 600;
-      font-size: 15px;
+      font-size: 14px;
       color: #1a237e;
       max-width: 400px;
       white-space: nowrap;
@@ -221,7 +221,9 @@
 
 
 
-
+          <div *ngIf="sSOLoginDataModel.InstituteID !== 0" class="college-strip" title="{{InstituteName}}">
+            {{ InstituteName }}
+          </div>
 
           <mat-form-field class="mt-3" appearance="fill" *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.HostelWarden || this.sSOLoginDataModel.RoleID == _EnumRole.HostelWardenITINCVT || this.sSOLoginDataModel.RoleID == _EnumRole.HostelWardenITISCVT" style="width: 20%; max-width: 240px;margin-right:10px">
             <mat-label>Hostel Name</mat-label>
@@ -243,17 +245,11 @@
 
 
           <!-- College Name (Visible for specific roles) commented Code -->
-
           <!--<mat-form-field class="mt-3 mx-2" id="InstituteName" appearance="fill" *ngIf="sSOLoginDataModel.InstituteID !== 0"
-                          style="width: 35%; max-width: 240px;">
-            <mat-label>College Name</mat-label>
-            <input [disabled]="true" style="font-weight: bold;" class="text-xs" matInput [(ngModel)]="InstituteName" name="InstituteName">
-          </mat-form-field>-->
-
-          <div *ngIf="sSOLoginDataModel.InstituteID !== 0" class="college-strip" title="{{InstituteName}}">
-            {{ InstituteName }}
-          </div>
-
+                  style="width: 35%; max-width: 240px;">
+    <mat-label>College Name</mat-label>
+    <input [disabled]="true" style="font-weight: bold;" class="text-xs" matInput [(ngModel)]="InstituteName" name="InstituteName">
+  </mat-form-field>-->
           <!--// Session Type new added 05082025-->
           <mat-form-field class="mt-3" appearance="fill" style="width: 20%; max-width: 240px;margin-right:10px" *ngIf="sSOLoginDataModel.ShowSessionSelection == 1">
             <mat-label>Session Type</mat-label>

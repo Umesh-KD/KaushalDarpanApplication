@@ -759,10 +759,15 @@ export class EM_TransferSystemSearchModel {
   public TransferSystemID: number = 0;
   public StaffID: number = 0;
   public ActionBy: number = 0;
-  public Action ?: string = '';
-  public Remark ?: string = '';
+  public Action?: string = '';
+  public Remark?: string = '';
   public StatusID: number = 0;
+  public ID: number = 0;
+  public EmployeeType: number = 0;
+  public InstituteID: number = 0;
+  public CategoryID: number = 0;
 }
+  
 
 export class TransferSystemUpdateDataModel {
   public TransferSystemID: number = 0;

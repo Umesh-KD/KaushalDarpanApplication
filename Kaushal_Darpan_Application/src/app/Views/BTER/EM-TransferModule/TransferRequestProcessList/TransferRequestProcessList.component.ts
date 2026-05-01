@@ -37,6 +37,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public ExaminersList: any[] = [];
     public TransferSystemStatusList: any[] = [];
     public EM_TransferSystemEXTList: any[] = [];
+    public EM_TransferSystemHSTList: any[] = [];
     public TransferSystemStatusSearchList: any[] = [];
 
   isSubmitted: boolean = false;
@@ -52,6 +53,16 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     modalReference: NgbModalRef | undefined;
     public StaffTrainingHTS_GetDataList: any = [];
     public ShowCheckBoxId: number = 0;
+    public GazettedList: any[] = [
+      { ID: 1, Name: 'Gazetted' },
+      { ID: 2, Name: 'Non-Gazetted' }
+    ];
+    public GetTransfercateList: any = [];
+    public ItiCollegesListAll: any = [];
+    public SearchCategoryID: number = 0;
+    public SearchInstituteID: number = 0;
+    public SearchEmployeeType: number = 0;
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -81,38 +92,53 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       IsCompletedTraining: [false],
       IsNewTraining: [false],
       ComplitionTrainingDoc: ['']
-      
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Status = "0";
 
+
+    await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.ItiCollegesListAll = data.Data;
+    })
+
+    await this.commonFunctionService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.GetTransfercateList = data['Data'];
+      console.log(this.GetTransfercateList, "GetTransfercateList");
+    });
     
-    debugger
 
     await this.commonFunctionService.GetCommonMasterDDLByAction1('TransferSystemStatus')
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TransferSystemStatusList = data['Data'];
         this.TransferSystemStatusSearchList = data['Data'];
-        debugger
+
+    
 
          if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
-           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Submitted || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected)
-           this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected)
-      
+           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Submitted || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
+           this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
+           this.SearchStatus = EnumTransferSystemStatus.Submitted;
+           this.ShowCheckBoxId = 1;
            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.Submitted);
         }
          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
-           debugger
-           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.UnderJDTEReview)
-           this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview )
-          
+           
+           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.UnderJDTEReview);
+           this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview);
+           this.SearchStatus = EnumTransferSystemStatus.UnderADTEReview;
+           this.ShowCheckBoxId = 1;
            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderADTEReview);
         }
-        else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
-           this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview || item.ID == EnumTransferSystemStatus.UnderDTEReview )
-           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderDTEReview)
+         else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview || item.ID == EnumTransferSystemStatus.UnderDTEReview);
+           this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected  || item.ID == EnumTransferSystemStatus.UnderDTEReview )
+           
+           this.SearchStatus = EnumTransferSystemStatus.UnderJDTEReview;
+           this.ShowCheckBoxId = 1;
            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderJDTEReview);
         }else{
           this.TransferSystemStatusList = [];
@@ -134,11 +160,11 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
     
     async EM_TransferSystem_GetData() {
-      debugger
+      
       try {
         this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
         this.searchRequest.Action = "EM_TransferProcessListmain";
-        this.searchRequest.StatusID = this.statusID;
+        this.searchRequest.StatusID = this.SearchStatus;
         await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
@@ -149,7 +175,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
           } else {
             this.EM_TransferProcessList = [];
           }
-          debugger
+          
           if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
             if (this.EM_TransferProcessList?.length > 0) {
               this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 1)
@@ -171,6 +197,12 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
               this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 2)
             }
           }
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+            if (this.EM_TransferProcessList?.length > 0) {
+              this.EM_TransferProcessList = this.EM_TransferProcessList;
+            }
+          }
+
           else {
             this.EM_TransferProcessList = [];
           }
@@ -250,32 +282,45 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     }
 
 
-
-    async StaffTrainingHTS_GetData(id: number) {
+    async EM_TransferSystemHST_GetData(model: any, TransferSystemID: number) {
       try {
-        debugger
-        //this.searchRequest.StaffTrainingDetailID = id;
-        //await this.staffServiceDetailsService.StaffTrainingHTS_GetData(this.searchRequest).then(async (data: any) => {
-        //  data = JSON.parse(JSON.stringify(data));
-        //  if (data.State === EnumStatus.Success) {
-        //    this.StaffTrainingHTS_GetDataList = data.Data;
-        //  }
-        //  else {
-        //    this.StaffTrainingHTS_GetDataList = [];
-        //  }
-        //})
-      } catch (error) {
-        console.error(error);
+        this.loaderService.requestStarted();
+        try {
+          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+          this.searchRequest.Action = "EM_TransferSystemHST";
+
+          this.searchRequest.TransferSystemID = TransferSystemID;
+          await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.EM_TransferSystemHSTList = data.Data;
+              if (this.statusID == 0) {
+                this.EM_TransferSystemHSTList = data.Data;
+              }
+            } else {
+              this.EM_TransferSystemHSTList = [];
+            }
+          })
+        } catch (error) {
+          console.error(error);
+        }
+        this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
       }
     }
-
     CloseModal() {
       this.modalService.dismissAll();
       this.modalReference?.close();
     }
 
     async onTransferSystemEXT(model: any, TransferSystemID: number) {
-      debugger
       try {
         this.loaderService.requestStarted();
         try {
@@ -309,7 +354,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       }
     }
     async onChangeSearchStatus() {
-      
+      debugger
       if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) && EnumTransferSystemStatus.Submitted == this.SearchStatus)) {
         this.ShowCheckBoxId = 1;
       } 

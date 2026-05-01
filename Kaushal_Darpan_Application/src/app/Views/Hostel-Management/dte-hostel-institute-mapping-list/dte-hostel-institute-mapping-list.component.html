@@ -45,6 +45,7 @@
             <th class="text-left">Hostel Name</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Parent Type</th>
+            <th class="text-left">Action</th>
 
           </tr>
         </thead>
@@ -58,7 +59,14 @@
             <td>
               <span *ngIf="item.isParent == 1">Map Hostel</span>
             </td>
-
+            <td>
+              <!--<button class="btn btn-danger btn-sm" (click)="unmapHostel(item.HIMappingID)">
+    Unmap
+  </button>-->
+              <button class="btn btn-danger btn-sm" (click)="editMapping(item.HIMappingID)">
+                Unmap
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>

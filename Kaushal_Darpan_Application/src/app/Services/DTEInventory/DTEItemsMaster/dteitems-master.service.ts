@@ -346,4 +346,12 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async MarkAuctionedItems_SR6(request: AuctionDetailsModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/MarkAuctionedItems_SR6`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
