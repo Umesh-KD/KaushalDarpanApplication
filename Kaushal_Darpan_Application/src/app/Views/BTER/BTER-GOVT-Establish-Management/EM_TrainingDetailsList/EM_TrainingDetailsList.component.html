@@ -205,3 +205,51 @@
 
 
 
+<ng-template #EmtrainingStatusHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Training Status History</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+          </div>
+        </div>
+        <!--{{StaffTrainingHTS_GetDataList|json}}-->
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Remark</th>
+                <th class="text-left">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of StaffTrainingHTS_GetDataList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.StatusName }}</td>
+                <td align="left">{{ row.Remarks}}</td>
+                <td align="left">{{ row.ActionDate }}</td>
+              </tr>
+              <tr *ngIf="StaffTrainingHTS_GetDataList?.length==0">
+                <td colspan="5" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
