@@ -5,6 +5,7 @@ export class CommonDDLSubjectMasterModel extends RequestBaseModel {
   public StreamID: number = 0;
   public SubjectID: number = 0;
   public UserID: number = 0;
+  public StaffID: number = 0;
 }
 export class CommonDDLSubjectCodeMasterModel extends RequestBaseModel {
   public SemesterID: number = 0;

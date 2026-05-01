@@ -16,9 +16,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a routerLink="/iti-attendance" class="btn bg-info btn-sm text-white">
-          <i class="ti ti-back"></i> Attendance Report
-        </a>
+    
         <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="filterData && filterData.length > 0">
           <i class="ti ti-excel"></i> Export Excel
         </a>

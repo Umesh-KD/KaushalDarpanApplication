@@ -723,3 +723,97 @@ export class StaffTrainingStatusUpdateDataModel {
   public Remark?: string = '';
   public jsonData?: string = '';
 }
+
+
+export class BTER_GetStaffPersonalDetailsModel {
+  public StaffUserID: number = 0;
+  public StaffID: number = 0;
+  public ModifyBy: number = 0;
+  public SSOID?: string = '';
+  public Remark?: string = '';
+}
+
+
+export class BTERStaffTransferSystemModel {
+  // public SSOID: string = '';
+  public EmployeeDesignation: string = '';
+  public EmployeeName: string = '';
+  public NonGazetteName: string = '';
+  
+
+  public StaffID: number = 0;
+  public TransfercateID: number = 0;
+  public ReasonDescription: string = '';
+  public SupportingDocuments: string = '';
+  public SupportingDocuments_Dis: string = '';
+  public vReasonDescription: string = '';
+  public NonGazettedID: number = 0;
+  public OfficeID: number = 0;
+  public DistrictID: number = 0;
+  public InstituteID: number = 0;
+  public DesignationID: number = 0;
+  public PriorityID: number = 0;
+}
+
+export class EM_TransferSystemSearchModel {
+  public TransferSystemID: number = 0;
+  public StaffID: number = 0;
+  public ActionBy: number = 0;
+  public Action?: string = '';
+  public Remark?: string = '';
+  public StatusID: number = 0;
+  public ID: number = 0;
+  public EmployeeType: number = 0;
+  public InstituteID: number = 0;
+  public CategoryID: number = 0;
+}
+  
+
+export class TransferSystemUpdateDataModel {
+  public TransferSystemID: number = 0;
+  public TrainingStatus: number = 0;
+  public CreatedBy: number = 0;
+  public Remark?: string = '';
+  public jsonData?: string = '';
+}
+
+
+export class BTER_EM_TransferSystemModle {
+  public TransferSystemID: number = 0;
+  public UserID: number = 0;
+  public StaffID: number = 0;
+  public SSOID: string = '';
+  public NonGazettedID: number = 0;
+  public EmployeeDesignation: string = '';
+  public EmployeeName: string = '';
+  public NonGazetteName: string = '';
+  
+  public TransferCategoryID: number = 0;
+  public ReasonDescription: string = '';
+  public SupportingDocuments: string = '';
+  public SupportingDocumentsDis: string = '';
+  public IsActive: boolean = false;
+  public IsDeleted: boolean = false;
+  public CreatedDate: Date | null = null;
+  public CreatedBy: number = 0;
+  public UpdatedDate: Date | null = null;
+  public UpdatedBy: number = 0;
+  public TransferStatus: number = 0;
+ 
+  public TransferExtDetails: BTER_EM_TransferSystemExtModle[] = [];
+}
+
+export class BTER_EM_TransferSystemExtModle {
+ public ID: number = 0;
+ public TransferSystemID: number = 0;
+ public OfficeID: number = 0;
+ public PostID: number = 0;
+ public DistrictID: number = 0;
+ public InstituteID: number = 0;
+ public Priority: number = 0;
+ public IsActive: boolean = false;
+ public IsDeleted: boolean = false;
+ public UpdatedDate: Date | null = null;
+ public UpdatedBy: number = 0;
+ public FinalApproveStatus: number = 0;
+}

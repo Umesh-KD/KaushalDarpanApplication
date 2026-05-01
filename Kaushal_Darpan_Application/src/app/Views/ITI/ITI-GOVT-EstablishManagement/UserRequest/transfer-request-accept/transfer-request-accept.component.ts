@@ -9,7 +9,7 @@ import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMast
 import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus, GlobalConstants, EnumTransferStatus_ITI_EM } from '../../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntakeDataModel';
@@ -90,6 +90,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   totalRecord: any = 0;
   TotalPages: any = 0;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
+  public _EnumTransferStatus_ITI_EM = EnumTransferStatus_ITI_EM;
   public RequestTypeSHowID: number = 0
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -385,6 +386,11 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.modalReference?.close();
     this.RequestUpdateStatus.StatusIDs = 0;
     this.RequestUpdateStatus.Remark = '';
+    this.RequestUpdateStatus.OnHoldDoc = '';
+    this.RequestUpdateStatus.Dis_OnHoldDoc = '';
+    this.RequestUpdateStatus.JoiningDate = '';
+    this.RequestUpdateStatus.JoiningTimeID = 0;
+    this.RequestUpdateStatus.JoiningRoleID = 0;
     this.isSubmitted = false;
   }
 
@@ -476,6 +482,11 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       this.groupForm.get('JoiningRoleID')?.updateValueAndValidity();
     }
   }
+
+  parseDDMMYYYY(dateStr: string): Date {
+    const [dd, mm, yyyy] = dateStr.split('-');
+    return new Date(+yyyy, +mm - 1, +dd);
+  }
   async UserRequestJoiningApprove_ITI_EM() {
     debugger
     await this.refreshValidators();
@@ -483,42 +494,70 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.groupForm.get('txtLastworkingDate')?.clearValidators();
     this.groupForm.get('txtLastworkingDate')?.updateValueAndValidity();
     if (this.groupForm.invalid) {
-      return console.log("error")
+      this.toastr.error("Please fill all required fields");
+      return;
     }
+    if(this.RequestUpdateStatus.StatusIDs==EnumTransferStatus_ITI_EM.On_Hold && (this.RequestUpdateStatus.OnHoldDoc == '')) {
+      this.toastr.error("Please upload document");
+      return;
+    }
+
+    if(this.RequestUpdateStatus.StatusIDs==EnumTransferStatus_ITI_EM.Approve){
+      const joiningDate = new Date(this.RequestUpdateStatus.JoiningDate);
+      const requestDate = this.parseDDMMYYYY(this.RowlistData.RequestDate);
+
+      // remove time part (important for accurate comparison)
+      joiningDate.setHours(0, 0, 0, 0);
+      requestDate.setHours(0, 0, 0, 0);
+
+      if (joiningDate < requestDate) {
+        this.CloseModal();
+        this.toastr.error("Joining Date should be greater than or equal to Relieving Date");
+        return;
+      }
+    }
+    
     this.loaderService.requestStarted();
     this.isLoading = true;
 
-    try {
-      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
-      this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
-      this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
-      this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+    this.Swal2.Confirmation("Are you sure you want to update request ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+            this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+            this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+            this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+            this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
 
-      await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
-        .then(async (data: any) => {
-          
-          if (data.State == EnumStatus.Success) {
-            this.toastr.success(data.Message)
-            this.CloseModal();
-            this.getlist();
-            this.RequestUpdateStatus = new RequestUpdateStatus();
+            await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
+              .then(async (data: any) => {
+                
+                if (data.State == EnumStatus.Success) {
+                  this.toastr.success(data.Message)
+                  this.CloseModal();
+                  this.getlist();
+                  this.RequestUpdateStatus = new RequestUpdateStatus();
+                }
+                else if (data.State == EnumStatus.Warning) {
+                  this.toastr.warning(data.Message)
+                }
+                else {
+                  this.toastr.error(data.ErrorMessage)
+                }
+              })
           }
-          else if (data.State == EnumStatus.Warning) {
-            this.toastr.warning(data.Message)
+          catch (ex) { console.log(ex) }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+              this.isLoading = false;
+            }, 200);
           }
-          else {
-            this.toastr.error(data.ErrorMessage)
-          }
-        })
-    }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-      }, 200);
-    }
+        }
+      });
+    
   }
 
   async onSubmitModel_VRS(model: any, userSubmitData: any) {
@@ -705,51 +744,120 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       this.searchRequestRelieving.UserID = UserID;
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.DownloadRelievingLetter_pdf(this.searchRequestRelieving)
-        .then((data: any) => {          
-          data = JSON.parse(JSON.stringify(data));
-          if(data.State == EnumStatus.Success){
-            this.DownloadFile(data.Data);
-          }
-        }, (error: any) => {
-          console.error(error);
-          this.toastr.error(this.ErrorMessage)
-        });
+      const blob: any = await this.ITIGovtEMStaffMasterService
+        .DownloadRelievingLetter_pdf(this.searchRequestRelieving);
 
-    } catch (Ex) {
-      console.log(Ex);
+      const now = new Date();
+      const timestamp =
+        now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + '_' +
+        String(now.getHours()).padStart(2, '0') + '-' +
+        String(now.getMinutes()).padStart(2, '0') + '-' +
+        String(now.getSeconds()).padStart(2, '0');
+
+      const fileName = `ITI_Relieving_Letter_${timestamp}.pdf`;
+
+      // Create blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Create anchor and trigger download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+    } catch (error: any) {
+      console.error(error);
+     
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
   }
+
+
+
+
 
   async JoiningLetter(UserID: number) {
     try {
-      this.searchRequestJoining.UserID = UserID;
+      this.searchRequestRelieving.UserID = UserID;
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMasterService.DownloadJoiningLetter_pdf(this.searchRequestJoining)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if(data.State == EnumStatus.Success){
-            this.DownloadFile(data.Data);
-          }
-          
-        }, (error: any) => {
-          console.error(error);
-          this.toastr.error(this.ErrorMessage)
-        });
+      const blob: any = await this.ITIGovtEMStaffMasterService
+        .DownloadJoiningLetter_pdf(this.searchRequestRelieving);
 
-    } catch (Ex) {
-      console.log(Ex);
+      const now = new Date();
+      const timestamp =
+        now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + '_' +
+        String(now.getHours()).padStart(2, '0') + '-' +
+        String(now.getMinutes()).padStart(2, '0') + '-' +
+        String(now.getSeconds()).padStart(2, '0');
+
+      const fileName = `ITI_Joining_Letter_${timestamp}.pdf`;
+
+      // Create blob URL
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Create anchor and trigger download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+
+    } catch (error: any) {
+      console.error(error);
+     
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
   }
+
+    // ✅ Download PDF
+
+
+
+  //async JoiningLetter(UserID: number) {
+  //  try {
+  //    this.searchRequestJoining.UserID = UserID;
+  //    this.loaderService.requestStarted();
+
+  //    await this.ITIGovtEMStaffMasterService.DownloadJoiningLetter_pdf(this.searchRequestJoining)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        if(data.State == EnumStatus.Success){
+  //          this.DownloadFile(data.Data);
+  //        }
+          
+  //      }, (error: any) => {
+  //        console.error(error);
+  //        this.toastr.error(this.ErrorMessage)
+  //      });
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
   loadInTable() {
     this.resetInTableValiable();
@@ -831,4 +939,56 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       console.error(error);
     }
   }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+        }
+        else {// type validation
+          this.toastr.error('error this file ?')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+        await this.commonMasterService.UploadPublicInfoDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              if (Type == "OnHoldDoc") {                
+                this.RequestUpdateStatus.Dis_OnHoldDoc = data['Data'][0]["Dis_FileName"];
+                this.RequestUpdateStatus.OnHoldDoc = data['Data'][0]["FileName"];
+              }
+              event.target.value = null;
+            }
+            if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
+            }
+            else if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+
+
+
 }
+function saveAs(blob: any, arg1: string) {
+  throw new Error('Function not implemented.');
+}
+

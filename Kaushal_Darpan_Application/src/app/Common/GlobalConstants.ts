@@ -227,7 +227,8 @@ export enum EnumRole {
   HostelIncharge = 258,
 
   //ITI Inspection
-  InspectionManager=102
+  InspectionManager=102,
+  STCSectionOfficer = 262
 }
 
 export enum enumExamStudentStatus {
@@ -881,4 +882,53 @@ export enum EnumStaffTrainingStatus {
   ADTE = 6360,
   JDTE = 6361,
   DTE = 6362
+}
+
+export enum EnumTransferStatus_ITI_EM {
+  Approve = 247,
+  Reject = 248,
+  Revert = 249,
+  Relieved = 4354,
+	Request_for_Join = 4355,
+	Joined = 4356,
+  On_Hold = 7354,
+}
+
+export enum EnumOffice {
+  RCVET = 1,
+  DTE_TRAINING = 2,
+  APPRENTICESHIP = 3,
+  AJMER_ZONE = 4,
+  BHARATPUR_ZONE = 5,
+  BIKANER_ZONE = 6,
+  JAIPUR_ZONE = 7,
+  JODHPUR_ZONE = 8,
+  KOTA_ZONE = 9,
+  UDAIPUR_ZONE = 10,
+  ITI = 11,
+  STATE1 = 12,
+  STATE2 = 13,
+  STATE5 = 14,
+  NODAL_OFFICE = 15,
+  DTE = 17,
+  BTER = 18,
+  TTC_LRDC = 19,
+  COLLEGE = 21
+}
+
+export enum EnumResultType {
+  MainResult = 1,
+  RevaluationResult = 2,
+  RwhResult = 3,
+  Ufm = 4,
+  RwhRevalEffected = 5
+}
+
+export enum EnumTransferSystemStatus {
+    Submitted = 1,
+    UnderADTEReview = 2,
+    UnderJDTEReview = 3,
+    UnderDTEReview = 4,
+    Appnoved = 5,
+    Rejected = 6
 }

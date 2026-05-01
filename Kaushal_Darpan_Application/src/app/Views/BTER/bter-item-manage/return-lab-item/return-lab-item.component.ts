@@ -306,6 +306,7 @@ export class ReturnLabItemComponent {
           this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition || 0;
           this.submitRequest.ItemList = arr;
           this.submitRequest.SelectedCount = arr.length;
+          this.submitRequest.RoleID = this.sSOLoginDataModel.RoleID
           
           console.log("Returning items:", this.submitRequest);
 

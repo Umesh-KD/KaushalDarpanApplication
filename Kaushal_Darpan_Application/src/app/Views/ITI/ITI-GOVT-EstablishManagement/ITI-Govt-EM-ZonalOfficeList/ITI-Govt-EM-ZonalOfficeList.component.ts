@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ITIGovtEMAddStaffBasicDetailDataModel, ITIGovtEMStaffMasterDataModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITI_Govt_EM_OFFICERSDataModel, RequestUpdateStatus, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITT_EM_ApproveStaffDataModel } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
+import { ITIGovtEMAddStaffBasicDetailDataModel, ITIGovtEMStaffMasterDataModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITI_Govt_EM_OFFICERSDataModel, RequestUpdateStatus, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITT_EM_ApproveStaffDataModel, UserOfficePostDataModel } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -9,13 +9,14 @@ import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumEMProfileStatus } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumEMProfileStatus, EnumOffice } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
 import { UserMasterService } from '../../../../Services/UserMaster/user-master.service';
 import { AssignRoleRightsService } from '../../../../Services/AssignRoleRights/assign-role-rights.service';
 import { AssignRoleRightsDataModel, UserMasterModel } from '../../../../Models/UserMasterDataModel';
+import { ITI_InstructorTechnicalCITSQualification } from '../../../../Models/ITI/ItiInstructorDataModel';
 @Component({
   selector: 'app-ITI-Govt-EM-ZonalOfficeList',
   standalone: false,
@@ -25,6 +26,7 @@ import { AssignRoleRightsDataModel, UserMasterModel } from '../../../../Models/U
 })
 export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public AddStaffBasicDetailFromGroup!: FormGroup;
+  public UpdatePostFormGroup!: FormGroup;
   public formData = new ITI_Govt_EM_ZonalOFFICERSDataModel();
   public isSubmitted: boolean = false;
 
@@ -34,6 +36,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public searchRequestUpdateSSOIDByPricipleModel = new UpdateSSOIDByPricipleModel();
   staffDetailsFormData = new ITIGovtEMStaffMasterDataModel();
   public searchRequestITi = new ITICollegeTradeSearchModel();
+  public UpdateRequest = new UserOfficePostDataModel();
   public isLoading: boolean = false;
 
   public State: number = 0;
@@ -41,6 +44,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public ErrorMessage: string = '';
 /*  public RoleMasterList: any[] = [];*/
   public DesignationMasterList: any[] = [];
+  public UserOfficePostDetails: any[] = [];
   
   public ITIGovtEMOFFICERSList: any[] = [];
   public StaffTypeList: any[] = []
@@ -98,15 +102,25 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public DesignationMasterDDLList: any = [];
   public InstituteMasterDDLList: any[] = [];
   public OfficeWorkList: any = [];
+  public StaffServiceDetailsDataList: any = [];
+  public isUpdateSubmitted: boolean = false;
+  public _EnumOffice = EnumOffice;
 
-
-  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
-    private ITICollegeTradeService: ItiSeatIntakeService, private UserMasterService: UserMasterService, private fb: FormBuilder, private assignRoleRightsService: AssignRoleRightsService
-  ) {
-
-  }
-
-
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private activatedRoute: ActivatedRoute, 
+    private routers: Router, 
+    private modalService: NgbModal, 
+    private Swal2: SweetAlert2,
+    private ITICollegeTradeService: ItiSeatIntakeService, 
+    private UserMasterService: UserMasterService, 
+    private fb: FormBuilder, 
+    private assignRoleRightsService: AssignRoleRightsService
+  ) { }
 
   async ngOnInit() {
 
@@ -137,10 +151,17 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
       DateOfRetirement: [''],
       AnyCourtCasePending: ['', [Validators.required]],
       AnyDisciplinaryActionPending: ['', [Validators.required]],
-
-
-
     });
+
+    this.UpdatePostFormGroup = this.formBuilder.group({
+      UpdatePostID: [0, [DropdownValidators]], 
+      Office: [{ value: '', disabled: true }], 
+      College: [{ value: '', disabled: true }], 
+      Division: [{ value: '', disabled: true }], 
+      NodalDistrict: [{ value: '', disabled: true }], 
+      CurrentPost: [{ value: '', disabled: true }], 
+    });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
 
@@ -159,17 +180,8 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     await this.GetStatusList();
     await this.GetZonalList();
     await this.GetLevelList();
-    await this.GetStaffTypeData();
-   
-    
-   
-
-   
-    
-    console.log(this.sSOLoginDataModel);
-
-    await this.GetRoleMasterData();
-    
+    await this.GetStaffTypeData(); 
+    await this.GetRoleMasterData();   
 
     //this.filteredStatusList = [
     //  { ID: 1, Name: 'Approved' },
@@ -180,6 +192,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
 
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
+  get _UpdatePostFormGroup() { return this.UpdatePostFormGroup.controls; }
   
 
   async GetStatusList() {
@@ -1006,5 +1019,112 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     }
   }
 
+  async getUserOfficePostDetails(StaffUserID: number) {
+    try {
+      const request: any = {};
+      request.Action = 'GetUserOfficePostDetails_ById'
+      request.USerID = StaffUserID;
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
+      await this.ITIGovtEMStaffMasterService.ITI_EM_GetUserOfficePostDetails(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.UserOfficePostDetails = data.Data;
+          this.UpdateRequest = this.UserOfficePostDetails[0];
+          await this.GetPostList();
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+          this.UserOfficePostDetails = [];
+        } else {
+          this.toastr.error(data.Message);
+          this.UserOfficePostDetails = [];
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async GetPostList() {
+    try {
+      var obj = {
+        OfficeID: this.UpdateRequest.OfficeID,
+        InstituteID: this.UpdateRequest.InstituteID,
+      }
+      await this.commonMasterService.GetItiVacantPost(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PostList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+  async onClick_UserPost(modal: any, StaffUserId: number){
+    await this.getUserOfficePostDetails(StaffUserId);
+    this.modalReference = this.modalService.open(modal, { size: 'md', backdrop: 'static' });
+  }
+
+  CloseModalPopup_updatePost() {
+    this.UpdateRequest = new UserOfficePostDataModel();
+    this.modalService.dismissAll();
+  }
+
+  async updateStaffPost() {
+    this.Swal2.Confirmation("Are you sure you want to Update Post ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            this.UpdateRequest.ModifyBy=this.sSOLoginDataModel.UserID;
+            this.UpdateRequest.DepartmentID=this.sSOLoginDataModel.DepartmentID;
+            
+            await this.ITIGovtEMStaffMasterService.UpdateUserOfficePost_ITI_EM(this.UpdateRequest).then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if(data.State === EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                this.modalService.dismissAll();
+                await this.GetZonalList();
+              } else if(data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              } else {
+                this.toastr.error(data.Message);
+              }
+            })
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      })
+    
+  }
+
+  async GetEmployeeServiceDetails_ITI_EM(StaffUserID: number) {
+    try {
+      const request: any = {};
+      request.StaffUserID = StaffUserID;
+      await this.ITIGovtEMStaffMasterService.GetEmployeeServiceDetails_ITI_EM(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success){
+          this.StaffServiceDetailsDataList = data.Data;
+        } else {
+          this.StaffServiceDetailsDataList = [];
+        }
+      })
+    } catch (error) {
+      console.error
+    }
+  }
+
+  CloseModal_ServiceHistory() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.isSubmitted = false;
+  }
+
+  async openModal_UserServiceHistory(model: any, StaffUserID: number) {
+    await this.GetEmployeeServiceDetails_ITI_EM(StaffUserID);
+    this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+  }
 }

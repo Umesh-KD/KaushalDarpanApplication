@@ -6,7 +6,7 @@ import { RevertDataModel, Student_DataModel, StudentAttendenceModel, StudentMark
 import { CommonSubjectDetailsMasterModel } from '../../../Models/CommonSubjectDetailsMasterModel';
 import { ITIExamination_UpdateEnrollmentNoModel, ITIExaminationOptionalSubjectRequestModel, ITIExaminationStudentDataModel } from '../../../Models/ITIExaminationDataModel';
 import { PreExamStudentDataModel } from '../../../Models/PreExamStudentDataModel';
-import { ITIRevaluationModel } from '../../../Models/RevaluationModel';
+import { ITIRevaluationModel, StudentEnrollmentModel, UpdateStudentWithHistoryModel } from '../../../Models/RevaluationModel';
 
 @Injectable({
   providedIn: 'root'
@@ -202,4 +202,28 @@ export class StudentExaminationITIService {
       ).toPromise();
   }
 
+  public async GetStudentDetailsByEnrollment(searchRequest: StudentEnrollmentModel) {
+    debugger
+  var body = JSON.stringify(searchRequest);
+  return await this.http.post(this.APIUrl + "/GetStudentDetailsByEnrollment", body, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+}
+
+public async UpdateStudentWithHistory(request: UpdateStudentWithHistoryModel) {
+  debugger;
+
+  var body = JSON.stringify(request);
+
+  return await this.http.post(
+    this.APIUrl + "/UpdateStudentWithHistory",
+    body,
+    this.headersOptions
+  )
+  .pipe(
+    catchError(this.handleErrorObservable)
+  )
+  .toPromise();
+}
 }

@@ -12,6 +12,8 @@ import { BTEREMStaffServiceDetailsService } from '../../../../Services/BTER/BTER
 import { DropdownValidators1 } from '../../../../Services/CustomValidators/custom-validators.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
 
   @Component({
     selector: 'app-EM-Staff-New-Process-Training',
@@ -46,6 +48,9 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
     public SearchStatus: number = 0;
     public Remark: string = '';
     public statusID: number = 0;
+    modalReference: NgbModalRef | undefined;
+    public StaffTrainingHTS_GetDataList: any = [];
+    public ShowCheckBoxId: number = 0;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -56,6 +61,7 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
     private bterEstablishManagementService: BTEREstablishManagementService,
     private staffServiceDetailsService: BTEREMStaffServiceDetailsService,
     private appsettingConfig: AppsettingService,
+    private modalService: NgbModal,
   ) { }
 
   async ngOnInit() {
@@ -103,12 +109,12 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
           debugger
-          this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE || item.ID == EnumStaffTrainingStatus.ADTE)
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE  || item.ID == EnumStaffTrainingStatus.JDTE)
+          this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE )
+          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE || item.ID == EnumStaffTrainingStatus.ADTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.ADTE);
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
-          this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.DTE || item.ID == EnumStaffTrainingStatus.JDTE)
+          this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.DTE )
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE ||  item.ID == EnumStaffTrainingStatus.DTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.JDTE);
         }else{
@@ -147,6 +153,33 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
           } else {
             this.StaffTrainingDetailsNewTrainingDataList = [];
           }
+          debugger
+          if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
+            if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
+              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 1)
+            }
+
+          }
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+            if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
+              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 2)
+            }
+          }
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
+            if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
+              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 1)
+            }
+          }
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
+            if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
+              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 2)
+            }
+          }
+          else {
+            this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList;
+          }
+
+
         })
       } catch (error) {
         console.error(error);
@@ -221,7 +254,68 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
     }
 
 
+
+    async StaffTrainingHTS_GetData(id: number) {
+      try {
+        debugger
+        this.searchRequest.StaffTrainingDetailID = id;
+        await this.staffServiceDetailsService.StaffTrainingHTS_GetData(this.searchRequest).then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.StaffTrainingHTS_GetDataList = data.Data;
+          }
+          else {
+            this.StaffTrainingHTS_GetDataList = [];
+          }
+        })
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    CloseModal() {
+      this.modalService.dismissAll();
+      this.modalReference?.close();
+    }
+
+    async onEmtrainingStatusHistory(model: any, StaffTrainingDetailId: number) {
+      debugger
+      try {
+        this.loaderService.requestStarted();
+        this.StaffTrainingHTS_GetData(StaffTrainingDetailId)
+        this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
     
-    
+
+    async onChangeSearchStatus() {
+      if (((this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && EnumStaffTrainingStatus.Applied == this.SearchStatus)) {
+        this.ShowCheckBoxId = 1;
+      }
+      else if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) && EnumStaffTrainingStatus.PrincipalApprove == this.SearchStatus)) {
+        this.ShowCheckBoxId = 1;
+      } 
+      else if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) && EnumStaffTrainingStatus.ADTE == this.SearchStatus)) {
+        this.ShowCheckBoxId = 1;
+      }
+      else if (((this.sSOLoginDataModel.RoleID == EnumRole.DTE) && EnumStaffTrainingStatus.JDTE == this.SearchStatus)) {
+        this.ShowCheckBoxId = 1;
+      } 
+
+      else {
+        this.ShowCheckBoxId = 0;
+      }
+      
+
+
+    }
 
 }

@@ -16,6 +16,7 @@ import { ITISeatIntakesModel, ITIsSearchModel } from '../../../../../Models/ITIs
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
+import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-add-request-ddo-office',
@@ -25,19 +26,25 @@ import { UserRequestService } from '../../../../../Services/UserRequest/user-req
 })
 export class AddRequestDDOOfficeComponent {
   groupForm!: FormGroup;
+  SearchFormGroup!: FormGroup;
+
   public formdata = new ITISeatIntakesModel()
   public tradeSearchRequest = new ItiTradeSearchModel()
   public searchRequestITi = new ITICollegeTradeSearchModel();
   public getUserSerivecRequest=new ITI_EM_UnlockProfileDataModel();
   public searchRequest = new RequestSearchModel();
   request = new RequestSearchModel();
+  searchReq = new RequestSearchModel();
   sSOLoginDataModel = new SSOLoginDataModel();
   SearchRequest = new ITIsSearchModel();
+
+  public _EnumRole = EnumRole;
   
   public isSubmitted: boolean = false;
   public isLoading: boolean = false;
   public InstituteCategoryList: any = [];
   public ListITICollegeByManagement: any = [];
+  public ListITICollegeByManagement_search: any = [];
   public ItiTradeList: any = [];
   public ITITradeSchemeList: any = [];
   public ManagmentTypeList: any = [];
@@ -48,6 +55,7 @@ export class AddRequestDDOOfficeComponent {
   public Id: number | null = null;
 
   public OfficeList: any = [];
+  public OfficeList_search: any = [];
   public LevelList: any = [];
   public PostList: any = [];
   public LevelID: number = 0
@@ -57,6 +65,8 @@ export class AddRequestDDOOfficeComponent {
   public GetStaffDetailsVRS: any[]=[];
   public DistrictList: any = [];
   public DivisionMasterList: any[] = [];
+  public DivisionMasterList_search: any[] = [];
+  public DistrictList_search: any[] = [];
 
   public OldDivisionID: number = 0
   public OldInstituteID: number = 0
@@ -77,6 +87,7 @@ export class AddRequestDDOOfficeComponent {
     private ITICollegeTradeService: ItiSeatIntakeService,
     public appsettingConfig: AppsettingService,
     private  ITIGovtEMStaffMaster: ITIGovtEMStaffMaster,
+    private Swal2: SweetAlert2,
 
   ) { }
 
@@ -110,6 +121,14 @@ export class AddRequestDDOOfficeComponent {
       txtEmployeeDesignation:[{value:'',disabled:true}],
 
       /*chkIsHod: [false]*/
+    });
+
+    this.SearchFormGroup = this.fb.group({
+      LevelID: [''],
+      OfficeID: [''],
+      DivisionID: [''],
+      InstituteID: [''],
+      NodalDistrictID: [''],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -186,6 +205,7 @@ export class AddRequestDDOOfficeComponent {
 
   async GetOfficeList() {
     this.request.OfficeID = 0;
+    this.request.InstituteID=0
     try {
       await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, this.request.LevelID)
         .then((data: any) => {
@@ -197,9 +217,27 @@ export class AddRequestDDOOfficeComponent {
       console.log(Ex);
     }
   }
+  async GetOfficeList_search() {
+    this.searchReq.OfficeID = 0;
+    this.searchReq.InstituteID=0
+    try {
+      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, this.searchReq.LevelID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList_search = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
   async GetPostList() {
     try {
-      await this.commonMasterService.GetCommonMasterData('PostMaster', 0)
+      var obj = {
+        OfficeID: this.request.OfficeID,
+        InstituteID: this.request.InstituteID
+      }
+      await this.commonMasterService.GetItiVacantPost(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
@@ -264,6 +302,18 @@ export class AddRequestDDOOfficeComponent {
       }, 200);
     }
   }
+  async getITICollege_search() {
+    try {
+      await this.commonMasterService.GetCommonMasterData('GovtIti', this.searchReq.DivisionID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ListITICollegeByManagement_search = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 
   async GetTradeSchemeDDL() {
     const MasterCode = "IITTradeScheme";
@@ -283,50 +333,55 @@ export class AddRequestDDOOfficeComponent {
   }
 
   async SaveData() {
-   debugger
     this.isSubmitted = true;
-    // if (this.groupForm.invalid) {
-    //   return;
-    // }
+    if (this.groupForm.invalid) {
+      this.toastr.error("Please enter required fields");
+      return;
+    }
+    this.Swal2.Confirmation("Are you sure you want to make transfer request ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
 
-    //this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+          this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
 
-    this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
+          console.log()
+          this.loaderService.requestStarted();
+          this.isLoading = true;
+          this.request.UserId = this.sSOLoginDataModel.UserID;
+          this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
+          this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
 
-    console.log()
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-    this.request.UserId = this.sSOLoginDataModel.UserID;
-    this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
-    this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
+          try {
+            this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
+          
+            console.log( "request",this.request)
+            await this.userRequestService.UserRequest(this.request).then((data: any) => {
+              if (data.State === EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                this.router.navigate(['/transfer-request-accept'])
+                setTimeout(() => {
+                  this.groupForm.reset();
+                }, 2000);
+              }
+              else if (data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              }
 
-    try {
-      this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
-     
-      console.log( "request",this.request)
-      await this.userRequestService.UserRequest(this.request).then((data: any) => {
-        if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          this.router.navigate(['/transfer-request-accept'])
-          setTimeout(() => {
-            this.groupForm.reset();
-          }, 2000);
-        }
-        else if (data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        }
-
-        else {
-          this.toastr.error(data.ErrorMessage);
+              else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            });
+          } catch (error) {
+            console.error(error);
+            this.toastr.error("An error occurred while saving the data.");
+          } finally {
+            this.loaderService.requestEnded();
+            this.isLoading = false;
+          }
         }
       });
-    } catch (error) {
-      console.error(error);
-      this.toastr.error("An error occurred while saving the data.");
-    } finally {
-      this.loaderService.requestEnded();
-      this.isLoading = false;
-    }
+    
   }
 
   async goBack() {
@@ -411,6 +466,26 @@ export class AddRequestDDOOfficeComponent {
       }, 200);
     }
   }
+  async ddl_DivisionID_Wise_District_search() {
+    
+    try {
+      this.loaderService.requestStarted();
+      this.DistrictList_search = []
+      await this.commonMasterService.DistrictMaster_DivisionIDWise(Number(this.searchReq.DivisionID))
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DistrictList_search = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async OfficeITIWiseCollege() {
     
@@ -439,6 +514,12 @@ export class AddRequestDDOOfficeComponent {
     this.groupForm.controls['ddlITICollegeTrade'].updateValueAndValidity();
     this.groupForm.controls['ddlDistrictID'].updateValueAndValidity();
     await this.GetDivisionMasterList();
+    await this.GetPostList();
+  }
+
+  async OfficeITIWiseCollege_search() {
+    await this.GetDivisionMasterList_search();
+    // await this.GetPostList_search();
   }
 
   dateSetter(date: any) {
@@ -509,6 +590,18 @@ export class AddRequestDDOOfficeComponent {
       console.log(Ex);
     }
   }
+  async GetDivisionMasterList_search() {
+    try {
+      await this.commonMasterService.GetDivisionMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DivisionMasterList_search = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 
   async ddlDivision_Change() {
     
@@ -522,6 +615,21 @@ export class AddRequestDDOOfficeComponent {
     } else if (this.request.LevelID == 2 && this.request.OfficeID == 15) {
       await this.ddl_DivisionID_Wise_District();
       this.request.InstituteID = 0;
+      /*this.groupForm.controls['ddlDistrictID'].setValidators([DropdownValidators]);*/
+    }
+  }
+  async ddlDivision_Change_search() {
+    
+    this.searchReq.InstituteID = 0;
+    this.searchReq.NodalDistrictID = 0;
+    if (this.searchReq.LevelID == 2 && this.searchReq.OfficeID == 11) {
+      await this.getITICollege_search();
+      this.searchReq.NodalDistrictID = 0;
+      this.searchReq.NodalStateID = 0;
+      /*this.groupForm.controls['ddlITICollegeTrade'].setValidators([DropdownValidators]);*/
+    } else if (this.searchReq.LevelID == 2 && this.searchReq.OfficeID == 15) {
+      await this.ddl_DivisionID_Wise_District_search();
+      this.searchReq.InstituteID = 0;
       /*this.groupForm.controls['ddlDistrictID'].setValidators([DropdownValidators]);*/
     }
   }
@@ -568,6 +676,14 @@ export class AddRequestDDOOfficeComponent {
       this.getstatuId = Number(this.request.RequestType);
     }    
   }
+
+  async onSearch() {
+    await this.GetStaffListDDL();
+  }
+
+  async onReset() {
+    this.searchReq = new RequestSearchModel();
+  }
   
   async FunctionRequestTypeShowSomePropety() {
     if (this.request.RequestType == 2) {
@@ -603,7 +719,16 @@ export class AddRequestDDOOfficeComponent {
   async GetStaffListDDL() {
     try {
       const request: any = {};
-      request.InstituteID = this.sSOLoginDataModel.InstituteID;
+      if(this.sSOLoginDataModel.RoleID == EnumRole.DTETraing || this.sSOLoginDataModel.RoleID == EnumRole.DTE_TrainingT2_establishment){
+        request.InstituteID=this.searchReq.InstituteID
+        request.LevelID = this.searchReq.LevelID
+        request.OfficeID = this.searchReq.OfficeID
+        request.DivisionID = this.searchReq.DivisionID
+        request.NodalDistrictID = this.searchReq.NodalDistrictID
+      } else {
+        request.InstituteID = this.sSOLoginDataModel.InstituteID;
+        request.OfficeID = this.sSOLoginDataModel.OfficeID;
+      }      
       request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       request.RoleID = this.sSOLoginDataModel.RoleID;
       request.UserID = this.sSOLoginDataModel.UserID;

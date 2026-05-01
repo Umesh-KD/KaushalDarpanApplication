@@ -1,0 +1,346 @@
+<app-loader> </app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Staff Transfer Request</h4>
+
+  </div>
+</div>
+<div class="card">
+
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Staff Personal Details</b>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="col-md-4">
+          <label for="SSOID">SSOID</label>
+          <input type="text" id="SSOID" class="form-control"
+                 [(ngModel)]="request.SSOID" disabled>
+        </div>
+
+        <div class="col-md-4">
+          <label for="EmployeeName">Employee Name</label>
+          <input type="text" id="EmployeeName" class="form-control"
+                 [(ngModel)]="request.EmployeeName" disabled>
+        </div>
+
+        <div class="col-md-4">
+          <label for="EmployeeDesignation">Designation</label>
+          <input type="text" id="EmployeeDesignation" class="form-control"
+                 [(ngModel)]="request.EmployeeDesignation" disabled>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Staff Type Gazetted non Gazetted 
+          </label>
+
+          <select class="form-select"
+                  [(ngModel)]="request.NonGazettedID" disabled>
+            <option value="0">--select--</option>
+            <option *ngFor="let item of GazettedList"
+                    [ngValue]="item.ID">
+              {{ item.Name }}
+            </option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="AddTransferRequest">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Staff Details Transfer Request</b>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Transfer Category <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="request.TransferCategoryID" formControlName="TransferCategoryID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GetTransfercateList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <!-- <div *ngIf="isSubmitted&&AddTransferRequest.TransferCategoryID.DropdownValidators" class="text-danger">
+                  <p *ngIf="AddTransferRequest.TransferCategoryID.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required .!</p>
+          </div> -->
+          <div *ngIf="isSubmitted && AddTransferRequest.get('TransferCategoryID').errors" class="text-danger">
+            <p *ngIf="!AddTransferRequest.get('TransferCategoryID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label for="EmployeeName">Reason Description</label>
+          <input type="text" id="ReasonDescription" formControlName="ReasonDescription" class="form-control"
+                 [(ngModel)]="request.ReasonDescription">
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="SupportingDocuments ">
+            Supporting Documents   :<span class="StarMarking">*</span>
+          </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="SupportingDocuments" type="file" (change)="onFilechange($event, 'SupportingDocuments')" formControlName="SupportingDocuments">
+            <label for="SupportingDocuments">
+              <span>Choose File</span>
+              {{request.SupportingDocuments === '' ? 'No File Choosen' : request.SupportingDocuments}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + request.SupportingDocuments}}"
+                 *ngIf="request.SupportingDocuments !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Add More Staff Transfer Request</b>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="req_child.OfficeID" formControlName="OfficeID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <!-- <div *ngIf="AddTransferRequest.get('OfficeID').errors" class="text-danger">
+            <p *ngIf="!AddTransferRequest.get('OfficeID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div> -->
+        </div>
+
+
+        <div *ngIf="req_child.OfficeID == InsOfficeID">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            District:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="req_child.DistrictID" formControlName="ddlDistrictID" (change)="getITICollege()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+        <div *ngIf="req_child.OfficeID == InsOfficeID">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute: <span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="ddlCollege" [(ngModel)]="req_child.InstituteID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="req_child.PostID" formControlName="PostID"  [disabled]="true" >
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div> -->
+
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Priority <span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="Priority"
+                  [(ngModel)]="req_child.Priority"
+                  disabled>
+            <option value="0">--select--</option>
+            <option *ngFor="let item of PriorityList"
+                    [ngValue]="item.ID">
+              {{ item.Name }}
+            </option>
+          </select>
+        </div> -->
+          <!-- <div *ngIf="AddTransferRequest.get('Priority').errors" class="text-danger">
+            <p *ngIf="!AddTransferRequest.get('Priority').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div> -->
+
+          <div class="flex gap-4 mt-6">
+            <button type="submit" class="btn btn-primary" (click)="addStaffTransferRequest()">Add</button>
+            <button type="submit" class="btn btn-success" (click)="OnfinalSave()">Final Save</button>
+          </div>
+
+        </div>
+      </div>
+  </form>
+
+</div>
+
+<!--{{StaffTransferObject|json}}-->
+<!--{{StaffTransferList|json}}-->
+<div class="card mt-3">
+
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For  List</b>
+    </div>
+    <div class="overflow-x-auto mt-4">
+      <table class="table table-bordered" *ngIf="StaffTransferList.length > 0">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Office Name</th>
+            <th>Staff Type</th>
+            <th>Institute Name</th>
+            <th>District Name</th>
+            <th>Designation Name</th>
+            <th>Priority</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of StaffTransferList;  let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td>{{ leave.OfficeName }}</td>
+            <td>{{ leave.NonGazetteName }}</td>
+            <td>{{ leave.InstituteName==''? 'N/A': leave.InstituteName}}</td>
+            <td>{{ leave.DistrictName==''? 'N/A': leave.DistrictName}} </td>
+            <td>{{ leave.DesignationName }}</td>
+            <td>{{ leave.Priority }}</td>
+            <td>
+              <div class="row-line-btn">
+                <!--<button class="btn bg-info text-white" (click)="Function_UpdateVacancyPost(modal_UpdateVacancyPost,leave)">Update</button>-->
+                <!--<button class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">
+                  Remove
+                </button>-->
+
+     
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+              <button class="btn bg-primary text-white" type="button" title="Priority Up" (click)="priorityUp(idx)" [disabled]="idx === 0">
+                <i class="ti ti-arrow-narrow-up"></i>
+              </button>
+              <button class="btn bg-info text-white" type="button" title="Priority Down" (click)="priorityDown(idx)" [disabled]="idx === StaffTransferList.length - 1">
+                <i class="ti ti-arrow-narrow-down"></i>
+              </button>
+     
+
+
+
+</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!--<ng-template #modal_UpdateVacancyPost let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm">
+        <div class="card-body">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _groupForm.ddlOffice.errors" class="text-danger">
+              <p *ngIf="!_groupForm.ddlOffice.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+
+          </div>
+
+          <div *ngIf="formData.OfficeID==11">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+            <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [ngValue]="item.InstituteID">
+                {{item.InstituteName}}
+              </option>
+            </select>-->
+
+            <!--<select class="form-select" id="StudentExamYear" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>-->
+          <!--</div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Staff Type<span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" name="StaffType" id="StaffTypeID" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_groupForm.StaffTypeID.errors" class="text-danger">
+              <p *ngIf="!_groupForm.StaffTypeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>-->
+          <!--{{TradeList|json}}-->
+          <!--<div *ngIf="groupForm.get('StaffTypeID')?.value == 2">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Trade: <span class="StarMarking">*</span>
+            </label>
+
+            <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of TradeList" [ngValue]="item.Id">
+                {{ item.TradeName }}
+              </option>
+            </select>
+          </div>-->
+
+
+          <!--{{formData.PostedSeat|json}}-->
+          <!--{{formData.DesignationID|json}}-->
+          <!--<div>
+
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
+              <option [ngValue]="0">--Select--</option>
+              <option *ngFor="let item of PostList" [ngValue]="item.ID">
+                {{item.Name}}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted&&_groupForm.ddlPost.errors" class="text-danger">
+              <p *ngIf="!_groupForm.ddlPost.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label for="TotalSeatID">Total Seat:</label>
+            <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
+                   [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+            <div *ngIf="isSubmitted&&_groupForm.TotalSeatID.errors" class="text-danger">
+              <p *ngIf="_groupForm.TotalSeatID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="Comments">Comments:</label>
+            <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" (click)="VacancyPostUpdate()">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>-->
+<app-otpmodal #otpModal></app-otpmodal>
+
+
+
+
+

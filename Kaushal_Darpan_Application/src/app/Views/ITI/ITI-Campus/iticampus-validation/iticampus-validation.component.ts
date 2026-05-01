@@ -87,7 +87,7 @@ export class ItiCampusValidationComponent {
   }
 
   async btn_SearchClick() {
-    
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID)

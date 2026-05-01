@@ -46,6 +46,7 @@ export class GroupcodeAllocationRevalComponent {
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
   public GroupCodeMasterReportlist = new GroupCodeAllocationReportModel();
+  public oldNewRollNoGCDataModel: any[] = [];
 
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -380,5 +381,127 @@ export class GroupcodeAllocationRevalComponent {
     catch (Ex) {
       console.log(Ex);
     }
+  }
+
+  async GetOldNewRollNoGroupCodeData() {
+    try {
+      //debugger
+      this.oldNewRollNoGCDataModel = [];
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+      // get
+      await this.revalGroupCodeAllocationService.GetOldNewRollNoGroupCodeData(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          if (data.State == EnumStatus.Success) {
+            this.oldNewRollNoGCDataModel = data['Data'];
+          }
+          else {
+            this.toastr.error(data.Message); 
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  async exportToExcelGetOldNewRollNoGroupCodeData() {
+    // get data
+    await this.GetOldNewRollNoGroupCodeData();
+
+    // sort order with original column 
+    const columnOrder = [
+      'SrNo', 'GroupCode_Reval', 'RevalRollNo', 'SemesterName', 'GroupCode', 'CCCode', 'InstituteName', 'StreamName', 'RollNo', 'SubjectCode',
+      'SubjectName', 'ObtainedTheoryOld', 'ObtainedTheory', 'Diff_Old_New_ThObtained'
+    ];
+
+    // remove unwanted column
+    const unwantedColumns = [
+      'SemesterID', 'EndTermID', 'StudentName', 'FatherName', 'DOB', 'Code', 'EnrollmentNo', 'SchemeID'
+    ];
+
+    // Custom Header Mapping with original column name as key and header name as value
+    const headerMap: any = {
+      SrNo: 'Sr No',
+      GroupCode_Reval: 'Group Code Reval',
+      RevalRollNo: 'Reval Roll No',
+      SemesterName: 'Semester Name',
+      GroupCode: 'Group Code',
+      CCCode: 'CC Code',
+      InstituteName: 'Institute Name',
+      StreamName: 'Stream Name',
+      RollNo: 'Roll No',
+      SubjectCode: 'Subject Code',
+      SubjectName: 'Subject Name',
+      ObtainedTheoryOld: 'Obtained Theory Old',
+      ObtainedTheory: 'Obtained Theory',
+      Diff_Old_New_ThObtained: 'Diff. Obtained Theory'
+    };
+
+    const filteredData = this.oldNewRollNoGCDataModel.map((item: any, index: number) => {
+      const filteredItem: any = {};
+
+      columnOrder.forEach((column) => {
+        if (column === 'SrNo') {
+          filteredItem[column] = index + 1;
+        } else if (!unwantedColumns.includes(column)) {
+          // always include column even if value is empty
+          filteredItem[column] = item[column] ?? '';
+        }
+      });
+
+      return filteredItem;
+    });
+
+    // Replace keys with custom headers
+    const finalData = filteredData.map((row: any) => {
+      const newRow: any = {};
+      columnOrder.forEach(col => {
+        newRow[headerMap[col] || col] = row[col];
+      });
+      return newRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(finalData);
+
+    // Column width
+    const columnWidths = columnOrder.map(col => {
+      const header = headerMap[col] || col;
+      return {
+        wch: Math.max(
+          header.length,
+          ...finalData.map((row: any) =>
+            row[header] ? row[header].toString().length : 0
+          )
+        ) + 2
+      };
+    });
+
+    ws['!cols'] = columnWidths;
+
+    // Header Styling
+    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+    if (range.s && range.e) {
+      for (let col = range.s.c; col <= range.e.c; col++) {
+        const cellAddress = XLSX.utils.encode_col(col) + '1';
+        if (!ws[cellAddress]) continue;
+
+        ws[cellAddress].s = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "808080" } },
+          alignment: { horizontal: "center", vertical: "center" }
+        };
+      }
+    }
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    XLSX.writeFile(wb, 'OldNewDetailOfRevalRollnoGC.xlsx');
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumResultType, EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +13,7 @@ import { UserMasterService } from '../../../Services/UserMaster/user-master.serv
 import { MenuService } from '../../../Services/Menu/menu.service';
 import { TabulationReportSearchModel } from '../../../models/bter/TabulationReportModel';
 import { ReportService } from '../../../Services/Report/report.service';
+import { EndTermFinYearModel } from '../../../Models/CommonMasterDataModel';
 
 @Component({
   selector: 'app-tabulation-report',
@@ -54,8 +55,11 @@ export class TabulationReportComponent {
   public totalInTableRecord: number = 0;
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
-
   //end table feature default
+
+  public ResultTypeList: any[] = [];
+  public endTermFinYear: EndTermFinYearModel[] = [];
+  public _EnumResultType = EnumResultType;
 
   constructor(private commonMasterService: CommonFunctionService,
     private loaderService: LoaderService,
@@ -96,6 +100,12 @@ export class TabulationReportComponent {
         .then((data: any) => {
           this.SemesterMasterList = data['Data'];
         }, (error: any) => console.error(error));
+
+      await this.commonMasterService.GetExamResultType()
+        .then((data: any) => {
+          this.ResultTypeList = data['Data'] || [];
+        }, (error: any) => console.error(error));
+
     }
     catch (Ex) {
       console.log(Ex);
@@ -149,16 +159,26 @@ export class TabulationReportComponent {
   async btn_SearchClick() {
     try {
       if ((this.request.InstituteId ?? 0) <= 0) {
-        this.toastr.error("Please select Institute!.");
+        this.toastr.error("Please select Institute!");
         return;
       }
       else if (parseInt(this.request.SemesterID || "0") <= 0) {
-        this.toastr.error("Please select Semester/Year!.");
+        this.toastr.error("Please select Semester/Year!");
         return;
       }
       else if ((this.request.SchemeID ?? 0) <= 0) {
-        this.toastr.error("Please select Scheme!.");
+        this.toastr.error("Please select Scheme!");
         return;
+      }
+      else if ((this.request.ResultTypeId ?? 0) <= 0) {
+        this.toastr.error("Please select Result Type!");
+        return;
+      }
+      else if (this.request.ResultTypeId == this._EnumResultType.RwhResult || this.request.ResultTypeId == this._EnumResultType.RwhRevalEffected) {
+        if ((this.request.EffectiveFromEndTermId ?? 0) <= 0) {
+          this.toastr.error("Please select Result Type!");
+          return;
+        }
       }
       await this.GetBterTabulationReport();
     }
@@ -173,6 +193,21 @@ export class TabulationReportComponent {
 
   }
 
+  async GetEffectiveFinYear() {
+    this.request.EffectiveFromEndTermId = 0;
+    this.endTermFinYear = [];
+    if (this.request.ResultTypeId == this._EnumResultType.RwhResult || this.request.ResultTypeId == this._EnumResultType.RwhRevalEffected) {
+      try {
+        await this.commonMasterService.GetEffectiveFinYear()
+          .then((data: any) => {
+            this.endTermFinYear = data['Data'] || [];
+          }, (error: any) => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+    }
+  }
 }
 
 

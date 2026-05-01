@@ -151,15 +151,42 @@
               <div class="flex align-center justify-center actionBtns">
                 <!--<button *ngIf="row.ProfileStatusID>1" type="button" class="bg-info btn text-white btn-sm" (click)="onCheckData(row)"><i class="ti ti-eye"></i></button>-->
 
-                <a *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Pending" href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>
+                <a  href="javascript:void(0);" title="View"
+                  *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Pending" 
+                  (click)="onCheckData(row)"><i class="ti ti-eye"></i>
+                </a>
+
                 <!--<button *ngIf="row.ProfileStatusID>1" type="button" class="bg-info btn text-white btn-sm" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></button>-->
-                <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.LockAndSubmit || row.ProfileStatusID === _EnumEMProfileStatus.Revert" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="Assign Status" 
+                  *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.LockAndSubmit || row.ProfileStatusID === _EnumEMProfileStatus.Revert" 
+                  (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i>
+                </a>
+
                 <!--<a href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
-                <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Approve " href="javascript:void(0);" title="Assign Role Rights" (click)="ViewandUpdate(MyModel_Action,row.StaffUserID)"><i class="ti ti-playlist-add"></i></a>
-                <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
+                <a  href="javascript:void(0);" title="Assign Role Rights" 
+                  *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Approve "
+                  (click)="ViewandUpdate(MyModel_Action,row.StaffUserID)"><i class="ti ti-playlist-add"></i>
+                </a>
+
+                <a href="javascript:void(0);" id="btnDelete" title="Delete" 
+                  *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" 
+                  (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i>
+                </a>
+
                 <!--<a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.SubjectID)"><i class="ti ti-pencil"></i></a>
                 -->
-                <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-history"></i></a>
+                <a href="javascript:void(0);" title="User Profile Status History" 
+                  (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-history"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Update User Post" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE_TrainingT2_establishment"
+                  (click)="onClick_UserPost(UpdatePost_Modal, row.StaffUserID)"><i class="ti ti-user-edit"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="User Service History" 
+                  (click)="openModal_UserServiceHistory(Modal_UserServiceHistory, row.StaffUserID)"><i class="ti ti-briefcase"></i>
+                </a>
+
               </div>
             </td>
           </tr>
@@ -787,5 +814,141 @@
   </div>
 </ng-template>
 
+<ng-template #UpdatePost_Modal let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
 
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Update Post</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup_updatePost()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-auto mt-3">
+            <form [formGroup]="UpdatePostFormGroup">
+              <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office</label>
+                  <div class="flex">
+                    <input class="form-input" placeholder="Office" name="Office" id="Office" disabled
+                          formControlName="Office" [(ngModel)]="UpdateRequest.Office" />
+                  </div>
+                </div>
+                <div *ngIf="UpdateRequest.OfficeID == _EnumOffice.ITI">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">College</label>
+                  <div class="flex">
+                    <input class="form-input" placeholder="College" name="College" id="College" disabled
+                          formControlName="College" [(ngModel)]="UpdateRequest.College" />
+                  </div>
+                </div>
+
+                <div *ngIf="UpdateRequest.OfficeID == _EnumOffice.NODAL_OFFICE">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Nodal District</label>
+                  <div class="flex">
+                    <input class="form-input" placeholder="NodalDistrict" name="NodalDistrict" id="NodalDistrict" disabled
+                          formControlName="NodalDistrict" [(ngModel)]="UpdateRequest.NodalDistrict" />
+                  </div>
+                </div>
+
+                <div *ngIf="UpdateRequest.OfficeID == _EnumOffice.AJMER_ZONE || 
+                            UpdateRequest.OfficeID == _EnumOffice.BHARATPUR_ZONE ||
+                            UpdateRequest.OfficeID == _EnumOffice.BIKANER_ZONE ||
+                            UpdateRequest.OfficeID == _EnumOffice.JAIPUR_ZONE ||
+                            UpdateRequest.OfficeID == _EnumOffice.JODHPUR_ZONE ||
+                            UpdateRequest.OfficeID == _EnumOffice.KOTA_ZONE ||
+                            UpdateRequest.OfficeID == _EnumOffice.UDAIPUR_ZONE">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone</label>
+                  <div class="flex">
+                    <input class="form-input" placeholder="Division" name="Division" id="Division" disabled
+                          formControlName="Division" [(ngModel)]="UpdateRequest.Division" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Current Post</label>
+                  <div class="flex">
+                    <input class="form-input" placeholder="CurrentPost" name="CurrentPost" id="CurrentPost" disabled
+                          formControlName="CurrentPost" [(ngModel)]="UpdateRequest.CurrentPost" />
+                  </div>
+                </div>
+
+                <div >
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Updated Post <span class="StarMarking">*</span></label>
+                  <select class="form-select" [(ngModel)]="UpdateRequest.UpdatePostID" formControlName="UpdatePostID">
+                    <option [value]="0">--Select--</option>
+                    <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+                  </select>
+                  <div *ngIf="isUpdateSubmitted&&_UpdatePostFormGroup.UpdatePostID.errors" class="text-danger">
+                    <p *ngIf="!_UpdatePostFormGroup.UpdatePostID.errors.DropdownValidators">
+                      <i aria-hidden="true"></i>This
+                      field is required .!
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="text-center">
+                <button type="button" (click)="updateStaffPost()" class="btn bg-info text-white mt-6">Update</button>
+                <button type="button" (click)="CloseModalPopup_updatePost()" class="btn bg-danger text-white mt-6">Cancel</button>
+              </div>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #Modal_UserServiceHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-end items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal_ServiceHistory()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>User Service History</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Name & SSOID</th>
+                <th class="text-left">Office</th>
+                <th class="text-left">Post</th>
+                <th class="text-left">Division</th>
+                <th class="text-left">District</th>
+                <th class="text-left">College</th>
+                <th class="text-left">Joining Date</th>
+                <th class="text-left">Relieving Date</th>
+                <th class="text-left">Remark</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of StaffServiceDetailsDataList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.NameAndSSOID }}</td>
+                <td align="left">{{ row.OfficeName }}</td>
+                <td align="left">{{ row.PostName}}</td>
+                <td align="left">{{ row.DivisionNameEnglish }}</td>
+                <td align="left">{{ row.DistrictNameEnglish }}</td>
+                <td align="left">{{ row.CodeAndName }}</td>
+                <td align="left">{{ row.JoiningDate }}</td>
+                <td align="left">{{ row.RelievingDate }}</td>
+                <td align="left">{{ row.Remark }}</td>
+              </tr>
+              <tr *ngIf="StaffServiceDetailsDataList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>

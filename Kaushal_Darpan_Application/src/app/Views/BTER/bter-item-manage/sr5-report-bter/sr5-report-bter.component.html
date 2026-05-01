@@ -85,15 +85,27 @@
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+      <div class="flex flex-col justify-between">
+        <!-- <select id="ddlConter" class="form-select  couterDropDown">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
-        </select>
+        </select> -->
+        <div *ngIf="sSOLoginDataModel.RoleID==7 || sSOLoginDataModel.RoleID==13" class="flex"> 
+          <select class="form-select" id="ItemStatus" [(ngModel)]="ItemStatus" name="ItemStatus">
+            <option value="0">Choose Mark As (*)</option>
+            <option value="2">Approve</option>
+            <option value="3">Reject</option>
+          </select>
+          <button type="button" class="btn bg-info text-white inline-block" (click)="ApproveSR5Items()">Save</button>
+        </div>
       </div>
       <div class="">
+        
+        <div class="">
+          <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
+        </div>
       </div>
       <div class="">
       </div>
@@ -102,18 +114,7 @@
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="flex"> 
-
-         <select class="form-select" id="ItemStatus" [(ngModel)]="ItemStatus" name="ItemStatus">
-          <option value="0">Choose Mark As (*)</option>
-          <option value="2">Approve</option>
-          <option value="3">Reject</option>
-        </select>
-        <button type="button" class="btn bg-info text-white inline-block" (click)="ApproveSR5Items()">Save</button>
-      </div>
-      <div class="">
-        <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
-      </div>
+      
       <div class="">
         <!-- <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" /> -->
       </div>
@@ -123,7 +124,7 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-              <th class="text-left">
+            <th class="text-left">
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <th class="text-left">Item No.</th>
@@ -138,16 +139,18 @@
             <th class="text-left">Approximate cost expected to be realised </th>
             <th class="text-left">Any suggestion of disposal </th>
             <th class="text-left">Remarks </th>
+            <th class="text-left">Item Condition </th>
+            <th class="text-left">IsAuction </th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="item.Selected" *ngIf="!(item.ConditionOnReturn == '2' && item.SR5Approval == '2')"
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="item.Selected" *ngIf="item.SR5Approval != 2"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,item)">
             </td>
             <td align="left">{{ idx+1}}</td>
-          <td align="left">{{ item.ItemName}}</td>
+            <td align="left">{{ item.ItemName}}</td>
             <!-- <td align="left">{{ item.Particulars_of_stores}}</td>  -->
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.Item_Code_Equipment_Code}}</td>
@@ -160,6 +163,34 @@
             <td align="left">{{ item.Approximate_cost_expected_to_be_realised}}</td> 
             <td align="left">{{ item.Any_suggestion_of_disposal}}</td> 
             <td align="left">{{ item.Remarks}}</td> 
+            <td align="left">
+              <div *ngIf="item.Selected; else notSelected">
+                <label>Equipment Working: <span class="StarMarking">*</span></label>
+                <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
+                <option value="1">Working</option>
+                <option value="2">Not Working</option>
+                </select>
+
+                <div *ngIf="isSubmitted && !item.equipmentStatus" class="text-danger">
+                <p>Please select a status.</p>
+                </div>
+              </div>
+            </td> 
+            <td align="left">
+              <label>
+                <ng-container
+                        *ngIf="
+                        item.Selected ;
+                        else notSelected"
+                    >
+                    <!-- formControlName="isOption" -->
+                  <input type="checkbox"
+                          name="isOption" [(ngModel)]="item.isOption"
+                          (click)="ItemMasterList[i]?.AuctionStatus === '1' || ItemMasterList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />
+                  Is Auction
+                </ng-container>
+              </label>
+            </td> 
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10">

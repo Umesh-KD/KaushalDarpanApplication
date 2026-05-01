@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { firstValueFrom, Observable } from "rxjs";
+import * as CryptoJS from 'crypto-js';
 
 
 @Injectable({
@@ -8,6 +9,10 @@ import { Observable } from "rxjs";
 })
 
 export class AppsettingService {
+
+  // crypto config (same as encrypt tool)
+  private key = CryptoJS.enc.Utf8.parse('1234567890123456');
+  private iv = CryptoJS.enc.Utf8.parse('1234567890123456');
 
   // appsetting json data set
   public AppName: string = "";
@@ -39,10 +44,41 @@ export class AppsettingService {
 
   }
 
-  // load
-  loadAppsetting(): Observable<any> {
-    return this.httpClient.get('/assets/appsettings.json');
+  // load + decrypt
+  loadAppsetting(): Promise<void> {
+    //debugger
+    return firstValueFrom(
+      this.httpClient.get<any>('/assets/appsettings.enc.json')// not encrypted in appsettings.json
+    ).then(res => {
+
+      // decrypt
+      const decrypted = CryptoJS.AES.decrypt(
+        res.data,
+        this.key,
+        {
+          iv: this.iv,
+          mode: CryptoJS.mode.CBC,
+          padding: CryptoJS.pad.Pkcs7
+        }
+      );
+
+      const json = decrypted.toString(CryptoJS.enc.Utf8);
+
+      if (!json) {
+        throw new Error('Decryption failed');
+      }
+
+      const appsetting = JSON.parse(json);
+
+      // reuse your existing method
+      this.setAppsetting(appsetting);
+    });
   }
+
+  //// load
+  //loadAppsetting(): Observable<any> {
+  //  return this.httpClient.get('/assets/appsettings.json');
+  //}
 
   //set
   setAppsetting(appsetting: any): any {

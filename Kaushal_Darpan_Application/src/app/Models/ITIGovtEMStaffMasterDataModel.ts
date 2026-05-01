@@ -539,6 +539,7 @@ export class RequestUpdateStatus {
   RequestTypeID: number = 0;
   LastWorkingDate: string = '';
   JoiningDate: string = '';
+  RequestDate: string = '';
   UserID: number = 0;
   StaffID: number = 0;
   JoiningRoleID: number = 0;
@@ -551,6 +552,8 @@ export class RequestUpdateStatus {
   Comments: string = '';
   IsAccount: boolean = false;
   AccountComments: string = '';
+  OnHoldDoc: string = '';
+  Dis_OnHoldDoc: string = '';
   RoleID: number = 0;
 }
 
@@ -801,4 +804,24 @@ export class ITI_EM_DroupdownDataModel{
   public DepartmentID?: number = 0;
   public RoleID?: number = 0;
   public UserID?: number = 0;
+}
+
+export class UserOfficePostDataModel {
+  public UserID: number = 0;
+  public UserOfficeDetailsId: number = 0;
+  public DepartmentID: number = 0;
+  public OfficeID: number = 0;
+  public NodalDistrictID: number = 0;
+  public InstituteID: number = 0;
+  public DivisionID: number = 0;
+  public CurrentPostID: number = 0;
+  public UpdatePostID: number = 0;
+  public ModifyBy: number = 0;
+
+  public Action: string = '';
+  public Office: string = '';
+  public NodalDistrict: string = '';
+  public College: string = '';
+  public Division: string = '';
+  public CurrentPost: string = '';
 }

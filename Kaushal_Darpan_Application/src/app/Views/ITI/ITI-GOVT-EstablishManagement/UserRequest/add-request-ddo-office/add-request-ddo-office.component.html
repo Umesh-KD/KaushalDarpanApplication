@@ -14,6 +14,70 @@
 <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
   <div class="card">
     <div class="card-body p-5">
+
+
+      <div class="mb-8"
+        *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTETraing || sSOLoginDataModel.RoleID == _EnumRole.DTE_TrainingT2_establishment">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Search Staff</b>
+        </div>
+
+        <form [formGroup]="SearchFormGroup">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div >
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="searchReq.LevelID" formControlName="LevelID" (change)="GetOfficeList_search()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+            <div >
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="searchReq.OfficeID" formControlName="OfficeID" (change)="OfficeITIWiseCollege_search()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of OfficeList_search" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+
+            <div *ngIf="searchReq.LevelID==2 &&  (searchReq.OfficeID== 11 ||  searchReq.OfficeID== 15)">
+              <label> Division<span class="StarMarking">*</span></label>
+              <select formControlName="DivisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change_search()"
+                      [(ngModel)]="searchReq.DivisionID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let division of DivisionMasterList_search" [value]="division.ID">{{division.Name}}</option>
+              </select>
+            </div>
+
+            <div *ngIf="searchReq.LevelID==2 && searchReq.OfficeID== 11">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="searchReq.InstituteID" formControlName="InstituteID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ListITICollegeByManagement_search" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+
+            <div *ngIf="searchReq.LevelID==2 && searchReq.OfficeID== 15">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District:<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="searchReq.NodalDistrictID" formControlName="NodalDistrictID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DistrictList_search" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+
+          </div>
+        </form>
+        <div class="text-center">
+          <!-- <button type="button" (click)="SaveData()" class="btn bg-info text-white mt-6">Submit</button> -->
+          <button type="button" (click)="onSearch()" class="btn bg-info text-white mt-6">Search</button>
+          <button type="button" (click)="onReset()" class="btn bg-danger text-white mt-6">Cancel</button>
+        </div>
+
+      </div>
+
+
       <div class="mb-8">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Relieving Request</b>
@@ -54,7 +118,7 @@
             </div>
 
             <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Transfer Level <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.LevelID" formControlName="ddlLevelID" (change)="GetOfficeList()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
@@ -67,7 +131,7 @@
               </div>
             </div>
             <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Transfer Office <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="ddlOffice" (change)="OfficeITIWiseCollege()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
@@ -81,7 +145,7 @@
             </div>
 
             <div *ngIf="request.LevelID==2 &&  (request.OfficeID== 11 ||  request.OfficeID== 15)">
-              <label>Division<span class="StarMarking">*</span></label>
+              <label> Transfer Division<span class="StarMarking">*</span></label>
               <select formControlName="divisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change()"
                       [(ngModel)]="request.DivisionID">
                 <option value="0">--Select--</option>
@@ -97,7 +161,7 @@
 
             <div *ngIf="request.LevelID==2 && request.OfficeID== 11">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
-              <select class="form-select" [(ngModel)]="request.InstituteID" formControlName="ddlITICollegeTrade">
+              <select class="form-select" [(ngModel)]="request.InstituteID" formControlName="ddlITICollegeTrade" (change)="GetPostList()">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
               </select>
@@ -111,7 +175,7 @@
 
             <div *ngIf="request.LevelID==2 && request.OfficeID== 15">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                District:<span class="StarMarking">*</span>
+                Transfer District:<span class="StarMarking">*</span>
               </label>
               <select class="form-select" [(ngModel)]="request.NodalDistrictID" formControlName="ddlDistrictID">
                 <option value="0">--Select--</option>
@@ -141,7 +205,7 @@
             </div>
 
             <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Transfer Post <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.PostID" formControlName="ddlPost">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
@@ -155,7 +219,7 @@
             </div>
 
             <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Role <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Transfer Role <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.ReqRoleID" formControlName="ReqRoleID">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of RoleListDDL" [value]="item.RoleID">{{item.RoleNameEnglish}}</option>
@@ -169,7 +233,7 @@
             </div>
 
             <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="AttachDocument_file">File</label>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="AttachDocument_file">File</label>
               
               <div class="flex fileUploader">
                 <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"

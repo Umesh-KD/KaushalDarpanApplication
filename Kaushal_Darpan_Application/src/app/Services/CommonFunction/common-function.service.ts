@@ -32,7 +32,7 @@ import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 
 
 @Injectable({
-  providedIn: 'root'  
+  providedIn: 'root'
 })
 export class CommonFunctionService {
   readonly APIUrl = this.appsettingConfig.apiURL + "CommonFunction";
@@ -111,7 +111,7 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetParliamentMaster(DistrictID:number=0) {
+  public async GetParliamentMaster(DistrictID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/GetParliamentMaster/' + DistrictID, this.headersOptions)
       .pipe(
@@ -215,15 +215,15 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async ItiTrade(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0, DivisionID: number = 0,SemesterID :number=0) {
+  public async ItiTrade(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0, DivisionID: number = 0, SemesterID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/ItiTrade/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID + '/' + DivisionID + '/' + SemesterID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async ItiTradecouncelling(designationId:any) {
-    return await this.http.get(this.APIUrl + '/ItiTradecouncelling/' + designationId , this.headersOptions)
+  public async ItiTradecouncelling(designationId: any) {
+    return await this.http.get(this.APIUrl + '/ItiTradecouncelling/' + designationId, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -240,9 +240,9 @@ export class CommonFunctionService {
 
 
 
-  public async StreamMaster_streamType(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0,action:string="") {
-debugger
-    return await this.http.get(this.APIUrl + '/StreamMaster_streamType/' + DepartmentID + '/' + StreamType + '/' + EndTermId +'/' + action, this.headersOptions)
+  public async StreamMaster_streamType(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, action: string = "") {
+    debugger
+    return await this.http.get(this.APIUrl + '/StreamMaster_streamType/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + action, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -260,25 +260,25 @@ debugger
 
 
 
-  public async SemesterRolewise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0,RoleID:number=0) {
+  public async SemesterRolewise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0, StaffID: number = 0) {
 
-    return await this.http.get(this.APIUrl + '/SemesterRolewise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/SemesterRolewise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' + StaffID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
 
-  public async StreamRoleWise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0,SemesterID:number=0,InstituteID:number=0) {
+  public async StreamRoleWise(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, RoleID: number = 0, SemesterID: number = 0, InstituteID: number = 0, StaffID: number = 0) {
 
-    return await this.http.get(this.APIUrl + '/StreamRoleWise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' + SemesterID + '/' + InstituteID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/StreamRoleWise/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + RoleID + '/' + SemesterID + '/' + InstituteID + '/' + StaffID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
 
-  public async StaffAttendence(SSOID: string= '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0) {
+  public async StaffAttendence(SSOID: string = '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/StaffAttendence/' + SSOID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID, this.headersOptions)
       .pipe(
@@ -288,9 +288,9 @@ debugger
 
 
 
-  public async Stream_InstituteIdWise(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0,InstituteID:number=0,AcademicYearID:number=0) {
+  public async Stream_InstituteIdWise(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0, AcademicYearID: number = 0) {
 
-    return await this.http.get(this.APIUrl + '/Stream_InstituteIdWise/' + DepartmentID + '/' + StreamType + '/' + EndTermId +'/'+InstituteID +'/' + AcademicYearID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/Stream_InstituteIdWise/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID + '/' + AcademicYearID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -325,9 +325,9 @@ debugger
   }
 
 
-  public async SemesterList(DepartmentID: number=0) {
+  public async SemesterList(DepartmentID: number = 0) {
 
-    return await this.http.get(this.APIUrl + '/SemesterList/'  + DepartmentID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/SemesterList/' + DepartmentID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -364,7 +364,7 @@ debugger
   }
 
   public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0, IsForEx: number = 0, IsWithNot6thSem: number = 0, EngNonEng: number = 0) {
-    
+
     return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}/${IsForEx}/${IsWithNot6thSem}/${EngNonEng}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -372,7 +372,7 @@ debugger
   }
 
   public async CenterCode() {
-    
+
     return await this.http.get(`${this.APIUrl}/CenterCodeMaster/`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -475,7 +475,7 @@ debugger
   }
 
   public async PreExam_StudentMaster(StudentID: number, statusId: number, DepartmentID: number = 0, Eng_NonEng: number = 0, EndTermID: number = 0, StudentExamID: number = 0, FileNameWithDynamicPath: number = 0) {
-     
+
     return await this.http.get(`${this.APIUrl}/PreExam_StudentMaster/${StudentID}/${statusId}/${DepartmentID}/${Eng_NonEng}/${EndTermID}/${StudentExamID}/${FileNameWithDynamicPath}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -621,7 +621,7 @@ debugger
   }
   public async UploadDocument(file: any, model: UploadFileModel | null = null) {
     //formdata
-     ;
+    ;
     const formData = new FormData();
     formData.append("file", file);
     formData.append("FolderName", model?.FolderName ?? "");
@@ -646,7 +646,7 @@ debugger
   public async UploadBTEROriginalDocument(file: any, model: UploadBTERFileModel | null = null) {
     //formdata
 
-     
+
 
     const formData = new FormData();
     formData.append("file", file);
@@ -672,7 +672,7 @@ debugger
   public async UploadBTERDocument(file: any, model: UploadBTERFileModel | null = null) {
     //formdata
 
-     debugger
+    debugger
 
     const formData = new FormData();
     formData.append("file", file);
@@ -770,7 +770,7 @@ debugger
 
 
 
-  public async GetCampusPostMasterDDL(DepartmentID: number = 0,CreatedBy:number=0) {
+  public async GetCampusPostMasterDDL(DepartmentID: number = 0, CreatedBy: number = 0) {
 
     return await this.http.get(`${this.APIUrl}/GetCampusPostMasterDDL/${DepartmentID}/${CreatedBy}`, this.headersOptions)
       .pipe(
@@ -881,15 +881,15 @@ debugger
   }
 
 
-  public async GetTierBasedPackageMaster(TierID:number) {
+  public async GetTierBasedPackageMaster(TierID: number) {
     return await this.http.get(`${this.APIUrl}/GetTierBasedPackageMaster/${TierID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
-  
-  public async getStudBasicDetailsEnrollmentWise( EnrollmentNo:string , DepartmentID:number) {
+
+  public async getStudBasicDetailsEnrollmentWise(EnrollmentNo: string, DepartmentID: number) {
     debugger
     return await this.http.post(`${this.APIUrl}/getStudBasicDetailsEnrollmentWise/${EnrollmentNo}/${DepartmentID}`, this.headersOptions)
       .pipe(
@@ -906,7 +906,7 @@ debugger
   }
 
   public async DistrictMaster_DivisionIDWise(DivisionID: number) {
-     ;
+    ;
     return await this.http.get(this.APIUrl + '/DistrictMaster_DivisionIDWise/' + DivisionID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1049,13 +1049,20 @@ debugger
   }
 
   public async GetCommonMasterData(MasterCode: string, DepartmentID: number = 0, CourseType: number = 0, StaffTypeID: number = 0) {
-    
+
     return await this.http.get(this.APIUrl + '/CommonMasterDataByCode/' + MasterCode + '/' + DepartmentID + '/' + CourseType + '/' + StaffTypeID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
+  public async GetItiVacantPost(model: any) {
+
+    return await this.http.post(this.APIUrl + '/GetItiVacantPost/', model, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async GetInstructorDetails(SSOID: string) {
 
@@ -1249,7 +1256,7 @@ debugger
 
   public async GetITITradeList() {
 
-    return await this.http.post(this.APIUrl + '/TradeListGetAllData/' , this.headersOptions)
+    return await this.http.post(this.APIUrl + '/TradeListGetAllData/', this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -1391,7 +1398,7 @@ debugger
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-    
+
   public async QualificationDetailsDDL(searchRequest: QualificationDDLDataModel) {
     var body = JSON.stringify(searchRequest);
     const headers = { 'content-type': 'application/json' }
@@ -1610,7 +1617,7 @@ debugger
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
   public async GetITIStaffInstituteWise(request: any) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/GetITIStaffInstituteWise', body, this.headersOptions)
@@ -1771,7 +1778,7 @@ debugger
       ).toPromise();
   }
 
-  public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number, BGTType?:number) {
+  public async BTER_BGT_BudgetType(DepartmentID: number, LevelID: number, BGTType?: number) {
     let url = `${this.APIUrl}/BTER_BGT_BudgetType/${DepartmentID}/${LevelID}`;
 
     if (BGTType !== undefined && BGTType !== null) {
@@ -1782,7 +1789,7 @@ debugger
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
-  
+
     // return await this.http.get(this.APIUrl + '/BTER_BGT_BudgetType/' + DepartmentID + "/" + LevelID + "/" + BGTType, this.headersOptions)
     //   .pipe(
     //     catchError(this.handleErrorObservable)
@@ -1798,8 +1805,8 @@ debugger
       ).toPromise();
   }
 
-  public async GetDesignationAndPostMaster(id:any=0) {
-    return await this.http.get(this.APIUrl + '/GetDesignationAndPostMaster/' +  id , this.headersOptions)
+  public async GetDesignationAndPostMaster(id: any = 0) {
+    return await this.http.get(this.APIUrl + '/GetDesignationAndPostMaster/' + id, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -1886,7 +1893,7 @@ debugger
 
 
   public async ITIGetStaff_InstituteWise(request: any) {
-     ;
+    ;
     const body = JSON.stringify(request);
     console.log(body);
     return await this.http.post(this.APIUrl + '/ITIGetStaff_InstituteWise', body, this.headersOptions)
@@ -1918,7 +1925,7 @@ debugger
 
 
   public async NodalInstituteList(InstituteID: number = 0) {
-     
+
     return await this.http.post(`${this.APIUrl}/NodalInstituteList/${InstituteID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -2124,7 +2131,7 @@ debugger
   }
 
   public async GetSSOIDDetailData(SSOIDDetailRequest: SSOIDDetailRequestModel) {
-     
+
     var body = JSON.stringify(SSOIDDetailRequest);
     const headers = { 'content-type': 'application/json' }
     return await this.http.post(this.APIUrl + "/GetSSOIDDetailData/", body, { 'headers': headers })
@@ -2134,7 +2141,7 @@ debugger
   }
 
   public async Counselling_UploadDocument(file: any, model: UploadCounsellingFileModel | null = null) {
-     
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("FolderName", model?.FolderName ?? "");
@@ -2164,7 +2171,7 @@ debugger
       ).toPromise();
   }
   public async DDL_OfficeMasterList(DepartmentID: number): Promise<any> {
-    return await this.http.get(`${this.APIUrl}/DDL_OfficeMaster/${DepartmentID}`,this.headersOptions)
+    return await this.http.get(`${this.APIUrl}/DDL_OfficeMaster/${DepartmentID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       )
@@ -2226,10 +2233,10 @@ debugger
   }
 
   public async GetDesignationDepartmentIDWise(DepartmentID: number = 1) {
-      return await this.http.get(this.APIUrl + '/GetDesignationDepartmentIDWise/' + DepartmentID, this.headersOptions)
-          .pipe(
-              catchError(this.handleErrorObservable)
-          ).toPromise();
+    return await this.http.get(this.APIUrl + '/GetDesignationDepartmentIDWise/' + DepartmentID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
   }
 
 
@@ -2272,14 +2279,14 @@ debugger
       ).toPromise();
   }
 
-  public async GetDocumentDetails_RejectAtBter(request:any) {
+  public async GetDocumentDetails_RejectAtBter(request: any) {
 
-    return await this.http.post(this.APIUrl + '/GetDocumentDetails_RejectAtBter',request, this.headersOptions)
+    return await this.http.post(this.APIUrl + '/GetDocumentDetails_RejectAtBter', request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
   public async GetCollegeTradeMaster(tradeSearchRequest: ItiTradeSearchModel) {
     var body = JSON.stringify(tradeSearchRequest);
     const headers = { 'content-type': 'application/json' }
@@ -2313,7 +2320,7 @@ debugger
       ).toPromise();
   }
 
-  public async GetStudentDataBy_StudID(request:StudentDetailsModel) {
+  public async GetStudentDataBy_StudID(request: StudentDetailsModel) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + "/GetStudentDataBy_StudID", body, this.headersOptions)
       .pipe(
@@ -2337,7 +2344,7 @@ debugger
       ).toPromise();
   }
 
-  
+
   public async GetCalenderYearList() {
     return await this.http.get(this.APIUrl + '/GetCalenderYearList/', this.headersOptions)
       .pipe(
@@ -2372,4 +2379,58 @@ debugger
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetEventTypes() {
+    debugger;
+    return await this.http.get(
+      this.APIUrl + `/GetEventTypes`,
+      this.headersOptions
+    )
+      .pipe(
+        catchError(this.handleErrorObservable)
+      )
+      .toPromise();
+  }
+
+  public async InsertEventCommonMaster(data: any) {
+    debugger;
+    return await this.http.post(
+      this.APIUrl + `/InsertEventCommonMaster`,
+      data,
+      this.headersOptions
+    )
+      .pipe(
+        catchError(this.handleErrorObservable)
+      )
+      .toPromise();
+  }
+
+  public async GetEventCommonMasterList(type: string) {
+    return await this.http.get(
+      this.APIUrl + `/EventCommonMaster?type=${type}`,
+      this.headersOptions
+    )
+      .pipe(
+        catchError(this.handleErrorObservable)
+      )
+      .toPromise();
+  }
+
+  public async GetEffectiveFinYear() {
+    return await this.http.get(
+      this.APIUrl + `/GetEffectiveFinYear`,
+      this.headersOptions
+    ).pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+    }
+
+    
+
+    public async GetCommonMasterDDLByAction1(ActionType: string) {
+
+        return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByAction1/${ActionType}`, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
 }
