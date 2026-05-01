@@ -14,26 +14,26 @@
 
     <div class="flex justify-between flex-wrap items-center p-3 mb-3">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="SSOID">SSOID</label>
           <input type="text" id="SSOID" class="form-control"
                  [(ngModel)]="request.SSOID" disabled>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="EmployeeName">Employee Name</label>
           <input type="text" id="EmployeeName" class="form-control"
                  [(ngModel)]="request.EmployeeName" disabled>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="EmployeeDesignation">Designation</label>
           <input type="text" id="EmployeeDesignation" class="form-control"
                  [(ngModel)]="request.EmployeeDesignation" disabled>
         </div>
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        <div class="col-md-3">
+          <label for="NonGazettedID">
             Staff Type Gazetted non Gazetted 
           </label>
 
@@ -53,7 +53,7 @@
   <form [formGroup]="AddTransferRequest">
     <div class="card-body p-5">
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-plus"></i>Staff Details Transfer Request</b>
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Transfer Request</b>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
@@ -99,7 +99,7 @@
 
     <div class="card-body p-5">
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-plus"></i> Add More Staff Transfer Request</b>
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Add More Priority</b>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -176,7 +176,7 @@
 
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For  List</b>
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Transfer For  List</b>
     </div>
     <div class="overflow-x-auto mt-4">
       <table class="table table-bordered" *ngIf="StaffTransferList.length > 0">

@@ -280,7 +280,7 @@ export class AddTransferRequestComponent {
 
     };
 
-    console.log('Vacancy being added:', StaffTransferData);
+    console.log('Priority being added:', StaffTransferData);
 
     this.StaffTransferList.push(StaffTransferData); 
     this.StaffTransferList = this.StaffTransferList;
