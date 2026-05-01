@@ -370,10 +370,13 @@ export class MasterLayoutComponent implements OnInit {
   }
 
   // when role change
-  async loadMenuByRoleID(SeletedUserId: any) {
+  async loadMenuByRoleID(SeletedUserId: any)
+  {
     // filter by roleid
 
-    console.log(SeletedUserId);
+    var isShowHideButton = await this.ShowHideFinYearDDL();
+
+
     //debugger
     var r = this.lstUserRole.filter((x: any) => x.RoleID == this.RoleID)[0];
     this.sSOLoginDataModel.RoleID = this.RoleID;
@@ -382,6 +385,7 @@ export class MasterLayoutComponent implements OnInit {
     this.sSOLoginDataModel.Eng_NonEng = r?.['courseType']; //eng(1) / noneng(2)
     this.sSOLoginDataModel.OfficeID = r?.['OfficeID']; //eng(1) / noneng(2)
     this.sSOLoginDataModel.DistrictID = r?.['DistrictID']; //eng(1) / noneng(2)
+    this.sSOLoginDataModel.IsShowFinYearDDL = isShowHideButton;
 
     // commented bcz don't want reset fyddl
     //if (this.sSOLoginDataModel.FinancialYearID_Session > 0) {
@@ -1020,6 +1024,7 @@ backtoSignOutNew_17122025() {
       this.loaderService.requestStarted();
       await this.commonFunctionService.GetCommonMasterData("DownloadApp")
         .then((data: any) => {
+
           data = JSON.parse(JSON.stringify(data));
           this.AppLink = data['Data'][0]['Link'];
    
@@ -1034,6 +1039,37 @@ backtoSignOutNew_17122025() {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async ShowHideFinYearDDL(): Promise<number>
+  {
+    var Value = 0;
+    try
+    {
+      var data =
+      {
+        MasterCode: "ShowFinYearDDL",
+        FilterBy: this.RoleID
+      }
+  
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.CommonMasterDataByAction(data)
+        .then((data: any) => {
+          Value = data['Data'][0]['ID']
+
+        }, (error: any) => console.error(error)
+      );
+    }
+    catch (ex)
+    {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+    return Value;
   }
 
   async openAppLink() {
