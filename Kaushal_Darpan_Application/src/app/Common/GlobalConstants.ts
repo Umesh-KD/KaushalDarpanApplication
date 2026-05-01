@@ -227,7 +227,8 @@ export enum EnumRole {
   HostelIncharge = 258,
 
   //ITI Inspection
-  InspectionManager=102
+  InspectionManager=102,
+  STCSectionOfficer = 262
 }
 
 export enum enumExamStudentStatus {
