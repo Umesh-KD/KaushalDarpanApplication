@@ -63,6 +63,11 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public SearchInstituteID: number = 0;
     public SearchEmployeeType: number = 0;
 
+    public SupportingDoc: string = '';
+    public Dis_SupportingDoc: string = '';
+    public TransferSystemStatusUpdateList: any = [];
+    public updateStatus: number = 0;
+    
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -115,8 +120,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         data = JSON.parse(JSON.stringify(data));
         this.TransferSystemStatusList = data['Data'];
         this.TransferSystemStatusSearchList = data['Data'];
+        this.TransferSystemStatusUpdateList = data['Data'];
 
-    
+        this.TransferSystemStatusUpdateList = this.TransferSystemStatusUpdateList.filter((item: any) => item.ID == EnumTransferSystemStatus.Appnoved);
 
          if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
            this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Submitted || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
@@ -160,11 +166,14 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
     
     async EM_TransferSystem_GetData() {
-      
+      debugger
       try {
         this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
         this.searchRequest.Action = "EM_TransferProcessListmain";
         this.searchRequest.StatusID = this.SearchStatus;
+        this.searchRequest.CategoryID = this.SearchCategoryID;
+        this.searchRequest.EmployeeType = this.SearchEmployeeType;
+        this.searchRequest.InstituteID = this.SearchInstituteID;
         await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
@@ -354,7 +363,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       }
     }
     async onChangeSearchStatus() {
-      debugger
+      
       if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) && EnumTransferSystemStatus.Submitted == this.SearchStatus)) {
         this.ShowCheckBoxId = 1;
       } 
@@ -370,4 +379,123 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       }
     }
 
+
+    async TransferSystemEXTStatusUpdate() {
+      try {
+        ;
+        const selectedRows = this.EM_TransferSystemEXTList
+          .filter((item: any) => item.Selected === true);
+
+        if (selectedRows.length === 0) {
+          this.toastr.warning("Please select one record");
+          return;
+        }
+
+        if (selectedRows.length > 1) {
+          this.toastr.warning("Please select only one record");
+          return;
+        }
+
+        if (!this.Status || this.Status == "0") {
+          this.toastr.warning("Please select status");
+          return;
+        }
+
+       
+
+
+        const jsonData = selectedRows.map((item: any) => ({
+          TransferSystemID: item.TransferSystemID,
+          ID: item.ID,
+          Status: this.Status,
+          Remark: this.Remark,
+          CreatedBy: this.sSOLoginDataModel.UserID,
+          SupportingDoc: this.sSOLoginDataModel.UserID,
+          Dis_SupportingDoc: this.sSOLoginDataModel.UserID,
+
+        }));
+        this.updateSearch.jsonData = JSON.stringify(jsonData);
+
+
+        await this.staffServiceDetailsService
+          .EM_TransferSystemUpdateStatus(this.updateSearch)
+          .then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State === EnumStatus.Success) {
+              this.toastr.success(data.Message);
+              this.updateSearch.jsonData = "";
+              this.Status = "0";
+              this.Remark = "";
+
+              this.EM_TransferProcessList =
+                this.EM_TransferProcessList.map((item: any) => ({
+                  ...item,
+                  Selected: false
+                }));
+             
+            } else {
+              this.toastr.error(data.ErrorMessage);
+            }
+          });
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+
+    async onFilechange(event: any, Name: any) {
+      try {
+        this.file = event.target.files[0];
+        if (this.file) {
+          // Type validation
+          if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+            // Size validation
+            if (this.file.size > 2000000) {
+              this.toastr.error('Select less than 2MB File');
+              return;
+            }
+          }
+          else {
+            this.toastr.error('Select valid file type jpg/jpeg/png/pdf');
+            this.Uploadfile = '';
+            event.target.value = null;
+            return;
+          }
+
+          //upload model
+          let uploadModel = new UploadFileModel();
+          uploadModel.FileExtention = this.file.type ?? "";
+          uploadModel.MinFileSize = "";
+          uploadModel.MaxFileSize = "2000000";
+          uploadModel.FolderName = "BTER_Establishment/TransferRequestDocument";
+
+          //Upload to server folder
+          await this.commonFunctionService.UploadDocument(this.file, uploadModel)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if (data.State === EnumStatus.Success) {
+                if (Name == 'SupportingDocuments') {
+                  this.SupportingDoc = data['Data'][0]["FileName"];
+                  this.Dis_SupportingDoc = data['Data'][0]["Dis_FileName"];
+                } else {
+                  this.toastr.warning("no action provided")
+                }
+              }
+
+              if (data.State === EnumStatus.Error) {
+                this.toastr.error(data.ErrorMessage);
+
+              } else if (data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.ErrorMessage);
+              }
+            });
+        }
+      } catch (Ex) {
+        console.log(Ex);
+      } finally {
+        this.loaderService.requestEnded();
+      }
+    }
 }
