@@ -1,28 +1,116 @@
- <form [formGroup]="form">
-<div>
-  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
-  <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID"  >
-    <option value="0">Choose Option</option>
-    <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
-  </select>
+<!-- Page Title -->
+<div class="flex items-center justify-between mb-6">
+  <h4 class="text-lg font-medium">Post Master</h4>
+
+  <button class="btn bg-info text-white"
+          (click)="ViewandUpdate(MyModel_addPost)">
+    Add Post
+  </button>
 </div>
 
-<div *ngIf="formData.StaffTypeID==2">
-  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
-  <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
-    <option value="0">Choose Option</option>
-    <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
-  </select>
+<div class="card">
+  <div class="card-body p-5">
+
+    <!-- LIST -->
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full">
+        <thead>
+          <tr>
+            <th>Sr No</th>
+            <th>Staff Type</th>
+            <th>Post Name</th>
+            <!--<th>Status</th>-->
+            <th width="150">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of PostList; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{row.PostType}}</td>
+            <td>{{row.PostName}}</td>
+
+            <!--<td>
+              <label class="switch">
+                <input type="checkbox"
+                       [checked]="row.ActiveStatus == 1"
+                       (change)="toggleStatus(row)">
+                <span class="slider round"></span>
+              </label>
+            </td>-->
+
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+
+                <!-- Edit -->
+                <a href="javascript:void(0);"
+                   title="Edit"
+                   (click)="ViewandUpdate(MyModel_addPost, row.ID)">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <!-- Delete -->
+                <a href="javascript:void(0);"
+                   title="Delete"
+                   (click)="Delete(row.ID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+
+              </div>
+            
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
 </div>
-<div>
-<label class="text-gray-800 text-sm font-medium inline-block mb-1">
-  Post <span class="StarMarking">*</span>
-</label>
-<input type="text"
-       class="form-control"
-       formControlName="Post"
-       [(ngModel)]="formData.Post"
-       placeholder="Enter Post" />
-</div>
+
+
+<!-- MODAL -->
+<ng-template #MyModel_addPost>
+  <div class="card p-4">
+
+    <h4 class="mb-3">Add / Edit Post</h4>
+
+    <form [formGroup]="form" (ngSubmit)="onSave()">
+
+      <div class="grid grid-cols-2 gap-4">
+
+        <!-- Staff Type -->
+        <div class="w-full">
+          <label class="block mb-1">Staff Type *</label>
+          <select class="form-select w-full" formControlName="StaffTypeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList"
+                    [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <!-- Post -->
+        <div class="w-full">
+          <label class="block mb-1">Post *</label>
+          <input type="text"
+                 class="form-control w-full"
+                 formControlName="Post"
+                 placeholder="Enter Post" />
+        </div>
+      </div>
+        <div class="mt-4 text-center">
+          <button type="submit" class="btn bg-success text-white">
+            Save
+          </button>
+
+          <button type="button"
+                  class="btn bg-danger text-white"
+                  (click)="CloseModalPopup()">
+            Cancel
+          </button>
+        </div>
+
 </form>
-
+  </div>
+</ng-template>
