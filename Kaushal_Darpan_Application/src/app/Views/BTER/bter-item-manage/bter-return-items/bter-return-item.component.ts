@@ -81,6 +81,8 @@ export class AddBterReturnItemComponent {
 
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
+      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      
       await this.bterInventoryService.GetIssueItemList(this.Searchrequest)
         .then((data: any) => {
           if (data) {
@@ -388,6 +390,7 @@ async confirmReturnNew() {
           this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition || 0;
           this.submitRequest.ItemList = arr;
           this.submitRequest.SelectedCount = arr.length;
+          this.submitRequest.RoleID = this.sSOLoginDataModel.RoleID
           debugger
           console.log("Returning items:", this.submitRequest);
 
