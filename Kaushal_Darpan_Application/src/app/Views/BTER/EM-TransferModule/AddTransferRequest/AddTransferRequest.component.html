@@ -135,13 +135,13 @@
         </div>
 
 
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="req_child.PostID" formControlName="PostID"  [disabled]="true" >
             <option value="0">--Select--</option>
             <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
           </select>
-        </div>
+        </div> -->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Priority <span class="StarMarking">*</span></label>
@@ -197,8 +197,8 @@
             <td class="text-center">{{idx+1}}</td>
             <td>{{ leave.OfficeName }}</td>
             <td>{{ leave.NonGazetteName }}</td>
-            <td>{{ leave.InstituteName || N/A}}</td>
-            <td>{{ leave.DistrictName || N/A}}</td>
+            <td>{{ leave.InstituteName==''? 'N/A': leave.InstituteName}}</td>
+            <td>{{ leave.DistrictName==''? 'N/A': leave.DistrictName}} </td>
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.Priority }}</td>
             <td>

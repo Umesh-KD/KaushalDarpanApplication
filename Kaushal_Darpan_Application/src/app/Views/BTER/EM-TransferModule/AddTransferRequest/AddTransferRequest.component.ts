@@ -618,7 +618,15 @@ export class AddTransferRequestComponent {
 
 
   async OnfinalSave() {
-
+    if (this.StaffTransferList.length <3) {
+      this.toastr.warning("Please add at least three valid vacancy before saving.");
+      return;
+    }
+    
+    if(this.request.SupportingDocuments==undefined || this.request.SupportingDocuments==null || this.request.SupportingDocuments==""){
+      this.toastr.error("Please upload supporting documents.");
+      return;
+    }
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
     await this.childComponent.OpenOTPPopup();
