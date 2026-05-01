@@ -329,7 +329,9 @@ export class SR5ReportBTERComponent {
     //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.ItemMasterList.forEach((x: any) => {
-      x.Selected = this.AllInTableSelect;
+      if(x.SR5Approval != 2) {
+        x.Selected = this.AllInTableSelect;
+      }      
     });
   }
    selectInTableSingleCheckbox(isSelected: boolean, item: any) {
@@ -345,6 +347,7 @@ export class SR5ReportBTERComponent {
   }
   async ApproveSR5Items() {
       try {
+        debugger
         let selected = this.ItemMasterList.filter((x: any) => x.Selected);
         if (selected.length === 0) {
           this.toastr.warning("Please select at least one item to mark for approval.", "Warning", {
