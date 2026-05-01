@@ -1709,6 +1709,7 @@ const routes: Routes = [
       { path: 'iip-event-common-master', loadChildren: () => import('./Views/iip-event-common-master/iip-event-common-master.module').then(m => m.IipEventCommonMasterModule) },
 
       { path: 'AddTransferRequest', loadChildren: () => import('./Views/BTER/EM-TransferModule/AddTransferRequest/AddTransferRequest.module').then(m => m.AddTransferRequestModule) },
+      { path: 'AddTransferRequest/:ID', loadChildren: () => import('./Views/BTER/EM-TransferModule/AddTransferRequest/AddTransferRequest.module').then(m => m.AddTransferRequestModule) },
       
       { path: 'TransferRequestList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestList/transfer-request-list.routing.module').then(m => m.TransferRequestListModule) },
       

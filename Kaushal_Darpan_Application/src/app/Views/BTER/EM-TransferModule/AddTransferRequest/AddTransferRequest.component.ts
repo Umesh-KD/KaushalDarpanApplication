@@ -181,6 +181,8 @@ export class AddTransferRequestComponent {
     await this.GetStaffPersonalDetails();
     await this.ddl_District();
 
+    
+
     await this.commonMasterService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.GetTransfercateList = data['Data'];
