@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
@@ -14,6 +14,7 @@ import { DTELaboratoryMasterService } from '../../../../Services/DTEInventory/DT
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import * as XLSX from 'xlsx';
+import { AuctionDetailsModel } from '../../../../Models/ItemsDataModels';
 
 @Component({
   selector: 'app-sr6-report-bter',
@@ -23,6 +24,7 @@ import * as XLSX from 'xlsx';
 })
 export class SR6ReportBTERComponent {
   public Searchrequest = new inventoryIssueHistorySearchModel()
+  public request = new AuctionDetailsModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public State: number = 0;
@@ -39,7 +41,14 @@ export class SR6ReportBTERComponent {
   public LabDetailsData: any = [];
   public ItemId: number = 0;
   public UserID: number = 0;
+  public ItemDetailsId: number = 0;
+  public AvailableQuantity: number = 0;
   public today: Date = new Date();
+  public AllInTableSelect: boolean = false;
+  public closeResult: string | undefined;
+  public AuctionFormGroup!: FormGroup;
+  @ViewChild('AuctionItems_Modal') MyModel_AuctionItem: ElementRef | any;
+  modalReference: NgbModalRef | undefined;
 
   constructor(
     private toastr: ToastrService,
@@ -54,11 +63,21 @@ export class SR6ReportBTERComponent {
     private modalService: NgbModal,
     private commonMasterService: CommonFunctionService,
     private LaboratoryMasterService: DTELaboratoryMasterService,
+    private formBuilder: FormBuilder,
   ) { }
 
   async ngOnInit() {
     // Check if the current route is 'bter-staff-inventory-details'
-    
+    this.AuctionFormGroup = this.formBuilder.group({
+      AuctionQuantity: ['', Validators.required],
+      txtAuctionDate: ['', Validators.required],
+      //txtAuctionDate: ['', Validators.required],
+      Authority_forAuctionOrder: ['', Validators.required],
+      ModeOfDisposal: ['', Validators.required],
+      Remarks: ['', Validators.required],
+      ApproximateCost: ['', Validators.required],
+    })
+
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
@@ -68,6 +87,8 @@ export class SR6ReportBTERComponent {
     await this.GetAllData();
     
   }
+
+  get _AuctionFormGroup() { return this.AuctionFormGroup.controls; }
 
   async GetAllData() {    
     try {
@@ -325,5 +346,111 @@ export class SR6ReportBTERComponent {
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
+  }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type == 'application/pdf') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png file')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+
+        await this.commonFunctionService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              if (Type == "Photo") {
+                this.request.Dis_AuctionDoc = data['Data'][0]["Dis_FileName"];
+                this.request.AuctionDoc = data['Data'][0]["FileName"];
+
+              }
+              event.target.value = null;
+            }
+            if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
+            }
+            else if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async SaveAuctionData() {
+    try {
+      this.isSubmitted = true;
+      if (this.AuctionFormGroup.invalid || this.AuctionFormGroup.value.AuctionQuantity == 0) {
+        this.toastr.error("Please valid Auction Detail")
+        return;
+      }
+      this.loaderService.requestStarted();
+
+      this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.request.ItemDetailsId = this.ItemDetailsId;
+      this.request.RoleID = this.sSOLoginDataModel.RoleID;
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+
+
+      //save
+      await this.bterInventoryService.SaveAuctionData(this.request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+
+          if (data.State = EnumStatus.Success) {
+            this.toastr.success(data.Message)
+            this.AuctionFormGroup.reset();
+            this.request.Dis_AuctionDoc = '';
+            this.CloseModalPopup();
+            this.GetAllData();
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+    this.request = new AuctionDetailsModel();
+  }
+
+  async ViewandUpdate(content: any, item:any) {
+    this.isSubmitted = false;
+    this.ItemDetailsId = item.ItemDetailsId
+    this.request.isOption = item.IsOption
+    this.AvailableQuantity = item.AvailableQuantity
+    this.request.AuctionQuantity = item.AvailableQuantity
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
   }
 }

@@ -146,4 +146,9 @@ export class EM_TrainingDetailsListComponent {
       console.error(error);
     }
   }
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+  }
 }

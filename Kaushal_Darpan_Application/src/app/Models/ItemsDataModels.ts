@@ -101,6 +101,11 @@ export class AuctionDetailsModel {
   public ModeOfDisposal?: string = '';
   public Remark?: string = '';
   public ApproximateCost?: number = 0;
+  public ItemDetails?: AuctionItemDetailsDataModel[] = [];
+}
+
+export class AuctionItemDetailsDataModel{
+  public ItemDetailsId?: number = 0
 }
 
 export class inventoryIssueHistorySearchModel {

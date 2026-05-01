@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel, BTER_GetStaffPersonalDetailsModel, BTER_EM_TransferSystemModle, BTER_EM_TransferSystemExtModle } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel, BTER_GetStaffPersonalDetailsModel, BTER_EM_TransferSystemModle, BTER_EM_TransferSystemExtModle, EM_TransferSystemSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -85,12 +85,14 @@ export class AddTransferRequestComponent {
   public QueryReqFormGroup!: FormGroup;
   public _EnumRole = EnumRole
   public GetRoleID: number = 0
+  public ID: number = 0;
  
   OfficeVacancy: ITIOfficeVacancyModel[] = [];
   public ProfileStatus: number = 0;
   public ProfileStatusID: number = 0;
   public _EnumProfileStatus = EnumProfileStatus;
   public serviceDetailsRequest = new BTER_Govt_EM_PersonalDetailByUserIDSearchModel();
+  public searchRequest = new EM_TransferSystemSearchModel();
   @ViewChild('MyModel_ReplayQuery') MyModel_ReplayQuery: any;
   closeResult: string | undefined;
   public DdlType: string = "";
@@ -98,6 +100,7 @@ export class AddTransferRequestComponent {
   public InsOfficeID: number = 21;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public IsLockandSubmit: boolean = false;
+  
   
   
 
@@ -125,7 +128,6 @@ export class AddTransferRequestComponent {
     { ID: 11, Name: '11' },
     { ID: 12, Name: '12' }
   ];
-
 
   public requestModel = new BTER_GetStaffPersonalDetailsModel();
   public request = new BTER_EM_TransferSystemModle();
@@ -169,6 +171,8 @@ export class AddTransferRequestComponent {
     // });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
+
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
     await this.GetCollegesListAll();
     await this.OfficeVacancyDataList();
@@ -180,6 +184,10 @@ export class AddTransferRequestComponent {
     ///test
     await this.GetStaffPersonalDetails();
     await this.ddl_District();
+
+    if (this.ID > 0) {
+      await this.GetById();
+    }
 
     await this.commonMasterService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
@@ -206,7 +214,7 @@ export class AddTransferRequestComponent {
     //   this.toastr.error("Please fill in all required fields.");
     //   return;
     // }
-    if(this.req_child.OfficeID==undefined || this.req_child.OfficeID==null || this.req_child.OfficeID==0 || this.req_child.Priority==undefined || this.req_child.Priority==null || this.req_child.Priority==0 ){
+    if(this.req_child.OfficeID==undefined || this.req_child.OfficeID==null || this.req_child.OfficeID==0){
       this.toastr.warning("Please select Office and Priority.");
       return;
     }
@@ -286,6 +294,37 @@ export class AddTransferRequestComponent {
       this.req_child.PostID=this.GetStaffPersonalDetailsList[0]["DesignationID"];
   }
 
+  async GetById() {
+      debugger
+      try {
+        this.loaderService.requestStarted();
+        try {
+          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+          this.searchRequest.Action = "EM_TransferSystemEXT";
+          this.searchRequest.StatusID = 0;
+          this.searchRequest.TransferSystemID = this.ID;
+          await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.StaffTransferList = data.Data;
+            } else {
+              this.StaffTransferList = [];
+            }
+          })
+        } catch (error) {
+          console.error(error);
+        }
+        // this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
 
   async GetCollegesListAll() {
 
@@ -312,19 +351,6 @@ export class AddTransferRequestComponent {
     this.isLoading = true;
     this.isSubmitted = true;
 
-    if (this.StaffTransferList.length <3) {
-      this.toastr.warning("Please add at least three valid vacancy before saving.");
-      return;
-    }
-    
-    if(this.request.SupportingDocuments==undefined || this.request.SupportingDocuments==null || this.request.SupportingDocuments==""){
-      this.toastr.error("Please upload supporting documents.");
-      return;
-    }
-    if(this.AddTransferRequest.invalid){
-      this.toastr.error("Please fill in all required fields.");
-      return;
-    }
     this.request.CreatedBy=this.sSOLoginDataModel.UserID;
     this.request.UserID=this.sSOLoginDataModel.UserID;
     this.request.SSOID=this.sSOLoginDataModel.SSOID;
@@ -626,6 +652,11 @@ export class AddTransferRequestComponent {
     
     if(this.request.SupportingDocuments==undefined || this.request.SupportingDocuments==null || this.request.SupportingDocuments==""){
       this.toastr.error("Please upload supporting documents.");
+      return;
+    }
+
+    if(this.AddTransferRequest.invalid){
+      this.toastr.error("Please fill in all required fields.");
       return;
     }
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
