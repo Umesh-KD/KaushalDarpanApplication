@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel, BTER_GetStaffPersonalDetailsModel, BTER_EM_TransferSystemModle, BTER_EM_TransferSystemExtModle } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
@@ -44,6 +44,7 @@ export class AddTransferRequestComponent {
   public tradeSearchRequest = new ItiTradeSearchModel()
   public deleteRequest = new ITIOfficeVacancyModel();
   public ItiSanctionOrderList = new ItiSanctionOrderList();
+  @Output() IsPriorityChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public currentDate = new Date();
   public isLoading: boolean = false;
@@ -260,7 +261,7 @@ export class AddTransferRequestComponent {
       InstituteName: getinstituteName,
       NonGazetteName: Non_Gazetted.Name,
       DistrictName:DistrictName,
-      Priority: Priority,
+      Priority: this.StaffTransferList.length + 1,
       PostedSeat: 0,
       // TradeID: formValues.TradeID,
     
@@ -849,5 +850,49 @@ export class AddTransferRequestComponent {
     }
 
   }
+
+
+
+  priorityUp(index: number)
+  {
+    if (index > 0) {
+      let temp: any;
+   
+      temp = this.StaffTransferList[index];
+      this.StaffTransferList[index] = this.StaffTransferList[index - 1];
+      this.StaffTransferList[index - 1] = temp;
+      this.StaffTransferList[index].Priority = index + 1;
+      this.StaffTransferList[index - 1].Priority = index;
+   
+
+      this.IsPriorityChange.emit(true)
+    }
+  }
+
+  priorityDown(index: number) {
+
+      let temp: any;
+   
+    temp = this.StaffTransferList[index];
+    this.StaffTransferList[index] = this.StaffTransferList[index + 1];
+    this.StaffTransferList[index + 1] = temp;
+    this.StaffTransferList[index].Priority = index + 1;
+    this.StaffTransferList[index + 1].Priority = index + 2;
+
+      this.IsPriorityChange.emit(true)
+    
+  }
+
+
+  deleteRow(index: number) {
+   
+    this.StaffTransferList.splice(index, 1);
+    this.StaffTransferList.forEach((item, i) => {
+        item.Priority = i + 1;
+      });
+    
+    this.IsPriorityChange.emit(true)
+  }
+
 
 }
