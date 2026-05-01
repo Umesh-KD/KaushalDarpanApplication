@@ -49,11 +49,20 @@
           <option [value]="1348">New</option>
         </select>
       </div>
+
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Result Type</label>
-        <select class="form-select" [(ngModel)]="filterModel.ResultType" name="ResultType">
+        <select class="form-select" [(ngModel)]="filterModel.ResultType" name="ResultType" (change)="GetEffectiveFinYear()">
           <option [value]="0">--Select--</option>
           <option *ngFor="let item of ResultTypeList" [value]="item.ID">{{ item.Name }}</option>
+        </select>
+      </div>
+
+      <div *ngIf="filterModel.ResultType==_EnumResultType.RwhResult || filterModel.ResultType==_EnumResultType.RwhRevalEffected">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Effective From</label>
+        <select class="form-select" [(ngModel)]="filterModel.EffectiveFromEndTermId" name="EffectiveFromEndTermId">
+          <option [value]="0">--Select--</option>
+          <option *ngFor="let item of endTermFinYear" [value]="item.EndTermID">{{ item.EndTermName }}</option>
         </select>
       </div>
 
@@ -80,10 +89,10 @@
       <!-- Buttons -->
 
       <div>
+        <button type="submit" class="btn bg-info text-white mt-6"> Download</button>
         <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()">
           <i class="ti ti-refresh"></i> Reset
         </button>
-        <button type="submit" class="btn bg-info text-white mt-6"> Download</button>
       </div>
 
     </form>

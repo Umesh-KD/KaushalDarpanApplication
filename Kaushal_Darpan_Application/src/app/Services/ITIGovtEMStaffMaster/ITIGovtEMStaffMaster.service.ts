@@ -700,6 +700,14 @@ export class ITIGovtEMStaffMaster {
       ).toPromise();
   }
 
+  public async GetEmployeeServiceDetails_ITI_EM(request: ITI_Govt_EM_UserRequestHistoryListSearchDataModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetEmployeeServiceDetails_ITI_EM', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 

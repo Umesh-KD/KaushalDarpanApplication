@@ -1174,6 +1174,8 @@ const routes: Routes = [
       { path: 'em-add-training-details', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-add-training-details/em-add-training-details.module').then(m => m.EMAddTrainingDetailsModule), title: 'Training Details' },
       { path: 'Staff-Completed-Process-Training', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/em-training-details-history/em-training-details-history.module').then(m => m.emtrainingdetailshistoryModule), title: 'Training Details' },
       { path: 'Staff-New-Process-Training', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/EM-Staff-New-Process-Training/EM-Staff-New-Process-Training.module').then(m => m.EMStaffNewProcessTrainingModule), title: 'Training Details' },
+      { path: 'ShorTrainingDetailsList', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/EM_TrainingDetailsList/EM_TrainingDetailsList.module').then(m => m.EM_TrainingDetailsListModule), title: 'Training Details' },
+
       
       { path: 'Bter-AddUserRequest', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
       { path: 'Bter-AddUserRequest/:id', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/bter-em-UserRequest/bter-em-request-add/bter-em-request-add.module').then(m => m.BtereEMRequestAddModule), title: 'Bter-AddUserRequest' },
@@ -1707,8 +1709,12 @@ const routes: Routes = [
       { path: 'iip-event-common-master', loadChildren: () => import('./Views/iip-event-common-master/iip-event-common-master.module').then(m => m.IipEventCommonMasterModule) },
 
       { path: 'AddTransferRequest', loadChildren: () => import('./Views/BTER/EM-TransferModule/AddTransferRequest/AddTransferRequest.module').then(m => m.AddTransferRequestModule) },
+      
+      { path: 'TransferRequestList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestList/transfer-request-list.routing.module').then(m => m.TransferRequestListModule) },
+      
       { path: 'BterAttendencePercentReport', loadChildren: () => import('./Views/bter-attendence-percent-report/bter-attendence-percent-report.module').then(m => m.BterAttendencePercentReportModule) },
       { path: 'iti-studentdetail-by-enrollment', loadChildren: () => import('./Views/iti-studentdetail-by-enrollment/iti-studentdetail-by-enrollment.module').then(m => m.ItiStudentdetailByEnrollmentModule) },
+      { path: 'TransferRequestProcessList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestProcessList/TransferRequestProcessList.module').then(m => m.TransferRequestProcessListModule) },
 
 
     ]

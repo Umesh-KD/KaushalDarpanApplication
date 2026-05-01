@@ -227,7 +227,8 @@ export enum EnumRole {
   HostelIncharge = 258,
 
   //ITI Inspection
-  InspectionManager=102
+  InspectionManager=102,
+  STCSectionOfficer = 262
 }
 
 export enum enumExamStudentStatus {
@@ -913,4 +914,21 @@ export enum EnumOffice {
   BTER = 18,
   TTC_LRDC = 19,
   COLLEGE = 21
+}
+
+export enum EnumResultType {
+  MainResult = 1,
+  RevaluationResult = 2,
+  RwhResult = 3,
+  Ufm = 4,
+  RwhRevalEffected = 5
+}
+
+export enum EnumTransferSystemStatus {
+    Submitted = 1,
+    UnderADTEReview = 2,
+    UnderJDTEReview = 3,
+    UnderDTEReview = 4,
+    Appnoved = 5,
+    Rejected = 6
 }
