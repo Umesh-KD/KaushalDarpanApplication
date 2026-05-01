@@ -102,6 +102,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public DesignationMasterDDLList: any = [];
   public InstituteMasterDDLList: any[] = [];
   public OfficeWorkList: any = [];
+  public StaffServiceDetailsDataList: any = [];
   public isUpdateSubmitted: boolean = false;
   public _EnumOffice = EnumOffice;
 
@@ -1084,6 +1085,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
               if(data.State === EnumStatus.Success) {
                 this.toastr.success(data.Message);
                 this.modalService.dismissAll();
+                await this.GetZonalList();
               } else if(data.State === EnumStatus.Warning) {
                 this.toastr.warning(data.Message);
               } else {
@@ -1098,4 +1100,31 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     
   }
 
+  async GetEmployeeServiceDetails_ITI_EM(StaffUserID: number) {
+    try {
+      const request: any = {};
+      request.StaffUserID = StaffUserID;
+      await this.ITIGovtEMStaffMasterService.GetEmployeeServiceDetails_ITI_EM(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success){
+          this.StaffServiceDetailsDataList = data.Data;
+        } else {
+          this.StaffServiceDetailsDataList = [];
+        }
+      })
+    } catch (error) {
+      console.error
+    }
+  }
+
+  CloseModal_ServiceHistory() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.isSubmitted = false;
+  }
+
+  async openModal_UserServiceHistory(model: any, StaffUserID: number) {
+    await this.GetEmployeeServiceDetails_ITI_EM(StaffUserID);
+    this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+  }
 }

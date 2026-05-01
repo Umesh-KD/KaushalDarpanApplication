@@ -179,8 +179,12 @@
                   (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-history"></i>
                 </a>
 
-                <a href="javascript:void(0);" title="Update User Post" 
+                <a href="javascript:void(0);" title="Update User Post" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE_TrainingT2_establishment"
                   (click)="onClick_UserPost(UpdatePost_Modal, row.StaffUserID)"><i class="ti ti-user-edit"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="User Service History" 
+                  (click)="openModal_UserServiceHistory(Modal_UserServiceHistory, row.StaffUserID)"><i class="ti ti-briefcase"></i>
                 </a>
 
               </div>
@@ -898,3 +902,53 @@
   </div>
 </ng-template>
 
+<ng-template #Modal_UserServiceHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-end items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal_ServiceHistory()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>User Service History</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Name & SSOID</th>
+                <th class="text-left">Office</th>
+                <th class="text-left">Post</th>
+                <th class="text-left">Division</th>
+                <th class="text-left">District</th>
+                <th class="text-left">College</th>
+                <th class="text-left">Joining Date</th>
+                <th class="text-left">Relieving Date</th>
+                <th class="text-left">Remark</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of StaffServiceDetailsDataList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.NameAndSSOID }}</td>
+                <td align="left">{{ row.OfficeName }}</td>
+                <td align="left">{{ row.PostName}}</td>
+                <td align="left">{{ row.DivisionNameEnglish }}</td>
+                <td align="left">{{ row.DistrictNameEnglish }}</td>
+                <td align="left">{{ row.CodeAndName }}</td>
+                <td align="left">{{ row.JoiningDate }}</td>
+                <td align="left">{{ row.RelievingDate }}</td>
+                <td align="left">{{ row.Remark }}</td>
+              </tr>
+              <tr *ngIf="StaffServiceDetailsDataList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
