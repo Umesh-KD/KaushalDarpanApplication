@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumResultType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ReportService } from '../../../Services/Report/report.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -15,6 +15,7 @@ import { MarksheetDownloadService } from '../../../Services/MarksheetDownload/ma
 import { MarksheetLetterSearchModel } from '../../../Models/MarksheetLetterDataModel';
 import { CollegesWiseReportsModel } from '../../../Models/CollegesWiseReportsModel';
 import { ExamResultStudentStaticsModel, ExamWiseStreamPapersReportModelModel, GetSessionalFailStudentReport, StudentAllMarksReportModel } from '../../../Models/GenerateAdmitCardDataModel';
+import { EndTermFinYearModel } from '../../../Models/CommonMasterDataModel';
 
 export interface requestData {
   Action: string;
@@ -29,6 +30,7 @@ export interface requestData {
   FileNo1: string;
   FileNo2: string;
   FileDate: any;
+  EffectiveFromEndTermId: number;
 }
 
 @Component({
@@ -63,7 +65,8 @@ export class BterResultReportsComponent implements OnInit {
     SchemeID: 0,
     FileNo1: '',
     FileNo2: '',
-    FileDate: null
+    FileDate: null,
+    EffectiveFromEndTermId:0
   };
 
   totalRecords = 0;
@@ -86,6 +89,9 @@ export class BterResultReportsComponent implements OnInit {
   public SubjectTheoryParcticalMarkStaticsList: ExamResultStudentStaticsModel[] = [];
   public ExamWiseStreamPapersrList: ExamWiseStreamPapersReportModelModel[] = [];
   public StudentAllMarksReport: StudentAllMarksReportModel[] = [];
+
+  public endTermFinYear: EndTermFinYearModel[] = [];
+  public _EnumResultType = EnumResultType;
 
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
@@ -181,7 +187,8 @@ export class BterResultReportsComponent implements OnInit {
       SchemeID: 0,
       FileNo1: '',
       FileNo2: '',
-      FileDate: null
+      FileDate: null,
+      EffectiveFromEndTermId:0
     };
     this.selectedType = '';
     this.ReportsListData = [];
@@ -645,7 +652,7 @@ export class BterResultReportsComponent implements OnInit {
 
   async getResultAppearedPassedStatisticsReport() {
 
-    //debugger
+   // debugger
     let request: any = {
       streamID: this.filterModel.StreamID,
       SemesterID: this.filterModel.SemesterID,
@@ -655,7 +662,9 @@ export class BterResultReportsComponent implements OnInit {
       SchemeID: this.filterModel.SchemeID,
       FileNo1: this.filterModel.FileNo1,
       FileNo2: this.filterModel.FileNo2,
-      FileDate: this.filterModel.FileDate
+      FileDate: this.filterModel.FileDate,
+      ResultType: this.filterModel.ResultType,
+      EffectiveFromEndTermId: this.filterModel.EffectiveFromEndTermId
     }
 
     this.reportService.getResultAppearedPassedStatisticsReport(request)
@@ -855,5 +864,19 @@ export class BterResultReportsComponent implements OnInit {
     XLSX.writeFile(wb, `Student_All_Marks_Report_${timestamp}.xlsx`);
   }
 
-
+  async GetEffectiveFinYear() {
+    this.filterModel.EffectiveFromEndTermId = 0;
+    this.endTermFinYear = [];
+    if (this.filterModel.ResultType == this._EnumResultType.RwhResult || this.filterModel.ResultType == this._EnumResultType.RwhRevalEffected) {
+      try {
+        await this.commonMasterService.GetEffectiveFinYear()
+          .then((data: any) => {
+            this.endTermFinYear = data['Data'] || [];
+          }, (error: any) => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+    }
+  }
 }

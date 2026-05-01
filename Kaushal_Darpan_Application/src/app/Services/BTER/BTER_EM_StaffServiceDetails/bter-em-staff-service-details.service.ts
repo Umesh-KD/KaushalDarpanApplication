@@ -2,7 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { BTER_GetStaffPersonalDetailsModel, StaffTrainingDetailDataModel, StaffTrainingDetailSearchData, StaffTrainingStatusUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_TransferSystemModle, BTER_GetStaffPersonalDetailsModel, StaffTrainingDetailDataModel, StaffTrainingDetailSearchData, StaffTrainingStatusUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import {  EM_TransferSystemSearchModel,    TransferSystemUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+
 
 @Injectable({
   providedIn: 'root'
@@ -89,4 +91,29 @@ export class BTEREMStaffServiceDetailsService {
       ).toPromise();
   }
 
+
+  // save sP 
+    public async Save_StaffTansferRequestDetails(request: BTER_EM_TransferSystemModle) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/BTER_EM_TransferSystem_IU`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+    public async GetEM_TransferSystemData(request: EM_TransferSystemSearchModel) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/GetEM_TransferSystemData`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+
+    public async EM_TransferSystemUpdateStatus(request: TransferSystemUpdateDataModel) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/EM_TransferSystemUpdateStatus`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
 }

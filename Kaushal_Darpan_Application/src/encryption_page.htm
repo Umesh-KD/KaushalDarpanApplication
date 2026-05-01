@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <title>json Encrypt Tool</title>
+
+  <!--
+    npm install crypto-js --force
+  npm install @types/crypto-js --save-dev --force
+    -->
   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>-->
   <script src="/assets/home/js/bootstrap.js"></script>
   <script src="/assets/home/js/jquery-3.7.1.min.js"></script>
@@ -34,7 +39,7 @@
   <h2>🔐 json Encryption Tool</h2>
 
   <div class="row">
-    <label>Upload .json:</label><br/>
+    <label>Upload .json:</label><br />
     <input type="file" id="fileInput" accept=".json" />
   </div>
 
@@ -57,12 +62,12 @@
     const IV = CryptoJS.enc.Utf8.parse('1234567890123456');
 
     // Load file content into textarea
-    document.getElementById('fileInput').addEventListener('change', function(event) {
+    document.getElementById('fileInput').addEventListener('change', function (event) {
       const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         document.getElementById('inputJson').value = e.target.result;
       };
       reader.readAsText(file);

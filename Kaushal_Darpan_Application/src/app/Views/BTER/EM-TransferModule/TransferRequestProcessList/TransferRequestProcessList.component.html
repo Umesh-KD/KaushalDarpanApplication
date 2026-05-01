@@ -1,0 +1,160 @@
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+      <div class=" ">
+        <label>Search By Status</label>
+        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (click)="onChangeSearchStatus()">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of TransferSystemStatusSearchList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <button type="submit"
+                class="btn bg-info mt-5 text-white w-100"
+                (click)="EM_TransferSystem_GetData_Search(this.SearchStatus)">
+          Search
+        </button>
+      </div>
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Transfer Application List</b>
+    </div>
+
+
+
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+      <div class=" ">
+        <label>Request Status</label>
+        <select class="form-select" id="ExamId" [(ngModel)]="Status" name="ddlStatus">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of TransferSystemStatusList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+      </div>
+      <div class=" ">
+        <label>Remark</label>
+        <input class="form-input" type="text" id="Remark" [(ngModel)]="Remark">
+      </div>
+      <div>
+        <button type="submit"
+                class="btn bg-info mt-5 text-white w-100"
+                (click)="TransferSystemStatusUpdate()">
+          Submit
+        </button>
+      </div>
+    </div>
+    <!--{{EM_TransferProcessList|json}}-->
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="50px" *ngIf="ShowCheckBoxId ==1">
+              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+                     [checked]="AllSelect"
+                     (change)="checkboxthView_checkboxchange($event.target.checked)">
+            </th>
+            <th width="80px" align="left">Sr. No.</th>
+            <th align="left">SSO ID</th>
+            <th align="left">Name</th>
+            <th align="left">Transfer Category</th>
+            <th align="left">Reason Description</th>
+            <th align="left">Supporting Documents</th>
+            <th class="left">Created Date</th>
+            <th align="left">Status</th>
+            <th align="center" width="200">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of EM_TransferProcessList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td *ngIf="ShowCheckBoxId ==1">
+              <input type="checkbox" name="MarkCheck"
+                     [(ngModel)]="row.Selected" />
+            </td>
+            <td>{{idx+1}}</td>
+            <td>{{row.SSOID}}</td>
+            <td>{{row.NAME}}</td>
+            <td>{{row.TransferCategory}}</td>
+            <td>{{row.ReasonDescription}}</td>
+            <td>{{row.SupportingDocuments}}</td>
+            <td>{{row.CreatedDate}}</td>
+            <td>{{row.TransferStatus}}</td>
+           
+            <!--<td align="left">
+              <div class="flex" *ngIf="row.TrainingDoc; else noDoc1">
+                <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/StaffTrainingDocument/' + row.TrainingDoc"
+                   class="btn bg-primary text-white m-0"
+                   target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </div>
+              <ng-template #noDoc1>-----</ng-template>
+            </td>-->
+            
+            <td>
+              <a href="javascript:void(0);" title="Status History" (click)="onTransferSystemEXT(TransferSystemEXT, row.TransferSystemID)"><i class="ti ti-list"></i></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #TransferSystemEXT let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Training Status History</b>
+          <div class="flex justify-end flex-wrap items-center">
+          </div>
+        </div>
+        <!--{{EM_TransferSystemEXTList|json}}-->
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Office Name</th>
+                <th class="text-left">Designation Name</th>
+                <th class="text-left">District Name</th>
+                <th class="text-left">Institute Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.OfficeName }}</td>
+                <td align="left">{{ row.DesignationName}}</td>
+                <td align="left">{{ row.DistrictName }}</td>
+                <td align="left">{{ row.InstituteName }}</td>
+              </tr>
+              <tr *ngIf="EM_TransferSystemEXTList?.length==0">
+                <td colspan="5" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+</ng-template>

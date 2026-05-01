@@ -1707,8 +1707,12 @@ const routes: Routes = [
       { path: 'iip-event-common-master', loadChildren: () => import('./Views/iip-event-common-master/iip-event-common-master.module').then(m => m.IipEventCommonMasterModule) },
 
       { path: 'AddTransferRequest', loadChildren: () => import('./Views/BTER/EM-TransferModule/AddTransferRequest/AddTransferRequest.module').then(m => m.AddTransferRequestModule) },
+      
+      { path: 'TransferRequestList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestList/transfer-request-list.routing.module').then(m => m.TransferRequestListModule) },
+      
       { path: 'BterAttendencePercentReport', loadChildren: () => import('./Views/bter-attendence-percent-report/bter-attendence-percent-report.module').then(m => m.BterAttendencePercentReportModule) },
       { path: 'iti-studentdetail-by-enrollment', loadChildren: () => import('./Views/iti-studentdetail-by-enrollment/iti-studentdetail-by-enrollment.module').then(m => m.ItiStudentdetailByEnrollmentModule) },
+      { path: 'TransferRequestProcessList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestProcessList/TransferRequestProcessList.module').then(m => m.TransferRequestProcessListModule) },
 
 
     ]

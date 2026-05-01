@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel, BTER_GetStaffPersonalDetailsModel, BTERStaffTransferSystemModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel, BTER_GetStaffPersonalDetailsModel, BTER_EM_TransferSystemModle, BTER_EM_TransferSystemExtModle } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -101,7 +101,7 @@ export class AddTransferRequestComponent {
   
 
   //test
-  StaffTransferList: BTERStaffTransferSystemModel[] = [];
+  StaffTransferList: BTER_EM_TransferSystemExtModle[] = [];
   StaffTransferObject: ITIOfficeVacancyModel[] = [];
   public file!: File;
   public Uploadfile: string = '';
@@ -127,7 +127,8 @@ export class AddTransferRequestComponent {
 
 
   public requestModel = new BTER_GetStaffPersonalDetailsModel();
-  public request = new BTERStaffTransferSystemModel();
+  public request = new BTER_EM_TransferSystemModle();
+  public req_child=new BTER_EM_TransferSystemExtModle();
 
   public GetStaffPersonalDetailsList: any = [];
 
@@ -143,26 +144,28 @@ export class AddTransferRequestComponent {
   async ngOnInit() {
 
     this.AddTransferRequest = this.formBuilder.group({
-      TransfercateID: [0, [DropdownValidators]],
+      TransferCategoryID: [0, [DropdownValidators]],
       SupportingDocuments: ['', [Validators.required]],
       ReasonDescription: ['', [Validators.required]],
-      PriorityID: [0, [DropdownValidators]],
-      OfficeID: [0, [DropdownValidators]],
+      // Priority: [0, [DropdownValidators]],
+      // OfficeID: [0, [DropdownValidators]],
+      Priority: [0],
+      OfficeID: [0],
       ddlCollege: [0, []],
       ddlDistrictID: [0, []],
-      DesignationID: [0, [DropdownValidators]],
+      PostID: [{ value: 0, disabled: true }],
     });
 
-    this.groupForm = this.formBuilder.group({
-      OfficeID: [0, [DropdownValidators]],
-      ddlCollege: [0, [DropdownValidators]],
-      InstituteID: [0, []],
-      StaffTypeID: [0, [DropdownValidators]],
-      DesignationID: [0, [DropdownValidators]],
-      TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
-      Comments: [''],
-      TradeID: [0,],
-    });
+    // this.groupForm = this.formBuilder.group({
+    //   OfficeID: [0, [DropdownValidators]],
+    //   ddlCollege: [0, [DropdownValidators]],
+    //   InstituteID: [0, []],
+    //   StaffTypeID: [0, [DropdownValidators]],
+    //   DesignationID: [0, [DropdownValidators]],
+    //   TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
+    //   Comments: [''],
+    //   TradeID: [0,],
+    // });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
@@ -197,15 +200,28 @@ export class AddTransferRequestComponent {
 
   async addStaffTransferRequest() {
     debugger
+
+    // if(this.AddTransferRequest.invalid){
+    //   this.toastr.error("Please fill in all required fields.");
+    //   return;
+    // }
+    if(this.req_child.OfficeID==undefined || this.req_child.OfficeID==null || this.req_child.OfficeID==0 || this.req_child.Priority==undefined || this.req_child.Priority==null || this.req_child.Priority==0 ){
+      this.toastr.warning("Please select Office and Priority.");
+      return;
+    }
     const formValues = this.AddTransferRequest.value;
 
     const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
-    const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
+    const getdesignation = this.PostList.find((item1: any) => item1.ID == this.req_child.PostID);
    
-    const Non_Gazetted = this.GazettedList.find((item: any) => item.ID == formValues.NonGazettedID);
+    const Non_Gazetted = this.GazettedList.find((item: any) => item.ID == this.request.NonGazettedID);
 
+    const District=this.DistrictList.find((item:any)=>item.ID==formValues.ddlDistrictID);
+
+    const Priority=this.PriorityList.find((item:any)=>item.ID==formValues.Priority)?.Name;
+    const DistrictName=District?.Name || '';
     /*const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);*/
-
+    this.req_child.PostID=this.GetStaffPersonalDetailsList[0]["DesignationID"];
     let getinstitute = [];
 
     if (formValues.ddlCollege && formValues.ddlCollege !== 0) {
@@ -220,15 +236,16 @@ export class AddTransferRequestComponent {
 
     const StaffTransferData: any = {
      
-      DesignationID: formValues.DesignationID,
-      InstituteID: formValues.InstituteID || 0,  // fallback if null
+      PostID: this.req_child.PostID,
+      // InstituteID: formValues.InstituteID || 0,  // fallback if null
       OfficeID: formValues.OfficeID,
-      StaffTypeID: formValues.StaffTypeID,
-      TotalSeatID: formValues.TotalSeatID,
-      PlanningID: formValues.ddlCollege||0,
+      // StaffTypeID: formValues.StaffTypeID,
+      // TotalSeatID: formValues.TotalSeatID,
+      InstituteID: formValues.ddlCollege||0,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       CreatedBy: this.sSOLoginDataModel.UserID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      DistrictID:this.req_child.DistrictID,
       CourseTypeID: 1,
       ActiveStatus: true,
       DeleteStatus: false,
@@ -237,18 +254,19 @@ export class AddTransferRequestComponent {
       ModifyDate: '',
       IPAddress: '',
       ID: 0,
-      RemainingSeatID: 0,
-      OfficeName: getoffice.Name,
-      DesignationName: getdesignation.Name,
+      RemainingSeatID: 0, 
+      OfficeName: getoffice?.Name,
+      DesignationName: getdesignation?.Name,
       InstituteName: getinstituteName,
-      NonGazetteName: Non_Gazetted,
-     
+      NonGazetteName: Non_Gazetted.Name,
+      DistrictName:DistrictName,
+      Priority: Priority,
       PostedSeat: 0,
-      TradeID: formValues.TradeID,
+      // TradeID: formValues.TradeID,
     
       Index: this.tempIndex++,
-      PostSanctionDate: formValues.PostSanctionDate,
-      PostSanctionedID: formValues.PostSanctionedID,
+      // PostSanctionDate: formValues.PostSanctionDate,
+      // PostSanctionedID: formValues.PostSanctionedID,
     
 
     };
@@ -259,8 +277,12 @@ export class AddTransferRequestComponent {
     this.StaffTransferList = this.StaffTransferList;
     this.toastr.success("Vacancy added successfully.");
 
-    this.AddTransferRequest.reset(); 
-   
+    // this.AddTransferRequest.reset(); 
+    this.AddTransferRequest.get('OfficeID')?.reset(0);
+    this.AddTransferRequest.get('ddlCollege')?.reset(0);
+    
+     this.GetPostList();
+      this.req_child.PostID=this.GetStaffPersonalDetailsList[0]["DesignationID"];
   }
 
 
@@ -289,15 +311,28 @@ export class AddTransferRequestComponent {
     this.isLoading = true;
     this.isSubmitted = true;
 
-    if (this.OfficeVacancy.length === 0) {
-      this.toastr.warning("Please add at least one valid vacancy before saving.");
+    if (this.StaffTransferList.length <3) {
+      this.toastr.warning("Please add at least three valid vacancy before saving.");
       return;
     }
-
+    
+    if(this.request.SupportingDocuments==undefined || this.request.SupportingDocuments==null || this.request.SupportingDocuments==""){
+      this.toastr.error("Please upload supporting documents.");
+      return;
+    }
+    if(this.AddTransferRequest.invalid){
+      this.toastr.error("Please fill in all required fields.");
+      return;
+    }
+    this.request.CreatedBy=this.sSOLoginDataModel.UserID;
+    this.request.UserID=this.sSOLoginDataModel.UserID;
+    this.request.SSOID=this.sSOLoginDataModel.SSOID;
+    this.request.TransferExtDetails=this.StaffTransferList;
+    this.request.StaffID=this.sSOLoginDataModel.StaffID??0;
     try {
       this.loaderService.requestStarted();
 
-      await this.ITIGovtEMStaffMaster.Save_M_OfficeVacancy_IU(this.OfficeVacancy).then((data: any) => {
+      await this.staffServiceDetailsService.Save_StaffTansferRequestDetails(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
 
@@ -326,23 +361,20 @@ export class AddTransferRequestComponent {
 
 
   async removeLeave(index: number, ID: number) {
-    
-
-
+    debugger
     if (ID === undefined || ID === null) {
       ID = 0;
     }
     if (index === undefined || index === null) {
-      index = 0;
+      index = -1;
     }
 
-    if (ID == 0 && index != 0) {
 
-      //this.StaffTransferList = this.StaffTransferList.filter(item => item.Index !== index);
-      //this.StaffTransferObject = [...this.StaffTransferList];
-      //this.StaffTransferList = [...this.StaffTransferList];
-
-
+    if (ID == 0 && index >-1) {
+      this.StaffTransferList.splice(index, 1);
+      // this.StaffTransferList = this.StaffTransferList.filter((item:any) => item.idx !== index);
+      // this.StaffTransferObject = [...this.StaffTransferList];
+      // this.StaffTransferList = [...this.StaffTransferList];
     }
     else if (ID != 0) {
       try {
@@ -392,11 +424,11 @@ export class AddTransferRequestComponent {
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.SearchData.EndTermID = this.sSOLoginDataModel.EndTermID;
 
-      await this.ITIGovtEMStaffMaster.OfficeVacancyListPlanning(this.SearchData)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.StaffTransferList = data['Data'];
-        }, error => console.error(error));
+      // await this.ITIGovtEMStaffMaster.OfficeVacancyListPlanning(this.SearchData)
+      //   .then((data: any) => {
+      //     data = JSON.parse(JSON.stringify(data));
+      //     this.StaffTransferList = data['Data'];
+      //   }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
@@ -412,8 +444,7 @@ export class AddTransferRequestComponent {
 
 
   async GetOfficeList() {
-    
-
+  
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
@@ -432,8 +463,6 @@ export class AddTransferRequestComponent {
       }, 200);
     }
   }
-
-  
 
 
   async GetInstitute() {
@@ -500,10 +529,6 @@ export class AddTransferRequestComponent {
   }
 
 
-
-
-  
-
   async GetPostList() {
     try {
       debugger
@@ -519,6 +544,7 @@ export class AddTransferRequestComponent {
       }, 200);
     }
   }
+
   async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
     debugger;
     try {
@@ -542,11 +568,11 @@ export class AddTransferRequestComponent {
         // ✅ Then patch values
        
 
-        this.groupForm.patchValue({
-          DesignationID: Number(this.formData.DesignationID),
-          TradeID: Number(this.formData.TradeID),
-          InstituteID: Number(this.formData.InstituteID)
-        });
+        // this.groupForm.patchValue({
+        //   DesignationID: Number(this.formData.DesignationID),
+        //   TradeID: Number(this.formData.TradeID),
+        //   InstituteID: Number(this.formData.InstituteID)
+        // });
 
         // ✅ Your original logic (unchanged)
         if (this.formData.PostedSeat !== 0) {
@@ -592,7 +618,15 @@ export class AddTransferRequestComponent {
 
 
   async OnfinalSave() {
-
+    if (this.StaffTransferList.length <3) {
+      this.toastr.warning("Please add at least three valid vacancy before saving.");
+      return;
+    }
+    
+    if(this.request.SupportingDocuments==undefined || this.request.SupportingDocuments==null || this.request.SupportingDocuments==""){
+      this.toastr.error("Please upload supporting documents.");
+      return;
+    }
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
     await this.childComponent.OpenOTPPopup();
@@ -704,7 +738,7 @@ export class AddTransferRequestComponent {
         this.request.EmployeeName = this.GetStaffPersonalDetailsList[0]["DisplayName"];
         this.request.EmployeeDesignation = this.GetStaffPersonalDetailsList[0]["DesignationNameEnglish"];
         this.request.NonGazettedID = this.GetStaffPersonalDetailsList[0]["ISNonGazetted"];
-
+        this.req_child.PostID=this.GetStaffPersonalDetailsList[0]["DesignationID"];
          this.GetPostList();
 
         console.log(this.OrderNoList, "orderlist");
@@ -753,7 +787,7 @@ export class AddTransferRequestComponent {
             if (data.State === EnumStatus.Success) {
               if (Name == 'SupportingDocuments') {
                 this.request.SupportingDocuments = data['Data'][0]["FileName"];
-                this.request.SupportingDocuments_Dis = data['Data'][0]["Dis_FileName"];
+                this.request.SupportingDocumentsDis = data['Data'][0]["Dis_FileName"];
               }  else {
                 this.toastr.warning("no action provided")
               }
@@ -773,6 +807,7 @@ export class AddTransferRequestComponent {
       this.loaderService.requestEnded();
     }
   }
+
   async ddl_District() {
 
     try {
@@ -798,7 +833,7 @@ export class AddTransferRequestComponent {
   async getITICollege() {
     try {
       debugger
-      await this.commonMasterService.GetInstituteMaster_ByDistrictWise(this.request.DistrictID, this.sSOLoginDataModel.EndTermID)
+      await this.commonMasterService.GetInstituteMaster_ByDistrictWise(this.req_child.DistrictID, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ItiCollegesListAll = data['Data'];
