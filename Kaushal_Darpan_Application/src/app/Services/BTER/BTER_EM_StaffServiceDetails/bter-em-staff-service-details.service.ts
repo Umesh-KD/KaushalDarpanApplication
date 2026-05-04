@@ -124,4 +124,14 @@ export class BTEREMStaffServiceDetailsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+    //delete
+  public async DeleteById(request: EM_TransferSystemSearchModel) {
+      const body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/EM_TransferSystemUpdatePocessManage`,body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

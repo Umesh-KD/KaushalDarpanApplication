@@ -14,26 +14,26 @@
 
     <div class="flex justify-between flex-wrap items-center p-3 mb-3">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="SSOID">SSOID</label>
           <input type="text" id="SSOID" class="form-control"
                  [(ngModel)]="request.SSOID" disabled>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="EmployeeName">Employee Name</label>
           <input type="text" id="EmployeeName" class="form-control"
                  [(ngModel)]="request.EmployeeName" disabled>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label for="EmployeeDesignation">Designation</label>
           <input type="text" id="EmployeeDesignation" class="form-control"
                  [(ngModel)]="request.EmployeeDesignation" disabled>
         </div>
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        <div class="col-md-3">
+          <label for="NonGazettedID">
             Staff Type Gazetted non Gazetted 
           </label>
 
@@ -53,7 +53,7 @@
   <form [formGroup]="AddTransferRequest">
     <div class="card-body p-5">
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-plus"></i>Staff Details Transfer Request</b>
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Transfer Request</b>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
@@ -99,7 +99,7 @@
 
     <div class="card-body p-5">
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-plus"></i> Add More Staff Transfer Request</b>
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Add More Priority</b>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -161,9 +161,7 @@
 
           <div class="flex gap-4 mt-6">
             <button type="submit" class="btn btn-primary" (click)="addStaffTransferRequest()">Add</button>
-            <button type="submit" class="btn btn-success" (click)="OnfinalSave()">Final Save</button>
           </div>
-
         </div>
       </div>
   </form>
@@ -176,7 +174,7 @@
 
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For  List</b>
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Transfer For  List</b>
     </div>
     <div class="overflow-x-auto mt-4">
       <table class="table table-bordered" *ngIf="StaffTransferList.length > 0">
@@ -197,8 +195,8 @@
             <td class="text-center">{{idx+1}}</td>
             <td>{{ leave.OfficeName }}</td>
             <td>{{ leave.NonGazetteName }}</td>
-            <td>{{ leave.InstituteName==''? 'N/A': leave.InstituteName}}</td>
-            <td>{{ leave.DistrictName==''? 'N/A': leave.DistrictName}} </td>
+            <td>{{ leave.InstituteName=='' || leave.InstituteName==null? 'N/A': leave.InstituteName}}</td>
+            <td>{{ leave.DistrictName=='' || leave.DistrictName==null? 'N/A': leave.DistrictName}} </td>
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.Priority }}</td>
             <td>
@@ -217,19 +215,22 @@
               </button>
               <button class="btn bg-info text-white" type="button" title="Priority Down" (click)="priorityDown(idx)" [disabled]="idx === StaffTransferList.length - 1">
                 <i class="ti ti-arrow-narrow-down"></i>
-              </button>
-     
-
-
-
+              </button>      
 </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <div class=" flex justify-center mt-3" *ngIf="(request.TransferStatus!=2 && request.TransferStatus!=3 && request.TransferStatus!=4)">
+       <button type="submit" class="btn btn-success"  (click)="OnfinalSave()">Final Save</button>
+    </div>
   </div>
 </div>
+
+<!--{{StaffTransferObject|json}}-->
+<!--{{StaffTransferList|json}}-->
+
 <!--<ng-template #modal_UpdateVacancyPost let-modal>
   <div class="modal-content">
     <div class="card">
