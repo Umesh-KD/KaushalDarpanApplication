@@ -4,9 +4,13 @@
   color: #fff;
 }
 .form-field {
-  width: 280px;
+  max-width: 280px; /* control container width */
 }
 
 .custom-width {
-  width: 100%;
+  width: 100%; /* input full rahe container ke andar */
+}
+.modal-card {
+  max-width: 800px; /* modal width control */
+  margin: 0 auto; /* center me lao */
 }
