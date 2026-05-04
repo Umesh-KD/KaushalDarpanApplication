@@ -35,6 +35,7 @@ export class SanctionOrderListComponent {
   public searchRequest = new ItiSanctionOrderList();
   public UserID: number = 0;
   public StaffID: number = 0
+
   isInstituteDisabled: boolean = false; // Set true to disable
 
   public CommonSubjectYesNo: number = 1;
@@ -120,7 +121,7 @@ export class SanctionOrderListComponent {
 
   async getExaminerData() {
 
-
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
     try {
       await this.ScholarshipService.GetsanctionOrder(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -176,6 +177,7 @@ export class SanctionOrderListComponent {
 
     this.searchRequest.OrderNo = '';
     this.searchRequest.OrderType = 0
+    this.searchRequest.ParentID = 0
    
     await this.getExaminerData();
   }

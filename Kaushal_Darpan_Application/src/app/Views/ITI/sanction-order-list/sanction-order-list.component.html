@@ -30,47 +30,63 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name</label>
-          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.ExamID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of ExamList" [value]="item.ID">
-              {{item.Name}}
-            </option>
-          </select>
-        </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name</label>
+    <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.ExamID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ExamList" [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>
+  </div>-->
         <!--semester-->
 
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type</label>
-          <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.OrderType" >
+        <div *ngIf="sSOLoginDataModel.RoleID!=_enumrole.DTE_TrainingT2_establishment">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type:</label>
+          <select class="form-select" id="CollegeID" [(ngModel)]="searchRequest.ParentID">
+
             <option value="0">--All--</option>
-            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.ID">
-              {{item.Name}}
-            </option>
+            <option value="1">Administrative Sanction</option>
+            <option value="2">Financial Sanction</option>
+            <option value="3">Post Sanction</option>
+
           </select>
+
         </div>
 
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester Name</label>
-          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID">
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumrole.DTE_TrainingT2_establishment">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type:</label>
+          <select class="form-select" id="CollegeID" [(ngModel)]="searchRequest.ParentID">
+
             <option value="0">--All--</option>
-            <option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
-              {{item.SemesterName}}
-            </option>
+
+            <option value="4">Transfer Sanction</option>
           </select>
-        </div>-->
+
+        </div>
+
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester Name</label>
+    <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
+        {{item.SemesterName}}
+      </option>
+    </select>
+  </div>-->
         <!--commonsubject(yes/no)-->
         <!--branch-->
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
-          <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
-              {{item.StreamName}}
-            </option>
-          </select>
-        </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
+    <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+        {{item.StreamName}}
+      </option>
+    </select>
+  </div>-->
         <!--subject-->
         <!--group code-->
 
@@ -108,7 +124,8 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>S.No</th>
-            <th>Name</th>
+            <th>Sanction Type</th>
+            <th *ngIf="sSOLoginDataModel.RoleID!=_enumrole.DTE_TrainingT2_establishment">Name</th>
             <th>Order No</th>
             <th>Order Date</th>
       
@@ -120,7 +137,8 @@
         <tbody>
           <tr *ngFor="let row of ExaminersList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td class="text-center">{{idx+1}}</td>
-            <td class="text-center">{{row.OrderTypeName}}</td>
+            <td class="text-center">{{row.ParentName}}</td>
+            <td *ngIf="sSOLoginDataModel.RoleID!=_enumrole.DTE_TrainingT2_establishment" class="text-center">{{row.OrderTypeName}}</td>
             <td class="text-center">{{row.OrderNo}}</td>
             <td class="text-center">{{row.OrderDate}}</td>
           

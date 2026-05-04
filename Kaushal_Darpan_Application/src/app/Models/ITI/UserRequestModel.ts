@@ -39,11 +39,17 @@ export class RequestSearchModel {
   public RequestCreatedInstituteID?: number = 0;
   public RoleID?: number = 0;
   public RelievingTimeID?: number = 0;
-  
+  public OrderID :number=0
+
+
   public EmployeeNumber: string = '';
   public EmployeeDesignation: string = '';
   public LastworkingDate?: string = '';
 }
+
+
+
+
 
 
 /*-----------Bter Em---------------*/
@@ -82,7 +88,7 @@ export class BterRequestSearchModel {
   public ReqRoleID: number = 0;
   public EmployeeNumber: string = '';
   public EmployeeDesignation: string = '';
-
+  public OrderID: number = 0
   public IsPensionable: boolean = false;
   public NumberOfPensionable: string = '';
   public DateOfBirth: string = '';
