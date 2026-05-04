@@ -1723,7 +1723,8 @@ const routes: Routes = [
 
 
       { path: 'ItiTeacherAttendance', loadChildren: () => import('./Views/iti-teacher-attendance/iti-teacher-attendance.module').then(m => m.ItiTeacherAttendanceModule) },
-
+      { path: 'StructuredSummaryList', loadChildren: () => import('./Views/BTER/EM-TransferModule/StructuredSummaryList/StructuredSummaryList.module').then(m => m.StructuredSummaryListModule) },
+      { path: 'TabutarTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
     ]
   },
 

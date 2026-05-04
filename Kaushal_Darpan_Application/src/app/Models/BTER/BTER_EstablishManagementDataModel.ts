@@ -818,3 +818,17 @@ export class BTER_EM_TransferSystemExtModle {
  public UpdatedBy: number = 0;
  public FinalApproveStatus: number = 0;
 }
+
+
+export class TransferSystemGeneratorDataModel {
+  public TransferSystemID: number = 0;
+  public CreatedBy: number = 0;
+  public jsonData?: string = '';
+  public OrderDate?: string = '';
+  public DispatchNo?: string = '';
+  public OrderSupportingDocument?: string = '';
+  public OrderSupportingDocument_Dis?: string = '';
+  public Remark?: string = '';
+  public TrainingStatus: number = 0;
+
+}
