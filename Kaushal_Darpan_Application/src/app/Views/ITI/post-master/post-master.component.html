@@ -76,40 +76,38 @@
 
     <form [formGroup]="form" (ngSubmit)="onSave()">
 
-      <div class="grid grid-cols-2 gap-4">
+      <div class="flex gap-6">
 
-        <!-- Staff Type -->
-        <div class="w-full">
+        <div class="form-field">
           <label class="block mb-1">Staff Type *</label>
-          <select class="form-select w-full" formControlName="StaffTypeID">
+          <select class="form-select custom-width" formControlName="StaffTypeID">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of StaffTypeList"
-                    [value]="item.ID">
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">
               {{item.Name}}
             </option>
           </select>
         </div>
 
         <!-- Post -->
-        <div class="w-full">
+        <div class="form-field">
           <label class="block mb-1">Post *</label>
           <input type="text"
-                 class="form-control w-full"
+                 class="form-control custom-width"
                  formControlName="Post"
                  placeholder="Enter Post" />
         </div>
       </div>
-        <div class="mt-4 text-center">
-          <button type="submit" class="btn bg-success text-white">
-            Save
-          </button>
+      <div class="mt-4 flex justify-end gap-2">
+        <button type="submit" class="btn bg-success text-white">
+          Save
+        </button>
 
-          <button type="button"
-                  class="btn bg-danger text-white"
-                  (click)="CloseModalPopup()">
-            Cancel
-          </button>
-        </div>
+        <button type="button"
+                class="btn bg-danger text-white"
+                (click)="CloseModalPopup()">
+          Cancel
+        </button>
+      </div>
 
 </form>
   </div>

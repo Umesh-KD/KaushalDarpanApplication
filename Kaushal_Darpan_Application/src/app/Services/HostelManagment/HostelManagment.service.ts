@@ -265,11 +265,19 @@ export class HostelManagmentService {
       ).toPromise();
   }
 
-  public async UnmapHostelInstitute(id: number) {
-    const request: any = {}
-    request.id = id
+  //public async UnmapHostelInstitute(id: number) {
+  //  const request: any = {}
+  //  request.id = id
+  //  return await this.http
+  //    .post(`${this.APIUrl}/UnmapHostelInstitute`, request, this.headersOptions)
+  //    .pipe(
+  //      catchError(this.handleErrorObservable)
+  //    )
+  //    .toPromise();
+  //}
+  public async UnmapHostelInstitute(model: any) {
     return await this.http
-      .post(`${this.APIUrl}/UnmapHostelInstitute`, request, this.headersOptions)
+      .post(`${this.APIUrl}/UnmapHostelInstitute`, model, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       )

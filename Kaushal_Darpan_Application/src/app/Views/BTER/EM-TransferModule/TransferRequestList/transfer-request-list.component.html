@@ -70,11 +70,17 @@
           <td mat-cell *matCellDef="let element"> {{element.CreatedDate}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="TransferStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Transfer Status </th>
+          <td mat-cell *matCellDef="let element"> {{element.TransferStatus}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
           <td mat-cell *matCellDef="let element">
             <a [routerLink]="'/AddTransferRequest'" [queryParams]="{ID:element.TransferSystemID}" title="Edit"><i class="ti ti-pencil"></i></a>
-            <a class="btn " href="javascript:void(0);" title="Status History" (click)="onTransferSystemEXT(TransferSystemEXT, element.TransferSystemID)"><i class="ti ti-list"></i></a>
+            <a class="btn btn-sm btn-primary" href="javascript:void(0);" title="Status History" (click)="onTransferSystemEXT(TransferSystemEXT, element.TransferSystemID)"><i class="ti ti-list"></i></a>
+            <a href="javascript:void(0);" id="btnDelete"  title="Delete" (click)="DeleteById(element.TransferSystemID)"><i class="ti ti-trash"></i></a>
           </td>
         </ng-container>
 
