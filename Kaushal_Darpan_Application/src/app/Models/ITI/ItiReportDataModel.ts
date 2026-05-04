@@ -146,6 +146,7 @@ export class ItiSanctionOrderList {
   public OrderType :number=0
   public InstituteID :number=0
   public ModifyBy :number=0
+  public RoleID :number=0
   public OrderNo :string=''
   public OrderDate :string=''
   public OrderCopy: string = ''
