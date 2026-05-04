@@ -198,6 +198,8 @@ const routes: Routes = [
 
       { path: 'addgroupcenter', loadChildren: () => import('./Views/GroupCenter/add-group-center/add-group-center.module').then(m => m.AddGroupCenterModule), title: 'Add Group Center' },
       { path: 'groupcenter', loadChildren: () => import('./Views/GroupCenter/group-center/group-center.module').then(m => m.GroupCenterModule), title: 'Group Center' },
+      { path: 'Postmaster', loadChildren: () => import('./Views/ITI/post-master/post-master.module').then(m => m.PostMasterModule) },
+
 
       { path: 'addtimetable', loadChildren: () => import('./Views/TimeTable/add-time-table/add-time-table.module').then(m => m.AddTimeTableModule), title: 'Add Time Table' },
       { path: 'updatetimetable/:id', loadChildren: () => import('./Views/TimeTable/add-time-table/add-time-table.module').then(m => m.AddTimeTableModule), title: 'Update Time Table' },
