@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { ItiSanctionOrderList } from '../../../Models/ITI/ItiReportDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -26,7 +26,7 @@ export class AddSanctionOrderComponent {
   public BranchList: any[] = [];
   public CategoryList: any[] = [];
   public OrderList: any[] = [];
-
+  public _enumrole = EnumRole
 
   public request = new ItiSanctionOrderList()
   public isLoading: boolean = false;
@@ -148,7 +148,10 @@ export class AddSanctionOrderComponent {
   async SaveData() {
 
     try {
-      if (this.request.OrderType == 0) {
+
+
+
+      if (this.request.OrderType == 0 && this.sSOLoginDataModel.RoleID != EnumRole.DTE_TrainingT2_establishment) {
         this.toastr.warning("Please Select Order Type")
         return
       }
