@@ -367,6 +367,10 @@ export class AddTransferRequestComponent {
     this.isLoading = true;
     this.isSubmitted = true;
 
+    // if(this.AddTransferRequest.invalid){
+    //   this.toastr.error("Please fill all the required fields.");
+    //   return;
+    // }
     this.request.CreatedBy=this.sSOLoginDataModel.UserID;
     this.request.UserID=this.sSOLoginDataModel.UserID;
     this.request.SSOID=this.sSOLoginDataModel.SSOID;
@@ -677,10 +681,10 @@ export class AddTransferRequestComponent {
       return;
     }
 
-    if(this.AddTransferRequest.invalid){
-      this.toastr.error("Please fill all the required fields.");
-      return;
-    }
+    // if(this.AddTransferRequest.invalid){
+    //   this.toastr.error("Please fill all the required fields.");
+    //   return;
+    // }
 
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
