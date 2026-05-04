@@ -215,7 +215,7 @@ export class AddTransferRequestComponent {
     //   return;
     // }
     if(this.req_child.OfficeID==undefined || this.req_child.OfficeID==null || this.req_child.OfficeID==0){
-      this.toastr.warning("Please select Office and Priority.");
+      this.toastr.warning("Please select Office.");
       return;
     }
     const formValues = this.AddTransferRequest.value;
@@ -307,6 +307,13 @@ export class AddTransferRequestComponent {
             data = JSON.parse(JSON.stringify(data));
             if (data.State === EnumStatus.Success) {
               this.StaffTransferList = data.Data;
+              console.log("this.StaffTransferList", this.StaffTransferList);
+              this.request.TransferCategoryID=data.Data[0]['TransferCategoryID'];
+              this.request.ReasonDescription=data.Data[0]['ReasonDescription'];
+              this.request.SupportingDocuments=data.Data[0]['SupportingDocuments'];
+              this.request.SupportingDocumentsDis=data.Data[0]['SupportingDocumentsDis'];
+              this.request.TransferStatus=data.Data[0]['TransferStatus'];
+              // this.request.TransferSystemID=this.StaffTransferList[0]['TransferSystemID'];
             } else {
               this.StaffTransferList = [];
             }
@@ -356,6 +363,11 @@ export class AddTransferRequestComponent {
     this.request.SSOID=this.sSOLoginDataModel.SSOID;
     this.request.TransferExtDetails=this.StaffTransferList;
     this.request.StaffID=this.sSOLoginDataModel.StaffID??0;
+    this.request.TransferStatus=1;
+    if(this.ID>0){
+      this.request.TransferSystemID=this.ID
+    }
+
     try {
       this.loaderService.requestStarted();
 
@@ -363,11 +375,11 @@ export class AddTransferRequestComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
 
-          this.OfficeVacancy = [];
-          this.OfficeVacancyDataList();
+          // this.OfficeVacancy = [];
+          // this.OfficeVacancyDataList();
           this.toastr.success('Data saved successfully!');
 
-          window.location.reload();
+          // window.location.reload();
           // Clear array after successful save
         } else {
           this.toastr.error(data.ErrorMessage);
@@ -652,11 +664,6 @@ export class AddTransferRequestComponent {
     
     if(this.request.SupportingDocuments==undefined || this.request.SupportingDocuments==null || this.request.SupportingDocuments==""){
       this.toastr.error("Please upload supporting documents.");
-      return;
-    }
-
-    if(this.AddTransferRequest.invalid){
-      this.toastr.error("Please fill in all required fields.");
       return;
     }
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
