@@ -135,7 +135,7 @@
            </td>
 
             <td>
-              <a href="javascript:void(0);" title="Transfer EXT" (click)="onTransferSystemEXT(TransferSystemEXT, row.TransferSystemID)"><i class="ti ti-list"></i></a>
+              <a class="me-2" href="javascript:void(0);" title="Transfer EXT" (click)="onTransferSystemEXT(TransferSystemEXT, row.TransferSystemID)"><i class="ti ti-list"></i></a>
               <a href="javascript:void(0);" title="Status History" (click)="EM_TransferSystemHST_GetData(EM_TransferSystemHST, row.TransferSystemID)"><i class="ti ti-list"></i></a>
             </td>
           </tr>
@@ -150,103 +150,110 @@
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between items-center">
+        <h2 class="mb-0">Staff Transfer Application</h2>
         <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
       </div>
 
       <div class="card-body p-5">
-
-        <div>
-          <label>Update Status</label>
-          <select class="form-select" id="updateStatus" [(ngModel)]="updateStatus" name="ddlupdateStatus">
-            <option value="0">--select--</option>
-            <option *ngFor="let item of TransferSystemStatusUpdateList" [value]="item.ID">
-              {{item.Name}}
-            </option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                 for="SupportingDocuments ">
-            Supporting DOC :<span class="StarMarking">*</span>
-          </label>
-          <div class="flex fileUploader">
-            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="SupportingDocuments" type="file" (change)="onFilechange($event, 'SupportingDocuments')">
-            <label for="SupportingDocuments">
-              <span>Choose File</span>
-              {{SupportingDocuments === '' ? 'No File Choosen' : SupportingDocuments}}
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+          <div>
+            <label>Update Status</label>
+            <select class="form-select" id="updateStatus" [(ngModel)]="updateStatus" name="ddlupdateStatus">
+              <option value="0">--select--</option>
+              <option *ngFor="let item of TransferSystemStatusUpdateList" [value]="item.ID">
+                {{item.Name}}
+              </option>
+            </select>
+          </div>
+          <div>
+            <label class="block  text-sm font-medium text-gray-900 dark:text-white"
+                   for="SupportingDocuments ">
+              Supporting DOC :<span class="StarMarking">*</span>
             </label>
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + SupportingDoc}}"
-                 *ngIf="SupportingDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="SupportingDocuments" type="file" (change)="onFilechange($event, 'SupportingDocuments')">
+              <label for="SupportingDocuments">
+                <span>Choose File</span>
+                {{SupportingDocuments === '' ? 'No File Choosen' : SupportingDocuments}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + SupportingDoc}}"
+                   *ngIf="SupportingDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          <button type="submit"
-                  class="btn bg-info mt-5 text-white w-100"
-                  (click)="TransferSystemEXTStatusUpdate(this.SearchStatus)">
-            Submit
-          </button>
-        </div>
-
-      </div>
-
-      <div class="card-body">
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b class="text-1xl-5"><i class="ti ti-list"></i>Transfer System EXT</b>
-          <div class="flex justify-end flex-wrap items-center">
+          <div class="updt-btn-man">
+            <button type="submit"
+                    class="btn bg-info mt-5 text-white "
+                    (click)="TransferSystemEXTStatusUpdate(this.SearchStatus)">
+              Update
+            </button>
           </div>
         </div>
-        <!--{{EM_TransferSystemEXTList|json}}-->
-        <div class="overflow-x-auto mt-3">
-          <table class="table table-border w-full table-auto" cellpadding="5">
-            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-              <tr>
-                <!--FinalApproveStatus-->
-                <th width="50px">
-                  <!--<input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
-     [checked]="AllSelect"
-     (change)="checkboxthViewUpdate($event.target.checked)">-->
-                </th>
-                <th class="text-left">S No</th>
-                <th class="text-left">Office Name</th>
-                <th class="text-left">Designation Name</th>
-                <th class="text-left">District Name</th>
-                <th class="text-left">Institute Name</th>
-                <th class="text-left">Priority</th>
+         
 
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
-                <td>
-                  <input type="checkbox" name="MarkCheck"
-                         [(ngModel)]="row.Selected" />
-                </td>
-                <td align="left">{{idx+1}}</td>
-                <td align="left">{{ row.OfficeName }}</td>
-                <td align="left">{{ row.DesignationName}}</td>
-                <td align="left">{{ row.DistrictName }}</td>
-                <td align="left">{{ row.InstituteName }}</td>
-                <td align="left">{{ row.Priority}}</td>
+         
 
-              </tr>
-              <tr *ngIf="EM_TransferSystemEXTList?.length==0">
-                <td colspan="5" class="text-center">No Record Found </td>
-              </tr>
-            </tbody>
-          </table>
+
+        </div>
+
+        <div class="card-body">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i>Transfer System EXT</b>
+            <div class="flex justify-end flex-wrap items-center">
+            </div>
+          </div>
+
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <!--FinalApproveStatus-->
+                  <th width="50px">
+                    <!--<input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+              [checked]="AllSelect"
+              (change)="checkboxthViewUpdate($event.target.checked)">-->
+                  </th>
+                  <th class="text-left">S No</th>
+                  <th class="text-left">Office Name</th>
+                  <th class="text-left">Designation Name</th>
+                  <th class="text-left">District Name</th>
+                  <th class="text-left">Institute Name</th>
+                  <th class="text-left">Priority</th>
+                  <th class="text-left">Status</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
+                  <td>
+                    <input type="checkbox" name="MarkCheck"
+                           [(ngModel)]="row.Selected" [disabled]="isAnyApproved" />
+                  </td>
+                  <td align="left">{{idx+1}}</td>
+                  <td align="left">{{ row.OfficeName }}</td>
+                  <td align="left">{{ row.DesignationName}}</td>
+                  <td align="left">{{ row.DistrictName }}</td>
+                  <td align="left">{{ row.InstituteName }}</td>
+                  <td align="left">{{ row.Priority}}</td>
+                  <td align="left">{{ row.Status}}</td>
+
+                </tr>
+                <tr *ngIf="EM_TransferSystemEXTList?.length==0">
+                  <td colspan="5" class="text-center">No Record Found </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
+            Close
+          </button>
         </div>
       </div>
-      <div class="card-footer text-right">
-        <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
-          Close
-        </button>
-      </div>
-    </div>
   </div>
 
 </ng-template>

@@ -68,6 +68,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public Dis_SupportingDoc: string = '';
     public TransferSystemStatusUpdateList: any = [];
     public updateStatus: number = 0;
+    public isAnyApproved: boolean = false;
     
   constructor(
     private toastr: ToastrService,
@@ -306,6 +307,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
               this.EM_TransferSystemHSTList = data.Data;
               if (this.statusID == 0) {
                 this.EM_TransferSystemHSTList = data.Data;
+               
               }
             } else {
               this.EM_TransferSystemHSTList = [];
@@ -342,8 +344,10 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
             data = JSON.parse(JSON.stringify(data));
             if (data.State === EnumStatus.Success) {
               this.EM_TransferSystemEXTList = data.Data;
+              this.checkApproveStatus();
               if (this.statusID == 0) {
                 this.EM_TransferProcessList = data.Data;
+                
               }
             } else {
               this.EM_TransferSystemEXTList = [];
@@ -430,6 +434,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
               this.updateSearch.jsonData = "";
               this.Status = "0";
               this.Remark = "";
+              this.CloseModal();
 
               this.EM_TransferProcessList =
                 this.EM_TransferProcessList.map((item: any) => ({
@@ -512,5 +517,12 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         item.Selected = isChecked;  // Set all checkboxes based on the parent checkbox state
       }
 
+    }
+
+    checkApproveStatus() {
+      debugger
+      this.isAnyApproved = this.EM_TransferSystemEXTList?.some(
+        (item: any) => item.FinalApproveStatus == 5
+      );
     }
 }

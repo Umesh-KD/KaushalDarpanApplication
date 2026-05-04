@@ -14,18 +14,46 @@
 
 <div class="card">
   <div class="card-body p-5">
-
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
-      <div class="Search">
-        <div class="form-group row">
-          <label for="Search" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-input ng-pristine ng-valid ng-touched" id="Search" (input)="applyFilter($event.target.value)" placeholder="Search...">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+      <!-- <div > -->
+        <form [formGroup]="Searchform" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+          <div >
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Institue<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="ddlCampusType"
+                       formControlName="CollegeID"  [(ngModel)]="request.CollegeID" >
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of institueList;" [value]="item.InstituteID">{{item.InstituteName}}</option>
+              </select>
           </div>
-        </div>
-      </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">EnrollmentNo/Name</label>   
+            <input type="text" class="form-input" placeholder="Name" id="Name" formControlName="StudentName" [(ngModel)]="request.StudentName">
+          </div>
+
+          <!-- <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+              <i class="ti ti-refresh"></i>
+              Reset
+          </button> -->
+           <div class="flex items-end gap-2">
+              <button type="button"
+                      class="btn bg-info text-white" (click)="GetAllData()">
+                Search
+              </button>
+
+              <button type="button"
+                      class="btn bg-danger text-white" (click)="ClearSearchData()">
+                <i class="ti ti-refresh"></i> Reset
+              </button>
+            </div>
+        </form>
+      <!-- </div> -->
     </div>
+
+
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
@@ -34,6 +62,15 @@
         </a>
       </div>
     </div>
+    
+      <div class="Search flex justify-end flex-wrap items-center mb-4" >
+        <div class="form-group row">
+          <!-- <label for="Search" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label> -->
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" id="Search" (input)="applyFilter($event.target.value)" placeholder="Search...">
+          </div>
+        </div>
+      </div>
     <div class="mat-elevation-z8 table-responsive">
       <table mat-table [dataSource]="dataSource" matSort>
 
