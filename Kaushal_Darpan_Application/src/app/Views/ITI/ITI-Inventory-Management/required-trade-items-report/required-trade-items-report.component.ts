@@ -300,6 +300,7 @@ exportToExcel1(): void {
   const unwantedColumns = ['RequiredItemId', 'EquipmentsId', 'IsConsumable'];
 
   let columnOrder = [
+     'SNo',
     'TradeName',
     'ItemCategoryName',
     'ItemName',
@@ -310,7 +311,7 @@ exportToExcel1(): void {
 
   // 👉 Add Institute column ONLY if filtered
   if (this.searchReq.CollegeId && this.searchReq.CollegeId != 0) {
-    columnOrder = ['InstituteName', ...columnOrder];
+    columnOrder = ['SNo','InstituteName', ...columnOrder];
   }
 
   const selectedInstitute = this.CollegeDDLList.find(
@@ -319,12 +320,17 @@ exportToExcel1(): void {
 
   const instituteName = selectedInstitute?.InstituteName || '';
 
-  const filteredData = this.ItemMasterList.map((item: any) => {
-    const row: any = {};
+  const filteredData = this.ItemMasterList.map((item: any, index: number) => {
+  const row: any = {};
 
     columnOrder.forEach(col => {
-      if (col === 'InstituteName') {
-        row[col] = instituteName; // same for all rows
+      if (col === 'SNo') {
+        row[col] = index + 1;
+      } else if (col === 'InstituteName') {
+        row[col] = instituteName;
+      } else if (col === 'Dificiency') {
+        const diff = item.RequiredQuantity - item.AvailableQty;
+        row[col] = diff < 0 ? diff * -1 : diff;
       } else {
         row[col] = item[col] ?? '';
       }
@@ -334,19 +340,20 @@ exportToExcel1(): void {
   });
 
   // ✅ Add total row
-  const totalRequired = this.ItemMasterList.reduce((s:any, x:any) => s + (+x.RequiredQuantity || 0), 0);
+    const totalRequired = this.ItemMasterList.reduce((s:any, x:any) => s + (+x.RequiredQuantity || 0), 0);
   const totalAvailable = this.ItemMasterList.reduce((s:any, x:any) => s + (+x.AvailableQty || 0), 0);
+  const totalDef = totalRequired - totalAvailable;
 
+  // ✅ Total row
   const totalRow: any = {};
   columnOrder.forEach(col => {
-    if (col === 'TradeName') totalRow[col] = 'TOTAL';
+    if (col === 'SNo') totalRow[col] = '';
+    else if (col === 'ItemName') totalRow[col] = 'TOTAL';
     else if (col === 'RequiredQuantity') totalRow[col] = totalRequired;
     else if (col === 'AvailableQty') totalRow[col] = totalAvailable;
-    else if (col === 'Dificiency') totalRow[col] = totalRequired - totalAvailable;
-    else if (col === 'InstituteName') totalRow[col] = '';
+    else if (col === 'Dificiency') totalRow[col] = totalDef < 0 ? totalDef * -1 : totalDef;
     else totalRow[col] = '';
   });
-
   filteredData.push(totalRow);
 
   // Export
