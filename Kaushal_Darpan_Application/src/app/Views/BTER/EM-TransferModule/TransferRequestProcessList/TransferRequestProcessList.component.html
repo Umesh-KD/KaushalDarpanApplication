@@ -188,7 +188,7 @@
           <button type="submit"
                   class="btn bg-info mt-5 text-white w-100"
                   (click)="TransferSystemEXTStatusUpdate(this.SearchStatus)">
-            Submit
+            Update
           </button>
         </div>
 
@@ -200,7 +200,7 @@
           <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
-        <!--{{EM_TransferSystemEXTList|json}}-->
+        
         <div class="overflow-x-auto mt-3">
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
@@ -217,14 +217,15 @@
                 <th class="text-left">District Name</th>
                 <th class="text-left">Institute Name</th>
                 <th class="text-left">Priority</th>
+                <th class="text-left">Status</th>
 
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
-                <td>
+                <td >
                   <input type="checkbox" name="MarkCheck"
-                         [(ngModel)]="row.Selected" />
+                         [(ngModel)]="row.Selected" [disabled]="isAnyApproved"  />
                 </td>
                 <td align="left">{{idx+1}}</td>
                 <td align="left">{{ row.OfficeName }}</td>
@@ -232,6 +233,7 @@
                 <td align="left">{{ row.DistrictName }}</td>
                 <td align="left">{{ row.InstituteName }}</td>
                 <td align="left">{{ row.Priority}}</td>
+                <td align="left">{{ row.Status}}</td>
 
               </tr>
               <tr *ngIf="EM_TransferSystemEXTList?.length==0">
