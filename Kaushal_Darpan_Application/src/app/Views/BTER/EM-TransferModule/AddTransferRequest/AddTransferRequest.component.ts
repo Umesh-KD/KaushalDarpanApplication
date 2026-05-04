@@ -218,7 +218,16 @@ export class AddTransferRequestComponent {
       this.toastr.warning("Please select Office.");
       return;
     }
+    
     const formValues = this.AddTransferRequest.value;
+
+    if(this.req_child.OfficeID!=this.InsOfficeID){
+      this.req_child.DistrictID=0;
+      this.req_child.InstituteID=0;
+      formValues.ddlDistrictID=0;
+      formValues.ddlCollege=0;
+    }
+
 
     const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == this.req_child.PostID);
@@ -657,6 +666,7 @@ export class AddTransferRequestComponent {
 
 
   async OnfinalSave() {
+    debugger
     if (this.StaffTransferList.length <3) {
       this.toastr.warning("Please add at least three valid vacancy before saving.");
       return;
@@ -666,6 +676,12 @@ export class AddTransferRequestComponent {
       this.toastr.error("Please upload supporting documents.");
       return;
     }
+
+    if(this.AddTransferRequest.invalid){
+      this.toastr.error("Please fill all the required fields.");
+      return;
+    }
+
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
     await this.childComponent.OpenOTPPopup();
