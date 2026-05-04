@@ -168,20 +168,28 @@
         <div>
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                  for="SupportingDocuments ">
-            Supporting DOC   :<span class="StarMarking">*</span>
+            Supporting DOC :<span class="StarMarking">*</span>
           </label>
           <div class="flex fileUploader">
             <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                    id="SupportingDocuments" type="file" (change)="onFilechange($event, 'SupportingDocuments')">
             <label for="SupportingDocuments">
               <span>Choose File</span>
-              {{request.SupportingDocuments === '' ? 'No File Choosen' : request.SupportingDocuments}}
+              {{SupportingDocuments === '' ? 'No File Choosen' : SupportingDocuments}}
             </label>
             <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + request.SupportingDocuments}}"
-                 *ngIf="request.SupportingDocuments !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + SupportingDoc}}"
+                 *ngIf="SupportingDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
             </div>
           </div>
+        </div>
+
+        <div>
+          <button type="submit"
+                  class="btn bg-info mt-5 text-white w-100"
+                  (click)="TransferSystemEXTStatusUpdate(this.SearchStatus)">
+            Submit
+          </button>
         </div>
 
       </div>
@@ -192,27 +200,39 @@
           <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
-        
+        <!--{{EM_TransferSystemEXTList|json}}-->
         <div class="overflow-x-auto mt-3">
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
+                <!--FinalApproveStatus-->
+                <th width="50px">
+                  <!--<input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+     [checked]="AllSelect"
+     (change)="checkboxthViewUpdate($event.target.checked)">-->
+                </th>
                 <th class="text-left">S No</th>
                 <th class="text-left">Office Name</th>
                 <th class="text-left">Designation Name</th>
                 <th class="text-left">District Name</th>
                 <th class="text-left">Institute Name</th>
                 <th class="text-left">Priority</th>
+
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
+                <td>
+                  <input type="checkbox" name="MarkCheck"
+                         [(ngModel)]="row.Selected" />
+                </td>
                 <td align="left">{{idx+1}}</td>
                 <td align="left">{{ row.OfficeName }}</td>
                 <td align="left">{{ row.DesignationName}}</td>
                 <td align="left">{{ row.DistrictName }}</td>
                 <td align="left">{{ row.InstituteName }}</td>
                 <td align="left">{{ row.Priority}}</td>
+
               </tr>
               <tr *ngIf="EM_TransferSystemEXTList?.length==0">
                 <td colspan="5" class="text-center">No Record Found </td>

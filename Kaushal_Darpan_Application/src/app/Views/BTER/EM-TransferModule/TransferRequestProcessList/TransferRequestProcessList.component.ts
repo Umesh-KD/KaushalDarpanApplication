@@ -25,6 +25,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
   export class TransferRequestProcessListComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
     public updateSearch = new TransferSystemUpdateDataModel();
+    public updateExtSearch = new EM_TransferSystemSearchModel();
     public request = new EM_TransferSystemSearchModel();
     public searchRequest = new EM_TransferSystemSearchModel();
 
@@ -381,8 +382,17 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 
     async TransferSystemEXTStatusUpdate() {
+      debugger
       try {
-        ;
+
+        if (!this.updateStatus || this.updateStatus == 0) {
+          this.toastr.warning("Please select status");
+          return;
+        }
+        if (!this.SupportingDoc==null || this.SupportingDoc == "") {
+          this.toastr.warning("Please Upload Supporting Documents");
+          return;
+        }
         const selectedRows = this.EM_TransferSystemEXTList
           .filter((item: any) => item.Selected === true);
 
@@ -396,29 +406,22 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
           return;
         }
 
-        if (!this.Status || this.Status == "0") {
-          this.toastr.warning("Please select status");
-          return;
-        }
-
-       
-
-
+        
         const jsonData = selectedRows.map((item: any) => ({
           TransferSystemID: item.TransferSystemID,
           ID: item.ID,
-          Status: this.Status,
+          Status: this.updateStatus,
           Remark: this.Remark,
           CreatedBy: this.sSOLoginDataModel.UserID,
-          SupportingDoc: this.sSOLoginDataModel.UserID,
-          Dis_SupportingDoc: this.sSOLoginDataModel.UserID,
+          SupportingDoc: this.SupportingDoc,
+          Dis_SupportingDoc: this.Dis_SupportingDoc,
 
         }));
-        this.updateSearch.jsonData = JSON.stringify(jsonData);
+        this.updateExtSearch.jsonData = JSON.stringify(jsonData);
 
 
         await this.staffServiceDetailsService
-          .EM_TransferSystemUpdateStatus(this.updateSearch)
+          .TransferSystemEXTStatusUpdate(this.updateExtSearch)
           .then(async (data: any) => {
             data = JSON.parse(JSON.stringify(data));
 
@@ -446,6 +449,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 
     async onFilechange(event: any, Name: any) {
+      debugger
       try {
         this.file = event.target.files[0];
         if (this.file) {
@@ -497,5 +501,16 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       } finally {
         this.loaderService.requestEnded();
       }
+    }
+
+ 
+
+    checkboxthViewUpdate(isChecked: boolean) {
+
+      this.AllSelect = isChecked;
+      for (let item of this.EM_TransferSystemEXTList) {
+        item.Selected = isChecked;  // Set all checkboxes based on the parent checkbox state
+      }
+
     }
 }
