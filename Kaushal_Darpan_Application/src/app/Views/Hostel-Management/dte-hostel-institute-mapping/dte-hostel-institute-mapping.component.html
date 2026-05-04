@@ -92,6 +92,7 @@
             <th class="text-left">Hostel Name</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Member Type</th>
+            <th class="text-left">UnMap</th>
           </tr>
 
         </thead>
@@ -105,6 +106,10 @@
                 <input type="radio" name="memberType" [value]="item.isParent" [checked]="item.isParent"
                        (change)="SetParent(item, idx)">&nbsp; Set Parent
               </label>
+            </td>
+            <td>
+             
+              <span style="color:red; cursor:pointer;" (click)="removeInstitute(idx)"> ❌ </span>
             </td>
 </tbody>
       </table>

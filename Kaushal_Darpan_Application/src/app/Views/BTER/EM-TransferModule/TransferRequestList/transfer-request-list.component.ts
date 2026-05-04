@@ -14,6 +14,7 @@ import { EM_TransferSystemSearchModel } from '../../../../Models/BTER/BTER_Estab
 import { BTEREMStaffServiceDetailsService } from '../../../../Services/BTER/BTER_EM_StaffServiceDetails/bter-em-staff-service-details.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-transfer-request-list',
@@ -27,7 +28,7 @@ export class TransferRequestListComponent implements OnInit {
   State: boolean = false;
   // viewAdminDashboardList: StudentExamDetails[] = [];
   filteredData: any[] = [];
-  displayedColumns: string[] = ['SrNo', 'NAME', 'SSOID', 'TransferCategory', 'ReasonDescription', 'CreatedDate','Action'];
+  displayedColumns: string[] = ['SrNo', 'NAME', 'SSOID', 'TransferCategory','TransferStatus', 'ReasonDescription', 'CreatedDate','Action'];
   dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
   totalRecords: number = 0;
   pageSize: number = 10;
@@ -46,6 +47,7 @@ export class TransferRequestListComponent implements OnInit {
   modalReference: NgbModalRef | undefined;
 
   public searchRequest = new EM_TransferSystemSearchModel();
+
   public EM_TransferProcessList:any=[];
   public EM_TransferSystemEXTList:any=[];
 
@@ -56,7 +58,8 @@ export class TransferRequestListComponent implements OnInit {
     private commonMasterService: CommonFunctionService,
     private staffServiceDetailsService: BTEREMStaffServiceDetailsService,
     private loaderService: LoaderService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private Swal2: SweetAlert2
   ) {
   }
 
@@ -174,6 +177,45 @@ async EM_TransferSystem_GetData() {
         }, 200);
       }
     }
+
+  async DeleteById(ID: any) {
+    debugger
+    this.Swal2.Confirmation("Do you want to delete?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            //Show Loading
+            this.loaderService.requestStarted();
+            this.searchRequest.TransferSystemID=ID;
+            this.searchRequest.Action = "Delete";
+            await this.staffServiceDetailsService.DeleteById(this.searchRequest)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                console.log(data);
+
+                if (data.State) {
+                  this.toastr.success(data.Message)
+                  await this.EM_TransferSystem_GetData();
+                }
+                else {
+                  this.toastr.error(data.ErrorMessage)
+                }
+
+              }, (error: any) => console.error(error)
+              );
+          }
+          catch (ex) {
+            console.log(ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+        }
+      });
+  }
 
   onPaginationChange(event: PageEvent): void {
     this.pageSize = event.pageSize;

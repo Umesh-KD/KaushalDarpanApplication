@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel, BTER_GetStaffPersonalDetailsModel, BTER_EM_TransferSystemModle, BTER_EM_TransferSystemExtModle } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel, BTER_GetStaffPersonalDetailsModel, BTER_EM_TransferSystemModle, BTER_EM_TransferSystemExtModle, EM_TransferSystemSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -85,12 +85,14 @@ export class AddTransferRequestComponent {
   public QueryReqFormGroup!: FormGroup;
   public _EnumRole = EnumRole
   public GetRoleID: number = 0
+  public ID: number = 0;
  
   OfficeVacancy: ITIOfficeVacancyModel[] = [];
   public ProfileStatus: number = 0;
   public ProfileStatusID: number = 0;
   public _EnumProfileStatus = EnumProfileStatus;
   public serviceDetailsRequest = new BTER_Govt_EM_PersonalDetailByUserIDSearchModel();
+  public searchRequest = new EM_TransferSystemSearchModel();
   @ViewChild('MyModel_ReplayQuery') MyModel_ReplayQuery: any;
   closeResult: string | undefined;
   public DdlType: string = "";
@@ -98,6 +100,7 @@ export class AddTransferRequestComponent {
   public InsOfficeID: number = 21;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public IsLockandSubmit: boolean = false;
+  
   
   
 
@@ -125,7 +128,6 @@ export class AddTransferRequestComponent {
     { ID: 11, Name: '11' },
     { ID: 12, Name: '12' }
   ];
-
 
   public requestModel = new BTER_GetStaffPersonalDetailsModel();
   public request = new BTER_EM_TransferSystemModle();
@@ -169,6 +171,8 @@ export class AddTransferRequestComponent {
     // });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
+
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
     await this.GetCollegesListAll();
     await this.OfficeVacancyDataList();
@@ -181,7 +185,9 @@ export class AddTransferRequestComponent {
     await this.GetStaffPersonalDetails();
     await this.ddl_District();
 
-    
+    if (this.ID > 0) {
+      await this.GetById();
+    }
 
     await this.commonMasterService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
@@ -208,11 +214,20 @@ export class AddTransferRequestComponent {
     //   this.toastr.error("Please fill in all required fields.");
     //   return;
     // }
-    if(this.req_child.OfficeID==undefined || this.req_child.OfficeID==null || this.req_child.OfficeID==0 || this.req_child.Priority==undefined || this.req_child.Priority==null || this.req_child.Priority==0 ){
-      this.toastr.warning("Please select Office and Priority.");
+    if(this.req_child.OfficeID==undefined || this.req_child.OfficeID==null || this.req_child.OfficeID==0){
+      this.toastr.warning("Please select Office.");
       return;
     }
+    
     const formValues = this.AddTransferRequest.value;
+
+    if(this.req_child.OfficeID!=this.InsOfficeID){
+      this.req_child.DistrictID=0;
+      this.req_child.InstituteID=0;
+      formValues.ddlDistrictID=0;
+      formValues.ddlCollege=0;
+    }
+
 
     const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == this.req_child.PostID);
@@ -274,7 +289,7 @@ export class AddTransferRequestComponent {
 
     };
 
-    console.log('Vacancy being added:', StaffTransferData);
+    console.log('Priority being added:', StaffTransferData);
 
     this.StaffTransferList.push(StaffTransferData); 
     this.StaffTransferList = this.StaffTransferList;
@@ -288,6 +303,44 @@ export class AddTransferRequestComponent {
       this.req_child.PostID=this.GetStaffPersonalDetailsList[0]["DesignationID"];
   }
 
+  async GetById() {
+      debugger
+      try {
+        this.loaderService.requestStarted();
+        try {
+          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+          this.searchRequest.Action = "EM_TransferSystemEXT";
+          this.searchRequest.StatusID = 0;
+          this.searchRequest.TransferSystemID = this.ID;
+          await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.StaffTransferList = data.Data;
+              console.log("this.StaffTransferList", this.StaffTransferList);
+              this.request.TransferCategoryID=data.Data[0]['TransferCategoryID'];
+              this.request.ReasonDescription=data.Data[0]['ReasonDescription'];
+              this.request.SupportingDocuments=data.Data[0]['SupportingDocuments'];
+              this.request.SupportingDocumentsDis=data.Data[0]['SupportingDocumentsDis'];
+              this.request.TransferStatus=data.Data[0]['TransferStatus'];
+              // this.request.TransferSystemID=this.StaffTransferList[0]['TransferSystemID'];
+            } else {
+              this.StaffTransferList = [];
+            }
+          })
+        } catch (error) {
+          console.error(error);
+        }
+        // this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
 
   async GetCollegesListAll() {
 
@@ -314,24 +367,20 @@ export class AddTransferRequestComponent {
     this.isLoading = true;
     this.isSubmitted = true;
 
-    if (this.StaffTransferList.length <3) {
-      this.toastr.warning("Please add at least three valid vacancy before saving.");
-      return;
-    }
-    
-    if(this.request.SupportingDocuments==undefined || this.request.SupportingDocuments==null || this.request.SupportingDocuments==""){
-      this.toastr.error("Please upload supporting documents.");
-      return;
-    }
-    if(this.AddTransferRequest.invalid){
-      this.toastr.error("Please fill in all required fields.");
-      return;
-    }
+    // if(this.AddTransferRequest.invalid){
+    //   this.toastr.error("Please fill all the required fields.");
+    //   return;
+    // }
     this.request.CreatedBy=this.sSOLoginDataModel.UserID;
     this.request.UserID=this.sSOLoginDataModel.UserID;
     this.request.SSOID=this.sSOLoginDataModel.SSOID;
     this.request.TransferExtDetails=this.StaffTransferList;
     this.request.StaffID=this.sSOLoginDataModel.StaffID??0;
+    this.request.TransferStatus=1;
+    if(this.ID>0){
+      this.request.TransferSystemID=this.ID
+    }
+
     try {
       this.loaderService.requestStarted();
 
@@ -339,11 +388,11 @@ export class AddTransferRequestComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
 
-          this.OfficeVacancy = [];
-          this.OfficeVacancyDataList();
+          // this.OfficeVacancy = [];
+          // this.OfficeVacancyDataList();
           this.toastr.success('Data saved successfully!');
 
-          window.location.reload();
+          // window.location.reload();
           // Clear array after successful save
         } else {
           this.toastr.error(data.ErrorMessage);
@@ -621,6 +670,7 @@ export class AddTransferRequestComponent {
 
 
   async OnfinalSave() {
+    debugger
     if (this.StaffTransferList.length <3) {
       this.toastr.warning("Please add at least three valid vacancy before saving.");
       return;
@@ -630,6 +680,12 @@ export class AddTransferRequestComponent {
       this.toastr.error("Please upload supporting documents.");
       return;
     }
+
+    // if(this.AddTransferRequest.invalid){
+    //   this.toastr.error("Please fill all the required fields.");
+    //   return;
+    // }
+
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
     await this.childComponent.OpenOTPPopup();

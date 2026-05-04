@@ -34,11 +34,12 @@ export class ItiAttendencePercentComponent {
   dynamicColumns: DynamicColumn[] = [];
 
   displayedColumns: string[] = [];
-
+  public InstituteID:number=0
   filterData: any[] = [];
   public requestStaff = new StaffMasterDDLDataModel();
   SubjectMasterDDL: any[] = [];
   StaffList: any[] = [];
+  InstituteList: any[] = [];
   SSOID: string = ''
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
@@ -84,6 +85,9 @@ export class ItiAttendencePercentComponent {
     private toastr: ToastrService,
     public appsettingConfig: AppsettingService) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    this.InstituteID = this.sSOLoginDataModel.InstituteID
+
     // Access the route parameters
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
     this.semesterId = parseInt(this.route.snapshot.paramMap.get('semesterId') ?? "0");
@@ -111,8 +115,12 @@ export class ItiAttendencePercentComponent {
       ShiftId: [''],
       SSOID: [''],
       Percent: [''],
-    });
+      InstituteID: [''],
 
+    });
+   if (this.sSOLoginDataModel.InstituteID == 0) {
+     await this.GetInstituteList()
+   }
   await this.getSubjectMasterDDL(this.streamId, this.semesterId);
   await  this.GetStaff_InstituteWise()
     this.TableForm.patchValue({
@@ -176,7 +184,7 @@ export class ItiAttendencePercentComponent {
 
   async getMasterData() {
     try {
-      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
       })
@@ -197,7 +205,10 @@ export class ItiAttendencePercentComponent {
   async ItiShiftUnitDDL(ID: number) {
     try {
       debugger
-      await this.commonMasterService.ItiShiftUnitDDL(ID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+
+      
+
+      await this.commonMasterService.ItiShiftUnitDDL(ID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.shiftddl = data.Data;
       })
@@ -236,6 +247,12 @@ export class ItiAttendencePercentComponent {
   async GetAttendanceTimeTable() {
 
     try {
+
+      if (this.InstituteID == 0) {
+        this.toastr.warning("Please Select Iti")
+        return
+      }
+
       debugger
       const rawStart = this.TableForm.getRawValue().AttendanceStartDate;
       const rawEnd = this.TableForm.getRawValue().AttendanceEndDate;
@@ -263,7 +280,7 @@ export class ItiAttendencePercentComponent {
         SemesterID: this.TableForm.value.SemesterID,
         EndTermID: this.sSOLoginDataModel.EndTermID,
         FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
-        InstituteID: this.sSOLoginDataModel.InstituteID,
+        InstituteID: this.InstituteID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.TableForm.getRawValue().StreamID,
@@ -605,10 +622,14 @@ export class ItiAttendencePercentComponent {
   }
 
 
- async GetStaff_InstituteWise() {
+ async GetStaff_InstituteWise(ID:any='') {
 
-
-    this.requestStaff.InstituteID = this.sSOLoginDataModel.InstituteID;
+   if (ID > 0) {
+     this.InstituteID = ID
+   } else {
+     this.InstituteID = this.sSOLoginDataModel.InstituteID
+   }
+    this.requestStaff.InstituteID =this.InstituteID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.requestStaff.DepartmentID = this.sSOLoginDataModel.Eng_NonEng;
    await this.commonMasterService.ITIInstructor_InstituteWise(this.requestStaff).then((data: any) => {
@@ -672,4 +693,25 @@ export class ItiAttendencePercentComponent {
       this.SubjectMasterDDL = data.Data;
     })
   }
+
+
+
+  async GetInstituteList() {
+
+
+
+    await this.commonMasterService.Iticollege(2, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      debugger;
+      if (data.Data.length > 0) {
+        this.InstituteList = data.Data;
+      }
+      else {
+        this.InstituteList = [];
+      }
+
+      //this.ExaminerDDL = [{ StaffID: 1, Name: 'Staff 1', SSOID: 'Staff1' },{ StaffID: 2, Name: 'Staff 2', SSOID: 'Staff2' },{ StaffID: 3, Name: 'Staff 3', SSOID: 'Staff3' }];
+    })
+  }
+
 }

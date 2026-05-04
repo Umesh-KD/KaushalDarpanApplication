@@ -29,7 +29,19 @@
     <form [formGroup]="TableForm" (ngSubmit)="getData()">
       <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
 
-        <div *ngIf="sSOLoginDataModel.RoleID!=222"> 
+        <div *ngIf="sSOLoginDataModel.InstituteID==0">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Instituite<span class="StarMarking">*</span></label>
+          <ng-select formControlName="InstituteID" [clearable]="false" (change)="GetStaff_InstituteWise($event)">
+            <ng-option value="">--Select--</ng-option>
+            @for (item of InstituteList; track item.InstituteID) {
+            <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            }
+          </ng-select>
+
+        </div>
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID!=222">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teacher</label>
 
           <select formControlName="SSOID"
@@ -220,11 +232,7 @@
       <!-- Pagination and Excel Export -->
       <div class="table-footer">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2">
-          <div>
-            <button mat-raised-button class="custom-button" type="button" (click)="saveAttendance()" *ngIf="filterData && filterData.length > 0">Save</button>
-            <button mat-raised-button class="custom-button ms-2" type="button" (click)="saveAttendancefinal()" *ngIf="filterData && filterData.length > 0">Final Save</button>
 
-          </div>
           <div class="flex justify-end flex-wrap items-center">
             <mat-paginator [length]="totalRecords"
                            [pageSize]="pageSize"

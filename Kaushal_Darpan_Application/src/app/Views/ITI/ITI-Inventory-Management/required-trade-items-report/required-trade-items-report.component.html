@@ -72,7 +72,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
-        (click)="exportToExcel()"  
+        (click)="exportToExcel1()"  
         *ngIf="ItemMasterList && ItemMasterList.length > 0">
         <i class="ti ti-excel"></i> Export Excel
       </a>
@@ -95,7 +95,7 @@
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
-      <table class="table table-border w-full table-auto" cellpadding="5">
+      <table class="table table-border w-full table-auto" cellpadding="5" id="reportTable">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">SNO</th>
@@ -135,6 +135,20 @@
             </td> -->
           </tr>
         </tbody>
+        <tfoot>
+          <tr style="font-weight: bold; background: #f3f4f6;">
+            <td></td>
+            <td colspan="2" align="right">Total</td>
+
+            <td align="left">{{ totalRequiredQty }}</td>
+            <td align="left">{{ totalAvailableQty }}</td>
+
+            <td align="left">
+              {{ totalDeficiency < 0 ? (totalDeficiency * -1) : totalDeficiency }}
+            </td>
+          </tr>
+        </tfoot>
+
       </table>
     </div>
   </div>

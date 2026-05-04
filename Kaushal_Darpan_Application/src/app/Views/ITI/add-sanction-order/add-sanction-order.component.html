@@ -26,20 +26,33 @@
 
 
 
-      <div>
+      <div *ngIf="sSOLoginDataModel.RoleID!=_enumrole.DTE_TrainingT2_establishment">
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type: <span class="StarMarking">*</span></label>
         <select class="form-select" id="CollegeID" [(ngModel)]="request.ParentID" (change)="GetOrderList()">
-       
+
           <option value="0">--Select--</option>
           <option value="1">Administrative Sanction</option>
           <option value="2">Financial Sanction</option>
           <option value="3">Post Sanction</option>
+       
         </select>
 
       </div>
 
 
-      <div>
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumrole.DTE_TrainingT2_establishment">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type: <span class="StarMarking">*</span></label>
+        <select class="form-select" id="CollegeID" [(ngModel)]="request.ParentID" (change)="GetOrderList()">
+
+          <option value="0">--Select--</option>
+    
+          <option value="4">Transfer Sanction</option>
+        </select>
+
+      </div>
+
+
+      <div *ngIf="sSOLoginDataModel.RoleID!=_enumrole.DTE_TrainingT2_establishment">
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type: <span class="StarMarking">*</span></label>
         <select class="form-select" id="CollegeID" [(ngModel)]="request.OrderType">
           <option value="0">--Select--</option>

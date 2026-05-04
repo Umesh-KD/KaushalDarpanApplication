@@ -70,6 +70,7 @@ export class DTEHostelInstituteMappingComponent {
   selected: any[] = []; 
   public isAllSelected: boolean = false;
 
+  mappingId: number = 0;
   constructor(
     private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -95,10 +96,20 @@ export class DTEHostelInstituteMappingComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.getHostelTypeList();
     await this.GetAllddlHostelList();
+    await this.GetMasterData();  
     await this.GetAllHostelInstituteMappingList();
     this.GetMasterData();
-  }
+    this.route.queryParams.subscribe(params => {
+      if (params['id']) {
 
+        this.mappingId = +params['id'];
+
+        this.GetHostelInstituteMappingByID(this.mappingId);
+      
+      }
+    });
+
+  }
   async getHostelTypeList() {
     try {
       await this.commonMasterService.GetCommonMasterDDLByType('HostelType')
@@ -120,35 +131,80 @@ export class DTEHostelInstituteMappingComponent {
     }
   }
 
+  //async GetHostelInstituteMappingByID(id: number) {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this._HostelManagmentService.GetHostelInstituteMappingByID(id).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      console.log(data);
+  //      if (data.Data !== null) {
+  //        console.log(data.Data, "edit");
+  //        this.HostelInstituteMappingRequest.HostelID = data.Data.HostelID;
+  //        this.HostelInstituteMappingRequest.InstituteID = data.Data.InstituteID;
+  //        this.selected = data.Data.InstituteID
+  //          ? data.Data.InstituteID.split(',').map((x: any) => Number(x))
+  //          : [];
+
+  //        console.log("Selected IDs:", this.selected);
+  //        this.isUpdate = true;
+  //      }
+  //      console.log(this.request, "request")
+  //    });
+  //  } catch (error) {
+  //    console.error(error);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
   async GetHostelInstituteMappingByID(id: number) {
-    debugger
     try {
       this.loaderService.requestStarted();
-      await this._HostelManagmentService.GetHostelInstituteMappingByID(id).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        console.log(data);
-        if (data.Data !== null) {
-          console.log(data.Data, "edit");
-          this.HostelInstituteMappingRequest.HostelID = data.Data.HostelID;
-          this.HostelInstituteMappingRequest.InstituteID = data.Data.InstituteID;
-          this.selected = data.Data.InstituteID
-            ? data.Data.InstituteID.split(',').map((x: any) => Number(x))
-            : [];
 
-          console.log("Selected IDs:", this.selected);
-          this.isUpdate = true;
-        }
-        console.log(this.request, "request")
-      });
+      const data: any = await this._HostelManagmentService
+        .GetHostelInstituteMappingByID(id);
+
+      if (data.Data !== null) {
+
+        this.HostelInstituteMappingRequest.HostelID = data.Data.HostelID;
+
+        // selected IDs
+        this.selected = data.Data.InstituteID
+          ? data.Data.InstituteID.split(',').map((x: any) => Number(x))
+          : [];
+
+        // 🔥 FIX STARTS HERE
+        this.SelectedinstituteList = this.selected.map((instId: number, index: number) => {
+
+          const institute = this.InstituteMasterDDLList.find(
+            (x: any) => x.ID == instId
+          );
+
+          const hostel = this.HostelListData.find(
+            (x: any) => x.HostelID == data.Data.HostelID
+          );
+
+          return {
+            InstituteID: instId,
+            InstituteName: institute?.Name || '',      
+            HostelID: data.Data.HostelID,
+            hostelname: hostel?.HostelName || '',       
+            HIMappingID: data.Data.HIMappingID,        
+            isParent: index === 0                        
+          };
+        });
+
+        this.isUpdate = true;
+      }
+
     } catch (error) {
       console.error(error);
     } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+      this.loaderService.requestEnded();
     }
   }
-  
   async ResetControl() {
     this.isSubmitted = false;
     this.isUpdate = false;
@@ -256,43 +312,85 @@ export class DTEHostelInstituteMappingComponent {
   }
 
 
+  //addHostelInstituteMap() {
+  //  debugger;
+
+  //  this.HostelInstituteMappingRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //  this.HostelInstituteMappingRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //  this.HostelInstituteMappingRequest.CourseTypeID = 0;
+
+  //  const Parent = this.HostelInstituteMappingRequest.isParent
+  //  const hostelId = this.HostelInstituteMappingRequest.HostelID;
+  //  const hostelname = this.HostelListData.find(
+  //    (x: any) => x.HostelID == hostelId
+  //  );
+
+
+  //  this.SelectedinstituteList = this.selected?.length
+  //    ? this.selected.map((id: number) => {
+  //      const institute = this.InstituteMasterDDLList.find(
+  //        (x: any) => x.ID === id
+  //      );
+
+  //      return {
+  //        InstituteID: id,
+  //        InstituteName: institute?.Name || '',
+  //        HostelID: hostelId,
+  //        hostelname: hostelname.HostelName || '',
+  //        isParent: Parent.valueOf() === true ? true : false
+  //      };
+  //    }): [];
+
+  //  this.HostelInstituteMappingRequest.InstituteID =
+  //    this.selected?.length ? this.selected.join(',') : '';
+
+  //  this.HostelInstituteMappingRequest.HIMappingID =
+  //    this.HostelInstituteMappingRequest.HIMappingID || 0;
+  //  this.ResetControl();
+  //}
   addHostelInstituteMap() {
-    debugger;
 
-    this.HostelInstituteMappingRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-    this.HostelInstituteMappingRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.HostelInstituteMappingRequest.CourseTypeID = 0;
-
-    const Parent = this.HostelInstituteMappingRequest.isParent
     const hostelId = this.HostelInstituteMappingRequest.HostelID;
-    const hostelname = this.HostelListData.find(
+
+    if (!this.selected || this.selected.length === 0) {
+      this.toastr.error("Please select institute");
+      return;
+    }
+
+    const hostel = this.HostelListData.find(
       (x: any) => x.HostelID == hostelId
     );
 
+    this.selected.forEach((id: number) => {
 
-    this.SelectedinstituteList = this.selected?.length
-      ? this.selected.map((id: number) => {
+      const exists = this.SelectedinstituteList.some(
+        (x: any) => x.InstituteID === id
+      );
+
+      if (!exists) {
+
         const institute = this.InstituteMasterDDLList.find(
           (x: any) => x.ID === id
         );
 
-        return {
+        this.SelectedinstituteList.push({
           InstituteID: id,
           InstituteName: institute?.Name || '',
           HostelID: hostelId,
-          hostelname: hostelname.HostelName || '',
-          isParent: Parent.valueOf() === true ? true : false
-        };
-      }): [];
+          hostelname: hostel?.HostelName || '',
 
-    this.HostelInstituteMappingRequest.InstituteID =
-      this.selected?.length ? this.selected.join(',') : '';
+         
+          isParent: this.SelectedinstituteList.length === 0
+        });
 
-    this.HostelInstituteMappingRequest.HIMappingID =
-      this.HostelInstituteMappingRequest.HIMappingID || 0;
-    this.ResetControl();
+      } else {
+        this.toastr.warning("Institute already added");
+      }
+    });
+
+  
+    this.selected = [];
   }
-
 
   SetParent(InstituteID: any) {
     this.SelectedinstituteList.forEach((element: { isParent: boolean; }) => {
@@ -310,42 +408,87 @@ export class DTEHostelInstituteMappingComponent {
     debugger;
     this.isSubmitted = true;
 
+    // ===============================
+    // 🔥 CASE 1: NOTHING SELECTED → UNMAP ALL
+    // ===============================
     if (!this.SelectedinstituteList || this.SelectedinstituteList.length === 0) {
-      this.toastr.error("Please Add At Least One Institute");
-      return;
-    }
-    const hasParent = this.SelectedinstituteList.some(function(x: { isParent: boolean; }) {
-            return x.isParent === true;
-        });
-    if (!hasParent) {
-      this.toastr.error("Please select one parent institute");
+
+      if (this.mappingId > 0) {
+
+        if (!confirm("No institute selected. This will unmap all. Continue?")) {
+          return;
+        }
+
+        try {
+          this.loaderService.requestStarted();
+
+          //await this._HostelManagmentService.UnmapHostelInstitute(this.mappingId);
+          await this._HostelManagmentService.UnmapHostelInstitute({
+            HIMappingID: this.mappingId
+          });
+          this.toastr.success("Unmapped successfully");
+
+          this.router.navigate(['/Hostel-Institute-Mapping-List']);
+
+        } catch (error) {
+          console.error(error);
+          this.toastr.error("Unmap failed");
+        } finally {
+          this.loaderService.requestEnded();
+        }
+
+        return;
+      }
+
+      this.toastr.error("Please select hostel or institute");
       return;
     }
 
-    try
-    {
+    const hasParent = this.SelectedinstituteList.some((x: any) => x.isParent === true);
+
+    if (!hasParent) {
+     
+      this.toastr.warning("No parent selected (optional)");
+    }
+
+    
+    try {
       this.loaderService.requestStarted();
+
       const payload = this.SelectedinstituteList.map((item: any) => ({
-        ...item,
+
+        HIMappingID: item.HIMappingID && item.HIMappingID > 0
+          ? item.HIMappingID
+          : this.mappingId,
+
+        HostelID: item.HostelID,
+        InstituteID: item.InstituteID,
+        isParent: item.isParent,
+
         EndTermID: this.sSOLoginDataModel.EndTermID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: 0
       }));
 
+      console.log("Payload:", payload);
+
       const data: any = await this._HostelManagmentService
         .HostelInstituteMappingSaveData(payload);
 
       if (data.State === EnumStatus.Success) {
+
         this.toastr.success(data.Message || "Saved Successfully");
+
         this.SelectedinstituteList = [];
-        this.router.navigate(['/Hostel-Institute-Mapping']);
-        
+
+        this.router.navigate(['/Hostel-Institute-Mapping-List']);
+
       } else {
         this.toastr.error(data.ErrorMessage || "Something went wrong!");
       }
 
     } catch (ex) {
-      console.log(ex);
+      console.error(ex);
       this.toastr.error("Exception occurred");
     } finally {
       setTimeout(() => {
@@ -354,5 +497,26 @@ export class DTEHostelInstituteMappingComponent {
       }, 200);
     }
   }
+  removeInstitute(index: number) {
+
+    const removed = this.SelectedinstituteList[index];
+
+    if (confirm("Are you sure you want to remove this institute?")) {
+
+      
+      this.SelectedinstituteList.splice(index, 1);
+
+    
+      this.selected = this.selected.filter(
+        (x: number) => x !== removed.InstituteID
+      );
+
+      
+      if (this.SelectedinstituteList.length > 0) {
+        this.SelectedinstituteList[0].isParent = true;
+      }
+    }
+  }
 
 }
+

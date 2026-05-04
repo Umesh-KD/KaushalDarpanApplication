@@ -93,7 +93,7 @@ export class UnlockCalenderComponent {
     console.log('All events:', events);
 
 
-    this.GetInstituteList()
+  await  this.GetInstituteList()
     if (this.SSOLoginDataModel.RoleID == 20 || this.SSOLoginDataModel.RoleID == 43) {
       this.InstituteID = this.SSOLoginDataModel.InstituteID
       this.GetStaff_InstituteWise()
@@ -456,11 +456,11 @@ export class UnlockCalenderComponent {
   }
 
 
-  GetInstituteList() {
+ async GetInstituteList() {
 
 
 
-    this.commonFunctionService.Iticollege(2, this.SSOLoginDataModel.Eng_NonEng).then((data: any) => {
+   await this.commonFunctionService.Iticollege(2, this.SSOLoginDataModel.Eng_NonEng).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       debugger;
       if (data.Data.length > 0) {

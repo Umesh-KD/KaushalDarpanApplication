@@ -45,6 +45,8 @@ export class RequiredTradeItemsReportComponent {
   public ItemList:any[]=[];
   EnumRole = EnumRole;
   public request = new ItemsDataModels();
+  public RequiredItemSum:number=0;
+
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
@@ -258,5 +260,107 @@ export class RequiredTradeItemsReportComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     XLSX.writeFile(wb, `MinRequiredItemsList_${timestamp}.xlsx`);
   }
+  get totalRequiredQty(): number {
+  return (this.ItemMasterList || []).reduce(
+    (sum:any, item:any) => sum + (Number(item.RequiredQuantity) || 0),
+    0
+  );
+}
 
+get totalAvailableQty(): number {
+  return (this.ItemMasterList || []).reduce(
+    (sum:any, item:any) => sum + (Number(item.AvailableQty) || 0),
+    0
+  );
+}
+
+get totalDeficiency(): number {
+  return this.totalRequiredQty - this.totalAvailableQty;
+}
+
+
+// exportToExcel1(): void {
+//   const table = document.getElementById('reportTable');
+
+//   if (!table) {
+//     console.error('Table not found!');
+//     return;
+//   }
+
+//   // Convert full table (thead + tbody + tfoot) to worksheet
+//   const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(table);
+
+//   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+//   XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+//   XLSX.writeFile(wb, 'Item_Report.xlsx');
+// }
+exportToExcel1(): void {
+
+  const unwantedColumns = ['RequiredItemId', 'EquipmentsId', 'IsConsumable'];
+
+  let columnOrder = [
+     'SNo',
+    'TradeName',
+    'ItemCategoryName',
+    'ItemName',
+    'RequiredQuantity',
+    'AvailableQty',
+    'Dificiency'
+  ];
+
+  // 👉 Add Institute column ONLY if filtered
+  if (this.searchReq.CollegeId && this.searchReq.CollegeId != 0) {
+    columnOrder = ['SNo','InstituteName', ...columnOrder];
+  }
+
+  const selectedInstitute = this.CollegeDDLList.find(
+    (x: any) => x.InstituteID == this.searchReq.CollegeId
+  );
+
+  const instituteName = selectedInstitute?.InstituteName || '';
+
+  const filteredData = this.ItemMasterList.map((item: any, index: number) => {
+  const row: any = {};
+
+    columnOrder.forEach(col => {
+      if (col === 'SNo') {
+        row[col] = index + 1;
+      } else if (col === 'InstituteName') {
+        row[col] = instituteName;
+      } else if (col === 'Dificiency') {
+        const diff = item.RequiredQuantity - item.AvailableQty;
+        row[col] = diff < 0 ? diff * -1 : diff;
+      } else {
+        row[col] = item[col] ?? '';
+      }
+    });
+
+    return row;
+  });
+
+  // ✅ Add total row
+    const totalRequired = this.ItemMasterList.reduce((s:any, x:any) => s + (+x.RequiredQuantity || 0), 0);
+  const totalAvailable = this.ItemMasterList.reduce((s:any, x:any) => s + (+x.AvailableQty || 0), 0);
+  const totalDef = totalRequired - totalAvailable;
+
+  // ✅ Total row
+  const totalRow: any = {};
+  columnOrder.forEach(col => {
+    if (col === 'SNo') totalRow[col] = '';
+    else if (col === 'ItemName') totalRow[col] = 'TOTAL';
+    else if (col === 'RequiredQuantity') totalRow[col] = totalRequired;
+    else if (col === 'AvailableQty') totalRow[col] = totalAvailable;
+    else if (col === 'Dificiency') totalRow[col] = totalDef < 0 ? totalDef * -1 : totalDef;
+    else totalRow[col] = '';
+  });
+  filteredData.push(totalRow);
+
+  // Export
+  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+  XLSX.writeFile(wb, 'Item_Report.xlsx');
+}
 }

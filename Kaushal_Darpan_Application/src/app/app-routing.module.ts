@@ -198,6 +198,8 @@ const routes: Routes = [
 
       { path: 'addgroupcenter', loadChildren: () => import('./Views/GroupCenter/add-group-center/add-group-center.module').then(m => m.AddGroupCenterModule), title: 'Add Group Center' },
       { path: 'groupcenter', loadChildren: () => import('./Views/GroupCenter/group-center/group-center.module').then(m => m.GroupCenterModule), title: 'Group Center' },
+      { path: 'Postmaster', loadChildren: () => import('./Views/ITI/post-master/post-master.module').then(m => m.PostMasterModule) },
+
 
       { path: 'addtimetable', loadChildren: () => import('./Views/TimeTable/add-time-table/add-time-table.module').then(m => m.AddTimeTableModule), title: 'Add Time Table' },
       { path: 'updatetimetable/:id', loadChildren: () => import('./Views/TimeTable/add-time-table/add-time-table.module').then(m => m.AddTimeTableModule), title: 'Update Time Table' },
@@ -1717,6 +1719,10 @@ const routes: Routes = [
       { path: 'iti-studentdetail-by-enrollment', loadChildren: () => import('./Views/iti-studentdetail-by-enrollment/iti-studentdetail-by-enrollment.module').then(m => m.ItiStudentdetailByEnrollmentModule) },
       { path: 'TransferRequestProcessList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestProcessList/TransferRequestProcessList.module').then(m => m.TransferRequestProcessListModule) },
 
+      { path: 'MasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/master-dashboard/master-dashboard.module').then(m => m.MasterDashboardModule) },
+
+
+      { path: 'ItiTeacherAttendance', loadChildren: () => import('./Views/iti-teacher-attendance/iti-teacher-attendance.module').then(m => m.ItiTeacherAttendanceModule) },
 
     ]
   },
@@ -1835,8 +1841,10 @@ const routes: Routes = [
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
-  { path: 'PostMaster', loadChildren: () => import('./Views/ITI/post-master/post-master.module').then(m => m.PostMasterModule) },
+  
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
+  { path: 'Views\BterAttendenceRoom', loadChildren: () => import('./Views/bter-attendence-room/bter-attendence-room.module').then(m => m.BterAttendenceRoomModule) },
+
 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
