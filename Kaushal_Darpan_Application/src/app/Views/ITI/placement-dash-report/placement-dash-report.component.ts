@@ -10,6 +10,9 @@ import { EnumRole } from '../../../Common/GlobalConstants';
 import { PlacementReportService } from '../../../Services/PlacementReport/PlacementReport.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { PlacementReportSearchModels } from '../../../Models/PlacementDashReportModel';
+import { ItiCampusPostService } from '../../../Services/ITI/ITICampusPost/iticampus-post.service';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-iti-placement-dash-report',
@@ -36,6 +39,9 @@ export class ITIPlacementDashReportComponent implements OnInit {
   _EnumRole = EnumRole;
   InstituteMasterList: any = [];
   SemesterMasterList: any = [];
+  public Searchform!:FormGroup;
+  public institueList: any = [];
+  public request =new PlacementReportSearchModels();
   Table_SearchText: string = '';
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
@@ -43,32 +49,74 @@ export class ITIPlacementDashReportComponent implements OnInit {
     private PlacementDashService: PlacementReportService,
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
-    private commonMasterService: CommonFunctionService
+    private commonMasterService: CommonFunctionService,
+    private CampusPostService: ItiCampusPostService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder
   ) {
   }
 
   async ngOnInit(): Promise<void> {
+
+    this.Searchform = this.formBuilder.group({
+      CollegeID: ['0'] , // ✅ disabled here
+      StudentName: ['']
+    });
+
+
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.activatedRoute.paramMap.subscribe(params => {
       this.id = params.get('id')
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    if(this.sSOLoginDataModel.RoleID==this._EnumRole.ITI_Placement_TPO)
+    {
+      this.request.CollegeID=this.sSOLoginDataModel.InstituteID;
+      this.Searchform.get('CollegeID')?.disable();
+    }
+    else
+    {
+      this.Searchform.get('CollegeID')?.enable();
+    }
+    await this.GetLoadData();
     this.GetAllData();
 
-    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+  }
+
+
+  async GetLoadData(){
+    this.request.StudentName
+    try{
+      this.loaderService.requestStarted();
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.InstituteMasterList = data['Data'];
       }, (error: any) => console.error(error));
 
-    await this.commonMasterService.SemesterMaster()
-      .then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.SemesterMasterList = data['Data'];
-      }, (error: any) => console.error(error));
+      await this.CampusPostService.Iticollege(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.EndTermID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.institueList = data['Data'];
+            // this.copyOfinstitueList=data['Data'];
+          }, error => console.error(error));
+
+      await this.commonMasterService.SemesterMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.SemesterMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
   }
-
-
   // exportToExcel(): void {
   //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.viewAdminDashboardList);
   //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -99,13 +147,15 @@ export class ITIPlacementDashReportComponent implements OnInit {
   
 
   async GetAllData() {
+    debugger
+    console.log(this.request.CollegeID);
     let requestData: PlacementReportSearchModels = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      CollegeID : this.sSOLoginDataModel.InstituteID,
+      CollegeID : this.request.CollegeID,
       Id: this.id,
       Gender: '',
-      StudentName: '',
+      StudentName: this.request.StudentName,
       RoleID: this.sSOLoginDataModel.RoleID
     }
 
@@ -165,6 +215,18 @@ export class ITIPlacementDashReportComponent implements OnInit {
     this.endInTableIndex = Math.min(this.currentPage * this.pageSize, this.totalRecords);
   }
 
+
+    async ClearSearchData() {
+      if(this.sSOLoginDataModel.RoleID!=this._EnumRole.ITI_Placement_TPO)
+      {
+        this.request.CollegeID = 0;
+      }
+      else{
+        this.request.CollegeID = this.sSOLoginDataModel.InstituteID;
+      }
+    this.request.StudentName = '';
+    await this.GetAllData();
+  }
 
 }
 

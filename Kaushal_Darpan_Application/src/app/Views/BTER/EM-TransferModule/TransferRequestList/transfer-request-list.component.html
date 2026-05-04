@@ -70,6 +70,11 @@
           <td mat-cell *matCellDef="let element"> {{element.CreatedDate}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="TransferStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Transfer Status </th>
+          <td mat-cell *matCellDef="let element"> {{element.TransferStatus}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
           <td mat-cell *matCellDef="let element">
