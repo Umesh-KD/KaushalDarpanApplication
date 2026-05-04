@@ -274,6 +274,7 @@ export class ITIAddItemsMasterComponent {
           await this.GetTradeDDL();
           this.request.TradeId = data['Data']["TradeId"];
           this.request.IsRequested = data['Data']["IsRequested"];
+          this.request.Status = data['Data']["Status"];
           // if(this.request.IsRequested==true){
           //   await this.refreshFieldsOnEdit();
           // }

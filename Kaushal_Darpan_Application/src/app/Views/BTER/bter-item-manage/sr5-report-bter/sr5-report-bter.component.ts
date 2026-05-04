@@ -329,7 +329,7 @@ export class SR5ReportBTERComponent {
     //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.ItemMasterList.forEach((x: any) => {
-      if(x.SR5Approval != 2) {
+      if(x.SR5Approval == 2) {
         x.Selected = this.AllInTableSelect;
       }      
     });
