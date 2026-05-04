@@ -64,7 +64,7 @@ export class PostMasterService {
 
   // ================= DELETE =================
   async DeletePost(postID: number, modifyBy: number) {
-    return await this.http.delete(
+    return await this.http.post(
       `${this.APIUrl}/DeletePostByID/${postID}/${modifyBy}`,
       this.getHeaders()
     )

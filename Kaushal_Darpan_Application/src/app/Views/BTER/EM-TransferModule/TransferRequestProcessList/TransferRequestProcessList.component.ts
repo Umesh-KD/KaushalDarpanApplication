@@ -69,7 +69,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public TransferSystemStatusUpdateList: any = [];
     public updateStatus: number = 0;
     public isAnyApproved: boolean = false;
-    
+    public EnumRole= EnumRole;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -84,7 +84,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
   ) { }
 
   async ngOnInit() {
-    
+    debugger
     this.AddTrainingDetailsFromGroup = this.formBuilder.group({
       OrganizinglnstituteName: ['', [Validators.required]],
       CourseType: ['', [DropdownValidators1]],
@@ -524,5 +524,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       this.isAnyApproved = this.EM_TransferSystemEXTList?.some(
         (item: any) => item.FinalApproveStatus == 5
       );
+    }
+
+    async StructuredSummaryList() {
+      window.open('/StructuredSummaryList', '_blank');
     }
 }

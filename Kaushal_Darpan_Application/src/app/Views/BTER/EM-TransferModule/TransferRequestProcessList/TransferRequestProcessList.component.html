@@ -59,7 +59,17 @@
 
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Transfer Application List</b>
+      <b class="text-xl">
+        <i class="ti ti-list"></i>
+        Staff Transfer Application List
+      </b>
+
+      <button type="button"
+              *ngIf="sSOLoginDataModel?.RoleID === EnumRole.EM_JDTE || sSOLoginDataModel?.RoleID === EnumRole.EM_Secretary_BTER"
+              class="btn bg-info text-white mt-2"
+              (click)="StructuredSummaryList()">
+        Structured Summary List
+      </button>
     </div>
 
 
