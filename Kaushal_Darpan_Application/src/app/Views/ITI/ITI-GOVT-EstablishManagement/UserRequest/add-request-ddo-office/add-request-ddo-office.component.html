@@ -380,13 +380,13 @@
           <table class="w-full table-border" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
-              <tr>
-                <th>Mark</th>
-                <th>S.No</th>
+              <tr class="align-left">
+                <th class="text-left">Mark</th>
+                <th class="text-left">S.No</th>
                
-                <th>Order No</th>
-                <th>Order Date</th>
-                <th>Order Copy</th>
+                <th class="text-left">Order No</th>
+                <th class="text-left">Order Date</th>
+                <th class="text-left">Order Copy</th>
                 <!--<th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="text-left">Action</th>-->
               </tr>
 
@@ -394,14 +394,14 @@
 
             <tbody>
               <tr *ngFor="let row of PostSanctionList; let idx = index">
-                <td align="center">
+                <td align="left">
                   <input type="checkbox" name="MarkCheck" [(ngModel)]="row.Marked" />
                 </td>
-                <td class="text-center">{{idx+1}}</td>
+                <td class="text-left">{{idx+1}}</td>
              
-                <td class="text-center">{{row.OrderNo}}</td>
-                <td class="text-center">{{row.DisOrderDate}}</td>
-                <td class="text-center">
+                <td class="text-left">{{row.OrderNo}}</td>
+                <td class="text-left">{{row.DisOrderDate}}</td>
+                <td class="text-left">
                   <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
                     <i class="ti ti-eye"></i>
                   </a>
