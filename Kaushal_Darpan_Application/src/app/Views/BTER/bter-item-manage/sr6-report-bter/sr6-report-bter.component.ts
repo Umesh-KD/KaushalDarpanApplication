@@ -49,6 +49,7 @@ export class SR6ReportBTERComponent {
   public AuctionFormGroup!: FormGroup;
   @ViewChild('AuctionItems_Modal') MyModel_AuctionItem: ElementRef | any;
   modalReference: NgbModalRef | undefined;
+  public maxDate: string = '';
 
   constructor(
     private toastr: ToastrService,
@@ -81,10 +82,13 @@ export class SR6ReportBTERComponent {
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
+    const today = new Date();
+    this.maxDate = today.toISOString().split('T')[0]; // format: yyyy-MM-dd
     await this.GetTradeDDL();
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
     await this.GetAllData();
+    
     
   }
 

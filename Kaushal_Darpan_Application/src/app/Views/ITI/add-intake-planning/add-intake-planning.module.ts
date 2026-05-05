@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AddIntakePlanningRoutingModule } from './add-intake-planning-routing.module';
 import { AddIntakePlanningComponent } from './add-intake-planning.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     AddIntakePlanningRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgSelectModule
   ]
 })
 export class AddIntakePlanningModule { }

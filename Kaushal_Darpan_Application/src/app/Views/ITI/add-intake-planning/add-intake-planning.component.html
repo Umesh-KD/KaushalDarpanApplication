@@ -57,10 +57,21 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Trade:<span class="StarMarking">*</span>
               </label>
-              <select class="form-select" formControlName="ddlTrade" [(ngModel)]="request.TradeID">
+              <!-- <select class="form-select" formControlName="ddlTrade" [(ngModel)]="request.TradeID">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
-              </select>
+              </select> -->
+              <ng-select
+                [items]="ItiTradeListAll"
+                bindLabel="TradeName"
+                bindValue="Id"
+                placeholder="Search Trade..."
+                formControlName="ddlTrade"
+                [(ngModel)]="request.TradeID"
+                [searchable]="true"
+                [clearable]="true">
+
+              </ng-select>
               <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlTrade.errors" class="text-danger">
                 <p *ngIf="!_SeatIntakeFormGroup.ddlTrade.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This field is required .!
