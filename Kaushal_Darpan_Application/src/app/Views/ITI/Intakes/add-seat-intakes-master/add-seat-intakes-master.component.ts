@@ -134,7 +134,7 @@ export class AddSeatIntakesMasterComponent implements OnInit {
       //  console.log(this.ItiTradeListAll, "ItiTradeListAll")
       //})
 
-      await this.commonFunctionService.GetCollegeTradeMaster(this.tradeSearchRequest).then((data: any) => {
+      await this.commonFunctionService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiTradeListAll = data.Data
        

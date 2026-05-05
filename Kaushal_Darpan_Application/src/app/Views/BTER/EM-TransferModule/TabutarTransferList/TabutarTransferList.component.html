@@ -1,0 +1,156 @@
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+      <div>
+        <label>Search By Status</label>
+        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of TransferSystemStatusSearchList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          Staff Type Gazetted non Gazetted
+        </label>
+
+        <select class="form-select"
+                [(ngModel)]="SearchEmployeeType">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of GazettedList"
+                  [ngValue]="item.ID">
+            {{ item.Name }}
+          </option>
+        </select>
+      </div>
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          Category
+        </label>
+        <select class="form-select" [(ngModel)]="SearchCategoryID">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of GetTransfercateList" [value]="item.ID">{{item.Name}}</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+        <select class="form-select" [(ngModel)]="SearchInstituteID">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of ItiCollegesListAll" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
+        </select>
+      </div>
+
+
+      <div>
+        <button type="submit"
+                class="btn bg-info mt-5 text-white w-100"
+                (click)="EM_TransferSystem_GetData_Search(this.SearchStatus)">
+          Search
+        </button>
+      </div>
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Transfer Application List</b>
+     
+    </div>
+
+  </div>
+
+  <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+    <div class=" ">
+      <label>Dispatch No</label>
+      <input class="form-input" type="text" id="DispatchNo" [(ngModel)]="requestUp.DispatchNo" >
+    </div>
+    <div class=" ">
+      <label>Order Date</label>
+      <input class="form-input" type="date" id="OrderDate" [(ngModel)]="requestUp.OrderDate" >
+    </div>
+    <div>
+      <label class="block  text-sm font-medium text-gray-900 dark:text-white"
+             for="OrderSupportingDocument ">
+        Order Supporting Document :<span class="StarMarking">*</span>
+      </label>
+      <div class="flex fileUploader">
+        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+               id="SupportingDocuments" type="file" (change)="onFilechange($event, 'SupportingDocuments')" >
+        <label for="SupportingDocuments">
+          <span>Choose File</span>
+          {{requestUp.OrderSupportingDocument === '' ? 'No File Choosen' : requestUp.OrderSupportingDocument}}
+        </label>
+        <div class="flex">
+          <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + requestUp.OrderSupportingDocument}}"
+             *ngIf="requestUp.OrderSupportingDocument !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button type="submit"
+              class="btn bg-info mt-5 text-white w-100"
+              (click)="TransferSystemGeneratorUpdate()">
+        Submit
+      </button>
+    </div>
+  </div>
+
+
+  <div class="overflow-auto mt-3">
+    <table class="table table-border w-full" cellpadding="5">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+        <tr>
+          <th width="50px">
+            <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+                   [checked]="AllSelect"
+                   (change)="checkboxthView_checkboxchange($event.target.checked)">
+          </th>
+          <th width="80px" align="left">Sr. No.</th>
+          <th align="left">SSO ID</th>
+          <th align="left">Name</th>
+          <th align="left">Transfer Category</th>
+          <th align="left">Reason Description</th>
+          <th class="left">Application Date</th>
+          <th align="left">Status</th>
+          <th align="left">Supporting Documents</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of EM_TransferProcessList | tableSearchFilter:Table_SearchText; let idx=index;">
+          <td>
+            <input type="checkbox" name="MarkCheck"
+                   [(ngModel)]="row.Selected" />
+          </td>
+          <td>{{idx+1}}</td>
+          <td>{{row.SSOID}}</td>
+          <td>{{row.NAME}}</td>
+          <td>{{row.TransferCategory}}</td>
+          <td>{{row.ReasonDescription}}</td>
+
+          <td>{{row.CreatedDate}}</td>
+          <td>{{row.TransferStatusName}}</td>
+          <td align="left">
+            <div class="flex" *ngIf="row.SupportingDocuments; else noDoc1">
+              <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.SupportingDocuments"
+                 class="btn bg-primary text-white m-0"
+                 target="_blank">
+                <i class="ti ti-eye"></i>
+              </a>
+            </div>
+            <ng-template #noDoc1>-----</ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+

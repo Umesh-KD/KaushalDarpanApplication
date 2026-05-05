@@ -56,7 +56,7 @@ export class itiAddAdminSubUserComponent {
         RoleID: ['', [DropdownValidators]],
         //InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
         txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
-        txtMobileNo: [{ value: '', disabled: true }, Validators.required],
+        txtMobileNo: [Validators.required,Validators.pattern(/^[6-9][0-9]{9}$/)],
       });
 
     //this.GetAllDataITI();
@@ -215,4 +215,12 @@ export class itiAddAdminSubUserComponent {
 
   }
 
+  allowOnlyNumbers(event: KeyboardEvent) {
+  const charCode = event.key.charCodeAt(0);
+
+  // Allow only numbers (0-9)
+  if (charCode < 48 || charCode > 57) {
+    event.preventDefault();
+  }
+}
 }

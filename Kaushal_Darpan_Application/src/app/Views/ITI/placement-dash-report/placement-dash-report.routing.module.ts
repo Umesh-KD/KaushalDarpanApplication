@@ -7,6 +7,7 @@ import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { ITIPlacementDashReportComponent } from './placement-dash-report.component';
 import { MaterialModule } from '../../../material.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 const routes: Routes = [
   {
     path: '',
@@ -18,7 +19,7 @@ const routes: Routes = [
   declarations: [
     ITIPlacementDashReportComponent
   ],
-  imports: [RouterModule.forChild(routes), FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule,MaterialModule],
+  imports: [RouterModule.forChild(routes), FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule,MaterialModule,  NgMultiSelectDropDownModule.forRoot()],
   exports: [RouterModule],
 })
 
