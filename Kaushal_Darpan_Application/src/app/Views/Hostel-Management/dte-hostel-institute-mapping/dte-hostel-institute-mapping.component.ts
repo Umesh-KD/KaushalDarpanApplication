@@ -406,7 +406,7 @@ export class DTEHostelInstituteMappingComponent {
   }
 
 
-  async saveData() {
+  async saveData1() {
 
     this.isSubmitted = true;
 
@@ -486,6 +486,56 @@ export class DTEHostelInstituteMappingComponent {
 
     } catch (ex) {
       console.error(ex);
+      this.toastr.error("Exception occurred");
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
+
+
+
+  async saveData() {
+    debugger;
+    this.isSubmitted = true;
+
+    if (!this.SelectedinstituteList || this.SelectedinstituteList.length === 0) {
+      this.toastr.error("Please Add At Least One Institute");
+      return;
+    }
+    const hasParent = this.SelectedinstituteList.some(function (x: { isParent: boolean; }) {
+      return x.isParent === true;
+    });
+    if (!hasParent) {
+      this.toastr.error("Please select one parent institute");
+      return;
+    }
+
+    try {
+      this.loaderService.requestStarted();
+      const payload = this.SelectedinstituteList.map((item: any) => ({
+        ...item,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CourseTypeID: 0
+      }));
+
+      const data: any = await this._HostelManagmentService
+        .HostelInstituteMappingSaveData(payload);
+
+      if (data.State === EnumStatus.Success) {
+        this.toastr.success(data.Message || "Saved Successfully");
+        this.SelectedinstituteList = [];
+        this.router.navigate(['/Hostel-Institute-Mapping']);
+
+      } else {
+        this.toastr.error(data.ErrorMessage || "Something went wrong!");
+      }
+
+    } catch (ex) {
+      console.log(ex);
       this.toastr.error("Exception occurred");
     } finally {
       setTimeout(() => {
