@@ -257,11 +257,11 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
           }
           else if (data.State == EnumStatus.Warning) {            
             this.toastr.warning(data.Message);
-            this.formData.DistrictID = 0;
+            this.formData.RoleID = 0;
           }
           else {
             this.toastr.error(data.ErrorMessage);
-            this.formData.DistrictID = 0;
+            this.formData.RoleID = 0;
           }
         }, (error: any) => console.error(error)
         );
@@ -406,8 +406,11 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     }
   }
 
-  onRoleChange(event: any) {    
+  async onRoleChange(event: any) {    
     const selectedRoleId = +event.target.value;
+    if(selectedRoleId == 97){
+      await this.DuplicateNodal();
+    }
   
     const selectedRole = this.RoleMasterList.find((item: any) => item.ID === selectedRoleId);
 
@@ -484,10 +487,10 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     if (this.AddStaffBasicDetailFromGroup.invalid) {
       return;
     }
-
+    debugger
     // Check for duplicate deployment dates in the AddedDeploymentList
     const isDuplicate = this.AddedZonalList.some((element: any) =>
-      this.formData.SSOID === element.SSOID
+      this.formData.SSOID == element.SSOID
     );
 
     if (isDuplicate) {

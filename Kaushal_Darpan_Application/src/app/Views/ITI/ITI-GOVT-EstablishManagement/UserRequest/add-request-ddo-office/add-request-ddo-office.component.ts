@@ -19,6 +19,7 @@ import { UserRequestService } from '../../../../../Services/UserRequest/user-req
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { ItiSanctionOrderList } from '../../../../../Models/ITI/ItiReportDataModel';
 import { HiringRoleMasterService } from '../../../../../Services/HiringRoleMaster/hiring-role-master.service';
+import { ITI_Govt_EM_NodalSearchDataModel } from '../../../../../Models/ITIGovtEMStaffMasterDataModel';
 
 @Component({
   selector: 'app-add-request-ddo-office',
@@ -42,6 +43,8 @@ export class AddRequestDDOOfficeComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   SearchRequest = new ITIsSearchModel();
   public ordersearchRequest = new ItiSanctionOrderList()
+  public NodalsearchRequest = new ITI_Govt_EM_NodalSearchDataModel();
+
   public _EnumRole = EnumRole;
   
   public isSubmitted: boolean = false;
@@ -96,7 +99,6 @@ export class AddRequestDDOOfficeComponent {
     private  ITIGovtEMStaffMaster: ITIGovtEMStaffMaster,
     private Swal2: SweetAlert2,
     private ScholarshipService: HiringRoleMasterService,
-
   ) { }
 
   async ngOnInit() {
@@ -241,10 +243,14 @@ export class AddRequestDDOOfficeComponent {
     }
   }
   async GetPostList() {
+    if(this.request.ReqRoleID == 97){
+      await this.DuplicateNodal();
+    }
     try {
       var obj = {
         OfficeID: this.request.OfficeID,
-        InstituteID: this.request.InstituteID
+        InstituteID: this.request.InstituteID,
+        NodalDistrictID: this.request.NodalDistrictID,
       }
       await this.commonMasterService.GetItiVacantPost(obj)
         .then((data: any) => {
@@ -865,5 +871,40 @@ export class AddRequestDDOOfficeComponent {
       }
     });
   }
+
+  async onRoleChange() {
+    if(this.request.ReqRoleID == 97){
+      await this.DuplicateNodal();
+    }
+  }
+
+  async DuplicateNodal() {
+   
+    this.NodalsearchRequest.DistrictID = this.request.NodalDistrictID;
+    this.NodalsearchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.NodalsearchRequest.LevelID = this.request.LevelID;
+    try {
+      await this.ITIGovtEMStaffMaster.GetITI_Govt_CheckDistrictNodalOffice(this.NodalsearchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+
+
+          }
+          else if (data.State == EnumStatus.Warning) {            
+            this.toastr.warning(data.Message);
+            this.request.ReqRoleID = 0;
+          }
+          else {
+            this.toastr.error(data.ErrorMessage);
+            this.request.ReqRoleID = 0;
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  } 
 
 }

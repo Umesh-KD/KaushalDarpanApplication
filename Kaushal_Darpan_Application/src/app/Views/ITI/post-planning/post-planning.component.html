@@ -19,17 +19,25 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
+          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID" (change)="onOfficeChange()">
             <option value="0">--Select--</option>
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
 
-        <div *ngIf="formData.OfficeID==11">
+        <div *ngIf="formData.OfficeID==_EnumOffice.ITI">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
           <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID" (change)="GetOrderDetailsList()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div *ngIf="formData.OfficeID==_EnumOffice.NODAL_OFFICE">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: <span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="NodalDistrictID" [(ngModel)]="formData.NodalDistrictID" (change)="GetOrderDetailsList()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
         </div>
 
@@ -112,6 +120,7 @@
             <th>Staff Type</th>
             <th>Institute Name</th>
             <th>Trade Name</th>
+            <th>District Name</th>
             <th>Designation Name</th>
             <th>Total Seat</th>
             <th>Posted Seat</th>
@@ -129,6 +138,7 @@
             <td>{{ leave.InstituteName }}</td>
             <!--<td>{{ leave.TradeName }}</td>-->
             <td style="text-align: center;">{{ leave.TradeName ?? '-----' }}</td>
+            <td>{{ leave.NodalDistrictName }}</td>
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.TotalSeatID }}</td>
             <td>{{ leave.PostedSeat }}</td>
@@ -198,7 +208,7 @@
 
           </div>
 
-          <div *ngIf="formData.OfficeID==11">
+          <div *ngIf="formData.OfficeID==_EnumOffice.ITI">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
             <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
               <option [ngValue]="0">--Select--</option>
