@@ -905,9 +905,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async DistrictMaster_DivisionIDWise(DivisionID: number) {
+  public async DistrictMaster_DivisionIDWise(DivisionID: number, StateID: number = 0) {
     ;
-    return await this.http.get(this.APIUrl + '/DistrictMaster_DivisionIDWise/' + DivisionID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/DistrictMaster_DivisionIDWise/' + DivisionID + '/' + StateID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

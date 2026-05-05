@@ -357,10 +357,7 @@ export class ITIAddItemsMasterComponent {
         .then((data: any) => {
           console.log(data)
           data = JSON.parse(JSON.stringify(data));
-          this.TradeDDLList = data['Data'];
-          console.log(this.TradeDDLList)
-          // this.request.TradeId=-1
-          this.AddItemsRequestFormGroup.get('TradeId')?.setValue(0);  
+          this.TradeDDLList = data['Data']; 
         }, error => console.error(error));
     }
     catch (Ex) {

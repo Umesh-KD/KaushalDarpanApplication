@@ -177,7 +177,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Transfer District:<span class="StarMarking">*</span>
               </label>
-              <select class="form-select" [(ngModel)]="request.NodalDistrictID" formControlName="ddlDistrictID">
+              <select class="form-select" [(ngModel)]="request.NodalDistrictID" formControlName="ddlDistrictID" (change)="GetPostList()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
               </select>
@@ -220,7 +220,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Transfer Role <span class="StarMarking">*</span></label>
-              <select class="form-select" [(ngModel)]="request.ReqRoleID" formControlName="ReqRoleID">
+              <select class="form-select" [(ngModel)]="request.ReqRoleID" formControlName="ReqRoleID" (change)="onRoleChange()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of RoleListDDL" [value]="item.RoleID">{{item.RoleNameEnglish}}</option>
               </select>

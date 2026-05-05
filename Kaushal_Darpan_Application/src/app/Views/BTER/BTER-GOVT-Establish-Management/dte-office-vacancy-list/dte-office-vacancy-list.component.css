@@ -188,3 +188,9 @@ textarea {
   .slider.round:before {
     border-radius: 50%;
   }
+
+.row-line-btn{
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
