@@ -50,6 +50,8 @@ export class TransferRequestListComponent implements OnInit {
 
   public EM_TransferProcessList:any=[];
   public EM_TransferSystemEXTList:any=[];
+  public EM_TransferSystemEmployeeStatus:any=[];
+  public EmployeeLatestRequestStatus:number=0;
 
   constructor(
     private PlacementDashService: PlacementReportService,
@@ -69,7 +71,8 @@ export class TransferRequestListComponent implements OnInit {
       this.id = params.get('id')
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.EM_TransferSystem_GetData();
+    await this.GetEM_TransferSystemEmployeeStatus();
+    await this.EM_TransferSystem_GetData();
 
     // await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
     //   .then((data: any) => {
@@ -119,6 +122,33 @@ export class TransferRequestListComponent implements OnInit {
 //       );
 //   }
 
+async GetEM_TransferSystemEmployeeStatus() {
+        debugger
+        try {
+          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+          this.searchRequest.SSOID=this.sSOLoginDataModel.SSOID;
+          // this.searchRequest.Action = "EM_TransferSystemEmployeeStatus";
+          this.searchRequest.StatusID = 0;
+          await this.staffServiceDetailsService.GetEM_TransferSystemEmployeeStatus(this.searchRequest).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.EM_TransferSystemEmployeeStatus = data.Data;
+              this.EmployeeLatestRequestStatus=this.EM_TransferSystemEmployeeStatus[0].TransferStatus;
+              // this.filteredData = [...this.EM_TransferProcessList]; // Copy full dataset
+              // this.dataSource = new MatTableDataSource(this.filteredData);
+              // this.dataSource.sort = this.sort;
+              // this.totalRecords = this.filteredData.length;
+              // this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+              // this.updateTable();
+            } else {
+              this.EM_TransferSystemEmployeeStatus = [];
+            }
+
+          })
+        } catch (error) {
+          console.error(error);
+        }
+      }
 
 async EM_TransferSystem_GetData() {
         debugger
