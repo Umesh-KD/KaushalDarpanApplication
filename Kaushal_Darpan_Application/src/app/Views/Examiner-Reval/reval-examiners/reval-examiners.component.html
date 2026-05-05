@@ -100,7 +100,7 @@
         </div>
         <!--group code-->
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Group code</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Reval Group code</label>
           <select class="form-select" id="GroupID" [(ngModel)]="searchRequest.GroupCodeID">
             <option value="0">--All--</option>
             <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">{{item.Name}}</option>

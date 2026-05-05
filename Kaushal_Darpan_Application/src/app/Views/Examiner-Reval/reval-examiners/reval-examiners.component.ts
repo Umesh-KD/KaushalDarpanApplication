@@ -114,7 +114,7 @@ export class RevalExaminersComponent implements OnInit {
       model.SemesterID = this.searchRequest.SemesterID;
 
       // call
-      await this.commonMasterService.GetGroupCode(model)
+      await this.commonMasterService.GetGroupCode_Reval(model)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.GroupMasterDDLList = data.Data;
