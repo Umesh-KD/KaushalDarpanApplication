@@ -225,6 +225,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
+    this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID
     debugger
     try {
       this.loaderService.requestStarted();

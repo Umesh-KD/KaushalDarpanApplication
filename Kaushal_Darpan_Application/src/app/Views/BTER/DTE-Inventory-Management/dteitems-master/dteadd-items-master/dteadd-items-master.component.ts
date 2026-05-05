@@ -89,7 +89,7 @@ export class DteAddItemsMasterComponent {
       IsConsume: [''],
       UnitId: [0],
       voucherdate: ['', Validators.required],
-      abbreviation: [''],
+      abbreviation: ['',  Validators.required],
       // receiptbookfolio: [''],
       // issuedate: [''],
       // IndentNo: [''],

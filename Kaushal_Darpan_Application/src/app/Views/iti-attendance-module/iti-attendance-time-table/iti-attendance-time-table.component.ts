@@ -350,9 +350,10 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
         // If the user clicks "Yes"
         try {
           
-          let obj = {
+          let obj =
+          {
             ID: staff.ID,
-            SubjectID: staff.SubjectID,
+            SubjectIDs: staff.SubjectID,
             AssignToSSOID: staff.StaffSSOID,
             StreamID: staff.StreamID,
             SemesterID: staff.SemesterID,

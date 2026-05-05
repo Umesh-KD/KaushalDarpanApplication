@@ -525,10 +525,11 @@ export class DTEHostelInstituteMappingComponent {
       const data: any = await this._HostelManagmentService
         .HostelInstituteMappingSaveData(payload);
 
-      if (data.State === EnumStatus.Success) {
+      if (data.State === EnumStatus.Success)
+      {
         this.toastr.success(data.Message || "Saved Successfully");
         this.SelectedinstituteList = [];
-        this.router.navigate(['/Hostel-Institute-Mapping']);
+        this.router.navigate(['/Hostel-Institute-Mapping-List']);
 
       } else {
         this.toastr.error(data.ErrorMessage || "Something went wrong!");
@@ -550,8 +551,9 @@ export class DTEHostelInstituteMappingComponent {
 
     const removed = this.SelectedinstituteList[index];
    
-      if (item.isParent === true) {
-        alert("Please select another parent first, then remove this one.");
+    if (item.isParent)
+    {
+      this.Swal2.Info("Kindly choose another parent first, then you can remove this selection");
         return;
     }
     this.Swal2.Confirmation(

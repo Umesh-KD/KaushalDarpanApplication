@@ -758,6 +758,7 @@ export class BTERStaffTransferSystemModel {
 export class EM_TransferSystemSearchModel {
   public TransferSystemID: number = 0;
   public StaffID: number = 0;
+  public SSOID?: string = '';
   public ActionBy: number = 0;
   public Action?: string = '';
   public Remark?: string = '';

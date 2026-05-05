@@ -191,7 +191,7 @@ export class AddExaminerComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
         this.GroupMasterDDLList = data.Data;
 
-        console.log("GroupMasterDDLList", this.GroupMasterDDLList);
+       // console.log("GroupMasterDDLList", this.GroupMasterDDLList);
       })
     } catch (error) {
       console.error(error);
@@ -219,11 +219,11 @@ export class AddExaminerComponent implements OnInit {
 
   async ddlStream_Change() {
     try {
-      this.loaderService.requestStarted();
       this.SubjectMasterDDLList = [];
       this.CommonSubjectDDLList = [];
       this.searchRequest.CommonSubjectID = 0;
-      debugger
+      //debugger
+
       // if common subject
       if (this.CommonSubjectYesNo == 2 && this.searchRequest.SemesterID > 0) {//yes
         await this.GetCommonSubjectDDL();
@@ -235,20 +235,20 @@ export class AddExaminerComponent implements OnInit {
       }
 
       // else
-      await this.commonMasterService.SubjectMaster_StreamIDWise(this.searchRequest.StreamID, this.sSOLoginDataModel.DepartmentID, this.searchRequest.SemesterID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+      await this.commonMasterService.SubjectMaster_StreamIDWise(this.searchRequest.StreamID,
+        this.sSOLoginDataModel.DepartmentID,
+        this.searchRequest.SemesterID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID
+      )
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.SubjectMasterDDLList = data.Data;
-          console.log("SubjectMasterDDLList", this.SubjectMasterDDLList)
+          //console.log("SubjectMasterDDLList", this.SubjectMasterDDLList)
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -264,7 +264,7 @@ export class AddExaminerComponent implements OnInit {
       await this.examinerservice.GetTeacherForExaminer(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffForExaminerList = data.Data;
-        console.log("this.StaffForExaminerList", this.StaffForExaminerList)
+        //console.log("this.StaffForExaminerList", this.StaffForExaminerList)
       })
     } catch (error) {
       console.error(error)
@@ -302,24 +302,20 @@ export class AddExaminerComponent implements OnInit {
         if (this.State === EnumStatus.Success) {
           this.toastr.success(this.Message);
           this.AppointExaminer = new ExaminerDataModel();
-          this.getStaffForExaminerData();
+          await this.getStaffForExaminerData();
           this.CloseModalPopup();
         } else {
           this.toastr.error(this.ErrorMessage);
         }
       } catch (error) {
         console.error("Error saving examiner data:", error);
-      } finally {
-        setTimeout(() => {
-          this.loaderService.requestEnded();
-        }, 200);
-      }
+      } 
     };
 
     if (!this.AppointExaminer.AssignGroupCode || this.AppointExaminer.AssignGroupCode=='()') {
       await saveExaminer();
     } else {
-      this.Swal2.Confirmation(`This teacher is already assigned this Group Code ${this.AppointExaminer.AssignGroupCode},Select Yes If You want to Assign more Group Code!`, async (result: any) => {
+      this.Swal2.Confirmation(`This teacher is already assigned this Group Code ${this.AppointExaminer.AssignGroupCode}, Select Yes If You want to Assign more Group Code!`, async (result: any) => {
         if (result.isConfirmed) {
           await saveExaminer();
         }
@@ -400,15 +396,13 @@ export class AddExaminerComponent implements OnInit {
 
 
   async GetByID(id: number, StaffSubjectId:number) {
-    try {
-      
-      this.loaderService.requestStarted();
+    try {      
 
       await this.examinerservice.GetByID(id, StaffSubjectId, this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.Eng_NonEng)
         .then(async (data: any) => {
           
           data = JSON.parse(JSON.stringify(data));
-          console.log(data, "data");
+          //console.log(data, "data");
           this.AppointExaminer.StaffID = data['Data']["StaffID"];
 
           this.AppointExaminer.Name = data['Data']["Name"];
@@ -423,7 +417,7 @@ export class AddExaminerComponent implements OnInit {
           this.AppointExaminer.SubjectID = data['Data']['SubjectID']
           /*      console.log(this.AppointExaminer.InstituteID,"   this.AppointExaminer.InstituteID ")*/
 
-          this.getGroupCodeMasterList()
+          await this.getGroupCodeMasterList()
 
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
@@ -435,11 +429,6 @@ export class AddExaminerComponent implements OnInit {
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 

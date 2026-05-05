@@ -374,7 +374,7 @@ export class AddItiIssueItemComponent {
       
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequests.TypeName = 'TradeList';
+      this.Searchrequests.TypeName = 'TradeList_minReqItem';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
       if (data && data.State === EnumStatus.Success) {

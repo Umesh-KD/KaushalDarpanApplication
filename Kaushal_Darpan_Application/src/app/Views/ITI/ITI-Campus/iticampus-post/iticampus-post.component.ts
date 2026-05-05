@@ -608,7 +608,8 @@ debugger
 
   async saveData() {
     
-    ;
+//    debugger
+  //  console.log(this.request_EligibilityCriteriaModel.PassingYear);
     this.isSubmitted = true;
     const mainRoleSelected = this.HRDetailsList.some((r: any) => r.IsMainRole == 1);
 
