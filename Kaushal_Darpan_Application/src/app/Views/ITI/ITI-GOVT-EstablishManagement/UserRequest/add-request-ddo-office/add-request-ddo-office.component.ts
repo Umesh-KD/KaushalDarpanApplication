@@ -17,6 +17,9 @@ import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/
 import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
+import { ItiSanctionOrderList } from '../../../../../Models/ITI/ItiReportDataModel';
+import { HiringRoleMasterService } from '../../../../../Services/HiringRoleMaster/hiring-role-master.service';
+import { ITI_Govt_EM_NodalSearchDataModel } from '../../../../../Models/ITIGovtEMStaffMasterDataModel';
 
 @Component({
   selector: 'app-add-request-ddo-office',
@@ -27,6 +30,8 @@ import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 export class AddRequestDDOOfficeComponent {
   groupForm!: FormGroup;
   SearchFormGroup!: FormGroup;
+  public OrderDate:string=''
+  public OrderType:number=0
 
   public formdata = new ITISeatIntakesModel()
   public tradeSearchRequest = new ItiTradeSearchModel()
@@ -37,13 +42,18 @@ export class AddRequestDDOOfficeComponent {
   searchReq = new RequestSearchModel();
   sSOLoginDataModel = new SSOLoginDataModel();
   SearchRequest = new ITIsSearchModel();
+  public ordersearchRequest = new ItiSanctionOrderList()
+  public NodalsearchRequest = new ITI_Govt_EM_NodalSearchDataModel();
 
   public _EnumRole = EnumRole;
   
   public isSubmitted: boolean = false;
   public isLoading: boolean = false;
   public InstituteCategoryList: any = [];
+  public OrderList: any = [];
   public ListITICollegeByManagement: any = [];
+  public filterplanorderList: any = [];
+  public PostSanctionList: any = [];
   public ListITICollegeByManagement_search: any = [];
   public ItiTradeList: any = [];
   public ITITradeSchemeList: any = [];
@@ -88,7 +98,7 @@ export class AddRequestDDOOfficeComponent {
     public appsettingConfig: AppsettingService,
     private  ITIGovtEMStaffMaster: ITIGovtEMStaffMaster,
     private Swal2: SweetAlert2,
-
+    private ScholarshipService: HiringRoleMasterService,
   ) { }
 
   async ngOnInit() {
@@ -105,8 +115,8 @@ export class AddRequestDDOOfficeComponent {
       txtMobile: [''],
       txtEmailID: [''],
       txtRequestRemarks: ['', Validators.required],
-      txtOrderNo: ['', Validators.required],
-      txtOrderDate: ['', Validators.required],
+      txtOrderNo: ['', ],
+      txtOrderDate: ['',],
       /* txtJoiningDate: [''],*/
       txtRequestDate: ['', Validators.required],
       // LastworkingDate: ['', Validators.required],
@@ -139,6 +149,7 @@ export class AddRequestDDOOfficeComponent {
     await this.GetRoleListDDL();
     await this.GetLevelList();
     await this.GetOfficeList();
+    await this.GetOrderList();
     //await this.getITICollege();
     //this.GetRoleMasterData();
     await this.GetStaffTypeData();
@@ -232,10 +243,14 @@ export class AddRequestDDOOfficeComponent {
     }
   }
   async GetPostList() {
+    if(this.request.ReqRoleID == 97){
+      await this.DuplicateNodal();
+    }
     try {
       var obj = {
         OfficeID: this.request.OfficeID,
-        InstituteID: this.request.InstituteID
+        InstituteID: this.request.InstituteID,
+        NodalDistrictID: this.request.NodalDistrictID,
       }
       await this.commonMasterService.GetItiVacantPost(obj)
         .then((data: any) => {
@@ -338,6 +353,12 @@ export class AddRequestDDOOfficeComponent {
       this.toastr.error("Please enter required fields");
       return;
     }
+
+    if (this.request.OrderID == 0) {
+      this.toastr.warning("Please Add Transfer Details")
+      return
+    }
+    debugger
     this.Swal2.Confirmation("Are you sure you want to make transfer request ?",
       async (result: any) => {
         //confirmed
@@ -758,4 +779,132 @@ export class AddRequestDDOOfficeComponent {
       console.error(error);
     }
   }
+
+
+
+  async GetOrderList() {
+    try {
+
+      this.PostSanctionList = []
+
+      var obj = {
+        MasterCode: 'TransferOrderNo',
+        FilterBy: this.OrderDate
+
+      }
+      this.loaderService.requestStarted();
+      await this.commonMasterService.CommonMasterDataByAction(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.OrderList = data['Data'];
+
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async getExaminerData() {
+    this.ordersearchRequest.SanctionID = this.OrderType
+    this.ordersearchRequest.OrderDate = this.OrderDate
+    this.PostSanctionList = []
+    try {
+      await this.ScholarshipService.GetsanctionOrderNotAssign(this.ordersearchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostSanctionList = data.Data;
+        console.log("this.PostSanctionList", this.PostSanctionList)
+        debugger
+        //this.PostSanctionList = this.PostSanctionList.filter((item: any) =>
+
+        //  !this.request.OrderDetailsList.some((order: any) => order.SanctionID === item.SanctionID)
+        //);
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  deletePost(index: any): void {
+    debugger
+    this.request.OrderID=0
+    this.filterplanorderList.splice(index, 1);
+
+  }
+
+
+  AddPost() {
+
+
+    const IsSelect = this.PostSanctionList.filter((e: any) => e.Marked == true);
+
+    if (IsSelect.length == 0) {
+      this.toastr.warning("Please Select Any Order First");
+      return;
+    }
+
+    if (!this.filterplanorderList) {
+      this.filterplanorderList = [];
+    }
+
+    IsSelect.forEach((item: any) => {
+      const exists = this.filterplanorderList.some(
+        (x: any) => x.SanctionID === item.SanctionID
+      );
+
+
+
+
+      if (!exists) {
+ 
+        this.request.OrderID=item.ID
+        this.filterplanorderList.push(item);
+      }
+    });
+  }
+
+  async onRoleChange() {
+    if(this.request.ReqRoleID == 97){
+      await this.DuplicateNodal();
+    }
+  }
+
+  async DuplicateNodal() {
+   
+    this.NodalsearchRequest.DistrictID = this.request.NodalDistrictID;
+    this.NodalsearchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.NodalsearchRequest.LevelID = this.request.LevelID;
+    try {
+      await this.ITIGovtEMStaffMaster.GetITI_Govt_CheckDistrictNodalOffice(this.NodalsearchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+
+
+          }
+          else if (data.State == EnumStatus.Warning) {            
+            this.toastr.warning(data.Message);
+            this.request.ReqRoleID = 0;
+          }
+          else {
+            this.toastr.error(data.ErrorMessage);
+            this.request.ReqRoleID = 0;
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  } 
+
 }

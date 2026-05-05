@@ -10,7 +10,7 @@ import { BTEREstablishManagementService } from '../../../Services/BTER/BTER-Esta
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus }
+import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus, EnumOffice }
   from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
@@ -94,12 +94,21 @@ export class PostPlanningComponent {
   public CheckUserID: number = 0
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public IsLockandSubmit: boolean = false;
+  public _EnumOffice = EnumOffice;
 
-  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMaster: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
-    private ITICollegeTradeService: ItiSeatIntakeService, private ScholarshipService: HiringRoleMasterService,
-  ) {
-
-  }
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private ITIGovtEMStaffMaster: ITIGovtEMStaffMaster, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private activatedRoute: ActivatedRoute, 
+    private routers: Router, 
+    private modalService: NgbModal, 
+    private Swal2: SweetAlert2,
+    private ITICollegeTradeService: ItiSeatIntakeService, 
+    private ScholarshipService: HiringRoleMasterService,
+  ) { }
 
   async ngOnInit() {
 
@@ -109,6 +118,7 @@ export class PostPlanningComponent {
       InstituteID: [0, []],
       StaffTypeID: [0, [DropdownValidators]],
       DesignationID: [0, [DropdownValidators]],
+      NodalDistrictID: [0, [DropdownValidators]],
       TradeID: [0,],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
       Comments: [''],
@@ -146,12 +156,10 @@ export class PostPlanningComponent {
     return this.groupForm.controls;
   }
 
-
-
   tempIndex: number = 1;
 
   async addOfficeVacancy() {
-    
+    debugger
     const formValues = this.AddOfficeVacancyForm.value;
 
     // Validate required fields before adding
@@ -169,7 +177,12 @@ export class PostPlanningComponent {
       return;
     }
 
-    if(formValues.OfficeID == 11 && !formValues.ddlCollege){
+    if(formValues.OfficeID == EnumOffice.ITI && !formValues.ddlCollege){
+      this.toastr.warning("Please fill all required fields before adding.");
+      return;
+    }
+
+    if(formValues.OfficeID == EnumOffice.NODAL_OFFICE && !formValues.NodalDistrictID){
       this.toastr.warning("Please fill all required fields before adding.");
       return;
     }
@@ -182,7 +195,7 @@ export class PostPlanningComponent {
     const OrderName = this.AcademicOrderNoList.find((item5: any) => item5.SanctionID == formValues.PostSanctionedID);
 
     const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);
-
+    const getNodalDistrictName = this.DistrictList.find((x: any) => x.ID == formValues.NodalDistrictID)?.Name || '';
     let getinstitute = [];
 
     if (formValues.ddlCollege && formValues.ddlCollege !== 0) {
@@ -203,6 +216,7 @@ export class PostPlanningComponent {
       StaffTypeID: formValues.StaffTypeID,
       TotalSeatID: formValues.TotalSeatID,
       PlanningID: formValues.ddlCollege||0,
+      NodalDistrictID: formValues.NodalDistrictID||0,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       CreatedBy: this.sSOLoginDataModel.UserID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
@@ -226,7 +240,7 @@ export class PostPlanningComponent {
       PostSanctionDate: formValues.PostSanctionDate,
       PostSanctionedID: formValues.PostSanctionedID,
       OrderName: OrderName.OrderNo,
-
+      NodalDistrictName: getNodalDistrictName,
     };
 
     console.log('Vacancy being added:', vacancyData);
@@ -349,10 +363,6 @@ export class PostPlanningComponent {
 
   }
 
-
-
-
-
   ResetControl() {
     this.isSubmitted = false;
     this.formData = new ITIOfficeVacancyModel();
@@ -367,7 +377,7 @@ export class PostPlanningComponent {
       this.loaderService.requestStarted();
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.SearchData.EndTermID = this.sSOLoginDataModel.EndTermID;
-
+      debugger
       await this.ITIGovtEMStaffMaster.OfficeVacancyListPlanning(this.SearchData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -796,5 +806,25 @@ export class PostPlanningComponent {
 
     }
     
+  }
+
+  async onOfficeChange() {
+    await this.ddl_DivisionID_Wise_District();
+  }
+
+  async ddl_DivisionID_Wise_District() {
+    try {
+      this.DistrictList = [];
+      const DivisionID = 0;
+      const StateID = 6;
+      await this.commonMasterService.DistrictMaster_DivisionIDWise(DivisionID,StateID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DistrictList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
   }
 }

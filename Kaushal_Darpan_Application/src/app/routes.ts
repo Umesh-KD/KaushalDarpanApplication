@@ -524,6 +524,9 @@ export const routes: Routes = [
           { path: 'HOD-DTEEquipmentVerifications', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/DTEEquipmentVerifications-mapping-list/DTEEquipmentVerifications-mapping-list-module').then(m => m.DTEEquipmentVerificationsMappingListModule) },
           { path: 'Auction-List', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/auction-list/auction-list.module').then(m => m.AuctionListModule) },
           /*BTER-DTE-Inventory-Management*/
+
+           { path: 'ITIExaminerInchargeDashboard', loadChildren: () => import('./Views/ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module').then(m => m.ItiExaminationInchargeDashboardModule), title: 'ITI Examiner Incharge Dashboard' },
+
         ]
     },
     {

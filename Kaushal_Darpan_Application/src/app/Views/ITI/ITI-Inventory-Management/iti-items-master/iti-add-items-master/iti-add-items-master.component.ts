@@ -274,6 +274,7 @@ export class ITIAddItemsMasterComponent {
           await this.GetTradeDDL();
           this.request.TradeId = data['Data']["TradeId"];
           this.request.IsRequested = data['Data']["IsRequested"];
+          this.request.Status = data['Data']["Status"];
           // if(this.request.IsRequested==true){
           //   await this.refreshFieldsOnEdit();
           // }
@@ -356,10 +357,7 @@ export class ITIAddItemsMasterComponent {
         .then((data: any) => {
           console.log(data)
           data = JSON.parse(JSON.stringify(data));
-          this.TradeDDLList = data['Data'];
-          console.log(this.TradeDDLList)
-          // this.request.TradeId=-1
-          this.AddItemsRequestFormGroup.get('TradeId')?.setValue(0);  
+          this.TradeDDLList = data['Data']; 
         }, error => console.error(error));
     }
     catch (Ex) {

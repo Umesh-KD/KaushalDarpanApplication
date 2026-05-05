@@ -54,15 +54,15 @@ export class DteHostelInstituteMappingListComponent {
     });
   }
   async ngOnInit() {
-   
+
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-   
+
     await this.GetAllHostelInstituteMappingList();
 
 
   }
-    
+
 
 
 
@@ -89,33 +89,42 @@ export class DteHostelInstituteMappingListComponent {
       }, 200);
     }
   }
-    
+
   async unmapHostel(mappingId: number) {
-    if (confirm("Are you sure you want to unmap this hostel?")) {
-      try {
-        console.log("Clicked OK, ID:", mappingId);
 
-        this.loaderService.requestStarted();
+    this.Swal2.Confirmation("Are you sure you want to unmap this hostel?",
+      async (result: any) => {
 
-        const res: any = await this._HostelManagmentService.UnmapHostelInstitute(mappingId);
+        if (result.isConfirmed) {
 
-        console.log("API Response:", res);
+          try {
+            console.log("Clicked OK, ID:", mappingId);
 
-        if (res && (res.State === 1 || res.state === 1)) {
-          this.toastr.success(res.Message || "Unmapped successfully");
-          this.GetAllHostelInstituteMappingList();
-        } else {
-          this.toastr.error(res?.ErrorMessage || "Unmap failed");
+            this.loaderService.requestStarted();
+
+            const res: any = await this._HostelManagmentService.UnmapHostelInstitute(mappingId);
+
+            console.log("API Response:", res);
+
+            if (res && (res.State === 1 || res.state === 1)) {
+              this.toastr.success(res.Message || "Unmapped successfully");
+              await this.GetAllHostelInstituteMappingList();
+            } else {
+              this.toastr.error(res?.ErrorMessage || "Unmap failed");
+            }
+
+          } catch (error) {
+            console.error("Error:", error);
+            this.toastr.error("Something went wrong");
+          } finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+
         }
 
-      } catch (error) {
-        console.error("Error:", error);
-        this.toastr.error("Something went wrong");
-      } finally {
-        this.loaderService.requestEnded();
-      }
-    }
+      });
 
   }
-
 }

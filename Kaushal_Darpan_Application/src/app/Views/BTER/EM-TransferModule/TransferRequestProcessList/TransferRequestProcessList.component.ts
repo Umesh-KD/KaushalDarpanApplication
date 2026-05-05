@@ -69,7 +69,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public TransferSystemStatusUpdateList: any = [];
     public updateStatus: number = 0;
     public isAnyApproved: boolean = false;
-    
+    public EnumRole = EnumRole;
+    isJDTECheck: boolean = false;
+    EnumTransferSystemStatus = EnumTransferSystemStatus;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -84,7 +86,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
   ) { }
 
   async ngOnInit() {
-    
+    debugger
     this.AddTrainingDetailsFromGroup = this.formBuilder.group({
       OrganizinglnstituteName: ['', [Validators.required]],
       CourseType: ['', [DropdownValidators1]],
@@ -164,6 +166,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       
       this.statusID = statusID;
       await this.EM_TransferSystem_GetData();
+
     }
 
     
@@ -189,23 +192,28 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
           
           if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
             if (this.EM_TransferProcessList?.length > 0) {
-              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 1)
+              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 1);
+              this.isAnyApproved = true;
             }
 
           }
           else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
             if (this.EM_TransferProcessList?.length > 0) {
-              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 2)
+              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 2);
+              this.isAnyApproved = true;
             }
           }
           else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
             if (this.EM_TransferProcessList?.length > 0) {
-              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 1)
+              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 1);
+              this.MainListApproveStatus();
             }
           }
           else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
             if (this.EM_TransferProcessList?.length > 0) {
-              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 2)
+              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 2);
+              this.MainListApproveStatus();
+
             }
           }
           else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
@@ -522,7 +530,19 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     checkApproveStatus() {
       debugger
       this.isAnyApproved = this.EM_TransferSystemEXTList?.some(
-        (item: any) => item.FinalApproveStatus == 5
+        (item: any) => item.FinalApproveStatus == EnumTransferSystemStatus.Appnoved
       );
+    }
+
+    MainListApproveStatus() {
+      this.isJDTECheck = this.EM_TransferProcessList?.some(
+        (item: any) => item.FinalApproveStatus === 5
+      );
+
+     
+    }
+
+    async StructuredSummaryList() {
+      window.open('/StructuredSummaryList', '_blank');
     }
 }

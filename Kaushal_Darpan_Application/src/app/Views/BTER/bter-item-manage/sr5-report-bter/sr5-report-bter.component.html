@@ -146,7 +146,7 @@
         <tbody>
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="item.Selected" *ngIf="item.SR5Approval != 2"
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="item.Selected" *ngIf="item.SR5Approval == 2"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,item)">
             </td>
             <td align="left">{{ idx+1}}</td>
@@ -177,13 +177,8 @@
               </div>
             </td> 
             <td align="left">
-              <label>
-                <ng-container
-                        *ngIf="
-                        item.Selected ;
-                        else notSelected"
-                    >
-                    <!-- formControlName="isOption" -->
+              <label *ngIf="item.equipmentStatus == 2">
+                <ng-container *ngIf="item.Selected ; else notSelected">
                   <input type="checkbox"
                           name="isOption" [(ngModel)]="item.isOption"
                           (click)="ItemMasterList[i]?.AuctionStatus === '1' || ItemMasterList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />
