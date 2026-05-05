@@ -708,6 +708,7 @@ export class ITIOfficeVacancyModel {
   public DepartmentID: number = 0;
   public EndTermID: number = 0;
   public CourseTypeID: number = 0;
+  public NodalDistrictID?: number = 0;
   public ActiveStatus: boolean = false;
   public DeleteStatus: boolean = false;
   public RTS: string = '';
@@ -723,6 +724,7 @@ export class ITIOfficeVacancyModel {
   public TradeID:number=0
   public TradeName: string = ''
   public PostSanctionDate: string = ''
+  public NodalDistrictName?: string = ''
   public PostSanctionedID: number = 0;
 }
 

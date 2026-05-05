@@ -134,4 +134,13 @@ export class BTEREMStaffServiceDetailsService {
       ).toPromise();
   }
 
+
+  public async TransferSystemGeneratorUpdate(request: TransferSystemUpdateDataModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/TransferSystemGeneratorUpdate`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

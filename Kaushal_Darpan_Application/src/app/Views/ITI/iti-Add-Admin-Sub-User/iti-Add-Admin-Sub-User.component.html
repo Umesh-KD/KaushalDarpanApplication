@@ -66,12 +66,15 @@
                 Mobile No<span class="StarMarking">*</span>
               </label>
               <input type="text" class="form-input" id="txtMobileNo" placeholder="Mobile Number" name="txtMobileNo" formControlName="txtMobileNo"
-                     [(ngModel)]="adminRequest.MobileNo" maxlength="10">
+                     [(ngModel)]="adminRequest.MobileNo" maxlength="10" (keypress)="allowOnlyNumbers($event)">
               <div *ngIf="isSubmitted&&_AdminUserFormGroup.txtMobileNo.errors" class="text-danger">
                 <p *ngIf="_AdminUserFormGroup.txtMobileNo.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required .!
                 </p>
+                <p *ngIf="_AdminUserFormGroup.txtMobileNo.errors.pattern">
+                  Enter valid  mobile number
+                </p> 
               </div>
             </div>
 
