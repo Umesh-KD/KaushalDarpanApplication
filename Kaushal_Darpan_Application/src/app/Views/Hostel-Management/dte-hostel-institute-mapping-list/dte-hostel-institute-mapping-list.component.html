@@ -63,7 +63,7 @@
               <!--<button class="btn btn-danger btn-sm" (click)="unmapHostel(item.HIMappingID)">
     Unmap
   </button>-->
-              <button class="btn btn-danger btn-sm" (click)="editMapping(item.HIMappingID)">
+              <button *ngIf="item.isParent == 1" class="btn btn-danger btn-sm" (click)="editMapping(item.HIMappingID)">
                 Unmap
               </button>
             </td>
