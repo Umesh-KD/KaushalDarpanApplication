@@ -26,7 +26,7 @@ export class ITIPlacementDashReportComponent implements OnInit {
   State: boolean = false;
   viewAdminDashboardList: StudentExamDetails[] = [];
   filteredData: any[] = [];
-  displayedColumns: string[] = ['SrNo', 'StudentName', 'EnrollmentNo', 'InstituteName', 'InstitutionManagementType','TradeName','companyName', 'Email', 'FatherName', 'DOB', 'Age', 'GenderName'];
+  displayedColumns: string[] = [];
   dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
   totalRecords: number = 0;
   pageSize: number = 10;
@@ -134,6 +134,12 @@ export class ITIPlacementDashReportComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       this.id = params.get('id')
     });
+    if(this.id==10){
+      this.displayedColumns= ['SrNo', 'StudentName', 'EnrollmentNo', 'InstituteName', 'InstitutionManagementType','TradeName','companyName', 'Email', 'FatherName', 'DOB', 'Age', 'GenderName'];
+    }
+    else{
+      this.displayedColumns= ['SrNo', 'StudentName', 'EnrollmentNo', 'InstituteName', 'InstitutionManagementType', 'Email', 'FatherName', 'DOB', 'Age', 'GenderName'];
+    }
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     debugger;
 
@@ -271,7 +277,7 @@ export class ITIPlacementDashReportComponent implements OnInit {
   
 
   async GetAllData() {
- //   debugger
+    debugger
     console.log(this.request.CollegeID);
      console.log("selected trade ===> ",this.SelectedTradeID);
      console.log("selected institute ===> ",this.SelectedCollegeID);

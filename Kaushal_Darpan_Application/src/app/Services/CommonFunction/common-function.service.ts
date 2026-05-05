@@ -2432,5 +2432,13 @@ export class CommonFunctionService {
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();
-    }
+  }
+
+  public async GetGroupCode_Reval(model: CommonDDLSubjectMasterModel) {
+    const body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/GetGroupCode_Reval`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

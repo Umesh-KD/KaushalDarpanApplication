@@ -32,7 +32,7 @@ export class RevalAddExaminerComponent implements OnInit {
   public ExamList: any[] = [];
   public Table_SearchText: any = '';
   // public request = new HrMasterDataModel()
-  public _enumDepartment =EnumDepartment
+  public _enumDepartment = EnumDepartment
   public AppointExaminer = new ExaminerDataModel();
   public isSubmitted: boolean = false;
   public AppointExaminerFormGroup!: FormGroup;
@@ -64,15 +64,17 @@ export class RevalAddExaminerComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    console.log(this.sSOLoginDataModel);
-    this.getSemesterMasterList();
+    //console.log(this.sSOLoginDataModel);
+
+    // load
+    await this.getSemesterMasterList();
     await this.ExaminationSchemeChange()
-    this.getStreamMasterList();
-    this.GetCommonSubjectDDL()
-    this.getInstituteMasterList()
-    this.getSubjectMasterList()
-    this.getExamMasterList()
-    this.getDesignationMasterList()
+    await this.getStreamMasterList();
+    //await this.GetCommonSubjectDDL()
+    await this.getInstituteMasterList()
+    await this.getSubjectMasterList()
+    await this.getExamMasterList()
+    await this.getDesignationMasterList()
 
   }
   get _AppointExaminerFormGroup() { return this.AppointExaminerFormGroup.controls; }
@@ -191,7 +193,7 @@ export class RevalAddExaminerComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
         this.GroupMasterDDLList = data.Data;
 
-        console.log("GroupMasterDDLList", this.GroupMasterDDLList);
+       // console.log("GroupMasterDDLList", this.GroupMasterDDLList);
       })
     } catch (error) {
       console.error(error);
@@ -219,28 +221,41 @@ export class RevalAddExaminerComponent implements OnInit {
 
   async ddlStream_Change() {
     try {
-      this.loaderService.requestStarted();
-      this.SubjectMasterDDLList=[]
-      await this.commonMasterService.SubjectMaster_StreamIDWise(this.searchRequest.StreamID, this.sSOLoginDataModel.DepartmentID, this.searchRequest.SemesterID,)
+      this.SubjectMasterDDLList = [];
+      this.CommonSubjectDDLList = [];
+      this.searchRequest.CommonSubjectID = 0;
+
+      // if common subject
+      if (this.CommonSubjectYesNo == 2 && this.searchRequest.SemesterID > 0) {//yes
+        await this.GetCommonSubjectDDL();
+        return;
+      }
+
+      if (this.searchRequest.SemesterID == 0 || this.searchRequest.StreamID == 0) {
+        return;
+      }
+
+      // call
+      await this.commonMasterService.SubjectMaster_StreamIDWise(this.searchRequest.StreamID,
+        this.sSOLoginDataModel.DepartmentID,
+        this.searchRequest.SemesterID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID
+      )
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.SubjectMasterDDLList = data.Data;
-          console.log("SubjectMasterDDLList", this.SubjectMasterDDLList)
+          //console.log("SubjectMasterDDLList", this.SubjectMasterDDLList)
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   async getStaffForExaminerData() {
     try {
-      this.StaffForExaminerList=[]
+      this.StaffForExaminerList = []
       this.searchRequest.CommonSubjectYesNo = this.CommonSubjectYesNo;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -251,11 +266,11 @@ export class RevalAddExaminerComponent implements OnInit {
       await this.examinerservice.GetTeacherForExaminer(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffForExaminerList = data.Data;
-        console.log("this.StaffForExaminerList", this.StaffForExaminerList)
+        //console.log("this.StaffForExaminerList", this.StaffForExaminerList)
       })
     } catch (error) {
       console.error(error)
-    } 
+    }
   }
 
   async appointStaffAsExaminer(StaffID: number) {
@@ -279,6 +294,7 @@ export class RevalAddExaminerComponent implements OnInit {
     this.AppointExaminer.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.AppointExaminer.RoleID = this.sSOLoginDataModel.RoleID;
 
+
     const saveExaminer = async () => {
       try {
         this.loaderService.requestStarted();
@@ -290,24 +306,20 @@ export class RevalAddExaminerComponent implements OnInit {
         if (this.State === EnumStatus.Success) {
           this.toastr.success(this.Message);
           this.AppointExaminer = new ExaminerDataModel();
-          this.getStaffForExaminerData();
+          await this.getStaffForExaminerData();
           this.CloseModalPopup();
         } else {
           this.toastr.error(this.ErrorMessage);
         }
       } catch (error) {
         console.error("Error saving examiner data:", error);
-      } finally {
-        setTimeout(() => {
-          this.loaderService.requestEnded();
-        }, 200);
-      }
+      } 
     };
 
-    if (!this.AppointExaminer.AssignGroupCode || this.AppointExaminer.AssignGroupCode=='()') {
+    if (!this.AppointExaminer.AssignGroupCode || this.AppointExaminer.AssignGroupCode == '()') {
       await saveExaminer();
     } else {
-      this.Swal2.Confirmation(`This teacher is already assigned this Group Code ${this.AppointExaminer.AssignGroupCode},Select Yes If You want to Assign more Group Code!`, async (result: any) => {
+      this.Swal2.Confirmation(`This teacher is already assigned this Group Code ${this.AppointExaminer.AssignGroupCode}, Select Yes If You want to Assign more Group Code!`, async (result: any) => {
         if (result.isConfirmed) {
           await saveExaminer();
         }
@@ -340,7 +352,7 @@ export class RevalAddExaminerComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-  /*  this.getSubjectMasterList()*/
+    /*  this.getSubjectMasterList()*/
   }
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -351,7 +363,7 @@ export class RevalAddExaminerComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-  async ViewandUpdate(content: any, UserID: number,StaffSubjectId:number=0) {
+  async ViewandUpdate(content: any, UserID: number, StaffSubjectId: number = 0) {
 
     //const initialState = {
     //  UserID: UserID,
@@ -387,16 +399,14 @@ export class RevalAddExaminerComponent implements OnInit {
 
 
 
-  async GetByID(id: number, StaffSubjectId:number) {
+  async GetByID(id: number, StaffSubjectId: number) {
     try {
-      
-      this.loaderService.requestStarted();
 
       await this.examinerservice.Getexaminer_byID_Reval(id, StaffSubjectId, this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.Eng_NonEng)
         .then(async (data: any) => {
-          
+
           data = JSON.parse(JSON.stringify(data));
-          console.log(data, "data");
+         // console.log(data, "data");
           this.AppointExaminer.StaffID = data['Data']["StaffID"];
 
           this.AppointExaminer.Name = data['Data']["Name"];
@@ -411,7 +421,7 @@ export class RevalAddExaminerComponent implements OnInit {
           this.AppointExaminer.SubjectID = data['Data']['SubjectID']
           /*      console.log(this.AppointExaminer.InstituteID,"   this.AppointExaminer.InstituteID ")*/
 
-          this.getGroupCodeMasterList()
+         await this.getGroupCodeMasterList()
 
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
@@ -424,19 +434,27 @@ export class RevalAddExaminerComponent implements OnInit {
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   async GetCommonSubjectDDL() {
     try {
-      if (this.CommonSubjectYesNo == 1 || this.searchRequest.SemesterID == 0) {//no
+
+      this.searchRequest.CommonSubjectID = 0;
+      this.StaffForExaminerList = [];
+      const select = document.getElementById('CommonSubjectYesNo') as HTMLSelectElement;
+      const value = Number(select.value);
+
+      if (value == 2 && this.searchRequest.SemesterID == 0) {//yes
+        select.value = '1';
+        this.CommonSubjectYesNo = 1;
+        this.toastr.warning("Please select semester!");
+        return;
+      }
+      if (value == 1 || this.searchRequest.SemesterID == 0) {//no
         this.CommonSubjectDDLList = [];
         return;
       }
+
       this.commonDDLCommonSubjectModel.SemesterID = this.searchRequest.SemesterID;
       this.commonDDLCommonSubjectModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.commonDDLCommonSubjectModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;

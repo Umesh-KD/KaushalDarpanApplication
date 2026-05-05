@@ -5,7 +5,7 @@
 
       <div>
         <label>Search By Status</label>
-        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus">
+        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (click)="onChangeSearchStatus()">
           <option value="0">--select--</option>
           <option *ngFor="let item of TransferSystemStatusSearchList" [value]="item.ID">
             {{item.Name}}
@@ -60,7 +60,9 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Transfer Application List</b>
+
      
+
     </div>
 
   </div>
@@ -106,7 +108,7 @@
     <table class="table table-border w-full" cellpadding="5">
       <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
         <tr>
-          <th width="50px">
+          <th width="50px" *ngIf="ShowCheckBoxId == 1">
             <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
                    [checked]="AllSelect"
                    (change)="checkboxthView_checkboxchange($event.target.checked)">
@@ -124,7 +126,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of EM_TransferProcessList | tableSearchFilter:Table_SearchText; let idx=index;">
-          <td>
+          <td *ngIf="ShowCheckBoxId == 1" >
             <input type="checkbox" name="MarkCheck"
                    [(ngModel)]="row.Selected" />
           </td>

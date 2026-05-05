@@ -8,9 +8,9 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Hostel Institute Mapping' : 'Hostel Institute Mapping' }}</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Hostel Management</a>
+      <a [routerLink]="'/Hostel-Institute-Mapping-List'"  class="text-sm font-medium text-slate-700">Hostel Management</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Hostel Institute Mapping</a>
+      <a [routerLink]="'/Hostel-Institute-Mapping-List'" class="text-sm font-medium text-slate-700" aria-current="page">Hostel Institute Mapping</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
         {{ isUpdate ? 'Update Hostel Institute Mapping' : 'Add Hostel Institute Mapping' }}
@@ -109,7 +109,7 @@
             </td>
             <td>
              
-              <span style="color:red; cursor:pointer;" (click)="removeInstitute(idx)"> ❌ </span>
+              <span style="color:red; cursor:pointer;" (click)="removeInstitute(idx,item)"> ❌ </span>
             </td>
 </tbody>
       </table>

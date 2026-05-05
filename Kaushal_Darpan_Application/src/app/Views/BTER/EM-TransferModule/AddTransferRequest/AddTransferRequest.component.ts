@@ -392,6 +392,7 @@ export class AddTransferRequestComponent {
           // this.OfficeVacancyDataList();
           this.toastr.success('Data saved successfully!');
 
+          this.routers.navigate(['TransferRequestList']);
           // window.location.reload();
           // Clear array after successful save
         } else {
