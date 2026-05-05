@@ -42,11 +42,11 @@
 
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Examination Scheme:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Examination Scheme</label>
           <select class="form-select" id="StudentExamYear"
                   [(ngModel)]="searchRequest.IsYearly"
                   (change)="ExaminationSchemeChange()">
-            <option value="-1">--Select All--</option>
+            <option value="-1">--All--</option>
             <option value=0>Semester</option>
             <option value=1>Yearly</option>
           </select>

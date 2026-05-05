@@ -58,13 +58,16 @@ export class RevalExaminersComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
-    console.log(this.sSOLoginDataModel);
-    this.getSemesterMasterList();
+
+    //console.log(this.sSOLoginDataModel);
+
+    // load
+    await this.getSemesterMasterList();
     await this.ExaminationSchemeChange()
-    this.getStreamMasterList();
-    this.getGroupCodeMasterList();
-    //this.getExaminerData();
-    //this.getExamMasterList();//grid data
+    await this.getStreamMasterList();
+    await this.getGroupCodeMasterList();
+    //await this.getExaminerData();
+    //await this.getExamMasterList();//grid data
   }
 
   async getSemesterMasterList() {
@@ -104,16 +107,18 @@ export class RevalExaminersComponent implements OnInit {
   async getGroupCodeMasterList() {
     try {
       let model = new CommonDDLSubjectMasterModel();
-      model.SubjectID = this.searchRequest.SemesterID;
+      model.SubjectID = this.searchRequest.SubjectID;
       model.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       model.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       model.EndTermID = this.sSOLoginDataModel.EndTermID;
-      //
+      model.SemesterID = this.searchRequest.SemesterID;
+
+      // call
       await this.commonMasterService.GetGroupCode(model)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.GroupMasterDDLList = data.Data;
-          console.log("GroupMasterDDLList", this.GroupMasterDDLList);
+          //console.log("GroupMasterDDLList", this.GroupMasterDDLList);
         })
     } catch (error) {
       console.error(error);
@@ -174,16 +179,17 @@ export class RevalExaminersComponent implements OnInit {
   }
 
   async getExaminerData() {
-    console.log("searchRequest", this.searchRequest);
+    //console.log("searchRequest", this.searchRequest);
     this.searchRequest.CommonSubjectYesNo = this.CommonSubjectYesNo;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     try {
+      // call
       await this.examinerservice.GetExaminerData_Reval(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ExaminersList = data.Data;
-        console.log("this.ExaminersList", this.ExaminersList)
+        //console.log("this.ExaminersList", this.ExaminersList)
       })
     } catch (error) {
       console.error(error);
@@ -196,7 +202,6 @@ export class RevalExaminersComponent implements OnInit {
         //confirmed
         if (result.isConfirmed) {
           try {
-            this.loaderService.requestStarted();
             await this.examinerservice.DeleteByID_Reval(ExaminerID, this.UserID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
@@ -215,11 +220,6 @@ export class RevalExaminersComponent implements OnInit {
           }
           catch (ex) {
             console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
           }
         }
       });
@@ -290,6 +290,7 @@ export class RevalExaminersComponent implements OnInit {
   }
 
   async GetCommonSubjectDDL() {
+    await this.getGroupCodeMasterList(); // for get group code based on semester
     try {
       if (this.CommonSubjectYesNo == 1 || this.searchRequest.SemesterID == 0) {//no
         this.CommonSubjectDDLList = [];

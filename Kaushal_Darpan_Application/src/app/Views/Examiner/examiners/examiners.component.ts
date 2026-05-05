@@ -69,13 +69,16 @@ export class ExaminersComponent implements OnInit {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
-    console.log(this.sSOLoginDataModel);
+
+    //console.log(this.sSOLoginDataModel);
+
+    // load
     await this.getSemesterMasterList();
     await this.ExaminationSchemeChange()
     await this.getStreamMasterList();
     await this.getGroupCodeMasterList();
-    //this.getExaminerData();
-    //this.getExamMasterList();//grid data
+    //await this.getExaminerData();
+    //await this.getExamMasterList();//grid data
   }
 
   async getSemesterMasterList() {
@@ -125,7 +128,7 @@ export class ExaminersComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.GroupMasterDDLList = data.Data;
-          console.log("GroupMasterDDLList", this.GroupMasterDDLList);
+          //console.log("GroupMasterDDLList", this.GroupMasterDDLList);
         })
     } catch (error) {
       console.error(error);
@@ -186,17 +189,18 @@ export class ExaminersComponent implements OnInit {
   }
 
   async getExaminerData() {
-    console.log("searchRequest", this.searchRequest);
+    //console.log("searchRequest", this.searchRequest);
     this.searchRequest.CommonSubjectYesNo = this.CommonSubjectYesNo;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     try {
+      // call
       await this.examinerservice.GetExaminerData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ExaminersList = data.Data;
         this.loadInTable();
-        console.log("this.ExaminersList", this.ExaminersList)
+        //console.log("this.ExaminersList", this.ExaminersList)
       })
     } catch (error) {
       console.error(error);
@@ -209,7 +213,6 @@ export class ExaminersComponent implements OnInit {
         //confirmed
         if (result.isConfirmed) {
           try {
-            this.loaderService.requestStarted();
             await this.examinerservice.DeleteById(ExaminerID, this.UserID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
@@ -228,11 +231,6 @@ export class ExaminersComponent implements OnInit {
           }
           catch (ex) {
             console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
           }
         }
       });
