@@ -26,6 +26,8 @@ export class DteHostelInstituteMappingListComponent {
   public HostelInstituteMappingList: any = [];
   HostelInstituteMappingRequest = new HostelInstituteMappingModel()
 
+  public IsShowAddButton: boolean = true;
+
 
   constructor(
     private fb: FormBuilder,
@@ -77,6 +79,11 @@ export class DteHostelInstituteMappingListComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.HostelInstituteMappingList = data['Data'];
+
+          if (this.HostelInstituteMappingList && this.HostelInstituteMappingList?.length > 0) {
+            this.IsShowAddButton = false;
+          }
+
           console.log(this.HostelInstituteMappingList, "GetAllHostelInstituteMappingList")
         }, error => console.error(error));
     }
