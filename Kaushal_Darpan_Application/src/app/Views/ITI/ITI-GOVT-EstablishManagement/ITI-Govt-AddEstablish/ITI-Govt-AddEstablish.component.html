@@ -364,8 +364,8 @@
             <th class="text-left">Name /SSO Id</th>
             <th class="text-left">StaffLevel Type</th>
             <th class="text-left">Staff Level Child Type</th>
-            <th class="text-left">Course</th>
-            <th class="text-left">Subject</th>
+            <th class="text-left">Trade</th>
+            <!-- <th class="text-left">Subject</th> -->
             <th class="text-left">Contact/Address Details</th>
             <!--<th class="text-left">Address Details</th>-->
             <th class="text-left">Profile Status</th>
@@ -383,7 +383,7 @@
             <td> {{row.StaffLevelTypeName}}</td>
             <td> {{row.StaffLevelChildName}}</td>
             <td>{{row.Stream}}</td>
-            <td>{{row.Subject}}</td>
+            <!-- <td>{{row.Subject}}</td> -->
             <td>
               <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
               <p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>

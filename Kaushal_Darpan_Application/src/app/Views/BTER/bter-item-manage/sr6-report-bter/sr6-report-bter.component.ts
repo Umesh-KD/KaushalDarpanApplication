@@ -224,7 +224,7 @@ export class SR6ReportBTERComponent {
       this.toastr.warning("No data available to export.");
       return;
     }
-    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus',];
+    const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'AuctionStatus', 'IsOption'];
     const filteredData = this.ItemMasterList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -412,7 +412,7 @@ export class SR6ReportBTERComponent {
 
       //save
       await this.bterInventoryService.SaveAuctionData(this.request)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
 
@@ -421,7 +421,7 @@ export class SR6ReportBTERComponent {
             this.AuctionFormGroup.reset();
             this.request.Dis_AuctionDoc = '';
             this.CloseModalPopup();
-            this.GetAllData();
+            await this.GetAllData();
           }
           else {
             this.toastr.error(data.ErrorMessage)

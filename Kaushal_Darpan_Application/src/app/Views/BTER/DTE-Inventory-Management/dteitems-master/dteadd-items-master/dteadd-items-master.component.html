@@ -242,7 +242,12 @@
             Abbreviation: <span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input uppercase" id="abbreviation" name="abbreviation" formControlName="abbreviation" [(ngModel)]="request.abbreviation" maxlength="20">
-
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.abbreviation.errors" class="text-danger">
+            <p *ngIf="_AddItemsRequestFormGroup.abbreviation.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+          </div>
         </div>
 
         <div class="mt-3">

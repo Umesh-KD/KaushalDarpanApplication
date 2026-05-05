@@ -115,20 +115,18 @@ export class DteEquipmentsMasterComponent {
       this.request.IsConsumable = this.EquipmentsRequestFormGroup.value.IsConsumable ? 1 : 0;
       this.request.IsSerialNo = this.EquipmentsRequestFormGroup.value.IsSerialNo ? 1 : 0;
       await this.dteEquipmentsService.SaveData(this.request)
-        .then((data: any) => {
+        .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
-            this.ResetControl();
-            this.GetAllData();
+            await this.ResetControl();
+            await this.GetAllData();
             const btnSave = document.getElementById('btnSave');
             if (btnSave) btnSave.innerHTML = "Submit";
             this.routers.navigate(['/DteEquipmentsMaster']);
-
-
           }
           else if (this.State == EnumStatus.Error) {
             this.toastr.error(this.ErrorMessage);
@@ -307,6 +305,7 @@ export class DteEquipmentsMasterComponent {
   async ResetControl() {
     this.isSubmitted = false;
     this.request = new DTEEquipmentsDataModel();
+    this.EquipmentsId = 0;
     this.EquipmentsRequestFormGroup.reset({
       UnitId: 0
     });

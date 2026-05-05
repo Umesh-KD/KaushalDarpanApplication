@@ -726,6 +726,8 @@ export class ITIOfficeVacancyModel {
   public PostSanctionDate: string = ''
   public NodalDistrictName?: string = ''
   public PostSanctionedID: number = 0;
+  public RoleID?: number = 0;
+  public UserID?: number = 0;
 }
 
 export class ITT_EM_ApproveStaffDataModel extends RequestBaseModel {
