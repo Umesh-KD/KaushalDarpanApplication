@@ -131,35 +131,37 @@ export class DTEHostelInstituteMappingComponent {
     }
   }
 
-  //async GetHostelInstituteMappingByID(id: number) {
-  //  debugger
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this._HostelManagmentService.GetHostelInstituteMappingByID(id).then((data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      console.log(data);
-  //      if (data.Data !== null) {
-  //        console.log(data.Data, "edit");
-  //        this.HostelInstituteMappingRequest.HostelID = data.Data.HostelID;
-  //        this.HostelInstituteMappingRequest.InstituteID = data.Data.InstituteID;
-  //        this.selected = data.Data.InstituteID
-  //          ? data.Data.InstituteID.split(',').map((x: any) => Number(x))
-  //          : [];
-
-  //        console.log("Selected IDs:", this.selected);
-  //        this.isUpdate = true;
-  //      }
-  //      console.log(this.request, "request")
-  //    });
-  //  } catch (error) {
-  //    console.error(error);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
   async GetHostelInstituteMappingByID(id: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      await this._HostelManagmentService.GetHostelInstituteMappingByID(id).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        console.log(data);
+        if (data.Data !== null) {
+
+          this.SelectedinstituteList = data.Data;
+          //console.log(data.Data, "edit");
+          //this.HostelInstituteMappingRequest.HostelID = data.Data.HostelID;
+          //this.HostelInstituteMappingRequest.InstituteID = data.Data.InstituteID;
+          //this.selected = data.Data.InstituteID
+          //  ? data.Data.InstituteID.split(',').map((x: any) => Number(x))
+          //  : [];
+
+          console.log("Selected IDs:", this.selected);
+          this.isUpdate = true;
+        }
+        console.log(this.request, "request")
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async GetHostelInstituteMappingByID12(id: number) {
     try {
       this.loaderService.requestStarted();
 
@@ -170,12 +172,12 @@ export class DTEHostelInstituteMappingComponent {
 
         this.HostelInstituteMappingRequest.HostelID = data.Data.HostelID;
 
-        // selected IDs
+      
         this.selected = data.Data.InstituteID
           ? data.Data.InstituteID.split(',').map((x: any) => Number(x))
           : [];
 
-        // 🔥 FIX STARTS HERE
+       
         this.SelectedinstituteList = this.selected.map((instId: number, index: number) => {
 
           const institute = this.InstituteMasterDDLList.find(
@@ -408,9 +410,6 @@ export class DTEHostelInstituteMappingComponent {
 
     this.isSubmitted = true;
 
-    // ===============================
-    // 🔥 CASE 1: NOTHING SELECTED → UNMAP ALL
-    // ===============================
     if (!this.SelectedinstituteList || this.SelectedinstituteList.length === 0) {
 
       if (this.mappingId > 0) {
@@ -440,25 +439,19 @@ export class DTEHostelInstituteMappingComponent {
 
           });
 
-        return; // IMPORTANT → keep this
+        return; 
       }
 
       this.toastr.error("Please select hostel or institute");
       return;
     }
 
-    // ===============================
-    // 🔍 Parent check
-    // ===============================
     const hasParent = this.SelectedinstituteList.some((x: any) => x.isParent === true);
 
     if (!hasParent) {
       this.toastr.warning("No parent selected (optional)");
     }
 
-    // ===============================
-    // 💾 SAVE DATA
-    // ===============================
     try {
       this.loaderService.requestStarted();
 
@@ -503,10 +496,14 @@ export class DTEHostelInstituteMappingComponent {
   }
 
 
-  removeInstitute(index: number) {
+  removeInstitute(index: number,item:any) {
 
     const removed = this.SelectedinstituteList[index];
-
+   
+      if (item.isParent === true) {
+        alert("Please select another parent first, then remove this one.");
+        return;
+    }
     this.Swal2.Confirmation(
       "Are you sure you want to remove this institute?",
       (result: any) => {
@@ -519,7 +516,7 @@ export class DTEHostelInstituteMappingComponent {
             (x: number) => x !== removed.InstituteID
           );
 
-          // Maintain parent selection
+          
           if (this.SelectedinstituteList.length > 0) {
             this.SelectedinstituteList[0].isParent = true;
           }
