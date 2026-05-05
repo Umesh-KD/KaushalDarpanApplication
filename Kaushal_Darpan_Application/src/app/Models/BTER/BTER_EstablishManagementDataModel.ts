@@ -832,3 +832,35 @@ export class TransferSystemGeneratorDataModel {
   public TrainingStatus: number = 0;
 
 }
+
+
+
+export class BTERStaffManualRequestModel {
+  
+  public EmployeeDesignation: string = '';
+  public EmployeeName: string = '';
+  public NonGazetteName: string = '';
+  public StaffID: number = 0;
+  public TransfercateID: number = 0;
+  public ReasonDescription: string = '';
+  public SupportingDocuments: string = '';
+  public SupportingDocuments_Dis: string = '';
+  public vReasonDescription: string = '';
+  public NonGazettedID: number = 0;
+  public OfficeID: number = 0;
+  public DistrictID: number = 0;
+  public InstituteID: number = 0;
+  public PostID: number = 0;
+  public PriorityID: number = 0;
+  public CreatedBy: number = 0;
+  public UserID: number = 0;
+  public SSOID: string = '';
+ 
+
+  public To_OfficeID: number = 0;
+  public To_PostID: number = 0;
+  public To_ddlDistrictID: number = 0;
+  public To_ddlCollege: number = 0;
+ 
+
+}

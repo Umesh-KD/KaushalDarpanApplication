@@ -2432,5 +2432,13 @@ export class CommonFunctionService {
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();
-    }
+  }
+
+  public async DDL_EmployeeTransferSysterm(OfficeID: number = 0, DesignationID: number = 0, DistrictID: number = 0, InstituteID: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/DDL_EmployeeTransferSysterm/' + OfficeID + '/' + DesignationID + '/' + DistrictID + '/' + InstituteID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
