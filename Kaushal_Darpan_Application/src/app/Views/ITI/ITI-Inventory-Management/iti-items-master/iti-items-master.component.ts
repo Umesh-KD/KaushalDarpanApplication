@@ -120,7 +120,7 @@ export class ITIItemsMasterComponent {
       let Searchrequest: any = {}
 
       Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      Searchrequest.TypeName = 'TradeList';
+      Searchrequest.TypeName = 'TradeList_minReqItem';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(Searchrequest);
 
