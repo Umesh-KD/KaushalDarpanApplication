@@ -17,7 +17,7 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-      <a routerLink="/AddTransferRequest" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Request Transfer</a>
+      <a *ngIf="EmployeeLatestRequestStatus==5 || EmployeeLatestRequestStatus==6" routerLink="/AddTransferRequest" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Request Transfer</a>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
       <div class="Search">
@@ -78,9 +78,9 @@
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
           <td mat-cell *matCellDef="let element">
-            <a [routerLink]="'/AddTransferRequest'" [queryParams]="{ID:element.TransferSystemID}" title="Edit"><i class="ti ti-pencil"></i></a>
+            <a *ngIf="element.TransferStatusCode ==1" class="btn btn-sm btn-primary" [routerLink]="'/AddTransferRequest'" [queryParams]="{ID:element.TransferSystemID}" title="Edit"><i class="ti ti-pencil"></i></a>            
+            <a *ngIf="element.TransferStatusCode==1" class="btn btn-sm btn-primary" href="javascript:void(0);" id="btnDelete"  title="Delete" (click)="DeleteById(element.TransferSystemID)"><i class="ti ti-trash"></i></a>
             <a class="btn btn-sm btn-primary" href="javascript:void(0);" title="Status History" (click)="onTransferSystemEXT(TransferSystemEXT, element.TransferSystemID)"><i class="ti ti-list"></i></a>
-            <a href="javascript:void(0);" id="btnDelete"  title="Delete" (click)="DeleteById(element.TransferSystemID)"><i class="ti ti-trash"></i></a>
           </td>
         </ng-container>
 

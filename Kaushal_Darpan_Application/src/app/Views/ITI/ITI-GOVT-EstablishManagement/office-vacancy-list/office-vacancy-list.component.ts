@@ -13,7 +13,7 @@ import { ITIOfficeVacancyModel } from '../../../../Models/ITIGovtEMStaffMasterDa
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
 
 
@@ -44,11 +44,19 @@ export class OfficeVacancyListComponent {
   public StaffTypeList: any[] = [];
   public DataExcel: any = [];
 
-  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMaster: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
-    private ITICollegeTradeService: ItiSeatIntakeService, private ScholarshipService: HiringRoleMasterService,
-  ) {
-
-  }
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private ITIGovtEMStaffMaster: ITIGovtEMStaffMaster, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private activatedRoute: ActivatedRoute, 
+    private routers: Router, 
+    private modalService: NgbModal, 
+    private Swal2: SweetAlert2,
+    private ITICollegeTradeService: ItiSeatIntakeService, 
+    private ScholarshipService: HiringRoleMasterService,
+  ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -62,17 +70,25 @@ export class OfficeVacancyListComponent {
     });
 
 
+    // if(this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
+    //   this.formData.OfficeID = 11;
+    //   this.formData.InstituteID = this.sSOLoginDataModel.InstituteID
+
+    //   this.groupForm.get('OfficeID')?.disable();
+    //   this.groupForm.get('InstituteID')?.disable();
+    // } else {
+    //   this.groupForm.get('OfficeID')?.enable();
+    //   this.groupForm.get('InstituteID')?.enable();
+    // }
+
     await this.GetPostList();
     await this.GetOfficeList();
     await this.GetStaffTypeData();
     await this.GetTradeData();
     await this.GetInstitute();
-    await this.OfficeVacancyDataList();
-
+    await this.OfficeVacancyDataList();    
   }
-  get _groupForm() {
-    return this.groupForm.controls;
-  }
+  get _groupForm() { return this.groupForm.controls;}
 
   async GetOfficeList() {
 
@@ -114,9 +130,6 @@ export class OfficeVacancyListComponent {
   }
 
   async GetTradeData() {
-    debugger
-
-
     this.tradeSearchRequest.action = 'Posttrade'
     
     try {
@@ -188,6 +201,8 @@ export class OfficeVacancyListComponent {
       this.loaderService.requestStarted();
       this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.formData.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.formData.RoleID = this.sSOLoginDataModel.RoleID;
+      this.formData.UserID = this.sSOLoginDataModel.UserID;
 
       await this.ITIGovtEMStaffMaster.ITI_OfficeVacancyReport(this.formData)
         .then((data: any) => {

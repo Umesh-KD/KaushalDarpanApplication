@@ -45,7 +45,7 @@
                 </ng-multiselect-dropdown>
               </div>
           </div>
-          <div>
+          <div *ngIf="id==10">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Trade<span class="StarMarking">*</span>
               </label>
@@ -69,7 +69,7 @@
                                    (onDeSelectAll)="onDeSelectAll($event)">
                 </ng-multiselect-dropdown>
           </div>
-          <div>
+          <div *ngIf="id==10">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Company Name: <span class="StarMarking">*</span>
             </label>

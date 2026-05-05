@@ -300,6 +300,7 @@ export class ITI_Govt_EM_ZonalOFFICERSSearchDataModel {
   LevelID: number = 0;
   StaffTypeID: number = 0;
   Name: string = "";
+  RoleId:number = 0;
 }
 
 export class ITI_Govt_EM_ZonalOFFICERSDataModel {
@@ -726,6 +727,8 @@ export class ITIOfficeVacancyModel {
   public PostSanctionDate: string = ''
   public NodalDistrictName?: string = ''
   public PostSanctionedID: number = 0;
+  public RoleID?: number = 0;
+  public UserID?: number = 0;
 }
 
 export class ITT_EM_ApproveStaffDataModel extends RequestBaseModel {
