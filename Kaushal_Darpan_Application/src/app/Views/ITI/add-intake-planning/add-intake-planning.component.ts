@@ -229,63 +229,124 @@ export class AddIntakePlanningComponent {
 
 
 
+async onSubmit() {
+  this.isSubmitted = true;
 
-
-    async onSubmit() {
-    debugger
-
-    this.isSubmitted = true;
- 
-    if (this.SeatIntakeFormGroup.invalid) {
-      this.toastr.error("invalid Form Data")
-      return
-      }
-      const unitNo = Number(this.request.UnitNo);
-
-      if (!unitNo || unitNo < 2 || unitNo % 2 !== 0) {
-        this.toastr.warning('Unit must be an even number and at least 2');
-        return;
-      }
-    try {
-      this.loaderService.requestStarted();
-
-      this.request.ModifyBy = this.SSOLoginDataModel.UserID;
-      this.request.DepartmentID = this.SSOLoginDataModel.DepartmentID;
-      this.request.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
-      this.request.CreatedBy = this.SSOLoginDataModel.UserID;
-
-      // this.request.FinancialSanctionID=this.SeatIntakeFormGroup.get('ddlFinancialSanctionID')?.value;
-      // this.request.AdminSanctionedID=this.SeatIntakeFormGroup.get('ddlAdminSanctionedID')?.value;
-      this.request.CollegeID = this.ItiCollegesListAll.find(
-        (e: any) => e.ID === Number(this.request.PlanningID)
-      )?.CollegeID || 0;
-
-      this.request.ActiveStatus = true;
-      console.log("request",this.request);
-      await this.ItiSeatIntakeService.SaveSeatIntakePlanning(this.request)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State = EnumStatus.Success) {
-            this.toastr.success(data.Message)
-            this.onReset()
-            this.router.navigate(['/SeatIntakePlanning'])
-          }
-          else {
-            this.toastr.error(data.ErrorMessage)
-          }
-
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
+  if (this.SeatIntakeFormGroup.invalid) {
+    this.toastr.error("Invalid form data");
+    return;
   }
+
+  const unitNo = Number(this.request.UnitNo);
+
+  if (!unitNo || unitNo < 2 || unitNo % 2 !== 0) {
+    this.toastr.warning('Unit must be an even number and at least 2');
+    return;
+  }
+
+  try {
+    this.loaderService.requestStarted();
+
+    this.request.ModifyBy = this.SSOLoginDataModel.UserID;
+    this.request.DepartmentID = this.SSOLoginDataModel.DepartmentID;
+    this.request.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
+    this.request.CreatedBy = this.SSOLoginDataModel.UserID;
+
+    this.request.CollegeID = this.ItiCollegesListAll.find(
+      (e: any) => e.ID === Number(this.request.PlanningID)
+    )?.CollegeID || 0;
+
+    this.request.ActiveStatus = true;
+
+    const response: any = await this.ItiSeatIntakeService.SaveSeatIntakePlanning(this.request);
+    const data = JSON.parse(JSON.stringify(response));
+
+    // ✅ Correct comparison
+    if (data.State === EnumStatus.Success) {
+      this.toastr.success(data.Message);
+      this.onReset();
+      this.router.navigate(['/SeatIntakePlanning']);
+    }
+
+    // ⚠️ Duplicate case (comes from SP = -2)
+    else if (data.State === EnumStatus.Warning) {
+      this.toastr.warning(data.Message || "Duplicate entry not allowed");
+    }
+
+    // ❌ Error case
+    else {
+      this.toastr.error(data.ErrorMessage || "Something went wrong");
+    }
+
+  } catch (ex) {
+    console.error(ex);
+    this.toastr.error("Unexpected error occurred");
+  } finally {
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+  }
+}
+
+// backup 050526
+
+
+  //   async onSubmit() {
+  //   debugger
+
+  //   this.isSubmitted = true;
+ 
+  //   if (this.SeatIntakeFormGroup.invalid) {
+  //     this.toastr.error("invalid Form Data")
+  //     return
+  //     }
+  //     const unitNo = Number(this.request.UnitNo);
+
+  //     if (!unitNo || unitNo < 2 || unitNo % 2 !== 0) {
+  //       this.toastr.warning('Unit must be an even number and at least 2');
+  //       return;
+  //     }
+  //   try {
+  //     this.loaderService.requestStarted();
+
+  //     this.request.ModifyBy = this.SSOLoginDataModel.UserID;
+  //     this.request.DepartmentID = this.SSOLoginDataModel.DepartmentID;
+  //     this.request.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
+  //     this.request.CreatedBy = this.SSOLoginDataModel.UserID;
+
+  //     // this.request.FinancialSanctionID=this.SeatIntakeFormGroup.get('ddlFinancialSanctionID')?.value;
+  //     // this.request.AdminSanctionedID=this.SeatIntakeFormGroup.get('ddlAdminSanctionedID')?.value;
+  //     this.request.CollegeID = this.ItiCollegesListAll.find(
+  //       (e: any) => e.ID === Number(this.request.PlanningID)
+  //     )?.CollegeID || 0;
+
+  //     this.request.ActiveStatus = true;
+  //     console.log("request",this.request);
+  //     await this.ItiSeatIntakeService.SaveSeatIntakePlanning(this.request)
+  //       .then((data: any) => {
+  //         debugger
+  //         data = JSON.parse(JSON.stringify(data));
+  //         if (data.State = EnumStatus.Success) {
+  //           this.toastr.success(data.Message)
+  //           this.onReset()
+  //           this.router.navigate(['/SeatIntakePlanning'])
+  //         }
+  //         else {
+  //           this.toastr.error(data.ErrorMessage)
+  //         }
+
+  //       }, (error: any) => console.error(error)
+  //       );
+  //   }
+  //   catch (ex) {
+  //     console.log(ex);
+  //   }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
 
 
   async onReset() {
