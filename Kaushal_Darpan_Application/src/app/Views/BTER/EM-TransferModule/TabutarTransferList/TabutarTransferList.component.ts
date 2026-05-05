@@ -107,13 +107,14 @@ import * as XLSX from 'xlsx';
 
         this.TransferSystemStatusSearchList = data['Data'];
           if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
-            this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.UnderJDTEReview || item.ID == EnumTransferSystemStatus.UnderDTEReview);
-           this.SearchStatus = EnumTransferSystemStatus.UnderJDTEReview;
-            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderJDTEReview);
+            this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Appnoved || item.ID == EnumTransferSystemStatus.UnderDTEReview);
+            this.SearchStatus = EnumTransferSystemStatus.UnderDTEReview;
+            this.onChangeSearchStatus();
+            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderDTEReview);
         }
          else{
           this.TransferSystemStatusList = [];
-            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderJDTEReview);
+            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderDTEReview);
         }
       }, (error: any) => console.error(error));
     }
@@ -277,5 +278,17 @@ import * as XLSX from 'xlsx';
         console.error(error);
       }
     }
+
+    async onChangeSearchStatus() {
+
+      if (this.sSOLoginDataModel.RoleID == EnumRole.DTE && EnumTransferSystemStatus.UnderDTEReview == this.SearchStatus) {
+        this.ShowCheckBoxId = 1;
+      }
+
+      else {
+        this.ShowCheckBoxId = 0;
+      }
+    }
+
  
 }

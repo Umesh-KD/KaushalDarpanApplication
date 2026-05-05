@@ -65,11 +65,19 @@
       </b>
 
       <button type="button"
-              *ngIf="EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === EnumRole.EM_JDTE || sSOLoginDataModel?.RoleID === EnumRole.EM_Secretary_BTER)"
+              *ngIf="EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.EM_JDTE || sSOLoginDataModel?.RoleID == _EnumRole.EM_Secretary_BTER)"
               class="btn bg-info text-white mt-2"
               (click)="StructuredSummaryList()">
         Structured Summary List
       </button>
+
+      <button type="button"
+              *ngIf="(EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.DTE))"
+              class="btn bg-info text-white mt-2"
+              (click)="TabutarTransferList()">
+        Tabutar Transfer List
+      </button>
+
     </div>
 
 
@@ -102,7 +110,12 @@
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th width="50px" *ngIf="(sSOLoginDataModel.RoleID == EnumRole.DTE || sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF  && ShowCheckBoxId ==1) ||( this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER || this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE && isJDTECheck == true) ">
+            <th width="50px" *ngIf="
+                ( (sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF) &&  SearchStatus == EnumTransferSystemStatus.Submitted  && ShowCheckBoxId ==1)
+                 ||
+                ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE|| this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER ) && SearchStatus == EnumTransferSystemStatus.UnderADTEReview && ShowCheckBoxId ==1)
+                || (sSOLoginDataModel.RoleID == _EnumRole.DTE  &&  SearchStatus == EnumTransferSystemStatus.UnderJDTEReview  &&  ShowCheckBoxId ==1)
+              ">
               <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
                      [checked]="AllSelect"
                      (change)="checkboxthView_checkboxchange($event.target.checked)">
@@ -120,7 +133,13 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of EM_TransferProcessList | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td *ngIf="(sSOLoginDataModel.RoleID == EnumRole.DTE || sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF  && ShowCheckBoxId ==1) ||( this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER || this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE && row.FinalApproveStatus  == 5) ">
+            <td *ngIf="
+                ((sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF)  && ShowCheckBoxId ==1 && row.StatusID == EnumTransferSystemStatus.Submitted )
+                ||
+                ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER || this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE)  && row.StatusID == EnumTransferSystemStatus.UnderADTEReview  && row.FinalApproveStatus  == 5  && ShowCheckBoxId == 1)
+                ||
+                (sSOLoginDataModel.RoleID == _EnumRole.DTE && ShowCheckBoxId == 1 && row.StatusID == EnumTransferSystemStatus.UnderJDTEReview)
+                   ">
               <input type="checkbox"
                      name="MarkCheck"
                      [(ngModel)]="row.Selected" />

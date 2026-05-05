@@ -69,7 +69,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public TransferSystemStatusUpdateList: any = [];
     public updateStatus: number = 0;
     public isAnyApproved: boolean = false;
-    public EnumRole = EnumRole;
+    public _EnumRole = EnumRole;
     isJDTECheck: boolean = false;
     EnumTransferSystemStatus = EnumTransferSystemStatus;
   constructor(
@@ -544,5 +544,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
     async StructuredSummaryList() {
       window.open('/StructuredSummaryList', '_blank');
+    }
+
+    async TabutarTransferList() {
+      window.open('/TabutarTransferList', '_blank');
     }
 }
