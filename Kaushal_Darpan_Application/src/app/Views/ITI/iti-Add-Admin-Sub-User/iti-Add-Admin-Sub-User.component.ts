@@ -14,6 +14,8 @@ import { ITIAdminUserService } from '../../../Services/ITI/ITI-Admin-User/itiadm
 import { Router } from '@angular/router';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
+
+
 @Component({
   selector: 'app-iti-Add-Admin-Sub-User',
   standalone: false,
@@ -31,7 +33,8 @@ export class itiAddAdminSubUserComponent {
   public ErrorMessage: string = '';
   public ScholarshipFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
-  
+
+
   //public CollegeList: any = [];
   public AdminUserList: any = [];
   public AdminUserFormGroup!: FormGroup;
@@ -43,7 +46,7 @@ export class itiAddAdminSubUserComponent {
   constructor(private adminUserService: ITIAdminUserService,
     private commonMasterService: CommonFunctionService, 
     private toastr: ToastrService, private routers: Router,
-    private loaderService: LoaderService, private formBuilder: FormBuilder, public appsettingConfig: AppsettingService,
+    private loaderService: LoaderService, private formBuilder: FormBuilder, public appsettingConfig: AppsettingService
    ) {  }
 
   async ngOnInit() {
@@ -110,7 +113,13 @@ export class itiAddAdminSubUserComponent {
       this.adminRequest.CreatedBy = this.sSOLoginDataModel.UserID;
       this.adminRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.adminRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      await this.openOTP();
+
+      this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+      this.childComponent.OpenOTPPopup();
+
+      this.childComponent.onVerified.subscribe(async () =>
+      {
+
       await this.adminUserService.adminUserDataSave(this.adminRequest)
         .then((data: any) => {
           ;
@@ -131,6 +140,8 @@ export class itiAddAdminSubUserComponent {
 
         }, (error: any) => console.error(error)
         );
+      })
+
     }
     catch (ex) {
       console.log(ex);
@@ -206,12 +217,16 @@ export class itiAddAdminSubUserComponent {
 
 
   async openOTP() {
-    debugger
+ 
+
+
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
     await this.childComponent.OpenOTPPopup();
     // await OTP verification
     await this.childComponent.waitForVerification();
+
+
 
   }
 
