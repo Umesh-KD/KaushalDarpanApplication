@@ -43,7 +43,7 @@
         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
         <select class="form-select" [(ngModel)]="SearchInstituteID">
           <option value="0">--select--</option>
-          <option *ngFor="let item of ItiCollegesListAll" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
+          <option *ngFor="let item of InstituteList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
         </select>
       </div>
 
@@ -61,7 +61,11 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Transfer Application List</b>
 
-     
+      <button type="submit"
+              class="btn bg-info mt-5 text-white w-100"
+              (click)="onManualRequest(ManualRequest)">
+        Manual Request
+      </button>
 
     </div>
 
@@ -70,11 +74,11 @@
   <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
     <div class=" ">
       <label>Dispatch No</label>
-      <input class="form-input" type="text" id="DispatchNo" [(ngModel)]="requestUp.DispatchNo" >
+      <input class="form-input" type="text" id="DispatchNo" [(ngModel)]="requestUp.DispatchNo">
     </div>
     <div class=" ">
       <label>Order Date</label>
-      <input class="form-input" type="date" id="OrderDate" [(ngModel)]="requestUp.OrderDate" >
+      <input class="form-input" type="date" id="OrderDate" [(ngModel)]="requestUp.OrderDate">
     </div>
     <div>
       <label class="block  text-sm font-medium text-gray-900 dark:text-white"
@@ -83,7 +87,7 @@
       </label>
       <div class="flex fileUploader">
         <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-               id="SupportingDocuments" type="file" (change)="onFilechange($event, 'SupportingDocuments')" >
+               id="SupportingDocuments" type="file" (change)="onFilechange($event, 'SupportingDocuments')">
         <label for="SupportingDocuments">
           <span>Choose File</span>
           {{requestUp.OrderSupportingDocument === '' ? 'No File Choosen' : requestUp.OrderSupportingDocument}}
@@ -126,7 +130,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of EM_TransferProcessList | tableSearchFilter:Table_SearchText; let idx=index;">
-          <td *ngIf="ShowCheckBoxId == 1" >
+          <td *ngIf="ShowCheckBoxId == 1">
             <input type="checkbox" name="MarkCheck"
                    [(ngModel)]="row.Selected" />
           </td>
@@ -153,6 +157,130 @@
     </table>
   </div>
 </div>
+
+
+<ng-template #ManualRequest let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <h2 class="mb-0">Add Transfer Request</h2>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body p-5">
+        <form [formGroup]="AddTransferRequest">
+          
+
+          <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>From Details</b>
+          </div>
+          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6 mt-6 mb-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="RequestManual.OfficeID" formControlName="OfficeID" (change)="OfficeChange()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="RequestManual.PostID" formControlName="PostID" (change)="PostChange()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+
+            <div *ngIf="isShowDDl== true">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District:<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="RequestManual.DistrictID" formControlName="ddlDistrictID" (change)="getITICollege()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+            <div *ngIf="isShowDDl== true">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute: <span class="StarMarking">*</span></label>
+              <select class="form-select" formControlName="ddlCollege" [(ngModel)]="RequestManual.InstituteID" (change)="PostChange()">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of InstituteList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+            </div>
+
+
+            <div>
+              <label>Employee</label>
+              <select class="form-select" id="EmployeeID" [(ngModel)]="RequestManual.StaffID" name="EmployeeID" formControlName="StaffID" (change)="StaffChange()">
+                <option value="0">--select--</option>
+                <option *ngFor="let item of StaffDDLList" [value]="item.ID">
+                  {{item.Name}}
+                </option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>To Details</b>
+          </div>
+          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6 mt-6">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="RequestManual.To_OfficeID" formControlName="To_OfficeID" (change)="To_OfficeChange()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of To_OfficeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+             
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="RequestManual.To_PostID" formControlName="To_PostID" >
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of To_PostList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+            <div *ngIf=" To_isShowDDl== true">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District:<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="RequestManual.To_ddlDistrictID" formControlName="To_ddlDistrictID" (change)="TogetITICollege()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of To_DistrictList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+            <div *ngIf="To_isShowDDl== true">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute: <span class="StarMarking">*</span></label>
+              <select class="form-select" formControlName="To_ddlCollege" [(ngModel)]="RequestManual.To_ddlCollege">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of To_InstituteList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="updt-btn-man">
+            <button type="submit"
+                    class="btn bg-info mt-5 text-white "
+                    (click)="AddManualRequest(this.SearchStatus)">
+              Submit
+            </button>
+
+
+          </div>
+        </form>
+      </div>
+
+      
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+      
+    </div>
+  </div>
+
+</ng-template>
 
 
 

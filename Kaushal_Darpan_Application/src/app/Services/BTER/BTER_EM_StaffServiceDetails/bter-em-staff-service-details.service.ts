@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { BTER_EM_TransferSystemModle, BTER_GetStaffPersonalDetailsModel, StaffTrainingDetailDataModel, StaffTrainingDetailSearchData, StaffTrainingStatusUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_TransferSystemModle, BTER_GetStaffPersonalDetailsModel, BTERStaffManualRequestModel, StaffTrainingDetailDataModel, StaffTrainingDetailSearchData, StaffTrainingStatusUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 import {  EM_TransferSystemSearchModel,    TransferSystemUpdateDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 
 
@@ -150,5 +150,14 @@ export class BTEREMStaffServiceDetailsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async AddTransferSystemManualRequest(request: BTERStaffManualRequestModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/AddTransferSystemManualRequest`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }

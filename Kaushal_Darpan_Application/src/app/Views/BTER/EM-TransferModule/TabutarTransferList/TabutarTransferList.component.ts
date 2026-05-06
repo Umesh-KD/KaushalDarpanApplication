@@ -6,10 +6,10 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { EnumStatus, GlobalConstants, EnumStaffTrainingStatus, EnumRole, EnumTransferSystemStatus } from '../../../../Common/GlobalConstants';
-import { EM_TransferSystemSearchModel, TransferSystemGeneratorDataModel, TransferSystemUpdateDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_TransferSystemModle, BTER_GetStaffPersonalDetailsModel, BTERStaffManualRequestModel, EM_TransferSystemSearchModel, TransferSystemGeneratorDataModel, TransferSystemUpdateDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { BTEREMStaffServiceDetailsService } from '../../../../Services/BTER/BTER_EM_StaffServiceDetails/bter-em-staff-service-details.service';
-import { DropdownValidators1 } from '../../../../Services/CustomValidators/custom-validators.service';
+import { DropdownValidators, DropdownValidators1 } from '../../../../Services/CustomValidators/custom-validators.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -25,8 +25,9 @@ import * as XLSX from 'xlsx';
   export class TabutarTransferListComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
     public updateSearch = new TransferSystemUpdateDataModel();
+
     public updateExtSearch = new EM_TransferSystemSearchModel();
-    public request = new EM_TransferSystemSearchModel();
+    /*public request = new EM_TransferSystemSearchModel();*/
     public searchRequest = new EM_TransferSystemSearchModel();
 
   public AddTrainingDetailsFromGroup!: FormGroup;
@@ -40,6 +41,7 @@ import * as XLSX from 'xlsx';
     public EM_TransferSystemEXTList: any[] = [];
     public EM_TransferSystemHSTList: any[] = [];
     public TransferSystemStatusSearchList: any[] = [];
+    public StaffDDLList: any[] = [];
 
   isSubmitted: boolean = false;
   Table_SearchText: string = '';
@@ -60,6 +62,7 @@ import * as XLSX from 'xlsx';
     ];
     public GetTransfercateList: any = [];
     public ItiCollegesListAll: any = [];
+    public InstituteList: any = [];
     public SearchCategoryID: number = 0;
     public SearchInstituteID: number = 0;
     public SearchEmployeeType: number = 0;
@@ -70,7 +73,24 @@ import * as XLSX from 'xlsx';
     public updateStatus: number = 0;
     public isAnyApproved: boolean = false;
     public requestUp = new TransferSystemGeneratorDataModel();
+    public RequestManual = new BTERStaffManualRequestModel();
     public UpdateTransferRequest!: FormGroup;
+    public requestModel = new BTER_GetStaffPersonalDetailsModel();
+    public GetStaffPersonalDetailsList: any = [];
+    public request = new BTER_EM_TransferSystemModle();
+    public PostList: any = [];
+    public OfficeList: any[] = [];
+    public DistrictList: any = [];
+    public AddTransferRequest!: FormGroup;
+    public isShowData: boolean = false;
+    public To_OfficeList: any[] = [];
+    public To_PostList: any = [];
+   
+    public To_DistrictList: any = [];
+    public To_InstituteList: any = [];
+    public InsOfficeID: number = 21;
+    public isShowDDl: boolean = false;
+    public To_isShowDDl: boolean = false;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -84,10 +104,32 @@ import * as XLSX from 'xlsx';
     private modalService: NgbModal,
   ) { }
 
-  async ngOnInit() {
+    async ngOnInit() {
+
+      this.AddTransferRequest = this.formBuilder.group({
+
+        PostID: [0, [DropdownValidators]],
+        OfficeID: [0, [DropdownValidators]],
+        ddlCollege: [0, []],
+        ddlDistrictID: [0, []],
+
+        StaffID: [0, [DropdownValidators]],
+
+        To_PostID: [0, [DropdownValidators]],
+        To_OfficeID: [0, [DropdownValidators]],
+        To_ddlDistrictID: [0, []],
+        To_ddlCollege: [0, []],
+
+
+      });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Status = "0";
+
+     
+  
+
+
 
     await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
@@ -117,6 +159,15 @@ import * as XLSX from 'xlsx';
             this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderDTEReview);
         }
       }, (error: any) => console.error(error));
+
+    await this.GetPostList();
+    await this.GetOfficeList();
+    await this.ddl_District();
+
+    await this.ToGetOfficeList();
+    await this.ToGetPostList();
+    await this.Toddl_District();
+
     }
 
 
@@ -290,5 +341,341 @@ import * as XLSX from 'xlsx';
       }
     }
 
+    async onManualRequest(model: any) {
+      try {
+        this.loaderService.requestStarted();
+        try {
+          
+         
+        } catch (error) {
+          console.error(error);
+        }
+        this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+    CloseModal() {
+      this.modalService.dismissAll();
+      this.modalReference?.close();
+    }
+
+  
+
+
+    async GetStaffPersonalDetails() {
+      debugger
+      try {
+        this.loaderService.requestStarted();
+        this.requestModel.StaffID = this.RequestManual.StaffID;
+
+        await this.staffServiceDetailsService.GetStaffPersonalDetails(this.requestModel).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GetStaffPersonalDetailsList = data['Data'];
+          this.RequestManual.NonGazetteName = this.GetStaffPersonalDetailsList[0]["ISNonGazetted"];
+          this.RequestManual.UserID = this.GetStaffPersonalDetailsList[0]["UserID"];
+          this.RequestManual.SSOID = this.GetStaffPersonalDetailsList[0]["SSOID"];
+        
+          
+        });
+      }
+      catch (error) {
+        console.error(error);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+    async GetStaffDDLList() {
+
+      try {
+        this.loaderService.requestStarted();
+        await this.commonFunctionService.DDL_EmployeeTransferSysterm(this.RequestManual.OfficeID, this.RequestManual.PostID, this.RequestManual.DistrictID, this.RequestManual.InstituteID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.StaffDDLList = data['Data'];
+          }, (error: any) => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+     
+
+    // from ddl
+    async GetOfficeList() {
+
+      try {
+        this.loaderService.requestStarted();
+        await this.commonFunctionService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.OfficeList = data['Data'];
+            this.To_OfficeList = data['Data'];
+          }, error => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+    async GetPostList() {
+      try {
+        debugger
+        this.loaderService.requestStarted();
+        const data: any = await this.commonFunctionService.GetCommonMasterData('Post', 0, 0, 0);
+        this.PostList = data['Data'];
+        this.To_PostList = data['Data'];
  
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+    async ddl_District() {
+
+      try {
+        this.loaderService.requestStarted();
+        this.DistrictList = [];
+        this.To_DistrictList = [];
+        await this.commonFunctionService.GetDistrictMaster()
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictList = data['Data'];
+            this.To_DistrictList = data['Data'];
+          }, error => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+    async getITICollege() {
+      try {
+        debugger
+        await this.commonFunctionService.GetInstituteMaster_ByDistrictWise(this.RequestManual.DistrictID, this.sSOLoginDataModel.EndTermID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.InstituteList = data['Data'];
+            this.To_InstituteList = data['Data'];
+
+            
+
+          }, error => console.error(error));
+
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+
+    }
+
+
+    ////To ddl
+
+    async ToGetOfficeList() {
+
+      try {
+        this.loaderService.requestStarted();
+        await this.commonFunctionService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+           
+            this.To_OfficeList = data['Data'];
+          }, error => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+    async ToGetPostList() {
+      try {
+        debugger
+        this.loaderService.requestStarted();
+        const data: any = await this.commonFunctionService.GetCommonMasterData('Post', 0, 0, 0);
+      
+        this.To_PostList = data['Data'];
+
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+    async Toddl_District() {
+
+      try {
+        this.loaderService.requestStarted();
+     
+        this.To_DistrictList = [];
+        await this.commonFunctionService.GetDistrictMaster()
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+           
+            this.To_DistrictList = data['Data'];
+          }, error => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+    async TogetITICollege() {
+      try {
+        debugger
+        await this.commonFunctionService.GetInstituteMaster_ByDistrictWise(this.RequestManual.DistrictID, this.sSOLoginDataModel.EndTermID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.To_InstituteList = data['Data'];
+          }, error => console.error(error));
+
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+
+    }
+
+
+    async OfficeChange() {
+      debugger;
+
+      if (this.RequestManual.OfficeID == this.InsOfficeID) {
+
+        this.AddTransferRequest.get('ddlDistrictID')?.setValidators([DropdownValidators]);
+        this.AddTransferRequest.get('ddlCollege')?.setValidators([DropdownValidators]);
+
+        this.isShowDDl = true;
+
+      } else {
+
+        this.AddTransferRequest.get('ddlDistrictID')?.clearValidators();
+        this.AddTransferRequest.get('ddlCollege')?.clearValidators();
+
+        this.isShowDDl = false;
+      }
+
+      this.AddTransferRequest.get('ddlDistrictID')?.updateValueAndValidity();
+      this.AddTransferRequest.get('ddlCollege')?.updateValueAndValidity();
+    }
+
+    async To_OfficeChange() {
+
+      debugger
+      if (this.RequestManual.To_OfficeID == this.InsOfficeID) {
+        this.AddTransferRequest.controls['To_ddlDistrictID'].setValidators([DropdownValidators]);
+        this.AddTransferRequest.controls['To_ddlCollege'].setValidators([DropdownValidators]);
+        this.To_isShowDDl = true;
+      }
+      else {
+        this.AddTransferRequest.controls['To_ddlDistrictID'].clearValidators();
+        this.AddTransferRequest.controls['To_ddlCollege'].clearValidators();
+        this.To_isShowDDl = false;
+      }
+      this.AddTransferRequest.controls['To_ddlDistrictID'].updateValueAndValidity();
+      this.AddTransferRequest.controls['To_ddlCollege'].updateValueAndValidity();
+
+    }
+
+    async AddManualRequest() {
+      this.isSubmitted = true;
+      if (this.AddTransferRequest.invalid) {
+        this.AddTransferRequest.markAllAsTouched();
+        this.toastr.error('Please fill all the required fields.', 'Error');
+        Object.keys(this.AddTransferRequest.controls).forEach(key => {
+          const control = this.AddTransferRequest.get(key);
+
+          if (control && control.invalid) {
+            this.toastr.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
+        return;
+      }
+      this.RequestManual.CreatedBy = this.sSOLoginDataModel.UserID;
+     
+      await this.staffServiceDetailsService
+        .AddTransferSystemManualRequest(this.RequestManual)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.RequestManual = new BTERStaffManualRequestModel();
+            this.CloseModal();
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        });
+
+    }
+
+    async PostChange() {
+      debugger;
+
+      await this.GetStaffDDLList();
+     
+     
+    }
+
+    async StaffChange() {
+      await this.GetStaffPersonalDetails();
+    }
 }
