@@ -106,13 +106,26 @@ import * as XLSX from 'xlsx';
 
         this.TransferSystemStatusSearchList = data['Data'];
           if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
-           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Appnoved);
-           this.SearchStatus = EnumTransferSystemStatus.Appnoved;
-            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.Appnoved);
+            this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.UnderJDTEReview);
+
+            this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList
+              .filter((item: any) =>
+                item.ID == EnumTransferSystemStatus.UnderJDTEReview 
+               
+              )
+              .map((item: any) => {
+                if (item.ID == EnumTransferSystemStatus.UnderJDTEReview) {
+                  item.Name = 'JDTE Reviewed';
+                }
+                return item;
+              });
+
+            this.SearchStatus = EnumTransferSystemStatus.UnderJDTEReview;
+            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderJDTEReview);
         }
          else{
           this.TransferSystemStatusList = [];
-            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.Appnoved);
+            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderJDTEReview);
         }
       }, (error: any) => console.error(error));
     }

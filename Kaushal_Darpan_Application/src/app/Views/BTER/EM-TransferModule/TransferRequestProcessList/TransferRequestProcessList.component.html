@@ -1,3 +1,17 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Transfer Module Process</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Role Wise (Approve / Reject) List</a>
+    </div>
+  </div>
+</div>
+
+
+
 <div class="card">
   <div class="card-body p-5">
 
@@ -15,11 +29,11 @@
 
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-          Staff Type Gazetted non Gazetted
+          (  Gazetted / Non Gazetted )Employee
         </label>
 
         <select class="form-select"
-                [(ngModel)]="SearchEmployeeType">
+                [(ngModel)]="SearchEmployeeType" [disabled]="isDisable">
           <option value="0">--select--</option>
           <option *ngFor="let item of GazettedList"
                   [ngValue]="item.ID">
@@ -72,7 +86,7 @@
       </button>
 
       <button type="button"
-              *ngIf="(EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.DTE))"
+              *ngIf="(EnumTransferSystemStatus.UnderDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.DTE))"
               class="btn bg-info text-white mt-2"
               (click)="TabutarTransferList()">
         Tabutar Transfer List
@@ -111,10 +125,10 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th width="50px" *ngIf="
-                ( (sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF) &&  SearchStatus == EnumTransferSystemStatus.Submitted  && ShowCheckBoxId ==1)
+                ( (sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF)   && ShowCheckBoxId ==1)
                  ||
-                ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE|| this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER ) && SearchStatus == EnumTransferSystemStatus.UnderADTEReview && ShowCheckBoxId ==1)
-                || (sSOLoginDataModel.RoleID == _EnumRole.DTE  &&  SearchStatus == EnumTransferSystemStatus.UnderJDTEReview  &&  ShowCheckBoxId ==1)
+                ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE|| this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER )  && ShowCheckBoxId ==1)
+                || (sSOLoginDataModel.RoleID == _EnumRole.DTE    &&  ShowCheckBoxId ==1)
               ">
               <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
                      [checked]="AllSelect"
@@ -134,11 +148,11 @@
         <tbody>
           <tr *ngFor="let row of EM_TransferProcessList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td *ngIf="
-                ((sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF)  && ShowCheckBoxId ==1 && row.StatusID == EnumTransferSystemStatus.Submitted )
+                ((sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == _EnumRole.EM_ADTE_NON_GAZETTED_STAFF)  && ShowCheckBoxId ==1  )
                 ||
-                ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER || this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE)  && row.StatusID == EnumTransferSystemStatus.UnderADTEReview  && row.FinalApproveStatus  == 5  && ShowCheckBoxId == 1)
+                ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER || this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE)  && row.StatusID == EnumTransferSystemStatus.UnderADTEReview    && ShowCheckBoxId == 1)
                 ||
-                (sSOLoginDataModel.RoleID == _EnumRole.DTE && ShowCheckBoxId == 1 && row.StatusID == EnumTransferSystemStatus.UnderJDTEReview)
+                (sSOLoginDataModel.RoleID == _EnumRole.DTE && ShowCheckBoxId == 1 )
                    ">
               <input type="checkbox"
                      name="MarkCheck"
@@ -163,10 +177,12 @@
              </div>
              <ng-template #noDoc1>-----</ng-template>
            </td>
-            <td>
-              <a class="me-2" href="javascript:void(0);" title="Transfer EXT" (click)="onTransferSystemEXT(TransferSystemEXT, row.TransferSystemID)"><i class="ti ti-list"></i></a>
-              <a href="javascript:void(0);" title="Status History" (click)="EM_TransferSystemHST_GetData(EM_TransferSystemHST, row.TransferSystemID)"><i class="ti ti-list"></i></a>
-            </td>
+                <td>
+                  <a class="me-2" href="javascript:void(0);" title="Transfer EXT" (click)="onTransferSystemEXT(TransferSystemEXT, row.TransferSystemID)"><i class="ti ti-list"></i></a>
+                  <a href="javascript:void(0);" title="Status History" (click)="EM_TransferSystemHST_GetData(EM_TransferSystemHST, row.TransferSystemID)"><i class="ti ti-list"></i></a> 
+                </td>
+
+            
           </tr>
         </tbody>
       </table>
@@ -186,7 +202,7 @@
       <div class="card-body p-5">
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
           <div>
-            <label>Update Status</label>
+            <label>Action Status</label>
             <select class="form-select" id="updateStatus" [(ngModel)]="updateStatus" name="ddlupdateStatus">
               <option value="0">--select--</option>
               <option *ngFor="let item of TransferSystemStatusUpdateList" [value]="item.ID">
@@ -228,55 +244,57 @@
 
         </div>
 
-        <div class="card-body">
-          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-list"></i>Transfer System EXT</b>
-            <div class="flex justify-end flex-wrap items-center">
-            </div>
-          </div>
-
-          <div class="overflow-x-auto mt-3">
-            <table class="table table-border w-full table-auto" cellpadding="5">
-              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-                <tr>
-                  <!--FinalApproveStatus-->
-                  <th width="50px">
-                    <!--<input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
-              [checked]="AllSelect"
-              (change)="checkboxthViewUpdate($event.target.checked)">-->
-                  </th>
-                  <th class="text-left">S No</th>
-                  <th class="text-left">Office Name</th>
-                  <th class="text-left">Designation Name</th>
-                  <th class="text-left">District Name</th>
-                  <th class="text-left">Institute Name</th>
-                  <th class="text-left">Priority</th>
-                  <th class="text-left">Status</th>
-
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
-                  <td>
-                    <input type="checkbox" name="MarkCheck"
-                           [(ngModel)]="row.Selected" [disabled]="isAnyApproved" />
-                  </td>
-                  <td align="left">{{idx+1}}</td>
-                  <td align="left">{{ row.OfficeName }}</td>
-                  <td align="left">{{ row.DesignationName}}</td>
-                  <td align="left">{{ row.DistrictName }}</td>
-                  <td align="left">{{ row.InstituteName }}</td>
-                  <td align="left">{{ row.Priority}}</td>
-                  <td align="left">{{ row.Status}}</td>
-
-                </tr>
-                <tr *ngIf="EM_TransferSystemEXTList?.length==0">
-                  <td colspan="5" class="text-center">No Record Found </td>
-                </tr>
-              </tbody>
-            </table>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Transfer System EXT</b>
+          <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
+        <!--{{EM_TransferSystemEXTList|json}}-->
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <!--FinalApproveStatus-->
+                <th width="50px">
+                  <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+                         [checked]="AllSelect"
+                         (change)="checkboxthViewUpdate($event.target.checked)">
+                </th>
+                <th class="text-left">S No</th>
+                <th class="text-left">Office Name</th>
+                <th class="text-left">Designation Name</th>
+                <th class="text-left">District Name</th>
+                <th class="text-left">Institute Name</th>
+                <th class="text-left">Priority</th>
+                <th class="text-left">Status</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
+                <td>
+                  <input 
+                         type="checkbox"
+                         name="MarkCheck"
+                         [(ngModel)]="row.Selected" />
+                </td>
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.OfficeName }}</td>
+                <td align="left">{{ row.DesignationName}}</td>
+                <td align="left">{{ row.DistrictName }}</td>
+                <td align="left">{{ row.InstituteName }}</td>
+                <td align="left">{{ row.Priority}}</td>
+                <td align="left">{{ row.Status}}</td>
+
+              </tr>
+              <tr *ngIf="EM_TransferSystemEXTList?.length==0">
+                <td colspan="5" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
         <div class="card-footer text-right">
           <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
             Close

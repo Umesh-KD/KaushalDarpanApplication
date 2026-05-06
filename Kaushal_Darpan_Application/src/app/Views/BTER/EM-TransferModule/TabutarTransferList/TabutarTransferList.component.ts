@@ -149,7 +149,28 @@ import * as XLSX from 'xlsx';
 
         this.TransferSystemStatusSearchList = data['Data'];
           if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
-            this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Appnoved || item.ID == EnumTransferSystemStatus.UnderDTEReview);
+            //this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID ==
+              //EnumTransferSystemStatus.Appnoved || item.ID == EnumTransferSystemStatus.UnderDTEReview);
+
+            this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList
+              .filter((item: any) =>
+                item.ID == EnumTransferSystemStatus.UnderDTEReview ||
+                item.ID == EnumTransferSystemStatus.Appnoved 
+                
+              )
+              .map((item: any) => {
+                if (item.ID == EnumTransferSystemStatus.Appnoved) {
+                  item.Name = 'Final Appnoved';
+                }
+
+                if (item.ID == EnumTransferSystemStatus.UnderDTEReview) {
+                  item.Name = 'DTE Reviewed';
+                }
+
+                return item;
+              });
+
+
             this.SearchStatus = EnumTransferSystemStatus.UnderDTEReview;
             this.onChangeSearchStatus();
             this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderDTEReview);
@@ -365,6 +386,7 @@ import * as XLSX from 'xlsx';
     CloseModal() {
       this.modalService.dismissAll();
       this.modalReference?.close();
+      this.RequestManual = new BTERStaffManualRequestModel();
     }
 
   
@@ -401,11 +423,41 @@ import * as XLSX from 'xlsx';
 
       try {
         this.loaderService.requestStarted();
-        await this.commonFunctionService.DDL_EmployeeTransferSysterm(this.RequestManual.OfficeID, this.RequestManual.PostID, this.RequestManual.DistrictID, this.RequestManual.InstituteID)
-          .then((data: any) => {
-            data = JSON.parse(JSON.stringify(data));
-            this.StaffDDLList = data['Data'];
-          }, (error: any) => console.error(error));
+
+        this.StaffDDLList = [];
+
+        if (this.RequestManual.OfficeID != 21) {
+
+          this.RequestManual.DistrictID = 0;
+          this.RequestManual.InstituteID = 0;
+        }
+
+        if (this.RequestManual.OfficeID != 21 && this.RequestManual.DistrictID == 0 && this.RequestManual.InstituteID==0) {
+          
+          
+          await this.commonFunctionService.DDL_EmployeeTransferSysterm(this.RequestManual.OfficeID, this.RequestManual.PostID, this.RequestManual.DistrictID, this.RequestManual.InstituteID)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.StaffDDLList = data['Data'];
+            }, (error: any) => console.error(error));
+
+        }
+
+        if (this.RequestManual.OfficeID == 21 && this.RequestManual.DistrictID != 0 && this.RequestManual.InstituteID !=0) {
+          this.RequestManual.OfficeID = this.RequestManual.OfficeID;
+          this.RequestManual.InstituteID = this.RequestManual.InstituteID;
+
+          await this.commonFunctionService.DDL_EmployeeTransferSysterm(this.RequestManual.OfficeID, this.RequestManual.PostID, this.RequestManual.DistrictID, this.RequestManual.InstituteID)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.StaffDDLList = data['Data'];
+            }, (error: any) => console.error(error));
+
+        }
+
+        
+
+       
       }
       catch (Ex) {
         console.log(Ex);
@@ -613,6 +665,8 @@ import * as XLSX from 'xlsx';
 
       this.AddTransferRequest.get('ddlDistrictID')?.updateValueAndValidity();
       this.AddTransferRequest.get('ddlCollege')?.updateValueAndValidity();
+
+      await this.PostChange();
     }
 
     async To_OfficeChange() {
@@ -651,7 +705,18 @@ import * as XLSX from 'xlsx';
         return;
       }
       this.RequestManual.CreatedBy = this.sSOLoginDataModel.UserID;
-     
+
+      if (this.isShowDDl == false) {
+        this.RequestManual.DistrictID = 0;
+        this.RequestManual.InstituteID = 0;
+      }
+
+      if (this.To_isShowDDl == false) {
+        this.RequestManual.To_ddlDistrictID = 0;
+        this.RequestManual.To_ddlCollege = 0;
+      }
+
+
       await this.staffServiceDetailsService
         .AddTransferSystemManualRequest(this.RequestManual)
         .then(async (data: any) => {

@@ -72,6 +72,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public _EnumRole = EnumRole;
     isJDTECheck: boolean = false;
     EnumTransferSystemStatus = EnumTransferSystemStatus;
+    isDisable: boolean = false;
+    
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -126,31 +129,116 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         this.TransferSystemStatusSearchList = data['Data'];
         this.TransferSystemStatusUpdateList = data['Data'];
 
-        this.TransferSystemStatusUpdateList = this.TransferSystemStatusUpdateList.filter((item: any) => item.ID == EnumTransferSystemStatus.Appnoved);
+        this.TransferSystemStatusUpdateList = this.TransferSystemStatusUpdateList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected);
 
          if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
-           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Submitted || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
+           //this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Submitted || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
+
+           if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
+             this.SearchEmployeeType=1
+             this.isDisable = true;
+           }
+
+           if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+             this.SearchEmployeeType = 2
+             this.isDisable = true;
+           }
+
+
+           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList
+             .filter((item: any) =>
+               item.ID == EnumTransferSystemStatus.Submitted ||
+               item.ID == EnumTransferSystemStatus.UnderADTEReview ||
+               item.ID == EnumTransferSystemStatus.Rejected
+             )
+             .map((item: any) => {
+               if (item.ID == EnumTransferSystemStatus.Submitted) {
+                 item.Name = 'Under ADTE Review';
+               }
+
+               if (item.ID == EnumTransferSystemStatus.UnderADTEReview) {
+                 item.Name = 'ADTE Reviewed';
+               }
+
+               return item;
+             });
+
            this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
            this.SearchStatus = EnumTransferSystemStatus.Submitted;
            this.ShowCheckBoxId = 1;
            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.Submitted);
         }
          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
-           
-           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.UnderJDTEReview);
+
+           if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
+             this.SearchEmployeeType = 1
+             this.isDisable = true;
+           }
+
+           if (this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
+             this.SearchEmployeeType = 2
+             this.isDisable = true;
+           }
+
+
+           //this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected
+           //|| item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.UnderJDTEReview);
+
+           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList
+             .filter((item: any) =>
+               item.ID == EnumTransferSystemStatus.UnderADTEReview ||
+               item.ID == EnumTransferSystemStatus.UnderJDTEReview ||
+               item.ID == EnumTransferSystemStatus.Rejected
+             )
+             .map((item: any) => {
+               if (item.ID == EnumTransferSystemStatus.UnderADTEReview) {
+                 item.Name = 'Under JDTE Review';
+               }
+
+               if (item.ID == EnumTransferSystemStatus.UnderJDTEReview) {
+                 item.Name = 'JDTE Reviewed';
+               }
+
+               return item;
+             });
+
+
            this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview);
            this.SearchStatus = EnumTransferSystemStatus.UnderADTEReview;
            this.ShowCheckBoxId = 1;
            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderADTEReview);
         }
          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
-           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview || item.ID == EnumTransferSystemStatus.UnderDTEReview);
+
+           this.isDisable = false;
+          //this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID ==
+           //EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview || item.ID == EnumTransferSystemStatus.UnderDTEReview);
+
+           this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList
+             .filter((item: any) =>
+               item.ID == EnumTransferSystemStatus.UnderJDTEReview ||
+               item.ID == EnumTransferSystemStatus.UnderDTEReview ||
+               item.ID == EnumTransferSystemStatus.Rejected
+             )
+             .map((item: any) => {
+               if (item.ID == EnumTransferSystemStatus.UnderJDTEReview) {
+                 item.Name = 'Under DTE Review';
+               }
+
+               if (item.ID == EnumTransferSystemStatus.UnderDTEReview) {
+                 item.Name = 'DTE Reviewed';
+               }
+
+               return item;
+             });
+
            this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected  || item.ID == EnumTransferSystemStatus.UnderDTEReview )
            
            this.SearchStatus = EnumTransferSystemStatus.UnderJDTEReview;
            this.ShowCheckBoxId = 1;
            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderJDTEReview);
-        }else{
+         } else {
+           this.isDisable = false;
           this.TransferSystemStatusList = [];
            this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.Submitted);
         }
@@ -206,13 +294,13 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
           else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
             if (this.EM_TransferProcessList?.length > 0) {
               this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 1);
-              this.MainListApproveStatus();
+              //this.MainListApproveStatus();
             }
           }
           else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
             if (this.EM_TransferProcessList?.length > 0) {
               this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 2);
-              this.MainListApproveStatus();
+              //this.MainListApproveStatus();
 
             }
           }
@@ -352,7 +440,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
             data = JSON.parse(JSON.stringify(data));
             if (data.State === EnumStatus.Success) {
               this.EM_TransferSystemEXTList = data.Data;
-              this.checkApproveStatus();
+              /*this.checkApproveStatus();*/
               if (this.statusID == 0) {
                 this.EM_TransferProcessList = data.Data;
                 
@@ -413,16 +501,16 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
           return;
         }
 
-        if (selectedRows.length > 1) {
-          this.toastr.warning("Please select only one record");
-          return;
-        }
+        //if (selectedRows.length > 1) {
+        //  this.toastr.warning("Please select only one record");
+        //  return;
+        //}
 
         
         const jsonData = selectedRows.map((item: any) => ({
           TransferSystemID: item.TransferSystemID,
           ID: item.ID,
-          Status: this.updateStatus,
+          Status: this.EnumTransferSystemStatus.Rejected,
           Remark: this.Remark,
           CreatedBy: this.sSOLoginDataModel.UserID,
           SupportingDoc: this.SupportingDoc,
@@ -527,20 +615,21 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
     }
 
-    checkApproveStatus() {
-      debugger
-      this.isAnyApproved = this.EM_TransferSystemEXTList?.some(
-        (item: any) => item.FinalApproveStatus == EnumTransferSystemStatus.Appnoved
-      );
-    }
+    //checkApproveStatus() {
+    //  debugger
+    //  this.isAnyApproved = this.EM_TransferSystemEXTList?.some(
+    //    (item: any) => item.FinalApproveStatus == EnumTransferSystemStatus.Rejected
+    //  );
+    //}
 
-    MainListApproveStatus() {
-      this.isJDTECheck = this.EM_TransferProcessList?.some(
-        (item: any) => item.FinalApproveStatus === 5
-      );
+    //MainListApproveStatus() {
+    //  this.isJDTECheck = this.EM_TransferProcessList?.some(
+    //    (item: any) => item.FinalApproveStatus === 5
+    //  );
 
-     
-    }
+
+    //}
+
 
     async StructuredSummaryList() {
       window.open('/StructuredSummaryList', '_blank');
@@ -549,4 +638,19 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     async TabutarTransferList() {
       window.open('/TabutarTransferList', '_blank');
     }
+
+
+    //isLastEligibleRow(index: number): boolean {
+    //  // filter rows which are allowed (0 or 1)
+    //  const validRows = this.EM_TransferSystemEXTList
+    //    .map((row, i) => ({ row, i }))
+    //    .filter(x => x.row.FinalApproveStatus == 0 || x.row.FinalApproveStatus == 1);
+
+    //  if (validRows.length === 0) return false;
+
+    //  // get last eligible row index
+    //  const lastIndex = validRows[validRows.length - 1].i;
+
+    //  return index === lastIndex;
+    //}
 }
