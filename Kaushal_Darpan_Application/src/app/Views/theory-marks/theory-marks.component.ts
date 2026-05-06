@@ -132,23 +132,16 @@ export class TheoryMarksComponent implements OnInit {
       this.requestGroupCode.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.requestGroupCode.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       //call
-      this.loaderService.requestStarted();
-
       await this.commonMasterService.DDL_GroupCode_ExaminerWise(this.requestGroupCode)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.GroupCodeList = data['Data'];
-          console.log("GroupCodeList", this.GroupCodeList);
+          //console.log("GroupCodeList", this.GroupCodeList);
         }, (error: any) => console.error(error)
         );
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -163,8 +156,6 @@ export class TheoryMarksComponent implements OnInit {
       this.copyCheckerRequest.GroupCodeID = this.ExaminerCodeLoginForm.value.GroupCodeID;
       this.copyCheckerRequest.ExaminerCode = this.ExaminerCodeLoginForm.value.ExaminerCode;
       //call
-      this.loaderService.requestStarted();
-
       await this.collegeDashDataService.GetCopyCheckerDashData(this.copyCheckerRequest)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -183,11 +174,6 @@ export class TheoryMarksComponent implements OnInit {
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
   //
@@ -211,7 +197,6 @@ export class TheoryMarksComponent implements OnInit {
       }
       this.searchRequest.GroupCodeID = this.TheoryMarksDashBoardCount[0].GroupCodeID;
       //call
-      this.loaderService.requestStarted();
       await this.TheoryMarksService.GetTheoryMarksDetailList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -250,11 +235,6 @@ export class TheoryMarksComponent implements OnInit {
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
   //
@@ -397,13 +377,13 @@ export class TheoryMarksComponent implements OnInit {
 
   async SaveData(array: any, isFinalSubmit: boolean = false) {
     try {
-      console.log("filtered while save", array);
+      //console.log("filtered while save", array);
       await this.TheoryMarksService.UpdateSaveData(array)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          console.log("data on save", data);
+          //console.log("data on save", data);
 
           if (this.State == EnumStatus.Success) {
             this.IsFeedbackSubmit = true
@@ -434,9 +414,7 @@ export class TheoryMarksComponent implements OnInit {
 
     } catch (ex) {
       console.log(ex);
-    } finally {
-      this.loaderService.requestEnded();
-    }
+    } 
   }
 
   ResetControl() {
