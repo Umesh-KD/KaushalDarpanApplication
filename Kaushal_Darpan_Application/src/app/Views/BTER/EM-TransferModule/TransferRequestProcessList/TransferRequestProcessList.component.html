@@ -274,8 +274,8 @@
             <tbody>
               <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
                 <td>
-                  <input 
-                         type="checkbox"
+                  <!--*ngIf="isLastEligibleRow(idx)"-->
+                  <input type="checkbox"
                          name="MarkCheck"
                          [(ngModel)]="row.Selected" />
                 </td>

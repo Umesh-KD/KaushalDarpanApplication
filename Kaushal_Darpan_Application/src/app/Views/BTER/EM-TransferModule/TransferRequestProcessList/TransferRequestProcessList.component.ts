@@ -640,17 +640,17 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     }
 
 
-    //isLastEligibleRow(index: number): boolean {
-    //  // filter rows which are allowed (0 or 1)
-    //  const validRows = this.EM_TransferSystemEXTList
-    //    .map((row, i) => ({ row, i }))
-    //    .filter(x => x.row.FinalApproveStatus == 0 || x.row.FinalApproveStatus == 1);
+    isLastEligibleRow(index: number): boolean {
+      
+      const validRows = this.EM_TransferSystemEXTList
+        .map((row, i) => ({ row, i }))
+        .filter(x => x.row.FinalApproveStatus == 0 || x.row.FinalApproveStatus == 1);
 
-    //  if (validRows.length === 0) return false;
+      if (validRows.length === 0) return false;
 
-    //  // get last eligible row index
-    //  const lastIndex = validRows[validRows.length - 1].i;
+      
+      const lastIndex = validRows[validRows.length - 1].i;
 
-    //  return index === lastIndex;
-    //}
+      return index === lastIndex;
+    }
 }
