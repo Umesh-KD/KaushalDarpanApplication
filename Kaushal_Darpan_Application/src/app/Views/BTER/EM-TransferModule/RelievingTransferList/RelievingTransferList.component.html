@@ -1,3 +1,16 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Transfer Module Process</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page"> Retieving Process List</a>
+    </div>
+  </div>
+</div>
+
+
 <div class="card">
   <div class="card-body p-5">
 
@@ -60,7 +73,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-xl">
         <i class="ti ti-list"></i>
-        Staff Transfer Application List
+        Retieving Process List
       </b>
 
       <button type="button"
@@ -110,11 +123,15 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th width="80px" align="left">Sr. No.</th>
-            <th align="left">SSO ID</th>
+            <!--<th align="left">SSO ID</th>-->
             <th align="left">Name</th>
             <th align="left">Transfer Category</th>
             <th align="left">Reason Description</th>
             <th class="left">Application Date</th>
+            <th align="left">Office</th>
+            <th align="left">Post</th>
+            <th align="left">District</th>
+            <th align="left">Institute</th>
             <th align="left">Status</th>
             <th align="left">Supporting Documents</th>
             <th align="center" width="200">Action</th>
@@ -123,15 +140,19 @@
         <tbody>
           <tr *ngFor="let row of EM_TransferProcessList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td>{{idx+1}}</td>
-            <td>{{row.SSOID}}</td>
+            <!--<td>{{row.SSOID}}</td>-->
             <td>{{row.NAME}}</td>
             <td>{{row.TransferCategory}}</td>
             <td>{{row.ReasonDescription}}</td>      
             <td>{{row.CreatedDate}}</td>
-            <td>{{row.TransferStatusName}}</td>
+            <td>{{row.OfficeName}}</td>
+            <td>{{row.DesignationName}}</td>
+            <td>{{row.DistrictName}}</td>
+            <td>{{row.InstituteName}}</td>
+            <td>{{row.RelievingStatusName}}</td>
                 <td align="left">
-                <div class="flex" *ngIf="row.SupportingDocuments; else noDoc1">
-               <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.SupportingDocuments"
+                <div class="flex" *ngIf="row.OrderSupportingDocument; else noDoc1">
+               <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.OrderSupportingDocument"
                   class="btn bg-primary text-white m-0"
                   target="_blank">
                  <i class="ti ti-eye"></i>

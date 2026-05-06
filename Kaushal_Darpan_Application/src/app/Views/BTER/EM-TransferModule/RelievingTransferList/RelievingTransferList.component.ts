@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { EnumStatus, GlobalConstants, EnumStaffTrainingStatus, EnumRole, EnumTransferSystemStatus } from '../../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants, EnumStaffTrainingStatus, EnumRole, EnumTransferSystemStatus, EnumTransferRelievingStatus } from '../../../../Common/GlobalConstants';
 import { EM_TransferSystemSearchModel, TransferSystemUpdateDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { BTEREMStaffServiceDetailsService } from '../../../../Services/BTER/BTER_EM_StaffServiceDetails/bter-em-staff-service-details.service';
@@ -141,40 +141,30 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
             console.log(this.GetTransfercateList, "GetTransfercateList");
           });
         
-          await this.commonFunctionService.GetCommonMasterDDLByAction1('TransferSystemStatus')
+        await this.commonFunctionService.GetCommonMasterDDLByAction1('TransferRelievingStatus')
             .then((data: any) => {
               data = JSON.parse(JSON.stringify(data));
               this.TransferSystemStatusList = data['Data'];
               this.TransferSystemStatusSearchList = data['Data'];
-              this.TransferSystemStatusUpdateList = data['Data'];
-
-              this.TransferSystemStatusUpdateList = this.TransferSystemStatusUpdateList.filter((item: any) => item.ID == EnumTransferSystemStatus.Appnoved);
-
-              if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
-                this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Submitted || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
-                this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
-                this.SearchStatus = EnumTransferSystemStatus.Submitted;
-                this.ShowCheckBoxId = 1;
-                this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.Submitted);
+             
+              if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+                
+                
+                this.SearchStatus = EnumTransferRelievingStatus.RelievingPending;
+               
+                this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
               }
               else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
-                
-                this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.UnderJDTEReview);
-                this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview);
-                this.SearchStatus = EnumTransferSystemStatus.UnderADTEReview;
-                this.ShowCheckBoxId = 1;
-                this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderADTEReview);
+               this.SearchStatus = EnumTransferRelievingStatus.RelievingPending;
+                this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
               }
               else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
-                this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview || item.ID == EnumTransferSystemStatus.UnderDTEReview);
-                this.TransferSystemStatusList = this.TransferSystemStatusList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected  || item.ID == EnumTransferSystemStatus.UnderDTEReview )
-                
-                this.SearchStatus = EnumTransferSystemStatus.UnderJDTEReview;
+                this.SearchStatus = EnumTransferRelievingStatus.RelievingPending;
                 this.ShowCheckBoxId = 1;
-                this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderJDTEReview);
+                this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
               }else{
                 this.TransferSystemStatusList = [];
-                this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.Submitted);
+                this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
               }
               
           }, (error: any) => console.error(error));
