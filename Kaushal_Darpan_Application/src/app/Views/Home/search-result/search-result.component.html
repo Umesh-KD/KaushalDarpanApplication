@@ -32,7 +32,6 @@
                   </div>
                 </div>
 
-
                 <div class="col-md-3">
                   <label for="SemesterID" class="form-label">Semester<span class="StarMarking" style="color:red;">*</span></label>
                   <select class="form-select mb-0" id="SemesterID" name="SemesterID" [(ngModel)]="resultSearchReq.SemesterID"
@@ -45,6 +44,17 @@
                   </div>
                 </div>
 
+                <div class="col-md-3">
+                  <label for="ResultType" class="form-label">Result Type<span class="StarMarking" style="color:red;">*</span></label>
+                  <select class="form-select mb-0" id="ResultType" name="ResultType" [(ngModel)]="resultSearchReq.ResultType"
+                          formControlName="ResultType">
+                    <option [value]="0">Choose Option</option>
+                    <option *ngFor="let item of ResultTypeList" [value]="item.ID">{{item.Name}}</option>
+                  </select>
+                  <div *ngIf="isSubmitted && _formGroup.controls.ResultType.errors" class="text-danger">
+                    <p *ngIf="!_formGroup.controls.ResultType.errors.required"><i aria-hidden="true"></i>This field is required!</p>
+                  </div>
+                </div>
 
                 <div class="col-md-3">
                   <label for="RollNo" class="form-label">Roll No<span class="StarMarking" style="color:red;">*</span></label>
