@@ -131,14 +131,20 @@
                    (change)="checkboxthView_checkboxchange($event.target.checked)">
           </th>
           <th width="80px" align="left">Sr. No.</th>
-          <th align="left">SSO ID</th>
+          <!--<th align="left">SSO ID</th>-->
           <th align="left">Name</th>
-          <th align="left">Transfer Category</th>
-          <th align="left">Reason Description</th>
-          <th class="left">Application Date</th>
-          <th align="left">Status</th>
-          <th align="left">Supporting Documents</th>
+          <!--<th align="left">Transfer Category</th>
+  <th align="left">Reason Description</th>-->
 
+          <th class="left">Office</th>
+          <th class="left">Post</th>
+          <th class="left">District</th>
+          <th class="left">Institute</th>
+          <th align="left">Status</th>
+
+          <th class="left">Order NO</th>
+          <th class="left">Order Date</th>
+          <th align="left">Supporting Documents</th>
         </tr>
       </thead>
       <tbody>
@@ -148,16 +154,23 @@
                    [(ngModel)]="row.Selected" />
           </td>
           <td>{{idx+1}}</td>
-          <td>{{row.SSOID}}</td>
+          <!--<td>{{row.SSOID}}</td>-->
           <td>{{row.NAME}}</td>
-          <td>{{row.TransferCategory}}</td>
-          <td>{{row.ReasonDescription}}</td>
+          <!--<td>{{row.TransferCategory}}</td>
+  <td>{{row.ReasonDescription}}</td>-->
 
-          <td>{{row.CreatedDate}}</td>
+
+          <td>{{row.OfficeName}}</td>
+          <td>{{row.DesignationName }}</td>
+          <td>{{row.DistrictName }}</td>
+          <td>{{row.InstituteName }}</td>
           <td>{{row.TransferStatusName}}</td>
+
+          <td>{{row.OrderNo}}</td>
+          <td>{{row.OrderDate}}</td>
           <td align="left">
-            <div class="flex" *ngIf="row.SupportingDocuments; else noDoc1">
-              <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.SupportingDocuments"
+            <div class="flex" *ngIf="row.OrderSupportingDocument; else noDoc1">
+              <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.OrderSupportingDocument"
                  class="btn bg-primary text-white m-0"
                  target="_blank">
                 <i class="ti ti-eye"></i>
