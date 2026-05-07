@@ -725,10 +725,6 @@ export class TheoryMarksComponent implements OnInit {
       dOC.Remark = '';
     }
 
-    if (dOC.IsPresentTheory == 0) {
-      dOC.ObtainedTheory = 0;
-    }
-
   }
 
   async onFilechange(event: any, Type: string, row: any) {
