@@ -318,7 +318,9 @@
           <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
-      
+
+        {{EM_TransferSystemHSTList|json}}
+
         <div class="overflow-x-auto mt-3">
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
@@ -327,7 +329,7 @@
                 <th class="text-left">Status</th>
                 <th class="text-left">Remarks</th>
                 <th class="text-left">Action Date</th>
-              
+
               </tr>
             </thead>
             <tbody>
@@ -336,7 +338,7 @@
                 <td align="left">{{ row.StatusName }}</td>
                 <td align="left">{{ row.Remarks}}</td>
                 <td align="left">{{ row.ActionDate }}</td>
-                
+
               </tr>
               <tr *ngIf="EM_TransferSystemHSTList?.length==0">
                 <td colspan="5" class="text-center">No Record Found </td>

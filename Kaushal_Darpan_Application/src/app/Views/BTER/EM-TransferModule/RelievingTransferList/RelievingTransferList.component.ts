@@ -206,64 +206,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       }
     }
 
-    // async TransferSystemStatusUpdate() {
-    //   try {
-    //     ;
-    //     const selectedRows = this.EM_TransferProcessList
-    //       .filter((item: any) => item.Selected === true);
-
-    //     if (selectedRows.length === 0) {
-    //       this.toastr.warning("Please select at least one record");
-    //       return;
-    //     }
-
-    //     if (!this.Status || this.Status == "0") {
-    //       this.toastr.warning("Please select status");
-    //       return;
-    //     }
-
-    //     if (!this.Remark || this.Remark.trim() === "") {
-    //       this.toastr.warning("Please enter remark");
-    //       return;
-    //     }
-
-
-    //     const jsonData = selectedRows.map((item: any) => ({
-    //       TransferSystemID: item.TransferSystemID,
-    //       Status: this.Status,   
-    //       Remark: this.Remark,
-    //       CreatedBy: this.sSOLoginDataModel.UserID      
-    //     }));
-    //     this.updateSearch.jsonData = JSON.stringify(jsonData);
-       
-       
-    //     await this.staffServiceDetailsService
-    //       .EM_TransferSystemUpdateStatus(this.updateSearch)
-    //       .then(async (data: any) => {
-    //         data = JSON.parse(JSON.stringify(data));
-
-    //         if (data.State === EnumStatus.Success) {
-    //           this.toastr.success(data.Message);
-    //           this.updateSearch.jsonData = "";
-    //           this.Status = "0";
-    //           this.Remark = "";
-
-    //           this.EM_TransferProcessList =
-    //             this.EM_TransferProcessList.map((item: any) => ({
-    //               ...item,
-    //               Selected: false
-    //             }));
-    //           await this.EM_TransferSystem_GetData();
-    //         } else {
-    //           this.toastr.error(data.ErrorMessage);
-    //         }
-    //       });
-
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
-
+   
 
     async EM_TransferSystemHST_GetData(model: any, TransferSystemID: number) {
       try {
@@ -340,22 +283,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         }, 200);
       }
     }
-    // async onChangeSearchStatus() {
-      
-    //   if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) && EnumTransferSystemStatus.Submitted == this.SearchStatus)) {
-    //     this.ShowCheckBoxId = 1;
-    //   } 
-    //   else if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) && EnumTransferSystemStatus.UnderADTEReview == this.SearchStatus)) {
-    //     this.ShowCheckBoxId = 1;
-    //   }
-    //   else if (((this.sSOLoginDataModel.RoleID == EnumRole.DTE) && EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus)) {
-    //     this.ShowCheckBoxId = 1;
-    //   } 
-
-    //   else {
-    //     this.ShowCheckBoxId = 0;
-    //   }
-    // }
+    
 
 
     async TransferSystemEXTStatusUpdate() {
@@ -514,4 +442,48 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     async TabutarTransferList() {
       window.open('/TabutarTransferList', '_blank');
     }
+
+    async RelievingLetter(TransferSystemID: number) {
+      try {
+        this.searchRequest.TransferSystemID = TransferSystemID;
+        this.loaderService.requestStarted();
+
+        const blob: any = await this.staffServiceDetailsService
+          .DownloadRelievingLetterPDF(this.searchRequest);
+
+        const now = new Date();
+        const timestamp =
+          now.getFullYear() + '-' +
+          String(now.getMonth() + 1).padStart(2, '0') + '-' +
+          String(now.getDate()).padStart(2, '0') + '_' +
+          String(now.getHours()).padStart(2, '0') + '-' +
+          String(now.getMinutes()).padStart(2, '0') + '-' +
+          String(now.getSeconds()).padStart(2, '0');
+
+        const fileName = `ITI_Relieving_Letter_${timestamp}.pdf`;
+
+        // Create blob URL
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Create anchor and trigger download
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+
+      } catch (error: any) {
+        console.error(error);
+
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
 }

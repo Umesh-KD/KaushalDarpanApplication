@@ -160,10 +160,14 @@
              </div>
              <ng-template #noDoc1>-----</ng-template>
            </td>
-            <td>
-              <!-- <a class="me-2" href="javascript:void(0);" title="Transfer EXT" (click)="onTransferSystemEXT(TransferSystemEXT, row.TransferSystemID)"><i class="ti ti-list"></i></a> -->
-              <!-- <a href="javascript:void(0);" title="Status History" (click)="EM_TransferSystemHST_GetData(EM_TransferSystemHST, row.TransferSystemID)"><i class="ti ti-list"></i></a> -->
-            </td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a href="javascript:void(0);" title="Relieving Letter"
+                       (click)="RelievingLetter(row.TransferSystemID)">
+                      <i class="ti ti-download"></i>
+                    </a>
+                  </div>
+                </td>
           </tr>
         </tbody>
       </table>
