@@ -116,20 +116,19 @@ export class DteEquipmentsMasterComponent {
       this.request.IsSerialNo = this.EquipmentsRequestFormGroup.value.IsSerialNo ? 1 : 0;
       await this.dteEquipmentsService.SaveData(this.request)
         .then(async (data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message)
             await this.ResetControl();
             await this.GetAllData();
             const btnSave = document.getElementById('btnSave');
             if (btnSave) btnSave.innerHTML = "Submit";
             this.routers.navigate(['/DteEquipmentsMaster']);
           }
-          else if (this.State == EnumStatus.Error) {
-            this.toastr.error(this.ErrorMessage);
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage);
+          } else {
+            this.toastr.error(data.ErrorMessage);
           }
         })
     }

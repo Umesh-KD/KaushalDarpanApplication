@@ -209,7 +209,6 @@ export class AddTransferRequestComponent {
 
   async addStaffTransferRequest() {
     debugger
-
     // if(this.AddTransferRequest.invalid){
     //   this.toastr.error("Please fill in all required fields.");
     //   return;
@@ -293,7 +292,7 @@ export class AddTransferRequestComponent {
 
     this.StaffTransferList.push(StaffTransferData); 
     this.StaffTransferList = this.StaffTransferList;
-    this.toastr.success("Vacancy added successfully.");
+    this.toastr.success("Location Priority added successfully.");
 
     // this.AddTransferRequest.reset(); 
     this.AddTransferRequest.get('OfficeID')?.reset(0);
@@ -681,7 +680,7 @@ export class AddTransferRequestComponent {
   async OnfinalSave() {
     debugger
     if (this.StaffTransferList.length <3) {
-      this.toastr.warning("Please add at least three valid vacancy before saving.");
+      this.toastr.warning("Please add at least three valid Loaction Priorities before saving.");
       return;
     }
 // 7358 this is for other selection  in trnasfer category
