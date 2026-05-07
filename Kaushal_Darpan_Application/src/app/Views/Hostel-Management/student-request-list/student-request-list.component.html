@@ -168,7 +168,9 @@
               </tr>
               <tr>
                 <td>Father's Contact/Mobile No.</td>
-                <td>{{StudentDetailsList[0]?.FatherContactNo}}</td>
+                <td>{{StudentDetailsList[0]?.FatherContactNo}}
+
+                </td>
               </tr>
               <tr>
                 <td>Local Guardian Name</td>
@@ -196,7 +198,7 @@
               </tr> -->
               <tr>
                 <td>Room Partner Application ID</td>
-                <td>{{StudentDetailsList[0]?.RoomPartnerApplicationID}}</td>
+                <td>{{ getYesNo(StudentDetailsList[0]?.RoomPartnerApplicationID) }}</td>
               </tr>
               <tr>
                 <td>Room Partner Name</td>
