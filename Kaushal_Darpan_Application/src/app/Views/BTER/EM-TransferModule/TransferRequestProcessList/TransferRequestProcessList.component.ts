@@ -641,14 +641,13 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 
     isLastEligibleRow(index: number): boolean {
-      
+
       const validRows = this.EM_TransferSystemEXTList
         .map((row, i) => ({ row, i }))
-        .filter(x => x.row.FinalApproveStatus == 0 || x.row.FinalApproveStatus == 1);
+        .filter(x => x.row.FinalApproveStatus != 6);
 
       if (validRows.length === 0) return false;
 
-      
       const lastIndex = validRows[validRows.length - 1].i;
 
       return index === lastIndex;
