@@ -202,11 +202,15 @@ export class TheoryMarksRevalComponent {
 
           this.isfinalsubmit = this.TheoryMarksDetailList.every(x => x.isFinalSubmit === true);
 
-          //this.TheoryMarksDetailList.forEach(x => {
-          //  if (x.IsChecked == false) {
-          //    x.IsPresentTheory = 1
-          //  }
-          //})
+          this.TheoryMarksDetailList.forEach(x => {
+            if (x.IsChecked == false) {
+              x.IsPresentTheory = 1
+              x.ObtainedTheory = '';
+            }
+            else if (x.IsChecked == true && x.IsPresentTheory == 0) {
+              x.ObtainedTheory = '';
+            }
+          })
 
           //table feature load
           this.loadInTable();
@@ -646,11 +650,6 @@ export class TheoryMarksRevalComponent {
     } else {
       dOC.ShowRemark = false;
       dOC.Remark = '';
-    }
-
-    if (dOC.IsPresentTheory == 0) {
-      dOC.ObtainedTheory = 0;
-
     }
 
   }
