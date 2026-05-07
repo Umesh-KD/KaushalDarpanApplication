@@ -109,6 +109,14 @@ export class BTEREMStaffServiceDetailsService {
             ).toPromise();
     }
 
+    public async GetEM_RelievingTransferData(request: EM_TransferSystemSearchModel) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/GetEM_RelievingTransferData`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+
     public async GetEM_TransferSystemEmployeeStatus(request: EM_TransferSystemSearchModel) {
         const body = JSON.stringify(request);
         return this.http.post(`${this.APIUrl}/GetEM_TransferSystemEmployeeStatus`, body, this.headersOptions)

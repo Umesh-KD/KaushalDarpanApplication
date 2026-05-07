@@ -222,8 +222,15 @@
         </tbody>
       </table>
     </div>
-    <div class=" flex justify-center mt-3" *ngIf="(request.TransferStatus!=2 && request.TransferStatus!=3 && request.TransferStatus!=4)">
-       <button type="submit" class="btn btn-success"  (click)="OnfinalSave()">Final Save</button>
+    <div class="flex justify-center mt-3"
+         *ngIf="request.TransferStatus != 2
+         && request.TransferStatus != 3
+         && request.TransferStatus != 4">
+      <button type="submit"
+              class="btn btn-success"
+              (click)="OnfinalSave()">
+        Final Save
+      </button>
     </div>
   </div>
 </div>

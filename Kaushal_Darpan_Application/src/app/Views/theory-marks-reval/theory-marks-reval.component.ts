@@ -9,7 +9,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { StreamMasterService } from '../../Services/BranchesMaster/branches-master.service';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { CopyCheckerDashboardService } from '../../Services/CopyCheckerDashboard/copy-checker-dashboard.service';
 import { CopyCheckerRequestModel } from '../../Models/CopyCheckerRequestModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -33,7 +33,7 @@ export class TheoryMarksRevalComponent {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public SemesterMasterList: any = [];
-  public isfinalsubmit:boolean=false
+  public isfinalsubmit: boolean = false
   public Branchlist: any = [];
   /*public TheoryMarksList: any = [];*/
   public UserID: number = 0;
@@ -68,6 +68,7 @@ export class TheoryMarksRevalComponent {
   @ViewChildren('markInput') markInputs!: QueryList<ElementRef>;
 
   public closeResult: string | undefined;
+  routeStatus: number = -1;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -105,12 +106,13 @@ export class TheoryMarksRevalComponent {
       GroupCodeID: ['', [DropdownValidators]],
       ExaminerCode: ['', Validators.required],
     });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     /*this.UserID = this.sSOLoginDataModel.UserID;*/
 
     // LOAD
     this.OpenModalPopup(this.MyModel_ExaminerCodeLogin);
-    this.DDL_GroupCode_ExaminerWise();
+    await this.DDL_GroupCode_ExaminerWise();
   }
 
   get form() { return this.ExaminerCodeLoginForm.controls; }
@@ -123,23 +125,16 @@ export class TheoryMarksRevalComponent {
       this.requestGroupCode.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.requestGroupCode.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       //call
-      this.loaderService.requestStarted();
-
       await this.commonMasterService.DDL_GroupCode_ExaminerWise_Reval(this.requestGroupCode)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.GroupCodeList = data['Data'];
-          console.log("GroupCodeList",this.GroupCodeList);
+          //console.log("GroupCodeList",this.GroupCodeList);
         }, (error: any) => console.error(error)
         );
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -154,10 +149,8 @@ export class TheoryMarksRevalComponent {
       this.copyCheckerRequest.GroupCodeID = this.ExaminerCodeLoginForm.value.GroupCodeID;
       this.copyCheckerRequest.ExaminerCode = this.ExaminerCodeLoginForm.value.ExaminerCode;
       //call
-      this.loaderService.requestStarted();
-
       await this.collegeDashDataService.GetCopyCheckerDashData_Reval(this.copyCheckerRequest)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.TheoryMarksDashBoardCount = data['Data'];
           const checkIsChecked = this.TheoryMarksDashBoardCount.find((e: any) => e.IsChecked > 0)
@@ -165,7 +158,7 @@ export class TheoryMarksRevalComponent {
             this.IsCountShow = false
             this.isListVisible = true
 
-            this.GetTheoryMarksDetailList();
+            await this.GetTheoryMarksDetailList();
           } else {
             this.IsCountShow = true
           }
@@ -175,16 +168,11 @@ export class TheoryMarksRevalComponent {
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
   //
   async GetTheoryMarksDetailList() {
     try {
-      this.AllInTableSelect=false;
+      this.AllInTableSelect = false;
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -199,7 +187,6 @@ export class TheoryMarksRevalComponent {
       }
       this.searchRequest.GroupCodeID = this.TheoryMarksDashBoardCount[0].GroupCodeID;
       //call
-      this.loaderService.requestStarted();
       await this.TheoryMarksService.GetTheoryMarksDetailList_Reval(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -207,22 +194,20 @@ export class TheoryMarksRevalComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.TheoryMarksDetailList = data['Data'];
-          this.TheoryMarksDetailList.map((x: any) => {
-            this.onStatusThoryMarks(x);
+          this.TheoryMarksDetailList.map(async (x: any) => {
+            await this.onStatusThoryMarks(x);
           })
 
-          console.log("TheoryMarksDetailList", this.TheoryMarksDetailList);
+          //console.log("TheoryMarksDetailList", this.TheoryMarksDetailList);
 
-          this.TheoryMarksDetailList.forEach(x => {
-            if (x.IsChecked == false) {
-              x.IsPresentTheory = 1
-            }
-          })
+          this.isfinalsubmit = this.TheoryMarksDetailList.every(x => x.isFinalSubmit === true);
 
-          var isfinalsubmit = this.TheoryMarksDetailList.filter(x => x.isFinalSubmit == true)
-          if (isfinalsubmit.length > 0) {
-            this.isfinalsubmit = true
-          }
+          //this.TheoryMarksDetailList.forEach(x => {
+          //  if (x.IsChecked == false) {
+          //    x.IsPresentTheory = 1
+          //  }
+          //})
+
           //table feature load
           this.loadInTable();
           //end table feature load
@@ -231,18 +216,13 @@ export class TheoryMarksRevalComponent {
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
   //
 
 
   isAllChecked(): boolean {
-    
-    let nonDetained =  this.TheoryMarksDetailList?.filter(item => item.IsDetain == false);
+
+    let nonDetained = this.TheoryMarksDetailList?.filter(item => item.IsDetain == false);
     return nonDetained?.every(item => item.IsChecked == true);
   }
 
@@ -250,10 +230,10 @@ export class TheoryMarksRevalComponent {
 
     var IsCheckecd = this.TheoryMarksDetailList.some(x => x.Marked == true);
 
-      if (IsCheckecd==false) {
-        this.toastr.error("Please Marked At least One Student")
-        return
-      }
+    if (IsCheckecd == false) {
+      this.toastr.error("Please Marked At least One Student")
+      return
+    }
 
     this.Swal2.Confirmation("Are you sure? <br> Once Submitted, It can't be edited anymore.",
       async (result: any) => {
@@ -264,70 +244,75 @@ export class TheoryMarksRevalComponent {
   }
 
   async OnSubmit(StudentExamPaperRevaluationID: number = 0, isFinalSubmit: boolean = false) {
-    
+
+    var filtered: any[] = [];
+
     // try {
     this.loaderService.requestStarted();
-    
+
+    // manually marks
     this.TheoryMarksDetailList.forEach((item: any) => {
-      if (item.isSufm == true || item.isDetain == true) {
+      if (item.isSufm == true || item.isDetain == true || item.IsPresentTheory == 0) {
         item.selected = true;
       }
     });
 
-    if (StudentExamPaperRevaluationID == 0 && isFinalSubmit == false) {
-      var filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true && x.IsUFM != true && x.IsDetain != true);
-    } else {
-      var filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true && x.StudentExamPaperRevaluationID == StudentExamPaperRevaluationID);
+    // for single student
+    if (StudentExamPaperRevaluationID > 0) {
+      filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true && x.IsUFM != true && x.IsDetain != true && x.StudentExamPaperRevaluationID == StudentExamPaperRevaluationID) ?? [];
     }
-    // Filter the TheoryMarksList to get only the items where Marked is true
-
-    /*  var filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true);*/
-    if (isFinalSubmit == false) {
-      var IsCheckecd = this.TheoryMarksDetailList.filter(x => x.Marked == true);
-
-      if (IsCheckecd.length == 0) {
-        this.toastr.error("Please Marked At least One Student")
-        return
-      }
+    else {
+      filtered = this.TheoryMarksDetailList.filter(x => x.Marked == true && x.IsUFM != true && x.IsDetain != true) ?? [];
     }
 
+    // student checked
+    if (filtered.length == 0) {
+      this.toastr.error("Please Marked At least One Student")
+      return
+    }
+
+    // final submit the add all list
     if (isFinalSubmit == true) {
-      var filtered = this.TheoryMarksDetailList
+      filtered = this.TheoryMarksDetailList
     }
-    
+
+    // mark not entered
+    let markNotEntered = filtered.filter(
+      x => (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '')
+        && x.IsUFM == false && x.IsDetain == false && x.IsPresentTheory == 1
+    );
+    if (markNotEntered.length > 0) {
+      this.toastr.error(`Please enter marks for present student first! (Roll No)</br> ${markNotEntered.map((x: any) => x.RollNo).join(', <br>')}`);
+      return
+    }
+
     // Iterate over each filtered item for validation
     for (let x of filtered) {
 
       // If the student is marked as "Absent" (IsPresentTheory = 0), validate marks
-      if (x.IsPresentTheory === 0) {
+      if (x.IsPresentTheory === 0 && x.IsDetain == false) {
+        x.ObtainedTheory = 0; // Ensure marks are 0 when absent -- ramesh 13-02-2026
         // Ensure marks are 0 when absent (MaxTheory and ObtainedTheory should be 0 for absent students)
         if (x.ObtainedTheory !== 0) {
-          this.toastr.error('Please Enter 0 for absent student!');
-          return;
-        }
-      }
-
-      // If the student is marked as "Present" (IsPresentTheory = 1), ensure that marks are entered
-      if (x.IsPresentTheory === 1) {
-        // If no marks are entered, show the "Please enter marks" message
-        if (x.ObtainedTheory === null || x.ObtainedTheory === undefined) {
-          this.toastr.error('Please enter marks for present student!');
-          return;
-        }
-
-        // Ensure the mark is either 0 or greater than 0 but not more than MaxTheory
-        if (x.ObtainedTheory === 0) {
-          this.toastr.warning('Marks are 0 for this student, proceed if this is intentional.');
-        } else if (x.ObtainedTheory <= 0 || x.ObtainedTheory > x.MaxTheory) {
-          this.toastr.error('Marks must be between 0 and Max Theory marks!');
+          this.toastr.error(`Please Enter 0 for absent student! (Roll No) </br> ${x.RollNo}`);
           return;
         }
       }
 
       // Ensure that MaxTheory is not less than ObtainedTheory
-      if ((x.ObtainedTheory!) > x.MaxTheory) {
-        this.toastr.error("'Obtained Marks' cannot be greater then 'Max Marks'!");
+      if ((x.ObtainedTheory!) > x.MaxTheory && x.IsUFM == false && x.IsDetain == false) {
+        this.toastr.error(`'Obtained Marks' cannot be greater then 'Max Marks'! (Roll No) </br> ${x.RollNo}`);
         return;
+      }
+
+      // If the student is marked as "Present" (IsPresentTheory = 1), ensure that marks are entered
+      if (x.IsPresentTheory == 1 && x.IsUFM == false && x.IsDetain == false) {
+        // If no marks are entered, show the "Please enter marks" message
+        if (x.ObtainedTheory === null || x.ObtainedTheory === undefined || x.ObtainedTheory === '') {
+          this.toastr.error(`Please enter marks for present student! (Roll No) </br> ${x.RollNo}`);
+          return;
+        }
+
       }
 
       // Set the Modifier information
@@ -336,34 +321,51 @@ export class TheoryMarksRevalComponent {
 
     filtered.forEach(x => {
       x.IsChecked = true,
-      x.isFinalSubmit = isFinalSubmit
+        x.isFinalSubmit = isFinalSubmit
     })
 
-    this.perfactStudents = filtered.filter(x => x.ObtainedTheory == x.MaxTheory);
-    console.log("this.perfactStudents", this.perfactStudents);
-    if (this.perfactStudents.length > 0) {
-      this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for Roll Number:<br> ${this.perfactStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
+    // zero marks
+    let zeromarksStudents = filtered.filter(x => x.ObtainedTheory === 0 && x.IsUFM == false && x.IsDetain == false && x.IsPresentTheory == 1) ?? [];
+    if (zeromarksStudents.length > 0) {
+      await this.Swal2.Confirmation(`Marks are 0 for student, proceed if this is intentional: (Roll No)<br> ${zeromarksStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
-           await this.SaveData(filtered)
+          await this.OnSubmitAfter(filtered, isFinalSubmit);
         }
       })
-    } else {
-       await this.SaveData(filtered)
+    }
+
+    // if zero not found
+    if (zeromarksStudents.length == 0) {
+      await this.OnSubmitAfter(filtered, isFinalSubmit);
     }
   }
 
-  async SaveData(array: any) {
+  async OnSubmitAfter(item: any[], isFinalSubmit: boolean = false) {
+    // full marks
+    this.perfactStudents = item.filter(x => x.ObtainedTheory == x.MaxTheory) ?? [];
+    if (this.perfactStudents.length > 0) {
+      await this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for student: (Roll No)<br> ${this.perfactStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
+        if (result.isConfirmed) {
+          await this.SaveData(item, isFinalSubmit);
+        }
+      })
+    } else {
+      await this.SaveData(item, isFinalSubmit);
+    }
+  }
+
+  async SaveData(array: any, isFinalSubmit: boolean = false) {
     try {
-      console.log("filtered while save", array);
+      //console.log("filtered while save", array);
       await this.TheoryMarksService.UpdateSaveData_Reval(array)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          console.log("data on save", data);
+          //console.log("data on save", data);
 
           if (this.State == EnumStatus.Success) {
-            
+
             this.toastr.success(this.Message);
             if (array.length > 1) {
               await this.GetTheoryMarksDetailList();
@@ -387,18 +389,8 @@ export class TheoryMarksRevalComponent {
 
     } catch (ex) {
       console.log(ex);
-    } finally {
-      this.loaderService.requestEnded();
     }
   }
-
-
-
-
-
-
-
-
 
   ResetControl() {
     this.isSubmitted = false;
@@ -409,9 +401,11 @@ export class TheoryMarksRevalComponent {
     this.AllInTableSelect = false;
   }
 
-  public reset() {
+  async reset() {
     this.searchRequest.RollNo = ''
-    this.GetTheoryMarksDetailList()
+    this.searchRequest.StudentStatus = -1;
+    this.searchRequest.CheckedStatus = -1;
+    await this.GetTheoryMarksDetailList()
   }
 
   async OnConfirm(content: any, ExaminerCode: string = '') {
@@ -430,7 +424,7 @@ export class TheoryMarksRevalComponent {
   }
 
   async Confirm() {
-    this.GetTheoryMarksDetailList();
+    await this.GetTheoryMarksDetailList();
     this.isListVisible = true;
     this.modalReference?.close();
   }
@@ -624,15 +618,15 @@ export class TheoryMarksRevalComponent {
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    
+
     const rowIndex = this.TheoryMarksDetailList.findIndex(x => x === item);
     if (rowIndex !== -1) {
       this.TheoryMarksDetailList[rowIndex].Marked = isSelected;
     }
 
     // Update "Select All" checkbox state
-    let nonDetained =this.TheoryMarksDetailList.filter(r => r.IsDetain==false);
-    this.AllInTableSelect = nonDetained.every(r => r.Marked==true);
+    let nonDetained = this.TheoryMarksDetailList.filter(r => r.IsDetain == false);
+    this.AllInTableSelect = nonDetained.every(r => r.Marked == true);
   }
 
   //end table feature
@@ -654,7 +648,7 @@ export class TheoryMarksRevalComponent {
       dOC.Remark = '';
     }
 
-    if(dOC.IsPresentTheory == 0) {
+    if (dOC.IsPresentTheory == 0) {
       dOC.ObtainedTheory = 0;
 
     }
@@ -727,14 +721,54 @@ export class TheoryMarksRevalComponent {
 
   onTabPress(event: KeyboardEvent, idx: number): void {
     if (event.key === 'Tab') {
-      event.preventDefault(); // Prevents the default tab action
+      event.preventDefault();
 
-      const nextIndex = idx + 1;
-      const nextInput = document.querySelector(`[tabindex="${nextIndex}"]`) as HTMLElement;
+      let nextIndex = idx + 1;
+      let nextTextbox: HTMLInputElement | null = null;
 
-      if (nextInput) {
-        nextInput.focus();
+      while (!nextTextbox) {
+        const element = document.querySelector(
+          `input[type="text"][tabindex="${nextIndex}"]`
+        ) as HTMLInputElement | null;
+
+        if (!element) break;
+
+        if (!element.disabled) {
+          nextTextbox = element;
+        } else {
+          nextIndex++;
+        }
       }
+
+      nextTextbox?.focus();
     }
   }
+
+  allowOnlyPositiveNumbers(event: KeyboardEvent) {
+    const allowedKeys = [
+      'Backspace',
+      'Tab',
+      'ArrowLeft',
+      'ArrowRight',
+      'Delete'
+    ];
+    if (
+      allowedKeys.includes(event.key) ||
+      (event.key >= '0' && event.key <= '9')
+    ) {
+      return;
+    }
+    event.preventDefault();
+  }
+  // selected all except absent
+  get selectedAllForPresent(): boolean {
+    let anyUnmarkedInPresent = this.TheoryMarksDetailList.filter(x => x.Marked == false && x.IsPresentTheory == 1)?.length;
+    if (anyUnmarkedInPresent != 0) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
 }
