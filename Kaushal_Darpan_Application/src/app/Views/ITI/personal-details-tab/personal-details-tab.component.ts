@@ -127,7 +127,7 @@ export class PersonalDetailsTabComponent implements OnInit {
         //ddlCategoryE: ['', [DropdownValidators]],
 
         ddlIncomeDetail: ['',],
-        ddlMinority: [''],
+        ddlMinority: [{ value: '', disabled: true }],
         ddlEWSCategory: [''],
         ddlEligible8thTradesID: [''],
         ddlEligible10thTradesID: [''],
@@ -464,7 +464,7 @@ export class PersonalDetailsTabComponent implements OnInit {
           console.log("NationalityList", this.NationalityList)
         }, (error: any) => console.error(error)
       );
-      await this.commonMasterService.GetCommonMasterData('Religion')
+      await this.commonMasterService.GetCommonMasterData('Religion', this.request.ApplicationID, this.request.CategoryA)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ReligionList = data['Data'];
@@ -852,5 +852,23 @@ onCategoryCChange() {
       pwdControl.markAsUntouched();
     }
   }
-}
+  }
+
+  onReligionChange() {
+
+    
+    if (this.request.Religion ==1) {
+
+  
+        this.request.IsMinority = false;
+      }
+      else {
+        this.request.IsMinority = true;
+      }
+
+    }
+  
+
+
+
 }
