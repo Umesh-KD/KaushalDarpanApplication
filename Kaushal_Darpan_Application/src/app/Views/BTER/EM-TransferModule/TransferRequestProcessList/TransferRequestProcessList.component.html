@@ -274,8 +274,8 @@
             <tbody>
               <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
                 <td>
-                  <!--*ngIf="isLastEligibleRow(idx)"-->
                   <input type="checkbox"
+                         *ngIf="row.FinalApproveStatus != 6"
                          name="MarkCheck"
                          [(ngModel)]="row.Selected" />
                 </td>
@@ -319,7 +319,7 @@
           </div>
         </div>
 
-        {{EM_TransferSystemHSTList|json}}
+       
 
         <div class="overflow-x-auto mt-3">
           <table class="table table-border w-full table-auto" cellpadding="5">
