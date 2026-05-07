@@ -202,11 +202,11 @@ export class TheoryMarksRevalComponent {
 
           this.isfinalsubmit = this.TheoryMarksDetailList.every(x => x.isFinalSubmit === true);
 
-          //this.TheoryMarksDetailList.forEach(x => {
-          //  if (x.IsChecked == false) {
-          //    x.IsPresentTheory = 1
-          //  }
-          //})
+          this.TheoryMarksDetailList.forEach(x => {
+            if (x.IsChecked == false || (x.IsChecked === true && x.IsPresentTheory == 0)) {
+              x.ObtainedTheory = '';
+            }
+          })
 
           //table feature load
           this.loadInTable();

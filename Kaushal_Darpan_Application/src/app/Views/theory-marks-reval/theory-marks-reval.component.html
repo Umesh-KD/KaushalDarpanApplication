@@ -361,7 +361,7 @@
               <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
               <span class="text-red-500" *ngIf="row.IsUFM">UFM</span>
               <select *ngIf="row.IsDetain==false && row.IsUFM==false" class="form-select" id="IsPresentTheory"
-                      [disabled]="true" [(ngModel)]="row.IsPresentTheory" (change)="onStatusThoryMarks(row)">
+                      [disabled]="!row.Marked" [(ngModel)]="row.IsPresentTheory" (change)="onStatusThoryMarks(row)">
                 <option value="">Choose Option</option>
                 <option value="0">Absent</option>
                 <option value="1">Present</option>
