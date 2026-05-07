@@ -622,7 +622,17 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStat
           </div>
 
           <div class="">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document (Lease/Rent Agreement) <span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1" style="width:100%">
+              Document (Lease/Rent Agreement) <span class="StarMarking">*</span>
+
+              <mat-icon style="float:right" matTooltip="Under Section 17(1)(d) of the Registration Act, 1908, lease deeds for immovable property exceeding 12 months, yearly leases, or those reserving yearly rent must be registered."
+                        matTooltipPosition="above"
+                        class="text-blue-500 cursor-pointer ml-1">
+                info
+              </mat-icon>
+            </label>
+
+
             <div class="flex fileUploader">
               <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="AgreementFileName" type="file" (change)="onFilechange($event,'AgreementFileName')" />
