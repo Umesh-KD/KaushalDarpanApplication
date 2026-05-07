@@ -148,8 +148,8 @@ export class AddTransferRequestComponent {
 
     this.AddTransferRequest = this.formBuilder.group({
       TransferCategoryID: [0, [DropdownValidators]],
-      SupportingDocuments: ['', [Validators.required]],
-      ReasonDescription: ['', [Validators.required]],
+      SupportingDocuments: ['',],
+      ReasonDescription: [''],
       // Priority: [0, [DropdownValidators]],
       // OfficeID: [0, [DropdownValidators]],
       Priority: [0],
@@ -209,7 +209,6 @@ export class AddTransferRequestComponent {
 
   async addStaffTransferRequest() {
     debugger
-
     // if(this.AddTransferRequest.invalid){
     //   this.toastr.error("Please fill in all required fields.");
     //   return;
@@ -293,7 +292,7 @@ export class AddTransferRequestComponent {
 
     this.StaffTransferList.push(StaffTransferData); 
     this.StaffTransferList = this.StaffTransferList;
-    this.toastr.success("Vacancy added successfully.");
+    this.toastr.success("Location Priority added successfully.");
 
     // this.AddTransferRequest.reset(); 
     this.AddTransferRequest.get('OfficeID')?.reset(0);
@@ -322,6 +321,14 @@ export class AddTransferRequestComponent {
               this.request.SupportingDocuments=data.Data[0]['SupportingDocuments'];
               this.request.SupportingDocumentsDis=data.Data[0]['SupportingDocumentsDis'];
               this.request.TransferStatus=data.Data[0]['TransferStatus'];
+
+              //   // ✅ Patch form values
+              // this.AddTransferRequest.patchValue({
+              //   TransferCategoryID: data.Data[0]['TransferCategoryID'] || 0,
+              //   ReasonDescription: data.Data[0]['ReasonDescription'] || '',
+              //   SupportingDocuments: data.Data[0]['SupportingDocuments'] || ''
+              // });
+
               // this.request.TransferSystemID=this.StaffTransferList[0]['TransferSystemID'];
             } else {
               this.StaffTransferList = [];
@@ -673,19 +680,38 @@ export class AddTransferRequestComponent {
   async OnfinalSave() {
     debugger
     if (this.StaffTransferList.length <3) {
-      this.toastr.warning("Please add at least three valid vacancy before saving.");
+      this.toastr.warning("Please add at least three valid Loaction Priorities before saving.");
       return;
     }
+// 7358 this is for other selection  in trnasfer category
+    if(this.request.TransferCategoryID==7358){
+      this.AddTransferRequest.get('ReasonDescription')?.setValidators([Validators.required]);
+    }
+    else{
+      this.AddTransferRequest.get('ReasonDescription')?.clearValidators();
+    }
+    this.AddTransferRequest.get('ReasonDescription')?.updateValueAndValidity();
     
     if(this.request.SupportingDocuments==undefined || this.request.SupportingDocuments==null || this.request.SupportingDocuments==""){
       this.toastr.error("Please upload supporting documents.");
       return;
     }
 
-    // if(this.AddTransferRequest.invalid){
-    //   this.toastr.error("Please fill all the required fields.");
-    //   return;
-    // }
+    if(this.request.TransferCategoryID==7358 && (this.request.ReasonDescription==undefined || this.request.ReasonDescription==null || this.request.ReasonDescription=="")){
+      this.toastr.error("Please enter reason description.");
+      return;
+    }
+
+    // this.AddTransferRequest.patchValue({
+    //   SupportingDocuments: this.request.SupportingDocumentsDis || ''
+    // });
+    
+
+    console.log(this.AddTransferRequest.value);
+    if(this.AddTransferRequest.invalid){
+      this.toastr.error("Please fill all the required fields.");
+      return;
+    }
 
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model

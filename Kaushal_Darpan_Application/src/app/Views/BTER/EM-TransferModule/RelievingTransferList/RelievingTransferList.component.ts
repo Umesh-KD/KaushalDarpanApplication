@@ -1,0 +1,517 @@
+import { Component } from '@angular/core';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { EnumStatus, GlobalConstants, EnumStaffTrainingStatus, EnumRole, EnumTransferSystemStatus, EnumTransferRelievingStatus } from '../../../../Common/GlobalConstants';
+import { EM_TransferSystemSearchModel, TransferSystemUpdateDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
+import { BTEREMStaffServiceDetailsService } from '../../../../Services/BTER/BTER_EM_StaffServiceDetails/bter-em-staff-service-details.service';
+import { DropdownValidators1 } from '../../../../Services/CustomValidators/custom-validators.service';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
+
+  @Component({
+    selector: 'app-RelievingTransferList',
+    standalone: false,
+    templateUrl: './RelievingTransferList.component.html',
+    styleUrl: './RelievingTransferList.component.css'
+  })
+
+  export class RelievingTransferListComponent {
+  public sSOLoginDataModel = new SSOLoginDataModel();
+    public updateSearch = new TransferSystemUpdateDataModel();
+    public updateExtSearch = new EM_TransferSystemSearchModel();
+    public request = new EM_TransferSystemSearchModel();
+    public searchRequest = new EM_TransferSystemSearchModel();
+
+  public AddTrainingDetailsFromGroup!: FormGroup;
+
+  public EM_TrainingCourseTypeList: any = [];
+   
+    public EM_TransferProcessList: any = [];
+    public AllSelect: boolean = false;
+    public ExaminersList: any[] = [];
+    public TransferSystemStatusList: any[] = [];
+    public EM_TransferSystemEXTList: any[] = [];
+    public EM_TransferSystemHSTList: any[] = [];
+    public TransferSystemStatusSearchList: any[] = [];
+
+  isSubmitted: boolean = false;
+  Table_SearchText: string = '';
+  public file!: File;
+    public Uploadfile: string = '';
+    selectedRows: any[] = [];
+    isSingleSelection = false;
+    public Status: string = '';
+    public SearchStatus: number = 0;
+    public Remark: string = '';
+    public statusID: number = 0;
+    modalReference: NgbModalRef | undefined;
+    public StaffTrainingHTS_GetDataList: any = [];
+    public ShowCheckBoxId: number = 0;
+    public GazettedList: any[] = [
+      { ID: 1, Name: 'Gazetted' },
+      { ID: 2, Name: 'Non-Gazetted' }
+    ];
+    public GetTransfercateList: any = [];
+    public ItiCollegesListAll: any = [];
+    public SearchCategoryID: number = 0;
+    public SearchInstituteID: number = 0;
+    public SearchEmployeeType: number = 0;
+    public isInstituteDisabled :boolean = false;
+
+    public SupportingDoc: string = '';
+    public Dis_SupportingDoc: string = '';
+    public TransferSystemStatusUpdateList: any = [];
+    public updateStatus: number = 0;
+    public isAnyApproved: boolean = false;
+    public _EnumRole = EnumRole;
+    isJDTECheck: boolean = false;
+    EnumTransferSystemStatus = EnumTransferSystemStatus;
+  constructor(
+    private toastr: ToastrService,
+    private commonFunctionService: CommonFunctionService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private routers: Router,
+    private bterEstablishManagementService: BTEREstablishManagementService,
+    private staffServiceDetailsService: BTEREMStaffServiceDetailsService,
+    private appsettingConfig: AppsettingService,
+    private modalService: NgbModal,
+  ) { }
+
+  async ngOnInit() {
+    debugger
+    this.AddTrainingDetailsFromGroup = this.formBuilder.group({
+      OrganizinglnstituteName: ['', [Validators.required]],
+      CourseType: ['', [DropdownValidators1]],
+      CourseName: ['', [Validators.required]],
+      DurationUnit: ['', [DropdownValidators1]],
+      Duration: ['', [Validators.required]],
+      StartDate: ['', [Validators.required]],
+      EndDate: ['', [Validators.required]],
+      ModeOfTraining: ['', [DropdownValidators1]],
+      Venue: ['', [Validators.required]],
+      TrainingDoc: ['', [Validators.required]],
+      IsCompletedTraining: [false],
+      IsNewTraining: [false],
+      ComplitionTrainingDoc: ['']
+    });
+
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.Status = "0";
+
+    if(this.sSOLoginDataModel.RoleID==this._EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID==this._EnumRole.Principal)
+    {
+      this.SearchInstituteID = this.sSOLoginDataModel.InstituteID
+      this.isInstituteDisabled = true;
+    }
+    else{
+      this.isInstituteDisabled=false;
+    }
+
+    await this.GetLoadData();
+    
+    }
+
+    async EM_TransferSystem_GetData_Search(statusID: number) {
+      
+      this.statusID = statusID;
+      await this.EM_TransferSystem_GetData();
+
+    }
+
+    async GetLoadData() {
+      try {
+        this.loaderService.requestStarted();
+          await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.ItiCollegesListAll = data.Data;
+          })
+
+          await this.commonFunctionService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.GetTransfercateList = data['Data'];
+            console.log(this.GetTransfercateList, "GetTransfercateList");
+          });
+        
+        await this.commonFunctionService.GetCommonMasterDDLByAction1('TransferRelievingStatus')
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.TransferSystemStatusList = data['Data'];
+              this.TransferSystemStatusSearchList = data['Data'];
+             
+              if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+                
+                
+                this.SearchStatus = EnumTransferRelievingStatus.RelievingPending;
+               
+                this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
+              }
+              else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
+               this.SearchStatus = EnumTransferRelievingStatus.RelievingPending;
+                this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
+              }
+              else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+                this.SearchStatus = EnumTransferRelievingStatus.RelievingPending;
+                this.ShowCheckBoxId = 1;
+                this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
+              }else{
+                this.TransferSystemStatusList = [];
+                this.EM_TransferSystem_GetData_Search(EnumTransferRelievingStatus.RelievingPending);
+              }
+              
+          }, (error: any) => console.error(error));
+
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+    
+    async EM_TransferSystem_GetData() {
+      debugger
+      try {
+        this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+        // this.searchRequest.Action = "EM_TransferProcessListmain";
+        this.searchRequest.StatusID = this.SearchStatus;
+        this.searchRequest.CategoryID = this.SearchCategoryID;
+        this.searchRequest.EmployeeType = this.SearchEmployeeType;
+        this.searchRequest.InstituteID = this.SearchInstituteID;
+        await this.staffServiceDetailsService.GetEM_RelievingTransferData(this.searchRequest).then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.EM_TransferProcessList = data.Data;
+            // if (this.statusID == 0) {
+            //   this.EM_TransferProcessList = data.Data;
+            // }
+          } 
+          else {
+            this.EM_TransferProcessList = [];
+          }
+        })
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // async TransferSystemStatusUpdate() {
+    //   try {
+    //     ;
+    //     const selectedRows = this.EM_TransferProcessList
+    //       .filter((item: any) => item.Selected === true);
+
+    //     if (selectedRows.length === 0) {
+    //       this.toastr.warning("Please select at least one record");
+    //       return;
+    //     }
+
+    //     if (!this.Status || this.Status == "0") {
+    //       this.toastr.warning("Please select status");
+    //       return;
+    //     }
+
+    //     if (!this.Remark || this.Remark.trim() === "") {
+    //       this.toastr.warning("Please enter remark");
+    //       return;
+    //     }
+
+
+    //     const jsonData = selectedRows.map((item: any) => ({
+    //       TransferSystemID: item.TransferSystemID,
+    //       Status: this.Status,   
+    //       Remark: this.Remark,
+    //       CreatedBy: this.sSOLoginDataModel.UserID      
+    //     }));
+    //     this.updateSearch.jsonData = JSON.stringify(jsonData);
+       
+       
+    //     await this.staffServiceDetailsService
+    //       .EM_TransferSystemUpdateStatus(this.updateSearch)
+    //       .then(async (data: any) => {
+    //         data = JSON.parse(JSON.stringify(data));
+
+    //         if (data.State === EnumStatus.Success) {
+    //           this.toastr.success(data.Message);
+    //           this.updateSearch.jsonData = "";
+    //           this.Status = "0";
+    //           this.Remark = "";
+
+    //           this.EM_TransferProcessList =
+    //             this.EM_TransferProcessList.map((item: any) => ({
+    //               ...item,
+    //               Selected: false
+    //             }));
+    //           await this.EM_TransferSystem_GetData();
+    //         } else {
+    //           this.toastr.error(data.ErrorMessage);
+    //         }
+    //       });
+
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
+
+
+    async EM_TransferSystemHST_GetData(model: any, TransferSystemID: number) {
+      try {
+        this.loaderService.requestStarted();
+        try {
+          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+          this.searchRequest.Action = "EM_TransferSystemHST";
+
+          this.searchRequest.TransferSystemID = TransferSystemID;
+          await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.EM_TransferSystemHSTList = data.Data;
+              if (this.statusID == 0) {
+                this.EM_TransferSystemHSTList = data.Data;
+               
+              }
+            } else {
+              this.EM_TransferSystemHSTList = [];
+            }
+          })
+        } catch (error) {
+          console.error(error);
+        }
+        this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+    CloseModal() {
+      this.modalService.dismissAll();
+      this.modalReference?.close();
+    }
+
+    async onTransferSystemEXT(model: any, TransferSystemID: number) {
+      try {
+        this.loaderService.requestStarted();
+        try {
+          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+          this.searchRequest.Action = "EM_TransferSystemEXT";
+          this.searchRequest.StatusID = this.statusID;
+          this.searchRequest.TransferSystemID = TransferSystemID;
+          await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.EM_TransferSystemEXTList = data.Data;
+              this.checkApproveStatus();
+              if (this.statusID == 0) {
+                this.EM_TransferProcessList = data.Data;
+                
+              }
+            } else {
+              this.EM_TransferSystemEXTList = [];
+            }
+          })
+        } catch (error) {
+          console.error(error);
+        }
+        this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+    // async onChangeSearchStatus() {
+      
+    //   if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) && EnumTransferSystemStatus.Submitted == this.SearchStatus)) {
+    //     this.ShowCheckBoxId = 1;
+    //   } 
+    //   else if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) && EnumTransferSystemStatus.UnderADTEReview == this.SearchStatus)) {
+    //     this.ShowCheckBoxId = 1;
+    //   }
+    //   else if (((this.sSOLoginDataModel.RoleID == EnumRole.DTE) && EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus)) {
+    //     this.ShowCheckBoxId = 1;
+    //   } 
+
+    //   else {
+    //     this.ShowCheckBoxId = 0;
+    //   }
+    // }
+
+
+    async TransferSystemEXTStatusUpdate() {
+      debugger
+      try {
+
+        if (!this.updateStatus || this.updateStatus == 0) {
+          this.toastr.warning("Please select status");
+          return;
+        }
+        if (!this.SupportingDoc==null || this.SupportingDoc == "") {
+          this.toastr.warning("Please Upload Supporting Documents");
+          return;
+        }
+        const selectedRows = this.EM_TransferSystemEXTList
+          .filter((item: any) => item.Selected === true);
+
+        if (selectedRows.length === 0) {
+          this.toastr.warning("Please select one record");
+          return;
+        }
+
+        if (selectedRows.length > 1) {
+          this.toastr.warning("Please select only one record");
+          return;
+        }
+
+        
+        const jsonData = selectedRows.map((item: any) => ({
+          TransferSystemID: item.TransferSystemID,
+          ID: item.ID,
+          Status: this.updateStatus,
+          Remark: this.Remark,
+          CreatedBy: this.sSOLoginDataModel.UserID,
+          SupportingDoc: this.SupportingDoc,
+          Dis_SupportingDoc: this.Dis_SupportingDoc,
+
+        }));
+        this.updateExtSearch.jsonData = JSON.stringify(jsonData);
+
+
+        await this.staffServiceDetailsService
+          .TransferSystemEXTStatusUpdate(this.updateExtSearch)
+          .then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State === EnumStatus.Success) {
+              this.toastr.success(data.Message);
+              this.updateSearch.jsonData = "";
+              this.Status = "0";
+              this.Remark = "";
+              this.CloseModal();
+
+              this.EM_TransferProcessList =
+                this.EM_TransferProcessList.map((item: any) => ({
+                  ...item,
+                  Selected: false
+                }));
+             
+            } else {
+              this.toastr.error(data.ErrorMessage);
+            }
+          });
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+
+    async onFilechange(event: any, Name: any) {
+      debugger
+      try {
+        this.file = event.target.files[0];
+        if (this.file) {
+          // Type validation
+          if (this.file.type === 'application/pdf' || this.file.type === 'image/jpeg' || this.file.type === 'image/png') {
+            // Size validation
+            if (this.file.size > 2000000) {
+              this.toastr.error('Select less than 2MB File');
+              return;
+            }
+          }
+          else {
+            this.toastr.error('Select valid file type jpg/jpeg/png/pdf');
+            this.Uploadfile = '';
+            event.target.value = null;
+            return;
+          }
+
+          //upload model
+          let uploadModel = new UploadFileModel();
+          uploadModel.FileExtention = this.file.type ?? "";
+          uploadModel.MinFileSize = "";
+          uploadModel.MaxFileSize = "2000000";
+          uploadModel.FolderName = "BTER_Establishment/TransferRequestDocument";
+
+          //Upload to server folder
+          await this.commonFunctionService.UploadDocument(this.file, uploadModel)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if (data.State === EnumStatus.Success) {
+                if (Name == 'SupportingDocuments') {
+                  this.SupportingDoc = data['Data'][0]["FileName"];
+                  this.Dis_SupportingDoc = data['Data'][0]["Dis_FileName"];
+                } else {
+                  this.toastr.warning("no action provided")
+                }
+              }
+
+              if (data.State === EnumStatus.Error) {
+                this.toastr.error(data.ErrorMessage);
+
+              } else if (data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.ErrorMessage);
+              }
+            });
+        }
+      } catch (Ex) {
+        console.log(Ex);
+      } finally {
+        this.loaderService.requestEnded();
+      }
+    }
+
+ 
+
+    checkboxthViewUpdate(isChecked: boolean) {
+
+      this.AllSelect = isChecked;
+      for (let item of this.EM_TransferSystemEXTList) {
+        item.Selected = isChecked;  // Set all checkboxes based on the parent checkbox state
+      }
+
+    }
+
+    checkApproveStatus() {
+      debugger
+      this.isAnyApproved = this.EM_TransferSystemEXTList?.some(
+        (item: any) => item.FinalApproveStatus == EnumTransferSystemStatus.Appnoved
+      );
+    }
+
+    MainListApproveStatus() {
+      this.isJDTECheck = this.EM_TransferProcessList?.some(
+        (item: any) => item.FinalApproveStatus === 5
+      );
+
+     
+    }
+
+    async StructuredSummaryList() {
+      window.open('/StructuredSummaryList', '_blank');
+    }
+
+    async TabutarTransferList() {
+      window.open('/TabutarTransferList', '_blank');
+    }
+}

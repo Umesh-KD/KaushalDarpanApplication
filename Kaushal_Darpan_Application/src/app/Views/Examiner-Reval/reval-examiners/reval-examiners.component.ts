@@ -300,6 +300,7 @@ export class RevalExaminersComponent implements OnInit {
       this.commonDDLCommonSubjectModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.commonDDLCommonSubjectModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.commonDDLCommonSubjectModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.commonDDLCommonSubjectModel.IsReval = true;
       //get
       await this.commonMasterService.GetCommonSubjectDDL(this.commonDDLCommonSubjectModel)
         .then((data: any) => {

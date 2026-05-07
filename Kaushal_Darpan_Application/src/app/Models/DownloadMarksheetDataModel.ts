@@ -32,5 +32,6 @@ export class StudentResultSearchModel {
   public EndTermID: number = 0
   public RollNo: string = ''
   public SemesterID: number = 0
+  public ResultType: number = 0
   public DOB: string = ''
 } 
