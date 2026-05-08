@@ -1090,6 +1090,7 @@ const routes: Routes = [
       },
 
       { path: 'ItiOptionForm/:trade/:type', loadChildren: () => import('./Views/ITI/iti-option-form-list/iti-option-form-list.module').then(m => m.ItiOptionFormListModule), title: 'ITI Option Form' },
+      { path: 'OrderMaster', loadChildren: () => import('./Views/ITI/iti-order-master/iti-order-master.module').then(m => m.ItiOrderMasterModule), title: 'Order Master' },
       { path: 'Teacher-Wise-Report', loadChildren: () => import('./Views/teacher-wise-report/teacher-wise-report.module').then(m => m.TeacherWiseReportModule) },
       { path: 'Subject-Wise-Report', loadChildren: () => import('./Views/subject-wise-report/subject-wise-report.module').then(m => m.SubjectWiseReportModule) },
       { path: 'SignedCopyOfResult', loadChildren: () => import('./Views/SignedCopyOfResultMaster/SignedCopyOfResultMaster.module').then(m => m.SignedCopyOfResultMasterModule), title: 'Add SignedCopyOfResult' },
@@ -1729,8 +1730,8 @@ const routes: Routes = [
       { path: 'TabutarTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'ITIExaminerInchargeDashboard', loadChildren: () => import('./Views/ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module').then(m => m.ItiExaminationInchargeDashboardModule), title: 'ITI Examiner Incharge Dashboard' },
 
-     
-     
+      { path: 'StaffIFMSData', loadChildren: () => import('../Views/ITI/staff-ifmsdata/staff-ifmsdata.module').then(m => m.StaffIFMSDataModule) },
+
     ]
   },
 
@@ -1851,6 +1852,9 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\BterAttendenceRoom', loadChildren: () => import('./Views/bter-attendence-room/bter-attendence-room.module').then(m => m.BterAttendenceRoomModule) },
+
+
+
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 
