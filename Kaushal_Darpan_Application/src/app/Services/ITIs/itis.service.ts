@@ -129,6 +129,15 @@ export class ITIsService {
       ).toPromise();
   }
 
+  public async ActiveStatusByIDCollegeMaster(data: any) {
+  return await this.http.post(
+    this.APIUrl + '/UpdateActiveStatusByIDCollegeMaster',
+    data,
+    this.headersOptions
+  ).pipe(
+    catchError(this.handleErrorObservable)
+  ).toPromise();
+}
 
 
 
@@ -285,5 +294,12 @@ export class ITIsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetAllActiveDgtOrders() {
+  return await this.http.get(`${this.APIUrl}/GetAllActiveDgtOrders`, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+}
 
 }

@@ -156,8 +156,8 @@
           </label>
           <select class="form-select" [(ngModel)]="searchrequest.Status">
             <option value="-1">ALL</option>
-            <option value="1">Active</option>
-            <option value="0">Inactive</option>
+            <option value="1">Affiliated</option>
+            <option value="0">DeAffiliated</option>
           </select>
         </div>
         <!-- <div>
@@ -247,7 +247,7 @@
             <th *ngIf="sSOLoginDataModel.RoleID!=_EnumRole.DTETraing">Roll List / Admit Card</th>
             <!--<th class="text-left">Fee Status</th>-->
             <!--<th class="text-left">Modified</th>-->
-            <th class="text-left">Status</th>
+            <!-- <th class="text-left">Status</th> -->
             <th class="text-left">Active/Inactive Remark</th>
             <th *ngIf="sSOLoginDataModel.RoleID!=42 && sSOLoginDataModel.RoleID!=22" class="text-center">Action</th>
           </tr>
@@ -373,9 +373,9 @@
             <!--<td align="left">{{ iti.ModifyDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>-->
 
 
-            <td class="left">
+            <!-- <td class="left">
               <div class="flex items-center">
-                <span>{{ iti.ActiveStatus == 1 ? 'Active' : 'Inactive' }}</span>
+                <span>{{ iti.ActiveStatus == 1 ? 'Affiliated' : 'DeAffiliated' }}</span>
                 <div class="ms-2 actionBtns" style="max-width:auto;width:auto;min-width:auto;">
 
                   <a href="javascript:void(0);" title="{{ iti.ActiveStatus == 1 ? 'Inactive' : 'Active' }} ITI" (click)="btnActive_OnClick(iti.Id)">
@@ -384,7 +384,7 @@
                 </div>
               </div>
 
-            </td>
+            </td> -->
             <td [innerHtml]="iti.RemarkForStatus"></td>
 
 
@@ -397,18 +397,25 @@
 
                 <mat-menu #menuAction="matMenu">
                   <!-- First Semester -->
-                  <button mat-menu-item [routerLink]="'/ItiCollegeUpdate'"
+                  <!-- <button mat-menu-item [routerLink]="'/ItiCollegeUpdate'"
                           [queryParams]="{ id: iti.Id }"
                           matTooltip="Update ITI College Details">
+                    <i class="ti ti-pencil"></i> Update Details of ITI
+                  </button> -->
+
+                  <button mat-menu-item 
+                    [routerLink]="['/ItiPlanning']"
+                    [queryParams]="{ id: iti.Id, Type: 1 }"
+                     matTooltip="Update ITI College Details">
                     <i class="ti ti-pencil"></i> Update Details of ITI
                   </button>
 
                   <!-- Second Semester -->
-                  <button mat-menu-item
+                  <!-- <button mat-menu-item
                           (click)="ResetSSOID(iti.Id,iti.Ssoid)"
                           matTooltip="Reset SSOID">
                     <i class="ti ti-refresh"></i> Reset SSOID
-                  </button>
+                  </button> -->
 
                   <!-- Third Semester -->
                   <button mat-menu-item matTooltip="Unlock Fee" (click)="UnlockFee(iti.Id,iti.FeePdf)">
@@ -419,16 +426,15 @@
 
 
                   <!-- Fourth Semester -->
-                  <button mat-menu-item (click)="DeleteDataById(iti.Id)"
+                  <button mat-menu-item (click)="btnActive_OnClick(iti.Id)"
                           matTooltip="Delete ITI">
-                    <i class="ti ti-trash"></i> Delete
+                    <i class="ti ti-trash"></i>{{ iti.ActiveStatus == 1 ? 'DeAffiliated' : 'Affiliated' }}
                   </button>
-
                   <!-- Fifth Semester -->
-                  <button mat-menu-item
+                  <!-- <button mat-menu-item
                           matTooltip="NCVT Mis">
                     <i class="ti ti-download"></i> NCVT Mis
-                  </button>
+                  </button> -->
 
                   <!-- Sixth Semester -->
                   <button mat-menu-item (click)="ViewandUpdate(MyModel_ViewTrades,iti.Id)"
