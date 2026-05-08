@@ -155,7 +155,7 @@
           <label for="OrderDate">Order Date <span class="StarMarking">*</span></label>
           <div>
             <input type="date" id="OrderDate" formControlName="OrderDate" class="form-control"
-                 [(ngModel)]="formData.OrderDate">
+                 [(ngModel)]="formData.OrderDate" [max]="today">
           </div>
           <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.OrderDate.errors" class="text-danger">
             <p *ngIf="_AddOfficeVacancyForm.OrderDate.errors?.required">

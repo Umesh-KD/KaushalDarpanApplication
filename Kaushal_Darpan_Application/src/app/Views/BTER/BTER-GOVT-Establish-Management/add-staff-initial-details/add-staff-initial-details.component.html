@@ -106,6 +106,20 @@
             </div>
           </div>
 
+          <div *ngIf="this.IsGuestHouseAdmin != true && formData.IsNodal==true">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.InstituteID.errors" class="text-danger">
+              <p *ngIf="!_AddStaffBasicDetailFromGroup.InstituteID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+
           <div *ngIf="formData.IsGuestStaff==true">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name <span class="StarMarking">*</span></label>
             <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
@@ -175,20 +189,6 @@
           </select>
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
             <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This
-              field is required .!
-            </p>
-          </div>
-        </div>
-      
-        <div *ngIf="this.IsGuestHouseAdmin != true && formData.IsNodal==true">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
-          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.InstituteID.errors" class="text-danger">
-            <p *ngIf="!_AddStaffBasicDetailFromGroup.InstituteID.errors.DropdownValidators">
               <i aria-hidden="true"></i>This
               field is required .!
             </p>

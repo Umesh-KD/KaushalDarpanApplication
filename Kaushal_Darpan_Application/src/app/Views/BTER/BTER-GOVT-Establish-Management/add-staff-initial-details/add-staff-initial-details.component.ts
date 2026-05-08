@@ -7,7 +7,7 @@ import { DropdownValidators } from '../../../../Services/CustomValidators/custom
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { ITI_Govt_EM_NodalSearchDataModel, ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
-import { EnumStatus, EnumRole } from '../../../../Common/GlobalConstants';
+import { EnumStatus, EnumRole, EnumOffice } from '../../../../Common/GlobalConstants';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { Router } from '@angular/router';
@@ -54,6 +54,7 @@ export class AddStaffInitialDetailsComponent {
   public searchRequest1 = new GuestRoomSeatSearchModel();
   public settingsMultiselect: object = {};
 
+  public _EnumOffice = EnumOffice;
 
   constructor(
     private loaderService: LoaderService,
@@ -299,12 +300,19 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetInstituteMaster() {
-   debugger
     try {
       this.loaderService.requestStarted();
+      var Eng_NonEng = 0
+      if(this.formData.RoleID == EnumRole.Principal){
+        Eng_NonEng= 1
+      } else if(this.formData.RoleID == EnumRole.PrincipalNon){
+        Eng_NonEng= 2
+      } else {
+        Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      }
       await this.commonMasterService.InstituteMaster(
         this.sSOLoginDataModel.DepartmentID,
-        this.sSOLoginDataModel.Eng_NonEng,
+        Eng_NonEng,
         this.sSOLoginDataModel.EndTermID
       )
         .then((data: any) => {
