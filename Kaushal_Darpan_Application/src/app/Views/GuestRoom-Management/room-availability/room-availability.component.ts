@@ -23,7 +23,7 @@ export class RoomAvailabilityComponent {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public showColumn: boolean = false;
-  public UserID: number = 0;
+  public UserID: number = 0; 
   public GuestHouseID: number = 0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
@@ -42,14 +42,20 @@ export class RoomAvailabilityComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
 
-    //this.route.queryParams.subscribe(params => {
-    //  this.ManagementTypeId = +params['ManagementTypeId'];
+    this.route.queryParams.subscribe(async params => {
 
-    //  if (this.ManagementTypeId) {
-    //    this.searchRequest.ManagementTypeId = this.ManagementTypeId;
-    //  }
-    //});
+      const guestHouseId = params?.['GuestHouseIDs'];
 
+      
+      if (guestHouseId !== null && guestHouseId !== undefined && guestHouseId !== '') {
+        this.GuestHouseID = Number(guestHouseId);
+        await this.GetGuestHouseRoomAvailabilityData();
+      } else {
+        this.GuestHouseID = 0; 
+      }
+
+      
+    });
 
     await this.GetGuestHouseNameList();
     await this.GetGuestHouseRoomAvailabilityData();
@@ -61,9 +67,10 @@ export class RoomAvailabilityComponent {
   async GetGuestHouseNameList() {
     try {
       this.loaderService.requestStarted();
-
+      debugger
       let searchRequest: any = {}
       searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
+      searchRequest.CreatedBy = this.sSOLoginDataModel.UserID ?? 0;
       await this.guestRoomManagementService.GetGuestHouseNameList(searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

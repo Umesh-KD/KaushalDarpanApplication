@@ -5,7 +5,7 @@ import { GuestRoomManagmentService } from '../../../Services/GuestRoomManagment/
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumRole, EnumStatus, GlobalConstants, EnumConfigurationType, EnumFeeFor, EnumUserType } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants, EnumConfigurationType, EnumFeeFor, EnumUserType, EnumMessageType } from '../../../Common/GlobalConstants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -23,6 +23,7 @@ import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
 import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 import { ApplyDuplicateDocService } from '../../../Services/ApplyDuplicateDoc/ApplyDuplicateDoc.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { ApplicationMessageDataModel } from '../../../Models/ApplicationMessageDataModel';
 
 @Component({
   selector: 'app-guest-room-request',
@@ -50,6 +51,7 @@ export class GuestRoomRequestComponent {
   checkInRequest = new CheckInDataModel()
   approveRequest = new GuestApplyForGuestRoomDataModel()
   searchRequest = new GuestApplyForGuestRoomSearchModel();
+  public messageModel = new ApplicationMessageDataModel();
   RequestList: any = [];
   statusList: any = [];
   RoomNoList: any = [];
@@ -82,6 +84,8 @@ export class GuestRoomRequestComponent {
   public PaymentDetailtList: any = [];
   public isMarksheet: boolean = false;
   public isMigration: boolean = false;
+  public smsSendGuestHouseName: string = '';
+  public smsCheckin_checkoutstatus: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -184,6 +188,8 @@ export class GuestRoomRequestComponent {
   async onSubmit(model: any, userSubmitData: any) {
     try {
       this.request = { ...userSubmitData };
+      this.smsSendGuestHouseName = userSubmitData.GuestHouseName;
+   
       this.request.Status = 0;
       this.request.Remark = '';
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
@@ -194,14 +200,19 @@ export class GuestRoomRequestComponent {
   async CheckIn(userSubmitData: any) {
     try {
       this.request = { ...userSubmitData };
+      this.smsSendGuestHouseName = userSubmitData.GuestHouseName;
+      var RoomNo: string = ''
 
       if (this.request.Status === 1339) {
         this.request.Status = 220;
+        RoomNo = this.RoomNoList.find((x: any) => x.GuestRoomDetailID == this.checkInRequest.GuestRoomDetailID)?.RoomNo
       } else if(this.request.Status === 220) {
         this.request.Status = 219;
       } else {
         this.toastr.error("Invalid Action")
       }
+
+       this.smsCheckin_checkoutstatus = this.request.Status ?? 0;
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.GuestRoomDetailID = this.checkInRequest.GuestRoomDetailID;
@@ -214,8 +225,14 @@ export class GuestRoomRequestComponent {
             this.Message = data['Message'];
             this.ErrorMessage = data['ErrorMessage'];
             if (this.State == EnumStatus.Success) {
+              
+              // checkin and checkout send sms functionality
+              await this.SendApplicationMessage(this.request.MobileNo, this.smsSendGuestHouseName, RoomNo, this.smsCheckin_checkoutstatus);
               this.CloseModal();
-              this.GuestRequestList();
+              await this.GuestRequestList();
+             
+
+              
             }
             else if (this.State == EnumStatus.Warning) {
               this.toastr.warning(this.Message)
@@ -271,23 +288,38 @@ export class GuestRoomRequestComponent {
     this.request.Status = 0;
     this.request.Remark = '';
     this.isSubmitted = false;
+    this.smsCheckin_checkoutstatus = 0;
+    this.smsSendGuestHouseName = "";
   }
 
   async updateReqStatus() {
+    debugger
     this.isCheckedIn = true;
     if (this.groupForm.invalid) {
       this.toastr.error("Please enter required fields !");
       return
     }
-
+    this.smsCheckin_checkoutstatus = this.request.Status ?? 0;
     try {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+      
       await this._GuestRoomManagmentService.updateReqStatus(this.request)
+     
         .then(async (data: any) => {
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
+            
+            
+            debugger
+            if (this.smsCheckin_checkoutstatus == 1339 && this.sSOLoginDataModel.RoleID == EnumRole.GuestHouseAdmin)
+            {
+              //admin approve send sms
+              await this.SendApplicationMessage(this.request.MobileNo, this.smsSendGuestHouseName, "", this.smsCheckin_checkoutstatus);
+            }
+
             this.CloseModal();
             this.CloseModal_CheckIn();
+
             this.GuestRequestList();
           }
           else if (data.State == EnumStatus.Warning) {
@@ -627,5 +659,40 @@ export class GuestRoomRequestComponent {
     this.modalReference?.close();
     this.isCheckedIn = false;
     this.checkInRequest = new CheckInDataModel();
+  }
+
+  async SendApplicationMessage(MobileNo: string, GuestHouseName: string, RoomNo: string,Status : number) {
+    try {
+      debugger
+      this.loaderService.requestStarted();
+      this.messageModel.MobileNo = MobileNo;
+      if (Status == 220 ) {
+        this.messageModel.MessageType = EnumMessageType.GuestHouseCheckIn;
+      }
+      if (Status == 219) {
+        this.messageModel.MessageType = EnumMessageType.GuestHouseCheckOut;
+      }
+      if (Status == 1339) {
+        this.messageModel.MessageType = EnumMessageType.GuestHouseAdminApprove;
+      }
+      this.messageModel.ApplicationNo = RoomNo;
+      this.messageModel.ApplicantName = GuestHouseName;
+      await this.sMSMailService.SendApplicationMessage(this.messageModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            console.log('Message sent successfully', data);
+          } else {
+            console.log('Something went wrong', data);
+          }
+        }, error => console.error(error));
+    } catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 }

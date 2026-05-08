@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
-import { DTEItemsSaveModel, DTEItemsSearchModel, DTEItemsDataModels,inventoryIssueHistorySearchModel, inventoryIssueHistoryITISearchModel, ItemsIssueReturnModels } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel, DTEItemsSearchModel, DTEItemsDataModels,inventoryIssueHistorySearchModel, inventoryIssueHistoryITISearchModel, ItemsIssueReturnModels, issuedItemSearchRequestModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
 import { DteItemsMasterService } from '../../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
@@ -49,6 +49,8 @@ export class AddItiIssueItemComponent {
   public TradeDDLList: any = [];
   public EquipmentDDLList: any = [];
   public CategoryDDLList: any = [];
+  public issuedCategoryDDLList: any = [];
+
   public StaffDDLList: any = [];
   public staffDDLList: any = [];
   selectedItems: Array<any> = [];
@@ -65,6 +67,9 @@ export class AddItiIssueItemComponent {
   public selectedDataList: any[] = [];
   public ItemMasterList: any[] = [];
   public staff_ID:number =0;
+  public issuedItrmSearchrequests = new issuedItemSearchRequestModel()
+  public EquipmentsDDLList: any = [];
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -92,9 +97,33 @@ export class AddItiIssueItemComponent {
     //await this.ddlStaffMembers();
     //await this.ddlTradeList();
 
+    this.issuedItrmSearchrequests = {
+  //StaffID: 0,
+  InstituteID: this.sSOLoginDataModel.InstituteID,
+  ItemCategoryId: 0,
+  EquipmentsId: 0,
+  IsConsume: -1,
+  EquipmentWorking: -1,
+  ReturnStatus: 0,
+  TypeName:'',
+  TradeId:0,
+  staffID:0,
+  ItemId:0,
+  collageTradeID:0,
+  issuedTo:0,
+  serialNo:0,
+  departmentID:0,
+  ItemType:0,
+  IssuedId:0,
+  StreamID:0,
+  ItemDetailsId:0
+};
     await this.GetStaffDDL()
     await this.GetTradeDDL()
     await this.GetCategoryDDL()
+    await this.GetAllinventoryIssueHistoryNew();
+    await this.GetEquipmentDDL()
+    await this.GetissuesCategoryDDL()
   }
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
 
@@ -355,10 +384,12 @@ export class AddItiIssueItemComponent {
         ];
 
         this.Searchrequests.staffID = 0;
+        this.issuedItrmSearchrequests.staffID = 0;
         console.log('staff list ==>', this.staffDDLList);
       } else {
         this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
         this.Searchrequests.staffID = 0;
+        this.issuedItrmSearchrequests.staffID = 0;
         this.toastr.error(data?.ErrorMessage || 'No staff found.');
       }
     } catch (Ex) {
@@ -426,6 +457,45 @@ export class AddItiIssueItemComponent {
       } else {
         this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
         this.Searchrequests.ItemId = 0;
+        this.toastr.error(data?.ErrorMessage || 'No category found.');
+      }
+    } catch (Ex) {
+      console.log('Error in GetCategoryDDL:', Ex);
+    } finally {
+      setTimeout(() => this.loaderService.requestEnded(), 200);
+    }
+  }
+
+  async GetissuesCategoryDDL() {
+    
+    try {
+      // const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+      // if (!anyTeamSelected) {
+      //   this.toastr.error("Please select at least one Item!");
+      //   return;
+      // }
+
+      // if (this.Searchrequests.staffID == 0) {
+      //   this.toastr.error("Please select at least one Staff!");
+      //   return;
+      // }
+      this.loaderService.requestStarted();
+      this.issuedItrmSearchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      
+      this.issuedItrmSearchrequests.TypeName = 'ItemList';
+      debugger
+      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDLNew(this.issuedItrmSearchrequests);
+
+      if (data && data.State === EnumStatus.Success) {
+        this.issuedCategoryDDLList = [
+          { ItemId: 0, ItemCategoryName: 'Choose Category' },
+          ...data.Data
+        ];
+
+        this.issuedItrmSearchrequests.ItemId = 0;
+        console.log('category list ==>', this.CategoryDDLList);
+      } else {
+        this.issuedCategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
         this.toastr.error(data?.ErrorMessage || 'No category found.');
       }
     } catch (Ex) {
@@ -781,11 +851,11 @@ export class AddItiIssueItemComponent {
   async GetAllinventoryIssueHistoryNew() {
     try {
       this.loaderService.requestStarted();
-      let Searchrequest: any = {}
-      Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      Searchrequest.ReturnStatus = 0;
+      // let Searchrequest: any = {}
+      this.issuedItrmSearchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.issuedItrmSearchrequests.ReturnStatus = 0;
 
-      await this.itiInventoryService.GetAllinventoryIssueHistoryNew(Searchrequest)
+      await this.itiInventoryService.GetAllinventoryIssueItemHistoryNew(this.issuedItrmSearchrequests)
         .then((data: any) => {
           if (data.State == EnumStatus.Success) {
             this.ItemMasterList = data.Data || [];
@@ -806,5 +876,34 @@ export class AddItiIssueItemComponent {
 
   CloseModalPopup_IssueHistory() {
     this.modalService.dismissAll();
+  }
+
+  async GetEquipmentDDL() {
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.OfficeID = this.sSOLoginDataModel.OfficeID;
+
+      await this.itiInventoryService.GetAllEquipmentsMaster(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.EquipmentsDDLList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 }

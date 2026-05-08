@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { TheoryMarksSearchModel } from '../../Models/TheoryMarksDataModels';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { RoleMasterDataModel, UserRoleRightsDataModel } from '../../Models/RoleMasterDataModel';
-import { GlobalConstants } from '../../Common/GlobalConstants';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -35,6 +33,7 @@ export class TheoryMarksRevalService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
   public async UpdateSaveData_Reval(selectedList: any[]): Promise<any> {
     const body = JSON.stringify(selectedList);
     return await this.http.post(this.APIUrl + '/UpdateSaveData_Reval', body, this.headersOptions)
@@ -51,6 +50,21 @@ export class TheoryMarksRevalService {
       ).toPromise();
   }
 
-  
+  //----- edit marks by admin
+  public async GetTheoryMarks_Admin(searchRequest: TheoryMarksSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetTheoryMarks_Admin`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UpdateTheoryMarks_Admin(selectedList: any[]): Promise<any> {
+    const body = JSON.stringify(selectedList);
+    return await this.http.post(this.APIUrl + '/UpdateTheoryMarks_Admin', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }
