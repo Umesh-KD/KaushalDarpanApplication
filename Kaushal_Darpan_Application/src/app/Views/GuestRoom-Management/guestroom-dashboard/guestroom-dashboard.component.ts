@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormGroup } from '@angular/forms';
 import { StaffMasterSearchModel } from '../../../Models/StaffMasterDataModel';
 import { StaffMasterService } from '../../../Services/StaffMaster/staff-master.service';
+import { GuestRoomManagmentService } from '../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 
 @Component({
   selector: 'app-guestroom-dashboard',
@@ -31,6 +32,7 @@ export class GuestRoomDashboardComponent {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public UserID: number = 0;
+  public Guest_Houseids: number = 0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new DTEApplicationDashboardDataModel();
   public HostelDashboardList: DTEDashboardModel[] = [];
@@ -41,6 +43,8 @@ export class GuestRoomDashboardComponent {
   //Profile View Variables Pawan
   public ProfileLists: any = {};
   public StaffMasterList: any = [];
+  public GuestHouseNameList: any = [];
+  
   public rquestfrom: any = [];
   //Profile View Variables Pawan
   public _EnumEMProfileStatus = EnumEMProfileStatus;
@@ -55,13 +59,16 @@ export class GuestRoomDashboardComponent {
     private loaderService: LoaderService,
     private staffMasterService: StaffMasterService,
     private router: ActivatedRoute, private modalService: NgbModal, public appsettingConfig: AppsettingService, private Swal2: SweetAlert2,
-    private sweetAlert2: SweetAlert2
+    private sweetAlert2: SweetAlert2,
+    private guestRoomManagementService: GuestRoomManagmentService,
   ) { }
 
   async ngOnInit() {    
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetGuestHouseNameList();
     await this.GetGuestRoomDashboard();
     await this.CheckProfileStatus();
+   
     if ((this.sSOLoginDataModel.RoleID == EnumRole.GuestRoomWarden || this.sSOLoginDataModel.RoleID == EnumRole.GuestHouseAdmin || this.sSOLoginDataModel.RoleID == EnumRole.GuestHouseIncharge)) {
 
       let status = this.StaffMasterList[0].ProfileStatus;
@@ -117,7 +124,41 @@ export class GuestRoomDashboardComponent {
     }
   }
 
+  async GetGuestHouseNameList() {
+    try {
+      this.loaderService.requestStarted();
+      debugger
+      let searchRequest: any = {}
+      searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
+      searchRequest.CreatedBy = this.sSOLoginDataModel.UserID ?? 0;
+      await this.guestRoomManagementService.GetGuestHouseNameList(searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GuestHouseNameList = data['Data'];
 
+
+          if (this.GuestHouseNameList.length > 0) {
+            this.Guest_Houseids = this.GuestHouseNameList[0].ID || 0;
+          } else {
+            this.Guest_Houseids = 0;
+          }
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GuestHouseChange() {
+
+    await this.GetGuestRoomDashboard();
+
+  }
 
   async GetGuestRoomDashboard() {
     
@@ -128,6 +169,7 @@ export class GuestRoomDashboardComponent {
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
     this.searchRequest.HostelID = this.sSOLoginDataModel.HostelID;
     this.searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID;
+    this.searchRequest.Guest_Houseids = this.Guest_Houseids;
     
     this.HostelDashboardList = [];
     try {
