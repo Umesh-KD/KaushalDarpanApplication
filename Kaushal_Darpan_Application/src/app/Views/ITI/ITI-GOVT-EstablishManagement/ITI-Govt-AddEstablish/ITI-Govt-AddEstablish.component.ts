@@ -1684,4 +1684,47 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       }, 200);
     }
   }
+
+
+  async GetIFMSDATA(SSOID: any) {
+    try {
+      this.loaderService.requestStarted();
+
+      var request = {
+        MasterCode: "GetDataFromIFMS",
+        FilterBy: SSOID
+      }
+
+      await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) =>
+      {
+        debugger;
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success)
+
+        {
+          this.isSSOVisible = true;
+          this.formData.Displayname = data.Data[0].NAME_ENGLISH;
+          this.formData.MobileNo = data.Data[0].MOB_NO;
+          this.formData.Mailpersonal = data.Data[0].EMAIL;
+          this.formData.SSOID = data.Data[0].EMPLOYEE_CODE;
+          this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
+
+        }
+        else
+        {
+          this.toastr.warning('No Record Found');
+        }
+    
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
 }

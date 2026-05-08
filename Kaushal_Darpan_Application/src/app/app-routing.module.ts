@@ -1726,6 +1726,8 @@ const routes: Routes = [
       { path: 'TabutarTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'ITIExaminerInchargeDashboard', loadChildren: () => import('./Views/ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module').then(m => m.ItiExaminationInchargeDashboardModule), title: 'ITI Examiner Incharge Dashboard' },
 
+      { path: 'StaffIFMSData', loadChildren: () => import('../Views/ITI/staff-ifmsdata/staff-ifmsdata.module').then(m => m.StaffIFMSDataModule) },
+
     ]
   },
 
@@ -1846,6 +1848,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\BterAttendenceRoom', loadChildren: () => import('./Views/bter-attendence-room/bter-attendence-room.module').then(m => m.BterAttendenceRoomModule) },
+
 
 
 
