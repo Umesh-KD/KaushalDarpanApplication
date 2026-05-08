@@ -22,7 +22,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
   selector: 'app-iti-direct-experience',
   standalone: false,
   templateUrl: './iti-direct-experience.component.html',
-  styleUrl: './iti-direct-experience.css'
+  styleUrl: './iti-direct-experience.component.css'
 })
 export class ITIDirectExperienceComponent {
   public SSOLoginDataModel = new SSOLoginDataModel()
