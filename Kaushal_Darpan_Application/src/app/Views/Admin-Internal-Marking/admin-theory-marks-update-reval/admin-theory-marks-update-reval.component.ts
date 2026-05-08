@@ -1,39 +1,36 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { ExaminerFeedbackDataModel, TheoryMarksDataModels, TheoryMarksSearchModel } from '../../../Models/TheoryMarksDataModels';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TheoryMarksService } from '../../../Services/TheoryMarks/theory-marks.service';
+import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from '../../../Services/Loader/loader.service';
-import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CommonFunctionService } from '../../../Common/common';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { StreamMasterService } from '../../../Services/BranchesMaster/branches-master.service';
-import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
-import { CopyCheckerDashboardService } from '../../../Services/CopyCheckerDashboard/copy-checker-dashboard.service';
 import { CopyCheckerRequestModel } from '../../../Models/CopyCheckerRequestModel';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DDL_GroupCode_ExaminerWise, ExaminerCodeLoginModel } from '../../../Models/ExaminerCodeLoginModel';
-import { ExaminerService } from '../../../Services/Examiner/examiner.service';
-import * as XLSX from 'xlsx';
-import { AppsettingService } from '../../../Common/appsetting.service';
-import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { ExaminerCodeLoginModel, DDL_GroupCode_ExaminerWise } from '../../../Models/ExaminerCodeLoginModel';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { TheoryMarksSearchModel, TheoryMarksDataModels, ExaminerFeedbackDataModel } from '../../../Models/TheoryMarksDataModels';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { TheoryMarksRevalService } from '../../../Services/TheoryMarksReval/theory-marks-reval.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import * as XLSX from 'xlsx';
+
 
 @Component({
-  selector: 'app-admin-theory-marks-update',
+  selector: 'app-admin-theory-marks-update-reval',
   standalone: false,
-  templateUrl: './admin-theory-marks-update.component.html',
-  styleUrl: './admin-theory-marks-update.component.css'
+  templateUrl: './admin-theory-marks-update-reval.component.html',
+  styleUrl: './admin-theory-marks-update-reval.component.css'
 })
-export class AdminTheoryMarksUpdateComponent {
+
+export class AdminTheoryMarksUpdateRevalComponent {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public SemesterMasterList: any = [];
-  public isfinalsubmit:boolean=false
+  public isfinalsubmit: boolean = false
   public Branchlist: any = [];
   /*public TheoryMarksList: any = [];*/
   public UserID: number = 0;
@@ -88,19 +85,11 @@ export class AdminTheoryMarksUpdateComponent {
 
   constructor(
     private commonMasterService: CommonFunctionService,
-    private collegeDashDataService: CopyCheckerDashboardService,
-    private Router: Router,
-    private TheoryMarksService: TheoryMarksService,
+    private theoryMarksRevalService: TheoryMarksRevalService,
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private router: ActivatedRoute,
-    private routers: Router,
-    private modalService: NgbModal,
-    private Swal2: SweetAlert2,
-    private streamMasterService: StreamMasterService,
-    private formBuilder: FormBuilder,
-    private examinerService: ExaminerService,
-    private appsettingConfig: AppsettingService
+    private Swal2: SweetAlert2
   ) { }
 
   async ngOnInit() {
@@ -128,11 +117,11 @@ export class AdminTheoryMarksUpdateComponent {
       await this.OnSubmit();
     })
   }
-  
+
   //
   async GetTheoryMarksDetailList() {
     try {
-      this.AllInTableSelect=false;
+      this.AllInTableSelect = false;
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -140,13 +129,12 @@ export class AdminTheoryMarksUpdateComponent {
       this.searchRequest.IsConfirmed = this.IsConfirmed = true;
       //debugger
       //call
-      this.loaderService.requestStarted();
-      await this.TheoryMarksService.GetTheoryMarks_Admin(this.searchRequest)
+      await this.theoryMarksRevalService.GetTheoryMarks_Admin(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.TheoryMarksDetailList = data['Data'];
 
-          console.log("TheoryMarksDetailList", this.TheoryMarksDetailList);
+          //console.log("TheoryMarksDetailList", this.TheoryMarksDetailList);
 
           this.TheoryMarksDetailList.forEach(x => {
             if (x.IsChecked == false) {
@@ -166,17 +154,12 @@ export class AdminTheoryMarksUpdateComponent {
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
   //
 
   isAllChecked(): boolean {
-    
-    let nonDetained =  this.TheoryMarksDetailList?.filter(item => item.IsDetain == false);
+
+    let nonDetained = this.TheoryMarksDetailList?.filter(item => item.IsDetain == false);
     return nonDetained?.every(item => item.IsChecked == true);
   }
 
@@ -184,10 +167,10 @@ export class AdminTheoryMarksUpdateComponent {
 
     var IsCheckecd = this.TheoryMarksDetailList.some(x => x.Marked == true);
 
-      if (IsCheckecd==false) {
-        this.toastr.error("Please Marked At least One Student")
-        return
-      }
+    if (IsCheckecd == false) {
+      this.toastr.error("Please Marked At least One Student")
+      return
+    }
 
     this.Swal2.Confirmation("Are you sure? <br> Once Submitted, It can't be edited anymore.",
       async (result: any) => {
@@ -201,8 +184,7 @@ export class AdminTheoryMarksUpdateComponent {
   async OnSubmit(StudentExamPaperMarksID: number = 0, isFinalSubmit: boolean = false) {
 
     // try {
-    this.loaderService.requestStarted();
-    
+
     this.TheoryMarksDetailList.forEach((item: any) => {
       if (item.isSufm == true || item.isDetain == true) {
         item.selected = true;
@@ -229,7 +211,7 @@ export class AdminTheoryMarksUpdateComponent {
     if (isFinalSubmit == true) {
       var filtered = this.TheoryMarksDetailList
     }
-    
+
     // Iterate over each filtered item for validation
     for (let x of filtered) {
 
@@ -271,7 +253,7 @@ export class AdminTheoryMarksUpdateComponent {
 
     filtered.forEach(x => {
       x.IsChecked = true,
-      x.isFinalSubmit = isFinalSubmit
+        x.isFinalSubmit = isFinalSubmit
     })
 
     this.perfactStudents = filtered.filter(x => x.ObtainedTheory == x.MaxTheory);
@@ -279,26 +261,26 @@ export class AdminTheoryMarksUpdateComponent {
     if (this.perfactStudents.length > 0) {
       this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for Roll Number:<br> ${this.perfactStudents.map((x: any) => x.RollNo).join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
-           await this.SaveData(filtered)
+          await this.SaveData(filtered)
         }
       })
     } else {
-       await this.SaveData(filtered)
+      await this.SaveData(filtered)
     }
   }
 
   async SaveData(array: any) {
     try {
-      console.log("filtered while save", array);
-      await this.TheoryMarksService.UpdateTheoryMarks_Admin(array)
+      //console.log("filtered while save", array);
+      await this.theoryMarksRevalService.UpdateTheoryMarks_Admin(array)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          console.log("data on save", data);
+          //console.log("data on save", data);
 
           if (this.State == EnumStatus.Success) {
-            
+
             this.toastr.success(this.Message);
             if (array.length > 1) {
               await this.GetTheoryMarksDetailList();
@@ -322,8 +304,6 @@ export class AdminTheoryMarksUpdateComponent {
 
     } catch (ex) {
       console.log(ex);
-    } finally {
-      this.loaderService.requestEnded();
     }
   }
 
@@ -455,15 +435,15 @@ export class AdminTheoryMarksUpdateComponent {
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    
+
     const rowIndex = this.TheoryMarksDetailList.findIndex(x => x === item);
     if (rowIndex !== -1) {
       this.TheoryMarksDetailList[rowIndex].Marked = isSelected;
     }
 
     // Update "Select All" checkbox state
-    let nonDetained =this.TheoryMarksDetailList.filter(r => r.IsDetain==false);
-    this.AllInTableSelect = nonDetained.every(r => r.Marked==true);
+    let nonDetained = this.TheoryMarksDetailList.filter(r => r.IsDetain == false);
+    this.AllInTableSelect = nonDetained.every(r => r.Marked == true);
   }
 
   //end table feature
@@ -487,28 +467,6 @@ export class AdminTheoryMarksUpdateComponent {
       return false;
     }
     return true;
-  }
-
-  async onStatusThoryMarks(dOC: any) {
-    console.log(this.paginatedInTableData, 'ListDataaaaa')
-    if (this.paginatedInTableData.some((x: any) => x.IsPresentTheory == 4)) {
-      this.isAnyUFMSelected = true
-    } else if (this.paginatedInTableData.every((x: any) => x.IsPresentTheory == 4)) {
-      this.isAnyUFMSelected = true
-    }
-    else {
-      this.isAnyUFMSelected = false
-    }
-    if (dOC.IsPresentTheory == 4) {
-      dOC.ShowRemark = true;
-    } else {
-      dOC.ShowRemark = false;
-      dOC.Remark = '';
-    }
-
-    if (dOC.IsPresentTheory == 0) {
-      dOC.ObtainedTheory = 0;
-    }
   }
 
   onTabPress(event: KeyboardEvent, idx: number): void {
