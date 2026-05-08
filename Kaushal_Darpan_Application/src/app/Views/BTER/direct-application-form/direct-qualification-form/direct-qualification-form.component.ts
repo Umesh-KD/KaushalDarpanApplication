@@ -19,7 +19,7 @@ import { StudentJanAadharDetailService } from '../../../../Services/StudentJanAa
 @Component({
   selector: 'app-direct-qualification-form',
   templateUrl: './direct-qualification-form.component.html',
-  styleUrls: ['./direct-qualification-form.component.css'],
+  //styleUrls: ['./direct-qualification-form.component.css'],
   standalone: false
 })
 

@@ -50,6 +50,8 @@
         </div>
         <div>
           <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SSOIDGetSomeDetails(formData.SSOID)">Get Details</button>
+          <button style="display:none" type="submit" class="btn bg-info text-white mt-6 me-1" (click)="GetIFMSDATA(formData.SSOID)">Get IFMS Data</button>
+
         </div>
       </div>
       <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
