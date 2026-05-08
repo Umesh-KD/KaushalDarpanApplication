@@ -22,7 +22,25 @@ isUpdate ? 'Update GuestRoom Facilities' : 'Add GuestRoom Facilities'
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Facilities Name  <span class="StarMarking"></span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Guest House  <span class="StarMarking">*</span></label>
+          <select class="form-select w-auto"
+                  formControlName="GuestHouseID"
+                  [(ngModel)]="request.GuestHouseID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GuestHouseNameList"
+                    [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && groupForm.controls['GuestHouseID'].errors" class="text-danger">
+            <p *ngIf="groupForm.controls['GuestHouseID'].errors?.['required']
+            || groupForm.controls['GuestHouseID'].errors?.['min']">
+              This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Facilities Name  <span class="StarMarking">*</span></label>
           <input formControlName="txtFacilitiesName" class="form-input" type="text" id="FacilitiesName"
                  placeholder="Enter Facilities Name" [(ngModel)]="request.FacilitiesName">
           <div *ngIf="isSubmitted && groupForm.controls.txtFacilitiesName.errors" class="text-danger">

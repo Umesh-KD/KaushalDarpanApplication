@@ -143,6 +143,7 @@ export class GuestRoomSeatMasterComponent {
 
   async GetGuestHouseNameList() {
     try {
+      debugger
       this.loaderService.requestStarted();
       this.searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
       //this.searchRequest.InstituteID = 9;
@@ -291,6 +292,8 @@ export class GuestRoomSeatMasterComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
+      (this.searchRequest as any).CreatedBy = this.sSOLoginDataModel.UserID;
+      (this.searchRequest as any).RoleId = this.sSOLoginDataModel.RoleID;
       await this._GuestRoomManagmentService.GetAllRoomSeatList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
