@@ -50,7 +50,8 @@ export class HostelWardenStudentMeritlistComponent {
   public titleDDLBranchTrade: string = ''
   meritMultiSelected: boolean = false;
   decryptedIdsArray: any[] = [];
-showCheckbox: boolean = true;
+  showCheckbox: boolean = true;
+  //meritMultiSelected: boolean = false;
 
 
 
