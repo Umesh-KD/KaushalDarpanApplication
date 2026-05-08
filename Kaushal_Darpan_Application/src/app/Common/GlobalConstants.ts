@@ -418,6 +418,9 @@ export enum EnumMessageType {
   Bter_NotifyCandidateDeficiency = "Bter_NotifyCandidateDeficiency",
   Bter_NotifyCandidateApproveMerit = "Bter_NotifyCandidateApproveMerit",
   Bter_NotifyCandidateRejectMerit = "Bter_NotifyCandidateRejectMerit",
+  GuestHouseCheckIn = "GuestHouseCheckIn",
+  GuestHouseCheckOut = "GuestHouseCheckOut",
+  GuestHouseAdminApprove = "GuestHouseAdminApprove",
 }
 export enum EnumStatusOfStaff {
   Draft = 163,

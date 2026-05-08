@@ -288,6 +288,7 @@ export class AddBterIssueItemComponent {
   CloseModalPopup() {
 
     this.modalService.dismissAll();
+    this.submitRequest = new ItemsIssueReturnModels();
   }
 
 
@@ -951,6 +952,7 @@ export class AddBterIssueItemComponent {
             });
             this.Searchrequests = new inventoryIssueHistorySearchModel();
             this.BindItem_list();
+            this.submitRequest = new ItemsIssueReturnModels();
             //this.GetAllData();
             // this.CloseModalPopup();
           } else if (data.State == EnumStatus.Error) {

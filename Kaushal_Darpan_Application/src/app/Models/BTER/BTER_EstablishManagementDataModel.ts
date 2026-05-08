@@ -768,6 +768,8 @@ export class EM_TransferSystemSearchModel {
   public InstituteID: number = 0;
   public CategoryID: number = 0;
   public jsonData?: string = '';
+  public RelievingDoc?: string = '';
+  public RelievingDoc_Dis?: string = '';
 }
   
 

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { PushDataRoutingModule } from './push-data-routing.module';
 import { PushDataComponent } from './push-data.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({

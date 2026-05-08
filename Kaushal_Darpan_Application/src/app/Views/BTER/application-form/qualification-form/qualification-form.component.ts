@@ -18,8 +18,8 @@ import { StudentJanAadharDetailService } from '../../../../Services/StudentJanAa
 
 @Component({
   selector: 'app-qualification-form',
-  templateUrl: './qualification-form.component.html',
-  styleUrls: ['./qualification-form.component.css'],
+  templateUrl: './qualification-form.component.html', 
+  //styleUrls: ['./qualification-form.component.css'],
   standalone: false
 })
 

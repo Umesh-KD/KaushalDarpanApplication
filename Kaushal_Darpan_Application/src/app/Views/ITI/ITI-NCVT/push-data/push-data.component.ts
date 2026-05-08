@@ -20,8 +20,8 @@ import { ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
 import { ITI_NCVTService } from '../../../../Services/ITI-NVCT/iti-nvct.service';
 @Component({
     selector: 'app-push-data',
-  templateUrl: './add-push-data.component.html',
-  styleUrls: ['./add-push-data.component.css'],
+  templateUrl: './push-data.component.html',
+  styleUrls: ['./push-data.component.css'],
     standalone: false
 })
 export class PushDataComponent implements OnInit{

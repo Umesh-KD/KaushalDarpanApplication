@@ -13,6 +13,7 @@ export class DTEApplicationDashboardDataModel {
   public HostelID?: number = 0;
   public UrlStatus?: string = '';
   public GuestHouseIDs?: string = '';
+  public Guest_Houseids: number = 0;
 }
 
 export class DTEDashboardModel {

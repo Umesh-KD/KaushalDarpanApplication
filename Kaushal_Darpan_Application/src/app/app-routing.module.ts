@@ -1125,7 +1125,10 @@ const routes: Routes = [
       { path: 'ItiPlanning', loadChildren: () => import('./Views/ITI/iti-planning/iti-planning.module').then(m => m.ItiPlanningModule) },
       { path: 'admin-sca-marking', loadChildren: () => import('./Views/Admin-Internal-Marking/admin-sca-marking/admin-sca-marking.module').then(m => m.AdminSCAMarkingModule) },
       { path: 'admin-internal-marking', loadChildren: () => import('./Views/Admin-Internal-Marking/admin-internal-practical/admin-internal-practical.module').then(m => m.AdminInternalPracticalModule) },
+
       { path: 'admin-theory-marks-update', loadChildren: () => import('./Views/Admin-Internal-Marking/admin-theory-marks-update/admin-theory-marks-update.module').then(m => m.AdminTheoryMarksUpdateModule), title: 'Admin Theory Marks Update' },
+
+      { path: 'admin-theory-marks-update-reval', loadChildren: () => import('./Views/Admin-Internal-Marking/admin-theory-marks-update-reval/admin-theory-marks-update-reval.module').then(m => m.AdminTheoryMarksUpdateRevalModule) },
 
       { path: 'itiprivateaddestablish', loadChildren: () => import('./Views/ITI/ITI-Private-EstablishManagement/ITI_Private_AddEstablish/ITI_Private_AddEstablish.module').then(m => m.ITIPrivateAddEstablishModule) },
       { path: 'additiprivatestaffmaster', loadChildren: () => import('./Views/ITI/ITI-Private-EstablishManagement/add-iti-private-staff-master/add-iti-private-staff-master.module').then(m => m.AddItiPrivateStaffMasterModule), title: 'Add ITI Private Staff' },
@@ -1726,6 +1729,8 @@ const routes: Routes = [
       { path: 'TabutarTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'ITIExaminerInchargeDashboard', loadChildren: () => import('./Views/ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module').then(m => m.ItiExaminationInchargeDashboardModule), title: 'ITI Examiner Incharge Dashboard' },
 
+      { path: 'StaffIFMSData', loadChildren: () => import('../Views/ITI/staff-ifmsdata/staff-ifmsdata.module').then(m => m.StaffIFMSDataModule) },
+
     ]
   },
 
@@ -1836,16 +1841,17 @@ const routes: Routes = [
   { path: 'BhandarForm', loadChildren: () => import('./Views/bhandar-form/bhandar-form.module').then(m => m.BhandarFormModule) },
   { path: 'Views\ITI\AppointInstructorList', loadChildren: () => import('./Views/ITI/appoint-instructor-list/appoint-instructor-list.module').then(m => m.AppointInstructorListModule) },
 
-
-
-
   { path: 'Views\ITI\InstructorOptionForm', loadChildren: () => import('./Views/ITI/instructor-option-form/instructor-option-form.module').then(m => m.InstructorOptionFormModule) },
+
   { path: 'Views\ITI\InstructorSelectchoice', loadChildren: () => import('./Views/ITI/instructor-selectchoice/instructor-selectchoice.module').then(m => m.InstructorSelectchoiceModule) },
+
   { path: 'Views\ITI\NodalMapping', loadChildren: () => import('./Views/ITI/nodal-mapping/nodal-mapping.module').then(m => m.NodalMappingModule) },
+
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\BterAttendenceRoom', loadChildren: () => import('./Views/bter-attendence-room/bter-attendence-room.module').then(m => m.BterAttendenceRoomModule) },
+
 
 
 

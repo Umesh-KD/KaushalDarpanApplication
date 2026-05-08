@@ -121,7 +121,8 @@ export class CollegeNodalReportsComponent {
           ApplicationID: 0,
           UserID: ssoLoginUser.UserID,
         RoleID: ssoLoginUser.RoleID,
-        FinancialYearID: this.sSOLoginDataModel.FinancialYearID
+        FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+        Guest_Houseids:0
       }
 
 
