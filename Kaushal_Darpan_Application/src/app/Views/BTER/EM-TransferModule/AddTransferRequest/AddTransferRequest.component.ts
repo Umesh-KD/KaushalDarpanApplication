@@ -717,8 +717,12 @@ export class AddTransferRequestComponent {
     // await for open model
     await this.childComponent.OpenOTPPopup();
     // await OTP verification
-    await this.childComponent.waitForVerification();
-    this.SaveData()
+    // await this.childComponent.waitForVerification();
+
+    this.childComponent.onVerified.subscribe(() => {
+      console.log("otp verified on the page")
+       this.SaveData()
+    })
   }
 
   async VacancyPostUpdate() {
