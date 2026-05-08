@@ -485,9 +485,9 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
     var data = {
       DepartmentID: EnumDepartment.ITI,
       CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
-      AcademicYearID:9 ,
-      EndTermID: 9,
-      Key: "DIRECT ADDMISSSION,DIRECT ADDMISSSION PRIVATE",
+      AcademicYearID:30 ,
+      EndTermID: 30,
+      Key: "Admission,DIRECT ADDMISSSION,DIRECT ADDMISSSION PRIVATE",
       SSOID: this.sSOLoginDataModel.SSOID
     }
     debugger
@@ -496,7 +496,7 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
         data = JSON.parse(JSON.stringify(data));
         this.DateConfigSetting_Direct = data['Data'][0];
         // this.DirectAdmissionMapKey = 1
-
+        this.MapKeyEng = this.DateConfigSetting_Direct['Admission'];
         this.DirectAdmissionMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION'];
         this.DirectAdmissionPrivateMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION PRIVATE'];
 

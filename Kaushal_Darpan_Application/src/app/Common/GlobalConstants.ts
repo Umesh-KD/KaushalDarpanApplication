@@ -935,3 +935,11 @@ export enum EnumTransferSystemStatus {
     Appnoved = 5,
     Rejected = 6
 }
+
+
+export enum EnumTransferRelievingStatus {
+  RelievingPending = 1,
+  Relieved = 2,
+  Rejected = 3
+  
+}

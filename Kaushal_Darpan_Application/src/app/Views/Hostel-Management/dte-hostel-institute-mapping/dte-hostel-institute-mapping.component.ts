@@ -131,36 +131,69 @@ export class DTEHostelInstituteMappingComponent {
     }
   }
 
+  //async GetHostelInstituteMappingByID(id: number) {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this._HostelManagmentService.GetHostelInstituteMappingByID(id).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      console.log(data);
+  //      if (data.Data !== null) {
+
+  //        this.SelectedinstituteList = data.Data;
+
+
+  //        console.log("Selected IDs:", this.selected);
+  //        this.isUpdate = true;
+  //      }
+  //      console.log(this.request, "request")
+  //    });
+  //  } catch (error) {
+  //    console.error(error);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
   async GetHostelInstituteMappingByID(id: number) {
-    debugger
+
     try {
+
       this.loaderService.requestStarted();
-      await this._HostelManagmentService.GetHostelInstituteMappingByID(id).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        console.log(data);
-        if (data.Data !== null) {
 
-          this.SelectedinstituteList = data.Data;
-          //console.log(data.Data, "edit");
-          //this.HostelInstituteMappingRequest.HostelID = data.Data.HostelID;
-          //this.HostelInstituteMappingRequest.InstituteID = data.Data.InstituteID;
-          //this.selected = data.Data.InstituteID
-          //  ? data.Data.InstituteID.split(',').map((x: any) => Number(x))
-          //  : [];
+      const response: any =
+        await this._HostelManagmentService
+          .GetHostelInstituteMappingByID(id);
 
-          console.log("Selected IDs:", this.selected);
-          this.isUpdate = true;
-        }
-        console.log(this.request, "request")
-      });
-    } catch (error) {
+      const data = JSON.parse(JSON.stringify(response));
+
+      if (data.Data && data.Data.length > 0) {
+
+        this.SelectedinstituteList = data.Data;
+
+        // selected hostel
+        this.HostelInstituteMappingRequest.HostelID =
+          data.Data[0].HostelID;
+
+
+
+        this.isUpdate = true;
+      }
+
+    }
+    catch (error) {
+
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+
+    }
+    finally {
+
+      this.loaderService.requestEnded();
+
     }
   }
+
   async GetHostelInstituteMappingByID12(id: number) {
     try {
       this.loaderService.requestStarted();
@@ -314,42 +347,7 @@ export class DTEHostelInstituteMappingComponent {
   }
 
 
-  //addHostelInstituteMap() {
-  //  debugger;
-
-  //  this.HostelInstituteMappingRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-  //  this.HostelInstituteMappingRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-  //  this.HostelInstituteMappingRequest.CourseTypeID = 0;
-
-  //  const Parent = this.HostelInstituteMappingRequest.isParent
-  //  const hostelId = this.HostelInstituteMappingRequest.HostelID;
-  //  const hostelname = this.HostelListData.find(
-  //    (x: any) => x.HostelID == hostelId
-  //  );
-
-
-  //  this.SelectedinstituteList = this.selected?.length
-  //    ? this.selected.map((id: number) => {
-  //      const institute = this.InstituteMasterDDLList.find(
-  //        (x: any) => x.ID === id
-  //      );
-
-  //      return {
-  //        InstituteID: id,
-  //        InstituteName: institute?.Name || '',
-  //        HostelID: hostelId,
-  //        hostelname: hostelname.HostelName || '',
-  //        isParent: Parent.valueOf() === true ? true : false
-  //      };
-  //    }): [];
-
-  //  this.HostelInstituteMappingRequest.InstituteID =
-  //    this.selected?.length ? this.selected.join(',') : '';
-
-  //  this.HostelInstituteMappingRequest.HIMappingID =
-  //    this.HostelInstituteMappingRequest.HIMappingID || 0;
-  //  this.ResetControl();
-  //}
+ 
   addHostelInstituteMap() {
 
     const hostelId = this.HostelInstituteMappingRequest.HostelID;
@@ -366,13 +364,13 @@ export class DTEHostelInstituteMappingComponent {
     this.selected.forEach((id: number) => {
 
       const exists = this.SelectedinstituteList.some(
-        (x: any) => x.InstituteID === id
+        (x: any) => x.InstituteID == id
       );
 
       if (!exists) {
 
         const institute = this.InstituteMasterDDLList.find(
-          (x: any) => x.ID === id
+          (x: any) => x.ID == id
         );
 
         this.SelectedinstituteList.push({
@@ -577,5 +575,6 @@ export class DTEHostelInstituteMappingComponent {
       });
 
   }
+
 }
 

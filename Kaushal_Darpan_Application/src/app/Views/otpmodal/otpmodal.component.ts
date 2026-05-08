@@ -20,7 +20,8 @@ export class OTPModalComponent {
   @Input() MobileNo!: any;
   @Output() onVerified = new EventEmitter<void>();
   private modalRef: any;
-
+  private verificationResolver: (() => void) | null = null;
+  private verificationRejecter: (() => void) | null = null;
 
   timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
   showResendButton: boolean = false; // Whether to show the "Resend OTP" button
@@ -52,6 +53,17 @@ export class OTPModalComponent {
   }
 
   CloseOTPModal() {
+    // reject pending promise on cancel
+    if (this.verificationRejecter) {
+      this.verificationRejecter();
+      this.verificationResolver = null;
+      this.verificationRejecter = null;
+    }
+
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    
     if (this.modalRef) {
       this.modalRef.close();
     }
@@ -182,9 +194,17 @@ export class OTPModalComponent {
     } else
       if (this.OTP === this.GeneratedOTP || this.OTP === GlobalConstants.DefaultOTP) {
         //this.toastr.success('OTP Verified');
-        this.activeModal.close();
-        this.onVerified.emit();
+        // this.activeModal.close();
+        // this.onVerified.emit();
+
         this.OTP = "";
+
+        // resolve promise only once
+        if (this.verificationResolver) {
+          this.verificationResolver();
+          this.verificationResolver = null;
+          this.verificationRejecter = null;
+        }
         if (this.modalRef) {
           this.modalRef.close();
         }
@@ -193,9 +213,22 @@ export class OTPModalComponent {
       }
   }
 
+  // waitForVerification(): Promise<void> {
+  //   return new Promise(resolve => {
+  //     this.onVerified.pipe(take(1)).subscribe(() => resolve());
+  //   });
+  // }
+
   waitForVerification(): Promise<void> {
-  return new Promise(resolve => {
-    this.onVerified.pipe(take(1)).subscribe(() => resolve());
-  });
-}
+
+    return new Promise((resolve, reject) => {
+
+      // clear old handlers
+      this.verificationResolver = null;
+      this.verificationRejecter = null;
+
+      this.verificationResolver = resolve;
+      this.verificationRejecter = reject;
+    });
+  }
 }
