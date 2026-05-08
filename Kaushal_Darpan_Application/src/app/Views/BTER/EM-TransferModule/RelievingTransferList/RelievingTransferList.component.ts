@@ -65,10 +65,12 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public SearchEmployeeType: number = 0;
     public isInstituteDisabled :boolean = false;
 
-    public SupportingDoc: string = '';
-    public Dis_SupportingDoc: string = '';
+    public RelievingDoc: string = '';
+    public RelievingDoc_Dis: string = '';
     public TransferSystemStatusUpdateList: any = [];
     public updateStatus: number = 0;
+    public modelTsId: number = 0;
+    public modelStaffId: number = 0;
     public isAnyApproved: boolean = false;
     public _EnumRole = EnumRole;
     isJDTECheck: boolean = false;
@@ -117,7 +119,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     }
 
     await this.GetLoadData();
-    
+    this.updateStatus == EnumTransferRelievingStatus.Relieved;
     }
 
     async EM_TransferSystem_GetData_Search(statusID: number) {
@@ -146,6 +148,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
               data = JSON.parse(JSON.stringify(data));
               this.TransferSystemStatusList = data['Data'];
               this.TransferSystemStatusSearchList = data['Data'];
+              this.TransferSystemStatusUpdateList = data['Data'];
+
+              this.TransferSystemStatusUpdateList = this.TransferSystemStatusUpdateList.filter((item: any) => item.ID == EnumTransferRelievingStatus.Relieved || item.ID == EnumTransferRelievingStatus.Rejected);
              
               if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
                 
@@ -246,29 +251,29 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     CloseModal() {
       this.modalService.dismissAll();
       this.modalReference?.close();
+
+      this.updateStatus = 0;
+      this.Remark = "";
+      this.RelievingDoc ="";
+      this.RelievingDoc_Dis ="";
+      this.modelStaffId = 0;
+      this.modelTsId = 0;
     }
 
-    async onTransferSystemEXT(model: any, TransferSystemID: number) {
+   
+    
+
+
+    async onRetievingAction(model: any, TransferSystemID: number, StaffID: number) {
       try {
+        debugger
+
+        this.modelTsId = TransferSystemID;
+        this.modelStaffId = StaffID;
         this.loaderService.requestStarted();
         try {
-          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
-          this.searchRequest.Action = "EM_TransferSystemEXT";
-          this.searchRequest.StatusID = this.statusID;
-          this.searchRequest.TransferSystemID = TransferSystemID;
-          await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
-            data = JSON.parse(JSON.stringify(data));
-            if (data.State === EnumStatus.Success) {
-              this.EM_TransferSystemEXTList = data.Data;
-              this.checkApproveStatus();
-              if (this.statusID == 0) {
-                this.EM_TransferProcessList = data.Data;
-                
-              }
-            } else {
-              this.EM_TransferSystemEXTList = [];
-            }
-          })
+          
+          
         } catch (error) {
           console.error(error);
         }
@@ -283,10 +288,11 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         }, 200);
       }
     }
-    
 
 
-    async TransferSystemEXTStatusUpdate() {
+
+
+    async TransferSystemRetievingUpdateStatus() {
       debugger
       try {
 
@@ -294,39 +300,26 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
           this.toastr.warning("Please select status");
           return;
         }
-        if (!this.SupportingDoc==null || this.SupportingDoc == "") {
+        if (!this.RelievingDoc == null || this.RelievingDoc == "") {
           this.toastr.warning("Please Upload Supporting Documents");
           return;
         }
-        const selectedRows = this.EM_TransferSystemEXTList
-          .filter((item: any) => item.Selected === true);
 
-        if (selectedRows.length === 0) {
-          this.toastr.warning("Please select one record");
+        if (this.updateStatus == EnumTransferRelievingStatus.Rejected) {
+          this.toastr.warning("Please Enter Remark");
           return;
         }
-
-        if (selectedRows.length > 1) {
-          this.toastr.warning("Please select only one record");
-          return;
-        }
-
+        this.updateExtSearch.StatusID = this.updateStatus;
+        this.updateExtSearch.Remark = this.Remark;
+        this.updateExtSearch.RelievingDoc = this.RelievingDoc;
+        this.updateExtSearch.RelievingDoc_Dis = this.RelievingDoc_Dis;
+        this.updateExtSearch.StaffID = this.modelStaffId;
+        this.updateExtSearch.TransferSystemID = this.modelTsId;
         
-        const jsonData = selectedRows.map((item: any) => ({
-          TransferSystemID: item.TransferSystemID,
-          ID: item.ID,
-          Status: this.updateStatus,
-          Remark: this.Remark,
-          CreatedBy: this.sSOLoginDataModel.UserID,
-          SupportingDoc: this.SupportingDoc,
-          Dis_SupportingDoc: this.Dis_SupportingDoc,
-
-        }));
-        this.updateExtSearch.jsonData = JSON.stringify(jsonData);
 
 
         await this.staffServiceDetailsService
-          .TransferSystemEXTStatusUpdate(this.updateExtSearch)
+          .TransferSystemRetievingUpdateStatus(this.updateExtSearch)
           .then(async (data: any) => {
             data = JSON.parse(JSON.stringify(data));
 
@@ -342,6 +335,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
                   ...item,
                   Selected: false
                 }));
+
+
+              this.GetLoadData();
              
             } else {
               this.toastr.error(data.ErrorMessage);
@@ -387,8 +383,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
               data = JSON.parse(JSON.stringify(data));
               if (data.State === EnumStatus.Success) {
                 if (Name == 'SupportingDocuments') {
-                  this.SupportingDoc = data['Data'][0]["FileName"];
-                  this.Dis_SupportingDoc = data['Data'][0]["Dis_FileName"];
+                  this.RelievingDoc = data['Data'][0]["FileName"];
+                  this.RelievingDoc_Dis = data['Data'][0]["Dis_FileName"];
                 } else {
                   this.toastr.warning("no action provided")
                 }
@@ -486,4 +482,6 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       }
     }
 
+
+   
 }

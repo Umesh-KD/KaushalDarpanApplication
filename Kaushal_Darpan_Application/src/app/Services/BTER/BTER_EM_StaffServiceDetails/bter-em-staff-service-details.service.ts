@@ -185,4 +185,13 @@ export class BTEREMStaffServiceDetailsService {
       .toPromise();
   }
 
+
+  public async TransferSystemRetievingUpdateStatus(request: EM_TransferSystemSearchModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/TransferSystemRetievingUpdateStatus`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
