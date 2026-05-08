@@ -4,9 +4,25 @@
 
 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
   <b class="text-1xl-5"><i class="ti ti-list"></i> Guest House Admin </b>
-  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
-    <i class="ti ti-chevron-down"></i>
-  </button>
+
+
+  <div class="d-flex align-items-center gap-2 flex-wrap">
+
+    <label class="text-gray-800 text-sm font-medium mb-0">
+      Select Guest House
+    </label>
+
+    <select class="form-select w-auto"
+            [(ngModel)]="Guest_Houseids"
+            (change)="GuestHouseChange()">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of GuestHouseNameList"
+              [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>
+
+  </div>
 </div>
 
 <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
@@ -15,11 +31,23 @@
       <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
       <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
       <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
-      <a routerLink="/{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+
+      <a *ngIf="row.StatusText == 'Total Request'" [routerLink]="['/guestroomrequest']"         
+         class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+        View All
+        <i class="ti ti-chevron-right"></i>
+      </a>
+
+      <a *ngIf="row.StatusText != 'Total Request'" [routerLink]="['/guest-room-availability']"
+         [queryParams]="{ GuestHouseIDs: Guest_Houseids }"
+         class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+        View All
+        <i class="ti ti-chevron-right"></i>
+      </a>
+      <!--<a routerLink="/{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>-->
     </div>
   </div>
 </div>
-
 
 
 

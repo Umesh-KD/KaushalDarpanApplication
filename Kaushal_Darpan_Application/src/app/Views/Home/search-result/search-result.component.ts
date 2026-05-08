@@ -47,6 +47,7 @@ export class SearchResultComponent implements OnInit {
   OriginalCampusPostList: any[] = []; // Store unfiltered data
   public BranchMasterList: any[] = [];
   StreamID: number = 0;
+  ResultTypeList: any;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -60,6 +61,7 @@ export class SearchResultComponent implements OnInit {
     this._formGroup = this.fb.group({
       EndTermID: ['0', [DropdownValidators]],
       SemesterID: ['0', [DropdownValidators]],
+      ResultType: ['0', [DropdownValidators]],
       RollNo: ['', Validators.required],
       DOB: ['', Validators.required],
     });
@@ -68,6 +70,7 @@ export class SearchResultComponent implements OnInit {
     this.resultSearchReq = new StudentResultSearchModel();
     await this.GetSemesterList();
     await this.GetResultEndTermDDLList();
+    await this.GetResultTypeList();
   }
 
   async GetSemesterList() {
@@ -209,5 +212,16 @@ export class SearchResultComponent implements OnInit {
       // Remove class after PDF generation
       element.classList.remove('pdf-mode');
     });
+  }
+
+  async GetResultTypeList() {
+    try {
+      await this.commonMasterService.GetExamResultType()
+        .then((data: any) => {
+          this.ResultTypeList = data['Data'] || [];
+        }, error => console.error(error));
+    } catch (Ex) {
+      console.log(Ex);
+    } 
   }
 }

@@ -209,7 +209,6 @@ export class AddTransferRequestComponent {
 
   async addStaffTransferRequest() {
     debugger
-
     // if(this.AddTransferRequest.invalid){
     //   this.toastr.error("Please fill in all required fields.");
     //   return;
@@ -218,8 +217,30 @@ export class AddTransferRequestComponent {
       this.toastr.warning("Please select Office.");
       return;
     }
-    
+
     const formValues = this.AddTransferRequest.value;
+
+          // Duplicate Check
+    const isDuplicate = this.StaffTransferList.some((x: any) => {
+
+      // Normal Office Duplicate Check
+      if (this.req_child.OfficeID != 21) {
+        return x.OfficeID == this.req_child.OfficeID;
+      }
+
+      // OfficeID = 21 → Check Office + District + Institute
+      return (
+        x.OfficeID == this.req_child.OfficeID &&
+        x.DistrictID == this.req_child.DistrictID &&
+        x.InstituteID == (formValues.ddlCollege || 0)
+      );
+    });
+
+    if (isDuplicate) {
+      this.toastr.warning("This location priority already added.");
+      return;
+    }
+
 
     if(this.req_child.OfficeID!=this.InsOfficeID){
       this.req_child.DistrictID=0;
@@ -293,7 +314,7 @@ export class AddTransferRequestComponent {
 
     this.StaffTransferList.push(StaffTransferData); 
     this.StaffTransferList = this.StaffTransferList;
-    this.toastr.success("Vacancy added successfully.");
+    this.toastr.success("Location Priority added successfully.");
 
     // this.AddTransferRequest.reset(); 
     this.AddTransferRequest.get('OfficeID')?.reset(0);
@@ -399,7 +420,6 @@ export class AddTransferRequestComponent {
           // this.OfficeVacancy = [];
           // this.OfficeVacancyDataList();
           this.toastr.success('Data saved successfully!');
-
           this.routers.navigate(['TransferRequestList']);
           // window.location.reload();
           // Clear array after successful save
@@ -681,7 +701,7 @@ export class AddTransferRequestComponent {
   async OnfinalSave() {
     debugger
     if (this.StaffTransferList.length <3) {
-      this.toastr.warning("Please add at least three valid vacancy before saving.");
+      this.toastr.warning("Please add at least three valid Loaction Priorities before saving.");
       return;
     }
 // 7358 this is for other selection  in trnasfer category
@@ -713,13 +733,15 @@ export class AddTransferRequestComponent {
       this.toastr.error("Please fill all the required fields.");
       return;
     }
-
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
     await this.childComponent.OpenOTPPopup();
     // await OTP verification
     await this.childComponent.waitForVerification();
-    this.SaveData()
+    this.childComponent.onVerified.subscribe(() => {
+      console.log("otp verified on the page")
+        this.SaveData();
+    })
   }
 
   async VacancyPostUpdate() {

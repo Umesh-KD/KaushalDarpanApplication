@@ -5,6 +5,8 @@ import { ItiPlanningRoutingModule } from './iti-planning-routing.module';
 import { ItiPlanningComponent } from './iti-planning.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OTPModalModule } from '../../otpmodal/otpmodal.module';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import { OTPModalModule } from '../../otpmodal/otpmodal.module';
     ItiPlanningRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    OTPModalModule
+    OTPModalModule,
+    MatIconModule,
+    MatTooltipModule
 
   ]
 })

@@ -31,7 +31,8 @@
           <label>Hostel Name<span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="HostelInstituteMappingRequest.HostelID">
             <option value="">--Select Hostel--</option>
-            <option *ngFor="let item of HostelListData" [value]="item.HostelID">
+            <!--<option *ngFor="let item of HostelListData" [value]="item.HostelID">-->
+            <option *ngFor="let item of HostelListData" [ngValue]="item.HostelID">
               {{ item.HostelName }}
             </option>
           </select>

@@ -418,6 +418,9 @@ export enum EnumMessageType {
   Bter_NotifyCandidateDeficiency = "Bter_NotifyCandidateDeficiency",
   Bter_NotifyCandidateApproveMerit = "Bter_NotifyCandidateApproveMerit",
   Bter_NotifyCandidateRejectMerit = "Bter_NotifyCandidateRejectMerit",
+  GuestHouseCheckIn = "GuestHouseCheckIn",
+  GuestHouseCheckOut = "GuestHouseCheckOut",
+  GuestHouseAdminApprove = "GuestHouseAdminApprove",
 }
 export enum EnumStatusOfStaff {
   Draft = 163,
@@ -931,4 +934,12 @@ export enum EnumTransferSystemStatus {
     UnderDTEReview = 4,
     Appnoved = 5,
     Rejected = 6
+}
+
+
+export enum EnumTransferRelievingStatus {
+  RelievingPending = 1,
+  Relieved = 2,
+  Rejected = 3
+  
 }

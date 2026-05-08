@@ -13,80 +13,93 @@
 <!-- Page Title End -->
 
 <div class="card">
-    <div class="card-body p-5">
+  <div class="card-body p-5">
 
-        <div class="mb-8">
-            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-                <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-                <div>
-                </div>
-            </div>
-            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-                <div>
-                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>
-                    <select class="form-select" [(ngModel)]="GuestHouseID"
-                        (change)="GetGuestHouseRoomAvailabilityData()">
-                        <option value="0">--Select--</option>
-                        <option *ngFor="let item of GuestHouseNameList" [value]="item.ID">{{item.Name}}</option>
-                    </select>
-                </div>
-                <div>
-                    <button type="button" class="btn bg-info text-white mt-6" id="btnSave"
-                        (click)="GetGuestHouseRoomAvailabilityData()">search</button>
-                </div>
-            </div>
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
         </div>
-
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>
+          <select class="form-select" [(ngModel)]="GuestHouseID"
+                  (change)="GetGuestHouseRoomAvailabilityData()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GuestHouseNameList" [value]="item.ID">{{item.Name}}</option>
+          </select>
         </div>
-
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-            <div class="">
-                <select id="ddlConter" class="form-select  couterDropDown">
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="500">500</option>
-                    <option value="1000">1000</option>
-                </select>
-            </div>
-            <div class="">
-            </div>
-            <div class="">
-            </div>
-            <div class="">
-                <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
-            </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" id="btnSave"
+                  (click)="GetGuestHouseRoomAvailabilityData()">
+            search
+          </button>
         </div>
-        <div class="overflow-x-auto mt-3">
-            <table class="table table-border w-full table-auto" cellpadding="5">
-                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-                  <tr>
-                    <!-- <th class="text-left">S.No</th> -->
-                    <th class="text-left">Room Type</th>
-                    <th class="text-left">Total Room</th>
-                    <th class="text-left">Total Bed</th>
-                    <th class="text-left">Alloted Bed</th>
-                    <th class="text-left">Available Bed</th>
-                   
-                  </tr>
-
-                </thead>
-                <tbody>
-                    <tr *ngFor="let item of RoomAvailabiltiesList  | tableSearchFilter:Table_SearchText;let idx=index;">
-                        <!-- <td align="left">{{idx+1}}</td> -->
-                        <td align="left">{{item.RoomTypeName}}</td>
-                        <td align="left">{{item.RoomQuantity}}</td>
-                        <td align="left">{{item.TotalBed}}</td>
-                        <td align="left">{{item.AllotedBed}}</td>
-                        <td align="left">{{item.AvailableBed}}</td>
-                       
-                    </tr>
-                </tbody>
-
-            </table>
-        </div>
+      </div>
     </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+    <!--{{RoomAvailabiltiesList|json}}-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <!-- <th class="text-left">S.No</th> -->
+            <th class="text-left">Room Type</th>
+            <th class="text-left">Total Room</th>
+            <th class="text-left">Total Bed</th>
+            <th class="text-left">Alloted Bed</th>
+            <th class="text-left">Available Bed</th>
+            <th class="text-left">Under Maintenance</th>
+            <th class="text-left">Occupied Rooms</th>
+            <th class="text-left">Room Reserved</th>
+            <th class="text-left">Available Rooms</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of RoomAvailabiltiesList | tableSearchFilter:Table_SearchText; let idx=index"
+              [ngClass]="{'total-row': item.RoomTypeName == 'Total'}">
+            <!-- <td align="left">{{idx+1}}</td> -->
+            <td align="left">{{item.RoomTypeName}}</td>
+            <td align="left">{{item.RoomQuantity}}</td>
+            <td align="left">{{item.TotalBed}}</td>
+            <td align="left">{{item.AllotedBed}}</td>
+            <td align="left">{{item.AvailableBed}}</td>
+            <td align="left">{{item.UnderMaintenance}}</td>
+            <td align="left">{{item.OccupiedRooms}}</td>
+            <td align="left">{{item.Roomreserved}}</td>
+            <td align="left">{{item.AvailableRooms}}</td>
+
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- end row -->

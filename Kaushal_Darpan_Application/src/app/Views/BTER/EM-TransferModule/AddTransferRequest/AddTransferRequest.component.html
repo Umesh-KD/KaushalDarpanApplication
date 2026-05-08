@@ -181,11 +181,11 @@
         <thead>
           <tr>
             <th>S.No</th>
-            <th>Office Name</th>
+            <th>Office </th>
             <th>Staff Type</th>
-            <th>Institute Name</th>
-            <th>District Name</th>
-            <th>Designation Name</th>
+            <th>Institute </th>
+            <th>District </th>
+            <th>Designation </th>
             <th>Priority</th>
             <th>Actions</th>
           </tr>
@@ -222,8 +222,15 @@
         </tbody>
       </table>
     </div>
-    <div class=" flex justify-center mt-3" *ngIf="(request.TransferStatus!=2 && request.TransferStatus!=3 && request.TransferStatus!=4)">
-       <button type="submit" class="btn btn-success"  (click)="OnfinalSave()">Final Save</button>
+    <div class="flex justify-center mt-3"
+         *ngIf="request.TransferStatus != 2
+         && request.TransferStatus != 3
+         && request.TransferStatus != 4">
+      <button type="submit"
+              class="btn btn-success"
+              (click)="OnfinalSave()">
+        Final Save
+      </button>
     </div>
   </div>
 </div>
