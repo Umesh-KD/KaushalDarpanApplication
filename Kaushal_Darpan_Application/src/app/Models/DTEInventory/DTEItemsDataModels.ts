@@ -119,6 +119,29 @@ export class inventoryIssueHistoryITISearchModel {
   public CollegeId?: number =0;
 }
 
+export class issuedItemSearchRequestModel {
+  public InstituteID: number = 0;
+  public TypeName: string = '';
+  public TradeId: number = 0;
+  public staffID: number = 0;
+  public ItemId: number = 0;
+  public collageTradeID: number = 0;
+  public issuedTo: number = 0;
+  public serialNo: number = 0;
+  public departmentID: number = 0;
+  public ItemCategoryId: number = 0;
+  public ItemType: number = 0;
+  public EquipmentsId: number = 0;
+  public IssuedId: number = 0;
+  public StreamID: number = 0;
+  public ItemDetailsId: number =0;
+  public CollegeId?: number =0;
+  public IsConsume:number = 0;
+  public EquipmentWorking:number = 0;
+  //public StaffID:number = 0;
+  public ReturnStatus:number = 0;
+}
+
 
 export class ItemsIssueReturnModels extends RequestBaseModel {
   public ItemId: number = 0;
