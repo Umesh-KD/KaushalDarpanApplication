@@ -545,7 +545,8 @@ isPresent(value: any): boolean {
     return `file_${timestamp}.${extension}`;
   }
 
-  saveAttendance() {
+  saveAttendance()
+  {
     console.log(this.dataSource.filteredData);
     let saveAttendanceData: any[] = this.dataSource.filteredData;
     const attendanceData = {

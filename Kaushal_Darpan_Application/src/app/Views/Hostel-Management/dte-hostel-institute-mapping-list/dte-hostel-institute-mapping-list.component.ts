@@ -70,6 +70,7 @@ export class DteHostelInstituteMappingListComponent {
 
   async GetAllHostelInstituteMappingList() {
     try {
+      debugger
       this.loaderService.requestStarted();
 
       await this._HostelManagmentService.GetAllHostelInstituteMappingList(this.HostelInstituteMappingRequest)

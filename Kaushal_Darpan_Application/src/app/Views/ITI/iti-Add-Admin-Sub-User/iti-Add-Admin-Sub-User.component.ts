@@ -97,7 +97,8 @@ export class itiAddAdminSubUserComponent {
         this.toastr.error("Please Verify SSOID")
         return
       }
-      if (this.adminRequest.SSOID == '') {
+      if (this.adminRequest.SSOID == '')
+      {
         this.toastr.error("Please Enter Valid SSOID")
         return
       }
