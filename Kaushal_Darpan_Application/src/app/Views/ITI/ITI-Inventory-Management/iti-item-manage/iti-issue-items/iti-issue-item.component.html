@@ -22,10 +22,10 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <div class="flex gap-2">
-          <a href="javascript:void(0);" (click)="ShowIssuedItemsList(Items_Details_Issue)"
+          <!-- <a href="javascript:void(0);" (click)="ShowIssuedItemsList(Items_Details_Issue)"
             class="btn bg-info btn-sm text-white">
             <i class="ti ti-excel"></i> List of Issued Items
-          </a>
+          </a> -->
         </div>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -155,6 +155,191 @@
       <button class="btn bg-info text-white me-2" (click)="saveSelectedItems()">Save</button>
       <!--<button class="btn bg-danger text-white" (click)="cancelSelection()">Cancel</button> -->
     </div>
+
+    <!-- ================= ISSUED ITEMS HISTORY ================= -->
+
+<div class="mt-8">
+
+  <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+    
+    <b class="text-1xl-5">
+      <i class="ti ti-list"></i>
+      Issued Items History
+    </b>
+
+    <div>
+      <button class="btn bg-info text-white"
+              (click)="GetAllinventoryIssueHistoryNew()">
+
+        <i class="ti ti-refresh"></i>
+        Refresh
+
+      </button>
+    </div>
+
+  </div>
+
+
+       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+       <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
+          <select class="form-select" id="staffID" [(ngModel)]="issuedItrmSearchrequests.staffID">
+            <option *ngFor="let item of staffDDLList" [ngValue]="item.staffID">
+              {{ item.staffName }}
+            </option>
+          </select>
+        </div>
+
+         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item Type:</label>
+          <select class="form-select" [(ngModel)]="issuedItrmSearchrequests.IsConsume">
+            <!-- (change)="GetItemListType()"> -->
+             <option [ngValue]="-1">-- Select --</option>
+            <option [ngValue]="1">Consumable</option>
+            <option [ngValue]="0">Permanent</option>
+          </select>
+        </div>
+
+         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item Name:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="issuedItrmSearchrequests.ItemCategoryId">
+            <option *ngFor="let item of issuedCategoryDDLList" [ngValue]="item.ItemId">
+              {{ item.ItemCategoryName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Equipment:
+          </label>
+          <select class="form-select" id="EquipmentsId" [(ngModel)]="issuedItrmSearchrequests.EquipmentsId">
+            <option [ngValue]="0">Choose Option</option>
+            <option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{item.Name}}</option>
+          </select>
+        </div>
+
+         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item Type:</label>
+          <select class="form-select" [(ngModel)]="issuedItrmSearchrequests.EquipmentWorking">
+            <!-- (change)="GetItemListType()"> -->
+             <option [ngValue]="-1">-- Select --</option>
+             <!-- 0,1 for working -->
+            <option [ngValue]="0">Working</option>
+            <option [ngValue]="2">Not Working</option>
+          </select>
+        </div>
+        <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllinventoryIssueHistoryNew()">Search</button>
+        </div>
+        </div>
+  <div class="overflow-x-auto mt-3">
+
+    <table class="table table-border w-full table-auto" cellpadding="5">
+
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+        <tr>
+
+          <th class="text-left">SNO</th>
+
+          <th class="text-left">Name</th>
+
+          <th class="text-left">Item Name</th>
+
+          <th class="text-left">Equipment Name</th>
+
+          <th class="text-left">Equipment Code</th>
+
+          <th class="text-left">Item Type</th>
+
+          <th class="text-left">Qty</th>
+
+          <th class="text-left">Issue Date</th>
+
+          <th class="text-left">Return Date</th>
+
+          <th class="text-left">Equipment Status</th>
+
+          <th class="text-left">Status</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let item of ItemMasterList; let idx=index">
+
+          <td>{{ idx + 1 }}</td>
+
+          <td>{{ item.Name }}</td>
+
+          <td>{{ item.ItemCategoryName }}</td>
+
+          <td>{{ item.EquipmentName }}</td>
+
+          <td>{{ item.EquipmentsCode }}</td>
+
+          <td>
+
+            <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
+
+              {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+
+            </span>
+
+          </td>
+
+          <td>{{ item.Quantity }}</td>
+
+          <td>{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+
+          <td>{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+
+          <td>
+
+            <span
+              [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
+
+              {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0
+              ? 'Working'
+              : 'Not Working' }}
+
+            </span>
+
+          </td>
+
+          <td>
+
+            <span [ngClass]="{
+              'InvStatus-issued': item.InvStatus === 0,
+              'InvStatus-returned': item.InvStatus === 1
+            }">
+
+              {{ item.InvStatus === 0 ? 'Issued' : 'Returned' }}
+
+            </span>
+
+          </td>
+
+        </tr>
+
+        <tr *ngIf="ItemMasterList?.length == 0">
+
+          <td colspan="11" class="text-center">
+            No Record Found
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
   </div>
 </div>
 
@@ -297,7 +482,14 @@
   </div>
 </ng-template>
 
-<ng-template #Items_Details_Issue let-modal
+
+
+<!-- ****************************************************** -->
+<!-- remove this block because we added list directly on page we do not need to show on popup 070526  -->
+
+
+
+<!-- <ng-template #Items_Details_Issue let-modal
   class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
@@ -317,10 +509,10 @@
                   <th class="text-left">Equipment Name</th>
                   <th class="text-left">Equipment Code</th>
                   <th class="text-left">Item Type</th>
-                  <th class="text-left">Qty</th>
-                  <th class="text-left">Issue Date</th>
+                  <th class="text-left">Qty</th> -->
+                  <!-- <th class="text-left">Issue Date</th> -->
                   <!-- <th class="text-left">Due Date</th> -->
-                  <th class="text-left">Return Date</th>
+                  <!-- <th class="text-left">Return Date</th>
                   <th class="text-left">Equipment Status on Return</th>
                   <th class="text-left">Status</th>
                 </tr>
@@ -338,9 +530,9 @@
                     </span>
                   </td>
                   <td align="left">{{ item.Quantity}}</td>
-                  <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+                  <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td> -->
                   <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
-                  <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+                  <!-- <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
                   <td align="left">
                     <span
                       [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
@@ -368,4 +560,4 @@
       </div>
     </div>
   </div>
-</ng-template>
+</ng-template> -->
