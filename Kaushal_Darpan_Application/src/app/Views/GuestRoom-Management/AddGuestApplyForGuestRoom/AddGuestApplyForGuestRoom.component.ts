@@ -325,6 +325,20 @@ export class AddGuestApplyForGuestRoomComponent {
       return
     }
 
+    if (this.request.Dis_EmpIDCardPhoto == '') {
+      this.toastr.warning('Please Upload Employee ID Card Document');
+      return;
+    }
+    if (this.request.Dis_PurposeDocPhoto == '') {
+      this.toastr.warning('Please Upload Purpose Document');
+      return;
+
+    }
+    if (this.request.Dis_IDProofPhoto == '') {
+      this.toastr.warning('Please Upload Valid Photo ID');
+      return;
+    }  
+
     this.childComponent.MobileNo = this.request.MobileNo
 
     // await for open model
@@ -353,6 +367,10 @@ export class AddGuestApplyForGuestRoomComponent {
       this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
       this.request.IsForSelf = true;
       //save
+
+     
+
+
       await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -833,5 +851,9 @@ export class AddGuestApplyForGuestRoomComponent {
 
   async onGenderChange() {
     await this.checkRoomAvailability();
+  }
+
+  async genderChange() {
+    this.request.Purpose = 0;
   }
 }

@@ -697,7 +697,14 @@ debugger
       return;
     }
     this.formData.ModifyBy = this.sSOLoginDataModel.UserID;
-    this.formData.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+    // this.formData.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+    if(this.formData.RoleID == EnumRole.Principal){
+      this.formData.CourseTypeID = 1
+    } else if(this.formData.RoleID == EnumRole.PrincipalNon){
+      this.formData.CourseTypeID = 2
+    } else {
+      this.formData.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
+    }
     this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.formData.EndTermID=this.sSOLoginDataModel.EndTermID;
     this.formData.GuestHouseID = 0 // storing multiple guesthouseids in param named multiGuestHouseIDs
