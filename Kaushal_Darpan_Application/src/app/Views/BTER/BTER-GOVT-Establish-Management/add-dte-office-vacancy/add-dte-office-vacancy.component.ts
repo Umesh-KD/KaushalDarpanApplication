@@ -41,7 +41,7 @@ export class AddDTEOfficeVacancyComponent {
   public isFinalSave:boolean=true;
   public isShow:boolean=true;
   public VacancyID: number = 0;
-
+  public today: string = '';
   _BudgetType = BudgetType;
 
   constructor(
@@ -75,6 +75,7 @@ export class AddDTEOfficeVacancyComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.VacancyID = Number(this.activatedRoute.snapshot.queryParamMap.get('id'));
+    await this.setToday();
     await this.GetStaffTypeData();
     await this.GetOfficeList();
     await this.GetBTER_BGT_BudgetType();
@@ -87,6 +88,14 @@ export class AddDTEOfficeVacancyComponent {
 
   get _AddOfficeVacancyForm() {
     return this.AddOfficeVacancyForm.controls;
+  }
+
+  async setToday() {
+    const date = new Date();
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+    this.today = `${year}-${month}-${day}`;
   }
 
   async fillupDesignation() {
@@ -149,7 +158,7 @@ export class AddDTEOfficeVacancyComponent {
     await this.commonMasterService
       .InstituteMaster(
         this.sSOLoginDataModel.DepartmentID,
-        this.sSOLoginDataModel.Eng_NonEng,
+        0,
         this.sSOLoginDataModel.EndTermID
       )
       .then((data: any) => {

@@ -679,6 +679,12 @@ export enum ITIGovtEM_EnumStaffType {
   Teaching = 5354,
   NonTeaching = 5355,
 }
+
+export enum BTERGovtEM_EnumStaffType {
+  Teaching = 30,
+  NonTeaching = 31,
+}
+
 export enum ITIGovtEM_EnumStaffLevel {
   Administrative = 1,
   Placement = 2,

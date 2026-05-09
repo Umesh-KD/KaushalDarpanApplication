@@ -509,6 +509,8 @@ export class GuestRoomDetailsComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest1.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
+      (this.searchRequest1 as any).CreatedBy = this.sSOLoginDataModel.UserID;
+      (this.searchRequest1 as any).RoleId = this.sSOLoginDataModel.RoleID;
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

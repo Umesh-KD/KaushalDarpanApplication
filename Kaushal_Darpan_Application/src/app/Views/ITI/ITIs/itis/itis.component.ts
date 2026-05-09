@@ -585,39 +585,134 @@ export class ITIsComponent implements OnInit {
   //}
 
 
-  async btnActive_OnClick(InstitudeID: number) {
-    this.Swal2.ConfirmationWithRemark('Are you sure you want to activate this?', async (remark: string) => {
-      try {
-        this.loaderService.requestStarted();
+  // async btnActive_OnClick(InstitudeID: number) {
+  //   this.Swal2.ConfirmationWithRemark('Are you sure you want to activate this?', async (remark: string) => {
+  //     try {
+  //       this.loaderService.requestStarted();
 
 
-        await this.addITIsService.ActiveStatusByID(InstitudeID, this.sSOLoginDataModel.UserID, remark)
-                .then(async (data: any) => {
-                  data = JSON.parse(JSON.stringify(data));
+  //       await this.addITIsService.ActiveStatusByID(InstitudeID, this.sSOLoginDataModel.UserID, remark,)
+  //               .then(async (data: any) => {
+  //                 data = JSON.parse(JSON.stringify(data));
 
-                  this.State = data['State'];
-                  this.Message = data['Message'];
-                  this.ErrorMessage = data['ErrorMessage'];
+  //                 this.State = data['State'];
+  //                 this.Message = data['Message'];
+  //                 this.ErrorMessage = data['ErrorMessage'];
 
-                  if (this.State == EnumStatus.Success) {
-                    this.toastr.success(this.Message);
-                    this.GetAllData();
-                  } else {
-                    this.toastr.error(this.ErrorMessage);
-                  }
-                })
-      } catch (ex) {
-        console.error(ex);
-      } finally {
-        setTimeout(() => {
-          this.loaderService.requestEnded();
-        }, 200);
-      }
-    });
+  //                 if (this.State == EnumStatus.Success) {
+  //                   this.toastr.success(this.Message);
+  //                   this.GetAllData();
+  //                 } else {
+  //                   this.toastr.error(this.ErrorMessage);
+  //                 }
+  //               })
+  //     } catch (ex) {
+  //       console.error(ex);
+  //     } finally {
+  //       setTimeout(() => {
+  //         this.loaderService.requestEnded();
+  //       }, 200);
+  //     }
+  //   });
+  // }
+
+
+async btnActive_OnClick(InstitudeID: number) {
+  const { value: formValues, isConfirmed } = await Swal.fire({
+  title: 'Activate / Deactivate ITI',
+  width: '650px',
+  customClass: {
+    popup: 'swal-popup-custom'
+  },
+  html: `
+    <div style="text-align:left; font-size:13px;">
+
+      <!-- Order No -->
+      <label style="font-weight:600;">Order No</label>
+      <input id="orderNo" placeholder="Enter Order No"
+        style="width:100%; height:34px; padding:6px 10px; margin:4px 0 10px 0;
+        border:1px solid #d1d5db; border-radius:6px; outline:none;" />
+
+      <!-- Dates Row -->
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <div style="flex:1;">
+          <label style="font-weight:600;">Order Date</label>
+          <input id="orderDate" type="date"
+            style="width:100%; height:34px; padding:6px 10px; margin-top:4px;
+            border:1px solid #d1d5db; border-radius:6px; outline:none;" />
+        </div>
+
+        <div style="flex:1;">
+          <label style="font-weight:600;">Effective Date</label>
+          <input id="effectiveDate" type="date"
+            style="width:100%; height:34px; padding:6px 10px; margin-top:4px;
+            border:1px solid #d1d5db; border-radius:6px; outline:none;" />
+        </div>
+      </div>
+
+      <!-- Remark -->
+      <label style="font-weight:600;">Remark</label>
+      <textarea id="remark" placeholder="Enter Remark"
+        style="width:100%; height:70px; padding:6px 10px; margin-top:4px;
+        border:1px solid #d1d5db; border-radius:6px; outline:none; resize:none;"></textarea>
+
+    </div>
+  `,
+  focusConfirm: false,
+  showCancelButton: true,
+  confirmButtonText: 'Submit',
+
+  preConfirm: () => {
+    const orderNo = (document.getElementById('orderNo') as HTMLInputElement).value;
+    const orderDate = (document.getElementById('orderDate') as HTMLInputElement).value;
+    const effectiveDate = (document.getElementById('effectiveDate') as HTMLInputElement).value;
+    const remark = (document.getElementById('remark') as HTMLTextAreaElement).value;
+
+    if (!orderNo || !orderDate || !effectiveDate || !remark) {
+      Swal.showValidationMessage('All fields are required');
+      return false;
+    }
+
+    return { orderNo, orderDate, effectiveDate, remark };
   }
+});
 
+  if (isConfirmed && formValues) {
+    try {
+      this.loaderService.requestStarted();
+debugger
+      await this.addITIsService.ActiveStatusByIDCollegeMaster({
+        id: InstitudeID,
+        modifyBy: this.sSOLoginDataModel.UserID,
+        remark: formValues.remark,
+        orderNo: formValues.orderNo,
+        orderDate: formValues.orderDate,
+        effectiveDate: formValues.effectiveDate
+      }).then((data: any) => {
+debugger
+        data = JSON.parse(JSON.stringify(data));
 
+        this.State = data['State'];
+        this.Message = data['Message'];
+        this.ErrorMessage = data['ErrorMessage'];
 
+        if (this.State == EnumStatus.Success) {
+          this.toastr.success(this.Message);
+          this.GetAllData();
+        } else {
+          this.toastr.error(this.ErrorMessage);
+        }
+      });
+
+    } catch (ex) {
+      console.error(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+}
 
 
 

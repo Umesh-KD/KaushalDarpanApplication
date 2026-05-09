@@ -366,7 +366,11 @@ export class DTEHostelInstituteMappingComponent {
       const exists = this.SelectedinstituteList.some(
         (x: any) => x.InstituteID == id
       );
-
+      //const exists = this.SelectedinstituteList.some(
+      //  (x: any) =>
+      //    x.InstituteID == id &&
+      //    x.HostelID == hostelId
+      //);
       if (!exists) {
 
         const institute = this.InstituteMasterDDLList.find(

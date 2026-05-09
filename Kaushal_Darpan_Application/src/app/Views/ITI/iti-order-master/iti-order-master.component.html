@@ -1,0 +1,60 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">DGT Orders</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl text-slate-500">chevron_right</i>
+      <span class="text-sm font-medium text-slate-700">DGT Orders</span>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+      <b><i class="ti ti-list"></i> Orders List</b>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+      <table class="table table-border w-full table-auto">
+        <thead class="bg-light/40 border-b h-10">
+          <tr>
+            <th class="text-left">S No</th>
+            <th class="text-left">Order No</th>
+            <th class="text-left">Order Date</th>
+            <th class="text-left">Created By</th>
+            <th class="text-left">Created Date</th>
+            <th class="text-left">Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of orderList; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.OrderNo || '-' }}</td>
+            <td>{{ item.OrderDate | date:'dd-MM-yyyy' }}</td>
+            <td>{{ item.CreatedBy }}</td>
+            <td>{{ item.CreatedDate | date:'dd-MM-yyyy HH:mm' }}</td>
+            <td>
+              <span [class.text-green]="item.ActiveStatus" 
+                    [class.text-red]="!item.ActiveStatus">
+                {{ item.ActiveStatus ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+          </tr>
+
+          <tr *ngIf="orderList?.length == 0">
+            <td colspan="6" class="text-center text-gray-500 py-3">
+              No Records Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { StaffIFMSDataRoutingModule } from './staff-ifmsdata-routing.module';
 import { StaffIFMSDataComponent } from './staff-ifmsdata.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { StaffIFMSDataComponent } from './staff-ifmsdata.component';
   ],
   imports: [
     CommonModule,
-    StaffIFMSDataRoutingModule
+    StaffIFMSDataRoutingModule,
+    FormsModule
   ]
 })
 export class StaffIFMSDataModule { }

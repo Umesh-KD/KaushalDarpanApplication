@@ -36,6 +36,7 @@ export class GuestRoomFacilitiesComponent {
   StautsChangeMdl = new StatusChangeGuestModel()
   public searchRequest = new FacilitiesSearchModel();
   public FacilityList: any = [];
+  public GuestHouseNameList: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -47,24 +48,50 @@ export class GuestRoomFacilitiesComponent {
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private Swal2: SweetAlert2,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private guestRoomManagementService: GuestRoomManagmentService,
   ) { }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-
+    this.request.GuestHouseID = 0;
 
     this.groupForm = this.fb.group({
 
-      txtFacilitiesName: ['', Validators.required]
+      txtFacilitiesName: ['', Validators.required],
+      GuestHouseID: [0, [Validators.required, Validators.min(1)]]
     });
 
     await this.GuestRoomFacilityList();
+    await this.GetGuestHouseNameList();
 
   }
+  async GetGuestHouseNameList() {
+    try {
+      this.loaderService.requestStarted();
+      debugger
+      let searchRequest: any = {}
+      searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
+      searchRequest.CreatedBy = this.sSOLoginDataModel.UserID ?? 0;
+      (searchRequest as any).RoleId = this.sSOLoginDataModel.RoleID;
 
+      await this.guestRoomManagementService.GetGuestHouseNameList(searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GuestHouseNameList = data['Data'];          
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async SaveFacilities() {
     this.isSubmitted = true;
