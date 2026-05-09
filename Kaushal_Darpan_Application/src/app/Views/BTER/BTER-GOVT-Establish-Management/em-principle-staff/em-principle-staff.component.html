@@ -103,7 +103,7 @@
         </div>
 
 
-        <div *ngIf="formData.StaffTypeID !=0 && formData.StaffTypeID != _ITIGovtEM_EnumStaffType.Teaching">
+        <div *ngIf="formData.StaffTypeID !=0 && formData.StaffTypeID != _BTERGovtEM_EnumStaffType.Teaching">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Level <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.StaffLevelID" (change)="StaffLevelChild()" formControlName="StaffLevel" [ngModelOptions]="{standalone: true}">
             <option value="0">--Choose Option--</option>
@@ -141,7 +141,7 @@
         </div>
 
         <!-- add branch if role is leacturer  -->
-        <div *ngIf="formData.StaffTypeID == _ITIGovtEM_EnumStaffType.Teaching && formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.Lecturer">
+        <div *ngIf="formData.StaffTypeID == _BTERGovtEM_EnumStaffType.Teaching && formData.StaffLevelChildID==_ITIGovtEM_EnumStaffLevelChild.Lecturer">
           <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch<span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
                   [(ngModel)]="formData.BranchID">
@@ -217,7 +217,7 @@
         </div>
       </div>
       <!--{{formData.HostelIDs|json}}-->
-      <div *ngIf="formData.StaffLevelChildID == 25  && this.formData.StaffTypeID == _ITIGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelID == 4">
+      <div *ngIf="formData.StaffLevelChildID == 25  && this.formData.StaffTypeID == _BTERGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelID == 4">
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel <span class="StarMarking">*</span></label>
 
         <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
