@@ -739,22 +739,21 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
       console.log( this.formData);
 
 
-
       this.personalDetailsRequest.SSOID = this.sSOLoginDataModel.SSOID;
-
       this.personalDetailsRequest.StaffUserID = this.sSOLoginDataModel.UserID;
       this.personalDetailsRequest.Action = 'StaffDetails';
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_ITI_Govt_Em_PersonalDetailByUserID(this.personalDetailsRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
+          debugger;
           //this.formData = data['Data']['iTIGovtEMStaffPersonalDetails'];
-          //this.formData.Name = data['Data']['iTIGovtEMStaffPersonalDetails']['Name'];
-          //this.formData.EmployeeID = data['Data']['iTIGovtEMStaffPersonalDetails']['EmployeeID'];
+          this.formData.Name = data['Data']['iTIGovtEMStaffPersonalDetails']['Name'];
+          this.formData.EmployeeID = data['Data']['iTIGovtEMStaffPersonalDetails']['EmployeeID'];
           this.formData.CurrentBasicDesignationID = data['Data']['iTIGovtEMStaffPersonalDetails']['CurrentBasicDesignationID'];
           this.formData.CoreBusiness = data['Data']['iTIGovtEMStaffPersonalDetails']['CoreBusiness'];
           this.formData.CurrentPostingEmp = data['Data']['iTIGovtEMStaffPersonalDetails']['CurrentPostingEmp'];
-          //this.formData.GenderID = data['Data']['iTIGovtEMStaffPersonalDetails']['GenderID'];
+          this.formData.GenderID = data['Data']['iTIGovtEMStaffPersonalDetails']['GenderID'];
           this.formData.PanCardNumber = data['Data']['iTIGovtEMStaffPersonalDetails']['PanCardNumber'];
           this.formData.BloodGroupID = data['Data']['iTIGovtEMStaffPersonalDetails']['BloodGroupID'];
           this.formData.FatherName = data['Data']['iTIGovtEMStaffPersonalDetails']['FatherName'];
@@ -768,15 +767,15 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
           this.formData.BeforeChildren = data['Data']['iTIGovtEMStaffPersonalDetails']['BeforeChildren'];
           this.formData.AfterChildren = data['Data']['iTIGovtEMStaffPersonalDetails']['AfterChildren'];
           this.formData.TotalChildren = data['Data']['iTIGovtEMStaffPersonalDetails']['TotalChildren'];
-          //this.formData.Address = data['Data']['iTIGovtEMStaffPersonalDetails']['Address'];
-          //this.formData.Pincode = data['Data']['iTIGovtEMStaffPersonalDetails']['Pincode'];
+          this.formData.Address = data['Data']['iTIGovtEMStaffPersonalDetails']['Address'];
+          this.formData.Pincode = data['Data']['iTIGovtEMStaffPersonalDetails']['Pincode'];
           this.formData.StateID = data['Data']['iTIGovtEMStaffPersonalDetails']['StateID'];
           this.formData.DistrictID = data['Data']['iTIGovtEMStaffPersonalDetails']['DistrictID'];
           this.formData.StateHomeStateID = data['Data']['iTIGovtEMStaffPersonalDetails']['StateHomeStateID'];
-          //this.formData.Email = data['Data']['iTIGovtEMStaffPersonalDetails']['Email'];
-          //this.formData.MobileNumber = data['Data']['iTIGovtEMStaffPersonalDetails']['MobileNumber'];
-          //this.formData.AdharCardNumber = data['Data']['iTIGovtEMStaffPersonalDetails']['AdharCardNumber'];
-          //this.formData.BhamashahNo = data['Data']['iTIGovtEMStaffPersonalDetails']['BhamashahNo'];
+          this.formData.Email = data['Data']['iTIGovtEMStaffPersonalDetails']['Email'];
+          this.formData.MobileNumber = data['Data']['iTIGovtEMStaffPersonalDetails']['MobileNumber'];
+          this.formData.AdharCardNumber = data['Data']['iTIGovtEMStaffPersonalDetails']['AdharCardNumber'];
+          this.formData.BhamashahNo = data['Data']['iTIGovtEMStaffPersonalDetails']['BhamashahNo'];
           this.formData.PassportNo = data['Data']['iTIGovtEMStaffPersonalDetails']['PassportNo'];
           this.formData.SpecialAbilityID = data['Data']['iTIGovtEMStaffPersonalDetails']['SpecialAbilityID'];
           this.formData.JudicialCasePendingID = data['Data']['iTIGovtEMStaffPersonalDetails']['JudicialCasePendingID'];
@@ -785,7 +784,7 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
           this.formData.DistrictCommak = data['Data']['iTIGovtEMStaffPersonalDetails']['DistrictCommak'];
           this.formData.DivisionLevelCommak = data['Data']['iTIGovtEMStaffPersonalDetails']['DivisionLevelCommak'];
           this.formData.StateCommak = data['Data']['iTIGovtEMStaffPersonalDetails']['StateCommak'];
-          //this.formData.DateOfBirth = this.dateSetter(data['Data']['iTIGovtEMStaffPersonalDetails']['DateOfBirth'])         
+          this.formData.DateOfBirth = this.dateSetter(data['Data']['iTIGovtEMStaffPersonalDetails']['DateOfBirth'])         
           this.formData.DateofPostingEmp = this.dateSetter(data['Data']['iTIGovtEMStaffPersonalDetails']['DateofPostingEmp'])
           this.formData.CITSPassedYears = this.dateSetter(data['Data']['iTIGovtEMStaffPersonalDetails']['CITSPassedYears'])
           this.formData.DateOfJoiningGvernmentOfEmp = this.dateSetter(data['Data']['iTIGovtEMStaffPersonalDetails']['DateOfJoiningGvernmentOfEmp'])
