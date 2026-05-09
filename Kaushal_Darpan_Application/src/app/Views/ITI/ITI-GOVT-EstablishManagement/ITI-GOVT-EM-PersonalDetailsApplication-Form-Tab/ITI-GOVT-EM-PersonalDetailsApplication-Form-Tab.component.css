@@ -2,3 +2,53 @@ a.disabled {
     pointer-events: none;
     opacity: 0.6;
   }
+.card {
+  background: transparent !important;
+  border: 0;
+  box-shadow: none !important;
+}
+mat-sidenav-content > main {
+  background: #fff;
+}
+.persoanl-dtl-tbs {
+  margin-bottom: 20px;
+  padding: 12px;
+  border-radius: 10px;
+  /*  border: 1px solid #d1d1d1;*/
+  background: #fff;
+  box-shadow: 0 8px 30px -12px #050f2c2e;
+}
+  .persoanl-dtl-tbs a {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: 15px;
+    padding: 10px;
+    border-radius: 10px !important;
+    background: transparent;
+    border: 0;
+  }
+    .persoanl-dtl-tbs a i {
+      margin: 0;
+      width: 40px;
+      height: 40px;
+      border: 1px solid #b9b9b9;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #2874f3;
+    }
+    .persoanl-dtl-tbs a.active, .persoanl-dtl-tbs a:hover {
+      color: #fff;
+      background-image: linear-gradient(90deg, #2874f3, #20bcff);
+    }
+      .persoanl-dtl-tbs a.active i, .persoanl-dtl-tbs a:hover i {
+        color: #fff;
+      }
+
+    .tabMenu.persoanl-dtl-tbs a.active::after {
+      display: none;
+    }

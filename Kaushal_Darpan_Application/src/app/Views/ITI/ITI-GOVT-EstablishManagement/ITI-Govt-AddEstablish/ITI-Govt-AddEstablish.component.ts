@@ -1692,7 +1692,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
       var request = {
         MasterCode: "GetDataFromIFMS",
-        FilterBy: SSOID
+        FilterBy: 'SSOID'
       }
 
       await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) =>

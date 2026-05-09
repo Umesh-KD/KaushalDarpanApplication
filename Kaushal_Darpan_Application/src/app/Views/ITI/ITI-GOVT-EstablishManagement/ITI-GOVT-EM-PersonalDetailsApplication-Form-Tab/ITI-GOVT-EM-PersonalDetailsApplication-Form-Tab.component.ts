@@ -29,7 +29,8 @@ import { ITIGovtEMStaffProfileComponent } from '../ITI-Govt-EM-StaffProfile/ITI-
   styleUrls: ['./ITI-GOVT-EM-PersonalDetailsApplication-Form-Tab.component.css'],
     standalone: false
 })
-export class ITIGOVTEMPersonalDetailsApplicationFormTabComponent implements OnInit {
+export class ITIGOVTEMPersonalDetailsApplicationFormTabComponent implements OnInit
+{
   TabEnableDisable:any[] = [] ;
   @ViewChild('tabContent', { read: ViewContainerRef }) tabContent!: ViewContainerRef;
   selectedTabIndex = 0;

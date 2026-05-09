@@ -29,8 +29,8 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div *ngIf="sSOLoginDataModel.RoleID !== EnumRole.StoreKeeper && 
-            sSOLoginDataModel.RoleID !== EnumRole.Principal && 
+        <div *ngIf="sSOLoginDataModel.RoleID !== EnumRole.StoreKeeper &&
+            sSOLoginDataModel.RoleID !== EnumRole.Principal &&
             sSOLoginDataModel.RoleID !== EnumRole.PrincipalNon &&
             sSOLoginDataModel.RoleID !== EnumRole.BTER_StoreIncharge">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -38,8 +38,8 @@
           </label>
           <select class="form-select"
                   [(ngModel)]="Searchrequest.CollegeId"
-                  [disabled]="sSOLoginDataModel.RoleID === EnumRole.Principal || 
-                    sSOLoginDataModel.RoleID === EnumRole.PrincipalNon || 
+                  [disabled]="sSOLoginDataModel.RoleID === EnumRole.Principal ||
+                    sSOLoginDataModel.RoleID === EnumRole.PrincipalNon ||
                     sSOLoginDataModel.RoleID === EnumRole.Admin ||
                     sSOLoginDataModel.RoleID === EnumRole.AdminNon ||
                     sSOLoginDataModel.RoleID === EnumRole.BTER_StoreIncharge">
@@ -53,7 +53,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item Type:</label>
           <select class="form-select"
                   [(ngModel)]="Searchrequest.ItemType"
-                  (change)="GetEquipmentDDL()"> 
+                  (change)="GetEquipmentDDL()">
             <option [value]="2">--- All ---</option>
             <option [value]="1">Consumable</option>
             <option [value]="0">Permanent</option>
@@ -80,7 +80,7 @@
             <option value="0">Pending</option>
             <option value="1">Approved</option>
             <option value="2">Revert</option>
-            
+
           </select>
         </div>
 
@@ -96,10 +96,10 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" 
-        (click)="exportToExcel()" 
-        class="btn bg-info btn-sm text-white" 
-        *ngIf="ItemMasterList && ItemMasterList.length > 0">
+      <a href="javascript:void(0);"
+         (click)="exportToExcel()"
+         class="btn bg-info btn-sm text-white"
+         *ngIf="ItemMasterList && ItemMasterList.length > 0">
         <i class="ti ti-excel"></i> Export Excel
       </a>
     </div>
@@ -149,7 +149,7 @@
             <th class="text-left">QuantityIssued</th>
             <th class="text-left">Bill Document</th>
             <th class="text-left">Remarks</th>
-            <th class="text-center">Action</th> 
+            <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -202,10 +202,11 @@
             <td align="left">
               {{ item.AvailableQuantity }}
             </td>
-            <td align="left">{{item.QuantityIssued > 0 ? '' : item.QuantityIssued}}
+            <td align="left">
+              {{item.QuantityIssued > 0 ? '' : item.QuantityIssued}}
               <span style="cursor: pointer; color: blue;"
-                (click)="ShowIssueItemList(IssueItemList_Modal, item)"
-                *ngIf="item.Status == 1 && item.IsConsume == 0 && item.QuantityIssued > 0">
+                    (click)="ShowIssueItemList(IssueItemList_Modal, item)"
+                    *ngIf="item.Status == 1 && item.IsConsume == 0 && item.QuantityIssued > 0">
                 {{ item.QuantityIssued }}
               </span>
               <span *ngIf="item.Status == 1 && item.IsConsume == 1 && item.QuantityIssued > 0">
@@ -213,43 +214,43 @@
               </span>
             </td>
             <td align="left">
-               <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + item.BillFilePath }}"
-               *ngIf="item.BillFileName" class="btn bg-primary text-white m-0" target="_blank">
-              <i class="ti ti-eye"></i>
-            </a>
+              <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + item.BillFilePath }}"
+                 *ngIf="item.BillFileName" class="btn bg-primary text-white m-0" target="_blank">
+                <i class="ti ti-eye"></i>
+              </a>
             </td>
             <td align="left">{{item.Remark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge"
-                  class="btn btn-sm text-white"
-                  (click)="(item.Status == 0) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
-                  [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
-                  [title]="item.Status == 1 ? 'Approved' : 'Accept'">
+                        class="btn btn-sm text-white"
+                        (click)="(item.Status == 0) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
+                        [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
+                        [title]="item.Status == 1 ? 'Approved' : 'Accept'">
                   {{ item.Status == 0 ? 'Pending at Store Incharge' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted'  :  item.Status == 3 ? 'Approved by Store Incharge' : '' }}
                 </button>
                 <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge)
                     && (item.Status == 0)"
-                    class="btn btn-sm text-white"
-                    (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
-                    [ngClass]="'bg-revert'"
-                    [title]="'Revert'">
+                        class="btn btn-sm text-white"
+                        (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
+                        [ngClass]="'bg-revert'"
+                        [title]="'Revert'">
                   Revert
                 </button>
 
                 <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal || sSOLoginDataModel.RoleID == EnumRole.PrincipalNon"
-                  class="btn btn-sm text-white"
-                  (click)="(item.Status == 3) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
-                  [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
-                  [title]="item.Status == 1 ? 'Approved' : 'Accept'">
+                        class="btn btn-sm text-white"
+                        (click)="(item.Status == 3) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
+                        [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
+                        [title]="item.Status == 1 ? 'Approved' : 'Accept'">
                   {{ item.Status == 0 ? 'Pending at Store Incharge' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted' :  item.Status == 3 ? 'Approved by Store Incharge'  : '' }}
                 </button>
                 <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)
                     && (item.Status == 3)"
-                    class="btn btn-sm text-white"
-                    (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
-                    [ngClass]="'bg-revert'"
-                    [title]="'Revert'">
+                        class="btn btn-sm text-white"
+                        (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
+                        [ngClass]="'bg-revert'"
+                        [title]="'Revert'">
                   Revert
                 </button>
 
@@ -260,6 +261,14 @@
                 sSOLoginDataModel.RoleID == EnumRole.DTE || sSOLoginDataModel.RoleID == EnumRole.DTENON || sSOLoginDataModel.RoleID == EnumRole.DTELateral) {
                 <a [routerLink]="['/AddDteItemMaster']" [queryParams]="{ id: item.ItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
                 }
+
+
+                <button class="btn btn-sm bg-success text-white"
+                        (click)="GetAllDataHistory(IssueItemListHistory_Modal,item.ItemId)"
+                        [title]="'View History'">
+                  View
+                </button>
+
               </div>
             </td>
           </tr>
@@ -281,34 +290,39 @@
         <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
         <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
       </div>
-        <div class="card-body">
+      <div class="card-body">
 
-          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
 
-       
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Remark <span class="StarMarking">*</span>
-              </label>
-              <textarea class="form-input" [(ngModel)]="Revertrequest.Remark"></textarea>
-              <!--<div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
-                <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>-->
-            </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Remark <span class="StarMarking">*</span>
+            </label>
+            <textarea class="form-input" [(ngModel)]="Revertrequest.Remark"></textarea>
+            <!--<div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
+              <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>-->
           </div>
-        </div> <!-- Close this div here for card-body -->
-        <div class="card-footer text-right">
-          <button type="button" (click)="RevertStausUpdate()" class="btn bg-success text-white btn-sm">
-            Submit
-          </button>
         </div>
-    
+      </div> <!-- Close this div here for card-body -->
+      <div class="card-footer text-right">
+        <button type="button" (click)="RevertStausUpdate()" class="btn bg-success text-white btn-sm">
+          Submit
+        </button>
+      </div>
+
     </div>
   </div>
 </ng-template>
 
+
+
+
+
+
 <ng-template #IssueItemList_Modal let-modal
-  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
@@ -326,7 +340,7 @@
                   <th class="text-left">Item Type</th>
                   <th class="text-left">Item Name</th>
                   <th class="text-left">Equipment Name</th>
-                  <th class="text-left">Equipment Code</th>                  
+                  <th class="text-left">Equipment Code</th>
                   <th class="text-left">Qty</th>
                   <th class="text-left">Issue Date</th>
                   <th class="text-left">Indent No</th>
@@ -346,13 +360,12 @@
                   <td align="left">{{ item.ItemCategoryName}}</td>
                   <td align="left">{{ item.EquipmentName}}</td>
                   <td align="left">{{ item.EquipmentsCode}}</td>
-                  
+
                   <td align="left">{{ item.Quantity}}</td>
                   <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
                   <td align="left">{{ item.IndentNo}}</td>
                   <td align="left">
-                    <span
-                      [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
+                    <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
                       {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : 'Not Working' }}
                     </span>
                   </td>
@@ -366,6 +379,137 @@
                   </td>
                 </tr>
                 <tr *ngIf="ItemMasterList?.length==0">
+                  <td colspan="10">
+                    No Record Found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #IssueItemListHistory_Modal let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus">Issue Items</i> </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">SNO</th>
+                  <th class="text-left" *ngIf="sSOLoginDataModel.RoleID !== 201">
+                    College Name
+                  </th>
+                  <th class="text-left">Entry Date</th>
+                  <th class="text-left">Supplier Name</th>
+                  <th class="text-left">Bill No</th>
+                  <th class="text-left">Bill Date</th>
+                  <th class="text-left">Item Type</th>
+                  <th class="text-left">Equipment</th>
+                  <th class="text-left">Specification</th>
+                  <th class="text-left">Category</th>
+                  <th class="text-left">Initial Quantity</th>
+                  <th class="text-left">Price Per Unit</th>
+                  <th class="text-left">Total Price</th>
+
+                  <!--<th class="text-left">Working</th>
+  <th class="text-left">Not Working</th>-->
+                  <th class="text-left">Auctioned</th>
+                  <th class="text-left">Available Quantity</th>
+                  <th class="text-left">QuantityIssued</th>
+                  <th class="text-left">Bill Document</th>
+                  <th class="text-left">Remarks</th>
+                  <th class="text-left">Status</th>
+                  <th class="text-center">ActionBy</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of ItemMasterListHistory; let idx=index;">
+                  <td align="left">{{idx+1}}</td>
+                  <td align="left" *ngIf="sSOLoginDataModel.RoleID !== 201">
+                    {{ item.InstituteName ?? "BTER" }}
+                  </td>
+                  <td align="left">{{item.RTS | date}}</td>
+                  <td align="left">{{item.CampanyName}}</td>
+                  <td align="left">{{item.BillNo}}</td>
+                  <td align="left">{{item.BillDate}}</td>
+                  <td align="left">
+                    <span class="px-2 py-1 rounded text-white"
+                          [ngClass]="item.IsConsume == 1 ? 'bg-blue-500' : 'bg-green-500'">
+                      {{ item.IsConsume == 1 ? 'Consumable' : 'Permanent' }}
+                    </span>
+                  </td>
+                  <td align="left">{{item.EquipmentsName}}</td>
+                  <td align="left">{{item.Specification}}</td>
+                  <td align="left">{{item.ItemCategoryName}}</td>
+                  <td align="left">
+                    <span style="cursor: pointer; color: blue;" (click)="navigateToEdit(item.ItemId)"
+                          *ngIf="sSOLoginDataModel.RoleID == EnumRole.StoreKeeper
+                && item.Status == 1
+                && item.IsConsume == 0">
+                      {{item.InitialQuantity}}
+                    </span>
+                    <span *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+       || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
+       || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
+       || sSOLoginDataModel.RoleID == EnumRole.DTE
+       || sSOLoginDataModel.RoleID == EnumRole.DTENON
+       || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+       || sSOLoginDataModel.RoleID == EnumRole.AdminNon
+       || sSOLoginDataModel.RoleID == EnumRole.DTELateral
+       || sSOLoginDataModel.RoleID == EnumRole.Principal
+       || sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge
+       || (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.Status == 0)
+       || (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.IsConsume == 1)">
+                      {{item.InitialQuantity}}
+                    </span>
+                  </td>
+                  <td align="left">{{item.PricePerUnit}}</td>
+                  <td align="left">{{item.TotalPrice}}</td>
+                  <!--<td align="left">{{item.Working}}</td>
+  <td align="left">{{item.NotWorking}}</td>-->
+                  <td align="left">{{item.Auctioned}}</td>
+
+                  <td align="left">
+                    {{ item.AvailableQuantity }}
+                  </td>
+                  <td align="left">
+                    {{item.QuantityIssued > 0 ? '' : item.QuantityIssued}}
+                    <span style="cursor: pointer; color: blue;"
+                          (click)="ShowIssueItemList(IssueItemList_Modal, item)"
+                          *ngIf="item.Status == 1 && item.IsConsume == 0 && item.QuantityIssued > 0">
+                      {{ item.QuantityIssued }}
+                    </span>
+                    <span *ngIf="item.Status == 1 && item.IsConsume == 1 && item.QuantityIssued > 0">
+                      {{ item.QuantityIssued }}
+                    </span>
+                  </td>
+                  <td align="left">
+                    <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + item.BillFilePath }}"
+                       *ngIf="item.BillFileName" class="btn bg-primary text-white m-0" target="_blank">
+                      <i class="ti ti-eye"></i>
+                    </a>
+                  </td>
+                  <td align="left">{{item.Remark}}</td>
+
+                  <td align="left">{{ item.Status == 0 ? 'Pending at Store Incharge' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted'  :  item.Status == 3 ? 'Approved by Store Incharge' : '' }}</td>
+
+                  <td align="left">{{item.ActionBy}}</td>
+                </tr>
+                <tr *ngIf="ItemMasterListHistory?.length==0">
                   <td colspan="10">
                     No Record Found
                   </td>

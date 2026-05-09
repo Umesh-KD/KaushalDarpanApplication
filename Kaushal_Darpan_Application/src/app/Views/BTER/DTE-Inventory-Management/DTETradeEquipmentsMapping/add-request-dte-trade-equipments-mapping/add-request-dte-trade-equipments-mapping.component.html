@@ -295,10 +295,25 @@
                    || sSOLoginDataModel.RoleID == EnumRole.DTENON
                    || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
                    || sSOLoginDataModel.RoleID == EnumRole.AdminNon
-                   || sSOLoginDataModel.RoleID == EnumRole.DTELateral) 
+                   || sSOLoginDataModel.RoleID == EnumRole.DTELateral)
                    && item.EquipmentsStatus == 'Requested'"
                    [routerLink]="['/RequestEquipmentsMapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity, item.TE_MappingId,item.FileName]"
                    title="Edit"> <i class="ti ti-pencil"></i></a>
+
+                <a *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal
+                   && item.PrincipalApproveStatus==0
+                )
+                   && item.EquipmentsStatus == 'Approved'"
+                   (click)="PrincipalstatusApprove(item.ItemId)"
+                   title="Approve"> <i class="fa fa-check"></i></a>
+                <a *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal
+                   && item.PrincipalApproveStatus==0
+  )
+     && item.EquipmentsStatus == 'Approved'"
+                   (click)="PrincipalstatusReject(item.ItemId)"
+                   title="Reject"> <i class="fa fa-remove"></i></a>
+
+
               </div>
             </td>
           </tr>

@@ -8,4 +8,7 @@ export class DTEItemCategoriesDataModels {
   public DepartmentID: number = 0;
   public CategoryFor?: number = 0;
   public TradeId?: number = 0;
+  public ItemID?: number = 0;
+  public Status?: number = 0;
+  public Remark?: string = '';
 }

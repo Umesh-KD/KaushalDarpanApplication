@@ -44,7 +44,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject<span class="StarMarking">*</span></label>
-          <ng-select formControlName="SubjectID" [clearable]="false" (change)="ChangeSubjectDDL()">
+          <ng-select formControlName="SubjectID" [clearable]="false" (change)="ChangeSubjectDDL()" name="SubjectID">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of SubjectMasterDDL; track item.ID) {
             <ng-option [value]="item.ID">{{item.Name}}</ng-option>
@@ -78,13 +78,17 @@
             <input type="date"
                    class="form-field w-60"
                    formControlName="AttendanceStartDate"
-                   (change)="onStartDateChange($event)" />
+                   (change)="onStartDateChange($event)" 
+                   [max]="todayDate"
+                   />
 
             End Date:
             <input type="date"
                    class="form-field w-50"
                    formControlName="AttendanceEndDate"
-                   [min]="minEndDate" />
+                   [min]="minEndDate" 
+                   [max]="todayDate"
+                   />
           </div>
         </div>
         <!--{{GetLeaveList|json}}-->

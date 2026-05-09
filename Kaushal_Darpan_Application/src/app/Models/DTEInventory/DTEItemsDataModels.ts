@@ -31,6 +31,7 @@ export class DTEItemsSearchModel {
   public ItemFor?: number = 0;
   public StaffID?: number = 0;
   public TradeId?: number = 0;
+  public ItemId?: number = 0;
 }
 
 export class DTEItemsSearchModel1 {

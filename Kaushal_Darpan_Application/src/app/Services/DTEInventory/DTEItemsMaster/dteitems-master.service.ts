@@ -45,6 +45,16 @@ export class DteItemsMasterService {
       ).toPromise();
   }
 
+ 
+  public async GetAllDataHistory(searchRequest: DTEItemsSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllDataHistory`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async GetAllAuctionList(searchRequest: DTEItemsSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllAuctionList`, body, this.headersOptions)
