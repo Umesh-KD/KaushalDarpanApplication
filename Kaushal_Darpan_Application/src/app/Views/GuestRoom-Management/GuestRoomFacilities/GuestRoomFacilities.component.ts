@@ -75,6 +75,8 @@ export class GuestRoomFacilitiesComponent {
       let searchRequest: any = {}
       searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
       searchRequest.CreatedBy = this.sSOLoginDataModel.UserID ?? 0;
+      (searchRequest as any).RoleId = this.sSOLoginDataModel.RoleID;
+
       await this.guestRoomManagementService.GetGuestHouseNameList(searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

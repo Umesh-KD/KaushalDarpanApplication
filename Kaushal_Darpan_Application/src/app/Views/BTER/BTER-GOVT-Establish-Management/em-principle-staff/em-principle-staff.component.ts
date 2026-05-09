@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus, EnumRole } from '../../../../Common/GlobalConstants';
+import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus, EnumRole, BTERGovtEM_EnumStaffType } from '../../../../Common/GlobalConstants';
 import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { ToastrService } from 'ngx-toastr';
@@ -79,6 +79,7 @@ export class EMPrincipleStaffComponent {
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
   _ITIGovtEM_EnumStaffType = ITIGovtEM_EnumStaffType;
+  _BTERGovtEM_EnumStaffType = BTERGovtEM_EnumStaffType;
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
@@ -671,7 +672,7 @@ async GetTechnicianDll() {
 
   async GetChangeTechcian() {
     debugger
-    if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
+    if (this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
       this.AddStaffBasicDetailFromGroup.controls['Technician'].setValidators([DropdownValidators]);
     } else {
       this.AddStaffBasicDetailFromGroup.controls['Technician'].clearValidators();
@@ -680,7 +681,7 @@ async GetTechnicianDll() {
     this.AddStaffBasicDetailFromGroup.controls['Technician'].updateValueAndValidity();
  
     // -------------------------
-    if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.Lecturer) {
+    if (this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.Lecturer) {
       this.AddStaffBasicDetailFromGroup.controls['BranchID'].setValidators([DropdownValidators]);
     } else {
       this.AddStaffBasicDetailFromGroup.controls['BranchID'].clearValidators();
@@ -703,7 +704,7 @@ async GetTechnicianDll() {
 
 
     //DEEPAK APPLY CONDITION TEC WAR
-    if (this.formData.StaffLevelChildID == 25 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelID == 4) {
+    if (this.formData.StaffLevelChildID == 25 && this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelID == 4) {
       await this.GetHostelData();
 
       this.AddStaffBasicDetailFromGroup.controls['Hostel'].setValidators([Validators.required]);
@@ -720,7 +721,7 @@ async GetTechnicianDll() {
     this.AddStaffBasicDetailFromGroup.controls['Hostel'].updateValueAndValidity();
 
 
-    if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden) {
+    if (this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.NonTeaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden) {
       await this.GetGuestHouseNameList();
       this.AddStaffBasicDetailFromGroup.controls['guestRoomID'].setValidators([DropdownValidators]);
 
@@ -755,11 +756,11 @@ async GetTechnicianDll() {
         this.formData.HostelID = 0;
       }
 
-      if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
+      if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.NonTeaching) {
         this.formData.StatusOfStaff = EnumStatusOfStaff.Draft;
       }
 
-      if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
+      if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.Teaching) {
         this.formData.StatusOfStaff = EnumStatusOfStaff.Draft;
       }
 
@@ -800,14 +801,14 @@ async GetTechnicianDll() {
       this.loaderService.requestStarted();
       debugger;
       await this.bterEstablishManagementService.BTER_EM_AddStaffPrinciple(this.formData)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
 
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            this.ResetControls();
-            this.GetAllData();
+            await this.ResetControls();
+            await this.GetAllData();
 
             const btnSave = document.getElementById('btnSave');
             if (btnSave) btnSave.innerHTML = "Submit";
@@ -1284,10 +1285,10 @@ async GetCategroyData() {
   }
 
   // async AddValidationStaffLevelNon() {
-  //   if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
+  //   if (this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.NonTeaching) {
   //     this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
   //   }
-  //   else if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
+  //   else if (this.formData.StaffTypeID == this._BTERGovtEM_EnumStaffType.Teaching) {
   //     this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
   //   }
   //   else {
