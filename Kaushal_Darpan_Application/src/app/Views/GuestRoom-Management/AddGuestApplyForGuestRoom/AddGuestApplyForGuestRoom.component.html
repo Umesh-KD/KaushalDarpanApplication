@@ -95,7 +95,7 @@
             Gender:<span class="StarMarking" style="display:none;">*</span>
           </label>
           <!--<select class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="request.GenderId" (change)="onGenderChange()">-->
-          <select class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="request.GenderId">
+          <select (change)="genderChange()" class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="request.GenderId">
             <option value="0" selected>--Select Gender--</option>
             <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
