@@ -127,7 +127,7 @@
                                     [data]="GuestHouseNameList"
                                     [(ngModel)]="formData.GuestHouseIDs"
                                     [disabled]="false" (onSelect)="onItemSelect($event)" (onDeSelectAlls)="onDeSelectAll($event)"
-                                    (onSelectAll)="onSelectAll($event)" (onDeSelects)="onDeSelects($event)" (onDropDownCloses)="onDropDownCloses($event)">
+                                    (onSelectAll)="onSelectAll($event)"  (onDeSelect)="onDeSelect($event)" (onDropDownCloses)="onDropDownCloses($event)">
             </ng-multiselect-dropdown>
 
             <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.GuestHouseID.errors" class="text-danger">
