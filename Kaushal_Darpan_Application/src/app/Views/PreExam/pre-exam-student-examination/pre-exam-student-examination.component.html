@@ -413,9 +413,17 @@
                    title="Assign Optional Subject" (click)="StudentOptionalSubjectModelView(OptionalSubjectModal, row.StudentID,row.StudentExamID)">
                   <i class="fa fa-file-o"></i>
                 </a>
+
+                <!-- update optional subject after eligible *ngIf="IsShowOptionalSubject(row.status)"-->
+                <a href="javascript:void(0);"
+                   class="bg-gray-200" title="Update Optional Subject"
+                   (click)="UpdateOptionalAfterEligibleModelView(updateOptionalAfterEligibleModal,row.StudentID, row.StudentExamID)">
+                  <i class="fa fa-file-o"></i>
+                </a>
+
                 <!--<a *ngIf="row.AdmitCard" download target="_blank" (click)="DownloadAdmitCard()" title="Download Admit Cards"><i class="ti ti-download"></i></a>-->
-                <a *ngIf="row.AdmitCard && row.IsShowAdmitCard==1" 
-                  (click)="DownloadAdmitCard(row)" title="Download Admit Cards">
+                <a *ngIf="row.AdmitCard && row.IsShowAdmitCard==1"
+                   (click)="DownloadAdmitCard(row)" title="Download Admit Cards">
                   <i class="ti ti-download"></i>
                 </a>
 
@@ -1692,3 +1700,69 @@
     </form>
   </div>
 </ng-template>
+
+<!-- update optional subject after eligible -->
+<ng-template #updateOptionalAfterEligibleModal let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="UpdateOptionalAfterEligibleFG" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Update Assigned Optional Subject</b>
+          <button class="btn bg-info text-white" (click)="CloseUpdateOptionalAfterEligibleModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <!-- already assigned-->
+        <div class="card-body">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Already Assigned</b>
+          </div>
+          <div class="xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div *ngFor="let item of alreadyAssignedOptionalSubject">
+              <label>{{item.ParentSubjectCode}}</label> -> <label>{{item.SubjectCode}}</label>              
+            </div>
+            <div class="text-center">
+              <!-- Show message if optionalSubjectList is empty -->
+              <span *ngIf="alreadyAssignedOptionalSubject.length == 0" class="text-danger">
+                No Optional Subject Assigned
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- update able -->
+        <div class="card-body" *ngIf="alreadyAssignedOptionalSubject.length > 0">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Update</b>
+          </div>
+          <div class="xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div *ngFor="let item of updateOptionalAfterEligibleList">
+              <label>{{item.SubjectCode}}</label><span class="StarMarking">*</span>
+              <select class="form-select" (change)="UpdateOptionalAfterEligibleValue(item.ParentSubjectID,$event.target.value)" required>
+                <option *ngFor="let li of (updateOptionalChildAfterEligibleList | filter:{ParentSubjectID:item.ParentSubjectID})"
+                        [value]="li.SubjectID" [selected]="li.SubjectID==item.SubjectID">
+                  {{li.SubjectName}}
+                </option>
+              </select>
+            </div>
+            <div class="text-center">
+              <!-- Show button if optionalSubjectList is not empty -->
+              <button *ngIf="updateOptionalAfterEligibleList.length > 0"
+                      type="button"
+                      class="btn bg-info text-white inline-block mt-5"
+                      (click)="UpdateOptionalAfterEligibleData()">
+                Update
+              </button>
+
+              <!-- Show message if optionalSubjectList is empty -->
+              <span *ngIf="updateOptionalAfterEligibleList.length == 0" class="text-danger">
+                No Optional Subject
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<!-- //end update optional subject after eligible -->
