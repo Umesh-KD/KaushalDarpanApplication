@@ -243,6 +243,21 @@ export class StaffMasterService {
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+
+  public async GetAllRoomReport(model: any) {
+    return await this.http.post(this.APIUrl + '/GetAllRoomReport', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
+  public async GetAllRoomUtilizationReport(model: any) {
+    return await this.http.post(this.APIUrl + '/GetAllRoomUtilizationReport', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
   public async SaveRosterDisplay(model: any) {
     return await this.http.post(this.APIUrl + '/SaveRosterDisplay', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
