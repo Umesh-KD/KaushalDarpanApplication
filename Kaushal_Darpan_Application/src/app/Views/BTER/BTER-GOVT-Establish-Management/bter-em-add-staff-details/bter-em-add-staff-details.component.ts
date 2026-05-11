@@ -733,7 +733,7 @@ export class BterEMAddStaffDetailsComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.UserProfileStatusHistoryList = data.Data;
-          this.UserProfileStatusHistoryList=this.UserProfileStatusHistoryList.filter((item:any)=>item.UserProfileStatus==='Revert');
+          // this.UserProfileStatusHistoryList=this.UserProfileStatusHistoryList.filter((item:any)=>item.UserProfileStatus==='Revert');
 
         }, (error: any) => console.error(error))
 
@@ -1309,6 +1309,35 @@ export class BterEMAddStaffDetailsComponent {
 
   }
 
+  async onDateChange() {
+    if (this.serviceReq.FromDate && this.serviceReq.ToDate) {
+      if(this.serviceReq.FromDate>this.serviceReq.ToDate){
+        this.toastr.error("To Date should be greater than From Date");
+        this.serviceReq.ToDate='';
+        return;
+      }
+    }
+  }
+
+  async onTransferDateChange() {
+    if (this.serviceReq.ToDate && this.serviceReq.DateOfTransfer){
+      if(this.serviceReq.ToDate>this.serviceReq.DateOfTransfer){
+        this.toastr.error("Transfer Date should be greater than To Date");
+        this.serviceReq.DateOfTransfer='';
+        return;
+      }
+    }
+  }
+
+  async onPromotionDateChange() {
+    if (this.serviceReq.ToDate && this.serviceReq.DateOfpromotion){
+      if(this.serviceReq.ToDate>this.serviceReq.DateOfpromotion){
+        this.toastr.error("Promotion Date should be greater than To Date");
+        this.serviceReq.DateOfpromotion='';
+        return;
+      }
+    }
+  }
 
 }
 

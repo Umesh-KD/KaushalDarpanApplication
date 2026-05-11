@@ -554,7 +554,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Date<span class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="FromDate" id="FromDate"
-                  formControlName="FromDate" [(ngModel)]="serviceReq.FromDate" (click)="openDatePicker($event)" />
+                  formControlName="FromDate" [(ngModel)]="serviceReq.FromDate" (click)="openDatePicker($event)" (change)="onDateChange()" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.FromDate.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.FromDate.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -565,7 +565,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Date<span class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="ToDate" id="ToDate"
-                  formControlName="ToDate" [(ngModel)]="serviceReq.ToDate" (click)="openDatePicker($event)" />
+                  formControlName="ToDate" [(ngModel)]="serviceReq.ToDate" (click)="openDatePicker($event)" (change)="onDateChange()" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToDate.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.ToDate.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -689,7 +689,7 @@
           <div *ngIf="serviceReq.IsTransfer">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Transfer<span class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfTransfer" id="DateOfTransfer"
-                  formControlName="DateOfTransfer" [(ngModel)]="serviceReq.DateOfTransfer" (click)="openDatePicker($event)" />
+                  formControlName="DateOfTransfer" [(ngModel)]="serviceReq.DateOfTransfer" (click)="openDatePicker($event)"  (change)="onTransferDateChange()" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DateOfTransfer.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.DateOfTransfer.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -722,7 +722,7 @@
           <div *ngIf="serviceReq.IsPromotion">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Promotion<span class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfpromotion" id="DateOfpromotion"
-                  formControlName="DateOfpromotion" [(ngModel)]="serviceReq.DateOfpromotion" (click)="openDatePicker($event)" />
+                  formControlName="DateOfpromotion" [(ngModel)]="serviceReq.DateOfpromotion" (click)="openDatePicker($event)" (change)="onPromotionDateChange()" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.DateOfpromotion.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.DateOfpromotion.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
