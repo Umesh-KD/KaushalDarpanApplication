@@ -9,7 +9,7 @@
   </div>
 </div>
 
-<div class="card">
+<div class="card" style="height: 100vh;">
   <div class="card-body p-5">
 
     <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
@@ -18,7 +18,7 @@
         <i class="ti ti-chevron-left"></i> Back
       </a>
     </div>
-    <form [formGroup]="AddStaffBasicDetailFromGroup">
+    <form [formGroup]="AddStaffBasicDetailFromGroup" class="mb-3">
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
 
@@ -226,7 +226,7 @@
         </div> -->
 
       </div>
-      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox mb-6">
         <div>
           <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Save Details</button>
         </div>
