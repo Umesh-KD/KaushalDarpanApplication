@@ -24,11 +24,11 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
           <!--<select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-                (change)="GetTradeDDL()">
-          <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-            {{ item.staffName }}
-          </option>
-        </select>-->
+                  (change)="GetTradeDDL()">
+            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+              {{ item.staffName }}
+            </option>
+          </select>-->
           <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
@@ -89,10 +89,10 @@
           <i class="ti ti-excel"></i> Export Excel
         </a>
 
-        <a href="javascript:void(0);" 
-          (click)="MarkForAuction()" 
-          class="btn bg-info btn-sm text-white"
-          *ngIf="Searchrequest.status == 2">
+        <a href="javascript:void(0);"
+           (click)="MarkForAuction()"
+           class="btn bg-info btn-sm text-white"
+           *ngIf="Searchrequest.status == 2">
           <i class="ti ti-excel"></i> Mark for auction
         </a>
 
@@ -138,6 +138,7 @@
             <th class="text-left">Return Date</th>
             <th class="text-left">Equipment Status on Return</th>
             <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -176,7 +177,7 @@
                                }">
                 {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
               </span> -->
-                  <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
+              <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
                                  'InvStatus-issued': item.IssueStatus === 2 && item.ReturnStatus === 0,
                                  'InvStatus-reject': item.IssueStatus === 3,
                                  'InvStatus-returned': item.IssueStatus === 2 && item.ReturnStatus === 1
@@ -184,6 +185,17 @@
                 {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2  && item.ReturnStatus === 0 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' :  item.IssueStatus ===2  && item.ReturnStatus === 1  ? 'Returned' : 'Unknown' }}
               </span>
             </td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a (click)="OnView(modal_StudentReverteDocument,item.IssuedId,item.ItemDetailsId)"
+                   title="History"
+                   class="p-1">
+                  <i class="ti ti-eye"></i>
+                </a>
+                </div>
+            </td>
+            
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10">
@@ -197,6 +209,101 @@
 
   </div>
 </div>
+
+
+<ng-template #modal_StudentReverteDocument let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-xl"><i class="ti ti-history"></i>Work-Flow History</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+              <tr class="text-left">
+                <th class="text-left">SNO</th>
+                <th class="text-left">Issued to</th>
+                <th class="text-left">Item Code</th>
+                <th class="text-left">Item Category</th>
+                <th class="text-left">Equipment Name</th>
+                <th class="text-left">Equipment Code</th>
+                <th class="text-left">Item Type</th>
+                <th class="text-left">Indent No</th>
+                <th class="text-left">Issued Quantity</th>
+                <th class="text-left">Used Quantity</th>
+                <th class="text-left">Remaining Quantity</th>
+                <th class="text-left">Issue Date</th>
+                <th class="text-left">Return Date</th>
+                <th class="text-left">Equipment Status on Return</th>
+                <th class="text-left">Status</th>
+
+                <th>Action Date</th>
+                <th>Action By</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of WorkHistory; let idx=index;  ">
+                <td align="left">{{ idx+1}}</td>
+                <td align="left">{{ item.Name}}</td>
+                <td align="left">{{ item.ItemCode}}</td>
+                <td align="left">{{ item.ItemCategoryName}}</td>
+                <td align="left">{{ item.EquipmentName}}</td>
+                <td align="left">{{ item.ItemCode}}</td>
+                <td align="left">
+                  <span [ngClass]="item.IsConsumable == 1 ? 'badge-permanent' : 'badge-consumable'">
+                    {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+                  </span>
+                </td>
+                <td align="left">{{ item.IndentNo}}</td>
+                <td align="left">{{ item.Quantity}}</td>
+                <td align="left">{{ item.UsedQuantity}}</td>
+                <td align="left">{{ item.RemainingQuantity}}</td>
+                <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+                <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
+                <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+                <td align="left">
+                  <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
+                    {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Serviceable' : 'Unserviceable' }}
+                  </span>
+                </td>
+                <td align="left">
+          
+                  <!-- <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
+                     'InvStatus-issued': item.IssueStatus === 2,
+                     'InvStatus-reject': item.IssueStatus === 3,
+                     'InvStatus-returned': item.IssueStatus === 4
+                   }">
+    {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
+  </span> -->
+                  <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
+                       'InvStatus-issued': item.IssueStatus === 2 && item.ReturnStatus === 0,
+                       'InvStatus-reject': item.IssueStatus === 3,
+                       'InvStatus-returned': item.IssueStatus === 2 && item.ReturnStatus === 1
+                     }">
+                    {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2  && item.ReturnStatus === 0 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' :  item.IssueStatus ===2  && item.ReturnStatus === 1  ? 'Returned' : 'Unknown' }}
+                  </span>
+                </td>
+
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item?.HistoryDate}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Actionby}}</td>
+
+              </tr>
+              <tr *ngIf="WorkHistory?.length === 0"><td colspan="15"><b>No Data Available </b>  </td></tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
 
 
 

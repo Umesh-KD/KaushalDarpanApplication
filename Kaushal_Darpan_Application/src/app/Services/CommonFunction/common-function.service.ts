@@ -278,9 +278,9 @@ export class CommonFunctionService {
   }
 
 
-  public async StaffAttendence(SSOID: string = '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0) {
+  public async StaffAttendence(SSOID: string = '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0, RoleID:number=0) {
 
-    return await this.http.get(this.APIUrl + '/StaffAttendence/' + SSOID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/StaffAttendence/' + SSOID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID + '/' + RoleID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -152,7 +152,7 @@
             <td class="border p-2">
               <div *ngIf="(item.Selected || item.Status_LabIncharge == 1) && item.IsConsume == 0; else notSelected">
                 <label>Equipment Working: <span class="StarMarking">*</span></label>
-                <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
+                <select class="form-select" [disabled]="item.Status_LabIncharge != 0" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
                   <option value="1">Working</option>
                   <option value="2">Not Working</option>
                 </select>
