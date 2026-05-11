@@ -1142,6 +1142,12 @@ export class ApplyForHostelComponent {
       centered: true
     });
   }
+
+  CloseModalProfileStatuslist() {
+    this.modalService.dismissAll();
+  /*this.modalReference?.close();*/
+    this.isSubmitted = false;
+  }
  }
 
 
