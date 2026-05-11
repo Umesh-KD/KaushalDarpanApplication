@@ -414,11 +414,11 @@
                   <i class="fa fa-file-o"></i>
                 </a>
 
-                <!-- update optional subject after eligible *ngIf="IsShowOptionalSubject(row.status)"-->
-                <a href="javascript:void(0);"
+                <!-- update optional subject after eligible-->
+                <a href="javascript:void(0);"  *ngIf="IsShowOptionalSubject(row.status)"
                    class="bg-gray-200" title="Update Optional Subject"
                    (click)="UpdateOptionalAfterEligibleModelView(updateOptionalAfterEligibleModal,row.StudentID, row.StudentExamID)">
-                  <i class="fa fa-file-o"></i>
+                  <i class="fa fa-book"></i>
                 </a>
 
                 <!--<a *ngIf="row.AdmitCard" download target="_blank" (click)="DownloadAdmitCard()" title="Download Admit Cards"><i class="ti ti-download"></i></a>-->

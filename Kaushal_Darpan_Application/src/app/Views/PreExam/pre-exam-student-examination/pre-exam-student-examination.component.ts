@@ -263,6 +263,12 @@ export class PreExamStudentExaminationComponent {
         ddlOptSubjectID: [''],
       })
 
+    this.UpdateOptionalAfterEligibleFG = this.formBuilder.group(
+      {
+        ddlOptParentSubjectID: [''],
+        ddlOptSubjectID: [''],
+      })
+
     this.EditStudentDataFormGroup = this.formBuilder.group(
       {
         txtStudentName: [{ value: '', disabled: true }, Validators.required],
