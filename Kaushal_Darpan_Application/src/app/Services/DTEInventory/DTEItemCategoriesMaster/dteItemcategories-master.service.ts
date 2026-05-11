@@ -52,6 +52,21 @@ export class DTEItemCategoriesMasterService {
   }
 
 
+
+
+  public async PrincipalStatusChange(request: DTEItemCategoriesDataModels) {
+
+
+    const body = JSON.stringify(request);
+      
+    return await this.http.post(this.APIUrl + '/PrincipalStatusChange', request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
   public async DeleteDataByID(PK_ID: number, ModifyBy: number) {
     return await this.http.post(this.APIUrl + '/DeleteDataByID/' + PK_ID + "/" + ModifyBy, this.headersOptions)
       .pipe(

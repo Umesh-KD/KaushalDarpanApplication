@@ -695,4 +695,106 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
       console.log(Ex);
     }
   }
+  async PrincipalstatusApprove(ID: number) {
+    try {
+
+      this.Swal2.Confirmation("Are you sure you want to approve this request?", async (result: any) => {
+
+        if (!result.isConfirmed) return;
+
+        if (ID) {
+          this.requestCategorie.ItemID = ID
+            ;
+          this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+        }
+        this.requestCategorie.Status=1
+    
+
+        await this.tradeEquipmentsMappingService.PrincipalStatusChange(this.requestCategorie)
+          .then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              this.toastr.success(this.Message);
+              this.ResetControl();
+               this.GetAllData();
+            }
+            else if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage);
+            }
+          });
+
+      });
+
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
+  async PrincipalstatusReject(ID: number) {
+
+    try {
+
+      this.Swal2.ConfirmationWithRemark(
+        "Are you sure you want to reject this request?",
+        async (remark: string) => {
+
+          this.requestCategorie.Remark = remark;
+          this.requestCategorie.ItemID = ID;
+          this.requestCategorie.ModifyBy = this.sSOLoginDataModel.UserID;
+          this.requestCategorie.Status = 2
+
+          await this.tradeEquipmentsMappingService.PrincipalStatusChange(this.requestCategorie)
+            .then((data: any) => {
+
+              this.State = data['State'];
+              this.Message = data['Message'];
+              this.ErrorMessage = data['ErrorMessage'];
+
+              if (this.State == EnumStatus.Success) {
+
+                this.toastr.success(this.Message);
+                this.ResetControl();
+                 this.GetAllData();
+
+              } else if (this.State == EnumStatus.Error) {
+
+                this.toastr.error(this.ErrorMessage);
+
+              }
+
+            });
+
+        },
+        "Reject"
+      );
+
+    }
+    catch (ex) {
+
+      console.log(ex);
+
+    }
+    finally {
+
+      setTimeout(() => {
+
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+
+    }
+
+  }
 }

@@ -142,6 +142,7 @@ export class DteAddItemsMasterComponent {
     console.log(this.AddItemsRequestFormGroup.value);
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.request.RoleID = this.sSOLoginDataModel.RoleID;
     this.request.batchId = this.request.abbreviation + '/' + this.request.VoucherNumber;
     this.isSubmitted = true;
     if (this.AddItemsRequestFormGroup.invalid) {

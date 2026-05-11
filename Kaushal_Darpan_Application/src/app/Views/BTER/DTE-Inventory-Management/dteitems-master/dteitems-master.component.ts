@@ -49,6 +49,7 @@ export class DteItemsMasterComponent {
   public ItemId: number = 0;
   public Table_SearchText: string = "";
   public ItemMasterList: any = [];
+  public ItemMasterListHistory: any = [];
   public ItemMasterList1: any = [];
   public IssuedItemList: any = [];
   public EquipmentsDDLList: any = [];
@@ -110,6 +111,43 @@ export class DteItemsMasterComponent {
       }, 200);
     }
   }
+
+
+
+  async GetAllDataHistory(model: any,ID:number=0) {
+    try {
+      this.loaderService.requestStarted();
+
+      this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID
+      this.Searchrequest.ItemId = ID
+
+      this.modalReference = this.modalService.open(model, { size: 'xl', backdrop: 'static' });
+      await this.dteItemsMasterService.GetAllDataHistory(this.Searchrequest)
+        .then((data: any) => {
+
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.ItemMasterListHistory = data['Data'];
+     
+          console.log('Item Master List ==>', this.ItemMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
 
   async GetTradeDDL() {
     try {
@@ -367,60 +405,78 @@ export class DteItemsMasterComponent {
     }
   }
 
- async RevertStausUpdate()
-  {
+  async RevertStausUpdate() {
 
-   try {
-    
-    
-     if (this.ItemId) {
+    try {
 
+      if (this.ItemId) {
 
-       if (this.Revertrequest.Remark =='')
-       {
-         this.toastr.warning('Please Fill Remark');
-         return;
-       }
+        if (this.Revertrequest.Remark == '') {
+          this.toastr.warning('Please Fill Remark');
+          return;
+        }
 
-       let requests =
-       {
-         ItemId: this.ItemId,
-         Status: 2,
-         ModifyBy: this.sSOLoginDataModel.UserID,
-         Remark:this.Revertrequest.Remark
-       };
+        this.Swal2.Confirmation(
+          "Are you sure you want to submit?",
+          async (result: any) => {
 
-       await this.itemService.UpdateStatusRevertData(requests)
-         .then((data: any) => {
-           this.State = data['State'];
-           this.Message = data['Message'];
-           this.ErrorMessage = data['ErrorMessage'];
+            if (!result.isConfirmed) return;
 
-           if (this.State == EnumStatus.Success) {
-             this.toastr.success(this.Message)
-             this.CloseModal();
-             this.GetAllData();
+            let requests = {
+              ItemId: this.ItemId,
+              Status: 2,
+              ModifyBy: this.sSOLoginDataModel.UserID,
+              RoleID: this.sSOLoginDataModel.RoleID,
+              Remark: this.Revertrequest.Remark
+            };
 
-           }
-           else if (this.State == EnumStatus.Warning) {
-             this.toastr.warning(this.ErrorMessage)
+            await this.itemService.UpdateStatusRevertData(requests)
+              .then((data: any) => {
 
-           }
-           else if (this.State == EnumStatus.Error) {
-             this.toastr.error(this.ErrorMessage);
-           }
-         })
-     }
-   }
-   catch (ex) { console.log(ex) }
-   finally {
-     setTimeout(() => {
-       this.loaderService.requestEnded();
-       this.isLoading = false;
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
 
-     }, 200);
-   }
+                if (this.State == EnumStatus.Success) {
 
+                  this.toastr.success(this.Message);
+                  this.CloseModal();
+                  this.GetAllData();
+
+                }
+                else if (this.State == EnumStatus.Warning) {
+
+                  this.toastr.warning(this.ErrorMessage);
+
+                }
+                else if (this.State == EnumStatus.Error) {
+
+                  this.toastr.error(this.ErrorMessage);
+
+                }
+
+              });
+
+          });
+
+      }
+
+    }
+    catch (ex) {
+
+      console.log(ex);
+
+    }
+    finally {
+
+      setTimeout(() => {
+
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+
+    }
 
   }
 

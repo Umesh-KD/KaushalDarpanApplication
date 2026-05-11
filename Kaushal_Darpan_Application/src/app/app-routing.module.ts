@@ -1090,7 +1090,7 @@ const routes: Routes = [
       },
 
       { path: 'ItiOptionForm/:trade/:type', loadChildren: () => import('./Views/ITI/iti-option-form-list/iti-option-form-list.module').then(m => m.ItiOptionFormListModule), title: 'ITI Option Form' },
-      { path: 'OrderMaster', loadChildren: () => import('./Views/ITI/iti-order-master/iti-order-master.module').then(m => m.ItiOrderMasterModule), title: 'Order Master' },
+      { path: 'OrderMaster/:ssoid', loadChildren: () => import('./Views/ITI/iti-order-master/iti-order-master.module').then(m => m.ItiOrderMasterModule), title: 'Order Master' },
       { path: 'Teacher-Wise-Report', loadChildren: () => import('./Views/teacher-wise-report/teacher-wise-report.module').then(m => m.TeacherWiseReportModule) },
       { path: 'Subject-Wise-Report', loadChildren: () => import('./Views/subject-wise-report/subject-wise-report.module').then(m => m.SubjectWiseReportModule) },
       { path: 'SignedCopyOfResult', loadChildren: () => import('./Views/SignedCopyOfResultMaster/SignedCopyOfResultMaster.module').then(m => m.SignedCopyOfResultMasterModule), title: 'Add SignedCopyOfResult' },

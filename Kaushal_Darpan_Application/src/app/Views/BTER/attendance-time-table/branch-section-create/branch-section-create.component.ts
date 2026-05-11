@@ -133,14 +133,14 @@ export class BranchSectionCreateComponent {
     await this.staffMasterService.GetHODWiseSemester(this.GetHODWiseSemester)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        debugger
+        //debugger
         this.GetdataHODWiseSemester = data.Data  
       }, error => console.error(error));
-
+//debugger
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterDDL = data.Data;
-      debugger
+      //debugger
       if (this.SemesterMasterDDL.length > 0) {
         const allowedSemesters = this.GetdataHODWiseSemester?.[0]?.SemesterID
           ?.split(',')
@@ -213,7 +213,7 @@ export class BranchSectionCreateComponent {
   }
 
   async loadDropdownData() {
-    debugger
+    ////debugger
     let obj = {
       InstituteID: this.sSOLoginDataModel.InstituteID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
@@ -235,7 +235,7 @@ export class BranchSectionCreateComponent {
   }
 
   createSection1(item?: any): FormGroup {
-    debugger
+    ////debugger
     return this.formBuilder.group({
       sectionName: [item?.SectionName || ''],
       studentCount: [item?.StudentCount || 0]
@@ -256,7 +256,7 @@ export class BranchSectionCreateComponent {
       await this.staffMasterService.AllBranchHOD(this.requestBranchHOD)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger
+          ////debugger
           this.resBranchHOD = data.Data
           // this.IIPMasterFormGroup.patchValue({
           //   StreamID: this.resBranchHOD[0].StreamID
@@ -281,7 +281,7 @@ export class BranchSectionCreateComponent {
 
 
   async SemeIDAcStream() {
-    debugger
+    ////debugger
     this.StreamMasterDDL=[];
     this.IIPMasterFormGroup.get('StreamID')?.setValue(0);
     this.IIPMasterFormGroup.get('StCount')?.setValue('');
@@ -313,7 +313,7 @@ export class BranchSectionCreateComponent {
 
 
   SaveData() {
-    debugger
+    ////debugger
     this.isSubmitted = true;
     if (this.IIPMasterFormGroup.invalid) {
       return;
@@ -419,13 +419,22 @@ export class BranchSectionCreateComponent {
 
 
     const SemesterName = selectedSemester.SemesterName;
-    debugger
+    ////debugger
 
     /*this.GetBranchStudnet();*/
     const baseTheory = Math.floor(totalStudents / sectionCount);
     let remTheory = totalStudents % sectionCount;
     //copy
-    let _studentidList_baseTheory = [...this.StudentList];
+    debugger
+    let _StudentList =[];
+    _StudentList =  this.StreamMasterDDL
+                                          .filter((item: any) => item.StreamID == streamId)
+                                          .map((x: any) => x.students)
+                                          .filter((x: any) => x != null && x != '')
+                                          .join(',')
+                                          .split(',')
+                                          .map((s: any) => s.trim());
+    let _studentidList_baseTheory = [..._StudentList];
 
     for (let i = 0; i < sectionCount; i++) {
       const studentsInSection = baseTheory + (remTheory > 0 ? 1 : 0);
@@ -452,7 +461,7 @@ export class BranchSectionCreateComponent {
     let remPractical = totalStudents % PsectionCount;
 
     //copy
-    let _studentidList_basePractical = [...this.StudentList];
+    let _studentidList_basePractical = [..._StudentList];
 
     for (let i = 0; i < PsectionCount; i++) {
       const studentsInSection = basePractical + (remPractical > 0 ? 1 : 0);
@@ -479,7 +488,7 @@ export class BranchSectionCreateComponent {
     let remTutorial = totalStudents % TsectionCount;
 
     //copy
-    let _studentidList_baseTutorial = [...this.StudentList];
+    let _studentidList_baseTutorial = [..._StudentList];
 
     for (let i = 0; i < TsectionCount; i++) {
       const studentsInSection = baseTutorial + (remTutorial > 0 ? 1 : 0);
@@ -516,7 +525,7 @@ export class BranchSectionCreateComponent {
   }
 
   async save() {
-    debugger
+    ////debugger
     const totalFromSections = this.sectionForm.value.sections.reduce((sum: any, section: { studentCount: any; }) => sum + section.studentCount, 0);
 
     // const streamID = this.GetBranchSectionData.some((x: { StreamID: string }) =>
@@ -579,14 +588,14 @@ export class BranchSectionCreateComponent {
       studentids: this.sectionForm.value.studentids,
     }
 
-    debugger
+    ////debugger
     await this.staffMasterService.SaveBranchSectionData(obj)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.State = data['State'];
         this.Message = data['Message'];
         this.ErrorMessage = data['ErrorMessage'];
-        debugger
+        ////debugger
         //if (this.State == 1) {
         //  this.toastr.success('Section data saved successfully!');
         //  this.isSubmitted = false;
@@ -678,7 +687,7 @@ export class BranchSectionCreateComponent {
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.GetBranchSectionData = data.Data
-        debugger
+        ////debugger
         this.GetBranchSectionData = this.GetBranchSectionData.filter((item: any) => item.CreatedBy == this.sSOLoginDataModel.UserID)
         this.totalRecord = data['Data'].length;
         console.log(this.GetBranchSectionData)
@@ -698,7 +707,7 @@ export class BranchSectionCreateComponent {
 
   async EditData(content: any, rowData?: any) {
     this.isSubmitted = true;
-    debugger
+    //debugger
     // Open only once, store reference
     this.modalRef1 = this.modalService.open(content, {
       size: 'xl',
@@ -743,7 +752,7 @@ export class BranchSectionCreateComponent {
   }
 
   async EditBranchSectionData(content: any, rowData?: any) {
-    debugger
+    //debugger
     this.modalRef2 = this.modalService.open(content, {
       size: 'xl',
       ariaLabelledBy: 'modal-basic-title',
@@ -816,9 +825,9 @@ export class BranchSectionCreateComponent {
     }
   }
   onBranchChange(selectedValue: any) {
-    debugger;
+    //debugger;
     const streamId = this.IIPMasterFormGroup.get('StreamID')?.value;
-    debugger
+    //debugger
     this.IsBranch = streamId > 0 ? true : false;
 
     const selectedStream = this.StreamMasterDDL.find((item: any) => item.StreamID == streamId);
@@ -838,7 +847,7 @@ export class BranchSectionCreateComponent {
 
 
   async getupBranchHodData() {
-    debugger
+    //debugger
     const GetstreamId = this.AddStaffSubjectSectionModel.StreamID;
     const GetSemesterID = this.AddStaffSubjectSectionModel.SemesterID;
 
@@ -856,7 +865,7 @@ export class BranchSectionCreateComponent {
         this.GetSectionData = data.Data;
         this.GetSectionData = this.GetSectionData.filter((item: any) => item.CreatedBy == this.sSOLoginDataModel.UserID)
         this.allSections = this.GetSectionData;
-        debugger
+        //debugger
         
         const usedSectionIds = this.AddStaffSubjectSectionModelList.map(
           (x: any) => Number(x.SectionID)
@@ -878,7 +887,7 @@ export class BranchSectionCreateComponent {
 
 
   //   async getSemesterBranchwiseSectionData() {
-  //   debugger
+  //   //debugger
   //   const GetstreamId = this.AddStaffSubjectSectionModel.StreamID;
   //   const GetSemesterID = this.AddStaffSubjectSectionModel.SemesterID;
 
@@ -901,7 +910,7 @@ export class BranchSectionCreateComponent {
   // }
 
   async getSubjectMasterDDL(StreamID: number, SemesterID: number | null) {
-    debugger
+    //debugger
 
 
       
@@ -933,7 +942,7 @@ export class BranchSectionCreateComponent {
   }
 
   async AddStaffData(content: any, rowData?: any) {
-    debugger
+    //debugger
     await this.GetAssignedTeacherForSubject_BySecctionID(rowData.SectionID)
      await this.GetAssignedTeacherForSubject(rowData.SectionID)
      console.log('alllist==>', this.AddStaffSubjectAllSectionModelList);
@@ -1018,7 +1027,7 @@ export class BranchSectionCreateComponent {
 
 
   AddToList() {
-    debugger
+    //debugger
     this.isSubmitted = true;
     if (this.EditDataFormGroup.invalid) return;
 
@@ -1104,7 +1113,7 @@ export class BranchSectionCreateComponent {
   }
   refreshAvailableSections() {
     // collect all used section IDs
-    debugger
+    //debugger
     const usedIds = this.AddStaffSubjectSectionModelList
       .flatMap(x => (x.SectionIDs ? x.SectionIDs.split(',').map(Number) : []));
 
@@ -1116,7 +1125,7 @@ export class BranchSectionCreateComponent {
     if (!subjectId || subjectId === 0) {
       return;
     }
-    debugger
+    //debugger
     const DepartmentID = this.sSOLoginDataModel.DepartmentID;
     const EndTermID = this.sSOLoginDataModel.EndTermID;
     const Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -1160,7 +1169,7 @@ export class BranchSectionCreateComponent {
 
 
   SaveData_EditDetails() {
-    debugger
+    //debugger
     this.isSubmitted = true;
 
     if (this.AddStaffSubjectSectionModelList.length === 0) {
@@ -1206,7 +1215,7 @@ export class BranchSectionCreateComponent {
 
   //SaveData_EditDetails() {
   //  this.isSubmitted = true;
-  //  debugger;
+  //  //debugger;
 
   //  if (this.EditDataFormGroup.valid) {
   //    try {
@@ -1244,7 +1253,7 @@ export class BranchSectionCreateComponent {
   //}
 
   async GetAssignedTeacherForSubject_BySecctionID(SectionID: number) {
-    debugger;
+    //debugger;
     try {
       this.AddStaffSubjectSectionModelList = []
       let obj = {
@@ -1252,7 +1261,7 @@ export class BranchSectionCreateComponent {
       }
       await this.staffMasterService.GetAssignedTeacherForSubject_BySecctionID(obj).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
-        debugger
+        //debugger
         if (data.length > 0) {
           // this.toastr.success(data.Message)
           this.AddStaffSubjectSectionModelList = data
@@ -1265,17 +1274,17 @@ export class BranchSectionCreateComponent {
   }
 
     async GetAssignedTeacherForSubject(SectionID: number) {
-      debugger;
+      //debugger;
     try {
       this.AddStaffSubjectAllSectionModelList = []
       let obj = {
         SectionID: SectionID
       }
       //get all data
-      debugger
+      //debugger
       await this.staffMasterService.GetAssignedTeacherForSubject(obj).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
-        debugger
+        //debugger
         if (data.length > 0) {
           // this.toastr.success(data.Message)
           this.AddStaffSubjectAllSectionModelList = data
@@ -1351,7 +1360,7 @@ export class BranchSectionCreateComponent {
       }
       await this.staffMasterService.GetBranchSectionData(obj).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
-        debugger
+        //debugger
         if (data.length > 0) {
           // this.toastr.success(data.Message)
           // await this.getData();
@@ -1373,7 +1382,7 @@ export class BranchSectionCreateComponent {
 
   }
   async EditDataSection(rowData: any) {
-    debugger;
+    //debugger;
 
     if (!rowData || !rowData.StreamID) {
       return;
