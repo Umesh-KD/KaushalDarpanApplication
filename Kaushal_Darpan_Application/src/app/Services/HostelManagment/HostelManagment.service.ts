@@ -317,6 +317,18 @@ export class HostelManagmentService {
       ).toPromise();
   }
 
+  public async GetRoomAllotmentCancelHistory(reqId: number) {
 
+    return await this.http
+      .get(
+        this.APIUrl + "/GetRoomAllotmentCancelHistory/" + reqId,
+        this.headersOptions
+      )
+      .pipe(
+        catchError(this.handleErrorObservable)
+      )
+      .toPromise();
+
+  }
 
 }

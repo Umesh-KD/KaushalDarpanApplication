@@ -16,6 +16,7 @@ import { HttpClient } from '@angular/common/http';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { DeallocateRoomDataModel } from '../../../Models/Hostel-Management/StudentRequestDataModal';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-apply-for-hostel',
@@ -64,6 +65,7 @@ export class ApplyForHostelComponent {
   // public SelectedRoomTypeID : SelectedRoomTyps[] = [];
   public SelectedRoomTypeID : any[] = [];
   public selectedRoomTypes: any[] = []; 
+  public RoomAllotmentCancelHistoryList: any[] = []; 
 
 
   _EnumRole = EnumRole;
@@ -80,6 +82,7 @@ export class ApplyForHostelComponent {
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
+    private modalService: NgbModal,
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
@@ -1102,5 +1105,43 @@ export class ApplyForHostelComponent {
       });
   }
 
-}
+  async onUserProfileStatusHistorylist(reqId: any) {
+    try {
+
+      this.loaderService.requestStarted();
+
+      await this._HostelManagmentService
+        .GetRoomAllotmentCancelHistory(reqId)
+        .then((data: any) => {
+
+          data = JSON.parse(JSON.stringify(data));
+
+          this.RoomAllotmentCancelHistoryList = data['Data'];
+
+        }, (error: any) => {
+
+          console.error(error);
+
+        });
+
+      console.log(reqId, "modal");
+
+    }
+    catch (Ex) {
+
+      console.log(Ex);
+
+    }
+  }
+
+  async openUserProfileStatusHistorylist(content: any, reqId: number) {
+    await this.onUserProfileStatusHistorylist(reqId);
+    this.modalService.open(content, {
+      size: 'lg',
+      backdrop: 'static',
+      centered: true
+    });
+  }
+ }
+
 
