@@ -142,7 +142,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth <span class="StarMarking">*</span></label>
           <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfBirth" id="DateOfBirth"
-                 formControlName="DateOfBirth" [(ngModel)]="request.DateOfBirth" (click)="openDatePicker($event)" />
+                 formControlName="DateOfBirth" [(ngModel)]="request.DateOfBirth" (click)="openDatePicker($event)" [max]="this.today"/>
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfBirth.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfBirth.errors.required">
@@ -154,7 +154,8 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of first appointment as a govt employee <span class="StarMarking">*</span></label>
           <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfFirstAppointment" id="DateOfFirstAppointment"
-                 formControlName="DateOfFirstAppointment" [(ngModel)]="request.DateOfFirstAppointment" (click)="openDatePicker($event)" />
+                 formControlName="DateOfFirstAppointment" [(ngModel)]="request.DateOfFirstAppointment" (click)="openDatePicker($event)"
+                 [min]="request.DateOfBirth" [max]="this.today" />
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfFirstAppointment.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfFirstAppointment.errors.required">
               <i aria-hidden="true"></i>This field is required .!
@@ -167,7 +168,8 @@
         <div *ngIf=" this.IsOterFacultyTech == false" >
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Joining in Department<span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="DepartmentJoiningDate" id="DepartmentJoiningDate"
-                 formControlName="DepartmentJoiningDate" [(ngModel)]="request.DepartmentJoiningDate" (change)="calExperience()" /> <!--(click)="openDatePicker($event)"-->
+                 formControlName="DepartmentJoiningDate" [(ngModel)]="request.DepartmentJoiningDate" (change)="calExperience()" 
+                 [min]="request.DateOfFirstAppointment" [max]="this.today"/> <!--(click)="openDatePicker($event)"-->
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DepartmentJoiningDate.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DepartmentJoiningDate.errors.required">
@@ -182,7 +184,8 @@
           <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Regular Appointment<span class="StarMarking">*</span></label>-->
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Appointment  as a regular  govt. Employee<span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="DateOfAppointment" id="DateOfAppointment" [min]="request.DateOfJoining"
-                 formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment" (click)="openDatePicker($event)" />
+                 formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment" (click)="openDatePicker($event)" 
+                 [min]="request.DateOfFirstAppointment" [max]="this.today"/>
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfAppointment.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfAppointment.errors.required">
@@ -194,7 +197,8 @@
         <div *ngIf=" this.IsOterFacultyTech == false"> 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the Current Institute<span class="StarMarking">*</span></label>
           <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement"
-                 formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" (click)="openDatePicker($event)" />
+                 formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" (click)="openDatePicker($event)" 
+                 [min]="request.DateOfFirstAppointment" [max]="this.today"/>
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfJoining.errors.required">
               <i aria-hidden="true"></i>This field is required .!
@@ -554,7 +558,8 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Date<span class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="FromDate" id="FromDate"
-                  formControlName="FromDate" [(ngModel)]="serviceReq.FromDate" (click)="openDatePicker($event)" (change)="onDateChange()" />
+                  formControlName="FromDate" [(ngModel)]="serviceReq.FromDate" (click)="openDatePicker($event)" (change)="onDateChange()"
+                  [max]="this.today" />
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.FromDate.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.FromDate.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -565,7 +570,8 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Date<span class="StarMarking">*</span></label>
             <input autocomplete="off" type="date" class="form-input" placeholder="" name="ToDate" id="ToDate"
-                  formControlName="ToDate" [(ngModel)]="serviceReq.ToDate" (click)="openDatePicker($event)" (change)="onDateChange()" />
+                  formControlName="ToDate" [(ngModel)]="serviceReq.ToDate" (click)="openDatePicker($event)" (change)="onDateChange()" 
+                  [max]="this.today"/>
             <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.ToDate.errors" class="text-danger">
               <p *ngIf="_AddServiceistoryFormGroup.ToDate.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
@@ -826,7 +832,7 @@
         </div>
 
         
-        <div class="pt-30">
+        <div class="pt-30 mb-3">
           <button type="button" class="btn bg-primary text-white" (click)="AddAnotherServiceHistory()">
             <i class="ti ti-plus"></i> Add More
           </button>
