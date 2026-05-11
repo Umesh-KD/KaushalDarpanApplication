@@ -189,6 +189,8 @@ export class DteItemsMasterService {
       ).toPromise();
   }
 
+
+
   public async GetAllinventoryIssueHistory(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllinventoryIssueHistory`, body, this.headersOptions)
@@ -196,6 +198,16 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetAllinventoryIssueHistoryTrail(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllinventoryIssueHistoryTrail`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllInventoryIssueReturnItemList`, body, this.headersOptions)

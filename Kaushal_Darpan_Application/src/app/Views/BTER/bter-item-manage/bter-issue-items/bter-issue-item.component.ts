@@ -626,7 +626,9 @@ export class AddBterIssueItemComponent {
         element.LabID = this.Searchrequests.LabID,
         element.IndentNo = this.consumableIndentNo,
         element.itemCategoryId = this.Searchrequests.ItemCategoryId
-        || 0;
+        || 0
+      element.UserId = this.sSOLoginDataModel.UserID
+        ;
 
 
       element.issuedTo = this.Searchrequests.issuedTo && this.Searchrequests.issuedTo > 0
@@ -940,6 +942,7 @@ export class AddBterIssueItemComponent {
     this.submitRequest.FileName = this.FileName;
     this.submitRequest.StreamID = this.Searchrequests.StreamID || 0;
     this.submitRequest.LabID = this.Searchrequests.LabID || 0;
+    this.submitRequest.UserId = this.sSOLoginDataModel.UserID || 0;
 
     console.log('arr: ' + arr);
     try {

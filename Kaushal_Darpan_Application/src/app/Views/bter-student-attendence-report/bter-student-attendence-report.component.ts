@@ -234,14 +234,13 @@ export class BterStudentAttendenceReportComponent {
   async getstaffmaster(SemesterID: number = 0) {
 
     let SSOID = ''
-    if (this.sSOLoginDataModel.RoleID == 60 || this.sSOLoginDataModel.RoleID == 61) {
-      SSOID = this.sSOLoginDataModel.SSOID
+    let RoleID = 0
 
-    } else{
-      SSOID=''
-    }
+    SSOID = this.sSOLoginDataModel.SSOID
+    RoleID = this.sSOLoginDataModel.RoleID
+ 
 
-    await this.commonMasterService.StaffAttendence(SSOID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+    await this.commonMasterService.StaffAttendence(SSOID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID, RoleID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
       this.StaffMasterList = data.Data;
       })

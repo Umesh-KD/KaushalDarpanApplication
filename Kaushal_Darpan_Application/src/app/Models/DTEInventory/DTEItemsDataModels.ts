@@ -99,6 +99,7 @@ export class inventoryIssueHistorySearchModel {
   public RoleID? : number = 0;
   public status? : number = 0;
   public IssueStatus? : number = 2;
+  public ItemDetailsId? : number =0;
   public IsStaff? : boolean = false;
 }
 export class inventoryIssueHistoryITISearchModel {

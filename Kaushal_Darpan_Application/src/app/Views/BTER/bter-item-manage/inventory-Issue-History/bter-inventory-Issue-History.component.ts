@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { FormGroup } from '@angular/forms';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -38,10 +38,11 @@ export class bterinventoryIssueHistoryComponent {
   public TradeDDLList: any = [];
   public staffDDLList: any = [];
   public LabDetailsData: any = [];
+  public WorkHistory: any = [];
   public ItemId: number = 0;
   public UserID: number = 0;
   public today: Date = new Date();
-
+  closeResult: string | undefined;
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
@@ -94,6 +95,50 @@ export class bterinventoryIssueHistoryComponent {
           }
         }, error => console.error(error));
       console.log('Item Master List ',this.ItemMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+  }
+
+
+
+  async GetAllDataTrail(IssueID: number, ItemDetailsId:number) {
+    try {
+      this.loaderService.requestStarted();
+      this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequest.TradeId = this.Searchrequest.TradeId;
+      this.Searchrequest.staffID = this.Searchrequest.staffID;
+
+      if (this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge) {
+        this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
+        this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      }
+
+      this.Searchrequest.IssuedId = IssueID
+      this.Searchrequest.ItemDetailsId = ItemDetailsId
+
+
+      await this.bterInventoryService.GetAllinventoryIssueHistoryTrail(this.Searchrequest)
+        .then((data: any) => {
+          if (data) {
+
+            this.WorkHistory = data.Data || [];
+          
+          } else {
+            console.error("No data returned from API");
+          }
+        }, error => console.error(error));
+      console.log('Item Master List ', this.WorkHistory)
     }
     catch (Ex) {
       console.log(Ex);
@@ -285,4 +330,27 @@ export class bterinventoryIssueHistoryComponent {
       console.error(error);
     }
   }
+
+
+  async OnView(content: any, ID: number,id2:number) {
+
+    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this.GetAllDataTrail(ID, id2);
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
 }
