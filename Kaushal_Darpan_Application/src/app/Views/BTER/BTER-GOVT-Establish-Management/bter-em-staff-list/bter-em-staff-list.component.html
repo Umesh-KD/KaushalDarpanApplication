@@ -128,26 +128,31 @@
               <div class="flex align-center justify-center actionBtns">
                 <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID, row.StaffID, row.SSOID)"><i class="ti ti-trash"></i></a>
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
-                <a href="javascript:void(0);" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"
-                   *ngIf="
-     row.RoleID != _EnumRole.GuestHouseAdmin &&
-     row.RoleID != _EnumRole.GuestHouseIncharge &&
-     row.RoleID != _EnumRole.GuestRoomWarden &&
-     row.ProfileStatusID != 0 &&
-     row.ProfileStatusID != 288
-   "><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" [title]="row.ProfileStatusID == 247 ? 'View' : 'View & Approve'"
+                  (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"
+                  *ngIf="row.RoleID != _EnumRole.GuestHouseAdmin && 
+                          row.RoleID != _EnumRole.GuestHouseIncharge && 
+                          row.RoleID != _EnumRole.GuestRoomWarden &&
+                          row.ProfileStatusID != 0 &&
+                          row.ProfileStatusID != 288
+                     "><i [class]="row.ProfileStatusID == 247 ? 'ti ti-eye' : 'ti ti-check' "></i>
+                </a>
 
 
 
-                <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
+                <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" 
+                  title="Unlock Profile" 
+                  (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)">
+                  <i class="ti ti-lock-open"></i>
+                </a>
                 <a href="javascript:void(0);"
                    *ngIf="(row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden)
-          && !(row.ProfileStatusID == 0
-          || row.ProfileStatusID == 288
-          || row.ProfileStatusID == 429)"
-                   title="View"
+                            && !(row.ProfileStatusID == 0
+                            || row.ProfileStatusID == 288
+                            || row.ProfileStatusID == 429)"
+                   [title]="row.ProfileStatusID == 247 ? 'View' : 'View & Approve'"
                    (click)="openModal_ApproveStaffProfileGuestHouse(Modal_ApproveStaffProfileGuestHouse, row.StaffUserID, row.SSOID, true,row.RoleID)">
-                  <i class="ti ti-check"></i>
+                  <i [class]="row.ProfileStatusID == 247 ? 'ti ti-eye' : 'ti ti-check' "></i>
                 </a>
                 
 

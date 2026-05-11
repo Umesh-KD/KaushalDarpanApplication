@@ -833,16 +833,22 @@ debugger
   onSelectAll(items: any[],) {    
     this.GuestHouseNameList = [...items];
     if (this.GuestHouseNameList.length > 0) {
-      // Assuming HostelList is an array of objects, and each object has a property 'HostelID'
       this.formData.MultiGuestHouseIDs = this.GuestHouseNameList.map((item :any)=> item.ID).join(',');
     }
   }
 
-  public onDeSelects(item: any) {
-    console.log(item);
+  onDeSelect(item: any) {
+
+    this.formData.MultiGuestHouseIDs =
+      this.formData.GuestHouseIDs
+        ?.filter((x: any) => x.ID !== item.ID)
+        ?.map((x: any) => x.ID)
+        ?.join(',') || '';
+
+    console.log("multiguesthouseids",this.formData.MultiGuestHouseIDs);
   }
 
-  public onDropDownCloses(item: any) {
+  onDropDownCloses(item: any) {
     console.log(item);
   }
 

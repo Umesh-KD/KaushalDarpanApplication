@@ -167,6 +167,11 @@ export class PreExamStudentExaminationComponent {
   requestAction = new CampusPostMaster_Action();
   public RejectDocumentDetail: any = []
 
+  public UpdateOptionalAfterEligibleFG!: FormGroup;
+  public updateOptionalAfterEligibleList: any = [];
+  public updateOptionalChildAfterEligibleList: any = [];
+  public alreadyAssignedOptionalSubject: any = [];
+
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
     private loaderService: LoaderService,
@@ -253,6 +258,12 @@ export class PreExamStudentExaminationComponent {
       })
 
     this.OptionalSubjectFormGroup = this.formBuilder.group(
+      {
+        ddlOptParentSubjectID: [''],
+        ddlOptSubjectID: [''],
+      })
+
+    this.UpdateOptionalAfterEligibleFG = this.formBuilder.group(
       {
         ddlOptParentSubjectID: [''],
         ddlOptSubjectID: [''],
@@ -2996,30 +3007,30 @@ export class PreExamStudentExaminationComponent {
   async NorifyStudent_VerifyForExamination() {
     let Requestdata: any = this.PreExamStudentData.filter((e: any) => e.Selected == true)
 
-    if(Requestdata.length > 0) {
+    if (Requestdata.length > 0) {
       this.Swal2.Confirmation("Are you sure to Notify Students?", async (result: any) => {
 
-      //confirmed
-      if (result.isConfirmed) {
-        const SMSrequest: ForSMSNotifyStudentModel[] = Requestdata.map((student: any) => ({
+        //confirmed
+        if (result.isConfirmed) {
+          const SMSrequest: ForSMSNotifyStudentModel[] = Requestdata.map((student: any) => ({
             StudentId: student.StudentID,
             MobileNo: student.MobileNo,
             StudentName: student.StudentName,
             MessageType: "Exam_Fee_Reminder"
-        }));
+          }));
 
-        this.smsMailService.NorifyStudent_VerifyForExamination(SMSrequest)
-        .then(async (data: any) => {
-          if (data.State == EnumStatus.Success) {
-            this.toastr.success("Notified successfully");
-          } else if (data.State == EnumStatus.Warning) {
-            this.toastr.warning("Something went wrong");
-          } else {
-            console.log(data.ErrorMessage);
-          }
-        });
-      }
-    });      
+          this.smsMailService.NorifyStudent_VerifyForExamination(SMSrequest)
+            .then(async (data: any) => {
+              if (data.State == EnumStatus.Success) {
+                this.toastr.success("Notified successfully");
+              } else if (data.State == EnumStatus.Warning) {
+                this.toastr.warning("Something went wrong");
+              } else {
+                console.log(data.ErrorMessage);
+              }
+            });
+        }
+      });
     } else {
       this.toastr.error('Please select at least one student to notify')
       return
@@ -3036,7 +3047,7 @@ export class PreExamStudentExaminationComponent {
 
       await this.commonMasterService.GetOptionalSubjectDDL(this.optionalSubRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
+        if (data.State === EnumStatus.Success) {
           this.OptionalSubjectDDLList = data.Data
         } else {
           this.toastr.error(data.ErrorMessage)
@@ -3044,6 +3055,136 @@ export class PreExamStudentExaminationComponent {
       })
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  // update optional subject after eligible
+  async UpdateOptionalAfterEligibleValue(ParentSubjectID: number, SubjectID: any) {
+    this.updateOptionalAfterEligibleList.forEach((x: any) => {
+      if (x.ParentSubjectID == ParentSubjectID) {
+        x.SubjectID = SubjectID;
+      }
+    });
+
+  }
+
+  // update 
+  async UpdateOptionalAfterEligibleData() {
+    //debugger
+    try {
+      if (this.updateOptionalAfterEligibleList.filter((x: any) => x.SubjectID == 0)?.length > 0) {
+        this.toastr.error("Please choose all optional subject!");
+        return;
+      }
+      this.isSubmitted = true;
+      this.optSubRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.optSubRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.optSubRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.optSubRequest.CreatedBy = this.sSOLoginDataModel.UserID
+      this.optSubRequest.RowJson = JSON.stringify(this.updateOptionalAfterEligibleList);
+      this.optSubRequest.RowJson_AlreadyAssigned = JSON.stringify(this.alreadyAssignedOptionalSubject);
+      // call
+      await this.preExamStudentExaminationService.UpdateOptionalSubjectAfterEligibleStudent(this.optSubRequest)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message);
+            this.CloseUpdateOptionalAfterEligibleModal()
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.Message)
+          }
+          else {
+            this.toastr.error(this.Message)
+            console.error(this.ErrorMessage);
+          }
+        })
+        .catch((error: any) => {
+          console.error(error);
+          this.toastr.error('Failed to Update optional subject!');
+        });
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  CloseUpdateOptionalAfterEligibleModal() {
+    this.isSubmitted = false
+    this.modalService.dismissAll();
+    this.updateOptionalAfterEligibleList = [];
+    this.updateOptionalChildAfterEligibleList = [];
+    this.alreadyAssignedOptionalSubject = [];
+  }
+
+  IsShowOptionalSubject(row: any) {
+    if ((
+      this.sSOLoginDataModel.RoleID == EnumRole.Admin
+      || this.sSOLoginDataModel.RoleID == EnumRole.Principal
+      || this.sSOLoginDataModel.RoleID == EnumRole.Registrar
+    ) && ([
+      (enumExamStudentStatus.EligibleForExamination || enumExamStudentStatus.NewEligibleForExamination)
+    ]).includes(row.status)
+      && row.StudentTypeID == this._enumStudentType.Reg
+      && [4, 5, 6].includes(row.SemesterID)
+      && this.sSOLoginDataModel.Eng_NonEng == this._EnumCourseType.Engineering
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  async UpdateOptionalAfterEligibleModelView(content: any, StudentId: number, StudentExamID: number) {
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason: any) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this.optSubRequest.StudentExamID = StudentExamID;
+    await this.GetUpdateOptionalAfterEligibleMaster(StudentId, StudentExamID); // optional subject master
+    await this.GetAlreadyAssignedOptionalSubject(StudentExamID); // already assigned optional subject
+  }
+
+  // get optional subject
+  async GetUpdateOptionalAfterEligibleMaster(StudentId: number, StudentExamID: number) {
+    try {
+      await this.commonMasterService.GetOptionalSubjectsByStudentID(StudentId, this.sSOLoginDataModel.DepartmentID, StudentExamID)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.updateOptionalAfterEligibleList = data['Data']["Table"];// exam id
+          this.updateOptionalChildAfterEligibleList = data['Data']["Table1"];
+          this.updateOptionalAfterEligibleList.forEach((x: any) => {
+            if (x.SubjectID == 0) {
+              let i = 0;
+              this.updateOptionalChildAfterEligibleList.forEach((c: any) => {
+                if (x.ParentSubjectID == c.ParentSubjectID && i == 0) {
+                  x.SubjectID = c.SubjectID;
+                  i++;
+                }
+              });
+            }
+          });
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  // get already assigned optional subject 
+  async GetAlreadyAssignedOptionalSubject(StudentExamID: number) {
+    try {
+      await this.commonMasterService.GetAlreadyAssignedOptionalSubject(StudentExamID)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.alreadyAssignedOptionalSubject = data['Data'];
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
     }
   }
 }

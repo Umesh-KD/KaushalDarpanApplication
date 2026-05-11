@@ -920,10 +920,10 @@ export class BterEMAddStaffDetailsComponent {
 
       // Get Names safely
       const institute = this.InstituteMasterDDLList.find((x: any) => x.InstituteID == formValue.TransferToInstituteID);
-      const designation = this.DesignationMasterDDLList.find((x: any) => x.ID == formValue.DesignationID);
+      const designation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.DesignationID);
       const office = this.OfficeList.find((x: any) => x.ID == formValue.OfficeID);
       const transferOffice = this.OfficeList.find((x: any) => x.ID == formValue.TransferToOfficeID);
-      const promotionDesignation = this.DesignationMasterDDLList.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
+      const promotionDesignation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
       
       if(this.serviceReq.InstituteID!=0){
         this.serviceReq.InstituteName=this.InstituteMasterDDLList.filter((x:any)=>x.InstituteID==this.serviceReq.InstituteID)[0]['InstituteName'];

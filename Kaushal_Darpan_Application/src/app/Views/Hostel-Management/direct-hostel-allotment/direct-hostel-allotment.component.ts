@@ -85,6 +85,7 @@ export class DirectHostelAllotmentComponent {
   get _AllotRequestFormGroup() { return this.AllotRequestFormGroup.controls; }
 
   async GetStudentDetails() {
+    debugger
     if(this.studentRequest.ApplicationNo == '') {
       this.toastr.error('Please enter Application No / Enrollment No');
       this.showStudentDetails = false;
