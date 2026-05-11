@@ -337,6 +337,19 @@ export class WardenApplyForGuestRoomComponent {
       this.toastr.warning("Guest House Room Quantity is requird !");
       return
     }
+    if (this.request.Dis_EmpIDCardPhoto == '') {
+      this.toastr.warning('Please Upload Employee ID Card Document');
+      return;
+    }
+    if (this.request.Dis_PurposeDocPhoto == '') {
+      this.toastr.warning('Please Upload Purpose Document');
+      return;
+
+    }
+    if (this.request.Dis_IDProofPhoto == '') {
+      this.toastr.warning('Please Upload Valid Photo ID');
+      return;
+    }  
 
     this.childComponent.MobileNo = this.request.MobileNo
 
