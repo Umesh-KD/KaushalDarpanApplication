@@ -15,6 +15,7 @@ export class BTER_EM_StaffListSearchModel {
   Name: string = "";
   status?:number=0;
   Eng_NonEng?:number=0;
+  GuestHouseID?: string = "";
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {

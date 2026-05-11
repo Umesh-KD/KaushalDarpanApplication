@@ -284,6 +284,7 @@ export class BTEREMStaffListComponent {
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID
     this.searchRequest.status=this.searchRequest.status
     this.searchRequest.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng
+    this.searchRequest.GuestHouseID = this.sSOLoginDataModel.GuestHouseID;
     try {
       this.loaderService.requestStarted();
       await this.bterEstablishManagementService.BTER_EM_GetStaffList(this.searchRequest)
@@ -614,7 +615,7 @@ export class BTEREMStaffListComponent {
     debugger
     this.IsView = type;
     await this.GetPersonalDetailByUserID(StaffUserID, SSOID);
-    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
 
     this.approveRequest.IsExtraWorking = false;
 
