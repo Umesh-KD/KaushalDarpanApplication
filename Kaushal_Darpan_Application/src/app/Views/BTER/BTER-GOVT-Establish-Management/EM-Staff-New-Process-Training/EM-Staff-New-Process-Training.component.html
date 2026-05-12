@@ -5,7 +5,7 @@
 
       <div class=" ">
         <label>Search By Status</label>
-        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (click)="onChangeSearchStatus()">
+        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (change)="StaffTrainingDetailsNewTraining_Search(SearchStatus)">
           <option value="0">--select--</option>
           <option *ngFor="let item of StaffTrainingStatusSearchList" [value]="item.ID">
             {{item.Name}}

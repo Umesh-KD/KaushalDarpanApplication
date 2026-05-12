@@ -316,7 +316,7 @@
 
                 <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
 
-                <a *ngIf="(row.ComplitionTrainingDoc== null ||row.ComplitionTrainingDoc== '' ) &&  row.isTrainingCom == 1" href="javascript:void(0);" title="Doc update" (click)="onEmtrainingDocUpdate(EmtrainingDocUpdate, row.StaffTrainingDetailID)"><i class="fa-upload"></i></a>
+                <a *ngIf="!row.ComplitionTrainingDoc && row.isTrainingCom === 1" href="javascript:void(0);" title="Doc update" (click)="onEmtrainingDocUpdate(EmtrainingDocUpdate, row.StaffTrainingDetailID)"><i class="fa-upload"></i></a>
               </td>
             </tr>
           </tbody>
