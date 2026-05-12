@@ -628,7 +628,7 @@ import * as XLSX from 'xlsx';
     async TogetITICollege() {
       try {
         debugger
-        await this.commonFunctionService.GetInstituteMaster_ByDistrictWise(this.RequestManual.DistrictID, this.sSOLoginDataModel.EndTermID)
+        await this.commonFunctionService.GetInstituteMaster_ByDistrictWise(this.RequestManual.To_ddlDistrictID, this.sSOLoginDataModel.EndTermID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.To_InstituteList = data['Data'];

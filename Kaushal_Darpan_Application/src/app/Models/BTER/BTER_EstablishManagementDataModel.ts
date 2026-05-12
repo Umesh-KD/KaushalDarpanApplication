@@ -770,6 +770,7 @@ export class EM_TransferSystemSearchModel {
   public jsonData?: string = '';
   public RelievingDoc?: string = '';
   public RelievingDoc_Dis?: string = '';
+  public RoleID: number = 0;
 }
   
 

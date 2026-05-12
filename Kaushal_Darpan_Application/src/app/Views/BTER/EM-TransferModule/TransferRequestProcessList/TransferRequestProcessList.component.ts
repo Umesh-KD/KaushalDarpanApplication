@@ -267,6 +267,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         this.searchRequest.CategoryID = this.SearchCategoryID;
         this.searchRequest.EmployeeType = this.SearchEmployeeType;
         this.searchRequest.InstituteID = this.SearchInstituteID;
+        this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
         await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
@@ -291,19 +292,19 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
               this.isAnyApproved = true;
             }
           }
-          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
             if (this.EM_TransferProcessList?.length > 0) {
-              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 1);
+              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 1 || item.ISNonGazetted == 2);
               //this.MainListApproveStatus();
             }
           }
-          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
-            if (this.EM_TransferProcessList?.length > 0) {
-              this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 2);
-              //this.MainListApproveStatus();
+          //else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
+          //  if (this.EM_TransferProcessList?.length > 0) {
+          //    this.EM_TransferProcessList = this.EM_TransferProcessList.filter((item: any) => item.ISNonGazetted == 2);
+          //    //this.MainListApproveStatus();
 
-            }
-          }
+          //  }
+          //}
           else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
             if (this.EM_TransferProcessList?.length > 0) {
               this.EM_TransferProcessList = this.EM_TransferProcessList;
