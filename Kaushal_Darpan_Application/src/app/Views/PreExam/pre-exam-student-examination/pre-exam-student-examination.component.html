@@ -415,7 +415,7 @@
                 </a>
 
                 <!-- update optional subject after eligible-->
-                <a href="javascript:void(0);"  *ngIf="IsShowOptionalSubject(row.status)"
+                <a href="javascript:void(0);"  *ngIf="IsShowOptionalSubject(row)"
                    class="bg-gray-200" title="Update Optional Subject"
                    (click)="UpdateOptionalAfterEligibleModelView(updateOptionalAfterEligibleModal,row.StudentID, row.StudentExamID)">
                   <i class="fa fa-book"></i>
