@@ -223,10 +223,9 @@
           </mat-form-field>
 
 
-  
 
 
-          <div *ngIf="sSOLoginDataModel.InstituteID !== 0" class="college-strip" title="{{InstituteName}}">
+          <div *ngIf="sSOLoginDataModel.InstituteID !== 0 && InstituteName!=''" class="college-strip" title="{{InstituteName}}">
             {{ InstituteName }}
           </div>
 

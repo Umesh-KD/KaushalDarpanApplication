@@ -7,9 +7,9 @@
       <div>
         <h4 class="text-slate-900 text-lg font-medium mb-2">Add Govt Establish</h4>
         <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-          <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+          <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Establish Management</a>
           <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-          <a routerlink="/ITI-Govt-AddEstablish" aria-current="page" class="text-sm font-medium text-slate-700" ng-reflect-router-link="/ITI-Govt-AddEstablish" href="/ITI-Govt-AddEstablish"> Add Govt Establish Info Details </a>
+          <a [routerLink]="'/ITI-Govt-AddEstablish'" aria-current="page" class="text-sm font-medium text-slate-700" > Add Govt Establish Info Details </a>
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
 
         <!-- Left Title -->
         <div>
-          <a [routerLink]="'/ITI-Govt-AddEstablish'"> Employee Basic Details</a>
+          <a> Employee Basic Details</a>
         </div>
 
         <!-- Right Side -->
@@ -72,7 +72,7 @@
         </div>
 
         <div>
-          <label class="form-label">DOR</label>
+          <label class="form-label">Date of Retirement</label>
           <input type="date" class="form-input" [(ngModel)]="model[0].DOR" disabled>
         </div>
 
@@ -265,7 +265,7 @@
             <tr>
               <th>#</th>
               <th>Family Member ID</th>
-              <th>Name</th>
+              <th style="width:22%">Name</th>
 
               <th>Relationship Name</th>
               <th>DOB</th>
@@ -280,7 +280,6 @@
           <tbody>
             <tr *ngFor="let fam of model; let i = index">
               <td>{{ i + 1 }}</td>
-
               <td>
                 <input class="form-input"
                        [(ngModel)]="fam.FAMILYMEMBERID" disabled>
@@ -290,19 +289,10 @@
                 <input class="form-input"
                        [(ngModel)]="fam.NAME" disabled>
               </td>
-
-
-
               <td>
                 <input class="form-input"
                        [(ngModel)]="fam.RELATIONSHIPNAMEEN" disabled>
               </td>
-
-              <!-- <td>
-                <input type="date"
-                       class="form-input"
-                       [(ngModel)]="fam.DOB_FAMILY">
-              </td> -->
               <td>
                 <input class="form-input"
                        [value]="fam.DOB_FAMILY | date:'dd-MM-yyyy'"

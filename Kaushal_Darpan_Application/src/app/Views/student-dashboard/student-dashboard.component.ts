@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { StudentDashboardModel } from '../../Models/StudentDashboardModel';
 import { StudentSearchModel } from '../../Models/StudentSearchModel';
@@ -13,6 +13,9 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { StudentDetailsModel } from '../../Models/StudentDetailsModel';
 import { EncryptionService } from '../../Services/EncryptionService/encryption-service.service';
+import { MenuByUserAndRoleWiseModel } from '../../Models/MenuByUserAndRoleWiseModel';
+import { MenuService } from '../../Services/Menu/menu.service';
+import { MasterLayoutComponent } from '../Shared/master-layout/master-layout.component';
 
 
 @Component({
@@ -65,7 +68,9 @@ export class StudentDashboardComponent implements OnInit {
     private modalService: NgbModal, 
     public appsettingConfig: AppsettingService, 
     private Swal2: SweetAlert2, 
-    private route: Router
+    private route: Router,
+    private menuService: MenuService,
+    private parent: MasterLayoutComponent
   ) { }
   
   async ngOnInit()
@@ -108,6 +113,8 @@ export class StudentDashboardComponent implements OnInit {
           //changes
           await this.GetProfileDashboard();
           await this.GetStudentDashboard();
+
+        
  
           this.route.navigateByUrl('/dashboard');
         //  window.open("/dashboard", "_Self")
@@ -125,11 +132,17 @@ export class StudentDashboardComponent implements OnInit {
    
       }
     }
-    //else {
-    //  //Redirect To Emitra Application
-    //  window.open('/emitradashboard', "_self");
-    //}
-    //await this.GetAllData();
+
+
+    //changes for menu not binding 
+    this.parent.LoadMenuStudent(
+      this.parent.sSOLoginDataModel.UserID,
+      this.parent.sSOLoginDataModel.RoleID,
+      this.sSOLoginDataModel.DepartmentID
+    );
+
+    this.parent.InstituteName = this.ProfileLists?.InstituteName;
+
   }
 
 
@@ -285,6 +298,10 @@ export class StudentDashboardComponent implements OnInit {
       
     }
   }
+
+
+
+
   
   
 
