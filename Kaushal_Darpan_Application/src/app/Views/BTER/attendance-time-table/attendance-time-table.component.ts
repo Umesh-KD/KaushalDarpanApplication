@@ -511,6 +511,7 @@ export class AttendanceTimeTableComponent implements OnInit {
   // }
 
   AttendanceData(rowData: any) {
+    //debugger
     if (rowData != null && rowData != undefined) {
       if (rowData.StreamID != null) {
         this.router.navigate([

@@ -1,4 +1,5 @@
 import { RequestBaseModel } from "./RequestBaseModel";
+import { ResponseBaseModel } from "./ResponseBaseModel";
 
 export class PreExamStudentDataModel extends RequestBaseModel {
   public ApplicationNo: string = '';
@@ -57,6 +58,7 @@ export class PreExam_UpdateOptionalSubjectModel {
 export class OptionalSubjectRequestModel extends RequestBaseModel {
   public StudentID: number = 0;
   public RowJson: string = "";
+  public RowJson_AlreadyAssigned: string = "";
   public CreatedBy: number = 0;
   public StudentExamID?: number = 0;
 } 
@@ -66,6 +68,6 @@ export class AnnexureDataModel {
   public EndTermID: number = 0;
   public StudentExamType: number = 0;
   public InstitueID: number = 0;
-  
-      
-} 
+}
+
+

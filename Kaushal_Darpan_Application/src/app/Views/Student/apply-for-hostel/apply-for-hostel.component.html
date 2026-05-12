@@ -28,8 +28,8 @@
 <!--{{StudentDetailsList|json}}-->
 <div class="card">
   <div class="card-body p-5"
-     *ngIf="StudentDetailsList[0]?.AllotmentStatus == 0 || 
-            StudentDetailsList[0]?.AllotmentStatus == 12 || 
+       *ngIf="StudentDetailsList[0]?.AllotmentStatus == 0 ||
+            StudentDetailsList[0]?.AllotmentStatus == 12 ||
             StudentDetailsList[0]?.AllotmentStatus == 13">
 
     <div class="mb-8">
@@ -91,8 +91,8 @@
         <b class="text-1xl-5"><i class="ti ti-user"></i> Some Basic Info For Emergency Contact</b>
       </div>
       <form [formGroup]="groupForm"
-         (ngSubmit)="saveData()" 
-         *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 || 
+            (ngSubmit)="saveData()"
+            *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 ||
                 StudentDetailsList[0]?.AllotmentStatus === 12 ||
                 StudentDetailsList[0]?.AllotmentStatus === 13 ">
 
@@ -116,8 +116,8 @@
             <input class="form-input" placeholder="Enter Local Guardian Contact No." (keypress)="validateNumber($event)" formControlName="txtLocalGuardianContactNo" maxlength="10" />
           </div>
         </div>
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3" 
-          *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3"
+             *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
           <b class="text-1xl-5"><i class="ti ti-list"></i> In Year({{LastFY.FinancialYearName}})</b>
         </div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
@@ -171,28 +171,28 @@
 
         <!-- room choice -->
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
-          <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
 
-              <!-- <label for="inputState" class="form-label">Branch</label> -->
-                <ng-multiselect-dropdown  #multiSelect1 class="w-40 text-sm" [placeholder]="'Choose Option'"
-                                      [settings]="settingsMultiselect"
-                                      [data]="RoomTypeDDLList"
-                                      formControlName="SelectedRoomTypeID"
-                                      name="SelectedRoomTypeID"
-                                      [disabled]="false"
-                                      (onFilterChange)="onFilterChange($event)"
-                                      (onDropDownClose)="onDropDownClose($event)"
-                                      (onSelect)="onItemSelect($event)"
-                                      (onDeSelect)="onDeSelect($event)"
-                                      (onSelectAll)="onSelectAll($event)"
-                                      (onDeSelectAll)="onDeSelectAll($event)">
-                </ng-multiselect-dropdown>
-              <!-- [(ngModel)]="SelectedRoomTypeID" -->
-              <small>(1 Seater, 2 Seater, 3 Seater, 4 Seater)</small>
-              <!-- <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">
-                <p *ngIf="!_groupForm.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-              </div> -->
+            <!-- <label for="inputState" class="form-label">Branch</label> -->
+            <ng-multiselect-dropdown #multiSelect1 class="w-40 text-sm" [placeholder]="'Choose Option'"
+                                     [settings]="settingsMultiselect"
+                                     [data]="RoomTypeDDLList"
+                                     formControlName="SelectedRoomTypeID"
+                                     name="SelectedRoomTypeID"
+                                     [disabled]="false"
+                                     (onFilterChange)="onFilterChange($event)"
+                                     (onDropDownClose)="onDropDownClose($event)"
+                                     (onSelect)="onItemSelect($event)"
+                                     (onDeSelect)="onDeSelect($event)"
+                                     (onSelectAll)="onSelectAll($event)"
+                                     (onDeSelectAll)="onDeSelectAll($event)">
+            </ng-multiselect-dropdown>
+            <!-- [(ngModel)]="SelectedRoomTypeID" -->
+            <small>(1 Seater, 2 Seater, 3 Seater, 4 Seater)</small>
+            <!-- <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">
+              <p *ngIf="!_groupForm.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+            </div> -->
           </div>
         </div>
 
@@ -210,7 +210,7 @@
           </div>
         </div>
 
-     
+
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3" *ngIf="RequestForRoomPartner === true">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No</label>
@@ -255,12 +255,8 @@
             </div>
           </div>
         </div>-->
-
-
-
         <!-- </div> -->
-
-         <!-- <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
           <select formControlName="txtRoomType" class="form-input" type="text" id="RoomType" placeholder="Enter Room Type"
                   [(ngModel)]="request.RoomType" (change)="changeSeats()">
@@ -418,7 +414,7 @@
                     <i class="ti ti-download"></i>
                   </a>
 
-                   <a *ngIf="item.HostelFeesReciept" (click)="DownloadHostelAllotmentLetter(item.ReqId)" class="text-success"
+                  <a *ngIf="item.HostelFeesReciept" (click)="DownloadHostelAllotmentLetter(item.ReqId)" class="text-success"
                      title="Download Allotment Letter">
                     <i class="ti ti-download"></i>
                   </a>
@@ -436,10 +432,51 @@
       <p>You are not eligible for hostel</p>
     </div>
   </div>
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 6">
+
+  <!--<div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 6">
     <div class="mb-8" style="padding: 10px; background-color: #ffe5e5; border: 1px solid #cc0000; color: #990000;">
       <strong>Hostel Cancelled by Choice:</strong><br>
       We regret to inform you that your hostel request has been cancelled by the warden.
+
+
+      <br><br>
+
+      <strong>Remark :</strong>
+      {{HostelDetailsList[0]?.Remark}}
+
+    </div>
+
+  </div>-->
+  <div class="card-body p-4"
+       *ngIf="StudentDetailsList[0]?.AllotmentStatus == 6">
+
+    <div class="reject-card">
+
+      <div class="row align-items-center">
+
+        <!-- Left Side -->
+        <div class="col-md-10">
+
+          <strong class="text-danger">
+            Hostel Cancelled by Choice
+          </strong>
+
+          <p class="mb-0 mt-2">
+            We regret to inform you that your hostel request has been cancelled by the warden.
+          </p>
+
+        </div>
+
+        <!-- Right Side -->
+        <div class="col-md-2 text-end">
+
+          <a href="javascript:void(0);" title="Status History" (click)="openUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, sSOLoginDataModel.StudentID)"><i class="ti ti-list"></i></a>
+
+         
+        </div>
+
+      </div>
+
     </div>
 
   </div>
@@ -495,12 +532,12 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Contact/Mobile No.<span class="StarMarking">*</span></label>
-    <input placeholder="Enter Father's Contact/Mobile No." class="form-input" id="mobileNo" (keypress)="validateNumber($event)" [(ngModel)]="HostelWardenSomeDetails.txtWFatherContactNo" name="MobileNo" formControlName="txtWFatherContactNo" maxlength="10">
-    <div *ngIf="isSubmitted && groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors" class="text-danger">
-      <p *ngIf="groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
-    </div>
-  </div>-->
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Contact/Mobile No.<span class="StarMarking">*</span></label>
+            <input placeholder="Enter Father's Contact/Mobile No." class="form-input" id="mobileNo" (keypress)="validateNumber($event)" [(ngModel)]="HostelWardenSomeDetails.txtWFatherContactNo" name="MobileNo" formControlName="txtWFatherContactNo" maxlength="10">
+            <div *ngIf="isSubmitted && groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors" class="text-danger">
+              <p *ngIf="groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>-->
 
 
           <div>
@@ -585,3 +622,66 @@
   </div>
 </div>
 
+<ng-template #MyModel_UserProfileStatusHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+
+        <button class="btn bg-info text-white" (click)="CloseModalProfileStatuslist()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+
+      <div class="card-body">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Status History</b>
+          <div class="flex justify-end flex-wrap items-center">
+          
+          </div>
+        </div>
+
+
+        <!--{{UserProfileStatusHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th>S.No</th>
+                <th>Remark</th>
+                <th>Rejected Date</th>
+                <th>Rejected By</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of RoomAllotmentCancelHistoryList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.Remark }}</td>
+                <td align="left">{{ row.ModifyDate }}</td>
+                <td align="left">{{ row.ModifyByName}}</td>
+                
+              </tr>
+              <tr *ngIf="RoomAllotmentCancelHistoryList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalProfileStatuslist()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
+</ng-template>

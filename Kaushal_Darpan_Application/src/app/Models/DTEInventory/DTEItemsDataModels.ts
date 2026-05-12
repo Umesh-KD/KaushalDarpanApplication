@@ -31,6 +31,7 @@ export class DTEItemsSearchModel {
   public ItemFor?: number = 0;
   public StaffID?: number = 0;
   public TradeId?: number = 0;
+  public ItemId?: number = 0;
 }
 
 export class DTEItemsSearchModel1 {
@@ -98,6 +99,7 @@ export class inventoryIssueHistorySearchModel {
   public RoleID? : number = 0;
   public status? : number = 0;
   public IssueStatus? : number = 2;
+  public ItemDetailsId? : number =0;
   public IsStaff? : boolean = false;
 }
 export class inventoryIssueHistoryITISearchModel {

@@ -1,0 +1,12 @@
+.reject-card {
+  padding: 15px;
+  background: #ffe5e5;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+}
+
+.history-icon {
+  font-size: 26px;
+  color: #dc3545;
+  cursor: pointer;
+}

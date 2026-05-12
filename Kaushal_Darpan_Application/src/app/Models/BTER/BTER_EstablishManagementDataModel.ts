@@ -15,6 +15,7 @@ export class BTER_EM_StaffListSearchModel {
   Name: string = "";
   status?:number=0;
   Eng_NonEng?:number=0;
+  GuestHouseID?: string = "";
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
@@ -770,6 +771,7 @@ export class EM_TransferSystemSearchModel {
   public jsonData?: string = '';
   public RelievingDoc?: string = '';
   public RelievingDoc_Dis?: string = '';
+  public RoleID: number = 0;
 }
   
 
