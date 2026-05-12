@@ -95,13 +95,15 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         this.StaffTrainingStatusList = data['Data'];
         this.StaffTrainingStatusSearchList = data['Data'];
 
-        if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID==EnumRole.PrincipalNon) {
+        if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+          this.SearchStatus = EnumStaffTrainingStatus.Applied;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) =>  item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.PrincipalApprove)
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.Applied  || item.ID == EnumStaffTrainingStatus.PrincipalApprove)
 
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.Applied);
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+          this.SearchStatus = EnumStaffTrainingStatus.PrincipalApprove;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) =>  item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE)
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.PrincipalApprove ||  item.ID == EnumStaffTrainingStatus.ADTE)
 
@@ -109,16 +111,19 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
           debugger
+          this.SearchStatus = EnumStaffTrainingStatus.ADTE;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE )
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE || item.ID == EnumStaffTrainingStatus.ADTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.ADTE);
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+          this.SearchStatus = EnumStaffTrainingStatus.JDTE;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.DTE )
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE ||  item.ID == EnumStaffTrainingStatus.DTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.JDTE);
         }else{
           this.StaffTrainingStatusList = [];
+          this.SearchStatus = EnumStaffTrainingStatus.Applied;
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.Applied);
         }
         
@@ -130,61 +135,119 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     }
 
     async StaffTrainingDetailsNewTraining_Search(statusID: number) {
-      
+    
       this.statusID = statusID;
       await this.StaffTrainingDetailsNewTraining_GetData();
+      await this.onChangeSearchStatus();
     }
-
-    
     async StaffTrainingDetailsNewTraining_GetData() {
-      
+      debugger;
+
       try {
-        this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+        this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
         this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
         this.searchRequest.Action = "GetAllDataNewTraining";
         this.searchRequest.StatusID = this.statusID;
-        await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State === EnumStatus.Success) {
-            this.StaffTrainingDetailsNewTrainingDataList = data.Data;
-            if (this.statusID == 0) {
-              this.StaffTrainingDetailsNewTrainingDataList = data.Data;
-            }
-          } else {
-            this.StaffTrainingDetailsNewTrainingDataList = [];
-          }
-          debugger
+
+        const response: any = await this.staffServiceDetailsService
+          .StaffTrainingDetails_GetData(this.searchRequest);
+
+        const data = JSON.parse(JSON.stringify(response));
+
+        if (data.State === EnumStatus.Success) {
+          this.StaffTrainingDetailsNewTrainingDataList = data.Data || [];
+        } else {
+          this.StaffTrainingDetailsNewTrainingDataList = [];
+        }
+
+        debugger;
+
+        // Apply Role Based Filter
+        if (this.StaffTrainingDetailsNewTrainingDataList.length > 0) {
+
           if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
-            if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
-              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 1)
-            }
+            debugger
+            this.StaffTrainingDetailsNewTrainingDataList =
+              this.StaffTrainingDetailsNewTrainingDataList.filter(
+                (item: any) => item.ISNonGazetted == 1
+              );
 
-          }
-          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
-            if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
-              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 2)
-            }
-          }
-          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
-            if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
-              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 1)
-            }
-          }
-          else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
-            if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
-              this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 2)
-            }
-          }
-          else {
-            this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList;
-          }
+          } else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+            debugger
+            this.StaffTrainingDetailsNewTrainingDataList =
+              this.StaffTrainingDetailsNewTrainingDataList.filter(
+                (item: any) => item.ISNonGazetted == 2
+              );
 
+          } else if (
+            this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE ||
+            this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER
+          ) {
 
-        })
+            this.StaffTrainingDetailsNewTrainingDataList =
+              this.StaffTrainingDetailsNewTrainingDataList.filter(
+                (item: any) =>
+                  item.ISNonGazetted == 1 || item.ISNonGazetted == 2
+              );
+          }
+        }
+
       } catch (error) {
         console.error(error);
+        this.StaffTrainingDetailsNewTrainingDataList = [];
       }
     }
+    
+    //async StaffTrainingDetailsNewTraining_GetData() {
+    //  debugger
+    //  try {
+    //    this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+    //    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+    //    this.searchRequest.Action = "GetAllDataNewTraining";
+    //    this.searchRequest.StatusID = this.statusID;
+    //    await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
+    //      data = JSON.parse(JSON.stringify(data));
+    //      if (data.State === EnumStatus.Success) {
+    //        this.StaffTrainingDetailsNewTrainingDataList = data.Data;
+    //        if (this.statusID == 0) {
+    //          this.StaffTrainingDetailsNewTrainingDataList = data.Data;
+    //        }
+    //      }
+    //      else {
+    //        this.StaffTrainingDetailsNewTrainingDataList = [];
+    //      }
+    //      debugger
+    //      if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
+    //        if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
+    //          this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 1)
+    //        }
+
+    //      }
+    //      else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+    //        if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
+    //          this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 2)
+    //        }
+    //      }
+    //      else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
+    //        if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
+    //          this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 1 || item.ISNonGazetted == 2)
+    //        }
+    //      }
+    //      //else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER) {
+    //      //  if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
+    //      //    this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 2)
+    //      //  }
+    //      //}
+    //      else {
+    //        this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList;
+    //      }
+
+
+    //    })
+    //  } catch (error) {
+    //    console.error(error);
+    //  }
+    //}
 
     checkboxthView_checkboxchange(isChecked: boolean) {
       
