@@ -1312,10 +1312,10 @@ async GetCategroyData() {
       await this.bterEstablishManagementService.GetStaff_HostelIDs(this.hostelSearchReq)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          // this.StaffHostelDetails = data.Data;
+          this.StaffHostelDetails = data.Data;
 
           this.StaffHostelDetails = this.HostelList.filter((hostel: any) =>
-            data.Data.some((selected: any) => selected.ID === hostel.ID)
+            this.StaffHostelDetails.some((selected: any) => selected.ID === hostel.ID)
           );
         }, (error: any) => console.error(error))
 
@@ -1365,8 +1365,6 @@ async GetCategroyData() {
   }
 
   async RevertStaffProfile(model: any, userSubmitData: any) {
-    debugger
-
     try {
       await this.GetStatusList()
       this.RequestUpdateStatus.StatusIDs = 249;
@@ -1380,11 +1378,6 @@ async GetCategroyData() {
       console.error('Error fetching data:', error);
     }
   }
-
-
-
-
-
 
   async updateReqStatus() {
 
