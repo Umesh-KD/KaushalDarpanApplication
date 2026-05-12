@@ -3122,7 +3122,6 @@ export class PreExamStudentExaminationComponent {
   IsShowOptionalSubject(row: any) {
     if ((
       this.sSOLoginDataModel.RoleID == EnumRole.Admin
-      || this.sSOLoginDataModel.RoleID == EnumRole.Principal
       || this.sSOLoginDataModel.RoleID == EnumRole.Registrar
     ) && ([
       (enumExamStudentStatus.EligibleForExamination || enumExamStudentStatus.NewEligibleForExamination)
