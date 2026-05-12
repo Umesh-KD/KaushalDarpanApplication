@@ -34,6 +34,7 @@ export class VerifyApplicationCommitteeComponent {
   public UpdateStatusListDDL: any = [];
   public InstituteStatusListDDL: any = [];
   public CommitteeListDDL: any = [];
+  public UserRequestHistoryList: any = [];
   public SelectedInstituteId: number | null = null;
 
   public status: number = 0;
@@ -536,6 +537,34 @@ export class VerifyApplicationCommitteeComponent {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async onUserRequestHistorylist(model: any, THTEAppID: number) {
+     
+    try {
+      this.loaderService.requestStarted();
+      this.requestSearch.THTEAppID = THTEAppID
+
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplicationStatusHistory(this.requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserRequestHistoryList = data.Data;
+        }, (error: any) => console.error(error))
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalRequestHistorylist1() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
   }
 
 }

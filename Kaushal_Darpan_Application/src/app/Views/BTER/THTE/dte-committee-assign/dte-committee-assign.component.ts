@@ -6,7 +6,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { ApplicationGenrateOrderByDteListSearchModel, PrincipleApplicationListSearchModel, StaffDetailsPreviewDataModel, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Principle } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { ApplicationGenrateOrderByDteListSearchModel, PrincipleApplicationListSearchModel, StaffDetailsPreviewDataModel, THTE_ApplicationSearchModel, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Principle } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
@@ -31,6 +31,7 @@ export class DTECommitteeAssignComponent {
   public _DTEGenrateOrder = new ApplicationGenrateOrderByDteListSearchModel();
   staffDetailsFormData = new StaffDetailsDataModel();
   staffDetailsPreview = new StaffDetailsPreviewDataModel();
+  public requestSearch = new THTE_ApplicationSearchModel();
 
   modalReference: NgbModalRef | undefined;
   public ApplicationListData: any = [];
@@ -38,6 +39,7 @@ export class DTECommitteeAssignComponent {
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
   public DTECommitteeListDDL: any = [];
+  public UserRequestHistoryList: any = [];
   public enumRole = EnumRole;
 
   public status: number = 0;
@@ -385,4 +387,35 @@ export class DTECommitteeAssignComponent {
     this.AllInTableSelect = this.paginatedInTableData.every(r => r.Selected === true);
   }
   // end table feature
+
+  async onUserRequestHistorylist(model: any, THTEAppID: number) {
+     
+    try {
+      this.loaderService.requestStarted();
+      const requestSearch: any = {}
+      requestSearch.THTEAppID = THTEAppID
+
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplicationStatusHistory(requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserRequestHistoryList = data.Data;
+
+        }, (error: any) => console.error(error))
+
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalRequestHistorylist1() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+  }
 }

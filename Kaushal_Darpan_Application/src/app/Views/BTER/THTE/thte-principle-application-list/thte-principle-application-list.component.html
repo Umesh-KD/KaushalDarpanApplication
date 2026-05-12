@@ -88,6 +88,7 @@
             <th class="text-left">Last Qualification is recorded in the service book?</th>
             <th class="text-left">Status</th>
             <th class="text-left">Remark</th>
+            <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -115,6 +116,13 @@
             <td align="left">{{row.IsQualificationRecorded_str}}</td>
             <td align="left">{{row.StatusName}}</td>
             <td align="left">{{row.Remark}}</td>
+            <td align="left">
+              <div class="flex align-center justify-center actionBtns w-auto"
+                  style="width:auto !important">
+                <a href="javascript:void(0);" class="btn bg-blue text-red" title="History"
+                  (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-list"></i></a>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -146,22 +154,14 @@
 
         <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist()" type="button"><i class="ti ti-x"></i></button>
       </div>
-
-
-
       <div class="card-body">
-
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i>Applied Institute List</b>
           <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
-
-
         <!--{{UserRequestHistoryList|json}}-->
         <div class="overflow-x-auto mt-3">
-
-
 
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
@@ -199,6 +199,59 @@
         </button>
       </div>
     </div>
+  </div>
+
+</ng-template>
+
+<ng-template #MyModel_UserRequestHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+
+        <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist1()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Request History</b>
+          <div class="flex justify-end flex-wrap items-center">
+          </div>
+        </div>
+        <!--{{UserRequestHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Teacher Name</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Remarks</th>
+                <th class="text-left">Action Name</th>
+                <th class="text-left">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of UserRequestHistoryList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.TeacherName }}</td>
+                <td align="left">{{ row.StatusName }}</td>
+                <td align="left">{{ row.Remarks }}</td>
+                <td align="left">{{ row.ActionName }}</td>
+                <td align="left">{{ row.ActionDate }}</td>
+              </tr>
+              <tr *ngIf="UserRequestHistoryList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalRequestHistorylist1()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> 
   </div>
 
 </ng-template>
