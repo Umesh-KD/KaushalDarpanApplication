@@ -263,4 +263,15 @@ export class PreExamStudentExaminationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async UpdateOptionalSubjectAfterEligibleStudent(request: OptionalSubjectRequestModel) {
+    return this.http.post(this.APIUrl + '/UpdateOptionalSubjectAfterEligibleStudent', request, this.headersOptions)
+      .pipe(
+        catchError(error => {
+          console.error('Error:', error);
+          return throwError(error);
+        })
+      ).toPromise();
+  }
+    
 }

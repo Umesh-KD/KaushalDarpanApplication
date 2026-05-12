@@ -278,9 +278,9 @@ export class CommonFunctionService {
   }
 
 
-  public async StaffAttendence(SSOID: string = '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0) {
+  public async StaffAttendence(SSOID: string = '', StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0, RoleID:number=0) {
 
-    return await this.http.get(this.APIUrl + '/StaffAttendence/' + SSOID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/StaffAttendence/' + SSOID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID + '/' + RoleID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -2422,16 +2422,16 @@ export class CommonFunctionService {
       this.headersOptions
     ).pipe(catchError(this.handleErrorObservable))
       .toPromise();
-    }
+  }
 
-    
 
-    public async GetCommonMasterDDLByAction1(ActionType: string) {
 
-        return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByAction1/${ActionType}`, this.headersOptions)
-            .pipe(
-                catchError(this.handleErrorObservable)
-            ).toPromise();
+  public async GetCommonMasterDDLByAction1(ActionType: string) {
+
+    return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByAction1/${ActionType}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
   }
 
   public async GetGroupCode_Reval(model: CommonDDLSubjectMasterModel) {
@@ -2440,13 +2440,20 @@ export class CommonFunctionService {
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
-    }
+  }
 
-    public async DDL_EmployeeTransferSysterm(OfficeID: number = 0, DesignationID: number = 0, DistrictID: number = 0, InstituteID: number = 0) {
+  public async DDL_EmployeeTransferSysterm(OfficeID: number = 0, DesignationID: number = 0, DistrictID: number = 0, InstituteID: number = 0) {
 
-        return await this.http.get(this.APIUrl + '/DDL_EmployeeTransferSysterm/' + OfficeID + '/' + DesignationID + '/' + DistrictID + '/' + InstituteID, this.headersOptions)
-            .pipe(
-                catchError(this.handleErrorObservable)
-            ).toPromise();
-    }
+    return await this.http.get(this.APIUrl + '/DDL_EmployeeTransferSysterm/' + OfficeID + '/' + DesignationID + '/' + DistrictID + '/' + InstituteID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAlreadyAssignedOptionalSubject(StudentExamID: number) {
+    return await this.http.get(`${this.APIUrl}/GetAlreadyAssignedOptionalSubject/${StudentExamID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

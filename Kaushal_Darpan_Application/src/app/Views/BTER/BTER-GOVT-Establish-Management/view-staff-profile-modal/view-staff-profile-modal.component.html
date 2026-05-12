@@ -196,7 +196,7 @@
           <div>
             <label class="text-sm font-semibold text-gray-700 block mb-1">Date of Retirement</label>
             <div class="bg-gray-50 border rounded px-3 py-2">
-              {{staffDetailsServicePreview.DateOfRetirement}}
+              {{staffDetailsServicePreview?.DateOfRetirement | date: 'dd-MM-yyyy'}}
             </div>
           </div>
 

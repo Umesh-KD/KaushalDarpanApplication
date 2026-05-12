@@ -1731,6 +1731,9 @@ const routes: Routes = [
       { path: 'ITIExaminerInchargeDashboard', loadChildren: () => import('./Views/ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module').then(m => m.ItiExaminationInchargeDashboardModule), title: 'ITI Examiner Incharge Dashboard' },
 
       { path: 'StaffIFMSData', loadChildren: () => import('../Views/ITI/staff-ifmsdata/staff-ifmsdata.module').then(m => m.StaffIFMSDataModule) },
+      { path: 'BterAttendenceRoom', loadChildren: () => import('./Views/bter-attendence-room/bter-attendence-room.module').then(m => m.BterAttendenceRoomModule) },
+      { path: 'BterRoomUtilization', loadChildren: () => import('./Views/bter-room-utilization/bter-room-utilization.module').then(m => m.BterRoomUtilizationModule) },
+
 
     ]
   },
@@ -1797,7 +1800,7 @@ const routes: Routes = [
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
 
-
+    
 
     ]
   },
@@ -1851,7 +1854,7 @@ const routes: Routes = [
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
-  { path: 'Views\BterAttendenceRoom', loadChildren: () => import('./Views/bter-attendence-room/bter-attendence-room.module').then(m => m.BterAttendenceRoomModule) },
+
 
 
 

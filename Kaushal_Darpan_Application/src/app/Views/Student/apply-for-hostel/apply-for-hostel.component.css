@@ -17,3 +17,17 @@
 .card {
   overflow: visible !important;
 }
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100% !important;
+}
+
+th,
+td {
+  padding: 10px;
+  vertical-align: middle;
+}

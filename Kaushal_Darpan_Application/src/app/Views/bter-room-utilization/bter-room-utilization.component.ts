@@ -20,14 +20,13 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AttendanceServiceService } from '../../Services/AttendanceServices/attendance-service.service';
 import { RosterDisplayTimeTableDataModel } from '../../Models/StaffMasterDataModel';
-
 @Component({
-  selector: 'app-bter-attendence-room',
+  selector: 'app-bter-room-utilization',
   standalone: false,
-  templateUrl: './bter-attendence-room.component.html',
-  styleUrl: './bter-attendence-room.component.css'
+  templateUrl: './bter-room-utilization.component.html',
+  styleUrl: './bter-room-utilization.component.css'
 })
-export class BterAttendenceRoomComponent {
+export class BterRoomUtilizationComponent {
   displayedColumns: string[] = [];
   columnSchema: Array<{ key: string; label: string; isAction?: boolean; isDate?: boolean }> = [];
 
@@ -89,7 +88,7 @@ export class BterAttendenceRoomComponent {
     SectionID: 0,
     DayID: 0,
     AttendanceEndDate: '',
-    AttendanceStartDate:''
+    AttendanceStartDate: ''
     /*AttendanceDate: ''*/
   };
   minEndDate: string | null = null;
@@ -258,7 +257,7 @@ export class BterAttendenceRoomComponent {
       this.filterModel.AttendanceEndDate = formattedDateEnd
 
       this.loaderService.requestStarted();
-      const response = await this.staffMasterService.GetAllRoomReport(this.filterModel);
+      const response = await this.staffMasterService.GetAllRoomUtilizationReport(this.filterModel);
       const data = JSON.parse(JSON.stringify(response));
       if (data.State === EnumStatus.Success) {
         this.filterData = data.Data;

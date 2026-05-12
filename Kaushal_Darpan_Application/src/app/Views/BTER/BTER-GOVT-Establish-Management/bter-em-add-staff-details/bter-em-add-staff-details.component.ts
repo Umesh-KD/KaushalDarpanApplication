@@ -733,7 +733,7 @@ export class BterEMAddStaffDetailsComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.UserProfileStatusHistoryList = data.Data;
-          this.UserProfileStatusHistoryList=this.UserProfileStatusHistoryList.filter((item:any)=>item.UserProfileStatus==='Revert');
+          // this.UserProfileStatusHistoryList=this.UserProfileStatusHistoryList.filter((item:any)=>item.UserProfileStatus==='Revert');
 
         }, (error: any) => console.error(error))
 
@@ -920,10 +920,10 @@ export class BterEMAddStaffDetailsComponent {
 
       // Get Names safely
       const institute = this.InstituteMasterDDLList.find((x: any) => x.InstituteID == formValue.TransferToInstituteID);
-      const designation = this.DesignationMasterDDLList.find((x: any) => x.ID == formValue.DesignationID);
+      const designation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.DesignationID);
       const office = this.OfficeList.find((x: any) => x.ID == formValue.OfficeID);
       const transferOffice = this.OfficeList.find((x: any) => x.ID == formValue.TransferToOfficeID);
-      const promotionDesignation = this.DesignationMasterDDLList.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
+      const promotionDesignation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
       
       if(this.serviceReq.InstituteID!=0){
         this.serviceReq.InstituteName=this.InstituteMasterDDLList.filter((x:any)=>x.InstituteID==this.serviceReq.InstituteID)[0]['InstituteName'];
@@ -1309,6 +1309,35 @@ export class BterEMAddStaffDetailsComponent {
 
   }
 
+  async onDateChange() {
+    if (this.serviceReq.FromDate && this.serviceReq.ToDate) {
+      if(this.serviceReq.FromDate>this.serviceReq.ToDate){
+        this.toastr.error("To Date should be greater than From Date");
+        this.serviceReq.ToDate='';
+        return;
+      }
+    }
+  }
+
+  async onTransferDateChange() {
+    if (this.serviceReq.ToDate && this.serviceReq.DateOfTransfer){
+      if(this.serviceReq.ToDate>this.serviceReq.DateOfTransfer){
+        this.toastr.error("Transfer Date should be greater than To Date");
+        this.serviceReq.DateOfTransfer='';
+        return;
+      }
+    }
+  }
+
+  async onPromotionDateChange() {
+    if (this.serviceReq.ToDate && this.serviceReq.DateOfpromotion){
+      if(this.serviceReq.ToDate>this.serviceReq.DateOfpromotion){
+        this.toastr.error("Promotion Date should be greater than To Date");
+        this.serviceReq.DateOfpromotion='';
+        return;
+      }
+    }
+  }
 
 }
 
