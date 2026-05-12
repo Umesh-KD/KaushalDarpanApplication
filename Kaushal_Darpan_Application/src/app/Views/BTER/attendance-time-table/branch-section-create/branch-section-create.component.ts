@@ -923,11 +923,12 @@ export class BranchSectionCreateComponent {
     this.subjectsearch.SemesterID = this.AddStaffSubjectSectionModel.SemesterID;
     this.subjectsearch.DepartmentID=1
     this.subjectsearch.SchemeID=1348
+    this.subjectsearch.EndTermID=this.sSOLoginDataModel.EndTermID
     /* await this.getupBranchHodData();*/
 
     if (GetstreamId && GetSemesterID) {
       this.commonMasterService
-        .GetSubjectMasterDDL_New(this.subjectsearch)
+        .Get_SubjectMasterByCondition(this.subjectsearch)
         .then((data: any) => {
           this.SubjectMasterDDL = data?.Data || [];
         })
