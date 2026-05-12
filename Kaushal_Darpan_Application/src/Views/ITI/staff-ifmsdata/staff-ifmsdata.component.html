@@ -1,99 +1,155 @@
-<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
-  <h4 class="text-slate-900 text-lg font-medium">Employee Master</h4>
-</div>
+
 
 <div class="card">
   <div class="card-body p-5">
 
+    <div class="flex items-center justify-between flex-wrap gap-2 mb-6 ng-star-inserted">
+      <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">Add Govt Establish</h4>
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+          <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+          <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+          <a routerlink="/ITI-Govt-AddEstablish" aria-current="page" class="text-sm font-medium text-slate-700" ng-reflect-router-link="/ITI-Govt-AddEstablish" href="/ITI-Govt-AddEstablish"> Add Govt Establish Info Details </a>
+        </div>
+      </div>
+    </div>
+
+
     <!-- ================= BASIC ================= -->
     <div class="mb-6">
-     <div class="flex items-center justify-between bg-light p-3 mb-3 font-semibold">
+      <div class="flex items-center justify-between bg-light p-3 mb-3 font-semibold">
 
-  <!-- Left Title -->
-  <div>
-    Employee Basic Details
-  </div>
+        <!-- Left Title -->
+        <div>
+          <a [routerLink]="'/ITI-Govt-AddEstablish'"> Employee Basic Details</a>
+        </div>
 
-  <!-- Right Side -->
-  <div class="flex items-center gap-2">
+        <!-- Right Side -->
+        <div class="flex items-center gap-2">
 
-    <div class="text-sm text-gray-600">Data as on 1 Jan, 2026</div>
+          <div class="text-sm text-gray-600">Data as on 1 Jan, 2026</div>
 
-    <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1">
+          <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded flex items-center gap-1">
 
-      <!-- Refresh Icon -->
-      <i class="ti ti-refresh"></i><span class="text-sm ">Refresh Data</span>
+            <!-- Refresh Icon -->
+            <i class="ti ti-refresh"></i><span class="text-sm ">Refresh Data</span>
 
-    </button>
+          </button>
 
-  </div>
 
-</div>
+
+
+
+        </div>
+
+      </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div><label class="form-label">Employee ID</label>
-          <input class="form-input" [(ngModel)]="model[0].EMPLOYEEID" disabled></div>
+        <div>
+          <label class="form-label">Employee ID</label>
+          <input class="form-input" [(ngModel)]="model[0].EMPLOYEEID" disabled>
+        </div>
 
-        <div><label class="form-label">Employee Code</label>
-          <input class="form-input" [(ngModel)]="model[0].EMPLOYEE_CODE" disabled></div>
+        <div>
+          <label class="form-label">Employee Code</label>
+          <input class="form-input" [(ngModel)]="model[0].EMPLOYEE_CODE" disabled>
+        </div>
 
-        <div><label class="form-label">Name (English)</label>
-          <input class="form-input" [(ngModel)]="model[0].NAME_ENGLISH" disabled></div>
+        <div>
+          <label class="form-label">Name (English)</label>
+          <input class="form-input" [(ngModel)]="model[0].NAME_ENGLISH" disabled>
+        </div>
 
-        <div><label class="form-label">Father Name</label>
-          <input class="form-input" [(ngModel)]="model[0].FATHER_NAME" disabled></div>
+        <div>
+          <label class="form-label">Father Name</label>
+          <input class="form-input" [(ngModel)]="model[0].FATHER_NAME" disabled>
+        </div>
 
-        <div><label class="form-label">Date of Birth</label>
-          <input type="date" class="form-input" [(ngModel)]="model[0].DATE_OF_BIRTH" disabled></div>
+        <div>
+          <label class="form-label">Date of Birth</label>
+          <input type="date" class="form-input" [(ngModel)]="model[0].DATE_OF_BIRTH" disabled>
+        </div>
 
-        <div><label class="form-label">DOR</label>
-          <input type="date" class="form-input" [(ngModel)]="model[0].DOR" disabled></div>
+        <div>
+          <label class="form-label">DOR</label>
+          <input type="date" class="form-input" [(ngModel)]="model[0].DOR" disabled>
+        </div>
 
-        <div><label class="form-label">Office ID</label>
-          <input class="form-input" [(ngModel)]="model[0].OFFICE_ID" disabled></div>
+        <div>
+          <label class="form-label">Office ID</label>
+          <input class="form-input" [(ngModel)]="model[0].OFFICE_ID" disabled>
+        </div>
 
-        <div><label class="form-label">Email</label>
-          <input class="form-input" [(ngModel)]="model[0].EMAIL" disabled></div>
+        <div>
+          <label class="form-label">Email</label>
+          <input class="form-input" [(ngModel)]="model[0].EMAIL" disabled>
+        </div>
 
-        <div><label class="form-label">Mobile No.</label>
-          <input class="form-input" [(ngModel)]="model[0].MOB_NO" disabled></div>
+        <div>
+          <label class="form-label">Mobile No.</label>
+          <input class="form-input" [(ngModel)]="model[0].MOB_NO" disabled>
+        </div>
 
-        <div><label class="form-label">Service Category</label>
-          <input class="form-input" [(ngModel)]="model[0].SERVICE_CATEGORY" disabled></div>
+        <div>
+          <label class="form-label">Service Category</label>
+          <input class="form-input" [(ngModel)]="model[0].SERVICE_CATEGORY" disabled>
+        </div>
 
-        <div><label class="form-label">Sub Service Category</label>
-          <input class="form-input" [(ngModel)]="model[0].SUBSERVICE_CATEGORY" disabled></div>
+        <div>
+          <label class="form-label">Sub Service Category</label>
+          <input class="form-input" [(ngModel)]="model[0].SUBSERVICE_CATEGORY" disabled>
+        </div>
 
-        <div><label class="form-label">Status Name</label>
-          <input class="form-input" [(ngModel)]="model[0].STATUS_NAME" disabled></div>
+        <div>
+          <label class="form-label">Status Name</label>
+          <input class="form-input" [(ngModel)]="model[0].STATUS_NAME" disabled>
+        </div>
 
-        <div><label class="form-label">Gender</label>
-          <input class="form-input" [(ngModel)]="model[0].GEN_NAME_EN" disabled></div>
+        <div>
+          <label class="form-label">Gender</label>
+          <input class="form-input" [(ngModel)]="model[0].GEN_NAME_EN" disabled>
+        </div>
 
-        <div><label class="form-label">Branch Group Code</label>
-          <input class="form-input" [(ngModel)]="model[0].B_GRP_CODE" disabled></div>
+        <div>
+          <label class="form-label">Branch Group Code</label>
+          <input class="form-input" [(ngModel)]="model[0].B_GRP_CODE" disabled>
+        </div>
 
-        <div><label class="form-label">Current Designation</label>
-          <input class="form-input" [(ngModel)]="model[0].CURRENT_DESG_EN" disabled></div>
+        <div>
+          <label class="form-label">Current Designation</label>
+          <input class="form-input" [(ngModel)]="model[0].CURRENT_DESG_EN" disabled>
+        </div>
 
-        <div><label class="form-label">Office Name</label>
-          <input class="form-input" [(ngModel)]="model[0].OFFICE_NAME_EN" disabled></div>
+        <div>
+          <label class="form-label">Office Name</label>
+          <input class="form-input" [(ngModel)]="model[0].OFFICE_NAME_EN" disabled>
+        </div>
 
-        <div><label class="form-label">Department</label>
-          <input class="form-input" [(ngModel)]="model[0].CURRENT_DEPT_EN" disabled></div>
+        <div>
+          <label class="form-label">Department</label>
+          <input class="form-input" [(ngModel)]="model[0].CURRENT_DEPT_EN" disabled>
+        </div>
 
-        <div><label class="form-label">Officer Type</label>
-          <input class="form-input" [(ngModel)]="model[0].OFFICER_TYPE" disabled></div>
+        <div>
+          <label class="form-label">Officer Type</label>
+          <input class="form-input" [(ngModel)]="model[0].OFFICER_TYPE" disabled>
+        </div>
 
-        <div><label class="form-label">Quota Name</label>
-          <input class="form-input" [(ngModel)]="model[0].QUOTA_NAME_EN" disabled></div>
+        <div>
+          <label class="form-label">Quota Name</label>
+          <input class="form-input" [(ngModel)]="model[0].QUOTA_NAME_EN" disabled>
+        </div>
 
-        <div><label class="form-label">Entry Status</label>
-          <input class="form-input" [(ngModel)]="model[0].ENT_STATUS" disabled></div>
+        <div>
+          <label class="form-label">Entry Status</label>
+          <input class="form-input" [(ngModel)]="model[0].ENT_STATUS" disabled>
+        </div>
 
-        <div><label class="form-label">Cadre</label>
-          <input class="form-input" [(ngModel)]="model[0].Cadre" disabled></div>
+        <div>
+          <label class="form-label">Cadre</label>
+          <input class="form-input" [(ngModel)]="model[0].Cadre" disabled>
+        </div>
 
       </div>
     </div>
@@ -178,7 +234,7 @@
         <div><label>Category ID</label><input class="form-input" [(ngModel)]="model[0].CATEGORY_ID" disabled></div>
 
         <div><label>Appointment Order No.</label><input class="form-input" [(ngModel)]="model[0].APPOINT_ORD_NUM" disabled></div>
-        <div><label>Nationality</label><input class="form-input" [(ngModel)]="model[0].Nationality" disabled></div> 
+        <div><label>Nationality</label><input class="form-input" [(ngModel)]="model[0].Nationality" disabled></div>
         <div><label>Nationality ID</label><input class="form-input" [(ngModel)]="model[0].NATIONALITY_ID" disabled></div>
         <div><label>Parent Department Name</label><input class="form-input" [(ngModel)]="model[0].PARENT_DEPT_NAME_EN" disabled></div>
 
@@ -194,94 +250,94 @@
 
         <div><label>Civil Pensioner</label><input class="form-input" [(ngModel)]="model[0].IS_CIVIL_PENSIONER" disabled></div>
         <div><label>Civil Pension Amount</label><input class="form-input" [(ngModel)]="model[0].CIVIL_PENSION_AMOUNT" disabled></div>
-        <div><label>Rajasthan Domicile</label><input class="form-input" [(ngModel)]="model[0].IS_RAJASTHAN_DOMICILE"  disabled></div>
+        <div><label>Rajasthan Domicile</label><input class="form-input" [(ngModel)]="model[0].IS_RAJASTHAN_DOMICILE" disabled></div>
 
       </div>
     </div>
 
     <!-- ================= FAMILY (INLINE) ================= -->
     <div class="mb-6">
-  <div class="bg-light p-3 mb-3 font-semibold">Family Details</div>
+      <div class="bg-light p-3 mb-3 font-semibold">Family Details</div>
 
-  <div class="overflow-x-auto">
-    <table class="table table-border w-full table-auto">
-      <thead class="bg-light/40 border-b">
-        <tr>
-          <th>#</th>
-          <th>Family Member ID</th>
-          <th>Name</th>
-          
-          <th>Relationship Name</th>
-          <th>DOB</th>
-          <th>Gender</th>
-          <th>Marital Status</th>
-          <th>Jan Aadhar ID</th>
-          <th>Aadhaar Ref No.</th>
-          <th>Member ID</th>
-        </tr>
-      </thead>
+      <div class="overflow-x-auto">
+        <table class="table table-border w-full table-auto">
+          <thead class="bg-light/40 border-b">
+            <tr>
+              <th>#</th>
+              <th>Family Member ID</th>
+              <th>Name</th>
 
-      <tbody>
-        <tr *ngFor="let fam of model; let i = index">
-          <td>{{ i + 1 }}</td>
+              <th>Relationship Name</th>
+              <th>DOB</th>
+              <th>Gender</th>
+              <th>Marital Status</th>
+              <th>Jan Aadhar ID</th>
+              <th>Aadhaar Ref No.</th>
+              <th>Member ID</th>
+            </tr>
+          </thead>
 
-          <td>
-            <input class="form-input"
-                   [(ngModel)]="fam.FAMILYMEMBERID" disabled>
-          </td>
+          <tbody>
+            <tr *ngFor="let fam of model; let i = index">
+              <td>{{ i + 1 }}</td>
 
-          <td>
-            <input class="form-input"
-                   [(ngModel)]="fam.NAME" disabled>
-          </td>
+              <td>
+                <input class="form-input"
+                       [(ngModel)]="fam.FAMILYMEMBERID" disabled>
+              </td>
 
-          
+              <td>
+                <input class="form-input"
+                       [(ngModel)]="fam.NAME" disabled>
+              </td>
 
-          <td>
-            <input class="form-input"
-                   [(ngModel)]="fam.RELATIONSHIPNAMEEN" disabled>
-          </td>
 
-          <!-- <td>
-            <input type="date"
-                   class="form-input"
-                   [(ngModel)]="fam.DOB_FAMILY">
-          </td> -->
-           <td>
+
+              <td>
+                <input class="form-input"
+                       [(ngModel)]="fam.RELATIONSHIPNAMEEN" disabled>
+              </td>
+
+              <!-- <td>
+                <input type="date"
+                       class="form-input"
+                       [(ngModel)]="fam.DOB_FAMILY">
+              </td> -->
+              <td>
                 <input class="form-input"
                        [value]="fam.DOB_FAMILY | date:'dd-MM-yyyy'"
                        disabled>
               </td>
 
-          <td>
-            <input class="form-input"
-                   [(ngModel)]="fam.GENNAMEEN" disabled>
-          </td>
+              <td>
+                <input class="form-input"
+                       [(ngModel)]="fam.GENNAMEEN" disabled>
+              </td>
 
-          <td>
-            <input class="form-input"
-                   [(ngModel)]="fam.MSTATUSNAME" disabled>
-          </td>
+              <td>
+                <input class="form-input"
+                       [(ngModel)]="fam.MSTATUSNAME" disabled>
+              </td>
 
-          <td>
-            <input class="form-input"
-                   [(ngModel)]="fam.JANAADHARID" disabled>
-          </td>
+              <td>
+                <input class="form-input"
+                       [(ngModel)]="fam.JANAADHARID" disabled>
+              </td>
 
-          <td>
-            <input class="form-input"
-                   [(ngModel)]="fam.AADHARREFNO" disabled>
-          </td>
+              <td>
+                <input class="form-input"
+                       [(ngModel)]="fam.AADHARREFNO" disabled>
+              </td>
 
-          <td>
-            <input class="form-input"
-                   [(ngModel)]="fam.MEMBERID" disabled>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+              <td>
+                <input class="form-input"
+                       [(ngModel)]="fam.MEMBERID" disabled>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <!-- ACTION -->
     <!-- <div class="text-center">
