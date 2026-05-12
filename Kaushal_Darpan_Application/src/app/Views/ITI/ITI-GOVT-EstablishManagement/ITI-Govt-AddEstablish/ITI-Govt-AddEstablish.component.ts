@@ -619,16 +619,22 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
   // New Work Pawan 18-02-2025
 
-  async StaffLevelType() {
+  async StaffLevelType()
 
-    this.formData.StaffLevelID = 0;
+  {
+
+    //this.formData.StaffLevelID = 0;
+
+
     this.AddValidationStaffWiseNon();
     this.AddValidationStaffWise();
-       await this.GetPostList();  
+     //  await this.GetPostList();  
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.StaffTypeID = this.formData.StaffTypeID;
+
     //Teaching=30
-    if (this.searchRequest.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
+    if (this.searchRequest.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching)
+    {
       this.formData.StaffLevelID = this._ITIGovtEM_EnumStaffLevel.TeachingRole;
       this.formData.BranchID = 0;
       await this.GetBranchesMasterData();
@@ -1724,7 +1730,32 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       }, 200);
     }
   }
+  async onEdit(item: any)
+  {
+    debugger;
 
+    this.isSSOVisible = true;
+    this.formData.Displayname = item.Name;
+    this.formData.MobileNo = item.MobileNumber;
+    this.formData.Mailpersonal = item.Email;
+    this.formData.SSOID = item.SSOID;
+    this.formData.StaffID = item.StaffID;
+    this.formData.InstituteId = item.InstituteID;
+    this.formData.StaffTypeID = item.StaffTypeID;
+    this.formData.StaffPostTypeID = item.StaffPostTypeID;
+
+    await this.GetPostList();
+    await new Promise(resolve => setTimeout(resolve, 100));
+    this.formData.DesignationID = item.DesignationID;
+    await this.StaffLevelType();
+    await new Promise(resolve => setTimeout(resolve, 300));
+    this.formData.StaffLevelID = item.StaffLevelID;
+    await this.StaffLevelChild();
+    await new Promise(resolve => setTimeout(resolve, 300));
+    this.formData.StaffLevelChildID = item.StaffLevelChildID;
+
+
+  }
 
 
 }

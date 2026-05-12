@@ -94,10 +94,12 @@ export class StudentAttendanceComponent implements OnInit {
   async ngOnInit() {
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
-      AttandanceTimeID: ['', Validators.required],
-      StreamID: ['', Validators.required],
+      AttandanceTimeID: ['', Validators.required], 
+      // StreamID: ['', Validators.required],
+        StreamID: [{ value: '', disabled: true }, Validators.required],
       SectionID: ['', Validators.required],
-      SemesterID: ['', Validators.required],
+      // SemesterID: ['', Validators.required],
+      SemesterID: [{ value: '', disabled: true }, Validators.required],
       AttendanceStartDate: [this.selectedRange?.start],
       AttendanceEndDate: [this.selectedRange?.end]
     });
