@@ -250,26 +250,66 @@ export class DirectHostelAllotmentComponent {
     }
   }
 
+  //async GetRoomNoDDL() {
+  //  try {
+  //    this.searchRequestHostelRoom.HostelID = this.sSOLoginDataModel.HostelID;
+  //    this.searchRequestHostelRoom.RoomType = this.Allotmentrequest.RoomTypeId;
+  //    this.searchRequestHostelRoom.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    this.loaderService.requestStarted();
+  //    await this.hostelRoomDetailsService.GetRoomDDLList(this.searchRequestHostelRoom.HostelID, this.searchRequestHostelRoom.RoomType, this.searchRequestHostelRoom.EndTermID)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.RoomNoDDLList = data['Data'];
+  //        this.Allotmentrequest.FessAmount = this.RoomNoDDLList[0].FeePerBad
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
   async GetRoomNoDDL() {
     try {
+
       this.searchRequestHostelRoom.HostelID = this.sSOLoginDataModel.HostelID;
       this.searchRequestHostelRoom.RoomType = this.Allotmentrequest.RoomTypeId;
       this.searchRequestHostelRoom.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.loaderService.requestStarted();
-      await this.hostelRoomDetailsService.GetRoomDDLList(this.searchRequestHostelRoom.HostelID, this.searchRequestHostelRoom.RoomType, this.searchRequestHostelRoom.EndTermID)
+
+      await this.hostelRoomDetailsService
+        .GetRoomDDLList(
+          this.searchRequestHostelRoom.HostelID,
+          this.searchRequestHostelRoom.RoomType,
+          this.searchRequestHostelRoom.EndTermID
+        )
         .then((data: any) => {
+
           data = JSON.parse(JSON.stringify(data));
+
           this.RoomNoDDLList = data['Data'];
-          this.Allotmentrequest.FessAmount = this.RoomNoDDLList[0].FeePerBad
-        }, error => console.error(error));
-    }
-    catch (Ex) {
+
+          if (this.RoomNoDDLList.length > 0 &&
+            this.RoomNoDDLList[0].FeePerBad > 0) {
+
+            this.Allotmentrequest.FessAmount =
+              this.RoomNoDDLList[0].FeePerBad;
+
+          }
+          else {
+
+            // fallback fee
+            this.Allotmentrequest.FessAmount =
+              this.RoomFeeList[0].HostelFee +
+              this.RoomFeeList[0].Cautionfee;
+          }
+
+        });
+
+    } catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 

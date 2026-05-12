@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffDetailsServicePreviewDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffListSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffDetailsServicePreviewDataModel, StaffGuestHouseSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
@@ -19,6 +19,8 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
+import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -63,12 +65,19 @@ export class BTEREMStaffListComponent {
   public staffDetailsServicePreview = new StaffDetailsServicePreviewDataModel();
   public unlockRequest = new BTER_EM_UnlockProfileDataModel();
   public RequestUpdateStatus = new RequestUpdateStatus();
+  public searchRequest1 = new GuestRoomSeatSearchModel();
+  public guestHouseRequest = new StaffGuestHouseSearchModel();
+  public guestHouseSaveRequest = new StaffGuestHouseSearchModel();
+  public StaffGuestHouseDetails: BTER_EM_StaffHostelListModel[] = []
   public UserProfileStatusHistoryList: any = [];
   public isApproveSubmitted: boolean = false;
+  public settingsMultiselect: object = {};
   public isLoading: boolean = false;
   public State: number = 0;
+  public StaffIDforGuestHouse: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
+  public staffGuestHouseIDs: string = '';
   public filteredStatusList: any[] = [];
   public type: string = ''
   public InstituteMasterDDL: any[] = [];
@@ -76,6 +85,7 @@ export class BTEREMStaffListComponent {
   public DesignationMasterDDLList: any = [];
   public GenderList: any = [];
   public InstituteMasterDDLList: any[] = [];
+  public GuestHouseNameList: any = [];
   public BugetHeadList:any=[];
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
@@ -95,6 +105,7 @@ export class BTEREMStaffListComponent {
     private formBuilder: FormBuilder,
     private userRequestService: UserRequestService,
     private activatedRoute: ActivatedRoute,
+    private guestRoomManagmentService: GuestRoomManagmentService,
   ) {}
 
   async ngOnInit() {
@@ -159,6 +170,25 @@ export class BTEREMStaffListComponent {
       Remark: [''],
     });
 
+    this.settingsMultiselect = {
+      singleSelection: false,
+      idField: 'ID',
+      textField: 'Name',
+      enableCheckAll: true,
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      allowSearchFilter: true,
+      limitSelection: -1,
+      clearSearchFilter: true,
+      maxHeight: 197,
+      itemsShowLimit: 10,
+      searchPlaceholderText: 'Search...',
+      noDataAvailablePlaceholderText: 'Not Found',
+      closeDropDownOnSelection: false,
+      showSelectedItemsAtTop: false,
+      defaultOpen: false,
+      IsVerified: false,
+    };
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
@@ -187,7 +217,7 @@ export class BTEREMStaffListComponent {
     await this.BTER_EM_GetStaffList();
     await this.GetOfficeList();
     await this.GetBudgetList();
-
+    await this.GetGuestHouseNameList();
     await this.GetInstituteMaster();
     await this.GetStaffTypeData();
     await this.GetDesignationMasterData();
@@ -1121,4 +1151,140 @@ debugger
     await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 
+  async CloseModal_GuestHouseEdit() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.guestHouseSaveRequest = new StaffGuestHouseSearchModel();
+    this.guestHouseRequest = new StaffGuestHouseSearchModel();
+  }
+
+  async onEditGuestHouse(model: any, row: any) {
+    try {
+      await this.GetGuestHouseNameList();
+      await this.GetStaff_GuestHouseIDs(row.StaffID, row.StaffUserID, row.RoleID);
+      this.guestHouseSaveRequest.StaffID = row.StaffID;
+      this.guestHouseSaveRequest.StaffUserID = row.StaffUserID;
+      this.guestHouseSaveRequest.RoleID = row.RoleID;
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static',});
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async GetGuestHouseNameList() {
+   // debugger;
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequest1.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID;
+      this.searchRequest1.isEstablishment = true
+      await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GuestHouseNameList = data['Data'];
+        }, error => console.error(error));  
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetStaff_GuestHouseIDs(StaffID: number, StaffUserID: number, RoleID: number) {
+    try {
+      this.loaderService.requestStarted();
+      this.guestHouseRequest.StaffID = StaffID;
+      this.guestHouseRequest.StaffUserID = StaffUserID;
+      this.guestHouseRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.guestHouseRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.guestHouseRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.guestHouseRequest.RoleID = RoleID
+      await this.bterEstablishManagementService.GetStaff_GuestHouseList(this.guestHouseRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StaffGuestHouseDetails = data['Data'];
+
+          this.StaffGuestHouseDetails = this.GuestHouseNameList.filter((x: any) =>
+            this.StaffGuestHouseDetails.some((selected: any) => selected.ID === x.ID)
+          );
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async SaveStaffGuestHouse() {
+    try {
+      if (this.StaffGuestHouseDetails.length > 0) {
+        this.staffGuestHouseIDs = this.StaffGuestHouseDetails.map((item: any) => item.ID).join(',');
+      } else {
+        this.toastr.error("Please select at least one hostel")
+      }
+      this.guestHouseSaveRequest.StaffGuestHouseIDs = this.staffGuestHouseIDs;
+      this.guestHouseSaveRequest.ModifyBy = this.sSOLoginDataModel.UserID
+
+      await this.bterEstablishManagementService.SaveStaff_GuestHouseIDs(this.guestHouseSaveRequest)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if(data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            await this.CloseModal_GuestHouseEdit();
+          } else if (data.state === EnumStatus.Warning) {
+            this.toastr.warning(data.Message)
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        }, (error: any) => console.error(error))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  onItemSelect(item: any, centerID: number) {
+    
+  }
+
+  onSelectAll(items: any[], centerID: number) {
+    
+  }
+
+  onDeSelectAll(centerID: number) {
+
+  }
+
+  onFilterChange(event: any) {
+    // Handle filtering logic (if needed)
+    console.log(event);
+  }
+
+  onDropDownClose(event: any) {
+    // Handle dropdown close event
+    console.log(event);
+  }
+
+  // multiselect events
+  public onFilterChanges(item: any) {
+    console.log(item);
+  }
+  public onDropDownCloses(item: any) {
+    console.log(item);
+  }
+
+  public onItemSelects(item: any) {
+    console.log(item);
+  }
+  public onDeSelect(item: any) {
+    console.log(item);
+  }
 }

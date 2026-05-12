@@ -100,7 +100,8 @@ export class LoginComponent implements OnInit {
     this.SSOToken = "ellyWGZCa1JQeW91WHZiMUZicTZqZmhGaVgzTktiTnM1SEhwelF5bWhMNHFvVTF1ZFMzTlV6LzhNUDMvL2hOMFNlakNHdDdNZW51WSt5blNFcXFLeXVLejZzMG9HTFREVGpMcmhMTlZzOHpHejFWbVRSeDk3elJQVTdodW5oOU4zNTZCNkpzbjdhOFBHaTZiS01LQ3lZOVhzUlBBbytvTGJDSlJpemsyQlZrejZrbTFIZlBKR2hRK2VWM3M5SFFt";
   }
 
-  loadDropdownData(MasterCode: string): void {
+  loadDropdownData(MasterCode: string): void
+  {
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
       switch (MasterCode) {
         case 'Institute':
@@ -137,9 +138,8 @@ export class LoginComponent implements OnInit {
   @ViewChild('modal_MultiDepartment') modal_MultiDepartment: any;
   @ViewChild('modal_MultiInsitute') modal_MultiInsitute: any;
 
-
-
-  open(content: any, BookingId: string) {
+  open(content: any, BookingId: string)
+  {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {

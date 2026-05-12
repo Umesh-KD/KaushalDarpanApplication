@@ -709,6 +709,36 @@ export class MasterLayoutComponent implements OnInit {
     }
   }
 
+  //Load Menu
+  async LoadMenuStudent(UserID: number, RoleID: number,departmentid:number) {
+    try {
+      let model: MenuByUserAndRoleWiseModel = {
+        DepartmentID: departmentid,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        RoleID: RoleID,
+        UserID: UserID,
+        InstituteId: this.sSOLoginDataModel.InstituteID
+      };
+      //
+      await this.menuService.MenuUserandRoleWise(model)
+        .then((MenuData: any) => {
+          MenuData = JSON.parse(JSON.stringify(MenuData));
+          this.filterMenuData = MenuData;
+          localStorage.setItem('Menu', JSON.stringify(this.filterMenuData.Data));
+          if (MenuData != null) {
+            this.groupMenuItems(MenuData['Data']);
+          }
+        }, error => console.error(error));
+    }
+
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+
+
   async Logout() {
     console.log("Logout...");
     sessionStorage.removeItem('userid');

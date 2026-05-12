@@ -95,11 +95,11 @@ export class StudentAttendanceComponent implements OnInit {
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
       AttandanceTimeID: ['', Validators.required], 
-      // StreamID: ['', Validators.required],
-        StreamID: [{ value: '', disabled: true }, Validators.required],
+      StreamID: ['', Validators.required],
+        // StreamID: [{ value: '', disabled: true }, Validators.required],
       SectionID: ['', Validators.required],
-      // SemesterID: ['', Validators.required],
-      SemesterID: [{ value: '', disabled: true }, Validators.required],
+      SemesterID: ['', Validators.required],
+      // SemesterID: [{ value: '', disabled: true }, Validators.required],
       AttendanceStartDate: [this.selectedRange?.start],
       AttendanceEndDate: [this.selectedRange?.end]
     });
@@ -150,7 +150,7 @@ export class StudentAttendanceComponent implements OnInit {
     //   // AttendanceEndDate: this.selectedRange?.end
     // });
 
-  debugger
+  //debugger
     await this.GetStudentAttandanceTimeDDL();
   //  await this.GetStaffLeaveAllData();
 
@@ -234,9 +234,13 @@ export class StudentAttendanceComponent implements OnInit {
 
       if(this.StudentAttandanceTimeDDL && this.StudentAttandanceTimeDDL.length>0){
         this.TableForm.get('SubjectID')?.disable();
+        // this.TableForm.get('StreamID')?.disable();
+        // this.TableForm.get('SemesterID')?.disable();
       }
       else{
         this.TableForm.get('SubjectID')?.enable();
+        // this.TableForm.get('StreamID')?.enable();
+        // this.TableForm.get('SemesterID')?.enable();
       }
     })
 
@@ -427,7 +431,7 @@ export class StudentAttendanceComponent implements OnInit {
  
   async GetAttendanceTimeTable() {
     try {
-      //debugger;
+      debugger;
 
       const rawStart = this.TableForm.value.AttendanceStartDate;
       const rawEnd = this.TableForm.value.AttendanceEndDate;
@@ -469,7 +473,7 @@ export class StudentAttendanceComponent implements OnInit {
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
-
+//debugger
           // Generate dynamic columns
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => ![
@@ -552,7 +556,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   // Method to handle attendance change (can be customized)
   onAttendanceChange(event: any, element: any, column: string) {
-   // debugger
+   // //debugger
     const attendanceStatus = event.checked ? 'P' : 'A';
     element[column] = attendanceStatus;
     console.log(`${element.StudentName}'s attendance for ${column} changed to ${attendanceStatus}`);
@@ -560,14 +564,14 @@ export class StudentAttendanceComponent implements OnInit {
 
   // Method to toggle all attendance for a specific column to 'Present'
   toggleAllAttendanceForColumn(column: string, checked: boolean) {
-    //debugger
+    ////debugger
     this.dataSource.data.forEach((row: { [x: string]: string; }) => {
       row[column] = checked ? 'P' : 'A'; // Set all attendance to 'P' or 'A'
     });
   }
 
  async getData() {
-    debugger
+    //debugger
     this.isSubmitted = true;
 
     // await this.GetStudentAttandanceTimeDDL();
@@ -681,7 +685,7 @@ export class StudentAttendanceComponent implements OnInit {
       if (!result.isConfirmed) return; 
 
       let saveAttendanceData: any[] = this.dataSource.filteredData;
-      //debugger;
+      debugger;
 
       this.sectionId = this.TableForm.value.SectionID;
 
@@ -690,7 +694,8 @@ export class StudentAttendanceComponent implements OnInit {
         SemesterID: this.TableForm.value.SemesterID,
         StreamID: this.TableForm.value.StreamID,
         SectionID: this.sectionId,
-        SubjectID: this.TableForm.value.SubjectID,
+        // SubjectID: this.TableForm.value.SubjectID,
+        SubjectID: this.subjectId,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         InstituteID: this.sSOLoginDataModel.InstituteID,
@@ -743,7 +748,7 @@ export class StudentAttendanceComponent implements OnInit {
 
 
   toggleAllAttendance() {
-    //debugger
+    debugger
     const attendanceStatus = this.checkedAll ? 'P' : 'A';
     this.dataSource.data.forEach((element: { Attendance: string; }) => {
       element.Attendance = attendanceStatus;
@@ -809,7 +814,7 @@ export class StudentAttendanceComponent implements OnInit {
   lockColumn(columnName: string) {
     this.swat.Confirmation("Are you sure you want to lock this column?", (result: any) => {
       if (!result.isConfirmed) return;
-
+debugger
       const col = this.dynamicColumns.find(c => c.name === columnName);
       if (col) {
         col.locked = true;
@@ -822,6 +827,7 @@ export class StudentAttendanceComponent implements OnInit {
   unlockColumn(columnName: string) {
     this.swat.Confirmation("Are you sure you want to unlock this column?", (result: any) => {
       if (!result.isConfirmed) return;
+      debugger
       const col = this.dynamicColumns.find(c => c.name === columnName);
       if (col) {
         col.locked = false;

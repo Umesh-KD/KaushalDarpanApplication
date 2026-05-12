@@ -217,7 +217,7 @@ export enum EnumRole {
   EM_NON_GAZETTED_STAFF=252,
   EM_ADTE_GAZETTED_STAFF=240,
   EM_ADTE_NON_GAZETTED_STAFF = 241,
-
+  JD_TTC = 250,
 
   // ITI Examination Incharge Roles
 

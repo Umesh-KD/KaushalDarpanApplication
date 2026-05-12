@@ -10,6 +10,7 @@ import { BTEREMStaffListComponent } from './bter-em-staff-list.component';
 import { BTEREMStaffListRoutingModule } from './bter-em-staff-list-routing.module';
 import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-staff-profile-modal.model';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-st
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     OTPModalModule,
-    ViewStaffProfileModalModule
+    ViewStaffProfileModalModule,
+    NgMultiSelectDropDownModule.forRoot(),
   ]
 })
 export class BTEREMStaffListModule { }

@@ -46,6 +46,7 @@ export class ViewStaffProfileModalComponent {
   }
 
   async OpenStaffProfileViewModal() {
+    debugger
     await this.StaffDetailsPreview_Service(this.StaffID,this.UserID);
     await this.ViewPopup(this.Modal_StaffDetailsViewModal);
   }
