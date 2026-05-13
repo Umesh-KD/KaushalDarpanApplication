@@ -162,14 +162,14 @@
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between items-center">
-        <h2 class="mb-0">Staff Transfer Application</h2>
+        <h2 class="mb-0">Staff Relieving Action</h2>
         <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
       </div>
 
       <div class="card-body p-5">
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
           <div>
-            <label>Update Status</label>
+            <label>Update Status <span class="StarMarking">*</span></label>
             <select class="form-select" id="updateStatus" [(ngModel)]="updateStatus" name="ddlupdateStatus">
               <option value="0">--select--</option>
               <option *ngFor="let item of TransferSystemStatusUpdateList" [value]="item.ID">

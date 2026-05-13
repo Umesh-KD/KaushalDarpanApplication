@@ -8,7 +8,7 @@
     </div>-->
   </div>
 </div>
-<div class="card">
+<div *ngIf="sSOLoginDataModel.RoleID!=20 && sSOLoginDataModel.RoleID!=43" class="card">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Office Vacancy</b>
@@ -111,6 +111,9 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For  List</b>
     </div>
+    <div>
+      <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+    </div>
     <div class="overflow-x-auto mt-4">
       <table class="table table-bordered" *ngIf="OfficeVacancyList.length > 0">
         <thead>
@@ -127,11 +130,11 @@
             <th>Remaining Seat</th>
             <th>Order No</th>
             <th>Comments</th>
-            <th>Actions</th>
+            <th *ngIf="sSOLoginDataModel.RoleID!=20 && sSOLoginDataModel.RoleID!=43">Actions</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let leave of OfficeVacancyList;  let idx = index">
+          <tr *ngFor="let leave of OfficeVacancyList | tableSearchFilter:Table_SearchText;  let idx = index">
             <td class="text-center">{{idx+1}}</td>
             <td>{{ leave.OfficeName }}</td>
             <td>{{ leave.StaffTypeName }}</td>
@@ -145,7 +148,7 @@
             <td>{{ leave.RemainingSeatID }}</td>
             <td>{{ leave.OrderName }}</td>
             <td>{{ leave.Comments }}</td>
-            <td>
+            <td *ngIf="sSOLoginDataModel.RoleID!=20 && sSOLoginDataModel.RoleID!=43">
               <!--<button class="btn btn-sm"
             [ngClass]="leave.ActiveStatus ? 'btn-success' : 'btn-danger'"
             (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">

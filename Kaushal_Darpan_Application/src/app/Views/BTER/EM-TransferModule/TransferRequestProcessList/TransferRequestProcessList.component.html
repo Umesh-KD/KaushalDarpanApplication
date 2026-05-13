@@ -52,10 +52,10 @@
           <option *ngFor="let item of GetTransfercateList" [value]="item.ID">{{item.Name}}</option>
         </select>
       </div>
-
+      <!--{{ItiCollegesListAll|json}}-->
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-        <select class="form-select"  [(ngModel)]="SearchInstituteID">
+        <select class="form-select" [(ngModel)]="SearchInstituteID">
           <option value="0">--select--</option>
           <option *ngFor="let item of ItiCollegesListAll" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
         </select>
@@ -89,7 +89,7 @@
               *ngIf="(EnumTransferSystemStatus.UnderDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.DTE))"
               class="btn bg-info text-white mt-2"
               (click)="TabutarTransferList()">
-        Tabutar Transfer List
+        Tabular Transfer List
       </button>
 
     </div>
@@ -99,7 +99,7 @@
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
 
       <div class=" ">
-        <label>Request Status</label>
+        <label>Request Status  <span class="StarMarking">*</span></label>
         <select class="form-select" id="ExamId" [(ngModel)]="Status" name="ddlStatus">
           <option value="0">--select--</option>
           <option *ngFor="let item of TransferSystemStatusList" [value]="item.ID">
@@ -108,7 +108,7 @@
         </select>
       </div>
       <div class=" ">
-        <label>Remark</label>
+        <label>Remark  <span class="StarMarking">*</span></label>
         <input class="form-input" type="text" id="Remark" [(ngModel)]="Remark">
       </div>
       <div>
@@ -216,7 +216,7 @@
           <div>
             <label class="block  text-sm font-medium text-gray-900 dark:text-white"
                    for="SupportingDocuments ">
-              Supporting DOC :<span class="StarMarking">*</span>
+              Supporting Document :<span class="StarMarking">*</span>
             </label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -271,6 +271,7 @@
                 <th class="text-left">Institute Name</th>
                 <th class="text-left">Priority</th>
                 <th class="text-left">Status</th>
+                <th class="text-left">Supporting Document</th>
 
               </tr>
             </thead>
@@ -289,6 +290,17 @@
                 <td align="left">{{ row.InstituteName }}</td>
                 <td align="left">{{ row.Priority}}</td>
                 <td align="left">{{ row.Status}}</td>
+
+                <td align="left">
+                  <div class="flex" *ngIf="row.SupportingDoc; else noDoc1">
+                    <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.SupportingDoc"
+                       class="btn bg-primary text-white m-0"
+                       target="_blank">
+                      <i class="ti ti-eye"></i>
+                    </a>
+                  </div>
+                  <ng-template #noDoc1>-----</ng-template>
+                </td>
 
               </tr>
               <tr *ngIf="EM_TransferSystemEXTList?.length==0">

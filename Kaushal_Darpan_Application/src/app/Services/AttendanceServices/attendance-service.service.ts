@@ -202,11 +202,18 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
+  public async DeleteAssignTeacherForSubject(model: any) {
+    return await this.http.post(this.APIUrl + '/DeleteAssignTeacherForSubject', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
   public async GetStudentAttendanceTLC(model: any) {
     return await this.http.post(this.APIUrl + '/GetStudentAttendanceTLC', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+
 
   public async SaveStudentAttendanceTLC(model: any) {
     return await this.http.post(this.APIUrl + '/SaveStudentAttendanceTLC', model, this.headersOptions).pipe(

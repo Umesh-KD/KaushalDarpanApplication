@@ -591,6 +591,14 @@ export class StaffHostelSearchModel extends RequestBaseModel {
   public StaffUserID?: number = 0
   public StaffHostelIDs?: string = ''
 }
+
+export class StaffGuestHouseSearchModel extends RequestBaseModel {
+  public StaffID?: number = 0
+  public StaffUserID?: number = 0
+  public ModifyBy?: number = 0
+  public StaffGuestHouseIDs?: string = ''
+}
+
 export class BTER_DesignationWiseBranchDataModel {
   public DepartmentID: number = 0;
   public DesignationID: number = 0;
@@ -866,6 +874,6 @@ export class BTERStaffManualRequestModel {
   public To_PostID: number = 0;
   public To_ddlDistrictID: number = 0;
   public To_ddlCollege: number = 0;
- 
+
 
 }

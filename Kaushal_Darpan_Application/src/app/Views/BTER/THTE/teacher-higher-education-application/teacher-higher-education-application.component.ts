@@ -542,13 +542,14 @@ export class TeacherHigherEducationApplicationComponent {
      
     try {
       this.loaderService.requestStarted();
-      this.requestSearch.THTEAppID = THTEAppID
+      const requestSearch: any = {}
+      requestSearch.THTEAppID = THTEAppID
 
-      await this.teacherHigherEducationApplicationService.THTE_GrtApplicationStatusHistory(this.requestSearch)
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplicationStatusHistory(requestSearch)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.UserRequestHistoryList = data.Data;
-          this.UserRequestHistoryList = this.UserRequestHistoryList.filter((item: any) => item.StatusID == 1340 || item.StatusID == 1345)
+          // this.UserRequestHistoryList = this.UserRequestHistoryList.filter((item: any) => item.StatusID == 1340 || item.StatusID == 1345)
           this.showJoiningStatusColumn = this.UserRequestHistoryList?.some(r => r.RequestTypeID === 1);
           this.totalRecord = this.UserRequestHistoryList[0]?.TotalRecords;
           this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);

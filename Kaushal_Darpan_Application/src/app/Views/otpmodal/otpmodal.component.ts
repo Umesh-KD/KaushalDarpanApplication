@@ -39,7 +39,7 @@ export class OTPModalComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
+
   }
 
   formatMobileNo(mobile: string): string {
@@ -52,9 +52,7 @@ export class OTPModalComponent {
   }
 
   CloseOTPModal() {
-    if (this.modalRef) {
-      this.modalRef.close();
-    }
+    this.colseAndRefreshOTPModal();
   }
 
   formatTime(seconds: number): string {
@@ -181,21 +179,27 @@ export class OTPModalComponent {
       this.toastr.error('Please Enter valid OTP');
     } else
       if (this.OTP === this.GeneratedOTP || this.OTP === GlobalConstants.DefaultOTP) {
-        //this.toastr.success('OTP Verified');
-        this.activeModal.close();
+        //this.toastr.success('OTP Verified');        
         this.onVerified.emit();
-        this.OTP = "";
-        if (this.modalRef) {
-          this.modalRef.close();
-        }
+        this.colseAndRefreshOTPModal();
       } else {
         this.toastr.error('Invalid OTP');
       }
   }
 
   waitForVerification(): Promise<void> {
-  return new Promise(resolve => {
-    this.onVerified.pipe(take(1)).subscribe(() => resolve());
-  });
-}
+    return new Promise(resolve => {
+      this.onVerified.pipe(take(1)).subscribe(() => resolve());
+    });
+  }
+
+  colseAndRefreshOTPModal() {
+    
+    this.onVerified?.observers?.forEach((obs:any) => obs.unsubscribe());
+    this.activeModal.close();
+    this.OTP = "";
+    if (this.modalRef) {
+      this.modalRef.close();
+    }
+  }
 }

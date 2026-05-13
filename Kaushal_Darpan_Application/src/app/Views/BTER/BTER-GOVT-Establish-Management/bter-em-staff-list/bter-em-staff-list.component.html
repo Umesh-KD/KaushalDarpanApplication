@@ -155,6 +155,11 @@
                   <i [class]="row.ProfileStatusID == 247 ? 'ti ti-eye' : 'ti ti-check' "></i>
                 </a>
                 
+                <a href="javascript:void(0);" title="Add Update Guest House" 
+                  *ngIf="(row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden) &&
+                        sSOLoginDataModel.RoleID == _EnumRole.JD_TTC" 
+                  (click)="onEditGuestHouse(Modal_GuestHouseEdit, row)"><i class="ti ti-pencil"></i>
+                </a>
 
               </div>
             </td>
@@ -1645,6 +1650,47 @@
       </div>
     </div>
   </div>
+</ng-template>
+
+<ng-template #Modal_GuestHouseEdit let-modal>
+  <div class="modal-content " >
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Add/Remove Guest House</b>
+        <button class="btn bg-info text-white" (click)="CloseModal_GuestHouseEdit()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="min-height: 300px; max-height: 90vh; overflow-y: auto;">
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+          <div >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House <span class="StarMarking">*</span></label>
+
+            <ng-multiselect-dropdown 
+                [ngModelOptions]="{standalone: true}" 
+                [placeholder]="'Choose Option'"
+                [settings]="settingsMultiselect"
+                [data]="GuestHouseNameList"
+                [(ngModel)]="StaffGuestHouseDetails"
+                [disabled]="false" 
+                (onSelect)="onItemSelect($event)" 
+                (onDeSelectAlls)="onDeSelectAll($event)"
+                (onSelectAll)="onSelectAll($event)"  
+                (onDeSelect)="onDeSelect($event)" 
+                (onDropDownCloses)="onDropDownCloses($event)">
+            </ng-multiselect-dropdown>
+
+          </div>
+          
+        </div>
+      
+      </div>
+      <div class="card-footer text-center">
+        <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="SaveStaffGuestHouse()">Update</button>
+      </div>
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
 </ng-template>
 
 <app-otpmodal #otpModal></app-otpmodal>
