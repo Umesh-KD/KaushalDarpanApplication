@@ -57,12 +57,10 @@ export class JDTEDashboardComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     // await this.CheckProfileStatus();
-    debugger
     if ((this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE || EnumRole.EM_JDTE)) {
       await this.CheckProfileStatus_SELF();
 
       if (this.StaffMasterList.length > 0) {
-        debugger
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == EnumEMProfileStatus.Pending || status == EnumEMProfileStatus.Completed || status == EnumEMProfileStatus.Revert || status==EnumEMProfileStatus.LockAndSubmit) {
           
@@ -117,7 +115,6 @@ export class JDTEDashboardComponent {
   //   }
   // }
   async GetAllData() {
-    debugger;
     this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -148,7 +145,6 @@ export class JDTEDashboardComponent {
     try {
 
       this.loaderService.requestStarted();
-      debugger;
       await this.AdminDashDataService.GetEM_JDTEDashData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
