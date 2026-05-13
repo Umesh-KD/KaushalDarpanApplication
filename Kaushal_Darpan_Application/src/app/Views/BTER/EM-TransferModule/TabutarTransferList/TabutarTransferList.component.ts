@@ -91,6 +91,10 @@ import * as XLSX from 'xlsx';
     public InsOfficeID: number = 21;
     public isShowDDl: boolean = false;
     public To_isShowDDl: boolean = false;
+
+    public isStar: boolean = false;
+    todayDate: string = new Date().toISOString().split('T')[0];
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -114,7 +118,8 @@ import * as XLSX from 'xlsx';
         ddlDistrictID: [0, []],
 
         StaffID: [0, [DropdownValidators]],
-
+        TransfercateID: [0, [DropdownValidators]],
+        ReasonDescription: [''],
         To_PostID: [0, [DropdownValidators]],
         To_OfficeID: [0, [DropdownValidators]],
         To_ddlDistrictID: [0, []],
@@ -125,12 +130,6 @@ import * as XLSX from 'xlsx';
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Status = "0";
-
-     
-  
-
-
-
     await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ItiCollegesListAll = data.Data;
@@ -155,12 +154,12 @@ import * as XLSX from 'xlsx';
             this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList
               .filter((item: any) =>
                 item.ID == EnumTransferSystemStatus.UnderDTEReview ||
-                item.ID == EnumTransferSystemStatus.Appnoved 
+                item.ID == EnumTransferSystemStatus.Approved 
                 
               )
               .map((item: any) => {
-                if (item.ID == EnumTransferSystemStatus.Appnoved) {
-                  item.Name = 'Final Appnoved';
+                if (item.ID == EnumTransferSystemStatus.Approved) {
+                  item.Name = 'Final Approved';
                 }
 
                 if (item.ID == EnumTransferSystemStatus.UnderDTEReview) {
@@ -316,7 +315,7 @@ import * as XLSX from 'xlsx';
         }
         const jsonData = selectedRows.map((item: any) => ({
           TransferSystemID: item.TransferSystemID,
-          Status: EnumTransferSystemStatus.Appnoved,
+          Status: EnumTransferSystemStatus.Approved,
           DispatchNo: this.requestUp.DispatchNo,
           OrderSupportingDocument: this.requestUp.OrderSupportingDocument,
           OrderSupportingDocument_Dis: this.requestUp.OrderSupportingDocument_Dis,
@@ -544,7 +543,8 @@ import * as XLSX from 'xlsx';
             data = JSON.parse(JSON.stringify(data));
             this.InstituteList = data['Data'];
             this.To_InstituteList = data['Data'];
-
+            this.InstituteList = this.InstituteList.filter((item: any) => item.TypeID == 1);
+            this.To_InstituteList = this.To_InstituteList.filter((item: any) => item.TypeID == 1);
             
 
           }, error => console.error(error));
@@ -742,5 +742,27 @@ import * as XLSX from 'xlsx';
 
     async StaffChange() {
       await this.GetStaffPersonalDetails();
+    }
+
+    async TransferCategoryChange() {
+
+      if (this.request.TransferCategoryID == 7358) {
+        this.AddTransferRequest.get('ReasonDescription')?.setValidators([Validators.required]);
+        this.isStar = true;
+      }
+      else {
+        this.AddTransferRequest.get('ReasonDescription')?.clearValidators();
+      }
+      this.AddTransferRequest.get('ReasonDescription')?.updateValueAndValidity();
+
+
+      if (this.request.TransferCategoryID == 7358) {
+        this.isStar = true;
+
+
+
+      } else {
+        this.isStar = false;
+      }
     }
 }

@@ -86,6 +86,8 @@ export class AddTransferRequestComponent {
   public _EnumRole = EnumRole
   public GetRoleID: number = 0
   public ID: number = 0;
+  public isStar: boolean = false;
+
  
   OfficeVacancy: ITIOfficeVacancyModel[] = [];
   public ProfileStatus: number = 0;
@@ -700,13 +702,22 @@ export class AddTransferRequestComponent {
 
   async OnfinalSave() {
     debugger
-    if (this.StaffTransferList.length <3) {
-      this.toastr.warning("Please add at least three valid Loaction Priorities before saving.");
+
+    console.log(this.AddTransferRequest.value);
+    if (this.AddTransferRequest.invalid) {
+      this.toastr.error("Please fill all the required fields.");
+
+      if (this.request.TransferCategoryID == 0) {
+        this.toastr.error("Please select Transfer Category.");
+      }
+
       return;
     }
+
 // 7358 this is for other selection  in trnasfer category
-    if(this.request.TransferCategoryID==7358){
+    if (this.request.TransferCategoryID == 7358) {
       this.AddTransferRequest.get('ReasonDescription')?.setValidators([Validators.required]);
+      this.isStar = true;
     }
     else{
       this.AddTransferRequest.get('ReasonDescription')?.clearValidators();
@@ -723,16 +734,17 @@ export class AddTransferRequestComponent {
       return;
     }
 
+    if (this.StaffTransferList.length < 3) {
+      this.toastr.warning("Please add at least three valid Loaction Priorities before saving.");
+      return;
+    }
+
     // this.AddTransferRequest.patchValue({
     //   SupportingDocuments: this.request.SupportingDocumentsDis || ''
     // });
     
 
-    console.log(this.AddTransferRequest.value);
-    if(this.AddTransferRequest.invalid){
-      this.toastr.error("Please fill all the required fields.");
-      return;
-    }
+    
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
     await this.childComponent.OpenOTPPopup();
@@ -946,6 +958,7 @@ export class AddTransferRequestComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ItiCollegesListAll = data['Data'];
+          this.ItiCollegesListAll = this.ItiCollegesListAll.filter((item: any) => item.TypeID==1);
          
         }, error => console.error(error));
 
@@ -1002,5 +1015,13 @@ export class AddTransferRequestComponent {
     this.IsPriorityChange.emit(true)
   }
 
+  async TransferCategoryChange() {
+    if (this.request.TransferCategoryID == 7358) {
+      this.isStar = true;
 
+
+    } else {
+      this.isStar = false;
+    }
+  }
 }

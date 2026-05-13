@@ -639,7 +639,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
     }
 
     async TabutarTransferList() {
-      window.open('/TabutarTransferList', '_blank');
+      window.open('/TabularTransferList', '_blank');
     }
 
 

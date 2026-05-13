@@ -419,7 +419,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     checkApproveStatus() {
       debugger
       this.isAnyApproved = this.EM_TransferSystemEXTList?.some(
-        (item: any) => item.FinalApproveStatus == EnumTransferSystemStatus.Appnoved
+        (item: any) => item.FinalApproveStatus == EnumTransferSystemStatus.Approved
       );
     }
 
@@ -456,7 +456,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
           String(now.getMinutes()).padStart(2, '0') + '-' +
           String(now.getSeconds()).padStart(2, '0');
 
-        const fileName = `ITI_Relieving_Letter_${timestamp}.pdf`;
+        const fileName = `Relieving_Letter_${timestamp}.pdf`;
 
         // Create blob URL
         const blobUrl = window.URL.createObjectURL(blob);
