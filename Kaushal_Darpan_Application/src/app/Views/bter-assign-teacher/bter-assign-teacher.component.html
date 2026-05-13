@@ -96,7 +96,7 @@
 
         <button type="button"
                 class="btn bg-info text-white px-5 py-2 rounded-md" (click)="GetAssignedTeacherForSubject()">
-         
+
           Search
 
         </button>
@@ -138,35 +138,43 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of AddStaffSubjectSectionModelList; let i = index">
-           <td>{{ i+1 }}</td> 
-         
-          <td>{{ row.SemesterName }}</td>
-          <td>{{ row.StreamName }}</td>
-          <td>{{ row.SubjectName }}</td>
-          <td>{{ row.SatffName }}</td>
-          <td>{{ row.SectionsName }}</td>
-          <td class="text-center">
-            <div class="flex items-center justify-center gap-2">
+            <td>{{ i+1 }}</td>
 
-              <button type="button"
-                      class="btn btn-sm bg-info text-white hover:bg-info/90 px-2 py-1 rounded"
-                      (click)="AddStaffData(MyModel_EdiDetailsStaff,row,i)"
-                      title="Edit">
-                <i class="ti ti-pencil text-base"></i>
-              </button>
+            <td>{{ row.SemesterName }}</td>
+            <td>{{ row.StreamName }}</td>
+            <td>{{ row.SubjectName }}</td>
+            <td>{{ row.SatffName }}</td>
+            <td>{{ row.SectionsName }}</td>
+            <td class="text-center">
+              <div class="flex items-center justify-center gap-2">
 
-              <button type="button"
-                      class="btn btn-sm bg-danger text-white hover:bg-danger/90 px-2 py-1 rounded"
-                      (click)="DeleteRow(row)"
-                      title="Delete">
-                <i class="ti ti-trash text-base"></i>
-              </button>
+                <button type="button"
+                        class="btn btn-sm bg-info text-white hover:bg-info/90 px-2 py-1 rounded"
+                        (click)="AddStaffData(MyModel_EdiDetailsStaff,row,i)"
+                        title="Edit">
+                  <i class="ti ti-pencil text-base"></i>
+                </button>
 
-            </div>
-          </td>
-        </tr>
+                <button type="button"
+                        class="btn btn-sm bg-danger text-white hover:bg-danger/90 px-2 py-1 rounded"
+                        (click)="DeleteRow(row)"
+                        title="Delete">
+                  <i class="ti ti-trash text-base"></i>
+                </button>
+
+                <button type="button"
+                        class="btn btn-sm bg-success text-white hover:bg-success/90 px-2 py-1 rounded"
+                        (click)="GetAssignedTeacherForSubjectHistory(MyModel_HistoryDetailsStaff,ID)"
+                        title="History">
+                  <i class="ti ti-eye text-base"></i>
+                </button>
+
+
+              </div>
+            </td>
+          </tr>
           <tr *ngIf="AddStaffSubjectSectionModelList.length === 0">
-           
+
             <td colspan="7" class="text-center">No records found.</td>
           </tr>
         </tbody>
@@ -285,17 +293,17 @@
               </div>
             </div>
             <!-- <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name</label>
-    <ng-select formControlName="SectionID" [clearable]="false">
-      <ng-option [value]="0">--Select--</ng-option>
-      @for (item of GetSectionData; track item.SectionID) {
-      <ng-option [value]="item.SectionID">{{item.SectionName}}</ng-option>
-      }
-    </ng-select>
-    <div *ngIf="isSubmitted && formEditData.SectionID.errors" class="text-danger">
-      <p *ngIf="formEditData.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-    </div>
-  </div> -->
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name</label>
+              <ng-select formControlName="SectionID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of GetSectionData; track item.SectionID) {
+                <ng-option [value]="item.SectionID">{{item.SectionName}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formEditData.SectionID.errors" class="text-danger">
+                <p *ngIf="formEditData.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div> -->
 
           </div>
           <div *ngIf="!IsEditMode || AddStaffSubjectSectionModelList1?.length==0 " class="mt-3 text-center">
@@ -307,12 +315,12 @@
             <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
               <b class="text-1xl-5">Assigned List</b>
             </div>
-       
+
             <div class="overflow-x-auto mt-3">
               <table class="table table-border w-full table-auto" cellpadding="5">
                 <thead>
                   <tr>
-                     <th>ID</th> 
+                    <th>ID</th>
                     <th>Semester</th>
                     <th>Stream</th>
                     <th>Subject</th>
@@ -323,7 +331,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let row of AddStaffSubjectSectionModelList1; let i = index">
-                     <td>{{ i+1}}</td> 
+                    <td>{{ i+1}}</td>
                     <td>{{ row.SemesterName }}</td>
                     <td>{{ row.StreamName }}</td>
                     <td>{{ row.SubjectName }}</td>
@@ -360,3 +368,71 @@
 
 </ng-template>
 
+
+<ng-template #MyModel_HistoryDetailsStaff let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+
+
+  <div class="modal-content">
+   
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;History</b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+  
+       
+          <div *ngIf="HistoryList1?.length>0" class="mt-2">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5">Assigned List</b>
+            </div>
+
+            <div class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead>
+                  <tr class="text-left">
+                    <!-- <th>ID</th> -->
+                    <th>SrNo</th>
+                    <th>Semester</th>
+                    <th>Stream</th>
+                    <th>Subject</th>
+                    <th>Staff</th>
+                    <th>Sections</th>
+                    <th>Action Date</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of HistoryList1; let i = index">
+                    <td>{{ i+1 }}</td>
+
+                    <td>{{ row.SemesterName }}</td>
+                    <td>{{ row.StreamName }}</td>
+                    <td>{{ row.SubjectName }}</td>
+                    <td>{{ row.SatffName }}</td>
+                    <td>{{ row.SectionsName }}</td>
+                    <td class="text-center">
+                      {{row.ActionDate}}
+                    </td>
+                  </tr>
+                  <tr *ngIf="HistoryList1.length === 0">
+                    <td colspan="7" class="text-center">No records found.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+         
+
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+  </div>
+
+</ng-template>

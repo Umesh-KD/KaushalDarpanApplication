@@ -58,6 +58,7 @@ export class BterAssignTeacherComponent {
   StudentAttandanceTimeDDL: any[] = [];
   AddStaffSubjectSectionModelList: any[] = [];
   AddStaffSubjectSectionModelList1: any[] = [];
+ HistoryList1: any[] = [];
   public GetLeaveList: any = [];
   public searchRequest = new LeaveMasterSearchModel();
   TableForm!: FormGroup;
@@ -1118,7 +1119,65 @@ async  ngOnInit() {
 
 
 
-  async GetAssignedTeacherForSubject(ID:number=0) {
+  async GetAssignedTeacherForSubjectHistory(Content:any,ID:number=0) {
+    //debugger
+   
+    
+    ;
+    try {
+      this.HistoryList1 = []
+      let obj = {
+        SectionID: this.TableForm.value.SectionID,
+        SubjectID: this.TableForm.value.SubjectID,
+        StreamID: this.TableForm.value.StreamID,
+        SemesterID: this.TableForm.value.SemesterID,
+        EndtermID: this.sSOLoginDataModel.EndTermID,
+        InstituteId: this.sSOLoginDataModel.InstituteID,
+        SSOID: this.sSOLoginDataModel.SSOID,
+        ID:ID
+      }
+      //get all data
+      //debugger
+      await this.staffMasterService.GetAssignedTeacherForSubject_History(obj).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data['Data']));
+        //debugger
+        if (data.length > 0) {
+          // this.toastr.success(data.Message)
+
+          if (ID > 0) {
+            this.HistoryList1 = data
+          } else {
+
+
+
+            this.HistoryList1 = data
+          }
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+    this.modalService.open(Content, {
+
+      size: 'xl',
+
+      ariaLabelledBy: 'modal-basic-title',
+
+      backdrop: 'static'
+
+    }).result.then((result) => {
+
+      this.closeResult = `Closed with: ${result}`;
+
+    }, (reason: any) => {
+
+      this.closeResult =
+        `Dismissed ${this.getDismissReason(reason)}`;
+    })
+  }
+
+
+  async GetAssignedTeacherForSubject(ID: number = 0) {
     //debugger
 
     debugger
@@ -1133,7 +1192,7 @@ async  ngOnInit() {
         EndtermID: this.sSOLoginDataModel.EndTermID,
         InstituteId: this.sSOLoginDataModel.InstituteID,
         SSOID: this.sSOLoginDataModel.SSOID,
-        ID:ID
+        ID: ID
       }
       //get all data
       //debugger
@@ -1157,6 +1216,10 @@ async  ngOnInit() {
       console.error(error)
     }
   }
+
+
+
+
 
 
   async AddStaffData(content: any, rowData: any = null) {
