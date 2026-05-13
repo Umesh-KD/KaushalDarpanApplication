@@ -226,7 +226,7 @@
                 <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
               </select>
             </div>
-            {{InstituteList|json}}
+            <!--{{InstituteList|json}}-->
             <div *ngIf="isShowDDl== true">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute: <span class="StarMarking">*</span></label>
               <select class="form-select" formControlName="ddlCollege" [(ngModel)]="RequestManual.InstituteID" (change)="PostChange()">
