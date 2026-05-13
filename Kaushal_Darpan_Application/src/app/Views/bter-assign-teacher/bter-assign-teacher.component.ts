@@ -222,7 +222,7 @@ async  ngOnInit() {
       ID: [''],
       SubjectID: [0, Validators.required],
       //AssignToSSOID: ['', Validators.required],
-      StreamName: ['', Validators.required],
+      StreamID: ['', Validators.required],
       SectionID: [0, Validators.required],
       AssignbyStaffID: [0, Validators.required],
       SemesterID: [{ value: 0, }, Validators.required],
@@ -1463,7 +1463,7 @@ async  ngOnInit() {
     } else {
 
       newItem.ID =
-        this.AddStaffSubjectSectionModelList1.length + 1;
+        0
     }
 
     // =========================
@@ -1805,7 +1805,9 @@ async  ngOnInit() {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data['Data']));
           this.toastr.success('Saved Successfully');
+          this.GetAssignedTeacherForSubject()
           this.CloseModal();
+         
         }, error => console.error(error));
     } catch (Ex) {
       console.log(Ex);

@@ -202,7 +202,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
-              <ng-select appendTo="body" formControlName="StreamName" [clearable]="false" class="w-full"
+              <ng-select appendTo="body" formControlName="StreamID" [clearable]="false" class="w-full"
                          (change)="getSubjectMasterDDL2(EditDataFormGroup.value.StreamID, EditDataFormGroup.value.SemesterID)" [(ngModel)]="AddStaffSubjectSectionModel.StreamID">
                 <ng-option [value]="0">--Select--</ng-option>
                 <ng-option *ngFor="let item of StreamMasterDDL" [value]="item.StreamID">
