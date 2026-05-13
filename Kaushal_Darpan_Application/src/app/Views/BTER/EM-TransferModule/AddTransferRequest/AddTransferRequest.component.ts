@@ -210,7 +210,7 @@ export class AddTransferRequestComponent {
   tempIndex: number = 1;
 
   async addStaffTransferRequest() {
-    debugger
+    
     // if(this.AddTransferRequest.invalid){
     //   this.toastr.error("Please fill in all required fields.");
     //   return;
@@ -327,7 +327,7 @@ export class AddTransferRequestComponent {
   }
 
   async GetById() {
-      debugger
+      
       try {
         this.loaderService.requestStarted();
         try {
@@ -393,7 +393,7 @@ export class AddTransferRequestComponent {
 
 
   async SaveData() {
-    debugger
+    
     this.loaderService.requestStarted();
     this.isLoading = true;
     this.isSubmitted = true;
@@ -444,7 +444,7 @@ export class AddTransferRequestComponent {
 
 
   async removeLeave(index: number, ID: number) {
-    debugger
+    
     if (ID === undefined || ID === null) {
       ID = 0;
     }
@@ -614,7 +614,7 @@ export class AddTransferRequestComponent {
 
   async GetPostList() {
     try {
-      debugger
+      
       this.loaderService.requestStarted();
       const data: any = await this.commonMasterService.GetCommonMasterData('GazettedNonGazettedPost',0,0, this.request.NonGazettedID);
       this.PostList = data['Data'];
@@ -629,7 +629,7 @@ export class AddTransferRequestComponent {
   }
 
   async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
-    debugger;
+    ;
     try {
 
       // ✅ FIX: remove focus from background element
@@ -701,7 +701,7 @@ export class AddTransferRequestComponent {
 
 
   async OnfinalSave() {
-    debugger
+    
 
     console.log(this.AddTransferRequest.value);
     if (this.AddTransferRequest.invalid) {
@@ -748,16 +748,14 @@ export class AddTransferRequestComponent {
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     // await for open model
     await this.childComponent.OpenOTPPopup();
-    // await OTP verification
+	  // await OTP verification
     await this.childComponent.waitForVerification();
-    this.childComponent.onVerified.subscribe(() => {
-      console.log("otp verified on the page")
-        this.SaveData();
-    })
+
+    await this.SaveData();
   }
 
   async VacancyPostUpdate() {
-    debugger
+    
     try {
       if (this.formData.ID != 0) {
         await this.ITIGovtEMStaffMaster.UpdateOfficeVacancy(this.formData).then(async (data: any) => {
@@ -846,7 +844,7 @@ export class AddTransferRequestComponent {
   //test
 
   async GetStaffPersonalDetails() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
       this.requestModel.StaffID = this.sSOLoginDataModel.StaffID;
@@ -953,7 +951,7 @@ export class AddTransferRequestComponent {
 
   async getITICollege() {
     try {
-      debugger
+      
       await this.commonMasterService.GetInstituteMaster_ByDistrictWise(this.req_child.DistrictID, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
