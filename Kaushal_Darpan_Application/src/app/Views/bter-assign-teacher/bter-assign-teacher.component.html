@@ -1,1 +1,362 @@
-<p>bter-assign-teacher works!</p>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Assign Teacher For Subject</h4>
+
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/']" class="text-sm font-medium text-slate-700" aria-current="page">Assign Teacher For Subject</a>
+
+
+
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      <a (click)="AddStaffData(MyModel_EdiDetailsStaff)" class="inline-flex items-center btn bg-success text-white btn-sm"><i class="ti ti-chevron-left"></i>Add</a>
+    </div>
+
+
+    <form [formGroup]="TableForm">
+      <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
+
+
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester<span class="StarMarking">*</span></label>
+          <ng-select appendTo="body" formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL1(TableForm.value.StreamID, TableForm.value.SemesterID)">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of SemesterMasterDDL; track item.SemesterID) {
+            <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SemesterID.errors" class="text-danger">
+            <p *ngIf="formTable.SemesterID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream<span class="StarMarking">*</span></label>
+          <ng-select appendTo="body" formControlName="StreamID" [clearable]="false" (change)="getSubjectMasterDDL(TableForm.value.StreamID, TableForm.value.SemesterID)">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of StreamMasterDDL; track item.StreamID) {
+            <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.StreamID.errors" class="text-danger">
+            <p *ngIf="formTable.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <!--{{GetSectionData|json}}-->
+
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject<span class="StarMarking">*</span></label>
+          <ng-select appendTo="body" formControlName="SubjectID" [clearable]="false" (change)="ChangeSubjectDDL()">
+            <ng-option value="">--Select--</ng-option>
+            @for (item of SubjectMasterDDL; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SubjectID.errors" class="text-danger">
+            <p *ngIf="formTable.SubjectID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name<span class="StarMarking">*</span></label>
+          <ng-select appendTo="body" formControlName="SectionID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of GetSectionData; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SectionID.errors" class="text-danger">
+            <p *ngIf="formTable.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
+
+
+      </div>
+
+
+      <div class="flex items-end gap-2 mt-4">
+
+        <button type="button"
+                class="btn bg-info text-white px-5 py-2 rounded-md" (click)="GetAssignedTeacherForSubject()">
+         
+          Search
+
+        </button>
+
+        <button type="button"
+                class="btn bg-danger text-white px-5 py-2 rounded-md">
+
+          <i class="ti ti-refresh"></i>
+          Reset
+
+        </button>
+
+      </div>
+
+
+    </form>
+
+
+  </div>
+
+  <div class="mt-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Assigned List</b>
+    </div>
+    <!-- {{AddStaffSubjectSectionModelList|json}} -->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead>
+          <tr class="text-left">
+            <!-- <th>ID</th> -->
+            <th>SrNo</th>
+            <th>Semester</th>
+            <th>Stream</th>
+            <th>Subject</th>
+            <th>Staff</th>
+            <th>Sections</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of AddStaffSubjectSectionModelList; let i = index">
+           <td>{{ i+1 }}</td> 
+         
+          <td>{{ row.SemesterName }}</td>
+          <td>{{ row.StreamName }}</td>
+          <td>{{ row.SubjectName }}</td>
+          <td>{{ row.SatffName }}</td>
+          <td>{{ row.SectionsName }}</td>
+          <td class="text-center">
+            <div class="flex items-center justify-center gap-2">
+
+              <button type="button"
+                      class="btn btn-sm bg-info text-white hover:bg-info/90 px-2 py-1 rounded"
+                      (click)="AddStaffData(MyModel_EdiDetailsStaff,row,i)"
+                      title="Edit">
+                <i class="ti ti-pencil text-base"></i>
+              </button>
+
+              <button type="button"
+                      class="btn btn-sm bg-danger text-white hover:bg-danger/90 px-2 py-1 rounded"
+                      (click)="DeleteRow(row)"
+                      title="Delete">
+                <i class="ti ti-trash text-base"></i>
+              </button>
+
+            </div>
+          </td>
+        </tr>
+          <tr *ngIf="AddStaffSubjectSectionModelList.length === 0">
+           
+            <td colspan="7" class="text-center">No records found.</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                   [length]="totalRecords" (page)="onPaginationChange($event)">
+    </mat-paginator>
+    <!--{{ApprovedTeacherList|json}}-->
+  </div>
+
+
+</div>
+
+
+<ng-template #MyModel_EdiDetailsStaff let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Add-Edit Assign Teacher For Subject</b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Basic Details</b>
+          </div>
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+              <ng-select appendTo="body" formControlName="StreamName" [clearable]="false" class="w-full"
+                         (change)="getSubjectMasterDDL2(EditDataFormGroup.value.StreamID, EditDataFormGroup.value.SemesterID)" [(ngModel)]="AddStaffSubjectSectionModel.StreamID">
+                <ng-option [value]="0">--Select--</ng-option>
+                <ng-option *ngFor="let item of StreamMasterDDL" [value]="item.StreamID">
+                  {{ item.StreamName }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="isSubmitted && formEditData.StreamName.errors" class="text-danger">
+                <p *ngIf="formEditData.StreamName.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+              <ng-select appendTo="body" formControlName="SemesterID" [clearable]="false"
+                         (change)="getSubjectMasterDDL2(EditDataFormGroup.value.StreamID, EditDataFormGroup.value.SemesterID)"
+                         [(ngModel)]="AddStaffSubjectSectionModel.SemesterID">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of SemesterMasterDDL; track item.SemesterID) {
+                <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formEditData.SemesterID.errors" class="text-danger">
+                <p *ngIf="formEditData.SemesterID.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div>
+            <!--{{SubjectMasterDDL|json}}-->
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name</label>
+              <ng-select appendTo="body" formControlName="SectionID" [items]="GetSectionData" bindLabel="Name"
+                         bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                         placeholder="--Select Branch--">
+                <ng-template ng-option-tmp let-item="item" let-item$="item$">
+                  <input type="checkbox" [checked]="item$.selected" class="me-2" />
+                  {{ item.Name }}
+                </ng-template>
+              </ng-select>
+              <div *ngIf="isSubmitted && formEditData.SectionID.errors" class="text-danger">
+                <p *ngIf="formEditData.SectionID.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject</label>
+              <!-- (change)="refreshAvailableSections1($event)" -->
+              <ng-select appendTo="body" formControlName="SubjectID" [clearable]="false" [(ngModel)]="AddStaffSubjectSectionModel.SubjectID">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of SubjectMasterDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formEditData.SubjectID.errors" class="text-danger">
+                <p *ngIf="formEditData.SubjectID.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Add Staff</label>
+              <select appendTo="body" formControlName="AssignbyStaffID" class="form-select" id="StaffID"
+                      [(ngModel)]="AddStaffSubjectSectionModel.StaffID">
+                <option value="0">--All--</option>
+                <option *ngFor="let item of ApprovedTeacherList" value="{{item.StaffID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && formEditData.AssignbyStaffID.errors" class="text-danger">
+                <p *ngIf="formEditData.AssignbyStaffID.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+            <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name</label>
+    <ng-select formControlName="SectionID" [clearable]="false">
+      <ng-option [value]="0">--Select--</ng-option>
+      @for (item of GetSectionData; track item.SectionID) {
+      <ng-option [value]="item.SectionID">{{item.SectionName}}</ng-option>
+      }
+    </ng-select>
+    <div *ngIf="isSubmitted && formEditData.SectionID.errors" class="text-danger">
+      <p *ngIf="formEditData.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>
+  </div> -->
+
+          </div>
+          <div *ngIf="!IsEditMode || AddStaffSubjectSectionModelList1?.length==0 " class="mt-3 text-center">
+            <button type="button" class="btn bg-info text-white" (click)="AddToList()">
+              Add to List
+            </button>
+          </div>
+          <div *ngIf="AddStaffSubjectSectionModelList1?.length>0" class="mt-5">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5">Assigned List</b>
+            </div>
+       
+            <div class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead>
+                  <tr>
+                     <th>ID</th> 
+                    <th>Semester</th>
+                    <th>Stream</th>
+                    <th>Subject</th>
+                    <th>Staff</th>
+                    <th>Sections</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of AddStaffSubjectSectionModelList1; let i = index">
+                     <td>{{ i+1}}</td> 
+                    <td>{{ row.SemesterName }}</td>
+                    <td>{{ row.StreamName }}</td>
+                    <td>{{ row.SubjectName }}</td>
+                    <td>{{ row.SatffName }}</td>
+                    <td>{{ row.SectionsName }}</td>
+                    <td>
+                      <button class="btn btn-danger btn-sm" (click)="DeleteFromList(i)">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="AddStaffSubjectSectionModelList1.length === 0">
+                    <td colspan="7" class="text-center">No records found.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center flex items-center justify-center mt-3">
+              <button type="button" id="btnSave" (click)="SaveData_EditDetails()" class="btn bg-info text-white">
+                <i class="ti ti-device-floppy"></i> Submit
+              </button>
+              <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+    </form>
+
+
+  </div>
+
+</ng-template>
+
