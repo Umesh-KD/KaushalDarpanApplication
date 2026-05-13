@@ -139,9 +139,9 @@ export class ApplyForHostelComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));    
     
+    await this.GetLastFYEndTerm();
     await this.GetStudentDetailsForApply();
     await this.GetMarksDetails();
-    await this.GetLastFYEndTerm();
     await this.GetAllData();
     await this.GetRoomTypeDDL();
 
@@ -416,14 +416,12 @@ export class ApplyForHostelComponent {
     try {
       let obj = {
         EndTermID: this.sSOLoginDataModel.EndTermID,
-        Action: "_getLastFYEndTerm"
+        Action: "_getLastFYEndTerm_new",
+        StudentID: this.sSOLoginDataModel.StudentID
       }
       await this._HostelManagmentService.GetLastFYEndTerm(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
 
           this.LastTerm1 = data['Data'].Table[0]
           this.LastTerm2 = data['Data'].Table[1]
