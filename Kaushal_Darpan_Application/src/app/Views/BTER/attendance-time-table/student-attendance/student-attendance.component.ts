@@ -32,12 +32,12 @@ import { CommonDDLSubjectMasterModel } from '../../../../Models/CommonDDLSubject
 })
 export class StudentAttendanceComponent implements OnInit {
   displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName'];
- /* dynamicColumns: string[] = [];*/
+  /* dynamicColumns: string[] = [];*/
 
   filterData: any[] = [];
   dynamicColumns: { name: string, locked: boolean }[] = [];
- 
- 
+
+
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
@@ -53,7 +53,7 @@ export class StudentAttendanceComponent implements OnInit {
   private _liveAnnouncer = inject(LiveAnnouncer);
   dataSource = new MatTableDataSource<any>([]);
   checkedAll: boolean = false;
-  public todayDate:string='';
+  public todayDate: string = '';
   // Pagination related variables
   totalRecords: number = 0;
   pageSize: number = 500;
@@ -66,7 +66,7 @@ export class StudentAttendanceComponent implements OnInit {
   sectionId!: number;
   subjectId!: number;
   today: Date = new Date();
-  yesterdayDate: string='';
+  yesterdayDate: string = '';
   sevenDaysLater: Date = new Date();
   selectedRange: { start: Date, end: Date } | null = null;
 
@@ -88,15 +88,15 @@ export class StudentAttendanceComponent implements OnInit {
     private HrMasterService: LeaveMasterService,
 
   ) {
-    
+
   }
 
   async ngOnInit() {
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
-      AttandanceTimeID: ['', Validators.required], 
+      AttandanceTimeID: ['', Validators.required],
       StreamID: ['', Validators.required],
-        // StreamID: [{ value: '', disabled: true }, Validators.required],
+      // StreamID: [{ value: '', disabled: true }, Validators.required],
       SectionID: ['', Validators.required],
       SemesterID: ['', Validators.required],
       // SemesterID: [{ value: '', disabled: true }, Validators.required],
@@ -115,14 +115,14 @@ export class StudentAttendanceComponent implements OnInit {
     const today = new Date();
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1); // Move to the previous day
-    this.yesterdayDate = yesterday.toISOString().split('T')[0]; 
+    this.yesterdayDate = yesterday.toISOString().split('T')[0];
     this.sevenDaysLater.setDate(this.today.getDate() - 7);
     this.selectedRange = {
       start: this.sevenDaysLater,
       end: this.today
     };
 
-   await this.getSubjectMasterDDL(this.streamId, this.semesterId);
+    await this.getSubjectMasterDDL(this.streamId, this.semesterId);
 
     this.TableForm.patchValue({
       StreamID: this.streamId,
@@ -136,7 +136,7 @@ export class StudentAttendanceComponent implements OnInit {
     //     this.TableForm.patchValue({
     //       SubjectID: this.subjectId
     //     });
-        // this.getData();
+    // this.getData();
     //   }
     // }, 1000);
 
@@ -150,19 +150,19 @@ export class StudentAttendanceComponent implements OnInit {
     //   // AttendanceEndDate: this.selectedRange?.end
     // });
 
-  //debugger
+    //debugger
     await this.GetStudentAttandanceTimeDDL();
-  //  await this.GetStaffLeaveAllData();
+    //  await this.GetStaffLeaveAllData();
 
-    if(this.subjectId){
+    if (this.subjectId) {
       await this.getData();
     }
-    this.todayDate= new Date().toISOString().split('T')[0];
+    this.todayDate = new Date().toISOString().split('T')[0];
     //const defaultTime = this.StudentAttandanceTimeDDL.find(x => x.Name === '09:00:00 - 10:00:00');
     //if (!this.TableForm.get('AttandanceTimeID')?.value && defaultTime) {
     //  this.TableForm.patchValue({ AttandanceTimeID: defaultTime.ID });
     //}
-    
+
   }
   get formTable() { return this.TableForm.controls; }
 
@@ -176,22 +176,22 @@ export class StudentAttendanceComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
         this.SemesterMasterDDL = data.Data;
       })
-    
-    let obj = {
-      SemesterID: this.semesterId,
-      StreamID: this.streamId,
-      SubjectID: this.subjectId,
-      StaffID: this.sSOLoginDataModel.StaffID,
-      DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-    }
-    await this.staffMasterService.GetBranchSectionAcRosterData(obj)
-      .then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.GetSectionData = data.Data;
-       
-      }, (error: any) => console.error(error)
-      );
+
+      let obj = {
+        SemesterID: this.semesterId,
+        StreamID: this.streamId,
+        SubjectID: this.subjectId,
+        StaffID: this.sSOLoginDataModel.StaffID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      }
+      await this.staffMasterService.GetBranchSectionAcRosterData(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GetSectionData = data.Data;
+
+        }, (error: any) => console.error(error)
+        );
 
 
 
@@ -225,19 +225,19 @@ export class StudentAttendanceComponent implements OnInit {
 
 
   async GetStudentAttandanceTimeDDL() {
-    debugger
+    //debugger
     // await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
     await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.subjectId).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
-     // debugger
+      // debugger
       this.StudentAttandanceTimeDDL = data.Data;
 
-      if(this.StudentAttandanceTimeDDL && this.StudentAttandanceTimeDDL.length>0){
+      if (this.StudentAttandanceTimeDDL && this.StudentAttandanceTimeDDL.length > 0) {
         this.TableForm.get('SubjectID')?.disable();
         // this.TableForm.get('StreamID')?.disable();
         // this.TableForm.get('SemesterID')?.disable();
       }
-      else{
+      else {
         this.TableForm.get('SubjectID')?.enable();
         // this.TableForm.get('StreamID')?.enable();
         // this.TableForm.get('SemesterID')?.enable();
@@ -259,7 +259,7 @@ export class StudentAttendanceComponent implements OnInit {
       await this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SubjectMasterDDL = data.Data;
-        if(this.subjectId!=0 || this.subjectId!=null || this.subjectId!=undefined){
+        if (this.subjectId != 0 || this.subjectId != null || this.subjectId != undefined) {
           this.TableForm.get('SubjectID')?.setValue(this.subjectId);
         }
 
@@ -270,12 +270,12 @@ export class StudentAttendanceComponent implements OnInit {
 
   }
 
- 
+
 
 
   async GetStaffLeaveAllData() {
     try {
-      debugger
+      //debugger
       const rawStart = this.TableForm.value.AttendanceStartDate;
       const rawEnd = this.TableForm.value.AttendanceEndDate;
 
@@ -296,7 +296,7 @@ export class StudentAttendanceComponent implements OnInit {
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
       this.searchRequest.From_Date = formattedDateStart;
       this.searchRequest.To_Date = formattedDateEnd;
-     
+
 
       this.loaderService.requestStarted();
       await this.HrMasterService.ByIDStaffLeaveList(this.searchRequest)
@@ -428,10 +428,10 @@ export class StudentAttendanceComponent implements OnInit {
 
     return `${year}-${month}-${day}`;
   }
- 
+
   async GetAttendanceTimeTable() {
     try {
-      debugger;
+      //debugger;
 
       const rawStart = this.TableForm.value.AttendanceStartDate;
       const rawEnd = this.TableForm.value.AttendanceEndDate;
@@ -473,13 +473,13 @@ export class StudentAttendanceComponent implements OnInit {
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
-//debugger
+          //debugger
           // Generate dynamic columns
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => ![
               'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
               'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
-              'EndTermID', 'CourseTypeID', 'StudentID'
+              'EndTermID', 'CourseTypeID', 'StudentID', 'RosterID'
             ].includes(key))
             .map(key => {
               const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
@@ -556,7 +556,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   // Method to handle attendance change (can be customized)
   onAttendanceChange(event: any, element: any, column: string) {
-   // //debugger
+    // //debugger
     const attendanceStatus = event.checked ? 'P' : 'A';
     element[column] = attendanceStatus;
     console.log(`${element.StudentName}'s attendance for ${column} changed to ${attendanceStatus}`);
@@ -570,7 +570,7 @@ export class StudentAttendanceComponent implements OnInit {
     });
   }
 
- async getData() {
+  async getData() {
     //debugger
     this.isSubmitted = true;
 
@@ -580,7 +580,7 @@ export class StudentAttendanceComponent implements OnInit {
     // if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
     //   this.GetAttendanceTimeTable();
     // }
-     if (this.TableForm.value.StreamID != null && this.subjectId != null) {
+    if (this.TableForm.value.StreamID != null && this.subjectId != null) {
       this.GetAttendanceTimeTable();
     }
   }
@@ -682,7 +682,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   saveAttendance() {
     this.swat.Confirmation("Are you sure you want to save the attendance?", (result: any) => {
-      if (!result.isConfirmed) return; 
+      if (!result.isConfirmed) return;
 
       let saveAttendanceData: any[] = this.dataSource.filteredData;
       debugger;
@@ -700,7 +700,8 @@ export class StudentAttendanceComponent implements OnInit {
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         InstituteID: this.sSOLoginDataModel.InstituteID,
         AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID,
-        StaffID: this.sSOLoginDataModel.StaffID
+        StaffID: this.sSOLoginDataModel.StaffID,
+        RosterID: this.TableForm.value.AttandanceTimeID
       };
 
       saveAttendanceData.forEach(item => {
@@ -712,7 +713,7 @@ export class StudentAttendanceComponent implements OnInit {
             'SectionID', 'SectionName', 'DepartmentID', 'SemesterName', 'StreamName', 'EnrollmentNo',
             'StudentName', 'SubjectName', 'EndTermID', 'SemesterID', 'StreamID', 'SubjectID',
             'CourseTypeID', 'AssignTeacherForSubjectID', 'SubjectID1', 'AttendanceDate', 'Attendance',
-            'InstituteID', 'StudentID','StaffID'
+            'InstituteID', 'StudentID', 'StaffID', 'RosterID'
           ];
 
           if (!skipKeys.includes(key)) {
@@ -748,7 +749,7 @@ export class StudentAttendanceComponent implements OnInit {
 
 
   toggleAllAttendance() {
-    debugger
+    //debugger
     const attendanceStatus = this.checkedAll ? 'P' : 'A';
     this.dataSource.data.forEach((element: { Attendance: string; }) => {
       element.Attendance = attendanceStatus;
@@ -758,11 +759,11 @@ export class StudentAttendanceComponent implements OnInit {
 
   async ChangeSubjectDDL() {
 
-   // debugger
+    // debugger
     const GetSemesterID = this.TableForm.get('SemesterID')?.value;
     const GetstreamId = this.TableForm.get('StreamID')?.value;
     const GetSubjectID = this.TableForm.get('SubjectID')?.value;
-    
+
     //debugger
     let obj = {
       SemesterID: GetSemesterID,
@@ -776,7 +777,7 @@ export class StudentAttendanceComponent implements OnInit {
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.GetSectionData = data.Data;
-       
+
       }, (error: any) => console.error(error)
       );
 
@@ -806,7 +807,7 @@ export class StudentAttendanceComponent implements OnInit {
   async sectionDDlAcRoster() {
 
 
-    
+
   }
 
 
@@ -814,12 +815,12 @@ export class StudentAttendanceComponent implements OnInit {
   lockColumn(columnName: string) {
     this.swat.Confirmation("Are you sure you want to lock this column?", (result: any) => {
       if (!result.isConfirmed) return;
-debugger
+      debugger
       const col = this.dynamicColumns.find(c => c.name === columnName);
       if (col) {
         col.locked = true;
-        this.dataSource.data = [...this.dataSource.data]; 
-        this.cdr.detectChanges(); 
+        this.dataSource.data = [...this.dataSource.data];
+        this.cdr.detectChanges();
       }
     });
   }
@@ -834,8 +835,8 @@ debugger
         this.dataSource.data.forEach((row: any) => {
           if (row[columnName] === 'H') row[columnName] = 'A';
         });
-        this.dataSource.data = [...this.dataSource.data]; 
-        this.cdr.detectChanges(); 
+        this.dataSource.data = [...this.dataSource.data];
+        this.cdr.detectChanges();
       }
     });
   }
