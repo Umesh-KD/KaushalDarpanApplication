@@ -1089,6 +1089,14 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async Get_SubjectMasterByCondition(request: CommonDDLSubjectMasterModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/Get_SubjectMasterByCondition/`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetSerialMasterData(request: CommonSerialMasterRequestModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetSerialMasterData/`, body, this.headersOptions)

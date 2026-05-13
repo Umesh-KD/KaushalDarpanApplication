@@ -133,6 +133,7 @@ export enum EnumRole {
   Principle_NonEng_Degree1Year = 207,
   Principle_NonEng_Degree2YearLateral = 208,
   CommitteInchargeDTE = 247,
+  Committee_Incharge = 234,
 
   //Iti new role
   ITIPrivateTeacher = 62,
