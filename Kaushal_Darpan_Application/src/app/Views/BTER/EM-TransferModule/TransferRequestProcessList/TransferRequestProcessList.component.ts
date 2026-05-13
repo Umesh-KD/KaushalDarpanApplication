@@ -115,6 +115,8 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
     await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ItiCollegesListAll = data.Data;
+      this.ItiCollegesListAll = this.ItiCollegesListAll.filter((item: any) => item.InstitutionManagementTypeID == 1);
+
     })
 
     await this.commonFunctionService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {
@@ -639,7 +641,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
     }
 
     async TabutarTransferList() {
-      window.open('/TabutarTransferList', '_blank');
+      window.open('/TabularTransferList', '_blank');
     }
 
 

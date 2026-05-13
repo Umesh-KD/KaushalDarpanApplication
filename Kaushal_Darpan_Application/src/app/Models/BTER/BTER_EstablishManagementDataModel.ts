@@ -874,6 +874,6 @@ export class BTERStaffManualRequestModel {
   public To_PostID: number = 0;
   public To_ddlDistrictID: number = 0;
   public To_ddlCollege: number = 0;
- 
+
 
 }
