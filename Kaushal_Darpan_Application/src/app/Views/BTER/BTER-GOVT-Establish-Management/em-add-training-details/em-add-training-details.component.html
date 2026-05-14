@@ -82,10 +82,21 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Duration Unit: <span class="StarMarking">*</span>
           </label>
-          <select class="form-select" id="DurationUnit" [(ngModel)]="request.DurationUnit" formControlName="DurationUnit">
+          <!--<select class="form-select" id="DurationUnit" [(ngModel)]="request.DurationUnit" formControlName="DurationUnit">
+    <option [value]="0">--- Choose Duration Unit --- </option>
+    <option [value]="1">Days</option>
+    <option [value]="2">Weeks</option>
+  </select>-->
+          <select class="form-select"
+                  id="DurationUnit"
+                  [(ngModel)]="request.DurationUnit"
+                  formControlName="DurationUnit"
+                  (change)="validateTrainingDates()">
+
             <option [value]="0">--- Choose Duration Unit --- </option>
             <option [value]="1">Days</option>
             <option [value]="2">Weeks</option>
+
           </select>
 
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.DurationUnit.errors" class="text-danger">
@@ -99,9 +110,19 @@
           <label for="Duration" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Duration: <span class="StarMarking">*</span>
           </label>
-          <input type="text" class="form-input" id="Duration" name="Duration" formControlName="Duration"
-                 [(ngModel)]="request.Duration" maxlength="2" placeholder="Duration"
-                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+          <input type="text"
+                 class="form-input"
+                 id="Duration"
+                 name="Duration"
+                 formControlName="Duration"
+                 [(ngModel)]="request.Duration"
+                 maxlength="2"
+                 placeholder="Duration"
+                 (input)="validateTrainingDates()"
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+          <!--<input type="text" class="form-input" id="Duration" name="Duration" formControlName="Duration"
+         [(ngModel)]="request.Duration" maxlength="2" placeholder="Duration"
+         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">-->
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.Duration.errors?.required" class="text-danger">
             <p>This field is required!</p>
           </div>
@@ -111,12 +132,21 @@
           <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Start Date: <span class="StarMarking">*</span>
           </label>
+          <!--<input type="date"
+         id="StartDate"
+         name="StartDate"
+         class="form-input"
+         formControlName="StartDate"
+         [(ngModel)]="request.StartDate" (change)="onDateChange()" />-->
           <input type="date"
                  id="StartDate"
                  name="StartDate"
                  class="form-input"
                  formControlName="StartDate"
-                 [(ngModel)]="request.StartDate" (change)="onDateChange()" />
+                 [(ngModel)]="request.StartDate"
+                 [min]="request.TrainingTypeID == 2 ? todayDate : null"
+                 [max]="request.TrainingTypeID == 1 ? todayDate : null"
+                 (change)="validateTrainingDates()" />
 
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.StartDate.errors" class="text-danger">
             <p *ngIf="!_AddTrainingDetailsFromGroup.StartDate.errors.DropdownValidators">
@@ -129,12 +159,19 @@
           <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
             End Date: <span class="StarMarking">*</span>
           </label>
+          <!--<input type="date"
+         id="EndDate"
+         name="EndDate"
+         class="form-input"
+         formControlName="EndDate"
+         [(ngModel)]="request.EndDate" [min]="request.StartDate" (change)="onDateChange()" />-->
           <input type="date"
                  id="EndDate"
                  name="EndDate"
                  class="form-input"
                  formControlName="EndDate"
-                 [(ngModel)]="request.EndDate" [min]="request.StartDate" (change)="onDateChange()" />
+                 [(ngModel)]="request.EndDate"
+                 readonly />
 
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.EndDate.errors" class="text-danger">
             <p *ngIf="!_AddTrainingDetailsFromGroup.EndDate.errors.DropdownValidators">
@@ -266,9 +303,10 @@
               <th align="left">Venue</th>
               <th align="left">Mode Of Training</th>
               <th class="text-left">View Document</th>
-              <th class="text-left">View Complition Training Document</th>
+              <th class="text-left">View Completion Training Document</th>
               <th class="text-left">Status</th>
               <th align="center" width="200">Action</th>
+             
             </tr>
           </thead>
           <tbody>
@@ -366,7 +404,7 @@
               <th align="left">Venue</th>
               <th align="left">Mode Of Training</th>
               <th class="text-left">View Document</th>
-              <th class="text-left">View Complition Training Document</th>
+              <th class="text-left">View Completion Training Document</th>
               <th class="text-left">Status</th>
               <th align="center" width="200">Action</th>
             </tr>
@@ -489,7 +527,7 @@
           <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                    for="ComplitionDoc">
-              Complition Training  Upload Document :<span class="StarMarking">*</span>
+              Completion Training  Upload Document :<span class="StarMarking">*</span>
             </label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"

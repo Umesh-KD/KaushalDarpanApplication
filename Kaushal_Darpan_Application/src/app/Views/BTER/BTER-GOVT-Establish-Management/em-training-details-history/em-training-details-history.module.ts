@@ -7,6 +7,7 @@ import { StudentStatusHistoryModule } from '../../../Student/student-status-hist
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { emtrainingdetailshistoryComponent } from './em-training-details-history.component';
 import { emtrainingdetailshistoryRoutingModule } from './em-training-details-history-routing.module';
+import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-staff-profile-modal.model';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { emtrainingdetailshistoryRoutingModule } from './em-training-details-his
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
+    ViewStaffProfileModalModule
   ]
 })
 export class emtrainingdetailshistoryModule { }
