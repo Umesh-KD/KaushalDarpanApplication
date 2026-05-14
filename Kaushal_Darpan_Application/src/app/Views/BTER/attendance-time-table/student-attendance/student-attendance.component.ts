@@ -480,7 +480,7 @@ export class StudentAttendanceComponent implements OnInit {
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
-          //debugger
+          debugger
           // Generate dynamic columns
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => ![
@@ -491,7 +491,7 @@ export class StudentAttendanceComponent implements OnInit {
             .map(key => {
               const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
               const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
-              return { name: key, locked: isLeaveDate };
+              return { name: key, locked: isLeaveDate, isMarkOnAttendanceDate:false };
             });
 
           // Apply attendance logic
@@ -544,7 +544,7 @@ export class StudentAttendanceComponent implements OnInit {
         EndTermID: this.sSOLoginDataModel.EndTermID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.streamId,
+        StreamID: this.streamId,  
         SectionID: this.TableForm.value.SectionID,
         SubjectID: this.subjectId,
         TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
@@ -596,7 +596,7 @@ export class StudentAttendanceComponent implements OnInit {
   //}
 
   //// ✅ Example helper (if not already defined)
-  //isColumnLocked(columnName: string): boolean {
+  //isColumnLocked(columnName: string): boolean { 
   //  const col = this.dynamicColumns.find(c => c.name === columnName);
   //  return col ? col.locked : false;
   //}
@@ -869,7 +869,7 @@ export class StudentAttendanceComponent implements OnInit {
 
 
   async saveAttendance() {
-    this.swat.Confirmation("Are you sure you want to save the attendance?", (result: any) => {
+    this.swat.Confirmation("Are you sure you want to save the attendance?", async (result: any) => {
       if (!result.isConfirmed) return;
       debugger
       if (this.markedAttendanceDates.length < 0) {
@@ -953,7 +953,7 @@ export class StudentAttendanceComponent implements OnInit {
       basePostAttendanceTimeTableModal.postAttendanceTimeTables = saveAttendanceData;
       basePostAttendanceTimeTableModal.markedAttendanceDatesDetails = markedAttendanceDatesObj;
       //debugger
-       this.attendanceServiceService.saveAttendanceData(basePostAttendanceTimeTableModal)
+       await this.attendanceServiceService.saveAttendanceData(basePostAttendanceTimeTableModal)
         .then( async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           //if (data.Data >0) {
@@ -1170,6 +1170,10 @@ export class StudentAttendanceComponent implements OnInit {
     this.AttendanceMarkingDataList = [];
     this.dynamicColumns=[] ;
     this.markedAttendanceDates = [];
+    this.dataSource.data = [];
+    this.filterData = [];
+    this.displayedColumns = [];
+    this.dataSource = new MatTableDataSource<any>([]);
   }
 
 }

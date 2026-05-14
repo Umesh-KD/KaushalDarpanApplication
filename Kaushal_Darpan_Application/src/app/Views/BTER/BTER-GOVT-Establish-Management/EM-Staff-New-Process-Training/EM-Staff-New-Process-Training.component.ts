@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { DropdownValidators1 } from '../../../../Services/CustomValidators/custo
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
 
 
   @Component({
@@ -51,6 +52,9 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     modalReference: NgbModalRef | undefined;
     public StaffTrainingHTS_GetDataList: any = [];
     public ShowCheckBoxId: number = 0;
+    @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
+
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -379,6 +383,13 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       
 
 
+    }
+
+    async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+      debugger
+      this.childComponentViewStaffProfile.StaffID = StaffID;
+      this.childComponentViewStaffProfile.UserID = UserID;
+      await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
     }
 
 }
