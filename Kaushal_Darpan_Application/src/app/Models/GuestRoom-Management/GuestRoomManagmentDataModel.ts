@@ -231,3 +231,17 @@ export class CheckInDataModel {
   public GuestReqID?: number = 0;
   public UserID?: number = 0;
 }
+
+export class RoomReservationDataModel {
+  public FromDate?: string = ''
+  public ToDate?: string = ''  
+  public Remark?: string = ''  
+  public RoomDetailList?: RoomDetailDataModel[] = []
+  public ModifyBy?: number = 0;
+  public RoleID?: number = 0;
+}
+
+export class RoomDetailDataModel{
+  public GuestRoomDetailID?: number = 0;
+  public GuestHouseID?: number = 0;
+}
