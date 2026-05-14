@@ -378,6 +378,9 @@ export class PostPlanningComponent {
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.SearchData.EndTermID = this.sSOLoginDataModel.EndTermID;
       debugger
+      if (this.sSOLoginDataModel.RoleID == 43 || this.sSOLoginDataModel.RoleID == 20) {
+        this.SearchData.InstituteID = this.sSOLoginDataModel.InstituteID
+      }
       await this.ITIGovtEMStaffMaster.OfficeVacancyListPlanning(this.SearchData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
