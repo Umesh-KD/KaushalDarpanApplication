@@ -61,7 +61,7 @@ export class AddGuestApplyForGuestRoomComponent {
   displayedColumns: string[] = [
     'SNo', 'RequestName', 'InstituteName', 'DepartmentName', 'FromDateTime', 'ToDateTime',
     'GuestHouseName', 'Purpose_str','RoomType', 'CoolingFacilities_Str', 'RoomFee', 
-    'StatusName', 'Remark', 'CheckinCheckout', 'Action'
+    'StatusName', 'Remark', 'CheckinCheckout','Document', 'Action'
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -187,6 +187,8 @@ export class AddGuestApplyForGuestRoomComponent {
     this.request.MailPersonal = this.sSOLoginDataModel.Mailpersonal;
     this.request.MobileNo = this.sSOLoginDataModel.Mobileno;
     this.request.PostalAddress = this.sSOLoginDataModel.Postaladdress;
+    this.request.EmpID = this.sSOLoginDataModel.EmployeeNumber;
+    this.request.GenderId = this.sSOLoginDataModel.GenderID;
   }
 
   onFromDateChange() {
@@ -273,23 +275,18 @@ export class AddGuestApplyForGuestRoomComponent {
             item.ActiveStatus = false;
             item.ModifyBy = this.sSOLoginDataModel.UserID;
 
-            await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(item)
+            await this.guestRoomManagmentService.DeleteDataByID(item.GuestReqID, this.sSOLoginDataModel.UserID)
               .then((data: any) => {
                 data = JSON.parse(JSON.stringify(data));
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
 
-                if (this.State == 1) {
+                if (data.State == EnumStatus.Success) {
                   this.toastr.success(this.Message)
                   this.ResetControls();
                   this.loadData();
                   this.GetGuestRoomApplyList();
                   this.RoomAvailablity = 0;
-                }
-
-                else {
-                  this.toastr.error(this.ErrorMessage)
+                } else {
+                  this.toastr.error(data.ErrorMessage)
                 }
 
               }, (error: any) => console.error(error)
@@ -308,8 +305,58 @@ export class AddGuestApplyForGuestRoomComponent {
 
   }
 
+  checkDateOverlap(): boolean {
+
+  const requestFrom = new Date(
+    `${this.request.FromDate}T${this.request.FromTime || '00:00:00'}`
+  );
+
+  const requestTo = new Date(
+    `${this.request.ToDate}T${this.request.ToTime || '00:00:00'}`
+  );
+
+  const isOverlap = this.GuestRoomApplyList.some((item: any) => {
+
+    // Convert dd-MM-yyyy to yyyy-MM-dd
+    const fromParts = item.FromDate.split('-');
+    const toParts = item.ToDate.split('-');
+
+    const existingFromDate =
+      `${fromParts[2]}-${fromParts[1]}-${fromParts[0]}`;
+
+    const existingToDate =
+      `${toParts[2]}-${toParts[1]}-${toParts[0]}`;
+
+    const existingFrom = new Date(
+      `${existingFromDate}T${item.FromTime}`
+    );
+
+    const existingTo = new Date(
+      `${existingToDate}T${item.ToTime}`
+    );
+
+    // Overlap condition
+    return (
+      requestFrom <= existingTo &&
+      requestTo >= existingFrom
+    );
+  });
+
+  if (isOverlap) {
+    this.toastr.warning('Selected date/time period is already applied.');
+    return true;
+  }
+
+  return false;
+}
+
   async openOTPModal_Apply() {
     this.isSubmitted = true;
+
+    if (this.checkDateOverlap()) {
+      return;
+    }
+
     if (this.IIPMasterFormGroup.invalid) {
       this.toastr.error("Please enter required fields !");
       return
@@ -366,11 +413,8 @@ export class AddGuestApplyForGuestRoomComponent {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
       this.request.IsForSelf = true;
+
       //save
-
-     
-
-
       await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

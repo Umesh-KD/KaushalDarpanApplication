@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumStatus, HostelStatus } from '../../../Common/GlobalConstants';
 import { RoomAllotmentDataModel } from '../../../Models/Hostel-Management/RoomAllotmentDataModel';
 import { HostelManagmentService } from '../../../Services/HostelManagment/HostelManagment.service';
 import * as XLSX from 'xlsx';
@@ -51,6 +51,7 @@ export class HostelWardenStudentMeritlistComponent {
   meritMultiSelected: boolean = false;
   decryptedIdsArray: any[] = [];
   showCheckbox: boolean = true;
+  public HostelStatusList: any = []
   //meritMultiSelected: boolean = false;
 
 
@@ -112,9 +113,12 @@ export class HostelWardenStudentMeritlistComponent {
       remark: ['', Validators.required],
     });
 
+    this.Searchrequest.status = 3;
+
     await this.GetAllGenerateHostelWardenStudentMeritlist();
     await this.GetBranchMaster();
     await this.GetSemesterMaster();
+    await this.GetHostelStatusDDL();
     //await this.GetMarksDetails();
     
   }
@@ -169,7 +173,10 @@ export class HostelWardenStudentMeritlistComponent {
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.Searchrequest.Action = "getall_A_O";
-
+      if (
+        this.Searchrequest.status == HostelStatus.AffidavitApproved||
+        this.Searchrequest.status == HostelStatus.UploadAffidavit
+      )
       this.loaderService.requestStarted();
       await this.studentRequestService.GetAllGenerateHostelWardenStudentMeritlist(this.Searchrequest)
         .then((data: any) => {
@@ -597,7 +604,17 @@ this.showCheckbox = !this.StudentReqListList.some((x: any) => x.AllotmentStatus 
     }
   }
 
-
+  async GetHostelStatusDDL() {
+    try {
+      await this.commonFunctionService.GetHostelStatusDDL().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.HostelStatusList = data['Data'];
+        this.HostelStatusList = this.HostelStatusList.filter((x: any) =>  x.StatusID == 9 )
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
 }

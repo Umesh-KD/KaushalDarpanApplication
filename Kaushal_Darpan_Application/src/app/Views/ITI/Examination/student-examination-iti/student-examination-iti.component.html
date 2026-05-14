@@ -135,7 +135,9 @@
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-      <ng-container *ngIf="this.sSOLoginDataModel.RoleID !=_EnumRole.Principal_NCVT && this.sSOLoginDataModel.RoleID !=_EnumRole.ITIPrincipal && this.sSOLoginDataModel.RoleID !=42 ">
+      <ng-container *ngIf="this.sSOLoginDataModel.RoleID !=_EnumRole.Principal_NCVT
+                    && this.sSOLoginDataModel.RoleID !=_EnumRole.ITIPrincipal && this.sSOLoginDataModel.RoleID !=42  && this.sSOLoginDataModel.RoleID !=253
+                    && this.sSOLoginDataModel.RoleID !=254">
         <div  class="flex">
           <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus" #examStatus="ngModel">
             <option value="0">Choose Mark As (*)</option>
@@ -169,7 +171,8 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th *ngIf="this.sSOLoginDataModel.RoleID !=_EnumRole.Principal_NCVT && this.sSOLoginDataModel.RoleID !=_EnumRole.ITIPrincipal && this.sSOLoginDataModel.RoleID !=42" >
+            <th *ngIf="this.sSOLoginDataModel.RoleID !=_EnumRole.Principal_NCVT && this.sSOLoginDataModel.RoleID !=_EnumRole.ITIPrincipal
+                && this.sSOLoginDataModel.RoleID !=42 && this.sSOLoginDataModel.RoleID !=253 && this.sSOLoginDataModel.RoleID !=254" >
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <th class="text-left">Sr.No.</th>
@@ -223,7 +226,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
-            <td *ngIf="this.sSOLoginDataModel.RoleID !=_EnumRole.Principal_NCVT && this.sSOLoginDataModel.RoleID !=_EnumRole.ITIPrincipal && this.sSOLoginDataModel.RoleID !=42" >
+            <td *ngIf="this.sSOLoginDataModel.RoleID !=_EnumRole.Principal_NCVT
+                && this.sSOLoginDataModel.RoleID !=_EnumRole.ITIPrincipal && this.sSOLoginDataModel.RoleID !=42
+                && this.sSOLoginDataModel.RoleID !=253 && this.sSOLoginDataModel.RoleID !=254" >
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
             </td>

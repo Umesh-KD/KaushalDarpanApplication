@@ -75,6 +75,8 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
     isJDTECheck: boolean = false;
     EnumTransferSystemStatus = EnumTransferSystemStatus;
     isDisable: boolean = false;
+    isShowStatus_Checkbox: boolean = false;
+    IsApproveExt: boolean = false;
     @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
   constructor(
@@ -133,7 +135,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
         this.TransferSystemStatusSearchList = data['Data'];
         this.TransferSystemStatusUpdateList = data['Data'];
 
-        this.TransferSystemStatusUpdateList = this.TransferSystemStatusUpdateList.filter((item: any) => item.ID == EnumTransferSystemStatus.Rejected);
+        this.TransferSystemStatusUpdateList = this.TransferSystemStatusUpdateList.filter((item: any) => item.ID == EnumTransferSystemStatus.Approved);
 
          if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
            //this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID == EnumTransferSystemStatus.Submitted || item.ID == EnumTransferSystemStatus.UnderADTEReview || item.ID == EnumTransferSystemStatus.Rejected);
@@ -215,6 +217,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
 
            this.isDisable = false;
+           this.isShowStatus_Checkbox = true;
           //this.TransferSystemStatusSearchList = this.TransferSystemStatusSearchList.filter((item: any) => item.ID ==
            //EnumTransferSystemStatus.Rejected || item.ID == EnumTransferSystemStatus.UnderJDTEReview || item.ID == EnumTransferSystemStatus.UnderDTEReview);
 
@@ -446,9 +449,12 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
             if (data.State === EnumStatus.Success) {
               this.EM_TransferSystemEXTList = data.Data;
               /*this.checkApproveStatus();*/
+              this.EM_TransferSystemEXTList = data.Data;
+              // IMPORTANT
+              this.checkApproveExt();
+
               if (this.statusID == 0) {
                 this.EM_TransferProcessList = data.Data;
-                
               }
             } else {
               this.EM_TransferSystemEXTList = [];
@@ -468,6 +474,20 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
         }, 200);
       }
     }
+
+    checkApproveExt(): void {
+
+      // If any row approved then hide all checkboxes
+
+      this.IsApproveExt = this.EM_TransferSystemEXTList.some(
+        (x: any) => Number(x.FinalApproveStatus) === 5
+      );
+
+      console.log('IsApproveExt', this.IsApproveExt);
+
+    }
+
+
     async onChangeSearchStatus() {
       
       if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) && EnumTransferSystemStatus.Submitted == this.SearchStatus)) {
@@ -490,40 +510,73 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
       debugger
       try {
 
-        if (!this.updateStatus || this.updateStatus == 0) {
-          this.toastr.warning("Please select status");
-          return;
+        if (this.isShowStatus_Checkbox == true) {
+
+          if (!this.updateStatus || this.updateStatus == 0) {
+            this.toastr.warning("Please select status");
+            return;
+          }
+
+          if (!this.SupportingDoc == null || this.SupportingDoc == "") {
+            this.toastr.warning("Please Upload Supporting Documents");
+            return;
+          }
+
+          const selectedRows = this.EM_TransferSystemEXTList
+            .filter((item: any) => item.Selected === true);
+
+          if (selectedRows.length === 0) {
+            this.toastr.warning("Please select one record");
+            return;
+          }
+
+          if (selectedRows.length > 1) {
+            this.toastr.warning("Please select only one record");
+            return;
+          }
+
+          const jsonData = selectedRows.map((item: any) => ({
+            TransferSystemID: item.TransferSystemID,
+            ID: item.ID,
+            Status: this.EnumTransferSystemStatus.Approved,
+            Remark: this.Remark,
+            CreatedBy: this.sSOLoginDataModel.UserID,
+            SupportingDoc: this.SupportingDoc,
+            Dis_SupportingDoc: this.Dis_SupportingDoc,
+            updateType:1
+
+          }));
+          this.updateExtSearch.jsonData = JSON.stringify(jsonData);
+
         }
-        if (!this.SupportingDoc==null || this.SupportingDoc == "") {
-          this.toastr.warning("Please Upload Supporting Documents");
-          return;
+        else {
+          debugger
+          const selectedRows = this.EM_TransferSystemEXTList;
+
+          const jsonData = selectedRows.map((item: any) => ({
+            TransferSystemID: item.TransferSystemID,
+            ID: item.ID,
+            Status: 0,
+            Remark: (
+              this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF ||
+              this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF
+            )
+              ? `Approved by ADTE: ${this.Remark}`
+              : (
+                this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE ||
+                this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER
+              )
+                ? `Approved by JDTE: ${this.Remark}`
+                : `Approved: ${this.Remark}`,
+            CreatedBy: this.sSOLoginDataModel.UserID,
+            SupportingDoc: '',
+            Dis_SupportingDoc: '',
+            updateType: 2
+
+          }));
+
+          this.updateExtSearch.jsonData = JSON.stringify(jsonData);
         }
-        const selectedRows = this.EM_TransferSystemEXTList
-          .filter((item: any) => item.Selected === true);
-
-        if (selectedRows.length === 0) {
-          this.toastr.warning("Please select one record");
-          return;
-        }
-
-        //if (selectedRows.length > 1) {
-        //  this.toastr.warning("Please select only one record");
-        //  return;
-        //}
-
-        
-        const jsonData = selectedRows.map((item: any) => ({
-          TransferSystemID: item.TransferSystemID,
-          ID: item.ID,
-          Status: this.EnumTransferSystemStatus.Rejected,
-          Remark: this.Remark,
-          CreatedBy: this.sSOLoginDataModel.UserID,
-          SupportingDoc: this.SupportingDoc,
-          Dis_SupportingDoc: this.Dis_SupportingDoc,
-
-        }));
-        this.updateExtSearch.jsonData = JSON.stringify(jsonData);
-
 
         await this.staffServiceDetailsService
           .TransferSystemEXTStatusUpdate(this.updateExtSearch)
@@ -536,7 +589,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
               this.Status = "0";
               this.Remark = "";
               this.CloseModal();
-
+              window.location.reload();
               this.EM_TransferProcessList =
                 this.EM_TransferProcessList.map((item: any) => ({
                   ...item,
@@ -645,17 +698,16 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
     }
 
 
-    isLastEligibleRow(index: number): boolean {
+    onSingleSelect(selectedRow: any): void {
 
-      const validRows = this.EM_TransferSystemEXTList
-        .map((row, i) => ({ row, i }))
-        .filter(x => x.row.FinalApproveStatus != 6);
+      this.EM_TransferSystemEXTList.forEach((row: any) => {
 
-      if (validRows.length === 0) return false;
+        row.Selected = false;
 
-      const lastIndex = validRows[validRows.length - 1].i;
+      });
 
-      return index === lastIndex;
+      selectedRow.Selected = true;
+
     }
 
     async OpenStaffProfileViewModal(StaffID: number, UserID: number) {

@@ -1728,6 +1728,8 @@ const routes: Routes = [
       { path: 'MasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/master-dashboard/master-dashboard.module').then(m => m.MasterDashboardModule) },
       { path: 'ItiTeacherAttendance', loadChildren: () => import('./Views/iti-teacher-attendance/iti-teacher-attendance.module').then(m => m.ItiTeacherAttendanceModule) },
       { path: 'StructuredSummaryList', loadChildren: () => import('./Views/BTER/EM-TransferModule/StructuredSummaryList/StructuredSummaryList.module').then(m => m.StructuredSummaryListModule) },
+      { path: 'TransferRequestReport', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
+      { path: 'TabutarTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'TabularTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'ITIExaminerInchargeDashboard', loadChildren: () => import('./Views/ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module').then(m => m.ItiExaminationInchargeDashboardModule), title: 'ITI Examiner Incharge Dashboard' },
 
