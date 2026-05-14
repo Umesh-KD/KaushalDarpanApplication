@@ -21,6 +21,7 @@ import { LeaveMasterSearchModel } from '../../../../Models/LeaveMasterDataModel'
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { LeaveMasterService } from '../../../../Services/LeaveMaster/leave-master.service';
 import { CommonDDLSubjectMasterModel } from '../../../../Models/CommonDDLSubjectMasterModel';
+import { BasePostAttendanceTimeTableModal } from '../../../../Models/StudentMasterModels';
 
 
 @Component({
@@ -35,8 +36,14 @@ export class StudentAttendanceComponent implements OnInit {
   /* dynamicColumns: string[] = [];*/
 
   filterData: any[] = [];
-  dynamicColumns: { name: string, locked: boolean }[] = [];
+  AttendanceMarkingDataList: any[] = [];
+  dynamicColumns: { name: string, locked: boolean, isMarkOnAttendanceDate?: boolean }[] = [];
 
+  markedAttendanceDates: {
+    date: string;
+    marked: boolean;
+    locked: boolean;
+  }[] = [];
 
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
@@ -154,9 +161,9 @@ export class StudentAttendanceComponent implements OnInit {
     await this.GetStudentAttandanceTimeDDL();
     //  await this.GetStaffLeaveAllData();
 
-    if (this.subjectId) {
-      await this.getData();
-    }
+    //if (this.subjectId) {
+    //  await this.getData();
+    //}
     this.todayDate = new Date().toISOString().split('T')[0];
     //const defaultTime = this.StudentAttandanceTimeDDL.find(x => x.Name === '09:00:00 - 10:00:00');
     //if (!this.TableForm.get('AttandanceTimeID')?.value && defaultTime) {
@@ -431,7 +438,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   async GetAttendanceTimeTable() {
     try {
-      //debugger;
+    //  debugger;
 
       const rawStart = this.TableForm.value.AttendanceStartDate;
       const rawEnd = this.TableForm.value.AttendanceEndDate;
@@ -473,7 +480,7 @@ export class StudentAttendanceComponent implements OnInit {
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
-          //debugger
+          debugger
           // Generate dynamic columns
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => ![
@@ -484,7 +491,7 @@ export class StudentAttendanceComponent implements OnInit {
             .map(key => {
               const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
               const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
-              return { name: key, locked: isLeaveDate };
+              return { name: key, locked: isLeaveDate, isMarkOnAttendanceDate:false };
             });
 
           // Apply attendance logic
@@ -527,17 +534,81 @@ export class StudentAttendanceComponent implements OnInit {
     }
   }
 
-  // ✅ Disable slide toggle when column is locked or value is 'TL'
+
+  async GetAttendanceMarkingStatus() {
+    try {
+      //debugger;
+
+      let obj = {
+        SemesterID: this.semesterId,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+        StreamID: this.streamId,  
+        SectionID: this.TableForm.value.SectionID,
+        SubjectID: this.subjectId,
+        TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
+      };
+
+      this.AttendanceMarkingDataList = [];
+
+      await this.attendanceServiceService.GetStudentAttendanceWitMarkingStatus(obj).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data['Data']));
+        this.AttendanceMarkingDataList = data;
+
+        //  store only required fields
+        this.markedAttendanceDates = this.AttendanceMarkingDataList.map((x: any) => ({            
+          date: x.AttendanceDate.split('T')[0],
+            marked: x.IsMarked,
+            locked: x.IsLocked
+          }));
+        console.log(this.markedAttendanceDates);
+
+        this.dynamicColumns.forEach(col => {
+          // remove () prefix from column
+          const columnDate =
+            col.name.replace(/\(.*?\)\s*/g, '').trim();
+          const matched = this.markedAttendanceDates.find(x => {
+            // remove time part
+            const markedDate = x.date.split('T')[0];
+            return markedDate === columnDate;
+          });
+          if (matched) {
+            col.isMarkOnAttendanceDate = matched.marked;
+            col.locked = matched.locked;
+          } else {
+            col.isMarkOnAttendanceDate = false;
+            col.locked = false;
+          }
+        });
+        this.cdr.detectChanges();
+
+      }, error => console.error(error));
+
+    } catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  //// ✅ Disable slide toggle when column is locked or value is 'TL'
+  //isToggleDisabled(element: any, columnName: string): boolean {
+  //  return this.isColumnLocked(columnName) || element[columnName] === 'TL';
+  //}
+
+  //// ✅ Example helper (if not already defined)
+  //isColumnLocked(columnName: string): boolean { 
+  //  const col = this.dynamicColumns.find(c => c.name === columnName);
+  //  return col ? col.locked : false;
+  //}
+
   isToggleDisabled(element: any, columnName: string): boolean {
-    return this.isColumnLocked(columnName) || element[columnName] === 'TL';
-  }
-
-  // ✅ Example helper (if not already defined)
-  isColumnLocked(columnName: string): boolean {
     const col = this.dynamicColumns.find(c => c.name === columnName);
-    return col ? col.locked : false;
+    return (
+      !col?.isMarkOnAttendanceDate ||
+      col?.locked ||
+      element[columnName] === 'TL'
+    );
   }
-
 
   private getLeaveDates(leaveList: any[]): string[] {
     const leaveDates: string[] = [];
@@ -564,16 +635,133 @@ export class StudentAttendanceComponent implements OnInit {
 
   // Method to toggle all attendance for a specific column to 'Present'
   toggleAllAttendanceForColumn(column: string, checked: boolean) {
-    ////debugger
+  //  debugger
     this.dataSource.data.forEach((row: { [x: string]: string; }) => {
       row[column] = checked ? 'P' : 'A'; // Set all attendance to 'P' or 'A'
     });
   }
 
-  async getData() {
-    //debugger
-    this.isSubmitted = true;
+  // Method to toggle all attendance for a specific column to 'Present'
 
+
+  //toggleAllAttendanceForMarkingColumn(columnName: string, checked: boolean) {
+  //  debugger
+  //  const column = this.dynamicColumns.find(c => c.name === columnName);
+
+  //  if (!column) return;
+
+  //  // if locked then no action
+  //  if (column.locked) {
+  //    return;
+  //  }
+
+  //  // enable/disable column
+  //  column.isMarkOnAttendanceDate = checked;
+
+  //  if (checked) {
+
+  //    if (!this.markedAttendanceDates.includes(columnName)) {
+  //      this.markedAttendanceDates.push(columnName);
+  //    }
+
+  //  } else {
+
+  //    this.markedAttendanceDates =
+  //      this.markedAttendanceDates.filter(d => d !== columnName);
+  //  }
+
+  //  this.cdr.detectChanges();
+
+  //  console.log('Marked Dates => ', this.markedAttendanceDates);
+  //}
+
+
+  //toggleAllAttendanceForMarkingColumn(columnName: string, checked: boolean) {
+  //  debugger
+  //  const column = this.dynamicColumns.find(c => c.name === columnName);
+
+  //  if (!column) return;
+
+  //  // if locked then no action
+  //  if (column.locked) {
+  //    return;
+  //  }
+
+  //  // enable/disable column
+  //  column.isMarkOnAttendanceDate = checked;
+
+  //  if (checked) {
+
+  //    // check already exists
+  //    const exists = this.markedAttendanceDates.find(
+  //      x => x.date === columnName
+  //    );
+
+  //    if (!exists) {
+
+  //      this.markedAttendanceDates.push({
+  //        date: columnName,
+  //        locked: column.locked
+  //      });
+
+  //    }
+
+  //  } else {
+
+  //    // remove date
+  //    this.markedAttendanceDates =
+  //      this.markedAttendanceDates.filter(x => x.date !== columnName);
+  //  }
+
+  //  this.cdr.detectChanges();
+
+  //  console.log('Marked Dates => ', this.markedAttendanceDates);
+  //}
+
+  toggleAllAttendanceForMarkingColumn(columnName: string, checked: boolean) {
+    //debugger
+    const column = this.dynamicColumns.find(c => c.name === columnName);
+
+
+    if (!column) return;
+
+    // if locked -> cannot uncheck
+    if (column.locked) {
+      column.isMarkOnAttendanceDate = true;
+      return;
+    }
+
+    // update UI state
+    column.isMarkOnAttendanceDate = checked;
+
+    // check existing
+    const existing = this.markedAttendanceDates.find(
+      x => x.date === columnName.replace(/\(.*?\)\s*/g, '').trim()
+    );
+
+    if (existing) {
+
+      existing.marked = checked;
+      existing.locked = column.locked;
+
+    } else {
+
+      this.markedAttendanceDates.push({
+        date: columnName.replace(/\(.*?\)\s*/g, '').trim(),
+        marked: checked,
+        locked: column.locked
+      });
+    }
+
+    this.cdr.detectChanges();
+
+    console.log(this.markedAttendanceDates);
+  }
+
+  async getData() {
+    debugger
+    this.isSubmitted = true;
+    this.ResetData();
     // await this.GetStudentAttandanceTimeDDL();
     await this.GetStaffLeaveAllData();
 
@@ -581,7 +769,8 @@ export class StudentAttendanceComponent implements OnInit {
     //   this.GetAttendanceTimeTable();
     // }
     if (this.TableForm.value.StreamID != null && this.subjectId != null) {
-      this.GetAttendanceTimeTable();
+      await this.GetAttendanceTimeTable();
+      await this.GetAttendanceMarkingStatus();
     }
   }
 
@@ -679,13 +868,34 @@ export class StudentAttendanceComponent implements OnInit {
 
 
 
-
-  saveAttendance() {
-    this.swat.Confirmation("Are you sure you want to save the attendance?", (result: any) => {
+  async saveAttendance() {
+    this.swat.Confirmation("Are you sure you want to save the attendance?", async (result: any) => {
       if (!result.isConfirmed) return;
-
+      debugger
+      if (this.markedAttendanceDates.length < 0) {
+        this.toastr.warning("Please Mark Attendance Atleast On One Date");
+        return;
+      }
       let saveAttendanceData: any[] = this.dataSource.filteredData;
-      debugger;
+
+      //START  obj  with marking status
+      const markedAttendanceDatesObj = this.markedAttendanceDates.map(x => ({
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        SemesterID: this.semesterId,
+        StreamID: this.streamId,
+        SectionID: this.sectionId,
+        SubjectID: this.subjectId,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+        AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        RosterID: this.TableForm.value.AttandanceTimeID,
+        Date: x.date.replace(/\(.*?\)\s*/g, '').trim(),
+        IsLocked: x.locked,
+        IsMarked: x.marked
+
+      }));
+      //END  obj  with marking status
 
       this.sectionId = this.TableForm.value.SectionID;
 
@@ -716,32 +926,42 @@ export class StudentAttendanceComponent implements OnInit {
             'InstituteID', 'StudentID', 'StaffID', 'RosterID'
           ];
 
+
           if (!skipKeys.includes(key)) {
             //  Remove (Working Day) / (Holiday) prefix → keep only yyyy-mm-dd
             const cleanedDate = key.replace(/\(.*?\)\s*/g, '').trim();
 
-            attendanceArray.push({
-              Date: cleanedDate,
-              Status: item[key] || null
-            });
+            const isMarked = this.markedAttendanceDates.some(
+              x => x.date === cleanedDate && x.marked === true
+            );
+
+            if (isMarked) {
+              attendanceArray.push({
+                Date: cleanedDate,
+                Status: item[key] || null
+              });
+
+            }
 
             delete item[key];
           }
         });
-
         item.Attendance = attendanceArray;
       });
 
-      console.log('Prepared data for saving:', saveAttendanceData);
-
-      this.attendanceServiceService.saveAttendanceData(saveAttendanceData)
-        .then((data: any) => {
+      let basePostAttendanceTimeTableModal = new BasePostAttendanceTimeTableModal();
+      basePostAttendanceTimeTableModal.postAttendanceTimeTables = saveAttendanceData;
+      basePostAttendanceTimeTableModal.markedAttendanceDatesDetails = markedAttendanceDatesObj;
+      //debugger
+       await this.attendanceServiceService.saveAttendanceData(basePostAttendanceTimeTableModal)
+        .then( async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.Data == 1) {
-            this.GetAttendanceTimeTable();
+          //if (data.Data >0) {
+           // this.GetAttendanceTimeTable();
             this.toastr.success(data.Message);
             this.checkedAll = false;
-          }
+            await this.getData();
+          //}
         }, error => console.error(error));
 
     });
@@ -812,34 +1032,115 @@ export class StudentAttendanceComponent implements OnInit {
 
 
 
+  //lockColumn(columnName: string) {
+  //  this.swat.Confirmation("Are you sure you want to lock this column?", (result: any) => {
+  //    if (!result.isConfirmed) return;
+  //    debugger
+  //    const col = this.dynamicColumns.find(c => c.name === columnName);
+  //    if (col) {
+  //      col.locked = true;
+  //      col.isMarkOnAttendanceDate = false;
+  //      this.dataSource.data = [...this.dataSource.data];
+  //      this.cdr.detectChanges();
+  //    }
+  //  });
+  //}
+
   lockColumn(columnName: string) {
-    this.swat.Confirmation("Are you sure you want to lock this column?", (result: any) => {
-      if (!result.isConfirmed) return;
-      debugger
-      const col = this.dynamicColumns.find(c => c.name === columnName);
-      if (col) {
+    
+    this.swat.Confirmation(
+      "Are you sure you want to lock this column?",
+      (result: any) => {
+
+        if (!result.isConfirmed) return;
+        debugger
+        const col = this.dynamicColumns.find(c => c.name === columnName);
+
+        if (!col) return;
+
         col.locked = true;
+
+        // mark should remain checked
+        col.isMarkOnAttendanceDate = true;
+
+        // update storage
+        const existing = this.markedAttendanceDates.find(
+          x => x.date === columnName.replace(/\(.*?\)\s*/g, '').trim()
+        );
+
+        if (existing) {
+
+          existing.locked = true;
+          existing.marked = true;
+
+        } else {
+
+          this.markedAttendanceDates.push({
+            date: columnName.replace(/\(.*?\)\s*/g, '').trim(),
+            marked: true,
+            locked: true
+          });
+        }
+
         this.dataSource.data = [...this.dataSource.data];
+
         this.cdr.detectChanges();
-      }
-    });
+      });
   }
 
+  //unlockColumn(columnName: string) {
+  //  this.swat.Confirmation("Are you sure you want to unlock this column?", (result: any) => {
+  //    if (!result.isConfirmed) return;
+  //    debugger
+  //    const col = this.dynamicColumns.find(c => c.name === columnName);
+  //    if (col) {
+  //      col.locked = false;
+  //      this.dataSource.data.forEach((row: any) => {
+  //        if (row[columnName] === 'H') row[columnName] = 'A';
+  //      });
+  //      // still disabled until Mark checked again
+  //      col.isMarkOnAttendanceDate = false;
+  //      this.dataSource.data = [...this.dataSource.data];
+  //      this.cdr.detectChanges();
+  //    }
+  //  });
+  //}
+
   unlockColumn(columnName: string) {
-    this.swat.Confirmation("Are you sure you want to unlock this column?", (result: any) => {
-      if (!result.isConfirmed) return;
-      debugger
-      const col = this.dynamicColumns.find(c => c.name === columnName);
-      if (col) {
+
+    this.swat.Confirmation(
+      "Are you sure you want to unlock this column?",
+      (result: any) => {
+
+        if (!result.isConfirmed) return;
+
+        const col = this.dynamicColumns.find(c => c.name === columnName);
+
+        if (!col) return;
+
         col.locked = false;
-        this.dataSource.data.forEach((row: any) => {
-          if (row[columnName] === 'H') row[columnName] = 'A';
-        });
+
+        // still marked after unlock
+        col.isMarkOnAttendanceDate = true;
+
+        // update storage
+        const existing = this.markedAttendanceDates.find(
+          x => x.date === columnName
+        );
+
+        if (existing) {
+
+          existing.locked = false;
+          existing.marked = true;
+        }
+
         this.dataSource.data = [...this.dataSource.data];
+
         this.cdr.detectChanges();
-      }
-    });
+      });
   }
+
+
 
   //isColumnLocked(columnName: string): boolean {
   //  const col = this.dynamicColumns.find(c => c.name === columnName);
@@ -865,6 +1166,15 @@ export class StudentAttendanceComponent implements OnInit {
     }
   }
 
+  ResetData() {
+    this.AttendanceMarkingDataList = [];
+    this.dynamicColumns=[] ;
+    this.markedAttendanceDates = [];
+    this.dataSource.data = [];
+    this.filterData = [];
+    this.displayedColumns = [];
+    this.dataSource = new MatTableDataSource<any>([]);
+  }
 
 }
 

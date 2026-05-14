@@ -421,7 +421,16 @@ export class AddTransferRequestComponent {
 
           // this.OfficeVacancy = [];
           // this.OfficeVacancyDataList();
-          this.toastr.success('Data saved successfully!');
+          if (this.request.TransferSystemID == 0) {
+            this.toastr.success('This request add successfully!');
+          } else if (this.request.TransferSystemID != 0)   {
+            this.toastr.success('This request update successfully!');
+          }
+          else  {
+            this.toastr.success('Data saved successfully!');
+          }
+          this.request = new  BTER_EM_TransferSystemModle();
+
           this.routers.navigate(['TransferRequestList']);
           // window.location.reload();
           // Clear array after successful save

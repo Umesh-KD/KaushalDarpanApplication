@@ -7,6 +7,7 @@ import { StudentStatusHistoryModule } from '../../../Student/student-status-hist
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { RelievingTransferListComponent } from './RelievingTransferList.component';
 import { RelievingTransferListRoutingModule } from './RelievingTransferList-routing.module';
+import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.model';
 
 
 
@@ -24,6 +25,7 @@ import { RelievingTransferListRoutingModule } from './RelievingTransferList-rout
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
+    ViewStaffProfileModalModule
   ]
 })
 export class RelievingTransferListModule { }

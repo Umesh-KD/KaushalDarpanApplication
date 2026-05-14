@@ -224,8 +224,8 @@
             <th class="text-left">Equipment</th>
             <th class="text-left">Requested Quantity</th>
             <th class="text-left">Approved Quantity</th>
-            <th class="text-left">Remark</th>
-            <th *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || 
+            <th>Description / Remarks</th>
+            <th *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal ||
                         sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge ||
                         sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)" class="text-left">Date Of Approval</th>
             <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
@@ -237,15 +237,16 @@
                 || sSOLoginDataModel.RoleID == EnumRole.AdminNon
                 || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Date Of Request</th>
             <!-- <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
-                || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
-                || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
-                || sSOLoginDataModel.RoleID == EnumRole.DTE
-                || sSOLoginDataModel.RoleID == EnumRole.DTENON
-                || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
-                || sSOLoginDataModel.RoleID == EnumRole.AdminNon
-                || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Status</th> -->
+  || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear
+  || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear
+  || sSOLoginDataModel.RoleID == EnumRole.DTE
+  || sSOLoginDataModel.RoleID == EnumRole.DTENON
+  || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+  || sSOLoginDataModel.RoleID == EnumRole.AdminNon
+  || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Status</th> -->
             <th class="text-left">Status</th>
-            <th>Description / Remarks</th>
+
+            <th class="text-left">Remark</th>
             <!-- <th>Indent Document</th> -->
             <th class="text-left">Action</th>
           </tr>
@@ -282,7 +283,7 @@
               {{ item.PrincipalStatus}}
             </td> -->
             <td align="left">{{ item.PrincipalStatus}}</td>
-            <td align="left">{{ item.Remarks}}</td>
+            <td align="left">{{ item.PrincipalRemark}}</td>
             <!-- <td align="left"><a *ngIf="item.FileName" href="{{ appsettingConfig.StaticFileRootPathURL + 'IssuesIndent/' + item.FileName }}" class="btn bg-primary text-white m-0" target="_blank">
   {{item.FileName}}
 </a></td> -->

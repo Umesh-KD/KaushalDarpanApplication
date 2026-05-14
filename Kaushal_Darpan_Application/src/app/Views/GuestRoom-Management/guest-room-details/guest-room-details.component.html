@@ -120,6 +120,7 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Room Details List</b>
+
       <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-1 bg-light">
       <b class="text-1xl-5"> Add Room Details</b>
 
@@ -141,116 +142,179 @@
 
       </div>
 
-    </div>-->
+      </div>-->
+
     </div>
+
+
     
-    <div class="table-container">
-      <mat-form-field appearance="outline">
-        <mat-label>Filter</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Search guests">
-      </mat-form-field>
+     
+    
 
-      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
-        <!-- Columns definitions -->
-        <ng-container matColumnDef="SNo">
-          <th mat-header-cell *matHeaderCellDef>#</th>
-          <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="RoomNo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Room No</th>
-          <td mat-cell *matCellDef="let row">{{ row.RoomNo }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="GuestHouseName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest Room Name</th>
-          <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="RoomType">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Type</th>
-          <td mat-cell *matCellDef="let row">{{ getRoomTypeName(row.RoomTypeID) }}</td>
-        </ng-container>
-
-        <!-- Study Table Facilities -->
-        <ng-container matColumnDef="StudyTableFacilities">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Study Table Facilities</th>
-          <td mat-cell *matCellDef="let row">
-            <span [ngClass]="{
-        'bg-success': row.StudyTableFacilities == 1,
-        'bg-danger': row.StudyTableFacilities == 2
-      }"
-                  class="btn btn-sm text-white">
-              {{ row.StudyTableFacilities == 1 ? 'Available' : 'Not Available' }}
-            </span>
-          </td>
-        </ng-container>
-
-        <!-- Fan Facilities -->
-        <ng-container matColumnDef="FanFacilities">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fan Facilities</th>
-          <td mat-cell *matCellDef="let row">
-            <span [ngClass]="{
-        'bg-success': row.FanFacilities == 1,
-        'bg-danger': row.FanFacilities == 2
-      }"
-                  class="btn btn-sm text-white">
-              {{ row.FanFacilities == 1 ? 'Available' : 'Not Available' }}
-            </span>
-          </td>
-        </ng-container>
-
-        <!-- Cooling Facilities -->
-        <ng-container matColumnDef="CoolingFacilities">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cooling Facilities</th>
-          <td mat-cell *matCellDef="let row">
-            <span [ngClass]="{
-        'bg-success': row.CoolingFacilities == 1,
-        'bg-primary': row.CoolingFacilities == 2,
-        'bg-secondary': row.CoolingFacilities == 3,
-        'bg-danger': row.CoolingFacilities == 0
-      }"
-                  class="btn btn-sm text-white">
-              {{ row.CoolingFacilities_str}}
-            </span>
-          </td>
-        </ng-container>
-
-        <!-- Attached Bath Facilities -->
-        <ng-container matColumnDef="AttachedBathFacilities">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Attached Bath Facilities</th>
-          <td mat-cell *matCellDef="let row">
-            <span [ngClass]="{
-        'bg-success': row.AttachedBathFacilities == 1,
-        'bg-danger': row.AttachedBathFacilities == 2
-      }"
-                  class="btn btn-sm text-white">
-              {{ row.AttachedBathFacilities == 1 ? 'Available' : 'Not Available' }}
-            </span>
-          </td>
-        </ng-container>
-
-
-        <ng-container matColumnDef="Action">
-          <th mat-header-cell *matHeaderCellDef>Action</th>
-          <td mat-cell *matCellDef="let row">
-            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-              <a href="javascript:void(0)" (click)="btnEdit_OnClick(row)" title="Edit"><i class="ti ti-pencil"></i></a>
-              <a href="javascript:void(0)" (click)="btnDelete_OnClick(row)" title="Delete"><i class="ti ti-trash"></i> </a>
-            </div>
-          </td>
-        </ng-container>
-
-        <!-- Header and row definitions -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord == 0">
-        No Record Found
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="flex">
+        <!-- <select class="form-select" id="IssuedItemStatus" >
+          <option value="0">Choose Mark As (*)</option>
+          <option value="2">Approve</option>
+          <option value="3">Reject</option>
+        </select> -->
+        <button type="button" class="btn bg-info text-white inline-block" (click)="openReservationModal(Modal_ReserveRoom)">Mark as Reserved</button>
       </div>
-      <mat-paginator [pageSizeOptions]="[50, 100, 500]" showFirstLastButtons></mat-paginator>
-    </div>    
-    
+      <div class="">
+        <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
+      </div>
+      <div class="">
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+            </th>
+            <th class="text-left">SNO</th>
+            <th class="text-left">Room No</th>
+            <th class="text-left">Room Type</th>
+            <th class="text-left">Guest Room Name</th>
+            <th class="text-left">Study Table Facilities</th>
+            <th class="text-left">Fan Facilities</th>
+            <th class="text-left">Cooling Facilities</th>
+            <th class="text-left">Attached Bath Facilities</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+            <td align="left">
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,item)">
+            </td>
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>
+            <td align="left">{{ row.RoomNo}}</td>
+            <td align="left">{{ getRoomTypeName(row.RoomTypeID)}}</td>
+            <td align="left">{{ row.GuestHouseName}}</td> 
+            <td align="left">
+              <span [ngClass]="{'bg-success': row.StudyTableFacilities == 1, 'bg-danger': row.StudyTableFacilities == 2}"
+                  class="btn btn-sm text-white">
+                {{ row.StudyTableFacilities == 1 ? 'Available' : 'Not Available' }}
+              </span>
+            </td> 
+            <td align="left">
+              <span [ngClass]="{'bg-success': row.FanFacilities == 1, 'bg-danger': row.FanFacilities == 2}"
+                    class="btn btn-sm text-white">
+                {{ row.FanFacilities == 1 ? 'Available' : 'Not Available' }}
+              </span>
+            </td>
+            <td align="left">
+              <span [ngClass]="{
+                          'bg-success': row.CoolingFacilities == 1,
+                          'bg-primary': row.CoolingFacilities == 2,
+                          'bg-secondary': row.CoolingFacilities == 3,
+                          'bg-danger': row.CoolingFacilities == 0
+                        }"
+                    class="btn btn-sm text-white">
+                {{ row.CoolingFacilities_str}}
+              </span>
+            </td>
+            <td align="left">
+              <span [ngClass]="{
+                                'bg-success': row.AttachedBathFacilities == 1,
+                                'bg-danger': row.AttachedBathFacilities == 2
+                              }"
+                    class="btn btn-sm text-white">
+                {{ row.AttachedBathFacilities == 1 ? 'Available' : 'Not Available' }}
+              </span>
+            </td>
+
+            <td align="left">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="btnEdit_OnClick(row)" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0)" (click)="btnDelete_OnClick(row)" title="Delete"><i class="ti ti-trash"></i> </a>
+              </div>
+            </td>
+          
+          </tr>
+          <tr *ngIf="paginatedInTableData?.length==0">
+            <td colspan="10">
+              No Record Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+
   </div>
 </div>
+
+<ng-template #Modal_ReserveRoom let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus">Room Reservation</i> </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-x-auto mt-3">
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-6">
+              <div>
+                <label for="FromDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Form Date: <span class="StarMarking">*</span>
+                </label>
+                <input type="date" class="form-input" id="FromDate" name="FromDate"
+                    [(ngModel)]="reservationRequest.FromDate">
+                
+              </div>
+
+              <div>
+                <label for="ToDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  To Date: <span class="StarMarking">*</span>
+                </label>
+                <input type="date" class="form-input" id="ToDate" name="ToDate"
+                    [(ngModel)]="reservationRequest.ToDate">
+                
+              </div>
+
+              <div>
+                <label for="Remark" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Remark: <span class="StarMarking">*</span>
+                </label>
+                <textarea
+                  class="form-input" id="Remark" name="Remark"
+                  [(ngModel)]]="reservationRequest.Remark"
+                  rows="4"
+                  placeholder="Enter Remark">
+                </textarea>
+                
+              </div>
+
+            </div>
+          </div>
+          <div class="mt-4">
+            <button class="btn bg-info text-white me-2" (click)="SaveRoomReservation()">Save</button>
+            <!--<button class="btn bg-danger text-white" (click)="cancelSelection()">Cancel</button> -->
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
