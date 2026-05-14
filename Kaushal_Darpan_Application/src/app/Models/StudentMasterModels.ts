@@ -53,12 +53,12 @@ export class StudentMasterModel {
   public BankName: string = '';
   public StudentPhoto: string = '';
   public StudentSign: string = '';
-  public StudentPaper : string=''
+  public StudentPaper: string = ''
   public Dis_StudentPhoto: string = '';
   public Dis_StudentSign: string = '';
   public Folder: string = ''
   public StudentTypeName: string = ''
- 
+
 
   public Remark: string = '';
   public TypeOfAdmissionID: number = 0;
@@ -97,7 +97,7 @@ export class StudentMasterModel {
   public IsYearly: boolean = false;
   public TransctionDate?: string = ''
   public PaidAmount: string = ''
-  public AllotmentId:number=0
+  public AllotmentId: number = 0
   public His_StatusId?: number = 0;
   public IsVerified?: boolean = false;
   public RoleID?: number = 0;
@@ -155,7 +155,7 @@ export interface StudentMarkedModel extends RequestBaseModel {
   StudentFilterStatusId: number;
   ModifyBy: number;
   RoleId?: number;
-  StudentExamID?: number;  
+  StudentExamID?: number;
   SemesterID?: number,
   Remark?: string
   RejectDocName?: string
@@ -170,7 +170,7 @@ export class StudentMarkedModelForJoined {
   public StudentFilterStatusId: number = 0;
   public ModifyBy: number = 0;
   public RoleId: number = 0;
-  public AllotmentId :number=0
+  public AllotmentId: number = 0
 }
 export class AbcIdStudentDetailsSearchModel {
   public DepartmentId: number = 0;
@@ -182,18 +182,18 @@ export class AbcIdStudentDetailsSearchModel {
 
 export class StudentAttendenceModel extends RequestBaseModel {
 
-  public StudentExamID:number=0
+  public StudentExamID: number = 0
   public AttendenceID: number = 0
   public EligibilityStatus: number = 0
   public FaMark: string = ''
-  public Remarks: string= ''
-  public ReceiptNo:string=''
-  public DepositDate:string=''
+  public Remarks: string = ''
+  public ReceiptNo: string = ''
+  public DepositDate: string = ''
   public StudentName: string = ''
   public ChallanNo: string = ''
   public ChallanDate: string = ''
 
-  
+
 }
 export class RevertDataModel {
   public StudentExamID: number = 0;
@@ -244,16 +244,16 @@ export class ITIStudentCorrectionMasterSearchModel {
   public RoleID: number = 0;
   public UserID: number = 0;
   public DistrictID: number = 0;
- // public DateOfBirth: string = ''
- 
+  // public DateOfBirth: string = ''
+
   public InstituteID: number = 0;
   public DepartmentID: number = 0;
-   public PageSize: number = 50
+  public PageSize: number = 50
   public PageNumber: number = 1
 
   public SortOrder: string = '';
   public SortColumn: string = '';
-  public action:string='';
+  public action: string = '';
   public StateRegNumber?: string = '';
   public ErrorDescription?: string = '';
   public DateOfBirth?: string = '';
@@ -263,7 +263,7 @@ export class ITIStudentCorrectionMasterSearchModel {
 //----------------------------- route update-studentdetails  -----------------------------
 
 export class BTERStudentDetailsMasterSearchModel {
-  public StudentID:number=0;
+  public StudentID: number = 0;
   public Name: string = '';
   public UIDNumber: string = '';
   public CandidateID: number = 0
@@ -276,16 +276,16 @@ export class BTERStudentDetailsMasterSearchModel {
   public RoleID: number = 0;
   public UserID: number = 0;
   public DistrictID: number = 0;
- // public DateOfBirth: string = ''
- 
+  // public DateOfBirth: string = ''
+
   public InstituteID: number = 0;
   public DepartmentID: number = 0;
-   public PageSize: number = 50
+  public PageSize: number = 50
   public PageNumber: number = 1
 
   public SortOrder: string = '';
   public SortColumn: string = '';
-  public action:string='';
+  public action: string = '';
   public StateRegNumber?: string = '';
   public ErrorDescription?: string = '';
   public DateOfBirth?: string = '';
@@ -295,7 +295,7 @@ export class BTERStudentDetailsMasterSearchModel {
 
 export class BTERStudentProfileUpdateModel {
   public StudentID: number = 0;
-    public EngNonEng: number = 0
+  public EngNonEng: number = 0
   // Basic Details
   public NameEn: string = '';
   public NameHi: string = '';
@@ -321,8 +321,7 @@ export class BTERStudentProfileUpdateModel {
   public action: string = '';
 }
 
-export class ChunksSearchModel
-{
+export class ChunksSearchModel {
 
   public PageSize: number = 0;
   public UserID: number = 0;
@@ -331,7 +330,10 @@ export class ChunksSearchModel
   public Action: number = 0;
 
 }
-
+export class BasePostAttendanceTimeTableModal {
+  public postAttendanceTimeTables: any[] = [];
+  public markedAttendanceDatesDetails: any[] = [];
+}
 
 
 
