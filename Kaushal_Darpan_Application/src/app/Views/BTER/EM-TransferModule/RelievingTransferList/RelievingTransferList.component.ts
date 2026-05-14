@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,7 +13,8 @@ import { DropdownValidators1 } from '../../../../Services/CustomValidators/custo
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
+import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
+import { firstValueFrom } from 'rxjs';
 
   @Component({
     selector: 'app-RelievingTransferList',
@@ -66,6 +67,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public isInstituteDisabled :boolean = false;
 
     public RelievingDoc: string = '';
+    public RelievingDate: string = '';
     public RelievingDoc_Dis: string = '';
     public TransferSystemStatusUpdateList: any = [];
     public updateStatus: number = 0;
@@ -75,6 +77,15 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     public _EnumRole = EnumRole;
     isJDTECheck: boolean = false;
     EnumTransferSystemStatus = EnumTransferSystemStatus;
+    public isShowDate: boolean = false;
+
+    @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
+    todayDate: string = new Date(
+      new Date().getTime() - new Date().getTimezoneOffset() * 60000
+    )
+      .toISOString()
+      .split('T')[0];
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -306,15 +317,27 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
         }
 
         if (this.updateStatus == EnumTransferRelievingStatus.Rejected) {
-          this.toastr.warning("Please Enter Remark");
-          return;
+          if (!this.Remark || this.Remark.trim() === '') {
+            this.toastr.warning("Please enter a remark.");
+            return;
+          }
         }
+
+        if (this.updateStatus != EnumTransferRelievingStatus.Rejected) {
+          if (!this.RelievingDate || this.RelievingDate == '') {
+            this.toastr.warning("Please enter a Relieving Date.");
+            return;
+          }
+
+        }
+      
         this.updateExtSearch.StatusID = this.updateStatus;
         this.updateExtSearch.Remark = this.Remark;
         this.updateExtSearch.RelievingDoc = this.RelievingDoc;
         this.updateExtSearch.RelievingDoc_Dis = this.RelievingDoc_Dis;
         this.updateExtSearch.StaffID = this.modelStaffId;
         this.updateExtSearch.TransferSystemID = this.modelTsId;
+        this.updateExtSearch.RelievingDate = this.RelievingDate;
         
 
 
@@ -439,8 +462,11 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       window.open('/TabutarTransferList', '_blank');
     }
 
+    
+
     async RelievingLetter(TransferSystemID: number) {
       try {
+        debugger
         this.searchRequest.TransferSystemID = TransferSystemID;
         this.loaderService.requestStarted();
 
@@ -456,7 +482,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
           String(now.getMinutes()).padStart(2, '0') + '-' +
           String(now.getSeconds()).padStart(2, '0');
 
-        const fileName = `Relieving_Letter_${timestamp}.pdf`;
+        const fileName = `Relieving_Letter${timestamp}.pdf`;
 
         // Create blob URL
         const blobUrl = window.URL.createObjectURL(blob);
@@ -483,5 +509,22 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     }
 
 
+    async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+      debugger
+      this.childComponentViewStaffProfile.StaffID = StaffID;
+      this.childComponentViewStaffProfile.UserID = UserID;
+      await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
+    }
+    async TransferSystemStatusChange() {
+      if (this.updateStatus != EnumTransferRelievingStatus.Rejected) 
+        {
+          this.isShowDate = true;
+        }
+        else {
+          this.isShowDate = false;
+        }
+      
+      
+    }
    
 }

@@ -364,7 +364,7 @@
             <th class="text-left">Sr. No.</th>
             <th class="text-left">Staff Type</th>
             <!--<th class="text-left">Name</th>-->
-            <th class="text-left">Name /SSO Id</th>
+            <th class="text-left">Name /SSO Id/designation</th>
             <th class="text-left">Contact/Address Details</th>
             <th class="text-left">StaffLevel Type</th>
             <!--<th class="text-left">Staff Level Child Type</th>-->
@@ -384,7 +384,11 @@
             <td>{{idx+1}}</td>
             <td>{{row.StaffType}}</td>
             <!--<td>{{row.Name}}</td>-->
-            <td>{{row.Name}}({{row.SSOID}})</td>
+          <td>
+            {{row.Name}}({{row.SSOID}})<br />
+                                       <b>{{row.CURRENT_DESG_EN}}</b>
+
+          </td>
             <td>
               <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
               <p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>
