@@ -38,7 +38,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span></label>
           <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtSSOID"
-                 formControlName="txtSSOID" [(ngModel)]="formData.SSOID" />
+                 formControlName="txtSSOID" [(ngModel)]="formData.SSOID"  />
           <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
             <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
               <i aria-hidden="true"></i>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div>
-          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SSOIDGetSomeDetails(formData.SSOID)">Get Details</button>
+          <button  style="display:none" type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SSOIDGetSomeDetails(formData.SSOID)">Get Details</button>
           <button style="display:none" type="submit" class="btn bg-info text-white mt-6 me-1" (click)="GetIFMSDATA(formData.SSOID)">Get IFMS Data</button>
 
         </div>
@@ -64,16 +64,16 @@
 
           </div>
           <!--<div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.Name.errors" class="text-danger">
-          ex
-          >
+      ex
+      >
 
-          <p *ngIf="_AddStaffBasicDetailFromGroup.Name.errors.required">
-            <i aria-hidden="true"></i>
-            This
-            field is
-            required.!
-          </p>
-        </div>-->
+      <p *ngIf="_AddStaffBasicDetailFromGroup.Name.errors.required">
+        <i aria-hidden="true"></i>
+        This
+        field is
+        required.!
+      </p>
+    </div>-->
         </div>
 
 
@@ -82,13 +82,13 @@
           <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtMobileNo"
                  formControlName="txtMobileNo" [(ngModel)]="formData.MobileNo" />
           <!--<div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
-          <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
-            <i aria-hidden="true"></i>
-            This
-            field is
-            required.!
-          </p>
-        </div>-->
+      <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
+        <i aria-hidden="true"></i>
+        This
+        field is
+        required.!
+      </p>
+    </div>-->
         </div>
 
         <div>
@@ -96,13 +96,13 @@
           <input class="form-input" placeholder="Enter Email ID" name="SSOID" id="txtEmailID"
                  formControlName="txtEmailID" [(ngModel)]="formData.Mailpersonal" />
           <!--<div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
-          <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
-            <i aria-hidden="true"></i>
-            This
-            field is
-            required.!
-          </p>
-        </div>-->
+      <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
+        <i aria-hidden="true"></i>
+        This
+        field is
+        required.!
+      </p>
+    </div>-->
         </div>
 
         <div>
@@ -120,27 +120,15 @@
         </div>
 
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type<span class="StarMarking">*</span></label>
-          <select class="form-select" name="StaffType" id="ddlStaffType" formControlName="ddlStaffType"
-                  [(ngModel)]="formData.StaffTypeID" (change)="StaffLevelType()">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlStaffType.errors" class="text-danger">
-            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlStaffType.errors.DropdownValidators">
-              <i aria-hidden="true"></i>
-              field is required .!
-            </p>
-          </div>
-        </div>
+
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Post Type <span
-              class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Staff Post Type <span class="StarMarking">*</span>
+          </label>
           <select class="form-select" name="StaffPostTypeID" id="StaffPostTypeID" formControlName="StaffPostTypeID"
-                  [(ngModel)]="formData.StaffPostTypeID"   (change)="GetPostList()">
-         
+                  [(ngModel)]="formData.StaffPostTypeID" (change)="GetPostList()">
+
             <option value="0">Choose Option</option>
             <option *ngFor="let item of StaffPostTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -165,6 +153,22 @@
             </p>
           </div>
         </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type<span class="StarMarking">*</span></label>
+          <select class="form-select" name="StaffType" id="ddlStaffType" formControlName="ddlStaffType"
+                  [(ngModel)]="formData.StaffTypeID" (change)="StaffLevelType()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlStaffType.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlStaffType.errors.DropdownValidators">
+              <i aria-hidden="true"></i>
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+
 
         <div *ngIf="formData.StaffTypeID !=0 && formData.StaffTypeID != _ITIGovtEM_EnumStaffType.Teaching">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Level <span class="StarMarking">*</span></label>
@@ -198,15 +202,15 @@
           </div>
         </div>
         <!--<div *ngIf="formData.BranchID !=0 && HOD_DDlList.length > 0">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Hod`S</label>
-        <select class="form-select" name="SearchByHODs" id="SearchByHODs" [ngModelOptions]="{standalone: true}"
-                [(ngModel)]="formData.HODsId">
-          <option value="0">Choose Option</option>
-          <option *ngFor="let item of HOD_DDlList" [value]="item.ID">
-            {{item.Name}}
-          </option>
-        </select>
-      </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Hod`S</label>
+    <select class="form-select" name="SearchByHODs" id="SearchByHODs" [ngModelOptions]="{standalone: true}"
+            [(ngModel)]="formData.HODsId">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of HOD_DDlList" [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>
+  </div>-->
         <!--{{StaffLevelChildList|json}}-->
 
         <div *ngIf="formData.Show_StaffLevelChild === true && formData.StaffLevelID != 0">
@@ -362,45 +366,45 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr. No.</th>
-            <th class="text-left">Staff Type</th>
-            <!--<th class="text-left">Name</th>-->
-            <th class="text-left">Name /SSO Id/designation</th>
-            <th class="text-left">Contact/Address Details</th>
-            <th class="text-left">StaffLevel Type</th>
-            <!--<th class="text-left">Staff Level Child Type</th>-->
-            <th class="text-left">Post Name</th>
 
+            <!--<th class="text-left">Name</th>-->
+            <th class="text-left">Name</th>
+            <th class="text-left">SSO Id</th>
+            <th class="text-left">Mobile No</th>
+
+            <th class="text-left" width="20%">Designation Name</th>
+            <th class="text-left">StaffLevel Type</th>
+            <th class="text-left">Staff Type</th>
             <th class="text-left">Trade</th>
-            <!-- <th class="text-left">Subject</th> -->
-            <!--<th class="text-left">Address Details</th>-->
             <th class="text-left">Profile Status</th>
-            <!--<th class="text-left">Remark</th>-->
-            <!--<th class="text-left">Status</th>-->
             <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of StaffMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td>{{idx+1}}</td>
-            <td>{{row.StaffType}}</td>
-            <!--<td>{{row.Name}}</td>-->
-          <td>
-            {{row.Name}}({{row.SSOID}})<br />
-                                       <b>{{row.CURRENT_DESG_EN}}</b>
-
-          </td>
             <td>
-              <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
-              <p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>
-              <p *ngIf="row.Address?.length>0" style="max-width:350px">
-                {{row.Address}}, {{row.District}}, {{row.State}}, {{row.PinCode}}
-              </p>
+              {{row.Name}}<br />
+
+            </td>
+            <td>
+              {{row.SSOID}}
             </td>
 
-            <td> {{row.StaffLevelTypeName}}</td>
+            <td>
+              <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
+              <!--<p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>
+    <p *ngIf="row.Address?.length>0" style="max-width:350px">
+      {{row.Address}}, {{row.District}}, {{row.State}}, {{row.PinCode}}
+    </p>-->
+            </td>
+
+
             <!--<td> {{row.StaffLevelChildName}}</td>-->
 
             <td> {{row.DesignationName}}</td>
+            <td> {{row.StaffLevelTypeName}}</td>
+            <td>{{row.StaffType}}</td>
 
             <td>{{row.Stream}}</td>
             <!-- <td>{{row.Subject}}</td> -->
@@ -432,19 +436,28 @@
               <!--{{row.ProfileStatus|json}}-->
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="row.ProfileStatus == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
+
+                <a title="Edit Details" (click)="onEdit(row)">
+
+                  <i class="ti ti-user-check"></i>
+                </a>
+
                 <a *ngIf="row.ProfileStatus>0" href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>
                 <a *ngIf="row.ProfileStatus!=247" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>
 
                 <!--<a href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
-                <a title="Edit Details" (click)="onEdit(row)"><i class="ti ti-pencil"></i></a>
 
+
+                <a *ngIf="row.ProfileStatus == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.MainStaffUserID)"><i class="ti ti-list"></i></a>
-                <a  target="_blank" [routerLink]="['/StaffIFMSData']"
+                <a target="_blank" [routerLink]="['/StaffIFMSData']"
                    [queryParams]="{ ssoid: row.SSOID }"
                    title="Assign Status">
 
                   <i class="ti ti-eye"></i>
+
+
+
                 </a>
               </div>
 

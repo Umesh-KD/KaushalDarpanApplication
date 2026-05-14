@@ -7,6 +7,7 @@ import { StudentStatusHistoryModule } from '../../../Student/student-status-hist
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { EMStaffNewProcessTrainingComponent } from './EM-Staff-New-Process-Training.component';
 import { EMStaffNewProcessTrainingRoutingModule } from './EM-Staff-New-Process-Training-routing.module';
+import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-staff-profile-modal.model';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { EMStaffNewProcessTrainingRoutingModule } from './EM-Staff-New-Process-T
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
+    ViewStaffProfileModalModule
   ]
 })
 export class EMStaffNewProcessTrainingModule { }

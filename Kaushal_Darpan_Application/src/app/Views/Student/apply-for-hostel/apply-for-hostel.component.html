@@ -8,17 +8,16 @@
     </div>
   </div>
   <div>
-    <button 
-      class="btn bg-info text-white" 
-      (click)="WithdrawHostelRequest()"
-      *ngIf="sSOLoginDataModel.RoleID === _EnumRole.Student &&
+    <button class="btn bg-info text-white"
+            (click)="WithdrawHostelRequest()"
+            *ngIf="sSOLoginDataModel.RoleID === _EnumRole.Student &&
         (StudentDetailsList[0]?.AllotmentStatus === 1 ||
           StudentDetailsList[0]?.AllotmentStatus === 2 ||
           StudentDetailsList[0]?.AllotmentStatus === 3 ||
           StudentDetailsList[0]?.AllotmentStatus === 9 ||
-          StudentDetailsList[0]?.AllotmentStatus === 10 || 
-          StudentDetailsList[0]?.AllotmentStatus === 11 || 
-          StudentDetailsList[0]?.AllotmentStatus === 14 || 
+          StudentDetailsList[0]?.AllotmentStatus === 10 ||
+          StudentDetailsList[0]?.AllotmentStatus === 11 ||
+          StudentDetailsList[0]?.AllotmentStatus === 14 ||
           StudentDetailsList[0]?.AllotmentStatus === 15)">
       <i class="ti ti-x"></i> Withdraw Hostel Request
     </button>
@@ -122,7 +121,7 @@
         </div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Alloted Hostel in {{LastTerm1.EndTermName}} Session</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel allotted in Previous Year </label>
             <select class="form-select" formControlName="txtAllotedHostelLastEndTerm" (change)="isallotedhostellastendterm()">
               <option value="2">--Select Option--</option>
               <option value="1">Yes</option>
@@ -130,7 +129,7 @@
             </select>
           </div>
           <div *ngIf="allotedhostellastendterm === true">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Alloted Hostel in {{LastTerm2.EndTermName}} session</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Allotted Hostel Details </label>
             <div class="flex items-center">
               <input class="form-input" placeholder="Room No." formControlName="txtAllotedHostelInLastSessionRoomNo" />
               -
@@ -291,10 +290,6 @@
               Update
             </button>
 
-
-
-
-
             <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
           </div>
         </div>
@@ -303,8 +298,9 @@
     </div>
 
   </div>
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 1">
+  <!--<div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 1">
     <div class="mb-8">
+
       <h3>Hostel Application Status:</h3>
       <p>Your application for the hostel has been successfully submitted, Your Application Id is {{StudentDetailsList[0]?.HostelRequestNo}}. If you are eligible for the hostel, you will receive an affidavit form.</p>
 
@@ -319,6 +315,7 @@
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
       <div>
         <h3>Steps:</h3>
+
         <ol>
           <li><b>Download Affidavit Form</b></li>
           <li><b>Fill the Affidavit Form:</b> Once you receive the form, please fill it out with all required details.</li>
@@ -360,9 +357,6 @@
       </div>
     </form>
 
-
-
-
   </div>
   <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 3">
     <div class="mb-8">
@@ -375,7 +369,249 @@
       <h3>Hostel Application Status:</h3>
       <p>Your supporting/Affidavit documents have been Approved. The college will verify them shortly.</p>
     </div>
+  </div>-->
+  <!-- Status 1 -->
+  <div class="card-body p-5"
+       *ngIf="StudentDetailsList[0]?.AllotmentStatus == 1">
+
+    <div class="flex justify-between items-start mb-3">
+
+      <h3>Hostel Application Status:</h3>
+
+      <button type="button"
+              class="btn bg-info text-white btn-sm"
+              (click)="onViewStudentDetails(studentDetailsModal)">
+
+        <i class="ti ti-eye"></i> View Application
+
+      </button>
+
+    </div>
+
+    <div class="mb-8">
+
+      <p>
+        Your application for the hostel has been successfully submitted,
+        Your Application Id is
+        {{StudentDetailsList[0]?.HostelRequestNo}}.
+        If you are eligible for the hostel, you will receive an affidavit form.
+      </p>
+
+      <h3>Next Steps:</h3>
+
+      <ol>
+        <li>
+          <b>Fill the Affidavit Form:</b>
+          Once you receive the form, please fill it out with all required details.
+        </li>
+
+        <li>
+          <b>Upload the Completed Form:</b>
+          After completing the affidavit form, upload it back to the portal
+          to complete your hostel application process.
+        </li>
+      </ol>
+
+    </div>
+
   </div>
+
+  <!-- Status 2 -->
+  <div class="card-body p-5"
+       *ngIf="StudentDetailsList[0]?.AllotmentStatus === 2">
+
+    <div class="flex justify-between items-start mb-3">
+
+      <h3>Steps:</h3>
+
+      <button type="button"
+              class="btn bg-info text-white btn-sm"
+              (click)="onViewStudentDetails(studentDetailsModal)">
+
+        <i class="ti ti-eye"></i> View Application
+
+      </button>
+
+    </div>
+
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+      <div>
+
+        <ol>
+          <li><b>Download Affidavit Form</b></li>
+
+          <li>
+            <b>Fill the Affidavit Form:</b>
+            Once you receive the form, please fill it out with all required details.
+          </li>
+
+          <li>
+            <b>Upload the Completed Form:</b>
+            After completing the affidavit form, upload it back to the portal
+            to complete your hostel application process.
+          </li>
+
+        </ol>
+
+      </div>
+
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+
+      <b class="text-1xl-5">
+        <i class="ti ti-upload"></i> Affidavit Form
+      </b>
+
+      <button class="btn bg-success text-white btn-sm"
+              type="button"
+              (click)="DownloadHostelForm(RoomPartnerDetailsList[0]?.StudentID)">
+
+        Download Affidavit Form
+
+      </button>
+
+    </div>
+
+    <form [formGroup]="groupFormAffidavit"
+          (ngSubmit)="UpdateAffidavit()">
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+
+        <div>
+
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="fileStudentPhoto">
+
+            Upload Affidavit Form
+            <span class="StarMarking">*</span>
+
+          </label>
+
+          <div class="flex fileUploader">
+
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="fileStudentPhoto"
+                   type="file"
+                   formControlName="txtAffidavitDocument"
+                   (change)="onFilechange($event,'Document')">
+
+            <label for="fileStudentPhoto">
+
+              <span>Choose File</span>
+
+              {{request.AffidavitDocument == '' ? 'No File Choosen' : request.AffidavitDocument}}
+
+            </label>
+
+            <div class="flex"
+                 *ngIf="this.request.AffidavitDocument !=''">
+
+              <a href="{{appsettingConfig.StaticFileRootPathURL + request.dis_AffidavitDocument}}"
+                 class="btn bg-primary text-white m-0"
+                 target="_blank">
+
+                <i class="ti ti-eye"></i>
+
+              </a>
+
+              <a href="javascript:void(0);"
+                 class="btn bg-danger text-white m-0"
+                 (click)="DeleteImage(request.AffidavitDocument,'AffidavitDocument')">
+
+                <i class="ti ti-trash"></i>
+
+              </a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div>
+
+          <button type="submit"
+                  class="btn bg-info text-white mt-6">
+
+            Submit
+
+          </button>
+
+          <button type="button"
+                  class="btn bg-danger text-white mt-6">
+
+            Cancel
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <!-- Status 3 -->
+  <div class="card-body p-5"
+       *ngIf="StudentDetailsList[0]?.AllotmentStatus == 3">
+
+    <div class="flex justify-between items-start mb-3">
+
+      <h3>Hostel Application Status:</h3>
+
+      <button type="button"
+              class="btn bg-info text-white btn-sm"
+              (click)="onViewStudentDetails(studentDetailsModal)">
+
+        <i class="ti ti-eye"></i> View Application
+
+      </button>
+
+    </div>
+
+    <div class="mb-8">
+
+      <p>
+        Your supporting documents have been submitted.
+        The college will verify them shortly.
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- Status 9 -->
+  <div class="card-body p-5"
+       *ngIf="StudentDetailsList[0]?.AllotmentStatus == 9">
+
+    <div class="flex justify-between items-start mb-3">
+
+      <h3>Hostel Application Status:</h3>
+
+      <button type="button"
+              class="btn bg-info text-white btn-sm"
+              (click)="onViewStudentDetails(studentDetailsModal)">
+
+        <i class="ti ti-eye"></i> View Application
+
+      </button>
+
+    </div>
+
+    <div class="mb-8">
+
+      <p>
+        Your supporting/Affidavit documents have been Approved.
+        The college will verify them shortly.
+      </p>
+
+    </div>
+
+  </div>
+
   <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 4">
     <div class="mb-8">
       <h3>Hostel Details:</h3>
@@ -472,7 +708,7 @@
 
           <a href="javascript:void(0);" title="Status History" (click)="openUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, sSOLoginDataModel.StudentID)"><i class="ti ti-list"></i></a>
 
-         
+
         </div>
 
       </div>
@@ -637,7 +873,7 @@
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i>Status History</b>
           <div class="flex justify-end flex-wrap items-center">
-          
+
           </div>
         </div>
 
@@ -660,7 +896,7 @@
                 <td align="left">{{ row.Remark }}</td>
                 <td align="left">{{ row.ModifyDate }}</td>
                 <td align="left">{{ row.ModifyByName}}</td>
-                
+
               </tr>
               <tr *ngIf="RoomAllotmentCancelHistoryList?.length==0">
                 <td colspan="10" class="text-center">No Record Found </td>
@@ -685,3 +921,138 @@
   </div>
 
 </ng-template>
+<!-- Student Details Modal -->
+
+<ng-template #studentDetailsModal let-modal>
+
+  <div class="modal-content">
+
+    <div class="card">
+
+      <div class="card-header flex justify-between items-center">
+        <b>Student Details For Hostel</b>
+
+        <button class="btn bg-info text-white"
+                (click)="CloseModal()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="card-body">
+
+        <div class="overflow-x-auto">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+
+            <thead class="bg-light/40">
+              <tr>
+                <th class="text-left">Title</th>
+                <th class="text-left">Details</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>Application ID</td>
+                <td>{{StudentDetailsList[0]?.HostelRequestNo}}</td>
+              </tr>
+
+              <tr>
+                <td>Name of Student</td>
+                <td>{{StudentDetailsList[0]?.StudentName}}</td>
+              </tr>
+
+              <tr>
+                <td>Father's Name</td>
+                <td>{{StudentDetailsList[0]?.FatherName}}</td>
+              </tr>
+
+              <tr>
+                <td>Contact/Mobile No.</td>
+                <td>{{StudentDetailsList[0]?.MobileNo}}</td>
+              </tr>
+
+              <tr>
+                <td>Permanent Address</td>
+                <td>{{StudentDetailsList[0]?.Address1}}</td>
+              </tr>
+
+              <tr>
+                <td>Category</td>
+                <td>{{StudentDetailsList[0]?.CasteCategoryNameEnglish}}</td>
+              </tr>
+
+              <tr *ngIf="MarksDetailsList">
+                <td>(A). 10th Percentage</td>
+                <td>{{MarksDetailsList[0]?.AvgMarks10}}%</td>
+              </tr>
+
+              <tr *ngIf="MarksDetailsList">
+                <td>(B). 1st Year Percentage</td>
+                <td>{{MarksDetailsList[0]?.AvgMarksFirstYear}}%</td>
+              </tr>
+
+              <tr *ngIf="MarksDetailsList">
+                <td>(C). 2nd Year Percentage</td>
+                <td>{{MarksDetailsList[0]?.AvgMarksSecondYear}}%</td>
+              </tr>
+
+              <tr *ngIf="MarksDetailsList">
+                <td>Total Percentage</td>
+                <td>{{MarksDetailsList[0]?.TotalAvg}}%</td>
+              </tr>
+
+              <tr>
+                <td>Father Contact No.</td>
+                <td>{{StudentDetailsList[0]?.FatherContactNo}}</td>
+              </tr>
+
+              <tr>
+                <td>Local Guardian Name</td>
+                <td>{{StudentDetailsList[0]?.LocalGuardianName}}</td>
+              </tr>
+
+              <tr>
+                <td>Local Guardian Contact No.</td>
+                <td>{{StudentDetailsList[0]?.LocalGuardianContactNo}}</td>
+              </tr>
+
+              <tr>
+                <td>Room Partner Application ID</td>
+                <td>{{StudentDetailsList[0]?.RoomPartnerApplicationID}}</td>
+              </tr>
+
+              <tr>
+                <td>Room Partner Name</td>
+                <td>{{StudentDetailsList[0]?.RoomPartnerName}}</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</ng-template>
+<!-- Common View Application Button -->
+<!--<div class="card-body p-5"
+     *ngIf="StudentDetailsList[0]?.AllotmentStatus == 1 ||
+            StudentDetailsList[0]?.AllotmentStatus == 2 ||
+            StudentDetailsList[0]?.AllotmentStatus == 3 ||
+            StudentDetailsList[0]?.AllotmentStatus == 9">
+
+  <button type="button"
+          class="btn bg-info text-white btn-sm float-end"
+          (click)="onViewStudentDetails(studentDetailsModal)">
+
+    <i class="ti ti-eye"></i> View Application
+
+  </button>
+
+</div>-->

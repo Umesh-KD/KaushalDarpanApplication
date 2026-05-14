@@ -694,7 +694,10 @@ export enum ITIGovtEM_EnumStaffLevel {
   HostelWarden = 5,
   GuestRoomWarden = 16,
   Staff = 18,
-  StoreKeeper = 21
+  StoreKeeper = 21,
+    Admision = 1023
+
+  
 }
 export enum ITIGovtEM_EnumStaffLevelChild {
   Clerk = 6,
