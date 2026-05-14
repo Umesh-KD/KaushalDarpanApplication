@@ -37,7 +37,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   filterData: any[] = [];
   AttendanceMarkingDataList: any[] = [];
-  dynamicColumns: { name: string, locked: boolean, isMarkOnAttendanceDate?: boolean }[] = [];
+  dynamicColumns: { name: string, locked: boolean, isMarkOnAttendanceDate?: boolean, isHoliday?: boolean }[] = [];
 
   markedAttendanceDates: {
     date: string;
@@ -491,7 +491,8 @@ export class StudentAttendanceComponent implements OnInit {
             .map(key => {
               const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
               const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
-              return { name: key, locked: isLeaveDate, isMarkOnAttendanceDate:false };
+              const isHoliday = key.includes('(Holiday)');
+              return { name: key, locked: isLeaveDate, isMarkOnAttendanceDate: false, isHoliday: isHoliday };
             });
 
           // Apply attendance logic
@@ -605,6 +606,7 @@ export class StudentAttendanceComponent implements OnInit {
     const col = this.dynamicColumns.find(c => c.name === columnName);
     return (
       !col?.isMarkOnAttendanceDate ||
+      col.isHoliday ||   
       col?.locked ||
       element[columnName] === 'TL'
     );
