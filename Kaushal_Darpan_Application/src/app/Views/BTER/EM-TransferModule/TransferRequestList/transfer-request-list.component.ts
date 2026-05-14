@@ -28,7 +28,7 @@ export class TransferRequestListComponent implements OnInit {
   State: boolean = false;
   // viewAdminDashboardList: StudentExamDetails[] = [];
   filteredData: any[] = [];
-  displayedColumns: string[] = ['SrNo', 'NAME', 'SSOID', 'TransferCategory','TransferStatus', 'ReasonDescription', 'CreatedDate','Action'];
+  displayedColumns: string[] = ['SrNo', 'NAME', 'SSOID', 'TransferCategory', 'TransferStatus', 'ReasonDescription', 'CreatedDate', 'RelievingStatusName', 'Action'];
   dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
   totalRecords: number = 0;
   pageSize: number = 10;

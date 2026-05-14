@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,8 @@ import { DropdownValidators1 } from '../../../../Services/CustomValidators/custo
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
+
 
 
   @Component({
@@ -73,7 +75,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     isJDTECheck: boolean = false;
     EnumTransferSystemStatus = EnumTransferSystemStatus;
     isDisable: boolean = false;
-    
+    @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
   constructor(
     private toastr: ToastrService,
@@ -113,6 +115,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ItiCollegesListAll = data.Data;
+      this.ItiCollegesListAll = this.ItiCollegesListAll.filter((item: any) => item.InstitutionManagementTypeID == 1);
+
     })
 
     await this.commonFunctionService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {
@@ -637,7 +641,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
     }
 
     async TabutarTransferList() {
-      window.open('/TabutarTransferList', '_blank');
+      window.open('/TabularTransferList', '_blank');
     }
 
 
@@ -652,5 +656,12 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
       const lastIndex = validRows[validRows.length - 1].i;
 
       return index === lastIndex;
+    }
+
+    async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+      debugger
+      this.childComponentViewStaffProfile.StaffID = StaffID;
+      this.childComponentViewStaffProfile.UserID = UserID;
+      await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
     }
 }

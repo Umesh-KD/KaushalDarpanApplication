@@ -32,6 +32,7 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
   public UserApplyInstituteList: any = [];
+  public UserRequestHistoryList: any = [];
   public Selecteditem: any = {}
 
   public status: number = 0;
@@ -329,5 +330,36 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async onUserRequestHistorylist(model: any, THTEAppID: number) {
+     
+    try {
+      this.loaderService.requestStarted();
+      const requestSearch: any = {}
+      requestSearch.THTEAppID = THTEAppID
+
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplicationStatusHistory(requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserRequestHistoryList = data.Data;
+
+        }, (error: any) => console.error(error))
+
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalRequestHistorylist1() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
   }
 }

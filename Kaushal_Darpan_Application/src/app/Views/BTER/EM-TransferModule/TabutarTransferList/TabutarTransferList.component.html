@@ -5,7 +5,7 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Tabutar Transfer List</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Tabular Transfer List</a>
     </div>
   </div>
 </div>
@@ -28,7 +28,7 @@
 
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-          (  Gazetted / Non Gazetted )Employee
+          (Gazetted / Non Gazetted )Employee
         </label>
 
         <select class="form-select"
@@ -86,12 +86,12 @@
 
   <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
     <div class=" ">
-      <label>Dispatch No</label>
+      <label>Dispatch No:<span class="StarMarking">*</span></label>
       <input class="form-input" type="text" id="DispatchNo" [(ngModel)]="requestUp.DispatchNo">
     </div>
     <div class=" ">
-      <label>Order Date</label>
-      <input class="form-input" type="date" id="OrderDate" [(ngModel)]="requestUp.OrderDate">
+      <label>Order Date :<span class="StarMarking">*</span></label>
+      <input class="form-input" type="date" id="OrderDate" [(ngModel)]="requestUp.OrderDate"  [max]="todayDate">
     </div>
     <div>
       <label class="block  text-sm font-medium text-gray-900 dark:text-white"
@@ -144,6 +144,9 @@
 
           <th class="left">Order NO</th>
           <th class="left">Order Date</th>
+          <th class="left">Category</th>
+          <th class="left">Reason Description</th>
+
           <th align="left">Supporting Documents</th>
         </tr>
       </thead>
@@ -168,6 +171,8 @@
 
           <td>{{row.OrderNo}}</td>
           <td>{{row.OrderDate}}</td>
+          <td>{{row.TransferCategory}}</td>
+          <td>{{row.ReasonDescription}}</td>
           <td align="left">
             <div class="flex" *ngIf="row.OrderSupportingDocument; else noDoc1">
               <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.OrderSupportingDocument"
@@ -221,6 +226,7 @@
                 <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
               </select>
             </div>
+            <!--{{InstituteList|json}}-->
             <div *ngIf="isShowDDl== true">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute: <span class="StarMarking">*</span></label>
               <select class="form-select" formControlName="ddlCollege" [(ngModel)]="RequestManual.InstituteID" (change)="PostChange()">
@@ -246,6 +252,22 @@
                   {{item.Name}}
                 </option>
               </select>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Transfer Category <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="RequestManual.TransfercateID" formControlName="TransfercateID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of GetTransfercateList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+
+            </div>
+
+            <div>
+              <label for="EmployeeName">Reason Description <span class="StarMarking" *ngIf="isStar== true">*</span></label>
+              <input type="text" id="ReasonDescription" formControlName="ReasonDescription"
+                     [(ngModel)]="RequestManual.ReasonDescription">
             </div>
 
           </div>

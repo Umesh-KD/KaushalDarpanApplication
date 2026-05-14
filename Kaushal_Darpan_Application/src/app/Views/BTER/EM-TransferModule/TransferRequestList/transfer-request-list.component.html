@@ -37,6 +37,9 @@
         </a>
       </div>
     </div>
+    <!--{{EM_TransferProcessList|json}}
+    {{dataSource|json}}-->
+
     <div class="mat-elevation-z8 table-responsive">
       <table mat-table [dataSource]="dataSource" matSort>
 
@@ -56,7 +59,7 @@
         </ng-container>
 
         <ng-container matColumnDef="TransferCategory">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> TransferCategory</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Transfer Category</th>
           <td mat-cell *matCellDef="let element"> {{element.TransferCategory}} </td>
         </ng-container>
 
@@ -66,7 +69,7 @@
         </ng-container>
 
         <ng-container matColumnDef="CreatedDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> CreatedDate </th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
           <td mat-cell *matCellDef="let element"> {{element.CreatedDate}} </td>
         </ng-container>
 
@@ -75,30 +78,37 @@
           <td mat-cell *matCellDef="let element"> {{element.TransferStatus}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="RelievingStatusName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Relieving Status </th>
+          <td mat-cell *matCellDef="let element"> {{element.RelievingStatusName}} </td>
+        </ng-container>
+
         <ng-container matColumnDef="Action">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
           <td mat-cell *matCellDef="let element">
-            <a *ngIf="element.TransferStatusCode ==1" class="btn btn-sm btn-primary" [routerLink]="'/AddTransferRequest'" [queryParams]="{ID:element.TransferSystemID}" title="Edit"><i class="ti ti-pencil"></i></a>            
-            <a *ngIf="element.TransferStatusCode==1" class="btn btn-sm btn-primary" href="javascript:void(0);" id="btnDelete"  title="Delete" (click)="DeleteById(element.TransferSystemID)"><i class="ti ti-trash"></i></a>
-            <a class="btn btn-sm btn-primary" href="javascript:void(0);" title="Status History" (click)="onTransferSystemEXT(TransferSystemEXT, element.TransferSystemID)"><i class="ti ti-list"></i></a>
+            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a *ngIf="element.TransferStatusCode ==1" class="btn btn-sm btn-primary" [routerLink]="'/AddTransferRequest'" [queryParams]="{ID:element.TransferSystemID}" title="Edit"><i class="ti ti-pencil"></i></a>
+              <a *ngIf="element.TransferStatusCode==1" class="btn btn-sm btn-primary" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="DeleteById(element.TransferSystemID)"><i class="ti ti-trash"></i></a>
+              <a class="btn btn-sm btn-primary" href="javascript:void(0);" title="Status History" (click)="onTransferSystemEXT(TransferSystemEXT, element.TransferSystemID)"><i class="ti ti-list"></i></a>
+            </div>
           </td>
         </ng-container>
 
 
         <!-- <ng-container matColumnDef="DOB">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> DOB </th>
-          <td mat-cell *matCellDef="let element"> {{element.DOB}} </td>
-        </ng-container>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> DOB </th>
+        <td mat-cell *matCellDef="let element"> {{element.DOB}} </td>
+      </ng-container>
 
-        <ng-container matColumnDef="Age">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Age </th>
-          <td mat-cell *matCellDef="let element"> {{element.Age}} </td>
-        </ng-container>
+      <ng-container matColumnDef="Age">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Age </th>
+        <td mat-cell *matCellDef="let element"> {{element.Age}} </td>
+      </ng-container>
 
-        <ng-container matColumnDef="GenderName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
-          <td mat-cell *matCellDef="let element"> {{element.GenderName}} </td>
-        </ng-container> -->
+      <ng-container matColumnDef="GenderName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
+        <td mat-cell *matCellDef="let element"> {{element.GenderName}} </td>
+      </ng-container> -->
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -128,7 +138,7 @@
       </div>
       <div class="card-body">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b class="text-1xl-5"><i class="ti ti-list"></i>Staff Training Status History</b>
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Transfer System Priority</b>
           <div class="flex justify-end flex-wrap items-center">
           </div>
         </div>
@@ -142,6 +152,7 @@
                 <th class="text-left">Designation Name</th>
                 <th class="text-left">District Name</th>
                 <th class="text-left">Institute Name</th>
+                <th class="text-left">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -151,6 +162,7 @@
                 <td align="left">{{ row.DesignationName}}</td>
                 <td align="left">{{ row.DistrictName=='' || row.DistrictName==null?'N/A':row.DistrictName}}</td>
                 <td align="left">{{ row.InstituteName==''|| row.InstituteName==null?'N/A':row.InstituteName}}</td>
+                <td align="left">{{ row.Status }}</td>
               </tr>
               <tr *ngIf="EM_TransferSystemEXTList?.length==0">
                 <td colspan="5" class="text-center">No Record Found </td>

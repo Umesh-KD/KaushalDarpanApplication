@@ -106,6 +106,7 @@ export class emtrainingdetailshistoryComponent {
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
         }
         else {
+          this.SearchStatus = EnumStaffTrainingStatus.Applied;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Applied);
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Applied);
         }
@@ -236,6 +237,7 @@ export class emtrainingdetailshistoryComponent {
 
       this.statusID = statusID;
       await this.StaffTrainingDetailsCompletedTraining_GetData();
+      await this.onChangeSearchStatus();
     }
 
     async StaffTrainingHTS_GetData(id: number) {

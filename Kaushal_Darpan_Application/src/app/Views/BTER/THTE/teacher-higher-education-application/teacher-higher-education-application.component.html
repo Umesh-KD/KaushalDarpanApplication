@@ -369,29 +369,20 @@
             <a href="javascript:void(0);" type="button" class="btn bg-primary text-white" title="History"
                (click)="ApplyCollegelist(MyModel_UserInstituteHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>
           </td>
-            <td align="center">
-
-
-              <div class="flex align-center justify-center actionBtns w-auto"
-                   style="width:auto !important">
-                <a href="javascript:void(0);" *ngIf="row.StatusID == 1340" class="btn bg-blue text-red" title="Edit" (click)="EditInfo(row.THTEAppID)"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" class="btn bg-blue text-red" title="History"
-                   (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>
-                <a *ngIf="row.StatusID == 1340" class="btn bg-blue text-red" title="Delete" (click)="THTEAppDelete(row.THTEAppID)">
-                  <i class="ti ti-trash"></i>
-                </a>
-              </div>
-
-
-            </td>
-
-
+          <td align="center">
+            <div class="flex align-center justify-center actionBtns w-auto"
+                  style="width:auto !important">
+              <a href="javascript:void(0);" *ngIf="row.StatusID == 1340" class="btn bg-blue text-red" title="Edit" (click)="EditInfo(row.THTEAppID)"><i class="ti ti-pencil"></i></a>
+              <a href="javascript:void(0);" class="btn bg-blue text-red" title="History"
+                  (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-list"></i></a>
+              <a *ngIf="row.StatusID == 1340" class="btn bg-blue text-red" title="Delete" (click)="THTEAppDelete(row.THTEAppID)">
+                <i class="ti ti-trash"></i>
+              </a>
+            </div>
+          </td>
           </tr>
         </tbody>
-
-
       </table>
-
     </div>
 
 
@@ -506,7 +497,7 @@
                 <td align="left">{{ row.StatusName }}</td>
                 <td align="left">{{ row.Remark }}</td>      
               </tr>
-              <tr *ngIf="UserRequestHistoryList?.length==0">
+              <tr *ngIf="UserApplyInstituteList?.length==0">
                 <td colspan="10" class="text-center">No Record Found </td>
               </tr>
             </tbody>
