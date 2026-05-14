@@ -174,8 +174,8 @@ export class HostelWardenStudentMeritlistComponent {
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.Searchrequest.Action = "getall_A_O";
       if (
-        this.Searchrequest.status == HostelStatus.AffidavitApproved
-        this.Searchrequest.status == HostelStatus.Affidavit Uploaded
+        this.Searchrequest.status == HostelStatus.AffidavitApproved||
+        this.Searchrequest.status == HostelStatus.UploadAffidavit
       )
       this.loaderService.requestStarted();
       await this.studentRequestService.GetAllGenerateHostelWardenStudentMeritlist(this.Searchrequest)
