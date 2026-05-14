@@ -1146,6 +1146,40 @@ export class ApplyForHostelComponent {
   /*this.modalReference?.close();*/
     this.isSubmitted = false;
   }
+
+  async onViewStudentDetails(content: any) {
+
+    try {
+
+      this.loaderService.requestStarted();
+
+      // if API call needed then call here
+      // await this.GetStudentDetailsForApply();
+      // await this.GetMarksDetails();
+
+      this.modalService.open(content, {
+        size: 'lg',
+        backdrop: 'static',
+        centered: true
+      });
+
+    }
+    catch (Ex) {
+
+      console.log(Ex);
+
+    }
+    finally {
+
+      this.loaderService.requestEnded();
+
+    }
+  }
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.isSubmitted = false;
+  }
+
  }
 
 

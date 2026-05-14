@@ -15,6 +15,7 @@ import { HostelManagmentService } from '../../../Services/HostelManagment/Hostel
 import * as XLSX from 'xlsx';
 import * as CryptoJS from 'crypto-js';
 import { EditHostelStudentSearchModel, HostelStudentSearchModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
+import { AppsettingService } from '../../../Common/appsetting.service';
 const secretKey = 'your-secret-key';
 
 @Component({
@@ -70,6 +71,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
     private routers: Router,
     private Swal2: SweetAlert2,
     private modalService: NgbModal,
+    private appsettingConfig: AppsettingService,
     private _HostelManagmentService: HostelManagmentService) { }
 
 
