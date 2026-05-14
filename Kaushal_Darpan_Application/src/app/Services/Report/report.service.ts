@@ -1941,6 +1941,23 @@ export class ReportService {
       }
     );
   }
+
+  public async GenerateAndViewPdf_Reval(model: RenumerationExaminerRequestModel): Promise<any> {
+    return this.http.post(`${this.APIUrl}/GenerateAndViewPdf_Reval`, model, {
+      ...this.headersOptions,
+      observe: 'response',
+      responseType: 'blob' as 'json' // Tell Angular to treat it as binary
+    }).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async SavePDFSubmitAndForwardToJD_Reval(model: RenumerationExaminerRequestModel) {
+    return await this.http.post(`${this.APIUrl}/SavePDFSubmitAndForwardToJD_Reval`, model, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 
