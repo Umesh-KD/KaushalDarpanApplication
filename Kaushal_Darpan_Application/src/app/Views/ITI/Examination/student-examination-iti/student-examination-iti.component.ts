@@ -277,7 +277,7 @@ export class StudentExaminationITIComponent
     this.UserID = this.sSOLoginDataModel.UserID
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal) {
+    if (this.sSOLoginDataModel.InstituteID>0) {
       this.isShowdrop = true;
 
       this.SearchStudentDataFormGroup.get('ddlInstituteID')?.disable();
@@ -401,7 +401,7 @@ export class StudentExaminationITIComponent
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
-          if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
+          if (this.sSOLoginDataModel.InstituteID>0) {
             this.InstituteMasterList = data['Data'];
             this.request.InstituteID = this.sSOLoginDataModel.InstituteID
             this.InstituteMasterList = this.InstituteMasterList.filter((x: any) => { return x.InstituteID == this.request.InstituteID });
