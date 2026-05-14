@@ -60,6 +60,12 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
+  public async GetStudentAttendanceWitMarkingStatus(model: any) {
+    return await this.http.post(this.APIUrl + '/GetStudentAttendanceWitMarkingStatus', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
 
 
 
@@ -114,6 +120,12 @@ export class AttendanceServiceService {
 
   public async saveAttendanceData(model: any) {
     return await this.http.post(this.APIUrl + '/AddStudentAttendance', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async SaveAttendanceDataWithStatus(model: any) {
+    return await this.http.post(this.APIUrl + '/SaveAttendanceDataWithStatus', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
