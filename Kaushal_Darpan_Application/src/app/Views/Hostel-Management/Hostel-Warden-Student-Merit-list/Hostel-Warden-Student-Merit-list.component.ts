@@ -175,6 +175,7 @@ export class HostelWardenStudentMeritlistComponent {
       this.Searchrequest.Action = "getall_A_O";
       if (
         this.Searchrequest.status == HostelStatus.AffidavitApproved
+
       )
       this.loaderService.requestStarted();
       await this.studentRequestService.GetAllGenerateHostelWardenStudentMeritlist(this.Searchrequest)
