@@ -61,7 +61,7 @@ export class AddGuestApplyForGuestRoomComponent {
   displayedColumns: string[] = [
     'SNo', 'RequestName', 'InstituteName', 'DepartmentName', 'FromDateTime', 'ToDateTime',
     'GuestHouseName', 'Purpose_str','RoomType', 'CoolingFacilities_Str', 'RoomFee', 
-    'StatusName', 'Remark', 'CheckinCheckout', 'Action'
+    'StatusName', 'Remark', 'CheckinCheckout','Document', 'Action'
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -305,8 +305,58 @@ export class AddGuestApplyForGuestRoomComponent {
 
   }
 
+  checkDateOverlap(): boolean {
+
+  const requestFrom = new Date(
+    `${this.request.FromDate}T${this.request.FromTime || '00:00:00'}`
+  );
+
+  const requestTo = new Date(
+    `${this.request.ToDate}T${this.request.ToTime || '00:00:00'}`
+  );
+
+  const isOverlap = this.GuestRoomApplyList.some((item: any) => {
+
+    // Convert dd-MM-yyyy to yyyy-MM-dd
+    const fromParts = item.FromDate.split('-');
+    const toParts = item.ToDate.split('-');
+
+    const existingFromDate =
+      `${fromParts[2]}-${fromParts[1]}-${fromParts[0]}`;
+
+    const existingToDate =
+      `${toParts[2]}-${toParts[1]}-${toParts[0]}`;
+
+    const existingFrom = new Date(
+      `${existingFromDate}T${item.FromTime}`
+    );
+
+    const existingTo = new Date(
+      `${existingToDate}T${item.ToTime}`
+    );
+
+    // Overlap condition
+    return (
+      requestFrom <= existingTo &&
+      requestTo >= existingFrom
+    );
+  });
+
+  if (isOverlap) {
+    this.toastr.warning('Selected date/time period is already applied.');
+    return true;
+  }
+
+  return false;
+}
+
   async openOTPModal_Apply() {
     this.isSubmitted = true;
+
+    if (this.checkDateOverlap()) {
+      return;
+    }
+
     if (this.IIPMasterFormGroup.invalid) {
       this.toastr.error("Please enter required fields !");
       return
@@ -363,11 +413,8 @@ export class AddGuestApplyForGuestRoomComponent {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
       this.request.IsForSelf = true;
+
       //save
-
-     
-
-
       await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
