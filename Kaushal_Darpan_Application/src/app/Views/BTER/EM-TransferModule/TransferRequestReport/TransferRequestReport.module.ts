@@ -5,19 +5,18 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { StudentStatusHistoryModule } from '../../../Student/student-status-history/student-status-history.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { RelievingTransferListComponent } from './RelievingTransferList.component';
-import { RelievingTransferListRoutingModule } from './RelievingTransferList-routing.module';
-import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.model';
+import { TransferRequestReportComponent } from './TransferRequestReport.component';
+import { TransferRequestReportRoutingModule } from './TransferRequestReport-routing.module';
 
 
 
 @NgModule({
   declarations: [
-    RelievingTransferListComponent,
+    TransferRequestReportComponent,
   ],
   imports: [
     CommonModule,
-    RelievingTransferListRoutingModule, 
+    TransferRequestReportRoutingModule,
     FormsModule, 
     ReactiveFormsModule, 
     CommonModule, 
@@ -25,7 +24,6 @@ import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Managemen
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
-    ViewStaffProfileModalModule
   ]
 })
-export class RelievingTransferListModule { }
+export class TransferRequestReportModule { }

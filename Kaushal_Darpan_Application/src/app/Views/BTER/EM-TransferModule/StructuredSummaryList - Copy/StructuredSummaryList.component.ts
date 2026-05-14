@@ -91,7 +91,6 @@ import * as XLSX from 'xlsx';
     await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ItiCollegesListAll = data.Data;
-      this.ItiCollegesListAll = this.ItiCollegesListAll.filter((item: any) => item.InstitutionManagementTypeID == 1);
     })
 
     await this.commonFunctionService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {

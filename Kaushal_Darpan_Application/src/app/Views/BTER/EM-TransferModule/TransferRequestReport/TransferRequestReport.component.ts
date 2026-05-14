@@ -16,13 +16,13 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 
   @Component({
-    selector: 'app-StructuredSummaryList',
+    selector: 'app-TransferRequestReport',
     standalone: false,
-    templateUrl: './StructuredSummaryList.component.html',
-    styleUrl: './StructuredSummaryList.component.css'
+    templateUrl: './TransferRequestReport.component.html',
+    styleUrl: './TransferRequestReport.component.css'
   })
 
-  export class StructuredSummaryListComponent {
+  export class TransferRequestReportComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
     public updateSearch = new TransferSystemUpdateDataModel();
     public updateExtSearch = new EM_TransferSystemSearchModel();
@@ -91,7 +91,6 @@ import * as XLSX from 'xlsx';
     await this.commonFunctionService.InstituteMaster(1, 1, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ItiCollegesListAll = data.Data;
-      this.ItiCollegesListAll = this.ItiCollegesListAll.filter((item: any) => item.InstitutionManagementTypeID == 1);
     })
 
     await this.commonFunctionService.GetCommonMasterDDLByType('TransferRequest').then((data: any) => {

@@ -1728,6 +1728,8 @@ const routes: Routes = [
       { path: 'MasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/master-dashboard/master-dashboard.module').then(m => m.MasterDashboardModule) },
       { path: 'ItiTeacherAttendance', loadChildren: () => import('./Views/iti-teacher-attendance/iti-teacher-attendance.module').then(m => m.ItiTeacherAttendanceModule) },
       { path: 'StructuredSummaryList', loadChildren: () => import('./Views/BTER/EM-TransferModule/StructuredSummaryList/StructuredSummaryList.module').then(m => m.StructuredSummaryListModule) },
+      { path: 'TransferRequestReport', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
+      { path: 'TabutarTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'TabularTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'ITIExaminerInchargeDashboard', loadChildren: () => import('./Views/ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module').then(m => m.ItiExaminationInchargeDashboardModule), title: 'ITI Examiner Incharge Dashboard' },
 
@@ -1735,7 +1737,7 @@ const routes: Routes = [
       { path: 'BterAttendenceRoom', loadChildren: () => import('./Views/bter-attendence-room/bter-attendence-room.module').then(m => m.BterAttendenceRoomModule) },
       { path: 'BterRoomUtilization', loadChildren: () => import('./Views/bter-room-utilization/bter-room-utilization.module').then(m => m.BterRoomUtilizationModule) },
 
-
+      { path: 'BterAssignTeacher', loadChildren: () => import('./Views/bter-assign-teacher/bter-assign-teacher.module').then(m => m.BterAssignTeacherModule) },
     ]
   },
 
@@ -1855,7 +1857,7 @@ const routes: Routes = [
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
-  { path: 'Views\BterAssignTeacher', loadChildren: () => import('./Views/bter-assign-teacher/bter-assign-teacher.module').then(m => m.BterAssignTeacherModule) },
+ 
 
 
 

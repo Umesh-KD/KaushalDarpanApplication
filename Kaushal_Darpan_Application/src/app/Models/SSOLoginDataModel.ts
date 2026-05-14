@@ -77,6 +77,7 @@ export class SSOLoginDataModel {
   public GuestHouseID?: string = ''
   public SelectedInsituteID: number = 0;
   public IsShowFinYearDDL: number = 0;
+  public GenderID: number = 0;
 
 }
 

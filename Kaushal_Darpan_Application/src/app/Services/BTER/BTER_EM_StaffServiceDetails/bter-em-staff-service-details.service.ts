@@ -185,6 +185,15 @@ export class BTEREMStaffServiceDetailsService {
       .toPromise();
   }
 
+  //DownloadRelievingLetterPDF(request: EM_TransferSystemSearchModel) {
+  //  return this.http.get(
+  //    `${this.APIUrl}/DownloadRelievingLetterPDF/${request.TransferSystemID}/${request.StaffID}`,
+  //    {
+  //      responseType: 'blob'
+  //    }
+  //  );
+  //}
+
 
   public async TransferSystemRetievingUpdateStatus(request: EM_TransferSystemSearchModel) {
     const body = JSON.stringify(request);

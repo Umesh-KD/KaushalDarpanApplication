@@ -249,6 +249,7 @@ export class StaffDetailsServicePreviewDataModel {
   public DateOfRetirement?: string = ''
   public PhysicalDisability_str?: string = ''
   public SportsQuota_str?: string = ''
+  public InstituteName?: string = ''
 
   public StaffID: number = 0
   public StaffUserID: number = 0
@@ -779,6 +780,7 @@ export class EM_TransferSystemSearchModel {
   public jsonData?: string = '';
   public RelievingDoc?: string = '';
   public RelievingDoc_Dis?: string = '';
+  public RelievingDate?: string = '';
   public RoleID: number = 0;
 }
   
