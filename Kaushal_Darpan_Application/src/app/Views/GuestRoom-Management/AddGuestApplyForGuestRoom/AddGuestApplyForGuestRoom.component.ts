@@ -187,6 +187,8 @@ export class AddGuestApplyForGuestRoomComponent {
     this.request.MailPersonal = this.sSOLoginDataModel.Mailpersonal;
     this.request.MobileNo = this.sSOLoginDataModel.Mobileno;
     this.request.PostalAddress = this.sSOLoginDataModel.Postaladdress;
+    this.request.EmpID = this.sSOLoginDataModel.EmployeeNumber;
+    this.request.GenderId = this.sSOLoginDataModel.GenderID;
   }
 
   onFromDateChange() {
@@ -273,23 +275,18 @@ export class AddGuestApplyForGuestRoomComponent {
             item.ActiveStatus = false;
             item.ModifyBy = this.sSOLoginDataModel.UserID;
 
-            await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(item)
+            await this.guestRoomManagmentService.DeleteDataByID(item.GuestReqID, this.sSOLoginDataModel.UserID)
               .then((data: any) => {
                 data = JSON.parse(JSON.stringify(data));
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
 
-                if (this.State == 1) {
+                if (data.State == EnumStatus.Success) {
                   this.toastr.success(this.Message)
                   this.ResetControls();
                   this.loadData();
                   this.GetGuestRoomApplyList();
                   this.RoomAvailablity = 0;
-                }
-
-                else {
-                  this.toastr.error(this.ErrorMessage)
+                } else {
+                  this.toastr.error(data.ErrorMessage)
                 }
 
               }, (error: any) => console.error(error)

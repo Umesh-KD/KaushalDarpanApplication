@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,6 +14,7 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
+import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
 
   @Component({
     selector: 'app-TabutarTransferList',
@@ -94,7 +95,7 @@ import * as XLSX from 'xlsx';
 
     public isStar: boolean = false;
     todayDate: string = new Date().toISOString().split('T')[0];
-
+    @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -724,7 +725,9 @@ import * as XLSX from 'xlsx';
           if (data.State === EnumStatus.Success) {
             this.toastr.success(data.Message);
             this.RequestManual = new BTERStaffManualRequestModel();
-            this.CloseModal();
+          await  this.CloseModal();
+           await this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderDTEReview);
+
           } else {
             this.toastr.error(data.ErrorMessage);
           }
@@ -764,5 +767,12 @@ import * as XLSX from 'xlsx';
       } else {
         this.isStar = false;
       }
+    }
+
+    async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+      debugger
+      this.childComponentViewStaffProfile.StaffID = StaffID;
+      this.childComponentViewStaffProfile.UserID = UserID;
+      await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
     }
 }

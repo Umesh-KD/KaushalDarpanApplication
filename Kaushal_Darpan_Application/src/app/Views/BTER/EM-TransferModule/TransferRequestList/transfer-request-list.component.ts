@@ -149,32 +149,76 @@ async GetEM_TransferSystemEmployeeStatus() {
           console.error(error);
         }
       }
+  async EM_TransferSystem_GetData() {
+    debugger;
 
-async EM_TransferSystem_GetData() {
-        debugger
-        try {
-          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
-          this.searchRequest.Action = "EM_TransferSystemListmain";
-          this.searchRequest.StatusID = 0;
-          await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
-            data = JSON.parse(JSON.stringify(data));
-            if (data.State === EnumStatus.Success) {
-              this.EM_TransferProcessList = data.Data;
-              this.filteredData = [...this.EM_TransferProcessList]; // Copy full dataset
-              this.dataSource = new MatTableDataSource(this.filteredData);
-              this.dataSource.sort = this.sort;
-              this.totalRecords = this.filteredData.length;
-              this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-              this.updateTable();
-            } else {
-              this.EM_TransferProcessList = [];
-            }
+    try {
+      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      this.searchRequest.Action = "EM_TransferSystemListmain";
+      this.searchRequest.StatusID = 0;
 
-          })
-        } catch (error) {
-          console.error(error);
-        }
+      const response: any = await this.staffServiceDetailsService
+        .GetEM_TransferSystemData(this.searchRequest);
+
+      const data = JSON.parse(JSON.stringify(response));
+
+      if (
+        data &&
+        data.State === EnumStatus.Success &&
+        Array.isArray(data.Data)
+      ) {
+
+        this.EM_TransferProcessList = data.Data;
+
+      } else {
+
+        this.EM_TransferProcessList = [];
+
       }
+
+      this.filteredData = [...this.EM_TransferProcessList];
+      this.dataSource = new MatTableDataSource(this.filteredData);
+      this.dataSource.sort = this.sort;
+
+      this.totalRecords = this.filteredData.length;
+      this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+
+      this.updateTable();
+
+    } catch (error) {
+      console.error(error);
+
+      this.EM_TransferProcessList = [];
+      this.filteredData = [];
+      this.dataSource = new MatTableDataSource(this.filteredData);
+    }
+  }
+//async EM_TransferSystem_GetData() {
+//        debugger
+//        try {
+//          this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+//          this.searchRequest.Action = "EM_TransferSystemListmain";
+//          this.searchRequest.StatusID = 0;
+//          await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
+//            data = JSON.parse(JSON.stringify(data));
+//            if (data.State === EnumStatus.Success) {
+//              this.EM_TransferProcessList = data.Data;
+//              this.filteredData = [...this.EM_TransferProcessList]; // Copy full dataset
+//              this.dataSource = new MatTableDataSource(this.filteredData);
+//              this.dataSource.sort = this.sort;
+//              this.totalRecords = this.filteredData.length;
+//              this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+//              this.updateTable();
+//            } else {
+//              this.EM_TransferProcessList = [];
+//              this.dataSource = new MatTableDataSource(this.filteredData);
+//            }
+
+//          })
+//        } catch (error) {
+//          console.error(error);
+//        }
+//      }
 
   async onTransferSystemEXT(model: any, TransferSystemID: number) {
       debugger
@@ -222,10 +266,9 @@ async EM_TransferSystem_GetData() {
             await this.staffServiceDetailsService.DeleteById(this.searchRequest)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
-                console.log(data);
-
+                debugger
                 if (data.State) {
-                  this.toastr.success(data.Message)
+                  this.toastr.success('This request was deleted successfully.')
                   await this.EM_TransferSystem_GetData();
                 }
                 else {
@@ -233,7 +276,10 @@ async EM_TransferSystem_GetData() {
                 }
 
               }, (error: any) => console.error(error)
-              );
+            );
+            
+            
+           
           }
           catch (ex) {
             console.log(ex);

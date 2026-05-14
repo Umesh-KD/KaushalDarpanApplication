@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -13,7 +13,7 @@ import { BTERSeatsDistributionsService } from '../../../Services/BTER/Seats-Dist
 import { map, of } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { GuestRoomManagmentService } from '../../../Services/GuestRoomManagment/GuestRoomManagment.service';
-import { GuestRoomSeatSearchModel, StatusChangeGuestModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { GuestRoomSeatSearchModel, RoomReservationDataModel, StatusChangeGuestModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { RoomDetailsDataModel } from '../../../Models/GuestRoom-Management/RoomDetailsDataModel';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -53,16 +53,30 @@ export class GuestRoomDetailsComponent {
   fileUrl: any = 0;
   public searchRequest1 = new GuestRoomSeatSearchModel();
   StautsChangeMdl = new StatusChangeGuestModel()
+  public reservationRequest = new RoomReservationDataModel();
   public GuestRoomList: any = [];
   public GuestHouseNameList: any = [];
   public RoomTypeList: any = [];
   displayedColumns: string[] = [
-    'SNo', 'RoomNo', 'RoomType', 'GuestHouseName', 'StudyTableFacilities', 'FanFacilities',
+    'select','SNo', 'RoomNo', 'RoomType', 'GuestHouseName', 'StudyTableFacilities', 'FanFacilities',
     'CoolingFacilities', 'AttachedBathFacilities', 'Action'
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
 
   constructor(
     private toastr: ToastrService,
@@ -74,7 +88,9 @@ export class GuestRoomDetailsComponent {
     private Swal2: SweetAlert2,
     private appsettingConfig: AppsettingService,
     private SeatsDistributionsService: BTERSeatsDistributionsService,
-    private guestRoomManagmentService: GuestRoomManagmentService) { }
+    private guestRoomManagmentService: GuestRoomManagmentService,
+    private modalService: NgbModal,
+  ) { }
 
   async ngOnInit() {
     this.fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + "Sample_Formate_HostelRoomFacility.xlsx?2";
@@ -189,10 +205,10 @@ export class GuestRoomDetailsComponent {
       await this.guestRoomManagmentService.GetAllGuestRoomDetails(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.RoomDetailsList = data['Data'];
+
+          this.loadInTable();
+
           this.totalRecord = data['Data'].length;
           this.initTable();
         }, error => console.error(error));
@@ -489,9 +505,6 @@ export class GuestRoomDetailsComponent {
       await this.guestRoomManagmentService.GetAllRoomSeatList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.GuestRoomList = data['Data'];
         }, error => console.error(error));
     }
@@ -514,9 +527,6 @@ export class GuestRoomDetailsComponent {
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.GuestHouseNameList = data['Data'];
         }, error => console.error(error));
     }
@@ -532,7 +542,6 @@ export class GuestRoomDetailsComponent {
 
   async GetRoomTypeList() {
     try {
-      debugger
       this.RoomTypeList = [];
       let RoomTypeList = this.GuestRoomList.filter(
         (x: { GuestHouseID: number }) =>
@@ -582,4 +591,148 @@ export class GuestRoomDetailsComponent {
       default: return 'Dormitory/Hall (Sharing)';
     }
   }
+
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+    this.reservationRequest = new RoomReservationDataModel();
+  }
+
+  async openReservationModal(content: any) {
+    const selected = this.RoomDetailsList.filter((x: any) => x.Selected);
+    if(selected.length == 0){
+      this.toastr.error("Please select at least one Room!");
+      return;
+    }
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+  }
+
+  async SaveRoomReservation() {
+    const selected = this.RoomDetailsList.filter((x: any) => x.Selected);
+    if(selected.length == 0){
+      this.toastr.error("Please select at least one Room!");
+      return;
+    }
+    this.reservationRequest.RoomDetailList = selected;
+    this.reservationRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+    this.reservationRequest.RoleID = this.sSOLoginDataModel.RoleID;
+
+    try {
+      this.loaderService.requestStarted();
+      await this.guestRoomManagmentService.SaveRoomReservation(this.reservationRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data['Data']) {
+            this.toastr.success(data['Data']);
+          }
+          this.CloseModalPopup();
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  //table feature 
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org. list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.RoomDetailsList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org. list here)
+  async sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.RoomDetailsList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.RoomDetailsList.length;
+  }
+  // (replace org. list here)
+  get totalInTableSelected(): number {
+    return this.RoomDetailsList.filter((x: any) => x.Selected)?.length;
+  }
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  //checked all (replace org. list here)
+  selectInTableAllCheckbox() {
+    this.RoomDetailsList.forEach((x: any) => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+  //checked single (replace org. list here)
+  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+    const data = this.RoomDetailsList.filter((x: any) => x.GuestRoomDetailID == item.GuestRoomDetailID);
+    data.forEach((x: any) => {
+      x.Selected = isSelected;
+    });
+    //select all(toggle)
+    this.AllInTableSelect = this.RoomDetailsList.every((r: any) => r.Selected);
+  }
+  // end table feature
+
+
 }

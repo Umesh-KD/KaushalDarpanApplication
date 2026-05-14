@@ -106,6 +106,7 @@ export class StudentDashboardComponent implements OnInit {
         }
         else if (this.StudantCourseList?.length == 1)
         {
+          debugger
           this.sSOLoginDataModel.StudentID = this.StudantCourseList[0]?.StudentID;
           this.sSOLoginDataModel.DepartmentID = this.StudantCourseList[0]?.DepartmentID;
           localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
