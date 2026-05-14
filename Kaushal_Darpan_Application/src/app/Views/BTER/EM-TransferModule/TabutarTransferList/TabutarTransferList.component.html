@@ -91,7 +91,7 @@
     </div>
     <div class=" ">
       <label>Order Date :<span class="StarMarking">*</span></label>
-      <input class="form-input" type="date" id="OrderDate" [(ngModel)]="requestUp.OrderDate"  [max]="todayDate">
+      <input class="form-input" type="date" id="OrderDate" [(ngModel)]="requestUp.OrderDate" [max]="todayDate">
     </div>
     <div>
       <label class="block  text-sm font-medium text-gray-900 dark:text-white"
@@ -131,23 +131,18 @@
                    (change)="checkboxthView_checkboxchange($event.target.checked)">
           </th>
           <th width="80px" align="left">Sr. No.</th>
-          <!--<th align="left">SSO ID</th>-->
           <th align="left">Name</th>
-          <!--<th align="left">Transfer Category</th>
-  <th align="left">Reason Description</th>-->
-
           <th class="left">Office</th>
           <th class="left">Post</th>
           <th class="left">District</th>
           <th class="left">Institute</th>
           <th align="left">Status</th>
-
           <th class="left">Order NO</th>
           <th class="left">Order Date</th>
           <th class="left">Category</th>
           <th class="left">Reason Description</th>
-
           <th align="left">Supporting Documents</th>
+          <th align="left">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -157,18 +152,12 @@
                    [(ngModel)]="row.Selected" />
           </td>
           <td>{{idx+1}}</td>
-          <!--<td>{{row.SSOID}}</td>-->
-          <td>{{row.NAME}}</td>
-          <!--<td>{{row.TransferCategory}}</td>
-  <td>{{row.ReasonDescription}}</td>-->
-
-
+          <td>{{row.NAME}} ({{row.SSOID}})</td>
           <td>{{row.OfficeName}}</td>
           <td>{{row.DesignationName }}</td>
           <td>{{row.DistrictName }}</td>
           <td>{{row.InstituteName }}</td>
           <td>{{row.TransferStatusName}}</td>
-
           <td>{{row.OrderNo}}</td>
           <td>{{row.OrderDate}}</td>
           <td>{{row.TransferCategory}}</td>
@@ -182,6 +171,11 @@
               </a>
             </div>
             <ng-template #noDoc1>-----</ng-template>
+          </td>
+          <td>
+            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a (click)="OpenStaffProfileViewModal(row.StaffID,row.StaffUserID)" title="View Profile"><i class="ti ti-eye"></i></a>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -200,7 +194,7 @@
 
       <div class="card-body p-5">
         <form [formGroup]="AddTransferRequest">
-          
+
 
           <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i>From Details</b>
@@ -323,17 +317,20 @@
         </form>
       </div>
 
-      
+
       <div class="card-footer text-right">
         <button type="button" (click)="CloseModal()" class="btn bg-success text-white btn-sm">
           Close
         </button>
       </div>
-      
+
     </div>
   </div>
 
 </ng-template>
+
+<app-view-staff-profile-modal #Modal_StaffDetailsViewModal></app-view-staff-profile-modal>
+
 
 
 

@@ -130,7 +130,7 @@
                 ( (this.sSOLoginDataModel.RoleID == _EnumRole.EM_JDTE|| this.sSOLoginDataModel.RoleID == _EnumRole.EM_Secretary_BTER )  && ShowCheckBoxId ==1)
                 || (sSOLoginDataModel.RoleID == _EnumRole.DTE    &&  ShowCheckBoxId ==1)
               ">
-              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" 
                      [checked]="AllSelect"
                      (change)="checkboxthView_checkboxchange($event.target.checked)">
             </th>
@@ -155,8 +155,14 @@
                 (sSOLoginDataModel.RoleID == _EnumRole.DTE && ShowCheckBoxId == 1 )
                    ">
               <input type="checkbox"
+                     *ngIf="(sSOLoginDataModel.RoleID != _EnumRole.DTE && row.FinalApproveStatus == 0)
+            || (sSOLoginDataModel.RoleID == _EnumRole.DTE && row.FinalApproveStatus == 5)"
                      name="MarkCheck"
                      [(ngModel)]="row.Selected" />
+              <label *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.DTE && row.FinalApproveStatus == 0)"
+                     title="Approve any one row first, then it will move to next role">
+                Staff Location
+              </label>
             </td>
             <td>{{idx+1}}</td>
             <td>{{row.SSOID}}</td>
@@ -184,8 +190,6 @@
                     <a (click)="OpenStaffProfileViewModal(row.StaffID,row.StaffUserID)" title="View Profile"><i class="ti ti-eye"></i></a>
                     </div>
                 </td>
-
-            
           </tr>
         </tbody>
       </table>
@@ -201,10 +205,9 @@
         <h2 class="mb-0">Staff Transfer Application</h2>
         <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
       </div>
-
       <div class="card-body p-5">
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
-          <div>
+          <div *ngIf="isShowStatus_Checkbox == true">
             <label>Action Status</label>
             <select class="form-select" id="updateStatus" [(ngModel)]="updateStatus" name="ddlupdateStatus">
               <option value="0">--select--</option>
@@ -213,7 +216,8 @@
               </option>
             </select>
           </div>
-          <div>
+
+          <div *ngIf="isShowStatus_Checkbox == true">
             <label class="block  text-sm font-medium text-gray-900 dark:text-white"
                    for="SupportingDocuments ">
               Supporting Document :<span class="StarMarking">*</span>
@@ -232,6 +236,11 @@
             </div>
           </div>
 
+
+          <div class=" ">
+            <label>Remark</label>
+            <input class="form-input" type="text" id="Remark" [(ngModel)]="Remark">
+          </div>
           <div class="updt-btn-man">
             <button type="submit"
                     class="btn bg-info mt-5 text-white "
@@ -240,13 +249,7 @@
             </button>
           </div>
         </div>
-         
-
-         
-
-
         </div>
-
       <div class="card-body">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i>Transfer System EXT</b>
@@ -259,10 +262,8 @@
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
                 <!--FinalApproveStatus-->
-                <th width="50px">
-                  <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
-                         [checked]="AllSelect"
-                         (change)="checkboxthViewUpdate($event.target.checked)">
+                <th width="50px" *ngIf="isShowStatus_Checkbox == true && IsApproveExt == false">
+                  Approve
                 </th>
                 <th class="text-left">S No</th>
                 <th class="text-left">Office Name</th>
@@ -277,12 +278,20 @@
             </thead>
             <tbody>
               <tr *ngFor="let row of EM_TransferSystemEXTList; let idx=index;  ">
-                <td>
+                <td *ngIf="isShowStatus_Checkbox && IsApproveExt == false">
+
+                  <!-- Show checkbox only when NO row approved -->
                   <input type="checkbox"
-                         *ngIf="row.FinalApproveStatus != 6"
+                         *ngIf="IsApproveExt == false"
                          name="MarkCheck"
-                         [(ngModel)]="row.Selected" />
+                         [checked]="row.Selected"
+                         (change)="onSingleSelect(row)" />
+
+
                 </td>
+
+
+
                 <td align="left">{{idx+1}}</td>
                 <td align="left">{{ row.OfficeName }}</td>
                 <td align="left">{{ row.DesignationName}}</td>
@@ -318,7 +327,7 @@
       </div>
   </div>
 
-</ng-template>
+</ng-template> 
 
 
 <ng-template #EM_TransferSystemHST let-modal>
