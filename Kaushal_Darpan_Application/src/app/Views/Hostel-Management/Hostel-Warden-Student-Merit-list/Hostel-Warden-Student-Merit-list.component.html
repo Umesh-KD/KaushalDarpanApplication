@@ -40,7 +40,7 @@
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
         <select class="form-select" id="status"
                 [(ngModel)]="Searchrequest.status" (change)="GetAllGenerateHostelWardenStudentMeritlist()">
-          <option value="0">--- Affidavit Uploaded ---</option>
+          <option value="0">Affidavit Uploaded</option>
           <option *ngFor="let item of HostelStatusList" [value]="item.StatusID">{{item.StatusName}}</option>
         </select>
       </div>
