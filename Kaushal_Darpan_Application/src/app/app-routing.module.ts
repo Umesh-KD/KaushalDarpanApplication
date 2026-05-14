@@ -1067,14 +1067,17 @@ const routes: Routes = [
       { path: 'ITI-CollegeLoginInfoMaster', loadChildren: () => import('./Views/ITI/ITI-CollegeLoginInfoMaster/ITI-CollegeLoginInfoMaster.module').then(m => m.ITICollegeLoginInfoMasterModule), title: 'ITI-CollegeLoginInfo-Master' },
 
       { path: 'online-marking-report', loadChildren: () => import('./Views/Reports/online-marking-report-provide-by-examiner/online-marking-report-provide-by-examiner.module').then(m => m.OnlineMarkingReportProvideByExaminerModule) },
+
       { path: 'renumeration-examiner', loadChildren: () => import('./Views/renumeration-examiner/renumeration-examiner.module').then(m => m.RenumerationExaminerModule) },
+      { path: 'renumeration-examiner-reval', loadChildren: () => import('./Views/renumeration-examiner-reval/renumeration-examiner-reval.module').then(m => m.RenumerationExaminerRevalModule) },
       { path: 'renumeration-jd', loadChildren: () => import('./Views/renumeration-jd/renumeration-jd.module').then(m => m.RenumerationJdModule) },
+      { path: 'renumeration-jd-reval', loadChildren: () => import('./Views/renumeration-jd-reval/renumeration-jd-reval.module').then(m => m.RenumerationJdRevalModule) },
+
       { path: 'unlock-application-form', loadChildren: () => import('./Views/ITI/unlock-application-form/unlock-application-form.module').then(m => m.UnlockApplicationFormModule) },
       { path: 'FeePaidByChallan', loadChildren: () => import('./Views/Emitra/fee-paid-by-challan/fee-paid-by-challan.module').then(m => m.FeePaidByChallanModule) },
 
       { path: 'renumeration-accounts', loadChildren: () => import('./Views/renumeration-accounts/renumeration-accounts.module').then(m => m.RenumerationAccountsModule) },
-      { path: 'renumeration-fee-setter', loadChildren: () => import('./Views/renumeration-fee-setter/renumeration-fee-setter.module').then(m => m.RenumerationFeeSetterModule) },
-
+      { path: 'renumeration-accounts-reval', loadChildren: () => import('./Views/renumeration-accounts-reval/renumeration-accounts-reval.module').then(m => m.RenumerationAccountsRevalModule) },
 
       { path: 'companydispatchlist', loadChildren: () => import('./Views/DispatchManagement/company-dispatch-list/company-dispatch-list.module').then(m => m.CompanyDispatchListModule), title: 'Company Dispatch List' },
       { path: 'addcompanydispatch', loadChildren: () => import('./Views/DispatchManagement/add-company-dispatch/add-company-dispatch.module').then(m => m.addcompanydispatchModule), title: 'Add Company Dispatch' },
@@ -1857,10 +1860,6 @@ const routes: Routes = [
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
- 
-
-
-
 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },

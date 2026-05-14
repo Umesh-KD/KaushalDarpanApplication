@@ -1,24 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { RenumerationJdRevalRoutingModule } from './renumeration-jd-reval-routing.module';
+import { RenumerationJdRevalComponent } from './renumeration-jd-reval.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { LoaderModule } from '../Shared/loader/loader.module';
-import { RenumerationFeeSetterComponent } from './renumeration-fee-setter.component';
-import { RenumerationFeeSetterRoutingModule } from './renumeration-fee-setter-routing.module';
 
 
 @NgModule({
   declarations: [
-    RenumerationFeeSetterComponent
+    RenumerationJdRevalComponent
   ],
   imports: [
     CommonModule,
-    RenumerationFeeSetterRoutingModule,
+    RenumerationJdRevalRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     TableSearchFilterModule,
     LoaderModule
   ]
 })
-export class RenumerationFeeSetterModule { }
+export class RenumerationJdRevalModule { }
