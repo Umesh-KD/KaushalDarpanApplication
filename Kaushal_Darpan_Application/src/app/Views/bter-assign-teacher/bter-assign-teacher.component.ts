@@ -1601,10 +1601,12 @@ async  ngOnInit() {
 
       let existsInAllSection = false;
 
+
+      debugger
       if (!this.IsEditMode && this.EditRowID == 0) {
 
         existsInAllSection =
-          this.AddStaffSubjectAllSectionModelList.some(
+          this.AddStaffSubjectSectionModelList.some(
             (x: any) => {
 
               const existingSectionIDs =
