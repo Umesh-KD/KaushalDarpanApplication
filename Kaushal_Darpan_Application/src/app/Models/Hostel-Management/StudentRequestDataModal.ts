@@ -12,6 +12,7 @@ export class StudentRequestDataModal {
   public status?: number = 0;
   public HostelStatus?: number = 0;
   public Gender?: number = 0;
+  public StudentId?: number = 0;
   
   public Action: string = '';
   public AllotmentStatus: number = 0;

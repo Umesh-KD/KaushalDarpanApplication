@@ -76,6 +76,7 @@ export class TheoryMarksSearchModel extends RequestBaseModel {
   public StrKey?: string = '';
   public CenterCode?: number = 0;
   public isUFM?: number = 0;
+  public IsReval?: number = 0;
 }
 
 

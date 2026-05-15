@@ -136,6 +136,7 @@
             <th class="text-left" *ngIf="Searchrequest.status == 9">Merit No</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Student Name</th>
+            <th class="text-left">Application ID</th>
             <th class="text-left">Hostel Request No</th>
             <!--<th class="text-left">Type</th>-->
             <th class="text-left">{{titleDDLBranchTrade}}</th>
@@ -163,6 +164,7 @@
             </td>
             <td align="left">{{item.InstituteName}}</td>
             <td align="left">{{item.StudentName}}</td>
+            <td align="left">{{item.ApplicationId}}</td>
             <td align="left">{{item.HostelRequestNo}}</td>
             <!--<td align="left">{{item.StudentType}}</td>-->
             <td align="left">{{item.StreamName}}</td>
@@ -170,7 +172,7 @@
             <td align="left">{{item.EndTermName}}</td>
             <td align="left">{{item.TotalAvgPercentage}}</td>
             <!-- <td *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
-    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> -->
+  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> -->
             <!--<a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>-->
             <!-- <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
     </div>

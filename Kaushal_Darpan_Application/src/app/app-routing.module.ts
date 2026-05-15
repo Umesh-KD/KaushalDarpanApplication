@@ -1896,6 +1896,3 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
 })
 
 export class AppRoutingModule { }
-
-
-
