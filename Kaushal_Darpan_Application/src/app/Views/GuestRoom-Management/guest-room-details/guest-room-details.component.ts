@@ -637,12 +637,13 @@ export class GuestRoomDetailsComponent {
     try {
       this.loaderService.requestStarted();
       await this.guestRoomManagmentService.SaveRoomReservation(this.reservationRequest)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if(data.State === EnumStatus.Success){
             this.toastr.success(data.Message);
             this.unSelectInTableAllCheckbox();
             this.CloseModalPopup();
+            await this.GetAllData();
           } else if(data.State === EnumStatus.Warning){
             this.toastr.warning(data.Message);
           } else {

@@ -96,6 +96,7 @@
             <th class="text-left">Guest House Name</th>
             <th class="text-left">Purpose</th>
             <th class="text-left">Room Type</th>
+            <th class="text-left">Room No</th>
             <th class="text-left">Cooling Facilities</th>
             <th class="text-left">Room Fee</th>
             <th class="text-left">Status</th>
@@ -119,6 +120,7 @@
             <td align="left">{{item.GuestHouseName}}</td>
             <td align="left">{{item.Purpose_str}}</td>
             <td align="left">{{item.RoomType_str}}</td>
+            <td align="left">{{item.RoomNo}}</td>
             <td align="left">{{item.CoolingFacilities_Str}}</td>
             <td align="left">{{item.RoomFee}}</td>
             <td align="left">{{item.StatusName}}</td>
@@ -164,7 +166,7 @@
                 <button type="button"
                         class="bg-success btn text-white btn-sm"
                         (click)="openModal_ReservedRoomCheckIn(modal_ReservedRoomCheckIn, item)"
-                        *ngIf="showCheckIn && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
+                        *ngIf="showCheckIn && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden && item.IsShowCheckInBtn">
                   <i class="ti ti-login"></i>Check In
                 </button>
               </div>
@@ -333,7 +335,7 @@
               <label for="SSOID" class="form-label">SSOID</label>
               <div class="input-group check-box-custom">
                 <input formControlName="SSOID" class="form-input" placeholder="Enter SSOID"  aria-describedby="basic-addon3 basic-addon4" />
-                <span *ngIf="SSOIDExists != null" class="input-group-text {{SSOIDExists?'text-success':'text-danger'}}"><i class="fa {{SSOIDExists?'fa-check':'fa-close'}}"></i></span>
+                <!-- <span *ngIf="SSOIDExists != null" class="input-group-text {{SSOIDExists?'text-success':'text-danger'}}"><i class="fa {{SSOIDExists?'fa-check':'fa-close'}}"></i></span> -->
               </div>
 
               <div *ngIf="isSubmit && _SSOIDFormGroup.SSOID.errors" class="form-text text-danger">
@@ -455,12 +457,12 @@
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                From Date/Time : <span class="StarMarking">*</span>
+                Check-In Date/Time :<span class="StarMarking">*</span>
               </label>
               <div class="flex">
                 <div style="width:calc(100% - 100px)">
                   <input formControlName="txtFromDate" class="form-input" placeholder="txtFromDate" type="date"
-                        [min]="todayDate" [(ngModel)]="requestReservedCheckIn.FromDate" (change)="onFromDateChange()">
+                        [min]="todayDate" [(ngModel)]="requestReservedCheckIn.FromDate">
                   <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtFromDate.errors" class="text-danger">
                     <p *ngIf="_IIPMasterFormGroup.txtFromDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                   </div>
@@ -473,27 +475,8 @@
             </div>
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                To Date/Time : <span class="StarMarking">*</span>
-              </label>
-              <div class="flex">
-                <div style="width:calc(100% - 100px)">
-                  <input formControlName="txtToDate" [min]="minToDate" class="form-input" placeholder="txtToDate" type="date"
-                        [(ngModel)]="requestReservedCheckIn.ToDate">
-                  <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtToDate.errors" class="text-danger">
-                    <p *ngIf="_IIPMasterFormGroup.txtToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-                  </div>
-                </div>
-                <div style="width:100px">
-                  <input formControlName="txtToTime" class="form-input" placeholder="txtToTime" type="time"
-                        [(ngModel)]="requestReservedCheckIn.ToTime">
-                </div>
-              </div>
-            </div>
-
-            <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Purpose<span class="StarMarking">*</span></label>
-              <select formControlName="Purpose" class="form-select" [(ngModel)]="requestReservedCheckIn.Purpose" (change)="GetRoomTypeListData()">
+              <select formControlName="Purpose" class="form-select" [(ngModel)]="requestReservedCheckIn.Purpose" (change)="onChangePurpose()">
                 <option value="0">--Select--</option>
                 <option value="1">Private</option>
                 <option value="2">On Duty</option>
@@ -501,69 +484,6 @@
               </select>
               <div *ngIf="isSubmitted && _IIPMasterFormGroup.Purpose.errors" class="text-danger">
                 <p *ngIf="!_IIPMasterFormGroup.Purpose.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name<span class="StarMarking">*</span></label>
-              <select formControlName="ddlGuestHouseID" class="form-select" [(ngModel)]="requestReservedCheckIn.GuestHouseID" (change)="GetRoomTypeListData()">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of GuestRoomNameList" [value]="item.ID">{{item.Name}}</option>
-              </select>
-              <div *ngIf="isSubmitted && _IIPMasterFormGroup.ddlGuestHouseID.errors" class="text-danger">
-                <p *ngIf="!_IIPMasterFormGroup.ddlGuestHouseID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Cooling Facilities: <span class="StarMarking">*</span></label>
-              <select class="form-select" id="CoolingFacilities" 
-                formControlName="CoolingFacilities" 
-                [(ngModel)]="requestReservedCheckIn.CoolingFacilities"
-                (change)="GetRoomTypeListData()">
-                <option value="0">Choose Option</option>
-                <option value="1">AC</option>
-                <option value="2">Non-AC</option>
-                <!-- <option value="3">Fan</option> -->
-              </select>
-              <div *ngIf="isSubmitted && _IIPMasterFormGroup.CoolingFacilities.errors" class="text-danger">
-                <p *ngIf="!_IIPMasterFormGroup.CoolingFacilities.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type<span class="StarMarking">*</span></label>
-              <select formControlName="txtRoomType" class="form-input" type="text" placeholder="Enter Room Type"
-                      [(ngModel)]="requestReservedCheckIn.RoomType" (change)="changeSeats()">
-                <option value="0">--Choose Room Type--</option>
-                <option *ngFor="let item of RoomTypeList" [value]="item.RoomType">{{item.RoomTypeName}}</option>
-              </select>
-              <small>(1 Bed, 2 Bed (sharing), 3 Bed (sharing), 4 Bed (sharing))</small>
-              <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomType.errors" class="text-danger">
-                <p *ngIf="!_IIPMasterFormGroup.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Capacity<span class="StarMarking">*</span></label>
-              <input formControlName="txtSeatCapacity" class="form-input" type="text" placeholder="Enter Seat Capacity"
-                    [(ngModel)]="requestReservedCheckIn.SeatCapacity">
-              <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtSeatCapacity.errors" class="text-danger">
-                <p *ngIf="_IIPMasterFormGroup.txtSeatCapacity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Availability<span class="StarMarking">*</span></label>
-              <div class="alert p-2 alert-warning">{{RoomAvailablity}}</div>
-
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Quantity<span class="StarMarking">*</span></label>
-              <input formControlName="txtRoomQuantity" class="form-input" type="text" placeholder="Enter Room Quantity"
-                    [(ngModel)]="requestReservedCheckIn.RoomQuantity">
-              <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomQuantity.errors" class="text-danger">
-                <p *ngIf="_IIPMasterFormGroup.txtRoomQuantity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
               </div>
             </div>
 

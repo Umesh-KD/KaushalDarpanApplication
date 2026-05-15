@@ -155,6 +155,10 @@ export class GuestApplyForGuestRoomDataModel {
   public IsForSelf?: boolean = false;
   public GenderId?: number = 0;
   public GuestRoomDetailID?: number = 0;
+  public BedFee_Training?: number = 0;
+  public BedFee_OnDuty?: number = 0;
+  public BedFee_Private?: number = 0;
+  public GuestCheckInOutID?: number = 0;
 }
 
 export class GuestApplyForGuestRoomSearchModel {
@@ -232,6 +236,8 @@ export class CheckInDataModel {
   public AllotmentStatus?: number = 0;
   public GuestReqID?: number = 0;
   public UserID?: number = 0;
+  public CheckInTime?: string = '';
+  public CheckInDate?: string = '';
 }
 
 export class RoomReservationDataModel {
