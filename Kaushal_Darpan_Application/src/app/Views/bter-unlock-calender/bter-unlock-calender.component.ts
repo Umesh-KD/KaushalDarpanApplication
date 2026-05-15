@@ -5,7 +5,7 @@ import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../Models/Common
 import { BranchStreamTypeWiseSearchModel } from '../../Models/BTER/BTERSeatsDistributions';
 import { PublicInfoDataModel } from '../../Models/PublicInfoDataModel';
 import { PublicAddType } from '../../Common/GlobalConstants';
-import { CalendarEventModel, CalendarEventModelBter, CalendarEventModelITI } from '../../Models/StaffMasterDataModel';
+import { CalendarEventModel, CalendarEventModelBter } from '../../Models/StaffMasterDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { ItiSeatIntakeService } from '../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { BTERSeatsDistributionsService } from '../../Services/BTER/Seats-Distributions/seats-distributions.service';
@@ -32,6 +32,10 @@ export class BterUnlockCalenderComponent {
   public AttandanceTimeID: number = 0
   public StaffID: number = 0
   GetSectionData: any[] = [];
+  currentMonth: number = new Date().getMonth() + 1;
+  currentYear: number = new Date().getFullYear();
+
+  allowedDates: string[] = [];
   SectionID: number = 0
   //public request = new SeatIntakeDataModel()
   IsFinalSubmit: boolean = false
@@ -57,6 +61,7 @@ export class BterUnlockCalenderComponent {
   public request = new PublicInfoDataModel()
   public State: number = 0;
   public key: number = 0;
+  public RoasterID: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
   public IsUpload: boolean = false;
@@ -126,9 +131,9 @@ export class BterUnlockCalenderComponent {
 
   async generateMonthDays(year: number, month: number) {
     const daysInMonth = new Date(year, month, 0).getDate();
-    const events: CalendarEventModelITI[] = [];
+    const events: CalendarEventModelBter[] = [];
     for (let day = 1; day <= daysInMonth; day++) {
-      const event = new CalendarEventModelITI();
+      const event = new CalendarEventModelBter();
       event.EventId = day;
       event.EventDate = new Date(year, month - 1, day);
 
@@ -170,7 +175,14 @@ export class BterUnlockCalenderComponent {
     });
   }
   async mergeEvents(events: any[], overrideEvents: any[]) {
+
+    // store allowed dates coming from SP
+    this.allowedDates = overrideEvents.map((x: any) =>
+      this.getDateString(new Date(x.EventDate))
+    );
+
     overrideEvents.forEach((se: any) => {
+
       const seDate = new Date(se.EventDate);
 
       if (isNaN(seDate.getTime())) {
@@ -186,29 +198,29 @@ export class BterUnlockCalenderComponent {
       });
 
       if (eventIndex !== -1) {
+
         const targetEvent = events[eventIndex];
 
         targetEvent.EventType = se.EventType;
         targetEvent.Remark = se.Remark;
-        targetEvent.IsFinalSubmit = se.IsFinalSubmit;
+        targetEvent.IsLocked = se.IsLocked;
 
-        if (se.EventType === 'Holiday') {
-          targetEvent.Color = 'red';
-        } else if (se.IsFinalSubmit == 1) {
-          targetEvent.Color = 'green';
-        } else {
-          targetEvent.Color = '';
-        }
+        // GREEN = locked
+      
+
       } else {
-        const newEvent = new CalendarEventModelITI();
+
+        const newEvent = new CalendarEventModelBter();
 
         newEvent.EventId = events.length + 1;
         newEvent.EventDate = seDate;
         newEvent.Day = seDate.getDate();
         newEvent.EventType = se.EventType;
         newEvent.Remark = se.Remark;
-        newEvent.IsFinalSubmit = se.IsFinalSubmit;
-        newEvent.Color = se.EventType === 'Holiday' ? 'red' : (se.IsFinalSubmit == 1 ? 'green' : '');
+        newEvent.IsLocked = se.IsLocked;
+
+        newEvent.Color = se.IsLocked == 1 ? 'green' : '';
+
         newEvent.DepartmentID = 0;
         newEvent.EndTermID = 0;
         newEvent.AcademicYearID = 0;
@@ -248,7 +260,7 @@ export class BterUnlockCalenderComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.eventsList = data.Data
-
+          this.RoasterID = this.eventsList[0]['RosterID']??0
           this.mergeEvents(this.events, this.eventsList);
         }, error => console.error(error));
 
@@ -320,58 +332,66 @@ export class BterUnlockCalenderComponent {
   }
 
   onDateClick(day: number) {
+
+    // validate day
     if (day < 1 || day > this.monthDays.length) return;
 
-    if (!this.SSOID || !this.SubjectID) {
+    // required selections
+    if (!this.StaffID || !this.SubjectID) {
       alert("Please select Staff and Subject first");
+      return;
+    }
+
+    if (!this.SectionID) {
+      alert("Please select Section first");
+      return;
+    }
+
+    if (!this.AttandanceTimeID) {
+      alert("Please select Attendance Time");
       return;
     }
 
     const existingEvent = this.getEvent(day);
     if (!existingEvent) return;
 
-    const eventDate = new Date(this.year, this.month - 1, day);
-
-    // 🔥 ROLE BASED RESTRICTION
-    if ([20, 43].includes(this.SSOLoginDataModel.RoleID)) {
-      if (!this.isWithinLast7Days(eventDate)) {
-        alert("You can only modify last 7 days");
-        return;
-      }
-    }
-
-    // ❌ Prevent action on holiday
+    // prevent holiday editing
     if (existingEvent.EventType === 'Holiday') {
       alert(`Holiday: ${existingEvent.Remark}`);
       return;
     }
 
-    // ===============================
-    // GREEN → WHITE (Unlock)
-    // ===============================
-    if (existingEvent.IsFinalSubmit) {
+    const isLocked = Number(existingEvent.IsLocked) === 1;
 
-      const remark = prompt("Enter remark for unlock:", existingEvent.Remark || "");
+    // ===============================
+    // LOCKED → UNLOCK
+    // ===============================
+    if (isLocked) {
+
+      const remark = prompt(
+        "Enter remark for unlock:",
+        existingEvent.Remark || ""
+      );
 
       if (remark === null || remark.trim() === "") {
         alert("Remark is required to unlock");
         return;
       }
 
-      existingEvent.IsFinalSubmit = false;
+      existingEvent.IsLocked = 0;   // ✅ unlock
       existingEvent.Remark = remark.trim();
       existingEvent.Color = '';
 
     }
     // ===============================
-    // WHITE → GREEN (Lock)
+    // UNLOCKED → LOCK
     // ===============================
     else {
 
       const confirmLock = confirm("Do you want to lock this date?");
       if (!confirmLock) return;
 
-      existingEvent.IsFinalSubmit = true;
+      existingEvent.IsLocked = 1;   // ✅ lock
       existingEvent.Color = 'green';
     }
 
@@ -390,7 +410,7 @@ export class BterUnlockCalenderComponent {
 
   saveAllEvents() {
     try {
-      if (!this.SSOID || this.SSOID.trim() === '') {
+      if (!this.StaffID) {
         this.toastr.warning('Please select Staff');
         return;
       }
@@ -400,26 +420,57 @@ export class BterUnlockCalenderComponent {
         return;
       }
 
+      if (!this.SectionID) {
+        alert("Please select Section first");
+        return;
+      }
+
+
+      if (!this.AttandanceTimeID) {
+        alert("Please select Attendence Time");
+        return;
+      }
+
+      debugger
       const formattedEvents = (this.events || [])
-        .filter((event: any) =>
-          event &&
-          event.EventDate &&
-          event.EventType !== 'Holiday' &&   // ✅ save only non-holiday dates
-          event.Day > 0
-        )
+        .filter((event: any) => {
+
+          if (!event || !event.EventDate || event.Day <= 0) return false;
+
+          const dateStr = this.getDateString(new Date(event.EventDate));
+          const dayOfWeek = new Date(event.EventDate).getDay();
+
+          if (event.EventType === 'Holiday') return false;
+
+          if (dayOfWeek === 0) return false;
+
+          if (!this.allowedDates.includes(dateStr)) return false;
+
+          return true;   // ✅ DO NOT filter IsLocked
+        })
+
         .map((event: any) => ({
           ...event,
+
           EventDate: this.formatDate(new Date(event.EventDate)),
+
           DepartmentID: this.SSOLoginDataModel.DepartmentID,
           EndTermID: this.SSOLoginDataModel.EndTermID,
           AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
           CourseTypeID: this.SSOLoginDataModel.Eng_NonEng,
+
           InstituteID: this.InstituteID,
           SubjectID: this.SubjectID,
           SSOID: this.SSOID,
+
           Remark: (event.Remark || '').trim(),
+
           IsActive: event.IsActive ?? true,
-          IsDelete: event.IsDelete ?? false
+          IsDelete: event.IsDelete ?? false,
+
+          SectionID: this.SectionID,
+          StaffID: this.StaffID,
+          RosterID: this.RoasterID
         }));
 
       if (formattedEvents.length === 0) {
@@ -427,7 +478,7 @@ export class BterUnlockCalenderComponent {
         return;
       }
 
-      this.attendanceServiceService.UpdateCalendarEventModelITI(formattedEvents)
+      this.attendanceServiceService.UpdateCalendarEventModelBter(formattedEvents)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data['Data']));
           this.toastr.success('Saved Successfully');
@@ -490,20 +541,42 @@ export class BterUnlockCalenderComponent {
     })
   }
   getCellClass(w: number, i: number): any {
-    const day = w * 7 + i - this.startDay + 1;
-    const isEmpty = (w * 7 + i) < this.startDay || day > this.monthDays.length;
 
-    if (isEmpty) {
-      return { empty: true };
+    const day = w * 7 + i - this.startDay + 1;
+
+    if (this.isEmptyCell(w, i)) {
+      return 'empty';
     }
+
+    const date = new Date(this.year, this.month - 1, day);
+
+    const dateStr = this.getDateString(date);
+
+    const weekday = date.getDay();
 
     const event = this.getEvent(day);
 
-    return {
-      holiday: event?.EventType === 'Holiday',
-      exam: event?.EventType === 'Exam',
-      finalSubmit: event?.IsFinalSubmit && event?.EventType !== 'Holiday'
-    };
+    // Sunday freeze grey
+    if (weekday === 0) {
+      return 'freeze';
+    }
+
+    // dates not coming from SP freeze
+    if (!this.allowedDates.includes(dateStr)) {
+      return 'freeze';
+    }
+
+    // Holiday = RED
+    if (event?.EventType === 'Holiday') {
+      return 'holiday';
+    }
+
+    // Locked = GREEN
+    if (event?.IsLocked == 1) {
+      return 'locked';
+    }
+
+    return '';
   }
 
   isEmptyCell(w: number, i: number): boolean {
@@ -595,7 +668,7 @@ export class BterUnlockCalenderComponent {
 
   async GetStudentAttandanceTimeDDL() {
 
-    await this.commonFunctionService.GetStudentAttandanceTimeDDL(this.StaffID, this.SubjectID).then((data: any) => {
+    await this.commonFunctionService.GetStudentAttandanceTimeDDL(this.StaffID, this.SubjectID, 0, this.SectionID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
 
       debugger

@@ -29,11 +29,7 @@ td.empty {
   cursor: default;
 }
 
-td.holiday {
-  background-color: lightcoral;
-  color: white;
-  font-weight: 600;
-}
+
 
 td.exam {
   background-color: lightblue;
@@ -165,4 +161,29 @@ td.empty {
   display: inline-block;
   font-weight: 600;
   font-size: 14px;
+}
+td.freeze {
+  background-color: #d6d6d6 !important;
+  color: #777 !important;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+
+td.freeze {
+  background-color: #d6d6d6 !important;
+  color: #666 !important;
+  pointer-events: none;
+}
+
+td.locked {
+  background-color: #2e7d32 !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+td.holiday {
+  background-color: #e53935 !important;
+  color: #fff !important;
+  font-weight: bold;
 }

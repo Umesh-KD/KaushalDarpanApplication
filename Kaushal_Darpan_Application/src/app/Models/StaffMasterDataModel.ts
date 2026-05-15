@@ -381,6 +381,7 @@ export class CalendarEventModelBter {
   public IsActive: boolean = true;
   public IsDelete: boolean = false;
   public IsFinalSubmit: boolean = false;
+  public IsLocked: number = 0;
   public Day: number = 0;
   public CurrentMonth?: number = 0;
   public CurrentYear?: number = 0;
@@ -388,6 +389,7 @@ export class CalendarEventModelBter {
   public SectionID?: number = 0;
   public TimeID?: number = 0;
   public StaffID?: number = 0;
+  public RosterID?: number = 0;
 }
 
 export class RosterDisplayTimeTableDataModel {
