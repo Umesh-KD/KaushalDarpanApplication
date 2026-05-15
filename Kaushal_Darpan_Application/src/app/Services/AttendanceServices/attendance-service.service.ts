@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { catchError, throwError } from 'rxjs';
 import { StreamMasterDataModelsTesting } from '../../Models/StreamMasterDataModelsTesting';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { CalendarEventModel, CalendarEventModelITI, PostAttendanceTimeTable, RosterDisplayTimeTableDataModel } from '../../Models/StaffMasterDataModel';
+import { CalendarEventModel, CalendarEventModelBter, CalendarEventModelITI, PostAttendanceTimeTable, RosterDisplayTimeTableDataModel } from '../../Models/StaffMasterDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -199,6 +199,11 @@ export class AttendanceServiceService {
 
   public async getAssignCalendarEventModelITI(model: CalendarEventModelITI) {
     return await this.http.post(this.APIUrl + '/getAssignCalendarEventModelITI', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+  public async getAssignCalendarEventModelBter(model: CalendarEventModelBter) {
+    return await this.http.post(this.APIUrl + '/getAssignCalendarEventModelBter', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }

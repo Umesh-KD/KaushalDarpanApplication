@@ -33,10 +33,12 @@ export class BterStudentAttendenceReportComponent {
   /* dynamicColumns: string[] = [];*/
 
   filterData: any[] = [];
+
   dynamicColumns: { name: string, locked: boolean }[] = [];
 
   UserID: number = 0
   RoleID:number=0
+
   StaffID:number=0
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;

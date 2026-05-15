@@ -362,6 +362,34 @@ export class CalendarEventModelITI {
   public CurrentYear?: number = 0;
   public InstituteID?: number = 0;
 }
+
+
+
+export class CalendarEventModelBter {
+  public EventId: number = 0;
+  public EventDate: Date = new Date();
+  public EventType: string = "";
+  public SSOID: string = "";
+  public SubjectID: number = 0;
+  public Remark: string = "";
+  public Color: string = "";
+  public WeekDayName: string = "";
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public AcademicYearID: number = 0;
+  public CourseTypeID: number = 0;
+  public IsActive: boolean = true;
+  public IsDelete: boolean = false;
+  public IsFinalSubmit: boolean = false;
+  public Day: number = 0;
+  public CurrentMonth?: number = 0;
+  public CurrentYear?: number = 0;
+  public InstituteID?: number = 0;
+  public SectionID?: number = 0;
+  public TimeID?: number = 0;
+  public StaffID?: number = 0;
+}
+
 export class RosterDisplayTimeTableDataModel {
   public Action?: string = "";
   public DepartmentID: number = 0;
