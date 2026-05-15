@@ -81,6 +81,8 @@ export class TabulationReportComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     //load
+    //debugger
+    this.request.InstituteId = this.sSOLoginDataModel.InstituteID;
     await this.GetMasterData();
   }
 
@@ -155,7 +157,6 @@ export class TabulationReportComponent {
     URL.revokeObjectURL(blobUrl);
   }
 
-
   async btn_SearchClick() {
     try {
       if ((this.request.InstituteId ?? 0) <= 0) {
@@ -207,6 +208,12 @@ export class TabulationReportComponent {
         console.log(Ex);
       }
     }
+  }
+
+  get isInstituteDisabled(): boolean {
+    return [this._EnumRole.Principal, this._EnumRole.PrincipalNon].includes(
+      this.sSOLoginDataModel.RoleID
+    );
   }
 }
 
