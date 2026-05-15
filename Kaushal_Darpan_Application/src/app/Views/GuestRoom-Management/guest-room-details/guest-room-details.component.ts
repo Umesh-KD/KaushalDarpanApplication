@@ -65,6 +65,8 @@ export class GuestRoomDetailsComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  public todayDate: string = this.formatDate(new Date());
+
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -117,6 +119,13 @@ export class GuestRoomDetailsComponent {
     await this.GetGuestHouseNameList();
   }
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
+
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
 
   async saveData() {
     debugger
@@ -176,14 +185,13 @@ export class GuestRoomDetailsComponent {
       } else {
         this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       }
-
       await this.guestRoomManagmentService.SaveGuestRoomDetails(this.request)
         .then((data: any) => {
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
             this.ResetControl();
           } else if (data.State === EnumStatus.Warning) {
-            this.toastr.warning(data.Message);
+            this.toastr.warning(data.ErrorMessage);
           } else {
             this.toastr.error(data.ErrorMessage);
           }
@@ -603,7 +611,17 @@ export class GuestRoomDetailsComponent {
       this.toastr.error("Please select at least one Room!");
       return;
     }
+    this.reservationRequest.FromDate = this.todayDate;
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+  }
+
+  async onFromDateChange() {
+    if(this.reservationRequest.FromDate && this.reservationRequest.ToDate){
+      if(this.reservationRequest.FromDate > this.reservationRequest.ToDate){
+        this.reservationRequest.ToDate = '';
+        this.toastr.warning("From Date cannot be greater than To Date!");
+      }
+    }
   }
 
   async SaveRoomReservation() {
@@ -621,10 +639,16 @@ export class GuestRoomDetailsComponent {
       await this.guestRoomManagmentService.SaveRoomReservation(this.reservationRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data['Data']) {
-            this.toastr.success(data['Data']);
+          if(data.State === EnumStatus.Success){
+            this.toastr.success(data.Message);
+            this.unSelectInTableAllCheckbox();
+            this.CloseModalPopup();
+          } else if(data.State === EnumStatus.Warning){
+            this.toastr.warning(data.Message);
+          } else {
+            this.toastr.error(data.ErrorMessage);
           }
-          this.CloseModalPopup();
+          
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -731,6 +755,13 @@ export class GuestRoomDetailsComponent {
     });
     //select all(toggle)
     this.AllInTableSelect = this.RoomDetailsList.every((r: any) => r.Selected);
+  }
+
+  unSelectInTableAllCheckbox() {
+    this.RoomDetailsList.forEach((x: any) => {
+      x.Selected = false;
+    });
+    this.AllInTableSelect = false;
   }
   // end table feature
 
