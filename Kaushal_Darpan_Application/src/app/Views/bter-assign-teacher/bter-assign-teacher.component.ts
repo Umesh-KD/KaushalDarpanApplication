@@ -1495,6 +1495,7 @@ async  ngOnInit() {
     this.getstaffmaster();
     this.getMasterData();
     this.getbranchmaster();
+    this.TableForm.reset()
   }
 
   // Global Variables
@@ -1931,5 +1932,9 @@ async  ngOnInit() {
       console.log(Ex);
       this.toastr.error('Error while deleting');
     }
+  }
+
+  async ResetButton() {
+
   }
 }
