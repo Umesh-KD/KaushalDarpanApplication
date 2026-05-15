@@ -14,16 +14,15 @@
           <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
           <!--<a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
         </div>
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
             <select class="form-select" id="ddlBranch"
-                    (change)="Onyearchange()" [(ngModel)]="SSOID">
-              <option value="">--All--</option>
-              <option *ngFor="let item of StaffList" [value]="item.SSOID">{{item.NameWithSSOID}}</option>
+                    (change)="getSubjectMasterDDL()" [(ngModel)]="StaffID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of StaffList" [value]="item.StaffID">{{item.SSOID}}</option>
             </select>
           </div>
 
@@ -31,16 +30,40 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject:</label>
             <select class="form-select" id="ddlBranch"
-                    [(ngModel)]="SubjectID">
+                    [(ngModel)]="SubjectID" (change)="ChangeSubjectDDL()">
               <option value="0">--All--</option>
               <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{item.Name}}</option>
             </select>
           </div>
 
-          <div class="flex justify-center">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name<span class="StarMarking">*</span></label>
+            <select class="form-select" id="ddlBranch"
+                    [(ngModel)]="SectionID">
+              <option [value]="0">--Select--</option>
+              @for (item of GetSectionData; track item.ID) {
+              <option [value]="item.ID">{{item.Name}}</option>
+              }
+            </select>
+
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Attandance Time<span class="StarMarking">*</span></label>
+            <select  class="form-select"  [(ngModel)]="AttandanceTimeID" >
+              <option [value]="0">--Select--</option>
+              @for (item of StudentAttandanceTimeDDL; track item.ID) {
+              <option [value]="item.ID">{{item.Name}}</option>
+              }
+            </select>
+          
+          </div>
+
+          <div class="flex mb-4">
             <button type="button" class="btn bg-info text-white mt-6" (click)="getCalendarEventModel()">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
           </div>
+
+
 
 
           <!-- <div>

@@ -81,7 +81,7 @@
             <td>{{item.StatusName}}</td>
             <td>
               <input type="button" class="btn btn-sm bg-info text-white" value="View"
-                     *ngIf="item.Status14p == 1 && item.Status == 0"
+                     *ngIf="item.Status == 0"
                      (click)="GenerateAndViewPdf(item.ExaminerID)"
                      title="click here to preview file" />
             </td>
@@ -96,7 +96,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr. No.</th>
-            <th class="text-left">Group Code</th>
+            <th class="text-left">Reval Group Code</th>
             <th class="text-left">Saved Copy</th>
             <th class="text-left">Status</th>
             <th class="text-left">Action</th>
