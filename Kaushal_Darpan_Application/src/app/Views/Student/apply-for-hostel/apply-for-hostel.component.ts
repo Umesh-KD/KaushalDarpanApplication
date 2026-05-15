@@ -1213,15 +1213,21 @@ export class ApplyForHostelComponent {
 
   async GetStudent_By_HostelMeritlist() {
     try {
+
+      // CLEAR OLD DATA
+      this.StudentDetailsMeritList = [];
+
       this.StudentChekMerit.StudentId = this.sSOLoginDataModel?.StudentID ?? 0;
       this.StudentChekMerit.HostelID = this.StudentDetailsList?.[0]?.HostelID ?? 0;
       this.StudentChekMerit.BrachId = 0;
       this.StudentChekMerit.InstituteID = 0;
       this.StudentChekMerit.EndTermID = this.sSOLoginDataModel?.EndTermID ?? 0;
+
       await this.studentRequestService.GetStudent_By_HostelMeritlist(this.StudentChekMerit)
         .then((data: any) => {
+
           data = JSON.parse(JSON.stringify(data));
-         
+
           if (data['Data']?.length > 0) {
 
             const item = data['Data'][0];

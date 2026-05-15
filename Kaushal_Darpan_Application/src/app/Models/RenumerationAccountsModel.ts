@@ -12,7 +12,7 @@ export class RenumerationAccountsModel extends ResponseBaseModel {
   public Selected: boolean = false;
   public RenumerationExaminerID: number = 0;
   public GroupCodeID: number = 0;
-  public GroupCode: number = 0;
+  public GroupCode: string = '0';
   public ExaminerCode: string = '';
   public ExaminerID: number = 0;
   public SSOID: string = '';
