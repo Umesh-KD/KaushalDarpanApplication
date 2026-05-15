@@ -171,6 +171,8 @@ export class GuestApplyForGuestRoomSearchModel {
   public RoleID: number = 0;
   public Status: number = 0;
   public IsForSelf?: boolean = false;
+  public FromDate?: string = '';
+  public ToDate?: string = '';
 }
 
 export class GuestStaffProfileSearchModel {
