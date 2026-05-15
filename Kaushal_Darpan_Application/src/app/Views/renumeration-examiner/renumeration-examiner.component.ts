@@ -70,7 +70,7 @@ export class RenumerationExaminerComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    this.GetTrackStatusData();
+    await this.GetTrackStatusData();
   }
 
   private getDismissReason(reason: any): string {
