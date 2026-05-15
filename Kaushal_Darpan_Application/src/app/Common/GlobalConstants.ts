@@ -953,3 +953,10 @@ export enum EnumTransferRelievingStatus {
   Rejected = 3
   
 }
+
+export enum EnumGuestHouseAllotmentStatus {
+  Allotted = 1,
+  Deallocated = 2,
+  Reserved = 3,
+  Unreserved = 4,
+}
