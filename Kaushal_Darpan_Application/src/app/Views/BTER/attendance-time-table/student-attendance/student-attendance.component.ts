@@ -37,7 +37,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   filterData: any[] = [];
   AttendanceMarkingDataList: any[] = [];
-  dynamicColumns: { name: string, locked: boolean, isMarkOnAttendanceDate?: boolean }[] = [];
+  dynamicColumns: { name: string, locked: boolean, isMarkOnAttendanceDate?: boolean, isHoliday?: boolean }[] = [];
 
   markedAttendanceDates: {
     date: string;
@@ -102,11 +102,11 @@ export class StudentAttendanceComponent implements OnInit {
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
       AttandanceTimeID: ['', Validators.required],
-      StreamID: ['', Validators.required],
-      // StreamID: [{ value: '', disabled: true }, Validators.required],
+      //StreamID: ['', Validators.required],
+       StreamID: [{ value: '', disabled: true }, Validators.required],
       SectionID: ['', Validators.required],
-      SemesterID: ['', Validators.required],
-      // SemesterID: [{ value: '', disabled: true }, Validators.required],
+     // SemesterID: ['', Validators.required],
+       SemesterID: [{ value: '', disabled: true }, Validators.required],
       AttendanceStartDate: [this.selectedRange?.start],
       AttendanceEndDate: [this.selectedRange?.end]
     });
@@ -282,7 +282,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   async GetStaffLeaveAllData() {
     try {
-      //debugger
+      debugger
       const rawStart = this.TableForm.value.AttendanceStartDate;
       const rawEnd = this.TableForm.value.AttendanceEndDate;
 
@@ -455,13 +455,13 @@ export class StudentAttendanceComponent implements OnInit {
           : this.formatDate(rawEnd);
 
       let obj = {
-        SemesterID: this.TableForm.value.SemesterID,
+        SemesterID: this.semesterId,
         EndTermID: this.sSOLoginDataModel.EndTermID,
         InstituteID: this.sSOLoginDataModel.InstituteID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.TableForm.value.StreamID,
-        SectionID: this.TableForm.value.SectionID,
+        StreamID: this.streamId,
+        SectionID: this.sectionId,
         SubjectID: this.subjectId,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
@@ -480,7 +480,7 @@ export class StudentAttendanceComponent implements OnInit {
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
-          //debugger
+          debugger
           // Generate dynamic columns
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => ![
@@ -491,7 +491,8 @@ export class StudentAttendanceComponent implements OnInit {
             .map(key => {
               const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
               const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
-              return { name: key, locked: isLeaveDate };
+              const isHoliday = key.includes('(Holiday)');
+              return { name: key, locked: isLeaveDate, isMarkOnAttendanceDate: false, isHoliday: isHoliday };
             });
 
           // Apply attendance logic
@@ -544,7 +545,7 @@ export class StudentAttendanceComponent implements OnInit {
         EndTermID: this.sSOLoginDataModel.EndTermID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.streamId,
+        StreamID: this.streamId,  
         SectionID: this.TableForm.value.SectionID,
         SubjectID: this.subjectId,
         TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
@@ -596,7 +597,7 @@ export class StudentAttendanceComponent implements OnInit {
   //}
 
   //// ✅ Example helper (if not already defined)
-  //isColumnLocked(columnName: string): boolean {
+  //isColumnLocked(columnName: string): boolean { 
   //  const col = this.dynamicColumns.find(c => c.name === columnName);
   //  return col ? col.locked : false;
   //}
@@ -605,6 +606,7 @@ export class StudentAttendanceComponent implements OnInit {
     const col = this.dynamicColumns.find(c => c.name === columnName);
     return (
       !col?.isMarkOnAttendanceDate ||
+      col.isHoliday ||   
       col?.locked ||
       element[columnName] === 'TL'
     );
@@ -768,7 +770,7 @@ export class StudentAttendanceComponent implements OnInit {
     // if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
     //   this.GetAttendanceTimeTable();
     // }
-    if (this.TableForm.value.StreamID != null && this.subjectId != null) {
+    if (this.streamId != null && this.subjectId != null) {
       await this.GetAttendanceTimeTable();
       await this.GetAttendanceMarkingStatus();
     }
@@ -869,7 +871,7 @@ export class StudentAttendanceComponent implements OnInit {
 
 
   async saveAttendance() {
-    this.swat.Confirmation("Are you sure you want to save the attendance?", (result: any) => {
+    this.swat.Confirmation("Are you sure you want to save the attendance?", async (result: any) => {
       if (!result.isConfirmed) return;
       debugger
       if (this.markedAttendanceDates.length < 0) {
@@ -901,8 +903,8 @@ export class StudentAttendanceComponent implements OnInit {
 
       const attendanceData = {
         EndTermID: this.sSOLoginDataModel.EndTermID,
-        SemesterID: this.TableForm.value.SemesterID,
-        StreamID: this.TableForm.value.StreamID,
+        SemesterID: this.semesterId,
+        StreamID: this.streamId,
         SectionID: this.sectionId,
         // SubjectID: this.TableForm.value.SubjectID,
         SubjectID: this.subjectId,
@@ -953,7 +955,7 @@ export class StudentAttendanceComponent implements OnInit {
       basePostAttendanceTimeTableModal.postAttendanceTimeTables = saveAttendanceData;
       basePostAttendanceTimeTableModal.markedAttendanceDatesDetails = markedAttendanceDatesObj;
       //debugger
-       this.attendanceServiceService.saveAttendanceData(basePostAttendanceTimeTableModal)
+       await this.attendanceServiceService.saveAttendanceData(basePostAttendanceTimeTableModal)
         .then( async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           //if (data.Data >0) {
@@ -980,9 +982,13 @@ export class StudentAttendanceComponent implements OnInit {
   async ChangeSubjectDDL() {
 
     // debugger
-    const GetSemesterID = this.TableForm.get('SemesterID')?.value;
-    const GetstreamId = this.TableForm.get('StreamID')?.value;
-    const GetSubjectID = this.TableForm.get('SubjectID')?.value;
+    //const GetSemesterID = this.TableForm.get('SemesterID')?.value;
+    //const GetstreamId = this.TableForm.get('StreamID')?.value;
+    //const GetSubjectID = this.TableForm.get('SubjectID')?.value;
+
+    const GetSemesterID = this.semesterId;
+    const GetstreamId = this.streamId;
+    const GetSubjectID = this.subjectId;
 
     //debugger
     let obj = {
@@ -1170,6 +1176,10 @@ export class StudentAttendanceComponent implements OnInit {
     this.AttendanceMarkingDataList = [];
     this.dynamicColumns=[] ;
     this.markedAttendanceDates = [];
+    this.dataSource.data = [];
+    this.filterData = [];
+    this.displayedColumns = [];
+    this.dataSource = new MatTableDataSource<any>([]);
   }
 
 }

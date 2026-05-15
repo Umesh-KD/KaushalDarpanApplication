@@ -4,7 +4,7 @@
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
 
       <div class=" ">
-        <label>Search By Status</label>
+        <label>Search By Status </label>
         <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (change)="StaffTrainingDetailsNewTraining_Search(SearchStatus)">
           <option value="0">--select--</option>
           <option *ngFor="let item of StaffTrainingStatusSearchList" [value]="item.ID">
@@ -32,7 +32,7 @@
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
 
       <div class=" ">
-        <label>Request Status</label>
+        <label>Request Status :<span class="StarMarking">*</span></label>
         <select class="form-select" id="ExamId" [(ngModel)]="Status" name="ddlStatus" >
           <option value="0">--select--</option>
           <option *ngFor="let item of StaffTrainingStatusList" [value]="item.ID">
@@ -41,7 +41,7 @@
         </select>
       </div>
       <div class=" ">
-        <label>Remark</label>
+        <label>Remark :<span class="StarMarking">*</span></label>
         <input class="form-input" type="text" id="Remark" [(ngModel)]="Remark">
       </div>
       <div>
@@ -74,7 +74,7 @@
             <th align="left">Venue</th>
             <th align="left">Mode Of Training</th>
             <th class="text-left">View Document</th>
-            <th class="text-left">View Complition Training Document</th>
+            <th class="text-left">View Completion Training Document</th>
             <th class="text-left">Status</th>
             <th class="text-left">Remark</th>
             <th align="center" width="200">Action</th>
@@ -116,6 +116,8 @@
                 </a>
               </div>
               <ng-template #noDoc2>-----</ng-template>
+
+              
             </td>
             <td>
               {{row.statusName}}
@@ -124,7 +126,10 @@
               {{row.Remark}}
             </td>
             <td>
-              <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
+                <a (click)="OpenStaffProfileViewModal(row.StaffID,row.StaffUserID)" title="View Profile"><i class="ti ti-eye"></i></a>
+                </div>
             </td>
           </tr>
         </tbody>
@@ -182,3 +187,5 @@
   </div>
 
 </ng-template>
+
+<app-view-staff-profile-modal #Modal_StaffDetailsViewModal></app-view-staff-profile-modal>

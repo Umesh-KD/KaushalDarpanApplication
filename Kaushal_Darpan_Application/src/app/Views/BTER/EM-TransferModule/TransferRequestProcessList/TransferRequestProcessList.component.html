@@ -156,11 +156,15 @@
                    ">
               <input type="checkbox"
                      *ngIf="(sSOLoginDataModel.RoleID != _EnumRole.DTE && row.FinalApproveStatus == 0)
-            || (sSOLoginDataModel.RoleID == _EnumRole.DTE && row.FinalApproveStatus == 5)"
+            || (sSOLoginDataModel.RoleID == _EnumRole.DTE && row.FinalApproveStatus == 5 )
+                     || (sSOLoginDataModel.RoleID == _EnumRole.DTE  && Status == EnumTransferSystemStatus.Rejected)
+                     "
                      name="MarkCheck"
                      [(ngModel)]="row.Selected" />
-              <label *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.DTE && row.FinalApproveStatus == 0)"
-                     title="Approve any one row first, then it will move to next role">
+
+
+              <label *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.DTE && row.FinalApproveStatus == 0 && Status != EnumTransferSystemStatus.Rejected)"
+                     title="Approve any one row location, then it will move to next role">
                 Staff Location
               </label>
             </td>

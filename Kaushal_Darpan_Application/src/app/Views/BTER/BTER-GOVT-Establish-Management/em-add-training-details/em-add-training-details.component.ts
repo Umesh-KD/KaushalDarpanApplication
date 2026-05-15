@@ -39,6 +39,9 @@ export class EMAddTrainingDetailsComponent {
   modalReference: NgbModalRef | undefined;
   public StaffTrainingHTS_GetDataList: any = [];
   isTrainingCom: boolean = false;
+  todayDate: any = new Date().toISOString().split('T')[0];
+
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -285,21 +288,48 @@ export class EMAddTrainingDetailsComponent {
   }
 
   onTrainingTypeChange(event: any) {
-    debugger
-   
+
     this.request.TrainingTypeID = event;
 
+    // Completion document validation
     if (this.request.TrainingTypeID == 1) {
-      this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].setValidators([Validators.required]);
-      } 
-    else {
-      this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].clearValidators();
+
+      this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc']
+        .setValidators([Validators.required]);
+
     }
-    this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].updateValueAndValidity();
+    else {
+
+      this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc']
+        .clearValidators();
+
+    }
+
+    this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc']
+      .updateValueAndValidity();
+
+    // Reset dates
+    this.request.StartDate = '';
+    this.request.EndDate = '';
+
+  }
+
+  //onTrainingTypeChange(event: any) {
+  //  debugger
+   
+  //  this.request.TrainingTypeID = event;
+
+  //  if (this.request.TrainingTypeID == 1) {
+  //    this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].setValidators([Validators.required]);
+  //    } 
+  //  else {
+  //    this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].clearValidators();
+  //  }
+  //  this.AddTrainingDetailsFromGroup.controls['ComplitionTrainingDoc'].updateValueAndValidity();
 
     
 
-  }
+  //}
     onDateChange() {
     const start = this.AddTrainingDetailsFromGroup.get('StartDate')?.value;
     const end = this.AddTrainingDetailsFromGroup.get('EndDate')?.value;
@@ -404,4 +434,182 @@ export class EMAddTrainingDetailsComponent {
     })
 
   }
+  validateTrainingDates() {
+
+    const startDate = this.request.StartDate;
+    const duration = Number(this.request.Duration);
+    const durationUnit = Number(this.request.DurationUnit);
+    const trainingType = Number(this.request.TrainingTypeID);
+
+    if (!startDate || !duration || !durationUnit) {
+      return;
+    }
+
+    // =========================
+    // Parse Start Date Properly
+    // =========================
+
+    const start = new Date(startDate);
+
+    start.setHours(0, 0, 0, 0);
+
+   
+
+    let totalDays = 0;
+
+    // Days
+    if (durationUnit === 1) {
+      totalDays = duration;
+    }
+
+    // Weeks
+    if (durationUnit === 2) {
+      totalDays = duration * 7;
+    }
+
+   
+
+    const end = new Date(start);
+
+    end.setDate(end.getDate() + totalDays - 1);
+
+
+    const yyyy = end.getFullYear();
+    const mm = String(end.getMonth() + 1).padStart(2, '0');
+    const dd = String(end.getDate()).padStart(2, '0');
+
+    const endDate = `${yyyy}-${mm}-${dd}`;
+
+    this.request.EndDate = endDate;
+
+    this.AddTrainingDetailsFromGroup.controls['EndDate']
+      .setValue(endDate);
+
+
+    this.AddTrainingDetailsFromGroup.controls['StartDate']
+      .setErrors(null);
+
+    this.AddTrainingDetailsFromGroup.controls['EndDate']
+      .setErrors(null);
+
+
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+
+    if (trainingType == 1) {
+
+      if (start > today) {
+
+        this.AddTrainingDetailsFromGroup.controls['StartDate']
+          .setErrors({
+            futureDateNotAllowed: true
+          });
+
+      }
+
+    }
+
+    if (trainingType == 2) {
+
+      if (start < today) {
+
+        this.AddTrainingDetailsFromGroup.controls['StartDate']
+          .setErrors({
+            backDateNotAllowed: true
+          });
+
+      }
+
+    }
+
+  }
+  //validateTrainingDates() {
+
+  //  const startDate = this.request.StartDate;
+  //  const duration = Number(this.request.Duration);
+  //  const durationUnit = Number(this.request.DurationUnit);
+  //  const trainingType = Number(this.request.TrainingTypeID);
+
+  //  if (!startDate || !duration || !durationUnit) {
+  //    return;
+  //  }
+
+  //  const start = new Date(startDate);
+
+  //  let totalDays = 0;
+
+  //  // Days
+  //  if (durationUnit == 1) {
+  //    totalDays = duration;
+  //  }
+
+  //  // Weeks
+  //  if (durationUnit == 2) {
+  //    totalDays = duration * 7;
+  //  }
+
+  //  // Calculate End Date
+  //  const end = new Date(start);
+
+  //  end.setDate(end.getDate() + totalDays);
+
+  //  const endDate = end.toISOString().split('T')[0];
+
+  //  this.request.EndDate = endDate;
+
+  //  this.AddTrainingDetailsFromGroup.controls['EndDate']
+  //    .setValue(endDate);
+
+  //  // Clear old errors
+  //  this.AddTrainingDetailsFromGroup.controls['StartDate']
+  //    .setErrors(null);
+
+  //  this.AddTrainingDetailsFromGroup.controls['EndDate']
+  //    .setErrors(null);
+
+  //  const today = new Date();
+
+  //  today.setHours(0, 0, 0, 0);
+
+  //  // =========================
+  //  // Completed Training
+  //  // =========================
+
+  //  if (trainingType == 1) {
+
+  //    // Future end date not allowed
+
+  //    if (end > today) {
+
+  //      this.AddTrainingDetailsFromGroup.controls['EndDate']
+  //        .setErrors({
+  //          futureDateNotAllowed: true
+  //        });
+
+  //    }
+
+  //  }
+
+  //  // =========================
+  //  // Add New Training
+  //  // =========================
+
+  //  if (trainingType == 2) {
+
+  //    // Back date not allowed
+
+  //    if (start < today) {
+
+  //      this.AddTrainingDetailsFromGroup.controls['StartDate']
+  //        .setErrors({
+  //          backDateNotAllowed: true
+  //        });
+
+  //    }
+
+  //  }
+
+  //}
 }

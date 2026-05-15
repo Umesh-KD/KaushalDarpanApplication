@@ -142,22 +142,23 @@
             <th class="text-left">Semester</th>
             <th class="text-left">Year</th>
             <th class="text-left">Percentage</th>
+            <th class="text-left">Action</th>
             <!-- <th class="text-center" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">Action</th> -->
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of StudentReqListList | tableSearchFilter:Table_SearchText; let idx = index">
-            <td align="left" 
-              *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon)
+            <td align="left"
+                *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon)
                        && Searchrequest.status != 0">
               <input type="checkbox" [(ngModel)]="item.selected" (change)="checkIfAllSelected()" />
             </td>
-            <td align="left" 
-              *ngIf="Searchrequest.status == 1 || Searchrequest.status == 0">
+            <td align="left"
+                *ngIf="Searchrequest.status == 1 || Searchrequest.status == 0">
               {{idx + 1}}
             </td>
-            <td align="left" 
-              *ngIf="Searchrequest.status == 9">
+            <td align="left"
+                *ngIf="Searchrequest.status == 9">
               {{item.MeritNo}}
             </td>
             <td align="left">{{item.InstituteName}}</td>
@@ -169,11 +170,23 @@
             <td align="left">{{item.EndTermName}}</td>
             <td align="left">{{item.TotalAvgPercentage}}</td>
             <!-- <td *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> -->
-                <!--<a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>-->
-                <!-- <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> -->
+            <!--<a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>-->
+            <!-- <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
+    </div>
+  </td> -->
+            <td>
+
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="item.SupportingDocument" [href]="appsettingConfig.StaticFileRootPathURL + item.SupportingDocument" target="_blank" class="text-success me-2" title="Supporting Document">
+                  <i class="ti ti-download"></i>
+                </a>
+
+                <a *ngIf="item.AffidavitDocument" [href]="appsettingConfig.StaticFileRootPathURL + item.AffidavitDocument" target="_blank" class="text-success" title="Affidavit Document">
+                  <i class="ti ti-download"></i>
+                </a>
               </div>
-            </td> -->
+            </td>
           </tr>
         </tbody>
       </table>

@@ -126,13 +126,13 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       ddlTrade: [''],
       ddlTechnician: [''],
       ddlITICollegeTrade: ['', [DropdownValidators]],
-      txtSSOID: ['', [Validators.required]],
+      txtSSOID: [{ value: '', disabled: true }, [Validators.required]],
       txtName: [{ value: '', disabled: true }],
       txtMobileNo: [{ value: '', disabled: true }],
       txtEmailID: [{ value: '', disabled: true }],
       ddlHostel: [''],
-      ddlPost: ['', [DropdownValidators]],
-      StaffPostTypeID: [0, [DropdownValidators]],
+      ddlPost: [{ value: '', disabled: true }, [DropdownValidators]],
+      StaffPostTypeID: [{ value: 0, disabled: true }, [DropdownValidators]],
     })
 
     this.QueryReqFormGroup = this.formBuilder.group({
@@ -664,7 +664,8 @@ export class ITIGovtAddEstablishComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "sss");
           this.StaffLevelList = data['Data'];
-          this.StaffLevelList = this.StaffLevelList.filter((item: any) => item.ID == this._ITIGovtEM_EnumStaffLevel.Placement || item.ID == this._ITIGovtEM_EnumStaffLevel.Staff || item.ID == this._ITIGovtEM_EnumStaffLevel.StoreKeeper);
+          this.StaffLevelList = this.StaffLevelList.filter((item: any) => item.ID == this._ITIGovtEM_EnumStaffLevel.Placement ||
+            item.ID == this._ITIGovtEM_EnumStaffLevel.Staff || item.ID == this._ITIGovtEM_EnumStaffLevel.StoreKeeper || item.ID == this._ITIGovtEM_EnumStaffLevel.Admision);
           console.log(this.StaffLevelList, "StaffLevelList")
         }, (error: any) => console.error(error)
         );

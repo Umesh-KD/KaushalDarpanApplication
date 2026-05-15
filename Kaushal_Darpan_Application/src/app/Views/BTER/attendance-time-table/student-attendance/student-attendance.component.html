@@ -150,12 +150,12 @@
           <!-- Dynamic Columns -->
           <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
             <th mat-header-cell *matHeaderCellDef style="width:130px !important">
-              <mat-checkbox [disabled]="!column.isMarkOnAttendanceDate || column.locked"
+              <mat-checkbox [disabled]="!column.isMarkOnAttendanceDate || column.locked || column.isHoliday"
                             (change)="toggleAllAttendanceForColumn(column.name, $event.checked)">
                 {{ column.name }}
               </mat-checkbox>
               <mat-checkbox [checked]="column.isMarkOnAttendanceDate"
-                            [disabled]="column.locked"
+                            [disabled]="column.locked || column.isHoliday"
                             (change)="toggleAllAttendanceForMarkingColumn(column.name, $event.checked)">
                 Mark
               </mat-checkbox>
@@ -169,7 +169,7 @@
               <!--(click)="unlockColumn(column.name)"-->
               <button *ngIf="!column.locked"
                       mat-mini-button color="warn"
-                      [disabled]="!column.isMarkOnAttendanceDate"
+                      [disabled]="!column.isMarkOnAttendanceDate || column.isHoliday"
                       (click)="lockColumn(column.name)">
                 Lock
               </button>

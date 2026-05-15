@@ -1349,7 +1349,7 @@ export class BranchSectionCreateComponent {
 
   async DeleteData(item:any) {
     try {
-     
+     debugger
       //get all data
       let obj ={
         StreamID: item.StreamID,
@@ -1362,20 +1362,18 @@ export class BranchSectionCreateComponent {
       await this.staffMasterService.GetBranchSectionData(obj).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         //debugger
-        if (data.length > 0) {
+        //if (data.length > 0) {
           // this.toastr.success(data.Message)
           // await this.getData();
           // await this.loadDropdownData();
           // await this.GetBranchHODApplyList();
-
-
 
           await this.loadDropdownData();
           await this.GetBranchHODApplyList();
           await this.getData();
 
 
-        }
+        //}
       })
     } catch (error) {
       console.error(error)
