@@ -1735,7 +1735,7 @@ const routes: Routes = [
 
       { path: 'StaffIFMSData', loadChildren: () => import('../Views/ITI/staff-ifmsdata/staff-ifmsdata.module').then(m => m.StaffIFMSDataModule) },
       { path: 'BterAttendenceRoom', loadChildren: () => import('./Views/bter-attendence-room/bter-attendence-room.module').then(m => m.BterAttendenceRoomModule) },
-      { path: 'BterRoomUtilization', loadChildren: () => import('./Views/bter-room-utilization/bter-room-utilization.module').then(m => m.BterRoomUtilizationModule) },
+      { path: 'BterRoomUtilization', loadChildren: () => import('./Views/ bter-room-utilization/bter-room-utilization.module').then(m => m.BterRoomUtilizationModule) },
 
       { path: 'BterAssignTeacher', loadChildren: () => import('./Views/bter-assign-teacher/bter-assign-teacher.module').then(m => m.BterAssignTeacherModule) },
     ]
