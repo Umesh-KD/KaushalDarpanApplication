@@ -183,6 +183,14 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
+  public async UpdateCalendarEventModelBter(model: any[]) {
+    debugger
+    return await this.http.post(this.APIUrl + '/UpdateCalendarEventModelBter', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+
 
   public async getCalendarEventModel(model: CalendarEventModel) {
     return await this.http.post(this.APIUrl + '/getCalendarEventModel', model, this.headersOptions).pipe(
