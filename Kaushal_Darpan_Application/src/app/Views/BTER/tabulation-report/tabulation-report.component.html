@@ -19,13 +19,12 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteId">
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteId" [disabled]="isInstituteDisabled">
             <option value="0">--Select--</option>
             <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
               {{item.InstituteName}}
             </option>
           </select>
-
         </div>
 
         <div>

@@ -1,0 +1,189 @@
+table {
+  border-collapse: collapse;
+  width: 80%;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  user-select: none;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 10px;
+  vertical-align: top;
+  height: 60px;
+  width: 45px;
+  position: relative;
+  cursor: default;
+  transition: background-color 0.3s ease;
+}
+
+th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+  color: #333;
+}
+
+td.empty {
+  background-color: #f0f0f0;
+  cursor: default;
+}
+
+
+
+td.exam {
+  background-color: lightblue;
+  font-weight: 600;
+}
+
+td:hover:not(.empty) {
+  background-color: #ffecb3;
+}
+
+td.finalSubmit {
+  background-color: #2e7d32 !important;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px 7px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%; /* Position above */
+  left: 50%;
+  margin-left: -60px;
+  width: 120px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+td:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+td:hover:not(.empty):not(.holiday):not(.exam) {
+  background-color: #ffecb3; /* light yellow */
+  cursor: pointer;
+}
+
+td.selected {
+  background-color: #ffd54f; /* darker yellow for selected day */
+  font-weight: bold;
+}
+
+
+
+.calendar-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  font-family: Arial, sans-serif;
+}
+
+  .calendar-toolbar .month-year {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .calendar-toolbar input {
+    width: 70px;
+    text-align: center;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .calendar-toolbar button {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+
+  .calendar-toolbar .nav-btn {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+    .calendar-toolbar .nav-btn:hover {
+      background-color: #e0e0e0;
+    }
+
+  .calendar-toolbar .save-btn {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+
+    .calendar-toolbar .save-btn:hover {
+      background-color: #0056b3;
+    }
+
+td.holiday {
+  background-color: #e57373 !important;
+  color: #ffffff !important; /* 👈 make text white */
+  font-weight: 600;
+}
+
+td.finalSubmit {
+  background-color: green !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+td.exam {
+  background-color: #ffd54f !important;
+  color: #000 !important;
+  font-weight: 600;
+}
+
+td.empty {
+  background-color: #f1f1f1;
+  color: transparent;
+}
+
+.date-number {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 14px;
+}
+td.freeze {
+  background-color: #d6d6d6 !important;
+  color: #777 !important;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+
+td.freeze {
+  background-color: #d6d6d6 !important;
+  color: #666 !important;
+  pointer-events: none;
+}
+
+td.locked {
+  background-color: #2e7d32 !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+td.holiday {
+  background-color: #e53935 !important;
+  color: #fff !important;
+  font-weight: bold;
+}
