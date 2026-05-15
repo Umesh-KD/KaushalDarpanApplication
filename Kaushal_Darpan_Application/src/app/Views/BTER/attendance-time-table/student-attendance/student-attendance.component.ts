@@ -100,7 +100,8 @@ export class StudentAttendanceComponent implements OnInit {
 
   async ngOnInit() {
     this.TableForm = this.fb.group({
-      SubjectID: ['', Validators.required],
+      // SubjectID: ['', Validators.required],
+      SubjectID: [{ value: '', disabled: true }, Validators.required],
       AttandanceTimeID: ['', Validators.required],
       //StreamID: ['', Validators.required],
        StreamID: [{ value: '', disabled: true }, Validators.required],
@@ -232,9 +233,10 @@ export class StudentAttendanceComponent implements OnInit {
 
 
   async GetStudentAttandanceTimeDDL() {
-    //debugger
+    debugger
+    //const sectionID = this.TableForm.value.SectionID ? this.sectionId : this.TableForm.value.SectionID;
     // await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
-    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.subjectId).then((data: any) => {
+    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.subjectId, this.streamId, this.TableForm.value.SectionID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       // debugger
       this.StudentAttandanceTimeDDL = data.Data;

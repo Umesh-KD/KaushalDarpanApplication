@@ -306,5 +306,11 @@ export class StudentRequestService {
       ).toPromise();
   }
 
-  
+  public async GetStudent_By_HostelMeritlist(searchRequest: StudentRequestDataModal) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStudent_By_HostelMeritlist`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
