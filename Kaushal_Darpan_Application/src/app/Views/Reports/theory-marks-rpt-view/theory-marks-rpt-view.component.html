@@ -72,6 +72,14 @@
           </select>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Marking Type</label>
+          <select class="form-select" name="IsReval" [(ngModel)]="searchRequest.IsReval">
+            <option value="0">Main</option>
+            <option value="1">Reval</option>
+          </select>
+        </div>
+
         <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Center C-Code:<span class="StarMarking"></span>

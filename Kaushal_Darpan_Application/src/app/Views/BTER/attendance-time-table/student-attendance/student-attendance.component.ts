@@ -53,6 +53,7 @@ export class StudentAttendanceComponent implements OnInit {
   GetSectionData: any[] = [];
   subjectsearch = new CommonDDLSubjectMasterModel()
   StudentAttandanceTimeDDL: any[] = [];
+  DayList: any[] = [];
   public GetLeaveList: any = [];
   public searchRequest = new LeaveMasterSearchModel();
   TableForm!: FormGroup;
@@ -100,7 +101,8 @@ export class StudentAttendanceComponent implements OnInit {
 
   async ngOnInit() {
     this.TableForm = this.fb.group({
-      SubjectID: ['', Validators.required],
+      // SubjectID: ['', Validators.required],
+      SubjectID: [{ value: '', disabled: true }, Validators.required],
       AttandanceTimeID: ['', Validators.required],
       //StreamID: ['', Validators.required],
        StreamID: [{ value: '', disabled: true }, Validators.required],
@@ -108,7 +110,8 @@ export class StudentAttendanceComponent implements OnInit {
      // SemesterID: ['', Validators.required],
        SemesterID: [{ value: '', disabled: true }, Validators.required],
       AttendanceStartDate: [this.selectedRange?.start],
-      AttendanceEndDate: [this.selectedRange?.end]
+      AttendanceEndDate: [this.selectedRange?.end],
+      DayID: [2]
     });
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -118,6 +121,7 @@ export class StudentAttendanceComponent implements OnInit {
     this.semesterId = parseInt(this.route.snapshot.paramMap.get('semesterId') ?? "0");
     this.subjectId = parseInt(this.route.snapshot.paramMap.get('subjectId') ?? "0");
 
+    this.DayListBind();
     await this.getMasterData();
     const today = new Date();
     const yesterday = new Date();
@@ -231,10 +235,34 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
 
+  DayListBind() {
+
+    this.DayList = [
+
+      { DayID: 2, DayName: 'Monday' },
+      { DayID: 3, DayName: 'Tuesday' },
+      { DayID: 4, DayName: 'Wednesday' },
+      { DayID: 5, DayName: 'Thursday' },
+      { DayID: 6, DayName: 'Friday' },
+      { DayID: 7, DayName: 'Saturday' },
+      { DayID: 1, DayName: 'Sunday' },
+    ];
+    this.TableForm.get('SemesterID')?.setValue(0);
+    this.TableForm.get('StreamID')?.setValue(0);
+    this.TableForm.get('SubjectID')?.setValue(0);
+    this.TableForm.get('StaffID')?.setValue(0);
+    this.TableForm.get('StaffID')?.setValue(0);
+    this.TableForm.get('SectionID')?.setValue(0);
+
+  }
+
   async GetStudentAttandanceTimeDDL() {
-    //debugger
+    debugger
+    
+    this.TableForm.get('AttandanceTimeID')?.setValue(0);
+    //const sectionID = this.TableForm.value.SectionID ? this.sectionId : this.TableForm.value.SectionID;
     // await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
-    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.subjectId).then((data: any) => {
+    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.subjectId, this.streamId, this.TableForm.value.SectionID, this.TableForm.value.DayID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       // debugger
       this.StudentAttandanceTimeDDL = data.Data;
@@ -244,11 +272,11 @@ export class StudentAttendanceComponent implements OnInit {
         // this.TableForm.get('StreamID')?.disable();
         // this.TableForm.get('SemesterID')?.disable();
       }
-      else {
-        this.TableForm.get('SubjectID')?.enable();
+      //else {
+       // this.TableForm.get('SubjectID')?.enable();
         // this.TableForm.get('StreamID')?.enable();
         // this.TableForm.get('SemesterID')?.enable();
-      }
+     // }
     })
 
   }
@@ -256,8 +284,9 @@ export class StudentAttendanceComponent implements OnInit {
   async getSubjectMasterDDL(ID: any, SemesterID: any) {
     //debugger
 
-    this.subjectsearch.StreamID = ID
+   // this.TableForm.get('SubjectID')?.disable();
 
+    this.subjectsearch.StreamID = ID
     this.subjectsearch.SemesterID = SemesterID
     this.subjectsearch.DepartmentID = 1
     this.subjectsearch.SchemeID = 1348
@@ -438,7 +467,12 @@ export class StudentAttendanceComponent implements OnInit {
 
   async GetAttendanceTimeTable() {
     try {
-    //  debugger;
+      //  debugger;
+
+      if (this.TableForm.value.AttandanceTimeID == 0) {
+        this.toastr.warning("Select Attendance Time");
+        return;
+      }
 
       const rawStart = this.TableForm.value.AttendanceStartDate;
       const rawEnd = this.TableForm.value.AttendanceEndDate;
@@ -461,7 +495,7 @@ export class StudentAttendanceComponent implements OnInit {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.streamId,
-        SectionID: this.sectionId,
+        SectionID: this.TableForm.value.SectionID,
         SubjectID: this.subjectId,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,

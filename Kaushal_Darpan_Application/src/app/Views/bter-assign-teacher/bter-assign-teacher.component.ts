@@ -375,7 +375,7 @@ async  ngOnInit() {
     this.subjectsearch.StaffID = this.StaffID
 
 
-    this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+    this.commonMasterService.Get_SubjectMasterByCondition(this.subjectsearch).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SubjectMasterDDL = data.Data;
     })
@@ -399,7 +399,7 @@ async  ngOnInit() {
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
     this.subjectsearch.StaffID = this.StaffID
 
-    this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+    this.commonMasterService.Get_SubjectMasterByCondition(this.subjectsearch).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SubjectMasterDDL = data.Data;
     })
@@ -422,7 +422,7 @@ async  ngOnInit() {
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
     this.subjectsearch.StaffID = this.StaffID
 
-    this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+    this.commonMasterService.Get_SubjectMasterByCondition(this.subjectsearch).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SubjectMasterDDL = data.Data;
     })
@@ -1601,10 +1601,12 @@ async  ngOnInit() {
 
       let existsInAllSection = false;
 
+
+      debugger
       if (!this.IsEditMode && this.EditRowID == 0) {
 
         existsInAllSection =
-          this.AddStaffSubjectAllSectionModelList.some(
+          this.AddStaffSubjectSectionModelList.some(
             (x: any) => {
 
               const existingSectionIDs =

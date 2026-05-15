@@ -1741,6 +1741,8 @@ const routes: Routes = [
       { path: 'BterRoomUtilization', loadChildren: () => import('./Views/bter-room-utilization/bter-room-utilization.module').then(m => m.BterRoomUtilizationModule) },
 
       { path: 'BterAssignTeacher', loadChildren: () => import('./Views/bter-assign-teacher/bter-assign-teacher.module').then(m => m.BterAssignTeacherModule) },
+      { path: 'BterUnlockCalender', loadChildren: () => import('./Views/bter-unlock-calender/bter-unlock-calender.module').then(m => m.BterUnlockCalenderModule) },
+
     ]
   },
 
@@ -1860,7 +1862,7 @@ const routes: Routes = [
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
-
+ 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 
@@ -1896,6 +1898,3 @@ export class TemplatePageTitleStrategy extends TitleStrategy {
 })
 
 export class AppRoutingModule { }
-
-
-
