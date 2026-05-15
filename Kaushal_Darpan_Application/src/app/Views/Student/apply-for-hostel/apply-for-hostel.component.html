@@ -1026,7 +1026,10 @@
                 <td>Room Partner Name</td>
                 <td>{{StudentDetailsList[0]?.RoomPartnerName}}</td>
               </tr>
-
+              <tr>
+                <td>Status</td>
+                <td>Published Provisional Merit</td>
+              </tr>
             </tbody>
 
           </table>
@@ -1056,3 +1059,14 @@
   </button>
 
 </div>-->
+<div class="flex justify-between items-start mb-3" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 14">
+
+  <button type="button"
+          class="btn bg-info text-white btn-sm"
+          (click)="onViewStudentDetails(studentDetailsModal)">
+
+    <i class="ti ti-eye"></i> View Application
+
+  </button>
+
+</div>

@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumStatus, HostelStatus } from '../../../Common/GlobalConstants';
 import { RoomAllotmentDataModel } from '../../../Models/Hostel-Management/RoomAllotmentDataModel';
 import { HostelManagmentService } from '../../../Services/HostelManagment/HostelManagment.service';
 import * as XLSX from 'xlsx';
@@ -143,6 +143,7 @@ export class CorrectedMeritListComponent {
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.Searchrequest.AllotmentStatus = HostelStatus.ReGenerateProvisionalMerit;
       this.Searchrequest.ReqId = this.decryptedIdsArray.map(id => ({ ReqId: id.toString() }));
 
       this.loaderService.requestStarted();

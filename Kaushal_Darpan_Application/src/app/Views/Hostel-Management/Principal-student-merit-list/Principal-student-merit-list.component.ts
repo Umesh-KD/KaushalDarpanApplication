@@ -656,6 +656,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   }
 
   async ReGenerateProvisionalMerit_Hostel() {
+    debugger
     if(this.Searchrequest.Gender == 0 || this.Searchrequest.Gender == undefined || this.Searchrequest.Gender == null){
       this.toastr.warning("Please select gender.");
       return;

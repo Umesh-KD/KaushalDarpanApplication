@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { CheckInDataModel, GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, GuestHousePaymentDataModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { CheckInDataModel, GuestApplyForGuestRoomDataModel, GuestApplyForGuestRoomSearchModel, GuestHousePaymentDataModel, GuestStaffProfileSearchModel } from '../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { MatPaginator } from '@angular/material/paginator';
@@ -36,6 +36,7 @@ export class GuestRoomRequestComponent {
   GrievanceFormGroup!: FormGroup;
   groupForm!: FormGroup;
   CheckInFormGroup!: FormGroup;
+  public IIPMasterFormGroup!: FormGroup;
   GFID: number | null = null;
   isUpdate: boolean = false;
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -46,17 +47,23 @@ export class GuestRoomRequestComponent {
   ErrorMessage: any = [];
   isLoading: boolean = false;
   isSubmitted: boolean = false;
+  IsShowForm: boolean = false;
+  isSubmit: boolean = false;
+  SSOIDExists: boolean = false;
   isCheckedIn: boolean = false;
   request = new GuestApplyForGuestRoomDataModel()
   checkInRequest = new CheckInDataModel()
+  public requestReservedCheckIn = new GuestApplyForGuestRoomDataModel()
   approveRequest = new GuestApplyForGuestRoomDataModel()
   searchRequest = new GuestApplyForGuestRoomSearchModel();
   public messageModel = new ApplicationMessageDataModel();
+  public searchRequestGuestStaffProfileSearchModel = new GuestStaffProfileSearchModel()
   RequestList: any = [];
   statusList: any = [];
   RoomNoList: any = [];
   filteredStatusList: any = [];
   modalReference: NgbModalRef | undefined;
+  public SSOIDFormGroup!: FormGroup;
   GetStatusID: number = 0;
   _EnumRole = EnumRole;
   displayedColumns: string[] = [
@@ -68,7 +75,7 @@ export class GuestRoomRequestComponent {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
-
+  public showCheckIn: boolean = false
   public departmentFlag: string = 'BTER';
   public saveFlag: number = 1;
   public otpRequest = new GuestHousePaymentDataModel();
@@ -86,6 +93,7 @@ export class GuestRoomRequestComponent {
   public isMigration: boolean = false;
   public smsSendGuestHouseName: string = '';
   public smsCheckin_checkoutstatus: number = 0;
+  public todayDate: string = this.formatDate(new Date());
 
   constructor(
     private fb: FormBuilder,
@@ -110,8 +118,36 @@ export class GuestRoomRequestComponent {
     this.CheckInFormGroup = this.fb.group({
       GuestRoomDetailID: ['', [DropdownValidators]]
     });
+
+    this.SSOIDFormGroup = this.fb.group({
+      SSOID: ['', Validators.required]
+    });
+    this.IIPMasterFormGroup = this.fb.group(
+      {
+        DisplayName: ['', Validators.required],
+        PostalCode: [''],
+        MailPersonal: ['', Validators.required],
+        MobileNo: ['', Validators.required],
+        PostalAddress: [''],
+        EmpID: ['', []],
+        txtFromDate: ['', Validators.required],
+        txtFromTime: [''],
+        txtToDate: ['', Validators.required],
+        txtToTime: [''],
+        Reason: [''],
+        txtRoomFee: [{ value: '', disabled: true }, Validators.required],
+        ddlGuestHouseID: ['', Validators.required],
+        Purpose: ['', [DropdownValidators]],
+        GenderId: ['', [DropdownValidators]],
+        CoolingFacilities: ['', [DropdownValidators]],
+        txtRoomType: ['', Validators.required],
+        txtSeatCapacity: ['', Validators.required],
+        txtRoomQuantity: [{ value: '', disabled: true }, Validators.required]
+      });
     
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
     await this.GuestRequestList();
     await this.commonMaster();
     this.GetStatusID = Number(this.route.snapshot.paramMap.get('Status')) || 0;
@@ -124,8 +160,17 @@ export class GuestRoomRequestComponent {
     
   }
 
+  get _IIPMasterFormGroup() { return this.IIPMasterFormGroup.controls; }
   get _CheckInFormGroup() { return this.CheckInFormGroup.controls; }
+  get _SSOIDFormGroup() { return this.SSOIDFormGroup.controls; }
   
+  formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
   async commonMaster() {
     try {
       this.loaderService.requestStarted();
@@ -152,6 +197,15 @@ export class GuestRoomRequestComponent {
   }
 
   async GuestRequestList() {
+    this.showCheckIn = false;
+    if(this.searchRequest.Status == 9359) {
+      if(this.searchRequest.FromDate == '' || this.searchRequest.ToDate == '') {
+        this.toastr.error('Please select From Date and To Date');
+        return;
+      } else {
+        this.showCheckIn = true;
+      }
+    }
     try {
       this.loaderService.requestStarted();
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
@@ -161,9 +215,6 @@ export class GuestRoomRequestComponent {
       await this._GuestRoomManagmentService.GuestRequestList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.RequestList = data['Data'];
 
           console.log('List data ==>',this.RequestList)
@@ -693,6 +744,71 @@ export class GuestRoomRequestComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async openModal_ReservedRoomCheckIn(model: any, userSubmitData: any) {
+    try {
+      // await this.GetRoomTypeListData(this.request);
+      this.modalReference = this.modalService.open(model, { size: 'xl', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  CloseModal_ReservedRoomCheckIn() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+  }
+
+  async CheckUserExists(SSOID: any) {
+    if (SSOID.target.value != null) {
+      debugger
+      this.isSubmit = true;
+      await this.commonMasterService.CheckSSOIDExists(SSOID.target.value, this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.InstituteID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data.body));
+          this.searchRequestGuestStaffProfileSearchModel.SSOID = SSOID.target.value;
+          if (data['State'] === 1) {
+            this.toastr.success(data.Message);
+            this.SSOIDExists = true;
+          } else {
+            this.toastr.warning(data.Message);
+            this.SSOIDExists = false;
+          }
+        }, error => console.error(error));
+    }
+  }
+
+  async PostUserExists() {
+    try {
+      this.searchRequestGuestStaffProfileSearchModel.SSOID = this.SSOIDFormGroup.get('SSOID')?.value;
+      await this._GuestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if(data.State === EnumStatus.Success) {
+            this.IsShowForm = true;
+            this.requestReservedCheckIn.DepartmentName = this.sSOLoginDataModel.DepartmentName;
+            this.requestReservedCheckIn.InstituteName = data['Data'][0]['InstituteName'];
+            this.requestReservedCheckIn.CollegeID = data['Data'][0]['InstituteID'];
+            this.requestReservedCheckIn.DisplayName = data['Data'][0]['DisplayName'];
+            this.requestReservedCheckIn.FirstName = data['Data'][0]['DisplayName'];
+            this.requestReservedCheckIn.State = data['Data'][0]['StateName'];
+            this.requestReservedCheckIn.PostalCode = data['Data'][0]['Pincode'];
+            this.requestReservedCheckIn.TelephoneNumber = data['Data'][0]['MobileNumber'];
+            this.requestReservedCheckIn.MailPersonal = data['Data'][0]['Email'];
+            this.requestReservedCheckIn.MobileNo = data['Data'][0]['MobileNumber'];
+            this.requestReservedCheckIn.PostalAddress = data['Data'][0]['Address'];
+            this.requestReservedCheckIn.UserID = data['Data'][0]['UserID'];
+            this.requestReservedCheckIn.RequestSSOID = data['Data'][0]['SSOID'];
+          } else if(data.State === EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage);
+          } else {
+            this.toastr.warning(data.Message);
+          }
+        }, error => console.error(error));
+    } catch (error) {
+      console.error(error);
     }
   }
 }
