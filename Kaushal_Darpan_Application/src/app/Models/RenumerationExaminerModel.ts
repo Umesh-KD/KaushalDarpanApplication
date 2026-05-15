@@ -9,7 +9,7 @@ export class RenumerationExaminerRequestModel extends RequestBaseModel {
 }
 export class RenumerationExaminerModel extends ResponseBaseModel {
   public GroupCodeID: number = 0;
-  public GroupCode: number = 0;
+  public GroupCode: string = '0';
   public ExaminerCode: string = '';
   public ExaminerID: number = 0;
   public SSOID: string = '';
@@ -25,7 +25,7 @@ export class RenumerationExaminerModel extends ResponseBaseModel {
 
 export class TrackStatusDataModel extends ResponseBaseModel {
   public GroupCodeID: number = 0;
-  public GroupCode: number = 0;
+  public GroupCode: string = '0';
   public ExaminerCode: string = '';
   public ExaminerID: number = 0;
   public SSOID: string = '';
