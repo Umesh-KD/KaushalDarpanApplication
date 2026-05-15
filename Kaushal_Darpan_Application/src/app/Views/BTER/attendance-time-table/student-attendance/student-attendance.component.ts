@@ -272,11 +272,11 @@ export class StudentAttendanceComponent implements OnInit {
         // this.TableForm.get('StreamID')?.disable();
         // this.TableForm.get('SemesterID')?.disable();
       }
-      else {
-        this.TableForm.get('SubjectID')?.enable();
+      //else {
+       // this.TableForm.get('SubjectID')?.enable();
         // this.TableForm.get('StreamID')?.enable();
         // this.TableForm.get('SemesterID')?.enable();
-      }
+     // }
     })
 
   }
