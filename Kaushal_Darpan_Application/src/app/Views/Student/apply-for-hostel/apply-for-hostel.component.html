@@ -1028,7 +1028,7 @@
                 <td>{{StudentDetailsList[0]?.RoomPartnerName}}</td>
               </tr>
 
-              <tr>
+              <tr *ngIf="StudentDetailsList[0]?.AllotmentStatus == 14 || StudentDetailsList[0]?.AllotmentStatus == 15">
                 <td>Merit list show</td>
                 <td>
                 <button type="button"
@@ -1067,7 +1067,7 @@
   </button>
 
 </div>-->
-<div class="flex justify-between items-start mb-3" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 14">
+<div class="flex justify-between items-start mb-3" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 14 || StudentDetailsList[0]?.AllotmentStatus == 15">
 
   <button type="button"
           class="btn bg-info text-white btn-sm"
@@ -1078,6 +1078,9 @@
   </button>
 
 </div>
+
+
+
 
 <ng-template #Student_By_HostelMeritlist let-modal>
 
