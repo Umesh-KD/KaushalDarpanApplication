@@ -229,7 +229,10 @@ export enum EnumRole {
 
   //ITI Inspection
   InspectionManager=102,
-  STCSectionOfficer = 262
+  STCSectionOfficer = 262,
+
+  IIP_Admin = 265,
+  IIP_Incharge = 266,
 }
 
 export enum enumExamStudentStatus {

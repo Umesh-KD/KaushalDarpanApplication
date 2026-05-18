@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { CreateGuestRoomDataModel, GuestRoomSearchModel, GuestApplyForGuestRoomSearchModel, CreateGuestRoomSeatDataModel, GuestRoomSeatSearchModel, FacilitiesDataModel, FacilitiesSearchModel, GuestApplyForGuestRoomDataModel, GuestStaffProfileSearchModel, StatusChangeGuestModel, GuestHousePaymentDataModel, RoomReservationDataModel } from '../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { CreateGuestRoomDataModel, GuestRoomSearchModel, GuestApplyForGuestRoomSearchModel, CreateGuestRoomSeatDataModel, GuestRoomSeatSearchModel, FacilitiesDataModel, FacilitiesSearchModel, GuestApplyForGuestRoomDataModel, GuestStaffProfileSearchModel, StatusChangeGuestModel, GuestHousePaymentDataModel, RoomReservationDataModel, UnreserveGuestRoomDataModel } from '../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { RoomDetailsDataModel } from '../../Models/GuestRoom-Management/RoomDetailsDataModel';
 
@@ -286,6 +286,14 @@ export class GuestRoomManagmentService {
   public async ReservedRoomCheckIn(request: GuestApplyForGuestRoomDataModel) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/ReservedRoomCheckIn', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UnreserveGuestHouseRoom(request: UnreserveGuestRoomDataModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/UnreserveGuestHouseRoom', body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

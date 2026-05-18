@@ -13,6 +13,7 @@ import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
 
 @Component({
   selector: 'app-verify-application-committee',
@@ -55,6 +56,7 @@ export class VerifyApplicationCommitteeComponent {
   public requestDDl = new THTE_DDL();
   //end table feature default
   public isShowInstituteSaveButton: boolean = false;
+  @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -158,7 +160,7 @@ export class VerifyApplicationCommitteeComponent {
   async updateStatusRemark() {
     let anySelected = this.ApplicationListData.some((x: any) => x.Selected === true)
     if (!anySelected) {
-      this.toastr.warning('Please select at least one record.');
+      this.toastr.warning(' Please mark preference status.');
       return;
     }
     if(this.status == 0) {
@@ -565,6 +567,13 @@ export class VerifyApplicationCommitteeComponent {
   CloseModalRequestHistorylist1() {
     this.modalService.dismissAll();
     this.modalReference?.close();
+  }
+
+  async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+    //debugger
+    this.childComponentViewStaffProfile.StaffID = StaffID;
+    this.childComponentViewStaffProfile.UserID = UserID;
+    await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 
 }
