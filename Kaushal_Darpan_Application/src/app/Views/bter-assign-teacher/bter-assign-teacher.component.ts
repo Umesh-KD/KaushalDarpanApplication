@@ -368,14 +368,14 @@ async  ngOnInit() {
 
     this.subjectsearch.SemesterID = SemesterID
     this.subjectsearch.DepartmentID = 1
-    this.subjectsearch.SchemeID = 1348
+    this.subjectsearch.SchemeID = 0
     this.subjectsearch.RoleID = this.sSOLoginDataModel.RoleID
     this.subjectsearch.UserID = this.sSOLoginDataModel.UserID
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
     this.subjectsearch.StaffID = this.StaffID
 
 
-    this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+    this.commonMasterService.Get_SubjectMasterByCondition(this.subjectsearch).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SubjectMasterDDL = data.Data;
     })
@@ -399,7 +399,7 @@ async  ngOnInit() {
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
     this.subjectsearch.StaffID = this.StaffID
 
-    this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+    this.commonMasterService.Get_SubjectMasterByCondition(this.subjectsearch).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SubjectMasterDDL = data.Data;
     })
@@ -422,7 +422,7 @@ async  ngOnInit() {
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
     this.subjectsearch.StaffID = this.StaffID
 
-    this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+    this.commonMasterService.Get_SubjectMasterByCondition(this.subjectsearch).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SubjectMasterDDL = data.Data;
     })
@@ -1495,6 +1495,7 @@ async  ngOnInit() {
     this.getstaffmaster();
     this.getMasterData();
     this.getbranchmaster();
+    this.TableForm.reset()
   }
 
   // Global Variables
@@ -1600,10 +1601,12 @@ async  ngOnInit() {
 
       let existsInAllSection = false;
 
+
+      debugger
       if (!this.IsEditMode && this.EditRowID == 0) {
 
         existsInAllSection =
-          this.AddStaffSubjectAllSectionModelList.some(
+          this.AddStaffSubjectSectionModelList.some(
             (x: any) => {
 
               const existingSectionIDs =
@@ -1931,5 +1934,9 @@ async  ngOnInit() {
       console.log(Ex);
       this.toastr.error('Error while deleting');
     }
+  }
+
+  async ResetButton() {
+
   }
 }

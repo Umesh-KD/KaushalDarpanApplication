@@ -14,7 +14,7 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
-
+import * as XLSX from 'xlsx';
 
   @Component({
     selector: 'app-EM-Staff-New-Process-Training',
@@ -392,4 +392,56 @@ import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view
       await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
     }
 
+    exportToExcelNew(): void {
+
+      if (this.StaffTrainingDetailsNewTrainingDataList.length == 0) {
+        alert('No records available for Excel export.');
+        return;
+      }
+
+      const unwantedColumns = [
+        'StaffTrainingDetailID',
+        'StaffID',
+        'UserID',
+        'StaffTypeID',
+        'StatusID',
+        'ISNonGazetted',
+        'RoleID',
+        'StaffUserID'
+      ];
+
+      const filteredData = this.StaffTrainingDetailsNewTrainingDataList.map(
+        (item: any, index: number) => {
+
+          const filteredItem: any = {};
+
+          // Add Serial Number
+          filteredItem["Sr. No"] = index + 1;
+
+          Object.keys(item).forEach(key => {
+            if (!unwantedColumns.includes(key)) {
+              filteredItem[key] = item[key];
+            }
+          });
+
+          return filteredItem;
+        });
+
+      const ws: XLSX.WorkSheet =
+        XLSX.utils.json_to_sheet(filteredData);
+
+      const wb: XLSX.WorkBook =
+        XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[:.-]/g, '_');
+
+      XLSX.writeFile(
+        wb,
+        `StaffDetailsNewTraining_${timestamp}.xlsx`
+      );
+    }
 }

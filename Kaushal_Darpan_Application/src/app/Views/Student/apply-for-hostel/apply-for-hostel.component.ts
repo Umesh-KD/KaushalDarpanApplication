@@ -15,7 +15,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { DeallocateRoomDataModel } from '../../../Models/Hostel-Management/StudentRequestDataModal';
+import { DeallocateRoomDataModel, StudentRequestDataModal } from '../../../Models/Hostel-Management/StudentRequestDataModal';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -34,6 +34,7 @@ export class ApplyForHostelComponent {
   HostelWardenSomeDetails = new HostelWardenSomeDetailsModel();
   HostelDetails = new HostelStudentSearchModel();
   withdrawRequest = new DeallocateRoomDataModel();
+  StudentChekMerit = new StudentRequestDataModal();
   public Table_SearchText: string = "";
   public tbl_txtSearch: string = '';
   public State: number = -1;
@@ -45,6 +46,7 @@ export class ApplyForHostelComponent {
   public searchRequest: any;
   public DistrictMasterList: any = [];
   public StudentDetailsList: any = [];
+  public StudentDetailsMeritList: any = [];
   public HostelDetailsList: any = [];
   public RoomPartnerDetailsList: any = [];
   public MarksDetailsList: any = [];
@@ -1175,10 +1177,121 @@ export class ApplyForHostelComponent {
 
     }
   }
+
+  
+
+
+  async onStudent_By_HostelMeritlist(content: any) {
+
+    try {
+
+      this.loaderService.requestStarted();
+
+       await  this.GetStudent_By_HostelMeritlist();
+      // if API call needed then call here
+      // await this.GetStudentDetailsForApply();
+      // await this.GetMarksDetails();
+
+      this.modalService.open(content, {
+        size: 'lg',
+        backdrop: 'static',
+        centered: true
+      });
+
+    }
+    catch (Ex) {
+
+      console.log(Ex);
+
+    }
+    finally {
+
+      this.loaderService.requestEnded();
+
+    }
+  }
+
+  //async GetStudent_By_HostelMeritlist() {
+  //  try {
+  //    this.StudentChekMerit.StudentId = this.sSOLoginDataModel?.StudentID ?? 0;
+  //    this.StudentChekMerit.HostelID = this.StudentDetailsList?.[0]?.HostelID ?? 0;
+  //    this.StudentChekMerit.BrachId = 0;
+  //    this.StudentChekMerit.InstituteID = 0;
+  //    this.StudentChekMerit.EndTermID = this.sSOLoginDataModel?.EndTermID ?? 0;
+  //    await this.studentRequestService.GetStudent_By_HostelMeritlist(this.StudentChekMerit)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+
+  //        if (data['Data']?.length > 0) {
+
+  //          const item = data['Data'][0];
+
+  //          // First Row
+  //          this.StudentDetailsMeritList.push({
+  //            ...item,
+  //            Status: 'Provisional Merit'
+  //          });
+
+  //          // Second Row
+  //          this.StudentDetailsMeritList.push({
+  //            ...item,
+  //            Status: 'Final Merit'
+  //          });
+  //        }
+
+  //      }, error => console.error(error));
+
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //}
+  async GetStudent_By_HostelMeritlist() {
+    try {
+
+      // CLEAR OLD DATA
+      this.StudentDetailsMeritList = [];
+
+      this.StudentChekMerit.StudentId = this.sSOLoginDataModel?.StudentID ?? 0;
+      this.StudentChekMerit.HostelID = this.StudentDetailsList?.[0]?.HostelID ?? 0;
+      this.StudentChekMerit.BrachId = 0;
+      this.StudentChekMerit.InstituteID = 0;
+      this.StudentChekMerit.EndTermID = this.sSOLoginDataModel?.EndTermID ?? 0;
+
+      await this.studentRequestService.GetStudent_By_HostelMeritlist(this.StudentChekMerit)
+        .then((data: any) => {
+
+          data = JSON.parse(JSON.stringify(data));
+
+          if (data['Data']?.length > 0) {
+
+            const item = data['Data'][0];
+
+            // First Row
+            this.StudentDetailsMeritList.push({
+              ...item,
+              Status: 'Provisional Merit'
+            });
+
+            // Second Row
+            this.StudentDetailsMeritList.push({
+              ...item,
+              Status: 'Final Merit'
+            });
+          }
+
+        }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
   CloseModal() {
     this.modalService.dismissAll();
     this.isSubmitted = false;
   }
+
 
  }
 

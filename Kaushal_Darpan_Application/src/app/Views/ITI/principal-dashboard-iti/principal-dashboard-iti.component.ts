@@ -48,6 +48,9 @@ export class PrincipalDashboardITIComponent implements OnInit
   public IsPendingQual: number = 0;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public Ishowpopup: boolean = false
+  public Isdynamicpop: boolean = false
+  public DynamicText:string=''
+  public DynamicRoute:string=''
   public ExamMessage:string=''
   constructor(private ITIAdminDashboardServiceService: ITIPrincipalDashboardServiceService, private ITIAdminDashboardService: ITIAdminDashboardServiceService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private encryptionService: EncryptionService,
@@ -80,15 +83,30 @@ export class PrincipalDashboardITIComponent implements OnInit
         }, 'OK', false);
       }
 
-      else if (this.IsPendingQual == 1) {
+      //else if (this.IsPendingQual == 1) {
 
-        this.sweetAlert2.Confirmation("Some Students has pending Qualification Details Please Fill", async (result: any) => {
-          window.open("/EditQualificationList", "_Self");
+      //  this.sweetAlert2.Confirmation("Some Students has pending Qualification Details Please Fill", async (result: any) => {
+      //    window.open("/EditQualificationList", "_Self");
+      //  }, 'OK', false);
+
+      //}
+
+      //else if (this.IsPendingQual == 1) {
+
+      //  this.sweetAlert2.Confirmation("Some Students has pending Qualification Details Please Fill", async (result: any) => {
+      //    window.open("/EditQualificationList", "_Self");
+      //  }, 'OK', false);
+
+
+      else if (this.Isdynamicpop == true) {
+
+        this.sweetAlert2.Confirmation(this.DynamicText, async (result: any) => {
+          window.open(this.DynamicRoute, "_Self");
         }, 'OK', false);
 
+
+
       }
-
-
 
 
       else {
@@ -115,6 +133,9 @@ export class PrincipalDashboardITIComponent implements OnInit
           this.IsPendingQual = data['Data'][0]['IsPendingQual'];
           this.Ishowpopup = data['Data'][0]['Ishowpopup'];
           this.ExamMessage = data['Data'][0]['ExamMessage'];
+          this.Isdynamicpop = data['Data'][0]['Isdynamicpop'];
+          this.DynamicText = data['Data'][0]['DynamicText'];
+          this.DynamicRoute = data['Data'][0]['DynamicRoute'];
       
           if (this.Ishowpopup == true) {
             this.sweetAlert2.Info(`${this.ExamMessage}`)

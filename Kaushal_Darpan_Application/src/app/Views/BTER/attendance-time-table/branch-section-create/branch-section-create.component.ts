@@ -160,7 +160,8 @@ export class BranchSectionCreateComponent {
       SectionCount: ['', Validators.required],
       PracticalSectionCount: ['', Validators.required],
       TutorialSectionCount: ['', Validators.required],
-      StCount: [{ value: '', disabled: true }]
+      StCount: [{ value: '', disabled: true }],
+      SchemeID:[1348]
     });
 
     this.sectionForm = this.formBuilder.group({
@@ -281,13 +282,13 @@ export class BranchSectionCreateComponent {
 
 
   async SemeIDAcStream() {
-    ////debugger
+    debugger
     this.StreamMasterDDL=[];
     this.IIPMasterFormGroup.get('StreamID')?.setValue(0);
     this.IIPMasterFormGroup.get('StCount')?.setValue('');
     this.IIPMasterFormGroup.get('SectionCount')?.setValue('');
     this.IIPMasterFormGroup.get('PracticalSectionCount')?.setValue('');
-    this.IIPMasterFormGroup.get('TutorialSectionCount')?.setValue('');
+    this.IIPMasterFormGroup.get('TutorialSectionCount')?.setValue('');    
 
 
     const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
@@ -295,7 +296,7 @@ export class BranchSectionCreateComponent {
     // StreamMasterHOD
     // await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
          
-    await this.commonMasterService.StreamMasterHOD(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+    await this.commonMasterService.StreamMasterHOD(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID, this.IIPMasterFormGroup.value.SchemeID ).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDL = data.Data;
       //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
@@ -1349,7 +1350,7 @@ export class BranchSectionCreateComponent {
 
   async DeleteData(item:any) {
     try {
-     
+     debugger
       //get all data
       let obj ={
         StreamID: item.StreamID,
@@ -1362,20 +1363,18 @@ export class BranchSectionCreateComponent {
       await this.staffMasterService.GetBranchSectionData(obj).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         //debugger
-        if (data.length > 0) {
+        //if (data.length > 0) {
           // this.toastr.success(data.Message)
           // await this.getData();
           // await this.loadDropdownData();
           // await this.GetBranchHODApplyList();
-
-
 
           await this.loadDropdownData();
           await this.GetBranchHODApplyList();
           await this.getData();
 
 
-        }
+        //}
       })
     } catch (error) {
       console.error(error)

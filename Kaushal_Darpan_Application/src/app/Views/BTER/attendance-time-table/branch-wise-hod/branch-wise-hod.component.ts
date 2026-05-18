@@ -46,7 +46,7 @@ export class BranchWiseHodComponent {
   public searchRequest = new GuestApplyForGuestRoomSearchModel();
   public searchRequestGuestStaffProfileSearchModel = new GuestStaffProfileSearchModel()
   displayedColumns: string[] = [
-    'SNo', 'FirstName', 'SSOID', 'MobileNo', 'MailPersonal', 'StreamName', 'InstituteName', 'SemesterName','actions'
+    'SNo', 'FirstName', 'SSOID', 'MobileNo', 'StreamName', 'InstituteName', 'SemesterName','actions'
   ];
   @ViewChild('paginator1') paginator1!: MatPaginator;
   dataSource!: MatTableDataSource<any>;
@@ -56,7 +56,7 @@ export class BranchWiseHodComponent {
   closeResult: string | undefined;
   modalRef1: NgbModalRef | null = null;
   displayedColumns1: string[] = [
-    'SNo', 'FirstName', 'SSOID', 'MobileNo', 'MailPersonal', 'StreamName', 'InstituteName', 'SemesterName', 'EndTermName'
+    'SNo', 'FirstName', 'SSOID', 'MobileNo',  'StreamName', 'InstituteName', 'SemesterName', 'EndTermName'
   ];
 
   constructor(private staffMasterService: StaffMasterService, private commonMasterService: CommonFunctionService, private guestRoomManagmentService: GuestRoomManagmentService,

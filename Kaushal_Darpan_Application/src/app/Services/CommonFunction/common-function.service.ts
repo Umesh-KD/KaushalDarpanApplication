@@ -307,9 +307,9 @@ export class CommonFunctionService {
   }
 
 
-  public async StreamMasterHOD(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, SemesterID: number = 0, InstituteId: number = 0) {
+  public async StreamMasterHOD(UserID: number = 0, StreamType: number = 0, EndTermId: number = 0, SemesterID: number = 0, InstituteId: number = 0, SchemeID: number=0) {
 
-    return await this.http.get(this.APIUrl + '/StreamMasterHOD/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + SemesterID + '/' + InstituteId, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/StreamMasterHOD/' + UserID + '/' + StreamType + '/' + EndTermId + '/' + SemesterID + '/' + InstituteId + '/' + SchemeID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -2186,9 +2186,9 @@ export class CommonFunctionService {
       .toPromise();
   }
 
-  public async GetStudentAttandanceTimeDDL(StaffID: number, SubjectID: number) {
+  public async GetStudentAttandanceTimeDDL(StaffID: number, SubjectID: number, StreamID: number = 0, SectionID: number = 0, DayID:number=0) {
 
-    return await this.http.get(`${this.APIUrl}/GetStudentAttandanceTimeDDL/${StaffID}/${SubjectID}`, this.headersOptions)
+    return await this.http.get(`${this.APIUrl}/GetStudentAttandanceTimeDDL/${StaffID}/${SubjectID}/${StreamID}/${SectionID}/${DayID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -89,9 +89,13 @@ export class HostelWardenStudentMeritlistComponent {
       }
     });
 
+
+
     this.ReqId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
+
+    
 
     if (this.sSOLoginDataModel.DepartmentID == 1) {
       this.titleDDLBranchTrade='Branch'
@@ -609,7 +613,7 @@ this.showCheckbox = !this.StudentReqListList.some((x: any) => x.AllotmentStatus 
       await this.commonFunctionService.GetHostelStatusDDL().then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.HostelStatusList = data['Data'];
-        this.HostelStatusList = this.HostelStatusList.filter((x: any) =>  x.StatusID == 9 )
+        this.HostelStatusList = this.HostelStatusList.filter((x: any) => x.StatusID == 9 || x.StatusID == 3 )
       })
     } catch (error) {
       console.error(error);

@@ -37,6 +37,24 @@
         </div>
 
         <div>
+          <label for="FromDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Form Date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="FromDate" name="FromDate"
+              [(ngModel)]="searchRequest.FromDate" [min]="todayDate">
+          
+        </div>
+
+        <div>
+          <label for="ToDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            To Date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="ToDate" name="ToDate"
+              [(ngModel)]="searchRequest.ToDate" [min]="searchRequest.FromDate">
+          
+        </div>
+
+        <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GuestRequestList()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="GuestRequestListCancel()">Cancel</button>
         </div>
@@ -78,6 +96,7 @@
             <th class="text-left">Guest House Name</th>
             <th class="text-left">Purpose</th>
             <th class="text-left">Room Type</th>
+            <th class="text-left">Room No</th>
             <th class="text-left">Cooling Facilities</th>
             <th class="text-left">Room Fee</th>
             <th class="text-left">Status</th>
@@ -101,6 +120,7 @@
             <td align="left">{{item.GuestHouseName}}</td>
             <td align="left">{{item.Purpose_str}}</td>
             <td align="left">{{item.RoomType_str}}</td>
+            <td align="left">{{item.RoomNo}}</td>
             <td align="left">{{item.CoolingFacilities_Str}}</td>
             <td align="left">{{item.RoomFee}}</td>
             <td align="left">{{item.StatusName}}</td>
@@ -141,6 +161,13 @@
                         *ngIf="(item.Status === 1339 || item.Status === 220) && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden  && item.PaymentStatus == 0"
                         (click)="openModalGenerateOTP(modal_GenrateOTP,item)">
                   <i class="ti ti-currency-rupee"></i> Pay Now
+                </button>
+
+                <button type="button"
+                        class="bg-success btn text-white btn-sm"
+                        (click)="openModal_ReservedRoomCheckIn(modal_ReservedRoomCheckIn, item)"
+                        *ngIf="showCheckIn && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden && item.IsShowCheckInBtn">
+                  <i class="ti ti-login"></i>Check In
                 </button>
               </div>
             </td>
@@ -292,3 +319,236 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #modal_ReservedRoomCheckIn let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Check-In for Reserved Room <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal_ReservedRoomCheckIn()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      
+      <div class="card-body">
+        <form [formGroup]="SSOIDFormGroup" class="mb-3" (ngSubmit)="PostUserExists()" *ngIf="SSOIDFormGroup">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
+            <div class="mb-3">
+              <label for="SSOID" class="form-label">SSOID</label>
+              <div class="input-group check-box-custom">
+                <input formControlName="SSOID" class="form-input" placeholder="Enter SSOID"  aria-describedby="basic-addon3 basic-addon4" />
+                <!-- <span *ngIf="SSOIDExists != null" class="input-group-text {{SSOIDExists?'text-success':'text-danger'}}"><i class="fa {{SSOIDExists?'fa-check':'fa-close'}}"></i></span> -->
+              </div>
+
+              <div *ngIf="isSubmit && _SSOIDFormGroup.SSOID.errors" class="form-text text-danger">
+                <p *ngIf="_SSOIDFormGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <div class="text-left">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1">Verify</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <form [formGroup]="IIPMasterFormGroup" class="form-horizontal" *ngIf="IsShowForm">
+
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Guest Apply For Guest Room</b>
+          </div>
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Name<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Display Name" name="DisplayName"
+                    [(ngModel)]="requestReservedCheckIn.DisplayName" formControlName="DisplayName" [readonly]="sSOLoginDataModel.RoleID!=_EnumRole.GuestRoomWarden">
+              <div *ngIf="isSubmitted && _IIPMasterFormGroup.DisplayName.errors" class="form-text text-danger">
+                <p *ngIf="_IIPMasterFormGroup.DisplayName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Mobile No<span class="StarMarking">*</span>
+
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Mobile No" name="MobileNo"
+                    [(ngModel)]="requestReservedCheckIn.MobileNo" formControlName="MobileNo" [readonly]="sSOLoginDataModel.RoleID!=_EnumRole.GuestRoomWarden">
+              <div *ngIf="isSubmitted && _IIPMasterFormGroup.MobileNo.errors" class="form-text text-danger">
+                <p *ngIf="_IIPMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Mail ID<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Mail Personal" name="MailPersonal"
+                    [(ngModel)]="requestReservedCheckIn.MailPersonal" formControlName="MailPersonal" >
+              <div *ngIf="isSubmitted && _IIPMasterFormGroup.MailPersonal.errors" class="form-text text-danger">
+                <p *ngIf="_IIPMasterFormGroup.MailPersonal.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Gender:<span class="StarMarking" style="display:none;">*</span>
+              </label>
+              <select class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="requestReservedCheckIn.GenderId">
+                <!--(change)="onGenderChange()"-->
+                <option value="0" selected>--Select Gender--</option>
+                <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && _IIPMasterFormGroup.GenderId.errors" class="text-danger">
+                <p *ngIf="!_IIPMasterFormGroup.GenderId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Postal Address<!--<span class="StarMarking">*</span>-->
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Postal Address" name="PostalAddress"
+                    [(ngModel)]="requestReservedCheckIn.PostalAddress" formControlName="PostalAddress" >
+              <!--<div *ngIf="isSubmitted && _IIPMasterFormGroup.PostalAddress.errors" class="form-text text-danger">
+                <p *ngIf="_IIPMasterFormGroup.PostalAddress.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>-->
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Postal Code<!--<span class="StarMarking">*</span>-->
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Postal Code" name="PostalCode"
+                    [(ngModel)]="requestReservedCheckIn.PostalCode" formControlName="PostalCode" >
+              <!--<div *ngIf="isSubmitted && _IIPMasterFormGroup.PostalCode.errors" class="form-text text-danger">
+                <p *ngIf="_IIPMasterFormGroup.PostalCode.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Employee ID
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Employee IUD" name="EmpID"
+                    [(ngModel)]="requestReservedCheckIn.EmpID" formControlName="EmpID">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"
+                    for="fileEmployeePhoto">
+                Employee ID Card Photo :
+              </label>
+              <div class="flex fileUploader">
+                <input id="fileEmployeePhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                      type="file" (change)="onFilechange($event,'Photo')">
+                <label for="fileEmployeePhoto">
+                  <span>Choose File</span>
+                  {{requestReservedCheckIn.Dis_EmpIDCardPhoto === '' ? 'No File Choosen' : requestReservedCheckIn.Dis_EmpIDCardPhoto}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestReservedCheckIn.EmpIDCardPhoto}}" *ngIf="this.requestReservedCheckIn.EmpIDCardPhoto !=''"
+                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Check-In Date/Time :<span class="StarMarking">*</span>
+              </label>
+              <div class="flex">
+                <div style="width:calc(100% - 100px)">
+                  <input formControlName="txtFromDate" class="form-input" placeholder="txtFromDate" type="date"
+                        [min]="todayDate" [(ngModel)]="requestReservedCheckIn.FromDate">
+                  <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtFromDate.errors" class="text-danger">
+                    <p *ngIf="_IIPMasterFormGroup.txtFromDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                  </div>
+                </div>
+                <div style="width:100px">
+                  <input formControlName="txtFromTime" class="form-input" placeholder="txtFromTime" type="time"
+                        [(ngModel)]="requestReservedCheckIn.FromTime">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Purpose<span class="StarMarking">*</span></label>
+              <select formControlName="Purpose" class="form-select" [(ngModel)]="requestReservedCheckIn.Purpose" (change)="onChangePurpose()">
+                <option value="0">--Select--</option>
+                <option value="1">Private</option>
+                <option value="2">On Duty</option>
+                <option value="3">Training</option>
+              </select>
+              <div *ngIf="isSubmitted && _IIPMasterFormGroup.Purpose.errors" class="text-danger">
+                <p *ngIf="!_IIPMasterFormGroup.Purpose.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fees(per day)<span class="StarMarking">*</span></label>
+              <input formControlName="txtRoomFee" class="form-input" type="text" placeholder="Enter Room Fees"
+                    [(ngModel)]="requestReservedCheckIn.RoomFee">
+              <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomFee.errors" class="text-danger">
+                <p *ngIf="_IIPMasterFormGroup.txtRoomFee.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div *ngIf="requestReservedCheckIn.Purpose != 0">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"
+                    for="PurposeDocPhoto">
+                {{requestReservedCheckIn.Purpose == 1 ? 'Private (Application)' : requestReservedCheckIn.Purpose == 2 ? 'On Duty Documents' : 'Training Documents'}} Upload:
+              </label>
+              <div class="flex fileUploader">
+                <input id="PurposeDocPhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                      type="file" (change)="onFilechange($event,'PurposeDocPhoto')">
+                <label for="PurposeDocPhoto">
+                  <span>Choose File</span>
+                  {{requestReservedCheckIn.Dis_PurposeDocPhoto === '' ? 'No File Choosen' : requestReservedCheckIn.Dis_PurposeDocPhoto}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestReservedCheckIn.PurposeDocPhoto}}" *ngIf="this.requestReservedCheckIn.PurposeDocPhoto !=''"
+                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"
+                    for="IDProofPhoto">
+                Valid Photo ID / Address ID such as Aadhar / Passport / Licence:
+              </label>
+              <div class="flex fileUploader">
+                <input id="IDProofPhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                      type="file" (change)="onFilechange($event,'IDProofPhoto')">
+                <label for="IDProofPhoto">
+                  <span>Choose File</span>
+                  {{requestReservedCheckIn.Dis_IDProofPhoto === '' ? 'No File Choosen' : requestReservedCheckIn.Dis_IDProofPhoto}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestReservedCheckIn.IDProofPhoto}}" *ngIf="this.requestReservedCheckIn.IDProofPhoto !=''"
+                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+          <div class="flex justify-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="openOTPModal_Apply()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+
+        </form>
+
+      </div> 
+    </div>
+  </div>
+</ng-template>
+
+

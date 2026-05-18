@@ -16,14 +16,7 @@
         </div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-          <div *ngIf="SSOLoginDataModel.RoleID!=20 && SSOLoginDataModel.RoleID!=43">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI:</label>
-            <select class="form-select" id="ddlBranch"
-                    (change)="GetStaff_InstituteWise($event.target.value)" [(ngModel)]="InstituteID" >
-              <option value="0">--All--</option>
-              <option *ngFor="let item of InstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-            </select>
-          </div>
+        
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
