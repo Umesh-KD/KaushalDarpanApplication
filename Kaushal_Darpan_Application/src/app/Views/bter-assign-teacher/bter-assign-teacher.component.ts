@@ -368,7 +368,7 @@ async  ngOnInit() {
 
     this.subjectsearch.SemesterID = SemesterID
     this.subjectsearch.DepartmentID = 1
-    this.subjectsearch.SchemeID = 1348
+    this.subjectsearch.SchemeID = 0
     this.subjectsearch.RoleID = this.sSOLoginDataModel.RoleID
     this.subjectsearch.UserID = this.sSOLoginDataModel.UserID
     this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
