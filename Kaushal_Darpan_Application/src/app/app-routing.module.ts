@@ -1742,6 +1742,8 @@ const routes: Routes = [
 
       { path: 'BterAssignTeacher', loadChildren: () => import('./Views/bter-assign-teacher/bter-assign-teacher.module').then(m => m.BterAssignTeacherModule) },
       { path: 'BterUnlockCalender', loadChildren: () => import('./Views/bter-unlock-calender/bter-unlock-calender.module').then(m => m.BterUnlockCalenderModule) },
+      { path: 'ScholarshipOnboard', loadChildren: () => import('./Views/ITI/scholarship-onboard/scholarship-onboard.module').then(m => m.ScholarshipOnboardModule) },
+
 
     ]
   },
@@ -1862,7 +1864,6 @@ const routes: Routes = [
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
- 
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 

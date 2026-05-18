@@ -1,0 +1,430 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">
+      Scholarship Onboarding
+    </h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">
+        Dashboard
+      </a>
+
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">
+        chevron_right
+      </i>
+
+      <a routerLink="/ScholarshipOnboard"
+         class="text-sm font-medium text-slate-700"
+         aria-current="page">
+        Scholarship Onboarding
+      </a>
+    </div>
+  </div>
+
+  <a (click)="Back()"
+     class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+
+<!-- Form Start -->
+<form [formGroup]="ScholarshipFormGroup"
+      class="form-horizontal">
+
+  <div class="card">
+    <div class="card-body p-5">
+
+      <!-- Section Header -->
+      <div class="flex justify-between flex-wrap items-center mb-5 p-3 py-2 bg-light rounded">
+        <b class="text-1xl-5">
+          <i class="ti ti-plus"></i>
+          Scholarship Onboarding Details
+        </b>
+      </div>
+
+      <!-- Nodal Officer Details -->
+      <div class="mb-8">
+
+      
+
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+
+          <!-- Name -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Nodal Officer Name <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-input"
+                   placeholder="Enter Nodal Officer Name"
+                   [(ngModel)]="request.NODALOFFICERNAME"
+                   formControlName="NODALOFFICERNAME">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.NODALOFFICERNAME.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.NODALOFFICERNAME.errors.required">
+                This field is required.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Nodal Officer Email <span class="StarMarking">*</span>
+            </label>
+
+            <input type="email"
+                   class="form-input"
+                   placeholder="Enter Nodal Officer Email"
+                   [(ngModel)]="request.NODALOFFICEREMAIL"
+                   formControlName="NODALOFFICEREMAIL">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.NODALOFFICEREMAIL.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.NODALOFFICEREMAIL.errors.required">
+                This field is required.!
+              </p>
+
+              <p *ngIf="_ScholarshipFormGroup.NODALOFFICEREMAIL.errors.pattern">
+                Enter valid email address.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Mobile -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Nodal Officer Mobile Number <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   maxlength="10"
+                   (keypress)="numberOnly($event)"
+                   class="form-input"
+                   placeholder="Enter Mobile Number"
+                   [(ngModel)]="request.NODALOFFICERMOBILE"
+                   formControlName="NODALOFFICERMOBILE">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.NODALOFFICERMOBILE.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.NODALOFFICERMOBILE.errors.required">
+                This field is required.!
+              </p>
+
+              <p *ngIf="_ScholarshipFormGroup.NODALOFFICERMOBILE.errors.pattern">
+                Enter valid mobile number.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Aadhaar -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Nodal Officer Aadhaar Number <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   maxlength="12"
+                   (keypress)="numberOnly($event)"
+                   class="form-input"
+                   placeholder="Enter Aadhaar Number"
+                   [(ngModel)]="request.NODALOFFICERAADHAAR"
+                   formControlName="NODALOFFICERAADHAAR">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.NODALOFFICERAADHAAR.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.NODALOFFICERAADHAAR.errors.required">
+                This field is required.!
+              </p>
+
+              <p *ngIf="_ScholarshipFormGroup.NODALOFFICERAADHAAR.errors.pattern">
+                Enter valid Aadhaar number.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Aadhaar Ref -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Aadhaar Reference Number <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-input"
+                   placeholder="Enter Aadhaar Reference Number"
+                   [(ngModel)]="request.NODALOFFICERAADHAAR_REFNO"
+                   formControlName="NODALOFFICERAADHAAR_REFNO">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.NODALOFFICERAADHAAR_REFNO.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.NODALOFFICERAADHAAR_REFNO.errors.required">
+                This field is required.!
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Contact Person 1 -->
+      <div class="mb-8">
+
+        <div class="flex justify-between flex-wrap items-center mb-4 p-3 py-2 bg-light rounded">
+          <b class="text-1xl-5">
+            <i class="ti ti-user"></i>
+            Contact Person 1
+          </b>
+        </div>
+
+        <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6">
+
+          <!-- Designation -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Designation <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-input"
+                   placeholder="Enter Designation"
+                   [(ngModel)]="request.DESIGNATION1"
+                   formControlName="DESIGNATION1">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.DESIGNATION1.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.DESIGNATION1.errors.required">
+                This field is required.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Name -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Name <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-input"
+                   placeholder="Enter Name"
+                   [(ngModel)]="request.NAME1"
+                   formControlName="NAME1">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.NAME1.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.NAME1.errors.required">
+                This field is required.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Email <span class="StarMarking">*</span>
+            </label>
+
+            <input type="email"
+                   class="form-input"
+                   placeholder="Enter Email"
+                   [(ngModel)]="request.EMAILADDRESS1"
+                   formControlName="EMAILADDRESS1">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.EMAILADDRESS1.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.EMAILADDRESS1.errors.required">
+                This field is required.!
+              </p>
+
+              <p *ngIf="_ScholarshipFormGroup.EMAILADDRESS1.errors.pattern">
+                Enter valid email address.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Mobile -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Mobile Number <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   maxlength="10"
+                   (keypress)="numberOnly($event)"
+                   class="form-input"
+                   placeholder="Enter Mobile Number"
+                   [(ngModel)]="request.MOBILENUMBER1"
+                   formControlName="MOBILENUMBER1">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.MOBILENUMBER1.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.MOBILENUMBER1.errors.required">
+                This field is required.!
+              </p>
+
+              <p *ngIf="_ScholarshipFormGroup.MOBILENUMBER1.errors.pattern">
+                Enter valid mobile number.!
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Contact Person 2 -->
+      <div class="mb-8">
+
+        <div class="flex justify-between flex-wrap items-center mb-4 p-3 py-2 bg-light rounded">
+          <b class="text-1xl-5">
+            <i class="ti ti-user"></i>
+            Contact Person 2
+          </b>
+        </div>
+
+        <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6">
+
+          <!-- Designation -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Designation <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-input"
+                   placeholder="Enter Designation"
+                   [(ngModel)]="request.DESIGNATION2"
+                   formControlName="DESIGNATION2">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.DESIGNATION2.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.DESIGNATION2.errors.required">
+                This field is required.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Name -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Name <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   class="form-input"
+                   placeholder="Enter Name"
+                   [(ngModel)]="request.NAME2"
+                   formControlName="NAME2">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.NAME2.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.NAME2.errors.required">
+                This field is required.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Email <span class="StarMarking">*</span>
+            </label>
+
+            <input type="email"
+                   class="form-input"
+                   placeholder="Enter Email"
+                   [(ngModel)]="request.EMAILADDRESS2"
+                   formControlName="EMAILADDRESS2">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.EMAILADDRESS2.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.EMAILADDRESS2.errors.required">
+                This field is required.!
+              </p>
+
+              <p *ngIf="_ScholarshipFormGroup.EMAILADDRESS2.errors.pattern">
+                Enter valid email address.!
+              </p>
+
+            </div>
+          </div>
+
+          <!-- Mobile -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Mobile Number <span class="StarMarking">*</span>
+            </label>
+
+            <input type="text"
+                   maxlength="10"
+                   (keypress)="numberOnly($event)"
+                   class="form-input"
+                   placeholder="Enter Mobile Number"
+                   [(ngModel)]="request.MOBILENUMBER2"
+                   formControlName="MOBILENUMBER2">
+
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.MOBILENUMBER2.errors"
+                 class="text-danger mt-1">
+
+              <p *ngIf="_ScholarshipFormGroup.MOBILENUMBER2.errors.required">
+                This field is required.!
+              </p>
+
+              <p *ngIf="_ScholarshipFormGroup.MOBILENUMBER2.errors.pattern">
+                Enter valid mobile number.!
+              </p>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="text-center mt-8">
+        <button type="button"
+                class="btn bg-info text-white me-2"
+                (click)="SaveData()">
+
+          <i class="ti ti-device-floppy mr-1"></i>
+          Submit
+        </button>
+
+        <button type="button"
+                class="btn bg-danger text-white"
+                (click)="ResetControls()">
+
+          <i class="ti ti-refresh"></i>
+          Reset
+        </button>
+      </div>
+
+    </div>
+  </div>
+</form>
+<!-- Form End -->

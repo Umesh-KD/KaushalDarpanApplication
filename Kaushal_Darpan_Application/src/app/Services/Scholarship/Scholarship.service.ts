@@ -44,12 +44,32 @@ export class ScholarshipService {
   }
 
   //Get by id
+  public async GetByIdOnBoard(ScholarshipID: number) {
+    return await this.http.get(`${this.APIUrl}/GetByIdOnBoard/${ScholarshipID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  //Get by id
   public async GetById(ScholarshipID: number) {
     return await this.http.get(`${this.APIUrl}/GetByID/${ScholarshipID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  ////save data
+  public async SaveDataOnBoard(request: any) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/SaveDataOnBoard`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   ////save data
   public async SaveData(request: ScholarshipModel) {

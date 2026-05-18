@@ -257,7 +257,7 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
   async GetStudentAttandanceTimeDDL() {
-    debugger
+    //debugger
     
     this.TableForm.get('AttandanceTimeID')?.setValue(0);
     //const sectionID = this.TableForm.value.SectionID ? this.sectionId : this.TableForm.value.SectionID;
@@ -311,7 +311,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   async GetStaffLeaveAllData() {
     try {
-      debugger
+      //debugger
       const rawStart = this.TableForm.value.AttendanceStartDate;
       const rawEnd = this.TableForm.value.AttendanceEndDate;
 
@@ -514,7 +514,7 @@ export class StudentAttendanceComponent implements OnInit {
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
-          debugger
+          //debugger
           // Generate dynamic columns
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => ![
@@ -795,7 +795,7 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
   async getData() {
-    debugger
+    //debugger
     this.isSubmitted = true;
     this.ResetData();
     // await this.GetStudentAttandanceTimeDDL();
@@ -907,7 +907,7 @@ export class StudentAttendanceComponent implements OnInit {
   async saveAttendance() {
     this.swat.Confirmation("Are you sure you want to save the attendance?", async (result: any) => {
       if (!result.isConfirmed) return;
-      debugger
+      //debugger
       if (this.markedAttendanceDates.length < 0) {
         this.toastr.warning("Please Mark Attendance Atleast On One Date");
         return;
@@ -1093,7 +1093,7 @@ export class StudentAttendanceComponent implements OnInit {
       (result: any) => {
 
         if (!result.isConfirmed) return;
-        debugger
+        //debugger
         const col = this.dynamicColumns.find(c => c.name === columnName);
 
         if (!col) return;

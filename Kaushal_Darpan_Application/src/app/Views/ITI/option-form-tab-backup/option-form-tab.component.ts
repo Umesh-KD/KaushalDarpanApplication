@@ -53,9 +53,6 @@ export class OptionFormTabComponent implements OnInit {
   public AddedChoices8: OptionsDetailsDataModel[] = []
   public AddedChoices12: OptionsDetailsDataModel[] = []
   public AddedChoices10: OptionsDetailsDataModel[] = []
-
-  public AddedChoices_All: OptionsDetailsDataModel[] = []
-
   public PersonalDetailsData: any = []
 
   constructor(
@@ -154,7 +151,7 @@ export class OptionFormTabComponent implements OnInit {
     const AddedChoices_8: OptionsDetailsDataModel[] = [];
     const AddedChoices_10: OptionsDetailsDataModel[] = [];
     const AddedChoices_12: OptionsDetailsDataModel[] = [];
-    debugger;
+
     this.isSubmitted = true
     if (this.OptionsFormGroup.invalid)
     {
@@ -182,74 +179,56 @@ export class OptionFormTabComponent implements OnInit {
       
       console.log("trade name", this.formData.TradeName)
 
+      if (this.formData.TradeLevel == 8) {
+        const insdtitutexist = this.AddedChoices8.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
+        if (insdtitutexist) {
+          this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
+          return
+        }
+        this.formData.Priority = this.AddedChoices8.length + 1;
+        this.AddedChoices8.push({
+          ...this.formData
+        });
 
-      const insdtitutexist = this.AddedChoices10.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
-      if (insdtitutexist) {
-        this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
-        return
+        AddedChoices_8.push({
+          ...this.formData
+        });
+
       }
-      this.formData.Priority = this.AddedChoices10.length + 1;
+      else if (this.formData.TradeLevel == 10) {
+        const insdtitutexist = this.AddedChoices10.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
+        if (insdtitutexist) {
+          this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
+          return
+        }
+        this.formData.Priority = this.AddedChoices10.length + 1;
+        this.AddedChoices10.push({
+          ...this.formData
+        });
 
-      AddedChoices_10.push({
-        ...this.formData
-      });
+        AddedChoices_10.push({
+          ...this.formData
+        });
 
+      }
+      else if (this.formData.TradeLevel == 12) {
+        const insdtitutexist = this.AddedChoices12.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
+        if (insdtitutexist) {
+          this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
+          return
+        }
+        this.formData.Priority = this.AddedChoices12.length + 1;
+        this.AddedChoices12.push({
+          ...this.formData
+        });
 
-      //if (this.formData.TradeLevel == 8)
-      //{
-      //  const insdtitutexist = this.AddedChoices8.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
-      //  if (insdtitutexist) {
-      //    this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
-      //    return
-      //  }
-      //  this.formData.Priority = this.AddedChoices8.length + 1;
-      //  this.AddedChoices8.push({
-      //    ...this.formData
-      //  });
+        AddedChoices_12.push({
+          ...this.formData
+        });
 
-      //  AddedChoices_8.push({
-      //    ...this.formData
-      //  });
-
-      //}
-      //else if (this.formData.TradeLevel == 10) {
-      //  const insdtitutexist = this.AddedChoices10.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
-      //  if (insdtitutexist) {
-      //    this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
-      //    return
-      //  }
-      //  this.formData.Priority = this.AddedChoices10.length + 1;
-      //  this.AddedChoices10.push({
-      //    ...this.formData
-      //  });
-
-      //  AddedChoices_10.push({
-      //    ...this.formData
-      //  });
-
-      //}
-      //else if (this.formData.TradeLevel == 12) {
-      //  const insdtitutexist = this.AddedChoices12.some(x => x.InstituteID == this.formData.InstituteID && x.TradeID == this.formData.TradeID)
-      //  if (insdtitutexist) {
-      //    this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
-      //    return
-      //  }
-      //  this.formData.Priority = this.AddedChoices12.length + 1;
-      //  this.AddedChoices12.push({
-      //    ...this.formData
-      //  });
-
-      //  AddedChoices_12.push({
-      //    ...this.formData
-      //  });
-
-      //}
-
+      }
 
       this.AddedChoices = [...AddedChoices_8, ...AddedChoices_10, ...AddedChoices_12];
-
-
-     // this.AddedChoices = [...AddedChoices_10];
 
       console.log("AddedChoices8", this.AddedChoices8);
       console.log("AddedChoices10", this.AddedChoices10);
@@ -267,7 +246,6 @@ export class OptionFormTabComponent implements OnInit {
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message) 
           this.AddedChoices = [...this.AddedChoices8, ...this.AddedChoices10, ...this.AddedChoices12];
-         // this.AddedChoices = [...this.AddedChoices10,];
           this.ResetOptions();
         }
         else {
@@ -390,23 +368,20 @@ export class OptionFormTabComponent implements OnInit {
   priorityDown(index: number, tradeLevel: number) {
     if (index < (tradeLevel === 8 ? this.AddedChoices8.length : this.AddedChoices10.length) - 1) {
       let temp: any;
-      if (tradeLevel === 8)
-      {
+      if (tradeLevel === 8) {
         temp = this.AddedChoices8[index];
         this.AddedChoices8[index] = this.AddedChoices8[index + 1];
         this.AddedChoices8[index + 1] = temp;
         this.AddedChoices8[index].Priority = index + 1;
         this.AddedChoices8[index + 1].Priority = index + 2;
-      } else if (tradeLevel === 10)
-      {
+      } else if (tradeLevel === 10) {
         temp = this.AddedChoices10[index];
         this.AddedChoices10[index] = this.AddedChoices10[index + 1];
         this.AddedChoices10[index + 1] = temp;
         this.AddedChoices10[index].Priority = index + 1;
         this.AddedChoices10[index + 1].Priority = index + 2;
       }
-      else if (tradeLevel === 12)
-      {
+      else if (tradeLevel === 12) {
         temp = this.AddedChoices12[index];
         this.AddedChoices12[index] = this.AddedChoices12[index + 1];
         this.AddedChoices12[index + 1] = temp;
@@ -495,8 +470,6 @@ export class OptionFormTabComponent implements OnInit {
     this.AddedChoices8 = []
     this.AddedChoices10 = []
     this.AddedChoices12 = []
-
-
     try {
       this.loaderService.requestStarted();
       await this.ItiApplicationFormService.GetOptionDetailsbyID(this.searchRequest)
@@ -507,22 +480,16 @@ export class OptionFormTabComponent implements OnInit {
           console.log(this.AddedChoices,"addeddata")
           this.formData.ApplicationID = data['Data'][0].ApplicationID;
 
-          this.AddedChoices.map((choice: any) =>
-          {
-            //if(choice.TradeLevel == 8) {
-            //  this.AddedChoices8.push(choice)
-            //}
-            //else if (choice.TradeLevel == 10)
-            //{
-            //  this.AddedChoices10.push(choice)
-            //}
-            //else if (choice.TradeLevel == 12) {
-            //  this.AddedChoices12.push(choice)
-            //}
-            this.AddedChoices10.push(choice)
-
-
-
+          this.AddedChoices.map((choice: any) => {
+            if(choice.TradeLevel == 8) {
+              this.AddedChoices8.push(choice)
+            }
+            else if (choice.TradeLevel == 10) {
+              this.AddedChoices10.push(choice)
+            }
+            else if (choice.TradeLevel == 12) {
+              this.AddedChoices12.push(choice)
+            } 
           })
 
           const btnSave = document.getElementById('btnSave')
