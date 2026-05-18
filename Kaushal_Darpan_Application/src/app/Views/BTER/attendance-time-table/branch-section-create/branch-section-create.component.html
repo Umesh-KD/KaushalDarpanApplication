@@ -29,7 +29,7 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
-            <select class="form-select" name="SchemeID" formControlName="SchemeID">
+            <select class="form-select" name="SchemeID" formControlName="SchemeID" (change)="GetSchemeWise()">
               <option [value]="0">--Select--</option>
               <option [value]="1347">Old</option>
               <option [value]="1348">New</option>
