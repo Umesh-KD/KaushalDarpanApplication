@@ -9,7 +9,7 @@ import { ITIGovtEMStaffMaster } from '../../../Services/ITIGovtEMStaffMaster/ITI
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus, EnumOffice } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../Models/ITI/SeatIntakeDataModel';
@@ -42,7 +42,7 @@ export class bterSanctionedPostsComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
-
+  public _EnumRole = EnumRole;
 
   
   public UserRequestHistoryList: any[] = [];
@@ -106,11 +106,20 @@ export class bterSanctionedPostsComponent implements OnInit {
 
   async getSanctionedPostslist() {
     try {
-
       this.searchRequest.StaffTypeID = this.searchRequest.StaffTypeID;
       this.searchRequest.OfficeID = this.searchRequest.OfficeID;
       this.searchRequest.BugetHeadID = this.searchRequest.BugetHeadID;
-      debugger
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      if(this.sSOLoginDataModel.RoleID === EnumRole.Principal || this.sSOLoginDataModel.RoleID === EnumRole.PrincipalNon){
+        this.searchRequest.OfficeID = EnumOffice.COLLEGE;
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      }
+      if(this.sSOLoginDataModel.RoleID === EnumRole.JD_TTC) {
+        this.searchRequest.OfficeID = EnumOffice.TTC_LRDC;
+      }
+      if(this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon){
+        this.searchRequest.OfficeID = EnumOffice.BTER;
+      }
       this.loaderService.requestStarted();
       await this.EstablishManagementService.OfficeVacancyList(this.searchRequest)
         .then((data: any) => {
@@ -149,8 +158,6 @@ export class bterSanctionedPostsComponent implements OnInit {
 
 
   async GetOfficeList() {
-    debugger;
-
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
