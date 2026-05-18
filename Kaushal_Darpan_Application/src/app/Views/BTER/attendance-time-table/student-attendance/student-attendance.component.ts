@@ -290,9 +290,10 @@ export class StudentAttendanceComponent implements OnInit {
     this.subjectsearch.SemesterID = SemesterID
     this.subjectsearch.DepartmentID = 1
     this.subjectsearch.SchemeID = 1348
+    this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID
 
     if (ID && SemesterID != "" && SemesterID != null) {
-      await this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+      await this.commonMasterService.Get_SubjectMasterByCondition(this.subjectsearch).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SubjectMasterDDL = data.Data;
         if (this.subjectId != 0 || this.subjectId != null || this.subjectId != undefined) {
