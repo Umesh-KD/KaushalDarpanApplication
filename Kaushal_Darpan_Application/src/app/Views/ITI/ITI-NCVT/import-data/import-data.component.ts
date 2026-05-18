@@ -104,7 +104,8 @@ export class ImportDataComponent implements OnInit {
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
 
    await this.getITICollege();
-    if (this.SSOLoginDataModel.RoleID == 43) {
+    if (this.SSOLoginDataModel.InstituteID >0)
+    {
       this.searchRequest.CollegeID = this.SSOLoginDataModel.InstituteID
     }
     await this.GetNCVTUPLOADED(1)

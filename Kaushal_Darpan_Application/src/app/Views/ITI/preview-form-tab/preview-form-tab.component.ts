@@ -138,8 +138,9 @@ export class PreviewFormTabComponent implements OnInit {
   async GetById() {
 
     this.Options10thLevel = []
-    this.Options12thLevel = []
-    this.Options8thLevel=[]
+    //this.Options12thLevel = []
+    //this.Options8thLevel = []
+
     this.isSubmitted = false;
     this.searchrequest.SSOID = this.sSOLoginDataModel.SSOID
     this.searchrequest.RoleID = this.sSOLoginDataModel.RoleID
@@ -161,14 +162,18 @@ export class PreviewFormTabComponent implements OnInit {
                 });
             }
             this.request.OptionalViewDatas.map((option: any) => {
-              if(option.TradeLevel == 8) {
-                this.Options8thLevel.push(option)
-              } else if(option.TradeLevel == 10) {
-                this.Options10thLevel.push(option)
-              }
-              else if (option.TradeLevel == 12) {
-                this.Options12thLevel.push(option)
-              }
+
+              this.Options10thLevel.push(option)
+              
+              //if(option.TradeLevel == 8) {
+              //  this.Options8thLevel.push(option)
+              //} else if(option.TradeLevel == 10) {
+              //  this.Options10thLevel.push(option)
+              //}
+              //else if (option.TradeLevel == 12) {
+              //  this.Options12thLevel.push(option)
+              //}
+
             })
             
             this.request.QualificationViewDetails = data.Data.QualificationViewDetails
