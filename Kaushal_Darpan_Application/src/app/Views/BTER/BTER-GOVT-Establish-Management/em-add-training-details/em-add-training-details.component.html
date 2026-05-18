@@ -82,11 +82,6 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Duration Unit: <span class="StarMarking">*</span>
           </label>
-          <!--<select class="form-select" id="DurationUnit" [(ngModel)]="request.DurationUnit" formControlName="DurationUnit">
-    <option [value]="0">--- Choose Duration Unit --- </option>
-    <option [value]="1">Days</option>
-    <option [value]="2">Weeks</option>
-  </select>-->
           <select class="form-select"
                   id="DurationUnit"
                   [(ngModel)]="request.DurationUnit"
@@ -120,9 +115,7 @@
                  placeholder="Duration"
                  (input)="validateTrainingDates()"
                  oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-          <!--<input type="text" class="form-input" id="Duration" name="Duration" formControlName="Duration"
-         [(ngModel)]="request.Duration" maxlength="2" placeholder="Duration"
-         oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">-->
+         
           <div *ngIf="isSubmitted && _AddTrainingDetailsFromGroup.Duration.errors?.required" class="text-danger">
             <p>This field is required!</p>
           </div>
@@ -132,12 +125,7 @@
           <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Start Date: <span class="StarMarking">*</span>
           </label>
-          <!--<input type="date"
-         id="StartDate"
-         name="StartDate"
-         class="form-input"
-         formControlName="StartDate"
-         [(ngModel)]="request.StartDate" (change)="onDateChange()" />-->
+          
           <input type="date"
                  id="StartDate"
                  name="StartDate"
@@ -159,12 +147,7 @@
           <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
             End Date: <span class="StarMarking">*</span>
           </label>
-          <!--<input type="date"
-         id="EndDate"
-         name="EndDate"
-         class="form-input"
-         formControlName="EndDate"
-         [(ngModel)]="request.EndDate" [min]="request.StartDate" (change)="onDateChange()" />-->
+         
           <input type="date"
                  id="EndDate"
                  name="EndDate"
@@ -267,6 +250,9 @@
 
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-list"></i>Staff  Details New Training</b>
+        <a href="javascript:void(0);" (click)="exportToExcelNew()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Download Execel
+        </a>
         <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openOTP()"><i class="ti ti-download"></i> Download Excel</a> -->
       </div>
       <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
@@ -368,7 +354,9 @@
     <div class="card-body p-5">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-list"></i>Staff  Details Completed Training</b>
-        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="openOTP()"><i class="ti ti-download"></i> Download Excel</a> -->
+        <a href="javascript:void(0);" (click)="exportToExcelCom()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Download Execel
+        </a>
       </div>
       <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
         <div class="">
