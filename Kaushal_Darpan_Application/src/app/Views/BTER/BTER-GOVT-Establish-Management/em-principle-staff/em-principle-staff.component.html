@@ -328,7 +328,7 @@
             <th class="text-left">Course</th>
             <th class="text-left">Subject</th>
             <th class="text-left">Contact Details</th>
-            <th class="text-left">Address Details</th>
+            <!-- <th class="text-left">Address Details</th> -->
             <th class="text-left">Profile Status</th>
             <th class="text-left">View Profile</th>
             <th class="text-left">Action</th>
@@ -349,11 +349,11 @@
               <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
               <p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>
             </td>
-            <td>
+            <!-- <td>
               <p *ngIf="row.Address?.length>0" style="max-width:350px">
                 {{row.Address}}, {{row.District}}, {{row.State}}, {{row.PinCode}}
               </p>
-            </td>
+            </td> -->
             <td>
               {{row.ProfileStatus}}
             </td>

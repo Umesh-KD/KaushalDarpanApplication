@@ -253,3 +253,9 @@ export class RoomDetailDataModel{
   public GuestRoomDetailID?: number = 0;
   public GuestHouseID?: number = 0;
 }
+
+export class UnreserveGuestRoomDataModel {
+  public GuestRoomDetailID?: number = 0;
+  public GuestHouseID?: number = 0;
+  public ModifyBy?: number = 0;
+}

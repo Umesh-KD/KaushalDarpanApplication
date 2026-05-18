@@ -15,6 +15,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { StaffDetailsDataModel } from '../../../../Models/StaffMasterDataModel';
 import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
+import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
 
 @Component({
   selector: 'app-dte-committee-assign',
@@ -48,6 +49,7 @@ export class DTECommitteeAssignComponent {
   CommitteeDocs: string = ''
   DTECommitteID: number = 0;
 
+  @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
@@ -417,5 +419,12 @@ export class DTECommitteeAssignComponent {
   CloseModalRequestHistorylist1() {
     this.modalService.dismissAll();
     this.modalReference?.close();
+  }
+
+  async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+    //debugger
+    this.childComponentViewStaffProfile.StaffID = StaffID;
+    this.childComponentViewStaffProfile.UserID = UserID;
+    await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 }

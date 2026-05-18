@@ -169,9 +169,11 @@
             <td align="left">{{row.Remark}}</td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID)" title="View Profile"><i class="ti ti-eye"></i></a>
+                <!-- <a (click)="OnConfirm(Modal_StaffDetails,row.StaffID)" title="View Profile"><i class="ti ti-eye"></i></a> -->
                 <a href="javascript:void(0);" class="btn bg-blue text-red" title="History"
                   (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-list"></i></a>
+
+                <a (click)="OpenStaffProfileViewModal(row.StaffID,row.StaffUserID)" title="View Profile"><i class="ti ti-eye"></i></a>
               </div>
             </td>
           </tr>
@@ -258,7 +260,7 @@
                 </td>
 
               </tr>
-              <tr *ngIf="UserRequestHistoryList?.length==0">
+              <tr *ngIf="UserApplyInstituteList?.length==0">
                 <td colspan="10" class="text-center">No Record Found </td>
               </tr>
             </tbody>
@@ -503,7 +505,7 @@
                 <th class="text-left">Teacher Name</th>
                 <th class="text-left">Status</th>
                 <th class="text-left">Remarks</th>
-                <th class="text-left">Action Name</th>
+                <th class="text-left">Action By</th>
                 <th class="text-left">Date</th>
               </tr>
             </thead>
@@ -533,3 +535,5 @@
   </div>
 
 </ng-template>
+
+<app-view-staff-profile-modal #Modal_StaffDetailsViewModal></app-view-staff-profile-modal>
