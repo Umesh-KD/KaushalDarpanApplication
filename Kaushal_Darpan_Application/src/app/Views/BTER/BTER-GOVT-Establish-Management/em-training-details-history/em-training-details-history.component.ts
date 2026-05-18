@@ -14,6 +14,8 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
+import * as XLSX from 'xlsx';
+
   @Component({
     selector: 'app-em-training-details-history',
     standalone: false,
@@ -133,30 +135,33 @@ export class emtrainingdetailshistoryComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.StaffTrainingDetailsCompletedTrainingDataList = data.Data;
-        }
-        else {
-          this.StaffTrainingDetailsNewTrainingDataList = [];
-        }
-
-        if (this.statusID != 0) {
-          this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.StatusID == this.statusID);
-        } else {
-          this.StaffTrainingDetailsCompletedTrainingDataList = data.Data;
-        }
-
-        if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
-          if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
-            this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 1 && (item.RoleID == 7 || item.RoleID == 13) )
+          if (this.statusID != 0) {
+            this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.StatusID == this.statusID);
+          } 
+          debugger
+          if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+            if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
+              if (this.StaffTrainingDetailsCompletedTrainingDataList?.length > 0) {
+                this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.ISNonGazetted == 1 && (item.RoleID == 7 || item.RoleID == 13))
+              }
+              else {
+                this.StaffTrainingDetailsCompletedTrainingDataList = [];
+              }
+              
+            }
+            if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+              if (this.StaffTrainingDetailsCompletedTrainingDataList?.length > 0) {
+                this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.ISNonGazetted == 2 && (item.RoleID == 7 || item.RoleID == 13))
+              }
+              else {
+                this.StaffTrainingDetailsCompletedTrainingDataList = [];
+              }
+            }
           }
+         
+         
         }
-         if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
-           if (this.StaffTrainingDetailsNewTrainingDataList?.length > 0) {
-            this.StaffTrainingDetailsNewTrainingDataList = this.StaffTrainingDetailsNewTrainingDataList.filter((item: any) => item.ISNonGazetted == 2 && (item.RoleID == 7 || item.RoleID == 13))
-          }
-        }
-
-
-
+       
       })
     } catch (error) {
       console.error(error);
@@ -304,4 +309,58 @@ export class emtrainingdetailshistoryComponent {
       await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
     }
 
+
+    exportToExcelCom(): void {
+
+      const unwantedColumns = [
+        'StaffTrainingDetailID',
+        'StaffID',
+        'UserID',
+        'StaffTypeID',
+        'StatusID',
+        'ISNonGazetted',
+        'RoleID',
+        'StaffUserID'
+      ];
+
+
+      if (this.StaffTrainingDetailsCompletedTrainingDataList.length == 0) {
+        alert('No records available for Excel export.');
+        return;
+      }
+
+      const filteredData = this.StaffTrainingDetailsCompletedTrainingDataList.map(
+        (item: any, index: number) => {
+
+          const filteredItem: any = {};
+
+          // Add Serial Number
+          filteredItem["Sr. No"] = index + 1;
+
+          Object.keys(item).forEach(key => {
+            if (!unwantedColumns.includes(key)) {
+              filteredItem[key] = item[key];
+            }
+          });
+
+          return filteredItem;
+        });
+
+      const ws: XLSX.WorkSheet =
+        XLSX.utils.json_to_sheet(filteredData);
+
+      const wb: XLSX.WorkBook =
+        XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[:.-]/g, '_');
+
+      XLSX.writeFile(
+        wb,
+        `StaffDetailsCompletedTraining_${timestamp}.xlsx`
+      );
+    }
 }

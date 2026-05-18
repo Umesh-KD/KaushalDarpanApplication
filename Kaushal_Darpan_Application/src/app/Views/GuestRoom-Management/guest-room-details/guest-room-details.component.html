@@ -181,6 +181,7 @@
             <th class="text-left">Fan Facilities</th>
             <th class="text-left">Cooling Facilities</th>
             <th class="text-left">Attached Bath Facilities</th>
+            <th class="text-left">Reservation Status</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -197,13 +198,13 @@
             <td align="left">
               <span [ngClass]="{'bg-success': row.StudyTableFacilities == 1, 'bg-danger': row.StudyTableFacilities == 2}"
                   class="btn btn-sm text-white">
-                {{ row.StudyTableFacilities == 1 ? 'Available' : 'Not Available' }}
+                {{ row.StudyTableFacilities_str}}
               </span>
             </td> 
             <td align="left">
               <span [ngClass]="{'bg-success': row.FanFacilities == 1, 'bg-danger': row.FanFacilities == 2}"
                     class="btn btn-sm text-white">
-                {{ row.FanFacilities == 1 ? 'Available' : 'Not Available' }}
+                {{ row.FanFacilities_str}}
               </span>
             </td>
             <td align="left">
@@ -223,9 +224,10 @@
                                 'bg-danger': row.AttachedBathFacilities == 2
                               }"
                     class="btn btn-sm text-white">
-                {{ row.AttachedBathFacilities == 1 ? 'Available' : 'Not Available' }}
+                {{ row.AttachedBathFacilitiesStatus }}
               </span>
             </td>
+            <td align="left">{{ row.ReservationStatus}}</td> 
 
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">

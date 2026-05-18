@@ -2186,9 +2186,9 @@ export class CommonFunctionService {
       .toPromise();
   }
 
-  public async GetStudentAttandanceTimeDDL(StaffID: number, SubjectID: number, StreamID: number = 0, SectionID:number=0) {
+  public async GetStudentAttandanceTimeDDL(StaffID: number, SubjectID: number, StreamID: number = 0, SectionID: number = 0, DayID:number=0) {
 
-    return await this.http.get(`${this.APIUrl}/GetStudentAttandanceTimeDDL/${StaffID}/${SubjectID}/${StreamID}/${SectionID}`, this.headersOptions)
+    return await this.http.get(`${this.APIUrl}/GetStudentAttandanceTimeDDL/${StaffID}/${SubjectID}/${StreamID}/${SectionID}/${DayID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

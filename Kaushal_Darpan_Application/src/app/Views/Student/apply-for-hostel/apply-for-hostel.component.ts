@@ -1211,6 +1211,41 @@ export class ApplyForHostelComponent {
     }
   }
 
+  //async GetStudent_By_HostelMeritlist() {
+  //  try {
+  //    this.StudentChekMerit.StudentId = this.sSOLoginDataModel?.StudentID ?? 0;
+  //    this.StudentChekMerit.HostelID = this.StudentDetailsList?.[0]?.HostelID ?? 0;
+  //    this.StudentChekMerit.BrachId = 0;
+  //    this.StudentChekMerit.InstituteID = 0;
+  //    this.StudentChekMerit.EndTermID = this.sSOLoginDataModel?.EndTermID ?? 0;
+  //    await this.studentRequestService.GetStudent_By_HostelMeritlist(this.StudentChekMerit)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+
+  //        if (data['Data']?.length > 0) {
+
+  //          const item = data['Data'][0];
+
+  //          // First Row
+  //          this.StudentDetailsMeritList.push({
+  //            ...item,
+  //            Status: 'Provisional Merit'
+  //          });
+
+  //          // Second Row
+  //          this.StudentDetailsMeritList.push({
+  //            ...item,
+  //            Status: 'Final Merit'
+  //          });
+  //        }
+
+  //      }, error => console.error(error));
+
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //}
   async GetStudent_By_HostelMeritlist() {
     try {
 
@@ -1252,11 +1287,11 @@ export class ApplyForHostelComponent {
       console.log(Ex);
     }
   }
-
   CloseModal() {
     this.modalService.dismissAll();
     this.isSubmitted = false;
   }
+
 
  }
 
