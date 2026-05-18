@@ -343,7 +343,7 @@ export class RosteComponent implements OnInit {
 
   async sectionDDlAcRoster() {
 
-    
+    this.TableForm.get('SectionID')?.setValue(0);
     const GetSemesterID = this.TableForm.get('SemesterID')?.value;
     const GetstreamId = this.TableForm.get('StreamID')?.value;
     const GetSubjectID = this.TableForm.get('SubjectID')?.value;

@@ -54,9 +54,11 @@ export class BterUnlockCalenderComponent {
   public ITIRemarkList: any = [];
   public SanctionedList: any = [];
   public FinancialYearList: any = [];
+  public DayList: any[] = [];
   public SeatIntakeID: number | null = null;
   public branchSearchRequest = new BranchStreamTypeWiseSearchModel()
-  public BranchID: number = 0 
+  public BranchID: number = 0
+  public DayID:number=2
   public InstituteID: number = 0
   public request = new PublicInfoDataModel()
   public State: number = 0;
@@ -108,8 +110,9 @@ export class BterUnlockCalenderComponent {
 
 
   
-      this.InstituteID = this.SSOLoginDataModel.InstituteID
-      this.GetStaff_InstituteWise()
+    this.InstituteID = this.SSOLoginDataModel.InstituteID
+    this.DayListBind();
+    this.GetStaff_InstituteWise()
     
 
 
@@ -240,6 +243,12 @@ export class BterUnlockCalenderComponent {
     return `${y}-${m}-${d}`;
   }
   async getCalendarEventModel() {
+    debugger;
+    if (this.SubjectID == 0 || this.StaffID == 0 || this.SectionID == 0 || this.AttandanceTimeID == 0) {
+      this.toastr.warning("Please Select All the Required Field");
+      return;
+    }
+
     this.request.CourseTypeId = this.SSOLoginDataModel.Eng_NonEng
     this.request.CreatedBy = this.SSOLoginDataModel.UserID;
     this.request.IPAddress = "";
@@ -268,6 +277,22 @@ export class BterUnlockCalenderComponent {
     } catch (Ex) {
       console.log(Ex);  // Handle any error that occurs during the async call
     }
+  }
+
+  DayListBind() {
+
+    this.DayList = [
+
+      { DayID: 2, DayName: 'Monday' },
+      { DayID: 3, DayName: 'Tuesday' },
+      { DayID: 4, DayName: 'Wednesday' },
+      { DayID: 5, DayName: 'Thursday' },
+      { DayID: 6, DayName: 'Friday' },
+      { DayID: 7, DayName: 'Saturday' },
+      { DayID: 1, DayName: 'Sunday' },
+    ];
+
+    this.AttandanceTimeID = 0;
   }
 
   populateMonthDays() {
@@ -326,7 +351,10 @@ export class BterUnlockCalenderComponent {
   }
 
   async ResetControl() {
+    this.StaffID=0
     this.SubjectID = 0
+    this.SectionID = 0
+    this.AttandanceTimeID=0
     this.SSOID = ''
     this.eventsList = []
   }
@@ -409,6 +437,7 @@ export class BterUnlockCalenderComponent {
   }
 
   saveAllEvents() {
+    debugger
     try {
       if (!this.StaffID) {
         this.toastr.warning('Please select Staff');
@@ -659,16 +688,11 @@ export class BterUnlockCalenderComponent {
     //  }, (error: any) => console.error(error)
     //);
 
-
-
-    this.GetStudentAttandanceTimeDDL()
-
-
   }
 
   async GetStudentAttandanceTimeDDL() {
-
-    await this.commonFunctionService.GetStudentAttandanceTimeDDL(this.StaffID, this.SubjectID, 0, this.SectionID).then((data: any) => {
+    this.AttandanceTimeID = 0;
+    await this.commonFunctionService.GetStudentAttandanceTimeDDL(this.StaffID, this.SubjectID, 0, this.SectionID,  this.DayID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
 
       debugger
