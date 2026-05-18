@@ -125,8 +125,8 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
         To_OfficeID: [0, [DropdownValidators]],
         To_ddlDistrictID: [0, []],
         To_ddlCollege: [0, []],
-
-
+        Designation: [''],
+        SSOID: [''],
       });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -360,6 +360,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
       else {
         this.ShowCheckBoxId = 0;
       }
+      this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderDTEReview);
     }
 
     async onManualRequest(model: any) {
@@ -404,7 +405,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
           this.RequestManual.NonGazetteName = this.GetStaffPersonalDetailsList[0]["ISNonGazetted"];
           this.RequestManual.UserID = this.GetStaffPersonalDetailsList[0]["UserID"];
           this.RequestManual.SSOID = this.GetStaffPersonalDetailsList[0]["SSOID"];
-        
+          this.request.EmployeeDesignation = this.GetStaffPersonalDetailsList[0]["DesignationNameEnglish"];
           
         });
       }
@@ -545,7 +546,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
             this.InstituteList = data['Data'];
             this.To_InstituteList = data['Data'];
             this.InstituteList = this.InstituteList.filter((item: any) => item.TypeID == 1);
-            this.To_InstituteList = this.To_InstituteList.filter((item: any) => item.TypeID == 1);
+           
             
 
           }, error => console.error(error));
@@ -633,6 +634,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.To_InstituteList = data['Data'];
+            this.To_InstituteList = this.To_InstituteList.filter((item: any) => item.TypeID == 1);
           }, error => console.error(error));
 
       } catch (error) {
@@ -775,4 +777,57 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
       this.childComponentViewStaffProfile.UserID = UserID;
       await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
     }
+
+    exportToExcel(): void {
+
+      if (this.EM_TransferProcessList.length == 0) {
+        alert('No records available for Excel export.');
+        return;
+      }
+
+      const unwantedColumns = [
+        'TransferSystemID',
+        'FinalApproveStatus',
+        'ISNonGazetted',
+        'StatusID',
+        'StaffUserID',
+        'StaffID'
+      ];
+
+      const filteredData = this.EM_TransferProcessList.map(
+        (item: any, index: number) => {
+
+          const filteredItem: any = {};
+
+          // Add Serial Number
+          filteredItem["Sr. No"] = index + 1;
+
+          Object.keys(item).forEach(key => {
+            if (!unwantedColumns.includes(key)) {
+              filteredItem[key] = item[key];
+            }
+          });
+
+          return filteredItem;
+        });
+
+      const ws: XLSX.WorkSheet =
+        XLSX.utils.json_to_sheet(filteredData);
+
+      const wb: XLSX.WorkBook =
+        XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[:.-]/g, '_');
+
+      XLSX.writeFile(
+        wb,
+        `TabularTransferList_${timestamp}.xlsx`
+      );
+    }
+   
+
 }

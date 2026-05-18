@@ -79,14 +79,16 @@
               (click)="onManualRequest(ManualRequest)">
         Manual Request
       </button>
-
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-download"></i> Download Execel
+      </a>
     </div>
 
   </div>
 
   <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
     <div class=" ">
-      <label>Dispatch No:<span class="StarMarking">*</span></label>
+      <label>Order/Dispatch No:<span class="StarMarking">*</span></label>
       <input class="form-input" type="text" id="DispatchNo" [(ngModel)]="requestUp.DispatchNo">
     </div>
     <div class=" ">
@@ -232,10 +234,22 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
-              <select class="form-select" [(ngModel)]="RequestManual.PostID" formControlName="PostID" (change)="PostChange()">
+              <ng-select [items]="PostList"
+                         bindLabel="Name"
+                         bindValue="ID"
+                         formControlName="PostID"
+                         [(ngModel)]="RequestManual.PostID"
+                         (change)="PostChange()"
+                         placeholder="--Select--"
+                         [searchable]="true"
+                         [clearable]="true"
+                         [virtualScroll]="true"
+                         [loading]="isLoading">
+              </ng-select>
+              <!--<select class="form-select" [(ngModel)]="RequestManual.PostID" formControlName="PostID" (change)="PostChange()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
-              </select>
+              </select>-->
             </div>
 
             <div>
@@ -247,8 +261,17 @@
                 </option>
               </select>
             </div>
+            <div *ngIf="request?.EmployeeDesignation != null && request?.EmployeeDesignation != ''">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Designation
+              </label>
 
-
+              <input type="text"
+                     id="Designation"
+                     [(ngModel)]="request.EmployeeDesignation"
+                     formControlName="Designation"
+                     readonly />
+            </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Transfer Category <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="RequestManual.TransfercateID" formControlName="TransfercateID">
@@ -298,10 +321,24 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
-              <select class="form-select" [(ngModel)]="RequestManual.To_PostID" formControlName="To_PostID">
+
+
+              <ng-select [items]="To_PostList"
+                         bindLabel="Name"
+                         bindValue="ID"
+                         formControlName="To_PostID"
+                         [(ngModel)]="RequestManual.To_PostID"
+                         placeholder="--Select--"
+                         [searchable]="true"
+                         [clearable]="true"
+                         [virtualScroll]="true"
+                         [loading]="isLoading">
+              </ng-select>
+
+              <!--<select class="form-select" [(ngModel)]="RequestManual.To_PostID" formControlName="To_PostID">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of To_PostList" [value]="item.ID">{{item.Name}}</option>
-              </select>
+              </select>-->
             </div>
 
           </div>
