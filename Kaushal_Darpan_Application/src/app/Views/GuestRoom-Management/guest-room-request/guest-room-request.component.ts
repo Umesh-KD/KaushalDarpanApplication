@@ -89,6 +89,7 @@ export class GuestRoomRequestComponent {
   public InstituteMasterDDLList: any = [];
   emitraRequest = new EmitraRequestDetails();
   public PaymentDetailtList: any = [];
+  public GenderList: any = [];
   public isMarksheet: boolean = false;
   public isMigration: boolean = false;
   public smsSendGuestHouseName: string = '';
@@ -116,7 +117,7 @@ export class GuestRoomRequestComponent {
       txtRemark: ['', Validators.required]
     });
     this.CheckInFormGroup = this.fb.group({
-      GuestRoomDetailID: ['', [DropdownValidators]]
+      GuestRoomDetailID: ['', [DropdownValidators]],
     });
 
     this.SSOIDFormGroup = this.fb.group({
@@ -132,22 +133,16 @@ export class GuestRoomRequestComponent {
         EmpID: ['', []],
         txtFromDate: ['', Validators.required],
         txtFromTime: [''],
-        txtToDate: ['', Validators.required],
-        txtToTime: [''],
         Reason: [''],
         txtRoomFee: [{ value: '', disabled: true }, Validators.required],
-        ddlGuestHouseID: ['', Validators.required],
         Purpose: ['', [DropdownValidators]],
         GenderId: ['', [DropdownValidators]],
-        CoolingFacilities: ['', [DropdownValidators]],
-        txtRoomType: ['', Validators.required],
-        txtSeatCapacity: ['', Validators.required],
-        txtRoomQuantity: [{ value: '', disabled: true }, Validators.required]
       });
     
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequestGuestStaffProfileSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequestGuestStaffProfileSearchModel.SSOID = this.sSOLoginDataModel.SSOID;
+    await this.GetGenderList();
     await this.GuestRequestList();
     await this.commonMaster();
     this.GetStatusID = Number(this.route.snapshot.paramMap.get('Status')) || 0;
@@ -693,6 +688,8 @@ export class GuestRoomRequestComponent {
       dropdownReq.CoolingFacilities = request.CoolingFacilities
       dropdownReq.RoomType = request.RoomType
       dropdownReq.GenderId = request.GenderId
+      dropdownReq.FromDate = request.FromDate
+      dropdownReq.ToDate = request.ToDate
 
       dropdownReq.action = "GetRoomForAllotment";
 
@@ -747,9 +744,35 @@ export class GuestRoomRequestComponent {
     }
   }
 
+  async GetGenderList() {
+    try {
+      await this.commonMasterService.GetCommonMasterData('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+        }, (error: any) => console.error(error)
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async openModal_ReservedRoomCheckIn(model: any, userSubmitData: any) {
     try {
-      // await this.GetRoomTypeListData(this.request);
+      debugger
+      this.requestReservedCheckIn.GuestHouseID = userSubmitData.GuestHouseID;
+      this.requestReservedCheckIn.GuestRoomDetailID = userSubmitData.GuestRoomDetailID;
+      this.requestReservedCheckIn.BedFee_OnDuty = userSubmitData.BedFee_OnDuty;
+      this.requestReservedCheckIn.BedFee_Private = userSubmitData.BedFee_Private;
+      this.requestReservedCheckIn.BedFee_Training = userSubmitData.BedFee_Training;
+      this.requestReservedCheckIn.SeatCapacity = userSubmitData.SeatCapacity;
+      this.requestReservedCheckIn.GuestCheckInOutID = userSubmitData.GuestCheckInOutID;
+      this.requestReservedCheckIn.RoomType = userSubmitData.RoomType;
+      this.requestReservedCheckIn.CoolingFacilities = userSubmitData.CoolingFacilities;
+
+      const [dd, mm, yyyy] = userSubmitData.FromDate.split('-');
+      this.requestReservedCheckIn.FromDate = `${yyyy}-${mm}-${dd}`;
+
       this.modalReference = this.modalService.open(model, { size: 'xl', backdrop: 'static' });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -759,11 +782,24 @@ export class GuestRoomRequestComponent {
   CloseModal_ReservedRoomCheckIn() {
     this.modalService.dismissAll();
     this.modalReference?.close();
+    this.requestReservedCheckIn = new GuestApplyForGuestRoomDataModel();
+    this.isSubmitted = false;
+  }
+
+  async onChangePurpose() {
+    if(this.requestReservedCheckIn.Purpose == 1){
+      this.requestReservedCheckIn.RoomFee = this.requestReservedCheckIn.BedFee_Private || 0
+    } else if(this.requestReservedCheckIn.Purpose == 2){
+      this.requestReservedCheckIn.RoomFee = this.requestReservedCheckIn.BedFee_OnDuty || 0
+    } else if(this.requestReservedCheckIn.Purpose == 3){
+      this.requestReservedCheckIn.RoomFee =  this.requestReservedCheckIn.BedFee_Training || 0
+    } else {
+      this.requestReservedCheckIn.RoomFee = 0
+    }
   }
 
   async CheckUserExists(SSOID: any) {
     if (SSOID.target.value != null) {
-      debugger
       this.isSubmit = true;
       await this.commonMasterService.CheckSSOIDExists(SSOID.target.value, this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.InstituteID)
         .then((data: any) => {
@@ -801,6 +837,8 @@ export class GuestRoomRequestComponent {
             this.requestReservedCheckIn.PostalAddress = data['Data'][0]['Address'];
             this.requestReservedCheckIn.UserID = data['Data'][0]['UserID'];
             this.requestReservedCheckIn.RequestSSOID = data['Data'][0]['SSOID'];
+            this.requestReservedCheckIn.GenderId = data['Data'][0]['GenderID'];
+            this.requestReservedCheckIn.EmpID = data['Data'][0]['EmployeeID'];
           } else if(data.State === EnumStatus.Error) {
             this.toastr.error(data.ErrorMessage);
           } else {
@@ -810,5 +848,157 @@ export class GuestRoomRequestComponent {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async openOTPModal_Apply() {
+    this.isSubmitted = true;
+    if (this.IIPMasterFormGroup.invalid) {
+      this.toastr.error("Please enter required fields !");
+      return
+    }
+    if (this.requestReservedCheckIn.GuestHouseID == 0) {
+      this.toastr.warning("Guest House Name is requird !");
+      return
+    } else if (this.requestReservedCheckIn.RoomType == 0) {
+      this.toastr.warning("Guest House Room Type is requird !");
+      return
+    } 
+
+    if (this.requestReservedCheckIn.Dis_EmpIDCardPhoto == '') {
+      this.toastr.warning('Please Upload Employee ID Card Document');
+      return;
+    }
+    if (this.requestReservedCheckIn.Dis_PurposeDocPhoto == '') {
+      this.toastr.warning('Please Upload Purpose Document');
+      return;
+
+    }
+    if (this.requestReservedCheckIn.Dis_IDProofPhoto == '') {
+      this.toastr.warning('Please Upload Valid Photo ID');
+      return;
+    }  
+
+    this.childComponent.MobileNo = this.requestReservedCheckIn.MobileNo
+
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+
+    // do work
+    await this.ReservedRoomCheckIn();
+  }
+
+  async ReservedRoomCheckIn() {
+    try {      
+      this.isLoading = true;
+
+      this.loaderService.requestStarted();
+
+      this.requestReservedCheckIn.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.requestReservedCheckIn.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      // this.request.UserID = this.sSOLoginDataModel.UserID;
+      this.requestReservedCheckIn.RoleID = this.sSOLoginDataModel.RoleID;
+      this.requestReservedCheckIn.Status = 215;
+      this.requestReservedCheckIn.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.requestReservedCheckIn.IsForSelf = false;
+      // this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
+
+      //save
+      await this._GuestRoomManagmentService.ReservedRoomCheckIn(this.requestReservedCheckIn)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (data.State === EnumStatus.Success) {
+            this.toastr.success(this.Message)
+            this.ResetControls();
+            this.CloseModal_ReservedRoomCheckIn();
+            await this.GuestRequestList();
+          } else if(data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage);
+          }else {
+            this.toastr.error(this.ErrorMessage)
+          }
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type == 'image/jpeg'
+          || this.file.type == 'image/jpg'
+          || this.file.type == 'image/png'
+          || this.file.type == 'application/pdf'
+        ) {
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+        }
+        else {
+          this.toastr.error('Select Only jpeg/jpg/png file')
+          return
+        }
+
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              if (Type == "Photo") {
+                this.requestReservedCheckIn.Dis_EmpIDCardPhoto = data['Data'][0]["Dis_FileName"];
+                this.requestReservedCheckIn.EmpIDCardPhoto = data['Data'][0]["FileName"];
+              } else if (Type == "IDProofPhoto") {
+                this.requestReservedCheckIn.Dis_IDProofPhoto = data['Data'][0]["Dis_FileName"];
+                this.requestReservedCheckIn.IDProofPhoto = data['Data'][0]["FileName"];
+              } else if (Type == "PurposeDocPhoto") {
+                this.requestReservedCheckIn.Dis_PurposeDocPhoto = data['Data'][0]["Dis_FileName"];
+                this.requestReservedCheckIn.PurposeDocPhoto = data['Data'][0]["FileName"];
+              }
+              event.target.value = null;
+            }
+            else if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
+            }
+            else {
+              this.toastr.warning(data.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+
+      this.loaderService.requestEnded();
+
+    }
+  }
+
+  // reset
+  ResetControls() {
+    this.requestReservedCheckIn = new GuestApplyForGuestRoomDataModel();
+    this.SSOIDFormGroup.patchValue({
+      SSOID: ''
+    });
+    this.isSubmit = false;
   }
 }

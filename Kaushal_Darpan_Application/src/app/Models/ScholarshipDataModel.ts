@@ -18,3 +18,24 @@ export class ScholarshipSearchModel extends RequestBaseModel {
   public StreamID: number = 0;
   public InstituteID: number = 0;
 }
+export class ScholarshipOnBoardModel {
+
+  NODALOFFICERNAME: string = '';
+  NODALOFFICEREMAIL: string = '';
+  NODALOFFICERMOBILE: string = '';
+  NODALOFFICERAADHAAR: string = '';
+
+  DESIGNATION1: string = '';
+  NAME1: string = '';
+  EMAILADDRESS1: string = '';
+  MOBILENUMBER1: string = '';
+
+  DESIGNATION2: string = '';
+  NAME2: string = '';
+  EMAILADDRESS2: string = '';
+  MOBILENUMBER2: string = '';
+
+  NODALOFFICERAADHAAR_REFNO: string = '';
+  InstCode:string=''
+  SSOID:string=''
+}
