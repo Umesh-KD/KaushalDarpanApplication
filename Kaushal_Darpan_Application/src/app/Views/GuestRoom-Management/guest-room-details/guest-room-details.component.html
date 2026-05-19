@@ -227,10 +227,15 @@
                 {{ row.AttachedBathFacilitiesStatus }}
               </span>
             </td>
-            <td align="left">{{ row.ReservationStatus}}</td> 
+            <td align="left">{{ row.ReservationStatus}} </td> 
 
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" title="Cancel Reservation"
+                  (click)="UnreserveGuestHouseRoom(row)" 
+                  *ngIf="row.IsCancelReservation == 1">
+                  <i class="ti ti-x"></i>
+                </a>
                 <a href="javascript:void(0)" (click)="btnEdit_OnClick(row)" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0)" (click)="btnDelete_OnClick(row)" title="Delete"><i class="ti ti-trash"></i> </a>
               </div>

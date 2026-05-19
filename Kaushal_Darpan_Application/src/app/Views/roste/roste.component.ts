@@ -171,7 +171,8 @@ export class RosteComponent implements OnInit {
       this.subjectsearch.SemesterID = SemesterID
       this.subjectsearch.DepartmentID = 1
       this.subjectsearch.SchemeID = 1348
-      this.commonMasterService.GetSubjectMasterDDL_New(this.subjectsearch).then((data: any) => {
+      this.subjectsearch.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.commonMasterService.Get_SubjectMasterByCondition(this.subjectsearch).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SubjectMasterDDL = data.Data;
       })

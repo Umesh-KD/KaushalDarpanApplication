@@ -252,7 +252,7 @@ export class BranchWiseHodComponent {
         return;
       }
 
-
+      debugger
 
 
       const isSSOID = this.ApplyList.some((x: { SSOID: string }) =>
@@ -465,6 +465,8 @@ export class BranchWiseHodComponent {
 
   async onSemesterChange(event: any) {
     debugger
+    this.request.StreamID = 0;
+    this.IIPMasterFormGroup.get('StreamIDs')?.setValue('')
     if (this.request.SemesterID == 1) {
       this.request.SemesterIDs = "1,2";
     }
@@ -524,11 +526,11 @@ export class BranchWiseHodComponent {
         .split(',')
         .map((id: string) => Number(id.trim()))
       : [];
-    if (rowData.SemesterID = "3,4,5") {
+    if (rowData.SemesterID == "3,4,5") {
       rowData.SemesterID = 3
     }
 
-    else if (rowData.SemesterID = "1,2") {
+    else if (rowData.SemesterID == "1,2") {
       rowData.SemesterID = 1
     } else {
       rowData.SemesterID = 6

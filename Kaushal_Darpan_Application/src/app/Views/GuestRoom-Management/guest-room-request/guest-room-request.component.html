@@ -90,6 +90,7 @@
           <tr>
             <th class="text-left" style="width:100px">#</th>
             <th class="text-left">Request Applier Information</th>
+            <th class="text-left">Documents</th>
             <th class="text-left">Employee ID</th>
             <th class="text-left">From Date/Time</th>
             <th class="text-left">To Date/Time</th>
@@ -112,6 +113,23 @@
               <span class="block fw-600">{{item.RequestName}} - ({{item.RoleNameEnglish}})</span>
               <span class="block">Department - {{item.DepartmentName}}</span>
               <span class="block">College - {{item.InstituteName}}</span>
+            </td>
+            <td align="left">
+              <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <span style="white-space: nowrap;"><b>Employee ID:</b> 
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.EmplDCardPhoto"
+                    class="text-info" target="_blank"> {{item.Dis_EmpIDCardPhoto}}</a>
+                </span>
+                <span style="white-space: nowrap;"><b>Purpose Doc:</b>
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.EmplDCardPhoto"
+                    class="text-info" target="_blank"> {{item.Dis_EmpIDCardPhoto}}</a>
+                </span>
+                <span style="white-space: nowrap;">
+                  <b>Valid Photo ID:</b> 
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.IDProofPhoto"
+                    class="text-info" target="_blank"> {{item.Dis_IDProofPhoto}}</a>
+                </span>
+              </div>
             </td>
             <td align="left"><a title="View Employee" href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.EmplDCardPhoto}}" target="_blank">{{item.EmpID}}</a> </td>
             
