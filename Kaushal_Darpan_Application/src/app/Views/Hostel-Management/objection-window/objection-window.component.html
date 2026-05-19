@@ -45,7 +45,7 @@
     </div>
   </div>-->
 
-      <div class="toggle-wrapper">
+      <!--<div class="toggle-wrapper">
         <label class="switch">
           <input type="checkbox" [(ngModel)]="isObjectionActive">
           <span class="slider round"></span>
@@ -54,7 +54,7 @@
         <span class="badge ms-2" [ngClass]="isObjectionActive ? 'bg-success' : 'bg-danger'">
           {{ isObjectionActive ? 'Active' : 'Inactive' }}
         </span>
-      </div>
+      </div>-->
 
       <div class=""></div>
 
@@ -83,8 +83,8 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of StudentReqListList | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td align="left" >
-              <input type="checkbox"  [(ngModel)]="item.selected" (change)="checkIfAllSelected()"/>
+            <td align="left">
+              <input type="checkbox" [(ngModel)]="item.selected" (change)="checkIfAllSelected()" />
             </td>
             <td align="left">{{ idx + 1 }}</td>
             <td align="left">{{ item.StudentName }}</td>
@@ -99,8 +99,10 @@
                   <i class="ti ti-list"></i>
                 </a>
                 <a href="javascript:void(0);" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.AffidavitDocument}}" target="_blank" class="text-success" title="Show Affidavit Details"> <i class="ti ti-download downloadIcon"></i></a>
               </div>
             </td>
+           
           </tr>
         </tbody>
       </table>
