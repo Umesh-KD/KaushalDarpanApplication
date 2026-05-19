@@ -595,10 +595,14 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification<span class="StarMarking">*</span> </label>
-            <input autocomplete="off" class="form-input " placeholder="Enter Qualification" value="12dfgdf" name="Qualification" id="Qualification"
-                   formControlName="Qualification" [(ngModel)]="serviceReq.Qualification" />
-            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.Qualification.errors" class="text-danger">
-              <p *ngIf="_AddServiceistoryFormGroup.Qualification.errors.required">
+
+            <select class="form-select " name="QualificationID" id="QualificationID" formControlName="QualificationID"
+                  [(ngModel)]="serviceReq.QualificationID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of EmployeeQualificationDDLList" [value]="item.QualificationID">{{item.QualificationName}}</option>
+            </select>
+            <div *ngIf="isAddServiceReq&&_AddServiceistoryFormGroup.QualificationID.errors" class="text-danger">
+              <p *ngIf="!_AddServiceistoryFormGroup.QualificationID.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
