@@ -243,7 +243,7 @@ export class BterUnlockCalenderComponent {
     return `${y}-${m}-${d}`;
   }
   async getCalendarEventModel() {
-    debugger;
+    //debugger;
     if (this.SubjectID == 0 || this.StaffID == 0 || this.SectionID == 0 || this.AttandanceTimeID == 0) {
       this.toastr.warning("Please Select All the Required Field");
       return;
@@ -437,7 +437,7 @@ export class BterUnlockCalenderComponent {
   }
 
   saveAllEvents() {
-    debugger
+    //debugger
     try {
       if (!this.StaffID) {
         this.toastr.warning('Please select Staff');
@@ -460,7 +460,7 @@ export class BterUnlockCalenderComponent {
         return;
       }
 
-      debugger
+      //debugger
       const formattedEvents = (this.events || [])
         .filter((event: any) => {
 
@@ -549,7 +549,7 @@ export class BterUnlockCalenderComponent {
 
     await this.commonFunctionService.Iticollege(2, this.SSOLoginDataModel.Eng_NonEng).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
-      debugger;
+      //debugger;
       if (data.Data.length > 0) {
         this.InstituteList = data.Data;
       }
@@ -562,7 +562,7 @@ export class BterUnlockCalenderComponent {
   }
 
   Onyearchange() {
-    debugger
+    //debugger
     this.SubjectMasterDDL = []
     this.commonFunctionService.GetNonsubstitutesubject(this.SSOID, this.SSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
@@ -628,7 +628,7 @@ export class BterUnlockCalenderComponent {
 
 
   getSubjectMasterDDL(ID: any = 0, SemesterID: any = 0) {
-    debugger
+    //debugger
 
     this.subjectsearch.StreamID = ID
 
@@ -652,11 +652,11 @@ export class BterUnlockCalenderComponent {
 
   async ChangeSubjectDDL() {
 
-    debugger
+    //debugger
 
     const GetSubjectID = this.SubjectID
 
-    debugger
+    //debugger
     let obj = {
       SemesterID: 0,
       StreamID: 0,
@@ -695,7 +695,7 @@ export class BterUnlockCalenderComponent {
     await this.commonFunctionService.GetStudentAttandanceTimeDDL(this.StaffID, this.SubjectID, 0, this.SectionID,  this.DayID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
 
-      debugger
+      //debugger
       this.StudentAttandanceTimeDDL = data.Data;
     })
 

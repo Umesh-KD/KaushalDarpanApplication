@@ -9,6 +9,7 @@ import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DTECommitteeAssignComponent } from './dte-committee-assign.component';
 import { DTECommitteeAssignRoutingModule } from './dte-committee-assign-routing.module';
+import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.model';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { DTECommitteeAssignRoutingModule } from './dte-committee-assign-routing.
     TableSearchFilterModule,
     DTECommitteeAssignRoutingModule,
     OTPModalModule,
-    MatTooltipModule
+    MatTooltipModule,
+    ViewStaffProfileModalModule,
   ]
 })
 export class DTECommitteeAssignModule { }

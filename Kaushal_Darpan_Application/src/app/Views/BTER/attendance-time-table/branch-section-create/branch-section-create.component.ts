@@ -282,7 +282,7 @@ export class BranchSectionCreateComponent {
 
 
   async SemeIDAcStream() {
-    debugger
+    //debugger
     this.StreamMasterDDL=[];
     this.IIPMasterFormGroup.get('StreamID')?.setValue(0);
     this.IIPMasterFormGroup.get('StCount')?.setValue('');
@@ -426,7 +426,7 @@ export class BranchSectionCreateComponent {
     const baseTheory = Math.floor(totalStudents / sectionCount);
     let remTheory = totalStudents % sectionCount;
     //copy
-    debugger
+    //debugger
     let _StudentList =[];
     _StudentList =  this.StreamMasterDDL
                                           .filter((item: any) => item.StreamID == streamId)
@@ -1350,7 +1350,7 @@ export class BranchSectionCreateComponent {
 
   async DeleteData(item:any) {
     try {
-     debugger
+     //debugger
       //get all data
       let obj ={
         StreamID: item.StreamID,
@@ -1437,6 +1437,13 @@ export class BranchSectionCreateComponent {
     } catch (error) {
       console.error(error);
     }
+  }
+
+
+  GetSchemeWise() {
+    this.IIPMasterFormGroup.get('SemesterID')?.setValue(0);
+    this.IIPMasterFormGroup.get('StreamID')?.setValue(0);
+    this.IIPMasterFormGroup.get('StCount')?.setValue(0);   
   }
 
 }

@@ -8,6 +8,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { TabutarTransferListComponent } from './TabutarTransferList.component';
 import { TabutarTransferListRoutingModule } from './TabutarTransferList-routing.module';
 import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.model';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 
@@ -25,7 +26,8 @@ import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Managemen
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
-    ViewStaffProfileModalModule
+    ViewStaffProfileModalModule,
+    NgSelectModule
   ]
 })
 export class TabutarTransferListModule { }
