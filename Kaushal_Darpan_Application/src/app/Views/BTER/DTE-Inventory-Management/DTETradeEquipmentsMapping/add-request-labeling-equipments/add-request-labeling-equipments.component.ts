@@ -111,6 +111,11 @@ export class AddRequestLabelingEquipmentsComponent {
       this.sSOLoginDataModel =  JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       if (this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTE || this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON || this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier || this.sSOLoginDataModel.RoleID == this._EnumRole.Admin || this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral)  {
         this.RequestFormGroup.get('ddlInstituteID')?.disable();
+        this.RequestFormGroup.get('ddlCategoryId')?.disable();
+        this.RequestFormGroup.get('ddlEquipmentsId')?.disable();
+
+        
+
       }
     });
 
@@ -210,17 +215,24 @@ export class AddRequestLabelingEquipmentsComponent {
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.isSubmitted = true;
 
-    if (this.RequestFormGroup.value.CampanyName != null &&
-      this.RequestFormGroup.value.IdentificationMark != null &&
-      this.RequestFormGroup.value.ddlCategoryId != null &&
-      this.RequestFormGroup.value.ddlEquipmentsId != null &&      
-      this.RequestFormGroup.value.txtPricePerUnit != null &&
-      Number(this.RequestFormGroup.value.txtPricePerUnit) > 0 &&
-      this.RequestFormGroup.value.ApprovedQuantity != null &&
-      this.RequestFormGroup.value.ApprovedQuantity > 0 &&
-      this.RequestFormGroup.value.txtTotalPrice != null &&
-      this.RequestFormGroup.value.txtTotalPrice > 0 &&
-      this.RequestFormGroup.value.txtVoucherNumber != null) {
+
+    const formValue = this.RequestFormGroup.getRawValue();
+
+    if (
+      formValue.CampanyName != null &&
+      formValue.IdentificationMark != null &&
+      formValue.ddlCategoryId != null &&
+      formValue.ddlEquipmentsId != null &&
+      formValue.txtPricePerUnit != null &&
+      Number(formValue.txtPricePerUnit) > 0 &&
+      formValue.ApprovedQuantity != null &&
+      formValue.ApprovedQuantity > 0 &&
+      formValue.txtTotalPrice != null &&
+      formValue.txtTotalPrice > 0 &&
+      formValue.txtVoucherNumber != null
+    )
+    { 
+
       //Show Loading
       this.loaderService.requestStarted();
       this.isLoading = true;
