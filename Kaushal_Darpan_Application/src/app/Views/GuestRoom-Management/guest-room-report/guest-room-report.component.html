@@ -77,8 +77,10 @@
           <tr>
             <th class="text-left" style="width:100px">#</th>
             <th class="text-left">Request Applier Information</th>
-            <th class="text-left">Employee ID</th>
-            <!--<th class="text-left">ID Proof</th>-->
+            <th class="text-left">Documents</th>
+            <!-- <th class="text-left">Employee ID</th> -->
+            <th class="text-left">Guest House</th>
+            <th class="text-left">Room No</th>
             <th class="text-left">Check In Date Time</th>
             <th class="text-left">Check Out Date Time</th>
             <th class="text-left">Status</th>
@@ -89,12 +91,50 @@
           <tr *ngFor="let item of RequestList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
             <td align="left">
-              <span class="block fw-600">{{item.RequestName}} - ({{item.RoleNameEnglish}})</span>
+              <!-- <span class="block fw-600">{{item.RequestName}} - ({{item.RoleNameEnglish}})</span>
               <span class="block">Dpartment - {{item.DepartmentName}}</span>
-              <span class="block">College - {{item.InstituteName}}</span>
+              <span class="block">College - {{item.InstituteName}}</span> -->
+
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <span style="white-space: nowrap;">{{item.RequestName}} - ({{item.RoleNameEnglish}})
+                </span><br>
+                <span style="white-space: nowrap;"><b>Dpartment </b> - {{item.DepartmentName}}
+                </span><br>
+                <span style="white-space: nowrap;">
+                  <b>College</b> - {{item.InstituteName}}
+                </span><br>
+                <span style="white-space: nowrap;">
+                  <b>Employee ID</b> - {{item.EmpID}}
+                </span><br>
+                <span style="white-space: nowrap;">
+                  <b>Mobile No</b> - {{item.MobileNo}}
+                </span><br>
+                <span style="white-space: nowrap;">
+                  <b>Email</b> - {{item.Email}}
+                </span>
+              </div>
             </td>
-            <td align="left"><a title="View Employee" href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.EmplDCardPhoto}}" target="_blank">{{item.EmpID}}</a> </td>
+            <td align="left">
+              <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <span style="white-space: nowrap;"><b>Employee ID:</b> 
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.EmplDCardPhoto"
+                    class="text-info" target="_blank"> {{item.Dis_EmpIDCardPhoto}}</a>
+                </span>
+                <span style="white-space: nowrap;"><b>Purpose Doc:</b>
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.PurposeDocPhoto"
+                    class="text-info" target="_blank"> {{item.Dis_PurposeDocPhoto}}</a>
+                </span>
+                <span style="white-space: nowrap;">
+                  <b>Valid Photo ID:</b> 
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.IDProofPhoto"
+                    class="text-info" target="_blank"> {{item.Dis_IDProofPhoto}}</a>
+                </span>
+              </div>
+            </td>
+            <!-- <td align="left"><a title="View Employee" href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.EmplDCardPhoto}}" target="_blank">{{item.EmpID}}</a> </td> -->
             <!--<td align="left"><a title="View ID Proof" href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.IDProofPhoto}}" target="_blank">{{item.IDProofNo}}</a></td>-->
+            <td align="left">{{item.GuestHouseName}}</td>
+            <td align="left">{{item.RoomNo}}</td>
             <td align="left">{{item.CheckInDateTime}}</td>
             <td align="left">{{item.ChcekOutDateTime}}</td>
             <td align="left">{{item.StatusName}}</td>

@@ -188,6 +188,7 @@ export class BTER_EM_AddServiceHistoryDataModel extends RequestBaseModel {
   public FromDate:string=''
   public ToDate:string=''
   public DesignationID: number = 0
+  public QualificationID: number = 0
   public DesignationName?:string=''
   public Qualification:string=''
 
