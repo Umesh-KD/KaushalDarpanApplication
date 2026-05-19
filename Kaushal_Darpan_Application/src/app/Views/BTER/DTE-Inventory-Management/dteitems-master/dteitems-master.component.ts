@@ -116,6 +116,7 @@ export class DteItemsMasterComponent {
 
   async GetAllDataHistory(model: any,ID:number=0) {
     try {
+      debugger
       this.loaderService.requestStarted();
 
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
