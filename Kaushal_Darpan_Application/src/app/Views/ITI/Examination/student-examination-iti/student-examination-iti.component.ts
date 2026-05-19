@@ -1503,7 +1503,7 @@ export class StudentExaminationITIComponent
   exportToExcel(): void {
     const wantedColumns =
       ['SrNo', 'StudentName', 'FatherName', 'ApplicationNo', 'EnrollmentNo', 'Dis_DOB', 'MobileNo', 'RollNo', 'InstituteName', 'InstituteCode',
-      'TradeName','TradeCode', 'SemesterName', 'StudentExamStatus', 'strEligibilityStatus', 'StudentExamType', 'TransctionDate','PaidAmount'
+        'TradeName', 'TradeCode', 'SemesterName', 'StudentExamStatus', 'strEligibilityStatus', 'StudentExamType', 'TransctionDate', 'PaidAmount','StateRegNo'
     ];
 
     const exportData = this.PreExamStudentData.map((row: any, index: number) => {
