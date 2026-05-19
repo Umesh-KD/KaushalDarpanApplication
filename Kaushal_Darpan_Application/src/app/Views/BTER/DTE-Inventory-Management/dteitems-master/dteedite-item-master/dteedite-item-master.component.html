@@ -70,9 +70,8 @@
               <th class="border p-2">Item</th>
 
               <th class="border p-2">EquipmentCode</th>
-              <!-- <th class="border p-2" *ngIf="dnone==true">ItemDetailsId</th> -->
               <th class="border p-2">EquipmentWorking</th>
-              <th class="border p-2">Is Eligible For Auction</th>
+              <!--<th class="border p-2">Is Eligible For Auction</th>-->
             </tr>
           </thead>
           <tbody *ngIf="ItemDetailsList?.length > 0">
@@ -120,18 +119,9 @@
                   <p>Please select a status.</p>
                 </div>
               </td>
+             
               <!--<td class="border p-2">
-               <label>
-                 <ng-container *ngIf="ItemDetailsList[i]?.EquipmentWorking === 2 || item.get('equipmentStatus')?.value === '2'">
-                   <input type="checkbox" formControlName="isOption" [disabled]="ItemDetailsList[i]?.AuctionStatus === '1'"
-            [ngClass]="{'cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1'}" /> Is Auction
-                 </ng-container>
-               </label>
-             </td>-->
-              <td class="border p-2">
                 <label>
-
-                  <!-- <ng-container *ngIf="ItemDetailsList[i]?.EquipmentWorking === 2 || item.get('equipmentStatus')?.value === '2'"> -->
                   <ng-container>
                     <input type="checkbox"
                            formControlName="isOption"
@@ -139,7 +129,7 @@
                     Is Auction
                   </ng-container>
                 </label>
-              </td>
+              </td>-->
 
 
             </tr>

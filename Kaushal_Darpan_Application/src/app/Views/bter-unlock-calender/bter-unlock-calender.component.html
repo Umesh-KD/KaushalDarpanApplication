@@ -18,7 +18,7 @@
 
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:<span class="StarMarking">*</span></label>
             <select class="form-select" id="ddlBranch"
                     (change)="getSubjectMasterDDL()" [(ngModel)]="StaffID">
               <option value="0">--All--</option>
@@ -28,7 +28,7 @@
 
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject:</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject:<span class="StarMarking">*</span></label>
             <select class="form-select" id="ddlBranch"
                     [(ngModel)]="SubjectID" (change)="ChangeSubjectDDL()">
               <option value="0">--All--</option>
@@ -38,24 +38,39 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name<span class="StarMarking">*</span></label>
-            <select class="form-select" id="ddlBranch"
+            <select class="form-select" id="ddlBranch" (change)="GetStudentAttandanceTimeDDL()"
                     [(ngModel)]="SectionID">
               <option [value]="0">--Select--</option>
               @for (item of GetSectionData; track item.ID) {
               <option [value]="item.ID">{{item.Name}}</option>
               }
             </select>
-
           </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Day<span class="StarMarking">*</span></label>
+            <select  class="form-select" (change)="GetStudentAttandanceTimeDDL()" [(ngModel)]="DayID">
+
+              <!--<ng-option [value]="0">--Select--</ng-option>
+              @for (item of DayList; track item.DayID) {
+              <ng-option [value]="item.DayID">{{item.DayName}}</ng-option>-->
+
+              <option [value]="0">--Select--</option>
+              @for (item of DayList; track item.DayID) {
+              <option [value]="item.DayID">{{item.DayName}}</option>
+              }
+            </select>
+          </div>
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Attandance Time<span class="StarMarking">*</span></label>
-            <select  class="form-select"  [(ngModel)]="AttandanceTimeID" >
+            <select class="form-select" [(ngModel)]="AttandanceTimeID">
               <option [value]="0">--Select--</option>
               @for (item of StudentAttandanceTimeDDL; track item.ID) {
               <option [value]="item.ID">{{item.Name}}</option>
               }
             </select>
-          
+
           </div>
 
           <div class="flex mb-4">

@@ -883,8 +883,8 @@
                   N/A
                 </span>
               </td>
-              <td>{{row.FromDate | date:'yyyy-MM-dd'}}</td>
-              <td>{{row.ToDate | date:'yyyy-MM-dd'}}</td>
+              <td>{{row.FromDate | date:'dd-mm-yyyy'}}</td>
+              <td>{{row.ToDate | date:'dd-mm-yyyy'}}</td>
               <td>{{row.DesignationName}}</td>
               <td>{{row.Qualification}}</td>
               <td class="text-center">
@@ -905,7 +905,7 @@
                     To Dept: {{row.TransferToOfficeName}}
                   </div>
                   <div class="text-sm">
-                    Tansfer Date: {{row.DateOfTransfer | date:'yyyy-MM-dd'}}
+                    Tansfer Date: {{row.DateOfTransfer | date:'dd-mm-yyyy'}}
                   </div>
                   <div class="text-sm" *ngIf="row.TransferToInstituteID">
                     To Institute: {{row.TransferToInstituteName}}
@@ -935,7 +935,7 @@
                     Designation: {{row.ToDesignationName}}
                   </div>
                   <div class="text-sm">
-                    Date: {{row.DateOfpromotion | date:'yyyy-MM-dd'}}
+                    Date: {{row.DateOfpromotion | date:'dd-mm-yyyy'}}
                   </div>
                   <div *ngIf="row.PromotionDocuments?.length>0">
                     Docs:

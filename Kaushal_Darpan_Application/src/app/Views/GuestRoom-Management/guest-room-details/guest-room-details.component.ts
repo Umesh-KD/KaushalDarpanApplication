@@ -662,6 +662,37 @@ export class GuestRoomDetailsComponent {
     }
   }
 
+  async UnreserveGuestHouseRoom(item: any) {
+    this.Swal2.Confirmation("Are you sure you want to Cancel Reservation ?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          try {
+
+            const Request: any = {};
+            Request.GuestHouseID = item.GuestHouseID;
+            Request.GuestRoomDetailID = item.GuestRoomDetailID;
+            Request.ModifyBy = this.sSOLoginDataModel.UserID;
+
+            await this.guestRoomManagmentService.UnreserveGuestHouseRoom(Request)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State === EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  await this.GetAllData(); // Reload list
+                } else {
+                  this.toastr.error(data.ErrorMessage);
+                }
+              }, (error: any) => {
+                console.error(error);
+                this.toastr.error("An error occurred during deletion.");
+              });
+          } catch (ex) {
+            console.log(ex);
+          } 
+        }
+      });
+  }
+
   //table feature 
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));

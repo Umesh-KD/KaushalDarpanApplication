@@ -7,6 +7,7 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 import { VerifyApplicationCommitteeComponent } from './verify-application-committee.component';
 import { VerifyApplicationCommitteeRoutingModule } from './verify-application-committee-routing.module';
+import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.model';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { VerifyApplicationCommitteeRoutingModule } from './verify-application-co
     TableSearchFilterModule,
     LoaderModule,
     OTPModalModule,
+    ViewStaffProfileModalModule,
   ]
 })
 export class VerifyApplicationCommitteeModule { }

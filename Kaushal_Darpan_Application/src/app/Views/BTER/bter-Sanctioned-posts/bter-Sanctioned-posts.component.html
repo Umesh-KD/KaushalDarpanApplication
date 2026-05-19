@@ -1,12 +1,12 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Bter</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Sanctioned Post List</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/BterUserRequestList" class="text-sm font-medium text-slate-700" aria-current="page">Request List</a>
+      <a routerLink="/BterUserRequestList" class="text-sm font-medium text-slate-700" aria-current="page">Sanctioned Post List</a>
     </div>
   </div>
 </div>
@@ -20,6 +20,16 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.OfficeID" 
+            [disabled]="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon
+                      || sSOLoginDataModel.RoleID == _EnumRole.JD_TTC
+                      || sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Staff Type:
           </label>
@@ -28,13 +38,7 @@
             <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="searchRequest.OfficeID">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-        </div>
+        
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="searchRequest.BugetHeadID">
@@ -98,7 +102,7 @@
             <td align="left">{{ row.Comments }}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" >
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.UploadedDocument}}" title="Uploaded Document"
+                <a href="{{appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/VacancyOrderDocument/' + row.UploadedDocument}}" title="Uploaded Document"
                    *ngIf="row.AttachDocument_fileName !=''" target="_blank"><i class="ti ti-eye"></i></a>
               </div>
             </td>

@@ -7,6 +7,7 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { THTECommitteeafterPrincipleApplicationListComponent } from './thte-committee-afterprinciple-application-list.component';
 import { THTECommitteeafterPrincipleApplicationListRoutingModule } from './thte-committee-afterprinciple-application-list-routing.module';
 import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
+import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.model';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
     TableSearchFilterModule,
     LoaderModule,
     OTPModalModule,
+    ViewStaffProfileModalModule,
   ]
 })
 export class THTECommitteeafterPrincipleApplicationListModule { }

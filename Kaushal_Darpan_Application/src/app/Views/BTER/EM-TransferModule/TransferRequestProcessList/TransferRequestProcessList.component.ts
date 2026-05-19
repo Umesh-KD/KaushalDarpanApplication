@@ -14,7 +14,8 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
-
+import * as XLSX from 'xlsx';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 
   @Component({
@@ -78,6 +79,8 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
     isShowStatus_Checkbox: boolean = false;
     IsApproveExt: boolean = false;
     @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
+    ConfirmationText: string = '';
+
 
   constructor(
     private toastr: ToastrService,
@@ -90,6 +93,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
     private staffServiceDetailsService: BTEREMStaffServiceDetailsService,
     private appsettingConfig: AppsettingService,
     private modalService: NgbModal,
+    private Swal2: SweetAlert2
   ) { }
 
   async ngOnInit() {
@@ -503,6 +507,8 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
       else {
         this.ShowCheckBoxId = 0;
       }
+
+      await this.EM_TransferSystem_GetData_Search(this.SearchStatus)
     }
 
 
@@ -578,28 +584,61 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
           this.updateExtSearch.jsonData = JSON.stringify(jsonData);
         }
 
-        await this.staffServiceDetailsService
-          .TransferSystemEXTStatusUpdate(this.updateExtSearch)
-          .then(async (data: any) => {
-            data = JSON.parse(JSON.stringify(data));
+        
+       if (this.isShowStatus_Checkbox == true) {
+           this.ConfirmationText = "Are you sure you want to approve this priority?";
+       } else {
+           this.ConfirmationText = "Are you sure you want to update the priority location according to the remark?";
+       }
 
-            if (data.State === EnumStatus.Success) {
-              this.toastr.success(data.Message);
-              this.updateSearch.jsonData = "";
-              this.Status = "0";
-              this.Remark = "";
-              this.CloseModal();
-              window.location.reload();
-              this.EM_TransferProcessList =
-                this.EM_TransferProcessList.map((item: any) => ({
-                  ...item,
-                  Selected: false
-                }));
-             
-            } else {
-              this.toastr.error(data.ErrorMessage);
+        this.Swal2.Confirmation(this.ConfirmationText,
+          async (result: any) => {
+            //confirmed
+            if (result.isConfirmed) {
+              try {
+                //Show Loading
+                this.loaderService.requestStarted();
+
+                await this.staffServiceDetailsService
+                  .TransferSystemEXTStatusUpdate(this.updateExtSearch)
+                  .then(async (data: any) => {
+                    data = JSON.parse(JSON.stringify(data));
+
+                    if (data.State === EnumStatus.Success) {
+                      this.toastr.success(data.Message);
+                      this.updateSearch.jsonData = "";
+                      this.Status = "0";
+                      this.Remark = "";
+                      this.CloseModal();
+                      window.location.reload();
+                      this.EM_TransferProcessList =
+                        this.EM_TransferProcessList.map((item: any) => ({
+                          ...item,
+                          Selected: false
+                        }));
+
+                    } else {
+                      this.toastr.error(data.ErrorMessage);
+                    }
+                  });
+
+
+              }
+              catch (ex) {
+                console.log(ex);
+              }
+              finally {
+                setTimeout(() => {
+                  this.loaderService.requestEnded();
+                }, 200);
+              }
             }
           });
+
+
+       
+
+
 
       } catch (error) {
         console.error(error);
@@ -716,4 +755,58 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
       this.childComponentViewStaffProfile.UserID = UserID;
       await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
     }
+
+    exportToExcel(): void {
+
+      if (this.EM_TransferProcessList.length == 0) {
+        alert('No records available for Excel export.');
+        return;
+      }
+
+      const unwantedColumns = [
+        'TransferSystemID',
+        'FinalApproveStatus',
+        'ISNonGazetted',
+        'StatusID',
+        'StaffUserID',
+        'StaffID'
+      ];
+
+      const filteredData = this.EM_TransferProcessList.map(
+        (item: any, index: number) => {
+
+          const filteredItem: any = {};
+
+          // Add Serial Number
+          filteredItem["Sr. No"] = index + 1;
+
+          Object.keys(item).forEach(key => {
+            if (!unwantedColumns.includes(key)) {
+              filteredItem[key] = item[key];
+            }
+          });
+
+          return filteredItem;
+        });
+
+      const ws: XLSX.WorkSheet =
+        XLSX.utils.json_to_sheet(filteredData);
+
+      const wb: XLSX.WorkBook =
+        XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[:.-]/g, '_');
+
+      XLSX.writeFile(
+        wb,
+        `TransferRequestProcessList_${timestamp}.xlsx`
+      );
+    }
+
+
+   
 }

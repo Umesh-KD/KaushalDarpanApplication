@@ -13,6 +13,7 @@ import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
+import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
 
 @Component({
   selector: 'app-thte-committee-afterprinciple-application-list',
@@ -37,6 +38,8 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
 
   public status: number = 0;
   modalReference: NgbModalRef | undefined;
+
+  @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -361,5 +364,12 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
   CloseModalRequestHistorylist1() {
     this.modalService.dismissAll();
     this.modalReference?.close();
+  }
+
+  async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
+    //debugger
+    this.childComponentViewStaffProfile.StaffID = StaffID;
+    this.childComponentViewStaffProfile.UserID = UserID;
+    await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 }

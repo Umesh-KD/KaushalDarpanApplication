@@ -18,7 +18,7 @@
 
       <div>
         <label>Search By Status</label>
-        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus">
+        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (change)="EM_TransferSystem_GetData_Search(SearchStatus)">
           <!--(click)="onChangeSearchStatus()" -->
           <option value="0">--select--</option>
           <option *ngFor="let item of TransferSystemStatusSearchList" [value]="item.ID">

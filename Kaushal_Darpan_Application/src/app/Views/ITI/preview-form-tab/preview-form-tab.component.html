@@ -3,7 +3,7 @@
   <div class="card-body p-5">
     <div class="mb-6">
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5">व्यक्तिगत विवरण (Personal Details)</b>
+        <b class="text-1xl-5"><i class="ti ti-user"></i> व्यक्तिगत विवरण (Personal Details)</b>
       </div>
 
       <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
@@ -88,7 +88,7 @@
     </div>
     <div class="mb-6">
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5">पते का विवरण (Address Details)</b>
+        <b class="text-1xl-5"><i class="ti ti-map-pin"></i> पते का विवरण (Address Details)</b>
       </div>
 
       <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
@@ -120,7 +120,7 @@
     </div>
     <div class="mb-6">
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5">योग्यता विवरण (Qualification Details)</b>
+        <b class="text-1xl-5"><i class="ti ti-school"></i> योग्यता विवरण (Qualification Details)</b>
       </div>
 
       <div class="overflow-auto">
@@ -168,7 +168,7 @@
 
     <div class="mb-6" *ngIf="Options8thLevel.length > 0">
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5">विकल्प(Option Form For 8th Level Trades)</b>
+        <b class="text-1xl-5"><i class="ti ti-license"></i> विकल्प(Option Form For 8th Level Trades)</b>
       </div>
       <div class="overflow-auto">
         <table class="w-full table-border" cellpadding="5">
@@ -197,7 +197,7 @@
 
     <div class="mb-6" *ngIf="Options10thLevel.length > 0">
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5">विकल्प(Option Form for 10th Level Trades)</b>
+        <b class="text-1xl-5"><i class="ti ti-license"></i>  विकल्प( Selected Options)</b>
       </div>
       <div class="overflow-auto">
         <table class="w-full table-border" cellpadding="5">
@@ -205,17 +205,22 @@
 
             <tr class="text-left">
               <th>Priority</th>
+              <th>College Type</th>
               <th>Name of College</th>
+              <th>Trade Level</th>
               <th>Trade Name</th>
-              <th>college Type</th>
+
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let item of Options10thLevel;  let idx=index; ">
               <td>{{idx+1}}</td>
-              <td>{{item.InstituteName}}</td>
-              <td>{{item.TradeName}}</td>
               <td>{{item.ManagementTypeName}}</td>
+              <td>{{item.InstituteName}}</td>
+              <td>{{item.TradeLevel}}</td>
+
+              <td>{{item.TradeName}}</td>
+
 
             </tr>
           </tbody>
@@ -253,8 +258,7 @@
 
     <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light ">
       <b class="text-1xl-5">
-        &nbsp;
-        अपलोड किए गए दस्तावेज़ (Uploaded Documents)
+        <i class="ti ti-file"></i>अपलोड किए गए दस्तावेज़ (Uploaded Documents)
       </b>
     </div>
 
@@ -286,7 +290,7 @@
     </div>
 
     <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light" *ngIf="IsShowIncompleteData">
-      <b class="text-1xl-5">Incomplete Data</b>
+      <b class="text-1xl-5"><i class="ti ti-alert-square-rounded"></i> अधूरा डेटा (Incomplete Data)</b>
     </div>
 
     <div class="overflow-auto" *ngIf="IsShowIncompleteData">

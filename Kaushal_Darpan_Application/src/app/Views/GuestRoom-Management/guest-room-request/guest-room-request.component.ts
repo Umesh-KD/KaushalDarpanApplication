@@ -267,24 +267,18 @@ export class GuestRoomRequestComponent {
         this.request.ModifyBy = this.sSOLoginDataModel.UserID;
         await this._GuestRoomManagmentService.updateReqStatusCheckInOut(this.request)
           .then(async (data: any) => {
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
-            if (this.State == EnumStatus.Success) {
+            if (data.State == EnumStatus.Success) {
               
               // checkin and checkout send sms functionality
               await this.SendApplicationMessage(this.request.MobileNo, this.smsSendGuestHouseName, RoomNo, this.smsCheckin_checkoutstatus);
               this.CloseModal();
               await this.GuestRequestList();
-             
-
-              
             }
-            else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.Message)
+            else if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.Message)
             }
             else {
-              this.toastr.error(this.ErrorMessage)
+              this.toastr.error(data.ErrorMessage)
             }
           })
       }
@@ -347,18 +341,13 @@ export class GuestRoomRequestComponent {
     }
     this.smsCheckin_checkoutstatus = this.request.Status ?? 0;
     try {
-      this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-      
+      this.request.ModifyBy = this.sSOLoginDataModel.UserID;      
       await this._GuestRoomManagmentService.updateReqStatus(this.request)
      
         .then(async (data: any) => {
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
-            
-            
-            debugger
-            if (this.smsCheckin_checkoutstatus == 1339 && this.sSOLoginDataModel.RoleID == EnumRole.GuestHouseAdmin)
-            {
+            if (this.smsCheckin_checkoutstatus == 1339 && this.sSOLoginDataModel.RoleID == EnumRole.GuestHouseAdmin) {
               //admin approve send sms
               await this.SendApplicationMessage(this.request.MobileNo, this.smsSendGuestHouseName, "", this.smsCheckin_checkoutstatus);
             }
@@ -714,16 +703,29 @@ export class GuestRoomRequestComponent {
       debugger
       this.loaderService.requestStarted();
       this.messageModel.MobileNo = MobileNo;
+
       if (Status == 220 ) {
         this.messageModel.MessageType = EnumMessageType.GuestHouseCheckIn;
+        this.messageModel.ApplicationNo = RoomNo;
+        this.messageModel.CheckIn_CheckOut = "Checked in to Room No. "
       }
+
       if (Status == 219) {
         this.messageModel.MessageType = EnumMessageType.GuestHouseCheckOut;
+        this.messageModel.ApplicationNo = RoomNo;
+        this.messageModel.CheckIn_CheckOut = "Checked out from Room No. "
       }
-      if (Status == 1339) {
+
+      // message for approve/reject by admin
+      if (Status == 1339 || Status == 218) {
         this.messageModel.MessageType = EnumMessageType.GuestHouseAdminApprove;
+        this.messageModel.ApplicationNo = "a room";
+        if(Status == 1339){
+          this.messageModel.Status = "Approved";
+        } else {
+          this.messageModel.Status = "Rejected";
+        }
       }
-      this.messageModel.ApplicationNo = RoomNo;
       this.messageModel.ApplicantName = GuestHouseName;
       await this.sMSMailService.SendApplicationMessage(this.messageModel)
         .then((data: any) => {
