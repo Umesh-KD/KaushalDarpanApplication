@@ -106,6 +106,19 @@
           </div>
         </div>
         <!--{{GetLeaveList|json}}-->
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Day<span class="StarMarking">*</span></label>
+          <ng-select formControlName="DayID" [clearable]="false" (change)="GetStudentAttandanceTimeDDL()">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of DayList; track item.DayID) {
+            <ng-option [value]="item.DayID">{{item.DayName}}</ng-option>
+            }
+          </ng-select>
+        
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Attandance Time<span class="StarMarking">*</span></label>
           <ng-select formControlName="AttandanceTimeID" [clearable]="false">
