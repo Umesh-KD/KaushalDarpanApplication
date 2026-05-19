@@ -45,6 +45,7 @@ export class BterAttendencePercentReportComponent {
   GetSectionData: any[] = [];
   subjectsearch = new CommonDDLSubjectMasterModel()
   StudentAttandanceTimeDDL: any[] = [];
+  DayList: any[] = [];
   public GetLeaveList: any = [];
   public searchRequest = new LeaveMasterSearchModel();
   TableForm!: FormGroup;
@@ -121,13 +122,14 @@ export class BterAttendencePercentReportComponent {
 
 
     this.TableForm = this.fb.group({
-      SubjectID: ['', Validators.required],
-      AttandanceTimeID: ['', Validators.required],
-      StreamID: ['', Validators.required],
-      SectionID: ['', Validators.required],
-      SemesterID: ['', Validators.required],
+      SubjectID: ['', ],
+      AttandanceTimeID: ['', ],
+      StreamID: ['', ],
+      SectionID: ['', ],
+      SemesterID: ['',],
       StaffID: [''],
       Percent: [''],
+      DayID: [2],
       AttendanceStartDate: [this.selectedRange?.start],
       AttendanceEndDate: [this.selectedRange?.end]
     });
@@ -136,6 +138,7 @@ export class BterAttendencePercentReportComponent {
     this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
     this.getstaffmaster();
+    this.DayListBind();
 
     this.TableForm.patchValue({
       StreamID: this.streamId,
@@ -250,12 +253,26 @@ export class BterAttendencePercentReportComponent {
 
 
   async GetStudentAttandanceTimeDDL() {
+    debugger
 
-    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
+    this.TableForm.get('AttandanceTimeID')?.setValue(0);
+    //const sectionID = this.TableForm.value.SectionID ? this.sectionId : this.TableForm.value.SectionID;
+    // await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
+    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.StaffID, this.TableForm.getRawValue().SubjectID, this.TableForm.getRawValue().StreamID, this.TableForm.value.SectionID, this.TableForm.value.DayID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
-
-      debugger
+      // debugger
       this.StudentAttandanceTimeDDL = data.Data;
+
+      if (this.StudentAttandanceTimeDDL && this.StudentAttandanceTimeDDL.length > 0) {
+        this.TableForm.get('SubjectID')?.disable();
+        // this.TableForm.get('StreamID')?.disable();
+        // this.TableForm.get('SemesterID')?.disable();
+      }
+      //else {
+      // this.TableForm.get('SubjectID')?.enable();
+      // this.TableForm.get('StreamID')?.enable();
+      // this.TableForm.get('SemesterID')?.enable();
+      // }
     })
 
   }
@@ -450,6 +467,30 @@ export class BterAttendencePercentReportComponent {
   //    console.log(Ex);
   //  }
   //}
+
+
+  DayListBind() {
+
+    this.DayList = [
+
+      { DayID: 2, DayName: 'Monday' },
+      { DayID: 3, DayName: 'Tuesday' },
+      { DayID: 4, DayName: 'Wednesday' },
+      { DayID: 5, DayName: 'Thursday' },
+      { DayID: 6, DayName: 'Friday' },
+      { DayID: 7, DayName: 'Saturday' },
+      { DayID: 1, DayName: 'Sunday' },
+    ];
+    this.TableForm.get('SemesterID')?.setValue(0);
+    this.TableForm.get('StreamID')?.setValue(0);
+    this.TableForm.get('SubjectID')?.setValue(0);
+    this.TableForm.get('StaffID')?.setValue(0);
+    this.TableForm.get('StaffID')?.setValue(0);
+    this.TableForm.get('SectionID')?.setValue(0);
+
+  }
+
+
   formatDate(value: any): string {
     if (!value) return '';
 
@@ -494,6 +535,7 @@ export class BterAttendencePercentReportComponent {
         StaffID: this.StaffID,
         TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
         Percent: this.TableForm.value.Percent || 0,
+        DayID: this.TableForm.value.DayID || 0,
       };
 
       this.filterData = [];
