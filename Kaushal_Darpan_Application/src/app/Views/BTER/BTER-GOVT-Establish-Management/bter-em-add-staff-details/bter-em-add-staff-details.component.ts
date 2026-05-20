@@ -175,8 +175,7 @@ export class BterEMAddStaffDetailsComponent {
       ToDate: ['', Validators.required],
     
       DesignationID: [0, DropdownValidators],
-      Qualification: ['', Validators.required],
-    
+      QualificationID: [0, DropdownValidators],    
       // Transfer
       IsTransfer: [false],
       DateOfTransfer: [''],
@@ -924,6 +923,7 @@ export class BterEMAddStaffDetailsComponent {
       const office = this.OfficeList.find((x: any) => x.ID == formValue.OfficeID);
       const transferOffice = this.OfficeList.find((x: any) => x.ID == formValue.TransferToOfficeID);
       const promotionDesignation = this.DesignationMasterDDLList_ServiceHistory.find((x: any) => x.ID == formValue.ToDesignationIDPromotion);
+      const Qualification = this.EmployeeQualificationDDLList.find((x: any) => x.QualificationID == formValue.QualificationID)?.QualificationName;
       
       if(this.serviceReq.InstituteID!=0){
         this.serviceReq.InstituteName=this.InstituteMasterDDLList.filter((x:any)=>x.InstituteID==this.serviceReq.InstituteID)[0]['InstituteName'];
@@ -946,7 +946,8 @@ export class BterEMAddStaffDetailsComponent {
         FromDate: formValue.FromDate,
         ToDate: formValue.ToDate,
         DesignationID: formValue.DesignationID,
-        Qualification: formValue.Qualification,
+        QualificationID: formValue.QualificationID,
+        Qualification: Qualification,
         DesignationName:this.serviceReq.DesignationName,
         InstituteName:this.serviceReq.InstituteName,
         OfficeName:this.serviceReq.OfficeName,

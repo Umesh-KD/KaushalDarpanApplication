@@ -132,7 +132,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr. No.</th>
-            <th class="text-left">Department</th>
+            <th class="text-left">Institute</th>
             <th class="text-left">Stream</th>
             <th class="text-left">Laboratory</th>
             <th class="text-left">Lab Incharge</th>
@@ -143,7 +143,7 @@
         <tbody>
           <tr *ngFor="let item of LabMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
-            <td align="left">{{item.DepartmentName}}</td>
+            <td align="left">{{item.InstituteName}}</td>
             <td align="left">{{item.StreamName}}</td>
             <td align="left">{{item.Lab_Name}}</td>
             <td align="left">{{item.StaffName}}</td>

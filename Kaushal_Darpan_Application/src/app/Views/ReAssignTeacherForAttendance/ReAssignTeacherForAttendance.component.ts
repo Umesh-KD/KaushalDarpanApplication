@@ -291,7 +291,7 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
     const columnKeys = Object.keys(sampleItem);
 
     // List of columns you want to exclude
-    const excludedColumns = ['ID', 'StaffID','rdID'];
+    const excludedColumns = ['ID', 'StaffID', 'rdID','AssignedStaffID'];
 
     this.columnSchema = columnKeys
       .filter(key => !excludedColumns.includes(key))
@@ -532,8 +532,9 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
       );
     }
     // If valid, continue with modal logic
-    this.ReAssignSaveData.From_Date = this.filterModel.From_Date;
-    this.ReAssignSaveData.To_Date = this.filterModel.To_Date;
+    debugger
+    this.ReAssignSaveData.From_Date = this.formatDate(selectedRecord.FromDate);
+    this.ReAssignSaveData.To_Date = this.formatDate(selectedRecord.ToDate);
     this.ReAssignSaveData.StaffID = selectedRecord.StaffID;
     this.ReAssignSaveData.AssignTeacherForSubjectID = selectedRecord.ID;
     this.ReAssignSaveData.rdID = selectedRecord.rdID;
@@ -552,6 +553,17 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
     } catch (reason: any) {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     }
+  }
+
+
+  formatDate(dateStr: string): string {
+
+    if (!dateStr) return '';
+
+    // dd-MM-yyyy -> yyyy-MM-dd
+    const parts = dateStr.split('-');
+
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
 
   CloseModal() {

@@ -178,6 +178,11 @@
     </div>
   </td> -->
             <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.AffidavitDocument}}" target="_blank" class="text-success" title="Show Affidavit Details"> <i class="ti ti-download downloadIcon"></i></a>
+              </div>
+            </td>
+            <!--<td>
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="item.SupportingDocument" [href]="appsettingConfig.StaticFileRootPathURL + item.SupportingDocument" target="_blank" class="text-success me-2" title="Supporting Document">
@@ -188,7 +193,7 @@
                   <i class="ti ti-download"></i>
                 </a>
               </div>
-            </td>
+            </td>-->
           </tr>
         </tbody>
       </table>

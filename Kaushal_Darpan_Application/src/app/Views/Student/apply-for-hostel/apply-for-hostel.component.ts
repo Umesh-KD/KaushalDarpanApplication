@@ -1265,19 +1265,10 @@ export class ApplyForHostelComponent {
 
           if (data['Data']?.length > 0) {
 
-            const item = data['Data'][0];
+            this.StudentDetailsMeritList = data['Data'];
 
-            // First Row
-            this.StudentDetailsMeritList.push({
-              ...item,
-              Status: 'Provisional Merit'
-            });
-
-            // Second Row
-            this.StudentDetailsMeritList.push({
-              ...item,
-              Status: 'Final Merit'
-            });
+         
+            
           }
 
         }, error => console.error(error));

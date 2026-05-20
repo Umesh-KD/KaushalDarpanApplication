@@ -38,7 +38,7 @@
             <option [value]="3">Department</option>
           </select>
         </div>
-
+        <!--{{staffDDLList|json}}-->
         <div *ngIf="Searchrequests.issuedTo == 2">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
           <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID" (change)="onStaffChange()">
