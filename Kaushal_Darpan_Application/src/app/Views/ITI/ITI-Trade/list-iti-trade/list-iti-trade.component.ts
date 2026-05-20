@@ -108,7 +108,8 @@ export class ListItiTradeComponent {
     debugger
     try {
       this.loaderService.requestStarted();
-      if (this.sSOLoginDataModel.RoleID == 42) {
+      if (this.sSOLoginDataModel.RoleID == 42)
+      {
         this.searchRequest.TradeTypeId=1
       }
       //this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
@@ -139,6 +140,8 @@ export class ListItiTradeComponent {
   onCancel(): void {
     this.searchRequest.TradeName = '';
     this.searchRequest.TradeCode = '';
+    this.searchRequest.TradeId = 0;
+ 
     this.searchRequest.TradeTypeId = 0;
     this.searchRequest.DurationYear = '';
     this.searchRequest.TradeLevelId = 0;
