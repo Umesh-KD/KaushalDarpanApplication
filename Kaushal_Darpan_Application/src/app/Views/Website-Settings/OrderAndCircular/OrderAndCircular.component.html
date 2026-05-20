@@ -19,23 +19,13 @@
 
                 <div *ngIf="sSOLoginDataModel.RoleID!=212">
                   <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department Type</label><span class="StarMarking">*</span>
-                                                                                                            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.DepartmentSubID" formControlName="DepartmentSubID">
-                                                                                                              <option value="0">--Select--</option>
-                                                                                                              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
-                                                                                                              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
-
-                                                                                                              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT">ITI NCVT</option>
-                                                                                                              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT</option>
-
-                                                                                                               <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Planing">T1 PLANING</option>
-                                                                                                               <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Establishment">T2 ESTABLISHMENT</option>
-                                                                                                               <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Purchase">T3 PURCHASE</option>
-
-
-
-
-
-                                                                                                            </select>
+                  <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.DepartmentSubID" formControlName="DepartmentSubID">
+                    <option value="0">--Select--</option>
+                    <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
+                    <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
+                    <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT">ITI NCVT</option>
+                    <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT</option>
+                  </select>
                   <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.DepartmentSubID.errors" class="text-danger">
                     <p *ngIf="!_HighlightsFromGroup.DepartmentSubID.errors.DropdownValidators">
                       <i aria-hidden="true"></i>This field is required .!
@@ -172,12 +162,7 @@
             <td *ngIf="sSOLoginDataModel.RoleID!=212" align="left">{{row.subcategory}}</td>
             <td align="left">{{row.TypeName}}</td>
             <td align="left">{{row.Title}}</td>
-            <td align="left">
-              <!--{{row.FileName}}-->
-              <a title="View File Details" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}" *ngIf="row.FileName !=''"
-                 target="_blank">View File</a>
-
-            </td>
+            <td align="left">{{row.FileName}}</td>
             <td align="left">{{row.Start_Date | date : 'dd-MM-yyyy hh:mm a'}}</td>
             <td align="left">{{row.End_Date | date : 'dd-MM-yyyy hh:mm a' }}</td>
             <td align="left">
@@ -188,7 +173,6 @@
                   <span class="toggleIcon">
                     <!-- <span class="toggleTitle">{{ row.IsActive == 1 ? 'Active' : 'Inactive' }}</span> -->
                   </span>
-
                 </label>
               </div>       
             </td>

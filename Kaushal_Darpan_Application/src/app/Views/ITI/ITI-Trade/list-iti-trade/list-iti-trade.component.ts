@@ -108,7 +108,8 @@ export class ListItiTradeComponent {
     debugger
     try {
       this.loaderService.requestStarted();
-      if (this.sSOLoginDataModel.RoleID == 42) {
+      if (this.sSOLoginDataModel.RoleID == 42)
+      {
         this.searchRequest.TradeTypeId=1
       }
       //this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
@@ -139,6 +140,8 @@ export class ListItiTradeComponent {
   onCancel(): void {
     this.searchRequest.TradeName = '';
     this.searchRequest.TradeCode = '';
+    this.searchRequest.TradeId = 0;
+ 
     this.searchRequest.TradeTypeId = 0;
     this.searchRequest.DurationYear = '';
     this.searchRequest.TradeLevelId = 0;
@@ -292,7 +295,7 @@ export class ListItiTradeComponent {
     this.totalInTableRecord = this.TradetblList.length;
   }
 
-  async GetTradeListDDL() {
+  async GetTradeListDDLold() {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.action = "_getAllData"
@@ -310,6 +313,33 @@ export class ListItiTradeComponent {
       }, 200);
     }
   }
+
+
+  async GetTradeListDDL() {
+    try
+    {
+      
+
+      var data =
+      {
+        MasterCode: "NCVT_Exam_Trade",
+        FilterBy: this.sSOLoginDataModel.EndTermID
+      }
+
+      await this.commonMasterService.CommonMasterDataByAction(data).then((data: any) => {
+        const parsedData = JSON.parse(JSON.stringify(data));
+        this.ItiTradeList = parsedData.Data;
+        console.log('Trade List===>', this.ItiTradeList);
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   onSearchChange() {
     debugger

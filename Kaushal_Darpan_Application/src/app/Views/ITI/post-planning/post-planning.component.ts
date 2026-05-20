@@ -28,7 +28,8 @@ import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
   templateUrl: './post-planning.component.html',
   styleUrl: './post-planning.component.css'
 })
-export class PostPlanningComponent {
+export class PostPlanningComponent
+{
   public AddOfficeVacancyForm!: FormGroup;
   public groupForm!: FormGroup;
   public formData = new ITIOfficeVacancyModel();

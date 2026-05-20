@@ -1726,7 +1726,8 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       }, 200);
     }
   }
-  async onEdit(item: any) {
+  async onEdit(item: any)
+  {
     debugger;
 
     this.isSSOVisible = true;
@@ -1736,22 +1737,29 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.formData.SSOID = item.SSOID;
     this.formData.StaffID = item.StaffID;
     this.formData.InstituteId = item.InstituteID;
-    this.formData.StaffTypeID = item.StaffTypeID;
+
     this.formData.StaffPostTypeID = item.StaffPostTypeID;
     this.formData.OfficeID = item.OfficeID;
-
-    await this.GetPostList();
+    //await this.GetPostList();
     await new Promise(resolve => setTimeout(resolve, 100));
     this.formData.DesignationID = item.DesignationID;
-    await this.StaffLevelType();
+   // await this.StaffLevelType();
     await new Promise(resolve => setTimeout(resolve, 300));
     this.formData.StaffLevelID = item.StaffLevelID;
-    await this.StaffLevelChild();
+   // await this.StaffLevelChild();
     await new Promise(resolve => setTimeout(resolve, 300));
     this.formData.StaffLevelChildID = item.StaffLevelChildID;
 
 
+    this.formData.StaffTypeID = item.StaffTypeID;
 
+    await this.StaffLevelType();
+
+/*    this.formData.StaffLevelID = item.StaffLevelID;*/
+    this.formData.BranchID = item.TradeID;
+    await this.GetChange();
+
+    this.formData.TechnicianID = item.TechnicianID;
 
 
   }

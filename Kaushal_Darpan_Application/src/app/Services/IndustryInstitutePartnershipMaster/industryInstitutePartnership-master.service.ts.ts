@@ -159,13 +159,33 @@ export class IndustryInstitutePartnershipMasterService {
       ).toPromise();
   }
 
-  public async DeleteEvent_ById(request: IIP_EventDataModel) {
-    var body = JSON.stringify(request);
-    return await this.http.post(`${this.APIUrl}/DeleteEvent_ById`,body, this.headersOptions)
+
+  public async GetCompanyEventsStaff(searchRequest: CompanyEventSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetCompanyEventsStaff`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async Savestaffconsent(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/Savestaffconsent`,body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async DeleteEvent_ById(request: IIP_EventDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeleteEvent_ById`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetEvent_ById(request: CompanyEventSearchModel) {
     var body = JSON.stringify(request);
