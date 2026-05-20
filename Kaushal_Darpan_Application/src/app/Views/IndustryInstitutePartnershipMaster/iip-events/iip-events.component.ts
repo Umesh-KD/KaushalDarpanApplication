@@ -54,6 +54,8 @@ export class IIPEventsComponent {
     try {
       
       this.searchRequest.CompanyID = this.CompanyID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      debugger
       await this.industryInstitutePartnershipMasterService.GetCompanyEvents(this.searchRequest)
         .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));

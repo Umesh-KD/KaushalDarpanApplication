@@ -150,6 +150,45 @@ export class CompanyMasterService {
   //     ).toPromise();
   // }
 
+public async InsertCompanyMoUDetails(request: any) {
 
+  var body = JSON.stringify(request);
 
+  return await this.http.post(
+    `${this.APIUrl}/InsertCompanyMoUDetails`,
+    body,
+    this.headersOptions
+  )
+  .pipe(
+    catchError(this.handleErrorObservable)
+  ).toPromise();
+}
+
+public async GetCompanyMoUDetails(request: any) {
+
+  const body = JSON.stringify(request);
+debugger
+  return await this.http.post(
+    `${this.APIUrl}/GetCompanyMoUDetails`,
+    body,
+    this.headersOptions
+  )
+  .pipe(
+    catchError(this.handleErrorObservable)
+  ).toPromise();
+}
+
+public async SendForApprove(request: any) {
+
+  const body = JSON.stringify(request);
+debugger
+  return await this.http.post(
+    `${this.APIUrl}/SendForApprove`,
+    body,
+    this.headersOptions
+  )
+  .pipe(
+    catchError(this.handleErrorObservable)
+  ).toPromise();
+}
 }

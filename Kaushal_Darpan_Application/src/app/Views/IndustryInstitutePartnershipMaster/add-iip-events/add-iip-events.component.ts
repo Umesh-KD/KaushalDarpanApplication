@@ -11,6 +11,7 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-iip-events',
@@ -45,7 +46,11 @@ export class AddIIPEventsComponent {
   public EventLevelList: any = [];
   public EventForList: any = [];
   isOJTSelected: boolean = false;
-
+  public DivisionMasterList: any = [];
+  isInstituteLevel: boolean = false;
+isDivisionLevel: boolean = false;
+public PageMode: string = '';
+public IsViewMode: boolean = false;
   constructor(
     private commonMasterService: CommonFunctionService, 
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
@@ -55,7 +60,8 @@ export class AddIIPEventsComponent {
     private activatedRoute: ActivatedRoute, 
     private routers: Router, 
     private modalService: NgbModal, 
-    private appsettingConfig: AppsettingService
+    private appsettingConfig: AppsettingService,
+    private location: Location,
   ) { }
 
 
@@ -76,6 +82,7 @@ export class AddIIPEventsComponent {
         Designation: [''],
         TrainingDuration: [''],
         AreaOfDomain: [''],
+        DivisionID: ['0'],
       });
     
     this.settingsMultiselect = {
@@ -125,12 +132,23 @@ export class AddIIPEventsComponent {
     this.todayDate = new Date().toISOString().substring(0, 16);
     await this.GetMasterData();
 
+     this.PageMode = String(this.activatedRoute.snapshot.queryParamMap.get('mode'));
+
+if (this.PageMode == 'view') {
+  this.IsViewMode = true;
+}
+
     if(this.CompanyID > 0 && this.EventID > 0) {
       this.searchRequest.CompanyID = this.CompanyID;
       this.searchRequest.EventID = this.EventID;
       await this.GetEvent_ById();
+
+      if (this.IsViewMode) {
+  this.EventFormGroup.disable();
+}
     }
     this.GetEventMasterData()
+   
   }
 
   get _EventFormGroup() { return this.EventFormGroup.controls; }
@@ -191,23 +209,85 @@ export class AddIIPEventsComponent {
     }
   }
 
+  // async GetEvent_ById() {
+  //   try {
+  //     await this.industryInstitutePartnershipMasterService.GetEvent_ById(this.searchRequest)
+  //       .then(async (data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         if (data.State == EnumStatus.Success) {
+  //           this.request = data.Data;
+  //           this.SelectedBranchList = this.request.Branchlist;
+  //           this.SelectedSemesterList = this.request.Semesterlist;
+  //           if (this.request.EventLevelID == 1) {
+  //             this.isInstituteLevel = true;
+  //              }
+
+  //                  if (this.request.EventLevelID == 3) {
+  //                this.isDivisionLevel = true;
+  //                 await this.GetDivisionMasterList();
+  //                }
+  //         } else {
+  //           this.toastr.error(data.ErrorMessage)
+  //         }
+  //     })
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
+
   async GetEvent_ById() {
-    try {
-      await this.industryInstitutePartnershipMasterService.GetEvent_ById(this.searchRequest)
-        .then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success) {
-            this.request = data.Data;
-            this.SelectedBranchList = this.request.Branchlist;
-            this.SelectedSemesterList = this.request.Semesterlist;
-          } else {
-            this.toastr.error(data.ErrorMessage)
+  try {
+    await this.industryInstitutePartnershipMasterService.GetEvent_ById(this.searchRequest)
+      .then(async (data: any) => {
+
+        data = JSON.parse(JSON.stringify(data));
+
+        if (data.State == EnumStatus.Success) {
+
+          this.request = data.Data;
+
+          this.SelectedBranchList = this.request.Branchlist;
+          this.SelectedSemesterList = this.request.Semesterlist;
+
+          // =========================
+          // OJT BLOCK SHOW
+          // =========================
+          this.isOJTSelected = Number(this.request.EventTypeID) == 3;
+
+          // =========================
+          // EVENT LEVEL
+          // =========================
+          if (this.request.EventLevelID == 1) {
+
+            this.isInstituteLevel = true;
           }
-      })
-    } catch (error) {
-      console.error(error)
-    }
+
+          if (this.request.EventLevelID == 3) {
+
+            this.isDivisionLevel = true;
+
+            await this.GetDivisionMasterList();
+          }
+
+          // =========================
+          // VIEW MODE
+          // =========================
+          if (this.IsViewMode) {
+
+            this.EventFormGroup.disable();
+          }
+
+        } else {
+
+          this.toastr.error(data.ErrorMessage);
+        }
+      });
+
+  } catch (error) {
+
+    console.error(error);
   }
+}
 
   onItemSelect(item: any) {
   }
@@ -331,5 +411,80 @@ onEventTypeChange(event: any) {
 
   // ⚠️ IMPORTANT: check using CODE or NAME
   this.isOJTSelected = selectedValue == 3; // if Code = 3 for OJT
+}
+
+async GetDivisionMasterList() {
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDivisionMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.DivisionMasterList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async onEventLevelChange(event: any) {
+
+  const selectedValue = Number(event.target.value);
+
+  this.isInstituteLevel = false;
+  this.isDivisionLevel = false;
+
+  // Institute Level
+  if (selectedValue == 1) {
+
+    this.isInstituteLevel = true;
+
+    // pass institute id in save
+    this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+
+    // clear division
+    this.request.DivisionID = 0;
+  }
+
+  // Division Level
+  else if (selectedValue == 3) {
+
+    this.isDivisionLevel = true;
+
+    // clear institute
+    this.request.InstituteID = 0;
+
+    // load division list
+    await this.GetDivisionMasterList();
+  }
+
+  else {
+
+    this.request.InstituteID = 0;
+    this.request.DivisionID = 0;
+  }
+}
+
+GoBack() {
+
+  // if browser history exists
+  if (window.history.length > 1) {
+
+    this.location.back();
+  }
+  else {
+
+    // fallback
+    this.routers.navigate(['/IndustryInstitutePartnershipList']);
+  }
 }
 }

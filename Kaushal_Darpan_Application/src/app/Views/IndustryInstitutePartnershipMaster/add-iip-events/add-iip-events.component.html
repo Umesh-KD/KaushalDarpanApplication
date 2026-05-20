@@ -22,10 +22,16 @@
       <form [formGroup]="EventFormGroup" id="IIPMasterFormGroup" class="form-horizontal">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Industry-Institute-Partnership Details</b>
-          <a routerLink="/IndustryInstitutePartnershipList"
+          <!-- <a routerLink="/IndustryInstitutePartnershipList"
             class="inline-flex items-center btn bg-dark text-white btn-sm">
             <i class="ti ti-chevron-left"></i>Back
-          </a>
+          </a> -->
+          <a href="javascript:void(0);"
+   (click)="GoBack()"
+   class="inline-flex items-center btn bg-dark text-white btn-sm">
+
+  <i class="ti ti-chevron-left"></i>Back
+</a>
         </div>
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -73,7 +79,8 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Event Level<span class="StarMarking">*</span>
             </label>
-            <select class="form-select" [(ngModel)]="request.EventLevelID" formControlName="EventLevelID">
+            <select class="form-select" [(ngModel)]="request.EventLevelID" formControlName="EventLevelID"
+              (change)="onEventLevelChange($event)">
               <option value="0">--Select--</option>
               <option *ngFor="let item of EventLevelList" [value]="item.Code">
                 {{item.NameEng}}
@@ -86,6 +93,38 @@
               </p>
             </div>
           </div>
+
+          <!-- Show Institute Field -->
+<div *ngIf="isInstituteLevel">
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Institute
+  </label>
+
+  <input type="text"
+         class="form-input"
+         [value]="sSOLoginDataModel.InstituteName"
+         readonly>
+</div>
+
+<!-- Show Division Dropdown -->
+<div *ngIf="isDivisionLevel">
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Division
+  </label>
+
+  <select class="form-select"
+          [(ngModel)]="request.DivisionID"
+          formControlName="DivisionID">
+
+    <option value="0">--Select--</option>
+
+    <option *ngFor="let item of DivisionMasterList"
+            [value]="item.ID">
+
+      {{item.Name}}
+    </option>
+  </select>
+</div>
 
           <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
@@ -165,7 +204,7 @@
             <div class="flex fileUploader">
               <input
                 class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                id="eventFileUpload" type="file" (change)="onFilechange($event,'Photo')">
+                id="eventFileUpload" type="file" (change)="onFilechange($event,'Photo')" *ngIf="!IsViewMode">
               <label for="eventFileUpload">
                 <span>Choose File</span>
                 {{request.Dis_FileUpload === '' ? 'No File Choosen' : request.Dis_FileUpload}}
@@ -253,7 +292,7 @@
 
         </div>
         </div>
-        <div class="flex justify-center mt-6">
+        <div class="flex justify-center mt-6" *ngIf="!IsViewMode">
           <button type="button" class="btn bg-info text-white mt-6" (click)="SaveEventData()">Save Event Data</button>
           <!-- <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
             <i class="ti ti-refresh"></i> Reset
