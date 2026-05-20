@@ -42,6 +42,8 @@ export class BranchWiseHodComponent {
   public ApplyList: any[] = []
   public BranchHideList: any[] = []
   totalRecord1 = 0;
+  public isEdit = 0;
+
   public SemesterStreamList: any[] = []
   public searchRequest = new GuestApplyForGuestRoomSearchModel();
   public searchRequestGuestStaffProfileSearchModel = new GuestStaffProfileSearchModel()
@@ -239,6 +241,7 @@ export class BranchWiseHodComponent {
     try {
       this.isSubmitted = true;
       const formValue = this.IIPMasterFormGroup.value;
+      this.isEdit = 0;
 
       if (!formValue.SemesterID || formValue.SemesterID === 0) {
         this.toastr.warning('Please select Semester');
@@ -397,7 +400,7 @@ export class BranchWiseHodComponent {
         SemesterID: this.IIPMasterFormGroup.value.SemesterID,
         InstituteID: this.sSOLoginDataModel.InstituteID
       };
-      
+      debugger
       await this.staffMasterService.GetStreamIDBySemester(request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -509,13 +512,15 @@ export class BranchWiseHodComponent {
       }
 
       console.log('Final DDL:', this.StreamMasterDDL);
-
-      await this.GetBranchHideList();
+      if (this.isEdit != 1) {
+        await this.GetBranchHideList();
+      }      
     }
   }
 
   async EditDataSection(rowData: any) {
     debugger
+    this.isEdit = 1;
     this.SSOIDFormGroup.patchValue({
       SSOID: rowData.SSOID,
     
@@ -553,8 +558,23 @@ export class BranchWiseHodComponent {
     this.request.MobileNo = rowData.MobileNo
     this.request.MailPersonal = rowData.MailPersonal
     this.request.ID = rowData.ID
-   
-    await this.onSemesterChange(this.request.SemesterID);
+
+    await this.commonMasterService.Stream_InstituteIdWise(
+      this.sSOLoginDataModel.DepartmentID,
+      this.sSOLoginDataModel.Eng_NonEng,
+      this.sSOLoginDataModel.EndTermID,
+      this.sSOLoginDataModel.InstituteID,
+      this.sSOLoginDataModel.FinancialYearID
+    ).then((data: any) => {
+      this.StreamMasterDDL = data.Data;
+    });
+
+    //const allIDs = this.StreamMasterDDL.map((x: any) => x.StreamID);
+    this.IIPMasterFormGroup.get('StreamIDs')?.setValue(streamIdArray);
+
+
+
+   // await this.onSemesterChange(this.request.SemesterID);
   
 
   }
