@@ -32,10 +32,10 @@
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Name <span class="StarMarking">*</span>
+              Name<span class="StarMarking">*</span>
             </label>
             <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
-              [(ngModel)]="request.Name" formControlName="Name">
+              [(ngModel)]="request.Name" formControlName="Name" disabled>
             <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Name.errors" class="text-danger">
               <p *ngIf="_CompanyMasterFormGroup.Name.errors.required">
                 <i aria-hidden="true"></i> This field is
@@ -49,7 +49,7 @@
               Website <span class="StarMarking">*</span>
             </label>
             <input type="email" class="form-input" placeholder="Enter Website" id="Website" name="Website"
-              [(ngModel)]="request.Website" formControlName="Website">
+              [(ngModel)]="request.Website" formControlName="Website" disabled>
             <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Website.errors" class="text-danger">
               <p *ngIf="_CompanyMasterFormGroup.Website.errors.required">
                 <i aria-hidden="true"></i> This field is
@@ -208,21 +208,19 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              ISIIP111
+              For Training
             </label>
             <input type="checkbox" class="form-checkbox"
-                  formControlName="ISIIP"/>
+                  formControlName="ISIIP" [(ngModel)]="request.ISIIP"/>
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              ISPlacement
+              For Placement
             </label>
             <input type="checkbox" class="form-checkbox"
-                  formControlName="ISPlacement"/>
+                  formControlName="ISPlacement" [(ngModel)]="request.ISPlacement" />
           </div>
         </div>
-
-        
 
       </form>
 
@@ -271,8 +269,8 @@
           </div>
 
           <div>
-            <div class="text-center">
-              <button type="button" class="btn bg-info text-white mt-6" (click)="AddMoreMembers()">Add More</button>
+            <div *ngIf="flag != 1" class="text-center">
+              <button  type="button" class="btn bg-info text-white mt-6" (click)="AddMoreMembers()">Add More</button>
               <button type="button" class="btn bg-danger text-white mt-6" (click)="resetHrDetails()">
                 <i class="ti ti-refresh"></i> Reset
               </button>
@@ -303,7 +301,7 @@
                   <td class="text-center">{{row.MobileNo}}</td>
                   <td class="text-center">{{row.EmailId}}</td>
                   <td class="text-center">
-                    <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
+                    <button *ngIf="flag != 1" class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
                       <i class="ti ti-trash"></i>
                     </button>
                   </td>
@@ -311,6 +309,72 @@
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">MOU Details </b>
+          </div>
+
+          <div class="overflow-auto">
+
+  <table class="w-full table-border" cellpadding="5">
+
+    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+      <tr>
+        <th>Sr No</th>
+        <th>Mou Start Date</th>
+        <th>Mou Till Date</th>
+        <th>Remark</th>
+        <th>Mou Doc</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let row of mouList; let idx = index">
+
+        <td class="text-center">
+          {{ idx + 1 }}
+        </td>
+
+        <td class="text-center">
+          {{ row.MoUStartDate | date:'dd-MM-yyyy' }}
+        </td>
+
+        <td class="text-center">
+          {{ row.MoUValidTill | date:'dd-MM-yyyy' }}
+        </td>
+
+        <td class="text-center">
+          {{ row.Remark }}
+        </td>
+
+        <td class="text-center">
+
+          <a *ngIf="row.MoUDoc"
+             href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.MoUDoc}}"
+             target="_blank">
+
+            <i class="ti ti-eye"></i>
+
+          </a>
+
+        </td>
+
+      </tr>
+
+      <tr *ngIf="mouList.length == 0">
+        <td colspan="5" class="text-center text-gray-500">
+          No Record Found
+        </td>
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
         </div>
 
       </form>

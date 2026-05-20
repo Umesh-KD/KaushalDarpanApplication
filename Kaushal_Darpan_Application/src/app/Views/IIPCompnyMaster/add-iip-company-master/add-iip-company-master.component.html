@@ -208,21 +208,27 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              ISIIP111
+              For Training
             </label>
-            <input type="checkbox" class="form-checkbox"
+            <input type="checkbox" class="form-checkbox" [(ngModel)]="request.ISIIP"
                   formControlName="ISIIP"/>
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              ISPlacement
+              For Placement
             </label>
-            <input type="checkbox" class="form-checkbox"
+            <input type="checkbox" class="form-checkbox" [(ngModel)]="request.ISPlacement"
                   formControlName="ISPlacement"/>
           </div>
         </div>
 
-        
+        <div class="col-span-full"
+          *ngIf="isSubmitted && CompanyMasterFormGroup.errors?.['atleastOneRequired']">
+          <p class="text-danger">
+            <i aria-hidden="true"></i>
+            Please select at least one option (Training or Placement).
+          </p>
+        </div>
 
       </form>
 

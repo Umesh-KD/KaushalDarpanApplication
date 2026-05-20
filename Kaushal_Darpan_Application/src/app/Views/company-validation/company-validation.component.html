@@ -92,9 +92,22 @@
             <td>{{company.CreatedDate}}</td>
             <td align="center">
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                <a href="javascript:void(0);" title="Company On Action" *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel && (company.Status=='Pending' || company.Status=='Hold'))" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="Company On Action" *ngIf="((this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel) && (company.Status=='Pending' || company.Status=='Hold'))" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="Company On Action" *ngIf="((this.sSOLoginDataModel.RoleID==_EnumRole.IIPAdmin) && (company.Status=='Pending' || company.Status=='Hold'))" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a>
+                
                 <!--<a href="javascript:void(0);" title="View & Update Company" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,company.ID)"><i class="ti ti-eye"></i></a>-->
-                <a [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:3}"
+                <a *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel)"
+                [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:3}"
+                   title="View & Update Company"             
+                 >
+                  <i class="ti ti-eye"></i>
+                </a>
+                 <!-- <a *ngIf="(company.Status=='Approved' || company.Status=='Rejected' || company.Status=='Hold' || company.Status=='Pending')" 
+                [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
+                  <i class="ti ti-eye"></i>
+                </a> -->
+                <a *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.IIPAdmin)"
+                [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:3,flag:1}"
                    title="View & Update Company"             
                  >
                   <i class="ti ti-eye"></i>
