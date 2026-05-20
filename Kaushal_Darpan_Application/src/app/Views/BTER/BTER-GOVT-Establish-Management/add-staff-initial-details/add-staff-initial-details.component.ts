@@ -709,6 +709,7 @@ debugger
     }
     this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.formData.EndTermID=this.sSOLoginDataModel.EndTermID;
+    this.formData.ParentRoleID = this.sSOLoginDataModel.RoleID;
     this.formData.GuestHouseID = 0 // storing multiple guesthouseids in param named multiGuestHouseIDs
     try {
       this.loaderService.requestStarted();
@@ -797,6 +798,7 @@ debugger
       this.loaderService.requestStarted();
       this.searchRequest1.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID;
       this.searchRequest1.isEstablishment = true
+      this.searchRequest1.RoleId = this.sSOLoginDataModel.RoleID;
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

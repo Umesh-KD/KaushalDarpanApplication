@@ -91,6 +91,7 @@ export class CreateGuestRoomComponent {
         this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       }     
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;  
+      this.request.RoleID = this.sSOLoginDataModel.RoleID;
       await this._GuestRoomManagmentService.SaveData(this.request)
         .then((data: any) => {
           this.State = data['State'];
@@ -158,12 +159,12 @@ export class CreateGuestRoomComponent {
       try {
         this.loaderService.requestStarted();
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+        this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
         await this._GuestRoomManagmentService.GetAllGuestRoomList(this.searchRequest)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
+            
             this.GuestRoomList = data['Data'];
             this.totalRecords = data['Data'].length
             this.initTable();
