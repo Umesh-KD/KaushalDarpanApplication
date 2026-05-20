@@ -24,6 +24,7 @@ export class CompanyMasterDataModels {
   public EmailId: string = '';
   public MobileNo: String = '';
   public ISIIP : boolean = false;
+  public ISPlacement: boolean = false;
 
 
   public ListCompanyHRDetails: HrMasterDataModel[] = [];
@@ -41,11 +42,12 @@ export interface ICompanyMasterDataModel {
   ActiveStatus: boolean
   DeleteStatus: boolean
   ModifyBy: number
+  MouAdded:number
 }
 
 export class CompanyMasterSearchModel {
   public Name: string = '';
-  public Status: string = '';
+  public Status: string = 'Pending';
   public ModifyBy: number = 0
   public RoleID: number = 0;
   // public ID: number = 0;

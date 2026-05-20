@@ -134,14 +134,16 @@
           </th>
           <th width="80px" align="left">Sr. No.</th>
           <th align="left">Name</th>
-          <th class="left">Office</th>
+          <th class="left">From Office</th>
           <th class="left">Post</th>
           <th class="left">District</th>
-          <th class="left">Institute</th>
+          <th class="left">From Institute</th>
           <th align="left">Status</th>
           <th class="left">Order NO</th>
           <th class="left">Order Date</th>
           <th class="left">Category</th>
+          <th class="left">To Office</th>
+          <th class="left">To Institute</th>
           <th class="left">Reason Description</th>
           <th align="left">Supporting Documents</th>
           <th align="left">Action</th>
@@ -155,14 +157,16 @@
           </td>
           <td>{{idx+1}}</td>
           <td>{{row.NAME}} ({{row.SSOID}})</td>
-          <td>{{row.OfficeName}}</td>
+          <td>{{row.OLD_OfficeName }}</td>
           <td>{{row.DesignationName }}</td>
           <td>{{row.DistrictName }}</td>
-          <td>{{row.InstituteName }}</td>
+          <td>{{row.OLD_InstituteName  }}</td>
           <td>{{row.TransferStatusName}}</td>
           <td>{{row.OrderNo}}</td>
           <td>{{row.OrderDate}}</td>
           <td>{{row.TransferCategory}}</td>
+          <td>{{row.OfficeName}}</td>
+          <td>{{row.InstituteName}}</td>
           <td>{{row.ReasonDescription}}</td>
           <td align="left">
             <div class="flex" *ngIf="row.OrderSupportingDocument; else noDoc1">

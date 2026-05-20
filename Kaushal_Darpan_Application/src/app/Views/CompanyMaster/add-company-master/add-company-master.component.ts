@@ -68,6 +68,7 @@ export class AddCompanyMasterComponent implements OnInit {
         ddlDistrict: ['', [DropdownValidators]],
         ddlCompanyType: ['', [DropdownValidators]],
         ISIIP: [false],
+        ISPlacement:[false],
         ddlCompanyStatus: ['', [DropdownValidators]],
         ddlPackage: ['', [DropdownValidators]],
         // HRName: ['', Validators.required],
@@ -298,6 +299,8 @@ export class AddCompanyMasterComponent implements OnInit {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.ISIIP = this.CompanyMasterFormGroup.value.ISIIP;
+      this.request.ISPlacement = this.CompanyMasterFormGroup.value.ISPlacement;
+      this.request.RoleID = this.sSOLoginDataModel.RoleID;
 
       //save
       debugger

@@ -240,6 +240,10 @@ const routes: Routes = [
       { path: 'Hrmaster', loadChildren: () => import('./Views/Hr-Master/hr-master/hr-master.module').then(m => m.HrmasterModule), title: 'HR Master' },
       { path: 'AddCompany', loadChildren: () => import('./Views/CompanyMaster/add-company-master/add-company-module').then(m => m.CompanyMasterModule), title: 'Add Company' },
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
+      
+      { path: 'AddIIPCompany', loadChildren: () => import('./Views/IIPCompnyMaster/add-iip-company-master/add-iip-company-master.module').then(m => m.AddIipCompanyMasterModule), title: 'Add IIP Company' },
+      { path: 'IIPCompanyMaster', loadChildren: () => import('./Views/IIPCompnyMaster/iip-company-master/iip-company-master.module').then(m => m.IipCompanyMasterModule), title: 'IIP Company Master' },
+      { path: 'ViewCompanyMouDetail', loadChildren: () => import('./Views/IIPCompnyMaster/view-iip-company-mou-detail/view-iip-company-mou-detail.module').then(m => m.ViewIipCompanyMouDetailModule), title: 'View Company Mou Detail' },
 
       { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
 
@@ -1167,6 +1171,7 @@ const routes: Routes = [
 
       { path: 'website-settings', loadChildren: () => import('./Views/Website-Settings/website-setting/website-setting.module').then(m => m.WebsiteSettingModule), title: 'Website Settings' },
       { path: 'DynamicUploadContent', loadChildren: () => import('./Views/Website-Settings/highlights/highlights.module').then(m => m.HighlightsModule), title: 'Dynamic Upload Content' },
+      { path: 'OrderAndCircular', loadChildren: () => import('./Views/Website-Settings/OrderAndCircular/OrderAndCircular.module').then(m => m.OrderAndCircularModule), title: 'OrderAndCircular' },
       { path: 'website-settings-downloads-fdgdsfgsf', loadChildren: () => import('./Views/Website-Settings/downloads/downloads.module').then(m => m.DownloadsModule), title: 'Website Settings' },
       { path: 'website-settings-circular-dfgdfgdsfg', loadChildren: () => import('./Views/Website-Settings/circular/circular.module').then(m => m.CircularModule), title: 'Website Settings' },
       { path: 'ItiCenterSuperintendent-sdfgsdfgdfs', loadChildren: () => import('./Views/ITI/iti-center-superintendent/iti-center-superintendent.module').then(m => m.ItiCenterSuperintendentModule) },
@@ -1750,6 +1755,7 @@ const routes: Routes = [
       { path: 'BterAssignTeacher', loadChildren: () => import('./Views/bter-assign-teacher/bter-assign-teacher.module').then(m => m.BterAssignTeacherModule) },
       { path: 'BterUnlockCalender', loadChildren: () => import('./Views/bter-unlock-calender/bter-unlock-calender.module').then(m => m.BterUnlockCalenderModule) },
       { path: 'ScholarshipOnboard', loadChildren: () => import('./Views/ITI/scholarship-onboard/scholarship-onboard.module').then(m => m.ScholarshipOnboardModule) },
+      { path: 'StaffTrainingConsent', loadChildren: () => import('./Views/staff-training-consent/staff-training-consent.module').then(m => m.StaffTrainingConsentModule) },
 
 
     ]
@@ -1871,6 +1877,7 @@ const routes: Routes = [
   { path: 'Views\ScholarshipGetData', loadChildren: () => import('./Views/scholarship-get-data/scholarship-get-data.module').then(m => m.ScholarshipGetDataModule) },
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
+  { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 

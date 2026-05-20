@@ -1,0 +1,228 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">IIP Company Master</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">IIP Company Master</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a [routerLink]="'/AddIIPCompany'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>   
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
+            <option value="">--All--</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Hold">Hold</option>
+          </select>
+        </div>
+        <div>
+          
+
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Website</th>
+            <th class="text-left">Address</th>
+            <th class="text-left">Status</th>
+            <th class="text-center">Action</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let company of CompanyMasterList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{company.Name}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{company.Website}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{company.Address}}</td>
+            <td>{{company.Status}} </td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="(company.Status=='Approved' || company.Status=='Rejected' || company.Status=='Hold' || company.Status=='Pending')" 
+                [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
+                  <i class="ti ti-eye"></i>
+                </a>
+                <a [routerLink]="'/AddIIPCompany'" [queryParams]="{CompanyID:company.ID, key:2}" *ngIf="(company.Status=='Pending' && (company.MouAdded == 1 || company.MouAdded == 0))" title="Edit"><i class="ti ti-pencil"></i></a>
+               
+                <a *ngIf="company.Status=='Pending' && company.MouAdded == 0"
+                    href="javascript:void(0)"
+                    title="MOU"
+                    (click)="openMouPopup(company)">
+                    <i class="ti ti-license"></i>
+                </a>
+
+                 <a *ngIf="company.Status=='Pending' && company.MouAdded == 1"
+                    href="javascript:void(0)"
+                    title="MOU Edit"
+                    (click)="openMouPopup(company)">
+                    <!-- <i class="ti ti-license"></i> -->
+                    <i class="ti ti-briefcase"></i>
+                    <!-- <i class="ti ti-file-contract"></i> -->
+                </a>
+
+                <a *ngIf="company.Status=='Pending' && company.MouAdded == 1"
+                    href="javascript:void(0)"
+                    title="Send for Approval"
+                    (click)="SendForApprove(company)">
+                    <!-- <i class="ti ti-license"></i> -->
+                    <i class="ti ti-arrow-forward-up"></i>
+                    <!-- <i class="ti ti-file-contract"></i> -->
+                </a>
+                 <a href="javascript:void(0);" title="Delete" *ngIf="(company.Status=='Pending' && (company.MouAdded == 1 || company.MouAdded == 0)) || (company.Status=='Approved' && company.MouAdded == 1)" (click)="DeleteById(company.ID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+                
+                
+              </div>
+            </td>           
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+
+<!-- MOU Popup Start -->
+
+<div *ngIf="showMouPopup"
+     class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+
+  <div class="bg-white rounded-xl shadow-lg w-full max-w-2xl p-5">
+
+    <div class="flex justify-between items-center border-b pb-3 mb-4">
+      <h4 class="text-lg font-semibold">
+        <i class="ti ti-file-certificate"></i>
+        Add Company MOU
+      </h4>
+
+      <button class="text-red-500 text-xl"
+              (click)="closeMouPopup()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <div>
+        <label class="form-label">MOU Start Date</label>
+        <input type="date"
+               class="form-input"
+               [(ngModel)]="mouRequest.MoUStartDate"
+               [max]="todayDate">
+      </div>
+
+      <div>
+        <label class="form-label">MOU Valid Till</label>
+        <input type="date"
+       class="form-input"
+       [(ngModel)]="mouRequest.MoUValidTill"
+       [min]="mouRequest.MoUStartDate">
+      </div>
+
+      <div class="md:col-span-2">
+        <label class="form-label">Remark</label>
+
+        <textarea class="form-input"
+                  rows="3"
+                  [(ngModel)]="mouRequest.Remark">
+        </textarea>
+      </div>
+
+      <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="Photo">
+              Upload File :
+            </label>
+            <div class="flex fileUploader">
+              <input
+                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                id="Photo" type="file" (change)="onFilechange($event,'Photo')">
+              <label for="Photo">
+                <span>Choose File</span>
+                {{mouRequest.DisMoUDoc === '' ? 'No File Choosen' : mouRequest.DisMoUDoc}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + mouRequest.MoUDoc}}"
+                  *ngIf="mouRequest.MoUDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i
+                    class="ti ti-eye"></i></a>
+              </div>
+            </div>
+          </div>
+
+    </div>
+
+    <div class="flex justify-end gap-3 mt-5">
+
+      <button type="button"
+              class="btn bg-danger text-white"
+              (click)="closeMouPopup()">
+        Cancel
+      </button>
+
+      <button type="button"
+              class="btn bg-success text-white"
+              (click)="saveMouDetails()">
+        Submit
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MOU Popup End -->
