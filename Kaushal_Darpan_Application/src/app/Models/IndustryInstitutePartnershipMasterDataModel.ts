@@ -130,6 +130,8 @@ export class IIP_EventDataModel extends RequestBaseModel {
   public Designation: string = '';
   public TrainingDuration: number = 0;
   public AreaOfDomain: string = '';
+  InstituteID: number = 0;
+DivisionID: number = 0;
 }
 
 export class BranchList {
