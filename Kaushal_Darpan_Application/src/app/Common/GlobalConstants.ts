@@ -233,6 +233,7 @@ export enum EnumRole {
 
   IIP_Admin = 265,
   IIP_Incharge = 266,
+  Employee=261
 }
 
 export enum enumExamStudentStatus {

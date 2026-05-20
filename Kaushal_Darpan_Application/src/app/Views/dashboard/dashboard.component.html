@@ -141,6 +141,8 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 <app-ITI-Planning-Dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIPlanningAdmin
  || this.sSOLoginDataModel.RoleID == _EnumRole.ITIBuildingAdmin"> </app-ITI-Planning-Dashboard>
 
+<app-employee-dashboard  *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Employee" ></app-employee-dashboard>
+
 
 <!--ITI END-->
 }
