@@ -5,7 +5,7 @@ import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { EnumEMProfileStatus, EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumOffice, EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
@@ -94,6 +94,7 @@ export class BTEREMStaffListComponent {
   public isApprove: boolean = false;
   public isModalOpen: boolean = false;
   _EnumRole = EnumRole;
+  _EnumOffice = EnumOffice;
   constructor(
     private loaderService: LoaderService,
     private bterEstablishManagementService: BTEREstablishManagementService,
