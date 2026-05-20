@@ -232,7 +232,7 @@ async  ngOnInit() {
 
 
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
-    this.GetStudentAttandanceTimeDDL();
+    //this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
     this.getstaffmaster();
   this.GetAssignedTeacherForSubject();
@@ -280,6 +280,7 @@ async  ngOnInit() {
         StaffID: this.sSOLoginDataModel.StaffID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        InstituteId: this.sSOLoginDataModel.InstituteID
       }
       await this.staffMasterService.GetBranchSectionAcRosterData(obj)
         .then((data: any) => {
@@ -895,6 +896,7 @@ async  ngOnInit() {
       StaffID: this.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      InstituteId: this.sSOLoginDataModel.InstituteID
     }
     await this.staffMasterService.GetBranchSectionAcRosterData(obj)
       .then((data: any) => {
@@ -921,7 +923,7 @@ async  ngOnInit() {
 
 
 
-    this.GetStudentAttandanceTimeDDL()
+    //this.GetStudentAttandanceTimeDDL()
 
 
   }
@@ -942,6 +944,7 @@ async  ngOnInit() {
       StaffID: this.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      InstituteId: this.sSOLoginDataModel.InstituteID
     }
     await this.staffMasterService.GetBranchSectionAcRosterData(obj)
       .then((data: any) => {
@@ -968,7 +971,7 @@ async  ngOnInit() {
 
 
 
-    this.GetStudentAttandanceTimeDDL()
+    //this.GetStudentAttandanceTimeDDL()
 
 
   }
@@ -1055,7 +1058,7 @@ async  ngOnInit() {
     this.getMasterData()
     this.getbranchmaster()
     this.getSubjectMasterDDL()
-    this.GetStudentAttandanceTimeDDL();
+    //this.GetStudentAttandanceTimeDDL();
 
 
 
@@ -1490,7 +1493,7 @@ async  ngOnInit() {
       this.modalRef1 = null;
       this.isSubmitted = false;
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
-    this.GetStudentAttandanceTimeDDL();
+    //this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
     this.getstaffmaster();
     this.getMasterData();
