@@ -25,9 +25,9 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment/SRN No</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">DGT Reg No/ Roll No/SRN No</label>
 
-            <input class="form-input" type="text" id="StudentExamEnrollment" placeholder="Search By Enrollment/SRN No " [(ngModel)]="request.EnrollmentNo"
+            <input class="form-input" type="text" id="StudentExamEnrollment" placeholder="Search By DGT Reg No/ Roll No/SRN No " [(ngModel)]="request.EnrollmentNo"
                    formControlName="txtEnrollmentNo">
           </div>
           <div>
@@ -471,13 +471,13 @@
             <table class="table table-border w-full table-auto" cellpadding="5">
               @if (sSOLoginDataModel.Eng_NonEng == 1) {
               <tr>
-                <td>DGT Reg No:</td>
+                <td>State Reg No:</td>
                 <td>{{StudentProfileDetailsData[0]['StateRegNo']}}</td>
               </tr>
               }
               <tr>
-                <td>Enrollment No.:</td>
-                <td>{{StudentProfileDetailsData[0]['EnrollmentNo']}}</td>
+                <td>DGT Reg NO/Roll No:</td>
+                <td>{{StudentProfileDetailsData[0]['EnrollmentNo']}} / {{StudentProfileDetailsData[0]['RollNo']}} </td>
               </tr>
 
               <!--document-->

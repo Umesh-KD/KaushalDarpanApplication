@@ -2081,7 +2081,8 @@ export class StudentExaminationITIComponent
     }
   }
 
-  async CloseModalpopup() {
+  async CloseModalpopup()
+  {
     this.modalService.dismissAll()
     this.isSubmitted = false
     this.requestUpdateEnrollmentNo = new ITIExamination_UpdateEnrollmentNoModel()

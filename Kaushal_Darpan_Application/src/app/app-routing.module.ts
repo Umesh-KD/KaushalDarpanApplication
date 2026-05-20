@@ -1171,6 +1171,7 @@ const routes: Routes = [
 
       { path: 'website-settings', loadChildren: () => import('./Views/Website-Settings/website-setting/website-setting.module').then(m => m.WebsiteSettingModule), title: 'Website Settings' },
       { path: 'DynamicUploadContent', loadChildren: () => import('./Views/Website-Settings/highlights/highlights.module').then(m => m.HighlightsModule), title: 'Dynamic Upload Content' },
+      { path: 'OrderAndCircular', loadChildren: () => import('./Views/Website-Settings/OrderAndCircular/OrderAndCircular.module').then(m => m.OrderAndCircularModule), title: 'OrderAndCircular' },
       { path: 'website-settings-downloads-fdgdsfgsf', loadChildren: () => import('./Views/Website-Settings/downloads/downloads.module').then(m => m.DownloadsModule), title: 'Website Settings' },
       { path: 'website-settings-circular-dfgdfgdsfg', loadChildren: () => import('./Views/Website-Settings/circular/circular.module').then(m => m.CircularModule), title: 'Website Settings' },
       { path: 'ItiCenterSuperintendent-sdfgsdfgdfs', loadChildren: () => import('./Views/ITI/iti-center-superintendent/iti-center-superintendent.module').then(m => m.ItiCenterSuperintendentModule) },
