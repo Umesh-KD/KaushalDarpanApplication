@@ -1289,12 +1289,14 @@ async  ngOnInit() {
 
         data = JSON.parse(JSON.stringify(data));
 
+
         this.StudentList = this.StreamMasterDDL
-          .map((x: any) => x.students)
-          .filter(Boolean)
-          .join(',')
-          .split(',')
-          .map((s: any) => s.trim());
+          ?.map((x: any) => x?.students)
+          ?.filter((x: any) => x)
+          ?.join(',')
+          ?.split(',')
+          ?.map((s: any) => s?.trim())
+          ?.filter((x: any) => x) || [];
 
         console.log('data ==>', this.StreamMasterDDL);
       });
