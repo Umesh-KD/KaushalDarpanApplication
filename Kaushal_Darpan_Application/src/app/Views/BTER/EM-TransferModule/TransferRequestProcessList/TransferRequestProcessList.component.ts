@@ -37,6 +37,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
   public EM_TrainingCourseTypeList: any = [];
    
     public EM_TransferProcessList: any = [];
+    public EM_TransferProcessExeclList: any = [];
     public AllSelect: boolean = false;
     public ExaminersList: any[] = [];
     public TransferSystemStatusList: any[] = [];
@@ -163,11 +164,11 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
              )
              .map((item: any) => {
                if (item.ID == EnumTransferSystemStatus.Submitted) {
-                 item.Name = 'Under ADTE Review';
+                 item.Name = 'Under Review';
                }
 
                if (item.ID == EnumTransferSystemStatus.UnderADTEReview) {
-                 item.Name = 'ADTE Reviewed';
+                 item.Name = 'Reviewed';
                }
 
                return item;
@@ -202,11 +203,11 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
              )
              .map((item: any) => {
                if (item.ID == EnumTransferSystemStatus.UnderADTEReview) {
-                 item.Name = 'Under JDTE Review';
+                 item.Name = 'Under Review';
                }
 
                if (item.ID == EnumTransferSystemStatus.UnderJDTEReview) {
-                 item.Name = 'JDTE Reviewed';
+                 item.Name = 'Reviewed';
                }
 
                return item;
@@ -233,11 +234,11 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
              )
              .map((item: any) => {
                if (item.ID == EnumTransferSystemStatus.UnderJDTEReview) {
-                 item.Name = 'Under DTE Review';
+                 item.Name = 'Under Review';
                }
 
                if (item.ID == EnumTransferSystemStatus.UnderDTEReview) {
-                 item.Name = 'DTE Reviewed';
+                 item.Name = 'Reviewed';
                }
 
                return item;
@@ -757,11 +758,31 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
     }
 
     exportToExcel(): void {
+      debugger
 
-      if (this.EM_TransferProcessList.length == 0) {
+      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
+      this.searchRequest.Action = "EM_TransferSystemListmainExcel";
+      this.searchRequest.StatusID = this.SearchStatus;
+      this.searchRequest.CategoryID = this.SearchCategoryID;
+      this.searchRequest.EmployeeType = this.SearchEmployeeType;
+      this.searchRequest.InstituteID = this.SearchInstituteID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+       this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.EM_TransferProcessExeclList = data.Data;
+          
+        } else {
+          this.EM_TransferProcessExeclList = [];
+        }
+      })
+
+      if (this.EM_TransferProcessExeclList.length == 0) {
         alert('No records available for Excel export.');
         return;
       }
+
+      
 
       const unwantedColumns = [
         'TransferSystemID',
@@ -772,7 +793,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
         'StaffID'
       ];
 
-      const filteredData = this.EM_TransferProcessList.map(
+      const filteredData = this.EM_TransferProcessExeclList.map(
         (item: any, index: number) => {
 
           const filteredItem: any = {};
