@@ -406,7 +406,8 @@ export class RosterDisplayTimeTableDataModel {
   public SemesterID: number = 0;
   public CreatedDate?: Date;
 
-  public StaffID?:number=0;
+  public StaffID?: number = 0;
+  public InstituteId?: number = 0;
 }
 
 

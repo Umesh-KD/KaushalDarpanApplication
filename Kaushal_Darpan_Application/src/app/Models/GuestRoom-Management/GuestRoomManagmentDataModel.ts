@@ -15,12 +15,13 @@ export class CreateGuestRoomDataModel {
   //public IPAddress?: string = '';
   public DistrictID: number = 0;
   public TehsilID: number = 0;
-
-
+  public RoleID?: number = 0;
 }
 
 export class GuestRoomSearchModel {
   public DepartmentID: number = 0;
+  public RoleID: number = 0;
+  public UserID: number = 0;
   public GuestHouseName: string = '';
 }
 export class StudentDataModel {
@@ -79,6 +80,7 @@ export class GuestRoomSeatSearchModel {
   public GuestHouseID: number = 0;
   public RoomType: number = 0;
   public SeatCapacity: number = 0;
+  public RoleId?: number = 0;
   public RoomQuantity?: number;
   public GuestHouseIDs?: string = '';
   public guestHouseForApply?: boolean = false;

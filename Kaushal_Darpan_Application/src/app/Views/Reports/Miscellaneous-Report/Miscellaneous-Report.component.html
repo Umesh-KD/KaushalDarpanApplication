@@ -49,17 +49,17 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
           <select class="form-select" id="SchemeID" formControlName="SchemeID">
             <option value="0">--All--</option>
-            <option value="1347">Old Semester</option>
-            <option value="1348">New Semester</option>
+            <option value="1347">Old</option>
+            <option value="1348">New</option>
           </select>
         </div>
         <div>
           <!--<button type="submit" class="btn bg-info mt-6 text-white">Search</button>-->
+          <button type="submit" class="btn bg-info mt-6 text-white">Export Excel </button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetReport()">
             <i class="ti ti-refresh"></i>
             Reset
           </button>
-          <button type="submit" class="btn bg-info mt-6 text-white">Export Excel </button>
           <!--<a href="javascript:void(0);"
              (click)="SubmitData(),exportToExcelTpye2()"
              class="btn bg-info mt-6 text-white">

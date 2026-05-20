@@ -100,17 +100,25 @@ export class AddIndustryInstitutePartnershipMasterComponent {
   async GetComapnyDetailsByID() {
     try {
       let companyID = this.request.PlacementCompanyID ?? 0
-
+debugger
       await this.commonMasterService.PlacementCompanyMaster_IDWise(companyID, this.sSOLoginDataModel.DepartmentID)
       .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.CompanyDetails = data['Data'][0];
+        this.CompanyDetails = data.Data;//data['Data'][0];
+        debugger
         this.request.Website = this.CompanyDetails.Website
         this.request.StateID = this.CompanyDetails.StateID
         await this.ddlState_Change()
         this.request.DistrictID = this.CompanyDetails.DistrictID
         this.request.Address = this.CompanyDetails.Address
         this.request.Logo = this.CompanyDetails.Logo
+        // this.request.ConcernPersonDetails[0].MobileNo = this.CompanyDetails.ListCompanyHRDetails[0].MobileNo
+        // this.request.ConcernPersonDetails[0].EmailId = this.CompanyDetails.ListCompanyHRDetails[0].EmailId
+        // this.request.ConcernPersonDetails[0].Name = this.CompanyDetails.ListCompanyHRDetails[0].Name
+        this.personRequest.MobileNo = this.CompanyDetails.ListCompanyHRDetails[0].MobileNo
+        this.personRequest.EmailId = this.CompanyDetails.ListCompanyHRDetails[0].EmailId
+        this.personRequest.Name = this.CompanyDetails.ListCompanyHRDetails[0].Name
+
       })
     } catch (error) {
       console.error(error);
@@ -129,6 +137,7 @@ export class AddIndustryInstitutePartnershipMasterComponent {
 
       await this.commonMasterService.PlacementCompanyMaster(this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
+          debugger
           data = JSON.parse(JSON.stringify(data));
           this.CompanyMasterList = data['Data'];
         }, (error: any) => console.error(error));
@@ -184,7 +193,8 @@ export class AddIndustryInstitutePartnershipMasterComponent {
       await this.industryInstitutePartnershipMasterService.GetById_IIP_CompanyDetails(this.searchReq)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          console.log(data);
+          console.log('data',data);
+          debugger
           this.request = data['Data'];
           this.request.Dis_Logo = data['Data']['Logo'];
           this.request.Logo = data['Data']['Logo'];
@@ -468,7 +478,7 @@ export class AddIndustryInstitutePartnershipMasterComponent {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-
+debugger
       //save
       await this.industryInstitutePartnershipMasterService.SaveData_IIP_Company(this.request)
         .then((data: any) => {

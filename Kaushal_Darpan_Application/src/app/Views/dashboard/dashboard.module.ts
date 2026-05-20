@@ -57,6 +57,7 @@ import { JDTEDashboardModule } from '../jdte-dashboard/jdte-dashboard.module';
 import { ITIPlanningDashboardModule } from '../ITI/ITI-Planning-Dashboard/ITI-Planning-Dashboard.module';
 import { ITIInspectionDashboardModule } from '../ITI/inspection-dashboard/inspection-dashboard.module';
 import { ItiExaminationInchargeDashboardModule } from '../ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module';
+import { EmployeeDashboardModule } from '../ITI/employee-dashboard/employee-dashboard.module';
 
 /// work here 
 
@@ -114,7 +115,8 @@ import { ItiExaminationInchargeDashboardModule } from '../ITI/iti-examination-in
     JDTEDashboardModule,
     ITIPlanningDashboardModule,
     ITIInspectionDashboardModule,
-    ItiExaminationInchargeDashboardModule
+    ItiExaminationInchargeDashboardModule,
+    EmployeeDashboardModule
   ]
 })
 export class dashboardModule { }
