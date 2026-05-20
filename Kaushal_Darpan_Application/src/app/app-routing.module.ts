@@ -1872,6 +1872,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
+  { path: 'Views\StaffTrainingConsent', loadChildren: () => import('./Views/staff-training-consent/staff-training-consent.module').then(m => m.StaffTrainingConsentModule) },
 
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 
