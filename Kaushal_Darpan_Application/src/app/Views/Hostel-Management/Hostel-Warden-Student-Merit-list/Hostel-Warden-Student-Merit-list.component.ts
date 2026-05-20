@@ -15,6 +15,7 @@ import { HostelManagmentService } from '../../../Services/HostelManagment/Hostel
 import * as XLSX from 'xlsx';
 import * as CryptoJS from 'crypto-js';
 import { AppsettingService } from '../../../Common/appsetting.service';
+
 const secretKey = 'your-secret-key';
 
 @Component({
@@ -272,6 +273,8 @@ this.showCheckbox = !this.StudentReqListList.some((x: any) => x.AllotmentStatus 
     this.isSubmitted = false;
     this.Searchrequest = new StudentRequestDataModal();
     this.RequestFormGroup.reset();
+    this.Searchrequest.status = 3;
+   
   }
   
 
@@ -438,6 +441,7 @@ this.showCheckbox = !this.StudentReqListList.some((x: any) => x.AllotmentStatus 
 
 
   onAffidavitApproved() {
+    debugger
     const selected = this.getSelectedItems();
 
     if (selected.length === 0) {

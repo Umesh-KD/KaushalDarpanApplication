@@ -135,7 +135,7 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 4, Name: 'Download Examiners With Group Code And Marking report' },
       { ID: 5, Name: 'Download Grace Marks Student report' },
       { ID: 6, Name: 'Download Detain Marks Student report' },
-
+      { ID: 7, Name: '(Reval) Download Examiners With Group Code And Marking report' }
     ];
   }
   get form() { return this.groupForm.controls; }
@@ -172,7 +172,7 @@ export class MiscellaneousReportComponent implements OnInit {
             }
             else if (data.State == EnumStatus.Success) {
               this.GetfilteredList = data["Data"];// list
-              if (this.requestData.Type == 4) {
+              if (this.requestData.Type == 4 || this.requestData.Type == 7) {
                 this.exportToExcelstaticType();
               }
               else if (this.requestData.Type == 5) {

@@ -27,7 +27,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
   styleUrls: ['./ReAssignTimeTable.component.css']
 })
 export class ReAssignTimeTableComponent implements OnInit {
-  displayedColumns: string[] = ['SrNo', 'StaffSSOID', 'StaffName', 'From_Date','To_Date','SectionName', 'EndTermName', 'SemesterName', 'CourseTypeName', 'StreamName', 'SubjectName', 'Actions'];
+  displayedColumns: string[] = ['SrNo', 'StaffSSOID', 'StaffName', 'From_Date', 'To_Date', 'SectionName', 'EndTermName', 'SemesterName', 'CourseTypeName', 'StreamName', 'SubjectName', 'Actions'];
   EditDataFormGroup!: FormGroup;
   TableForm!: FormGroup;
   isSubmitted: boolean = false;
@@ -492,21 +492,25 @@ export class ReAssignTimeTableComponent implements OnInit {
     }
   }
   AttendanceData(rowData: any) {
+    debugger
     if (rowData) {
       const routePath =
-        rowData.ATType === 0
-          ? 'student-attendance'
-          : 'ReAssignTeacherLCAttendance';
+    
+         'student-attendance'
+        
 
       if (rowData.StreamID != null) {
         this.router.navigate([
           routePath,
+          rowData.StaffID,
           rowData.StreamID,
           rowData.SemesterID,
           rowData.SubjectID,
           rowData.SectionID,
           rowData.From_Date,
           rowData.To_Date,
+          rowData.RosterID,
+          rowData.DayID
 
         ]);
       }

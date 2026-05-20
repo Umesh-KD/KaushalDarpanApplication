@@ -15,6 +15,7 @@ import { HostelManagmentService } from '../../../Services/HostelManagment/Hostel
 import * as XLSX from 'xlsx';
 import * as CryptoJS from 'crypto-js';
 import { EditHostelStudentSearchModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
+import { AppsettingService } from '../../../Common/appsetting.service';
 const secretKey = 'your-secret-key';
 
 @Component({
@@ -52,7 +53,9 @@ export class objectionwindowComponent {
   meritMultiSelected: boolean = false;
   decryptedIdsArray: any[] = [];
   public isObjectionActive: boolean = true;
+
   EditHostelDetails = new EditHostelStudentSearchModel();
+
 
 
 
@@ -68,6 +71,7 @@ export class objectionwindowComponent {
     private routers: Router,
     private Swal2: SweetAlert2,
     private modalService: NgbModal,
+    private appsettingConfig: AppsettingService,
     private route: ActivatedRoute) { }
 
 

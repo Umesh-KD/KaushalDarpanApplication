@@ -94,9 +94,10 @@
       <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
         <i class="ti ti-download"></i> Download Execel
       </a>
-      <h4 style="background-color: red; color: white; padding: 10px;" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE">
+      <h5 style="color: red; padding: 10px;"
+          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE">
         Please ensure that at least one priority request is approved before forwarding the user request.
-      </h4>
+      </h5>
     </div>
 
 

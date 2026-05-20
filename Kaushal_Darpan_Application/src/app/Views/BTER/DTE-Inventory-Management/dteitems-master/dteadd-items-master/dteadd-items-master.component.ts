@@ -109,6 +109,10 @@ export class DteAddItemsMasterComponent {
     await this.GetAllUnitData();
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
+      
+      
+      this.AddItemsRequestFormGroup.get('ItemCategoryId')?.disable();
+      this.AddItemsRequestFormGroup.get('EquipmentsId')?.disable();
       // this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
       
     }
