@@ -72,6 +72,8 @@ export class SR5ReportBTERComponent {
 
   async GetAllData() {    
     try {
+      debugger
+
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;

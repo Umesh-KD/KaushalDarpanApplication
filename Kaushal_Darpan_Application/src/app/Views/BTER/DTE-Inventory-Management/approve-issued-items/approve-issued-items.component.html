@@ -72,11 +72,11 @@
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="flex">
 
-        <!-- <a href="javascript:void(0);" 
-          class="btn bg-info btn-sm text-white"
-          (click)="ApproveIssuedItems()">
-          <i class="ti ti-check"></i> Approve Selected Items
-        </a> -->
+        <!-- <a href="javascript:void(0);"
+        class="btn bg-info btn-sm text-white"
+        (click)="ApproveIssuedItems()">
+        <i class="ti ti-check"></i> Approve Selected Items
+      </a> -->
 
         <select class="form-select" id="IssuedItemStatus" [(ngModel)]="IssuedItemStatus" name="IssuedItemStatus">
           <option value="0">Choose Mark As (*)</option>
@@ -120,8 +120,8 @@
             <td align="left">{{(startInTableIndex+1)+idx}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
-            <td align="left">{{ item.EquipmentName}}</td> 
-            <td align="left">{{ item.ItemCode}}</td> 
+            <td align="left">{{ item.EquipmentName}}</td>
+            <td align="left">{{ item.ItemCode}}</td>
             <td align="left">
               <span [ngClass]="item.IsConsumable == 1 ? 'badge-permanent' : 'badge-consumable'">
                 {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
@@ -133,20 +133,20 @@
 
             <td align="left">
               <div class="flex">
-                <input  class="form-input" style="width:100px" type="text" tabindex="{{idx}}" id="txtObtainedTheory"
-                  (keypress)="numberOnly($event)" 
-                  [readonly]="!item.Selected" 
-                  [disabled]="!item.Selected"  
-                  [(ngModel)]="item.ApproveIssueQuantity" 
-                  (keydown.tab)="onTabPress($event, idx)" 
-                  (keydown)="allowOnlyPositiveNumbers($event)"
-                  [max]="item.Quantity"
-                  min="1"
-                  tabindex="{{idx}}"
-                  (input)="validateQuantity(item)">
+                <input class="form-input" style="width:100px" type="text" tabindex="{{idx}}" id="txtObtainedTheory"
+                       (keypress)="numberOnly($event)"
+                       readonly
+                       disabled
+                       [(ngModel)]="item.ApproveIssueQuantity"
+                       (keydown.tab)="onTabPress($event, idx)"
+                       (keydown)="allowOnlyPositiveNumbers($event)"
+                       [max]="item.Quantity"
+                       min="1"
+                       tabindex="{{idx}}"
+                       (input)="validateQuantity(item)">
               </div>
             </td>
-          
+
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10">
@@ -156,7 +156,21 @@
         </tbody>
       </table>
 
-    </div>
+      <!--<input class="form-input" style="width:100px" type="text" tabindex="{{idx}}" id="txtObtainedTheory"
+             (keypress)="numberOnly($event)"
+             [readonly]="!item.Selected"
+             [disabled]="!item.Selected"
+             [(ngModel)]="item.ApproveIssueQuantity"
+             (keydown.tab)="onTabPress($event, idx)"
+             (keydown)="allowOnlyPositiveNumbers($event)"
+             [max]="item.Quantity"
+             min="1"
+             tabindex="{{idx}}"
+             (input)="validateQuantity(item)">-->
+   
+
+
+  </div>
     <!--pagination-->
     <div class="p-3 paginationBox flex items-center justify-end w-full">
       <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>

@@ -1028,14 +1028,14 @@
                 <td>{{StudentDetailsList[0]?.RoomPartnerName}}</td>
               </tr>
 
-              <tr *ngIf="StudentDetailsList[0]?.AllotmentStatus == 14 || StudentDetailsList[0]?.AllotmentStatus == 15">
+              <tr>
                 <td>Merit list show</td>
                 <td>
-                <button type="button"
-        
-        (click)="onStudent_By_HostelMeritlist(Student_By_HostelMeritlist)">
-                  <i class="ti ti-eye"></i></button>
-               </td>
+                  <button type="button"
+                          (click)="onStudent_By_HostelMeritlist(Student_By_HostelMeritlist)">
+                    <i class="ti ti-eye"></i>
+                  </button>
+                </td>
               </tr>
 
             </tbody>
@@ -1052,17 +1052,7 @@
 
 </ng-template>
 
-<div class="flex justify-between items-start mb-3" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 14 || StudentDetailsList[0]?.AllotmentStatus == 15">
 
-  <button type="button"
-          class="btn bg-info text-white btn-sm"
-          (click)="onViewStudentDetails(studentDetailsModal)">
-
-    <i class="ti ti-eye"></i> View Application
-
-  </button>
-
-</div>
 
 
 
@@ -1082,7 +1072,7 @@
         </button>
       </div>
 
-      <div class="card-body">
+      <div class="card-body" *ngIf="StudentDetailsMeritList.length > 0">
 
         <div class="overflow-x-auto mt-3">
           <table class="table table-border w-full table-auto" cellpadding="5">
@@ -1097,6 +1087,7 @@
                 <th class="text-left">Year</th>
                 <th class="text-left">Percentage</th>
                 <th class="text-left">Status</th>
+                <th class="text-left">Action Date</th>
               </tr>
             </thead>
             <tbody>
@@ -1109,7 +1100,8 @@
                 <td align="left">{{item.SemesterName}}</td>
                 <td align="left">{{item.EndTermName}}</td>
                 <td align="left">{{item.ClassPercentage}}</td>
-                <td>{{ item.Status }}</td>
+                <td>{{ item.StatusName }}</td>
+                <td>{{ item.ActionDate }}</td>
               </tr>
             </tbody>
           </table>
@@ -1122,3 +1114,21 @@
   </div>
 
 </ng-template>
+<div class="card-body p-5"
+     *ngIf="StudentDetailsList[0]?.AllotmentStatus == 11">
+
+  <div class="flex justify-between items-start mb-3">
+
+    <h3>Hostel Application Status:</h3>
+
+    <button type="button"
+            class="btn bg-info text-white btn-sm"
+            (click)="onViewStudentDetails(studentDetailsModal)">
+
+      <i class="ti ti-eye"></i> View Application
+
+    </button>
+
+  </div>
+
+</div>

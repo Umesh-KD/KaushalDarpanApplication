@@ -112,8 +112,8 @@ export class BranchWiseHodComponent {
         this.State = data['State'];
         this.Message = data['Message'];
         this.ErrorMessage = data['ErrorMessage'];
-        this.request.CollegeID = data['Data'];
-        this.request.CollegeID = data['Data'][0]['InstituteID'];
+        //this.request.CollegeID = data['Data'];
+        this.request.CollegeID = data['Data'][0]['InstituteID'] ?? 0;
         this.request.DisplayName = data['Data'][0]['DisplayName'];
         this.request.FirstName = data['Data'][0]['DisplayName'];
         this.request.MailPersonal = data['Data'][0]['Email'];
@@ -126,8 +126,9 @@ export class BranchWiseHodComponent {
   get _SSOIDFormGroup() { return this.SSOIDFormGroup.controls; }
 
   async CheckUserExists(SSOID: any) {
+    debugger
     if (SSOID.target.value != null) {
-      debugger
+      //debugger
       this.isSubmit = true;
       await this.commonMasterService.CheckSSOIDExists(SSOID.target.value, this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.InstituteID)
         .then((data: any) => {
@@ -167,6 +168,7 @@ export class BranchWiseHodComponent {
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.request.CollegeID = this.sSOLoginDataModel.InstituteID;
       await this.staffMasterService.AllBranchHOD(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -277,7 +279,6 @@ export class BranchWiseHodComponent {
       this.request.SemesterID = this.IIPMasterFormGroup.value.SemesterID;
       this.request.CollegeID = this.sSOLoginDataModel.InstituteID
   
-
       await this.staffMasterService.AllBranchHOD(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
