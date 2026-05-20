@@ -183,9 +183,11 @@ export class CompanyValidationComponent implements OnInit {
     if (this.formAction.invalid) {
       return
     }
+    debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.requestAction.ActionBy = this.sSOLoginDataModel.UserID;
     this.requestAction.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.requestAction.RoleID = this.sSOLoginDataModel.RoleID;
     //Show Loading
     this.loaderService.requestStarted();
     try {

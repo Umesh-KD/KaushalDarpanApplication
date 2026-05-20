@@ -64,15 +64,25 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
-                <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID}"
+                <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID, mode:'view'}"
                     title="Edit"
                     *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO) &&
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge)">
+                    <i class="ti ti-eye"></i></a>
+
+                <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID,mode:'edit'}"
+                    title="Edit"
+                    *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
+                      sSOLoginDataModel.RoleID == _enumRole.Principal ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge) &&
                       row.CompanyStatus != 1">
                     <i class="ti ti-pencil"></i></a>
+
 
                 <a href="javascript:void(0);" title="Delete"
                    (click)="DeleteEvent_ById(row.EventID)"
@@ -80,7 +90,7 @@
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO) &&
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge) &&
                       row.CompanyStatus != 1">
                   <i class="ti ti-trash"></i></a>
 

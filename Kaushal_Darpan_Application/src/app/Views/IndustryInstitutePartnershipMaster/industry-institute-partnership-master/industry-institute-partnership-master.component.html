@@ -25,7 +25,8 @@
            sSOLoginDataModel.RoleID == _enumRole.Principal ||
            sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
            sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-           sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO " >
+           sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO ||
+           sSOLoginDataModel.RoleID == _enumRole.IIPIncharge" >
            <i class="ti ti-plus"></i>Add New
         </a>
       </div>
@@ -126,7 +127,8 @@
                     sSOLoginDataModel.RoleID == _enumRole.Principal ||
                     sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
                     sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO) &&
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO ||
+                    sSOLoginDataModel.RoleID == _enumRole.IIPIncharge) &&
                     item.CompanyStatus == 0">
                   <i class="ti ti-calendar-week"></i></a>
 
