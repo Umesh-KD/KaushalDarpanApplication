@@ -1,0 +1,515 @@
+import { Component, OnInit } from '@angular/core';
+import { CompanyMasterDataModels, CompanyMasterSearchByIdModel } from '../../../Models/CompanyMasterDataModel';
+import { HrMasterDataModel } from '../../../Models/HrMasterDataModel';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { IDistrictMaster_StateIDWiseDataModel, IStateMasterDataModel } from '../../../Models/CommonMasterDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { CompanyMasterService } from '../../../Services/CompanyMaster/company-master.service.ts';
+import { ToastrService } from 'ngx-toastr';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+
+@Component({
+  selector: 'app-view-iip-company-mou-detail',
+  standalone:false,
+  templateUrl: './view-iip-company-mou-detail.component.html',
+  styleUrl: './view-iip-company-mou-detail.component.css'
+})
+export class ViewIipCompanyMouDetailComponent implements OnInit {
+
+  public ID: number = 0;
+      public request = new CompanyMasterDataModels();
+      public personRequest = new HrMasterDataModel();
+      public isLoading: boolean = false;
+      public isSubmitted: boolean = false;
+      public isHrFormSubmitted:boolean=false;
+    
+      public State: number = 0;
+      public key: number = 0;
+       public flag: number = 0;
+      public Message: string = '';
+      public ErrorMessage: string = '';
+      public CompanyMasterFormGroup!: FormGroup;
+      public HrMasterFormGroup!: FormGroup;
+    
+      public searchReq = new CompanyMasterSearchByIdModel();
+        
+    
+      public sSOLoginDataModel = new SSOLoginDataModel();
+      public DistrictMasterList: IDistrictMaster_StateIDWiseDataModel[] = []
+      public StateMasterList: IStateMasterDataModel[] = []
+      public CompanyTypeList: any = []
+      public CompanyStatusList: any = []
+      public PackageList: any = []
+      mouList: any[] = [];
+    
+      constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService,
+        private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
+        private activatedRoute: ActivatedRoute, public appsettingConfig: AppsettingService, private routers: Router, private modalService: NgbModal) {
+    
+      }
+    
+      async ngOnInit() {
+    
+    
+        // form group
+        this.CompanyMasterFormGroup = this.formBuilder.group(
+          {
+            Name: ['', Validators.required],
+            Website: ['', Validators.required],
+            Address: ['', Validators.required],
+    
+            ddlState: ['', [DropdownValidators]],
+            ddlDistrict: ['', [DropdownValidators]],
+            ddlCompanyType: ['', [DropdownValidators]],
+            ISIIP: [false],
+            ISPlacement:[false],
+            ddlCompanyStatus: ['', [DropdownValidators]],
+            ddlPackage: ['', [DropdownValidators]],
+            // HRName: ['', Validators.required],
+            // EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+            // MobileNo: ['', Validators.required],
+    
+    
+          });
+    
+        this.HrMasterFormGroup=this.formBuilder.group(
+        {
+            Name: ['', Validators.required],
+            EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+            MobileNo: ['', Validators.required],
+        })
+    
+        this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+        this.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('CompanyID')?.toString());
+        this.flag=Number(this.activatedRoute.snapshot.queryParamMap.get('flag')?.toString());
+        this.request.ModifyBy = this.sSOLoginDataModel.UserID
+        this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());//student list key
+        await this.GetMaterData()
+        await this.loadDropdownData('CompanyType')
+        //edit
+        if (this.ID > 0) {
+          this.searchReq.ID = this.ID;
+          await this.GetById();
+          await this.GetCompanyMouList(this.ID);
+        }
+
+         if (this.flag == 1) {
+    this.CompanyMasterFormGroup.disable();
+    this.HrMasterFormGroup.disable();
+  }
+      }
+      get _CompanyMasterFormGroup() { return this.CompanyMasterFormGroup.controls; }
+      get _HrMasterFormGroup(){return this.HrMasterFormGroup.controls;}
+    
+    
+    
+    
+      async loadDropdownData(MasterCode: string) {
+        this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+          switch (MasterCode) {
+            case 'CompanyType':
+              this.CompanyTypeList = data['Data'];
+              console.log(this.CompanyTypeList)
+              break;
+            default:
+              break;
+          }
+        });
+      }
+    
+      async GetTierBasedPackageMaster() {
+        try{
+         // debugger
+          this.loaderService.requestStarted();
+          await this.commonMasterService.GetTierBasedPackageMaster(this.request.TierID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            console.log(data['Data']);
+            this.PackageList = data['Data'];
+            console.log(this.PackageList);
+          }, error => console.error(error));
+        }
+        catch(Ex){
+          console.log(Ex);
+        }
+        finally{
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+    
+      async GetMaterData() {
+        try {
+          this.loaderService.requestStarted();
+          await this.commonMasterService.GetStateMaster()
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              console.log(data['Data']);
+              this.StateMasterList = data['Data'];
+              console.log(this.StateMasterList);
+            }, error => console.error(error));
+    
+            await this.commonMasterService.GetCompanyTierMaster()
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              console.log(data['Data']);
+              this.CompanyStatusList = data['Data'];
+              console.log(this.CompanyStatusList);
+            }, error => console.error(error));
+        }
+        catch (Ex) {
+          console.log(Ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+    
+      validateNumber(event: KeyboardEvent) {
+        const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+        if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+          event.preventDefault();
+        }
+      }
+    
+      async Back() {
+        if (this.key == 1) {
+          this.routers.navigate(['/IIPCompanyMaster'])
+        }
+        else if (this.key == 2) {
+          this.routers.navigate(['/IIPCompanyMaster'])
+        }
+        else if (this.key == 3) {
+          this.routers.navigate(['/CompanyValidation'])
+        }
+      }
+      GotoCommonSubject(): void {
+        this.routers.navigate(['/commonsubjects']);
+      }
+    
+      async ddlState_Change() {
+        try {
+          this.loaderService.requestStarted();
+          await this.commonMasterService.DistrictMaster_StateIDWise(this.request.StateID)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.DistrictMasterList = data['Data'];
+            }, error => console.error(error));
+        }
+        catch (Ex) {
+          console.log(Ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+    
+    
+      // get detail by id
+      async GetById() {
+        debugger
+        try {
+    
+          this.loaderService.requestStarted();
+    
+          await this.CompanyMasterService.GetById(this.searchReq)
+    
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              console.log(data,"company");
+    
+              this.request = data['Data'];
+              this.request.Dis_CompanyName = data['Data']['Dis_CompanyName'];
+              this.request.CompanyPhoto = data['Data']['CompanyPhoto'];
+              this.ddlState_Change();
+              this.request.DistrictID = data['Data']["DistrictID"];
+              console.log(this.request, "request");
+    
+    
+            }, (error: any) => console.error(error)
+            );
+        }
+        catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      } 
+    
+    
+      
+      
+    
+      async AddMoreMembers() {
+          
+          this.isHrFormSubmitted = true;
+          if(this.HrMasterFormGroup.invalid) {
+            this.toastr.error("Please fill all the required fields of Hr Form")
+            return;
+          }
+      
+          const personExists = this.request.ListCompanyHRDetails.some(person =>
+            person.EmailId === this.personRequest.EmailId && person.MobileNo === this.personRequest.MobileNo
+          );
+      
+          if (!personExists) {
+            this.request.ListCompanyHRDetails.push(this.personRequest);
+            this.personRequest = new HrMasterDataModel();
+            this.isHrFormSubmitted = false;
+          } else {
+            this.toastr.error("Person already exists with the same emailid and mobileno.");
+            return
+          }
+      
+          // this.request.ConcernPersonDetails.push(this.personRequest);
+        
+        }
+      
+    
+      async resetHrDetails() {
+        this.personRequest = new HrMasterDataModel();
+      }
+    
+      // get detail by id
+      async SaveData() {
+        debugger
+        try {
+          this.isSubmitted = true;
+          if (this.CompanyMasterFormGroup.invalid) {
+            console.log("errro")
+            return
+          }
+    
+          if(this.request.ListCompanyHRDetails.length<=0){
+            this.toastr.error("Please add at least one HR details");
+            return
+          }
+          this.isLoading = true;
+    
+          this.loaderService.requestStarted();
+    
+          this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+          this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+          this.request.ISIIP = this.CompanyMasterFormGroup.value.ISIIP;
+          this.request.ISPlacement = this.CompanyMasterFormGroup.value.ISPlacement;
+          this.request.RoleID = this.sSOLoginDataModel.RoleID;
+    
+          //save
+          debugger
+          await this.CompanyMasterService.SaveData(this.request)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              console.log(data);
+              this.State = data['State'];
+              this.Message = data['Message'];
+              this.ErrorMessage = data['ErrorMessage'];
+    
+              if (this.State = EnumStatus.Success) {
+                this.toastr.success(this.Message)
+                this.ResetControls();
+                 this.Back();
+                // this.routers.navigate(['/CompanyMaster']);
+              }
+              else {
+                this.toastr.error(this.ErrorMessage)
+              }
+    
+            }, (error: any) => console.error(error)
+            );
+        }
+        catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+    
+      public file!: File;
+      async onFilechange(event: any, Type: string) {
+        try {
+    
+          this.file = event.target.files[0];
+          if (this.file) {
+            if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png') {
+              //size validation
+              if (this.file.size > 2000000) {
+                this.toastr.error('Select less then 2MB File')
+                return
+              }
+              //if (this.file.size < 100000) {
+              //  this.toastr.error('Select more then 100kb File')
+              //  return
+              //}
+            }
+            else {// type validation
+              this.toastr.error('Select Only jpeg/jpg/png file')
+              return
+            }
+            // upload to server folder
+            this.loaderService.requestStarted();
+    
+            await this.commonMasterService.UploadDocument(this.file)
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+    
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
+    
+                if (this.State == EnumStatus.Success) {
+                  if (Type == "Photo") {
+                    this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+                    this.request.CompanyPhoto = data['Data'][0]["FileName"];
+    
+                  }
+                  //else if (Type == "Sign") {
+                  //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+                  //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+                  //}
+                  /*              item.FilePath = data['Data'][0]["FilePath"];*/
+                  event.target.value = null;
+                }
+                if (this.State == EnumStatus.Error) {
+                  this.toastr.error(this.ErrorMessage)
+                }
+                else if (this.State == EnumStatus.Warning) {
+                  this.toastr.warning(this.ErrorMessage)
+                }
+              });
+          }
+        }
+        catch (Ex) {
+          console.log(Ex);
+        }
+        finally {
+          /*setTimeout(() => {*/
+          this.loaderService.requestEnded();
+          /*  }, 200);*/
+        }
+      }
+    
+      async DeleteImage(FileName: any, Type: string) {
+        try {
+          // delete from server folder
+          this.loaderService.requestEnded();
+          await this.commonMasterService.DeleteDocument(FileName).then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            if (this.State == 0) {
+              if (Type == "Photo") {
+                this.request.Dis_CompanyName = '';
+                this.request.CompanyPhoto = '';
+              }
+              //else if (Type == "Sign") {
+              //  this.requestStudent.Dis_StudentSign = '';
+              //  this.requestStudent.StudentSign = '';
+              //}
+              this.toastr.success(this.Message)
+            }
+            if (this.State == 1) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == 2) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+        }
+        catch (Ex) {
+          console.log(Ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+    
+      // reset
+      ResetControls() {
+        this.request = new CompanyMasterDataModels();
+        //this.multiSelect.toggleSelectAll();
+      }
+    
+      async Delete_Hr(idx:number){
+        try{
+          this.request.ListCompanyHRDetails.splice(idx,1);
+        }
+        catch(error){
+          console.log(error);
+        }
+      }
+
+     async GetCompanyMouList(companyId: number) {
+
+  try {
+
+    this.loaderService.requestStarted();
+
+    const request = {
+      CompanyId: companyId,
+      Action: 'GetByCompanyID',
+      MoUDoc: '',
+      Remark: '',
+      IPAddress: ''
+    };
+
+    await this.CompanyMasterService
+      .GetCompanyMoUDetails(request)
+      .then((data: any) => {
+
+        data = JSON.parse(JSON.stringify(data));
+
+        if (data.State == EnumStatus.Success) {
+
+          debugger
+          this.mouList = data.Data ? [data.Data] : []; //data.Data || [];
+
+        }
+        else {
+
+          this.mouList = [];
+          //this.toastr.error(data.ErrorMessage);
+
+        }
+
+      }, (error: any) => {
+
+        console.error(error);
+
+      });
+
+  }
+  catch (ex) {
+
+    console.log(ex);
+
+  }
+  finally {
+
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+
+  }
+}
+
+
+}

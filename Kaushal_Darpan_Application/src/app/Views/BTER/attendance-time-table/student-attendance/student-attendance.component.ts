@@ -254,6 +254,7 @@ export class StudentAttendanceComponent implements OnInit {
         StaffID: this.StaffID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        InstituteId: this.sSOLoginDataModel.InstituteID
       }
       await this.staffMasterService.GetBranchSectionAcRosterData(obj)
         .then((data: any) => {
