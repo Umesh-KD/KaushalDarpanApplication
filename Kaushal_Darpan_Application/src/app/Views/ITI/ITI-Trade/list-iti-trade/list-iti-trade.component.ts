@@ -295,7 +295,7 @@ export class ListItiTradeComponent {
     this.totalInTableRecord = this.TradetblList.length;
   }
 
-  async GetTradeListDDL() {
+  async GetTradeListDDLold() {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.action = "_getAllData"
@@ -313,6 +313,33 @@ export class ListItiTradeComponent {
       }, 200);
     }
   }
+
+
+  async GetTradeListDDL() {
+    try
+    {
+      
+
+      var data =
+      {
+        MasterCode: "NCVT_Exam_Trade",
+        FilterBy: this.sSOLoginDataModel.EndTermID
+      }
+
+      await this.commonMasterService.CommonMasterDataByAction(data).then((data: any) => {
+        const parsedData = JSON.parse(JSON.stringify(data));
+        this.ItiTradeList = parsedData.Data;
+        console.log('Trade List===>', this.ItiTradeList);
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   onSearchChange() {
     debugger
