@@ -162,7 +162,8 @@
         <label class="form-label">MOU Start Date</label>
         <input type="date"
                class="form-input"
-               [(ngModel)]="mouRequest.MoUStartDate">
+               [(ngModel)]="mouRequest.MoUStartDate"
+               [max]="todayDate">
       </div>
 
       <div>

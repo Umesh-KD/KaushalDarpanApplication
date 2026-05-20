@@ -109,6 +109,7 @@ export class IIP_SearchModel extends RequestBaseModel {
 }
 
 export class IIP_EventDataModel extends RequestBaseModel {
+  public EventName: string = ''
   public EventID: number = 0
   public CompanyID: number = 0
   public EventTypeID: number = 0
