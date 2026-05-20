@@ -757,7 +757,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
       await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
     }
 
-    exportToExcel(): void {
+    async exportToExcel() {
       debugger
 
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
@@ -767,7 +767,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
       this.searchRequest.EmployeeType = this.SearchEmployeeType;
       this.searchRequest.InstituteID = this.SearchInstituteID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-       this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
+      await this.staffServiceDetailsService.GetEM_TransferSystemData(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.EM_TransferProcessExeclList = data.Data;
