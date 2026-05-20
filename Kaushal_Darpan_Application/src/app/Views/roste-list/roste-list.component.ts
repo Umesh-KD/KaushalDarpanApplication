@@ -485,6 +485,7 @@ export class RosteListComponent implements OnInit {
     this._RosterDisplayTimeTableDataModel.SemesterID = 0;
     this._RosterDisplayTimeTableDataModel.StreamID = this.filterModel.StreamID;
     this._RosterDisplayTimeTableDataModel.SubjectID = 0;
+    this._RosterDisplayTimeTableDataModel.InstituteId = this.sSOLoginDataModel.InstituteID;
     
     await this.GetRosterDisplay_PDFTimeTablePDF();
 
@@ -538,7 +539,8 @@ export class RosteListComponent implements OnInit {
 
       debugger;
 
-      this._RosterDisplayTimeTableDataModel.StaffID=this.filterModel.StaffID;
+      this._RosterDisplayTimeTableDataModel.StaffID = this.filterModel.StaffID;
+      this._RosterDisplayTimeTableDataModel.InstituteId = this.sSOLoginDataModel.InstituteID
 
       await this.attendanceServiceService.GetRosterDisplay_PDFTimeTable(this._RosterDisplayTimeTableDataModel)
         .then((data: any) => {

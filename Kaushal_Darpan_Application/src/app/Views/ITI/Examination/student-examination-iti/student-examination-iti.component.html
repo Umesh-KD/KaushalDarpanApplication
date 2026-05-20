@@ -215,7 +215,7 @@
               <span class="shortingSpan" *ngIf="sortInTableColumn=='BranchName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('SemesterName')">
-              Semester/Year
+              Year
               <span class="shortingSpan" *ngIf="sortInTableColumn=='SemesterName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th class="text-left">Status</th>
@@ -372,7 +372,7 @@
                 <td>{{StudentProfileDetailsData[0]['StreamName']}}</td>
               </tr>
               <tr>
-                <td>Semester/Year</td>
+                <td>Year</td>
                 <td>
                   {{StudentProfileDetailsData[0]['SemesterName']}} ({{StudentProfileDetailsData[0]['StudentType']}})
                 </td>
@@ -380,13 +380,33 @@
               <tr>
                 <td>Papers</td>
                 <td>
-                  Theory &amp; Practical Papers<br><span style="word-break: break-all;">
-                    (
-                    {{StudentProfileDetailsData[0]['Papers']}}
 
+                  @if (sSOLoginDataModel.Eng_NonEng == 2) {
+
+                  Theory &amp; Practical Papers
+                  <br>
+
+                  <span style="word-break: break-all;">
+                    (
+                    {{ StudentProfileDetailsData[0]['Papers'] }}
                     )
                   </span>
+
+                  } @else {
+
+                  Practical Papers
+                  <br>
+
+                  <span style="word-break: break-all;">
+                    (
+                    {{ StudentProfileDetailsData[0]['Papers'] }}
+                    )
+                  </span>
+
+                  }
+
                 </td>
+
               </tr>
               <tr>
                 <td>Student's Name</td>
@@ -449,6 +469,12 @@
 
           <div class="overflow-x-auto mt-3">
             <table class="table table-border w-full table-auto" cellpadding="5">
+              @if (sSOLoginDataModel.Eng_NonEng == 1) {
+              <tr>
+                <td>DGT Reg No:</td>
+                <td>{{StudentProfileDetailsData[0]['StateRegNo']}}</td>
+              </tr>
+              }
               <tr>
                 <td>Enrollment No.:</td>
                 <td>{{StudentProfileDetailsData[0]['EnrollmentNo']}}</td>
