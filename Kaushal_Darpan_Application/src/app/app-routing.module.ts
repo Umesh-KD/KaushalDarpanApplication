@@ -563,6 +563,13 @@ const routes: Routes = [
       { path: 'ItiStudentenrollment', loadChildren: () => import('./Views/ITI/Examination/iti-student-enrollment/iti-student-enrollment.module').then(m => m.ItiStudentEnrollmentModule), title: 'ITI-Student-Enrollment' },
       { path: 'attendance-time-table', loadChildren: () => import('./Views/BTER/attendance-time-table/attendance-time-table.module').then(m => m.AttendanceTimeTableModule), title: 'Student-Enrollment' },
       { path: 'student-attendance/:streamId/:semesterId/:subjectId/:sectionId', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance/student-attendance.module').then(m => m.StudentAttendanceModule), title: 'Student-Enrollment' },
+      {
+        path: 'student-attendance/:StaffID/:streamId/:semesterId/:subjectId/:sectionId/:fromDate/:toDate/:rosterId/:dayId',
+        loadChildren: () =>
+          import('./Views/BTER/attendance-time-table/student-attendance/student-attendance.module')
+            .then(m => m.StudentAttendanceModule),
+        title: 'Student-Enrollment'
+      },
       { path: 'student-attendance', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance/student-attendance.module').then(m => m.StudentAttendanceModule), title: 'Student-Enrollment' },
       { path: 'student-attendance-reports', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-reports/student-attendance-reports-component.module').then(m => m.StudentAttendanceReportsModule), title: 'Student-Enrollment' },
       { path: 'student-attendance-subjectwise-reports', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-subjectwise-report/student-attendance-subjectwise-report.module').then(m => m.StudentAttendanceSubjectwiseReportModule), title: 'Student-Enrollment' },

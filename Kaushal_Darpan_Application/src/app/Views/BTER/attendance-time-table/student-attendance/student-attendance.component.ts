@@ -64,6 +64,8 @@ export class StudentAttendanceComponent implements OnInit {
   public todayDate: string = '';
   // Pagination related variables
   totalRecords: number = 0;
+  fromDate:string=''
+  toDate:string=''
   pageSize: number = 500;
   currentPage: number = 1;
   totalPages: number = 0;
@@ -73,6 +75,10 @@ export class StudentAttendanceComponent implements OnInit {
   semesterId!: number;
   sectionId!: number;
   subjectId!: number;
+  StaffID: number = 0;
+  rosterId: number = 0;
+  dayId: number = 0;
+  isreassign:boolean=false
   today: Date = new Date();
   yesterdayDate: string = '';
   sevenDaysLater: Date = new Date();
@@ -120,7 +126,34 @@ export class StudentAttendanceComponent implements OnInit {
     this.sectionId = parseInt(this.route.snapshot.paramMap.get('sectionId') ?? "0");
     this.semesterId = parseInt(this.route.snapshot.paramMap.get('semesterId') ?? "0");
     this.subjectId = parseInt(this.route.snapshot.paramMap.get('subjectId') ?? "0");
+    this.StaffID = parseInt(this.route.snapshot.paramMap.get('StaffID') ?? '0');
+    this.fromDate = this.formatDateForInput(
+      this.route.snapshot.paramMap.get('fromDate') ?? ''
+    );
 
+    this.toDate = this.formatDateForInput(
+      this.route.snapshot.paramMap.get('toDate') ?? ''
+    );
+
+    this.rosterId = parseInt(this.route.snapshot.paramMap.get('rosterId') ?? '0');
+
+    this.dayId = parseInt(this.route.snapshot.paramMap.get('dayId') ?? '0');
+    if (
+      this.fromDate &&
+      this.toDate &&
+      this.rosterId > 0 &&
+      this.StaffID > 0
+    ) {
+      this.isreassign = true;
+      
+    }
+    else {
+      this.isreassign = false;
+      this.StaffID = this.sSOLoginDataModel.StaffID
+    }
+    
+
+    debugger
     this.DayListBind();
     await this.getMasterData();
     const today = new Date();
@@ -141,6 +174,32 @@ export class StudentAttendanceComponent implements OnInit {
       SectionID: this.sectionId,
       SubjectID: this.subjectId
     });
+    if (this.isreassign === true) {
+
+      this.TableForm.patchValue({
+        StreamID: this.streamId,
+        SemesterID: this.semesterId,
+        SectionID: this.sectionId,
+        SubjectID: this.subjectId,
+        AttendanceStartDate: this.fromDate,
+        AttendanceEndDate: this.toDate,
+        DayID: this.dayId,
+        AttandanceTimeID: this.rosterId
+      });
+
+      // Freeze fields
+      this.TableForm.get('StreamID')?.disable();
+      this.TableForm.get('SemesterID')?.disable();
+      this.TableForm.get('SectionID')?.disable();
+      this.TableForm.get('SubjectID')?.disable();
+      this.TableForm.get('AttendanceStartDate')?.disable();
+      this.TableForm.get('AttendanceEndDate')?.disable();
+      this.TableForm.get('DayID')?.disable();
+      this.TableForm.get('AttandanceTimeID')?.disable();
+
+    }
+    
+
 
     // setTimeout(()=> {
     //   if (this.semesterId > 0) {
@@ -192,7 +251,7 @@ export class StudentAttendanceComponent implements OnInit {
         SemesterID: this.semesterId,
         StreamID: this.streamId,
         SubjectID: this.subjectId,
-        StaffID: this.sSOLoginDataModel.StaffID,
+        StaffID: this.StaffID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       }
@@ -234,7 +293,14 @@ export class StudentAttendanceComponent implements OnInit {
     }
   }
 
+  formatDateForInput(dateStr: string): string {
 
+    if (!dateStr) return '';
+
+    const parts = dateStr.split('-');
+
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
+  }
   DayListBind() {
 
     this.DayList = [
@@ -258,11 +324,14 @@ export class StudentAttendanceComponent implements OnInit {
 
   async GetStudentAttandanceTimeDDL() {
     //debugger
-    
-    this.TableForm.get('AttandanceTimeID')?.setValue(0);
+
+    if (this.isreassign == false) {
+      this.TableForm.get('AttandanceTimeID')?.setValue(0);
+    }
+
     //const sectionID = this.TableForm.value.SectionID ? this.sectionId : this.TableForm.value.SectionID;
     // await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
-    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.subjectId, this.streamId, this.TableForm.value.SectionID, this.TableForm.value.DayID).then((data: any) => {
+    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.StaffID, this.subjectId, this.streamId, this.TableForm.value.SectionID, this.TableForm.value.DayID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       // debugger
       this.StudentAttandanceTimeDDL = data.Data;
@@ -330,7 +399,7 @@ export class StudentAttendanceComponent implements OnInit {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
-      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      this.searchRequest.StaffID = this.StaffID;
       this.searchRequest.From_Date = formattedDateStart;
       this.searchRequest.To_Date = formattedDateEnd;
 
@@ -500,7 +569,7 @@ export class StudentAttendanceComponent implements OnInit {
         SubjectID: this.subjectId,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
-        StaffID: this.sSOLoginDataModel.StaffID,
+        StaffID: this.StaffID,
         TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
       };
 
@@ -947,7 +1016,7 @@ export class StudentAttendanceComponent implements OnInit {
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         InstituteID: this.sSOLoginDataModel.InstituteID,
         AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID,
-        StaffID: this.sSOLoginDataModel.StaffID,
+        StaffID: this.StaffID,
         RosterID: this.TableForm.value.AttandanceTimeID
       };
 
@@ -1030,7 +1099,7 @@ export class StudentAttendanceComponent implements OnInit {
       SemesterID: GetSemesterID,
       StreamID: GetstreamId,
       SubjectID: GetSubjectID,
-      StaffID: this.sSOLoginDataModel.StaffID,
+      StaffID: this.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
     }
