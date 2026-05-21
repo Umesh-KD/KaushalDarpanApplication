@@ -211,4 +211,13 @@ export class EmitraPaymentService
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async ITINCVTEXAMVerification(request: TransactionStatusDataModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/ITINCVTEXAMVerification", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

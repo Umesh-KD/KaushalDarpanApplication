@@ -422,9 +422,21 @@ export class EmitraFeeTransactionHistoryComponent {
     this.isAllSelected();
   }
 
-  async VerifyAllSelected() {
-    debugger;
-    if(this.selectedItems.length > 0) {
+  async VerifyAllSelected()
+  {
+    if (this.sSOLoginDataModel.DepartmentID == 2)
+    {
+      this.CheckITIExamStatus();
+    }
+    else
+    {
+      this.CheckBterStatus();
+    }
+  }
+
+  async CheckBterStatus()
+  {
+    if (this.selectedItems.length > 0) {
       try {
         for (const item of this.selectedItems) {
           let obj: TransactionStatusDataModel = {
@@ -476,7 +488,65 @@ export class EmitraFeeTransactionHistoryComponent {
         }, 200);
       }
     } else {
-      this.toastr.error('Please select at least one item.'); 
+      this.toastr.error('Please select at least one item.');
     } 
   }
+  async CheckITIExamStatus()
+  {
+    if (this.selectedItems.length > 0) {
+      try {
+        for (const item of this.selectedItems) {
+          let obj: TransactionStatusDataModel = {
+            TransactionID: item.TransactionId,
+            DepartmentID: item.DepartmentID,
+            PRN: item.PRN,
+            ServiceID: item.subsidyserviceid,
+            ApplicationID: item.ApplicationID?.toString() ?? "",
+            AMOUNT: item.PaidAmount,
+            RPPTXNID: "",
+            SubOrderID: "",
+            CreatedBy: this.sSOLoginDataModel.UserID,
+            SSOID: this.sSOLoginDataModel.SSOID,
+            ExamStudentStatus: 0,
+            IsEmitra: item.IsEmitra
+          };
+          await this.emitraPaymentService.ITINCVTEXAMVerification(obj)
+            .then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.State = data['State'];
+              this.Message = data['SuccessMessage'];
+              this.ErrorMessage = data['ErrorMessage'];
+
+              if (data.State == EnumStatus.Success) {
+                if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS') {
+                  if (data.Data?.PRN) {
+                    this.toastr.success(`Fee Paid Successfully for PRN: ${data.Data.PRN}`);
+                    await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+                  }
+                } else {
+                  this.toastr.error(this.Message);
+                }
+              } else {
+                this.toastr.error(this.ErrorMessage);
+              }
+            })
+
+            .catch(err => {
+              console.error('Payment check failed for one item:', err);
+              this.toastr.error('Payment check failed for one item');
+            });
+        }
+        this.selectedItems = [];
+      } catch (ex) {
+        console.error('Unexpected error:', ex);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    } else {
+      this.toastr.error('Please select at least one item.');
+    } 
+  }
+
 }
