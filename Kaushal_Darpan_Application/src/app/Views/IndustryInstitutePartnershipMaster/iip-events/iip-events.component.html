@@ -73,7 +73,9 @@
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge)">
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO 
+                    || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge
+                    || sSOLoginDataModel.RoleID == _enumRole.IIPAdmin )">
                     <i class="ti ti-eye"></i></a>
 
                 <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID,mode:'edit'}"
