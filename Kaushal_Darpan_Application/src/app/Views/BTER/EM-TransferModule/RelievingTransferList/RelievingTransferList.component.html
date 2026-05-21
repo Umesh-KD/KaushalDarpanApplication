@@ -76,20 +76,9 @@
         <i class="ti ti-list"></i>
         ReLieving Process List
       </b>
-
-      <button type="button"
-              *ngIf="EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.EM_JDTE || sSOLoginDataModel?.RoleID == _EnumRole.EM_Secretary_BTER)"
-              class="btn bg-info text-white mt-2"
-              (click)="StructuredSummaryList()">
-        Structured Summary List
-      </button>
-
-      <button type="button"
-              *ngIf="(EnumTransferSystemStatus.UnderJDTEReview == this.SearchStatus   && (sSOLoginDataModel?.RoleID === _EnumRole.DTE))"
-              class="btn bg-info text-white mt-2"
-              (click)="TabutarTransferList()">
-        Tabutar Transfer List
-      </button>
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-download"></i> Download Execel
+      </a>
 
     </div>
 
@@ -110,10 +99,12 @@
             <th align="left">Transfer Category</th>
             <th align="left">Reason Description</th>
             <th class="left">Application Date</th>
-            <th align="left">Office</th>
+            <th align="left">from Office</th>
+            <th align="left">To Office</th>
             <th align="left">Post</th>
             <th align="left">District</th>
-            <th align="left">Institute</th>
+            <th align="left">from Institute</th>
+            <th align="left">To Institute</th>
             <th align="left">Status</th>
             <th align="left">Supporting Documents</th>
             <th align="left">Relieving  Date</th>
@@ -128,9 +119,12 @@
             <td>{{row.TransferCategory}}</td>
             <td>{{row.ReasonDescription}}</td>
             <td>{{row.CreatedDate}}</td>
+            <td>{{row.OLD_OfficeName}}</td>
             <td>{{row.OfficeName}}</td>
+
             <td>{{row.DesignationName}}</td>
             <td>{{row.DistrictName}}</td>
+            <td>{{row.OLD_InstituteName}}</td>
             <td>{{row.InstituteName}}</td>
             <td>{{row.RelievingStatusName}}</td>
             <td align="left">

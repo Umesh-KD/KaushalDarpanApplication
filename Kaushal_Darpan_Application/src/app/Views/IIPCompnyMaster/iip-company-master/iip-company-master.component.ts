@@ -27,6 +27,7 @@ export class IipCompanyMasterComponent implements OnInit {
      State: any;
   Message: any;
   ErrorMessage: any;
+  todayDate: string = '';
 
     public mouRequest: any = {
   ID: 0,
@@ -55,6 +56,7 @@ selectedFile: any;
     }
   
     async ngOnInit() {
+      this.todayDate = new Date().toISOString().split('T')[0];
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       await this.GetAllData();
     }

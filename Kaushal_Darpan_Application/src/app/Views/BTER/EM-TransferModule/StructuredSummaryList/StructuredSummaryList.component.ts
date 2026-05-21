@@ -116,7 +116,7 @@ import * as XLSX from 'xlsx';
               )
               .map((item: any) => {
                 if (item.ID == EnumTransferSystemStatus.UnderJDTEReview) {
-                  item.Name = 'JDTE Reviewed';
+                  item.Name = 'Reviewed';
                 }
                 return item;
               });

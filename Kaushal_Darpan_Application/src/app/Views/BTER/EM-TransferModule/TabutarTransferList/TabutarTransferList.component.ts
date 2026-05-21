@@ -160,11 +160,11 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
               )
               .map((item: any) => {
                 if (item.ID == EnumTransferSystemStatus.Approved) {
-                  item.Name = 'Final Approved';
+                  item.Name = 'Dispatched ';
                 }
 
                 if (item.ID == EnumTransferSystemStatus.UnderDTEReview) {
-                  item.Name = 'DTE Reviewed';
+                  item.Name = 'Reviewed';
                 }
 
                 return item;

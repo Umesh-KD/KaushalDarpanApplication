@@ -46,6 +46,7 @@ export class AddIIPEventsComponent {
   public EventLevelList: any = [];
   public EventForList: any = [];
   isOJTSelected: boolean = false;
+  isFacultySelected: boolean = false;
   public DivisionMasterList: any = [];
   isInstituteLevel: boolean = false;
 isDivisionLevel: boolean = false;
@@ -67,13 +68,16 @@ public IsViewMode: boolean = false;
 
   async ngOnInit() {
     this.EventFormGroup = this.formBuilder.group({
+        EventName: ['', Validators.required],
         EventTypeID: ['', [DropdownValidators]],
         Event: ['', [DropdownValidators]],
         EventStartDate: ['', Validators.required],
         EventEndDate: ['', Validators.required],
         EventForID: ['', Validators.required],
-        Semesterlist: ['',],
-        Branchlist: ['', ],
+        // Semesterlist: ['',],
+        // Branchlist: ['', ],
+        Semesterlist: [[], Validators.required],
+        Branchlist: [[], Validators.required],
         EventLevelID: ['', [DropdownValidators]],
         Remark: [''],
         SSOID: [''],
@@ -192,6 +196,7 @@ if (this.PageMode == 'view') {
     }
     try {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.request.InstituteID = this.sSOLoginDataModel.InstituteID
       debugger
       await this.industryInstitutePartnershipMasterService.SaveData_IIP_Events(this.request)
         .then(async (data: any) => {
@@ -245,6 +250,21 @@ if (this.PageMode == 'view') {
         if (data.State == EnumStatus.Success) {
 
           this.request = data.Data;
+          this.isFacultySelected = Number(this.request.EventForID) == 10;
+
+const semesterControl = this.EventFormGroup.get('Semesterlist');
+
+if (this.isFacultySelected) {
+
+  semesterControl?.clearValidators();
+
+} else {
+
+  semesterControl?.setValidators([Validators.required]);
+}
+
+semesterControl?.updateValueAndValidity();
+
 
           this.SelectedBranchList = this.request.Branchlist;
           this.SelectedSemesterList = this.request.Semesterlist;
@@ -486,5 +506,32 @@ GoBack() {
     // fallback
     this.routers.navigate(['/IndustryInstitutePartnershipList']);
   }
+}
+
+onEventForChange(event: any) {
+
+  const selectedValue = Number(event.target.value);
+  // FACULTY => ID = 10 , CODE = 2
+  this.isFacultySelected = selectedValue == 2;
+
+  const semesterControl = this.EventFormGroup.get('Semesterlist');
+
+  if (this.isFacultySelected) {
+
+    // Semester optional
+    semesterControl?.clearValidators();
+
+    // clear selected semester
+    this.request.Semesterlist = [];
+
+    semesterControl?.setValue([]);
+
+  } else {
+
+    // Semester mandatory
+    semesterControl?.setValidators([Validators.required]);
+  }
+
+  semesterControl?.updateValueAndValidity();
 }
 }
