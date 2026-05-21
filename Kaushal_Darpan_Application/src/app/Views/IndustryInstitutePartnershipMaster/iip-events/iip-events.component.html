@@ -43,7 +43,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
-            <th class="text-left">Event Name</th>
+            <th class="text-left">Event Title</th>
 
             <th class="text-left">Event Type</th>
             <th class="text-left">Event</th>
@@ -73,7 +73,9 @@
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
                       sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree ||
-                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge)">
+                    sSOLoginDataModel.RoleID == _enumRole.ITI_Placement_TPO 
+                    || sSOLoginDataModel.RoleID == _enumRole.IIPIncharge
+                    || sSOLoginDataModel.RoleID == _enumRole.IIPAdmin )">
                     <i class="ti ti-eye"></i></a>
 
                 <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID,mode:'edit'}"

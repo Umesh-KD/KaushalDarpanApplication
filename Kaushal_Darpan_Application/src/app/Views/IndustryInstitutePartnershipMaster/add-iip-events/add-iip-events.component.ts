@@ -252,7 +252,7 @@ if (this.PageMode == 'view') {
         if (data.State == EnumStatus.Success) {
 
           this.request = data.Data;
-          this.isFacultySelected = Number(this.request.EventForID) == 10;
+          this.isFacultySelected = Number(this.request.EventForID) == 2;
 
 const semesterControl = this.EventFormGroup.get('Semesterlist');
 
