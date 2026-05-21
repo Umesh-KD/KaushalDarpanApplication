@@ -497,17 +497,19 @@ async GetDivisionMasterList() {
 }
 
 GoBack() {
+  debugger
+  this.routers.navigate(['/IndustryInstitutePartnershipList']);
+// debugger
+//   // if browser history exists
+//   if (window.history.length > 1) {
 
-  // if browser history exists
-  if (window.history.length > 1) {
+//     this.location.back();
+//   }
+//   else {
 
-    this.location.back();
-  }
-  else {
-
-    // fallback
-    this.routers.navigate(['/IndustryInstitutePartnershipList']);
-  }
+//     // fallback
+//     this.routers.navigate(['/IndustryInstitutePartnershipList']);
+//   }
 }
 
 onEventForChange(event: any) {

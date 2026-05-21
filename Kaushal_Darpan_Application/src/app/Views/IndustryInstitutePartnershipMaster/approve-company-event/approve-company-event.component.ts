@@ -102,6 +102,7 @@ export class ApproveCompanyEventComponent {
     try {
       
       this.companyEventSearch.CompanyID = CompanyID;
+      this.companyEventSearch.RoleID = this.sSOLoginDataModel.RoleID
       await this.industryInstitutePartnershipMasterService.GetCompanyEvents(this.companyEventSearch)
         .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
