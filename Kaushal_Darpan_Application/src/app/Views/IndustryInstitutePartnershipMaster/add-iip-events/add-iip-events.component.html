@@ -289,36 +289,53 @@
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-plus"></i> Additional Information</b>
         </div>
-        <div 
-          class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4">
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4">
 
-          <div>
+          <!--<div>
             <label>SSO ID</label>
             <input type="text" class="form-input" [(ngModel)]="request.SSOID" formControlName="SSOID">
-          </div>
+          </div>-->
 
           <div>
-            <label>Mobile No</label>
-            <input type="text" class="form-input" [(ngModel)]="request.MobileNo" formControlName="MobileNo">
-          </div>
 
-          <div>
-            <label>Email</label>
-            <input type="email" class="form-input" [(ngModel)]="request.Email" formControlName="Email">
-          </div>
+            <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              SSO ID<span class="StarMarking">*</span>
+            </label>
+            <div class="flex">
+              <input type="text" class="form-input" id="txtSSOID" placeholder="Enter SSOID" name="SSOID" formControlName="SSOID"
+                     [(ngModel)]="request.SSOID">
 
-          <div>
-            <label>Designation</label>
-            <input type="text" class="form-input" [(ngModel)]="request.Designation" formControlName="Designation">
-          </div>
 
-          <div>
-            <label>Duration of Training (Hours)</label>
-            <input type="number" class="form-input" [(ngModel)]="request.TrainingDuration"
-              formControlName="TrainingDuration">
-          </div>
 
-        </div>
+              <button type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(request.SSOID)">GetDetails</button>
+
+            </div>
+
+
+            </div>
+
+            <div>
+              <label>Mobile No</label>
+              <input type="text" class="form-input" [(ngModel)]="request.MobileNo" formControlName="MobileNo">
+            </div>
+
+            <div>
+              <label>Email</label>
+              <input type="email" class="form-input" [(ngModel)]="request.Email" formControlName="Email">
+            </div>
+
+            <div>
+              <label>Designation</label>
+              <input type="text" class="form-input" [(ngModel)]="request.Designation" formControlName="Designation">
+            </div>
+
+            <div>
+              <label>Duration of Training (Hours)</label>
+              <input type="number" class="form-input" [(ngModel)]="request.TrainingDuration"
+                     formControlName="TrainingDuration">
+            </div>
+
+          </div>
         </div>
         <div class="flex justify-center mt-6" *ngIf="!IsViewMode">
           <button type="button" class="btn bg-info text-white mt-6" (click)="SaveEventData()">Save Event Data</button>
