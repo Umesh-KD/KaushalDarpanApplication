@@ -205,7 +205,7 @@ export class OrderAndCircularComponent {
   }
 
   async GetAllData() {
-    
+    debugger
     try {
       this.loaderService.requestStarted();
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID

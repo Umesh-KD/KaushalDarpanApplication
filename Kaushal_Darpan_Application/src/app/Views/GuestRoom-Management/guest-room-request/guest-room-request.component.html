@@ -411,7 +411,7 @@
 
               </label>
               <input type="text" class="form-input" placeholder="Enter Mobile No" name="MobileNo"
-                    [(ngModel)]="requestReservedCheckIn.MobileNo" formControlName="MobileNo" [readonly]="sSOLoginDataModel.RoleID!=_EnumRole.GuestRoomWarden">
+                    [(ngModel)]="requestReservedCheckIn.MobileNo" formControlName="MobileNo">
               <div *ngIf="isSubmitted && _IIPMasterFormGroup.MobileNo.errors" class="form-text text-danger">
                 <p *ngIf="_IIPMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>

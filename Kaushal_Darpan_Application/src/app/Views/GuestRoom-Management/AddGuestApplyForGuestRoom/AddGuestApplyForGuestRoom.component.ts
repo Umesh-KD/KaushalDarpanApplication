@@ -338,7 +338,7 @@ export class AddGuestApplyForGuestRoomComponent {
     // Overlap condition
     return (
       requestFrom <= existingTo &&
-      requestTo >= existingFrom
+      requestTo >= existingFrom && item.StatusID != 218
     );
   });
 

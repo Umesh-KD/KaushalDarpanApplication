@@ -988,4 +988,12 @@ export class BterAttendencePercentReportComponent {
     //  }
     //}
   }
+
+
+  async ResetRow() {
+
+    this.TableForm.reset()
+  }
+
+
 }

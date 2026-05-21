@@ -49,6 +49,7 @@ export class GuestRoomReportComponent {
 
 
   async ngOnInit() {
+    this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GuestRequestList();
     await this.commonMaster();
 
@@ -88,6 +89,7 @@ export class GuestRoomReportComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.GuestHouseIDs = this.sSOLoginDataModel.GuestHouseID ?? '';
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       await this._GuestRoomManagmentService.GuestRequestReportList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

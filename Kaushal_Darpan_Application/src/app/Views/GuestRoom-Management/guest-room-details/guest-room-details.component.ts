@@ -110,13 +110,14 @@ export class GuestRoomDetailsComponent {
     this.HSRoomID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
-    await this.GetAllData();
+    
     await this.GetRoomTypeDDL();
     if (this.HSRoomID > 0) {
       await this.GetByIDGuestRoomDetails(this.HSRoomID);
     }
-    await this.GetAllRoomSeatList();
     await this.GetGuestHouseNameList();
+    await this.GetAllRoomSeatList();
+    await this.GetAllData();
   }
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
 
@@ -550,10 +551,11 @@ export class GuestRoomDetailsComponent {
 
   async GetRoomTypeList() {
     try {
+      debugger
       this.RoomTypeList = [];
       let RoomTypeList = this.GuestRoomList.filter(
         (x: { GuestHouseID: number }) =>
-          x.GuestHouseID === Number(this.request.GuestHouseID));
+          x.GuestHouseID == Number(this.request.GuestHouseID));
       if (RoomTypeList?.length > 0) {
         this.RoomTypeList = RoomTypeList;
       } else {

@@ -36,6 +36,16 @@
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
 
+           <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Name<span
+                class="StarMarking">*</span></label>
+            <input type="text" class="form-input" [(ngModel)]="request.EventName" formControlName="EventName">
+          </div>
+           <div *ngIf="isSubmitted &&_EventFormGroup.EventName.errors" class="text-danger">
+              <p *ngIf="!_EventFormGroup.EventName.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Type<span
                 class="StarMarking">*</span></label>
@@ -143,7 +153,11 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event For<span
                 class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="request.EventForID" formControlName="EventForID">
+            <!-- <select class="form-select" [(ngModel)]="request.EventForID" formControlName="EventForID"> -->
+              <select class="form-select"
+        [(ngModel)]="request.EventForID"
+        formControlName="EventForID"
+        (change)="onEventForChange($event)">
               <option value="0">--Select--</option>
               <option *ngFor="let item of EventForList" [value]="item.Code">
                 {{item.NameEng}}
@@ -185,16 +199,30 @@
               (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
               (onDeSelectAll)="onDeSelectAll($event)" formControlName="Branchlist">
             </ng-multiselect-dropdown>
+             <div *ngIf="isSubmitted && _EventFormGroup.Branchlist.errors" class="text-danger">
+    <p *ngIf="_EventFormGroup.Branchlist.errors.required">
+      This field is required.!
+    </p>
+  </div>
           </div>
 
           <div class="mb-8 h-full">
-            <label>Semester<span class="text-danger">*</span></label>
+            <!-- <label>Semester<span class="text-danger">*</span></label> -->
+             <label>
+    Semester
+    <span class="text-danger" *ngIf="!isFacultySelected">*</span>
+  </label>
             <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'" [settings]="settingsMultiselectSem"
               [data]="SemesterMasterList" [(ngModel)]="request.Semesterlist" [disabled]="false"
               (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
               (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
               (onDeSelectAll)="onDeSelectAll($event)" formControlName="Semesterlist">
             </ng-multiselect-dropdown>
+            <div *ngIf="isSubmitted && _EventFormGroup.Semesterlist.errors" class="text-danger">
+  <p *ngIf="_EventFormGroup.Semesterlist.errors.required">
+    This field is required.!
+  </p>
+</div>
           </div>
 
           <div>

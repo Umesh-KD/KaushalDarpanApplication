@@ -281,6 +281,15 @@ export class BranchWiseHodComponent {
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.request.SemesterID = this.IIPMasterFormGroup.value.SemesterID;
       this.request.CollegeID = this.sSOLoginDataModel.InstituteID
+
+      if (this.request.SemesterID == 1) {
+        this.request.SemesterIDs = "1,2";
+      }
+      else if (this.request.SemesterID == 3) {
+        this.request.SemesterIDs = "3,4,5";
+      }
+
+
   
       await this.staffMasterService.AllBranchHOD(this.request)
         .then((data: any) => {
