@@ -515,6 +515,7 @@ const routes: Routes = [
       { path: 'ReservationRoster', loadChildren: () => import('./Views/reservation-roster/reservation-roster.module').then(m => m.ReservationRosterModule) },
       { path: 'ITIAllotment', loadChildren: () => import('./Views/ITI/itiallotment/itiallotment.module').then(m => m.ITIAllotmentModule) },
       { path: 'StudentExaminationITI', loadChildren: () => import('./Views/ITI/Examination/student-examination-iti/student-examination-iti.module').then(m => m.StudentExaminationITIModule), title: 'Examination' },
+      { path: 'StudentExaminationITI/:id', loadChildren: () => import('./Views/ITI/Examination/student-examination-iti/student-examination-iti.module').then(m => m.StudentExaminationITIModule), title: 'Examination' },
       { path: 'GenerateRollnumberITI', loadChildren: () => import('./Views/ITI/Examination/generate-rollnumber-iti/generate-rollnumber-iti.module').then(m => m.GenerateRollnumberITIModule), title: 'Generate Roll Number' },
       { path: 'CenterCreateITI', loadChildren: () => import('./Views/ITI/Examination/center-create-iti/center-create-iti.module').then(m => m.CenterCreateITIModule), title: 'Create Center' },
       { path: 'AddCenterITI', loadChildren: () => import('./Views/ITI/Examination/add-center-iti/add-center-iti.module').then(m => m.AddCenterITIModule), title: 'Create Center' },
@@ -1756,7 +1757,7 @@ const routes: Routes = [
       { path: 'BterUnlockCalender', loadChildren: () => import('./Views/bter-unlock-calender/bter-unlock-calender.module').then(m => m.BterUnlockCalenderModule) },
       { path: 'ScholarshipOnboard', loadChildren: () => import('./Views/ITI/scholarship-onboard/scholarship-onboard.module').then(m => m.ScholarshipOnboardModule) },
       { path: 'StaffTrainingConsent', loadChildren: () => import('./Views/staff-training-consent/staff-training-consent.module').then(m => m.StaffTrainingConsentModule) },
-
+      { path: 'itiPendingCollegeFee', loadChildren: () => import('./Views/Student/itiPendingCollegeFee/itiPendingCollegeFee.module').then(m => m.itiPendingCollegeFeeModule) },
 
     ]
   },

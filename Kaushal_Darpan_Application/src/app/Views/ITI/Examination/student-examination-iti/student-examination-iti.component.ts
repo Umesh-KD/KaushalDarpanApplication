@@ -137,7 +137,7 @@ export class StudentExaminationITIComponent
   public StudentDetailsModelList: EmitraApplicationstatusModel[] = []
 
   public AttendancePercentage: string = '';
-
+  public PendingCollegeFeeStatus: number = 0
   //closeResult: string | undefined;
   //modalReference: NgbModalRef | undefined;
   @ViewChild('modal_StudentStatusHistory') modal_StudentStatusHistory: any; item: any;
@@ -274,6 +274,12 @@ export class StudentExaminationITIComponent
       this.request.StudentFilterStatusId = this.statusID
     }
 
+   
+
+    
+
+
+
     this.UserID = this.sSOLoginDataModel.UserID
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID
 
@@ -293,6 +299,21 @@ export class StudentExaminationITIComponent
     await this.GetMasterData();
     await this.StreamMaster();
     await this.GetcOmmonData();
+    debugger
+    this.PendingCollegeFeeStatus = Number(
+      this.activatedRoute.snapshot.paramMap.get('id') ?? 0
+    );
+
+    if (this.PendingCollegeFeeStatus > 0) {
+      this.request.PendingCollegeFeeStatus = this.PendingCollegeFeeStatus;
+
+      this.request.StudentFilterStatusId =
+        this.request.StudentFilterStatusId === 0
+          ? 10
+          : this.request.StudentFilterStatusId;
+
+      this.btn_SearchClick();
+    }
 
   }
 
