@@ -48,13 +48,13 @@ export class OrderAndCircularComponent {
       Start_Date: ['',],
       End_Date: ['',],
       IsPublic: ['',],
-      DepartmentSubID: ['', [DropdownValidators]],
-      TypeID: ['', [DropdownValidators]],
+      DepartmentSubID: ['0', [DropdownValidators]],
+      TypeID: ['0', [DropdownValidators]],
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.todayDate = new Date().toISOString().substring(0, 16);
     this.GetDynamicUploadTypeDDL();
-    this.GetAllData();
+    this.GetAllSearchData();
     debugger
     if (this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship || this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship) {
       debugger
@@ -69,65 +69,24 @@ export class OrderAndCircularComponent {
   get _HighlightsFromGroup() { return this.HighlightsFromGroup.controls; }
 
   ResetControls() {
-    this.request = new WebsiteSettingDataModel();
-    this.request.EndTermID = this.sSOLoginDataModel.EndTermID
-    this.isFormSubmitted = false
-    this.HighlightsFromGroup.controls['DepartmentSubID'].enable();
-    this.HighlightsFromGroup.controls['TypeID'].enable();
-  }
 
-  async SaveData() {
-    
-    this.isFormSubmitted = true;
-    if (this.sSOLoginDataModel.RoleID == 212) {
-      this.HighlightsFromGroup.controls['DepartmentSubID'].clearValidators()
-    } else {
-      this.HighlightsFromGroup.controls['DepartmentSubID']
-        .setValidators([Validators.required]);
-
-    }
-    this.HighlightsFromGroup.controls['DepartmentSubID']
-      .updateValueAndValidity();
-
-    if(this.HighlightsFromGroup.invalid){
-      this.toastr.error("Please Fill Required Fields")
-      return
-    }
-
-    this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
-    this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    this.request.EndTermID = this.sSOLoginDataModel.EndTermID
-    this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
-    this.request.UserID = this.sSOLoginDataModel.UserID
-
-
-    this.request.LevelID = this.sSOLoginDataModel.LevelId
-    this.request.CreatedByRoleID = this.sSOLoginDataModel.RoleID
-
-
-
-    try {
-      this.loaderService.requestStarted();
-      await this.websiteSettingsService.SaveData(this.request).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          this.ResetControls();
-          this.GetAllData();
-        } else {
-          this.toastr.error(data.ErrorMessage);
-        }
-      })
+    this.HighlightsFromGroup.reset({
+      DepartmentSubID: 0,
+      TypeID: 0,
       
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      })
-    }
-    console.log("request",this.request)
+    });
+
+    this.DynamicContentData = [];
+    this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+
+    this.request.DepartmentSubID = 0;
+    this.request.TypeID = 0;
+    
+    this.GetAllSearchData();
   }
+  
     
   async GetDynamicUploadTypeDDL() {
 
@@ -204,157 +163,56 @@ export class OrderAndCircularComponent {
     }
   }
 
-  async GetAllData() {
-    debugger
-    try {
-      this.loaderService.requestStarted();
-      this.request.EndTermID = this.sSOLoginDataModel.EndTermID
-      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
-      if (this.sSOLoginDataModel.RoleID == 212) {
-        this.request.DepartmentSubID=6
-      }
-      await this.websiteSettingsService.GetAllData(this.request).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success)
-        {
-          this.DynamicContentData = data.Data
-        } else
-        {
-          this.toastr.error(data.ErrorMessage ?? data.Message);
-        }
+  async GetAllSearchData() {
+    debugger;
 
-      })
+    try {
+
+      this.DynamicContentData = [];
+
+      this.loaderService.requestStarted();
+
+      const departmentSubID = this.HighlightsFromGroup.get('DepartmentSubID')?.value;
+      const typeID = this.HighlightsFromGroup.get('TypeID')?.value;
+      const title = this.HighlightsFromGroup.get('Title')?.value;
+      const startDate = this.HighlightsFromGroup.get('Start_Date')?.value;
+      const endDate = this.HighlightsFromGroup.get('End_Date')?.value;
+
+   
+      this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+
       
+      this.request.DepartmentSubID = departmentSubID;
+      this.request.TypeID = typeID;
+      this.request.Title = title;
+      this.request.Start_Date = startDate;
+      this.request.End_Date = endDate;
+
+     
+      if (this.sSOLoginDataModel.RoleID == 212) {
+        this.request.DepartmentSubID = 6;
+      }
+
+      console.log("request", this.request);
+
+      const data: any = await this.websiteSettingsService.GetAllSearchData(this.request);
+
+      if (data.State == EnumStatus.Success) {
+        this.DynamicContentData = data.Data;
+      } else {
+        this.toastr.error(data.ErrorMessage ?? data.Message);
+      }
+
     } catch (error) {
       console.log(error);
     } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      })
-    }
-    console.log("request",this.request)
-  }
 
-  async onDelete(row: any) {  
+      this.loaderService.requestEnded();
 
-    this.Swal2.Confirmation("Are you sure you want to delete this ?",
-      async (result: any) => {
-        if (result.isConfirmed) {
-          try {
-            this.loaderService.requestStarted();
-            this.request.WS_ID = row.WS_ID;
-            this.request.UserID = this.sSOLoginDataModel.UserID
-            this.request.DUTC_ID = row.DUTC_ID
-            await this.websiteSettingsService.DeleteDataByID(this.request)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                console.log(data);
-
-                if (data.State = EnumStatus.Success) {
-                  this.toastr.success(data.Message)
-                  this.ResetControls();
-                  this.GetAllData()
-                }
-                else {
-                  this.toastr.error(data.ErrorMessage)
-                }
-
-              }, (error: any) => console.error(error)
-              );
-          }
-          catch (ex) {
-            console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
-        }
-      });
-  }
-
-  async onEdit(row: any) {
-    try {
-      this.loaderService.requestStarted();
-      this.request.DUTC_ID = row.DUTC_ID
-      await this.websiteSettingsService.GetById(this.request)
-        .then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log(data);
-
-          if (data.State = EnumStatus.Success) {
-            this.request = data.Data
-            this.HighlightsFromGroup.controls['DepartmentSubID'].disable();
-            this.HighlightsFromGroup.controls['TypeID'].disable();
-          }
-          else {
-            this.toastr.error(data.ErrorMessage)
-          }
-
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
-  onToggleChange(row: any) {
-    
-    this.Swal2.Confirmation("Are you sure you want to Change Status ?",
-      async (result: any) => {
-        if (result.isConfirmed) {
-          try {
-            row.IsActive = !row.IsActive
-            this.loaderService.requestStarted();
-            this.request.WS_ID = row.WS_ID;
-            this.request.UserID = this.sSOLoginDataModel.UserID
-            this.request.DUTC_ID = row.DUTC_ID
-            this.request.IsActive = row.IsActive
-            await this.websiteSettingsService.ActiveStatusChange(this.request)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                console.log(data);
-
-                if (data.State = EnumStatus.Success) {
-                  this.toastr.success(data.Message)
-                  this.ResetControls();
-                  this.GetAllData()
-                }
-                else {
-                  this.toastr.error(data.ErrorMessage)
-                }
-
-              }, (error: any) => console.error(error)
-              );
-          }
-          catch (ex) {
-            console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
-        }
-      });
-  }
-
-
-  onClickCheckbox() {
-    this.request.IsPrivate = !this.request.IsPrivate;
-    if (!this.request.IsPrivate) {
-      this.request.IsPrivate = false
-    } else {
-      this.request.IsPrivate = true
-    }
-  }
 
 }

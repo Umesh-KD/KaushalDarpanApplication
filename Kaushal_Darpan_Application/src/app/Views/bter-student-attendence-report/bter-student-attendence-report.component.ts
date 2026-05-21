@@ -852,6 +852,7 @@ export class BterStudentAttendenceReportComponent {
       StaffID: this.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      InstituteID: this.sSOLoginDataModel.InstituteID
     }
     await this.staffMasterService.GetBranchSectionAcRosterData(obj)
       .then((data: any) => {

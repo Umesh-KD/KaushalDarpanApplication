@@ -12,6 +12,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { Location } from '@angular/common';
+import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 
 @Component({
   selector: 'app-add-iip-events',
@@ -21,7 +22,8 @@ import { Location } from '@angular/common';
 })
 export class AddIIPEventsComponent {
   public EventFormGroup!: FormGroup
-
+  public requestSSoApi = new CommonVerifierApiDataModel();
+  public Isverifed: boolean = false
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new IIP_EventDataModel();
   public searchRequest = new CompanyEventSearchModel();
@@ -533,5 +535,69 @@ onEventForChange(event: any) {
   }
 
   semesterControl?.updateValueAndValidity();
-}
+  }
+
+
+
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
+    this.Isverifed = false
+    if (SSOID == "") {
+      this.toastr.error("Please Enter SSOID");
+      this.request.SSOID = ''
+      this.request.MobileNo = ''
+      this.request.Email = ''
+/*      this.request.Name = ''*/
+      return;
+    }
+
+    const username = SSOID; // or hardcoded 'SIDDHA.AZAD'
+    const appName = 'madarsa.test';
+    const password = 'Test@1234';
+
+    /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
+
+    this.requestSSoApi.SSOID = username;
+    this.requestSSoApi.appName = appName;
+    this.requestSSoApi.password = password;
+
+
+
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        let response = JSON.parse(JSON.stringify(data));
+        if (response?.Data) {
+
+          let parsedData = JSON.parse(response.Data); // parse string inside Data
+          if (parsedData != null) {
+/*            this.request.Name = parsedData.displayName;*/
+            this.request.MobileNo = parsedData.mobile;
+            this.request.SSOID = parsedData.SSOID;
+            this.request.Email = parsedData.mailPersonal;
+            this.request.Designation = parsedData.designation;
+            this.Isverifed = true
+
+          }
+          else {
+            this.toastr.error("Record Not Found");
+            return;
+          }
+
+          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+
+  }
+
+
 }
