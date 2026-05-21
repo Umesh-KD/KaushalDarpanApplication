@@ -186,7 +186,7 @@ export class itiPendingCollegeFeeComponent implements OnInit {
 
 
   async GetTransactionDetailsSemesterWise(content: any, item: StudentDetailsModel) {
-
+    debugger
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -197,7 +197,7 @@ export class itiPendingCollegeFeeComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.SemesterID = item.SemesterID;
-      this.searchRequest.studentId = item.StudentID;
+      this.searchRequest.StudentID = item.StudentID;
 
       this.searchRequest.action = '_GetTransactionDetailsSemesterWise_ITI';
       //await this.emitraPaymentService.GetTransactionDetailsActionWise(this.searchRequest)
@@ -379,6 +379,7 @@ export class itiPendingCollegeFeeComponent implements OnInit {
     else {
       this.sweetAlert2.Info('Exam Fee Date Is Not Open Yet Please Try Again');
     }
+
 
   }
 

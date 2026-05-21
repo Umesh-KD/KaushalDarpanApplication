@@ -1,23 +1,38 @@
 
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="'/dashboard'" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Pending Fee Student</a>
+    </div>
+  </div>
+</div>
+
+
 <div class="card" *ngIf="StudentDetailsModelList?.length>0">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>ITI Pending Fee Details</b>
       <button *ngIf="isShowSelected" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected Fee </button>
     </div>
+
+    <!--{{this.StudentDetailsModelList|json}}-->
     <div class="overflow-x-auto mt-3 w-full">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Sr No</th>
             <th *ngIf="isShowSelected" class="text-left">Select</th>
-            <th class="text-left">Name</th>
+            <th class="text-left">Name(Father Name)</th>
             <th class="text-left">Trade Name</th>
-            <th class="text-left">Semester/Year</th>
-            <th class="text-left">Enrollment No.</th>
+            <th class="text-left">Year</th>
+            <th class="text-left">DGT Reg No.</th>
             <th class="text-left">Roll No</th>
             <th class="text-left">Amt. (INR)</th>
-            <th class="text-left">Status</th>
+            <!--<th class="text-left">Status</th>-->
             <th class="text-left">Last Date</th>
             <!--<th class="text-left">View Subject</th>-->
             <th class="text-Center">Action</th>
@@ -27,27 +42,27 @@
           <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
             <td>{{idx+1}}</td>
             <td *ngIf="isShowSelected">
-             
+
               <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected" [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}" name="chk_Selected{{idx+1}}">
 
 
             </td>
-        
 
 
 
 
-            <td>{{row.StudentName}}</td>
+
+            <td>{{row.StudentName}}<br />({{row.FatherName}})</td>
             <td>{{row.StreamName}}</td>
             <td>{{row.Semester}}</td>
             <td>{{row.EnrollmentNo}}</td>
             <td>{{row.RollNo}}</td>
             <td>{{row.FeeAmount}}</td>
-            <td>{{row.StrStudenetStatus}}</td>
+            <!--<td>{{row.StrStudenetStatus}}</td>-->
             <td><span class="text-danger"><b>{{row.LastDate}}</b></span></td>
             <!--<td class="text-Center">
-    <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Subject</a>
-  </td>-->
+            <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Subject</a>
+          </td>-->
             <td class="text-center">
               <!--<button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.EligibleForEnrollment" class="btn bg-success text-white btn-sm" (click)="PayEnrollmentFee(row)" type="button">Pay Enroll Fee </button>-->
               <!--<button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.Enrolled && row.FeeStatus=='PENDING'" class="btn bg-success text-white btn-sm" (click)="EmitraPaymentCheckStatus(row)" type="button">Check Pay Status </button>-->
@@ -55,7 +70,7 @@
 
 
               <button style="margin-bottom:5px" *ngIf="row.ExamStudentStatus==enumExamStudentStatus.SelectedForExamination" class="btn bg-success text-white btn-sm" (click)="PayExamFee(row)" type="button">Pay Exam Fee </button>
-              <button class="btn bg-success text-white btn-sm" (click)="GetTransactionDetailsSemesterWise(modal_viewTransaction,row)" type="button">View History</button>
+              <!--<button class="btn bg-success text-white btn-sm" (click)="GetTransactionDetailsSemesterWise(modal_viewTransaction,row)" type="button">View History</button>-->
             </td>
           </tr>
           <tr *ngIf="StudentDetailsModelList?.length === 0">
