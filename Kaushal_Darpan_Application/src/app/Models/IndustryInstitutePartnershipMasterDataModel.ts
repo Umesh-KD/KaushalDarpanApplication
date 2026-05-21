@@ -109,6 +109,7 @@ export class IIP_SearchModel extends RequestBaseModel {
 }
 
 export class IIP_EventDataModel extends RequestBaseModel {
+  public EventName: string = ''
   public EventID: number = 0
   public CompanyID: number = 0
   public EventTypeID: number = 0
@@ -146,4 +147,7 @@ export class Semesterlist {
 export class CompanyEventSearchModel extends RequestBaseModel {
   public CompanyID: number = 0
   public EventID: number = 0
+  public StaffID: number = 0
+  public InterestedStatus: number = 0
+  public Remarks:string=''
 }

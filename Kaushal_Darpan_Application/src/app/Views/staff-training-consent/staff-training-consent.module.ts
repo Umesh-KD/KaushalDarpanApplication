@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { StaffTrainingConsentRoutingModule } from './staff-training-consent-routing.module';
 import { StaffTrainingConsentComponent } from './staff-training-consent.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 
 
 @NgModule({
@@ -11,7 +13,10 @@ import { StaffTrainingConsentComponent } from './staff-training-consent.componen
   ],
   imports: [
     CommonModule,
-    StaffTrainingConsentRoutingModule
+    StaffTrainingConsentRoutingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TableSearchFilterModule
   ]
 })
 export class StaffTrainingConsentModule { }

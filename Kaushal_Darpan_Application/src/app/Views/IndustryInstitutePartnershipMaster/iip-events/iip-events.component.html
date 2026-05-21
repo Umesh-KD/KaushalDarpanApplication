@@ -43,6 +43,8 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
+            <th class="text-left">Event Name</th>
+
             <th class="text-left">Event Type</th>
             <th class="text-left">Event</th>
             <th class="text-left">Event For</th>
@@ -55,6 +57,7 @@
         <tbody>
           <tr *ngFor="let row of CompanyEventsList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventType}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Event}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventFor}}</td>

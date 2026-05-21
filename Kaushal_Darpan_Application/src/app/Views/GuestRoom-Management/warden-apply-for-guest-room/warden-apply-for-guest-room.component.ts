@@ -192,6 +192,8 @@ export class WardenApplyForGuestRoomComponent {
             this.request.PostalAddress = data['Data'][0]['Address'];
             this.request.UserID = data['Data'][0]['UserID'];
             this.request.RequestSSOID = data['Data'][0]['SSOID'];
+            this.request.EmpID = data['Data'][0]['EmployeeID'];
+            this.request.GenderId = data['Data'][0]['GenderID'];
           } else if(data.State === EnumStatus.Error) {
             this.toastr.error(data.ErrorMessage);
           } else {

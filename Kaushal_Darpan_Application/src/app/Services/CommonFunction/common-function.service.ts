@@ -1779,8 +1779,8 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async DDL_RoleWiseOffice(DepartmentID: number, RoleID: number) {
-    return await this.http.get(this.APIUrl + '/DDL_RoleWiseOffice/' + DepartmentID + "/" + RoleID, this.headersOptions)
+  public async DDL_RoleWiseOffice(DepartmentID: number, RoleID: number, UserID: number = 0) {
+    return await this.http.get(this.APIUrl + '/DDL_RoleWiseOffice/' + DepartmentID + "/" + RoleID + "/" + UserID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

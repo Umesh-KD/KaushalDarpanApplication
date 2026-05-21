@@ -172,7 +172,12 @@
             <td *ngIf="sSOLoginDataModel.RoleID!=212" align="left">{{row.subcategory}}</td>
             <td align="left">{{row.TypeName}}</td>
             <td align="left">{{row.Title}}</td>
-            <td align="left">{{row.FileName}}</td>
+            <td align="left">
+              <!--{{row.FileName}}-->
+              <a title="View File Details" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}" *ngIf="row.FileName !=''"
+                 target="_blank">View File</a>
+
+            </td>
             <td align="left">{{row.Start_Date | date : 'dd-MM-yyyy hh:mm a'}}</td>
             <td align="left">{{row.End_Date | date : 'dd-MM-yyyy hh:mm a' }}</td>
             <td align="left">
@@ -183,6 +188,7 @@
                   <span class="toggleIcon">
                     <!-- <span class="toggleTitle">{{ row.IsActive == 1 ? 'Active' : 'Inactive' }}</span> -->
                   </span>
+
                 </label>
               </div>       
             </td>
