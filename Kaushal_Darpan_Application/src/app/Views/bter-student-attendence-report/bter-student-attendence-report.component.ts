@@ -521,13 +521,13 @@ export class BterStudentAttendenceReportComponent {
           : this.formatDate(rawEnd);
 
       let obj = {
-        SemesterID: this.TableForm.value.SemesterID,
+        SemesterID: this.TableForm.value.SemesterID||0,
         EndTermID: this.sSOLoginDataModel.EndTermID,
         InstituteID: this.sSOLoginDataModel.InstituteID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.TableForm.value.StreamID,
-        SectionID: this.TableForm.value.SectionID,
+        StreamID: this.TableForm.value.StreamID||0,
+        SectionID: this.TableForm.value.SectionID||0,
         SubjectID: this.TableForm.value.SubjectID|| 0,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
@@ -852,6 +852,7 @@ export class BterStudentAttendenceReportComponent {
       StaffID: this.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      InstituteID: this.sSOLoginDataModel.InstituteID
     }
     await this.staffMasterService.GetBranchSectionAcRosterData(obj)
       .then((data: any) => {
@@ -1026,4 +1027,10 @@ export class BterStudentAttendenceReportComponent {
     //  }
     //}
   }
+
+  async ResetRow() {
+
+    this.TableForm.reset()
+  }
+
 }

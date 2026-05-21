@@ -121,7 +121,7 @@ export class AddStaffInitialDetailsComponent {
     try {
       this.loaderService.requestStarted();
       // await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
-      await this.commonMasterService.DDL_RoleWiseOffice(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.RoleID)
+      await this.commonMasterService.DDL_RoleWiseOffice(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeList = data['Data'];
@@ -389,6 +389,7 @@ export class AddStaffInitialDetailsComponent {
       // await this.commonMasterService.GetRoleMasterDDL(, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
       this.roleModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.roleModel.RoleID=this.sSOLoginDataModel.RoleID;
+      this.roleModel.UserID=this.sSOLoginDataModel.UserID;
       await this.ITIGovtEMStaffMasterService.ITIGovtEM_Govt_RoleOfficeMapping_GetAllData(this.roleModel).then((data: any) => {
      
         data = JSON.parse(JSON.stringify(data));

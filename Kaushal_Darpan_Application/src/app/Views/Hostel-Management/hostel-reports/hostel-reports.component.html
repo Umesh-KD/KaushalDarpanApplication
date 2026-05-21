@@ -89,6 +89,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">SR NO</th>
+            <th class="text-left">Institute</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Application ID</th>
             <th class="text-left">{{titleDDLBranchTrade}}</th>
@@ -105,6 +106,7 @@
         <tbody>
           <tr *ngFor="let item of ReportList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
+            <td align="left">{{item.InstituteName}}</td>
             <td align="left">{{item.StudentName}}</td>
             <td align="left">{{item.ApplicationId}}</td>
             <td align="left">{{item.StreamName}}</td>

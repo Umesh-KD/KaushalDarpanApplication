@@ -15,7 +15,7 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
 import { firstValueFrom } from 'rxjs';
-
+import * as XLSX from 'xlsx';
   @Component({
     selector: 'app-RelievingTransferList',
     standalone: false,
@@ -525,6 +525,58 @@ import { firstValueFrom } from 'rxjs';
         }
       
       
+    }
+
+
+    exportToExcel(): void {
+
+      if (this.EM_TransferProcessList.length == 0) {
+        alert('No records available for Excel export.');
+        return;
+      }
+
+      const unwantedColumns = [
+        'TransferSystemID',
+        'FinalApproveStatus',
+        'ISNonGazetted',
+        'StatusID',
+        'StaffUserID',
+        'StaffID'
+      ];
+
+      const filteredData = this.EM_TransferProcessList.map(
+        (item: any, index: number) => {
+
+          const filteredItem: any = {};
+
+          // Add Serial Number
+          filteredItem["Sr. No"] = index + 1;
+
+          Object.keys(item).forEach(key => {
+            if (!unwantedColumns.includes(key)) {
+              filteredItem[key] = item[key];
+            }
+          });
+
+          return filteredItem;
+        });
+
+      const ws: XLSX.WorkSheet =
+        XLSX.utils.json_to_sheet(filteredData);
+
+      const wb: XLSX.WorkBook =
+        XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[:.-]/g, '_');
+
+      XLSX.writeFile(
+        wb,
+        `RelievingTransferList_${timestamp}.xlsx`
+      );
     }
    
 }

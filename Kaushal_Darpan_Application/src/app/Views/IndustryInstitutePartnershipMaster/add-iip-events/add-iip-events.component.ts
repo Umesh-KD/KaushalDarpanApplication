@@ -12,6 +12,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { Location } from '@angular/common';
+import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 
 @Component({
   selector: 'app-add-iip-events',
@@ -21,7 +22,8 @@ import { Location } from '@angular/common';
 })
 export class AddIIPEventsComponent {
   public EventFormGroup!: FormGroup
-
+  public requestSSoApi = new CommonVerifierApiDataModel();
+  public Isverifed: boolean = false
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new IIP_EventDataModel();
   public searchRequest = new CompanyEventSearchModel();
@@ -46,6 +48,7 @@ export class AddIIPEventsComponent {
   public EventLevelList: any = [];
   public EventForList: any = [];
   isOJTSelected: boolean = false;
+  isFacultySelected: boolean = false;
   public DivisionMasterList: any = [];
   isInstituteLevel: boolean = false;
 isDivisionLevel: boolean = false;
@@ -67,13 +70,16 @@ public IsViewMode: boolean = false;
 
   async ngOnInit() {
     this.EventFormGroup = this.formBuilder.group({
+        EventName: ['', Validators.required],
         EventTypeID: ['', [DropdownValidators]],
         Event: ['', [DropdownValidators]],
         EventStartDate: ['', Validators.required],
         EventEndDate: ['', Validators.required],
         EventForID: ['', Validators.required],
-        Semesterlist: ['',],
-        Branchlist: ['', ],
+        // Semesterlist: ['',],
+        // Branchlist: ['', ],
+        Semesterlist: [[], Validators.required],
+        Branchlist: [[], Validators.required],
         EventLevelID: ['', [DropdownValidators]],
         Remark: [''],
         SSOID: [''],
@@ -192,6 +198,7 @@ if (this.PageMode == 'view') {
     }
     try {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.request.InstituteID = this.sSOLoginDataModel.InstituteID
       debugger
       await this.industryInstitutePartnershipMasterService.SaveData_IIP_Events(this.request)
         .then(async (data: any) => {
@@ -245,6 +252,21 @@ if (this.PageMode == 'view') {
         if (data.State == EnumStatus.Success) {
 
           this.request = data.Data;
+          this.isFacultySelected = Number(this.request.EventForID) == 10;
+
+const semesterControl = this.EventFormGroup.get('Semesterlist');
+
+if (this.isFacultySelected) {
+
+  semesterControl?.clearValidators();
+
+} else {
+
+  semesterControl?.setValidators([Validators.required]);
+}
+
+semesterControl?.updateValueAndValidity();
+
 
           this.SelectedBranchList = this.request.Branchlist;
           this.SelectedSemesterList = this.request.Semesterlist;
@@ -487,4 +509,95 @@ GoBack() {
     this.routers.navigate(['/IndustryInstitutePartnershipList']);
   }
 }
+
+onEventForChange(event: any) {
+
+  const selectedValue = Number(event.target.value);
+  // FACULTY => ID = 10 , CODE = 2
+  this.isFacultySelected = selectedValue == 2;
+
+  const semesterControl = this.EventFormGroup.get('Semesterlist');
+
+  if (this.isFacultySelected) {
+
+    // Semester optional
+    semesterControl?.clearValidators();
+
+    // clear selected semester
+    this.request.Semesterlist = [];
+
+    semesterControl?.setValue([]);
+
+  } else {
+
+    // Semester mandatory
+    semesterControl?.setValidators([Validators.required]);
+  }
+
+  semesterControl?.updateValueAndValidity();
+  }
+
+
+
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
+    this.Isverifed = false
+    if (SSOID == "") {
+      this.toastr.error("Please Enter SSOID");
+      this.request.SSOID = ''
+      this.request.MobileNo = ''
+      this.request.Email = ''
+/*      this.request.Name = ''*/
+      return;
+    }
+
+    const username = SSOID; // or hardcoded 'SIDDHA.AZAD'
+    const appName = 'madarsa.test';
+    const password = 'Test@1234';
+
+    /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
+
+    this.requestSSoApi.SSOID = username;
+    this.requestSSoApi.appName = appName;
+    this.requestSSoApi.password = password;
+
+
+
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        let response = JSON.parse(JSON.stringify(data));
+        if (response?.Data) {
+
+          let parsedData = JSON.parse(response.Data); // parse string inside Data
+          if (parsedData != null) {
+/*            this.request.Name = parsedData.displayName;*/
+            this.request.MobileNo = parsedData.mobile;
+            this.request.SSOID = parsedData.SSOID;
+            this.request.Email = parsedData.mailPersonal;
+            this.request.Designation = parsedData.designation;
+            this.Isverifed = true
+
+          }
+          else {
+            this.toastr.error("Record Not Found");
+            return;
+          }
+
+          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+
+  }
+
+
 }

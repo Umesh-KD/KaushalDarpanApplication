@@ -27,7 +27,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
   styleUrls: ['./ReAssignTimeTable.component.css']
 })
 export class ReAssignTimeTableComponent implements OnInit {
-  displayedColumns: string[] = ['SrNo', 'StaffSSOID', 'StaffName', 'From_Date', 'To_Date', 'SectionName', 'EndTermName', 'SemesterName', 'CourseTypeName', 'StreamName', 'SubjectName', 'Actions'];
+  displayedColumns: string[] = ['SrNo', 'AbsentStaff','StaffSSOID', 'StaffName', 'From_Date', 'To_Date', 'SectionName', 'EndTermName', 'SemesterName', 'CourseTypeName', 'StreamName', 'SubjectName', 'Actions'];
   EditDataFormGroup!: FormGroup;
   TableForm!: FormGroup;
   isSubmitted: boolean = false;

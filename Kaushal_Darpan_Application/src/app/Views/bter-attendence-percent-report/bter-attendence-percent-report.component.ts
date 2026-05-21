@@ -814,6 +814,8 @@ export class BterAttendencePercentReportComponent {
       StaffID: this.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      InstituteID: this.sSOLoginDataModel.InstituteID
+
     }
     await this.staffMasterService.GetBranchSectionAcRosterData(obj)
       .then((data: any) => {
@@ -988,4 +990,12 @@ export class BterAttendencePercentReportComponent {
     //  }
     //}
   }
+
+
+  async ResetRow() {
+
+    this.TableForm.reset()
+  }
+
+
 }
