@@ -2,7 +2,7 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Master</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Details</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700"> Student Details</a>
@@ -22,9 +22,9 @@
         <!-- <a [routerLink]="'/AddCompany'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a> -->
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/EnrollmentNo/MobileNo</label>   
-          <input type="text" class="form-input" placeholder="Name/EnrollmentNo/MobileNo" id="Name" 
+        <div> 
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name / EnrollmentNo / MobileNo</label>   
+          <input type="text" class="form-input" placeholder="Name / EnrollmentNo / MobileNo" id="Name" 
             [(ngModel)]="searchRequest.Name"
             (keyup.enter)="GetStudentDetailsList(1)">
         </div>
@@ -167,13 +167,13 @@
 
               <!-- Mother's Name (English) -->
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Name (English)</label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mother's Name (English)</label>
                 <input type="text" class="form-input" formControlName="motherNameEn"   [(ngModel)]="requestAction.motherNameEn">
               </div>
 
               <!-- Mother's Name (Hindi) -->
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Name (Hindi)</label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mother's Name (Hindi)</label>
                 <input type="text" class="form-input" formControlName="motherNameHi"  [(ngModel)]="requestAction.motherNameHi">
               </div>
               
