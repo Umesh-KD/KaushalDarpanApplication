@@ -154,7 +154,6 @@ const routes: Routes = [
         path: 'dashboard', loadChildren: () => import('./Views/dashboard/dashboard.module').then(m => m.dashboardModule), title: 'Dashboard'
       },
       {path: 'rolemaster', loadChildren: () => import('./Views/role-master/role-master.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Role Master'},
-      {path: 'office-wise-role-master', loadChildren: () => import('./Views/role-master-office-wise/role-master-office-wise.module').then(m => m.RoleMasterOfficeWiseModule), title: 'Role Master'},
       {
         path: 'loader', loadChildren: () => import('./Views/Shared/loader/loader.module').then(m => m.LoaderModule),
       },
