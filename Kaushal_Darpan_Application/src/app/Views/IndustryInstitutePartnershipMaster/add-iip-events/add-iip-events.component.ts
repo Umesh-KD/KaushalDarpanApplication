@@ -54,6 +54,7 @@ export class AddIIPEventsComponent {
 isDivisionLevel: boolean = false;
 public PageMode: string = '';
 public IsViewMode: boolean = false;
+public ReturnUrl: string = '';
   constructor(
     private commonMasterService: CommonFunctionService, 
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
@@ -69,6 +70,8 @@ public IsViewMode: boolean = false;
 
 
   async ngOnInit() {
+    this.ReturnUrl =
+  this.activatedRoute.snapshot.queryParamMap.get('returnUrl') || '';
     this.EventFormGroup = this.formBuilder.group({
         EventName: ['', Validators.required],
         EventTypeID: ['', [DropdownValidators]],
@@ -496,20 +499,31 @@ async GetDivisionMasterList() {
   }
 }
 
+// GoBack() {
+//   this.routers.navigate(['/IndustryInstitutePartnershipList']);
+// // debugger
+// //   // if browser history exists
+// //   if (window.history.length > 1) {
+
+// //     this.location.back();
+// //   }
+// //   else {
+
+// //     // fallback
+// //     this.routers.navigate(['/IndustryInstitutePartnershipList']);
+// //   }
+// }
+
 GoBack() {
-  debugger
-  this.routers.navigate(['/IndustryInstitutePartnershipList']);
-// debugger
-//   // if browser history exists
-//   if (window.history.length > 1) {
 
-//     this.location.back();
-//   }
-//   else {
+  if (this.ReturnUrl) {
 
-//     // fallback
-//     this.routers.navigate(['/IndustryInstitutePartnershipList']);
-//   }
+    this.routers.navigateByUrl(this.ReturnUrl);
+
+  } else {
+
+    this.routers.navigate(['/IndustryInstitutePartnershipList']);
+  }
 }
 
 onEventForChange(event: any) {
