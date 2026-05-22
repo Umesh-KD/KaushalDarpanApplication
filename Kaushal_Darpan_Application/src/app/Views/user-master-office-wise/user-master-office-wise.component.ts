@@ -319,10 +319,10 @@ export class UserMasterOfficeWiseComponent {
         x.UserID = this.request.UserID,
         x.SSOID = this.request.SSOID,
         x.ModifiedBy = this.sSOLoginDataModel.UserID,
-        x.DepartmentID = this.sSOLoginDataModel.DepartmentID,
-        x.InstituteID = this.sSOLoginDataModel.InstituteID
+        x.DepartmentID = this.sSOLoginDataModel.DepartmentID
+        // x.InstituteID = this.sSOLoginDataModel.InstituteID
       });
-
+      
       await this.assignRoleRightsService.SaveAssignedRole_UserWise(editChild)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -531,5 +531,10 @@ export class UserMasterOfficeWiseComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  onInstituteChange(selectedValue: number, row: any) {
+    // Explicitly update the reference value
+    row.InstituteID = selectedValue;
   }
 }
