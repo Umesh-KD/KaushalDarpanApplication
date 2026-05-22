@@ -109,7 +109,23 @@ import * as XLSX from 'xlsx';
         else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
           this.SearchStatus = EnumStaffTrainingStatus.PrincipalApprove;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) =>  item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE)
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.PrincipalApprove ||  item.ID == EnumStaffTrainingStatus.ADTE)
+          this.StaffTrainingStatusSearchList =
+            this.StaffTrainingStatusSearchList
+              .filter((item: any) =>
+                item.ID == EnumStaffTrainingStatus.Reject ||
+                item.ID == EnumStaffTrainingStatus.PrincipalApprove ||
+                item.ID == EnumStaffTrainingStatus.ADTE
+              )
+              .map((item: any) => {
+                if (item.ID == EnumStaffTrainingStatus.PrincipalApprove) {
+                  return {
+                    ...item,
+                    Name: 'Under Review'
+                  };
+                }
+                return item;
+              });
+          //this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.PrincipalApprove ||  item.ID == EnumStaffTrainingStatus.ADTE)
 
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.PrincipalApprove);
         }
@@ -117,13 +133,49 @@ import * as XLSX from 'xlsx';
           debugger
           this.SearchStatus = EnumStaffTrainingStatus.ADTE;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE )
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE || item.ID == EnumStaffTrainingStatus.ADTE)
+          this.StaffTrainingStatusSearchList =
+            this.StaffTrainingStatusSearchList
+              .filter((item: any) =>
+                item.ID == EnumStaffTrainingStatus.Reject ||
+                item.ID == EnumStaffTrainingStatus.JDTE ||
+                item.ID == EnumStaffTrainingStatus.ADTE
+              )
+              .map((item: any) => {
+
+                if (item.ID == EnumStaffTrainingStatus.ADTE) {
+                  return {
+                    ...item,
+                    Name: 'Under Review'
+                  };
+                }
+
+                return item;
+              });
+          //this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE || item.ID == EnumStaffTrainingStatus.ADTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.ADTE);
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
           this.SearchStatus = EnumStaffTrainingStatus.JDTE;
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.DTE )
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE ||  item.ID == EnumStaffTrainingStatus.DTE)
+          this.StaffTrainingStatusSearchList =
+            this.StaffTrainingStatusSearchList
+              .filter((item: any) =>
+                item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE || item.ID == EnumStaffTrainingStatus.DTE
+              )
+              .map((item: any) => {
+
+                if (
+                  item.ID == EnumStaffTrainingStatus.JDTE
+                ) {
+                  return {
+                    ...item,
+                    Name: 'Under Review'
+                  };
+                }
+
+                return item;
+              });
+          //this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.JDTE ||  item.ID == EnumStaffTrainingStatus.DTE)
           this.StaffTrainingDetailsNewTraining_Search(EnumStaffTrainingStatus.JDTE);
         }else{
           this.StaffTrainingStatusList = [];
