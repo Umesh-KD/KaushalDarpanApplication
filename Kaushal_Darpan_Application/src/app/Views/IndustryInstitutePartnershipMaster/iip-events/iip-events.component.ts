@@ -40,6 +40,7 @@ export class IIPEventsComponent {
     private modalService: NgbModal, 
     private appsettingConfig: AppsettingService,
     private Swal2: SweetAlert2, 
+    private router: Router
   ) { }
 
   async ngOnInit() { 

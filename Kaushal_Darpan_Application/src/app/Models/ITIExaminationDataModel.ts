@@ -17,6 +17,7 @@ export class ITIExaminationStudentDataModel extends RequestBaseModel {
   public OptionalSubjectStatus: string = '0';
   public BridgeCourseID: string = '-1';
   public EligibilityStatus?: number = 0;
+  public PendingCollegeFeeStatus?: number = 0;
 }
 
 export class ITIExamination_UpdateEnrollmentNoModel {

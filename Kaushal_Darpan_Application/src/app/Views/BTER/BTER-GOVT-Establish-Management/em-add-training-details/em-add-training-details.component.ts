@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumStaffTrainingStatus, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { StaffTrainingDetailDataModel, StaffTrainingDetailSearchData } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { BTEREMStaffServiceDetailsService } from '../../../../Services/BTER/BTER_EM_StaffServiceDetails/bter-em-staff-service-details.service';
@@ -44,7 +44,7 @@ export class EMAddTrainingDetailsComponent {
   public StaffTrainingHTS_GetDataList: any = [];
   isTrainingCom: boolean = false;
   todayDate: any = new Date().toISOString().split('T')[0];
-
+  _EnumStaffTrainingStatus = EnumStaffTrainingStatus;
 
   constructor(
     private toastr: ToastrService,
@@ -136,6 +136,7 @@ export class EMAddTrainingDetailsComponent {
 
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.StaffID = this.sSOLoginDataModel.StaffID;
+      this.request.RoleID = this.sSOLoginDataModel.RoleID;
 
       
       await this.staffServiceDetailsService.Save_StaffTrainingDetails(this.request).then(async (data: any) => {
@@ -267,6 +268,8 @@ export class EMAddTrainingDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.StaffTrainingDetailsCompletedTrainingDataList = data.Data;
+        } else {
+          this.StaffTrainingDetailsCompletedTrainingDataList = [];
         }
       })
     } catch (error) {
@@ -284,6 +287,8 @@ export class EMAddTrainingDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.StaffTrainingDetailsNewTrainingDataList = data.Data;
+        } else {
+          this.StaffTrainingDetailsNewTrainingDataList = [];
         }
       })
     } catch (error) {
@@ -722,5 +727,29 @@ export class EMAddTrainingDetailsComponent {
       wb,
       `StaffDetailsCompletedTraining_${timestamp}.xlsx`
     );
+  }
+
+
+  async deleteRow(id: number) {
+    try {
+      debugger
+      this.searchRequest.StaffTrainingDetailID = id;
+      await this.staffServiceDetailsService.DeleteStaffTrainingData(this.searchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          debugger
+          this.toastr.success(data.Message);
+          await this.StaffTrainingDetailsCompletedTraining_GetData();
+          await this.StaffTrainingDetailsNewTraining_GetData();
+        }
+        else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+
+     
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

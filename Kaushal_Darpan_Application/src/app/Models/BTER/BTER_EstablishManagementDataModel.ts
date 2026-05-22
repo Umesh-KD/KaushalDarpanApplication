@@ -717,6 +717,7 @@ export class StaffTrainingDetailDataModel {
   public ComplitionTrainingDoc: string = '';
   public Dis_complitionTrainingDoc: string = '';
   public Remark: string = '';
+  public RoleID: number = 0;
 }
 
 export class StaffTrainingDetailSearchData {
@@ -733,6 +734,7 @@ export class StaffTrainingStatusUpdateDataModel {
   public StaffTrainingDetailID: number = 0;
   public TrainingStatus: number = 0;
   public CreatedBy: number = 0;
+  public RoleID: number = 0;
   public Remark?: string = '';
   public jsonData?: string = '';
 }
@@ -794,6 +796,7 @@ export class TransferSystemUpdateDataModel {
   public CreatedBy: number = 0;
   public Remark?: string = '';
   public jsonData?: string = '';
+  public RoleID: number = 0;
 }
 
 
@@ -818,7 +821,7 @@ export class BTER_EM_TransferSystemModle {
   public UpdatedDate: Date | null = null;
   public UpdatedBy: number = 0;
   public TransferStatus: number = 0;
- 
+  public RoleID: number = 0;
   public TransferExtDetails: BTER_EM_TransferSystemExtModle[] = [];
 }
 
@@ -879,6 +882,6 @@ export class BTERStaffManualRequestModel {
   public To_PostID: number = 0;
   public To_ddlDistrictID: number = 0;
   public To_ddlCollege: number = 0;
-
+  public RoleID: number = 0;
 
 }

@@ -153,9 +153,7 @@ const routes: Routes = [
       {
         path: 'dashboard', loadChildren: () => import('./Views/dashboard/dashboard.module').then(m => m.dashboardModule), title: 'Dashboard'
       },
-      {
-        path: 'rolemaster', loadChildren: () => import('./Views/role-master/role-master.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Role Master'
-      },
+      {path: 'rolemaster', loadChildren: () => import('./Views/role-master/role-master.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Role Master'},
       {
         path: 'loader', loadChildren: () => import('./Views/Shared/loader/loader.module').then(m => m.LoaderModule),
       },
@@ -233,6 +231,7 @@ const routes: Routes = [
       { path: 'rolemenurights', loadChildren: () => import('./Views/role-menu-rights/role-menu-rights.module').then(m => m.RoleMenuRightsModule), title: 'Role Menu Rights' },
       { path: 'rolemenurights/:id', loadChildren: () => import('./Views/role-menu-rights/role-menu-rights.module').then(m => m.RoleMenuRightsModule), title: 'Role Menu Rights' },
       { path: 'usermaster', loadChildren: () => import('./Views/user-master/user-master.module').then(m => m.UserMasterModule), title: 'User Master' },
+      { path: 'office-wise-user-master', loadChildren: () => import('./Views/user-master-office-wise/user-master-office-wise.module').then(m => m.UserMasterOfficeWiseModule), title: 'User Master' },
       { path: 'usermenurights', loadChildren: () => import('./Views/user-menu-rights/user-menu-rights.module').then(m => m.UserMenuRightsModule), title: 'User Menu Rights' },
       { path: 'placementshortlistedstudents', loadChildren: () => import('./Views/placement-shortlisted-students/placement-shortlisted-students/placement-shortlisted-students.module').then(m => m.PlacementShortlistedStudentsModule), title: 'Placement Shortlisted Student' },
       { path: 'placementselectedstudents', loadChildren: () => import('./Views/placement-selected-students/placement-selected-students.module').then(m => m.PlacementSelectedStudentsModule), title: 'Placement Selected Student' },
@@ -515,6 +514,7 @@ const routes: Routes = [
       { path: 'ReservationRoster', loadChildren: () => import('./Views/reservation-roster/reservation-roster.module').then(m => m.ReservationRosterModule) },
       { path: 'ITIAllotment', loadChildren: () => import('./Views/ITI/itiallotment/itiallotment.module').then(m => m.ITIAllotmentModule) },
       { path: 'StudentExaminationITI', loadChildren: () => import('./Views/ITI/Examination/student-examination-iti/student-examination-iti.module').then(m => m.StudentExaminationITIModule), title: 'Examination' },
+      { path: 'StudentExaminationITI/:id', loadChildren: () => import('./Views/ITI/Examination/student-examination-iti/student-examination-iti.module').then(m => m.StudentExaminationITIModule), title: 'Examination' },
       { path: 'GenerateRollnumberITI', loadChildren: () => import('./Views/ITI/Examination/generate-rollnumber-iti/generate-rollnumber-iti.module').then(m => m.GenerateRollnumberITIModule), title: 'Generate Roll Number' },
       { path: 'CenterCreateITI', loadChildren: () => import('./Views/ITI/Examination/center-create-iti/center-create-iti.module').then(m => m.CenterCreateITIModule), title: 'Create Center' },
       { path: 'AddCenterITI', loadChildren: () => import('./Views/ITI/Examination/add-center-iti/add-center-iti.module').then(m => m.AddCenterITIModule), title: 'Create Center' },
@@ -1756,7 +1756,7 @@ const routes: Routes = [
       { path: 'BterUnlockCalender', loadChildren: () => import('./Views/bter-unlock-calender/bter-unlock-calender.module').then(m => m.BterUnlockCalenderModule) },
       { path: 'ScholarshipOnboard', loadChildren: () => import('./Views/ITI/scholarship-onboard/scholarship-onboard.module').then(m => m.ScholarshipOnboardModule) },
       { path: 'StaffTrainingConsent', loadChildren: () => import('./Views/staff-training-consent/staff-training-consent.module').then(m => m.StaffTrainingConsentModule) },
-
+      { path: 'itiPendingCollegeFee', loadChildren: () => import('./Views/Student/itiPendingCollegeFee/itiPendingCollegeFee.module').then(m => m.itiPendingCollegeFeeModule) },
 
     ]
   },

@@ -8,6 +8,7 @@ export class HrMasterDataModel {
   public ActiveStatus: boolean = true;
   public DeleteStatus: boolean = false;
   public DepartmentID: number = 0;
+  public HRStatus?: string = 'Pending';
 }
 
 export class HrMasterSearchModel {

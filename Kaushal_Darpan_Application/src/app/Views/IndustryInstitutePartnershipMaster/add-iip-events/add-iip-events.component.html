@@ -37,7 +37,7 @@
 
 
            <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Name<span
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Title<span
                 class="StarMarking">*</span></label>
             <input type="text" class="form-input" [(ngModel)]="request.EventName" formControlName="EventName">
           </div>
@@ -197,7 +197,7 @@
               [data]="StreamMasterList" [(ngModel)]="request.Branchlist" [disabled]="false"
               (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
               (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
-              (onDeSelectAll)="onDeSelectAll($event)" formControlName="Branchlist">
+              (onDeSelectAll)="onDeSelectAll($event)" formControlName="Branchlist"  [disabled]="IsViewMode">
             </ng-multiselect-dropdown>
              <div *ngIf="isSubmitted && _EventFormGroup.Branchlist.errors" class="text-danger">
     <p *ngIf="_EventFormGroup.Branchlist.errors.required">
@@ -216,7 +216,7 @@
               [data]="SemesterMasterList" [(ngModel)]="request.Semesterlist" [disabled]="false"
               (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
               (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
-              (onDeSelectAll)="onDeSelectAll($event)" formControlName="Semesterlist">
+              (onDeSelectAll)="onDeSelectAll($event)" formControlName="Semesterlist"  [disabled]="IsViewMode">
             </ng-multiselect-dropdown>
             <div *ngIf="isSubmitted && _EventFormGroup.Semesterlist.errors" class="text-danger">
   <p *ngIf="_EventFormGroup.Semesterlist.errors.required">

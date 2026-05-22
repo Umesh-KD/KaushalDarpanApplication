@@ -249,7 +249,7 @@ export class AddCompanyMasterComponent implements OnInit {
   
 
   async AddMoreMembers() {
-      
+      debugger
       this.isHrFormSubmitted = true;
       if(this.HrMasterFormGroup.invalid) {
         this.toastr.error("Please fill all the required fields of Hr Form")
@@ -260,11 +260,17 @@ export class AddCompanyMasterComponent implements OnInit {
         person.EmailId === this.personRequest.EmailId && person.MobileNo === this.personRequest.MobileNo
       );
   
-      if (!personExists) {
+    if (!personExists) {
+      if (this.request.ListCompanyHRDetails.length <= 0) {
         this.request.ListCompanyHRDetails.push(this.personRequest);
         this.personRequest = new HrMasterDataModel();
         this.isHrFormSubmitted = false;
-      } else {
+      }
+      else {
+        this.toastr.error("Cannot Add more than One HR in a company");
+        return
+      }
+    } else {
         this.toastr.error("Person already exists with the same emailid and mobileno.");
         return
       }
@@ -312,7 +318,7 @@ export class AddCompanyMasterComponent implements OnInit {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State = EnumStatus.Success) {
+          if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
             this.ResetControls();
              this.Back();

@@ -78,14 +78,14 @@ export class UpdateStudentDetailComponent implements OnInit {
     //         txtActionRemarks: ['', Validators.required],
     //       })
    this.formAction = this.formBuilder.group({
-  nameEn: [{ value: '', disabled: true }],
+  nameEn: [{ value: '' }],
   nameHi: [''],
-  fatherNameEn: [{ value: '', disabled: true }],
+  fatherNameEn: [{ value: ''}],
   fatherNameHi: [''],
-  motherNameEn: [{ value: '', disabled: true }],
+  motherNameEn: [{ value: ''}],
   motherNameHi: [''],
   enrollmentNo: [{ value: '', disabled: true }],
-  dob: [{ value: '', disabled: true }],
+  dob: [{ value: ''}],
   mobileNo: [''],
   supportingDocument: [''],
   supportingRemark: [''],
@@ -360,21 +360,19 @@ export class UpdateStudentDetailComponent implements OnInit {
         //save
         // await this.ApplicationService.UpdateStudentQualificationDetails(this.req)
           await this.StudentdetailUpdateService.SaveStudentProfileData(this.requestAction)
-          .then((data: any) => {
+          .then(async (data: any) => {
             data = JSON.parse(JSON.stringify(data));
             console.log(data);
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
   
             if (data.State = EnumStatus.Success) {
-              this.toastr.success(this.Message)
+              this.toastr.success(data.Message)
               this.CloseModalPopup();
+              await this.GetStudentDetailsList(1);
               // this.ResetControls();
               // this.routers.navigate(['/CompanyMaster']);
             }
             else {
-              this.toastr.error(this.ErrorMessage)
+              this.toastr.error(data.ErrorMessage)
             }
             //  this.Router.navigateByUrl('/student-additional-qualification');
   
