@@ -203,4 +203,12 @@ export class BTEREMStaffServiceDetailsService {
       ).toPromise();
   }
 
+  public async DeleteStaffTrainingData(request: StaffTrainingDetailSearchData) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/DeleteStaffTrainingData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
