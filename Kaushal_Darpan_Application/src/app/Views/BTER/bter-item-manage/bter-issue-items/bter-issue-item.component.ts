@@ -800,6 +800,7 @@ export class AddBterIssueItemComponent {
 
       this.labrequests.Lab_DepartmentId = this.sSOLoginDataModel.DepartmentID;
       this.labrequests.Lab_BranchId = this.Searchrequests.StreamID;
+      this.labrequests.Lab_CollegeId = this.sSOLoginDataModel.InstituteID;
       this.labrequests.ActionName = 'GetLabDataForMaster';
       await this.bterInventoryService.GetDTEGetSetLabMaster(this.labrequests)
         .then((data: any) => {
@@ -847,7 +848,7 @@ export class AddBterIssueItemComponent {
 
     console.log('Logs Item ID:' + row.ItemId);
 
-    await this.bterInventoryService.GetDTEIssueItemListPermanent(row.EquipmentsId, row.ItemCategoryId).then((data: any) => {
+    await this.bterInventoryService.GetDTEIssueItemListPermanent(row.EquipmentsId, row.ItemCategoryId, this.sSOLoginDataModel.InstituteID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       if (data.State === EnumStatus.Success) {
         this.ItemsDataList = data.Data;
