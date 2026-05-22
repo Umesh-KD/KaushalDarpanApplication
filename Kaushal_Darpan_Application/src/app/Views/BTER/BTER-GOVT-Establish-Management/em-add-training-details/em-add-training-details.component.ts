@@ -136,6 +136,7 @@ export class EMAddTrainingDetailsComponent {
 
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.StaffID = this.sSOLoginDataModel.StaffID;
+      this.request.RoleID = this.sSOLoginDataModel.RoleID;
 
       
       await this.staffServiceDetailsService.Save_StaffTrainingDetails(this.request).then(async (data: any) => {

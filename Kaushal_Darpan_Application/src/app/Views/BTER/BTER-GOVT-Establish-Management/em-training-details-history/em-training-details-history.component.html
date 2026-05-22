@@ -157,6 +157,7 @@
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
                 <th class="text-left">S No</th>
+                <th class="text-left">Action By</th>
                 <th class="text-left">Status</th>
                 <th class="text-left">Remark</th>
                 <th class="text-left">Date</th>
@@ -165,6 +166,7 @@
             <tbody>
               <tr *ngFor="let row of StaffTrainingHTS_GetDataList; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.ActionByRole }}</td>
                 <td align="left">{{ row.StatusName }}</td>
                 <td align="left">{{ row.Remarks}}</td>
                 <td align="left">{{ row.ActionDate }}</td>
