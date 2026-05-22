@@ -98,6 +98,7 @@ export class ListhostelfeemanagementComponent {
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       await this._HostelManagmentService.getHostelFeeList(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
