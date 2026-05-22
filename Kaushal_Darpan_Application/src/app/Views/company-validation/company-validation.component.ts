@@ -107,7 +107,20 @@ export class CompanyValidationComponent implements OnInit {
     this.requestAction.Action = "0";
     this.requestAction.ActionRemarks = "";
     this.ApprovedStatus = "0";
+    await this.GetAllData();
   }
+
+  async CompanyDeactivateAction(content: any, ID: number) {
+    this.requestAction.ID = ID;
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    this.requestAction.Action = "0";
+    this.requestAction.ActionRemarks = "";
+  }
+
 
   async CompanyOnAction(content: any, ID: number) {
     this.requestAction.ID = ID;

@@ -190,7 +190,7 @@ export class HrMasterValidationComponent implements OnInit {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          if (this.State = EnumStatus.Success) {
+          if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message);
             await this.CloseModalPopup();
             await this.GetAllData();

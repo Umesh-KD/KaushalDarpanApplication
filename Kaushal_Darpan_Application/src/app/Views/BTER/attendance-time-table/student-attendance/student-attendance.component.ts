@@ -387,13 +387,23 @@ export class StudentAttendanceComponent implements OnInit {
       const rawEnd = this.TableForm.value.AttendanceEndDate;
 
       // Parse correctly whether string or Date
-      const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
-      dateStart.setDate(dateStart.getDate() + 1);
-      const formattedDateStart = dateStart.toISOString().split('T')[0];
 
-      const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
-      dateEnd.setDate(dateEnd.getDate() + 1);
-      const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+
+
+
+
+      // Parse correctly whether string or Date
+      const formattedDateStart =
+        typeof rawStart === 'string'
+          ? rawStart
+          : this.formatDate(rawStart);
+
+      const formattedDateEnd =
+        typeof rawEnd === 'string'
+          ? rawEnd
+          : this.formatDate(rawEnd);
+
+
 
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -585,7 +595,7 @@ export class StudentAttendanceComponent implements OnInit {
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
-          //debugger
+          debugger
           // Generate dynamic columns
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => ![
@@ -595,9 +605,12 @@ export class StudentAttendanceComponent implements OnInit {
             ].includes(key))
             .map(key => {
               const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
+
               const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
+              
               const isHoliday = key.includes('(Holiday)');
-              return { name: key, locked: isLeaveDate, isMarkOnAttendanceDate: false, isHoliday: isHoliday };
+              const freezeDates = isLeaveDate ? isLeaveDate : isHoliday;
+              return { name: key, locked: isLeaveDate, isMarkOnAttendanceDate: false, isHoliday: freezeDates };
             });
 
           // Apply attendance logic
