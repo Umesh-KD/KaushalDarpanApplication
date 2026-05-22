@@ -291,14 +291,21 @@ export class HostelManagmentService {
       ).toPromise();
   }
 
-  public async getHostelFeeList() {
-    debugger
-    return await this.http.get(this.APIUrl + "/getHostelFeeList", this.headersOptions)
+  //public async getHostelFeeList(searchRequest: HostelFeeModel) {
+  //  debugger
+  //  return await this.http.get(this.APIUrl + "/getHostelFeeList", this.headersOptions)
+  //    .pipe(
+  //      catchError(this.handleErrorObservable)
+  //    ).toPromise();
+  //}
+
+  public async getHostelFeeList(searchRequest: HostelFeeModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/getHostelFeeList`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
 
 
   public async SaveHostelFee(searchRequest: HostelFeeModel) {
