@@ -325,7 +325,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
         }));
         this.updateSearch.jsonData = JSON.stringify(jsonData);
 
-
+        this.updateSearch.RoleID = this.sSOLoginDataModel.RoleID;
         await this.staffServiceDetailsService
           .TransferSystemGeneratorUpdate(this.updateSearch)
           .then(async (data: any) => {
@@ -719,7 +719,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
         this.RequestManual.To_ddlCollege = 0;
       }
 
-
+      this.RequestManual.RoleID = this.sSOLoginDataModel.RoleID;
       await this.staffServiceDetailsService
         .AddTransferSystemManualRequest(this.RequestManual)
         .then(async (data: any) => {

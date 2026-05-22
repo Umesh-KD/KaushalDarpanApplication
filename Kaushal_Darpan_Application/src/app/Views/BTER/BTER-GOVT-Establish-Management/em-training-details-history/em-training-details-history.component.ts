@@ -223,6 +223,7 @@ export class emtrainingdetailshistoryComponent {
           Remark: this.Remark,
           CreatedBy: this.sSOLoginDataModel.UserID      
         }));
+        this.updateSearch.RoleID = this.sSOLoginDataModel.RoleID;
         this.updateSearch.jsonData = JSON.stringify(jsonData);
        
        

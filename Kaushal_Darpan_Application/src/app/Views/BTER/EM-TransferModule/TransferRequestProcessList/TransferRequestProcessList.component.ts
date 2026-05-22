@@ -371,6 +371,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
           Remark: this.Remark,
           CreatedBy: this.sSOLoginDataModel.UserID      
         }));
+        this.updateSearch.RoleID = this.sSOLoginDataModel.RoleID;
         this.updateSearch.jsonData = JSON.stringify(jsonData);
        
        
@@ -599,7 +600,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
               try {
                 //Show Loading
                 this.loaderService.requestStarted();
-
+                this.updateExtSearch.RoleID = this.sSOLoginDataModel.RoleID;
                 await this.staffServiceDetailsService
                   .TransferSystemEXTStatusUpdate(this.updateExtSearch)
                   .then(async (data: any) => {

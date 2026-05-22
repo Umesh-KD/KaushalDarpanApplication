@@ -338,6 +338,7 @@ import * as XLSX from 'xlsx';
         this.updateExtSearch.StaffID = this.modelStaffId;
         this.updateExtSearch.TransferSystemID = this.modelTsId;
         this.updateExtSearch.RelievingDate = this.RelievingDate;
+        this.updateExtSearch.RoleID = this.sSOLoginDataModel.RoleID;
         
 
 
