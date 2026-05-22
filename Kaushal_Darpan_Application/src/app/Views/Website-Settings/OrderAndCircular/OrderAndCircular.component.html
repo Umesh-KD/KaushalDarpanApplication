@@ -59,30 +59,22 @@
               Section
             </label>
 
-            <select class="form-select"
-                    formControlName="DepartmentSubID">
-
+            <select class="form-select"  formControlName="DepartmentSubID">
               <option value="0">--Select--</option>
 
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER"
-                      [value]="_EnumWS_DepartmentSub.BTER">
-                BTER
-              </option>
+              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER"[value]="_EnumWS_DepartmentSub.BTER"> BTER</option>
 
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER"
-                      [value]="_EnumWS_DepartmentSub.DTE">
-                DTE
-              </option>
+              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER"[value]="_EnumWS_DepartmentSub.DTE"> DTE</option>
 
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI"
-                      [value]="_EnumWS_DepartmentSub.ITI_NCVT">
-                ITI NCVT
-              </option>
+              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT"> ITI NCVT </option>
 
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI"
-                      [value]="_EnumWS_DepartmentSub.ITI_SCVT">
-                ITI SCVT
-              </option>
+              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT </option>
+
+              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Planing">T1 PLANING</option>
+              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Establishment">T2 ESTABLISHMENT</option>
+              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Purchase">T3 PURCHASE</option>
+
+
 
             </select>
 
@@ -261,9 +253,9 @@
 
             <th class="text-left">File</th>
 
-            <!--<th class="text-left">Start Date</th>
+            <th class="text-left">Start Date</th>
 
-            <th class="text-left">End Date</th>-->
+            <th class="text-left">End Date</th>
 
           </tr>
 
@@ -298,13 +290,13 @@
             </a>
           </td>
 
-            <!--<td>
+            <td>
               {{ row.Start_Date | date:'dd-MM-yyyy hh:mm a' }}
             </td>
 
             <td>
               {{ row.End_Date | date:'dd-MM-yyyy hh:mm a' }}
-            </td>-->
+            </td>
 
           </tr>
 

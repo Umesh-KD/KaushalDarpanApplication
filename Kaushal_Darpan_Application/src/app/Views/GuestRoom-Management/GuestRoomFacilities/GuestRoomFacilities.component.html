@@ -65,14 +65,16 @@ isUpdate ? 'Update GuestRoom Facilities' : 'Add GuestRoom Facilities'
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">#</th>
+            <th class="text-left">Guest House</th>
             <th class="text-left">Facilities Name</th>
-            <th class="text-left">Is Facilities</th>
+            <th class="text-left">Is Facility Active</th>
             <th style="width:125px;">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of FacilityList;let idx=index;">
             <td>{{idx+1}}</td>
+            <td>{{item.GuestHouseName}}</td>
             <td>{{item.FacilitiesName}}</td>
             <td>
               <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
