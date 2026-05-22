@@ -341,6 +341,10 @@
                 <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
 
                 <a *ngIf="!row.ComplitionTrainingDoc && row.isTrainingCom === 1" href="javascript:void(0);" title="Doc update" (click)="onEmtrainingDocUpdate(EmtrainingDocUpdate, row.StaffTrainingDetailID)"><i class="fa-upload"></i></a>
+
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(row.StaffTrainingDetailID)" *ngIf="_EnumStaffTrainingStatus.Applied== row.StatusID">
+                  <i class="ti ti-trash"></i>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -440,6 +444,9 @@
               </td>
               <td>
                 <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
+                <button  class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(row.StaffTrainingDetailID)" *ngIf="_EnumStaffTrainingStatus.Applied== row.StatusID">
+                  <i class="ti ti-trash"></i>
+                </button>
               </td>
             </tr>
           </tbody>

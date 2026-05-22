@@ -21,7 +21,7 @@ import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 export class BterHostelFeeComponent {
   public Table_SearchText: string = "";
   sSOLoginDataModel = new SSOLoginDataModel();
-
+  public Searchrequest = new HostelFeeModel();
   public request = new HostelFeeModel()
   public requestFormGroup!: FormGroup;
   public isSubmitted: boolean = false;
@@ -64,7 +64,8 @@ export class BterHostelFeeComponent {
   async GetHostelFee() {
     try {
       this.loaderService.requestStarted();
-      await this._HostelManagmentService.getHostelFeeList()
+      this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      await this._HostelManagmentService.getHostelFeeList(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
