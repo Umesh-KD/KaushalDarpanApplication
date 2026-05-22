@@ -21,9 +21,9 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
-        <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
-      </div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
@@ -33,6 +33,7 @@
             <option value="Approved">Approved</option>
             <option value="Rejected">Rejected</option>
             <option value="Hold">Hold</option>
+            <option value="Deactivate">Deactivate</option>
           </select>
         </div>
 
@@ -93,26 +94,25 @@
             <td align="center">
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
                 <a href="javascript:void(0);" title="Company On Action" *ngIf="((this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel) && (company.Status=='Pending' || company.Status=='Hold'))" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" title="Company On Action" *ngIf="((this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel) && (company.Status=='Approved'))" (click)="CompanyDeactivateAction(MyModel_DeactivateAction,company.ID)"><i class="ti ti-check"></i></a>
                 <a href="javascript:void(0);" title="Company On Action" *ngIf="((this.sSOLoginDataModel.RoleID==_EnumRole.IIPAdmin) && (company.Status=='Pending' || company.Status=='Hold'))" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a>
-                
+
                 <!--<a href="javascript:void(0);" title="View & Update Company" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,company.ID)"><i class="ti ti-eye"></i></a>-->
                 <a *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel)"
-                [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:3}"
-                   title="View & Update Company"             
-                 >
+                   [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:3}"
+                   title="View & Update Company">
                   <i class="ti ti-eye"></i>
                 </a>
-                 <!-- <a *ngIf="(company.Status=='Approved' || company.Status=='Rejected' || company.Status=='Hold' || company.Status=='Pending')" 
+                <!-- <a *ngIf="(company.Status=='Approved' || company.Status=='Rejected' || company.Status=='Hold' || company.Status=='Pending')"
                 [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
                   <i class="ti ti-eye"></i>
                 </a> -->
                 <a *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.IIPAdmin)"
-                [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:3,flag:1}"
-                   title="View & Update Company"             
-                 >
+                   [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:3,flag:1}"
+                   title="View & Update Company">
                   <i class="ti ti-eye"></i>
                 </a>
-                <a href="javascript:void(0);"  title="View Company History" (click)="openModal(modal_Open,company.ID)"><i class="ti ti-list"></i></a>
+                <a href="javascript:void(0);" title="View Company History" (click)="openModal(modal_Open,company.ID)"><i class="ti ti-list"></i></a>
               </div>
             </td>
           </tr>
@@ -122,6 +122,58 @@
   </div>
 </div>
 <!-- end row -->
+
+<ng-template #MyModel_DeactivateAction let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="formAction" id="formAction" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Company On Action</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mb-8">
+
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Action<span class="StarMarking">*</span></label>
+                <select class="form-select" id="ddlAction" formControlName="ddlAction" [(ngModel)]="requestAction.Action">
+                  <option value="0">--Select--</option>
+                  <option value="Deactivate">Deactivate</option>
+                </select>
+                <div *ngIf="isSubmitted&&requestAction.Action=='0'" class="text-danger">
+                  This field is required .!
+                </div>
+              </div>
+            </div>
+            <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3 mt-3">
+              <div>
+                <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
+                <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.ActionRemarks"></textarea>
+                <div *ngIf="isSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
+                  <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+
+
+            </div>
+
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_ApprovedCampus()">Submit</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
 
 <ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
@@ -192,7 +244,7 @@
                 <tr>
                   <th colspan="8" class="text-left font-bold">Company History</th>
                 </tr>
-            
+
                 <tr>
                   <th>Sr No</th>
                   <th>Company Name</th>
@@ -211,10 +263,9 @@
 
                   <td>{{ row.Name }}</td>
                   <td>{{ row.Address }}</td>
-                  <!-- <td>{{ row.DistrictID }}</td> -->         
+                  <!-- <td>{{ row.DistrictID }}</td> -->
                   <td>
-                    <span 
-                      [ngClass]="{
+                    <span [ngClass]="{
                         'bg-green-100 text-white px-3 py-3 rounded': row.Action == 'Approved',
                         'bg-yellow-100 text-white px-3 py-3 rounded': row.Action == 'Pending',
                         'bg-danger text-white px-3 py-3 rounded': row.Action == 'Rejected'
@@ -222,7 +273,7 @@
                       {{ row.Action }}
                     </span>
                   </td>
-            
+
                   <td>{{ row.ActionByName || '-' }}</td>
                   <td>{{ row.ActionRemarks || '-' }}</td>
                   <td>{{ row.ActionRTS | date:'dd-MM-yyyy HH:mm' }}</td>
@@ -240,7 +291,7 @@
                 <tr>
                   <th colspan="9" class="text-left font-bold">HR History</th>
                 </tr>
-            
+
                 <tr>
                   <th>Sr No</th>
                   <th>HR Name</th>
@@ -253,7 +304,7 @@
                   <th>Action Date</th>
                 </tr>
               </thead>
-            
+
               <tbody>
                 <tr *ngFor="let row of HrTrailList; let i = index">
                   <td>{{ i + 1 }}</td>
@@ -261,7 +312,7 @@
                   <td>{{ row.EmailId }}</td>
                   <td>{{ row.MobileNo }}</td>
                   <td>{{ row.companyName }}</td>
-            
+
                   <td>
                     <span [ngClass]="{
                       'bg-green-100 text-white px-2 py-1 rounded': row.Action == 'Approved',
@@ -271,12 +322,12 @@
                       {{ row.Action }}
                     </span>
                   </td>
-            
+
                   <td>{{ row.ActionByName || '-' }}</td>
                   <td>{{ row.ActionRemarks || '-' }}</td>
                   <td>{{ row.ActionRTS | date:'dd-MM-yyyy HH:mm' }}</td>
                 </tr>
-            
+
                 <tr *ngIf="HrTrailList?.length == 0">
                   <td colspan="9" class="text-center">No HR History Found</td>
                 </tr>

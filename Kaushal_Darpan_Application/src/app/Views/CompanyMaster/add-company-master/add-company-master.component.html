@@ -293,6 +293,7 @@
                   <th>Name</th>
                   <th>Contact No</th>
                   <th>Email</th>
+                  <th>HRStatus</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -302,8 +303,9 @@
                   <td class="text-center">{{row.Name}}</td>
                   <td class="text-center">{{row.MobileNo}}</td>
                   <td class="text-center">{{row.EmailId}}</td>
+                  <td class="text-center">{{row.HRStatus}}</td>
                   <td class="text-center">
-                    <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
+                    <button *ngIf="row.HRStatus!='Approved' && row.HRStatus!='Deactivate'" class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
                       <i class="ti ti-trash"></i>
                     </button>
                   </td>

@@ -101,8 +101,8 @@
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <!-- <a [routerLink]="'/AddHrmaster'" [queryParams]="{HRManagerID:row.HRManagerID,key:1}" *ngIf="GetRoleID ==_EnumRole.Admin" title="Edit"><i class="ti ti-pencil"></i></a> -->
                 <!-- <a href="javascript:void(0);" title="Delete" *ngIf="GetRoleID ==_EnumRole.Admin"(click)="DeleteById(row.HRManagerID)"><i class="ti ti-trash"></i></a> -->
-                <a [routerLink]="'/AddHrmaster'" [queryParams]="{HRManagerID:row.HRManagerID,key:1}" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.HRManagerID)"><i class="ti ti-trash"></i></a>
+                <a *ngIf="row.Status!='Approved'" [routerLink]="'/AddHrmaster'" [queryParams]="{HRManagerID:row.HRManagerID,key:1}" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a *ngIf="row.Status!='Approved'" href="javascript:void(0);" title="Delete" (click)="DeleteById(row.HRManagerID)"><i class="ti ti-trash"></i></a>
               </div>
             </td>
           </tr>

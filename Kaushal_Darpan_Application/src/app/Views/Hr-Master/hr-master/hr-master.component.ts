@@ -87,7 +87,7 @@ export class HrMasterComponent implements OnInit {
 
   async GetAllData() {
     try {
-      
+      debugger
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
