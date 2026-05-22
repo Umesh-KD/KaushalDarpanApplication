@@ -124,6 +124,7 @@ export class CollegeHostelDetailsComponent {
           
           if(data.State === EnumStatus.Success) {
             this.StudentDetailsList = data['Data'];
+
             if (
               !(this.StudentDetailsList[0].AllotmentStatus == 0 || 
                 this.StudentDetailsList[0].AllotmentStatus == 12 || 

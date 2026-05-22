@@ -96,10 +96,16 @@
           </ng-container>
 
           <!-- StaffSSOID Column -->
-          <ng-container matColumnDef="StaffSSOID">
+          <ng-container matColumnDef="AbsentStaff">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Staff SSO ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.AbsentStaff}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="StaffSSOID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Substitute Staff SSO ID </th>
             <td mat-cell *matCellDef="let element"> {{element.StaffSSOID}} </td>
           </ng-container>
+
 
           <!-- StaffName Column -->
           <ng-container matColumnDef="StaffName">

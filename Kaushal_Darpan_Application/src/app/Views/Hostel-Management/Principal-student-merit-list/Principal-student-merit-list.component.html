@@ -136,8 +136,9 @@
             <th class="text-left" *ngIf="Searchrequest.status == 9">Merit No</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Student Name</th>
+            <!--<th class="text-left">Application ID</th>-->
+            <!--<th class="text-left">Hostel Request No</th>-->
             <th class="text-left">Application ID</th>
-            <th class="text-left">Hostel Request No</th>
             <!--<th class="text-left">Type</th>-->
             <th class="text-left">{{titleDDLBranchTrade}}</th>
             <th class="text-left">Semester</th>
@@ -164,7 +165,7 @@
             </td>
             <td align="left">{{item.InstituteName}}</td>
             <td align="left">{{item.StudentName}}</td>
-            <td align="left">{{item.ApplicationId}}</td>
+            <!--<td align="left">{{item.ApplicationId}}</td>-->
             <td align="left">{{item.HostelRequestNo}}</td>
             <!--<td align="left">{{item.StudentType}}</td>-->
             <td align="left">{{item.StreamName}}</td>
@@ -177,23 +178,38 @@
             <!-- <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
     </div>
   </td> -->
+            <!--<td>
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.AffidavitDocument}}" target="_blank" class="text-success" title="Show Affidavit Details"> <i class="ti ti-download downloadIcon"></i></a>
+    </div>
+  </td>-->
             <td>
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.AffidavitDocument}}" target="_blank" class="text-success" title="Show Affidavit Details"> <i class="ti ti-download downloadIcon"></i></a>
+              <div class="flex align-center justify-center actionBtns w-auto">
+
+                <a *ngIf="item.AllotmentStatus !== 1 && item.AffidavitDocument"
+                   [attr.href]="appsettingConfig.StaticFileRootPathURL + item.AffidavitDocument"
+                   target="_blank"
+                   class="text-success"
+                   title="Show Affidavit Details">
+
+                  <i class="ti ti-download downloadIcon"></i>
+
+                </a>
+
               </div>
             </td>
             <!--<td>
 
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="item.SupportingDocument" [href]="appsettingConfig.StaticFileRootPathURL + item.SupportingDocument" target="_blank" class="text-success me-2" title="Supporting Document">
-                  <i class="ti ti-download"></i>
-                </a>
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <a *ngIf="item.SupportingDocument" [href]="appsettingConfig.StaticFileRootPathURL + item.SupportingDocument" target="_blank" class="text-success me-2" title="Supporting Document">
+        <i class="ti ti-download"></i>
+      </a>
 
-                <a *ngIf="item.AffidavitDocument" [href]="appsettingConfig.StaticFileRootPathURL + item.AffidavitDocument" target="_blank" class="text-success" title="Affidavit Document">
-                  <i class="ti ti-download"></i>
-                </a>
-              </div>
-            </td>-->
+      <a *ngIf="item.AffidavitDocument" [href]="appsettingConfig.StaticFileRootPathURL + item.AffidavitDocument" target="_blank" class="text-success" title="Affidavit Document">
+        <i class="ti ti-download"></i>
+      </a>
+    </div>
+  </td>-->
           </tr>
         </tbody>
       </table>

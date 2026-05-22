@@ -176,7 +176,7 @@
             <!-- <th class="text-left">Paid Amount</th> -->
             <th class="text-left">Fee For</th>
             <th class="text-left">Last Updated Date</th>
-            <th style="width:125px;">
+            <th style="width:125px;" *ngIf="sSOLoginDataModel.DepartmentID==1" >
               Action 
 
 
@@ -213,13 +213,13 @@
             <!-- <td>{{item.PaidAmount}}</td> -->
             <td>{{item.FeeFor}}</td>
             <td>{{item.UpdateDate}}</td>
-            <td>
+            <td *ngIf="sSOLoginDataModel.DepartmentID==1" >
+              
               <div class="flex  actionBtns w-auto" data-attr="{{item.TransactionId}}" style="width:auto !important">
                 <a *ngIf="item.TransctionStatusBtn==0" href="javascript:void(0);" (click)="CheckPaymentSataus(item)" title="Verify"><i class="ti ti-check"></i></a>
-
-                <!-- <a href="javascript:void(0);" (click)="FeeReceipt(item)" title="Download Reciept"><i class="ti ti-download"></i></a> -->
-
               </div>
+
+
             </td>
           </tr>
           <tr *ngIf="paginatedInTableData?.length==0"><td class="text-center" colspan="25"> No Record Found</td></tr>
