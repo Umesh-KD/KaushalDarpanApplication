@@ -153,9 +153,7 @@ const routes: Routes = [
       {
         path: 'dashboard', loadChildren: () => import('./Views/dashboard/dashboard.module').then(m => m.dashboardModule), title: 'Dashboard'
       },
-      {
-        path: 'rolemaster', loadChildren: () => import('./Views/role-master/role-master.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Role Master'
-      },
+      {path: 'rolemaster', loadChildren: () => import('./Views/role-master/role-master.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Role Master'},
       {
         path: 'loader', loadChildren: () => import('./Views/Shared/loader/loader.module').then(m => m.LoaderModule),
       },
@@ -233,6 +231,7 @@ const routes: Routes = [
       { path: 'rolemenurights', loadChildren: () => import('./Views/role-menu-rights/role-menu-rights.module').then(m => m.RoleMenuRightsModule), title: 'Role Menu Rights' },
       { path: 'rolemenurights/:id', loadChildren: () => import('./Views/role-menu-rights/role-menu-rights.module').then(m => m.RoleMenuRightsModule), title: 'Role Menu Rights' },
       { path: 'usermaster', loadChildren: () => import('./Views/user-master/user-master.module').then(m => m.UserMasterModule), title: 'User Master' },
+      { path: 'office-wise-user-master', loadChildren: () => import('./Views/user-master-office-wise/user-master-office-wise.module').then(m => m.UserMasterOfficeWiseModule), title: 'User Master' },
       { path: 'usermenurights', loadChildren: () => import('./Views/user-menu-rights/user-menu-rights.module').then(m => m.UserMenuRightsModule), title: 'User Menu Rights' },
       { path: 'placementshortlistedstudents', loadChildren: () => import('./Views/placement-shortlisted-students/placement-shortlisted-students/placement-shortlisted-students.module').then(m => m.PlacementShortlistedStudentsModule), title: 'Placement Shortlisted Student' },
       { path: 'placementselectedstudents', loadChildren: () => import('./Views/placement-selected-students/placement-selected-students.module').then(m => m.PlacementSelectedStudentsModule), title: 'Placement Selected Student' },

@@ -114,4 +114,11 @@ export class UserMasterService {
       ).toPromise();
   }
 
+  public async GetUserData_RoleWise(searchRequest: UserMasterSerchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetUserData_RoleWise", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

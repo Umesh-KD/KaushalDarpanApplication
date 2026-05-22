@@ -159,7 +159,7 @@
                   *ngIf="(row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden) &&
                         ((sSOLoginDataModel.RoleID == _EnumRole.JD_TTC && row.OfficeID == _EnumOffice.TTC_LRDC) || 
                           (sSOLoginDataModel.RoleID == _EnumRole.Admin && row.OfficeID == _EnumOffice.BTER) || 
-                          (sSOLoginDataModel.RoleID == _EnumRole.DTE && row.OfficeID == _EnumOffice.DTE))" 
+                          (sSOLoginDataModel.RoleID == _EnumRole.DTE && (row.OfficeID == _EnumOffice.DTE || row.OfficeID == _EnumOffice.COLLEGE)))" 
                   (click)="onEditGuestHouse(Modal_GuestHouseEdit, row)"><i class="ti ti-pencil"></i>
                 </a>
 

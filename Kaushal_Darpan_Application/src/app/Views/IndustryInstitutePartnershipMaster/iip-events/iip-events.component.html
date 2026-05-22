@@ -67,7 +67,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
-                <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID, mode:'view'}"
+                <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID, mode:'view',returnUrl: router.url}"
                     title="Edit"
                     *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
@@ -78,7 +78,7 @@
                     || sSOLoginDataModel.RoleID == _enumRole.IIPAdmin )">
                     <i class="ti ti-eye"></i></a>
 
-                <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID,mode:'edit'}"
+                <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID,mode:'edit',returnUrl: router.url}"
                     title="Edit"
                     *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
                       sSOLoginDataModel.RoleID == _enumRole.Principal ||
