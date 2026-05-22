@@ -155,7 +155,7 @@
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
-        <b><i class="fa fa-plus"></i> Team Member Details </b>
+        <b><i class="fa fa-plus"></i> Event Details </b>
         <button class="btn bg-info text-white" (click)="CloseEventModal()"><i class="ti ti-x"></i></button>
       </div>
       <div class="card-body">
@@ -165,7 +165,8 @@
             <table class="table table-border w-full" cellpadding="5">
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                 <tr>
-                    <th>Sr. No.</th>
+                    <th class="text-left">Sr. No.</th>
+                    <th class="text-left">Event Title</th>
                     <th class="text-left">Event Type</th>
                     <th class="text-left">Event</th>
                     <th class="text-left">Event For</th>
@@ -177,6 +178,7 @@
                 <tbody>
                 <tr *ngFor="let row of CompanyEventsList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
                     <td>{{idx+1}}</td>
+                    <td>{{row.EventName}}</td>
                     <td >{{row.EventType}}</td>
                     <td>{{row.Event}}</td>
                     <td >{{row.EventFor}}</td>

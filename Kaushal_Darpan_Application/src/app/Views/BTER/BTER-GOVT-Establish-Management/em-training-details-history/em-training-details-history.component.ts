@@ -106,7 +106,24 @@ export class emtrainingdetailshistoryComponent {
           this.SearchStatus = EnumStaffTrainingStatus.Applied;
           this.StaffTrainingDetailsCompleted_Search(this.SearchStatus);
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject  || item.ID == EnumStaffTrainingStatus.ADTE);
-          this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
+          this.StaffTrainingStatusSearchList =
+            this.StaffTrainingStatusSearchList
+              .filter((item: any) =>
+                item.ID == EnumStaffTrainingStatus.Reject ||
+                item.ID == EnumStaffTrainingStatus.PrincipalApprove ||
+                item.ID == EnumStaffTrainingStatus.ADTE
+              )
+              .map((item: any) => {
+                if (item.ID == EnumStaffTrainingStatus.PrincipalApprove) {
+                  return {
+                    ...item,
+                    Name: 'Under Review'
+                  };
+                }
+                return item;
+              });
+
+          //this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
         }
         else {
           this.SearchStatus = EnumStaffTrainingStatus.Applied;
@@ -206,6 +223,7 @@ export class emtrainingdetailshistoryComponent {
           Remark: this.Remark,
           CreatedBy: this.sSOLoginDataModel.UserID      
         }));
+        this.updateSearch.RoleID = this.sSOLoginDataModel.RoleID;
         this.updateSearch.jsonData = JSON.stringify(jsonData);
        
        

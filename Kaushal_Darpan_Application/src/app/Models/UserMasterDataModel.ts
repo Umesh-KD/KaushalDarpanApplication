@@ -76,6 +76,7 @@ export class UserMasterSerchModel {
   public MenuId: number = 0;
   public MenuNameEn: string = '';
   public DepartmentID: number = 0;
+  public ParentRoleID: number = 0;
 
 }
 

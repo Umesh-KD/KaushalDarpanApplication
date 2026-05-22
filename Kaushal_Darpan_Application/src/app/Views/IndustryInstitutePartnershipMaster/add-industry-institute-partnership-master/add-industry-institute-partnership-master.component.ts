@@ -115,9 +115,33 @@ debugger
         // this.request.ConcernPersonDetails[0].MobileNo = this.CompanyDetails.ListCompanyHRDetails[0].MobileNo
         // this.request.ConcernPersonDetails[0].EmailId = this.CompanyDetails.ListCompanyHRDetails[0].EmailId
         // this.request.ConcernPersonDetails[0].Name = this.CompanyDetails.ListCompanyHRDetails[0].Name
-        this.personRequest.MobileNo = this.CompanyDetails.ListCompanyHRDetails[0].MobileNo
-        this.personRequest.EmailId = this.CompanyDetails.ListCompanyHRDetails[0].EmailId
-        this.personRequest.Name = this.CompanyDetails.ListCompanyHRDetails[0].Name
+        // this.personRequest.MobileNo = this.CompanyDetails.ListCompanyHRDetails[0].MobileNo
+        // this.personRequest.EmailId = this.CompanyDetails.ListCompanyHRDetails[0].EmailId
+        // this.personRequest.Name = this.CompanyDetails.ListCompanyHRDetails[0].Name
+
+
+        // HR LIST BIND
+        this.request.ConcernPersonDetails = [];
+
+        if (
+          this.CompanyDetails.ListCompanyHRDetails &&
+          this.CompanyDetails.ListCompanyHRDetails.length > 0
+        ) {
+
+          this.request.ConcernPersonDetails =
+            this.CompanyDetails.ListCompanyHRDetails.map((x: any) => {
+
+              let hr = new ConcernPersonDetailsDataModel();
+
+              hr.HRManagerID = x.HRManagerID;
+              hr.PlacementCompanyID = x.PlacementCompanyID;
+              hr.Name = x.Name;
+              hr.MobileNo = x.MobileNo;
+              hr.EmailId = x.EmailId;
+
+              return hr;
+            });
+        }
 
       })
     } catch (error) {

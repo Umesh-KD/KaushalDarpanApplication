@@ -124,9 +124,38 @@ export class AddhostelfeemanagementComponent implements OnInit {
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.request.CourseTypeID = 0
     this.request.HostelId = 0;
-   
+
     const isUpdate = this.request.HostelFeeId && this.request.HostelFeeId > 0;
 
+    //  try {
+    //    const data: any = await this._HostelManagmentService.SaveHostelFee(this.request);
+
+    //    this.State = data.State;
+    //    this.Message = data.Message;
+    //    this.ErrorMessage = data.ErrorMessage;
+
+    //    if (this.State === EnumStatus.Success) {
+
+    //      const successMsg = isUpdate
+    //        ? 'Hostel fee updated successfully'
+    //        : 'Hostel fee saved successfully';
+
+    //      this.toastr.success(successMsg);
+    //      this.routers.navigate(['/hostel-fee-management']);
+    //    }
+    //    else {
+    //      this.toastr.error(this.ErrorMessage);
+    //    }
+
+    //  } catch (ex) {
+    //    console.error(ex);
+    //  } finally {
+    //    setTimeout(() => {
+    //      this.loaderService.requestEnded();
+    //      this.isLoading = false;
+    //    }, 200);
+    //  }
+    //}
     try {
       const data: any = await this._HostelManagmentService.SaveHostelFee(this.request);
 
@@ -136,11 +165,8 @@ export class AddhostelfeemanagementComponent implements OnInit {
 
       if (this.State === EnumStatus.Success) {
 
-        const successMsg = isUpdate
-          ? 'Hostel fee updated successfully'
-          : 'Hostel fee saved successfully';
+        this.toastr.success(this.Message);
 
-        this.toastr.success(successMsg);
         this.routers.navigate(['/hostel-fee-management']);
       }
       else {
@@ -156,7 +182,6 @@ export class AddhostelfeemanagementComponent implements OnInit {
       }, 200);
     }
   }
-
 
   async ResetControl() {
     debugger

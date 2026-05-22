@@ -73,7 +73,9 @@
 
           </label>
           <input type="text" class="form-input" placeholder="Enter Mobile No" name="MobileNo"
-                 [(ngModel)]="request.MobileNo" formControlName="MobileNo">
+                [(ngModel)]="request.MobileNo" formControlName="MobileNo"
+                maxlength="10" minlength="10"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
           <div *ngIf="isSubmitted && _IIPMasterFormGroup.MobileNo.errors" class="form-text text-danger">
             <p *ngIf="_IIPMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>

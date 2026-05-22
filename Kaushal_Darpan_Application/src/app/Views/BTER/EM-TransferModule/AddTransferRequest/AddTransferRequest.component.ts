@@ -414,7 +414,7 @@ export class AddTransferRequestComponent {
 
     try {
       this.loaderService.requestStarted();
-
+      this.request.RoleID = this.sSOLoginDataModel.RoleID;
       await this.staffServiceDetailsService.Save_StaffTansferRequestDetails(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {

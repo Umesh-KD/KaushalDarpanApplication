@@ -265,10 +265,11 @@
                   <td>{{ row.Address }}</td>
                   <!-- <td>{{ row.DistrictID }}</td> -->
                   <td>
-                    <span [ngClass]="{
-                        'bg-green-100 text-white px-3 py-3 rounded': row.Action == 'Approved',
-                        'bg-yellow-100 text-white px-3 py-3 rounded': row.Action == 'Pending',
-                        'bg-danger text-white px-3 py-3 rounded': row.Action == 'Rejected'
+                    <span 
+                      [ngClass]="{
+                        'bg-green-100 ': row.Action == 'Approved',
+                        'bg-yellow-100 ': row.Action == 'Pending',
+                        'bg-red-100 ': row.Action == 'Rejected'
                       }">
                       {{ row.Action }}
                     </span>
@@ -315,9 +316,9 @@
 
                   <td>
                     <span [ngClass]="{
-                      'bg-green-100 text-white px-2 py-1 rounded': row.Action == 'Approved',
-                      'bg-yellow-100 text-white px-2 py-1 rounded': row.Action == 'Pending',
-                      'bg-danger text-white px-2 py-1 rounded': row.Action == 'Rejected'
+                      'bg-green-100 ': row.Action == 'Approved',
+                      'bg-yellow-100 ': row.Action == 'Pending',
+                      'bg-red-100 ': row.Action == 'Rejected'
                     }">
                       {{ row.Action }}
                     </span>
