@@ -495,7 +495,8 @@ export class EmitraFeeTransactionHistoryComponent {
   {
     if (this.selectedItems.length > 0) {
       try {
-        for (const item of this.selectedItems) {
+        for (const item of this.selectedItems)
+        {
           let obj: TransactionStatusDataModel = {
             TransactionID: item.TransactionId,
             DepartmentID: item.DepartmentID,
@@ -510,6 +511,7 @@ export class EmitraFeeTransactionHistoryComponent {
             ExamStudentStatus: 0,
             IsEmitra: item.IsEmitra
           };
+
           await this.emitraPaymentService.ITINCVTEXAMVerification(obj)
             .then(async (data: any) => {
               data = JSON.parse(JSON.stringify(data));
@@ -518,12 +520,16 @@ export class EmitraFeeTransactionHistoryComponent {
               this.ErrorMessage = data['ErrorMessage'];
 
               if (data.State == EnumStatus.Success) {
-                if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS') {
-                  if (data.Data?.PRN) {
+                if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS')
+                {
+                  if (data.Data?.PRN)
+                  {
                     this.toastr.success(`Fee Paid Successfully for PRN: ${data.Data.PRN}`);
-                    await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+                 
                   }
-                } else {
+                }
+                else
+                {
                   this.toastr.error(this.Message);
                 }
               } else {
@@ -531,12 +537,15 @@ export class EmitraFeeTransactionHistoryComponent {
               }
             })
 
-            .catch(err => {
+            .catch(err =>
+            {
               console.error('Payment check failed for one item:', err);
               this.toastr.error('Payment check failed for one item');
             });
         }
+
         this.selectedItems = [];
+        await this.getStudentFeesTransactionHistoryList();
       } catch (ex) {
         console.error('Unexpected error:', ex);
       } finally {
