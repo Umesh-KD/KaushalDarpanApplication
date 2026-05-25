@@ -73,7 +73,7 @@ export class StudentAttendanceComponent implements OnInit {
   endInTableIndex: number = 10;
   streamId!: number;
   semesterId!: number;
-  sectionId!: number;
+  sectionId!: string;
   subjectId!: number;
   StaffID: number = 0;
   rosterId: number = 0;
@@ -122,8 +122,8 @@ export class StudentAttendanceComponent implements OnInit {
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     // Access the route parameters
+    this.sectionId = this.route.snapshot.paramMap.get('sectionId') ?? '';
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
-    this.sectionId = parseInt(this.route.snapshot.paramMap.get('sectionId') ?? "0");
     this.semesterId = parseInt(this.route.snapshot.paramMap.get('semesterId') ?? "0");
     this.subjectId = parseInt(this.route.snapshot.paramMap.get('subjectId') ?? "0");
     this.StaffID = parseInt(this.route.snapshot.paramMap.get('StaffID') ?? '0');
@@ -167,19 +167,32 @@ export class StudentAttendanceComponent implements OnInit {
     };
 
     await this.getSubjectMasterDDL(this.streamId, this.semesterId);
-
+    const sectionIds1 = this.sectionId
+      .split(',')
+      .map(x => Number(x));
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
-      SectionID: this.sectionId,
+      SectionID: sectionIds1[0], // important
       SubjectID: this.subjectId
+
     });
     if (this.isreassign === true) {
 
+      const sectionIds = this.sectionId
+        .split(',')
+        .map(x => Number(x));
+
+      // Filter dropdown first
+      this.GetSectionData = this.GetSectionData.filter(x =>
+        sectionIds.includes(x.ID)
+      );
+
+      // Then patch form
       this.TableForm.patchValue({
         StreamID: this.streamId,
         SemesterID: this.semesterId,
-        SectionID: this.sectionId,
+        SectionID: sectionIds[0], // important
         SubjectID: this.subjectId,
         AttendanceStartDate: this.fromDate,
         AttendanceEndDate: this.toDate,
@@ -187,16 +200,14 @@ export class StudentAttendanceComponent implements OnInit {
         AttandanceTimeID: this.rosterId
       });
 
-      // Freeze fields
+      // Disable fields
       this.TableForm.get('StreamID')?.disable();
       this.TableForm.get('SemesterID')?.disable();
-      this.TableForm.get('SectionID')?.disable();
       this.TableForm.get('SubjectID')?.disable();
       this.TableForm.get('AttendanceStartDate')?.disable();
       this.TableForm.get('AttendanceEndDate')?.disable();
       this.TableForm.get('DayID')?.disable();
       this.TableForm.get('AttandanceTimeID')?.disable();
-
     }
     
 
@@ -332,7 +343,7 @@ export class StudentAttendanceComponent implements OnInit {
 
     //const sectionID = this.TableForm.value.SectionID ? this.sectionId : this.TableForm.value.SectionID;
     // await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
-    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.StaffID, this.subjectId, this.streamId, this.TableForm.value.SectionID, this.TableForm.value.DayID).then((data: any) => {
+    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.StaffID, this.subjectId, this.streamId, this.TableForm.value.SectionID, this.TableForm.getRawValue().DayID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       // debugger
       this.StudentAttandanceTimeDDL = data.Data;
@@ -383,8 +394,8 @@ export class StudentAttendanceComponent implements OnInit {
   async GetStaffLeaveAllData() {
     try {
       //debugger
-      const rawStart = this.TableForm.value.AttendanceStartDate;
-      const rawEnd = this.TableForm.value.AttendanceEndDate;
+      const rawStart = this.TableForm.getRawValue().AttendanceStartDate;
+      const rawEnd = this.TableForm.getRawValue().AttendanceEndDate;
 
       // Parse correctly whether string or Date
 
@@ -548,15 +559,15 @@ export class StudentAttendanceComponent implements OnInit {
 
   async GetAttendanceTimeTable() {
     try {
-      //  debugger;
+        debugger;
 
-      if (this.TableForm.value.AttandanceTimeID == 0) {
+      if (this.TableForm.getRawValue().AttandanceTimeID == 0) {
         this.toastr.warning("Select Attendance Time");
         return;
       }
 
-      const rawStart = this.TableForm.value.AttendanceStartDate;
-      const rawEnd = this.TableForm.value.AttendanceEndDate;
+      const rawStart = this.TableForm.getRawValue().AttendanceStartDate;
+      const rawEnd = this.TableForm.getRawValue().AttendanceEndDate;
 
       // Parse correctly whether string or Date
       const formattedDateStart =
@@ -581,7 +592,7 @@ export class StudentAttendanceComponent implements OnInit {
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         StaffID: this.StaffID,
-        TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
+        TimeDDLID: this.TableForm.getRawValue().AttandanceTimeID || 0,
       };
 
       this.filterData = [];
