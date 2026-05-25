@@ -176,10 +176,10 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-      // Default Action
+     
       this.Searchrequest.Action = "AllHostelStudentMeritlistShowByPrinciple";
 
-      // Merit Generated Status
+      
       if (
         this.Searchrequest.status == HostelStatus.AffidavitApproved ||
         this.Searchrequest.status == HostelStatus.PublishProvisionalMerit ||
@@ -188,7 +188,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
         this.Searchrequest.Action = "HostelMeritList_Generated";
       }
 
-      // Apply Status
+     
       if (this.Searchrequest.status == HostelStatus.Apply) {
         this.Searchrequest.Action = "AllHostelStudentMeritlistShowByPrinciple";
       }
