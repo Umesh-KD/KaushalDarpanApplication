@@ -464,7 +464,7 @@ export class EmitraFeeTransactionHistoryComponent {
                 if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS') {
                   if (data.Data?.PRN) {
                     this.toastr.success(`Fee Paid Successfully for PRN: ${data.Data.PRN}`);
-                    await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+                   
                   }
                 } else {
                   this.toastr.error(this.Message);
@@ -479,7 +479,10 @@ export class EmitraFeeTransactionHistoryComponent {
               this.toastr.error('Payment check failed for one item');
             });
         }
+
         this.selectedItems = [];
+        await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+
       } catch (ex) {
         console.error('Unexpected error:', ex);
       } finally {
@@ -525,7 +528,6 @@ export class EmitraFeeTransactionHistoryComponent {
                   if (data.Data?.PRN)
                   {
                     this.toastr.success(`Fee Paid Successfully for PRN: ${data.Data.PRN}`);
-                 
                   }
                 }
                 else
@@ -536,7 +538,6 @@ export class EmitraFeeTransactionHistoryComponent {
                 this.toastr.error(this.ErrorMessage);
               }
             })
-
             .catch(err =>
             {
               console.error('Payment check failed for one item:', err);
@@ -546,9 +547,14 @@ export class EmitraFeeTransactionHistoryComponent {
 
         this.selectedItems = [];
         await this.getStudentFeesTransactionHistoryList();
-      } catch (ex) {
+
+      }
+      catch (ex)
+      {
         console.error('Unexpected error:', ex);
-      } finally {
+      }
+      finally
+      {
         setTimeout(() => {
           this.loaderService.requestEnded();
         }, 200);
