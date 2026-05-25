@@ -94,14 +94,23 @@ export class ApproveCompanyEventComponent {
   }
 
   async ViewCompanyEvents(content: any, CompanyID: number) {
+    // clear old data first
+    this.CompanyEventsList = [];
     await this.GetCompanyEvents(CompanyID)
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+
+     this.modalReference.result.finally(() => {
+     this.CompanyEventsList = [];
+    });
   }
 
   async GetCompanyEvents(CompanyID: number) {
     try {
       
+       // reset list before api call
+      this.CompanyEventsList = [];
       this.companyEventSearch.CompanyID = CompanyID;
+      this.companyEventSearch.RoleID = this.sSOLoginDataModel.RoleID
       await this.industryInstitutePartnershipMasterService.GetCompanyEvents(this.companyEventSearch)
         .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -119,6 +128,8 @@ export class ApproveCompanyEventComponent {
   }
 
   CloseEventModal() {
+    // clear modal data
+    this.CompanyEventsList = [];
     this.modalService.dismissAll();
     this.companyEventSearch = new CompanyEventSearchModel()
   }

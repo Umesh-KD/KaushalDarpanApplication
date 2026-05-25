@@ -39,7 +39,21 @@
             <option *ngFor="let item of statusList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            From Date
+          </label>
+          <input type="date" class="form-input" placeholder="Enter From Date" name="FromDate"
+              [(ngModel)]="searchRequest.FromDate">
+        </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            To Date
+          </label>
+          <input type="date" class="form-input" placeholder="Enter To Date" name="ToDate"
+              [(ngModel)]="searchRequest.ToDate">
+        </div>
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GuestRequestList()">Search</button>

@@ -120,7 +120,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
     }
   }
   async GetAllPrincipalstudentmeritlist() {
-     
+    debugger;
     try {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;

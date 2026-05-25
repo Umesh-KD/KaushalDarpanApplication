@@ -11,6 +11,7 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { HostelManagmentService } from '../../../Services/HostelManagment/HostelManagment.service';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
+import { HostelFeeModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
 
 @Component({
   selector: 'app-List-hostel-fee-management',
@@ -19,6 +20,7 @@ import { StudentRequestService } from '../../../Services/StudentRequest/student-
   standalone: false
 })
 export class ListhostelfeemanagementComponent {
+  public Searchrequest = new HostelFeeModel();
   public State: number = -1;
   groupForm!: FormGroup;
   public Message: any = [];
@@ -92,9 +94,12 @@ export class ListhostelfeemanagementComponent {
   }
 
   async GetHostelFee() {
+    debugger
     try {
       this.loaderService.requestStarted();
-      await this._HostelManagmentService.getHostelFeeList()
+      this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      await this._HostelManagmentService.getHostelFeeList(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];

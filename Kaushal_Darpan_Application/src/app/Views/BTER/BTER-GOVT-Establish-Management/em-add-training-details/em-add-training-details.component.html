@@ -341,6 +341,10 @@
                 <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
 
                 <a *ngIf="!row.ComplitionTrainingDoc && row.isTrainingCom === 1" href="javascript:void(0);" title="Doc update" (click)="onEmtrainingDocUpdate(EmtrainingDocUpdate, row.StaffTrainingDetailID)"><i class="fa-upload"></i></a>
+
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(row.StaffTrainingDetailID)" *ngIf="_EnumStaffTrainingStatus.Applied== row.StatusID">
+                  <i class="ti ti-trash"></i>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -440,6 +444,9 @@
               </td>
               <td>
                 <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
+                <button  class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(row.StaffTrainingDetailID)" *ngIf="_EnumStaffTrainingStatus.Applied== row.StatusID">
+                  <i class="ti ti-trash"></i>
+                </button>
               </td>
             </tr>
           </tbody>
@@ -474,6 +481,7 @@
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
                 <th class="text-left">S No</th>
+                <th class="text-left">Action By</th>
                 <th class="text-left">Status</th>
                 <th class="text-left">Remark</th>
                 <th class="text-left">Date</th>
@@ -482,6 +490,7 @@
             <tbody>
               <tr *ngFor="let row of StaffTrainingHTS_GetDataList; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.ActionByRole }}</td>
                 <td align="left">{{ row.StatusName }}</td>
                 <td align="left">{{ row.Remarks}}</td>
                 <td align="left">{{ row.ActionDate }}</td>

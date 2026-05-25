@@ -127,6 +127,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == _ITIGovtEM_EnumStaffLevel.GuestRoomWarden">GuestRoom Warden <span class="StarMarking">*</span></label>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == _ITIGovtEM_EnumStaffLevel.Staff">Staff <span class="StarMarking">*</span></label>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == _ITIGovtEM_EnumStaffLevel.StoreKeeper">StoreKeeper <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == _ITIGovtEM_EnumStaffLevel.StoreIncharge">Store Incharge <span class="StarMarking">*</span></label>
           <select formControlName="StaffLevelChild" (change)="GetChangeTechcian()" class="form-select" [(ngModel)]="formData.StaffLevelChildID" [ngModelOptions]="{standalone: true}">
             <option value="0">--Choose Option--</option>
 

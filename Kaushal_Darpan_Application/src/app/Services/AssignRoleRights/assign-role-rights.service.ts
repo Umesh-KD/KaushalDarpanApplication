@@ -51,4 +51,20 @@ export class AssignRoleRightsService {
        catchError(this.handleErrorObservable)
      ).toPromise();
   }
+
+  public async GetAssignedRole_USerWise(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAssignedRole_USerWise`,body, this.headersOptions)
+     .pipe(
+       catchError(this.handleErrorObservable)
+     ).toPromise();
+  }
+
+  public async SaveAssignedRole_UserWise(request: AssignRoleRightsDataModel[]) {
+    var body = JSON.stringify(request);  
+    return await this.http.post(`${this.APIUrl}/SaveAssignedRole_UserWise`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

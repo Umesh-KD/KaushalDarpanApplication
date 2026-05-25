@@ -4,12 +4,10 @@ import { CommonFunctionService } from '../../Services/CommonFunction/common-func
 
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
-import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../Models/CompanyMasterDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
-import { ITIStudentEnrollmentService } from '../../Services/ITI/ITIstudentenrollment/itistudent-enrollment.service';
 import { ItiDataMasterService } from '../../Services/ITI/ITIDataMaster/iti-datamaster.service';
 import { BTERStudentDetailsMasterSearchModel, BTERStudentProfileUpdateModel, ITIStudentCorrectionMasterSearchModel } from '../../Models/StudentMasterModels';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -78,14 +76,14 @@ export class UpdateStudentDetailComponent implements OnInit {
     //         txtActionRemarks: ['', Validators.required],
     //       })
    this.formAction = this.formBuilder.group({
-  nameEn: [{ value: '', disabled: true }],
+  nameEn: [{ value: '' }],
   nameHi: [''],
-  fatherNameEn: [{ value: '', disabled: true }],
+  fatherNameEn: [{ value: ''}],
   fatherNameHi: [''],
-  motherNameEn: [{ value: '', disabled: true }],
+  motherNameEn: [{ value: ''}],
   motherNameHi: [''],
   enrollmentNo: [{ value: '', disabled: true }],
-  dob: [{ value: '', disabled: true }],
+  dob: [{ value: ''}],
   mobileNo: [''],
   supportingDocument: [''],
   supportingRemark: [''],
@@ -164,7 +162,7 @@ export class UpdateStudentDetailComponent implements OnInit {
   }
 
   async GetStudentDetailsList(i:any) {
-    debugger
+    //debugger
     console.log(i);
     if(i==1){
       this.pageNo=1;
@@ -226,7 +224,7 @@ export class UpdateStudentDetailComponent implements OnInit {
   }
 
     async GetStudentDetailsByID() {
-    debugger
+    //debugger
     try {
 
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
@@ -289,7 +287,7 @@ export class UpdateStudentDetailComponent implements OnInit {
   
        
         //call
-        debugger
+        //debugger
         await this.documentDetailsService.UploadDocument(event, uploadModel)
           .then((data: any) => {
             this.State = data['State'];
@@ -315,7 +313,7 @@ export class UpdateStudentDetailComponent implements OnInit {
     }
 
   openOTP(StudentExamPaperMarksID: number = 0) {
-    debugger
+    //debugger
     // this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     this.childComponent.MobileNo="8334874706"
     this.childComponent.OpenOTPPopup();
@@ -328,7 +326,7 @@ export class UpdateStudentDetailComponent implements OnInit {
   }
 
     async SaveData() {
-      debugger
+      //debugger
       try {
         // this.isSubmitted = true;
       
@@ -360,21 +358,19 @@ export class UpdateStudentDetailComponent implements OnInit {
         //save
         // await this.ApplicationService.UpdateStudentQualificationDetails(this.req)
           await this.StudentdetailUpdateService.SaveStudentProfileData(this.requestAction)
-          .then((data: any) => {
+          .then(async (data: any) => {
             data = JSON.parse(JSON.stringify(data));
             console.log(data);
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
   
             if (data.State = EnumStatus.Success) {
-              this.toastr.success(this.Message)
+              this.toastr.success(data.Message)
               this.CloseModalPopup();
+              await this.GetStudentDetailsList(1);
               // this.ResetControls();
               // this.routers.navigate(['/CompanyMaster']);
             }
             else {
-              this.toastr.error(this.ErrorMessage)
+              this.toastr.error(data.ErrorMessage)
             }
             //  this.Router.navigateByUrl('/student-additional-qualification');
   
