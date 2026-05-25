@@ -39,7 +39,8 @@ export class ItemsDataModels {
   public BillFilePath : string = '';
   public Specification? : string = '';
   public IsRequested: boolean = false;
-  public ItemDetailID:number=0
+  public ItemDetailID: number = 0;
+  public MappingId: number = 0;
   
 }
 export class ItemsSearchModel {

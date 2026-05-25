@@ -193,7 +193,7 @@ export class DteAddItemsMasterComponent {
       }
       this.request.BillFileName = this.FileName;
       this.request.BillFilePath = 'StockRegisterBillUpload/' + this.FileName;
-
+      debugger
       await this.itemService.SaveData(this.request)
         .then((data: any) => {
           this.State = data['State'];
@@ -290,6 +290,7 @@ export class DteAddItemsMasterComponent {
           }  
           this.request.QuantityIssued=data['Data']["QuantityIssued"];
           this.request.QuantityBalance=data['Data']["QuantityBalance"];
+          this.request.MappingId = data['Data']["MappingId"];
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
 
