@@ -285,7 +285,7 @@ export class PaperCountReportComponent implements OnInit {
 
 
   exportToExcel(): void {
-    debugger;
+    //debugger;
 
     this.selectedNames = this.UniqueKeys.map(column => column.name);
 
@@ -367,7 +367,7 @@ export class PaperCountReportComponent implements OnInit {
   filtersApplied = false;
   
   async SubmitData() {
-    debugger;
+    //debugger;
     this.CustomizeReportCoulmnDataPush = [];
     try {
      
@@ -512,7 +512,7 @@ export class PaperCountReportComponent implements OnInit {
   }
 
   exportToExcelTpye2(): void {
-    debugger;
+    //debugger;
 
     this.selectedNames = this.UniqueKeys.map(column => column.name);
 
