@@ -410,7 +410,7 @@ export class StudentAttendanceComponent implements OnInit {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
-      this.searchRequest.StaffID = this.StaffID;
+      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
       this.searchRequest.From_Date = formattedDateStart;
       this.searchRequest.To_Date = formattedDateEnd;
 
