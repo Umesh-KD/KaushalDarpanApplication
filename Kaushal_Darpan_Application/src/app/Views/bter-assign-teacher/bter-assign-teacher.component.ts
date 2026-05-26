@@ -428,7 +428,7 @@ async  ngOnInit() {
       this.SubjectMasterDDL = data.Data;
     })
 
-    this.getbranchmaster(SemesterID)
+    //this.getbranchmaster(SemesterID)
     this.ChangeSubjectDDL1()
   }
 

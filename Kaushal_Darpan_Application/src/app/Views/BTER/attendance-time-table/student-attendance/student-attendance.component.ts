@@ -620,7 +620,8 @@ export class StudentAttendanceComponent implements OnInit {
               const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
               
               const isHoliday = key.includes('(Holiday)');
-              const freezeDates = isLeaveDate ? isLeaveDate : isHoliday;
+              //const freezeDates = isLeaveDate ? isLeaveDate : isHoliday;
+              const freezeDates = isLeaveDate || isHoliday;
               return { name: key, locked: isLeaveDate, isMarkOnAttendanceDate: false, isHoliday: freezeDates };
             });
 
