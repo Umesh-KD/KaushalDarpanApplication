@@ -358,6 +358,21 @@ export class AddGuestApplyForGuestRoomComponent {
     }
 
     if (this.IIPMasterFormGroup.invalid) {
+        this.toastr.error('Invalid form Details');
+        Object.keys(this.IIPMasterFormGroup.controls).forEach(key => {
+          const control = this.IIPMasterFormGroup.get(key);
+ 
+          if (control && control.invalid) {
+            this.toastr.error(`Control ${key} is invalid`);
+            // Object.keys(control.errors!).forEach(errorKey => {
+            //   this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            // });
+          }
+        });
+        return;
+      }
+
+    if (this.IIPMasterFormGroup.invalid) {
       this.toastr.error("Please enter required fields !");
       return
     }
