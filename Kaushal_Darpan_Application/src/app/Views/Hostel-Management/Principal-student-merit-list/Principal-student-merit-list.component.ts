@@ -119,51 +119,117 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
       console.error(error);
     }
   }
+  //async GetAllPrincipalstudentmeritlist() {
+  //  debugger;
+  //  try {
+  //    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+  //    this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;
+  //    this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
+  //    if(this.Searchrequest.status != HostelStatus.Apply) {
+  //      this.Searchrequest.Action ="AllHostelStudentMeritlistShowByPrinciple";
+  //    }
+
+  //    if (
+  //      this.Searchrequest.status == HostelStatus.AffidavitApproved
+  //      || this.Searchrequest.status == HostelStatus.PublishProvisionalMerit
+  //      || this.Searchrequest.status == HostelStatus.ReGenerateProvisionalMerit
+  //    ) {
+  //      this.Searchrequest.Action ="HostelMeritList_Generated";
+  //    }
+
+  //    this.loaderService.requestStarted();
+  //    await this.studentRequestService.GetAllPrincipalstudentmeritlist(this.Searchrequest)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        if (data.State == EnumStatus.Success) {
+  //          this.StudentReqListList = data['Data'];
+
+  //          this.StudentReqListList.forEach((item: any) => {
+  //            item.selected = false;
+  //          });
+
+  //          this.showRegenerateMerit = this.StudentReqListList.some((x: any) => x.MeritType === 2)
+
+  //          console.log('Student List ==>', this.StudentReqListList)
+  //        } else {
+  //          this.toastr.error(data.ErrorMessage)
+  //        }
+
+  //      }, error => console.error(error));
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
   async GetAllPrincipalstudentmeritlist() {
     debugger;
+
     try {
+
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-      if(this.Searchrequest.status != HostelStatus.Apply) {
-        this.Searchrequest.Action ="AllHostelStudentMeritlistShowByPrinciple";
+     
+      this.Searchrequest.Action = "AllHostelStudentMeritlistShowByPrinciple";
+
+      
+      if (
+        this.Searchrequest.status == HostelStatus.AffidavitApproved ||
+        this.Searchrequest.status == HostelStatus.PublishProvisionalMerit ||
+        this.Searchrequest.status == HostelStatus.ReGenerateProvisionalMerit
+      ) {
+        this.Searchrequest.Action = "HostelMeritList_Generated";
       }
 
-      if (
-        this.Searchrequest.status == HostelStatus.AffidavitApproved
-        || this.Searchrequest.status == HostelStatus.PublishProvisionalMerit
-        || this.Searchrequest.status == HostelStatus.ReGenerateProvisionalMerit
-      ) {
-        this.Searchrequest.Action ="HostelMeritList_Generated";
-      }   
+     
+      if (this.Searchrequest.status == HostelStatus.Apply) {
+        this.Searchrequest.Action = "AllHostelStudentMeritlistShowByPrinciple";
+      }
 
       this.loaderService.requestStarted();
-      await this.studentRequestService.GetAllPrincipalstudentmeritlist(this.Searchrequest)
+
+      await this.studentRequestService
+        .GetAllPrincipalstudentmeritlist(this.Searchrequest)
         .then((data: any) => {
+
           data = JSON.parse(JSON.stringify(data));
+
           if (data.State == EnumStatus.Success) {
+
             this.StudentReqListList = data['Data'];
 
             this.StudentReqListList.forEach((item: any) => {
               item.selected = false;
             });
 
-            this.showRegenerateMerit = this.StudentReqListList.some((x: any) => x.MeritType === 2)
+            this.showRegenerateMerit =
+              this.StudentReqListList.some((x: any) => x.MeritType === 2);
 
-            console.log('Student List ==>', this.StudentReqListList)
+            console.log('Student List ==>', this.StudentReqListList);
+
           } else {
-            this.toastr.error(data.ErrorMessage)
+            this.toastr.error(data.ErrorMessage);
           }
-          
+
         }, error => console.error(error));
+
     } catch (Ex) {
+
       console.log(Ex);
+
     } finally {
+
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+
     }
   }
 
