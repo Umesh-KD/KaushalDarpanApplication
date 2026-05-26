@@ -137,6 +137,7 @@
             <th class="text-left">Issue Date</th>
             <th class="text-left">Return Date</th>
             <th class="text-left">Equipment Status on Return</th>
+            <th class="text-left">Issue Document </th>
             <th class="text-left">Status</th>
             <th class="text-left">Action</th>
           </tr>
@@ -169,14 +170,22 @@
                 {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Serviceable' : 'Unserviceable' }}
               </span>
             </td>
+            <td>
+              <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + item.IssueItemDocument }}"
+                 *ngIf="item.IssueItemDocument!=''" class="btn bg-primary text-white m-0" target="_blank">
+                <i class="ti ti-eye"></i>
+              </a>
+
+            </td>
+
             <td align="left">
               <!-- <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
-                                 'InvStatus-issued': item.IssueStatus === 2,
-                                 'InvStatus-reject': item.IssueStatus === 3,
-                                 'InvStatus-returned': item.IssueStatus === 4
-                               }">
-                {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
-              </span> -->
+                       'InvStatus-issued': item.IssueStatus === 2,
+                       'InvStatus-reject': item.IssueStatus === 3,
+                       'InvStatus-returned': item.IssueStatus === 4
+                     }">
+      {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
+    </span> -->
               <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
                                  'InvStatus-issued': item.IssueStatus === 2 && item.ReturnStatus === 0,
                                  'InvStatus-reject': item.IssueStatus === 3,
@@ -193,9 +202,9 @@
                    class="p-1">
                   <i class="ti ti-eye"></i>
                 </a>
-                </div>
+              </div>
             </td>
-            
+
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10">
@@ -236,6 +245,7 @@
                 <th class="text-left">Used Quantity</th>
                 <th class="text-left">Remaining Quantity</th>
                 <th class="text-left">Issue Date</th>
+                <th class="text-left">Issue Document </th>
                 <th class="text-left">Return Date</th>
                 <th class="text-left">Equipment Status on Return</th>
                 <th class="text-left">Status</th>
@@ -263,6 +273,13 @@
                 <td align="left">{{ item.UsedQuantity}}</td>
                 <td align="left">{{ item.RemainingQuantity}}</td>
                 <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+                <td>
+                  <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + item.IssueItemDocument }}"
+                     *ngIf="item.IssueItemDocument!=''" class="btn bg-primary text-white m-0" target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
+
+                </td>
                 <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
                 <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
                 <td align="left">

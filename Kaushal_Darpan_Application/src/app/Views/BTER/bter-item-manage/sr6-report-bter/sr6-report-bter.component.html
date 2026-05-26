@@ -114,6 +114,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Item no</th>
+            <th class="text-left">Item Code</th>
             <th class="text-left">Particulars of stores</th>
             <th class="text-left">Quantity/weight</th>
             <th class="text-left">Book value original purchase price</th>
@@ -130,6 +131,7 @@
             
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Particulars_of_stores}}</td>
+            <td align="left">{{ item.ItemCode}}</td>
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.Purchase_price}}</td> 
             <td align="left">{{ item.Present_condition}}</td> 

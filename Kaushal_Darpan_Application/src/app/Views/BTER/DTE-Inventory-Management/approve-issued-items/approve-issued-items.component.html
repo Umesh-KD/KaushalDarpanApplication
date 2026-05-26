@@ -108,7 +108,9 @@
             <th class="text-left">Indent No</th>
             <th class="text-left">Issue Date</th>
             <th class="text-left">Issued Quantity</th>
+            <th class="text-left">Issue Document </th>
             <th class="text-left">Approve Issue Quantity</th>
+
           </tr>
         </thead>
         <tbody>
@@ -130,7 +132,13 @@
             <td align="left">{{ item.IndentNo}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.Quantity}}</td>
+            <td>
+              <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + item.IssueItemDocument }}"
+                 *ngIf="item.IssueItemDocument!=''" class="btn bg-primary text-white m-0" target="_blank">
+                <i class="ti ti-eye"></i>
+              </a>
 
+            </td>
             <td align="left">
               <div class="flex">
                 <input class="form-input" style="width:100px" type="text" tabindex="{{idx}}" id="txtObtainedTheory"

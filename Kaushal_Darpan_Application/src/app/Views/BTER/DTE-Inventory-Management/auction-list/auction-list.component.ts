@@ -283,8 +283,21 @@ export class AuctionListComponent {
           this.ErrorMessage = data['ErrorMessage'];
 
           this.ItemMasterList = data['Data'];
+          if (this.Searchrequest.EquipmentsId != 0) {
+            this.ItemMasterList = this.ItemMasterList.flter((item: any) => item.EquipmentsId == this.Searchrequest.EquipmentsId);
+          } else {
+            this.ItemMasterList = data['Data'];
+          }
+          
           this.loadInTable();
           this.ItemMasterList1 = data['Data'];
+          if (this.Searchrequest.EquipmentsId != 0) {
+            this.ItemMasterList1 = this.ItemMasterList1.flter((item: any) => item.EquipmentsId == this.Searchrequest.EquipmentsId);
+          } else {
+            this.ItemMasterList1 = data['Data'];
+          }
+
+
         }, error => console.error(error));
     }
     catch (Ex) {
