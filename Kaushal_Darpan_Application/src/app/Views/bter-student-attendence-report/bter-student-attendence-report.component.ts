@@ -286,11 +286,6 @@ export class BterStudentAttendenceReportComponent {
       // debugger
       this.StudentAttandanceTimeDDL = data.Data;
 
-      if (this.StudentAttandanceTimeDDL && this.StudentAttandanceTimeDDL.length > 0) {
-        this.TableForm.get('SubjectID')?.disable();
-        // this.TableForm.get('StreamID')?.disable();
-        // this.TableForm.get('SemesterID')?.disable();
-      }
       //else {
       // this.TableForm.get('SubjectID')?.enable();
       // this.TableForm.get('StreamID')?.enable();
@@ -526,9 +521,9 @@ export class BterStudentAttendenceReportComponent {
         InstituteID: this.sSOLoginDataModel.InstituteID,
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.TableForm.value.StreamID||0,
-        SectionID: this.TableForm.value.SectionID||0,
-        SubjectID: this.TableForm.value.SubjectID|| 0,
+        StreamID: this.TableForm.getRawValue().StreamID,
+        SectionID: this.TableForm.getRawValue().SectionID,
+        SubjectID: this.TableForm.getRawValue().SubjectID || 0,
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         StaffID: this.StaffID,

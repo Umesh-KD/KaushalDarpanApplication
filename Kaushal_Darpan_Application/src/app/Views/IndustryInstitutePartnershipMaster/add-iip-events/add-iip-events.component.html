@@ -307,7 +307,7 @@
 
 
 
-              <button type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(request.SSOID)">GetDetails</button>
+              <button type="button"  *ngIf="!IsViewMode" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(request.SSOID)">GetDetails</button>
 
             </div>
 

@@ -133,18 +133,23 @@ export class BranchSectionCreateComponent {
     await this.staffMasterService.GetHODWiseSemester(this.GetHODWiseSemester)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        //debugger
+        debugger
         this.GetdataHODWiseSemester = data.Data  
       }, error => console.error(error));
 //debugger
     await this.commonMasterService.SemesterMaster().then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
+      data = JSON.parse(JSON.stringify(data));  
       this.SemesterMasterDDL = data.Data;
-      //debugger
+      debugger
       if (this.SemesterMasterDDL.length > 0) {
-        const allowedSemesters = this.GetdataHODWiseSemester?.[0]?.SemesterID
-          ?.split(',')
-          ?.map((id: string) => id.trim()) || [];
+        const allowedSemesters = this.GetdataHODWiseSemester
+          ?.flatMap((x: any) =>
+            x.SemesterID?.split(',').map((id: string) => id.trim())
+          ) || [];
+
+        //const allowedSemesters = this.GetdataHODWiseSemester?.[0]?.SemesterID
+        //  ?.split(',')
+        //  ?.map((id: string) => id.trim()) || [];
 
         this.SemesterMasterDDL = this.SemesterMasterDDL.filter((x: any) =>
           allowedSemesters.includes(x.SemesterID?.toString())
