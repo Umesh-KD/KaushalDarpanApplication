@@ -11,6 +11,7 @@ import { EnumDepartment, EnumRole, EnumStatus, EnumWS_DepartmentSub } from '../.
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-OrderAndCircular',
@@ -39,9 +40,12 @@ export class OrderAndCircularComponent {
     private toastr: ToastrService,
     private websiteSettingsService: WebsiteSettingsService,
     public appsettingConfig: AppsettingService,
+    private route: ActivatedRoute
   ) { }
 
   async ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id') ?? '0';
+
     this.HighlightsFromGroup = this.formBuilder.group({
       Title: ['', Validators.required],
     
@@ -51,6 +55,18 @@ export class OrderAndCircularComponent {
       DepartmentSubID: ['0', [DropdownValidators]],
       TypeID: ['0', [DropdownValidators]],
     });
+
+
+    if (id != '0')
+    {
+    this.HighlightsFromGroup.patchValue({
+      DepartmentSubID: id
+    });
+      this.HighlightsFromGroup.get('DepartmentSubID')?.disable();
+    }
+    
+
+   
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.todayDate = new Date().toISOString().substring(0, 16);
     this.GetDynamicUploadTypeDDL();
