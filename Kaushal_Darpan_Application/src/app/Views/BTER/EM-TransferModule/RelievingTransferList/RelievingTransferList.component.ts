@@ -78,7 +78,7 @@ import * as XLSX from 'xlsx';
     isJDTECheck: boolean = false;
     EnumTransferSystemStatus = EnumTransferSystemStatus;
     public isShowDate: boolean = false;
-
+    public RelievingTimeID: number = 0;
     @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
     todayDate: string = new Date(
       new Date().getTime() - new Date().getTimezoneOffset() * 60000
@@ -316,6 +316,7 @@ import * as XLSX from 'xlsx';
           return;
         }
 
+        
         if (this.updateStatus == EnumTransferRelievingStatus.Rejected) {
           if (!this.Remark || this.Remark.trim() === '') {
             this.toastr.warning("Please enter a remark.");
@@ -323,9 +324,17 @@ import * as XLSX from 'xlsx';
           }
         }
 
+       
+
+
         if (this.updateStatus != EnumTransferRelievingStatus.Rejected) {
           if (!this.RelievingDate || this.RelievingDate == '') {
             this.toastr.warning("Please enter a Relieving Date.");
+            return;
+          }
+
+          if (this.RelievingTimeID === 0) {
+            this.toastr.warning("Please Select Relieving Time");
             return;
           }
 
@@ -339,6 +348,8 @@ import * as XLSX from 'xlsx';
         this.updateExtSearch.TransferSystemID = this.modelTsId;
         this.updateExtSearch.RelievingDate = this.RelievingDate;
         this.updateExtSearch.RoleID = this.sSOLoginDataModel.RoleID;
+        this.updateExtSearch.RelievingTimeID = this.RelievingTimeID;
+        this.updateExtSearch.ActionBy = this.sSOLoginDataModel.UserID;
         
 
 
