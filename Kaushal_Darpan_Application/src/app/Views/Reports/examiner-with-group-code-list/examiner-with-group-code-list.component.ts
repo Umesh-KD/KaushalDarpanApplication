@@ -168,7 +168,7 @@ export class ExaminerWithGroupCodeListComponent implements OnInit {
 
   // Fetching the data from the service and updating the table
   async GetAllData() {
-    debugger
+    //debugger
     this.requestData.EndTermID=this.sSOLoginDataModel.EndTermID;
     this.requestData.DepartmentID=this.sSOLoginDataModel.DepartmentID;
     this.requestData.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng;
@@ -205,7 +205,7 @@ export class ExaminerWithGroupCodeListComponent implements OnInit {
   }
 
   async UnlockRow(GroupCode: any) {
-    debugger;
+    //debugger;
     this.unlockRequest.GroupCode = GroupCode;
     this.unlockRequest.EndTermID=this.sSOLoginDataModel.EndTermID;
     this.unlockRequest.DepartmentID=this.sSOLoginDataModel.DepartmentID;
@@ -330,7 +330,6 @@ export class ExaminerWithGroupCodeListComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DownloadFile(data.Data, 'file download');
-          alert(data.Data)
         }, (error: any) => console.error(error));
     } catch (ex) {
       console.log(ex);
