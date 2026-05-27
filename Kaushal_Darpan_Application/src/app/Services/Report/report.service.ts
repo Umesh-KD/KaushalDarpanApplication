@@ -1958,6 +1958,14 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async StudentMarksheetDownloadChunk(request: any[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StudentMarksheetDownloadChunk`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 

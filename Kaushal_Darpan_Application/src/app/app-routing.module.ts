@@ -1171,6 +1171,7 @@ const routes: Routes = [
 
       { path: 'website-settings', loadChildren: () => import('./Views/Website-Settings/website-setting/website-setting.module').then(m => m.WebsiteSettingModule), title: 'Website Settings' },
       { path: 'DynamicUploadContent', loadChildren: () => import('./Views/Website-Settings/highlights/highlights.module').then(m => m.HighlightsModule), title: 'Dynamic Upload Content' },
+      { path: 'OrderAndCircular/:id', loadChildren: () => import('./Views/Website-Settings/OrderAndCircular/OrderAndCircular.module').then(m => m.OrderAndCircularModule), title: 'OrderAndCircular' },
       { path: 'OrderAndCircular', loadChildren: () => import('./Views/Website-Settings/OrderAndCircular/OrderAndCircular.module').then(m => m.OrderAndCircularModule), title: 'OrderAndCircular' },
       { path: 'website-settings-downloads-fdgdsfgsf', loadChildren: () => import('./Views/Website-Settings/downloads/downloads.module').then(m => m.DownloadsModule), title: 'Website Settings' },
       { path: 'website-settings-circular-dfgdfgdsfg', loadChildren: () => import('./Views/Website-Settings/circular/circular.module').then(m => m.CircularModule), title: 'Website Settings' },
@@ -1610,6 +1611,7 @@ const routes: Routes = [
       { path: 'candidate-allotment-report', loadChildren: () => import('./Views/Counselling-Master/candidate-allotment-report/candidate-allotment-report.module').then(m => m.CandidateAllotmentListReportModule), title: 'Candidate Allotment List' },
       { path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List' },
       { path: 'examiner-with-group-code-list', loadChildren: () => import('./Views/Reports/examiner-with-group-code-list/examiner-with-group-code-list.module').then(m => m.ExaminerWithGroupCodeListModule), title: 'ExaminerWithGroupCodeList' },
+      { path: 'unlock-examiner-groupcode-reval', loadChildren: () => import('./Views/unlock-examiner-groupcode-reval/unlock-examiner-groupcode-reval.module').then(m => m.UnlockExaminerGroupcodeRevalModule) },
       { path: 'mass-copping-detail-report', loadChildren: () => import('./Views/Reports/mass-copping-detail-report/mass-copping-detail-report.module').then(m => m.MassCoppingDetailReportModule), title: 'MassCoppingDetailReport' },
 
 
@@ -1878,7 +1880,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
-
+  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 
 ];

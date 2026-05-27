@@ -274,6 +274,7 @@ this.showCheckbox = !this.StudentReqListList.some((x: any) => x.AllotmentStatus 
     this.Searchrequest = new StudentRequestDataModal();
     this.RequestFormGroup.reset();
     this.Searchrequest.status = 3;
+    await this.GetAllGenerateHostelWardenStudentMeritlist();
    
   }
   

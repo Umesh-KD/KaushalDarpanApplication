@@ -206,12 +206,26 @@
               Relieving Date:<span class="StarMarking">*</span>
             </label>
 
-            <input class="form-input" 
+            <input class="form-input"
                    type="date"
                    id="RelievingDate"
                    [(ngModel)]="RelievingDate"
                    [min]="todayDate">
           </div>
+
+          <div *ngIf="isShowDate == true">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Relieving Time <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" [(ngModel)]="RelievingTimeID">
+              <option value="0">--Select--</option>
+              <option value="1">First Half</option>
+              <option value="2">Second Half</option>
+            </select>
+          </div>
+
+
+
           <div class="updt-btn-man">
             <button type="submit"
                     class="btn bg-info mt-5 text-white "
