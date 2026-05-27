@@ -89,7 +89,7 @@ export class emtrainingdetailshistoryComponent {
     this.Status = "0";
     
 
-    debugger
+    
     await this.commonFunctionService.GetCommonMasterDDLByType('StaffTrainingStatus')
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -99,10 +99,12 @@ export class emtrainingdetailshistoryComponent {
         if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
           this.SearchStatus = EnumStaffTrainingStatus.Applied;
           this.StaffTrainingDetailsCompleted_Search(this.SearchStatus);
+          //this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.fliter((item: any) => item.InstituteID == this.sSOLoginDataModel.InstituteID && (item.EmpRoleID != EnumRole.Principal || item.EmpRoleID != EnumRole.PrincipalNon));
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject  || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
           this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.Applied || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
         }
         else if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+          debugger
           this.SearchStatus = EnumStaffTrainingStatus.Applied;
           this.StaffTrainingDetailsCompleted_Search(this.SearchStatus);
           this.StaffTrainingStatusList = this.StaffTrainingStatusList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject  || item.ID == EnumStaffTrainingStatus.ADTE);
@@ -110,11 +112,11 @@ export class emtrainingdetailshistoryComponent {
             this.StaffTrainingStatusSearchList
               .filter((item: any) =>
                 item.ID == EnumStaffTrainingStatus.Reject ||
-                item.ID == EnumStaffTrainingStatus.PrincipalApprove ||
+                item.ID == EnumStaffTrainingStatus.Applied ||
                 item.ID == EnumStaffTrainingStatus.ADTE
               )
               .map((item: any) => {
-                if (item.ID == EnumStaffTrainingStatus.PrincipalApprove) {
+                if (item.ID == EnumStaffTrainingStatus.Applied) {
                   return {
                     ...item,
                     Name: 'Under Review'
@@ -123,7 +125,7 @@ export class emtrainingdetailshistoryComponent {
                 return item;
               });
 
-          //this.StaffTrainingStatusSearchList = this.StaffTrainingStatusSearchList.filter((item: any) => item.ID == EnumStaffTrainingStatus.Reject || item.ID == EnumStaffTrainingStatus.ADTE || item.ID == EnumStaffTrainingStatus.PrincipalApprove);
+          
         }
         else {
           this.SearchStatus = EnumStaffTrainingStatus.Applied;
@@ -148,38 +150,94 @@ export class emtrainingdetailshistoryComponent {
       this.searchRequest.Action = "GetAllDataCompletedTraining";
       this.searchRequest.StatusID = this.SearchStatus;
 
-      await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State === EnumStatus.Success) {
-          this.StaffTrainingDetailsCompletedTrainingDataList = data.Data;
-          if (this.statusID != 0) {
-            this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.StatusID == this.statusID);
-          } 
-          debugger
-          if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
-            if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
-              if (this.StaffTrainingDetailsCompletedTrainingDataList?.length > 0) {
-                this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.ISNonGazetted == 1 && (item.RoleID == 7 || item.RoleID == 13))
-              }
-              else {
-                this.StaffTrainingDetailsCompletedTrainingDataList = [];
-              }
+      
+await this.staffServiceDetailsService
+  .StaffTrainingDetails_GetData(this.searchRequest)
+  .then(async (data: any) => {
+
+    data = JSON.parse(JSON.stringify(data));
+
+    if (data.State === EnumStatus.Success) {
+      debugger
+      this.StaffTrainingDetailsCompletedTrainingDataList = data.Data || [];
+
+      // Status Filter
+      if (this.statusID != 0) {
+        this.StaffTrainingDetailsCompletedTrainingDataList =
+          this.StaffTrainingDetailsCompletedTrainingDataList.filter(
+            (item: any) => item.StatusID == this.statusID
+          );
+      }
+
+      debugger;
+
+      // Role Based Filter
+      if (
+        this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF
+      ) {
+
+        this.StaffTrainingDetailsCompletedTrainingDataList =
+          this.StaffTrainingDetailsCompletedTrainingDataList.filter(
+            (item: any) =>
+             
+              (item.EmpRoleID == 7 || item.EmpRoleID == 13)
+          );
+
+      } else if (
+        this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF
+      ) {
+
+        this.StaffTrainingDetailsCompletedTrainingDataList =
+          this.StaffTrainingDetailsCompletedTrainingDataList.filter(
+            (item: any) =>
               
-            }
-            if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
-              if (this.StaffTrainingDetailsCompletedTrainingDataList?.length > 0) {
-                this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.ISNonGazetted == 2 && (item.RoleID == 7 || item.RoleID == 13))
-              }
-              else {
-                this.StaffTrainingDetailsCompletedTrainingDataList = [];
-              }
-            }
-          }
+              (item.EmpRoleID == 7 || item.EmpRoleID == 13)
+          );
+      }
+
+    }
+    else {
+      this.StaffTrainingDetailsCompletedTrainingDataList = [];
+    }
+
+  });
+
+
+
+      //await this.staffServiceDetailsService.StaffTrainingDetails_GetData(this.searchRequest).then(async (data: any) => {
+      //  data = JSON.parse(JSON.stringify(data));
+      //  this.StaffTrainingDetailsCompletedTrainingDataList = data.Data;
+      //  if (data.State === EnumStatus.Success) {
+      //    this.StaffTrainingDetailsCompletedTrainingDataList = data.Data;
+
+      //    if (this.statusID != 0) {
+      //      this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.StatusID == this.statusID);
+      //    } 
+      //    debugger
+      //    if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+      //      if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF) {
+      //        if (this.StaffTrainingDetailsCompletedTrainingDataList?.length > 0) {
+      //          this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.ISNonGazetted == 1 && (item.RoleID == 7 || item.RoleID == 13))
+      //        }
+      //        else {
+      //          this.StaffTrainingDetailsCompletedTrainingDataList = [];
+      //        }
+              
+      //      }
+      //      if (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) {
+      //        if (this.StaffTrainingDetailsCompletedTrainingDataList?.length > 0) {
+      //          this.StaffTrainingDetailsCompletedTrainingDataList = this.StaffTrainingDetailsCompletedTrainingDataList.filter((item: any) => item.ISNonGazetted == 2 && (item.RoleID == 7 || item.RoleID == 13))
+      //        }
+      //        else {
+      //          this.StaffTrainingDetailsCompletedTrainingDataList = [];
+      //        }
+      //      }
+      //    }
          
          
-        }
+      //  }
        
-      })
+      //})
     } catch (error) {
       console.error(error);
     }
@@ -262,6 +320,8 @@ export class emtrainingdetailshistoryComponent {
       this.statusID = statusID;
       await this.StaffTrainingDetailsCompletedTraining_GetData();
       await this.onChangeSearchStatus();
+     
+     
     }
 
     async StaffTrainingHTS_GetData(id: number) {
@@ -306,18 +366,44 @@ export class emtrainingdetailshistoryComponent {
 
 
     async onChangeSearchStatus() {
-      if (((this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && EnumStaffTrainingStatus.Applied == this.SearchStatus)) {
+      debugger;
+
+      if (
+        (this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
+          this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) &&
+        EnumStaffTrainingStatus.Applied == this.SearchStatus
+      ) {
+
         this.ShowCheckBoxId = 1;
+
+        this.StaffTrainingDetailsCompletedTrainingDataList =
+          this.StaffTrainingDetailsCompletedTrainingDataList.filter(
+            (item: any) =>
+              item.InstituteID == this.sSOLoginDataModel.InstituteID &&
+              item.EmpRoleID != EnumRole.Principal &&
+              item.EmpRoleID != EnumRole.PrincipalNon
+          );
+
       }
-      else if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) && EnumStaffTrainingStatus.PrincipalApprove == this.SearchStatus)) {
+      else if (
+        (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF ||
+          this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) &&
+        EnumStaffTrainingStatus.Applied == this.SearchStatus
+      ) {
+        debugger
+        
+
+        this.StaffTrainingDetailsCompletedTrainingDataList =
+          this.StaffTrainingDetailsCompletedTrainingDataList.filter(
+            (item: any) =>
+              item.EmpRoleID == EnumRole.Principal ||
+              item.EmpRoleID == EnumRole.PrincipalNon
+          );
         this.ShowCheckBoxId = 1;
       }
       else {
         this.ShowCheckBoxId = 0;
       }
-
-
-
     }
 
     async OpenStaffProfileViewModal(StaffID: number, UserID: number) {

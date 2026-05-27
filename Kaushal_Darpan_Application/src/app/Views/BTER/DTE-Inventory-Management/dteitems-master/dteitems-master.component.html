@@ -222,7 +222,7 @@
             <td align="left">{{item.Remark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge"
+                <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge  && item.Isabbreviation != 1"
                         class="btn btn-sm text-white"
                         (click)="(item.Status == 0) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
                         [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
@@ -230,7 +230,7 @@
                   {{ item.Status == 0 ? 'Pending at Store Incharge' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted'  :  item.Status == 3 ? 'Approved by Store Incharge' : '' }}
                 </button>
                 <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.BTER_StoreIncharge)
-                    && (item.Status == 0)"
+                    && (item.Status == 0) && item.Isabbreviation != 1"
                         class="btn btn-sm text-white"
                         (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
                         [ngClass]="'bg-revert'"
@@ -238,7 +238,7 @@
                   Revert
                 </button>
 
-                <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal || sSOLoginDataModel.RoleID == EnumRole.PrincipalNon"
+                <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && item.Isabbreviation != 1"
                         class="btn btn-sm text-white"
                         (click)="(item.Status == 3) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
                         [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
@@ -246,7 +246,7 @@
                   {{ item.Status == 0 ? 'Pending at Store Incharge' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted' :  item.Status == 3 ? 'Approved by Store Incharge'  : '' }}
                 </button>
                 <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Principal || sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)
-                    && (item.Status == 3)"
+                    && (item.Status == 3) && item.Isabbreviation != 1"
                         class="btn btn-sm text-white"
                         (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
                         [ngClass]="'bg-revert'"

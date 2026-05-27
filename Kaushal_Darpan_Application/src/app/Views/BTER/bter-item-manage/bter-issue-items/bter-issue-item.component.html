@@ -440,6 +440,7 @@
                   <th class="text-left">Indent No</th>
                   <th class="text-left">Return Date</th>
                   <th class="text-left">Equipment Status on Return</th>
+                  <th class="text-left">Issue Document</th>
                   <th class="text-left">Status</th>
                   <th class="text-left">Approval Status</th>
                 </tr>
@@ -462,11 +463,19 @@
                   <td align="left">{{ item.IndentNo}}</td>
                   <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
                   <td align="left">
-                    <span
-                      [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
+                    <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working' : 'badge-notworking'">
                       {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : 'Not Working' }}
                     </span>
                   </td>
+                  <!--{{item.IssueItemDocument}}-->
+                  <td>
+                    <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + item.IssueItemDocument }}"
+                       *ngIf="item.IssueItemDocument!=''" class="btn bg-primary text-white m-0" target="_blank">
+                      <i class="ti ti-eye"></i>
+                    </a>
+
+                  </td>
+
                   <td align="left">
                     <span [ngClass]="{
                                  'InvStatus-issued': item.InvStatus === 0,
@@ -475,7 +484,7 @@
                       {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus ===1 ? 'Returned' : 'Unknown' }}
                     </span>
                   </td>
-                    <td align="left">
+                  <td align="left">
                     <span [ngClass]="{
                                  'InvStatus-issued': item.IssueStatus === 1,
                                  'InvStatus-returned': item.IssueStatus === 2

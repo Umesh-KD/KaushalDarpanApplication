@@ -46,17 +46,12 @@ async GetIFMSDATA(SSOID: any) {
         if (data.State == EnumStatus.Success)
         {
         
-          this.model=data.Data;
+            this.model=data.Data;
            this.formatAllDates(this.model);
-
-          debugger
-          console.log(this.model);
-
-
         }
         else
         {
-          
+          this.model = [];
         }
     
       });
@@ -72,29 +67,34 @@ async GetIFMSDATA(SSOID: any) {
 
   formatAllDates(data: any[]) {
 
-  if (!Array.isArray(data)) return;
+    try {
 
-  data.forEach((item: any) => {
+      if (!Array.isArray(data)) return;
 
-    Object.keys(item).forEach(key => {
+      data.forEach((item: any) => {
 
-      let value = item[key];
+        Object.keys(item).forEach(key => {
 
-      if (!value || typeof value !== 'string') return;
+          let value = item[key];
 
-      const formatted = this.formatDateForInput(value);
+          if (!value || typeof value !== 'string') return;
 
-      // only replace if valid date
-      if (formatted) {
-        item[key] = formatted;
-      }
+          const formatted = this.formatDateForInput(value);
 
-    });
+          // only replace if valid date
+          if (formatted) {
+            item[key] = formatted;
+          }
 
-  });
+        });
+
+      });
+    }
+    catch { }
 }
 
-formatDateForInput(date: any): string | null {
+  formatDateForInput(date: any): string | null
+  {
   if (!date) return null;
 
   try {

@@ -52,6 +52,7 @@
         </button>
       </div>
     </div>
+    <!--{{ShowCheckBoxId|json}}-->
     <!--{{StaffTrainingDetailsCompletedTrainingDataList|json}}-->
     <div class="overflow-auto mt-3">
       <table class="table table-border w-full" cellpadding="5">
@@ -128,7 +129,7 @@
                 <a href="javascript:void(0);" title="Status History" (click)="onEmtrainingStatusHistory(EmtrainingStatusHistory, row.StaffTrainingDetailID)"><i class="ti ti-list"></i></a>
 
                 <a (click)="OpenStaffProfileViewModal(row.StaffID,row.StaffUserID)" title="View Profile"><i class="ti ti-eye"></i></a>
-                </div>
+              </div>
             </td>
           </tr>
         </tbody>
