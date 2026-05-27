@@ -15,6 +15,7 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
+import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
 
   @Component({
     selector: 'app-TabutarTransferList',
@@ -43,6 +44,7 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
     public EM_TransferSystemHSTList: any[] = [];
     public TransferSystemStatusSearchList: any[] = [];
     public StaffDDLList: any[] = [];
+    
 
   isSubmitted: boolean = false;
   Table_SearchText: string = '';
@@ -95,6 +97,11 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
 
     public isStar: boolean = false;
     todayDate: string = new Date().toISOString().split('T')[0];
+    public CourseMasterDDL: any = [];
+    public To_CourseMasterDDL: any = [];
+    public StreamSearch = new StreamDDL_InstituteWiseModel();
+    public IsBranchshow: number = 0;
+    public To_IsBranchshow: number = 0;
     @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
   constructor(
     private toastr: ToastrService,
@@ -125,6 +132,8 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
         To_OfficeID: [0, [DropdownValidators]],
         To_ddlDistrictID: [0, []],
         To_ddlCollege: [0, []],
+        BranchID: [0, []],
+        To_BranchID: [0, []],
         Designation: [''],
         SSOID: [''],
       });
@@ -739,10 +748,19 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
 
     async PostChange() {
       debugger;
+      if (this.RequestManual.PostID != 0) {
 
-      await this.GetStaffDDLList();
-     
-     
+        if (this.RequestManual.InstituteID != 0 && this.RequestManual.PostID == 75) {
+          this.IsBranchshow = 1;
+          await this.getStreamMasterData();
+        }
+        else {
+          this.IsBranchshow = 0;
+          await this.GetStaffDDLList();
+          this.RequestManual.BranchID = 0;
+        }
+        
+      } 
     }
 
     async StaffChange() {
@@ -828,6 +846,98 @@ import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Manage
         `TabularTransferList_${timestamp}.xlsx`
       );
     }
-   
 
+    async getStreamMasterData() {
+      try {
+        this.StreamSearch.InstituteID = this.RequestManual.InstituteID;
+        this.StreamSearch.StreamType = this.sSOLoginDataModel.Eng_NonEng;
+        this.loaderService.requestStarted();
+        await this.commonFunctionService.StreamDDLInstituteIdWise(this.StreamSearch).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CourseMasterDDL = data.Data;
+          console.log("StreamMasterList", this.CourseMasterDDL)
+        }, error => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+    async BranchWiseEmployee() {
+      try {
+        this.loaderService.requestStarted();
+
+        this.StaffDDLList = [];
+
+        const data: any = await this.commonFunctionService.DDL_EmployeeTransferSysterm(
+          this.RequestManual.OfficeID,
+          this.RequestManual.PostID,
+          this.RequestManual.DistrictID,
+          this.RequestManual.InstituteID
+        );
+
+        const response = JSON.parse(JSON.stringify(data));
+
+        // Null/undefined handling
+        const staffList = response?.Data ?? [];
+
+        this.StaffDDLList = staffList.filter(
+          (item: any) => item?.CourseID == this.RequestManual.BranchID
+        );
+
+      } catch (Ex) {
+        console.log(Ex);
+        this.StaffDDLList = [];
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+
+    async getTo_StreamMasterData() {
+      try {
+        this.StreamSearch.InstituteID = this.RequestManual.To_ddlCollege;
+        this.StreamSearch.StreamType = this.sSOLoginDataModel.Eng_NonEng;
+        this.loaderService.requestStarted();
+        await this.commonFunctionService.StreamDDLInstituteIdWise(this.StreamSearch).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.To_CourseMasterDDL = data.Data;
+          console.log("StreamMasterList", this.To_CourseMasterDDL)
+        }, error => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+    async To_PostChange() {
+      debugger;
+      if (this.RequestManual.To_ddlCollege != 0 && this.RequestManual.To_PostID !=0) {
+
+        if (this.RequestManual.To_PostID == 75) {
+          this.To_IsBranchshow = 1;
+          await this.getTo_StreamMasterData();
+        } else {
+          this.To_IsBranchshow = 0;
+          this.RequestManual.To_BranchID = 0;
+        }
+
+
+      } 
+    }
+    
 }
