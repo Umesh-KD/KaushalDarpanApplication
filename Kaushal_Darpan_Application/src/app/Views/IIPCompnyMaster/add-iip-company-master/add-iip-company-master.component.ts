@@ -85,6 +85,8 @@ export class AddIipCompanyMasterComponent implements OnInit {
           Name: ['', Validators.required],
           EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
           MobileNo: ['', Validators.required],
+          Designation: ['', Validators.required],
+
       })
   
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));

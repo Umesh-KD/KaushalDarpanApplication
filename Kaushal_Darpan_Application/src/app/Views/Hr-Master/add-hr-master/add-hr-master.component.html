@@ -62,7 +62,18 @@
           </div>
 
 
-
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Designation <span class="StarMarking">*</span>
+            </label>
+            <input autocomplete="off" type="text" class="form-input" placeholder="Enter Designation" id="Designation" name="Designation"
+                   [(ngModel)]="request.Designation" formControlName="Designation">
+            <div *ngIf="isSubmitted && _HrMasterFormGroup.Designation.errors" class="text-danger">
+              <p *ngIf="_HrMasterFormGroup.Designation.errors.required">
+                <i aria-hidden="true"></i> This field is required.!
+              </p>
+            </div>
+          </div>
 
 
           <div class="col-span-3 text-center">

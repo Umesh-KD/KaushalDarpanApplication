@@ -46,6 +46,7 @@ export class AddHrMasterComponent {
         Name: ['', Validators.required],
         EmailId: ['', [Validators.required,Validators.pattern(GlobalConstants.EmailPattern)]],
         MobileNo: ['', Validators.required],
+        Designation: ['', Validators.required],
         PlacementCompanyID: ['', [DropdownValidators]],
 
       });

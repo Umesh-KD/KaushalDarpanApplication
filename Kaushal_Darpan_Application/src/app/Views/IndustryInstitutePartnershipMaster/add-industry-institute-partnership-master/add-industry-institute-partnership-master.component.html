@@ -186,6 +186,19 @@
           </div>
 
           <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Designation <span class="StarMarking">*</span>
+            </label>
+            <input autocomplete="off" type="text" class="form-input" placeholder="Enter Designation" id="Designation" name="Designation"
+                   [(ngModel)]="personRequest.Designation" formControlName="Designation">
+            <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.Designation.errors" class="text-danger">
+              <p *ngIf="_HrMasterFormGroup.Designation.errors.required">
+                <i aria-hidden="true"></i> This field is required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
             <div class="text-center">
               <button type="button" class="btn bg-info text-white mt-6" (click)="AddMoreMembers()">Add More</button>
               <button type="button" class="btn bg-danger text-white mt-6" (click)="resetHrDetails()">
@@ -209,15 +222,17 @@
                 <th>Name</th>
                 <th>Contact No</th>
                 <th>Email</th>
+                <th>Designation</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let row of request.ConcernPersonDetails; let idx=index;" >
+              <tr *ngFor="let row of request.ConcernPersonDetails; let idx=index;">
                 <td class="text-center">{{idx+1}}</td>
                 <td class="text-center">{{row.Name}}</td>
                 <td class="text-center">{{row.MobileNo}}</td>
                 <td class="text-center">{{row.EmailId}}</td>
+                <td class="text-center">{{row.Designation}}</td>
                 <td class="text-center">
                   <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
                     <i class="ti ti-trash"></i>

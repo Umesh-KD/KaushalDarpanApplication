@@ -97,6 +97,7 @@ export class ConcernPersonDetailsDataModel {
   public PlacementCompanyID: number = 0;
   public Name: string = '';
   public EmailId: string = '';
+  public Designation: string = '';
   public MobileNo: String = '';
   public ModifyBy: number = 0;
   public ActiveStatus: boolean = true;
