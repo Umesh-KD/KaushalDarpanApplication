@@ -188,7 +188,8 @@ export class OptionFormTabComponent implements OnInit {
         this.toastr.error("आपने पहले ही इस संयोजन को चुन लिया है")
         return
       }
-      this.formData.Priority = this.AddedChoices10.length + 1;
+      /*      this.formData.Priority = this.AddedChoices10.length + 1;*/
+      this.formData.StudentPriority = this.AddedChoices10.length + 1;
 
       AddedChoices_10.push({
         ...this.formData
