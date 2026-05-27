@@ -49,7 +49,7 @@
       </div>
       
     </div>
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+    <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
         <button type="button" class="btn bg-info text-white inline-block" (click)="SaveDataMarked()">Mark Auctioned Selected Items</button>
       </div>
@@ -61,15 +61,15 @@
       <div class="">
         
       </div>
-    </div>
+    </div>-->
     <!--{{ItemMasterList|json}}-->
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th>
+            <!--<th>
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
-            </th>
+            </th>-->
             <th class="text-left">SR NO</th>
             <th class="text-left">Category</th>
             <th class="text-left">College Name</th>
@@ -80,15 +80,15 @@
             <th class="text-left">Available Quantity</th>
             <th class="text-left">Price Per Unit</th>
             <th class="text-left">Is Auction</th>
-            <th class="text-center">Action</th>
+            <!--<th class="text-center">Action</th>-->
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of paginatedInTableData; let idx=index;">
-            <td>
+            <!--<td>
               <input type="checkbox" class="checkboxSize" [(ngModel)]="item.Selected" *ngIf="!(item.IsOption == '1' && item.AuctionStatus == '1')"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,item)">
-            </td>
+            </td>-->
             <td align="left">{{(startInTableIndex+1)+idx}}</td>
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.CollegeName??"BTER"}}</td>
@@ -106,14 +106,14 @@
                   item.IsOption == '1' ? 'Pending' : 'N/A'
               }}
             </td>
-            <td>
+            <!--<td>
               <div *ngIf="item.IsOption != 'true' && item.AuctionStatus != '1'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);"
                    (click)="ViewandUpdate(MyModel_ViewDetails, item)">
                   <i [ngClass]="MyModel_ViewDetails ? 'ti ti-eye' : 'ti ti-eye'"></i>
                 </a>
               </div>
-            </td>
+            </td>-->
           </tr>
         </tbody>
       </table>
