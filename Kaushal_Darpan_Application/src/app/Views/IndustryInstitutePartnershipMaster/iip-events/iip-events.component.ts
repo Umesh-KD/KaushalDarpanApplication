@@ -29,6 +29,7 @@ export class IIPEventsComponent {
 
   public CompanyID: number = 0
   public Table_SearchText: string = ''
+  public returnUrl: string = '/IndustryInstitutePartnershipList';
   constructor(
     private commonMasterService: CommonFunctionService, 
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
@@ -46,6 +47,10 @@ export class IIPEventsComponent {
   async ngOnInit() { 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CompanyID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+
+     // get return url
+  this.returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl')
+                    || '/IndustryInstitutePartnershipList';
     if(this.CompanyID > 0) {
       await this.GetCompanyEvents();
     }
@@ -97,4 +102,7 @@ export class IIPEventsComponent {
         }
       })
   }
+  goBack() {
+  this.router.navigateByUrl(this.returnUrl);
+}
 }

@@ -99,6 +99,7 @@ export class OptionsDetailsDataModel {
   public MinPercentageInScience: string = ''
   public MinPercentageInMath: string = ''
   public TradeCategory:number = 0
+  public StudentPriority:number = 0
 
   
 }
