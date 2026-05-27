@@ -25,7 +25,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
-          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.EventStatus">
+          <select class="form-select" name="EventStatus" id="StudentExamInstituteId" [(ngModel)]="searchRequest.EventStatus">
             <option value="0">--All--</option>
             <option value="1">Upcoming</option>
             <option value="2">Running</option>
@@ -34,21 +34,22 @@
         </div>
 
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" >Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetCompanyEvents()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearReset()">
             <i class="ti ti-refresh"></i>
             Reset
           </button>
         </div>
 
-      </div>
 
+      </div>
+      <br />
 
 
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
         <!-- <a routerLink="/IndustryInstitutePartnershipList" class="inline-flex items-center btn bg-dark text-white btn-sm">
-        <i class="ti ti-chevron-left"></i>Back</a> -->
+    <i class="ti ti-chevron-left"></i>Back</a> -->
         <a href="javascript:void(0)"
            (click)="goBack()"
            class="inline-flex items-center btn bg-dark text-white btn-sm">
@@ -81,6 +82,7 @@
               <th class="text-left">Event Type</th>
               <th class="text-left">Event</th>
               <th class="text-left">Event For</th>
+              <th class="text-left">Created Date</th>
               <th class="text-left">Event Start Date</th>
               <th class="text-left">Event End Date</th>
               <th class="text-left">Status</th>
@@ -94,6 +96,7 @@
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventType}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Event}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventFor}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{ row.CreatedDate | date:'dd-MM-yyyy HH:mm' }}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{ row.EventStartDate | date:'dd-MM-yyyy HH:mm' }}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventEndDate | date:'dd-MM-yyyy HH:mm' }}</td>
               <td>{{row.EventStatus}}</td>
@@ -138,6 +141,7 @@
                 </div>
               </td>
             </tr>
+            <tr *ngIf="CompanyEventsList?.length==0"><td colspan="20">No Event Found.</td> </tr>
           </tbody>
         </table>
       </div>
