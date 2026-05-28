@@ -13,36 +13,25 @@
 
 <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
 
+
  
   <div class="col-lg-3" *ngFor="let item of viewPlacementDashboardList; let i = index">
 
-    <div *ngIf="item.Type == 1">
+    <!-- <div *ngIf="item.Type == 1"> -->
+        <div>
       <div class="card shadow-lg" >
         <div class="p-5">
           <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
           <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
           <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
-          <a *ngIf="item.SRC == 'checklist'" [routerLink]="['/campusvalidation']" [queryParams]="{ flag: item.TotalTextHi }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
-          <a *ngIf="item.SRC == 'group'" [routerLink]="['/PlacementDashReport/', item.URL]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
-          <a *ngIf="item.SRC == 'rule_folder'" [routerLink]="['/',item.URL]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+         <!-- <a *ngIf="item.SRC == 'company_folder'" [routerLink]="['/',item.URL]" [queryParams]="{EventStatus: item.Type }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a> -->
+         <a *ngIf="item.SRC == 'rule_folder'" [routerLink]="['/',item.URL]" [queryParams]="{EventStatus: item.Type }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+
         </div>
       </div>
     </div>
 
-    <div *ngIf="item.Type == 2">
-      <div class="card shadow-lg">
-        <div class="p-5">
-          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
-          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
-          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
-          <a [routerLink]="['/approve-company-events']" [queryParams]="{ status: item.URL }"
-             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All 
-             <i class="ti ti-chevron-right"></i>
-          </a>
-          
-        </div>
-      </div>
-    </div>
+
   </div>
 
 
