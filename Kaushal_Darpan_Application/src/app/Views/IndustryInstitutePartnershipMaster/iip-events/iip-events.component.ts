@@ -54,6 +54,10 @@ export class iipeventsComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CompanyID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
 
+    debugger
+     this.searchRequest.EventStatus = Number(
+    this.activatedRoute.snapshot.queryParamMap.get('EventStatus')
+  );
      // get return url
   this.returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl')
                     || '/IndustryInstitutePartnershipList';
