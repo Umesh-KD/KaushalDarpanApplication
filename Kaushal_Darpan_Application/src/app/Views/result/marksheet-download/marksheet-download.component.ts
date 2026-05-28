@@ -154,6 +154,7 @@ export class MarksheetDownloadComponent {
   }
 
   async DownloadMarksheet(row: any) {
+    
     //debugger
     try {
       this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -175,7 +176,7 @@ export class MarksheetDownloadComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "Data");
           if (data.State == EnumStatus.Success) {
-            this.DownloadFile(data.Data, 'file download');
+            this.DownloadFile(data.Data, row.RollNo);
           }
           else {
             this.toastr.error(data.ErrorMessage)
@@ -196,21 +197,19 @@ export class MarksheetDownloadComponent {
 
   DownloadFile(FileName: string, DownloadfileName: any): void {
 
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
-    // Fetch the file as a blob
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
     this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
       const downloadLink = document.createElement('a');
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
+      downloadLink.download = this.generateFileName('pdf', DownloadfileName); 
       downloadLink.click();
-      // Clean up the object URL
       window.URL.revokeObjectURL(url);
     });
   }
-  generateFileName(extension: string): string {
+  generateFileName(extension: string, name: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
+    return `Marksheet_${name}_${timestamp}.${extension}`;
   }
 
   async DownloadMarksheetBulk() {
@@ -406,14 +405,16 @@ export class MarksheetDownloadComponent {
 
   async DownloadBulkMarksheet(start: number, end: number) {
     const StudentList: any[] = this.StudentList.slice(start, end + 1);
-
     try {
-      
+      const fullSession = this.FinYearList.find((x: any) => x.EndTermID == this.searchRequest.EndTermID)?.FinancialYearName;
+      const Session = fullSession ? fullSession.split('-')[0] : '';
+
       StudentList.forEach((element: any) => {
         element.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         element.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
         //element.EndTermID = this.sSOLoginDataModel.EndTermID;
         element.EndTermID = this.searchRequest.EndTermID;
+        element.SessionName = Session;
       });
 
       this.loaderService.requestStarted();
@@ -440,5 +441,21 @@ export class MarksheetDownloadComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  downloadFile_existing(row: any) {
+    const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/Marksheet/${row.MarksheetFilePath}`;
+    
+    fetch(url)
+      .then(response => response.blob())
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = row.MarksheetFile || 'Marksheet.pdf'; // Use stored filename
+        link.click();
+        // Clean up
+        window.URL.revokeObjectURL(link.href);
+      })
+      .catch(() => console.error('Download failed. Check CORS settings on the server.'));
   }
 }

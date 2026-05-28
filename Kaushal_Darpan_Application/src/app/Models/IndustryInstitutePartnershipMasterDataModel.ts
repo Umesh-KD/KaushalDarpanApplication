@@ -156,3 +156,8 @@ export class CompanyEventSearchModel extends RequestBaseModel {
 
 
 }
+
+export class EventConsentActionDataModel {
+  public Remark: string = ''
+  public Status: number = 0
+}
