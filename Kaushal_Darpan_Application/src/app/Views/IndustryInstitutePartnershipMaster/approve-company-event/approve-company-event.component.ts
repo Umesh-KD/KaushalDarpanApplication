@@ -69,13 +69,13 @@ export class ApproveCompanyEventComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.CompanyStatus = this.CompanyStatus;
       this.loaderService.requestStarted();
-      await this.industryInstitutePartnershipMasterService.GetAllData(this.searchRequest).then((data: any) => {
+      await this.industryInstitutePartnershipMasterService.GetAllDataEvent(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.IndustryInstitutePartnershipMasterList = data.Data;
         //table feature load
         this.loadInTable();
         //end table feature load
-        console.log(this.IndustryInstitutePartnershipMasterList)
+        console.log("event id testing ",this.IndustryInstitutePartnershipMasterList)
       }, (error: any) => console.error(error))
     }
     catch (ex) {
@@ -149,6 +149,7 @@ export class ApproveCompanyEventComponent {
 
     try {
       await this.industryInstitutePartnershipMasterService.ApproveCompanyEvents(Selected).then(async (data: any) => {
+        debugger
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
@@ -253,8 +254,9 @@ export class ApproveCompanyEventComponent {
     });
   }
   //checked single (replace org. list here)
-  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.IndustryInstitutePartnershipMasterList.filter((x: any) => x.CompanyID == item.CompanyID);
+  selectInTableSingleCheckbox(isSelected: boolean, item: any) 
+  {
+    const data = this.IndustryInstitutePartnershipMasterList.filter((x: any) => x.EventID == item.EventID);
     data.forEach((x: any) => {
       x.Selected = isSelected;
     });

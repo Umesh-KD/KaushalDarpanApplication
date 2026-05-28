@@ -54,10 +54,12 @@ export class CampusPostListComponent {
   public _EnumCampusType = EnumCampusType
   public _EnumRole = EnumRole
   public GetRoleID: number = 0
-
+  public FinancialYear: any = [];
   qrModalVisible: boolean = false;
   qrCodeData: string = '';
-
+  public CollegeList: any = [];
+  FinancialYearID: number = 0;
+public PostId: number = 0;
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: CampusPostService, private loaderService: LoaderService, private http: HttpClient,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private Swal2: SweetAlert2, private placemenrservice: PlacementStudentService,
     private Router: Router, private router: ActivatedRoute, private reportService: ReportService, private appsettingConfig: AppsettingService
@@ -69,6 +71,8 @@ export class CampusPostListComponent {
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
     await this.GetMasterData();
     await this.btn_SearchClick();
+    this.loadDropdownData('FinancialYears');
+    this.loadDropdownData('PlacementInstitute');
   }
 
 
@@ -200,11 +204,12 @@ export class CampusPostListComponent {
     }
   }
   async btn_SearchClick() {
+    debugger
     try {
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       this.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.loaderService.requestStarted();
-      await this.campusPostService.CampusValidationList(this.CompanyID,this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,this.CompanyTypeID)
+      await this.campusPostService.CampusValidationList(this.CompanyID,this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,this.CompanyTypeID,'TotalNoOfCampus',this.FinancialYearID,0)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
@@ -227,6 +232,8 @@ export class CampusPostListComponent {
     this.CompanyID = 0;
     this.InstituteID = 0;
     this.ApprovedStatus = "0";
+    this.FinancialYearID=0;
+    
     //this.CampusValidationListData = [];
   }
   async CampusOnPostAction(content: any, PostID: number) {
@@ -453,6 +460,20 @@ export class CampusPostListComponent {
     // Navigate to the edit page with the institute ID
     this.Router.navigate(['/SignedCopyOfResult', id]);
     console.log(id)
+  }
+  loadDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      switch (MasterCode) {
+        case 'FinancialYears':
+          this.FinancialYear = data['Data'];
+          break;
+        case 'PlacementInstitute':
+          this.CollegeList = data['Data'];
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   }

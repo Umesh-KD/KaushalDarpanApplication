@@ -70,9 +70,9 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
         <!-- <a routerLink="/IndustryInstitutePartnershipList" class="inline-flex items-center btn bg-dark text-white btn-sm">
-    <i class="ti ti-chevron-left"></i>Back</a> -->
-        <a href="javascript:void(0)"
-           (click)="goBack()"
+  <i class="ti ti-chevron-left"></i>Back</a> -->
+       
+        <a [routerLink]="['/IIPCompanyMaster']"
            class="inline-flex items-center btn bg-dark text-white btn-sm">
           <i class="ti ti-chevron-left"></i>Back
         </a>
