@@ -42,6 +42,15 @@ export class IndustryInstitutePartnershipMasterService {
       ).toPromise();
   }
 
+    public async GetAllDataEvent(searchRequest: IndustryInstitutePartnershipMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllDataEvent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   //Get by id
   public async GetById(ID: number) {
     return await this.http.get(`${this.APIUrl}/GetByID/${ID}`, this.headersOptions)
@@ -226,4 +235,5 @@ export class IndustryInstitutePartnershipMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
 }

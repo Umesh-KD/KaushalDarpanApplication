@@ -19,6 +19,7 @@ import { PlacementDashService } from '../../../Services/PlacementDashboard/Place
 export class IipDashboardComponent implements OnInit {
 
   public viewPlacementDashboardList: any = [];
+  public placementDashboardList: any = [];
     public Table_SearchText: string = "";
     /*  public searchRequest = new CommonSubjectMasterSearchModel();*/
     public request = new PlacementDashboardModel()
@@ -45,6 +46,7 @@ export class IipDashboardComponent implements OnInit {
     this.request.RoleId = this.sSOLoginDataModel.RoleID;
 debugger
     this.GetAllData();
+    this.GetIIPDashboardListData()
   }
   
     // this.userDataSubscription = this.commonFunctionService.sSOLoginDataModel$.subscribe(
@@ -78,6 +80,28 @@ debugger
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.viewPlacementDashboardList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+   async GetIIPDashboardListData() {
+    try {
+      this.loaderService.requestStarted();
+      debugger
+      await this.PlacementDashService.GetIIPDashboardListData(this.request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.placementDashboardList = data['Data'];
+          console.log(this.placementDashboardList);
         }, (error: any) => console.error(error)
         );
     }
