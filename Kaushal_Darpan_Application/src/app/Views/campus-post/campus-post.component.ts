@@ -10,7 +10,7 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CampusPostMasterModel, CampusPostMaster_EligibilityCriteriaModel } from '../../Models/CampusPostDataModel';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
+import { EnumMessageType, EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { CompanyMasterDataModels } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
@@ -31,6 +31,7 @@ export class CampusPostComponent implements OnInit {
   public PostID: number | null = null;
   public Message: any = [];
   public ErrorMessage: any = [];
+  public SaveRes: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public AllSelect: boolean = false
@@ -162,8 +163,8 @@ export class CampusPostComponent implements OnInit {
       //ddlNoofBackPapersAllowed: ['', [DropdownValidators]],
       ddlNoofBackPapersAllowed: [''],
 
-      txtAgeAllowedFrom: [''],
-      txtAgeAllowedTo: [''],
+      // txtAgeAllowedFrom: [''],
+      // txtAgeAllowedTo: [''],
       ddlHiringRoleID: ['', [DropdownValidators]],
       /*txtNoofPositions: ['', [Validators.required, Validators.pattern(GlobalConstants.PositionPattern)]],*/
     /*  txtNoofPositions: ['', Validators.required],*/
@@ -180,7 +181,10 @@ export class CampusPostComponent implements OnInit {
       ddlEligibleInstitutes: ['', [DropdownValidators]],
      
       ddlNoOfInterviewRound: [''],
-      txtappointmentLocation:['',Validators.required]
+      txtappointmentLocation:['',Validators.required],
+      AgeCalculationDate: [''],
+      MinimunAge: [''],
+      MaximumAge: [''],
     });
     this.request.EligibilityCriteriaModel = [];
     this.filteredPassingYears = this.PassingYearMasterList;
@@ -236,7 +240,7 @@ export class CampusPostComponent implements OnInit {
   }
 
   onPassingYearChange() {
-    const selectedPassingYear = this.request_EligibilityCriteriaModel.PassingYear;
+    const selectedPassingYear = this.request_EligibilityCriteriaModel.PassingYear || 0;
 
     // Filter the "To Passing Year" options to be greater than the selected "Passing Year From"
     if (selectedPassingYear > 0) {
@@ -246,7 +250,7 @@ export class CampusPostComponent implements OnInit {
     }
 
     // Reset the "Passing Year To" field if the selected "Passing Year From" makes it invalid
-    if (this.request_EligibilityCriteriaModel.ToPassingYear <= selectedPassingYear) {
+    if ((this.request_EligibilityCriteriaModel.ToPassingYear ?? 0) <= selectedPassingYear) {
       this.request_EligibilityCriteriaModel.ToPassingYear = 0;
     }
   }
@@ -654,13 +658,17 @@ debugger
         this.request.StudentConsentDate=this.request.CampusToDate;
         this.request.StudentConsentTime='23:59:59'
       }
+      debugger;
       await this.CampusPostService.SaveData(this.request)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
+          this.SaveRes = data['Data'];
+          debugger
           if (this.State == EnumStatus.Success) {
-            this.SendApplicationMessage();
+
+            this.SendApplicationMessage(this.SaveRes[0].CampusID, this.SaveRes[0].NodalType, this.SaveRes[0].CampusLocationURL);
             this.toastr.success(this.Message);
             if (this.initialState != undefined) {
               this.modalService.dismissAll();
@@ -822,7 +830,10 @@ debugger
             DeleteStatus: this.request_EligibilityCriteriaModel.DeleteStatus,
             SalaryName: this.request_EligibilityCriteriaModel.SalaryName,
             SalaryTypeID: this.request_EligibilityCriteriaModel.SalaryTypeID,
-            appointmentLocation:this.request_EligibilityCriteriaModel.appointmentLocation
+            appointmentLocation:this.request_EligibilityCriteriaModel.appointmentLocation,
+            AgeCalculationDate: this.request_EligibilityCriteriaModel.AgeCalculationDate,
+            MinimunAge: this.request_EligibilityCriteriaModel.MinimunAge,
+            MaximumAge: this.request_EligibilityCriteriaModel.MaximumAge
           }
         );
 
@@ -1163,14 +1174,14 @@ debugger
     this.calculatedAge = `${maxAgeText} to ${minAgeText}`;
   
     // Keep your min date validation
-    this.minDate = fromDateStr;
+    this.minDate = fromDateStr || '';
 
     // --------------------------------------------
 
     console.log('Calculated Age Range:', this.calculatedAge);
 
     // Optional
-    this.minDate = fromDateStr;
+    this.minDate = fromDateStr || '';
 
 
   }
@@ -1231,21 +1242,39 @@ debugger
 
 
 
-  async SendApplicationMessage() {
+  async SendApplicationMessage(CampusID: string, NodalType: string, CampusLocationURL:string) {
     debugger
     try {
       this.loaderService.requestStarted();
-      //this.messageModel.MobileNo = '8955186821';
-      this.messageModel.MobileNo = '8334874706';
+      //this.messageModel.MobileNo = '8334874706';
+      this.messageModel.CampusID = CampusID;
+      this.messageModel.NodalType = NodalType;
+      this.messageModel.CampusLocationURL = CampusLocationURL;
+      this.messageModel.MobileNo = this.sSOLoginDataModel.Mobileno;
+      this.messageModel.ApplicantName = this.sSOLoginDataModel.SSOID;
+      //this.messageModel.MobileNo = '8334874706';
+      //this.messageModel.ApplicantName = 'Divya Sharma';
+      this.messageModel.MessageType = EnumMessageType.Bter_CampusPostCreation;
+
+      const now = new Date();
+
+      this.messageModel.ActionDate =
+        now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + ' ' +
+        String(now.getHours()).padStart(2, '0') + ':' +
+        String(now.getMinutes()).padStart(2, '0') + ':' +
+        String(now.getSeconds()).padStart(2, '0');
+
       // department
       //if (this.DepartmentID == EnumDepartment.BTER) {
-      //  this.messageModel.MessageType = EnumMessageType.Bter_FormFinalSubmit;
+        //this.messageModel.MessageType = EnumMessageType.Bter_FormFinalSubmit;
       //}
       //else if (this.DepartmentID == EnumDepartment.ITI) {
       //  this.messageModel.MessageType = EnumMessageType.FormFinalSubmitITI;
       //}
       /*this.messageModel.ApplicationNo = this.ApplicationNo.toString();*/
-      this.messageModel.ApplicationNo = '21100634';
+      //this.messageModel.ApplicationNo = '21100634';
       // this.messageModel.MessageType='OTP';
       await this.smsMailService.SendApplicationMessage(this.messageModel)
         .then((data: any) => {

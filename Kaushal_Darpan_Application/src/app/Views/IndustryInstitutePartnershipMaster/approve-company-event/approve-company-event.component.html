@@ -26,7 +26,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
-        <!-- <div>
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
           <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
             <option value="0">--All--</option>
@@ -35,7 +35,7 @@
             <option value="Rejected">Rejected</option>
             <option value="Hold">Hold</option>
           </select>
-        </div> -->
+        </div>
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
@@ -60,10 +60,11 @@
           <option value="1000">1000</option>
         </select>
       </div>
-      <div class=""><button class="btn bg-success text-white" (click)="ApproveCompanyEvents()" type="button">Approve Company</button></div>
+      <div class=""></div>
       <div class=""></div>
       <div class="">
         <!-- <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" /> -->
+         <button class="btn bg-success text-white" (click)="ApproveCompanyEvents()" type="button">Approve Event</button>
       </div>
     </div>
     <!--{{IndustryInstitutePartnershipMasterList|json}}-->
@@ -75,7 +76,10 @@
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <th class="text-left">Sr. No.</th>
-            <th class="text-left">Name</th>
+
+            <th class="text-left">Company Name</th>
+            <th class="text-left">Event Name</th>
+             <th class="text-left">Created  Date</th>
             <th class="text-left">Website</th>
             <th class="text-left">Address</th>
             <th class="text-left">Status</th>
@@ -91,6 +95,9 @@
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td>{{row.CompanyName}}</td>
+               <td>{{row.EventName}}</td>
+               <td>{{row.CreatedDate | date}}</td>
+             
             <td>{{row.Website}}</td>
             <td>{{row.Address}}</td>
             <td>{{row.Status}}</td>

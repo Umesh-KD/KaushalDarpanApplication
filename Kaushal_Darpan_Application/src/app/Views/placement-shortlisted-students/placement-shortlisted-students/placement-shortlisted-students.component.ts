@@ -24,6 +24,7 @@ declare function tableToExcel(table: any, name: any, fileName: any): any;
 })
 export class PlacementShortlistedStudentsComponent implements OnInit {
   public PlacementShortListStudentForm!: FormGroup;
+  public PlacementShortListStudentForm1!: FormGroup;
 
   public Message: string = '';
   public ErrorMessage: string = '';
@@ -66,7 +67,10 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
 
     this.PlacementShortListStudentForm = this.formBuilder.group({
       CampusPostID: ['', [DropdownValidators]],
-      BranchID: ['', [DropdownValidators]],
+      BranchID: [''],
+      //HiringRoleID: [''],
+    });
+    this.PlacementShortListStudentForm1 = this.formBuilder.group({
       HiringRoleID: ['', [DropdownValidators]],
     });
 
@@ -82,7 +86,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   get form() { return this.PlacementShortListStudentForm.controls; }
   //
   async GetCampusPostMasterDDL() {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCampusPostMasterDDL(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.UserID)
@@ -144,23 +148,25 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   }
   //get all
   async GetAllData() {
-    debugger
+    //debugger
     this.isSubmitted = true;
     //
     this.refreshBranchRefValidation(false);
     //
     if (this.PlacementShortListStudentForm.invalid) {
-      return console.log("error")
+      return
     }
+
     this.StudentList = [];
     try {
-      this.loaderService.requestStarted();
       this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID;
       this.searchRequest.UserId = this.sSOLoginDataModel.UserID
       this.searchRequest.BranchID = this.BranchID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.CampusPostID = this.CampusPostID
+      this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID
+      this.searchRequest.HiringRoleID = this.HiringRoleID
 
       await this.placementShortListStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
@@ -175,17 +181,12 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   async GetPlacedStudentsCountList(){
     try {
       this.loaderService.requestStarted();
-      debugger;
+      //debugger;
       await this.placementShortListStudentService.GetPlacedStudentsCountList()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -213,16 +214,18 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   }
   //save
   async SaveAllData() {
-    debugger
+    //debugger
     this.isSubmitted = true;
     //
     this.refreshBranchRefValidation(true);
     //
     if (this.PlacementShortListStudentForm.invalid) {
-      return console.log("error")
+      return
+    }
+    if (this.PlacementShortListStudentForm1.invalid) {
+      return
     }
     try {
-      this.loaderService.requestStarted();
 
       const isAnySelected = this.StudentList.some(x => x.Marked);
       if (!isAnySelected) {
@@ -249,7 +252,8 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
             await this.GetAllData();
           }
           else {
-            this.toastr.error(this.ErrorMessage)
+            this.toastr.error(this.Message)
+            console.error(this.ErrorMessage);
           }
         })
         .catch((error: any) => {
@@ -259,11 +263,6 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -329,13 +328,13 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   //
   refreshBranchRefValidation(isValidate: boolean) {
     // clear
-    this.PlacementShortListStudentForm.get('HiringRoleID')?.clearValidators();
+    this.PlacementShortListStudentForm1.get('HiringRoleID')?.clearValidators();
     // set
     if (isValidate) {
-      this.PlacementShortListStudentForm.get('HiringRoleID')?.setValidators([DropdownValidators]);
+      this.PlacementShortListStudentForm1.get('HiringRoleID')?.setValidators([DropdownValidators]);
     }
     // update
-    this.PlacementShortListStudentForm.get('HiringRoleID')?.updateValueAndValidity();
+    this.PlacementShortListStudentForm1.get('HiringRoleID')?.updateValueAndValidity();
   }
   //
   checkboxthView_checkboxchange(isChecked: boolean) {

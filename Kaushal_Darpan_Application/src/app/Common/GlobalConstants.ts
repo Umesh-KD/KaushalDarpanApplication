@@ -431,6 +431,13 @@ export enum EnumMessageType {
   GuestHouseCheckIn = "GuestHouseCheckIn",
   GuestHouseCheckOut = "GuestHouseCheckOut",
   GuestHouseAdminApprove = "GuestHouseAdminApprove",
+
+  Bter_CampusApprove = "Bter_CampusApprove",
+  Bter_StudentConsent = "Bter_StudentConsent",
+  Bter_StudentShortList = "Bter_StudentShortList",
+  Bter_ComapnyHRApprove = "Bter_ComapnyHRApprove",
+  Bter_CampusPostCreation ="Bter_CampusPostCreation"
+
 }
 export enum EnumStatusOfStaff {
   Draft = 163,

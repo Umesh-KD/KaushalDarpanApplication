@@ -136,6 +136,18 @@ export class HrMasterValidationComponent implements OnInit {
     //await this.GetAllData();
   }
 
+
+  async CompanyDeactivateAction(content: any, HRManagerID: number) {
+    this.requestAction.HRManagerID = HRManagerID;
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    this.requestAction.Action = "0";
+    this.requestAction.ActionRemarks = "";
+  }
+
   async CompanyOnAction(content: any, HRManagerID: number) {
     this.requestAction.HRManagerID = HRManagerID;
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {

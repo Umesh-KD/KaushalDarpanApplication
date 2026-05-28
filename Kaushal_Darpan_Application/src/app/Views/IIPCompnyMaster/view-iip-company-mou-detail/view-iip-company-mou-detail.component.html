@@ -291,6 +291,7 @@
                   <th>Name</th>
                   <th>Contact No</th>
                   <th>Email</th>
+                  <th>Designation</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -300,6 +301,7 @@
                   <td class="text-center">{{row.Name}}</td>
                   <td class="text-center">{{row.MobileNo}}</td>
                   <td class="text-center">{{row.EmailId}}</td>
+                  <td class="text-center">{{row.Designation}}</td>
                   <td class="text-center">
                     <button *ngIf="flag != 1" class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
                       <i class="ti ti-trash"></i>

@@ -71,7 +71,8 @@ const routes: Routes = [
         path: 'allpost', loadChildren: () => import('./Views/Home/all-post/all-post.module').then(m => m.AllPostModule), title: 'All Campus List'
       },
       { path: 'iip-allpost', loadChildren: () => import('./Views/Home/iip-web-all-post/iip-web-all-post.module').then(m => m.IIPWebAllPostModule), title: 'IIP Post List' },
-
+      { path: 'iip-event-consent-list-public', loadChildren: () => import('./Views/Home/iip-event-consent-list-public/iip-event-consent-list-public.module').then(m => m.IipEventConsentListPublicModule), title: 'IIP Event Consent List' },
+      
       // {
       //   path: 'ITIallpost', loadChildren: () => import('./Views/Home/iti-all-post/iti-all-post.module').then(m => m.ITIAllPostModule), title: 'All Campus List'
       // },
@@ -879,8 +880,10 @@ const routes: Routes = [
       { path: 'industryInstitutePartnership-validation', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/industry-institute-partnership-validation/industry-institute-partnership-validation.module').then(m => m.IndustryInstitutePartnershipValidationModule) },
       { path: 'iip-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-events/iip-events.module').then(m => m.IIPEventsModule), title: 'IIP Events' },
       { path: 'add-iip-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/add-iip-events/add-iip-events.module').then(m => m.AddIIPEventsModule), title: 'Add IIP Events' },
+      { path: 'add-iip-events/:id', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/add-iip-events/add-iip-events.module').then(m => m.AddIIPEventsModule), title: 'Add IIP Events' },
       { path: 'approve-company-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/approve-company-event/approve-company-event.module').then(m => m.ApproveCompanyEventModule), title: 'Approve Company Events' },
       { path: 'event-consent-list', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-event-consent-list/iip-event-consent-list.module').then(m => m.IIPEventConsentListModule), title: 'Event Consent List' },
+      { path: 'event-consent-report', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-event-consent-report/iip-event-consent-report.module').then(m => m.IIPEventConsentReportModule), title: 'Event Consent Report' },
 
       { path: 'EditMeritDocument', loadChildren: () => import('./Views/BTER/BterMerit/edit-merit-document/edit-merit-document.module').then(m => m.EditMeritDocumentModule) },
       { path: 'AllotmentConfiguration', loadChildren: () => import('./Views/master-configuration/allotment-configuration/allotment-configuration.module').then(m => m.AllotmentConfigurationModule) },

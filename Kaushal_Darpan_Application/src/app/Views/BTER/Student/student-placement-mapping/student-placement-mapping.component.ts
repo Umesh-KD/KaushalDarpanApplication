@@ -16,8 +16,10 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
 import { StudentService } from '../../../../Services/Student/student.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { CompanyMasterService } from '../../../../Services/CompanyMaster/company-master.service.ts';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-student-placement-mapping',
@@ -62,9 +64,9 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
   ShowBTERApply: boolean = false;
   dateConfiguration = new DateConfigurationModel();
   constructor(private loaderService: LoaderService, private companyMasterService: CompanyMasterService, private activatedRoute:ActivatedRoute, private encryptionService: EncryptionService,
-    private commonservice: CommonFunctionService, public appsettingConfig: AppsettingService,
+    private commonservice: CommonFunctionService, public appsettingConfig: AppsettingService, private Swal2: SweetAlert2, private sweetAlert2: SweetAlert2,
     private studentService: StudentService, private modalService: NgbModal, private toastrService:
-      ToastrService, private sMSMailService: SMSMailService, private cookieService: CookieService, private formBuilder: FormBuilder, private dateMasterService: DateConfigService) { }
+      ToastrService, private sMSMailService: SMSMailService, private cookieService: CookieService, private formBuilder: FormBuilder, private dateMasterService: DateConfigService, private router: Router) { }
 
   timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
   showResendButton: boolean = false; // Whether to show the "Resend OTP" button
@@ -305,13 +307,30 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
             .then((data: any) => {
               data = JSON.parse(JSON.stringify(data));
               if (data.State == EnumStatus.Success) {
-                this.toastrService.success('Student Mapped Successfully');
+               // this.Swal2.Success("Student mobile number has been updated successfully. Now, the student can map themselves using the updated mobile number.!")
                 //Set User cookie
-                this.sSOLoginDataModel.StudentID = this.studentDetailsModel.StudentID;
-                this.sSOLoginDataModel.DepartmentID = this.searchRequest.DepartmentID;
-                localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
+                //this.sSOLoginDataModel.StudentID = this.studentDetailsModel.StudentID;
+                //this.sSOLoginDataModel.DepartmentID = this.searchRequest.DepartmentID;
+               // localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
                 this.cookieService.set('LoginStatus', "OK");
-                window.open("StudentDashboard", "_self");
+              //  window.open("EligibleStudentListMaster", "_self");
+
+                this.sweetAlert2.ConfirmationSuccess("Student mobile number has been updated successfully. Now, the student can map themselves using the updated mobile number.!", async (result: any) => {
+                  if (result.isConfirmed) {
+                    try
+                    {
+
+                      this.CloseModal();
+                      this.router.navigate(['/EligibleStudentListMaster']);
+                      //window.open("EligibleStudentListMaster", "_self");
+                      
+                    }
+                    catch (ex) {
+                      console.log(ex)
+                    }
+                  }
+                 
+                },'Ok',false);
               }
               else {
                 this.toastrService.success(data.Message);

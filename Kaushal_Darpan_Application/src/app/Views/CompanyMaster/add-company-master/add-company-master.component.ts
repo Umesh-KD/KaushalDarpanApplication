@@ -75,6 +75,7 @@ export class AddCompanyMasterComponent implements OnInit {
         // EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
         // MobileNo: ['', Validators.required],
 
+        CompanyRegNo: ['', Validators.required]
 
       });
 
@@ -219,17 +220,22 @@ export class AddCompanyMasterComponent implements OnInit {
 
       await this.CompanyMasterService.GetById(this.searchReq)
 
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data,"company");
-
           this.request = data['Data'];
+          if (
+            !this.request.ListCompanyHRDetails ||
+            this.request.ListCompanyHRDetails.length === 0
+          ) {
+            this.request.ListCompanyHRDetails = [];
+          }
           this.request.Dis_CompanyName = data['Data']['Dis_CompanyName'];
           this.request.CompanyPhoto = data['Data']['CompanyPhoto'];
           this.ddlState_Change();
           this.request.DistrictID = data['Data']["DistrictID"];
           console.log(this.request, "request");
-
+          await this.GetTierBasedPackageMaster();
 
         }, (error: any) => console.error(error)
         );
@@ -245,31 +251,20 @@ export class AddCompanyMasterComponent implements OnInit {
   } 
 
 
-  
-  
-
   async AddMoreMembers() {
       debugger
       this.isHrFormSubmitted = true;
       if(this.HrMasterFormGroup.invalid) {
         this.toastr.error("Please fill all the required fields of Hr Form")
         return;
-      }
-  
+      }  
       const personExists = this.request.ListCompanyHRDetails.some(person =>
         person.EmailId === this.personRequest.EmailId && person.MobileNo === this.personRequest.MobileNo
-      );
-  
+      );  
     if (!personExists) {
-      if (this.request.ListCompanyHRDetails.length <= 0) {
         this.request.ListCompanyHRDetails.push(this.personRequest);
         this.personRequest = new HrMasterDataModel();
         this.isHrFormSubmitted = false;
-      }
-      else {
-        this.toastr.error("Cannot Add more than One HR in a company");
-        return
-      }
     } else {
         this.toastr.error("Person already exists with the same emailid and mobileno.");
         return
@@ -277,7 +272,7 @@ export class AddCompanyMasterComponent implements OnInit {
   
       // this.request.ConcernPersonDetails.push(this.personRequest);
     
-    }
+   }
   
 
   async resetHrDetails() {

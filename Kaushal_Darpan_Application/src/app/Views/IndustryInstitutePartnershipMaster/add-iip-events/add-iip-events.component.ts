@@ -202,6 +202,7 @@ if (this.PageMode == 'view') {
     try {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.request.UserID = this.sSOLoginDataModel.UserID;
       debugger
       await this.industryInstitutePartnershipMasterService.SaveData_IIP_Events(this.request)
         .then(async (data: any) => {
@@ -209,7 +210,7 @@ if (this.PageMode == 'view') {
           
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            this.routers.navigate(['/IndustryInstitutePartnershipList']);
+            this.routers.navigate(['/iip-events']);
           } else {
             this.toastr.error(data.ErrorMessage)
           }

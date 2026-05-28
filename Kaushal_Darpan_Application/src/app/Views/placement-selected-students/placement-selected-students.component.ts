@@ -20,10 +20,10 @@ import { PlacementShortlistedStudentsService } from '../../Services/PlacementSho
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 @Component({
-    selector: 'app-placement-selected-students',
-    templateUrl: './placement-selected-students.component.html',
-    styleUrls: ['./placement-selected-students.component.css'],
-    standalone: false
+  selector: 'app-placement-selected-students',
+  templateUrl: './placement-selected-students.component.html',
+  styleUrls: ['./placement-selected-students.component.css'],
+  standalone: false
 })
 export class PlacementSelectedStudentsComponent implements OnInit {
   public PlacementSelectedListStudentForm!: FormGroup;
@@ -36,11 +36,11 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   public UserID: number = 0;
   public AllSelect: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
-  
-  public getSSOIDDetailData: any[]=[];
-  public messageModel= new ApplicationMessageDataModel();
-  
-  public PlacedCountList:any[]=[];
+
+  public getSSOIDDetailData: any[] = [];
+  public messageModel = new ApplicationMessageDataModel();
+
+  public PlacedCountList: any[] = [];
   public InstituteMasterList: any[] = [];
   public StreamMasterList: any[] = [];
   public CampusMasterList: any[] = [];
@@ -63,8 +63,8 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   async ngOnInit() {
     this.PlacementSelectedListStudentForm = this.formBuilder.group({
       CampusPostID: ['', [DropdownValidators]],
-      BranchID: ['', [DropdownValidators]],
-      HiringRoleID: ['',[DropdownValidators]],
+      BranchID: [''],
+      HiringRoleID: [''],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -146,15 +146,14 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   }
   //get all
   async GetAllData() {
-    
+
     this.isSubmitted = true;
     //
     if (this.PlacementSelectedListStudentForm.invalid) {
-      return console.log("error")
+      return
     }
     this.StudentList = [];
     try {
-      this.loaderService.requestStarted();
 
       this.searchRequest.BranchID = this.BranchID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -162,6 +161,9 @@ export class PlacementSelectedStudentsComponent implements OnInit {
       this.searchRequest.CampusPostID = this.CampusPostID
       this.searchRequest.AgeTo = this.searchRequest.AgeTo ?? 0;
       this.searchRequest.HiringRoleID = this.HiringRoleID;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      //
       await this.placementShortListStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -175,15 +177,9 @@ export class PlacementSelectedStudentsComponent implements OnInit {
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isSubmitted = false;
-      }, 200);
-    }
   }
 
-    async GetStudentPlacedCount() {
+  async GetStudentPlacedCount() {
     debugger
     try {
       this.loaderService.requestStarted();
@@ -215,7 +211,6 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   async SaveAllData() {
     try {
       this.isSubmitted = true;
-      this.loaderService.requestStarted();
 
       this.StudentList.forEach(x => {
         x.ModifyBy = this.sSOLoginDataModel.UserID;
@@ -225,11 +220,10 @@ export class PlacementSelectedStudentsComponent implements OnInit {
       const isAnySelected = this.StudentList.some(x => x.Marked);
       if (!isAnySelected) {
         this.toastr.error('Please select at least one checkbox!');
-
         return; // Exit the method if no checkbox is selected
       }
       //save
-      debugger
+      //debugger
       await this.placementShortListStudentService.SaveAllData(this.StudentList)
         .then(async (data: any) => {
           this.State = data['State'];
@@ -241,7 +235,8 @@ export class PlacementSelectedStudentsComponent implements OnInit {
             await this.GetAllData();
           }
           else {
-            this.toastr.error(this.ErrorMessage)
+            this.toastr.error(this.Message);
+            console.error(this.ErrorMessage);
           }
         })
         .catch((error: any) => {
@@ -251,12 +246,6 @@ export class PlacementSelectedStudentsComponent implements OnInit {
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isSubmitted = false;
-      }, 200);
     }
   }
 
@@ -318,78 +307,77 @@ export class PlacementSelectedStudentsComponent implements OnInit {
     }
   }
 
-
   async SendApplicationMessage() {
-       debugger
-       try {
-         this.loaderService.requestStarted();
-        //  let SSOID = this.sSOLoginDataModel.SSOID;
-        //  let action = "GetStudentDetailBySSOID";
-        let request=new SSOIDDetailRequestModel();
-        request.SSOID=this.sSOLoginDataModel.SSOID;
-        request.Action="GetStudentDetailBySSOID";
-         await this.commonMasterService.GetSSOIDDetailData(request)
-           .then((data: any) => {
-             data = JSON.parse(JSON.stringify(data));
-             this.getSSOIDDetailData = data['Data'];
-             console.log(this.getSSOIDDetailData,"getSSOIDDetailData");
-   
-             if (data.State == EnumStatus.Success) {
-               console.log('Data load successfully', data);
-             } else {
-               console.log('Something went wrong', data);
-             }
-           }, (error: any) => console.error(error));
-   
-   
-         // const personalMail = this.getSSOIDDetailData[0].Mailpersonal;
-         // this.messageModel.Email = (personalMail && personalMail.trim() !== '') 
-         //   ? personalMail 
-         //   : this.getSSOIDDetailData[0].Officialmail;
-   
-           this.messageModel.MobileNo = (this.getSSOIDDetailData[0].MobileNo && this.getSSOIDDetailData[0].MobileNo.trim() !== '')
-           ?this.getSSOIDDetailData[0].MobileNo
-           :this.getSSOIDDetailData[0].TelephoneNumber;
-   
-         //this.messageModel.MobileNo = '8955186821';
-         // this.messageModel.MobileNo = this.getSSOIDDetailData[0].MobileNo;
-         // department
-         //if (this.DepartmentID == EnumDepartment.BTER) {
-         //  this.messageModel.MessageType = EnumMessageType.Bter_FormFinalSubmit;
-         //}
-         //else if (this.DepartmentID == EnumDepartment.ITI) {
-         //  this.messageModel.MessageType = EnumMessageType.FormFinalSubmitITI;
-         //}
-         /*this.messageModel.ApplicationNo = this.ApplicationNo.toString();*/
-        //  Consent_Recorded_Student
-         this.messageModel.ApplicationNo = '21100634';
-         this.messageModel.MessageType='OTP';
-         if(this.messageModel.MobileNo!='' || this.messageModel.MobileNo!=null){
-             await this.smsMailService.SendApplicationMessage(this.messageModel)
-              .then((data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                if (data.State == EnumStatus.Success) {
-                  console.log('Message sent successfully', data);
-                } else {
-                  console.log('Something went wrong', data);
-                }
-              }, (error: any) => console.error(error));
-         }
-         else{
-            this.toastr.error("Mobile number is not available for sending SMS");
-         }
-        
-       } catch (Ex) {
-         console.log(Ex);
-       }
-       finally {
-         setTimeout(() => {
-           this.loaderService.requestEnded();
-         }, 200);
-       }
-     }
-   
-       //
+    //debugger
+    try {
+      this.loaderService.requestStarted();
+      //  let SSOID = this.sSOLoginDataModel.SSOID;
+      //  let action = "GetStudentDetailBySSOID";
+      let request = new SSOIDDetailRequestModel();
+      request.SSOID = this.sSOLoginDataModel.SSOID;
+      request.Action = "GetStudentDetailBySSOID";
+      await this.commonMasterService.GetSSOIDDetailData(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.getSSOIDDetailData = data['Data'];
+          console.log(this.getSSOIDDetailData, "getSSOIDDetailData");
+
+          if (data.State == EnumStatus.Success) {
+            console.log('Data load successfully', data);
+          } else {
+            console.log('Something went wrong', data);
+          }
+        }, (error: any) => console.error(error));
+
+
+      // const personalMail = this.getSSOIDDetailData[0].Mailpersonal;
+      // this.messageModel.Email = (personalMail && personalMail.trim() !== '') 
+      //   ? personalMail 
+      //   : this.getSSOIDDetailData[0].Officialmail;
+
+      this.messageModel.MobileNo = (this.getSSOIDDetailData[0].MobileNo && this.getSSOIDDetailData[0].MobileNo.trim() !== '')
+        ? this.getSSOIDDetailData[0].MobileNo
+        : this.getSSOIDDetailData[0].TelephoneNumber;
+
+      //this.messageModel.MobileNo = '8955186821';
+      // this.messageModel.MobileNo = this.getSSOIDDetailData[0].MobileNo;
+      // department
+      //if (this.DepartmentID == EnumDepartment.BTER) {
+      //  this.messageModel.MessageType = EnumMessageType.Bter_FormFinalSubmit;
+      //}
+      //else if (this.DepartmentID == EnumDepartment.ITI) {
+      //  this.messageModel.MessageType = EnumMessageType.FormFinalSubmitITI;
+      //}
+      /*this.messageModel.ApplicationNo = this.ApplicationNo.toString();*/
+      //  Consent_Recorded_Student
+      this.messageModel.ApplicationNo = '21100634';
+      this.messageModel.MessageType = 'OTP';
+      if (this.messageModel.MobileNo != '' || this.messageModel.MobileNo != null) {
+        await this.smsMailService.SendApplicationMessage(this.messageModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State == EnumStatus.Success) {
+              console.log('Message sent successfully', data);
+            } else {
+              console.log('Something went wrong', data);
+            }
+          }, (error: any) => console.error(error));
+      }
+      else {
+        this.toastr.error("Mobile number is not available for sending SMS");
+      }
+
+    } catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  //
   public async ExcelExport() {
     if (this.StudentList.length > 0) {
       tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
@@ -399,7 +387,7 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email','Mobile','Email Address','Marked','UploadedResume','Selected','CampusPostID'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'MobileNo', 'Email', 'Mobile', 'Email Address', 'Marked', 'UploadedResume', 'Selected', 'CampusPostID'
     ];
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
@@ -415,5 +403,5 @@ export class PlacementSelectedStudentsComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'ShortlistStudentData.xlsx');
   }
-   
+
 }

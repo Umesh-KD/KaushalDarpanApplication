@@ -24,7 +24,37 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.InstituteID" (change)="OnchangeInstitute()" [disabled]="IsDisable">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterList" value="{{item.Id}}">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Company</label>
+          <select class="form-select" id="CompanyID" [(ngModel)]="searchRequest.CompanyID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteCompanyMasterList" value="{{item.Id}}">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approve Status</label>
+          <select class="form-select" name="EventStatus" id="StudentExamInstituteId" [(ngModel)]="searchRequest.ApproveStatus">
+            <option value="-1">--All--</option>
+            <option value="0">Event Created</option>
+            <option value="1">Approved</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Status</label>
           <select class="form-select" name="EventStatus" id="StudentExamInstituteId" [(ngModel)]="searchRequest.EventStatus">
             <option value="0">--All--</option>
             <option value="1">Upcoming</option>
@@ -49,9 +79,9 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
         <!-- <a routerLink="/IndustryInstitutePartnershipList" class="inline-flex items-center btn bg-dark text-white btn-sm">
-    <i class="ti ti-chevron-left"></i>Back</a> -->
-        <a href="javascript:void(0)"
-           (click)="goBack()"
+  <i class="ti ti-chevron-left"></i>Back</a> -->
+       
+        <a [routerLink]="['/IIPCompanyMaster']"
            class="inline-flex items-center btn bg-dark text-white btn-sm">
           <i class="ti ti-chevron-left"></i>Back
         </a>
@@ -65,7 +95,9 @@
             <option value="1000">1000</option>
           </select>
         </div>
-        <div class=""></div>
+        <div class="">
+          <button *ngIf="sSOLoginDataModel.RoleID == _enumRole.IIPAdmin" class="btn bg-success text-white" (click)="ApproveCompanyEvents()" type="button">Approve Event</button>
+        </div>
         <div class=""></div>
         <div class="">
           <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
@@ -76,7 +108,11 @@
         <table class="table table-border w-full" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
+              <th class="text-left" *ngIf="searchRequest.ApproveStatus != 1 &&  sSOLoginDataModel.RoleID == _enumRole.IIPAdmin">
+                <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+              </th>
               <th>Sr. No.</th>
+              <th class="text-left">Company</th>
               <th class="text-left">Event Title</th>
 
               <th class="text-left">Event Type</th>
@@ -91,7 +127,13 @@
           </thead>
           <tbody>
             <tr *ngFor="let row of CompanyEventsList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+              <td *ngIf=" searchRequest.ApproveStatus != 1 && sSOLoginDataModel.RoleID == _enumRole.IIPAdmin">
+                <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                       #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
+                       *ngIf="row.intStatus != 1">
+              </td>
               <td>{{idx+1}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyName}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventName}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventType}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Event}}</td>
@@ -138,6 +180,12 @@
                     <i class="ti ti-trash"></i>
                   </a>
 
+                  <a [routerLink]="'/event-consent-list'" [queryParams]="{ id:row.EventID}"
+                     title="View Consent">
+
+                    <i class="ti ti-users-group"></i>
+                  </a>
+
                 </div>
               </td>
             </tr>
@@ -146,4 +194,5 @@
         </table>
       </div>
     </div>
+  </div>
   </div>
