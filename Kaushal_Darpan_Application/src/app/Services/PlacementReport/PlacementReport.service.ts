@@ -29,7 +29,7 @@ export class PlacementReportService {
   handleErrorObservable(error: Response | any) {
     return throwError(error);
   }
-  public async GetAllData(searchRequest: PlacementReportSearchModels) {
+  public async GetAllData(searchRequest: any) {
     const body = JSON.stringify(searchRequest);
 
     return await this.http.post(`${this.APIUrl}/GetAllData`, body, this.headersOptions)
@@ -37,6 +37,18 @@ export class PlacementReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetAllHistory(searchRequest: any) {
+    const body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetAllHistory`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
 
   /*------------------------------------------------ITI Placement--------------------------------------------------------*/

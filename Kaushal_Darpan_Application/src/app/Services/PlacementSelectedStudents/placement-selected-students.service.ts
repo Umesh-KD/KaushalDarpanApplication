@@ -46,6 +46,16 @@ export class PlacementSelectedStudentsService {
       ).toPromise();
   }
 
+  public async SaveReject(request: PlacementSelectedStudentResponseModel[]) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/SaveReject', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
   public async GetStudentPlacedCount() {
     return await this.http.get(this.APIUrl + "/GetStudentPlacedCount", this.headersOptions)
       .pipe(

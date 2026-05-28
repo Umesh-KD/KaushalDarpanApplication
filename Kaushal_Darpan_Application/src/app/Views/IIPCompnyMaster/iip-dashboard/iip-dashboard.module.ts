@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { IipDashboardRoutingModule } from './iip-dashboard-routing.module';
 import { IipDashboardComponent } from './iip-dashboard.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { IipDashboardComponent } from './iip-dashboard.component';
   ],
   imports: [
     CommonModule,
-    IipDashboardRoutingModule
+    IipDashboardRoutingModule,
+    FormsModule
   ],
   exports: [IipDashboardComponent]
 })

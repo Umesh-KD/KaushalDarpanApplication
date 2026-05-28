@@ -19,7 +19,7 @@ import { PlacementDashService } from '../../../Services/PlacementDashboard/Place
 export class IipDashboardComponent implements OnInit {
 
   public viewPlacementDashboardList: any = [];
-  public placementDashboardList: any = [];
+  public placementDashboardList: any[] = [];
     public Table_SearchText: string = "";
     /*  public searchRequest = new CommonSubjectMasterSearchModel();*/
     public request = new PlacementDashboardModel()
@@ -93,25 +93,53 @@ debugger
     }
   }
 
-   async GetIIPDashboardListData() {
-    try {
-      this.loaderService.requestStarted();
-      debugger
-      await this.PlacementDashService.GetIIPDashboardListData(this.request)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.placementDashboardList = data['Data'];
-          console.log(this.placementDashboardList);
-        }, (error: any) => console.error(error)
-        );
+  //  async GetIIPDashboardListData() {
+  //   try {
+  //     this.loaderService.requestStarted();
+  //     debugger
+  //     this.request.EventStatus = 'UP-Comming';
+  //     await this.PlacementDashService.GetIIPDashboardListData(this.request)
+  //       .then((data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         this.placementDashboardList = data['Data']||[];
+  //         console.log('event list with consent',this.placementDashboardList);
+  //       }, (error: any) => console.error(error)
+  //       );
+  //   }
+  //   catch (ex) {
+  //     console.log(ex);
+  //   }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
+
+  async GetIIPDashboardListData() {
+  try {
+    this.loaderService.requestStarted();
+
+    // default value if empty
+    if (!this.request.EventStatus) {
+      this.request.EventStatus = 'UP-Comming';
     }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
+
+    await this.PlacementDashService.GetIIPDashboardListData(this.request)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.placementDashboardList = data['Data'] || [];
+        console.log('event list with consent', this.placementDashboardList);
+      }, (error: any) => console.error(error)
+      );
   }
+  catch (ex) {
+    console.log(ex);
+  }
+  finally {
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+  }
+}
 }
