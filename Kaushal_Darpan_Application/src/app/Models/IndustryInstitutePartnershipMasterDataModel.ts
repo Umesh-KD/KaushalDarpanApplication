@@ -161,3 +161,12 @@ export class EventConsentActionDataModel {
   public Remark: string = ''
   public Status: number = 0
 }
+export class EventConsentSearchModel {
+  public EventID: number = 0
+  public EventTypeID: number = 0
+  public EventStatusID: number = 0
+  public UserID: number = 0
+  public RoleID: number = 0
+  public InstituteID: number = 0
+  public Action: string = ''
+}

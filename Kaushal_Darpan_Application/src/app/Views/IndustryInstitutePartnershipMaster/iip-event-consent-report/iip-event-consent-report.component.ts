@@ -9,7 +9,7 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import { EventConsentActionDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import { EventConsentActionDataModel, EventConsentSearchModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 
 @Component({
   selector: 'app-iip-event-consent-report',
@@ -20,9 +20,12 @@ import { EventConsentActionDataModel } from '../../../Models/IndustryInstitutePa
 export class IIPEventConsentReportComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new EventConsentActionDataModel();
+  public searchRequest = new EventConsentSearchModel();
 
   public CompanyEventsList: any = []
   public EventConsentDataList: any = []
+  public EventTypeList: any = [];
+  public EventDataList_DDL: any = [];
 
   modalReference: NgbModalRef | undefined;
   public _EnumRole = EnumRole;
@@ -55,25 +58,65 @@ export class IIPEventConsentReportComponent {
   ) { }
 
   async ngOnInit() {
-
+    debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.EventID = Number(this.activatedRoute.snapshot.queryParamMap.get('eid')?.toString());
-    this.EventTypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('etid')?.toString());
-    this.EventStatusID = Number(this.activatedRoute.snapshot.queryParamMap.get('esid')?.toString());
+    this.EventID = Number(this.activatedRoute.snapshot.queryParamMap.get('eid')?.toString()) || 0;
+    this.EventTypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('etid')?.toString()) || 0;
+    this.EventStatusID = Number(this.activatedRoute.snapshot.queryParamMap.get('esid')?.toString()) || 0;
+
+    await this.GetEventMasterData();
+    await this.GetEventDataList_DDL();
     await this.GetEventConsentData();
-    
+  }
+
+  async GetEventMasterData() {
+    try {
+      this.loaderService.requestStarted();
+      const eventTypeRes: any = await this.commonMasterService.GetEventCommonMaster('EventType');
+      this.EventTypeList = eventTypeRes.Data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async GetEventDataList_DDL() {
+    try {
+      const request: any = {};
+      request.Action = "GetAllEventData_DDL";
+      await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(request)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.EventDataList_DDL = data.Data
+          } 
+        })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async GetEventConsentData() {
     try {
-      let request: any = {};
-      request.EventID = this.EventID ;
-      request.EventTypeID = this.EventTypeID;
-      request.EventStatusID = this.EventStatusID;
-      request.UserID = this.sSOLoginDataModel.UserID;
-      request.RoleID = this.sSOLoginDataModel.RoleID; 
-      request.Action = "GetAllConsentData";
-      await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(request)
+      if(this.EventID != undefined || this.EventID != null || this.EventID != 0) {
+        this.searchRequest.EventID = this.EventID ;
+      }
+
+      if(this.EventTypeID != undefined || this.EventTypeID != null || this.EventTypeID != 0){
+        this.searchRequest.EventTypeID = this.EventTypeID;
+      }
+      
+      if(this.EventStatusID != undefined || this.EventStatusID != null || this.EventStatusID != 0 ){
+        this.searchRequest.EventStatusID = this.EventStatusID;
+      }
+
+      if(this.sSOLoginDataModel.RoleID == EnumRole.IIPIncharge) {
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      }
+
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID; 
+      this.searchRequest.Action = "GetAllConsentData";
+      await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(this.searchRequest)
         .then(async (data: any) => {
 
           data = JSON.parse(JSON.stringify(data));
@@ -83,7 +126,7 @@ export class IIPEventConsentReportComponent {
             this.loadInTable();
             //end table feature load
           } else if (data.State === EnumStatus.Warning) {
-            this.toastr.warning("Event not found")
+            this.toastr.warning("Data not found")
           } else {
             this.toastr.error(data.ErrorMessage)
           }
@@ -91,6 +134,17 @@ export class IIPEventConsentReportComponent {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  async ClearSearchData() {
+    this.searchRequest = new EventConsentSearchModel();
+    this.searchRequest.EventID = this.EventID ;
+    this.searchRequest.EventTypeID = this.EventTypeID;
+    this.searchRequest.EventStatusID = this.EventStatusID;
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID; 
+    this.searchRequest.Action = "GetAllConsentData";
+    await this.GetEventConsentData();
   }
 
   //table feature 
