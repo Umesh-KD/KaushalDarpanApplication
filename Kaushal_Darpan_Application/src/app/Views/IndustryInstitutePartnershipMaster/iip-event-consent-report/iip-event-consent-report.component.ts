@@ -21,8 +21,6 @@ export class IIPEventConsentReportComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new EventConsentActionDataModel();
 
-  groupForm!: FormGroup;
-
   public CompanyEventsList: any = []
   public EventConsentDataList: any = []
 
@@ -30,6 +28,8 @@ export class IIPEventConsentReportComponent {
   public _EnumRole = EnumRole;
 
   public EventID: number = 0
+  public EventTypeID: number = 0
+  public EventStatusID: number = 0
   public isSubmitted: boolean = false
 
   //table feature default
@@ -52,22 +52,15 @@ export class IIPEventConsentReportComponent {
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
     private loaderService: LoaderService, 
     private modalService: NgbModal,
-    private fb: FormBuilder,
   ) { }
 
   async ngOnInit() {
 
-    this.groupForm = this.fb.group({
-      ddlStatus: [1, [DropdownValidators]],
-      txtRemark: ['', Validators.required]
-    });
-
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.EventID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
-    if(this.EventID > 0) {
-      await this.GetEventConsentData();
-    }
-    // await this.GetCompanyEvents();
+    this.EventID = Number(this.activatedRoute.snapshot.queryParamMap.get('eid')?.toString());
+    this.EventTypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('etid')?.toString());
+    this.EventStatusID = Number(this.activatedRoute.snapshot.queryParamMap.get('esid')?.toString());
+    await this.GetEventConsentData();
     
   }
 
@@ -75,6 +68,8 @@ export class IIPEventConsentReportComponent {
     try {
       let request: any = {};
       request.EventID = this.EventID ;
+      request.EventTypeID = this.EventTypeID;
+      request.EventStatusID = this.EventStatusID;
       request.UserID = this.sSOLoginDataModel.UserID;
       request.RoleID = this.sSOLoginDataModel.RoleID; 
       request.Action = "GetAllConsentData";
