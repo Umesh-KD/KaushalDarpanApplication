@@ -240,6 +240,7 @@ const routes: Routes = [
       { path: 'AddCompany', loadChildren: () => import('./Views/CompanyMaster/add-company-master/add-company-module').then(m => m.CompanyMasterModule), title: 'Add Company' },
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
       
+      { path: 'IIPDashboard', loadChildren: () => import('./Views/IIPCompnyMaster/iip-dashboard/iip-dashboard.module').then(m => m.IipDashboardModule), title: 'IIP Dashboard' },
       { path: 'AddIIPCompany', loadChildren: () => import('./Views/IIPCompnyMaster/add-iip-company-master/add-iip-company-master.module').then(m => m.AddIipCompanyMasterModule), title: 'Add IIP Company' },
       { path: 'IIPCompanyMaster', loadChildren: () => import('./Views/IIPCompnyMaster/iip-company-master/iip-company-master.module').then(m => m.IipCompanyMasterModule), title: 'IIP Company Master' },
       { path: 'ViewCompanyMouDetail', loadChildren: () => import('./Views/IIPCompnyMaster/view-iip-company-mou-detail/view-iip-company-mou-detail.module').then(m => m.ViewIipCompanyMouDetailModule), title: 'View Company Mou Detail' },
