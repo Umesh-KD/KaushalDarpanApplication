@@ -169,6 +169,7 @@ export class EventConsentActionDataModel {
 }
 export class EventConsentSearchModel {
   public EventID: number = 0
+  public Event: number = 0
   public EventTypeID: number = 0
   public EventStatusID: number = 0
   public UserID: number = 0

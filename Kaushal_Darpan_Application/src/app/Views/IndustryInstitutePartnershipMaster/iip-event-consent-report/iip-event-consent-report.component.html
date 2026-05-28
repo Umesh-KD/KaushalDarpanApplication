@@ -22,31 +22,8 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event<span
-                class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="searchRequest.EventID" [disabled]="this.EventID > 0">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of EventDataList_DDL" [value]="item.EventID">
-                {{item.Event}}
-              </option>
-            </select>
-        </div>
-        
-        <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Type<span
-                class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="searchRequest.EventTypeID" [disabled]="this.EventTypeID > 0">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of EventTypeList" [value]="item.Code">
-                {{item.NameEng}}
-              </option>
-            </select>
-        </div>
-
-        <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Status<span
-                class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="searchRequest.EventStatusID" [disabled]="this.EventStatusID > 0">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Status</label>
+            <select class="form-select" [(ngModel)]="searchRequest.EventStatusID" >
               <option value="0">--Select--</option>
               <option value="1">Upcomming</option>
               <option value="2">Running</option>
@@ -54,6 +31,35 @@
               
             </select>
         </div>
+        
+        <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Type</label>
+            <select class="form-select" [(ngModel)]="searchRequest.EventTypeID" >
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of EventTypeList" [value]="item.Code">
+                {{item.NameEng}}
+              </option>
+            </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event</label>
+          <select class="form-select" [(ngModel)]="searchRequest.Event">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of EventList" [value]="item.Code">
+              {{item.NameEng}}
+            </option>
+          </select>
+        </div>
+
+        <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Name</label>
+            <select class="form-select" [(ngModel)]="searchRequest.EventID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of EventDataList_DDL" [value]="item.EventID">
+                {{item.Event}}
+              </option>
+            </select>
+        </div> -->
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetEventConsentData()">Search</button>
