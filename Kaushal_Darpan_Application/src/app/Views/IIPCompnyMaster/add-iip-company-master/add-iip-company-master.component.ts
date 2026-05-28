@@ -61,6 +61,7 @@ export class AddIipCompanyMasterComponent implements OnInit {
       this.CompanyMasterFormGroup = this.formBuilder.group(
         {
           Name: ['', Validators.required],
+          CompanyRegNo: ['', Validators.required],
           Website: ['', Validators.required],
           Address: ['', Validators.required],
   

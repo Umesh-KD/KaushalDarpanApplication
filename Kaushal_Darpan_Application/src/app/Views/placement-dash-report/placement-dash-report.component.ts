@@ -47,6 +47,7 @@ export class PlacementDashReportComponent implements OnInit {
   FromAge:number=0
   ToAge:number=0
   CampusID:number=0
+  FinancialYearID:number=0
 
   constructor(
     private PlacementDashService: PlacementReportService,
@@ -121,7 +122,8 @@ export class PlacementDashReportComponent implements OnInit {
       StudentName: '',
       CampusID: this.CampusID,
       ToAge: this.ToAge,
-      FromAge: this.FromAge
+      FromAge: this.FromAge,
+      FinancialYearID: this.FinancialYearID
     }
 
     await this.PlacementDashService.GetAllData(requestData)
