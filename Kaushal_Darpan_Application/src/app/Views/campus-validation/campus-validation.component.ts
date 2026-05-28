@@ -8,11 +8,11 @@ import { ToastrService } from 'ngx-toastr';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CampusPostService } from '../../Services/CampusPost/campus-post.service';
 import { CampusPostComponent } from '../campus-post/campus-post.component';
-import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumMessageType, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute } from '@angular/router';
-import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
+import { ApplicationMessageDataModel, SmsDataModel } from '../../Models/ApplicationMessageDataModel';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 
 @Component({
@@ -26,6 +26,7 @@ export class CampusValidationComponent {
   public Message: any = [];
   public ErrorMessage: any = [];
   public CampusValidationListData: any = [];
+  public CampusSMSData: any = [];
   public InstituteMasterList: any = [];
 
   public CompanyMasterList: any = [];
@@ -40,7 +41,7 @@ export class CampusValidationComponent {
   public reactiveSuspened:boolean=false;
 
   public messageModel = new ApplicationMessageDataModel()
-  
+  public SmsDataModel = new SmsDataModel();
 
   request = new CampusPostMasterModel();
   requestAction = new CampusPostMaster_Action();
@@ -125,6 +126,7 @@ export class CampusValidationComponent {
     }
   }
 
+
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
@@ -171,6 +173,32 @@ export class CampusValidationComponent {
       }, 200);
     }
   }
+
+  async GetCampusSMSDataByID(PostID:number) {
+    try {
+      debugger
+      this.loaderService.requestStarted();
+      this.SmsDataModel.PostID = PostID;
+      this.SmsDataModel.Flag = "_getCampusSMSDataByID";
+      await this.campusPostService.GetCampusSMSDataByID(this.SmsDataModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CampusSMSData = data['Data'];
+          console.log(this.CampusSMSData, "CampusSMSData");
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
   async btn_Clear() {
     this.requestAction.PostID = 0;
     this.requestAction.Action = "0";
@@ -192,6 +220,7 @@ export class CampusValidationComponent {
     });
     this.requestAction.Action = "0";
     this.requestAction.ActionRemarks = "";
+    await this.GetCampusSMSDataByID(this.requestAction.PostID);
   }
   async ViewandUpdate(content: any, PostID: number) {
     
@@ -244,7 +273,9 @@ export class CampusValidationComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (this.State == EnumStatus.Success) {
-            this.SendApplicationMessage();
+            if (this.requestAction.Action == "Approved") {
+              this.SendApplicationMessage();
+            }            
             this.toastr.success(this.Message);
             await this.CloseModalPopup();
             await this.btn_SearchClick();
@@ -323,7 +354,7 @@ export class CampusValidationComponent {
     try {
       this.loaderService.requestStarted();
       let request=new SSOIDDetailRequestModel();
-      request.SSOID=this.sSOLoginDataModel.SSOID;
+      request.SSOID = this.CampusSMSData[0].PostSSOID;
       request.Action="GetTPODetailBySSOID";
       // let SSOID = this.sSOLoginDataModel.SSOID;
       // let action = "GetTPODetailBySSOID";
@@ -332,7 +363,6 @@ export class CampusValidationComponent {
           data = JSON.parse(JSON.stringify(data));
           this.getSSOIDDetailData = data['Data'];
           console.log(this.getSSOIDDetailData,"getSSOIDDetailData");
-
           if (data.State == EnumStatus.Success) {
             console.log('Data load successfully', data);
           } else {
@@ -350,7 +380,6 @@ export class CampusValidationComponent {
         ?this.getSSOIDDetailData[0].MobileNo
         :this.getSSOIDDetailData[0].TelephoneNumber;
 
-      //this.messageModel.MobileNo = '8955186821';
       // this.messageModel.MobileNo = this.getSSOIDDetailData[0].MobileNo;
       // department
       //if (this.DepartmentID == EnumDepartment.BTER) {
@@ -360,8 +389,24 @@ export class CampusValidationComponent {
       //  this.messageModel.MessageType = EnumMessageType.FormFinalSubmitITI;
       //}
       /*this.messageModel.ApplicationNo = this.ApplicationNo.toString();*/
-      this.messageModel.ApplicationNo = '21100634';
-      this.messageModel.MessageType='OTP';
+      this.messageModel.CampusID = this.CampusSMSData[0].CampusID;
+      this.messageModel.NodalType = this.CampusSMSData[0].NodalType;
+      this.messageModel.CampusLocationURL = this.CampusSMSData[0].CampusLocationURL;
+      this.messageModel.ApplicantName = this.getSSOIDDetailData[0].SSOID;
+      this.messageModel.ReferenceID = this.CampusSMSData[0].ReferenceID;
+      //this.messageModel.MobileNo = '8334874706';
+      //this.messageModel.ApplicantName = 'Divya Sharma';
+      this.messageModel.MessageType = EnumMessageType.Bter_CampusApprove;
+
+      const now = new Date();
+
+      this.messageModel.ActionDate =
+        now.getFullYear() + '-' +
+        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+        String(now.getDate()).padStart(2, '0') + ' ' +
+        String(now.getHours()).padStart(2, '0') + ':' +
+        String(now.getMinutes()).padStart(2, '0') + ':' +
+        String(now.getSeconds()).padStart(2, '0');
       await this.smsMailService.SendApplicationMessage(this.messageModel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -380,6 +425,8 @@ export class CampusValidationComponent {
       }, 200);
     }
   }
+
+
 
   async UpdateCampusData() {
     debugger
