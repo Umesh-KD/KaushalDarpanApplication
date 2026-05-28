@@ -1,0 +1,115 @@
+<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+  <h3 class="mt-0 text-white">Industry Institute Partnership Events Consent List</h3>
+  <!-- <p class="mb-0">Click on 'View More Details' to access comprehensive information related to campus activities, including companies, vacancies, requirements, and more.</p> -->
+</div>
+
+<div class="container-fluid AboutSection position-relative py-5" style="background: #deebff !important;">
+  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
+  <div class="container-xl position-relative" style="z-index:9999">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card">
+          <div class="card-header">
+           
+            <div class="flex justify-end flex-wrap items-center">
+              <b><i class="fa fa-th-list"></i> IIP Event Consent Data List</b>
+              <a href="javascript:void(0);" 
+                class="btn bg-info btn-sm text-white" style="float: right;"
+                [routerLink]="'/iip-allpost'">
+                <i class="ti ti-download"></i> Back
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table mat-table [dataSource]="dataSource" matSort class="table table-border w-full table-auto" cellpadding="5">
+                <!-- Sr. No Column -->
+                <ng-container matColumnDef="SrNo">
+                  <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+                  <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="EventName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Event Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.EventName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="EventType">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Event Type</th>
+                  <td mat-cell *matCellDef="let element">{{ element.EventType }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Event">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Event</th>
+                  <td mat-cell *matCellDef="let element">{{ element.Event }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="EventFor">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Event For</th>
+                  <td mat-cell *matCellDef="let element">{{ element.EventFor }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="EventSchedule">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Event Schedule</th>
+                  <td mat-cell *matCellDef="let element">{{ element.EventSchedule }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="VenueName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Venue</th>
+                  <td mat-cell *matCellDef="let element">{{ element.VenueName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="LevelName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Level</th>
+                  <td mat-cell *matCellDef="let element">{{ element.LevelName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="ConsenterName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Consenter</th>
+                  <td mat-cell *matCellDef="let element">{{ element.ConsenterName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="InterestedStatus_str">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Insterested/Not-Insterested</th>
+                  <td mat-cell *matCellDef="let element">{{ element.InterestedStatus_str }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Remarks">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Consent Remark</th>
+                  <td mat-cell *matCellDef="let element">{{ element.Remarks }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="StatusName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Consent Status</th>
+                  <td mat-cell *matCellDef="let element">{{ element.StatusName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="StatusRemark">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Status Remark</th>
+                  <td mat-cell *matCellDef="let element">{{ element.StatusRemark }}</td>
+                </ng-container>
+
+                <!-- Table Header and Rows -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              </table>
+              <div class="overflow-x-auto mt-3">
+                <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+                  No Record Found
+                </div>
+                
+                <!-- Pagination Controls -->
+                <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                               [length]="totalRecords" (page)="onPaginationChange($event)">
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

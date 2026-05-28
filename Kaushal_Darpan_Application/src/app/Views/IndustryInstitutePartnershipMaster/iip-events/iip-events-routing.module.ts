@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IIPEventsComponent } from './iip-events.component';
+import { iipeventsComponent } from './iip-events.component';
 
-const routes: Routes = [{ path: '', component: IIPEventsComponent }];
+const routes: Routes = [{ path: '', component: iipeventsComponent }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

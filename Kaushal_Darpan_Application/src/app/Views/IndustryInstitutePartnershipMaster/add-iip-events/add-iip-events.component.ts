@@ -202,6 +202,7 @@ if (this.PageMode == 'view') {
     try {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.request.UserID = this.sSOLoginDataModel.UserID;
       debugger
       await this.industryInstitutePartnershipMasterService.SaveData_IIP_Events(this.request)
         .then(async (data: any) => {

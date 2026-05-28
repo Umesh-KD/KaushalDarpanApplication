@@ -202,4 +202,28 @@ export class IndustryInstitutePartnershipMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetEventConsentData(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetEventConsentData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UpdateConsentStatus(request: any[]) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UpdateConsentStatus`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetIIPEventConsentReportData(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetIIPEventConsentReportData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

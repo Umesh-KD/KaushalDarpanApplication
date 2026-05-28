@@ -71,7 +71,8 @@ const routes: Routes = [
         path: 'allpost', loadChildren: () => import('./Views/Home/all-post/all-post.module').then(m => m.AllPostModule), title: 'All Campus List'
       },
       { path: 'iip-allpost', loadChildren: () => import('./Views/Home/iip-web-all-post/iip-web-all-post.module').then(m => m.IIPWebAllPostModule), title: 'IIP Post List' },
-
+      { path: 'iip-event-consent-list-public', loadChildren: () => import('./Views/Home/iip-event-consent-list-public/iip-event-consent-list-public.module').then(m => m.IipEventConsentListPublicModule), title: 'IIP Event Consent List' },
+      
       // {
       //   path: 'ITIallpost', loadChildren: () => import('./Views/Home/iti-all-post/iti-all-post.module').then(m => m.ITIAllPostModule), title: 'All Campus List'
       // },
@@ -240,6 +241,7 @@ const routes: Routes = [
       { path: 'AddCompany', loadChildren: () => import('./Views/CompanyMaster/add-company-master/add-company-module').then(m => m.CompanyMasterModule), title: 'Add Company' },
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
       
+      { path: 'IIPDashboard', loadChildren: () => import('./Views/IIPCompnyMaster/iip-dashboard/iip-dashboard.module').then(m => m.IipDashboardModule), title: 'IIP Dashboard' },
       { path: 'AddIIPCompany', loadChildren: () => import('./Views/IIPCompnyMaster/add-iip-company-master/add-iip-company-master.module').then(m => m.AddIipCompanyMasterModule), title: 'Add IIP Company' },
       { path: 'IIPCompanyMaster', loadChildren: () => import('./Views/IIPCompnyMaster/iip-company-master/iip-company-master.module').then(m => m.IipCompanyMasterModule), title: 'IIP Company Master' },
       { path: 'ViewCompanyMouDetail', loadChildren: () => import('./Views/IIPCompnyMaster/view-iip-company-mou-detail/view-iip-company-mou-detail.module').then(m => m.ViewIipCompanyMouDetailModule), title: 'View Company Mou Detail' },
@@ -879,6 +881,8 @@ const routes: Routes = [
       { path: 'iip-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-events/iip-events.module').then(m => m.IIPEventsModule), title: 'IIP Events' },
       { path: 'add-iip-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/add-iip-events/add-iip-events.module').then(m => m.AddIIPEventsModule), title: 'Add IIP Events' },
       { path: 'approve-company-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/approve-company-event/approve-company-event.module').then(m => m.ApproveCompanyEventModule), title: 'Approve Company Events' },
+      { path: 'event-consent-list', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-event-consent-list/iip-event-consent-list.module').then(m => m.IIPEventConsentListModule), title: 'Event Consent List' },
+      { path: 'event-consent-report', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-event-consent-report/iip-event-consent-report.module').then(m => m.IIPEventConsentReportModule), title: 'Event Consent Report' },
 
       { path: 'EditMeritDocument', loadChildren: () => import('./Views/BTER/BterMerit/edit-merit-document/edit-merit-document.module').then(m => m.EditMeritDocumentModule) },
       { path: 'AllotmentConfiguration', loadChildren: () => import('./Views/master-configuration/allotment-configuration/allotment-configuration.module').then(m => m.AllotmentConfigurationModule) },
@@ -1171,6 +1175,7 @@ const routes: Routes = [
 
       { path: 'website-settings', loadChildren: () => import('./Views/Website-Settings/website-setting/website-setting.module').then(m => m.WebsiteSettingModule), title: 'Website Settings' },
       { path: 'DynamicUploadContent', loadChildren: () => import('./Views/Website-Settings/highlights/highlights.module').then(m => m.HighlightsModule), title: 'Dynamic Upload Content' },
+      { path: 'OrderAndCircular/:id', loadChildren: () => import('./Views/Website-Settings/OrderAndCircular/OrderAndCircular.module').then(m => m.OrderAndCircularModule), title: 'OrderAndCircular' },
       { path: 'OrderAndCircular', loadChildren: () => import('./Views/Website-Settings/OrderAndCircular/OrderAndCircular.module').then(m => m.OrderAndCircularModule), title: 'OrderAndCircular' },
       { path: 'website-settings-downloads-fdgdsfgsf', loadChildren: () => import('./Views/Website-Settings/downloads/downloads.module').then(m => m.DownloadsModule), title: 'Website Settings' },
       { path: 'website-settings-circular-dfgdfgdsfg', loadChildren: () => import('./Views/Website-Settings/circular/circular.module').then(m => m.CircularModule), title: 'Website Settings' },
@@ -1610,6 +1615,7 @@ const routes: Routes = [
       { path: 'candidate-allotment-report', loadChildren: () => import('./Views/Counselling-Master/candidate-allotment-report/candidate-allotment-report.module').then(m => m.CandidateAllotmentListReportModule), title: 'Candidate Allotment List' },
       { path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List' },
       { path: 'examiner-with-group-code-list', loadChildren: () => import('./Views/Reports/examiner-with-group-code-list/examiner-with-group-code-list.module').then(m => m.ExaminerWithGroupCodeListModule), title: 'ExaminerWithGroupCodeList' },
+      { path: 'unlock-examiner-groupcode-reval', loadChildren: () => import('./Views/unlock-examiner-groupcode-reval/unlock-examiner-groupcode-reval.module').then(m => m.UnlockExaminerGroupcodeRevalModule) },
       { path: 'mass-copping-detail-report', loadChildren: () => import('./Views/Reports/mass-copping-detail-report/mass-copping-detail-report.module').then(m => m.MassCoppingDetailReportModule), title: 'MassCoppingDetailReport' },
 
 
@@ -1878,7 +1884,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
-
+  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 
 ];

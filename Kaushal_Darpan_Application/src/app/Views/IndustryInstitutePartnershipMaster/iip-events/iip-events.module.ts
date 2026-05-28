@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
-import { IIPEventsComponent } from './iip-events.component';
+
 import { IIPEventsRoutingModule } from './iip-events-routing.module';
+import { iipeventsComponent } from './iip-events.component';
 
 @NgModule({
   declarations: [
-    IIPEventsComponent
+    iipeventsComponent
   ],
   imports: [
     CommonModule,

@@ -100,7 +100,7 @@ export class HostelReportsComponent {
 
   async GetReportData() {
     try {
-      
+      debugger
 
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID

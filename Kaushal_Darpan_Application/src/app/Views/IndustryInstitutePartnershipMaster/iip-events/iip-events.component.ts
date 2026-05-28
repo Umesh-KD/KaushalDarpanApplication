@@ -5,12 +5,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { CommonFunctionService } from '../../../Common/common';
+
 import { IndustryInstitutePartnershipMasterService } from '../../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CompanyEventSearchModel, IIP_EventDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-iip-events',
@@ -18,17 +19,20 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2';
   templateUrl: './iip-events.component.html',
   styleUrl: './iip-events.component.css'
 })
-export class IIPEventsComponent {
+
+export class iipeventsComponent {
   public sSOLoginDataModel = new SSOLoginDataModel(); 
   public searchRequest = new CompanyEventSearchModel(); 
 
   public deleteReq = new IIP_EventDataModel();
   _enumRole = EnumRole;
-
+  public IsDisable: boolean = false;
   public CompanyEventsList: any = []
-
+  public InstituteMasterList: any = [];
+  public InstituteCompanyMasterList: any = [];
   public CompanyID: number = 0
   public Table_SearchText: string = ''
+  public returnUrl: string = '/IndustryInstitutePartnershipList';
   constructor(
     private commonMasterService: CommonFunctionService, 
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
@@ -46,16 +50,43 @@ export class IIPEventsComponent {
   async ngOnInit() { 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CompanyID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
-    if(this.CompanyID > 0) {
-      await this.GetCompanyEvents();
+
+     // get return url
+  this.returnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl')
+                    || '/IndustryInstitutePartnershipList';
+   
+    debugger
+    if (this.sSOLoginDataModel.RoleID == EnumRole.IIP_Incharge) {
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      await this.GetInstituteMasterDDL();
+      await this.GetEventInsituteCompany();
+      this.IsDisable = true;
+    } else {
+      this.IsDisable = false;
+      await this.GetInstituteMasterDDL();
     }
+
+    if (this.CompanyID > 0) {
+     
+      this.searchRequest.CompanyID = this.CompanyID;
+    }
+
+      await this.GetCompanyEvents();
+   
+    
   }
 
   async GetCompanyEvents() {
     try {
+      this.CompanyEventsList = [];
+      if (this.searchRequest.CompanyID == 0) {
+        this.searchRequest.CompanyID = this.CompanyID;
+      } else {
+        this.searchRequest.CompanyID = this.searchRequest.CompanyID;
+      }
       
-      this.searchRequest.CompanyID = this.CompanyID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      
       debugger
       await this.industryInstitutePartnershipMasterService.GetCompanyEvents(this.searchRequest)
         .then(async (data: any) => {
@@ -64,7 +95,10 @@ export class IIPEventsComponent {
           this.CompanyEventsList = data.Data
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning("Event not found")
-        } else {
+        }
+        else
+        {
+        
           this.toastr.error(data.ErrorMessage)
         }
       })
@@ -97,4 +131,56 @@ export class IIPEventsComponent {
         }
       })
   }
+  goBack() {
+  this.router.navigateByUrl(this.returnUrl);
+  }
+
+
+  ClearReset()
+  {
+    this.searchRequest = new CompanyEventSearchModel();
+    this.GetCompanyEvents();
+  }
+
+  async GetInstituteMasterDDL() {
+    try {
+      var body =
+      {
+        MasterCode: "GetEventInsitute",
+        FilterBy:this.sSOLoginDataModel.RoleID
+      }
+      await this.commonMasterService.CommonMasterDataByAction(body)
+        .then((data: any) =>
+        {
+          this.InstituteMasterList = data.Data;
+        })
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
+
+
+  async GetEventInsituteCompany() {
+    try {
+      var body =
+      {
+        MasterCode: "GetEventInsituteCompany",
+        FilterBy: this.searchRequest.InstituteID
+      }
+      debugger
+      await this.commonMasterService.CommonMasterDataByAction(body)
+        .then((data: any) => {
+          this.InstituteCompanyMasterList = data.Data;
+        })
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  async OnchangeInstitute() {
+    await this.GetEventInsituteCompany();
+  }
+
 }

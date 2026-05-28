@@ -100,7 +100,7 @@
                 <!--<a href="javascript:void(0);" title="View & Update Company" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,company.ID)"><i class="ti ti-eye"></i></a>-->
                 <a *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel)"
                    [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:3}"
-                   title="View & Update Company">
+                   title="View Company">
                   <i class="ti ti-eye"></i>
                 </a>
                 <!-- <a *ngIf="(company.Status=='Approved' || company.Status=='Rejected' || company.Status=='Hold' || company.Status=='Pending')"
@@ -109,7 +109,7 @@
                 </a> -->
                 <a *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.IIPAdmin)"
                    [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:3,flag:1}"
-                   title="View & Update Company">
+                   title="View Company">
                   <i class="ti ti-eye"></i>
                 </a>
                 <a href="javascript:void(0);" title="View Company History" (click)="openModal(modal_Open,company.ID)"><i class="ti ti-list"></i></a>

@@ -31,6 +31,9 @@ export class StaffTrainingConsentComponent {
   public CompanyID: number = 0
   public Table_SearchText: string = ''
   public TrainingName: string = ''
+
+
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
@@ -55,10 +58,15 @@ export class StaffTrainingConsentComponent {
 
   async GetCompanyEvents() {
     try {
-
+      this.CompanyEventsList = [];
       this.searchRequest.CompanyID = this.CompanyID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      if (this.sSOLoginDataModel.RoleID == 3) {
+        this.searchRequest.StaffID = this.sSOLoginDataModel.StudentID;
+      } else {
+        this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      }
+
       debugger
       await this.industryInstitutePartnershipMasterService.GetCompanyEventsStaff(this.searchRequest)
         .then(async (data: any) => {
@@ -191,9 +199,10 @@ export class StaffTrainingConsentComponent {
           }
 
           try {
-
+            
             this.requestAction.StaffID =
-              this.sSOLoginDataModel.StaffID;
+              this.sSOLoginDataModel.StaffID || 0
+            this.requestAction.StudentID = this.sSOLoginDataModel.StudentID
 
             await this.industryInstitutePartnershipMasterService
               .Savestaffconsent(this.requestAction)
@@ -226,4 +235,8 @@ export class StaffTrainingConsentComponent {
     );
   }
 
+  ClearReset() {
+    this.searchRequest = new CompanyEventSearchModel();
+    this.GetCompanyEvents();
+  }
 }

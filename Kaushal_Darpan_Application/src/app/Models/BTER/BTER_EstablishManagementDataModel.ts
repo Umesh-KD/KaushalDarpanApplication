@@ -718,6 +718,7 @@ export class StaffTrainingDetailDataModel {
   public Dis_complitionTrainingDoc: string = '';
   public Remark: string = '';
   public RoleID: number = 0;
+  public InstituteID: number = 0;
 }
 
 export class StaffTrainingDetailSearchData {
@@ -787,6 +788,7 @@ export class EM_TransferSystemSearchModel {
   public RelievingDoc_Dis?: string = '';
   public RelievingDate?: string = '';
   public RoleID: number = 0;
+  public RelievingTimeID: number = 0;
 }
   
 
@@ -883,5 +885,7 @@ export class BTERStaffManualRequestModel {
   public To_ddlDistrictID: number = 0;
   public To_ddlCollege: number = 0;
   public RoleID: number = 0;
+  public BranchID: number = 0;
+  public To_BranchID: number = 0;
 
 }

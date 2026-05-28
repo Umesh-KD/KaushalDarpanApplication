@@ -103,9 +103,9 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a *ngIf="StudentList.length > 0" href="javascript:void(0);" (click)="DownloadMarksheetBulk()" class="btn bg-info btn-sm text-white">
+      <!-- <a *ngIf="StudentList.length > 0" href="javascript:void(0);" (click)="DownloadMarksheetBulk()" class="btn bg-info btn-sm text-white">
         <i class="ti ti-download"></i> Download Marksheet Bulk
-      </a>
+      </a> -->
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -115,9 +115,18 @@
           <option value="500">500</option>
           <option value="1000">1000</option>
         </select>
-        <div class="">
-          <!-- <input class="form-input" placeholder="Search..." /> -->
-        </div>
+      </div>
+      <div class="">
+        <!-- <div *ngIf="buttonGroups?.length > 0">
+          <div class="flex items-center flex-wrap gap-2 flex-row">
+            <a href="javascript:void(0);" 
+              *ngFor="let group of buttonGroups"
+              (click)="DownloadBulkMarksheet(group.startIndex, group.endIndex)" 
+              class="btn bg-info btn-sm text-white">
+              <i class="ti ti-download"></i> Download Marksheet ({{ group.label }})
+            </a>
+          </div>
+        </div> -->
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
@@ -139,8 +148,15 @@
             <td align="left">{{row.FatherName}}</td>
             <td align="left">{{row.RollNo}}</td>
             <td align="left">{{row.StreamID}}</td>
-            <td align="left">
-              <a href="javascript:void(0);" (click)="DownloadMarksheet(row)" class="btn bg-info btn-sm text-white">
+            <td align="left" >
+              <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
+                *ngIf="row.MarksheetFile == ''" 
+                (click)="DownloadMarksheet(row)">
+                <i class="ti ti-download"></i> Download Marksheet
+              </a>
+              <a class="btn bg-info btn-sm text-white" style="cursor: pointer;"
+                *ngIf="row.MarksheetFile != ''" 
+                (click)="downloadFile_existing(row)">
                 <i class="ti ti-download"></i> Download Marksheet
               </a>
             </td>

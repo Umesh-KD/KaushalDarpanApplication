@@ -331,7 +331,7 @@ export class DirectHostelAllotmentComponent {
     
     this.loaderService.requestStarted();
     try {
-      
+      debugger
       await this.studentRequestService.DirectHostelSeatAllotment(this.Allotmentrequest)
         .then(async (data: any) => {
 

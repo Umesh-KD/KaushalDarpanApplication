@@ -97,10 +97,12 @@
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
-                <a href="javascript:void(0);" title="View Company Events"
+                <!-- <a href="javascript:void(0);" title="View Company Events"
                    (click)="ViewCompanyEvents(MyModel_ViewEventDetails, row.CompanyID)">
+                  <i class="ti ti-eye"></i></a> -->
+ <a href="javascript:void(0);" title="View Company Events"
+                   [routerLink]="'/iip-events'" [queryParams]="{id:row.CompanyID, returnUrl: router.url}">
                   <i class="ti ti-eye"></i></a>
-
                 <!-- <a [routerLink]="'/Add-IndustryInstitutePartnership'" [queryParams]="{IndustryInstitutePartnershipID:item.CompanyID, key:1}"
                     title="Edit"><i class="ti ti-pencil"></i></a>
 

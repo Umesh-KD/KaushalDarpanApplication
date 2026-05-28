@@ -242,39 +242,61 @@
         <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 gap-6">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name <span
-                class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Name <span class="StarMarking">*</span>
+            </label>
             <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
-              [(ngModel)]="personRequest.Name" formControlName="Name">
+                   [(ngModel)]="personRequest.Name" formControlName="Name">
             <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.Name.errors" class="text-danger">
               <p *ngIf="_HrMasterFormGroup.Name.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
             </div>
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email <span
-                class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Email <span class="StarMarking">*</span>
+            </label>
             <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId"
-              [(ngModel)]="personRequest.EmailId" formControlName="EmailId">
+                   [(ngModel)]="personRequest.EmailId" formControlName="EmailId">
             <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.EmailId.errors" class="text-danger">
-              <p *ngIf="_HrMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!
+              <p *ngIf="_HrMasterFormGroup.EmailId.errors.required">
+                <i aria-hidden="true"></i> This field is required.!
               </p>
-              <p *ngIf="_HrMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email
-                address.</p>
+              <p *ngIf="_HrMasterFormGroup.EmailId.errors.pattern">
+                <i aria-hidden="true"></i>Please enter a valid email
+                address.
+              </p>
             </div>
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile Number <span
-                class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Mobile Number <span class="StarMarking">*</span>
+            </label>
             <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo"
-              [(ngModel)]="personRequest.MobileNo" formControlName="MobileNo" maxlength="10"
-              (keypress)="validateNumber($event)">
+                   [(ngModel)]="personRequest.MobileNo" formControlName="MobileNo" maxlength="10"
+                   (keypress)="validateNumber($event)">
             <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.MobileNo.errors" class="text-danger">
-              <p *ngIf="_HrMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!
+              <p *ngIf="_HrMasterFormGroup.MobileNo.errors.required">
+                <i aria-hidden="true"></i> This field is required.!
               </p>
             </div>
           </div>
+         
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Designation <span class="StarMarking">*</span>
+            </label>
+            <input autocomplete="off" type="text" class="form-input" placeholder="Enter Designation" id="Designation" name="Designation"
+                   [(ngModel)]="personRequest.Designation" formControlName="Designation">
+            <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.Designation.errors" class="text-danger">
+              <p *ngIf="_HrMasterFormGroup.Designation.errors.required">
+                <i aria-hidden="true"></i> This field is required.!
+              </p>
+            </div>
+          </div>
+
 
           <div>
             <div class="text-center">
@@ -299,6 +321,7 @@
                   <th>Name</th>
                   <th>Contact No</th>
                   <th>Email</th>
+                  <th>Designation</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -308,6 +331,7 @@
                   <td class="text-center">{{row.Name}}</td>
                   <td class="text-center">{{row.MobileNo}}</td>
                   <td class="text-center">{{row.EmailId}}</td>
+                  <td class="text-center">{{row.Designation}}</td>
                   <td class="text-center">
                     <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
                       <i class="ti ti-trash"></i>

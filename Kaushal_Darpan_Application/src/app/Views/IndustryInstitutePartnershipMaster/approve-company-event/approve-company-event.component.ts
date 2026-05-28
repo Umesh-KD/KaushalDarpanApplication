@@ -9,7 +9,7 @@ import { IndustryInstitutePartnershipMasterService } from '../../../Services/Ind
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CompanyEventSearchModel, IndustryInstitutePartnershipMasterDataModels, IndustryInstitutePartnershipMasterSearchModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-approve-company-event',
@@ -24,7 +24,7 @@ export class ApproveCompanyEventComponent {
 
   public IndustryInstitutePartnershipMasterList: IndustryInstitutePartnershipMasterDataModels[] = [];
   public CompanyEventsList: any = []
-
+ _enumRole = EnumRole;
   public Table_SearchText: string = '';
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
@@ -51,7 +51,8 @@ export class ApproveCompanyEventComponent {
     private activatedRoute: ActivatedRoute, 
     private routers: Router, 
     private modalService: NgbModal, 
-    private appsettingConfig: AppsettingService
+    private appsettingConfig: AppsettingService,
+    private router: Router
   ) { }
 
 
