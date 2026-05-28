@@ -177,7 +177,8 @@ export class AddHrMasterComponent {
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
             this.ResetControls();
-            this.routers.navigate(['/Hrmaster']);
+            this.Back();
+            //this.routers.navigate(['/Hrmaster']);
           }
           else {
             this.toastr.error(this.ErrorMessage)
