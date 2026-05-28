@@ -151,3 +151,8 @@ export class CompanyEventSearchModel extends RequestBaseModel {
   public InterestedStatus: number = 0
   public Remarks:string=''
 }
+
+export class EventConsentActionDataModel {
+  public Remark: string = ''
+  public Status: number = 0
+}

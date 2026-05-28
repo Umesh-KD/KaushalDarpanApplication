@@ -879,6 +879,7 @@ const routes: Routes = [
       { path: 'iip-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-events/iip-events.module').then(m => m.IIPEventsModule), title: 'IIP Events' },
       { path: 'add-iip-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/add-iip-events/add-iip-events.module').then(m => m.AddIIPEventsModule), title: 'Add IIP Events' },
       { path: 'approve-company-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/approve-company-event/approve-company-event.module').then(m => m.ApproveCompanyEventModule), title: 'Approve Company Events' },
+      { path: 'event-consent-list', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-event-consent-list/iip-event-consent-list.module').then(m => m.IIPEventConsentListModule), title: 'Event Consent List' },
 
       { path: 'EditMeritDocument', loadChildren: () => import('./Views/BTER/BterMerit/edit-merit-document/edit-merit-document.module').then(m => m.EditMeritDocumentModule) },
       { path: 'AllotmentConfiguration', loadChildren: () => import('./Views/master-configuration/allotment-configuration/allotment-configuration.module').then(m => m.AllotmentConfigurationModule) },
