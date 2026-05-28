@@ -26,11 +26,13 @@ export class IIPEventConsentReportComponent {
   public EventConsentDataList: any = []
   public EventTypeList: any = [];
   public EventDataList_DDL: any = [];
+  public EventList: any = [];
 
   modalReference: NgbModalRef | undefined;
   public _EnumRole = EnumRole;
 
   public EventID: number = 0
+  public Event: number = 0
   public EventTypeID: number = 0
   public EventStatusID: number = 0
   public isSubmitted: boolean = false
@@ -60,7 +62,7 @@ export class IIPEventConsentReportComponent {
   async ngOnInit() {
     debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.EventID = Number(this.activatedRoute.snapshot.queryParamMap.get('eid')?.toString()) || 0;
+    this.Event = Number(this.activatedRoute.snapshot.queryParamMap.get('eid')?.toString()) || 0;
     this.EventTypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('etid')?.toString()) || 0;
     this.EventStatusID = Number(this.activatedRoute.snapshot.queryParamMap.get('esid')?.toString()) || 0;
 
@@ -74,6 +76,9 @@ export class IIPEventConsentReportComponent {
       this.loaderService.requestStarted();
       const eventTypeRes: any = await this.commonMasterService.GetEventCommonMaster('EventType');
       this.EventTypeList = eventTypeRes.Data;
+
+      const eventRes: any = await this.commonMasterService.GetEventCommonMaster('Event');
+      this.EventList = eventRes.Data;
     } catch (error) {
       console.error(error);
     }
@@ -83,6 +88,15 @@ export class IIPEventConsentReportComponent {
     try {
       const request: any = {};
       request.Action = "GetAllEventData_DDL";
+      if(this.sSOLoginDataModel.RoleID == EnumRole.IIPIncharge) {
+        request.InstituteID = this.sSOLoginDataModel.InstituteID;
+      } else {
+        request.InstituteID = 0
+      }
+      request.Event = this.searchRequest.Event;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.EventTypeID = this.searchRequest.EventTypeID;
+
       await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -97,21 +111,21 @@ export class IIPEventConsentReportComponent {
 
   async GetEventConsentData() {
     try {
-      if(this.EventID != undefined || this.EventID != null || this.EventID != 0) {
-        this.searchRequest.EventID = this.EventID ;
-      }
+      // if(this.Event != undefined || this.Event != null || this.Event != 0) {
+      //   this.searchRequest.Event = this.Event ;
+      // }
 
-      if(this.EventTypeID != undefined || this.EventTypeID != null || this.EventTypeID != 0){
-        this.searchRequest.EventTypeID = this.EventTypeID;
-      }
+      // if(this.EventTypeID != undefined || this.EventTypeID != null || this.EventTypeID != 0){
+      //   this.searchRequest.EventTypeID = this.EventTypeID;
+      // }
       
-      if(this.EventStatusID != undefined || this.EventStatusID != null || this.EventStatusID != 0 ){
-        this.searchRequest.EventStatusID = this.EventStatusID;
-      }
+      // if(this.EventStatusID != undefined || this.EventStatusID != null || this.EventStatusID != 0 ){
+      //   this.searchRequest.EventStatusID = this.EventStatusID;
+      // }
 
-      if(this.sSOLoginDataModel.RoleID == EnumRole.IIPIncharge) {
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      }
+      // if(this.sSOLoginDataModel.RoleID == EnumRole.IIPIncharge) {
+      //   this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      // }
 
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID; 
@@ -120,16 +134,10 @@ export class IIPEventConsentReportComponent {
         .then(async (data: any) => {
 
           data = JSON.parse(JSON.stringify(data));
-          if (data.State === EnumStatus.Success) {
-            this.EventConsentDataList = data.Data
-            //table feature load
-            this.loadInTable();
-            //end table feature load
-          } else if (data.State === EnumStatus.Warning) {
-            this.toastr.warning("Data not found")
-          } else {
-            this.toastr.error(data.ErrorMessage)
-          }
+          this.EventConsentDataList = data.Data
+          //table feature load
+          this.loadInTable();
+          //end table feature load
         })
     } catch (error) {
       console.error(error)

@@ -13,36 +13,25 @@
 
 <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
 
+
  
   <div class="col-lg-3" *ngFor="let item of viewPlacementDashboardList; let i = index">
 
-    <div *ngIf="item.Type == 1">
-      <div class="card">
+    <!-- <div *ngIf="item.Type == 1"> -->
+        <div>
+      <div class="card shadow-lg" >
         <div class="p-5">
           <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
           <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
           <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
-          <a *ngIf="item.SRC == 'checklist'" [routerLink]="['/campusvalidation']" [queryParams]="{ flag: item.TotalTextHi }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
-          <a *ngIf="item.SRC == 'group'" [routerLink]="['/PlacementDashReport/', item.URL]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
-          <a *ngIf="item.SRC == 'rule_folder'" [routerLink]="['/',item.URL]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+         <!-- <a *ngIf="item.SRC == 'company_folder'" [routerLink]="['/',item.URL]" [queryParams]="{EventStatus: item.Type }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a> -->
+         <a *ngIf="item.SRC == 'rule_folder'" [routerLink]="['/',item.URL]" [queryParams]="{EventStatus: item.Type }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+
         </div>
       </div>
     </div>
 
-    <div *ngIf="item.Type == 2">
-      <div class="card">
-        <div class="p-5">
-          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
-          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
-          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
-          <a [routerLink]="['/approve-company-events']" [queryParams]="{ status: item.URL }"
-             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All 
-             <i class="ti ti-chevron-right"></i>
-          </a>
-          
-        </div>
-      </div>
-    </div>
+
   </div>
 
 
@@ -51,4 +40,75 @@
 
   </div>
 
+  <!-- Dashboard List Table Start -->
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full mt-4">
+  <b class="text-1xl-5">
+    <i class="ti ti-list"></i> Event Summary
+  </b>
+
+  <div>
+    <select class="form-select"
+            [(ngModel)]="request.EventStatus"
+            (change)="GetIIPDashboardListData()">
+      <option value=" ">All</option>
+      <option value="UP-Comming">Upcoming</option>
+      <option value="Running">Running</option>
+      <option value="Close">Closed</option>
+
+    </select>
+  </div>
+
+</div>
+
+<div class="overflow-auto mt-3 shadow-lg">
+  <table class="table table-border w-full" cellpadding="5">
+    
+    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+      <tr>
+        <th class="text-left">Sr. No.</th>
+        <th class="text-left">Event Type</th>
+        <th class="text-center">Total Event</th>
+        <th class="text-center"><i class="ti ti-users"></i> Consent By Faculty</th>
+        <th class="text-center"><i class="ti ti-users"></i>Consent By Student </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of placementDashboardList; let idx = index">
+
+        <td>{{ idx + 1 }}</td>
+
+        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+          {{ item.EventTypeName }}
+        </td>
+
+        <td class="text-center ">
+         <b>{{ item.TotalEvent }}</b> 
+        </td>
+
+        <td class="text-center">
+            <b> {{ item.ConsentByFaculty }}</b> 
+        </td>
+
+        <td class="text-center">
+           <b>  {{ item.ConsentByStudent }}</b> 
+        </td>
+
+      </tr>
+
+      <!-- No Data Found -->
+
+      <tr *ngIf="placementDashboardList?.length == 0">
+        <td colspan="5" class="text-center py-4">
+          No Data Found
+        </td>
+      </tr>
+
+    </tbody>
+
+  </table>
+</div>
+
+<!-- Dashboard List Table End -->
  

@@ -88,7 +88,7 @@ export class IIPEventConsentListComponent {
             this.loadInTable();
             //end table feature load
           } else if (data.State === EnumStatus.Warning) {
-            this.toastr.warning("Event not found")
+            this.toastr.warning("Event Consent Not Found")
           } else {
             this.toastr.error(data.ErrorMessage)
           }

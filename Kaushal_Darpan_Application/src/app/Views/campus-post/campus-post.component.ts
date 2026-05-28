@@ -540,9 +540,11 @@ debugger
           this.request.CampusVenueLocation = data['Data']["CampusVenueLocation"];
           this.request.CampusPostType = data['Data']["CampusPostType"];
           this.request.DistrictID = data['Data']["DistrictID"];
-          
-
-
+          this.request.JobDiscription = data['Data']["JobDiscription"];
+          this.request.Dis_JobDiscription = data['Data']["Dis_JobDiscription"];
+          this.request.StudentConsentDate = data['Data']["StudentConsentDate"];
+          this.request.StudentConsentTime = data['Data']["StudentConsentTime"];
+          debugger
           this.request.CampusFromDate = this.dateSetter(data['Data']['CampusFromDate']); //new Date(data['Data']['CampusFromDate']).toISOString().split('T').shift().toString();
           this.request.CampusFromTime = data['Data']["CampusFromTime"];
           this.request.CampusToDate = this.dateSetter(data['Data']['CampusToDate']);// new Date(data['Data']['CampusToDate']).toISOString().split('T').shift().toString();
@@ -557,6 +559,7 @@ debugger
           let indexToUpdate = this.HRDetailsList.findIndex((f: any) => f.HR_MobileNo == this.request.HR_MobileNo && f.HR_Name == this.request.HR_Name);
           this.HRDetailsList[indexToUpdate].IsMainRole = true;
 
+          debugger
           this.request_EligibilityCriteriaModel.PassingYear = data['Data']["EligibilityCriteriaModel"][0]["PassingYear"];
           this.request_EligibilityCriteriaModel.ToPassingYear = data['Data']["EligibilityCriteriaModel"][0]["ToPassingYear"];
           this.request_EligibilityCriteriaModel.MinPre_10 = data['Data']["EligibilityCriteriaModel"][0]["MinPre_10"];
@@ -576,6 +579,10 @@ debugger
           this.request_EligibilityCriteriaModel.NoOfInterviewRound = data['Data']["EligibilityCriteriaModel"][0]["NoOfInterviewRound"];
           this.request_EligibilityCriteriaModel.EligibleInstitutesID = data['Data']["EligibilityCriteriaModel"][0]["EligibleInstitutesID"];
           this.request_EligibilityCriteriaModel.BranchID = data['Data']["EligibilityCriteriaModel"][0]["BranchID"];
+          this.request_EligibilityCriteriaModel.AgeCalculationDate = data['Data']["EligibilityCriteriaModel"][0]["AgeCalculationDate"];
+          this.request_EligibilityCriteriaModel.MinimunAge = data['Data']["EligibilityCriteriaModel"][0]["MinimunAge"];
+          this.request_EligibilityCriteriaModel.MaximumAge = data['Data']["EligibilityCriteriaModel"][0]["MaximumAge"];
+          this.request_EligibilityCriteriaModel.appointmentLocation = data['Data']["EligibilityCriteriaModel"][0]["appointmentLocation"];
           
           
 

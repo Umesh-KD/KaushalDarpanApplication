@@ -260,6 +260,7 @@ export class CompanyDispatchIUMasterModel {
   public modifyBy: number = 0;
   public modifyDate: string = '';
   public ipAddress: string = '';
+  public CompanyRegNo: string = '';
   public status: number = 0;
 }
 

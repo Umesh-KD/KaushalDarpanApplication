@@ -84,6 +84,11 @@
             <td>{{row.StatusRemark}}</td>
 
           </tr>
+          <tr *ngIf="EventConsentDataList.length == 0">
+            <td colspan="20" class="text-center">
+              Data Not Found
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

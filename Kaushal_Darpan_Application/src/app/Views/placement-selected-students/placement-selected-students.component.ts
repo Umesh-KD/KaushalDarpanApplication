@@ -15,6 +15,7 @@ import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 import * as XLSX from 'xlsx';
+import { PlacementShortlistedStudentsService } from '../../Services/PlacementShortlistedStudents/placement-shortlisted-students.service';
 
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
@@ -53,7 +54,10 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   public searchRequest = new PlacementStudentSelectedSearchModel();
   public StudentList: PlacementSelectedStudentResponseModel[] = [];
 
-  constructor(private commonMasterService: CommonFunctionService, private smsMailService: SMSMailService, private Router: Router, private placementShortListStudentService: PlacementSelectedStudentsService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(private commonMasterService: CommonFunctionService, private smsMailService: SMSMailService, private Router: Router,
+    private placementShortListStudentService: PlacementSelectedStudentsService, private toastr: ToastrService,
+    private loaderService: LoaderService, private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router,
+    private fb: FormBuilder, private modalService: NgbModal, private placementShortListStudentService1: PlacementShortlistedStudentsService) {
   }
 
   async ngOnInit() {
@@ -244,6 +248,56 @@ export class PlacementSelectedStudentsComponent implements OnInit {
       console.log(ex);
     }
   }
+
+
+  async SaveReject() {
+    try {
+      this.isSubmitted = true;
+      this.loaderService.requestStarted();
+
+      this.StudentList.forEach(x => {
+        x.ModifyBy = this.sSOLoginDataModel.UserID;
+      });
+      console.log(this.StudentList);
+
+      const isAnySelected = this.StudentList.some(x => x.Marked);
+      if (!isAnySelected) {
+        this.toastr.error('Please select at least one checkbox!');
+
+        return; // Exit the method if no checkbox is selected
+      }
+      //save
+      debugger
+      await this.placementShortListStudentService1.SaveReject(this.StudentList)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            this.SendApplicationMessage();
+            this.toastr.success(this.Message)
+            await this.GetAllData();
+          }
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+        })
+        .catch((error: any) => {
+          console.error(error);
+          this.toastr.error('Failed to Action on Selection!');
+        });
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isSubmitted = false;
+      }, 200);
+    }
+  }
+
 
   //
   checkboxthView_checkboxchange(isChecked: boolean) {

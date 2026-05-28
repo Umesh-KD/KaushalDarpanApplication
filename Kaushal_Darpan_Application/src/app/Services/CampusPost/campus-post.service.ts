@@ -70,8 +70,12 @@ export class CampusPostService {
       ).toPromise();
   }
 
-  public async CampusValidationList(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number ,CompanyTypeID:number=0,Flag:string='',FinancialYearID: number = 0,PostId: number = 0) {
-    return await this.http.get(this.APIUrl + "/CampusValidationList" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID + "/" + CompanyTypeID + "/" + Flag  + "/" + FinancialYearID+ "/"+ PostId, this.headersOptions)
+  public async CampusValidationList(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number ,CompanyTypeID:number=0,Flag:string='',
+    FinancialYearID: number = 0,PostId: number = 0) {
+   
+
+    return await this.http.get(this.APIUrl + "/CampusValidationList" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID + "/" + 
+      CompanyTypeID + "/" + Flag  + "/" + FinancialYearID+ "/"+ PostId, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

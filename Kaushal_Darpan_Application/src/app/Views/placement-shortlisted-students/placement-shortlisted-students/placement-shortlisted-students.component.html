@@ -95,7 +95,10 @@
       </div>
       <div class="flex items-center">
         <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
-        <button type="button" class="btn bg-success text-white" (click)="exportToExcel()">&nbsp;&nbsp;&nbsp;Export</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn bg-success text-white" (click)="exportToExcel()">Export</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn bg-success text-white" (click)="downloadPDF()">Download Resumes</button>
       </div>
     </div>
 
@@ -181,7 +184,9 @@
     </div>
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
       <div class="text-center">
-        <button *ngIf="this.StudentList?.length>0" class="btn bg-success text-white" (click)="SaveAllData()" type="button">Submit</button>
+        <button *ngIf="this.StudentList?.length>0" class="btn bg-success text-white" (click)="SaveAllData()" type="button">ShortList</button>
+    
+        <button class="btn bg-danger text-white" (click)="SaveReject()" type="button">Reject</button>
       </div>
     </div>
   </div>
