@@ -18,10 +18,40 @@
   <div class="card-body p-5">
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+        <select class="form-select" name="EventStatus" id="StudentExamInstituteId" [(ngModel)]="searchRequest.EventStatus">
+          <option value="0">--All--</option>
+          <option value="1">Upcoming</option>
+          <option value="2">Running</option>
+          <option value="3">Expired</option>
+        </select>
+      </div>
+
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetCompanyEvents()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearReset()">
+          <i class="ti ti-refresh"></i>
+          Reset
+        </button>
+      </div>
+
+
+    </div>
+    <br />
+
+
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <!--<a routerLink="/IndustryInstitutePartnershipList" class="inline-flex items-center btn bg-dark text-white btn-sm">
-        <i class="ti ti-chevron-left"></i>Back
-      </a>-->
+      <i class="ti ti-chevron-left"></i>Back
+    </a>-->
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -49,9 +79,10 @@
             <th class="text-left">Event</th>
             <th class="text-left">Event For</th>
             <th class="text-left">Event Schedule</th>
-
+            <th class="text-left">Event Status</th>
             <th class="text-left">Venue</th>
             <th class="text-left">Level</th>
+            <th class="text-left">Status</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -63,19 +94,16 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Event}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventFor}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{ row.EventSchedule}}</td>
-
+            <td>{{row.NewEventStatus}}</td>
             <td>{{row.VenueName}}</td>
             <td>{{row.LevelName}}</td>
+            <td>{{row.StatusName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-
-                <a  (click)="UploadCotent(MyModel_Action,row.EventID,row.EventName,row.InterestedStatus,row.Remarks,row.ConsentID)"
+                <a (click)="UploadCotent(MyModel_Action,row.EventID,row.EventName,row.InterestedStatus,row.Remarks,row.ConsentID)"
                    title="Edit">
                   <i class="ti ti-eye"></i>
                 </a>
-
-
-
               </div>
             </td>
           </tr>
