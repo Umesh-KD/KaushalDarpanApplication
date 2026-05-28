@@ -35,6 +35,7 @@ export class PlacementDashboardModel {
   public EndTermID: number = 0
   public UserId: number = 0
   public RoleId: number = 0
+  public EventStatus:string = 'UP-Comming'
 
 }
 
