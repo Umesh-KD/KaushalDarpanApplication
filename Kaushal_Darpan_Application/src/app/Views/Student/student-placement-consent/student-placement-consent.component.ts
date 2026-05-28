@@ -403,7 +403,7 @@ export class StudentPlacementConsentComponent {
               // this.SmsDataModel.PostID = PostID;
               await this.SendApplicationMessage(PostID);
               /* this.toastr.success(data.Message);*/
-              this.Swal2.Success(`Your Consent has been recorded.</br> Registration No.${data.Data}`)
+              this.Swal2.Success(`Your Consent has been recorded.</br> Registration No. ${data.Data}`)
               this.btn_SearchClick();
 
             } else if (data.State === EnumStatus.Warning) {
