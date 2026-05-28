@@ -19,7 +19,7 @@ import { PlacementDashService } from '../../../Services/PlacementDashboard/Place
 export class IipDashboardComponent implements OnInit {
 
   public viewPlacementDashboardList: any = [];
-  public placementDashboardList: any = [];
+  public placementDashboardList: any[] = [];
     public Table_SearchText: string = "";
     /*  public searchRequest = new CommonSubjectMasterSearchModel();*/
     public request = new PlacementDashboardModel()
@@ -100,8 +100,8 @@ debugger
       await this.PlacementDashService.GetIIPDashboardListData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.placementDashboardList = data['Data'];
-          console.log(this.placementDashboardList);
+          this.placementDashboardList = data['Data']||[];
+          console.log('event list with consent',this.placementDashboardList);
         }, (error: any) => console.error(error)
         );
     }
