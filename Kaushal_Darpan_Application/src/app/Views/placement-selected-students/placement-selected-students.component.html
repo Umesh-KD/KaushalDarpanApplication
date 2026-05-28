@@ -114,7 +114,7 @@
             <th class="text-left">Age  </th>
             <th class="text-left">Gender   </th>
             <th class="text-left">Mobile   </th>
-            <th class="text-left">Home District</th>
+  
             <th class="text-left">State</th>
             <th class="text-left">Institute Name   </th>
             <th class="text-left">Institute Type</th>
@@ -136,7 +136,7 @@
             <td class="text-left">{{row.Age}}</td>
             <td class="text-left">{{row.Dis_Gender}}</td>
             <td class="text-left">{{row.MobileNo}}</td>
-            <td class="text-left">{{row.DistrictName}}</td>
+     
             <td class="text-left">{{row.StateName}}</td>
             <td class="text-left">{{row.InstituteName}}</td>
             <td class="text-left">{{row.InstitutionManagementType}}</td>
@@ -151,7 +151,7 @@
       <div class="text-center">
         <button *ngIf="this.StudentList?.length>0" class="btn bg-success text-white" (click)="SaveAllData()" type="button">Select</button>
       
-        <button class="btn bg-danger text-white" (click)="SaveReject()" type="button">Reject</button>
+        <button *ngIf="this.StudentList?.length>0"  class="btn bg-danger text-white" (click)="SaveReject()" type="button">Reject</button>
       </div>
     </div>
   </div>
