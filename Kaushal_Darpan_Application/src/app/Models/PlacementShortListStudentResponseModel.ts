@@ -62,8 +62,10 @@ export class PlacementShortListStudentResponseModel {
 export class PlacementShortlistedStuSearch {
   public RoleId: number = 0;
   public UserId: number = 0;
-  public BranchID: number = 0
-  public DepartmentID: number = 0
-  public Eng_NonEng: number = 0
-  public CampusPostID:number=0
+  public BranchID: number = 0;
+  public DepartmentID: number = 0;
+  public Eng_NonEng: number = 0;
+  public CampusPostID: number = 0;
+  public InstituteId: number = 0;
+  public HiringRoleID: number = 0;
 }

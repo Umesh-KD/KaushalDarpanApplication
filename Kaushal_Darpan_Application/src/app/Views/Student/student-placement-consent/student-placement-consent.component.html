@@ -8,7 +8,7 @@
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student Placement Consent</a>
-     
+
     </div>
   </div>
 
@@ -121,54 +121,57 @@
       </div>
     </div>
   </div>
-  <ng-template #modal_Open let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
-    <div class="modal-content">
-      <div class="card">
-        <div class="card-header flex justify-between  items-center">
-          <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Campus Details </b>
-          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
-        </div>
-        <div class="card-body p-5">
-          <div class="p-6">
-            <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
-              <table class="w-full table-border" cellpadding="5">
-                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-                  <tr class="text-left">
-                    <th>Company Info</th>
-                    <th>Requirement</th>
-                    <th>Eligibility</th>
-                    <th>JobDescription</th>
-                    <th>Date / Venue</th> 
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td rowspan="3" valign="top">
-                      <div>
-                        <b>{{CampusPostDetail.CompanyName}}</b>
-                        <p>Post: {{CampusPostDetail.PostNo}}</p>
-                        <a href="{{CampusPostDetail.Website}}" target="_blank">
-                          <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{CampusPostDetail.Logo}}" />
-                        </a>
-                      </div>
-                    </td>
-                    <td><span [innerHtml]="CampusPostDetail.Requirement"></span></td>
-                    <td><span [innerHtml]="CampusPostDetail.Eligibility"></span></td>
-                    <td><span [innerHtml]="CampusPostDetail.JobDescription"></span></td>
-                    <td>{{CampusPostDetail.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{CampusPostDetail.CampusAddress}}</td>
+</div>
 
-                  </tr>
+<!-- model -->
+<ng-template #modal_Open let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Campus Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <table class="w-full table-border" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                <tr class="text-left">
+                  <th>Company Info</th>
+                  <th>Requirement</th>
+                  <th>Eligibility</th>
+                  <th>JobDescription</th>
+                  <th>Date / Venue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="3" valign="top">
+                    <div>
+                      <b>{{CampusPostDetail.CompanyName}}</b>
+                      <p>Post: {{CampusPostDetail.PostNo}}</p>
+                      <a href="{{CampusPostDetail.Website}}" target="_blank">
+                        <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{CampusPostDetail.Logo}}" />
+                      </a>
+                    </div>
+                  </td>
+                  <td><span [innerHtml]="CampusPostDetail.Requirement"></span></td>
+                  <td><span [innerHtml]="CampusPostDetail.Eligibility"></span></td>
+                  <td><span [innerHtml]="CampusPostDetail.JobDescription"></span></td>
+                  <td>{{CampusPostDetail.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{CampusPostDetail.CampusAddress}}</td>
 
-                </tbody>
-              </table>
-            </div>
-            <div class="card-footer text-center">
-              <!--<button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>-->
-            </div>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer text-center">
+            <!--<button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>-->
           </div>
         </div>
       </div>
-
     </div>
-  </ng-template>
+
+  </div>
+</ng-template>
 

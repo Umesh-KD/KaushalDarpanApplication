@@ -4,6 +4,7 @@ import { RequestBaseModel } from "./RequestBaseModel"
 export class CompanyMasterDataModels {
   public ID: number = 0
   public Name: string = ''
+  public CompanyRegNo: string = ''
   public Website: string = ''
   public StateID: number = 0
   public DistrictID: number = 0
@@ -26,6 +27,7 @@ export class CompanyMasterDataModels {
   public ISIIP : boolean = false;
   public ISPlacement: boolean = false;
 
+  public CompanyStatus: string = '';
 
   public ListCompanyHRDetails: HrMasterDataModel[] = [];
 }
