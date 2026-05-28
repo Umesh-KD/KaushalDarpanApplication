@@ -192,6 +192,7 @@ if (this.PageMode == 'view') {
   }
 
   async SaveEventData() {
+    debugger
     console.log("branch", this.SelectedBranchList)
     console.log("semester", this.SelectedSemesterList)
     this.isSubmitted = true;
