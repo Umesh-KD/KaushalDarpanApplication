@@ -2,12 +2,12 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Event Consent List</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Event Consent Report</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a [routerLink]="['/iip-events']" class="text-sm font-medium text-slate-700">Event List</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Industry Institute Partnership Master</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Event Consent List</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Event Consent Report</a>
     </div>
   </div>
 </div>
@@ -15,6 +15,28 @@
 
 <div class="card">
   <div class="card-body p-5">
+
+    <!-- <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>
+        <div>
+
+
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+    </div> -->
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
@@ -103,47 +125,3 @@
     <!--end pagination-->
   </div>
 </div>
-
-<ng-template #modal_SubmitReq let-modal>
-  <div class="modal-content">
-    <div class="card">
-      <div class="card-header flex justify-between items-center">
-        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
-        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
-      </div>
-      <form [formGroup]="groupForm">
-        <div class="card-body">
-          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Status <span class="StarMarking">*</span>
-              </label>
-              <select class="form-select" [(ngModel)]="request.Status" formControlName="ddlStatus">
-                <option value="0" selected="">--Choose Option--</option>
-                <option value="1">Approve</option>
-                <option value="2">Reject</option>
-              </select>
-              <div *ngIf="isSubmitted && groupForm.controls.ddlStatus.errors" class="text-danger">
-                <p *ngIf="!groupForm.controls.ddlStatus.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Remark <span class="StarMarking">*</span>
-              </label>
-              <textarea class="form-input" [(ngModel)]="request.Remark" formControlName="txtRemark"></textarea>
-              <div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
-                <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>
-          </div>
-        </div> <!-- Close this div here for card-body -->
-        <div class="card-footer text-right">
-          <button type="button" (click)="updateConsentStatus()" class="btn bg-success text-white btn-sm">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</ng-template>

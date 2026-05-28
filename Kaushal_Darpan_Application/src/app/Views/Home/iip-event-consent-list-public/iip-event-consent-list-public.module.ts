@@ -4,21 +4,22 @@ import { CommonModule } from '@angular/common';
 
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
-
-import { IIPEventsRoutingModule } from './iip-events-routing.module';
-import { iipeventsComponent } from './iip-events.component';
+import { IipEventConsentListPublicComponent } from './iip-event-consent-list-public.component';
+import { IipEventConsentListPublicRoutingModule } from './iip-event-consent-list-public-routing.module';
+import { MaterialModule } from '../../../material.module';
 
 @NgModule({
   declarations: [
-    iipeventsComponent
+    IipEventConsentListPublicComponent
   ],
   imports: [
     CommonModule,
-    IIPEventsRoutingModule,
+    IipEventConsentListPublicRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     LoaderModule, 
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    MaterialModule
   ]
 })
-export class IIPEventsModule { }
+export class IipEventConsentListPublicModule { }

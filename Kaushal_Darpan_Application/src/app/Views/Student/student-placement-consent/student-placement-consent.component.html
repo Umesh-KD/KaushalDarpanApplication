@@ -25,26 +25,29 @@
 
       <div></div>
       <div></div>
-      <div class=""> 
+      <div class="">
         <!-- Keep heading left -->
         <label class="flex justify-end me-2 pr-3 block mb-2 text-sm font-medium text-gray-900 dark:text-white "
-              for="fileStudentPhoto">Upload Resume</label>
+               for="fileStudentPhoto">Upload Resume</label>
 
         <!-- Align this uploader to the right -->
         <div class="flex justify-end">
           <div class="flex items-center gap-2 fileUploader">
             <input class="block form-input w-full max-w-xs text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="fileStudentPhoto" type="file" 
-                  (change)="onFilechange($event,'Photo')">
+                   id="fileStudentPhoto" type="file"
+                   (change)="onFilechange($event,'Photo')">
 
             <label for="fileStudentPhoto" class="text-sm text-gray-700 dark:text-gray-300">
               <span>Choose File</span>
-              {{Request.Dis_UploadedResume === '' ? 'No File Choosen' : Request.Dis_UploadedResume}}
+              {{Request.Dis_UploadedResume === '' ? 'No File Chosen' : Request.Dis_UploadedResume}}
             </label>
           </div>
         </div>
       </div>
-
+      <!-- Note -->
+      <p class="text-xs text-red-500 mt-1 text-right pr-3">
+        Note: Select PDF file only (Maximum size: 2 MB)
+      </p>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -61,7 +64,7 @@
               <!--<th class="text-left">HR Details</th>-->
               <th class="text-left">Venue Details</th>
               <th class="text-left">Role Details</th>
-         
+
               <th class="text-center">Action</th>
             </tr>
           </thead>
@@ -82,10 +85,10 @@
                 <p><a href="{{row.Website}}" target="_blank">{{row.Website}}</a></p>
               </td>
               <!--<td>
-                <p><b>{{row.HR_Name}}</b></p>
-                <p style="white-space:nowrap"><i class="ti ti-phone"></i> +91-{{row.HR_MobileNo}}</p>
-                <p style="white-space:nowrap"><i class="ti ti-mail"></i> {{row.HR_Email}}</p>
-              </td>-->
+            <p><b>{{row.HR_Name}}</b></p>
+            <p style="white-space:nowrap"><i class="ti ti-phone"></i> +91-{{row.HR_MobileNo}}</p>
+            <p style="white-space:nowrap"><i class="ti ti-mail"></i> {{row.HR_Email}}</p>
+          </td>-->
 
               <td>
                 <p><b>{{row.CampusVenue}}</b></p>
@@ -94,21 +97,21 @@
               </td>
 
               <td><div [innerHtml]="row.RoleDetails"> </div></td>
-           
+
               <td align="center">
                 <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
                   <!-- <button class="btn bg-info text-white btn-sm" (click)="openModal(modal_Open,row.PostID)" type="button">View</button>
-                  <button *ngIf="row.ConsentID==0" class="btn bg-success text-white btn-sm" (click)="Savedata(row.PostID)" type="button">Consent</button>
-                  <button *ngIf="row.ConsentID!=0" class="btn bg-success text-white btn-sm" type="button">Already consent</button> -->
-                  
-                   <button class="btn bg-info text-white btn-sm" (click)="openModal(modal_Open,row.PostID)" type="button">View</button>
+              <button *ngIf="row.ConsentID==0" class="btn bg-success text-white btn-sm" (click)="Savedata(row.PostID)" type="button">Consent</button>
+              <button *ngIf="row.ConsentID!=0" class="btn bg-success text-white btn-sm" type="button">Already consent</button> -->
+
+                  <button class="btn bg-info text-white btn-sm" (click)="openModal(modal_Open,row.PostID)" type="button">View</button>
                   <button *ngIf="row.ConsentFlag == 1" class="btn bg-success text-white btn-sm" (click)="Savedata(row.PostID)" type="button">Consent</button>
                   <button *ngIf="row.ConsentFlag == 2" class="btn bg-success text-white btn-sm" type="button">Already consent</button>
                   <button *ngIf="row.ConsentFlag == 0" class="btn bg-success text-white btn-sm" type="button">Applied date is out</button>
 
                   <!-- <button *ngIf="isConsentAllowed(row)">Consent</button> -->
                   <!-- <button *ngIf="row.ConsentID!=0" class="btn bg-success text-white btn-sm" type="button">Already consent</button>
-                  <button *ngIf="isConsentExpired(row)" class="btn bg-success text-white btn-sm" type="button">Applied Date is Out</button> -->
+              <button *ngIf="isConsentExpired(row)" class="btn bg-success text-white btn-sm" type="button">Applied Date is Out</button> -->
                 </div>
               </td>
             </tr>

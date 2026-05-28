@@ -6,6 +6,7 @@ import { CampusPostMasterModel, CampusPostMaster_Action, CampusPostMaster_Eligib
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { SignedCopyOfResultSearchModel, SignedCopyOfResultModel } from '../../Models/CompanyMasterDataModel';
+import {  SmsDataModel } from '../../Models/ApplicationMessageDataModel';
 @Injectable({
   providedIn: 'root'
 })
@@ -71,6 +72,14 @@ export class CampusPostService {
 
   public async CampusValidationList(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number ,CompanyTypeID:number=0,Flag:string='') {
     return await this.http.get(this.APIUrl + "/CampusValidationList" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID + "/" + CompanyTypeID + "/" + Flag , this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetCampusSMSDataByID(SmsDataModel: SmsDataModel) {
+    const body = JSON.stringify(SmsDataModel);
+    return await this.http.post(this.APIUrl + "/GetCampusSMSDataByID" , body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

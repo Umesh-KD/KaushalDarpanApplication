@@ -399,10 +399,6 @@ export class StudentAttendanceComponent implements OnInit {
 
       // Parse correctly whether string or Date
 
-
-
-
-
       // Parse correctly whether string or Date
       const formattedDateStart =
         typeof rawStart === 'string'
@@ -414,8 +410,6 @@ export class StudentAttendanceComponent implements OnInit {
           ? rawEnd
           : this.formatDate(rawEnd);
 
-
-
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -424,7 +418,6 @@ export class StudentAttendanceComponent implements OnInit {
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
       this.searchRequest.From_Date = formattedDateStart;
       this.searchRequest.To_Date = formattedDateEnd;
-
 
       this.loaderService.requestStarted();
       await this.HrMasterService.ByIDStaffLeaveList(this.searchRequest)

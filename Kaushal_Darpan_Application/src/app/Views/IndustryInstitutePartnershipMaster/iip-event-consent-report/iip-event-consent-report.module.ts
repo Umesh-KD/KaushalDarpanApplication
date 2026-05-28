@@ -5,20 +5,20 @@ import { CommonModule } from '@angular/common';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 
-import { IIPEventsRoutingModule } from './iip-events-routing.module';
-import { iipeventsComponent } from './iip-events.component';
+import { IIPEventConsentReportComponent } from './iip-event-consent-report.component';
+import { IIPEventConsentReportRoutingModule } from './iip-event-consent-report-routing.module';
 
 @NgModule({
   declarations: [
-    iipeventsComponent
+    IIPEventConsentReportComponent
   ],
   imports: [
     CommonModule,
-    IIPEventsRoutingModule,
+    IIPEventConsentReportRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     LoaderModule, 
     TableSearchFilterModule
   ]
 })
-export class IIPEventsModule { }
+export class IIPEventConsentReportModule { }
