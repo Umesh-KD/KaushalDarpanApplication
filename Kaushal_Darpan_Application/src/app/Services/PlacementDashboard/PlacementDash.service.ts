@@ -65,4 +65,13 @@ export class PlacementDashService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+   public async GetIIPDashboardListData(request: PlacementDashboardModel) {
+    const body = JSON.stringify(request);
+    debugger
+    return await this.http.post(this.APIUrl + "/GetIIPDashboardListData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

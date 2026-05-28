@@ -23,6 +23,10 @@ export class IndustryInstitutePartnershipMasterDataModels {
   public Dis_Logo: string = ''
   public PlacementCompanyID?: number = 0
   public Selected?: boolean = false
+  
+
+
+  public EventID: number = 0 
 
   public ConcernPersonDetails: ConcernPersonDetailsDataModel[] = []
 }
