@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "./RequestBaseModel";
+
 export class PlacementSelectedStudentResponseModel {
   public Selected: boolean = false;
   public StudentID: number = 0;
@@ -55,19 +57,17 @@ export class PlacementSelectedStudentResponseModel {
   public ModifyBy: number = 0
   public IPAddress: string = ''
 }
-export class PlacementStudentSelectedSearchModel {
+export class PlacementStudentSelectedSearchModel extends RequestBaseModel {
   public CampusPostID: number = 0;
-/*  public CampusWiseHireRoleID: string = '*/
+  /*  public CampusWiseHireRoleID: string = '*/
   public InstituteID: number = 0;
   public BranchID: number = 0;
   public _10thPre: number = 0;
   public _12thPre: number = 0;
   public DiplomaPre: number = 0;
-/*  public FinancialYearID: number = 0;*/
+  /*  public FinancialYearID: number = 0;*/
   public NoOfBack: number = 0;
   public AgeFrom: number = 0;
   public AgeTo: number = 0;
-  public DepartmentID: number = 0
-  public Eng_NonEng: number = 0
-  public HiringRoleID:number=0
+  public HiringRoleID: number = 0
 }

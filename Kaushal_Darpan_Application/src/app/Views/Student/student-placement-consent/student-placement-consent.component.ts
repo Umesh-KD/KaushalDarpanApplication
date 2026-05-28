@@ -19,10 +19,10 @@ import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { SmsDataModel } from '../../../Models/ApplicationMessageDataModel';
 
 @Component({
-    selector: 'app-student-placement-consent',
-    templateUrl: './student-placement-consent.component.html',
-    styleUrls: ['./student-placement-consent.component.css'],
-    standalone: false
+  selector: 'app-student-placement-consent',
+  templateUrl: './student-placement-consent.component.html',
+  styleUrls: ['./student-placement-consent.component.css'],
+  standalone: false
 })
 export class StudentPlacementConsentComponent {
   public State: number = -1;
@@ -45,10 +45,10 @@ export class StudentPlacementConsentComponent {
   public Request = new CampusStudentConsentModel()
   public SmsDataModel = new SmsDataModel();
 
-  public getSSOIDDetailData: any[]=[];
+  public getSSOIDDetailData: any[] = [];
 
-  public messageModel= new ApplicationMessageDataModel();
-  public ConsentCount:number=0;
+  public messageModel = new ApplicationMessageDataModel();
+  public ConsentCount: number = 0;
 
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
@@ -58,7 +58,7 @@ export class StudentPlacementConsentComponent {
   public isSubmitted: boolean = false;
   public TodayDate = new Date()
 
-  constructor(private commonMasterService: CommonFunctionService, private smsMailService:SMSMailService, private campusPostService: CampusPostService, private loaderService: LoaderService,
+  constructor(private commonMasterService: CommonFunctionService, private smsMailService: SMSMailService, private campusPostService: CampusPostService, private loaderService: LoaderService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private Swal2: SweetAlert2,
     private placementservice: PlacementStudentService,
     private homeService: HomeService, private appsettingConfig: AppsettingService) {
@@ -93,11 +93,11 @@ export class StudentPlacementConsentComponent {
   //  }
   //}
   async btn_SearchClick() {
-    debugger;
+    //debugger;
     try {
       this.searchrequest.StudentID = this.sSOLoginDataModel.StudentID
       this.searchrequest.SSOID = this.sSOLoginDataModel.SSOID
-      this.searchrequest.action ="GetStudentCampusList"
+      this.searchrequest.action = "GetStudentCampusList"
       this.searchrequest.CollegeID = this.sSOLoginDataModel.InstituteID;
       this.searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.searchrequest.Status = this.ApprovedStatus
@@ -121,9 +121,9 @@ export class StudentPlacementConsentComponent {
   }
 
   isConsentAllowed(row: any): boolean {
-    debugger
+    //debugger
     if (!row.StudentConsentDate || !row.StudentConsentTime) return false;
-  
+
     const date = row.StudentConsentDate;
     const time = row.StudentConsentTime || '23:59'; // fallback
 
@@ -133,21 +133,21 @@ export class StudentPlacementConsentComponent {
     //   row.StudentConsentDate + 'T' + row.StudentConsentTime
     // );
     // console.log(consentDateTime);
-    if(row.ConsentID == 0 && consentDateTime < this.TodayDate){
+    if (row.ConsentID == 0 && consentDateTime < this.TodayDate) {
       console.log("true");
     }
-  
+
     return row.ConsentID == 0 && consentDateTime < this.TodayDate;
   }
 
   isConsentExpired(row: any): boolean {
     // debugger
     if (!row.StudentConsentDate || !row.StudentConsentTime) return false;
-  
+
     const consentDateTime = new Date(
       row.StudentConsentDate + 'T' + row.StudentConsentTime
     );
-  
+
     return row.ConsentID == 0 && consentDateTime >= this.TodayDate;
   }
   async btn_Clear() {
@@ -265,7 +265,7 @@ export class StudentPlacementConsentComponent {
   //    }, 200);
   //  }
   //}
-  async GetAllPost(PostID:number) {
+  async GetAllPost(PostID: number) {
     try {
       this.PostId = PostID
       this.loaderService.requestStarted();
@@ -327,7 +327,7 @@ export class StudentPlacementConsentComponent {
   }
 
   async GetStudentConsentCount() {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID)
@@ -373,9 +373,9 @@ export class StudentPlacementConsentComponent {
 
  
   async Savedata(PostID: number) {
-    debugger
+    //debugger
     await this.GetStudentConsentCount();
-    if(this.ConsentCount==5){
+    if (this.ConsentCount == 5) {
       this.Swal2.Warning("You have already given consent for 5 companies");
       return;
     }
@@ -401,23 +401,22 @@ export class StudentPlacementConsentComponent {
 
             if (data.State == EnumStatus.Success) {
               // this.SmsDataModel.PostID = PostID;
-             await this.SendApplicationMessage(PostID);
+              await this.SendApplicationMessage(PostID);
               /* this.toastr.success(data.Message);*/
-              this.Swal2.Success("Your Consent has been recorded")
+              this.Swal2.Success(`Your Consent has been recorded.</br> Registration No.${data.Data}`)
               this.btn_SearchClick();
 
-            }
-            if (data.State === EnumStatus.Error) {
-              this.toastr.error(data.ErrorMessage);
             } else if (data.State === EnumStatus.Warning) {
               this.toastr.warning(data.ErrorMessage);
+            }
+            else {
+              this.toastr.error(data.Message);
+              console.error(data.ErrorMessage);
             }
           });
 
         } catch (Ex) {
           console.log(Ex);
-        } finally {
-          this.loaderService.requestEnded();
         }
       }
     }
