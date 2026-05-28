@@ -131,8 +131,10 @@ export class iipeventsComponent {
         }
       })
   }
-  goBack() {
-  this.router.navigateByUrl(this.returnUrl);
+  goBack()
+  {
+   
+  /*this.router.navigateByUrl(this.returnUrl);*/
   }
 
 

@@ -92,41 +92,52 @@
             <td>{{company.Status}} </td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="(company.Status=='Approved' || company.Status=='Rejected' || company.Status=='Hold' || company.Status=='Pending')" 
-                [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
+                <a *ngIf="(company.Status=='Approved' || company.Status=='Rejected' || company.Status=='Hold' || company.Status=='Pending')"
+                   [routerLink]="'/ViewCompanyMouDetail'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
                   <i class="ti ti-eye"></i>
                 </a>
                 <a [routerLink]="'/AddIIPCompany'" [queryParams]="{CompanyID:company.ID, key:2}" *ngIf="(company.Status=='Pending' && (company.MouAdded == 1 || company.MouAdded == 0))" title="Edit"><i class="ti ti-pencil"></i></a>
-               
-                <a *ngIf="company.Status=='Pending' && company.MouAdded == 0"
-                    href="javascript:void(0)"
-                    title="MOU"
-                    (click)="openMouPopup(company)">
-                    <i class="ti ti-license"></i>
-                </a>
 
-                 <a *ngIf="company.Status=='Pending' && company.MouAdded == 1"
-                    href="javascript:void(0)"
-                    title="MOU Edit"
-                    (click)="openMouPopup(company)">
-                    <!-- <i class="ti ti-license"></i> -->
-                    <i class="ti ti-briefcase"></i>
-                    <!-- <i class="ti ti-file-contract"></i> -->
+                <a *ngIf="company.Status=='Pending' && company.MouAdded == 0"
+                   href="javascript:void(0)"
+                   title="MOU"
+                   (click)="openMouPopup(company)">
+                  <i class="ti ti-license"></i>
                 </a>
 
                 <a *ngIf="company.Status=='Pending' && company.MouAdded == 1"
-                    href="javascript:void(0)"
-                    title="Send for Approval"
-                    (click)="SendForApprove(company)">
-                    <!-- <i class="ti ti-license"></i> -->
-                    <i class="ti ti-arrow-forward-up"></i>
-                    <!-- <i class="ti ti-file-contract"></i> -->
+                   href="javascript:void(0)"
+                   title="MOU Edit"
+                   (click)="openMouPopup(company)">
+                  <!-- <i class="ti ti-license"></i> -->
+                  <i class="ti ti-briefcase"></i>
+                  <!-- <i class="ti ti-file-contract"></i> -->
                 </a>
-                 <a href="javascript:void(0);" title="Delete" *ngIf="(company.Status=='Pending' && (company.MouAdded == 1 || company.MouAdded == 0)) || (company.Status=='Approved' && company.MouAdded == 1)" (click)="DeleteById(company.ID)">
+
+                <a *ngIf="company.Status=='Pending' && company.MouAdded == 1"
+                   href="javascript:void(0)"
+                   title="Send for Approval"
+                   (click)="SendForApprove(company)">
+                  <!-- <i class="ti ti-license"></i> -->
+                  <i class="ti ti-arrow-forward-up"></i>
+                  <!-- <i class="ti ti-file-contract"></i> -->
+                </a>
+                <a href="javascript:void(0);" title="Delete" *ngIf="(company.Status=='Pending' && (company.MouAdded == 1 || company.MouAdded == 0)) || (company.Status=='Approved' && company.MouAdded == 1)" (click)="DeleteById(company.ID)">
                   <i class="ti ti-trash"></i>
                 </a>
-                
-                
+                <a href="javascript:void(0);" title="Add Event"
+                   *ngIf="
+                   company.Status == 'Approved'
+                   &&
+                   ( sSOLoginDataModel.RoleID == _enumRole.IIPAdmin
+                     ||
+                    sSOLoginDataModel.RoleID == _enumRole.IIPIncharge
+                   )
+                   "
+                   [routerLink]="'/add-iip-events'" [queryParams]="{id:company.ID}">
+                  <i class="ti ti-calendar-week"></i>
+                </a>
+
               </div>
             </td>           
           </tr>

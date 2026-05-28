@@ -8,7 +8,7 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ActivatedRoute,Router } from '@angular/router';
 import * as XLSX from 'xlsx';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class IipCompanyMasterComponent implements OnInit {
   Message: any;
   ErrorMessage: any;
   todayDate: string = '';
-
+  _enumRole = EnumRole;
     public mouRequest: any = {
   ID: 0,
   CompanyId: 0,
