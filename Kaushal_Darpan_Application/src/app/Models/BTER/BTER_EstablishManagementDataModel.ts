@@ -885,5 +885,7 @@ export class BTERStaffManualRequestModel {
   public To_ddlDistrictID: number = 0;
   public To_ddlCollege: number = 0;
   public RoleID: number = 0;
+  public BranchID: number = 0;
+  public To_BranchID: number = 0;
 
 }

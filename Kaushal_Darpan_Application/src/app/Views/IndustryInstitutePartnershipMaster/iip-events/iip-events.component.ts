@@ -58,7 +58,7 @@ export class IIPEventsComponent {
 
   async GetCompanyEvents() {
     try {
-      
+      this.CompanyEventsList = [];
       this.searchRequest.CompanyID = this.CompanyID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       debugger
@@ -69,7 +69,10 @@ export class IIPEventsComponent {
           this.CompanyEventsList = data.Data
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning("Event not found")
-        } else {
+        }
+        else
+        {
+        
           this.toastr.error(data.ErrorMessage)
         }
       })
@@ -104,5 +107,12 @@ export class IIPEventsComponent {
   }
   goBack() {
   this.router.navigateByUrl(this.returnUrl);
-}
+  }
+
+
+  ClearReset()
+  {
+    this.searchRequest = new CompanyEventSearchModel();
+    this.GetCompanyEvents();
+  }
 }

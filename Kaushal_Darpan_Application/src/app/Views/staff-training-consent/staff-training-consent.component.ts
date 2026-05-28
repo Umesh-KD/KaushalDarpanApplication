@@ -58,7 +58,12 @@ export class StaffTrainingConsentComponent {
 
       this.searchRequest.CompanyID = this.CompanyID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      if (this.sSOLoginDataModel.RoleID == 3) {
+        this.searchRequest.StaffID = this.sSOLoginDataModel.StudentID;
+      } else {
+        this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      }
+
       debugger
       await this.industryInstitutePartnershipMasterService.GetCompanyEventsStaff(this.searchRequest)
         .then(async (data: any) => {
@@ -191,9 +196,10 @@ export class StaffTrainingConsentComponent {
           }
 
           try {
-
+            
             this.requestAction.StaffID =
-              this.sSOLoginDataModel.StaffID;
+              this.sSOLoginDataModel.StaffID || 0
+            this.requestAction.StudentID = this.sSOLoginDataModel.StudentID
 
             await this.industryInstitutePartnershipMasterService
               .Savestaffconsent(this.requestAction)

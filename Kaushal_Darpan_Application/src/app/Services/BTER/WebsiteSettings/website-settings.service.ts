@@ -74,8 +74,10 @@ export class WebsiteSettingsService {
   public async GetAllSearchData(request: WebsiteSettingDataModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetAllSearchData`, body, this.headersOptions)
+
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+ 
 }

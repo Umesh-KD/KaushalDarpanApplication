@@ -4,6 +4,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { ExaminerDataModel, ExaminerSearchModel, TeacherForExaminerSearchModel } from '../../Models/ExaminerDataModel';
 import { ExaminerCodeLoginModel, ExaminerDashboardSearchModel } from '../../Models/ExaminerCodeLoginModel';
+import { ExaminerwithGroupcodeModel } from '../../Models/MiscellaneousModel';
 
 @Injectable({
   providedIn: 'root'
@@ -173,6 +174,22 @@ export class ExaminerService {
   public async GetExaminerByCode_Reval(model: ExaminerCodeLoginModel) {
     var body = JSON.stringify(model);
     return await this.http.post(`${this.APIUrl}/GetExaminerByCode_Reval`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetExaminerWithGroupCode_Reval(data: any) {
+    return await this.http.post(this.APIUrl + "/GetExaminerWithGroupCode_Reval/", data, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UnlockExaminerWithGroupCode_Reval(searchRequest: ExaminerwithGroupcodeModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/UnlockExaminerWithGroupCode_Reval`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

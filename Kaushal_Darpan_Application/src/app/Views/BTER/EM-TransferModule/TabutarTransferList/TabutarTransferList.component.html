@@ -251,9 +251,21 @@
                          [loading]="isLoading">
               </ng-select>
               <!--<select class="form-select" [(ngModel)]="RequestManual.PostID" formControlName="PostID" (change)="PostChange()">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
-              </select>-->
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+    </select>-->
+            </div>
+
+
+
+
+            <div *ngIf="IsBranchshow== 1">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch <span class="StarMarking">*</span></label>
+              <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
+                      [(ngModel)]="RequestManual.BranchID" (change)="BranchWiseEmployee()">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+              </select>
             </div>
 
             <div>
@@ -317,7 +329,7 @@
             </div>
             <div *ngIf="To_isShowDDl== true">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute: <span class="StarMarking">*</span></label>
-              <select class="form-select" formControlName="To_ddlCollege" [(ngModel)]="RequestManual.To_ddlCollege">
+              <select class="form-select" formControlName="To_ddlCollege" [(ngModel)]="RequestManual.To_ddlCollege" (change)="To_PostChange()">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of To_InstituteList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
@@ -335,14 +347,24 @@
                          placeholder="--Select--"
                          [searchable]="true"
                          [clearable]="true"
+                          (change)="To_PostChange()"
                          [virtualScroll]="true"
                          [loading]="isLoading">
               </ng-select>
 
               <!--<select class="form-select" [(ngModel)]="RequestManual.To_PostID" formControlName="To_PostID">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of To_PostList" [value]="item.ID">{{item.Name}}</option>
-              </select>-->
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of To_PostList" [value]="item.ID">{{item.Name}}</option>
+    </select>-->
+            </div>
+
+            <div *ngIf="To_IsBranchshow == 1">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
+              <select class="form-select" name="To_BranchID" id="BranchID" formControlName="To_BranchID"
+                      [(ngModel)]="RequestManual.To_BranchID" >
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of To_CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+              </select>
             </div>
 
           </div>

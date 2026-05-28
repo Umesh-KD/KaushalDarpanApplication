@@ -72,6 +72,7 @@ export class AddIndustryInstitutePartnershipMasterComponent {
         Name: ['', Validators.required],
         EmailId: ['', [Validators.required,Validators.pattern(GlobalConstants.EmailPattern)]],
         MobileNo: ['', Validators.required],
+        Designation: ['', Validators.required],
       });
 
 
