@@ -12,16 +12,14 @@ import { DropdownValidators } from '../../../Services/CustomValidators/custom-va
 import { EventConsentActionDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 
 @Component({
-  selector: 'app-iip-event-consent-list',
+  selector: 'app-iip-event-consent-report',
   standalone: false,
-  templateUrl: './iip-event-consent-list.component.html',
-  styleUrl: './iip-event-consent-list.component.css'
+  templateUrl: './iip-event-consent-report.component.html',
+  styleUrl: './iip-event-consent-report.component.css'
 })
-export class IIPEventConsentListComponent {
+export class IIPEventConsentReportComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new EventConsentActionDataModel();
-
-  groupForm!: FormGroup;
 
   public CompanyEventsList: any = []
   public EventConsentDataList: any = []
@@ -30,6 +28,8 @@ export class IIPEventConsentListComponent {
   public _EnumRole = EnumRole;
 
   public EventID: number = 0
+  public EventTypeID: number = 0
+  public EventStatusID: number = 0
   public isSubmitted: boolean = false
 
   //table feature default
@@ -52,22 +52,15 @@ export class IIPEventConsentListComponent {
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
     private loaderService: LoaderService, 
     private modalService: NgbModal,
-    private fb: FormBuilder,
   ) { }
 
   async ngOnInit() {
 
-    this.groupForm = this.fb.group({
-      ddlStatus: [1, [DropdownValidators]],
-      txtRemark: ['', Validators.required]
-    });
-
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.EventID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
-    if(this.EventID > 0) {
-      await this.GetEventConsentData();
-    }
-    // await this.GetCompanyEvents();
+    this.EventID = Number(this.activatedRoute.snapshot.queryParamMap.get('eid')?.toString());
+    this.EventTypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('etid')?.toString());
+    this.EventStatusID = Number(this.activatedRoute.snapshot.queryParamMap.get('esid')?.toString());
+    await this.GetEventConsentData();
     
   }
 
@@ -75,10 +68,12 @@ export class IIPEventConsentListComponent {
     try {
       let request: any = {};
       request.EventID = this.EventID ;
+      request.EventTypeID = this.EventTypeID;
+      request.EventStatusID = this.EventStatusID;
       request.UserID = this.sSOLoginDataModel.UserID;
       request.RoleID = this.sSOLoginDataModel.RoleID; 
       request.Action = "GetAllConsentData";
-      await this.industryInstitutePartnershipMasterService.GetEventConsentData(request)
+      await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(request)
         .then(async (data: any) => {
 
           data = JSON.parse(JSON.stringify(data));
@@ -96,51 +91,6 @@ export class IIPEventConsentListComponent {
     } catch (error) {
       console.error(error)
     }
-  }
-
-  async onSubmit(model: any) {
-    const selected = this.EventConsentDataList.filter((x: any) => x.Selected);
-    if(selected.length == 0) {
-      this.toastr.error('Please select at least one Consent for Action.');
-      return;
-    }
-    try {  
-      this.request.Status = 0;
-      this.request.Remark = '';
-      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  }
-
-  CloseModal() {
-    this.modalService.dismissAll();
-    this.modalReference?.close();
-  }
-
-  async updateConsentStatus() {
-    let selected = this.EventConsentDataList.filter((x: any) => x.Selected);
-
-    selected.forEach((x: any) => {
-      x.ModifyBy = this.sSOLoginDataModel.UserID;
-      x.Status = this.request.Status;
-      x.Remark = this.request.Remark
-    })
-
-    try {
-      await this.industryInstitutePartnershipMasterService.UpdateConsentStatus(selected).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.ErrorMessage);
-          this.CloseModal();
-          await this.GetEventConsentData();
-        }
-      })
-    } catch (error) {
-      console.error(error)
-    }
-
-    
   }
 
   //table feature 
