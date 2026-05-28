@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IIPEventsComponent } from './iip-events.component';
+import { iipeventsComponent } from './iip-events.component';
 
 describe('IIPEventsComponent', () => {
-  let component: IIPEventsComponent;
-  let fixture: ComponentFixture<IIPEventsComponent>;
+  let component: iipeventsComponent;
+  let fixture: ComponentFixture<iipeventsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IIPEventsComponent]
+      imports: [iipeventsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(IIPEventsComponent);
+    fixture = TestBed.createComponent(iipeventsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

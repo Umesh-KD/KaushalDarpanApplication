@@ -153,6 +153,7 @@ export class CompanyEventSearchModel extends RequestBaseModel {
   public StudentID: number = 0
   public InterestedStatus: number = 0
   public Remarks: string = ''
+  public InstituteID: number=0
 
 
 }
