@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { PlacementShortlistedStuSearch, PlacementShortListStudentResponseModel } from '../../Models/PlacementShortListStudentResponseModel';
 import { AppsettingService } from '../../Common/appsetting.service';
+import { PlacementSelectedStudentResponseModel } from '../../Models/PlacementSelectedStudentResponseModel';
 
 
 @Injectable({
@@ -53,4 +54,13 @@ export class PlacementShortlistedStudentsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async SaveReject(request: PlacementSelectedStudentResponseModel[]) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/SaveReject', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

@@ -7,6 +7,7 @@ import { LoaderModule } from '../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { PlacementDashReportComponent } from './placement-dash-report.component';
 import { MaterialModule } from '../../material.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 const routes: Routes = [
   {
     path: '',
@@ -18,7 +19,7 @@ const routes: Routes = [
   declarations: [
     PlacementDashReportComponent
   ],
-  imports: [RouterModule.forChild(routes), FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule,MaterialModule],
+  imports: [RouterModule.forChild(routes), FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule, MaterialModule, NgSelectModule],
   exports: [RouterModule],
 })
 

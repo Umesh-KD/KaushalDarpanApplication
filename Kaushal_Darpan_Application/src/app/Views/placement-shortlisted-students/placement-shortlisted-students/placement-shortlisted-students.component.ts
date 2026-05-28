@@ -43,7 +43,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   public CampusPostID: number = 0;
   public BranchID: number = 0;
   public HiringRoleID: number = 0;
-  public StudentList: PlacementShortListStudentResponseModel[] = [];
+  public StudentList: any[] = [];
   public searchRequest = new PlacementShortlistedStuSearch();
 
   constructor(
@@ -266,6 +266,65 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
       }, 200);
     }
   }
+
+  async SaveReject() {
+    debugger
+    this.isSubmitted = true;
+    //
+    this.refreshBranchRefValidation(true);
+    //
+    if (this.PlacementShortListStudentForm.invalid) {
+      return console.log("error")
+    }
+    try {
+      this.loaderService.requestStarted();
+
+      const isAnySelected = this.StudentList.some(x => x.Marked);
+      if (!isAnySelected) {
+        this.toastr.error('Please select at least one checkbox!');
+        return; // Exit the method if no checkbox is selected
+      }
+
+      //
+      this.StudentList.forEach(x => {
+        x.ModifyBy = this.sSOLoginDataModel.UserID;
+        x.CampusPostID = this.CampusPostID;
+        x.HiringRole = this.HiringRoleID;
+      });
+      console.log(this.StudentList);
+      //save
+
+      await this.placementShortListStudentService.SaveReject(this.StudentList)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message)
+            await this.GetAllData();
+          }
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+        })
+        .catch((error: any) => {
+          console.error(error);
+          this.toastr.error('Failed to Action Short List!');
+        });
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+
 
   //
   refreshBranchRefValidation(isValidate: boolean) {

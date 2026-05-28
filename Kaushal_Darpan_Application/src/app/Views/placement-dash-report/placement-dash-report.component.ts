@@ -9,7 +9,8 @@ import { StudentExamDetails } from '../../Models/DashboardCardModel';
 import { EnumRole } from '../../Common/GlobalConstants';
 import { PlacementReportService } from '../../Services/PlacementReport/PlacementReport.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
-import { PlacementReportSearchModels } from '../../Models/PlacementDashReportModel';
+import { PlacementReportHistorySearchModels, PlacementReportSearchModels } from '../../Models/PlacementDashReportModel';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-placement-dash-report',
@@ -22,8 +23,9 @@ export class PlacementDashReportComponent implements OnInit {
   ErrorMessage: string = '';
   State: boolean = false;
   viewAdminDashboardList: StudentExamDetails[] = [];
+  StudentHistoryModelList: any[] = [];
   filteredData: any[] = [];
-  displayedColumns: string[] = ['SrNo', 'StudentName', 'EnrollmentNo', 'InstituteName', 'InstitutionManagementType', 'Email', 'FatherName', 'DOB', 'Age', 'GenderName'];
+  displayedColumns: string[] = ['SrNo', 'StudentName', 'EnrollmentNo', 'InstituteName', 'InstitutionManagementType', 'Email', 'FatherName', 'DOB', 'Age', 'GenderName', 'Action'];
   dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
   totalRecords: number = 0;
   pageSize: number = 10;
@@ -36,14 +38,23 @@ export class PlacementDashReportComponent implements OnInit {
   _EnumRole = EnumRole;
   InstituteMasterList: any = [];
   SemesterMasterList: any = [];
+  CampusMasterList: any = [];
   Table_SearchText: string = '';
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
+  modalReference: NgbModalRef | undefined;
+  closeResult: string | undefined
+  EnrollmentNo:string=''
+  FromAge:number=0
+  ToAge:number=0
+  CampusID:number=0
 
   constructor(
     private PlacementDashService: PlacementReportService,
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
-    private commonMasterService: CommonFunctionService
+    private commonMasterService: CommonFunctionService,
+    private modalService: NgbModal,
+
   ) {
   }
 
@@ -54,6 +65,7 @@ export class PlacementDashReportComponent implements OnInit {
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetAllData();
+    this.GetCampusPostMasterDDL();
 
     await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
       .then((data: any) => {
@@ -61,13 +73,34 @@ export class PlacementDashReportComponent implements OnInit {
         this.InstituteMasterList = data['Data'];
       }, (error: any) => console.error(error));
 
-    await this.commonMasterService.SemesterMaster()
+  
+
+    await this.commonMasterService.GetCampusPostMasterDDL()
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SemesterMasterList = data['Data'];
       }, (error: any) => console.error(error));
-  }
 
+  }
+  async GetCampusPostMasterDDL() {
+    debugger
+    try {
+
+      await this.commonMasterService.GetCampusPostMasterDDL(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.UserID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CampusMasterList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+    
+      }, 200);
+    }
+  }
 
   exportToExcel(): void {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.viewAdminDashboardList);
@@ -77,15 +110,18 @@ export class PlacementDashReportComponent implements OnInit {
   }
 
   async GetAllData() {
-//    debugger
-    let requestData: PlacementReportSearchModels = {
+    //    debugger
+    let requestData: any = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      CollegeID : this.sSOLoginDataModel.InstituteID,
-      RoleID:this.sSOLoginDataModel.RoleID,
+      CollegeID: this.sSOLoginDataModel.InstituteID,
+      RoleID: this.sSOLoginDataModel.RoleID,
       Id: this.id,
       Gender: '',
-      StudentName: ''
+      StudentName: '',
+      CampusID: this.CampusID,
+      ToAge: this.ToAge,
+      FromAge: this.FromAge
     }
 
     await this.PlacementDashService.GetAllData(requestData)
@@ -142,6 +178,62 @@ export class PlacementDashReportComponent implements OnInit {
   updatePaginationIndexes(): void {
     this.startInTableIndex = (this.currentPage - 1) * this.pageSize + 1;
     this.endInTableIndex = Math.min(this.currentPage * this.pageSize, this.totalRecords);
+  }
+
+  async ViewHistory(content: any, ID: number,postid:number=0) {
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    //this.requestAction.Action = "0";
+    //this.requestAction.ActionRemarks = "";
+    await this.ViewWorkflow(ID, postid)
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+
+  }
+
+  async ViewWorkflow(StudentID: number = 0, PostID: number = 0) {
+    try {
+      debugger
+      const requestData: any = {
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        CollegeID: this.sSOLoginDataModel.InstituteID,
+        RoleID: this.sSOLoginDataModel.RoleID,
+        Id: this.id,
+        StudentID: StudentID,
+        CampusID: PostID,
+        Gender: '',
+        StudentName: '',
+      };
+
+      const data: any = await this.PlacementDashService.GetAllHistory(requestData);
+
+      const response = JSON.parse(JSON.stringify(data));
+
+      this.StudentHistoryModelList = response['Data'] || [];
+
+
+
+      this.updateTable();
+
+    } catch (error) {
+      console.error('Error in ViewWorkflow:', error);
+    }
   }
 
 
