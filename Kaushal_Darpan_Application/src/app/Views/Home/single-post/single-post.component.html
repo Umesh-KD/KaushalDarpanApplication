@@ -44,9 +44,9 @@
                           <div>
                             <b>{{CampusPostDetail.CompanyName}}</b>
                             <!--<p>Post: {{CampusPostDetail.PostNo}}</p>-->
-                            <p style="border-color: #b4cedf;" width="140px">
-                              Post: {{ ('2025-26')+ '-' + (CampusPostDetail.InstituteCode | number:'3.0') + '-' + CampusPostDetail.PostID }}
-                            </p>
+                          <p style="border-color: #b4cedf;" width="140px">
+                            Post: {{ ('2025-26')+ '-' + (CampusPostDetail.InstituteCode | number:'3.0') + '-' + CampusPostDetail.Dis_PostId }}
+                          </p>
                             <p>Total No.of Vacancy: {{CampusPostDetail.TotalPositions}}</p>
                             <a href="{{CampusPostDetail.Website}}" target="_blank">
                               <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{CampusPostDetail.Logo}}" />

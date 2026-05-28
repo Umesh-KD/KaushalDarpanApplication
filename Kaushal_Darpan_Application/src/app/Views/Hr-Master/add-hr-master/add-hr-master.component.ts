@@ -121,20 +121,16 @@ export class AddHrMasterComponent {
   // get detail by id
   async GetById() {
     try {
-      
+     // debugger
       this.loaderService.requestStarted();
 
       await this.HrMasterService.GetById(this.HRManagerID)
 
-        .then((data: any) => {
-          
+        .then((data: any) => {          
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
-
           this.request = data['Data'];
-
           this.request.PlacementCompanyID = data['Data']['PlacementCompanyID'];
-
           //this.HrMasterFormGroup.patchValue({
           //  PlacementCompanyID: this.request.PlacementCompanyID
           //});

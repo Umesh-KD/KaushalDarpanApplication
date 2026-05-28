@@ -223,8 +223,13 @@ export class AddCompanyMasterComponent implements OnInit {
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data,"company");
-
           this.request = data['Data'];
+          if (
+            !this.request.ListCompanyHRDetails ||
+            this.request.ListCompanyHRDetails.length === 0
+          ) {
+            this.request.ListCompanyHRDetails = [];
+          }
           this.request.Dis_CompanyName = data['Data']['Dis_CompanyName'];
           this.request.CompanyPhoto = data['Data']['CompanyPhoto'];
           this.ddlState_Change();
@@ -252,12 +257,10 @@ export class AddCompanyMasterComponent implements OnInit {
       if(this.HrMasterFormGroup.invalid) {
         this.toastr.error("Please fill all the required fields of Hr Form")
         return;
-      }
-  
+      }  
       const personExists = this.request.ListCompanyHRDetails.some(person =>
         person.EmailId === this.personRequest.EmailId && person.MobileNo === this.personRequest.MobileNo
-      );
-  
+      );  
     if (!personExists) {
         this.request.ListCompanyHRDetails.push(this.personRequest);
         this.personRequest = new HrMasterDataModel();
@@ -269,7 +272,7 @@ export class AddCompanyMasterComponent implements OnInit {
   
       // this.request.ConcernPersonDetails.push(this.personRequest);
     
-    }
+   }
   
 
   async resetHrDetails() {
