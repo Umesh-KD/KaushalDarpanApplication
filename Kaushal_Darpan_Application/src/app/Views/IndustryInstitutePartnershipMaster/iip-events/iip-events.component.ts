@@ -201,42 +201,50 @@ export class iipeventsComponent {
   }
 
   selectInTableAllCheckbox() {
-    this.IndustryInstitutePartnershipMasterList.forEach((x: any) => {
+    this.CompanyEventsList.forEach((x: any) => {
       x.Selected = this.AllInTableSelect;
     });
   }
 
-  async ApproveCompanyEvents() {
+  async ApproveCompanyEvents()
+  {
     const anySelected = this.CompanyEventsList.some((item: any) => item.Selected);
     if (!anySelected) {
       this.toastr.error('Please select at least one Company to approve.');
       return;
     }
 
-    const Selected = this.CompanyEventsList.filter((item: any) => item.Selected);
-    Selected.forEach((item: any) => {
-      item.ModifyBy = this.sSOLoginDataModel.UserID;
-    });
+    const confirmationMessage = 'Are you sure you want to approve the event?'
 
-    try {
+    this.Swal2.Confirmation(confirmationMessage, async (result: any) => {
+      if (result.isConfirmed)
+      {
+        const Selected = this.CompanyEventsList.filter((item: any) => item.Selected);
+        Selected.forEach((item: any) => {
+          item.ModifyBy = this.sSOLoginDataModel.UserID;
+        });
 
-      debugger;
-      await this.industryInstitutePartnershipMasterService.ApproveCompanyEvents(Selected).then(async (data: any) => {
-        debugger
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          this.AllInTableSelect = false;
-          await this.GetCompanyEvents();
-        } else if (data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
+        try {
+
+          debugger;
+          await this.industryInstitutePartnershipMasterService.ApproveCompanyEvents(Selected).then(async (data: any) => {
+            debugger
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.toastr.success(data.Message);
+              this.AllInTableSelect = false;
+              await this.GetCompanyEvents();
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.Message);
+            } else {
+              this.toastr.error(data.ErrorMessage);
+            }
+          })
+        } catch (error) {
+          console.error(error)
         }
-      })
-    } catch (error) {
-      console.error(error)
-    }
+      }
+    })
   }
 
 }
