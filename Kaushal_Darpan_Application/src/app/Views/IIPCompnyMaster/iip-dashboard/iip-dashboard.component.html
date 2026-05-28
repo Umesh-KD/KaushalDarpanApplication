@@ -57,6 +57,19 @@
   <b class="text-1xl-5">
     <i class="ti ti-list"></i> Event Summary
   </b>
+
+  <div>
+    <select class="form-select"
+            [(ngModel)]="request.EventStatus"
+            (change)="GetIIPDashboardListData()">
+      <option value=" ">All</option>
+      <option value="UP-Comming">Upcoming</option>
+      <option value="Running">Running</option>
+      <option value="Close">Closed</option>
+
+    </select>
+  </div>
+
 </div>
 
 <div class="overflow-auto mt-3 shadow-lg">
