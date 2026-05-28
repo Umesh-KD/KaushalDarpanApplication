@@ -1,4 +1,3 @@
-
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
@@ -22,83 +21,45 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Campus</label>
-            <!-- <select formControlName="CampusPostID" class="form-select" id="CampusPostID" [(ngModel)]="CampusPostID" (change)="GetCampusWiseHiringRoleDDL()">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of CampusMasterList" [value]="item.ID">{{item.Name}}</option>
-            </select> -->
-            <ng-select
-            [items]="CampusMasterList"
-            bindLabel="Name"
-            bindValue="ID"
-            formControlName="CampusPostID"
-            [(ngModel)]="CampusPostID"
-            placeholder="--Select--"
-            [searchable]="true"
-            [clearable]="true"
-            [virtualScroll]="true"
-            [loading]="isLoading"
-            (change)="GetCampusWiseHiringRoleDDL()">
-          </ng-select>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Campus<span class="StarMarking">*</span></label>
+            <ng-select [(ngModel)]="CampusPostID"
+                       formControlName="CampusPostID"
+                       [clearable]="false"
+                       (change)="GetCampusWiseHiringRoleDDL()">
+              <ng-option [value]="0" selected>--Select--</ng-option>
+              <ng-container *ngFor="let item of CampusMasterList;">
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-container>
+            </ng-select>
             <div *ngIf="isSubmitted && PlacementShortListStudentForm.get('CampusPostID').errors" class="text-danger">
               <p *ngIf="!PlacementShortListStudentForm.get('CampusPostID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
             </div>
           </div>
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
-            <!-- <select formControlName="BranchID" class="form-select" id="BranchID" [(ngModel)]="BranchID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">{{item.StreamName}}</option>
-            </select> -->
-            <ng-select
-              [items]="StreamMasterList"
-              bindLabel="StreamName"
-              bindValue="StreamID"
-              formControlName="BranchID"
-              [(ngModel)]="BranchID"
-              placeholder="--Select--"
-              [searchable]="true"
-              [clearable]="true"
-              [virtualScroll]="true"
-              [loading]="isLoading"
-              >              
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+            <ng-select [(ngModel)]="BranchID"
+                       formControlName="BranchID"
+                       [clearable]="false"
+                       [searchable]="true"
+                       [virtualScroll]="true">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              <ng-container *ngFor="let item of StreamMasterList;">
+                <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+              </ng-container>
             </ng-select>
-            <div *ngIf="isSubmitted && PlacementShortListStudentForm.get('BranchID').errors" class="text-danger">
+            <!--<div *ngIf="isSubmitted && PlacementShortListStudentForm.get('BranchID').errors" class="text-danger">
               <p *ngIf="!PlacementShortListStudentForm.get('BranchID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
-            </div>
+            </div>-->
           </div>
           <div>
             <button type="button" class="btn bg-success text-white mt-6" (click)="GetAllData()">Search</button>
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hiring Role<span class="StarMarking">*</span></label>
-            <!-- <select formControlName="HiringRoleID" style="min-width:200px !important;" class="form-select" id="HiringRoleID" [(ngModel)]="HiringRoleID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of HiringRoleMasterList" [value]="item.ID">{{item.Name}}</option>
-            </select> -->
-            <ng-select
-              [items]="HiringRoleMasterList"
-              bindLabel="Name"
-              bindValue="ID"
-              formControlName="HiringRoleID"
-              [(ngModel)]="HiringRoleID"
-              placeholder="--Select--"
-              [searchable]="true"
-              [clearable]="true"
-              [virtualScroll]="true"
-              [loading]="isLoading" >          
-            </ng-select>
-            <div *ngIf="isSubmitted && PlacementShortListStudentForm.get('HiringRoleID').errors" class="text-danger">
-              <p *ngIf="!PlacementShortListStudentForm.get('HiringRoleID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
-            </div>
-
           </div>
         </div>
       </form>
 
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>All Student List</b>
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Student List</b>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -110,8 +71,26 @@
           <option value="1000">1000</option>
         </select>
       </div>
-      <div class="">
-      </div>
+
+      <form [formGroup]="PlacementShortListStudentForm1">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hiring Role<span class="StarMarking">*</span></label>
+          <ng-select [(ngModel)]="HiringRoleID"
+                     formControlName="HiringRoleID"
+                     [clearable]="false"
+                     [searchable]="true"
+                     [virtualScroll]="true">
+            <ng-option [value]="0" selected>--Select--</ng-option>
+            <ng-container *ngFor="let item of HiringRoleMasterList;">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+          <div *ngIf="isSubmitted && PlacementShortListStudentForm1.get('HiringRoleID').errors" class="text-danger">
+            <p *ngIf="!PlacementShortListStudentForm1.get('HiringRoleID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+      </form>
+
       <div class="">
       </div>
       <div class="flex items-center">
@@ -119,7 +98,7 @@
         <button type="button" class="btn bg-success text-white" (click)="exportToExcel()">&nbsp;&nbsp;&nbsp;Export</button>
       </div>
     </div>
-    
+
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
@@ -144,28 +123,26 @@
             <th class="text-left">Institute Type</th>
             <th class="text-left">Enrollment No</th>
             <th class="text-left">Uploaded Resume</th>
-
-
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of StudentList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td>{{idx+1}}</td>
             <td>
-
               <input type="checkbox" name="MarkCheck"
                      [(ngModel)]="row.Marked" />
             </td>
+
             <!--<td class="text-left">
-            <select style="min-width:200px !important;" class="form-select" id="ddlHiringRoleID" [(ngModel)]="row.HiringRole">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of HiringRoleMasterList" [value]="item.HiringRoleID">{{item.HiringRoleName}}</option>
-            </select>
-            <div *ngIf="row.Marked && row.HiringRole === 0" class="invalid-feedback text-danger">
-              Please select Hiring Role!
-            </div>
-          </td>-->
-          <td class="text-center">{{row.PostNo}}</td>
+              <select style="min-width:200px !important;" class="form-select" id="ddlHiringRoleID" [(ngModel)]="row.HiringRole">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of HiringRoleMasterList" [value]="item.HiringRoleID">{{item.HiringRoleName}}</option>
+              </select>
+              <div *ngIf="row.Marked && row.HiringRole === 0" class="invalid-feedback text-danger">
+                Please select Hiring Role!
+              </div>
+            </td>-->
+            <td class="text-center">{{row.PostNo}}</td>
             <td class="text-left">{{row.StudentName}} </td>
             <td class="text-left">{{row.Email}}</td>
             <td class="text-left">{{row.FatherName}}</td>
@@ -173,21 +150,23 @@
             <td class="text-left">{{row.Age}}</td>
             <td class="text-left">{{row.Dis_Gender}}</td>
             <td class="text-left">{{row.MobileNo}}</td>
+
             <!--<td class="text-left">{{row.DistrictName}}</td>-->
             <td class="text-left">{{row.StateName}}</td>
             <td class="text-left">{{row.InstituteName}}</td>
             <td class="text-left">{{row.InstitutionManagementType}}</td>
             <td class="text-left">{{row.EnrollmentNo}}</td>
             <td class="text-left">
-               <!-- <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UploadedResume}}" *ngIf="row.UploadedResume; Not Uploaded"  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>          -->
-               <!-- <a href="{{row.UploadedResume}}"  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>          -->
+
+              <!-- <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UploadedResume}}" *ngIf="row.UploadedResume; Not Uploaded"  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>          -->
+              <!-- <a href="{{row.UploadedResume}}"  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>          -->
               <!-- D:\KAUSHAL-DARPAN\Api\Kaushal_Darpan.Api\StaticFiles\Sep232025124008692593.png -->
               <ng-container *ngIf="row.UploadedResume && row.UploadedResume.trim() !== ''; else notUploaded">
-              <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UploadedResume}}"
-                class="btn bg-primary text-white m-0"
-                target="_blank">
-                <i class="ti ti-eye"></i>
-              </a>
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UploadedResume}}"
+                   class="btn bg-primary text-white m-0"
+                   target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
               </ng-container>
               <ng-template #notUploaded>
                 <span class="text-muted">Not Uploaded</span>
@@ -202,7 +181,7 @@
     </div>
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
       <div class="text-center">
-        <button class="btn bg-success text-white" (click)="SaveAllData()" type="button">Submit</button>
+        <button *ngIf="this.StudentList?.length>0" class="btn bg-success text-white" (click)="SaveAllData()" type="button">Submit</button>
       </div>
     </div>
   </div>

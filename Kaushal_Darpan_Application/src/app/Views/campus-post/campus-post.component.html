@@ -292,7 +292,7 @@
             
             <div>
               <div class="grid 2xl:grid-cols-2 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
-                <div>
+                <!-- <div>
                   <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                     Age Allowed (Born Between) From<span class="StarMarking">*</span>
                   </label>
@@ -329,7 +329,54 @@
                       required .!
                     </p>
                   </div>
+                </div> -->
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Age Calculation Date<span class="StarMarking">*</span>
+                  </label>
+                  <input type="date" class="form-input" id="AgeCalculationDate" formControlName="AgeCalculationDate"
+                         [(ngModel)]="request_EligibilityCriteriaModel.AgeCalculationDate" (change)="onAgeRangeChange()">
+                  <div *ngIf="isSubmittedItemDetails&&form_Eligibility.AgeCalculationDate.errors" class="text-danger">
+                    <p *ngIf="form_Eligibility.AgeCalculationDate.errors.required">
+                      <i aria-hidden="true"></i> This field
+                      is required .!
+                    </p>
+                  </div>
                 </div>
+
+                <div class="grid 2xl:grid-cols-2 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
+                  <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                      Min Age<span class="StarMarking">*</span>
+                    </label>
+                    <input type="text" class="form-input" formControlName="MinimunAge"
+                      [(ngModel)]="request_EligibilityCriteriaModel.MinimunAge"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+
+                    <div *ngIf="isSubmittedItemDetails&&form_Eligibility.MinimunAge.errors" class="text-danger">
+                      <p *ngIf="form_Eligibility.MinimunAge.errors.required">
+                        <i aria-hidden="true"></i> This field is required .!
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                      Max Age<span class="StarMarking">*</span>
+                    </label>
+                    <input type="text" class="form-input" formControlName="MaximumAge"
+                      [(ngModel)]="request_EligibilityCriteriaModel.MaximumAge"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+
+                    <div *ngIf="isSubmittedItemDetails&&form_Eligibility.MaximumAge.errors" class="text-danger">
+                      <p *ngIf="form_Eligibility.MaximumAge.errors.required">
+                        <i aria-hidden="true"></i> This field is required .!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
               </div>
 
             </div>
@@ -614,7 +661,7 @@
                   <th class="text-left">12<sup>th</sup>%(min)</th>
                   <th class="text-left">Diploma%(min)</th>
                   <th class="text-left">Back papers allowed</th>
-                  <th class="text-left">Age Allowed (Born Between) From - To</th>
+                  <th class="text-left">Age Calculation Date Min - Max</th>
                   <th class="text-left">Hiring Role</th>
                   <th class="text-center">Positions</th>
                   <th class="text-center">Salary/Stipend/CTC</th>
@@ -648,7 +695,7 @@
 
 
                   <td>{{row.NoofBackPapersAllowed}}</td>
-                  <td>{{row.Dis_AgeAllowedFrom}}-{{row.Dis_AgeAllowedTo}}</td>
+                  <td>{{row.AgeCalculationDate | date: 'dd-MM-yyyy'}} ({{row.MinimunAge}} - {{row.MaximumAge}})</td>
                   <td>{{row.HiringRoleName}}</td>
                   <td>{{row.NoofPositions}}</td>
                   <td class="text-center">{{row.SalaryName}}</td>

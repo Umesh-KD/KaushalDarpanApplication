@@ -23,6 +23,10 @@ export class IndustryInstitutePartnershipMasterDataModels {
   public Dis_Logo: string = ''
   public PlacementCompanyID?: number = 0
   public Selected?: boolean = false
+  
+
+
+  public EventID: number = 0 
 
   public ConcernPersonDetails: ConcernPersonDetailsDataModel[] = []
 }
@@ -154,6 +158,7 @@ export class CompanyEventSearchModel extends RequestBaseModel {
   public InterestedStatus: number = 0
   public Remarks: string = ''
   public InstituteID: number=0
+  public ApproveStatus: number=-1
 
 
 }
@@ -161,4 +166,13 @@ export class CompanyEventSearchModel extends RequestBaseModel {
 export class EventConsentActionDataModel {
   public Remark: string = ''
   public Status: number = 0
+}
+export class EventConsentSearchModel {
+  public EventID: number = 0
+  public EventTypeID: number = 0
+  public EventStatusID: number = 0
+  public UserID: number = 0
+  public RoleID: number = 0
+  public InstituteID: number = 0
+  public Action: string = ''
 }

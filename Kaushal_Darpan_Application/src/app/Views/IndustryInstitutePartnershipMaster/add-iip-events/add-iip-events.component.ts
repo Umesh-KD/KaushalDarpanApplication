@@ -210,7 +210,7 @@ if (this.PageMode == 'view') {
           
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            this.routers.navigate(['/IndustryInstitutePartnershipList']);
+            this.routers.navigate(['/iip-events']);
           } else {
             this.toastr.error(data.ErrorMessage)
           }

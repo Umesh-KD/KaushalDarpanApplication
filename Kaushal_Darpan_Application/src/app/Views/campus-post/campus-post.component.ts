@@ -163,8 +163,8 @@ export class CampusPostComponent implements OnInit {
       //ddlNoofBackPapersAllowed: ['', [DropdownValidators]],
       ddlNoofBackPapersAllowed: [''],
 
-      txtAgeAllowedFrom: [''],
-      txtAgeAllowedTo: [''],
+      // txtAgeAllowedFrom: [''],
+      // txtAgeAllowedTo: [''],
       ddlHiringRoleID: ['', [DropdownValidators]],
       /*txtNoofPositions: ['', [Validators.required, Validators.pattern(GlobalConstants.PositionPattern)]],*/
     /*  txtNoofPositions: ['', Validators.required],*/
@@ -181,7 +181,10 @@ export class CampusPostComponent implements OnInit {
       ddlEligibleInstitutes: ['', [DropdownValidators]],
      
       ddlNoOfInterviewRound: [''],
-      txtappointmentLocation:['',Validators.required]
+      txtappointmentLocation:['',Validators.required],
+      AgeCalculationDate: [''],
+      MinimunAge: [''],
+      MaximumAge: [''],
     });
     this.request.EligibilityCriteriaModel = [];
     this.filteredPassingYears = this.PassingYearMasterList;
@@ -237,7 +240,7 @@ export class CampusPostComponent implements OnInit {
   }
 
   onPassingYearChange() {
-    const selectedPassingYear = this.request_EligibilityCriteriaModel.PassingYear;
+    const selectedPassingYear = this.request_EligibilityCriteriaModel.PassingYear || 0;
 
     // Filter the "To Passing Year" options to be greater than the selected "Passing Year From"
     if (selectedPassingYear > 0) {
@@ -247,7 +250,7 @@ export class CampusPostComponent implements OnInit {
     }
 
     // Reset the "Passing Year To" field if the selected "Passing Year From" makes it invalid
-    if (this.request_EligibilityCriteriaModel.ToPassingYear <= selectedPassingYear) {
+    if ((this.request_EligibilityCriteriaModel.ToPassingYear ?? 0) <= selectedPassingYear) {
       this.request_EligibilityCriteriaModel.ToPassingYear = 0;
     }
   }
@@ -827,7 +830,10 @@ debugger
             DeleteStatus: this.request_EligibilityCriteriaModel.DeleteStatus,
             SalaryName: this.request_EligibilityCriteriaModel.SalaryName,
             SalaryTypeID: this.request_EligibilityCriteriaModel.SalaryTypeID,
-            appointmentLocation:this.request_EligibilityCriteriaModel.appointmentLocation
+            appointmentLocation:this.request_EligibilityCriteriaModel.appointmentLocation,
+            AgeCalculationDate: this.request_EligibilityCriteriaModel.AgeCalculationDate,
+            MinimunAge: this.request_EligibilityCriteriaModel.MinimunAge,
+            MaximumAge: this.request_EligibilityCriteriaModel.MaximumAge
           }
         );
 
@@ -1168,14 +1174,14 @@ debugger
     this.calculatedAge = `${maxAgeText} to ${minAgeText}`;
   
     // Keep your min date validation
-    this.minDate = fromDateStr;
+    this.minDate = fromDateStr || '';
 
     // --------------------------------------------
 
     console.log('Calculated Age Range:', this.calculatedAge);
 
     // Optional
-    this.minDate = fromDateStr;
+    this.minDate = fromDateStr || '';
 
 
   }

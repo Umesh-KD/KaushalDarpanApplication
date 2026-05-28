@@ -75,6 +75,7 @@ export class AddCompanyMasterComponent implements OnInit {
         // EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
         // MobileNo: ['', Validators.required],
 
+        CompanyRegNo: ['', Validators.required]
 
       });
 
@@ -219,7 +220,7 @@ export class AddCompanyMasterComponent implements OnInit {
 
       await this.CompanyMasterService.GetById(this.searchReq)
 
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data,"company");
 
@@ -229,7 +230,7 @@ export class AddCompanyMasterComponent implements OnInit {
           this.ddlState_Change();
           this.request.DistrictID = data['Data']["DistrictID"];
           console.log(this.request, "request");
-
+          await this.GetTierBasedPackageMaster();
 
         }, (error: any) => console.error(error)
         );
@@ -245,9 +246,6 @@ export class AddCompanyMasterComponent implements OnInit {
   } 
 
 
-  
-  
-
   async AddMoreMembers() {
       debugger
       this.isHrFormSubmitted = true;
@@ -261,15 +259,9 @@ export class AddCompanyMasterComponent implements OnInit {
       );
   
     if (!personExists) {
-      if (this.request.ListCompanyHRDetails.length <= 0) {
         this.request.ListCompanyHRDetails.push(this.personRequest);
         this.personRequest = new HrMasterDataModel();
         this.isHrFormSubmitted = false;
-      }
-      else {
-        this.toastr.error("Cannot Add more than One HR in a company");
-        return
-      }
     } else {
         this.toastr.error("Person already exists with the same emailid and mobileno.");
         return
