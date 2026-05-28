@@ -97,6 +97,7 @@ export class ConcernPersonDetailsDataModel {
   public PlacementCompanyID: number = 0;
   public Name: string = '';
   public EmailId: string = '';
+  public Designation: string = '';
   public MobileNo: String = '';
   public ModifyBy: number = 0;
   public ActiveStatus: boolean = true;
@@ -148,7 +149,15 @@ export class CompanyEventSearchModel extends RequestBaseModel {
   public CompanyID: number = 0
   public EventID: number = 0
   public StaffID: number = 0
+  public EventStatus: number = 0
   public StudentID: number = 0
   public InterestedStatus: number = 0
-  public Remarks:string=''
+  public Remarks: string = ''
+
+
+}
+
+export class EventConsentActionDataModel {
+  public Remark: string = ''
+  public Status: number = 0
 }
