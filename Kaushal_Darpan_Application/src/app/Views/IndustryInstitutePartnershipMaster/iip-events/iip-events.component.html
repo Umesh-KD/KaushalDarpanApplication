@@ -43,9 +43,18 @@
           </select>
         </div>
 
-        
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approve Status</label>
+          <select class="form-select" name="EventStatus" id="StudentExamInstituteId" [(ngModel)]="searchRequest.ApproveStatus">
+            <option value="-1">--All--</option>
+            <option value="0">Event Created</option>
+            <option value="1">Approved</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Status</label>
           <select class="form-select" name="EventStatus" id="StudentExamInstituteId" [(ngModel)]="searchRequest.EventStatus">
             <option value="0">--All--</option>
             <option value="1">Upcoming</option>
@@ -86,7 +95,9 @@
             <option value="1000">1000</option>
           </select>
         </div>
-        <div class=""></div>
+        <div class="">
+          <button *ngIf="sSOLoginDataModel.RoleID == _enumRole.IIPAdmin" class="btn bg-success text-white" (click)="ApproveCompanyEvents()" type="button">Approve Event</button>
+        </div>
         <div class=""></div>
         <div class="">
           <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
@@ -97,6 +108,9 @@
         <table class="table table-border w-full" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
+              <th class="text-left" *ngIf="searchRequest.ApproveStatus != 1 &&  sSOLoginDataModel.RoleID == _enumRole.IIPAdmin">
+                <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+              </th>
               <th>Sr. No.</th>
               <th class="text-left">Company</th>
               <th class="text-left">Event Title</th>
@@ -113,6 +127,11 @@
           </thead>
           <tbody>
             <tr *ngFor="let row of CompanyEventsList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+              <td *ngIf=" searchRequest.ApproveStatus != 1 && sSOLoginDataModel.RoleID == _enumRole.IIPAdmin">
+                <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                       #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
+                       *ngIf="row.intStatus != 1">
+              </td>
               <td>{{idx+1}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyName}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventName}}</td>
@@ -163,7 +182,7 @@
 
                   <a [routerLink]="'/event-consent-list'" [queryParams]="{ id:row.EventID}"
                      title="View Consent">
-                   
+
                     <i class="ti ti-users-group"></i>
                   </a>
 

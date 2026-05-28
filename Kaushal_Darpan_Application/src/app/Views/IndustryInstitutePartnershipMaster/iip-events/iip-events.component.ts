@@ -8,7 +8,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 
 import { IndustryInstitutePartnershipMasterService } from '../../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { CompanyEventSearchModel, IIP_EventDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import { CompanyEventSearchModel, IIP_EventDataModel, IndustryInstitutePartnershipMasterDataModels } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -33,6 +33,9 @@ export class iipeventsComponent {
   public CompanyID: number = 0
   public Table_SearchText: string = ''
   public returnUrl: string = '/IndustryInstitutePartnershipList';
+  public IndustryInstitutePartnershipMasterList: IndustryInstitutePartnershipMasterDataModels[] = [];
+  public AllInTableSelect: boolean = false;
+
   constructor(
     private commonMasterService: CommonFunctionService, 
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
@@ -183,6 +186,53 @@ export class iipeventsComponent {
 
   async OnchangeInstitute() {
     await this.GetEventInsituteCompany();
+  }
+  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+    const data = this.IndustryInstitutePartnershipMasterList.filter((x: any) => x.EventID == item.EventID);
+    data.forEach((x: any) => {
+      x.Selected = isSelected;
+    });
+    //select all(toggle)
+    this.AllInTableSelect = this.IndustryInstitutePartnershipMasterList.every((r: any) => r.Selected);
+  }
+
+  selectInTableAllCheckbox() {
+    this.IndustryInstitutePartnershipMasterList.forEach((x: any) => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+
+  async ApproveCompanyEvents() {
+    const anySelected = this.CompanyEventsList.some((item: any) => item.Selected);
+    if (!anySelected) {
+      this.toastr.error('Please select at least one Company to approve.');
+      return;
+    }
+
+    const Selected = this.CompanyEventsList.filter((item: any) => item.Selected);
+    Selected.forEach((item: any) => {
+      item.ModifyBy = this.sSOLoginDataModel.UserID;
+    });
+
+    try {
+
+      debugger;
+      await this.industryInstitutePartnershipMasterService.ApproveCompanyEvents(Selected).then(async (data: any) => {
+        debugger
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.AllInTableSelect = false;
+          await this.GetCompanyEvents();
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 
 }

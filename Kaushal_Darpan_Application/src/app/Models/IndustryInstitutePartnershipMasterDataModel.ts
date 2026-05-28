@@ -158,6 +158,7 @@ export class CompanyEventSearchModel extends RequestBaseModel {
   public InterestedStatus: number = 0
   public Remarks: string = ''
   public InstituteID: number=0
+  public ApproveStatus: number=-1
 
 
 }
