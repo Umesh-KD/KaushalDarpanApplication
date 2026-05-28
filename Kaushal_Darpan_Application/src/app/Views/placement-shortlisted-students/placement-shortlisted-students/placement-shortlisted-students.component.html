@@ -95,7 +95,10 @@
       </div>
       <div class="flex items-center">
         <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
-        <button type="button" class="btn bg-success text-white" (click)="exportToExcel()">&nbsp;&nbsp;&nbsp;Export</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn bg-success text-white" (click)="exportToExcel()">Export</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn bg-success text-white" (click)="downloadPDF()">Download Resumes</button>
       </div>
     </div>
 

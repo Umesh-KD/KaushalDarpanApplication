@@ -59,6 +59,8 @@ export class CampusValidationComponent {
   public flagName: string = "TotalNoOfCampus";
   public TodayDate = new Date();
   public selectedSuspendedPost : any = {};
+   public FinancialYear: any = [];
+    FinancialYearID: number = 0;
 
   constructor(private commonMasterService: CommonFunctionService,private smsMailService: SMSMailService, private campusPostService: CampusPostService, private loaderService: LoaderService,
     private modalService: NgbModal, private route: ActivatedRoute, private formBuilder: FormBuilder, public appsettingConfig: AppsettingService, private toastr: ToastrService) {
@@ -155,8 +157,10 @@ export class CampusValidationComponent {
         this.InstituteID = 0;
       }
 
+
      
-      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,this.CompanyTypeID, this.flagName)
+      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,
+        this.CompanyTypeID, this.flagName,this.FinancialYearID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
@@ -206,6 +210,7 @@ export class CampusValidationComponent {
     this.CompanyID = 0;
     this.InstituteID = 0;
     this.ApprovedStatus = "0";
+     this.FinancialYearID=0;
   }
   async CampusOnPostAction(content: any, row: any) {
     debugger;
@@ -490,6 +495,16 @@ export class CampusValidationComponent {
       }, 200);
     }
   }
+  loadDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      switch (MasterCode) {
+        case 'FinancialYears':
+          this.FinancialYear = data['Data'];
+          break;
+        
+        
+      }
+    });
 }
-
+}
 

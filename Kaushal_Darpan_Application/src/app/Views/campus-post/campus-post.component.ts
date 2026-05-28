@@ -583,6 +583,7 @@ debugger
           this.request_EligibilityCriteriaModel.AgeCalculationDate = data['Data']["EligibilityCriteriaModel"][0]["AgeCalculationDate"];
           this.request_EligibilityCriteriaModel.MinimunAge = data['Data']["EligibilityCriteriaModel"][0]["MinimunAge"];
           this.request_EligibilityCriteriaModel.MaximumAge = data['Data']["EligibilityCriteriaModel"][0]["MaximumAge"];
+          this.request_EligibilityCriteriaModel.appointmentLocation = data['Data']["EligibilityCriteriaModel"][0]["appointmentLocation"];
           
           
 

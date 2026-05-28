@@ -40,6 +40,7 @@ export class PlacementDashboardComponent implements OnInit {
         this.request.CollegeID = this.sSOLoginDataModel.InstituteID
         this.request.UserId = this.sSOLoginDataModel.UserID
         this.request.RoleId = this.sSOLoginDataModel.RoleID
+        this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
         this.GetAllData();
       }
     );

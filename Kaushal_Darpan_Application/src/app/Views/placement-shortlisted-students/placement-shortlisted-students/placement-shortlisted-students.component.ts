@@ -13,14 +13,15 @@ import { DropdownValidators } from '../../../Services/CustomValidators/custom-va
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
+import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
 @Component({
-    selector: 'app-placement-shortlisted-students',
-    templateUrl: './placement-shortlisted-students.component.html',
-    styleUrls: ['./placement-shortlisted-students.component.css'],
-    standalone: false
+  selector: 'app-placement-shortlisted-students',
+  templateUrl: './placement-shortlisted-students.component.html',
+  styleUrls: ['./placement-shortlisted-students.component.css'],
+  standalone: false
 })
 export class PlacementShortlistedStudentsComponent implements OnInit {
   public PlacementShortListStudentForm!: FormGroup;
@@ -48,17 +49,18 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   public searchRequest = new PlacementShortlistedStuSearch();
 
   constructor(
-    private commonMasterService: CommonFunctionService, 
-    private Router: Router, 
-    private placementShortListStudentService: PlacementShortlistedStudentsService, 
-    private toastr: ToastrService, 
-    private loaderService: LoaderService, 
-    private formBuilder: FormBuilder, 
-    private router: ActivatedRoute, 
-    private routers: Router, 
-    private fb: FormBuilder, 
+    private commonMasterService: CommonFunctionService,
+    private Router: Router,
+    private placementShortListStudentService: PlacementShortlistedStudentsService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private router: ActivatedRoute,
+    private routers: Router,
+    private fb: FormBuilder,
     private modalService: NgbModal,
-    private appsettingConfig:AppsettingService
+    private appsettingConfig: AppsettingService,
+    private commonFunctionHelper: CommonFunctionHelper
   ) {
   }
 
@@ -89,7 +91,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     //debugger
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCampusPostMasterDDL(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.UserID)
+      await this.commonMasterService.GetCampusPostMasterDDL(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusMasterList = data['Data'];
@@ -183,9 +185,9 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     }
   }
 
-  async GetPlacedStudentsCountList(){
+  async GetPlacedStudentsCountList() {
+    this.PlacedStudentsCountList = [];
     try {
-      this.loaderService.requestStarted();
       //debugger;
       await this.placementShortListStudentService.GetPlacedStudentsCountList()
         .then((data: any) => {
@@ -199,11 +201,6 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -344,7 +341,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     }
   }
 
-    // export
+  // export
   public async ExcelExport() {
     if (this.StudentList.length > 0) {
       tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
@@ -354,7 +351,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email','Mobile','Email Address','Marked','UploadedResume','Selected','HiringRole','CampusPostID'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'MobileNo', 'Email', 'Mobile', 'Email Address', 'Marked', 'UploadedResume', 'Selected', 'HiringRole', 'CampusPostID'
     ];
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
@@ -370,4 +367,47 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'ShortlistStudentData.xlsx');
   }
+
+  async downloadPDF() {
+    const isAnySelected = this.StudentList.some(x => x.Marked);
+    if (!isAnySelected) {
+      this.toastr.error('Please select at least one checkbox!');
+      return; // Exit the method if no checkbox is selected
+    }
+
+    // get the selected students
+    const selectedStudents = this.StudentList.filter(student => student.Marked && student.UploadedResume != '') ?? [];
+    if (selectedStudents.length == 0) {
+      this.toastr.error('No valid resumes found!');
+      return;
+    }
+
+    // add in model
+    const studentWithFilesList = selectedStudents.map(student => ({
+      StudentID: student.StudentID,
+      CampusPostID: student.CampusPostID,
+      PostNo: student.PostNo,
+      UploadedResume: student.UploadedResume
+    }));
+    //debugger
+    // call
+    await this.placementShortListStudentService.DownloadPlacementShortListedStudents(studentWithFilesList)
+      .then((data: any) => {
+        if (data["State"] == EnumStatus.Success) {
+          this.commonFunctionHelper.downloadBase64OfZip(data["Data"], "ShortlistedStudentsResumes.zip");
+          this.toastr.success(data["Message"]);
+        } else if (data["State"] == EnumStatus.Warning) {
+          this.toastr.success(data["Message"]);
+        } else {
+          this.toastr.error(data["Message"]);
+          console.error(data["ErrorMessage"]);
+        }
+      })
+      .catch((error: any) => {
+        console.error(error);
+        this.toastr.error('Failed to download resumes!');
+      });
+
+  }
+
 }
