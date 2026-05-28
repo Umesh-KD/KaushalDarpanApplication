@@ -51,11 +51,39 @@ selectedFile: any;
   
     constructor(private commonMasterService: CommonFunctionService, private companyMasterService: CompanyMasterService,
       private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,
+          private activatedRoute: ActivatedRoute,
     private appsettingConfig: AppsettingService) {
   
     }
   
     async ngOnInit() {
+
+       var status = Number
+       (
+    this.activatedRoute.snapshot.queryParamMap.get('EventStatus')??0
+  );
+
+    
+ switch (status) {
+
+  case 1:
+    this.searchRequest.Status = 'Pending';
+    break;
+
+  case 2:
+    this.searchRequest.Status = 'Approved';
+    break;
+
+  case 3:
+    this.searchRequest.Status = 'Rejected';
+    break;
+
+  default:
+    this.searchRequest.Status = '';
+    break;
+}
+
+
       this.todayDate = new Date().toISOString().split('T')[0];
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       await this.GetAllData();

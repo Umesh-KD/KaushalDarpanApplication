@@ -234,7 +234,8 @@ export class CampusPostComponent implements OnInit {
 
   onStartCampusDateChange(): void {
     // Ensure the "minDate" is set to the "AgeAllowedFrom" date value
-    this.mincampusDate = this.request.CampusFromDate;
+    this.request.StudentConsentDate=''
+  
   //  this.request.CampusToDate = this.mincampusDate; 
 
   }

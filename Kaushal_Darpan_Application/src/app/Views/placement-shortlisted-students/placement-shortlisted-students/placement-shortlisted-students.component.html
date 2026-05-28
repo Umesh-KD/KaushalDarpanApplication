@@ -186,7 +186,7 @@
       <div class="text-center">
         <button *ngIf="this.StudentList?.length>0" class="btn bg-success text-white" (click)="SaveAllData()" type="button">ShortList</button>
     
-        <button class="btn bg-danger text-white" (click)="SaveReject()" type="button">Reject</button>
+        <button *ngIf="this.StudentList?.length>0"  class="btn bg-danger text-white" (click)="SaveReject()" type="button">Reject</button>
       </div>
     </div>
   </div>

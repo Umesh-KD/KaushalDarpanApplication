@@ -755,7 +755,7 @@
               Campus To Date : <span class="StarMarking">*</span>
             </label>
             <input formControlName="txtCampusToDate" class="form-input" placeholder="txtCampusToDate" type="date"
-                   id="txtCampusToDate" [(ngModel)]="request.CampusToDate" [min]="mincampusDate">
+                   id="txtCampusToDate" [(ngModel)]="request.CampusToDate" (change)="onStartCampusDateChange()" [min]="request.CampusFromDate">
             <div *ngIf="isSubmitted&&form.txtCampusToDate.errors" class="text-danger">
               <p *ngIf="form.txtCampusToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
             </div>
@@ -840,7 +840,7 @@
               Student Consent's Last Date : <span class="StarMarking">*</span>
             </label>
             <input formControlName="txtStudentConsentDate" class="form-input" placeholder="txtStudentConsentDate" type="date"
-                  id="txtStudentConsentDate" [(ngModel)]="request.StudentConsentDate" [min]="request.CampusFromDate"  (change)="validateDates()">
+                  id="txtStudentConsentDate" [(ngModel)]="request.StudentConsentDate" [min]="request.CampusFromDate" [max]="request.CampusToDate"  (change)="validateDates()">
             <div *ngIf="isSubmitted&&form.txtStudentConsentDate.errors" class="text-danger">
               <p *ngIf="form.txtStudentConsentDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               <p *ngIf="form.txtStudentConsentDate.errors?.invalidDate" ><i aria-hidden="true"></i>  Student Consent Date cannot be greater than Campus To Date .!</p>
