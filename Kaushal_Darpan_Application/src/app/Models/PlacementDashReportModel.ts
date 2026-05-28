@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "./RequestBaseModel"
+
 export class PlacementReportSearchModels {
   public Id: number = 0
   public Gender: string = ''
@@ -10,10 +12,8 @@ export class PlacementReportSearchModels {
   public TradeID?: String =''
   public CompanyID?: string = ''
 }
-export class PlacementDashboardModel {
-  public DepartmentID:number=0
+export class PlacementDashboardModel extends RequestBaseModel {
   public CollegeID: number = 0
-  public EndTermID: number = 0
   public UserId: number = 0
   public RoleId: number = 0
 

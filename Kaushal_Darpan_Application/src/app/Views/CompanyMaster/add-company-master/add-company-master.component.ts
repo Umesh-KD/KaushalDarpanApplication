@@ -302,6 +302,7 @@ export class AddCompanyMasterComponent implements OnInit {
       this.request.ISIIP = this.CompanyMasterFormGroup.value.ISIIP;
       this.request.ISPlacement = this.CompanyMasterFormGroup.value.ISPlacement;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
+     // this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
 
       //save
       debugger

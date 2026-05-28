@@ -20,6 +20,7 @@ export class CompanyMasterDataModels {
   public CreatedBy: number = 0
   public TierID: number = 0
   public PackageID: number = 0
+  //public FinancialYearID?: number = 0
 
   public HRName: string = '';
   public EmailId: string = '';
