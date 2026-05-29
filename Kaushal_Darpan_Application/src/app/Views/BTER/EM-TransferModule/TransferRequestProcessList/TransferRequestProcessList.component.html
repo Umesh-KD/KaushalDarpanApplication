@@ -215,7 +215,7 @@
         <h2 class="mb-0">Staff Transfer Application</h2>
         <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
       </div>
-      <div class="card-body p-5">
+      <div class="card-body p-5" *ngIf="IsValide == true">
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
           <div *ngIf="isShowStatus_Checkbox == true">
             <label>Action Status</label>
@@ -245,12 +245,14 @@
               </div>
             </div>
           </div>
+         
 
-
-          <div class=" ">
+          <div>
             <label>Remark</label>
             <input class="form-input" type="text" id="Remark" [(ngModel)]="Remark">
           </div>
+
+
           <div class="updt-btn-man">
             <button type="submit"
                     class="btn bg-info mt-5 text-white "
