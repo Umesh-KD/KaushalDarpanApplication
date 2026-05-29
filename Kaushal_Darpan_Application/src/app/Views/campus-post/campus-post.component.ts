@@ -196,17 +196,11 @@ export class CampusPostComponent implements OnInit {
     await this.GetMaterData();
     //await this.GetDistrictMasterList();
     //await this.GetStateMasterList();
-    if (this.activatedRoute.snapshot.queryParamMap.get('id') != null) {
-      this.PostID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
-      await this.GetByID(this.PostID);
-    }
+    
     if (this.activatedRoute.snapshot.queryParamMap.get('returl') != '') {
       this.returl = this.activatedRoute.snapshot.queryParamMap.get('returl')?.toString();
     }
-    if (this.initialState != undefined) {
-      this.PostID = Number(this.initialState["PostID"]);
-      await this.GetByID(this.PostID);
-    }
+    
     const ddlCompanyID = document.getElementById('ddlCompanyID');
     if (ddlCompanyID) ddlCompanyID.focus();
 
@@ -229,6 +223,14 @@ export class CampusPostComponent implements OnInit {
     }
     this.GetCollegeDetaisAndLoadDataFillValues();
 
+    if (this.activatedRoute.snapshot.queryParamMap.get('id') != null) {
+      this.PostID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+      await this.GetByID(this.PostID);
+    }
+    if (this.initialState != undefined) {
+      this.PostID = Number(this.initialState["PostID"]);
+      await this.GetByID(this.PostID);
+    }
     
   }
   //onStartDateChange(): void {
@@ -302,7 +304,7 @@ export class CampusPostComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.StateMasterList = data['Data'];
         }, error => console.error(error));
-debugger
+ 
         let action='getEng_NonEng_Stream';
       // await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
       // get stream VIA ACTION
@@ -461,7 +463,7 @@ debugger
 
 
   async GetNameWiseData(id: number) {
-    ;
+     ;
     try {
       this.request.Website = ''
       this.request.StateID = 0
@@ -525,6 +527,7 @@ debugger
       await this.CampusPostService.GetByID(id)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
+          debugger
           this.request.PostID = data['Data']["PostID"];
           this.request.PostNo = data['Data']["PostNo"];
           this.request.PostCollegeID = data['Data']["PostCollegeID"];
@@ -534,8 +537,12 @@ debugger
           await this.GetNameWiseData(this.request.CompanyID);
           this.request.Website = data['Data']["Website"];
           this.request.StateID = data['Data']["StateID"];
-          this.request.DistrictID = data['Data']["DistrictID"];
           await this.ddlState_Change();
+          this.request.DistrictID = Number(data['Data']["DistrictID"]);
+          this.CampusForm.patchValue({
+            ddlDistrict: this.request.DistrictID
+          });
+          
           this.request.Address = data['Data']["Address"];
           this.request.HR_Name = data['Data']["HR_Name"];
           this.request.HR_MobileNo = data['Data']["HR_MobileNo"];
@@ -544,12 +551,11 @@ debugger
           this.request.CampusVenue = data['Data']["CampusVenue"];
           this.request.CampusVenueLocation = data['Data']["CampusVenueLocation"];
           this.request.CampusPostType = data['Data']["CampusPostType"];
-          this.request.DistrictID = data['Data']["DistrictID"];
           this.request.JobDiscription = data['Data']["JobDiscription"];
           this.request.Dis_JobDiscription = data['Data']["Dis_JobDiscription"];
           this.request.StudentConsentDate = data['Data']["StudentConsentDate"];
           this.request.StudentConsentTime = data['Data']["StudentConsentTime"];
-          debugger
+           
           this.request.CampusFromDate = this.dateSetter(data['Data']['CampusFromDate']); //new Date(data['Data']['CampusFromDate']).toISOString().split('T').shift().toString();
           this.request.CampusFromTime = data['Data']["CampusFromTime"];
           this.request.CampusToDate = this.dateSetter(data['Data']['CampusToDate']);// new Date(data['Data']['CampusToDate']).toISOString().split('T').shift().toString();
@@ -564,7 +570,7 @@ debugger
           let indexToUpdate = this.HRDetailsList.findIndex((f: any) => f.HR_MobileNo == this.request.HR_MobileNo && f.HR_Name == this.request.HR_Name);
           this.HRDetailsList[indexToUpdate].IsMainRole = true;
 
-          debugger
+           
           this.request_EligibilityCriteriaModel.PassingYear = data['Data']["EligibilityCriteriaModel"][0]["PassingYear"];
           this.request_EligibilityCriteriaModel.ToPassingYear = data['Data']["EligibilityCriteriaModel"][0]["ToPassingYear"];
           this.request_EligibilityCriteriaModel.MinPre_10 = data['Data']["EligibilityCriteriaModel"][0]["MinPre_10"];
@@ -611,7 +617,7 @@ debugger
   get form() { return this.CampusForm.controls; }
   get form_Eligibility() { return this.EligibilityCriteriaForm.controls; }
   async saveData() {
-    debugger
+     
     this.isSubmitted = true;
     const mainRoleSelected = this.HRDetailsList.some((r: any) => r.IsMainRole == 1);
 
@@ -657,7 +663,7 @@ debugger
 
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-//debugger
+// 
       this.request.PostSSOID = this.sSOLoginDataModel.SSOID;
       /*this.request.PostCollegeID = this.request_EligibilityCriteriaModel.EligibleInstitutesID,*/
       this.request.PostCollegeID = this.sSOLoginDataModel.InstituteID;
@@ -670,16 +676,16 @@ debugger
         this.request.StudentConsentDate=this.request.CampusToDate;
         this.request.StudentConsentTime='23:59:59'
       }
-      debugger;
+       ;
       await this.CampusPostService.SaveData(this.request)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.SaveRes = data['Data'];
-          debugger
+           
           if (this.State == EnumStatus.Success) {
-            debugger
+             
             this.SendApplicationMessage(this.SaveRes[0].CampusID, this.SaveRes[0].NodalType, this.SaveRes[0].CampusLocationURL);
             this.toastr.success(this.Message);
             this.ResetControl();
@@ -730,7 +736,7 @@ debugger
   }
 }
   async AddNewRole() {
-    debugger;
+     ;
     this.isSubmittedItemDetails = true;
     if (this.BranchList.length < 1) {
       this.toastr.error("Please Select Branch")
@@ -1112,7 +1118,7 @@ debugger
   //}
 
   onAgeRangeChange() {
-    debugger;
+     ;
     this.MinAge=0
     const fromDateStr = this.request_EligibilityCriteriaModel.AgeAllowedFrom;
     const toDateStr = this.request_EligibilityCriteriaModel.AgeAllowedTo;
@@ -1263,7 +1269,7 @@ debugger
 
 
   async SendApplicationMessage(CampusID: string, NodalType: string, CampusLocationURL:string) {
-    debugger
+     
     try {
       this.loaderService.requestStarted();
       //this.messageModel.MobileNo = '8334874706';
