@@ -619,5 +619,16 @@ onEventForChange(event: any) {
 
   }
 
+  onlyNumber(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+
+    // Allow only numbers
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+
+    return true;
+  }
 
 }

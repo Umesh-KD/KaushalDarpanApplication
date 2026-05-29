@@ -314,14 +314,21 @@
 
             </div>
 
-            <div>
-              <label>Mobile No</label>
-              <input type="text" class="form-input" [(ngModel)]="request.MobileNo" formControlName="MobileNo">
-            </div>
+          <div>
+            <label>Mobile No</label>
+            <input type="text"
+                   class="form-input"
+                   [(ngModel)]="request.MobileNo"
+                   formControlName="MobileNo"
+                   maxlength="10"
+                   pattern="[0-9]*"
+                   inputmode="numeric"
+                   (keypress)="onlyNumber($event)">
+          </div>
 
             <div>
               <label>Email</label>
-              <input type="email" class="form-input" [(ngModel)]="request.Email" formControlName="Email">
+              <input type="email" class="form-input" [(ngModel)]="request.Email" formControlName="Email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
             </div>
 
             <div>

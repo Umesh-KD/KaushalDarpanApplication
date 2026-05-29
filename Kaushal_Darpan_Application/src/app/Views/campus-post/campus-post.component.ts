@@ -692,6 +692,7 @@ export class CampusPostComponent implements OnInit {
             if (this.returl != '') {
               this.routers.navigate(['/campusvalidation'])
             }
+
             else {
               this.routers.navigate(['/campuspostlist'])
               // window.open('/campuspostlist', "_self");

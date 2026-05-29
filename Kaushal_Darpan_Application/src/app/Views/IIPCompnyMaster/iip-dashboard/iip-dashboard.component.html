@@ -46,18 +46,26 @@
   <b class="text-1xl-5">
     <i class="ti ti-list"></i> Event Summary
   </b>
+ 
+ <div class="flex justify-end items-center gap-2">
 
-  <div>
-    <select class="form-select"
-            [(ngModel)]="request.EventStatus"
-            (change)="GetIIPDashboardListData()">
-      <option value=" ">All</option>
-      <option value="UP-Comming">Upcoming</option>
-      <option value="Running">Running</option>
-      <option value="Close">Closed</option>
+  <a [routerLink]="['/event-consent-report']"
+     *ngIf="sSOLoginDataModel.RoleID == _enumRole.IIPAdmin"
+     class="inline-flex items-center whitespace-nowrap btn bg-dark text-white btn-sm">
+    <i class="ti ti-report me-1"></i>
+    Consent Report
+  </a>
 
-    </select>
-  </div>
+  <select class="form-select w-auto"
+          [(ngModel)]="request.EventStatus"
+          (change)="GetIIPDashboardListData()">
+    <option value="">All</option>
+    <option value="UP-Comming">Upcoming</option>
+    <option value="Running">Running</option>
+    <option value="Close">Closed</option>
+  </select>
+
+</div>
 
 </div>
 
