@@ -77,14 +77,28 @@
 
 
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-        <!-- <a routerLink="/IndustryInstitutePartnershipList" class="inline-flex items-center btn bg-dark text-white btn-sm">
-  <i class="ti ti-chevron-left"></i>Back</a> -->
-       
-        <a [routerLink]="['/IIPCompanyMaster']"
-           class="inline-flex items-center btn bg-dark text-white btn-sm">
-          <i class="ti ti-chevron-left"></i>Back
-        </a>
+
+        <b class="text-1xl-5">
+          <i class="ti ti-list"></i> Search Results
+        </b>
+
+        <div class="flex gap-2">
+
+          <a [routerLink]="['/event-consent-report']"
+             *ngIf="sSOLoginDataModel.RoleID == _enumRole.IIPAdmin"
+             class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class="ti ti-report"></i>
+            Consent Report
+          </a>
+
+          <a [routerLink]="['/IIPCompanyMaster']"
+             class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class="ti ti-chevron-left"></i>
+            Back
+          </a>
+
+        </div>
+
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div class="">

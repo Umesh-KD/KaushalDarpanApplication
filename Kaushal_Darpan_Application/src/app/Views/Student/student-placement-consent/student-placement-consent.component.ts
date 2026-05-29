@@ -44,7 +44,7 @@ export class StudentPlacementConsentComponent {
   public searchrequest = new StudentConsentSearchModel()
   public Request = new CampusStudentConsentModel()
   public SmsDataModel = new SmsDataModel();
-
+  public TrainingName:string=''
   public getSSOIDDetailData: any[] = [];
 
   public messageModel = new ApplicationMessageDataModel();
@@ -234,6 +234,10 @@ export class StudentPlacementConsentComponent {
   }
   CloseModalPopup() {
     this.modalService.dismissAll();
+    this.Request.InterestedStatus = 0
+    this.Request.Remarks = ''
+    this.Request.UploadedResume = ''
+    this.Request.Dis_UploadedResume = ''
   }
 
   //async btnDelete_OnClick(RoleID: number) {
@@ -265,11 +269,11 @@ export class StudentPlacementConsentComponent {
   //    }, 200);
   //  }
   //}
-  async GetAllPost(PostID: number) {
+  async GetAllPost(PostID: number, BranchID:number=0) {
     try {
       this.PostId = PostID
       this.loaderService.requestStarted();
-      await this.homeService.GetAllPost(this.PostId, this.sSOLoginDataModel.DepartmentID)
+      await this.homeService.GetAllPost(this.PostId, this.sSOLoginDataModel.DepartmentID, BranchID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
@@ -315,14 +319,14 @@ export class StudentPlacementConsentComponent {
   }
 
 
-  async openModal(content: any, PostID: number) {
+  async openModal(content: any, PostID: number, BranchID:number=0) {
 
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    this.GetAllPost(PostID)
+    this.GetAllPost(PostID, BranchID)
     this.GetAllPlacementCompany()
   }
 
@@ -372,55 +376,116 @@ export class StudentPlacementConsentComponent {
   }
 
  
-  async Savedata(PostID: number) {
-    //debugger
-    await this.GetStudentConsentCount();
-    if (this.ConsentCount == 5) {
-      this.Swal2.Warning("You have already given consent for 5 companies");
-      return;
-    }
-    if (this.Request.UploadedResume == '' || this.Request.UploadedResume == undefined || this.Request.UploadedResume == null) {
-      this.Swal2.Warning("Please Upload Resume before Consent");
-      return;
-    }
-    this.Swal2.Confirmation("Are you sure you want to processed?", async (result: any) => {
-      if (result.isConfirmed) {
-        try {
-          this.Request.SSOID = this.sSOLoginDataModel.SSOID
-          this.Request.StudentID = this.sSOLoginDataModel.StudentID
-          this.Request.PostID = PostID
-          this.Request.ModifyBy = this.sSOLoginDataModel.StudentID
-          this.Request.CreatedBy = this.sSOLoginDataModel.StudentID
-          this.loaderService.requestStarted();
-          await this.placementservice.SaveData(this.Request).then(async (data: any) => {
+  async Savedata(PostID: number = 0) {
 
-            data = JSON.parse(JSON.stringify(data));
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
+    try {
 
-            if (data.State == EnumStatus.Success) {
-              // this.SmsDataModel.PostID = PostID;
-              await this.SendApplicationMessage(PostID);
-              /* this.toastr.success(data.Message);*/
-              this.Swal2.Success(`Your Consent has been recorded.</br> Registration No. ${data.Data}`)
-              this.btn_SearchClick();
+      debugger;
 
-            } else if (data.State === EnumStatus.Warning) {
-              this.toastr.warning(data.ErrorMessage);
-            }
-            else {
-              this.toastr.error(data.Message);
-              console.error(data.ErrorMessage);
-            }
-          });
-
-        } catch (Ex) {
-          console.log(Ex);
-        }
+      if (PostID == 0) {
+        PostID = this.Request.PostID;
       }
+
+      this.Request.PostID = PostID;
+
+      // Get Consent Count
+      await this.GetStudentConsentCount();
+
+      if (this.ConsentCount >= 5) {
+        this.Swal2.Warning("You have already given consent for 5 companies");
+        return;
+      }
+
+      // Resume Validation
+      if (!this.Request.UploadedResume && this.Request.InterestedStatus==1) {
+        this.Swal2.Warning("Please upload resume before consent");
+        return;
+      }
+
+      // Interest Validation
+      if (this.Request.InterestedStatus == 0) {
+        this.Swal2.Warning("Please select interest status");
+        return;
+      }
+
+      // Confirmation
+      this.Swal2.Confirmation(
+        "Are you sure you want to proceed?",
+        async (result: any) => {
+
+          if (result.isConfirmed) {
+
+            try {
+
+              // Assign Request Values
+              this.Request.SSOID = this.sSOLoginDataModel.SSOID;
+              this.Request.StudentID = this.sSOLoginDataModel.StudentID;
+              this.Request.ModifyBy = this.sSOLoginDataModel.StudentID;
+              this.Request.CreatedBy = this.sSOLoginDataModel.StudentID;
+
+              this.loaderService.requestStarted();
+
+              const response = await this.placementservice.SaveData(this.Request);
+
+              const data = JSON.parse(JSON.stringify(response));
+
+              this.State = data['State'];
+              this.Message = data['Message'];
+              this.ErrorMessage = data['ErrorMessage'];
+
+              if (data.State == EnumStatus.Success) {
+
+                // Send SMS/Notification
+                await this.SendApplicationMessage(PostID);
+                let message = `Your consent has been recorded.`
+                if (this.Request.InterestedStatus == 1) {
+                 message+= `<br/>Registration No. ${data.Data}`
+                }
+                this.Swal2.Success(
+                  message
+                );
+
+                this.CloseModalPopup()
+                await this.btn_SearchClick();
+
+              }
+              else if (data.State == EnumStatus.Warning) {
+
+                this.toastr.warning(data.ErrorMessage);
+
+              }
+              else {
+
+                this.toastr.error(data.Message);
+                console.error(data.ErrorMessage);
+
+              }
+
+            }
+            catch (error) {
+
+              console.error(error);
+              this.toastr.error("Something went wrong");
+
+            }
+            finally {
+
+              this.loaderService.requestEnded();
+
+            }
+
+          }
+
+        }
+      );
+
     }
-    )
+    catch (ex) {
+
+      console.error(ex);
+
+    }
+
   }
 
 
@@ -477,6 +542,58 @@ export class StudentPlacementConsentComponent {
       }, 200);
     }
   }
+  async UploadCotent(
+    content: any,
+    ID: number,
+    TrainingName: string = '',
+    InterestedStatus: number = 0,
+    Remarks: string = '',
+    ConsentID: number = 0,
+    UploadedResume: string = '',
+    Dis_UploadedResume: string = ''
+  ) {
 
+    // Reset Model
   
+
+    // Assign Values
+    this.Request.PostID = ID;
+
+    this.Request.InterestedStatus =
+      Number(InterestedStatus || 0);
+
+    this.Request.Remarks =
+      Remarks || '';
+
+    this.Request.ConsentID =
+      Number(ConsentID || 0);
+
+    this.Request.UploadedResume =
+      UploadedResume || '';
+
+    this.Request.Dis_UploadedResume =
+      Dis_UploadedResume || '';
+
+    this.TrainingName =
+      TrainingName || '';
+
+    // Open Modal
+    this.modalService.open(content, {
+      centered: true,
+      backdrop: 'static',
+      keyboard: false,
+      windowClass: 'training-modal'
+    }).result.then((result) => {
+
+      this.closeResult = `Closed with: ${result}`;
+
+    }, (reason) => {
+
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+
+    });
+
+  }
+
+
 }
