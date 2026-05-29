@@ -682,8 +682,10 @@ debugger
               this.modalService.dismissAll();
               window.open('/campusvalidation', "_self");
             }
+
             else {
               this.ResetControl();
+              window.open('/campuspostlist', "_self");
             }
           }
           else {
