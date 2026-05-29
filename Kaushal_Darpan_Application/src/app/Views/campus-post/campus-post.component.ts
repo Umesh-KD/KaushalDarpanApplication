@@ -682,28 +682,17 @@ export class CampusPostComponent implements OnInit {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          this.SaveRes = data['Data'];
-           
-          if (this.State == EnumStatus.Success) {
-             
+          this.SaveRes = data['Data'];          
+          if (this.State == EnumStatus.Success) {            
             this.SendApplicationMessage(this.SaveRes[0].CampusID, this.SaveRes[0].NodalType, this.SaveRes[0].CampusLocationURL);
             this.toastr.success(this.Message);
             this.ResetControl();
-            if (this.returl != '') {
+            if (this.returl != '' && this.returl != undefined) {
               this.routers.navigate(['/campusvalidation'])
             }
-
             else {
               this.routers.navigate(['/campuspostlist'])
-              // window.open('/campuspostlist', "_self");
             }
-
-            //if (this.initialState != undefined) {
-            //  this.modalService.dismissAll();             
-            //}
-            //else {
-            //  this.ResetControl();
-            //}
           }
           else {
             this.toastr.error(this.ErrorMessage)
@@ -724,7 +713,6 @@ export class CampusPostComponent implements OnInit {
  validateDates() {
   const campusDate = this.request.CampusToDate;
   const consentDate = this.request.StudentConsentDate;
-
   if (campusDate && consentDate) {
     const campus = new Date(campusDate);
     const consent = new Date(consentDate);
