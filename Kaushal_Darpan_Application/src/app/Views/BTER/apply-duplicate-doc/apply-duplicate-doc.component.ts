@@ -254,7 +254,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
       //  this.request.CasteCategoryID.
       //}
       this.OTP = '';
-      this.MobileNo = GlobalConstants.DefaultMobileNo.length > 0 ? GlobalConstants.DefaultMobileNo : '8334874706';//this.sSOLoginDataModel.Mobileno; 9460476972
+      this.MobileNo = GlobalConstants.DefaultMobileNo.length > 0 ? GlobalConstants.DefaultMobileNo : '';//this.sSOLoginDataModel.Mobileno; 9460476972
       this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
         this.closeResult = `Closed with: ${result}`;
       }, (reason) => {
