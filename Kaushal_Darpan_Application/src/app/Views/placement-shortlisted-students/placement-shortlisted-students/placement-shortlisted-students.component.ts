@@ -411,6 +411,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
       });
 
   }
+
   async NotifyStudents() {
     const isAnySelected = this.StudentList.some(x => x.Marked);
     if (!isAnySelected) {

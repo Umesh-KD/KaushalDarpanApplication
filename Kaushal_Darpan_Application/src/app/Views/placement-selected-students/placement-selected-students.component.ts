@@ -10,7 +10,7 @@ import { PlacementSelectedStudentResponseModel, PlacementStudentSelectedSearchMo
 import { PlacementSelectedStudentsService } from '../../Services/PlacementSelectedStudents/placement-selected-students.service';
 import { async } from 'rxjs';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumMessageType,EnumStatus } from '../../Common/GlobalConstants';
 import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
@@ -413,6 +413,40 @@ export class PlacementSelectedStudentsComponent implements OnInit {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'ShortlistStudentData.xlsx');
+  }
+
+
+  async NotifyStudents() {
+    debugger
+    const isAnySelected = this.StudentList.some(x => x.Marked);
+    if (!isAnySelected) {
+      this.toastr.error('Please select at least one checkbox!');
+      return; // Exit the method if no checkbox is selected
+    }
+
+    // get the selected students
+    const selectedStudents = this.StudentList.filter(student => student.Marked) ?? [];
+    // add in model
+    const studentWithFilesList = selectedStudents.map(student => ({
+      StudentID: student.StudentID,
+      CampusPostID: student.CampusPostID,
+      RoundNo: student.RoundNo,
+      EnrollmentNo: student.EnrollmentNo,
+      MobileNo: student.MobileNo,
+      MessageType: EnumMessageType.Bter_StudentShortList,
+    }));
+    //debugger
+    // call
+    await this.smsMailService.NorifyStudent_PlacementSelected(studentWithFilesList)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          console.log('Message sent successfully', data);
+        } else {
+          console.log('Something went wrong', data);
+        }
+      }, (error: any) => console.error(error));
+
   }
 
 }

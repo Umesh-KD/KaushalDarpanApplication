@@ -86,4 +86,13 @@ export class SMSMailService
       ).toPromise();
   }
 
+  public async NorifyStudent_PlacementSelected(request: any[]) {
+    const body = JSON.stringify(request);
+    debugger
+    return this.http.post(`${this.APIUrl}/NorifyStudent_PlacementSelected`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

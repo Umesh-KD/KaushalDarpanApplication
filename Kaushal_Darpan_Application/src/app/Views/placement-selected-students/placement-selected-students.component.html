@@ -48,8 +48,8 @@
             </ng-container>
           </ng-select>
           <!--<div *ngIf="isSubmitted && PlacementSelectedListStudentForm.get('BranchID').errors" class="text-danger">
-            <p *ngIf="!PlacementSelectedListStudentForm.get('BranchID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
-          </div>-->
+          <p *ngIf="!PlacementSelectedListStudentForm.get('BranchID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+        </div>-->
         </div>
 
         <div>
@@ -65,8 +65,8 @@
             </ng-container>
           </ng-select>
           <!--<div *ngIf="isSubmitted && PlacementSelectedListStudentForm.get('HiringRoleID').errors" class="text-danger">
-            <p *ngIf="!PlacementSelectedListStudentForm.get('HiringRoleID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
-          </div>-->
+          <p *ngIf="!PlacementSelectedListStudentForm.get('HiringRoleID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+        </div>-->
         </div>
         <div>
           <button type="button" class="btn bg-success text-white mt-6" (click)="GetAllData()">Search</button>
@@ -93,7 +93,10 @@
       </div>
       <div class="flex items-center">
         <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        &nbsp;&nbsp;&nbsp;
         <button type="button" class="btn bg-success text-white" (click)="exportToExcel()">Export</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn bg-success text-white" (click)="NotifyStudents()">Notify</button>
       </div>
     </div>
 
@@ -114,7 +117,7 @@
             <th class="text-left">Age  </th>
             <th class="text-left">Gender   </th>
             <th class="text-left">Mobile   </th>
-  
+
             <th class="text-left">State</th>
             <th class="text-left">Institute Name   </th>
             <th class="text-left">Institute Type</th>
@@ -137,7 +140,7 @@
             <td class="text-left">{{row.Age}}</td>
             <td class="text-left">{{row.Dis_Gender}}</td>
             <td class="text-left">{{row.MobileNo}}</td>
-     
+
             <td class="text-left">{{row.StateName}}</td>
             <td class="text-left">{{row.InstituteName}}</td>
             <td class="text-left">{{row.InstitutionManagementType}}</td>
