@@ -292,18 +292,18 @@
                 <div style="margin-bottom: 5px;">{{StudentData?.District}}</div>
                 <div style="margin-bottom: 15px;">DATE OF RESULT DECLARATION: {{StudentData?.ResultDeclarationDate}}</div>
 
-                <!--<div style="margin-bottom: 3px;">
+                <div style="margin-bottom: 3px;" *ngIf="resultSearchReq.ResultType == _enumResultType.MainResult">
                   <strong>NOTE:</strong> LAST DATE FOR APPLYING ONLINE RE-EVALUATION
                   FORM IS {{StudentData?.ReEvaluationDate}}.
                 </div>
-                <div style="margin-bottom: 3px;">
+                <div style="margin-bottom: 3px;" *ngIf="resultSearchReq.ResultType == _enumResultType.MainResult">
                   <strong>NOTE:</strong> If student applying for Revaluation in final semester, then his/her
-                  marksheet will be issued after declaration of Revaluation result.
+                  mark-sheet will be issued after declaration of Revaluation result.
                 </div>
-                <div style="margin-bottom: 10px;">
+                <div style="margin-bottom: 10px;" *ngIf="resultSearchReq.ResultType == _enumResultType.RevaluationResult">
                   <strong>NOTE:</strong> Student appeared as Ex student in * marked
                   subject in current session.
-                </div>-->
+                </div>
 
                 <div style="color: #444; text-align: justify;">
                   <strong>Disclaimer:</strong> Though utmost care has

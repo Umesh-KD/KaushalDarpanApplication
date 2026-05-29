@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumResultType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { CampusDetailsWebSearchModel } from '../../../Models/CampusDetailsWebDataModel';
 import { StudentResultSearchModel } from '../../../Models/DownloadMarksheetDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -48,6 +48,7 @@ export class SearchResultComponent implements OnInit {
   public BranchMasterList: any[] = [];
   StreamID: number = 0;
   ResultTypeList: any;
+  public _enumResultType = EnumResultType;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -115,35 +116,42 @@ export class SearchResultComponent implements OnInit {
       if (this._formGroup.invalid) {
         return;
       }
+      //debugger
       // call
-      await this.marksheetDownloadService.GetStudentResult_public(this.resultSearchReq).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State === EnumStatus.Success) {
-          this.StudentResultData = data['Data'];
-          this.StudentData = data.Data['Table'][0];
-          this.SubjectDetailsData = data.Data['Table1'];
-          this.FinalResultData = data.Data['Table2'];
+      await this.marksheetDownloadService.GetStudentResult_public(this.resultSearchReq)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.StudentResultData = data['Data'];
+            this.StudentData = data.Data['Table'][0];
+            this.SubjectDetailsData = data.Data['Table1'];
+            this.FinalResultData = data.Data['Table2'];
 
-          if (this.SubjectDetailsData?.length > 0) {
-            this.showResult = true;
+            if (this.SubjectDetailsData?.length > 0) {
+              this.showResult = true;
+            }
+          } else if (data.State === EnumStatus.Warning) {
+            this.showResult = false;
+            this.toastr.warning(data.Message);
+            this.StudentResultData = [];
+            this.StudentData = [];
+            this.SubjectDetailsData = [];
+            this.FinalResultData = [];
+          } else {
+            this.showResult = false;
+            this.toastr.error(data.Message);
+            console.error(data.ErrorMessage);
+            this.StudentResultData = [];
+            this.StudentData = [];
+            this.SubjectDetailsData = [];
+            this.FinalResultData = [];
           }
-        } else if (data.State === EnumStatus.Warning) {
-          this.showResult = false;
-          this.toastr.warning(data.Message);
-          this.StudentResultData = [];
-          this.StudentData = [];
-          this.SubjectDetailsData = [];
-          this.FinalResultData = [];
-        } else {
-          this.showResult = false;
-          this.toastr.error(data.ErrorMessage);
-          this.StudentResultData = [];
-          this.StudentData = [];
-          this.SubjectDetailsData = [];
-          this.FinalResultData = [];
-        }
+          
+          if (this.showResult == false) {
+            this.toastr.warning("No data found!");
+          }
 
-      })
+        })
     } catch (error) {
       console.error(error);
     }
@@ -222,6 +230,6 @@ export class SearchResultComponent implements OnInit {
         }, error => console.error(error));
     } catch (Ex) {
       console.log(Ex);
-    } 
+    }
   }
 }
