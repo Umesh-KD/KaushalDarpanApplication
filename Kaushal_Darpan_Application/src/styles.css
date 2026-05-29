@@ -289,4 +289,7 @@ app-date-wise-attendance-report .mat-date-range-input-wrapper {
   max-width: calc(50% - 4px);
   width: 120px !important;
 }
-
+.toast-container {
+  position: fixed !important;
+  z-index: 999999 !important;
+}
