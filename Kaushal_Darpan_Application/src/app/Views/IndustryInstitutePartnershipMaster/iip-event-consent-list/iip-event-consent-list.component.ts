@@ -131,9 +131,11 @@ export class IIPEventConsentListComponent {
       await this.industryInstitutePartnershipMasterService.UpdateConsentStatus(selected).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.ErrorMessage);
+          this.toastr.success(data.Message);
           this.CloseModal();
           await this.GetEventConsentData();
+        } else {
+          this.toastr.error(data.ErrorMessage);
         }
       })
     } catch (error) {

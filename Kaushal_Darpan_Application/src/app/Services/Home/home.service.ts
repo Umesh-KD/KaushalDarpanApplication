@@ -30,7 +30,8 @@ export class HomeService {
   }
     
   //Get all data
-  public async GetAllPost(postId: number = 0, DepartmentID: number = 0, StreamID: number = 0, CampusFromDate: string = '', CampusToDate: string = '', FinancialYearID: number = 0, InstituteID: number = 0) {
+  public async GetAllPost(postId: number = 0, DepartmentID: number = 0, StreamID: number = 0, CampusFromDate: string = '', CampusToDate: string = '', FinancialYearID: number = 0, InstituteID: number = 0
+  ) {
     debugger
     const params = new HttpParams()
       .set('CampusFromDate', CampusFromDate)

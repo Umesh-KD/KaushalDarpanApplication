@@ -1,0 +1,20 @@
+::ng-deep .training-modal .modal-dialog {
+  max-width: 720px !important;
+  margin: 1rem auto !important;
+}
+
+::ng-deep .training-modal .modal-content {
+  border: 0 !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+  height: auto !important;
+}
+
+::ng-deep .training-modal .modal-body {
+  padding: 0 !important;
+}
+
+::ng-deep .training-modal .modal-footer {
+  display: none !important;
+}
