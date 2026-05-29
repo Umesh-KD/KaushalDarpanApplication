@@ -518,14 +518,16 @@ async GetDivisionMasterList() {
 
 GoBack() {
 
-  if (this.ReturnUrl) {
+  this.routers.navigate(['/IIPCompanyMaster']);
 
-    this.routers.navigateByUrl(this.ReturnUrl);
+  //if (this.ReturnUrl) {
 
-  } else {
+  //  this.routers.navigateByUrl(this.ReturnUrl);
 
-    this.routers.navigate(['/IndustryInstitutePartnershipList']);
-  }
+  //} else {
+
+  //  this.routers.navigate(['/IIPCompanyMaster']);
+  //}
 }
 
 onEventForChange(event: any) {

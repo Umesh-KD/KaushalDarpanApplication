@@ -16,6 +16,7 @@ import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageData
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 import * as XLSX from 'xlsx';
 import { PlacementShortlistedStudentsService } from '../../Services/PlacementShortlistedStudents/placement-shortlisted-students.service';
+import { AppsettingService } from '../../Common/appsetting.service';
 
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
@@ -54,10 +55,20 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   public searchRequest = new PlacementStudentSelectedSearchModel();
   public StudentList: PlacementSelectedStudentResponseModel[] = [];
 
-  constructor(private commonMasterService: CommonFunctionService, private smsMailService: SMSMailService, private Router: Router,
-    private placementShortListStudentService: PlacementSelectedStudentsService, private toastr: ToastrService,
-    private loaderService: LoaderService, private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router,
-    private fb: FormBuilder, private modalService: NgbModal, private placementShortListStudentService1: PlacementShortlistedStudentsService) {
+  constructor(private commonMasterService: CommonFunctionService,
+    private smsMailService: SMSMailService,
+    private Router: Router,
+    private placementShortListStudentService: PlacementSelectedStudentsService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private router: ActivatedRoute,
+    private routers: Router,
+    private fb: FormBuilder,
+    private modalService: NgbModal,
+    private placementShortListStudentService1: PlacementShortlistedStudentsService,
+    public appsettingConfig: AppsettingService
+  ) {
   }
 
   async ngOnInit() {

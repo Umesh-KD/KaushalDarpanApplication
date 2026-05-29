@@ -234,6 +234,10 @@ export class ViewIipCompanyMouDetailComponent implements OnInit {
               this.request.CompanyPhoto = data['Data']['CompanyPhoto'];
               this.ddlState_Change();
               this.request.DistrictID = data['Data']["DistrictID"];
+              this.request.TierID = data['Data']["TierID"];
+              this.request.PackageID = data['Data']["PackageID"];
+              
+              this.GetTierBasedPackageMaster();
               console.log(this.request, "request");
     
     

@@ -29,6 +29,7 @@ export class CampusPostComponent implements OnInit {
   EligibilityCriteriaForm!: FormGroup;
   public isUpdate: boolean = false;
   public PostID: number | null = null;
+  public returl: string | undefined = '';
   public Message: any = [];
   public ErrorMessage: any = [];
   public SaveRes: any = [];
@@ -198,6 +199,9 @@ export class CampusPostComponent implements OnInit {
     if (this.activatedRoute.snapshot.queryParamMap.get('id') != null) {
       this.PostID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
       await this.GetByID(this.PostID);
+    }
+    if (this.activatedRoute.snapshot.queryParamMap.get('returl') != '') {
+      this.returl = this.activatedRoute.snapshot.queryParamMap.get('returl')?.toString();
     }
     if (this.initialState != undefined) {
       this.PostID = Number(this.initialState["PostID"]);
@@ -675,18 +679,25 @@ debugger
           this.SaveRes = data['Data'];
           debugger
           if (this.State == EnumStatus.Success) {
-
+            debugger
             this.SendApplicationMessage(this.SaveRes[0].CampusID, this.SaveRes[0].NodalType, this.SaveRes[0].CampusLocationURL);
             this.toastr.success(this.Message);
-            if (this.initialState != undefined) {
-              this.modalService.dismissAll();
-              window.open('/campusvalidation', "_self");
+            this.ResetControl();
+            if (this.returl != '') {
+              this.routers.navigate(['/campusvalidation'])
             }
 
             else {
-              this.ResetControl();
-              window.open('/campuspostlist', "_self");
+              this.routers.navigate(['/campuspostlist'])
+              // window.open('/campuspostlist', "_self");
             }
+
+            //if (this.initialState != undefined) {
+            //  this.modalService.dismissAll();             
+            //}
+            //else {
+            //  this.ResetControl();
+            //}
           }
           else {
             this.toastr.error(this.ErrorMessage)
