@@ -39,6 +39,7 @@ export class PlacementDashReportComponent implements OnInit {
   InstituteMasterList: any = [];
   SemesterMasterList: any = [];
   CampusMasterList: any = [];
+  public FinancialYearList: any = []
   Table_SearchText: string = '';
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
   modalReference: NgbModalRef | undefined;
@@ -65,6 +66,8 @@ export class PlacementDashReportComponent implements OnInit {
       this.id = params.get('id')
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+    await this.GetMasterDDL();
     this.GetAllData();
     this.GetCampusPostMasterDDL();
 
@@ -102,6 +105,29 @@ export class PlacementDashReportComponent implements OnInit {
       }, 200);
     }
   }
+
+  async GetMasterDDL() {
+    debugger
+    try {
+
+      await this.commonMasterService.GetFinancialYear()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.FinancialYearList = data['Data'];
+          console.log(this.FinancialYearID, "Year")
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+
+      }, 200);
+    }
+  }
+
+ 
 
   exportToExcel(): void {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.viewAdminDashboardList);
