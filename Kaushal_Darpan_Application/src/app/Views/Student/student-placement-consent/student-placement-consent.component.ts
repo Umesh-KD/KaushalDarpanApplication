@@ -494,14 +494,11 @@ export class StudentPlacementConsentComponent {
     try {
       this.loaderService.requestStarted();
 
-      await this.GetCampusSMSDataByID(PostID);
-      //this.messageModel.MobileNo = '8334874706';      
+      await this.GetCampusSMSDataByID(PostID);    
       this.messageModel.CampusID = this.StudentSMSData[0].CampusID;
       //this.messageModel.MobileNo = this.sSOLoginDataModel.Mobileno;
       this.messageModel.EnrollmentNo = this.StudentSMSData[0].EnrollmentNo;
       this.messageModel.RegNo = this.StudentSMSData[0].RegNo;
-      //this.messageModel.MobileNo = '8334874706';
-      //this.messageModel.ApplicantName = 'Divya Sharma';
       this.messageModel.MessageType = EnumMessageType.Bter_StudentConsent;
 
       const now = new Date();

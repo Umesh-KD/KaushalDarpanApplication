@@ -223,7 +223,6 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       if(this.CandidateFormGroup.invalid){
         return;
       }
-      // this.childComponent.MobileNo = '8334874706'
       this.childComponent.MobileNo= this.CandidateFormGroup.get('MobileNo')?.value;
       this.childComponent.OpenOTPPopup();
       this.request.DepartmentID=this.sSOLoginDataModel.DepartmentID;
