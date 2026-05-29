@@ -241,7 +241,7 @@ export class CommonFunctionService {
 
 
   public async StreamMaster_streamType(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, action: string = "") {
-    debugger
+      
     return await this.http.get(this.APIUrl + '/StreamMaster_streamType/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + action, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -672,7 +672,7 @@ export class CommonFunctionService {
   public async UploadBTERDocument(file: any, model: UploadBTERFileModel | null = null) {
     //formdata
 
-    debugger
+      
 
     const formData = new FormData();
     formData.append("file", file);
@@ -890,7 +890,7 @@ export class CommonFunctionService {
 
 
   public async getStudBasicDetailsEnrollmentWise(EnrollmentNo: string, DepartmentID: number) {
-    debugger
+      
     return await this.http.post(`${this.APIUrl}/getStudBasicDetailsEnrollmentWise/${EnrollmentNo}/${DepartmentID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -2381,7 +2381,7 @@ export class CommonFunctionService {
   }
 
   public async GetEventCommonMaster(type: string) {
-    debugger
+      
     return await this.http.get(this.APIUrl + `/EventCommonMaster?type=${type}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -2389,7 +2389,7 @@ export class CommonFunctionService {
   }
 
   public async GetEventTypes() {
-    debugger;
+      ;
     return await this.http.get(
       this.APIUrl + `/GetEventTypes`,
       this.headersOptions
@@ -2401,7 +2401,7 @@ export class CommonFunctionService {
   }
 
   public async InsertEventCommonMaster(data: any) {
-    debugger;
+      ;
     return await this.http.post(
       this.APIUrl + `/InsertEventCommonMaster`,
       data,
