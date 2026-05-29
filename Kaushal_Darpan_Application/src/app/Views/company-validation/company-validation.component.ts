@@ -312,8 +312,6 @@ export class CompanyValidationComponent implements OnInit {
       this.messageModel.CampusID = this.CompanySMSData[0].CompanyID;
       this.messageModel.ApplicantName = this.getSSOIDDetailData[0].SSOID;
       this.messageModel.ReferenceID = this.CompanySMSData[0].ReferenceID;
-      //this.messageModel.MobileNo = '8334874706';
-      //this.messageModel.ApplicantName = 'Divya Sharma';
       this.messageModel.MessageType = EnumMessageType.Bter_ComapnyHRApprove;
 
       const now = new Date();

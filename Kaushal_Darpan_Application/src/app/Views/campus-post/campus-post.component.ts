@@ -1261,14 +1261,11 @@ export class CampusPostComponent implements OnInit {
      
     try {
       this.loaderService.requestStarted();
-      //this.messageModel.MobileNo = '8334874706';
       this.messageModel.CampusID = CampusID;
       this.messageModel.NodalType = NodalType;
       this.messageModel.CampusLocationURL = CampusLocationURL;
       this.messageModel.MobileNo = this.sSOLoginDataModel.Mobileno;
       this.messageModel.ApplicantName = this.sSOLoginDataModel.SSOID;
-      //this.messageModel.MobileNo = '8334874706';
-      //this.messageModel.ApplicantName = 'Divya Sharma';
       this.messageModel.MessageType = EnumMessageType.Bter_CampusPostCreation;
 
       const now = new Date();

@@ -7,27 +7,29 @@ import { LoaderService } from '../../Services/Loader/loader.service';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
+import { EnumFileUpload, EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { ItiDataMasterService } from '../../Services/ITI/ITIDataMaster/iti-datamaster.service';
 import { BTERStudentDetailsMasterSearchModel, BTERStudentProfileUpdateModel, ITIStudentCorrectionMasterSearchModel } from '../../Models/StudentMasterModels';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UploadFileModel } from '../../Models/UploadFileModel';
+import { UploadBTERFileModel, UploadFileModel } from '../../Models/UploadFileModel';
 import { DocumentDetailsService } from '../../Common/document-details';
 import { AppsettingService } from '../../Common/appsetting.service';
-import {StudentdetailUpdateService} from '../../Services/StudentDetailUpdate/studentdetail-update.service'
+import { StudentdetailUpdateService } from '../../Services/StudentDetailUpdate/studentdetail-update.service'
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
+import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 
 @Component({
-    selector: 'update-student-details',
-    templateUrl: './update-student-details.component.html',
-    styleUrls: ['./update-student-details.component.css'],
-    standalone: false
+  selector: 'update-student-details',
+  templateUrl: './update-student-details.component.html',
+  styleUrls: ['./update-student-details.component.css'],
+  standalone: false
 })
 export class UpdateStudentDetailComponent implements OnInit {
   public StudentList: any = [];
   public SessionYearList: any = [];
   public InstituteMasterDDLList: any = [];
+  public GenderList: any = []
   public Table_SearchText: string = "";
   public searchRequest = new BTERStudentDetailsMasterSearchModel();
   public requestAction = new BTERStudentProfileUpdateModel();
@@ -38,8 +40,8 @@ export class UpdateStudentDetailComponent implements OnInit {
   closeResult: string | undefined;
 
   // pagination
-   pageNo: any = 1;
-   pageSize: any = 50;
+  pageNo: any = 1;
+  pageSize: any = 50;
   isPre: boolean = false;
   isNext: boolean = false;
   totalRecord: any = 0;
@@ -47,70 +49,82 @@ export class UpdateStudentDetailComponent implements OnInit {
   sortColumn: string = "";
   sortOrder: string = "";
   formAction!: FormGroup;
-  public SelectedStudent: any=[];
+  public SelectedStudent: any = [];
   public Message: string = '';
   public ErrorMessage: string = '';
   public State: number = 0;
+  public isSubmitted: boolean = false;
 
-   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   constructor(
-    private commonMasterService: CommonFunctionService, 
+    private commonMasterService: CommonFunctionService,
     private ItiDataMasterService: ItiDataMasterService,
-    private toastr: ToastrService, 
-    private loaderService: LoaderService, 
-    private Swal2: SweetAlert2, 
-    private Router: Router, 
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private Swal2: SweetAlert2,
+    private Router: Router,
     private router: ActivatedRoute,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private documentDetailsService: DocumentDetailsService, 
-    public appsettingConfig: AppsettingService, 
-    private StudentdetailUpdateService:StudentdetailUpdateService,
+    private documentDetailsService: DocumentDetailsService,
+    public appsettingConfig: AppsettingService,
+    private StudentdetailUpdateService: StudentdetailUpdateService,
   ) { }
 
   async ngOnInit() {
-    // this.formAction = this.formBuilder.group(
-    //       {
-    //         ddlAction: ['', Validators.required],
-    //         txtActionRemarks: ['', Validators.required],
-    //       })
-   this.formAction = this.formBuilder.group({
-  nameEn: [{ value: '' }],
-  nameHi: [''],
-  fatherNameEn: [{ value: ''}],
-  fatherNameHi: [''],
-  motherNameEn: [{ value: ''}],
-  motherNameHi: [''],
-  enrollmentNo: [{ value: '', disabled: true }],
-  dob: [{ value: ''}],
-  mobileNo: [''],
-  supportingDocument: [''],
-  supportingRemark: [''],
- 
-});
 
+    this.formAction = this.formBuilder.group({
+      nameEn: [{ value: '' }, Validators.required],
+      nameHi: ['', Validators.required],
+      fatherNameEn: [{ value: '' }, Validators.required],
+      fatherNameHi: ['', Validators.required],
+      motherNameEn: [{ value: '' }, Validators.required],
+      motherNameHi: ['', Validators.required],
+      enrollmentNo: [{ value: '', disabled: true }, Validators.required],
+      dob: [{ value: '' }, Validators.required],
+      mobileNo: ['',Validators.required],
+      supportingDocument: [''],
+      supportingRemark: [''],
+      Gender: ['', [DropdownValidators]],
+      JanAadharNo: ['', ],
+      AadharNo: ['', Validators.required],
+
+    });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
-   
-   // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+    // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+    await this.GetGenderList_DDL();
     await this.GetStudentDetailsList(1);
-  
+
   }
 
+  get _formAction() { return this.formAction.controls; }
+
+  async GetGenderList_DDL() {
+    try {
+      await this.commonMasterService.GetCommonMasterDDLByType('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID',
-      'Category','MotherName','HighestQualification','PersonwithDisability','PWDcategory','EconomicWeakerSection',
-      'TraineeType','RecordStatus','CollegeName','StudentID', 'IsCollegeSubmitted' ,'MobileNo','EmailID'
+      'Category', 'MotherName', 'HighestQualification', 'PersonwithDisability', 'PWDcategory', 'EconomicWeakerSection',
+      'TraineeType', 'RecordStatus', 'CollegeName', 'StudentID', 'IsCollegeSubmitted', 'MobileNo', 'EmailID'
     ];
 
     const columnOrder = [
-      'MISITICode','Trade','Shift','Shift','Name','FatherGuardianName','DateOfBirth','Gender','UIDNumber', 
-      'MobileNumber','EmailID','StateRegNumber','ErrorDescription'
+      'MISITICode', 'Trade', 'Shift', 'Shift', 'Name', 'FatherGuardianName', 'DateOfBirth', 'Gender', 'UIDNumber',
+      'MobileNumber', 'EmailID', 'StateRegNumber', 'ErrorDescription'
     ];
 
     const filteredData = this.StudentList.map((item: any) => {
@@ -121,8 +135,8 @@ export class UpdateStudentDetailComponent implements OnInit {
         }
       });
       return filteredItem;
-    });    
-    
+    });
+
     // Create worksheet from filtered data
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
 
@@ -161,53 +175,53 @@ export class UpdateStudentDetailComponent implements OnInit {
     XLSX.writeFile(wb, 'StudentListData.xlsx');
   }
 
-  async GetStudentDetailsList(i:any) {
+  async GetStudentDetailsList(i: any) {
     //debugger
     console.log(i);
-    if(i==1){
-      this.pageNo=1;
+    if (i == 1) {
+      this.pageNo = 1;
     }
-    else if(i==2){
+    else if (i == 2) {
       // if (this.totalRecord > (this.pageNo * this.pageSize)) {
-        this.pageNo++;
+      this.pageNo++;
       // }
     }
-    else if(i==3){
+    else if (i == 3) {
       if (this.pageNo > 1) {
         this.pageNo--;
       }
-      else{
-        this.pageNo=i>0?i:1;
+      else {
+        this.pageNo = i > 0 ? i : 1;
       }
     }
-    else{
-      this.pageNo=i>0?i:1;
+    else {
+      this.pageNo = i > 0 ? i : 1;
     }
 
     try {
 
-      this.searchRequest.PageNumber=this.pageNo
-      this.searchRequest.PageSize=this.pageSize
-      this.searchRequest.SortColumn=this.sortColumn
-      this.searchRequest.SortOrder=this.sortOrder
+      this.searchRequest.PageNumber = this.pageNo
+      this.searchRequest.PageSize = this.pageSize
+      this.searchRequest.SortColumn = this.sortColumn
+      this.searchRequest.SortOrder = this.sortOrder
 
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       // this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      
-      // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-        this.searchRequest.EngNonEng=this.sSOLoginDataModel.Eng_NonEng
 
-        //this.searchRequest.UIDNumber
-        this.searchRequest.action="_GetBTERStudentDetailsList";
+      // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.EngNonEng = this.sSOLoginDataModel.Eng_NonEng
+
+      //this.searchRequest.UIDNumber
+      this.searchRequest.action = "_GetBTERStudentDetailsList";
       // }
       this.loaderService.requestStarted();
       await this.ItiDataMasterService.GetBTERStudentDetailsList(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StudentList = data.Data;
 
-        this.totalRecord=this.StudentList[0]?.TotalRecords;
+        this.totalRecord = this.StudentList[0]?.TotalRecords;
         this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
 
         console.log(this.StudentList)
@@ -223,42 +237,49 @@ export class UpdateStudentDetailComponent implements OnInit {
     }
   }
 
-    async GetStudentDetailsByID() {
+  async GetStudentDetailsByID() {
     //debugger
     try {
 
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       // this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      
-      // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-        this.searchRequest.EngNonEng=this.sSOLoginDataModel.Eng_NonEng
 
-        //this.searchRequest.UIDNumber
-        this.searchRequest.action="GetStudentDetailsBYID";
+      // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.EngNonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath;
+
+      //this.searchRequest.UIDNumber
+      this.searchRequest.action = "GetStudentDetailsBYID";
       // }
       this.loaderService.requestStarted();
       await this.ItiDataMasterService.GetStudentDetailsBYID(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.SelectedStudent = data.Data;
-        this.requestAction=data.Data[0];
+        debugger
+        this.SelectedStudent = data.Data.Table;
+        this.requestAction = data.Data.Table[0];
+        this.requestAction.DocumentDetails = data.Data.Table1;
         this.formAction.patchValue({
-        nameEn:  this.SelectedStudent[0].StudentName,
-        nameHi:  this.SelectedStudent[0].StudentNameHindi,
-        fatherNameEn:  this.SelectedStudent[0].FatherName,
-        fatherNameHi:  this.SelectedStudent[0].FatherNameHindi,
-        motherNameEn:  this.SelectedStudent[0].MotherName,
-        motherNameHi:  this.SelectedStudent[0].MotherNameHindi,
-        enrollmentNo:  this.SelectedStudent[0].EnrollmentNo,
-        dob:  this.SelectedStudent[0].DOB?.substring(0,10),
-        mobileNo:  this.SelectedStudent[0].MobileNo,
-      //  supportingDocument:  this.SelectedStudent[0].SupportingDoc,
-       supportingRemark:  this.SelectedStudent[0].SupportingRemark
-      });
+          nameEn: this.SelectedStudent[0].StudentName,
+          nameHi: this.SelectedStudent[0].StudentNameHindi,
+          fatherNameEn: this.SelectedStudent[0].FatherName,
+          fatherNameHi: this.SelectedStudent[0].FatherNameHindi,
+          motherNameEn: this.SelectedStudent[0].MotherName,
+          motherNameHi: this.SelectedStudent[0].MotherNameHindi,
+          enrollmentNo: this.SelectedStudent[0].EnrollmentNo,
+          dob: this.SelectedStudent[0].DOB?.substring(0, 10),
+          mobileNo: this.SelectedStudent[0].MobileNo,
+          //  supportingDocument:  this.SelectedStudent[0].SupportingDoc,
+          supportingRemark: this.SelectedStudent[0].SupportingRemark,
+          Gender: this.SelectedStudent[0].Gender,
+          AdharNo: this.SelectedStudent[0].AadharNo,
+          JanAadharNo: this.SelectedStudent[0].JanAadharNo
+        });
 
-      this.requestAction.SupportingDocument=this.SelectedStudent[0].SupportingDoc;
-      console.log(this.formAction.value);
+        this.requestAction.SupportingDocument = this.SelectedStudent[0].SupportingDoc;
+        console.log(this.formAction.value);
 
         // this.totalRecord=this.StudentList[0]?.TotalRecords;
         // this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
@@ -276,46 +297,65 @@ export class UpdateStudentDetailComponent implements OnInit {
     }
   }
 
-    async UploadDocument(event: any) {
-      try {
-        //upload model
-         let uploadModel = new UploadFileModel();
-        //uploadModel.FileExtention = item.FileExtention ?? "";
-        //uploadModel.MinFileSize = item.MinFileSize ?? "";
-       // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
-        uploadModel.FolderName = "StudentDetails/";
-  
-       
-        //call
-        //debugger
-        await this.documentDetailsService.UploadDocument(event, uploadModel)
-          .then((data: any) => {
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
-            //
-            if (this.State == EnumStatus.Success) {
-          
-              this.requestAction.SupportingDocument=data.Data[0].FileName;       
-              event.target.value = null;
-            }
-            if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage)
-            }
-            else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.ErrorMessage)
-            }
-          });
-      }
-      catch (Ex) {
-        console.log(Ex);
-      }
+  async UploadDocument(event: any) {
+    try {
+      //upload model
+      let uploadModel = new UploadFileModel();
+      //uploadModel.FileExtention = item.FileExtention ?? "";
+      //uploadModel.MinFileSize = item.MinFileSize ?? "";
+      // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
+      uploadModel.FolderName = "StudentDetails/";
+
+
+      //call
+      //debugger
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          if (this.State == EnumStatus.Success) {
+
+            this.requestAction.SupportingDocument = data.Data[0].FileName;
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
     }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 
   openOTP(StudentExamPaperMarksID: number = 0) {
     //debugger
     // this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-    this.childComponent.MobileNo="8334874706"
+    this.isSubmitted = true
+    if(this.formAction.invalid){
+      Object.keys(this.formAction.controls).forEach(key => {
+          const control = this.formAction.get(key);
+ 
+          if (control && control.invalid) {
+            this.toastr.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
+      this.toastr.error("Please fill all required fields");
+      return
+    }
+
+    if (this.documentDetailsService.HasRequiredDocument(this.requestAction.DocumentDetails)) {
+      return;
+    }
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno;
     this.childComponent.OpenOTPPopup();
 
     this.childComponent.onVerified.subscribe(() => {
@@ -325,68 +365,65 @@ export class UpdateStudentDetailComponent implements OnInit {
     })
   }
 
-    async SaveData() {
-      //debugger
-      try {
-        // this.isSubmitted = true;
+  async SaveData() {
+    try {
+
+      this.loaderService.requestStarted();
       
-        // this.isLoading = true;
-  
-        this.loaderService.requestStarted();
 
-        console.log(this.requestAction);
-  
-        
-        // this.req.StudentID=this.sSOLoginDataModel.StudentID;
-        // this.req.OtherDoc=this.otherdoc;
-        // this.req.QualificationList=this.qualificationList;
-        // this.req.DepartmentID=this.sSOLoginDataModel.DepartmentID;
-        // if(this.isTPO){
-        //   this.req.Modifyby = this.sSOLoginDataModel.UserID;
-        // }
-        // else{
-        //   this.req.Modifyby = this.sSOLoginDataModel.StudentID;
-        // }
-        // this.req.InstituteID=this.sSOLoginDataModel.InstituteID;
 
-        this.requestAction.action="_UpdateStudentDetails";
-        this.requestAction.InstituteID=this.sSOLoginDataModel.InstituteID;
-        this.requestAction.DepartmentID=this.sSOLoginDataModel.DepartmentID;
-        this.requestAction.EngNonEng=this.sSOLoginDataModel.Eng_NonEng;
-        this.requestAction.ModifyBy=this.sSOLoginDataModel.UserID;
-       
-        //save
-        // await this.ApplicationService.UpdateStudentQualificationDetails(this.req)
-          await this.StudentdetailUpdateService.SaveStudentProfileData(this.requestAction)
-          .then(async (data: any) => {
-            data = JSON.parse(JSON.stringify(data));
-            console.log(data);
-  
-            if (data.State = EnumStatus.Success) {
-              this.toastr.success(data.Message)
-              this.CloseModalPopup();
-              await this.GetStudentDetailsList(1);
-              // this.ResetControls();
-              // this.routers.navigate(['/CompanyMaster']);
-            }
-            else {
-              this.toastr.error(data.ErrorMessage)
-            }
-            //  this.Router.navigateByUrl('/student-additional-qualification');
-  
-          }, (error: any) => console.error(error)
-          );
-      }
-      catch (ex) {
-        console.log(ex);
-      }
-      finally {
-        setTimeout(() => {
-          this.loaderService.requestEnded();
-        }, 200);
-      }
+      // this.req.StudentID=this.sSOLoginDataModel.StudentID;
+      // this.req.OtherDoc=this.otherdoc;
+      // this.req.QualificationList=this.qualificationList;
+      // this.req.DepartmentID=this.sSOLoginDataModel.DepartmentID;
+      // if(this.isTPO){
+      //   this.req.Modifyby = this.sSOLoginDataModel.UserID;
+      // }
+      // else{
+      //   this.req.Modifyby = this.sSOLoginDataModel.StudentID;
+      // }
+      // this.req.InstituteID=this.sSOLoginDataModel.InstituteID;
+
+      
+
+      this.requestAction.action = "_UpdateStudentDetails";
+      this.requestAction.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.requestAction.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.requestAction.EngNonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.requestAction.ModifyBy = this.sSOLoginDataModel.UserID;
+
+      //save
+      // await this.ApplicationService.UpdateStudentQualificationDetails(this.req)
+      await this.StudentdetailUpdateService.SaveStudentProfileData(this.requestAction)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+
+          if (data.State = EnumStatus.Success) {
+            this.toastr.success(data.Message)
+            this.CloseModalPopup();
+            await this.GetStudentDetailsList(1);
+            // this.ResetControls();
+            // this.routers.navigate(['/CompanyMaster']);
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+          //  this.Router.navigateByUrl('/student-additional-qualification');
+
+        }, (error: any) => console.error(error)
+        );
     }
-  
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   // get all data
   async ClearSearchData() {
@@ -402,7 +439,7 @@ export class UpdateStudentDetailComponent implements OnInit {
 
   async EditStudentDetails(content: any, ID: number) {
     this.searchRequest.StudentID = ID;
-    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+    this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -413,61 +450,24 @@ export class UpdateStudentDetailComponent implements OnInit {
   }
 
   private getDismissReason(reason: any): string {
-      if (reason === ModalDismissReasons.ESC) {
-        return 'by pressing ESC';
-      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-        return 'by clicking on a backdrop';
-      } else {
-        return `with: ${reason}`;
-      }
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
     }
+  }
 
   CloseModalPopup() {
     this.modalService.dismissAll();
+    this.isSubmitted = false
+    this.requestAction = new BTERStudentProfileUpdateModel();
   }
-
-  // async DeleteById(ID: number) {
-  //   this.Swal2.Confirmation("Do you want to delete?",
-  //     async (result: any) => {
-  //       //confirmed
-  //       if (result.isConfirmed) {
-  //         try {
-  //           //Show Loading
-  //           this.loaderService.requestStarted();
-
-  //           await this.ITIStudentEnrollmentService.DeleteById(ID, this.sSOLoginDataModel.UserID)
-  //             .then(async (data: any) => {
-  //               data = JSON.parse(JSON.stringify(data));
-  //               console.log(data);
-
-  //               if (!data.State) {
-  //                 this.toastr.success(data.Message)
-  //                 await this.GetStudentDetailsList(1);
-  //               }
-  //               else {
-  //                 this.toastr.error(data.ErrorMessage)
-  //               }
-
-  //             }, (error: any) => console.error(error)
-  //             );
-  //         }
-  //         catch (ex) {
-  //           console.log(ex);
-  //         }
-  //         finally {
-  //           setTimeout(() => {
-  //             this.loaderService.requestEnded();
-  //           }, 200);
-  //         }
-  //       }
-  //     });
-  // }
-
-
 
   // pagination start
 
-   totalShowData: any = 0
+  totalShowData: any = 0
   pageSizeChange(event: any): void {
     ;
     this.pageNo = 1;
@@ -489,6 +489,54 @@ export class UpdateStudentDetailComponent implements OnInit {
     if (this.pageNo > 1) {
       //this.pageNo = this.pageNo - 1;
       this.GetStudentDetailsList(3)
+    }
+  }
+
+  async UploadBTERDocument(event: any, item: any) {
+    try {
+      let uploadModel: UploadBTERFileModel = {
+        ApplicationID: this.requestAction.StudentID?.toString() ?? "0",
+        AcademicYear: item.AcademicYear?.toString() ?? "0",
+        DepartmentID: '1',
+        EndTermID: item.EndTermID?.toString() ?? "0",
+        Eng_NonEng: item.CourseType?.toString() ?? "0",
+        FileName: item.ColumnName ?? "",
+        FileExtention: item.FileExtention ?? "",
+        MinFileSize: item.MinFileSize ?? "",
+        MaxFileSize: item.MaxFileSize ?? "",
+        FolderName: item.FolderName ?? "",
+        FilePrefix: this.requestAction.FinancialYearName + "/" + this.requestAction.CourseTypeID + "/" + this.requestAction.StudentID,
+        //IsCopy: true 
+        FileNameWithDynamicPath: EnumFileUpload.FileNameWithDynamicPath,
+      }
+      //call
+      await this.documentDetailsService.UploadBTERDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          if (this.State == EnumStatus.Success) {
+            //add/update document in js list
+            const index = this.requestAction.DocumentDetails.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
+            if (index !== -1) {
+              this.requestAction.DocumentDetails[index].FileName = data.Data[0].FileName;
+              this.requestAction.DocumentDetails[index].Dis_FileName = data.Data[0].Dis_FileName;
+            }
+            console.log(this.requestAction.DocumentDetails)
+            //reset file type
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
     }
   }
 

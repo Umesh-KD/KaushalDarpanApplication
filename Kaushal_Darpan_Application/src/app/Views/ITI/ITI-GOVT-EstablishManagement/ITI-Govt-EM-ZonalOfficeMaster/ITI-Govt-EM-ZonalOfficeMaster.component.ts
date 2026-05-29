@@ -377,7 +377,6 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.LevelList = data['Data'];
-          debugger
           if (this.sSOLoginDataModel.StaffID > 0) {
             if (this.LevelID === 1 && this.sSOLoginDataModel.RoleID == this._EnumRole.DTE_TrainingT2_establishment) {
               this.LevelList = this.LevelList.filter((item: any) => item.ID != 2)

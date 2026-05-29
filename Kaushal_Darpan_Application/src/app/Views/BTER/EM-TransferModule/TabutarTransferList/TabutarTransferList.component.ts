@@ -134,6 +134,8 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
         To_ddlCollege: [0, []],
         BranchID: [0, []],
         To_BranchID: [0, []],
+        EngNonEngID: [0, []],
+        To_EngNonEngID: [0, []],
         Designation: [''],
         SSOID: [''],
       });
@@ -397,6 +399,9 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
       this.modalService.dismissAll();
       this.modalReference?.close();
       this.RequestManual = new BTERStaffManualRequestModel();
+      this.IsBranchshow = 0;
+      this.To_IsBranchshow = 0;
+
     }
 
   
@@ -727,7 +732,7 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
         this.RequestManual.To_ddlDistrictID = 0;
         this.RequestManual.To_ddlCollege = 0;
       }
-
+      debugger
       this.RequestManual.RoleID = this.sSOLoginDataModel.RoleID;
       await this.staffServiceDetailsService
         .AddTransferSystemManualRequest(this.RequestManual)
@@ -736,10 +741,21 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
           if (data.State === EnumStatus.Success) {
             this.toastr.success(data.Message);
             this.RequestManual = new BTERStaffManualRequestModel();
-          await  this.CloseModal();
+
+           await  this.CloseModal();
            await this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderDTEReview);
 
-          } else {
+          }
+          else if (data.State === EnumStatus.Error) {
+            this.toastr.warning(data.Message);
+            this.RequestManual = new BTERStaffManualRequestModel();
+
+            await this.CloseModal();
+            await this.EM_TransferSystem_GetData_Search(EnumTransferSystemStatus.UnderDTEReview);
+
+          }
+
+          else {
             this.toastr.error(data.ErrorMessage);
           }
         });
@@ -752,14 +768,21 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 
         if (this.RequestManual.InstituteID != 0 && this.RequestManual.PostID == 75) {
           this.IsBranchshow = 1;
-          await this.getStreamMasterData();
+
+          this.AddTransferRequest.get('EngNonEngID')?.setValidators([DropdownValidators]);
+          this.AddTransferRequest.get('BranchID')?.setValidators([DropdownValidators]);
+         
         }
         else {
           this.IsBranchshow = 0;
           await this.GetStaffDDLList();
           this.RequestManual.BranchID = 0;
+          this.AddTransferRequest.get('EngNonEngID')?.clearValidators();
+          this.AddTransferRequest.get('BranchID')?.clearValidators();
         }
-        
+
+        this.AddTransferRequest.get('EngNonEngID')?.updateValueAndValidity();
+        this.AddTransferRequest.get('BranchID')?.updateValueAndValidity();
       } 
     }
 
@@ -849,8 +872,9 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 
     async getStreamMasterData() {
       try {
+        debugger
         this.StreamSearch.InstituteID = this.RequestManual.InstituteID;
-        this.StreamSearch.StreamType = this.sSOLoginDataModel.Eng_NonEng;
+        this.StreamSearch.StreamType = this.RequestManual.EngNonEngID;
         this.loaderService.requestStarted();
         await this.commonFunctionService.StreamDDLInstituteIdWise(this.StreamSearch).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -905,8 +929,9 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 
     async getTo_StreamMasterData() {
       try {
+        debugger
         this.StreamSearch.InstituteID = this.RequestManual.To_ddlCollege;
-        this.StreamSearch.StreamType = this.sSOLoginDataModel.Eng_NonEng;
+        this.StreamSearch.StreamType = this.RequestManual.To_EngNonEngID;
         this.loaderService.requestStarted();
         await this.commonFunctionService.StreamDDLInstituteIdWise(this.StreamSearch).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -930,14 +955,32 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 
         if (this.RequestManual.To_PostID == 75) {
           this.To_IsBranchshow = 1;
-          await this.getTo_StreamMasterData();
+
+          this.AddTransferRequest.get('To_EngNonEngID')?.setValidators([DropdownValidators]);
+          this.AddTransferRequest.get('To_BranchID')?.setValidators([DropdownValidators]);
+
         } else {
           this.To_IsBranchshow = 0;
           this.RequestManual.To_BranchID = 0;
+          this.RequestManual.To_EngNonEngID = 0;
+          this.AddTransferRequest.get('To_EngNonEngID')?.clearValidators();
+          this.AddTransferRequest.get('To_BranchID')?.clearValidators();
         }
-
+        this.AddTransferRequest.get('To_EngNonEngID')?.updateValueAndValidity();
+        this.AddTransferRequest.get('To_BranchID')?.updateValueAndValidity();
 
       } 
     }
-    
+
+
+    async EngNonEngWiseBranch() {
+      debugger
+      await this.getStreamMasterData();
+    }
+
+
+    async To_EngNonEngWiseBranch() {
+      debugger
+      await this.getTo_StreamMasterData();
+    }
 }

@@ -280,6 +280,8 @@ export class BTERStudentDetailsMasterSearchModel {
 
   public InstituteID: number = 0;
   public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public FileNameWithDynamicPath: number = 0;
   public PageSize: number = 50
   public PageNumber: number = 1
 
@@ -318,7 +320,13 @@ export class BTERStudentProfileUpdateModel {
   public InstituteID: number = 0;
   public DepartmentID: number = 0;
   public RoleID: number = 0;
+  public Gender: number = 0;
   public action: string = '';
+  public AadharNo: string = '';
+  public JanAadharNo: string = '';
+  public DocumentDetails: DocumentDetailsModel[] = [];
+  public CourseTypeID: number = 0;
+  public FinancialYearName: string = '';
 }
 
 export class ChunksSearchModel {
