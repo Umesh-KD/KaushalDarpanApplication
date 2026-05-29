@@ -175,7 +175,7 @@
 
             <td align="center">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="['/campuspost']" [queryParams]="{ id: row.PostID }" id="btnEdit" title="Edit" *ngIf="(row.Status !='Suspend')"><i class="ti ti-pencil"></i></a>
+                <a [routerLink]="['/campuspost']" [queryParams]="{ id: row.PostID ,returl:'campusvalidation'}" id="btnEdit" title="Edit" *ngIf="(row.Status !='Suspend'))"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" title="Campus On Action" *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel && ( row.Status=='Pending' || row.Status=='Hold' || row.Status=='Approved'))" (click)="CampusOnPostAction(MyModel_Action,row)"><i class="ti ti-check"></i></a>
                 <a href="javascript:void(0);" title="View & Update Campus" *ngIf="(row.Status !='Suspend')" (click)="ViewandUpdate(MyModel_Action,row.PostID)"><i class="ti ti-eye"></i></a>
                 <a href="javascript:void(0);" (click)="openModalCampus(modal_Opens,row)" id="btnEdit" *ngIf="(row.Status =='Suspend' && GetRoleID != 6)" title="Update"><i class="ti ti-check"></i></a>
