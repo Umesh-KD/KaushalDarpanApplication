@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { FormBuilder } from '@angular/forms';
 import { PlacementDashService } from '../../../Services/PlacementDashboard/PlacementDash.service';
+import { EnumRole } from '../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-iip-dashboard',
@@ -21,6 +22,7 @@ export class IipDashboardComponent implements OnInit {
   public viewPlacementDashboardList: any = [];
   public placementDashboardList: any[] = [];
     public Table_SearchText: string = "";
+    _enumRole = EnumRole;
     /*  public searchRequest = new CommonSubjectMasterSearchModel();*/
     public request = new PlacementDashboardModel()
     public sSOLoginDataModel = new SSOLoginDataModel();
