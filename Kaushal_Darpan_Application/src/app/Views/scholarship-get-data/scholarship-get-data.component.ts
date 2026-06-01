@@ -261,7 +261,7 @@ export class ScholarshipGetDataComponent {
     ];
 
     if (!this.scholarshipRequestList || this.scholarshipRequestList.length === 0) {
-      alert('No data to export.');
+      this.toastr.warning('No data to export.');
       return;
     }
 

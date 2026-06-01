@@ -682,28 +682,17 @@ export class CampusPostComponent implements OnInit {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          this.SaveRes = data['Data'];
-           
-          if (this.State == EnumStatus.Success) {
-             
+          this.SaveRes = data['Data'];          
+          if (this.State == EnumStatus.Success) {            
             this.SendApplicationMessage(this.SaveRes[0].CampusID, this.SaveRes[0].NodalType, this.SaveRes[0].CampusLocationURL);
             this.toastr.success(this.Message);
             this.ResetControl();
-            if (this.returl != '') {
+            if (this.returl != '' && this.returl != undefined) {
               this.routers.navigate(['/campusvalidation'])
             }
-
             else {
               this.routers.navigate(['/campuspostlist'])
-              // window.open('/campuspostlist', "_self");
             }
-
-            //if (this.initialState != undefined) {
-            //  this.modalService.dismissAll();             
-            //}
-            //else {
-            //  this.ResetControl();
-            //}
           }
           else {
             this.toastr.error(this.ErrorMessage)
@@ -724,7 +713,6 @@ export class CampusPostComponent implements OnInit {
  validateDates() {
   const campusDate = this.request.CampusToDate;
   const consentDate = this.request.StudentConsentDate;
-
   if (campusDate && consentDate) {
     const campus = new Date(campusDate);
     const consent = new Date(consentDate);
@@ -1273,14 +1261,11 @@ export class CampusPostComponent implements OnInit {
      
     try {
       this.loaderService.requestStarted();
-      //this.messageModel.MobileNo = '8334874706';
       this.messageModel.CampusID = CampusID;
       this.messageModel.NodalType = NodalType;
       this.messageModel.CampusLocationURL = CampusLocationURL;
       this.messageModel.MobileNo = this.sSOLoginDataModel.Mobileno;
       this.messageModel.ApplicantName = this.sSOLoginDataModel.SSOID;
-      //this.messageModel.MobileNo = '8334874706';
-      //this.messageModel.ApplicantName = 'Divya Sharma';
       this.messageModel.MessageType = EnumMessageType.Bter_CampusPostCreation;
 
       const now = new Date();
@@ -1322,6 +1307,49 @@ export class CampusPostComponent implements OnInit {
     }
   }
 
+  async MinMaxAgeValidate() {
+    const minAge = this.request_EligibilityCriteriaModel.MinimunAge;
+    const maxAge = this.request_EligibilityCriteriaModel.MaximumAge;
+    if(!minAge || !maxAge) {
+      return;
+    }
+    else {
+      if(minAge > maxAge) {
+        this.toastr.error("Minimum Age should be less than Maximum Age");
+        this.request_EligibilityCriteriaModel.MaximumAge = 0;
+      }
+    }
+  }
 
+  async GetMinMaxAgeDate() {
+    debugger
+    await this.MinMaxAgeValidate();
+    const ageDate = this.request_EligibilityCriteriaModel.AgeCalculationDate;
+    const minAge = this.request_EligibilityCriteriaModel.MinimunAge;
+    const maxAge = this.request_EligibilityCriteriaModel.MaximumAge;
+
+    if (!ageDate || !minAge || !maxAge) {
+      return;
+    }
+    else {
+      try {
+        const request = {
+          CalculationDate: ageDate,
+          MinAge: minAge,
+          MaxAge: maxAge
+        };
+
+        await this.CampusPostService.GetMinMaxAgeDate(request).then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.request_EligibilityCriteriaModel.Dis_AgeAllowedFrom = this.dateSetter(data.Data.MinAgeDate);
+            this.request_EligibilityCriteriaModel.Dis_AgeAllowedTo = this.dateSetter(data.Data.MaxAgeDate);
+          }
+        })
+      } catch (error) {
+        console.error(error);
+      }
+    }    
+  }
 }
 

@@ -344,8 +344,8 @@ export class EMAddTrainingDetailsComponent {
     const start = this.AddTrainingDetailsFromGroup.get('StartDate')?.value;
     const end = this.AddTrainingDetailsFromGroup.get('EndDate')?.value;
 
-    if (start && end && new Date(end) < new Date(start)) {
-      alert("End Date cannot be less than Start Date");
+      if (start && end && new Date(end) < new Date(start)) {
+        this.toastr.warning("End Date cannot be less than Start Date");
 
       // clear EndDate properly
       this.AddTrainingDetailsFromGroup.get('EndDate')?.setValue(null);
@@ -627,7 +627,7 @@ export class EMAddTrainingDetailsComponent {
   exportToExcelNew(): void {
 
     if (this.StaffTrainingDetailsNewTrainingDataList.length == 0) {
-      alert('No records available for Excel export.');
+      this.toastr.warning('No records available for Excel export.');
       return;
     }
 
@@ -691,7 +691,7 @@ export class EMAddTrainingDetailsComponent {
     ];
 
     if (this.StaffTrainingDetailsCompletedTrainingDataList.length == 0) {
-      alert('No records available for Excel export.');
+      this.toastr.warning('No records available for Excel export.');
       return;
     }
 

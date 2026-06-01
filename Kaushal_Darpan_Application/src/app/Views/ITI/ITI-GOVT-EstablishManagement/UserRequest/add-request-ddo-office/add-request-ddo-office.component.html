@@ -274,7 +274,8 @@
                 Relieving Date
                 <span class="StarMarking">*</span>
               </label>
-              <input type="date" class="form-input" id="txtRequestDate" name="txtRequestDate" formControlName="txtRequestDate" [(ngModel)]="request.RequestDate">
+              <input type="date" class="form-input" id="txtRequestDate" name="txtRequestDate" formControlName="txtRequestDate" 
+                [(ngModel)]="request.RequestDate" [min]="TodayDate">
               <div *ngIf="isSubmitted&&_groupForm.txtRequestDate.errors" class="text-danger">
                 <p *ngIf="_groupForm.txtRequestDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>

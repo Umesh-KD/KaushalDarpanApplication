@@ -217,7 +217,7 @@ export class AppointexaminerreportComponent {
         },
         error: (err) => {
           console.error(err);
-          alert('Failed to download report');
+          this.toastr.warning('Failed to download report');
         }
       });
   }

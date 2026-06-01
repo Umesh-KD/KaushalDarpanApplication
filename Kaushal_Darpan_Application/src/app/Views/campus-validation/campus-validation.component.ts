@@ -408,8 +408,6 @@ export class CampusValidationComponent {
       this.messageModel.CampusLocationURL = this.CampusSMSData[0].CampusLocationURL;
       this.messageModel.ApplicantName = this.getSSOIDDetailData[0].SSOID;
       this.messageModel.ReferenceID = this.CampusSMSData[0].ReferenceID;
-      //this.messageModel.MobileNo = '8334874706';
-      //this.messageModel.ApplicantName = 'Divya Sharma';
       this.messageModel.MessageType = EnumMessageType.Bter_CampusApprove;
 
       const now = new Date();

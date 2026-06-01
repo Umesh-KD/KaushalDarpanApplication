@@ -129,12 +129,12 @@ export class BudgetCreateComponent {
     );
 
     if (invalid) {
-      alert('Please fill all required fields before saving.');
+      this.toastr.warning('Please fill all required fields before saving.');
       return;
     }
 
     console.log('Saving:', this.BudgetHeadList);
-    alert('All rows saved successfully!');
+    this.toastr.success('All rows saved successfully!');
     // TODO: call API or service to save data
   }
 

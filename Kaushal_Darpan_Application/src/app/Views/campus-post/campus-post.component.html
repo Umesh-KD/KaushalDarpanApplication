@@ -335,7 +335,7 @@
                     Age Calculation Date<span class="StarMarking">*</span>
                   </label>
                   <input type="date" class="form-input" id="AgeCalculationDate" formControlName="AgeCalculationDate"
-                         [(ngModel)]="request_EligibilityCriteriaModel.AgeCalculationDate" (change)="onAgeRangeChange()">
+                         [(ngModel)]="request_EligibilityCriteriaModel.AgeCalculationDate" (change)="GetMinMaxAgeDate()">
                   <div *ngIf="isSubmittedItemDetails&&form_Eligibility.AgeCalculationDate.errors" class="text-danger">
                     <p *ngIf="form_Eligibility.AgeCalculationDate.errors.required">
                       <i aria-hidden="true"></i> This field
@@ -350,7 +350,7 @@
                       Min Age<span class="StarMarking">*</span>
                     </label>
                     <input type="text" class="form-input" formControlName="MinimunAge"
-                      [(ngModel)]="request_EligibilityCriteriaModel.MinimunAge"
+                      [(ngModel)]="request_EligibilityCriteriaModel.MinimunAge" (change)="GetMinMaxAgeDate()"
                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 
                     <div *ngIf="isSubmittedItemDetails&&form_Eligibility.MinimunAge.errors" class="text-danger">
@@ -358,6 +358,7 @@
                         <i aria-hidden="true"></i> This field is required .!
                       </p>
                     </div>
+                    {{request_EligibilityCriteriaModel.Dis_AgeAllowedFrom}}
                   </div>
 
                   <div>
@@ -365,7 +366,7 @@
                       Max Age<span class="StarMarking">*</span>
                     </label>
                     <input type="text" class="form-input" formControlName="MaximumAge"
-                      [(ngModel)]="request_EligibilityCriteriaModel.MaximumAge"
+                      [(ngModel)]="request_EligibilityCriteriaModel.MaximumAge" (change)="GetMinMaxAgeDate()"
                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 
                     <div *ngIf="isSubmittedItemDetails&&form_Eligibility.MaximumAge.errors" class="text-danger">
@@ -373,6 +374,7 @@
                         <i aria-hidden="true"></i> This field is required .!
                       </p>
                     </div>
+                    {{request_EligibilityCriteriaModel.Dis_AgeAllowedTo}}
                   </div>
                 </div>
 

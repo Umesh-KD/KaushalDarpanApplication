@@ -126,13 +126,13 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       ddlTrade: [''],
       ddlTechnician: [''],
       ddlITICollegeTrade: ['', [DropdownValidators]],
-      txtSSOID: [{ value: '', disabled: true }, [Validators.required]],
+      txtSSOID: [{ value: '' }, [Validators.required]],
       txtName: [{ value: '', disabled: true }],
       txtMobileNo: [{ value: '', disabled: true }],
       txtEmailID: [{ value: '', disabled: true }],
       ddlHostel: [''],
-      ddlPost: [{ value: '', disabled: true }, [DropdownValidators]],
-      StaffPostTypeID: [{ value: 0, disabled: true }, [DropdownValidators]],
+      ddlPost: [{ value: ''  }, [DropdownValidators]],
+      StaffPostTypeID: [{ value: 0 }, [DropdownValidators]],
     })
 
     this.QueryReqFormGroup = this.formBuilder.group({
@@ -217,6 +217,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID;
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
     try {
       this.loaderService.requestStarted();
       await this.Staffservice.GetAllData(this.searchRequest)
@@ -915,7 +916,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.Swal2.Confirmation("Are you sure you want to delete hostel warden?", async (result: any) => {
       if (result.isConfirmed) {
 
-        alert(SSOID);
+        //alert(SSOID);
         try {
           this.loaderService.requestStarted();
 
@@ -1250,7 +1251,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
     try {
 
-
+      
 
       this.approveRequest = { ...userSubmitData };
       /*  this.RequestUpdateStatus = { ...userSubmitData };*/

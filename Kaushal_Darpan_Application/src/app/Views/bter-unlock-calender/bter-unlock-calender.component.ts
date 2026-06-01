@@ -366,17 +366,17 @@ export class BterUnlockCalenderComponent {
 
     // required selections
     if (!this.StaffID || !this.SubjectID) {
-      alert("Please select Staff and Subject first");
+      this.toastr.warning("Please select Staff and Subject first");
       return;
     }
 
     if (!this.SectionID) {
-      alert("Please select Section first");
+      this.toastr.warning("Please select Section first");
       return;
     }
 
     if (!this.AttandanceTimeID) {
-      alert("Please select Attendance Time");
+      this.toastr.warning("Please select Attendance Time");
       return;
     }
 
@@ -385,7 +385,7 @@ export class BterUnlockCalenderComponent {
 
     // prevent holiday editing
     if (existingEvent.EventType === 'Holiday') {
-      alert(`Holiday: ${existingEvent.Remark}`);
+      this.toastr.warning(`Holiday: ${existingEvent.Remark}`);
       return;
     }
 
@@ -402,7 +402,7 @@ export class BterUnlockCalenderComponent {
       );
 
       if (remark === null || remark.trim() === "") {
-        alert("Remark is required to unlock");
+        this.toastr.warning("Remark is required to unlock");
         return;
       }
 
@@ -450,13 +450,13 @@ export class BterUnlockCalenderComponent {
       }
 
       if (!this.SectionID) {
-        alert("Please select Section first");
+        this.toastr.warning("Please select Section first");
         return;
       }
 
 
       if (!this.AttandanceTimeID) {
-        alert("Please select Attendence Time");
+        this.toastr.warning("Please select Attendance Time");
         return;
       }
 

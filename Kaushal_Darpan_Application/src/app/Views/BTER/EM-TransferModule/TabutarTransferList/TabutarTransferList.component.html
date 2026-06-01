@@ -145,7 +145,7 @@
           <th class="left">To Office</th>
           <th class="left">To Institute</th>
           <th class="left">Reason Description</th>
-          <th align="left">Supporting Documents</th>
+          <th align="left">Order Supporting Documents</th>
           <th align="left">Action</th>
         </tr>
       </thead>
@@ -234,7 +234,7 @@
                 <option *ngFor="let item of InstituteList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
             </div>
-
+           
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
@@ -256,10 +256,27 @@
     </select>-->
             </div>
 
+            <div *ngIf="IsBranchshow == 1">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Eng Non Eng(Type) <span class="StarMarking">*</span>
+              </label>
+
+              <select class="form-select"
+                      name="EngNonEngID"
+                      id="EngNonEngID"
+                      formControlName="EngNonEngID"
+                      [(ngModel)]="RequestManual.EngNonEngID"
+                      (change)="EngNonEngWiseBranch()">
+
+                <option value="0">Choose Option</option>
+                <option value="1">Eng</option>
+                <option value="2">Non Eng</option>
+              </select>
+            </div>
 
 
 
-            <div *ngIf="IsBranchshow== 1">
+            <div *ngIf="IsBranchshow == 1">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch <span class="StarMarking">*</span></label>
               <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
                       [(ngModel)]="RequestManual.BranchID" (change)="BranchWiseEmployee()">
@@ -347,7 +364,7 @@
                          placeholder="--Select--"
                          [searchable]="true"
                          [clearable]="true"
-                          (change)="To_PostChange()"
+                         (change)="To_PostChange()"
                          [virtualScroll]="true"
                          [loading]="isLoading">
               </ng-select>
@@ -359,9 +376,28 @@
             </div>
 
             <div *ngIf="To_IsBranchshow == 1">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Eng Non Eng(Type) <span class="StarMarking">*</span>
+              </label>
+
+              <select class="form-select"
+                      name="To_EngNonEngID"
+                      id="To_EngNonEngID"
+                      formControlName="To_EngNonEngID"
+                      [(ngModel)]="RequestManual.To_EngNonEngID"
+                      (change)="To_EngNonEngWiseBranch()">
+
+                <option value="0">Choose Option</option>
+                <option value="1">Eng</option>
+                <option value="2">Non Eng</option>
+              </select>
+            </div>
+
+
+            <div *ngIf="To_IsBranchshow == 1">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
-              <select class="form-select" name="To_BranchID" id="BranchID" formControlName="To_BranchID"
-                      [(ngModel)]="RequestManual.To_BranchID" >
+              <select class="form-select" name="To_BranchID" id="To_BranchID" formControlName="To_BranchID"
+                      [(ngModel)]="RequestManual.To_BranchID">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of To_CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
               </select>

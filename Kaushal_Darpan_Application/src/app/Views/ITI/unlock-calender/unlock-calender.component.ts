@@ -312,7 +312,7 @@ export class UnlockCalenderComponent {
     if (day < 1 || day > this.monthDays.length) return;
 
     if (!this.SSOID || !this.SubjectID) {
-      alert("Please select Staff and Subject first");
+      this.toastr.warning("Please select Staff and Subject first");
       return;
     }
 
@@ -324,14 +324,14 @@ export class UnlockCalenderComponent {
     // 🔥 ROLE BASED RESTRICTION
     if ([20, 43].includes(this.SSOLoginDataModel.RoleID)) {
       if (!this.isWithinLast7Days(eventDate)) {
-        alert("You can only modify last 7 days");
+        this.toastr.warning("You can only modify last 7 days");
         return;
       }
     }
 
     // ❌ Prevent action on holiday
     if (existingEvent.EventType === 'Holiday') {
-      alert(`Holiday: ${existingEvent.Remark}`);
+      this.toastr.warning(`Holiday: ${existingEvent.Remark}`);
       return;
     }
 
@@ -343,7 +343,7 @@ export class UnlockCalenderComponent {
       const remark = prompt("Enter remark for unlock:", existingEvent.Remark || "");
 
       if (remark === null || remark.trim() === "") {
-        alert("Remark is required to unlock");
+        this.toastr.warning("Remark is required to unlock");
         return;
       }
 
