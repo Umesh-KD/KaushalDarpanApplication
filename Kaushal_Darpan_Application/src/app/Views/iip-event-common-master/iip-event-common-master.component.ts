@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-iip-event-common-master',
@@ -21,7 +22,8 @@ export class IipEventCommonMasterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private commonFunctionService: CommonFunctionService
+    private commonFunctionService: CommonFunctionService,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -69,12 +71,12 @@ export class IipEventCommonMasterComponent implements OnInit {
       let res: any = await this.commonFunctionService.InsertEventCommonMaster(payload);
 
       if (res.State === 1) {
-        alert('Saved successfully');
+        this.toastr.success('Saved successfully');
 
         this.form.reset();
         this.submitted = false;
       } else if (res.Data === -1) {
-        alert('Duplicate record!');
+        this.toastr.warning('Duplicate record!');
       }
 
       this.loadList();

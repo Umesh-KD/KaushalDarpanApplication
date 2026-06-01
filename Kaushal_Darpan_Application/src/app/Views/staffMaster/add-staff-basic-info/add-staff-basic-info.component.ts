@@ -812,7 +812,7 @@ export class AddStaffBasicInfoComponent implements OnInit {
     this.Swal2.Confirmation("Are you sure you want to delete hostel warden?", async (result: any) => {
       if (result.isConfirmed) {
 
-        alert(SSOID);
+        //alert(SSOID);
         try {
           this.loaderService.requestStarted();
          

@@ -46,7 +46,7 @@ export class IssuetrackerDashboardComponent1 {
   if (this.sSOLoginDataModel != null) {
     this.GetAllData();
   }
-  alert('dsfsdf');
+  //alert('dsfsdf');
 }
 
   async GetAllData() {

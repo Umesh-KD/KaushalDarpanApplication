@@ -701,10 +701,10 @@ export class AddBterIssueItemComponent {
       const availableQty = original.Quantity;
 
       if (item.Quantity > availableQty) {
-        alert(`You can’t enter more than available quantity (${availableQty}).`);
+        this.toastr.warning(`You can’t enter more than available quantity (${availableQty}).`);
         item.Quantity = availableQty; // Reset to max allowed
       } else if (item.Quantity < 1) {
-        alert('Quantity must be at least 1.');
+        this.toastr.warning('Quantity must be at least 1.');
         item.Quantity = 1;
       }
     }

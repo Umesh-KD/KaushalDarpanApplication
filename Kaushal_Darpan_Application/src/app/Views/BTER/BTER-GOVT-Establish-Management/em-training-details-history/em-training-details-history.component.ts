@@ -429,7 +429,7 @@ await this.staffServiceDetailsService
 
 
       if (this.StaffTrainingDetailsCompletedTrainingDataList.length == 0) {
-        alert('No records available for Excel export.');
+        this.toastr.warning('No records available for Excel export.');
         return;
       }
 
