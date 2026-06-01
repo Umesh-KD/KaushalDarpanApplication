@@ -518,16 +518,16 @@ async GetDivisionMasterList() {
 
 GoBack() {
 
-  this.routers.navigate(['/IIPCompanyMaster']);
+  //this.routers.navigate(['/IIPCompanyMaster']);
 
-  //if (this.ReturnUrl) {
+  if (this.ReturnUrl) {
 
-  //  this.routers.navigateByUrl(this.ReturnUrl);
+   this.routers.navigateByUrl(this.ReturnUrl);
 
-  //} else {
+  } else {
 
-  //  this.routers.navigate(['/IIPCompanyMaster']);
-  //}
+   this.routers.navigate(['/IIPCompanyMaster']);
+  }
 }
 
 onEventForChange(event: any) {
