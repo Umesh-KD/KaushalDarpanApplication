@@ -47,6 +47,8 @@ export class IipDashboardComponent implements OnInit {
     this.request.UserId = this.sSOLoginDataModel.UserID;
     this.request.RoleId = this.sSOLoginDataModel.RoleID;
 debugger
+
+  this.request.EventStatus = 'UP-Comming';
     this.GetAllData();
     this.GetIIPDashboardListData()
   }
@@ -73,10 +75,7 @@ debugger
     try {
       this.loaderService.requestStarted();
 
-      if (this.sSOLoginDataModel.RoleID!=6)
-      {
-        this.request.CollegeID = 0;
-      }
+     this.request.CollegeID=this.sSOLoginDataModel.InstituteID;
       debugger
       await this.PlacementDashService.GetIIPDashboardData(this.request)
         .then((data: any) => {
@@ -123,10 +122,10 @@ debugger
     this.loaderService.requestStarted();
 
     // default value if empty
-    if (!this.request.EventStatus) {
-      this.request.EventStatus = 'UP-Comming';
-    }
-
+    // if (!this.request.EventStatus) {
+    //   this.request.EventStatus = 'UP-Comming';
+    // }
+   this.request.CollegeID=this.sSOLoginDataModel.InstituteID;
     await this.PlacementDashService.GetIIPDashboardListData(this.request)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

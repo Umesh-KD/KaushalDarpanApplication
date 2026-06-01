@@ -73,6 +73,10 @@ export class iipeventsComponent {
       await this.GetInstituteMasterDDL();
     }
 
+    if(this.sSOLoginDataModel.RoleID == EnumRole.IIPAdmin){
+      this.searchRequest.ApproveStatus = 0;
+    }
+    
     if (this.CompanyID > 0) {
      
       this.searchRequest.CompanyID = this.CompanyID;
