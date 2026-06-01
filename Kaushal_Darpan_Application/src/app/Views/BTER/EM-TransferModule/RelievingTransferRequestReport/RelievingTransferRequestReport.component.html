@@ -106,8 +106,11 @@
             <th align="left">from Institute</th>
             <th align="left">To Institute</th>
             <th align="left">Status</th>
-            <th align="left">Supporting Documents</th>
+            <th align="left">Order Supporting Documents</th>
+            <th align="left">Relieving Remarks</th>
             <th align="left">Relieving  Date</th>
+            <th align="left">Relieving Time</th>
+            <th align="left">Relieving Documents</th>
             <th align="center" width="200">Action</th>
           </tr>
         </thead>
@@ -138,7 +141,23 @@
               <ng-template #noDoc1>-----</ng-template>
             </td>
             <td>
+              {{row.RelievingRemarks}}
+            </td>
+            <td>
               {{row.RelievingDate}}
+            </td>
+            <td>
+              {{ row.RelievingTimeID == 1 ? 'मध्याह्न पूर्व' : row.RelievingTimeID == 2 ? 'मध्याह्न पश्चात' : '' }}
+            </td>
+            <td align="left">
+              <div class="flex" *ngIf="row.RelievingDoc; else noDoc1">
+                <a [href]="appsettingConfig.StaticFileRootPathURL + 'BTER_Establishment/TransferRequestDocument/' + row.RelievingDoc"
+                   class="btn bg-primary text-white m-0"
+                   target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </div>
+              <ng-template #noDoc1>-----</ng-template>
             </td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
@@ -156,6 +175,7 @@
     </div>
   </div>
 </div>
+
 
 
 <ng-template #RetievingActionPopup let-modal>
