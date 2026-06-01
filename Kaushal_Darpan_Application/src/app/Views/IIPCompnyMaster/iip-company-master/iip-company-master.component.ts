@@ -115,6 +115,7 @@ selectedFile: any;
         this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
           this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
           this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+          this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
         this.loaderService.requestStarted();
         await this.companyMasterService.GetAllData(this.searchRequest).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
