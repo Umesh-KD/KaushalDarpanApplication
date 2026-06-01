@@ -1751,7 +1751,7 @@ const routes: Routes = [
       { path: 'ItiTeacherAttendance', loadChildren: () => import('./Views/iti-teacher-attendance/iti-teacher-attendance.module').then(m => m.ItiTeacherAttendanceModule) },
       { path: 'StructuredSummaryList', loadChildren: () => import('./Views/BTER/EM-TransferModule/StructuredSummaryList/StructuredSummaryList.module').then(m => m.StructuredSummaryListModule) },
       { path: 'TransferRequestReport', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
-      { path: 'RelievingTransferRequestList', loadChildren: () => import('./Views/BTER/EM-TransferModule/RelievingTransferRequestList/RelievingTransferRequestList.module').then(m => m.RelievingTransferRequestListModule) },
+      { path: 'RelievingTransferRequestReport', loadChildren: () => import('./Views/BTER/EM-TransferModule/RelievingTransferRequestReport/RelievingTransferRequestReport.module').then(m => m.RelievingTransferRequestReportModule) },
       { path: 'TabutarTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'TabularTransferList', loadChildren: () => import('./Views/BTER/EM-TransferModule/TabutarTransferList/TabutarTransferList.module').then(m => m.TabutarTransferListModule) },
       { path: 'ITIExaminerInchargeDashboard', loadChildren: () => import('./Views/ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module').then(m => m.ItiExaminationInchargeDashboardModule), title: 'ITI Examiner Incharge Dashboard' },
