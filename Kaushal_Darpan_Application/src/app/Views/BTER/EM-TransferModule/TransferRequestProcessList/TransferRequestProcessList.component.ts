@@ -81,6 +81,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
     IsApproveExt: boolean = false;
     @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
     ConfirmationText: string = '';
+    public IsValide: boolean = false;
 
 
   constructor(
@@ -444,8 +445,105 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
     async onTransferSystemEXT(model: any, TransferSystemID: number) {
       try {
+        debugger
         this.loaderService.requestStarted();
         try {
+
+          if (
+            this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF ||
+            this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF ||
+            this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE ||
+            this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER
+          ) {
+
+            this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+            this.searchRequest.Action = "EM_TransferSystemHST";
+            this.searchRequest.TransferSystemID = TransferSystemID;
+
+            await this.staffServiceDetailsService
+              .GetEM_TransferSystemData(this.searchRequest)
+              .then(async (data: any) => {
+
+                data = JSON.parse(JSON.stringify(data));
+
+                if (data.State === EnumStatus.Success) {
+
+                  const validRoles = [
+                    EnumRole.EM_ADTE_GAZETTED_STAFF,
+                    EnumRole.EM_ADTE_NON_GAZETTED_STAFF,
+                    EnumRole.EM_JDTE,
+                    EnumRole.EM_Secretary_BTER
+                  ];
+
+                  // Filter role wise data
+                  this.EM_TransferSystemHSTList = data.Data.filter(
+                    (item: any) => validRoles.includes(item.ActionByRoleID)
+                  );
+
+                  // Current Login Role
+                  const currentRole = this.sSOLoginDataModel.RoleID;
+
+                  // Match current role records
+                  const roleWiseData = this.EM_TransferSystemHSTList.filter(
+                    (item: any) => item.ActionByRoleID == currentRole
+                  );
+
+                  // If role data exists then false otherwise true
+                  this.IsValide = roleWiseData.length > 0 ? false : true;
+
+                } else {
+
+                  this.EM_TransferSystemHSTList = [];
+                  this.IsValide = true;
+
+                }
+              });
+          }
+          else if (this.sSOLoginDataModel.RoleID == EnumRole.DTE) {
+            debugger
+            this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+            this.searchRequest.Action = "EM_TransferSystemHST";
+            this.searchRequest.TransferSystemID = TransferSystemID;
+
+            await this.staffServiceDetailsService
+              .GetEM_TransferSystemData(this.searchRequest)
+              .then(async (data: any) => {
+
+                data = JSON.parse(JSON.stringify(data));
+
+                if (data.State === EnumStatus.Success) {
+
+                  const validRoles = [
+                    EnumRole.DTE
+                  ];
+
+                  // Filter role wise data
+                  this.EM_TransferSystemHSTList = data.Data.filter(
+                    (item: any) => validRoles.includes(item.ActionByRoleID)
+                  );
+
+                  // Current Login Role
+                  const currentRole = this.sSOLoginDataModel.RoleID;
+
+                  // Match current role records
+                  const roleWiseData = this.EM_TransferSystemHSTList.filter(
+                    (item: any) => item.ActionByRoleID == currentRole
+                  );
+
+                  // If role data exists then false otherwise true
+                  this.IsValide = roleWiseData.length > 0 ? false : true;
+
+                } else {
+
+                  this.EM_TransferSystemHSTList = [];
+                  this.IsValide = true;
+
+                }
+              });
+
+            
+          }
+
           this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
           this.searchRequest.Action = "EM_TransferSystemEXT";
           this.searchRequest.StatusID = this.statusID;

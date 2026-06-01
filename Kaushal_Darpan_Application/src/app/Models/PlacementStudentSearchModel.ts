@@ -25,6 +25,7 @@ export class StudentConsentSearchModel {
 }
 export class CampusStudentConsentModel {
   public ConsentID: number = 0;
+  public InterestedStatus: number = 0;
   public PostID: number = 0;
   public StudentID: number = 0;
   public SSOID: string = '';

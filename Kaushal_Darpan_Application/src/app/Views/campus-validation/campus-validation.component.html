@@ -19,16 +19,25 @@
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-       
-             <div>
-                <label for="inputState" class="form-label">Session Year</label>
-                <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="FinancialYearID">
-                  <option value=0>--All--</option>
-                  <option value=8>2024-2025</option>
-                  <option value=9>2025-2026</option>
-                </select>
-              </div>
-       
+
+        <!--<div>
+          <label for="inputState" class="form-label">Session Year</label>
+          <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="FinancialYearID">
+            <option value=0>--All--</option>
+            <option value=8>2024-2025</option>
+            <option value=9>2025-2026</option>
+          </select>
+        </div>-->
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year</label>
+          <select class="form-select" id="ddlFinancialYearID" [(ngModel)]="FinancialYearID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of FinancialYearList" value="{{item.FinancialYearID}}">{{item.FinancialYearName}}</option>
+          </select>
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company Name</label>
           <select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="CompanyID">
@@ -49,19 +58,19 @@
           </select>
         </div>
         <!--<div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>-->
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>-->
         <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="InstituteID">
-          <option value="0">--All--</option>
-          <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
-        </select>-->
+    <option value="0">--All--</option>
+    <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
+  </select>-->
         <!--<ng-select [(ngModel)]="InstituteID"
-                   formControlName="StudentExamInstituteId" [clearable]="false">
-          <ng-option [value]="0" selected>--All--</ng-option>
-          @for (item of InstituteMasterList; track item.InstituteID) {
-          <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
-          }
-        </ng-select>
-        </div>-->
+             formControlName="StudentExamInstituteId" [clearable]="false">
+    <ng-option [value]="0" selected>--All--</ng-option>
+    @for (item of InstituteMasterList; track item.InstituteID) {
+    <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+    }
+  </ng-select>
+  </div>-->
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
@@ -175,7 +184,7 @@
 
             <td align="center">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="['/campuspost']" [queryParams]="{ id: row.PostID }" id="btnEdit" title="Edit" *ngIf="(row.Status !='Suspend')"><i class="ti ti-pencil"></i></a>
+                <a [routerLink]="['/campuspost']" [queryParams]="{ id: row.PostID ,returl:'campusvalidation'}" id="btnEdit" title="Edit" *ngIf="(row.Status !='Suspend')"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" title="Campus On Action" *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.AdminNodel && ( row.Status=='Pending' || row.Status=='Hold' || row.Status=='Approved'))" (click)="CampusOnPostAction(MyModel_Action,row)"><i class="ti ti-check"></i></a>
                 <a href="javascript:void(0);" title="View & Update Campus" *ngIf="(row.Status !='Suspend')" (click)="ViewandUpdate(MyModel_Action,row.PostID)"><i class="ti ti-eye"></i></a>
                 <a href="javascript:void(0);" (click)="openModalCampus(modal_Opens,row)" id="btnEdit" *ngIf="(row.Status =='Suspend' && GetRoleID != 6)" title="Update"><i class="ti ti-check"></i></a>

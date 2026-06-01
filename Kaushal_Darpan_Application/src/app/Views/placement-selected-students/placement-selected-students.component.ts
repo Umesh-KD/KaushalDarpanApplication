@@ -10,12 +10,13 @@ import { PlacementSelectedStudentResponseModel, PlacementStudentSelectedSearchMo
 import { PlacementSelectedStudentsService } from '../../Services/PlacementSelectedStudents/placement-selected-students.service';
 import { async } from 'rxjs';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumMessageType,EnumStatus } from '../../Common/GlobalConstants';
 import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 import * as XLSX from 'xlsx';
 import { PlacementShortlistedStudentsService } from '../../Services/PlacementShortlistedStudents/placement-shortlisted-students.service';
+import { AppsettingService } from '../../Common/appsetting.service';
 
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
@@ -54,10 +55,20 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   public searchRequest = new PlacementStudentSelectedSearchModel();
   public StudentList: PlacementSelectedStudentResponseModel[] = [];
 
-  constructor(private commonMasterService: CommonFunctionService, private smsMailService: SMSMailService, private Router: Router,
-    private placementShortListStudentService: PlacementSelectedStudentsService, private toastr: ToastrService,
-    private loaderService: LoaderService, private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router,
-    private fb: FormBuilder, private modalService: NgbModal, private placementShortListStudentService1: PlacementShortlistedStudentsService) {
+  constructor(private commonMasterService: CommonFunctionService,
+    private smsMailService: SMSMailService,
+    private Router: Router,
+    private placementShortListStudentService: PlacementSelectedStudentsService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private router: ActivatedRoute,
+    private routers: Router,
+    private fb: FormBuilder,
+    private modalService: NgbModal,
+    private placementShortListStudentService1: PlacementShortlistedStudentsService,
+    public appsettingConfig: AppsettingService
+  ) {
   }
 
   async ngOnInit() {
@@ -402,6 +413,40 @@ export class PlacementSelectedStudentsComponent implements OnInit {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'ShortlistStudentData.xlsx');
+  }
+
+
+  async NotifyStudents() {
+    debugger
+    const isAnySelected = this.StudentList.some(x => x.Marked);
+    if (!isAnySelected) {
+      this.toastr.error('Please select at least one checkbox!');
+      return; // Exit the method if no checkbox is selected
+    }
+
+    // get the selected students
+    const selectedStudents = this.StudentList.filter(student => student.Marked) ?? [];
+    // add in model
+    const studentWithFilesList = selectedStudents.map(student => ({
+      StudentID: student.StudentID,
+      CampusPostID: student.CampusPostID,
+      RoundNo: student.RoundNo,
+      EnrollmentNo: student.EnrollmentNo,
+      MobileNo: student.MobileNo,
+      MessageType: EnumMessageType.Bter_StudentShortList,
+    }));
+    //debugger
+    // call
+    await this.smsMailService.NorifyStudent_PlacementSelected(studentWithFilesList)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          console.log('Message sent successfully', data);
+        } else {
+          console.log('Something went wrong', data);
+        }
+      }, (error: any) => console.error(error));
+
   }
 
 }

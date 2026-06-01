@@ -48,8 +48,8 @@
             </ng-container>
           </ng-select>
           <!--<div *ngIf="isSubmitted && PlacementSelectedListStudentForm.get('BranchID').errors" class="text-danger">
-            <p *ngIf="!PlacementSelectedListStudentForm.get('BranchID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
-          </div>-->
+          <p *ngIf="!PlacementSelectedListStudentForm.get('BranchID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+        </div>-->
         </div>
 
         <div>
@@ -65,8 +65,8 @@
             </ng-container>
           </ng-select>
           <!--<div *ngIf="isSubmitted && PlacementSelectedListStudentForm.get('HiringRoleID').errors" class="text-danger">
-            <p *ngIf="!PlacementSelectedListStudentForm.get('HiringRoleID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
-          </div>-->
+          <p *ngIf="!PlacementSelectedListStudentForm.get('HiringRoleID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+        </div>-->
         </div>
         <div>
           <button type="button" class="btn bg-success text-white mt-6" (click)="GetAllData()">Search</button>
@@ -93,7 +93,10 @@
       </div>
       <div class="flex items-center">
         <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        &nbsp;&nbsp;&nbsp;
         <button type="button" class="btn bg-success text-white" (click)="exportToExcel()">Export</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn bg-success text-white" (click)="NotifyStudents()">Notify</button>
       </div>
     </div>
 
@@ -114,11 +117,12 @@
             <th class="text-left">Age  </th>
             <th class="text-left">Gender   </th>
             <th class="text-left">Mobile   </th>
-  
+
             <th class="text-left">State</th>
             <th class="text-left">Institute Name   </th>
             <th class="text-left">Institute Type</th>
             <th class="text-left">Enrollment No</th>
+            <th class="text-left">Uploaded Resume</th>
           </tr>
         </thead>
         <tbody>
@@ -136,11 +140,23 @@
             <td class="text-left">{{row.Age}}</td>
             <td class="text-left">{{row.Dis_Gender}}</td>
             <td class="text-left">{{row.MobileNo}}</td>
-     
+
             <td class="text-left">{{row.StateName}}</td>
             <td class="text-left">{{row.InstituteName}}</td>
             <td class="text-left">{{row.InstitutionManagementType}}</td>
             <td class="text-left">{{row.EnrollmentNo}}</td>
+            <td class="text-left">
+              <ng-container *ngIf="row.UploadedResume && row.UploadedResume?.trim() !== ''; else notUploaded">
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.UploadedResume}}"
+                   class="btn bg-primary text-white m-0"
+                   target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </ng-container>
+              <ng-template #notUploaded>
+                <span class="text-muted">Not Uploaded</span>
+              </ng-template>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -148,10 +164,10 @@
 
     </div>
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
-      <div class="text-center">
-        <button *ngIf="this.StudentList?.length>0" class="btn bg-success text-white" (click)="SaveAllData()" type="button">Select</button>
-      
-        <button *ngIf="this.StudentList?.length>0"  class="btn bg-danger text-white" (click)="SaveReject()" type="button">Reject</button>
+      <div class="text-center" *ngIf="this.StudentList?.length>0">
+        <button class="btn bg-success text-white" (click)="SaveAllData()" type="button">Select</button>
+
+        <button class="btn bg-danger text-white" (click)="SaveReject()" type="button">Reject</button>
       </div>
     </div>
   </div>

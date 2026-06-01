@@ -259,7 +259,7 @@ export class AddCompanyMasterComponent implements OnInit {
         return;
       }  
       const personExists = this.request.ListCompanyHRDetails.some(person =>
-        person.EmailId === this.personRequest.EmailId && person.MobileNo === this.personRequest.MobileNo
+        person.EmailId === this.personRequest.EmailId || person.MobileNo === this.personRequest.MobileNo
       );  
     if (!personExists) {
         this.request.ListCompanyHRDetails.push(this.personRequest);

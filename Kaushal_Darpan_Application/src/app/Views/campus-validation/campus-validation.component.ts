@@ -28,7 +28,7 @@ export class CampusValidationComponent {
   public CampusValidationListData: any = [];
   public CampusSMSData: any = [];
   public InstituteMasterList: any = [];
-
+  public FinancialYearList: any = []
   public CompanyMasterList: any = [];
   public CompanyID: number = 0;
   public InstituteID: number = 0;
@@ -76,6 +76,8 @@ export class CampusValidationComponent {
     this.flagName = this.route.snapshot.queryParamMap.get('flag') ?? 'TotalNoOfCampus';
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    this.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
     this.currentStatus = Number(this.route.snapshot.queryParamMap.get("Status") ?? 0);
     await this.GetMasterData();
     await this.btn_SearchClick();
@@ -117,6 +119,13 @@ export class CampusValidationComponent {
           data = JSON.parse(JSON.stringify(data));
           this.CompanyMasterList = data['Data'];
         }, error => console.error(error));
+
+      await this.commonMasterService.GetFinancialYear()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.FinancialYearList = data['Data'];
+          console.log(this.FinancialYear, "Year")
+        }, (error: any) => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
@@ -399,8 +408,6 @@ export class CampusValidationComponent {
       this.messageModel.CampusLocationURL = this.CampusSMSData[0].CampusLocationURL;
       this.messageModel.ApplicantName = this.getSSOIDDetailData[0].SSOID;
       this.messageModel.ReferenceID = this.CampusSMSData[0].ReferenceID;
-      //this.messageModel.MobileNo = '8334874706';
-      //this.messageModel.ApplicantName = 'Divya Sharma';
       this.messageModel.MessageType = EnumMessageType.Bter_CampusApprove;
 
       const now = new Date();

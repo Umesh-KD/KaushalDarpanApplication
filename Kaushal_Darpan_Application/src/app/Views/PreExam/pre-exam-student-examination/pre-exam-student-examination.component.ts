@@ -2273,13 +2273,6 @@ export class PreExamStudentExaminationComponent {
   //document
   async UploadDocument(event: any, item: any) {
     try {
-      //upload model
-      // let uploadModel = new UploadFileModel();
-      // uploadModel.FileExtention = item.FileExtention ?? "";
-      // uploadModel.MinFileSize = item.MinFileSize ?? "";
-      // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
-      // uploadModel.FolderName = item.FolderName ?? "";
-
       let uploadModel: UploadBTERFileModel = {
         ApplicationID: this.requestStudent.StudentID?.toString() ?? "0",
         AcademicYear: item.AcademicYear?.toString() ?? "0",

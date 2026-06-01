@@ -10,10 +10,11 @@ import { ToastrService } from 'ngx-toastr';
 import { PlacementShortlistedStudentsService } from '../../../Services/PlacementShortlistedStudents/placement-shortlisted-students.service';
 import { PlacementShortlistedStuSearch, PlacementShortListStudentResponseModel } from '../../../Models/PlacementShortListStudentResponseModel';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumMessageType, EnumStatus } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
+import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
@@ -60,7 +61,8 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     private fb: FormBuilder,
     private modalService: NgbModal,
     private appsettingConfig: AppsettingService,
-    private commonFunctionHelper: CommonFunctionHelper
+    private commonFunctionHelper: CommonFunctionHelper,
+    private smsMailService: SMSMailService
   ) {
   }
 
@@ -407,6 +409,38 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
         console.error(error);
         this.toastr.error('Failed to download resumes!');
       });
+
+  }
+
+  async NotifyStudents() {
+    const isAnySelected = this.StudentList.some(x => x.Marked);
+    if (!isAnySelected) {
+      this.toastr.error('Please select at least one checkbox!');
+      return; // Exit the method if no checkbox is selected
+    }
+
+    // get the selected students
+    const selectedStudents = this.StudentList.filter(student => student.Marked ) ?? [];
+    // add in model
+    const studentWithFilesList = selectedStudents.map(student => ({
+      StudentID: student.StudentID,
+      CampusPostID: student.CampusPostID,
+      RoundNo: student.RoundNo,
+      EnrollmentNo: student.EnrollmentNo,
+      MobileNo: student.MobileNo,
+      MessageType: EnumMessageType.Bter_StudentShortList,
+    }));
+    //debugger
+    // call
+    await this.smsMailService.NorifyStudent_PlacementShortlist(studentWithFilesList)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          console.log('Message sent successfully', data);
+        } else {
+          console.log('Something went wrong', data);
+        }
+      }, (error: any) => console.error(error));
 
   }
 

@@ -35,7 +35,7 @@
               Name<span class="StarMarking">*</span>
             </label>
             <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
-              [(ngModel)]="request.Name" formControlName="Name" disabled>
+                   [(ngModel)]="request.Name" formControlName="Name" disabled>
             <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Name.errors" class="text-danger">
               <p *ngIf="_CompanyMasterFormGroup.Name.errors.required">
                 <i aria-hidden="true"></i> This field is
@@ -49,7 +49,7 @@
               Website <span class="StarMarking">*</span>
             </label>
             <input type="email" class="form-input" placeholder="Enter Website" id="Website" name="Website"
-              [(ngModel)]="request.Website" formControlName="Website" disabled>
+                   [(ngModel)]="request.Website" formControlName="Website" disabled>
             <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Website.errors" class="text-danger">
               <p *ngIf="_CompanyMasterFormGroup.Website.errors.required">
                 <i aria-hidden="true"></i> This field is
@@ -65,7 +65,7 @@
               State <span class="StarMarking">*</span>
             </label>
             <select formControlName="ddlState" class="form-select" id="ddlState" [(ngModel)]="request.StateID"
-              (change)="ddlState_Change()">
+                    (change)="ddlState_Change()">
               <option value="0">--Select--</option>
               <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
             </select>
@@ -98,7 +98,7 @@
               Company Type<span class="StarMarking">*</span>
             </label>
             <select formControlName="ddlCompanyType" class="form-select" id="ddlCompanyType"
-              [(ngModel)]="request.CompanyTypeId">
+                    [(ngModel)]="request.CompanyTypeId">
               <option value="0">--Select--</option>
               <option *ngFor="let item of CompanyTypeList" [value]="item.ID">{{item.Name}}</option>
             </select>
@@ -111,11 +111,11 @@
           </div>
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Company Status
             </label>
             <select formControlName="ddlCompanyStatus" class="form-select" id="ddlCompanyStatus" (change)="GetTierBasedPackageMaster()"
-              [(ngModel)]="request.TierID">
+                    [(ngModel)]="request.TierID">
               <option value="0">--Select--</option>
               <option *ngFor="let item of CompanyStatusList" [value]="item.TierID">{{item.TierName}}</option>
             </select>
@@ -126,7 +126,6 @@
               </p>
             </div>
           </div>
-
           <div>
             <label for="" class="text-gray-800 text-sm font-medium inline-block mb-1">
               Package (In Lakh)
@@ -144,29 +143,27 @@
           </div>
 
           <!-- <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Name <span class="StarMarking">*</span></label>
-              <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="request.HRName" formControlName="HRName">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.HRName.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.HRName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-              </div>
-            </div> -->
-
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Name <span class="StarMarking">*</span></label>
+      <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="request.HRName" formControlName="HRName">
+      <div *ngIf="isSubmitted && _CompanyMasterFormGroup.HRName.errors" class="text-danger">
+        <p *ngIf="_CompanyMasterFormGroup.HRName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+      </div>
+    </div> -->
           <!-- <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Email <span class="StarMarking">*</span></label>
-              <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="request.EmailId" formControlName="EmailId">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.EmailId.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-                <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
-              </div>
-            </div> -->
-
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Email <span class="StarMarking">*</span></label>
+      <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="request.EmailId" formControlName="EmailId">
+      <div *ngIf="isSubmitted && _CompanyMasterFormGroup.EmailId.errors" class="text-danger">
+        <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+        <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
+      </div>
+    </div> -->
           <!-- <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Mobile Number <span class="StarMarking">*</span></label>
-              <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.MobileNo.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-              </div>
-            </div> -->
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Mobile Number <span class="StarMarking">*</span></label>
+      <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
+      <div *ngIf="isSubmitted && _CompanyMasterFormGroup.MobileNo.errors" class="text-danger">
+        <p *ngIf="_CompanyMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+      </div>
+    </div> -->
 
 
           <div>
@@ -174,7 +171,7 @@
               Address <span class="StarMarking">*</span>
             </label>
             <input type="text" class="form-input" placeholder="Enter Company Address" id="Address" name="Address"
-              [(ngModel)]="request.Address" formControlName="Address">
+                   [(ngModel)]="request.Address" formControlName="Address">
             <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Address.errors" class="text-danger">
               <p *ngIf="_CompanyMasterFormGroup.Address.errors.required">
                 <i aria-hidden="true"></i> This field is
@@ -182,26 +179,26 @@
               </p>
             </div>
           </div>
-          
+
           <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              for="fileStudentPhoto">Photograph</label>
+                   for="fileStudentPhoto">Photograph</label>
             <div class="flex fileUploader">
-              <input
-                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
               <label for="fileStudentPhoto">
                 <span>Choose File</span>
                 {{request.Dis_CompanyName === '' ? 'No File Choosen' : request.Dis_CompanyName}}
               </label>
               <div class="flex">
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
-                  *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i
-                    class="ti ti-eye"></i></a>
+                   *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
                 <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-            (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
-            <i class="ti ti-trash"></i>
-          </a>-->
+          (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+          <i class="ti ti-trash"></i>
+        </a>-->
               </div>
             </div>
           </div>
@@ -211,14 +208,14 @@
               For Training
             </label>
             <input type="checkbox" class="form-checkbox"
-                  formControlName="ISIIP" [(ngModel)]="request.ISIIP"/>
+                   formControlName="ISIIP" [(ngModel)]="request.ISIIP" />
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               For Placement
             </label>
             <input type="checkbox" class="form-checkbox"
-                  formControlName="ISPlacement" [(ngModel)]="request.ISPlacement" />
+                   formControlName="ISPlacement" [(ngModel)]="request.ISPlacement" />
           </div>
         </div>
 
@@ -282,7 +279,7 @@
           <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5">Added HR Details </b>
           </div>
-
+         
           <div class="overflow-auto">
             <table class="w-full table-border" cellpadding="5">
               <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
@@ -292,6 +289,7 @@
                   <th>Contact No</th>
                   <th>Email</th>
                   <th>Designation</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -302,6 +300,7 @@
                   <td class="text-center">{{row.MobileNo}}</td>
                   <td class="text-center">{{row.EmailId}}</td>
                   <td class="text-center">{{row.Designation}}</td>
+                  <td class="text-center">{{row.HRStatus}}</td>
                   <td class="text-center">
                     <button *ngIf="flag != 1" class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
                       <i class="ti ti-trash"></i>

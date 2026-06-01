@@ -518,14 +518,16 @@ async GetDivisionMasterList() {
 
 GoBack() {
 
-  if (this.ReturnUrl) {
+  this.routers.navigate(['/IIPCompanyMaster']);
 
-    this.routers.navigateByUrl(this.ReturnUrl);
+  //if (this.ReturnUrl) {
 
-  } else {
+  //  this.routers.navigateByUrl(this.ReturnUrl);
 
-    this.routers.navigate(['/IndustryInstitutePartnershipList']);
-  }
+  //} else {
+
+  //  this.routers.navigate(['/IIPCompanyMaster']);
+  //}
 }
 
 onEventForChange(event: any) {
@@ -617,5 +619,16 @@ onEventForChange(event: any) {
 
   }
 
+  onlyNumber(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+
+    // Allow only numbers
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+
+    return true;
+  }
 
 }

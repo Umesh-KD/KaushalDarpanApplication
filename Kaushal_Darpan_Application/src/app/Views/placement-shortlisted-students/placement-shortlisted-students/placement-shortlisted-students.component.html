@@ -74,13 +74,13 @@
 
       <form [formGroup]="PlacementShortListStudentForm1">
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hiring Role<span class="StarMarking">*</span></label>
+          <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1">Hiring Role<span class="StarMarking">*</span></label>-->
           <ng-select [(ngModel)]="HiringRoleID"
                      formControlName="HiringRoleID"
                      [clearable]="false"
                      [searchable]="true"
                      [virtualScroll]="true">
-            <ng-option [value]="0" selected>--Select--</ng-option>
+            <ng-option [value]="0" selected>--Select Hiring Role--</ng-option>
             <ng-container *ngFor="let item of HiringRoleMasterList;">
               <ng-option [value]="item.ID">{{item.Name}}</ng-option>
             </ng-container>
@@ -91,14 +91,15 @@
         </div>
       </form>
 
-      <div class="">
-      </div>
-      <div class="flex items-center">
+
+      <div class="items-center" style="display: -webkit-box;">
         <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
         &nbsp;&nbsp;&nbsp;
         <button type="button" class="btn bg-success text-white" (click)="exportToExcel()">Export</button>
         &nbsp;&nbsp;&nbsp;
         <button type="button" class="btn bg-success text-white" (click)="downloadPDF()">Download Resumes</button>
+        &nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn bg-success text-white" (click)="NotifyStudents()">Notify</button>
       </div>
     </div>
 
@@ -164,7 +165,7 @@
               <!-- <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UploadedResume}}" *ngIf="row.UploadedResume; Not Uploaded"  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>          -->
               <!-- <a href="{{row.UploadedResume}}"  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>          -->
               <!-- D:\KAUSHAL-DARPAN\Api\Kaushal_Darpan.Api\StaticFiles\Sep232025124008692593.png -->
-              <ng-container *ngIf="row.UploadedResume && row.UploadedResume.trim() !== ''; else notUploaded">
+              <ng-container *ngIf="row.UploadedResume && row.UploadedResume?.trim() !== ''; else notUploaded">
                 <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UploadedResume}}"
                    class="btn bg-primary text-white m-0"
                    target="_blank">
@@ -183,8 +184,8 @@
 
     </div>
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
-      <div class="text-center">
-        <button *ngIf="this.StudentList?.length>0" class="btn bg-success text-white" (click)="SaveAllData()" type="button">ShortList</button>
+      <div class="text-center" *ngIf="this.StudentList?.length>0">
+        <button class="btn bg-success text-white" (click)="SaveAllData()" type="button">ShortList</button>
     
         <button *ngIf="this.StudentList?.length>0"  class="btn bg-danger text-white" (click)="SaveReject()" type="button">Reject</button>
       </div>

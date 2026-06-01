@@ -56,6 +56,9 @@ export class PlacementSelectedStudentResponseModel {
   public Marked: boolean = false;
   public ModifyBy: number = 0
   public IPAddress: string = ''
+
+  public CampusPostID?: number = 0;
+  public RoundNo?: string = '';
 }
 export class PlacementStudentSelectedSearchModel extends RequestBaseModel {
   public CampusPostID: number = 0;
