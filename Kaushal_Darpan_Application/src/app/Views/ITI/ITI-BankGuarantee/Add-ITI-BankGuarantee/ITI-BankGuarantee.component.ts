@@ -149,7 +149,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
       const d2 = new Date(maturityDate);
 
       if (d2 < d1) {
-        alert('Maturity date should be greater than Date of Issue');
+        this.toastr.warning('Maturity date should be greater than Date of Issue');
         this.bankGuarantee.patchValue({ duration: '' });
         return;
       }

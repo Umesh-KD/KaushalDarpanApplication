@@ -125,7 +125,7 @@ export class AadharEsignComponent
 
   SendOTP() {
 
-    alert();
+    //alert();
     this.startEsign((result) => {
       console.log('Aadhaar authentication result:', result);
       // Do further processing here

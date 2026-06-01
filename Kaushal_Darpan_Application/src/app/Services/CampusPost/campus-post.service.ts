@@ -133,4 +133,12 @@ export class CampusPostService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetMinMaxAgeDate(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetMinMaxAgeDate', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

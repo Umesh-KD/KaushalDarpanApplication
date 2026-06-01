@@ -681,7 +681,7 @@ export class ItiInstructorFormComponent {
   addEducationQualification() {
     this.isedu = true;
     if (this.EducationForm.invalid) {
-      alert("Please fill required fields before adding");
+      this.toastr.warning("Please fill required fields before adding");
       return;
     }
 
@@ -689,17 +689,17 @@ export class ItiInstructorFormComponent {
     if (MarksTypeID === '0') { 
       const perc = Number(this.educationRequest.Education_Percentage);
       if (isNaN(perc) || perc < 0 || perc > 100) {
-        alert("Percentage must be between 0 and 100");
+        this.toastr.warning("Percentage must be between 0 and 100");
         return;
       }
     } else if (MarksTypeID === '1') { 
       const cgpa = Number(this.educationRequest.Education_CGPA);
       if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
-        alert("CGPA must be between 0 and 10");
+        this.toastr.warning("CGPA must be between 0 and 10");
         return;
       }
     } else {
-      alert("Please select Marks Type");
+      this.toastr.warning("Please select Marks Type");
       return;
     }
     const EduQualificationName = this.eduQualificationDDL.filter(
@@ -882,26 +882,26 @@ export class ItiInstructorFormComponent {
 
   addTechQualification() {
     if (!this.techRequest.QualificationID ) {
-      alert("Please fill required fields before adding");
+      this.toastr.warning("Please fill required fields before adding");
       return;
     }
     if (this.techRequest.Tech_MarksTypeID == '1') {
       const cgpa = Number(this.techRequest.Tech_CGPA);
       if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
-        alert("CGPA must be between 0 and 10");
+        this.toastr.warning("CGPA must be between 0 and 10");
         return;
       }
     }
     if (this.techRequest.Tech_MarksTypeID == '0') {
       const perc = Number(this.techRequest.Tech_Percentage);
       if (isNaN(perc) || perc < 0 || perc > 100) {
-        alert("Percentage must be between 0 and 100");
+        this.toastr.warning("Percentage must be between 0 and 100");
         return;
       }
     }
 
     if (this.TechnicalForm.get('CITSCertified')?.value == '1' && this.techRequest.TypeID==0) {
-      alert("Please Select Type");
+      this.toastr.warning("Please Select Type");
       return;
     }
 
@@ -976,7 +976,7 @@ export class ItiInstructorFormComponent {
   //}
   addEmployeeQualification() {
     if (this.EmploymentForm.invalid) {
-      alert("Please fill required fields before adding");
+      this.toastr.warning("Please fill required fields before adding");
       return;
     }
 
@@ -993,7 +993,7 @@ export class ItiInstructorFormComponent {
 
     if (fromDate && toDate) {
       if (toDate < fromDate) {
-        alert("Date of Leaving cannot be earlier than Date of Joining");
+        this.toastr.warning("Date of Leaving cannot be earlier than Date of Joining");
         return;
       }
 

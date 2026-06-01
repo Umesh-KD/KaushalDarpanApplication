@@ -159,7 +159,7 @@ export class UndertakingByExminerComponent implements OnInit {
     const ssoId=this.UndertakingExminerForm.get('SsoId')?.value?.trim();
     console.log(ssoId);
     if(!ssoId){
-      alert('Please enter SSO ID');
+      this.toastr.warning('Please enter SSO ID');
       return;
     }
 

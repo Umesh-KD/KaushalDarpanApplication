@@ -1307,6 +1307,49 @@ export class CampusPostComponent implements OnInit {
     }
   }
 
+  async MinMaxAgeValidate() {
+    const minAge = this.request_EligibilityCriteriaModel.MinimunAge;
+    const maxAge = this.request_EligibilityCriteriaModel.MaximumAge;
+    if(!minAge || !maxAge) {
+      return;
+    }
+    else {
+      if(minAge > maxAge) {
+        this.toastr.error("Minimum Age should be less than Maximum Age");
+        this.request_EligibilityCriteriaModel.MaximumAge = 0;
+      }
+    }
+  }
 
+  async GetMinMaxAgeDate() {
+    debugger
+    await this.MinMaxAgeValidate();
+    const ageDate = this.request_EligibilityCriteriaModel.AgeCalculationDate;
+    const minAge = this.request_EligibilityCriteriaModel.MinimunAge;
+    const maxAge = this.request_EligibilityCriteriaModel.MaximumAge;
+
+    if (!ageDate || !minAge || !maxAge) {
+      return;
+    }
+    else {
+      try {
+        const request = {
+          CalculationDate: ageDate,
+          MinAge: minAge,
+          MaxAge: maxAge
+        };
+
+        await this.CampusPostService.GetMinMaxAgeDate(request).then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.request_EligibilityCriteriaModel.Dis_AgeAllowedFrom = this.dateSetter(data.Data.MinAgeDate);
+            this.request_EligibilityCriteriaModel.Dis_AgeAllowedTo = this.dateSetter(data.Data.MaxAgeDate);
+          }
+        })
+      } catch (error) {
+        console.error(error);
+      }
+    }    
+  }
 }
 
