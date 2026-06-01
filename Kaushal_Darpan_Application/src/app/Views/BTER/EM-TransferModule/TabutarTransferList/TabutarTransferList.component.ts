@@ -98,11 +98,15 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
     public isStar: boolean = false;
     todayDate: string = new Date().toISOString().split('T')[0];
     public CourseMasterDDL: any = [];
+    public TransferSystem_PostWiseBranchID: any = [];
     public To_CourseMasterDDL: any = [];
     public StreamSearch = new StreamDDL_InstituteWiseModel();
     public IsBranchshow: number = 0;
     public To_IsBranchshow: number = 0;
     @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
+    public GetDesignationID: number[] = [];
+
+
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -764,9 +768,12 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 
     async PostChange() {
       debugger;
+
+      await this.GetTransferSystem_PostWiseBranchCheck();
+
       if (this.RequestManual.PostID != 0) {
 
-        if (this.RequestManual.InstituteID != 0 && this.RequestManual.PostID == 75) {
+        if (this.RequestManual.InstituteID != 0 && this.GetDesignationID.includes(this.RequestManual.PostID)) {
           this.IsBranchshow = 1;
 
           this.AddTransferRequest.get('EngNonEngID')?.setValidators([DropdownValidators]);
@@ -951,20 +958,22 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 
     async To_PostChange() {
       debugger;
+      await this.GetTransferSystem_PostWiseBranchCheck();
+
       if (this.RequestManual.To_ddlCollege != 0 && this.RequestManual.To_PostID !=0) {
 
-        if (this.RequestManual.To_PostID == 75) {
+        if (this.GetDesignationID.includes(this.RequestManual.To_PostID)) {
           this.To_IsBranchshow = 1;
 
           this.AddTransferRequest.get('To_EngNonEngID')?.setValidators([DropdownValidators]);
           this.AddTransferRequest.get('To_BranchID')?.setValidators([DropdownValidators]);
 
         } else {
-          this.To_IsBranchshow = 0;
           this.RequestManual.To_BranchID = 0;
           this.RequestManual.To_EngNonEngID = 0;
           this.AddTransferRequest.get('To_EngNonEngID')?.clearValidators();
           this.AddTransferRequest.get('To_BranchID')?.clearValidators();
+          this.To_IsBranchshow = 0;
         }
         this.AddTransferRequest.get('To_EngNonEngID')?.updateValueAndValidity();
         this.AddTransferRequest.get('To_BranchID')?.updateValueAndValidity();
@@ -982,5 +991,27 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
     async To_EngNonEngWiseBranch() {
       debugger
       await this.getTo_StreamMasterData();
+    }
+
+    async GetTransferSystem_PostWiseBranchCheck() {
+      try {
+        debugger
+        this.GetDesignationID = [];
+        this.loaderService.requestStarted();
+        await this.staffServiceDetailsService.GetTransferSystem_PostWiseBranchCheck(this.searchRequest).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.TransferSystem_PostWiseBranchID = data.Data;
+          this.GetDesignationID = data.Data.map((x: any) => x.DesignationID);
+          console.log("TransferSystem_PostWiseBranchID", this.CourseMasterDDL)
+        }, error => console.error(error));
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
     }
 }
