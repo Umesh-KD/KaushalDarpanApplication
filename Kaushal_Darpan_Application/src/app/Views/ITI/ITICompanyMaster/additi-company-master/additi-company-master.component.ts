@@ -5,7 +5,6 @@ import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { IDistrictMaster_StateIDWiseDataModel, IStateMasterDataModel } from '../../../../Models/CommonMasterDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-//import { ToastrService } from 'ngx-toastr/toastr/toastr.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';

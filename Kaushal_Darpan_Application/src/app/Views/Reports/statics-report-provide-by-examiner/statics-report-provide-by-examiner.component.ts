@@ -284,7 +284,7 @@ export class StaticsReportProvideByExaminerComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DownloadFile(data.Data, 'file download');
-          alert(data.Data)
+          //alert(data.Data)
         }, (error: any) => console.error(error));
     } catch (ex) {
       console.log(ex);

@@ -1,6 +1,6 @@
 // for more, please see the commonfileuploderHelp.txt file
 var CommonFileUpload = function (_http) {
-  alert(_http)
+  //alert(_http)
   //"use strict"
 
   var $this = this;// hold for here local use
@@ -34,7 +34,7 @@ var CommonFileUpload = function (_http) {
 
   // public
   $this.uploadFile = function (inputFileUploadObj) {
-    alert('hhhhh');
+    //alert('hhhhh');
     if (isNullOrWhiteSpace(inputFileUploadObj)) {
       file.value = "";
       bootbox.alert("Invalid request");

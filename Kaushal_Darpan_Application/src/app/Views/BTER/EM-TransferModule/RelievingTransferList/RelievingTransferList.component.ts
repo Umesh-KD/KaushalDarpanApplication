@@ -543,7 +543,7 @@ import * as XLSX from 'xlsx';
     exportToExcel(): void {
 
       if (this.EM_TransferProcessList.length == 0) {
-        alert('No records available for Excel export.');
+        this.toastr.warning('No records available for Excel export.');
         return;
       }
 

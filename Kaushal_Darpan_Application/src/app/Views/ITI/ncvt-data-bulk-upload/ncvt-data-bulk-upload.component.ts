@@ -261,7 +261,7 @@ export class NcvtDataBulkUploadComponent implements AfterViewInit, OnInit
 
   // Start a fresh upload (new session)
   async startUpload() {
-    if (!this.excelData?.length) { alert('Please select an Excel file first'); return; }
+    if (!this.excelData?.length) { this.toastr.warning('Please select an Excel file first'); return; }
     this.sessionId = '12'
     // Mark all as pending (0)
     this.chunkGroups.forEach(g => { g.progress = 0; g.uploading = false; });
@@ -270,7 +270,7 @@ export class NcvtDataBulkUploadComponent implements AfterViewInit, OnInit
 
   // Resume upload: check server for uploaded chunks, skip them
   async resumeUpload() {
-    if (!this.sessionId) { alert('No sessionId found. Start new upload first.'); return; }
+    if (!this.sessionId) { this.toastr.warning('No sessionId found. Start new upload first.'); return; }
     //try {
     //  const uploaded = await this.uploadService.getUploadedChunks(this.sessionId).toPromise();
     //  const set = new Set(uploaded || []);
@@ -322,7 +322,7 @@ export class NcvtDataBulkUploadComponent implements AfterViewInit, OnInit
       {
         console.error('Chunk upload failed', g.chunkIndex, err);
         g.progress = -2; // failed
-        alert(`Chunk ${g.chunkIndex} failed. You can retry/resume later.`);
+        this.toastr.error(`Chunk ${g.chunkIndex} failed. You can retry/resume later.`);
         break;
       } finally {
         g.uploading = false;
@@ -394,7 +394,7 @@ export class NcvtDataBulkUploadComponent implements AfterViewInit, OnInit
     } catch (err) {
       console.error('Retry failed', err);
       g.progress = -2;
-      alert(`Retry failed for chunk ${g.chunkIndex}`);
+      this.toastr.error(`Retry failed for chunk ${g.chunkIndex}`);
     } finally {
       g.uploading = false;
     }

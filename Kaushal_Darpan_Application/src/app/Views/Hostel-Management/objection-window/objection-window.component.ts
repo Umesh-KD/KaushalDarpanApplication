@@ -357,7 +357,7 @@ export class objectionwindowComponent {
 
   async ViewandUpdate() {
 
-    alert('open model')
+    this.toastr.warning('open model')
   }
 
 

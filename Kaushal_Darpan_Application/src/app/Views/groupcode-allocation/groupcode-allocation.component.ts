@@ -340,7 +340,7 @@ export class GroupcodeAllocationComponent {
         },
         error: (err) => {
           console.error(err);
-          alert('Failed to download report');
+          this.toastr.warning('Failed to download report');
         }
       });
   }
@@ -381,7 +381,7 @@ export class GroupcodeAllocationComponent {
         },
         error: (err) => {
           console.error(err);
-          alert('Failed to download report');
+          this.toastr.warning('Failed to download report');
         }
       });
   }

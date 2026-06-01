@@ -200,7 +200,7 @@ export class InvigilatorAppointmentComponent implements OnInit {
           console.log(this.invigilatorFormData.InvigilatorSSOID);
           this.newSSOId = ''; // Clear the input field
         } else {
-          alert('Invalid selection.');
+          this.toastr.warning('Invalid selection.');
         }
       } catch (ex) {
         console.log(ex);

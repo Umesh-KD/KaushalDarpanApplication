@@ -877,7 +877,7 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
       })
 
       if (this.EM_TransferProcessExeclList.length == 0) {
-        alert('No records available for Excel export.');
+        this.toastr.warning('No records available for Excel export.');
         return;
       }
 

@@ -289,7 +289,7 @@ export class ItiSetCalenderComponent {
 
     const existingEvent = this.getEvent(day);
     if (existingEvent && existingEvent.EventType === 'Holiday') {
-      alert(`Holiday: ${existingEvent.Remark}`);
+      this.toastr.warning(`Holiday: ${existingEvent.Remark}`);
       return;
     }
 
@@ -300,7 +300,7 @@ export class ItiSetCalenderComponent {
     // Validate Event Type (only allow valid types)
     const validEventTypes = ['Holiday', 'Exam', 'Other'];
     if (!validEventTypes.includes(eventType)) {
-      alert("Invalid Event Type. Please select from 'Holiday', 'Exam', or 'Other'.");
+      this.toastr.warning("Invalid Event Type. Please select from 'Holiday', 'Exam', or 'Other'.");
       return;
     }
 
