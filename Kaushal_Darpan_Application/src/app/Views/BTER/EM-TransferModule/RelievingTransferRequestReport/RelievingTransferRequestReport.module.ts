@@ -5,18 +5,19 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { StudentStatusHistoryModule } from '../../../Student/student-status-history/student-status-history.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { StructuredSummaryListComponent } from './StructuredSummaryList.component';
-import { StructuredSummaryListRoutingModule } from './StructuredSummaryList-routing.module';
+import { RelievingTransferRequestReportComponent } from './RelievingTransferRequestReport.component';
+import { RelievingTransferRequestReportRoutingModule } from './RelievingTransferRequestReport-routing.module';
+import { ViewStaffProfileModalModule } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.model';
 
 
 
 @NgModule({
   declarations: [
-    StructuredSummaryListComponent,
+    RelievingTransferRequestReportComponent,
   ],
   imports: [
     CommonModule,
-    StructuredSummaryListRoutingModule, 
+    RelievingTransferRequestReportRoutingModule, 
     FormsModule, 
     ReactiveFormsModule, 
     CommonModule, 
@@ -24,6 +25,7 @@ import { StructuredSummaryListRoutingModule } from './StructuredSummaryList-rout
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
+    ViewStaffProfileModalModule
   ]
 })
-export class StructuredSummaryListModule { }
+export class RelievingTransferRequestReportModule { }
