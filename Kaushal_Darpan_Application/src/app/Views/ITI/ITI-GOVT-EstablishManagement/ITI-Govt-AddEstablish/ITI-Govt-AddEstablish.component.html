@@ -441,8 +441,8 @@
 
                   <i class="ti ti-user-check"></i>
                 </a>
-
-                <a *ngIf="row.ProfileStatus>0" href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>
+               
+                <a *ngIf="row.ProfileStatus>0 && row.IsFromIFMS == 0" href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>
                 <a *ngIf="row.ProfileStatus!=247" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>
 
                 <!--<a href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
@@ -452,7 +452,7 @@
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.MainStaffUserID)"><i class="ti ti-list"></i></a>
                 <a target="_blank" [routerLink]="['/StaffIFMSData']"
                    [queryParams]="{ ssoid: row.SSOID }"
-                   title="Assign Status">
+                   title="Assign Status" *ngIf="row.IsFromIFMS == 1">
 
                   <i class="ti ti-eye"></i>
 
