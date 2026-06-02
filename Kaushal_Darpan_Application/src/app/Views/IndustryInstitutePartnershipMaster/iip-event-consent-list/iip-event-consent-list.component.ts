@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { IndustryInstitutePartnershipMasterService } from '../../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -31,6 +31,7 @@ export class IIPEventConsentListComponent {
 
   public EventID: number = 0
   public isSubmitted: boolean = false
+  public ReturnUrl: string = '';
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -53,10 +54,13 @@ export class IIPEventConsentListComponent {
     private loaderService: LoaderService, 
     private modalService: NgbModal,
     private fb: FormBuilder,
+    private routers: Router, 
   ) { }
 
   async ngOnInit() {
 
+    this.ReturnUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl') || '';
+    
     this.groupForm = this.fb.group({
       ddlStatus: [1, [DropdownValidators]],
       txtRemark: ['', Validators.required]
@@ -244,4 +248,19 @@ export class IIPEventConsentListComponent {
     this.AllInTableSelect = this.EventConsentDataList.every((r: any) => r.Selected);
   }
   // end table feature
+
+  GoBack() {
+
+  //this.routers.navigate(['/IIPCompanyMaster']);
+debugger
+  if (this.ReturnUrl) {
+
+   this.routers.navigateByUrl(this.ReturnUrl);
+
+  } else {
+
+   this.routers.navigate(['/IIPCompanyMaster']);
+  }
+}
+
 }
