@@ -108,6 +108,11 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public StaffServiceDetailsDataList: any = [];
   public isUpdateSubmitted: boolean = false;
   public _EnumOffice = EnumOffice;
+  TransferFormGroup!: FormGroup;
+  public isTransferSubmitted = false;
+  public TransferRequest: any = {};
+  public ListITICollegeByManagement: any = [];
+  public StaffPostTypeList: any = [];
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -165,6 +170,20 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
       CurrentPost: [{ value: '', disabled: true }], 
     });
 
+    this.TransferFormGroup = this.formBuilder.group({
+      Name: [{ value: '', disabled: true }],
+      SSOID: [{ value: '', disabled: true }],
+      MobileNo: [{ value: '', disabled: true }],
+      EmailID: [{ value: '', disabled: true }],
+      CurrentInstitute: [{ value: '', disabled: true }],
+      //CurrentInstitute: [''],
+      InstituteID: [0, [DropdownValidators]],
+      //PostID: [0],
+      Remark: [''],
+      StaffPostTypeID: [0, [DropdownValidators]],
+      PostID:[0,[DropdownValidators]]
+    });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
 
@@ -184,8 +203,11 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     await this.GetZonalList();
     await this.GetLevelList();
     await this.GetStaffTypeData(); 
-    await this.GetRoleMasterData();   
-
+    await this.GetRoleMasterData();
+    await this.getITICollege();   
+    await this.getInstituteMasterList();
+    await this.GetStaffPostTypeList();
+    //await this.GetPostListnew();
     //this.filteredStatusList = [
     //  { ID: 1, Name: 'Approved' },
     //  { ID: 2, Name: 'Reject' }
@@ -196,7 +218,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
   get _UpdatePostFormGroup() { return this.UpdatePostFormGroup.controls; }
-  
+  get _TransferFormGroup() { return this.TransferFormGroup.controls;}
 
   async GetStatusList() {
     
@@ -1234,5 +1256,150 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
     doc.save('ITI_Govt_Office_List.pdf');
   }
+
+
+async openTransferModal(content: any, row: any) {
+
+  this.TransferRequest = row;
+
+  await this.GetStaffPostTypeList();
+
+  this.TransferFormGroup.patchValue({
+    Name: row.Name,
+    SSOID: row.SSOID,
+    MobileNo: row.MobileNo,
+    EmailID: row.EmailID,
+
+    CurrentInstitute: row.InstituteName,
+
+    InstituteID: 0,
+    StaffPostTypeID: 0,
+    PostID: 0,
+    Remark: ''
+  });
+
+  this.modalReference = this.modalService.open(content, {
+    size: 'lg',
+    backdrop: 'static'
+  });
+}
+
+closeTransferModal() {
+  this.modalService.dismissAll();
+}
+
+saveTransfer() {
+
+  debugger
+  this.isTransferSubmitted = true;
+
+  if (this.TransferFormGroup.invalid) {
+    return;
+  }
+const formData = this.TransferFormGroup.getRawValue();
+  const request = {
+
+    UserID: this.TransferRequest.StaffUserID,
+    OfficeID: 0,
+    PostID: formData.PostID,
+    DepartmentID:this.sSOLoginDataModel.DepartmentID,
+    LevelID:this.TransferRequest.LevelID,
+    DesignationID:this.TransferRequest.DesignationID,
+    InstituteID: formData.InstituteID,
+    StaffPostTypeID: formData.StaffPostTypeID,
+    CreatedBy: this.sSOLoginDataModel.UserID,
+    IsAdditionPost: true,
+    Remark: formData.Remark,
+};
+
+
+  console.log('post data',request);
+
+  try {
+       this.ITIGovtEMStaffMasterService.ITI_IsAdditionUserOfficeSave(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success){
+          this.StaffServiceDetailsDataList = data.Data;
+        } else {
+          this.StaffServiceDetailsDataList = [];
+        }
+      })
+    } catch (error) {
+      console.error
+    }
+
+this.closeTransferModal();
+  
+}
+
+
+async getITICollege() {
+    try {
+      this.searchRequestITi.Action = "_ITICollegeByManagementType";
+      this.searchRequestITi.FinancialYearID = 9;
+      this.searchRequestITi.ManagementTypeId = 0;
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('GovtIti')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ListITICollegeByManagement = data['Data'];
+
+          this.ListITICollegeByManagement = this.ListITICollegeByManagement.filter((item: any) => item.ID == this.sSOLoginDataModel.InstituteID)
+
+          console.log(this.ListITICollegeByManagement, "ListITICollegeByManagement")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async GetStaffPostTypeList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('PostType').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffPostTypeList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async GetPostListnew() {
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PostList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async onPostTypeChange() {
+
+  this.formData.StaffPostTypeID =
+      this.TransferFormGroup.value.StaffPostTypeID;
+
+  await this.GetPostListnew();
+}
 
 }
