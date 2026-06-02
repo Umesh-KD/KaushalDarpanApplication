@@ -47,4 +47,12 @@ export class ITIPrincipalDashboardServiceService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetITIEstablishmentDashboard(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetITIEstablishmentDashboard", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
