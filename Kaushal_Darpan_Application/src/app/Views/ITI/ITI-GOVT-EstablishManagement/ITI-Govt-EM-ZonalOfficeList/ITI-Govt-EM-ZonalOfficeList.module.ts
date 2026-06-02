@@ -7,6 +7,7 @@ import { ITIGovtEMZonalOfficeListComponent } from './ITI-Govt-EM-ZonalOfficeList
 import { TableSearchFilterPipe } from '../../../../Pipes/table-search-filter.pipe';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     ReactiveFormsModule,
     LoaderModule,
     TableSearchFilterModule,
+    NgSelectModule ,
     NgMultiSelectDropDownModule.forRoot(),
   ]
 })
