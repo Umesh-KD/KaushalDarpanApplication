@@ -11,7 +11,7 @@ import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
 import { ItiTradeSearchModel } from '../../../../../Models/CommonMasterDataModel';
 import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntakeDataModel';
-import { ITI_EM_UnlockProfileDataModel, RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
+import { ITI_EM_StaffDetails_Curr_DataModel, ITI_EM_UnlockProfileDataModel, RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { ITISeatIntakesModel, ITIsSearchModel } from '../../../../../Models/ITIsDataModels';
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
@@ -44,6 +44,7 @@ export class AddRequestDDOOfficeComponent {
   SearchRequest = new ITIsSearchModel();
   public ordersearchRequest = new ItiSanctionOrderList()
   public NodalsearchRequest = new ITI_Govt_EM_NodalSearchDataModel();
+  public formData = new ITI_EM_StaffDetails_Curr_DataModel();
 
   public _EnumRole = EnumRole;
   
@@ -139,6 +140,7 @@ export class AddRequestDDOOfficeComponent {
       DivisionID: [''],
       InstituteID: [''],
       NodalDistrictID: [''],
+      SSOID: [''],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -319,7 +321,7 @@ export class AddRequestDDOOfficeComponent {
   }
   async getITICollege_search() {
     try {
-      await this.commonMasterService.GetCommonMasterData('GovtIti', this.searchReq.DivisionID)
+      await this.commonMasterService.GetCommonMasterData('GovtIti', this.searchReq.DivisionID, this.searchReq.NodalDistrictID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ListITICollegeByManagement_search = data['Data'];
@@ -644,14 +646,12 @@ export class AddRequestDDOOfficeComponent {
     this.searchReq.InstituteID = 0;
     this.searchReq.NodalDistrictID = 0;
     if (this.searchReq.LevelID == 2 && this.searchReq.OfficeID == 11) {
+      await this.ddl_DivisionID_Wise_District_search();
       await this.getITICollege_search();
-      this.searchReq.NodalDistrictID = 0;
-      this.searchReq.NodalStateID = 0;
-      /*this.groupForm.controls['ddlITICollegeTrade'].setValidators([DropdownValidators]);*/
+      // this.searchReq.NodalDistrictID = 0;
     } else if (this.searchReq.LevelID == 2 && this.searchReq.OfficeID == 15) {
       await this.ddl_DivisionID_Wise_District_search();
       this.searchReq.InstituteID = 0;
-      /*this.groupForm.controls['ddlDistrictID'].setValidators([DropdownValidators]);*/
     }
   }
 
@@ -699,6 +699,7 @@ export class AddRequestDDOOfficeComponent {
   }
 
   async onSearch() {
+    this.request = new RequestSearchModel();
     await this.GetStaffListDDL();
   }
 
@@ -746,6 +747,7 @@ export class AddRequestDDOOfficeComponent {
         request.OfficeID = this.searchReq.OfficeID
         request.DivisionID = this.searchReq.DivisionID
         request.NodalDistrictID = this.searchReq.NodalDistrictID
+        request.SSOID = this.searchReq.SSOID
       } else {
         request.InstituteID = this.sSOLoginDataModel.InstituteID;
         request.OfficeID = this.sSOLoginDataModel.OfficeID;
@@ -780,7 +782,23 @@ export class AddRequestDDOOfficeComponent {
     }
   }
 
+  async GetStaffDetailsByStaffID(StaffID: number) {
+    if(!StaffID){
+      return;
+    }
+    try {
 
+      const request: any = {};
+      request.UserID = StaffID;
+      request.Action = 'StaffDetailsByStaffID'
+      await this.ITIGovtEMStaffMaster.ITI_EM_DropdownGetData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.formData = data.Data[0];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async GetOrderList() {
     try {
