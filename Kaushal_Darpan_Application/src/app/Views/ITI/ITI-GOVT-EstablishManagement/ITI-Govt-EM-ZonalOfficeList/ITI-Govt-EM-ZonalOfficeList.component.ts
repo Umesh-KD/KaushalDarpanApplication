@@ -660,17 +660,31 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
     const exportData = this.ZonalList.map((row: any, index: number) => ({
       'Sr. No.': index + 1,
-      'Name / SSO ID': `${row.Name || ''} (${row.SSOID || ''})`,
-      'Mobile / Email': `${row.MobileNo || ''} (${row.EmailID || ''})`,
-      'Level Name or Office Name': `${row.LevelName || ''} ${row.OfficeName ? 'or ' + row.OfficeName : ''}`,
-      'Institute Name': row.InstituteName || '',
-      'District Name': row.DistrictName || '',
-      'Staff Type or Post Name': `${row.StaffTypeName || ''} ${row.PostName ? '\n' + row.PostName : ''}`,
-      'Role': row.RoleName || '',
+
+      'Employee ID / Name':
+        `${row.Name || ''} (${row.SSOID || ''})`,
+
+      'Service Category':
+        row.ServiceName || '',
+
+      'Mobile / Email':
+        `${row.MobileNo || ''} (${row.EmailID || ''})`,
+
+      'Designation':
+        `${row.StaffTypeName || ''}${row.PostName ? ' / ' + row.PostName : ''}`,
+
+      'Level Name or Office Name':
+        `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
+
+      'Post Deployed':
+        row.PostName || '',
+
       'Profile Status (Remark)':
         `${row.ProfileStatus === 'Approve' ? 'Approved' : (row.ProfileStatus || '')}` +
         `${row.Remark ? ' (' + row.Remark + ')' : ''}`,
-      'Is Hod': row.IsHod || ''
+
+      'Is HOD':
+        row.IsHod || ''
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
@@ -686,9 +700,9 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     ws['!cols'] = colWidths;
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Staff List');
+    XLSX.utils.book_append_sheet(wb, ws, 'ITI Govt Office List');
 
-    XLSX.writeFile(wb, 'StaffList.xlsx');
+    XLSX.writeFile(wb, 'ITI_Govt_Office_Employee_List.xlsx');
   }
 
   CloseModalPopup() {
@@ -1210,7 +1224,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.text(
-      'ITI Govt Office List',
+      'ITI Govt Office Employee List',
       pageWidth / 2,
       10,
       { align: 'center' }
@@ -1218,31 +1232,29 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
     const body = this.ZonalList.map((row: any, index: number) => [
       index + 1,
-      `${row.Name} (${row.SSOID})`,
-      `${row.MobileNo} (${row.EmailID})`,
-      `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
-      row.InstituteName,
-      row.DistrictName,
+      `${row.Name || ''} (${row.SSOID || ''})`,
+      row.ServiceName || '',
+      `${row.MobileNo || ''} (${row.EmailID || ''})`,
       `${row.StaffTypeName || ''}${row.PostName ? ' / ' + row.PostName : ''}`,
-      row.RoleName,
-      `${row.ProfileStatus === 'Approve' ? 'Approved' : row.ProfileStatus || ''}${row.Remark ? ' (' + row.Remark + ')' : ''
+      `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
+      row.PostName || '',
+      `${row.ProfileStatus === 'Approve' ? 'Approved' : (row.ProfileStatus || '')}${row.Remark ? ' (' + row.Remark + ')' : ''
       }`,
-      row.IsHod
+      row.IsHod || ''
     ]);
 
     autoTable(doc, {
       startY: 18,
 
       head: [[
-        'Sr No',
-        'Name / SSO ID',
+        'Sr. No.',
+        'Employee ID / Name',
+        'Service Category',
         'Mobile / Email',
-        'Level / Office',
-        'Institute',
-        'District',
-        'Staff Type / Post',
-        'Role',
-        'Profile Status',
+        'Designation',
+        'Level Name / Office Name',
+        'Post Deployed',
+        'Profile Status (Remark)',
         'Is HOD'
       ]],
 
@@ -1265,7 +1277,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
       }
     });
 
-    doc.save('ITI_Govt_Office_List.pdf');
+    doc.save('ITI_Govt_Office_Employee_List.pdf');
   }
   async GetGovtITI() {
     try {
