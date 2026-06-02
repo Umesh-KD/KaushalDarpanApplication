@@ -15,7 +15,9 @@ import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti
 import { ITICollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { ItiTradeSearchModel, StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
-
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-ITI-Govt-AddEstablish',
   standalone: false,
@@ -1765,5 +1767,132 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
   }
 
+  exportToPDF(): void {
 
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'Govt Establish Info Details',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.StaffMasterList.map((row: any, index: number) => [
+      index + 1,
+      row.Name || '',
+      row.SSOID || '',
+      row.MobileNumber || '',
+      row.DesignationName || '',
+      row.StaffLevelTypeName || '',
+      row.StaffType || '',
+      row.Stream || '',
+      this.getProfileStatus(row.ProfileStatus)
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr. No.',
+        'Name',
+        'SSO ID',
+        'Mobile No',
+        'Designation',
+        'Staff Level Type',
+        'Staff Type',
+        'Trade',
+        'Profile Status'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1,
+        cellPadding: 2
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      }
+    });
+
+    doc.save('Govt_Establish_Info_Details.pdf');
+  }
+  exportToExcel(): void {
+
+    const exportData = this.StaffMasterList.map((row: any, index: number) => ({
+      'Sr. No.': index + 1,
+      'Name': row.Name || '',
+      'SSO ID': row.SSOID || '',
+      'Mobile No': row.MobileNumber || '',
+      'Designation Name': row.DesignationName || '',
+      'Staff Level Type': row.StaffLevelTypeName || '',
+      'Staff Type': row.StaffType || '',
+      'Trade': row.Stream || '',
+      'Profile Status': this.getProfileStatus(row.ProfileStatus)
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = [
+      { wch: 10 },
+      { wch: 30 },
+      { wch: 20 },
+      { wch: 15 },
+      { wch: 30 },
+      { wch: 25 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 }
+    ];
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Staff List');
+
+    XLSX.writeFile(wb, 'StaffList.xlsx');
+  }
+  getProfileStatus(status: number): string {
+
+    switch (status) {
+      case 0:
+        return 'Pending';
+
+      case 1:
+        return 'Complete';
+
+      case 2:
+        return 'Final Submit';
+
+      case 3:
+        return 'Approve';
+
+      case 4:
+        return 'Revert';
+
+      case 5:
+        return 'Reject';
+
+      default:
+        return '';
+    }
+  }
 }

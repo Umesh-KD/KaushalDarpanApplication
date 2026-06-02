@@ -336,7 +336,8 @@ export enum EnumConfigurationType {
   Counselling = 167,
   DIRECT_ADDMISSSION_PRIVATE =171,
   Reval_Date = 172,
-  Revaluation_Fee = 15
+  Revaluation_Fee = 15,
+  Common_Subject_Master = 174
 }
 
 export enum EnumDepartment {

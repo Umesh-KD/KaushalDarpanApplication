@@ -9,14 +9,14 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonSubjectService } from '../../../Services/CommonSubjects/common-subjects.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumDepartment, EnumStatus } from '../../../Common/GlobalConstants';
 
 
 @Component({
-    selector: 'app-common-subjects',
-    templateUrl: './common-subjects.component.html',
-    styleUrls: ['./common-subjects.component.css'],
-    standalone: false
+  selector: 'app-common-subjects',
+  templateUrl: './common-subjects.component.html',
+  styleUrls: ['./common-subjects.component.css'],
+  standalone: false
 })
 export class CommonSubjectsComponent implements OnInit {
 
@@ -29,12 +29,23 @@ export class CommonSubjectsComponent implements OnInit {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
-  constructor(private commonMasterService: CommonFunctionService, private commonSubjectService: CommonSubjectService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2) {
+  public IsCommonSubjectMasterDateOpen: number = 0;
+
+  constructor(private commonMasterService: CommonFunctionService,
+    private commonSubjectService: CommonSubjectService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private routers: Router,
+    private modalService: NgbModal,
+    private Swal2: SweetAlert2) {
 
   }
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+    await this.GetMasterDateConfigData();
     await this.GetSemestarMatserDDL();
     await this.GetAllData();
 
@@ -157,5 +168,22 @@ export class CommonSubjectsComponent implements OnInit {
           }
         }
       });
+  }
+
+  async GetMasterDateConfigData() {
+    var data = {
+      DepartmentID: EnumDepartment.BTER,
+      CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
+      AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Key: EnumConfigurationType.Common_Subject_Master,
+      SSOID: this.sSOLoginDataModel.SSOID
+    }
+    await this.commonMasterService.GetDateConfigSetting(data)
+      .then((resp: any) => {
+        let data = JSON.parse(JSON.stringify(resp));
+        this.IsCommonSubjectMasterDateOpen = data['Data'][0][EnumConfigurationType.Common_Subject_Master];
+      }, (error: any) => console.error(error)
+      );
   }
 }
