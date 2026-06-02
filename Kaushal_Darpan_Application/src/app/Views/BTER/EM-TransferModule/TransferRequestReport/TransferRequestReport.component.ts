@@ -70,7 +70,7 @@ export class TransferRequestReportComponent {
   public updateStatus: number = 0;
   public isAnyApproved: boolean = false;
   isDisable: boolean = false;
-
+  public ID: number = 0;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -85,20 +85,21 @@ export class TransferRequestReportComponent {
   ) { }
 
   async ngOnInit() {
-
+    debugger
     this.sSOLoginDataModel = JSON.parse(
       String(localStorage.getItem('SSOLoginUser'))
     );
+
+   
+      this.ID = Number(
+        this.activatedRoute.snapshot.queryParamMap.get('status')
+      );
 
     this.Status = "0";
 
     try {
 
-      const instituteData: any = await this.commonFunctionService.InstituteMaster(
-        1,
-        1,
-        this.sSOLoginDataModel.EndTermID
-      );
+      const instituteData: any = await this.commonFunctionService.InstituteMaster(1,1,this.sSOLoginDataModel.EndTermID);
 
       this.ItiCollegesListAll = instituteData.Data;
 
@@ -120,19 +121,7 @@ export class TransferRequestReportComponent {
         this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF ||
         this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF
       ) {
-        if (
-          this.sSOLoginDataModel.RoleID ==
-          EnumRole.EM_ADTE_GAZETTED_STAFF
-        ) {
-          
-        }
-
-        if (
-          this.sSOLoginDataModel.RoleID ==
-          EnumRole.EM_ADTE_NON_GAZETTED_STAFF
-        ) {
-          
-        }
+        
 
         this.TransferSystemStatusSearchList =
           this.TransferSystemStatusSearchList
@@ -154,28 +143,17 @@ export class TransferRequestReportComponent {
               return item;
             });
 
-        this.SearchStatus = EnumTransferSystemStatus.Submitted;
-        this.ShowCheckBoxId = 1;
-
-        await this.EM_TransferSystem_GetData_Search(
-          EnumTransferSystemStatus.Submitted
-        );
+        if (this.ID > 0) {
+          this.SearchStatus = this.ID;
+          await this.EM_TransferSystem_GetData_Search(this.ID);
+        } 
+        
+       
       }
       else if (
         this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE ||
         this.sSOLoginDataModel.RoleID == EnumRole.EM_Secretary_BTER
       ) {
-        if (this.sSOLoginDataModel.RoleID == EnumRole.EM_JDTE) {
-         
-        }
-
-        if (
-          this.sSOLoginDataModel.RoleID ==
-          EnumRole.EM_Secretary_BTER
-        ) {
-         
-        }
-
         this.TransferSystemStatusSearchList =
           this.TransferSystemStatusSearchList
             .filter(
@@ -196,19 +174,15 @@ export class TransferRequestReportComponent {
               return item;
             });
 
-        this.SearchStatus = EnumTransferSystemStatus.UnderADTEReview;
-        this.ShowCheckBoxId = 1;
+        if (this.ID > 0) {
+          this.SearchStatus = this.ID;
+          await this.EM_TransferSystem_GetData_Search(this.ID);
+        }
 
-        await this.EM_TransferSystem_GetData_Search(
-          EnumTransferSystemStatus.UnderADTEReview
-        );
       }
       else if (
         this.sSOLoginDataModel.RoleID == EnumRole.DTE
       ) {
-        
-        /*this.isShowStatus_Checkbox = true;*/
-
         this.TransferSystemStatusSearchList =
           this.TransferSystemStatusSearchList
             .filter(
@@ -229,12 +203,12 @@ export class TransferRequestReportComponent {
               return item;
             });
 
-        this.SearchStatus = EnumTransferSystemStatus.UnderJDTEReview;
-        this.ShowCheckBoxId = 1;
+        if (this.ID > 0) {
+          this.SearchStatus = this.ID;
+          await this.EM_TransferSystem_GetData_Search(this.ID);
+        }
 
-        await this.EM_TransferSystem_GetData_Search(
-          EnumTransferSystemStatus.UnderJDTEReview
-        );
+       
       }
       else {
       
@@ -246,17 +220,20 @@ export class TransferRequestReportComponent {
     } catch (error) {
       console.error(error);
     }
+
+   
+
+
   }
 
   async EM_TransferSystem_GetData_Search(statusID: number) {
-    this.statusID = statusID;
     await this.EM_TransferRequest_GetData();
   }
 
   async EM_TransferRequest_GetData() {
     debugger
     try {
-
+      this.EM_TransferProcessList = [];
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
       this.searchRequest.Action = "TransferRequestReport";
       this.searchRequest.StatusID = this.SearchStatus;

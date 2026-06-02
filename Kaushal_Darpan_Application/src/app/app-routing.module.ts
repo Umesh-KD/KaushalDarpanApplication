@@ -1765,7 +1765,7 @@ const routes: Routes = [
       { path: 'ScholarshipOnboard', loadChildren: () => import('./Views/ITI/scholarship-onboard/scholarship-onboard.module').then(m => m.ScholarshipOnboardModule) },
       { path: 'StaffTrainingConsent', loadChildren: () => import('./Views/staff-training-consent/staff-training-consent.module').then(m => m.StaffTrainingConsentModule) },
       { path: 'itiPendingCollegeFee', loadChildren: () => import('./Views/Student/itiPendingCollegeFee/itiPendingCollegeFee.module').then(m => m.itiPendingCollegeFeeModule) },
-
+      { path: 'TransferRequestReport/:id', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
     ]
   },
 
