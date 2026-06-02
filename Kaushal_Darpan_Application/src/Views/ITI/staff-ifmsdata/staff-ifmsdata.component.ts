@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { EnumStatus } from '../../../app/Common/GlobalConstants';
 import { CommonFunctionService } from '../../../app/Services/CommonFunction/common-function.service';
 import { ActivatedRoute } from '@angular/router';
+import { ITI_Govt_EM_PersonalDetailByUserIDSearchModel, ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel } from '../../../app/Models/ITIGovtEMStaffMasterDataModel';
+import { LoaderService } from '../../../app/Services/Loader/loader.service';
+import { ITIGovtEMStaffMaster } from '../../../app/Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 
 @Component({
   selector: 'app-staff-ifmsdata',
@@ -10,21 +13,25 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './staff-ifmsdata.component.css'
 })
 export class StaffIFMSDataComponent implements OnInit {
-
-
+  AddedEducationList: ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel[] = [];
+  public educationDetailsRequest = new ITI_Govt_EM_PersonalDetailByUserIDSearchModel();
+  public ssoid: string = '';
   async ngOnInit() 
   {
+    
+
      this.route.queryParams.subscribe(params => {
 
-    const ssoid = params['ssoid'];
+        this.ssoid = params['ssoid'];
 
-    if (ssoid) {
-      this.GetIFMSDATA(ssoid);
+       if (this.ssoid) {
+         this.GetIFMSDATA(this.ssoid);
+         this.GetEducationDetails();
     }
 
   });
   }
-  constructor(private commonMasterService:CommonFunctionService,private route: ActivatedRoute)
+  constructor(private commonMasterService: CommonFunctionService, private route: ActivatedRoute, private loaderService: LoaderService, private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster)
   {}
  public model: any = {};
 
@@ -124,5 +131,28 @@ async GetIFMSDATA(SSOID: any) {
   } catch {
     return null;
   }
-}
+  }
+
+  async GetEducationDetails() {
+    debugger
+  
+    try {
+      this.AddedEducationList = []; 
+      this.loaderService.requestStarted();
+      this.educationDetailsRequest.SSOID = this.ssoid;
+      this.educationDetailsRequest.Action = 'GetDataFromIFMS_EducationalQualification';
+      await this.ITIGovtEMStaffMasterService.ITIGovtEM_ITI_Govt_Em_PersonalDetailByUserID(this.educationDetailsRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AddedEducationList = data['Data']['EducationalList'];
+        }, error => console.error(error));
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
 }

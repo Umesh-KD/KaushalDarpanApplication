@@ -28,6 +28,7 @@ export class JDTEDashboardComponent {
   public viewAdminDashboardList: any[] = [];
   public viewJDTEStaffDetailList: any[] = [];
   public viewJDTEReleiving: any[] = [];
+  public viewJDTEReleiving_req: any[] = [];
   public viewAdminDashboardListOther: any[] = [];
   public viewAdminDashboardListLeave: any[] = [];
   public viewAdminDashboardAllotment: any[] = [];
@@ -109,6 +110,7 @@ export class JDTEDashboardComponent {
   //   }
   // }
   async GetAllData() {
+    debugger
     this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -141,6 +143,7 @@ export class JDTEDashboardComponent {
           this.viewAdminDashboardList = data['Data'];
           this.viewJDTEStaffDetailList = this.viewAdminDashboardList.filter(s => s.ListType === 'StaffDetail');
           this.viewJDTEReleiving = this.viewAdminDashboardList.filter(s => s.ListType === 'Transfer');
+          this.viewJDTEReleiving_req = this.viewAdminDashboardList.filter(s => s.ListType === 'Relieving');
           this.viewAdminDashboardListOther = this.viewAdminDashboardList.filter(s => s.ListType === 'OtherType');
         }, (error: any) => console.error(error)
         );
