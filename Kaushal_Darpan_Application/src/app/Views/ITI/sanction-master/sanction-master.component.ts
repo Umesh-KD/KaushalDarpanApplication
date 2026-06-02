@@ -9,7 +9,7 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2'
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
@@ -42,7 +42,7 @@ export class SanctionMasterComponent {
   public LevelMasterList: any = [];
   public DesignationMasterList: any = [];
   public Table_SearchText: string = '';
-
+  public _enumRole = EnumRole
 
   request = new SanctionOrderDataModel();
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -62,6 +62,10 @@ export class SanctionMasterComponent {
         chkActiveStatus: ['true'],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    if (this.sSOLoginDataModel.RoleID == EnumRole.DTE_TrainingT2_establishment) {
+      this.request.ParentID = 4
+      this.RoleMasterFormGroup.get('ParentID')?.disable();
+    }
     this.request.ModifyBy = this.sSOLoginDataModel.UserID;
     this.UserID = this.sSOLoginDataModel.UserID;
     await this.GetRoleMasterList();
@@ -79,6 +83,11 @@ export class SanctionMasterComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.RoleMasterList = data['Data'];
+          if (this.sSOLoginDataModel.RoleID == EnumRole.DTE_TrainingT2_establishment) {
+            this.RoleMasterList = this.RoleMasterList.filter((e: any) => e.ParentID == 4)
+          } else {
+            this.RoleMasterList = data['Data'];
+          }
         }, (error: any) => console.error(error));
     }
     catch (Ex) {

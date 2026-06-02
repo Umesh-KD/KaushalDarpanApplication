@@ -17,6 +17,9 @@ import { UserMasterService } from '../../../../Services/UserMaster/user-master.s
 import { AssignRoleRightsService } from '../../../../Services/AssignRoleRights/assign-role-rights.service';
 import { AssignRoleRightsDataModel, UserMasterModel } from '../../../../Models/UserMasterDataModel';
 import { ITI_InstructorTechnicalCITSQualification } from '../../../../Models/ITI/ItiInstructorDataModel';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-ITI-Govt-EM-ZonalOfficeList',
   standalone: false,
@@ -620,6 +623,40 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
    /* this.routers.navigate(['/ITIGOVTEMPersonalDetailsApplicationTab'])*/
   }
 
+  exportToExcel(): void {
+
+    const exportData = this.ZonalList.map((row: any, index: number) => ({
+      'Sr. No.': index + 1,
+      'Name / SSO ID': `${row.Name || ''} (${row.SSOID || ''})`,
+      'Mobile / Email': `${row.MobileNo || ''} (${row.EmailID || ''})`,
+      'Level Name or Office Name': `${row.LevelName || ''} ${row.OfficeName ? 'or ' + row.OfficeName : ''}`,
+      'Institute Name': row.InstituteName || '',
+      'District Name': row.DistrictName || '',
+      'Staff Type or Post Name': `${row.StaffTypeName || ''} ${row.PostName ? '\n' + row.PostName : ''}`,
+      'Role': row.RoleName || '',
+      'Profile Status (Remark)':
+        `${row.ProfileStatus === 'Approve' ? 'Approved' : (row.ProfileStatus || '')}` +
+        `${row.Remark ? ' (' + row.Remark + ')' : ''}`,
+      'Is Hod': row.IsHod || ''
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Auto column width
+    const colWidths = Object.keys(exportData[0] || {}).map(key => ({
+      wch: Math.max(
+        key.length,
+        ...exportData.map((r: any) => (r[key] ? r[key].toString().length : 0))
+      ) + 2
+    }));
+
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Staff List');
+
+    XLSX.writeFile(wb, 'StaffList.xlsx');
+  }
 
   CloseModalPopup() {
     this.modalService.dismissAll();
@@ -1128,4 +1165,74 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     await this.GetEmployeeServiceDetails_ITI_EM(StaffUserID);
     this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
   }
+
+
+  exportToPDF() {
+
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'ITI Govt Office List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.ZonalList.map((row: any, index: number) => [
+      index + 1,
+      `${row.Name} (${row.SSOID})`,
+      `${row.MobileNo} (${row.EmailID})`,
+      `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
+      row.InstituteName,
+      row.DistrictName,
+      `${row.StaffTypeName || ''}${row.PostName ? ' / ' + row.PostName : ''}`,
+      row.RoleName,
+      `${row.ProfileStatus === 'Approve' ? 'Approved' : row.ProfileStatus || ''}${row.Remark ? ' (' + row.Remark + ')' : ''
+      }`,
+      row.IsHod
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr No',
+        'Name / SSO ID',
+        'Mobile / Email',
+        'Level / Office',
+        'Institute',
+        'District',
+        'Staff Type / Post',
+        'Role',
+        'Profile Status',
+        'Is HOD'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      }
+    });
+
+    doc.save('ITI_Govt_Office_List.pdf');
+  }
+
 }

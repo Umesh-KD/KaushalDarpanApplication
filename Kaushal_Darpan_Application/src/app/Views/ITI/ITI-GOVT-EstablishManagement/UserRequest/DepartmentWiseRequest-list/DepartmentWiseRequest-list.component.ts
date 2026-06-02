@@ -16,7 +16,9 @@ import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntake
 import { RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
-
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-request-list',
   standalone: false,
@@ -791,6 +793,151 @@ export class DepartmentWiseRequestlistComponent implements OnInit {
     this.totalInTableRecord = this.UserRequestList.length;
   }
 
+  exportToExcel(): void {
+
+    const exportData = this.UserRequestList.map((row: any, index: number) => ({
+      'S No': index + 1,
+      'Staff Request Type': row.StaffRequestType || '',
+      'Request Type': row.RequestType || '',
+      'User': row.UserName || '',
+      'Level': row.LevelName || '',
+      'Staff Type': row.StaffType || '',
+      'Post': row.PostName || '',
+      'Office': row.OfficeName || '',
+      'Institute': row.InstituteName || '',
+      'Order No': row.OrderNo || '',
+      'Order Date': row.OrderDate || '',
+      'Last Working Date': row.LastWorkingDate || '',
+      'Joining Date': row.JoiningDate || '',
+      'Request Date': row.RequestDate || '',
+      'Staff Request Status': row.RequestStatus || '',
+      'Relieving Status': row.RelievingStatus || '',
+      'Joining Status': row.JoiningStatus || '',
+      'Request Remarks': row.RequestRemarks || ''
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = [
+      { wch: 8 },   // S No
+      { wch: 20 },  // Staff Request Type
+      { wch: 20 },  // Request Type
+      { wch: 25 },  // User
+      { wch: 20 },  // Level
+      { wch: 20 },  // Staff Type
+      { wch: 20 },  // Post
+      { wch: 25 },  // Office
+      { wch: 30 },  // Institute
+      { wch: 15 },  // Order No
+      { wch: 15 },  // Order Date
+      { wch: 18 },  // Last Working Date
+      { wch: 15 },  // Joining Date
+      { wch: 15 },  // Request Date
+      { wch: 20 },  // Request Status
+      { wch: 20 },  // Relieving Status
+      { wch: 20 },  // Joining Status
+      { wch: 40 }   // Remarks
+    ];
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Staff Requests');
+
+    XLSX.writeFile(wb, 'StaffRequests.xlsx');
+  }
+
+  exportToPDF(): void {
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'Department Wise Relieving and Joining List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.UserRequestList.map((row: any, index: number) => [
+      index + 1,
+      row.StaffRequestType || '',
+      row.RequestType || '',
+      row.UserName || '',
+      row.LevelName || '',
+      row.StaffType || '',
+      row.PostName || '',
+      row.OfficeName || '',
+      row.InstituteName || '',
+      row.OrderNo || '',
+      row.OrderDate || '',
+      row.LastWorkingDate || '',
+      row.JoiningDate || '',
+      row.RequestDate || '',
+      row.RequestStatus || '',
+      row.RelievingStatus || '',
+      row.JoiningStatus || '',
+      row.RequestRemarks || ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18, // space below heading
+
+      head: [[
+        'S No',
+        'Staff Request Type',
+        'Request Type',
+        'User',
+        'Level',
+        'Staff Type',
+        'Post',
+        'Office',
+        'Institute',
+        'Order No',
+        'Order Date',
+        'Last Working Date',
+        'Joining Date',
+        'Request Date',
+        'Request Status',
+        'Relieving Status',
+        'Joining Status',
+        'Remarks'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 6,
+        cellPadding: 1.5,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1,
+        overflow: 'linebreak'
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+      columnStyles: {
+        17: { cellWidth: 35 }
+      }
+    });
+
+    doc.save('Department_Wise_Relieving_Joining_List.pdf');
+  }
    }
 
 
