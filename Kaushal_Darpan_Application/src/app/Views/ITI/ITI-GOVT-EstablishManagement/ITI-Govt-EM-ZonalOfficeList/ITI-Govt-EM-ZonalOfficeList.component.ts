@@ -47,6 +47,9 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public ErrorMessage: string = '';
 /*  public RoleMasterList: any[] = [];*/
   public DesignationMasterList: any[] = [];
+  public CompanyMasterList: any[] = [];
+  public Districtlist: any[] = [];
+  public ItiDDLlist: any[] = [];
   public UserOfficePostDetails: any[] = [];
   
   public ITIGovtEMOFFICERSList: any[] = [];
@@ -184,7 +187,9 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     await this.GetZonalList();
     await this.GetLevelList();
     await this.GetStaffTypeData(); 
-    await this.GetRoleMasterData();   
+    await this.GetRoleMasterData();
+    await this.getItiNameAndCode();   
+    await this.GetDistrictMaster();   
 
     //this.filteredStatusList = [
     //  { ID: 1, Name: 'Approved' },
@@ -229,6 +234,10 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
     this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID
+    if (this.searchRequest.OfficeID != 11) {
+      this.searchRequest.InstituteID = 0
+      this.searchRequest.DistrictID=0
+    }
     debugger
     try {
       this.loaderService.requestStarted();
@@ -1233,6 +1242,65 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     });
 
     doc.save('ITI_Govt_Office_List.pdf');
+  }
+  async GetGovtITI() {
+    try {
+
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData("GovtIti")
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.ItiDDLlist = data['Data'];
+
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async getItiNameAndCode() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('GovtIti',0, this.searchRequest.DistrictID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CompanyMasterList = data['Data'];   // full list
+
+
+        }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetDistrictMaster() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDistrictMaster().then((data: any) => {
+        this.Districtlist = data.Data;
+      });
+    } catch (error) {
+    } finally {
+      this.loaderService.requestEnded();
+    }
   }
 
 }
