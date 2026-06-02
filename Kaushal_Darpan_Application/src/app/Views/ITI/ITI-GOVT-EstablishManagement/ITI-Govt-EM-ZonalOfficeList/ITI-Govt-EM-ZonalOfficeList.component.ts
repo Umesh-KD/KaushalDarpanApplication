@@ -211,7 +211,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     await this.getInstituteMasterList();
     await this.GetStaffPostTypeList();
     //await this.GetPostListnew();
-    await this.GetRoleMasterData();
+
     await this.getItiNameAndCode();   
     await this.GetDistrictMaster();   
 
