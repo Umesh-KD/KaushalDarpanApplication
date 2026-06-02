@@ -28,19 +28,6 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            SSO ID:
-          </label>
-          <input type="text" placeholder="SSO ID" class="form-input" id="txtSSOID" name="txtSSOID" [(ngModel)]="searchRequest.SSOID">
-        </div>
-        <div>
-          <label for="txtName" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Name:
-          </label>
-          <input type="text" placeholder="Name" class="form-input" id="txtName" name="txtName" [(ngModel)]="searchRequest.Name">
-        </div>
-
-        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Level:
           </label>
@@ -59,6 +46,47 @@
             <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
+
+
+        <div *ngIf="searchRequest.OfficeID==11">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
+          <ng-select [(ngModel)]="searchRequest.DistrictID"
+                 (change)="getItiNameAndCode()"    [clearable]="false">
+            <ng-option [value]="0" selected>Choose Option</ng-option>
+            <ng-container *ngFor="let item of Districtlist;">
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            </ng-container>
+          </ng-select>
+        </div>
+
+        <div *ngIf="searchRequest.OfficeID==11">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
+
+          <ng-select [(ngModel)]="searchRequest.InstituteID"
+                     [clearable]="false">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-option *ngFor="let item of CompanyMasterList;"
+                       [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
+        </div>
+
+
+
+
+        <div>
+          <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            SSO ID:
+          </label>
+          <input type="text" placeholder="SSO ID" class="form-input" id="txtSSOID" name="txtSSOID" [(ngModel)]="searchRequest.SSOID">
+        </div>
+        <div>
+          <label for="txtName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Name:
+          </label>
+          <input type="text" placeholder="Name" class="form-input" id="txtName" name="txtName" [(ngModel)]="searchRequest.Name">
+        </div>
+
+
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -197,7 +225,7 @@
                 <!-- <a href="javascript:void(0);" title="Update User Post" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.DTE_TrainingT2_establishment"
                   (click)="onClick_UserPost(UpdatePost_Modal, row.StaffUserID)"><i class="ti ti-user-edit"></i>
                 </a> -->
-                </a>
+           
 
                 <a href="javascript:void(0);" title="Transfer Institute" (click)="openTransferModal(TransferInstituteModal,row)">
                        <i class="ti ti-building"></i>

@@ -22,6 +22,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     TableSearchFilterModule,
     NgSelectModule ,
     NgMultiSelectDropDownModule.forRoot(),
+    NgSelectModule
   ]
 })
 export class ITIGovtEMZonalOfficeListModule { }
