@@ -386,6 +386,25 @@ await this.staffServiceDetailsService
 
       }
       else if (
+        (this.sSOLoginDataModel.RoleID == EnumRole.Principal ||
+          this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) 
+        && (EnumStaffTrainingStatus.Reject == this.SearchStatus || EnumStaffTrainingStatus.PrincipalApprove == this.SearchStatus)
+      ) {
+
+        this.ShowCheckBoxId = 0;
+
+        this.StaffTrainingDetailsCompletedTrainingDataList =
+          this.StaffTrainingDetailsCompletedTrainingDataList.filter(
+            (item: any) =>
+              item.InstituteID == this.sSOLoginDataModel.InstituteID &&
+              item.EmpRoleID != EnumRole.Principal &&
+              item.EmpRoleID != EnumRole.PrincipalNon
+          );
+
+      }
+
+
+      else if (
         (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF ||
           this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) &&
         EnumStaffTrainingStatus.Applied == this.SearchStatus
@@ -401,6 +420,23 @@ await this.staffServiceDetailsService
           );
         this.ShowCheckBoxId = 1;
       }
+      else if (
+        (this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF ||
+          this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) &&
+        EnumStaffTrainingStatus.Reject == this.SearchStatus || EnumStaffTrainingStatus.PrincipalApprove == this.SearchStatus
+      ) {
+        debugger
+
+
+        this.StaffTrainingDetailsCompletedTrainingDataList =
+          this.StaffTrainingDetailsCompletedTrainingDataList.filter(
+            (item: any) =>
+              item.EmpRoleID == EnumRole.Principal ||
+              item.EmpRoleID == EnumRole.PrincipalNon
+          );
+        this.ShowCheckBoxId = 0;
+      }
+
       else {
         this.ShowCheckBoxId = 0;
       }

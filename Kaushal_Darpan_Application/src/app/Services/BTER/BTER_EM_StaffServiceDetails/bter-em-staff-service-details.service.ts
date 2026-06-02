@@ -217,6 +217,21 @@ export class BTEREMStaffServiceDetailsService {
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
-  }
+    }
+
+    public async GetTransferRequestReport(request: EM_TransferSystemSearchModel) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/GetTransferRequestReport`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+    public async GetRelievingTransferRequestList(request: EM_TransferSystemSearchModel) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/GetRelievingTransferRequestList`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
 
 }

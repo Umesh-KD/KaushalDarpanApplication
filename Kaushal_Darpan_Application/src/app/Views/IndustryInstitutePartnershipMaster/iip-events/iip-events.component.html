@@ -196,7 +196,7 @@
                     <i class="ti ti-trash"></i>
                   </a>
 
-                  <a [routerLink]="'/event-consent-list'" [queryParams]="{ id:row.EventID}"
+                  <a [routerLink]="'/event-consent-list'" [queryParams]="{ id:row.EventID,returnUrl: router.url}"
                      title="View Consent">
 
                     <i class="ti ti-users-group"></i>
