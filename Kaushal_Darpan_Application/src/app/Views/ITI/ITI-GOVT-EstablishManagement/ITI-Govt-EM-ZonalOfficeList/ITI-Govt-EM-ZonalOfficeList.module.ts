@@ -20,6 +20,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ReactiveFormsModule,
     LoaderModule,
     TableSearchFilterModule,
+    NgSelectModule ,
     NgMultiSelectDropDownModule.forRoot(),
     NgSelectModule
   ]

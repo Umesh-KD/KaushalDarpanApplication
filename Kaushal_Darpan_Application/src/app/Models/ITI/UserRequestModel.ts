@@ -128,3 +128,19 @@ export class ITI_EM_UnlockProfileDataModel {
   public SSOID: string = ''
   public ModifyBy: number = 0
 }
+
+export class ITI_EM_StaffDetails_Curr_DataModel {
+  public Name: string = ''
+  public OfficeName: string = ''
+  public Division: string = ''
+  public Designation: string = ''
+  public EmployeeID: string = ''
+  public InstituteName: string = ''
+  
+  public StaffID: number = 0
+  public StaffUserID: number = 0
+  public DesignationID: number = 0
+  public InstituteID: number = 0
+  public OfficeID: number = 0
+  public IsZonalOffice: number = 0
+}
