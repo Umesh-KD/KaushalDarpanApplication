@@ -215,7 +215,7 @@ SelectedStudent:any = {};
         new Date(s.ScholarShipDate).getFullYear() === new Date(this.EditDataFormGroup.get('ScholarshipDate')?.value).getFullYear()
       );
       if(filtered.length > 0){
-        alert('Already got scholarship !');
+        this.toastr.warning('Already got scholarship !');
         return;
       }
 

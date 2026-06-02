@@ -483,7 +483,7 @@ export class ITIConsentUpdateComponent {
           if (isVerified) {         
             await this.onSubmitConsent(status);
           } else {
-            alert('OTP verification timeout');
+            this.toastr.warning('OTP verification timeout');
           }
 
         }
@@ -525,7 +525,7 @@ export class ITIConsentUpdateComponent {
           if (isVerified) {         
             await this.submitPayment(InspectionConsentID);
           } else {
-            alert('OTP verification timeout');
+            this.toastr.warning('OTP verification timeout');
           }
 
         }

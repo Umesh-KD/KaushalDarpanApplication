@@ -275,8 +275,8 @@ export class MasterLayoutComponent implements OnInit {
 
 
     // Force reload route, no browser refresh
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = 'reload';
+    //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    //this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['/dashboard']);
 
     // comment bcz other page open on different role

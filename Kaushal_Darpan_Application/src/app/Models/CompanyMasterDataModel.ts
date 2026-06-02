@@ -9,9 +9,9 @@ export class CompanyMasterDataModels {
   public StateID: number = 0
   public DistrictID: number = 0
   public RoleID: number = 0
-  public CompanyTypeId: number = 0
   public Address: string = ''
   public CompanyPhoto: string = '';
+  public CompanyTypeId: number = 0
   public Dis_CompanyName: string = '';
   public ActiveStatus: boolean = true;
   public DeleteStatus: boolean = false;
@@ -29,6 +29,7 @@ export class CompanyMasterDataModels {
   public ISPlacement: boolean = false;
 
   public CompanyStatus: string = '';
+  public InstituteID: number = 0;
 
   public ListCompanyHRDetails: HrMasterDataModel[] = [];
 }
@@ -54,7 +55,7 @@ export class CompanyMasterSearchModel {
   public ModifyBy: number = 0
   public RoleID: number = 0;
   // public ID: number = 0;
-  
+  public InstituteID: number = 0;
   public DepartmentID: number = 0;
   public PageNumber: number = 0;
   public PageSize: number = 0;

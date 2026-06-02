@@ -141,7 +141,7 @@ validateSchedule(index: number) {
     };
 
     if (toMinutes(endTime) <= toMinutes(startTime)) {
-      alert('समाप्त होने का समय प्रारंभ समय से बड़ा होना चाहिए।');
+      this.toastr.warning('समाप्त होने का समय प्रारंभ समय से बड़ा होना चाहिए।');
       // Optionally clear the invalid input
       group.get('endTime')?.setValue('');
     }

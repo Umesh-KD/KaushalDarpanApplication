@@ -146,10 +146,6 @@ export class SearchResultComponent implements OnInit {
             this.SubjectDetailsData = [];
             this.FinalResultData = [];
           }
-          
-          if (this.showResult == false) {
-            this.toastr.warning("No data found!");
-          }
 
         })
     } catch (error) {

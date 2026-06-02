@@ -149,7 +149,7 @@ export class UploadAnnexture32Component {
           },
           error: (err) => {
             console.error(err);
-            alert('Failed to download report');
+            this.toastr.error('Failed to download report');
           }
         });
     }
