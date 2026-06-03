@@ -450,19 +450,15 @@
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
-                <!-- <a title="Edit Details" (click)="onEdit(row)">
+                <a title="Edit Details" (click)="onEdit(row)">
                   <i class="ti ti-user-check"></i>
-                </a> -->
+                </a>
 
-                <!-- <a href="javascript:void(0);" title="View" 
-                  *ngIf="row.ProfileStatus>0" 
-                  (click)="onCheckData(row)">
-                  <i class="ti ti-eye"></i>
-                </a> -->
+
 
                 <a href="javascript:void(0);" title="Assign Status"
-                  *ngIf="row.ProfileStatus!=247" 
-                  (click)="onSubmit(modal_SubmitReq, row)">
+                   *ngIf="row.ProfileStatus!=247"
+                   (click)="onSubmit(modal_SubmitReq, row)">
                   <i class="ti ti-check"></i>
                 </a>
 
@@ -470,20 +466,26 @@
 
 
                 <a href="javascript:void(0);" id="btnDelete" title="Delete"
-                  *ngIf="row.ProfileStatus == 0"  
-                  (click)="btnDelete_OnClick(row.StaffUserID)">
+                   *ngIf="row.ProfileStatus == 0"
+                   (click)="btnDelete_OnClick(row.StaffUserID)">
                   <i class="ti ti-trash"></i>
                 </a>
 
-                <!-- <a href="javascript:void(0);" title="User Profile Status History" 
-                  (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.MainStaffUserID)">
-                  <i class="ti ti-list"></i>
-                </a> -->
+                <!-- <a href="javascript:void(0);" title="User Profile Status History"
+    (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.MainStaffUserID)">
+    <i class="ti ti-list"></i>
+  </a> -->
 
                 <a target="_blank" [routerLink]="['/StaffIFMSData']"
                    [queryParams]="{ ssoid: row.SSOID }"
                    title="Assign Status" *ngIf="row.IsFromIFMS == 1">
 
+                  <i class="ti ti-eye"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="View"
+                *ngIf="row.IsFromIFMS != 1"
+                   (click)="onCheckData(row)">
                   <i class="ti ti-eye"></i>
                 </a>
 
