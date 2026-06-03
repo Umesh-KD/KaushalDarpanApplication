@@ -193,7 +193,7 @@ export class ItiAppointedExaminerDetailsComponent {
         },
         error: (err) => {
           console.error(err);
-          alert('Failed to download report');
+          this.toastr.warning('Failed to download report');
         }
       });
   }

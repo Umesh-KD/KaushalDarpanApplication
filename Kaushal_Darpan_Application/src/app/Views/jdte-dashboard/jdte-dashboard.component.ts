@@ -28,6 +28,7 @@ export class JDTEDashboardComponent {
   public viewAdminDashboardList: any[] = [];
   public viewJDTEStaffDetailList: any[] = [];
   public viewJDTEReleiving: any[] = [];
+  public viewJDTEReleiving_req: any[] = [];
   public viewAdminDashboardListOther: any[] = [];
   public viewAdminDashboardListLeave: any[] = [];
   public viewAdminDashboardAllotment: any[] = [];
@@ -63,29 +64,23 @@ export class JDTEDashboardComponent {
       if (this.StaffMasterList.length > 0) {
         let status = this.StaffMasterList[0].ProfileStatus;
         if (status == EnumEMProfileStatus.Pending || status == EnumEMProfileStatus.Completed || status == EnumEMProfileStatus.Revert || status==EnumEMProfileStatus.LockAndSubmit) {
-          
           if(status == EnumEMProfileStatus.Revert)
           {
             this.sweetAlert2.Confirmation("Your Profile Reverted please Complete your profile Again?", async (result: any) => {
-              // window.open("/bter-em-add-staff-details", "_Self")
               this.router.navigateByUrl('/bter-em-add-staff-details');
             }, 'OK', false);
           }
           if(status == EnumEMProfileStatus.LockAndSubmit)
             {
               this.sweetAlert2.Confirmation("Your Profile is not appoved yet ?", async (result: any) => {
-                // window.open("/bter-em-add-staff-details", "_Self")
-                // this.router.navigateByUrl('/bter-em-add-staff-details');
               }, 'OK', false);
             }
           else
           {
             this.sweetAlert2.Confirmation("Your Profile Is not completed please Complete your profile?", async (result: any) => {
-              // window.open("/bter-em-add-staff-details", "_Self")
               this.router.navigateByUrl('/bter-em-add-staff-details');
             }, 'OK', false);
           }
-
         }
 
       }
@@ -115,17 +110,14 @@ export class JDTEDashboardComponent {
   //   }
   // }
   async GetAllData() {
+    debugger
     this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
     this.searchRequest.UserID=this.sSOLoginDataModel.UserID;
-    // this.searchRequest.IsYearly;
-    // this.sSOLoginDataModel.ExamScheme = this.searchRequest.IsYearly;
-    // this.sSOLoginDataModel.ExamScheme = this.searchRequest.IsYearly;
     this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
-
     if (this.sSOLoginDataModel.RoleID == 2 || this.sSOLoginDataModel.RoleID == 12) {
       this.searchRequest.CommonID = 89;
     }
@@ -148,18 +140,11 @@ export class JDTEDashboardComponent {
       await this.AdminDashDataService.GetEM_JDTEDashData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
           this.viewAdminDashboardList = data['Data'];
-
-          console.log(this.viewAdminDashboardList,"viewAdminDashboardList")
-
-          // Filter based on ListType 'EnrollmentType'
           this.viewJDTEStaffDetailList = this.viewAdminDashboardList.filter(s => s.ListType === 'StaffDetail');
-          // Filter based on ListType 'ExaminationType'
-          this.viewJDTEReleiving = this.viewAdminDashboardList.filter(s => s.ListType === 'Releiving');
-          // Filter based on ListType 'OtherType'
+          this.viewJDTEReleiving = this.viewAdminDashboardList.filter(s => s.ListType === 'Transfer');
+          this.viewJDTEReleiving_req = this.viewAdminDashboardList.filter(s => s.ListType === 'Relieving');
           this.viewAdminDashboardListOther = this.viewAdminDashboardList.filter(s => s.ListType === 'OtherType');
-
         }, (error: any) => console.error(error)
         );
 

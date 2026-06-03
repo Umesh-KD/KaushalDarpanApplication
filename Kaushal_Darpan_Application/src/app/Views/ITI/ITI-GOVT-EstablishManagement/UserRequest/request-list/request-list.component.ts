@@ -16,7 +16,9 @@ import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntake
 import { RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
-
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-request-list',
   standalone: false,
@@ -1022,5 +1024,148 @@ export class UserRequestListComponent implements OnInit {
     }
     catch (ex) { console.log(ex) }
   }
+  exportToExcel(): void {
+
+    const exportData = this.UserRequestList.map((row: any, index: number) => ({
+      'S No': index + 1,
+      'Request Type': row.RequestType || '',
+      'User': row.UserName || '',
+      'Level': row.LevelName || '',
+      'Staff Type': row.StaffType || '',
+      'Post': row.PostName || '',
+      'Office': row.OfficeName || '',
+      'Institute': row.InstituteName || '',
+      'Order No': row.OrderNo || '',
+      'Order Date': row.OrderDate || '',
+      'Last Working Date': row.LastWorkingDate || '',
+      'Joining Date': row.JoiningDate || '',
+      'Request Date': row.RequestDate || '',
+      'Staff Request Status': row.RequestStatus || '',
+      'Relieving Status': row.RelievingStatus || '',
+      'Joining Status': row.JoiningStatus || '',
+      'Request Remarks': row.RequestRemarks || ''
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = [
+      { wch: 8 },
+      { wch: 20 },
+      { wch: 25 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 25 },
+      { wch: 30 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 18 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 20 },
+      { wch: 40 }
+    ];
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'User Requests');
+
+    XLSX.writeFile(wb, 'UserRequests.xlsx');
+  }
+
+  exportToPDF(): void {
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
+
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'Request List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.UserRequestList.map((row: any, index: number) => [
+      index + 1,
+      row.RequestType || '',
+      row.UserName || '',
+      row.LevelName || '',
+      row.StaffType || '',
+      row.PostName || '',
+      row.OfficeName || '',
+      row.InstituteName || '',
+      row.OrderNo || '',
+      row.OrderDate || '',
+      row.LastWorkingDate || '',
+      row.JoiningDate || '',
+      row.RequestDate || '',
+      row.RequestStatus || '',
+      row.RelievingStatus || '',
+      row.JoiningStatus || '',
+      row.RequestRemarks || ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18, // space below heading
+      head: [[
+        'S No',
+        'Request Type',
+        'User',
+        'Level',
+        'Staff Type',
+        'Post',
+        'Office',
+        'Institute',
+        'Order No',
+        'Order Date',
+        'Last Working Date',
+        'Joining Date',
+        'Request Date',
+        'Request Status',
+        'Relieving Status',
+        'Joining Status',
+        'Remarks'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 6,
+        cellPadding: 1.5,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1,
+        overflow: 'linebreak'
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+      columnStyles: {
+        16: { cellWidth: 35 } // Remarks column
+      },
+
+      margin: { top: 10 }
+    });
+
+    doc.save('UserRequests.pdf');
+  }
+
 
 }

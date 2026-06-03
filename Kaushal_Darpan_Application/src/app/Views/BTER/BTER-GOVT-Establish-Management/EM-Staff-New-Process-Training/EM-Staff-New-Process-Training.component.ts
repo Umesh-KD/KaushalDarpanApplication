@@ -198,7 +198,7 @@ import * as XLSX from 'xlsx';
     }
     async StaffTrainingDetailsNewTraining_GetData() {
       debugger;
-
+      this.StaffTrainingDetailsNewTrainingDataList = [];
       try {
         this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
         this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
@@ -419,7 +419,27 @@ import * as XLSX from 'xlsx';
     async onChangeSearchStatus() {
       if (((this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && EnumStaffTrainingStatus.Applied == this.SearchStatus)) {
         this.ShowCheckBoxId = 1;
+
+        this.StaffTrainingDetailsNewTrainingDataList =
+          this.StaffTrainingDetailsNewTrainingDataList.filter(
+            (item: any) =>
+              item.InstituteID == this.sSOLoginDataModel.InstituteID
+             && item.EmpRoleID != EnumRole.Principal &&
+            item.EmpRoleID != EnumRole.PrincipalNon
+          );
       }
+      else if (((this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && (EnumStaffTrainingStatus.Reject == this.SearchStatus || EnumStaffTrainingStatus.PrincipalApprove == this.SearchStatus))) {
+        this.ShowCheckBoxId = 0;
+
+        this.StaffTrainingDetailsNewTrainingDataList =
+          this.StaffTrainingDetailsNewTrainingDataList.filter(
+            (item: any) =>
+              item.InstituteID == this.sSOLoginDataModel.InstituteID
+              && item.EmpRoleID != EnumRole.Principal &&
+              item.EmpRoleID != EnumRole.PrincipalNon
+          );
+      }
+
       else if (((this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_GAZETTED_STAFF || this.sSOLoginDataModel.RoleID == EnumRole.EM_ADTE_NON_GAZETTED_STAFF) && EnumStaffTrainingStatus.PrincipalApprove == this.SearchStatus)) {
         this.ShowCheckBoxId = 1;
       } 
@@ -448,7 +468,7 @@ import * as XLSX from 'xlsx';
     exportToExcelNew(): void {
 
       if (this.StaffTrainingDetailsNewTrainingDataList.length == 0) {
-        alert('No records available for Excel export.');
+        this.toastr.warning('No records available for Excel export.');
         return;
       }
 

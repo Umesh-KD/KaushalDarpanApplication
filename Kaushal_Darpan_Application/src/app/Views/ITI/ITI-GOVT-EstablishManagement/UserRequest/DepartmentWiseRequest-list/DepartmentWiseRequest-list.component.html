@@ -98,9 +98,19 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <div class="flex justify-end flex-wrap items-center">
-        <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
-        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+
+      <div>
+        <a href="javascript:void(0);"
+           class="btn bg-info text-white me-1"
+           (click)="exportToExcel()">
+          <i class="ti ti-download"></i> Download Excel
+        </a>
+
+        <a href="javascript:void(0);"
+           class="btn bg-danger text-white"
+           (click)="exportToPDF()">
+          <i class="ti ti-file-type-pdf"></i> Download PDF
+        </a>
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">

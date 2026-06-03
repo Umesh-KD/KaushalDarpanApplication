@@ -127,6 +127,7 @@
               </th>
               <th>Sr. No.</th>
               <th class="text-left">Company</th>
+              <th class="text-left">Institute</th>
               <th class="text-left">Event Title</th>
 
               <th class="text-left">Event Type</th>
@@ -148,6 +149,7 @@
               </td>
               <td>{{idx+1}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyName}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.InstituteName}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventName}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventType}}</td>
               <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Event}}</td>
@@ -194,7 +196,7 @@
                     <i class="ti ti-trash"></i>
                   </a>
 
-                  <a [routerLink]="'/event-consent-list'" [queryParams]="{ id:row.EventID}"
+                  <a [routerLink]="'/event-consent-list'" [queryParams]="{ id:row.EventID,returnUrl: router.url}"
                      title="View Consent">
 
                     <i class="ti ti-users-group"></i>

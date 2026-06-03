@@ -17,6 +17,9 @@ import { UserMasterService } from '../../../../Services/UserMaster/user-master.s
 import { AssignRoleRightsService } from '../../../../Services/AssignRoleRights/assign-role-rights.service';
 import { AssignRoleRightsDataModel, UserMasterModel } from '../../../../Models/UserMasterDataModel';
 import { ITI_InstructorTechnicalCITSQualification } from '../../../../Models/ITI/ItiInstructorDataModel';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-ITI-Govt-EM-ZonalOfficeList',
   standalone: false,
@@ -44,6 +47,9 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public ErrorMessage: string = '';
 /*  public RoleMasterList: any[] = [];*/
   public DesignationMasterList: any[] = [];
+  public CompanyMasterList: any[] = [];
+  public Districtlist: any[] = [];
+  public ItiDDLlist: any[] = [];
   public UserOfficePostDetails: any[] = [];
   
   public ITIGovtEMOFFICERSList: any[] = [];
@@ -105,6 +111,11 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public StaffServiceDetailsDataList: any = [];
   public isUpdateSubmitted: boolean = false;
   public _EnumOffice = EnumOffice;
+  TransferFormGroup!: FormGroup;
+  public isTransferSubmitted = false;
+  public TransferRequest: any = {};
+  public ListITICollegeByManagement: any = [];
+  public StaffPostTypeList: any = [];
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -162,6 +173,20 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
       CurrentPost: [{ value: '', disabled: true }], 
     });
 
+    this.TransferFormGroup = this.formBuilder.group({
+      Name: [{ value: '', disabled: true }],
+      SSOID: [{ value: '', disabled: true }],
+      MobileNo: [{ value: '', disabled: true }],
+      EmailID: [{ value: '', disabled: true }],
+      CurrentInstitute: [{ value: '', disabled: true }],
+      //CurrentInstitute: [''],
+      InstituteID: [0, [DropdownValidators]],
+      //PostID: [0],
+      Remark: [''],
+      StaffPostTypeID: [0, [DropdownValidators]],
+      PostID:[0,[DropdownValidators]]
+    });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
 
@@ -181,7 +206,14 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     await this.GetZonalList();
     await this.GetLevelList();
     await this.GetStaffTypeData(); 
-    await this.GetRoleMasterData();   
+    await this.GetRoleMasterData();
+    await this.getITICollege();   
+    await this.getInstituteMasterList();
+    await this.GetStaffPostTypeList();
+    //await this.GetPostListnew();
+
+    await this.getItiNameAndCode();   
+    await this.GetDistrictMaster();   
 
     //this.filteredStatusList = [
     //  { ID: 1, Name: 'Approved' },
@@ -193,7 +225,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
   get _UpdatePostFormGroup() { return this.UpdatePostFormGroup.controls; }
-  
+  get _TransferFormGroup() { return this.TransferFormGroup.controls;}
 
   async GetStatusList() {
     
@@ -226,6 +258,10 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
     this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID
+    if (this.searchRequest.OfficeID != 11) {
+      this.searchRequest.InstituteID = 0
+      this.searchRequest.DistrictID=0
+    }
     debugger
     try {
       this.loaderService.requestStarted();
@@ -620,6 +656,54 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
    /* this.routers.navigate(['/ITIGOVTEMPersonalDetailsApplicationTab'])*/
   }
 
+  exportToExcel(): void {
+
+    const exportData = this.ZonalList.map((row: any, index: number) => ({
+      'Sr. No.': index + 1,
+
+      'Employee ID / Name':
+        `${row.Name || ''} (${row.SSOID || ''})`,
+
+      'Service Category':
+        row.ServiceName || '',
+
+      'Mobile / Email':
+        `${row.MobileNo || ''} (${row.EmailID || ''})`,
+
+      'Designation':
+        `${row.StaffTypeName || ''}${row.PostName ? ' / ' + row.PostName : ''}`,
+
+      'Level Name or Office Name':
+        `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
+
+      'Post Deployed':
+        row.PostName || '',
+
+      'Profile Status (Remark)':
+        `${row.ProfileStatus === 'Approve' ? 'Approved' : (row.ProfileStatus || '')}` +
+        `${row.Remark ? ' (' + row.Remark + ')' : ''}`,
+
+      'Is HOD':
+        row.IsHod || ''
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    // Auto column width
+    const colWidths = Object.keys(exportData[0] || {}).map(key => ({
+      wch: Math.max(
+        key.length,
+        ...exportData.map((r: any) => (r[key] ? r[key].toString().length : 0))
+      ) + 2
+    }));
+
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'ITI Govt Office List');
+
+    XLSX.writeFile(wb, 'ITI_Govt_Office_Employee_List.xlsx');
+  }
 
   CloseModalPopup() {
     this.modalService.dismissAll();
@@ -887,12 +971,14 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
  
 
 
-  async getInstituteMasterList() {
+  async getInstituteMasterList(currentInstitute?: string) {
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDLList = data.Data;
+         this.InstituteMasterDDLList = data.Data.filter(
+          (x: any) => x.InstituteName !== currentInstitute
+        );
       })
     } catch (error) {
       console.error(error);
@@ -1128,4 +1214,334 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     await this.GetEmployeeServiceDetails_ITI_EM(StaffUserID);
     this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
   }
+
+
+  exportToPDF() {
+
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'ITI Govt Office Employee List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.ZonalList.map((row: any, index: number) => [
+      index + 1,
+      `${row.Name || ''} (${row.SSOID || ''})`,
+      row.ServiceName || '',
+      `${row.MobileNo || ''} (${row.EmailID || ''})`,
+      `${row.StaffTypeName || ''}${row.PostName ? ' / ' + row.PostName : ''}`,
+      `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
+      row.PostName || '',
+      `${row.ProfileStatus === 'Approve' ? 'Approved' : (row.ProfileStatus || '')}${row.Remark ? ' (' + row.Remark + ')' : ''
+      }`,
+      row.IsHod || ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr. No.',
+        'Employee ID / Name',
+        'Service Category',
+        'Mobile / Email',
+        'Designation',
+        'Level Name / Office Name',
+        'Post Deployed',
+        'Profile Status (Remark)',
+        'Is HOD'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      }
+    });
+
+    doc.save('ITI_Govt_Office_Employee_List.pdf');
+  }
+  async GetGovtITI() {
+    try {
+
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData("GovtIti")
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.ItiDDLlist = data['Data'];
+
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async getItiNameAndCode() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('GovtIti',0, this.searchRequest.DistrictID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CompanyMasterList = data['Data'];   // full list
+
+
+        }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetDistrictMaster() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDistrictMaster().then((data: any) => {
+        this.Districtlist = data.Data;
+      });
+    } catch (error) {
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
+async openTransferModal(content: any, row: any) {
+
+  this.TransferRequest = row;
+
+  await this.GetStaffPostTypeList();
+
+  this.TransferFormGroup.patchValue({
+    Name: row.Name,
+    SSOID: row.SSOID,
+    MobileNo: row.MobileNo,
+    EmailID: row.EmailID,
+
+    CurrentInstitute: row.InstituteName,
+
+    InstituteID: 0,
+    StaffPostTypeID: 0,
+    PostID: 0,
+    Remark: ''
+  });
+
+  this.modalReference = this.modalService.open(content, {
+    size: 'lg',
+    backdrop: 'static'
+  });
+  await this.getInstituteMasterList(row.InstituteName);
+}
+
+closeTransferModal() {
+  this.modalService.dismissAll();
+}
+
+saveTransfer() {
+
+  debugger
+  this.isTransferSubmitted = true;
+
+  if (this.TransferFormGroup.invalid) {
+    return;
+  }
+const formData = this.TransferFormGroup.getRawValue();
+  const request = {
+
+    UserID: this.TransferRequest.StaffUserID,
+    OfficeID: 11,
+    PostID: formData.PostID,
+    DepartmentID:this.sSOLoginDataModel.DepartmentID,
+    LevelID:this.TransferRequest.LevelID,
+    DesignationID:formData.PostID,
+    InstituteID: formData.InstituteID,
+    StaffPostTypeID: formData.StaffPostTypeID,
+    CreatedBy: this.sSOLoginDataModel.UserID,
+    IsAdditionPost: true,
+    Remark: formData.Remark,
+};
+
+
+  console.log('post data',request);
+
+  // try {
+  //      this.ITIGovtEMStaffMasterService.ITI_IsAdditionUserOfficeSave(request).then(async (data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       if(data.State === EnumStatus.Success){
+  //         this.StaffServiceDetailsDataList = data.Data;
+  //          this.toastr.success('Record Saved Successfully');
+  //       }
+  //       else if(data.State === EnumStatus.Warning){
+  //         this.StaffServiceDetailsDataList = data.Data;
+  //          this.toastr.success('Record Already exist');
+  //       }
+  //       else {
+  //          this.toastr.success(this.SuccessMessage)
+  //          this.toastr.success('Some Error Occured');
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.error
+  //   }
+
+
+  try {
+
+  this.ITIGovtEMStaffMasterService
+    .ITI_IsAdditionUserOfficeSave(request)
+    .then((data: any) => {
+
+      if (data.State === EnumStatus.Success) {
+
+        this.toastr.success(
+          data.Message || 'Record Saved Successfully'
+        );
+
+        this.closeTransferModal();
+
+      }
+      else if (data.State === EnumStatus.Warning) {
+
+        this.toastr.warning(
+          data.ErrorMessage || 'Duplicate record already exists.'
+        );
+
+      }
+      else {
+
+        this.toastr.error(
+          data.ErrorMessage || 'Some error occurred.'
+        );
+
+      }
+
+    })
+    .catch((error) => {
+
+      console.error(error);
+
+      this.toastr.error(
+        'Some error occurred while communicating with server.'
+      );
+
+    });
+
+}
+catch (error) {
+
+  console.error(error);
+
+  this.toastr.error('Some error occurred.');
+
+}
+//this.closeTransferModal();
+  
+}
+
+
+async getITICollege() {
+    try {
+      this.searchRequestITi.Action = "_ITICollegeByManagementType";
+      this.searchRequestITi.FinancialYearID = 9;
+      this.searchRequestITi.ManagementTypeId = 0;
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('GovtIti')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ListITICollegeByManagement = data['Data'];
+
+          this.ListITICollegeByManagement = this.ListITICollegeByManagement.filter((item: any) => item.ID == this.sSOLoginDataModel.InstituteID)
+
+          console.log(this.ListITICollegeByManagement, "ListITICollegeByManagement")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async GetStaffPostTypeList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('PostType').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffPostTypeList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async GetPostListnew() {
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PostList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async onPostTypeChange() {
+
+  this.formData.StaffPostTypeID =
+      this.TransferFormGroup.value.StaffPostTypeID;
+
+  await this.GetPostListnew();
+}
+
 }

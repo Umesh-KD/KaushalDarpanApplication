@@ -23,25 +23,36 @@
         </div>
 
         <form [formGroup]="SearchFormGroup">
-          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-6">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-2">SSOID/EmployeeID/College Code</label>
+              <input type="text" class="form-input" id="SSOID" name="SSOID" placeholder="Enter SSOID/Employee ID/College Code"
+                formControlName="SSOID" 
+                [(ngModel)]="searchReq.SSOID">
+            </div>
+          </div>
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-6">
 
             <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office Level</label>
               <select class="form-select" [(ngModel)]="searchReq.LevelID" formControlName="LevelID" (change)="GetOfficeList_search()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
               </select>
             </div>
             <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office</label>
               <select class="form-select" [(ngModel)]="searchReq.OfficeID" formControlName="OfficeID" (change)="OfficeITIWiseCollege_search()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of OfficeList_search" [value]="item.ID">{{item.Name}}</option>
               </select>
             </div>
+          </div>
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-6">
 
             <div *ngIf="searchReq.LevelID==2 &&  (searchReq.OfficeID== 11 ||  searchReq.OfficeID== 15)">
-              <label> Division<span class="StarMarking">*</span></label>
+              <label> Division</label>
               <select formControlName="DivisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change_search()"
                       [(ngModel)]="searchReq.DivisionID">
                 <option value="0">--Select--</option>
@@ -49,21 +60,22 @@
               </select>
             </div>
 
-            <div *ngIf="searchReq.LevelID==2 && searchReq.OfficeID== 11">
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
-              <select class="form-select" [(ngModel)]="searchReq.InstituteID" formControlName="InstituteID">
-                <option value="0">Choose Option</option>
-                <option *ngFor="let item of ListITICollegeByManagement_search" [value]="item.ID">{{item.Name}}</option>
+            <div *ngIf="searchReq.LevelID==2 && (searchReq.OfficeID== 15 || searchReq.OfficeID== 11)">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District:
+              </label>
+              <select class="form-select" [(ngModel)]="searchReq.NodalDistrictID" formControlName="NodalDistrictID"
+                (change)="getITICollege_search()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DistrictList_search" [value]="item.ID">{{item.Name}}</option>
               </select>
             </div>
 
-            <div *ngIf="searchReq.LevelID==2 && searchReq.OfficeID== 15">
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                District:<span class="StarMarking">*</span>
-              </label>
-              <select class="form-select" [(ngModel)]="searchReq.NodalDistrictID" formControlName="NodalDistrictID">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of DistrictList_search" [value]="item.ID">{{item.Name}}</option>
+            <div *ngIf="searchReq.LevelID==2 && searchReq.OfficeID== 11">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+              <select class="form-select" [(ngModel)]="searchReq.InstituteID" formControlName="InstituteID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ListITICollegeByManagement_search" [value]="item.ID">{{item.Name}}</option>
               </select>
             </div>
 
@@ -87,22 +99,87 @@
         </div>
 
         <form [formGroup]="groupForm">
-          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-6">
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Staff: <span class="StarMarking">*</span></label>
-              <select class="form-select" id="StaffID" [(ngModel)]="request.StaffID" formControlName="StaffID">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of StaffListDDL" [value]="item.StaffID">{{item.Name}}</option>
-              </select>
-              <div *ngIf="isSubmitted && _groupForm.StaffID.errors" class="text-danger">
-                <p *ngIf="!_groupForm.StaffID.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>This
-                  field is required .!
-                </p>
-              </div>
+
+              <ng-select [(ngModel)]="request.StaffID"
+                       formControlName="StaffID"
+                       [clearable]="false" [searchable]="true"
+                       (ngModelChange)="GetStaffDetailsByStaffID($event)">
+                <ng-option [value]="0" selected>--- Select ---</ng-option>
+                <ng-container *ngFor="let item of StaffListDDL;">
+                  <ng-option [value]="item.StaffID">{{item.Name}}</ng-option>
+                </ng-container>
+              </ng-select>
+              
+            </div>
+          </div>
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Employee ID
+              </label>
+              <input type="text" class="form-input" id="txtEmployeeID" name="txtEmployeeID" 
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="formData.EmployeeID" 
+                placeholder="Enter Employee ID" 
+                readonly disabled/>
+
             </div>
 
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Current Office
+              </label>
+              <input type="text" class="form-input" id="txtEmployeeID" name="txtEmployeeID" 
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="formData.OfficeName" 
+                placeholder="Enter Office Name" 
+                readonly disabled/>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Current Designation
+              </label>
+              <input type="text" class="form-input" id="txtEmployeeID" name="txtEmployeeID" 
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="formData.Designation" 
+                placeholder="Enter Designation" 
+                readonly disabled/>
+            </div>
+
+            <div *ngIf="formData.OfficeID == 11">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Current Institute
+              </label>
+              <input type="text" class="form-input" id="txtEmployeeID" name="txtEmployeeID" 
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="formData.InstituteName" 
+                placeholder="Enter Institute Name" 
+                readonly disabled/>
+            </div>
+
+            <div *ngIf="formData.IsZonalOffice == 1">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Current Division
+              </label>
+              <input type="text" class="form-input" id="txtEmployeeID" name="txtEmployeeID" 
+                [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="formData.Division" 
+                placeholder="Enter Division" 
+                readonly disabled/>
+            </div>
+
+          </div>
+
+
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-6">
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Request Type: <span class="StarMarking">*</span></label>
               <select class="form-select" id="ddlRequestType" [(ngModel)]="request.RequestType" formControlName="ddlRequestType" (change)="FunctionRequestType()">

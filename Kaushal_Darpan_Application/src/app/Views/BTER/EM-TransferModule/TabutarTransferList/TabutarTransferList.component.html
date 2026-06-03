@@ -145,7 +145,7 @@
           <th class="left">To Office</th>
           <th class="left">To Institute</th>
           <th class="left">Reason Description</th>
-          <th align="left">Supporting Documents</th>
+          <th align="left">Order Supporting Documents</th>
           <th align="left">Action</th>
         </tr>
       </thead>
@@ -276,7 +276,7 @@
 
 
 
-            <div *ngIf="IsBranchshow== 1">
+            <div *ngIf="IsBranchshow == 1">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch <span class="StarMarking">*</span></label>
               <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
                       [(ngModel)]="RequestManual.BranchID" (change)="BranchWiseEmployee()">

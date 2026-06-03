@@ -12,7 +12,9 @@ import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMast
 import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
 import { HttpClient } from '@angular/common/http';
-
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-user-request-list-transfer',
   standalone: false,
@@ -453,5 +455,145 @@ export class UserRequestListTransferComponent {
     }
   }
 
+  exportToExcel(): void {
 
+    const exportData = this.UserRequestList.map((row: any, index: number) => ({
+      'S No': index + 1,
+      'Request Type': row.RequestType || '',
+      'User': row.UserName || '',
+      'Transfer Level': row.LevelName || '',
+      'Transfer Office': row.OfficeName || '',
+      'Transfer Post': row.PostName || '',
+      'Relieving Institute': row.RelievingInstitute || '',
+      'Transfer Institute': row.InstituteName || '',
+      'Staff Type': row.StaffType || '',
+      'Order No': row.OrderNo || '',
+      'Order Date': row.OrderDate || '',
+      'Relieving Date': row.RequestDate || '',
+      'Joining Date': row.JoiningDate || '',
+      'Request Date': row.RequestDate || '',
+      'Staff Request Status': row.RequestStatus || '',
+      'Request Remarks': row.RequestRemarks || ''
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = [
+      { wch: 8 },
+      { wch: 20 },
+      { wch: 25 },
+      { wch: 20 },
+      { wch: 25 },
+      { wch: 25 },
+      { wch: 35 },
+      { wch: 35 },
+      { wch: 20 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 20 },
+      { wch: 40 }
+    ];
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Transfer Requests');
+
+    XLSX.writeFile(wb, 'TransferRequests.xlsx');
+  }
+
+
+
+  exportToPDF(): void {
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'User Request List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.UserRequestList.map((row: any, index: number) => [
+      index + 1,
+      row.RequestType || '',
+      row.UserName || '',
+      row.LevelName || '',
+      row.OfficeName || '',
+      row.PostName || '',
+      row.RelievingInstitute || '',
+      row.InstituteName || '',
+      row.StaffType || '',
+      row.OrderNo || '',
+      row.OrderDate || '',
+      row.RequestDate || '',
+      row.JoiningDate || '',
+      row.RequestDate || '',
+      row.RequestStatus || '',
+      row.RequestRemarks || ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18, // Space below heading
+
+      head: [[
+        'S No',
+        'Request Type',
+        'User',
+        'Transfer Level',
+        'Transfer Office',
+        'Transfer Post',
+        'Relieving Institute',
+        'Transfer Institute',
+        'Staff Type',
+        'Order No',
+        'Order Date',
+        'Relieving Date',
+        'Joining Date',
+        'Request Date',
+        'Request Status',
+        'Remarks'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 6,
+        cellPadding: 1.5,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1,
+        overflow: 'linebreak'
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+      columnStyles: {
+        6: { cellWidth: 30 },
+        7: { cellWidth: 30 },
+        15: { cellWidth: 35 }
+      }
+    });
+
+    doc.save('UserRequestList.pdf');
+  }
 }

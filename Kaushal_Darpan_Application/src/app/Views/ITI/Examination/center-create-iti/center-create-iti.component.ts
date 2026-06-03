@@ -307,7 +307,7 @@ export class CenterCreateITIComponent implements OnInit {
     });
 
     if (filteredData.length === 0) {
-      alert('No data with Marked = true to export.');
+      this.toastr.warning('No data with Marked = true to export.');
       return;
     }
 

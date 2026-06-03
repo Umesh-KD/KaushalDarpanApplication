@@ -17,6 +17,7 @@ import { PublicInfoDataModel } from '../../../../Models/PublicInfoDataModel';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { CalendarEventModel } from '../../../../Models/StaffMasterDataModel';
 import { AttendanceServiceService } from '../../../../Services/AttendanceServices/attendance-service.service';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-SetCalendar',
@@ -74,6 +75,7 @@ export class SetCalendarComponent implements OnInit {
     private routers: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     private attendanceServiceService: AttendanceServiceService,
+    private swal2: SweetAlert2
 
   ) { this.populateMonthDays(); }
 
@@ -291,8 +293,8 @@ export class SetCalendarComponent implements OnInit {
   if (day < 1 || day > this.monthDays.length) return;
 
   const existingEvent = this.getEvent(day);
-  if (existingEvent && existingEvent.EventType === 'Holiday') {
-    alert(`Holiday: ${existingEvent.Remark}`);
+    if (existingEvent && existingEvent.EventType === 'Holiday') {
+      this.swal2.Warning(`Holiday: ${existingEvent.Remark}`);
     return;
   }
 
@@ -302,8 +304,8 @@ export class SetCalendarComponent implements OnInit {
 
   // Validate Event Type (only allow valid types)
   const validEventTypes = ['Holiday', 'Exam', 'Other'];
-  if (!validEventTypes.includes(eventType)) {
-    alert("Invalid Event Type. Please select from 'Holiday', 'Exam', or 'Other'.");
+    if (!validEventTypes.includes(eventType)) {
+      this.toastr.warning("Invalid Event Type. Please select from 'Holiday', 'Exam', or 'Other'.");
     return;
   }
 

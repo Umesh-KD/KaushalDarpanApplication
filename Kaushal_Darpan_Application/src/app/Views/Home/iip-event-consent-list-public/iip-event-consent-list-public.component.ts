@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
@@ -29,7 +29,7 @@ export class IipEventConsentListPublicComponent {
 
   public CompanyEventsList: any = []
   public EventConsentDataList: any = []
-
+  public ReturnUrl: string = '';
   modalReference: NgbModalRef | undefined;
   public _EnumRole = EnumRole;
 
@@ -58,6 +58,7 @@ export class IipEventConsentListPublicComponent {
     private loaderService: LoaderService, 
     private modalService: NgbModal,
     private fb: FormBuilder,
+    private routers: Router, 
   ) { }
 
   async ngOnInit() {
@@ -136,4 +137,18 @@ export class IipEventConsentListPublicComponent {
     this.startInTableIndex = (this.currentPage - 1) * this.pageSize + 1;
     this.endInTableIndex = Math.min(this.currentPage * this.pageSize, this.totalRecords);
   }
+
+  GoBack() {
+
+  //this.routers.navigate(['/IIPCompanyMaster']);
+
+  if (this.ReturnUrl) {
+
+   this.routers.navigateByUrl(this.ReturnUrl);
+
+  } else {
+
+   this.routers.navigate(['/IIPCompanyMaster']);
+  }
+}
 }

@@ -9,7 +9,7 @@ import { CommonSubjectService } from '../../../Services/CommonSubjects/common-su
 import { CommonSubjectMasterModel } from '../../../Models/CommonSubjectMasterModel';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumDepartment, EnumStatus } from '../../../Common/GlobalConstants';
 import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
 import { CommonSubjectDetailsMasterModel } from '../../../Models/CommonSubjectDetailsMasterModel';
 
@@ -43,7 +43,8 @@ export class AddCommonSubjectsComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public settingsMultiselect: object = {};
   public SubjectCodeMasterDDLList: any[] = [];
-  public filteredSubjectCodes: any[] =[];
+  public filteredSubjectCodes: any[] = [];
+  public IsCommonSubjectMasterDateOpen: number = 0;
 
   constructor(private commonMasterService: CommonFunctionService,
     private commonSubjectService: CommonSubjectService,
@@ -87,6 +88,8 @@ export class AddCommonSubjectsComponent implements OnInit {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CommonSubjectId = Number(this.activatedRoute.snapshot.queryParamMap.get('commonSubjectId')?.toString());
+
+    await this.GetMasterDateConfigData();
     await this.GetSemestarMatserDDL();
     await this.getStreamMasterList();
     //await this.GetSubjectCodeMasterDDL();
@@ -422,5 +425,22 @@ export class AddCommonSubjectsComponent implements OnInit {
   }
   public onDeSelectAll(items: any) {
     console.log(items);
+  }
+
+  async GetMasterDateConfigData() {
+    var data = {
+      DepartmentID: EnumDepartment.BTER,
+      CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
+      AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Key: EnumConfigurationType.Common_Subject_Master,
+      SSOID: this.sSOLoginDataModel.SSOID
+    }
+    await this.commonMasterService.GetDateConfigSetting(data)
+      .then((resp: any) => {
+        let data = JSON.parse(JSON.stringify(resp));
+        this.IsCommonSubjectMasterDateOpen = data['Data'][0][EnumConfigurationType.Common_Subject_Master];
+      }, (error: any) => console.error(error)
+      );
   }
 }

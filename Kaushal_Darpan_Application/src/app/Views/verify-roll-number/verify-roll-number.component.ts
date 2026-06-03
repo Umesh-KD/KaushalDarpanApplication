@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ToastrService } from 'ngx-toastr/toastr/toastr.service';
+import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

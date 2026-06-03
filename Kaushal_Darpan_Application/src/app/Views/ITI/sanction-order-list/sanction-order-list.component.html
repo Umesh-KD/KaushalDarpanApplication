@@ -125,7 +125,7 @@
           <tr>
             <th>S.No</th>
             <th>Sanction Type</th>
-            <th *ngIf="sSOLoginDataModel.RoleID!=_enumrole.DTE_TrainingT2_establishment">Name</th>
+            <th>Name</th>
             <th>Order No</th>
             <th>Order Date</th>
       
@@ -138,7 +138,7 @@
           <tr *ngFor="let row of ExaminersList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td class="text-center">{{idx+1}}</td>
             <td class="text-center">{{row.ParentName}}</td>
-            <td *ngIf="sSOLoginDataModel.RoleID!=_enumrole.DTE_TrainingT2_establishment" class="text-center">{{row.OrderTypeName}}</td>
+            <td class="text-center">{{row.OrderTypeName}}</td>
             <td class="text-center">{{row.OrderNo}}</td>
             <td class="text-center">{{row.OrderDate}}</td>
           

@@ -93,7 +93,19 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div>
+        <a href="javascript:void(0);"
+           class="btn bg-info text-white me-1"
+           (click)="exportToExcel()">
+          <i class="ti ti-download"></i> Download Excel
+        </a>
 
+        <a href="javascript:void(0);"
+           class="btn bg-danger text-white"
+           (click)="exportToPDF()">
+          <i class="ti ti-file-type-pdf"></i> Download PDF
+        </a>
+      </div>
       <!--<div class="flex justify-end flex-wrap items-center">-->
       <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
       <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
@@ -192,18 +204,22 @@
                   *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestStatusId!=247 && row.RequestTypeID==1"                   
                   (click)="onSubmit(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i>
                 </a> -->
-                <a href="javascript:void(0);" title="Staff Request" class="btn btn-primary btn-sm text-white" 
+                <!--<a href="javascript:void(0);" title="Staff Request" class="btn btn-primary btn-sm text-white" 
                   *ngIf="row.RequestTypeID === 1 && row.RelievingStatusId==247"                   
                   (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)">Make Joining Request
-                </a>
+                </a>-->
 
               </div>
             </td>
-            <td align="left">
-              <a href="javascript:void(0);" title="Staff Request" class="btn btn-primary btn-sm text-white" 
-                *ngIf="row.RequestTypeID === 1 && row.RelievingStatusId==247"                   
-                (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)">Make Joining Request
-              </a>
+            <td align="center">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);"
+                   title="Make Joining Request"
+                   *ngIf="row.RequestTypeID == 1 && row.RelievingStatusId == 247"
+                   (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)">
+                  <i class="ti ti-circle-plus fs-4 text-primary"></i>
+                </a>
+                </div>
             </td>
 
 

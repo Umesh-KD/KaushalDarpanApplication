@@ -15,7 +15,9 @@ import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti
 import { ITICollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { ItiTradeSearchModel, StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
-
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-ITI-Govt-AddEstablish',
   standalone: false,
@@ -126,13 +128,13 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       ddlTrade: [''],
       ddlTechnician: [''],
       ddlITICollegeTrade: ['', [DropdownValidators]],
-      txtSSOID: [{ value: '', disabled: true }, [Validators.required]],
+      txtSSOID: [{ value: '' }, [Validators.required]],
       txtName: [{ value: '', disabled: true }],
       txtMobileNo: [{ value: '', disabled: true }],
       txtEmailID: [{ value: '', disabled: true }],
       ddlHostel: [''],
-      ddlPost: [{ value: '', disabled: true }, [DropdownValidators]],
-      StaffPostTypeID: [{ value: 0, disabled: true }, [DropdownValidators]],
+      ddlPost: [{ value: ''  }, [DropdownValidators]],
+      StaffPostTypeID: [{ value: 0 }, [DropdownValidators]],
     })
 
     this.QueryReqFormGroup = this.formBuilder.group({
@@ -916,7 +918,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.Swal2.Confirmation("Are you sure you want to delete hostel warden?", async (result: any) => {
       if (result.isConfirmed) {
 
-        alert(SSOID);
+        //alert(SSOID);
         try {
           this.loaderService.requestStarted();
 
@@ -1765,5 +1767,136 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
   }
 
+  exportToPDF(): void {
 
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'Govt Establish Info Details',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.StaffMasterList.map((row: any, index: number) => [
+      index + 1,
+      row.Name || '',
+      row.SSOID || '',
+      row.ServiceName || '',
+      row.MobileNumber || '',
+      row.DesignationName || '',
+      row.OfficeName || '',
+      row.DesignationName || '',
+      row.StaffType || '',
+      this.getProfileStatus(row.ProfileStatus)
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr. No.',
+        'Employee Name',
+        'Employee Id',
+        'Service Category',
+        'Mobile No',
+        'Designation Name',
+        'Office Name',
+        'Post Deployed',
+        'Cadre',
+        'Profile Status'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1,
+        cellPadding: 2
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      }
+    });
+
+    doc.save('Govt_Establish_Info_Details.pdf');
+  }
+  exportToExcel(): void {
+
+    const exportData = this.StaffMasterList.map((row: any, index: number) => ({
+      'Sr. No.': index + 1,
+      'Employee Name': row.Name || '',
+      'Employee Id': row.SSOID || '',
+      'Service Category': row.ServiceName || '',
+      'Mobile No': row.MobileNumber || '',
+      'Designation Name': row.DesignationName || '',
+      'Office Name': row.OfficeName || '',
+      'Post Deployed': row.DesignationName || '',
+      'Cadre': row.StaffType || '',
+      'Profile Status': this.getProfileStatus(row.ProfileStatus)
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    ws['!cols'] = [
+      { wch: 10 }, // Sr No
+      { wch: 30 }, // Employee Name
+      { wch: 20 }, // Employee Id
+      { wch: 25 }, // Service Category
+      { wch: 18 }, // Mobile
+      { wch: 30 }, // Designation
+      { wch: 35 }, // Office
+      { wch: 25 }, // Post Deployed
+      { wch: 20 }, // Cadre
+      { wch: 20 }  // Profile Status
+    ];
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Staff List');
+
+    XLSX.writeFile(wb, 'StaffList.xlsx');
+  }
+  getProfileStatus(status: number): string {
+
+    switch (status) {
+      case 0:
+        return 'Pending';
+
+      case 1:
+        return 'Complete';
+
+      case 2:
+        return 'Final Submit';
+
+      case 3:
+        return 'Approve';
+
+      case 4:
+        return 'Revert';
+
+      case 5:
+        return 'Reject';
+
+      default:
+        return '';
+    }
+  }
 }

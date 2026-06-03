@@ -156,7 +156,7 @@ export class EM_TrainingDetailsListComponent {
   exportToExcelNew(): void {
 
     if (this.StaffTrainingDetailsNewTrainingDataList.length == 0) {
-      alert('No records available for Excel export.');
+      this.toastr.warning('No records available for Excel export.');
       return;
     }
 
@@ -220,7 +220,7 @@ export class EM_TrainingDetailsListComponent {
     ];
 
     if (this.StaffTrainingDetailsCompletedTrainingDataList.length == 0) {
-      alert('No records available for Excel export.');
+      this.toastr.warning('No records available for Excel export.');
       return;
     }
 

@@ -2,28 +2,25 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
+
+import { TableSearchFilterPipe } from '../../../../Pipes/table-search-filter.pipe';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
-import { StudentStatusHistoryModule } from '../../../Student/student-status-history/student-status-history.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { StructuredSummaryListComponent } from './StructuredSummaryList.component';
-import { StructuredSummaryListRoutingModule } from './StructuredSummaryList-routing.module';
-
-
+import { ITIEstablishmentDashboardComponent } from './iti-establishment-dashboard.component';
+import { ITIEstablishmentDashboardRoutingModule } from './iti-establishment-dashboard-routing.module';
 
 @NgModule({
   declarations: [
-    StructuredSummaryListComponent,
+    ITIEstablishmentDashboardComponent
   ],
   imports: [
     CommonModule,
-    StructuredSummaryListRoutingModule, 
-    FormsModule, 
-    ReactiveFormsModule, 
-    CommonModule, 
-    LoaderModule, 
+    ITIEstablishmentDashboardRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    LoaderModule,
     TableSearchFilterModule,
-    StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
   ]
 })
-export class StructuredSummaryListModule { }
+export class ITIEstablishmentDashboardModule { }
