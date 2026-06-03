@@ -1382,7 +1382,7 @@ const formData = this.TransferFormGroup.getRawValue();
   const request = {
 
     UserID: this.TransferRequest.StaffUserID,
-    OfficeID: 0,
+    OfficeID: 11,
     PostID: formData.PostID,
     DepartmentID:this.sSOLoginDataModel.DepartmentID,
     LevelID:this.TransferRequest.LevelID,
