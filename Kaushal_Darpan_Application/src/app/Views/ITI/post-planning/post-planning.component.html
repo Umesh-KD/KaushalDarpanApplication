@@ -129,6 +129,7 @@
             <th>Posted Seat</th>
             <th>Remaining Seat</th>
             <th>Order No</th>
+            <th>Additional Post</th>
             <th>Comments</th>
             <th *ngIf="sSOLoginDataModel.RoleID!=20 && sSOLoginDataModel.RoleID!=43">Actions</th>
           </tr>
@@ -147,6 +148,7 @@
             <td>{{ leave.PostedSeat }}</td>
             <td>{{ leave.RemainingSeatID }}</td>
             <td>{{ leave.OrderName }}</td>
+            <td>{{ leave.AddPostCount }}</td>
             <td>{{ leave.Comments }}</td>
             <td *ngIf="sSOLoginDataModel.RoleID!=20 && sSOLoginDataModel.RoleID!=43">
               <!--<button class="btn btn-sm"
