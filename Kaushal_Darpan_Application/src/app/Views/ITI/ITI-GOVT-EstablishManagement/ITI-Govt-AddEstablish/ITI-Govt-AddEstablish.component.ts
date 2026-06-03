@@ -1792,11 +1792,12 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       index + 1,
       row.Name || '',
       row.SSOID || '',
+      row.ServiceName || '',
       row.MobileNumber || '',
       row.DesignationName || '',
-      row.StaffLevelTypeName || '',
+      row.OfficeName || '',
+      row.DesignationName || '',
       row.StaffType || '',
-      row.Stream || '',
       this.getProfileStatus(row.ProfileStatus)
     ]);
 
@@ -1805,13 +1806,14 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
       head: [[
         'Sr. No.',
-        'Name',
-        'SSO ID',
+        'Employee Name',
+        'Employee Id',
+        'Service Category',
         'Mobile No',
-        'Designation',
-        'Staff Level Type',
-        'Staff Type',
-        'Trade',
+        'Designation Name',
+        'Office Name',
+        'Post Deployed',
+        'Cadre',
         'Profile Status'
       ]],
 
@@ -1841,28 +1843,30 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
     const exportData = this.StaffMasterList.map((row: any, index: number) => ({
       'Sr. No.': index + 1,
-      'Name': row.Name || '',
-      'SSO ID': row.SSOID || '',
+      'Employee Name': row.Name || '',
+      'Employee Id': row.SSOID || '',
+      'Service Category': row.ServiceName || '',
       'Mobile No': row.MobileNumber || '',
       'Designation Name': row.DesignationName || '',
-      'Staff Level Type': row.StaffLevelTypeName || '',
-      'Staff Type': row.StaffType || '',
-      'Trade': row.Stream || '',
+      'Office Name': row.OfficeName || '',
+      'Post Deployed': row.DesignationName || '',
+      'Cadre': row.StaffType || '',
       'Profile Status': this.getProfileStatus(row.ProfileStatus)
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
 
     ws['!cols'] = [
-      { wch: 10 },
-      { wch: 30 },
-      { wch: 20 },
-      { wch: 15 },
-      { wch: 30 },
-      { wch: 25 },
-      { wch: 20 },
-      { wch: 20 },
-      { wch: 20 }
+      { wch: 10 }, // Sr No
+      { wch: 30 }, // Employee Name
+      { wch: 20 }, // Employee Id
+      { wch: 25 }, // Service Category
+      { wch: 18 }, // Mobile
+      { wch: 30 }, // Designation
+      { wch: 35 }, // Office
+      { wch: 25 }, // Post Deployed
+      { wch: 20 }, // Cadre
+      { wch: 20 }  // Profile Status
     ];
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
