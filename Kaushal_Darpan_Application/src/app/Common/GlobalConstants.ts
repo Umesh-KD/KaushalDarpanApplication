@@ -15,6 +15,8 @@ export class GlobalConstants {
   public static ITIPaperDownload: string = "ITIUpload";  // new added 19062025
   public static ITIAdmitCardFolder: string = "/AdmitCard";
   public static RejectAtBter: string = "RejectAtBter";
+  public static DepartmentBterFolder:string = "BTER";
+  public static StudentPlacementResumes: string = "/StudentPlacementResumes/";
 
   // regex
   public static AadhaarPattern: RegExp = /^[2-9]{1}[0-9]{11}$/;  // Aadhaar must start with 2-9 and be 12 digits long

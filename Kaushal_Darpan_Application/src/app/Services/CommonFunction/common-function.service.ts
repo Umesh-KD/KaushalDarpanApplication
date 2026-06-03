@@ -2464,4 +2464,11 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetUFMCategoryTypeList() {
+    return await this.http.get(this.APIUrl + '/GetUFMCategoryTypeList/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

@@ -11,7 +11,7 @@ import { OnlineMarkingReportModel, OnlineMarkingSearchModel } from '../../../Mod
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { UFMExtraInfoSaveModel, UFMStudentExtraInfoSaveModel } from '../../../Models/TheoryMarksDataModels';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -33,6 +33,7 @@ export class UFMStudentReportComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public InstituteMasterList: any[] = [];
   public StreamMasterDDLList: any[] = [];
+  public CategoryTypeList: any[] = [];
   public selectedDivision: number = 0;
   public selectedDistrict: number = 0;
 
@@ -51,11 +52,17 @@ export class UFMStudentReportComponent {
   public Table_SearchText: string = "";
   public isSubmitted: boolean = false;
   public isVisibleList: boolean = false;
+  closeResult: string | undefined;
 
   public ufmLetterForm!: FormGroup;
   modalReference: NgbModalRef | undefined;
   public saveufmExtraInfo = new UFMExtraInfoSaveModel();
   public UFMExtraInfoFilled: number = 1;
+  public CategoryID: number = 0;
+  public StudentExamID: number = 0;
+  public State: number = -1;
+  public Message: any = [];
+  public ErrorMessage: any = [];
 
   constructor(private loaderService: LoaderService,
     private reportService: ReportService,
@@ -83,6 +90,7 @@ export class UFMStudentReportComponent {
 
     // load
     await this.GetAllData();
+    await this.GetUFMCategoryTypeList();
   }
 
   exportToExcel() {
@@ -94,13 +102,107 @@ export class UFMStudentReportComponent {
     XLSX.writeFile(wb, fileName);
   }
 
+
+  async openModalCategory(content: any, StudentExamID: number) {
+    this.StudentExamID = StudentExamID;
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+  CloseModalPopupCategory() {
+    this.modalService.dismissAll();
+    this.CategoryID = 0;
+  }
+
+
+  async GetUFMCategoryTypeList() {
+    try {     
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetUFMCategoryTypeList()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CategoryTypeList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
+
+
+  async UpdateUFMCategoryData() {
+    debugger
+    if (this.CategoryID ==0) {
+      this.toastr.warning("Please Select UFM Category");
+      return;
+    }
+
+    //Show Loading
+    this.loaderService.requestStarted();
+    //this.isLoading = true;
+    try {
+
+      this.sSOLoginDataModel = JSON.parse(localStorage.getItem('SSOLoginUser') || '{}');
+
+      let request = {
+        UFMCategory: this.CategoryID,
+        StudentExamID: this.StudentExamID,
+        ModifyBy: this.sSOLoginDataModel.UserID,
+        //DepartmentID: this.sSOLoginDataModel.DepartmentID
+      };
+
+      await this.TheoryMarksService.UpdateUFMCategory(request)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message);
+            this.CloseModalPopupCategory();
+            this.CategoryID = 0;
+            await this.GetAllData();
+            //this.btn_SearchClick();
+          }
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+        })
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+       // this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
+
   async GetAllData() {
     try {
-      //debugger
+      debugger
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-
       this.loaderService.requestStarted();
       await this.reportService.GetUFMStudentReport(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

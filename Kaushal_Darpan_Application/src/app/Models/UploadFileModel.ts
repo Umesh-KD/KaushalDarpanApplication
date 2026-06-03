@@ -5,6 +5,8 @@ export class UploadFileModel {
   public MaxFileSize?: string = '';
   public Password?: string = '';
   public FileName?: string = '';
+
+  public Flag?: string = '';
 }
 
 export interface UploadBTERFileModel {

@@ -59,6 +59,8 @@ export class PlacementSelectedStudentResponseModel {
 
   public CampusPostID?: number = 0;
   public RoundNo?: string = '';
+
+  public RegistrationNo?: string = '';
 }
 export class PlacementStudentSelectedSearchModel extends RequestBaseModel {
   public CampusPostID: number = 0;
@@ -73,4 +75,6 @@ export class PlacementStudentSelectedSearchModel extends RequestBaseModel {
   public AgeFrom: number = 0;
   public AgeTo: number = 0;
   public HiringRoleID: number = 0
+
+  public NotifyStatus?: string = '';
 }

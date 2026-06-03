@@ -99,4 +99,12 @@ export class TheoryMarksService {
       ).toPromise();
   }
 
+  public async UpdateUFMCategory(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/UpdateUFMCategory', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

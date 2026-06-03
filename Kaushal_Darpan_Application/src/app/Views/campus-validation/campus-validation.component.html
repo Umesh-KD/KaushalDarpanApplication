@@ -21,13 +21,13 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <!--<div>
-          <label for="inputState" class="form-label">Session Year</label>
-          <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="FinancialYearID">
-            <option value=0>--All--</option>
-            <option value=8>2024-2025</option>
-            <option value=9>2025-2026</option>
-          </select>
-        </div>-->
+    <label for="inputState" class="form-label">Session Year</label>
+    <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="FinancialYearID">
+      <option value=0>--All--</option>
+      <option value=8>2024-2025</option>
+      <option value=9>2025-2026</option>
+    </select>
+  </div>-->
 
 
         <div>
@@ -44,6 +44,19 @@
             <option value="0">--All--</option>
             <option *ngFor="let item of CompanyMasterList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
+        </div>
+
+
+        <!--institute dropdown--> 
+        <div *ngIf="this.sSOLoginDataModel.RoleID==5">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <ng-select [(ngModel)]="InstituteID"                     
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of InstituteMasterList;">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
         </div>
 
 
