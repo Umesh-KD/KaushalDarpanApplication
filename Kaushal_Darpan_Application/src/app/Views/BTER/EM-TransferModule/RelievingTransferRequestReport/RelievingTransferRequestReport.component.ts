@@ -66,7 +66,7 @@ export class RelievingTransferRequestReportComponent {
   public SearchInstituteID: number = 0;
   public SearchEmployeeType: number = 0;
   public isInstituteDisabled: boolean = false;
-
+  public ID: number = 0;
   public RelievingDoc: string = '';
   public RelievingDate: string = '';
   public RelievingDoc_Dis: string = '';
@@ -119,6 +119,9 @@ export class RelievingTransferRequestReportComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.ID = Number(
+      this.activatedRoute.snapshot.queryParamMap.get('status')
+    );
     this.Status = "0";
 
     if (this.sSOLoginDataModel.RoleID == this._EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == this._EnumRole.Principal) {
@@ -131,13 +134,16 @@ export class RelievingTransferRequestReportComponent {
 
     await this.GetLoadData();
     this.updateStatus == EnumTransferRelievingStatus.Relieved;
+
+    if (this.ID > 0) {
+      this.SearchStatus = this.ID;
+      await this.EM_TransferSystem_GetData_Search(this.ID);
+    }
   }
 
   async EM_TransferSystem_GetData_Search(statusID: number) {
-
     this.statusID = statusID;
     await this.EM_TransferSystem_GetData();
-
   }
 
   async GetLoadData() {
