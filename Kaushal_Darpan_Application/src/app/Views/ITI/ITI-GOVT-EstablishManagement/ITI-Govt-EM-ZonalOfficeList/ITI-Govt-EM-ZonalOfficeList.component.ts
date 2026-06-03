@@ -1374,7 +1374,7 @@ const formData = this.TransferFormGroup.getRawValue();
     PostID: formData.PostID,
     DepartmentID:this.sSOLoginDataModel.DepartmentID,
     LevelID:this.TransferRequest.LevelID,
-    DesignationID:this.TransferRequest.DesignationID,
+    DesignationID:formData.PostID,
     InstituteID: formData.InstituteID,
     StaffPostTypeID: formData.StaffPostTypeID,
     CreatedBy: this.sSOLoginDataModel.UserID,
