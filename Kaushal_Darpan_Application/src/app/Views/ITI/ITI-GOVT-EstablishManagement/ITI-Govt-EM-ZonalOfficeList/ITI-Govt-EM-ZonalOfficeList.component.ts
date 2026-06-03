@@ -971,12 +971,14 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
  
 
 
-  async getInstituteMasterList() {
+  async getInstituteMasterList(currentInstitute?: string) {
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDLList = data.Data;
+         this.InstituteMasterDDLList = data.Data.filter(
+          (x: any) => x.InstituteName !== currentInstitute
+        );
       })
     } catch (error) {
       console.error(error);
@@ -1364,6 +1366,7 @@ async openTransferModal(content: any, row: any) {
     size: 'lg',
     backdrop: 'static'
   });
+  await this.getInstituteMasterList(row.InstituteName);
 }
 
 closeTransferModal() {
