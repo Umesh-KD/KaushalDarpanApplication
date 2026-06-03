@@ -1397,20 +1397,77 @@ const formData = this.TransferFormGroup.getRawValue();
 
   console.log('post data',request);
 
-  try {
-       this.ITIGovtEMStaffMasterService.ITI_IsAdditionUserOfficeSave(request).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success){
-          this.StaffServiceDetailsDataList = data.Data;
-        } else {
-          this.StaffServiceDetailsDataList = [];
-        }
-      })
-    } catch (error) {
-      console.error
-    }
+  // try {
+  //      this.ITIGovtEMStaffMasterService.ITI_IsAdditionUserOfficeSave(request).then(async (data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       if(data.State === EnumStatus.Success){
+  //         this.StaffServiceDetailsDataList = data.Data;
+  //          this.toastr.success('Record Saved Successfully');
+  //       }
+  //       else if(data.State === EnumStatus.Warning){
+  //         this.StaffServiceDetailsDataList = data.Data;
+  //          this.toastr.success('Record Already exist');
+  //       }
+  //       else {
+  //          this.toastr.success(this.SuccessMessage)
+  //          this.toastr.success('Some Error Occured');
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.error
+  //   }
 
-this.closeTransferModal();
+
+  try {
+
+  this.ITIGovtEMStaffMasterService
+    .ITI_IsAdditionUserOfficeSave(request)
+    .then((data: any) => {
+
+      if (data.State === EnumStatus.Success) {
+
+        this.toastr.success(
+          data.Message || 'Record Saved Successfully'
+        );
+
+        this.closeTransferModal();
+
+      }
+      else if (data.State === EnumStatus.Warning) {
+
+        this.toastr.warning(
+          data.ErrorMessage || 'Duplicate record already exists.'
+        );
+
+      }
+      else {
+
+        this.toastr.error(
+          data.ErrorMessage || 'Some error occurred.'
+        );
+
+      }
+
+    })
+    .catch((error) => {
+
+      console.error(error);
+
+      this.toastr.error(
+        'Some error occurred while communicating with server.'
+      );
+
+    });
+
+}
+catch (error) {
+
+  console.error(error);
+
+  this.toastr.error('Some error occurred.');
+
+}
+//this.closeTransferModal();
   
 }
 

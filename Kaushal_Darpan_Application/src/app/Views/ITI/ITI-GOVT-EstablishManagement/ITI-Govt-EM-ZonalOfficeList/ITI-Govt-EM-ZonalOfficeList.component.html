@@ -1,5 +1,16 @@
 <app-loader> </app-loader>
 <!-- Page Title Start -->
+<style>
+  .ng-select.ng-select-opened .ng-dropdown-panel {
+    z-index: 99999 !important;
+  }
+  .ng-dropdown-panel {
+    z-index: 99999 !important;
+  }
+  .modal-body {
+    overflow: visible !important;
+  }
+</style>
 
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
@@ -69,9 +80,6 @@
                        [value]="item.ID">{{item.Name}}</ng-option>
           </ng-select>
         </div>
-
-
-
 
         <div>
           <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -1012,7 +1020,7 @@
 <ng-template #TransferInstituteModal let-modal>
 
   <div class="modal-content">
-    <div class="card">
+    <div class="card min-h-[100vh]">
 
       <div class="card-header flex justify-between items-center">
         <b>
@@ -1141,7 +1149,9 @@
                   [searchable]="true"
                   [clearable]="true"
                   placeholder="Search Post"
-                  formControlName="PostID">
+                  formControlName="PostID"
+                            appendTo="body"
+                         >
 
               </ng-select>
             </div>
