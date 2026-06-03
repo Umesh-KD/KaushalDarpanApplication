@@ -204,18 +204,22 @@
                   *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestStatusId!=247 && row.RequestTypeID==1"                   
                   (click)="onSubmit(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i>
                 </a> -->
-                <a href="javascript:void(0);" title="Staff Request" class="btn btn-primary btn-sm text-white" 
+                <!--<a href="javascript:void(0);" title="Staff Request" class="btn btn-primary btn-sm text-white" 
                   *ngIf="row.RequestTypeID === 1 && row.RelievingStatusId==247"                   
                   (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)">Make Joining Request
-                </a>
+                </a>-->
 
               </div>
             </td>
-            <td align="left">
-              <a href="javascript:void(0);" title="Staff Request" class="btn btn-primary btn-sm text-white" 
-                *ngIf="row.RequestTypeID === 1 && row.RelievingStatusId==247"                   
-                (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)">Make Joining Request
-              </a>
+            <td align="center">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);"
+                   title="Make Joining Request"
+                   *ngIf="row.RequestTypeID == 1 && row.RelievingStatusId == 247"
+                   (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)">
+                  <i class="ti ti-circle-plus fs-4 text-primary"></i>
+                </a>
+                </div>
             </td>
 
 
