@@ -17,6 +17,7 @@ import { CampusStudentConsentModel, StudentConsentSearchModel } from '../../../M
 import { ApplicationMessageDataModel } from '../../../Models/ApplicationMessageDataModel';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { SmsDataModel } from '../../../Models/ApplicationMessageDataModel';
+import { UploadFileModel } from '../../../Models/UploadFileModel';
 
 @Component({
   selector: 'app-student-placement-consent',
@@ -46,6 +47,7 @@ export class StudentPlacementConsentComponent {
   public SmsDataModel = new SmsDataModel();
   public TrainingName:string=''
   public getSSOIDDetailData: any[] = [];
+  public FileFormatName: string = '';
 
   public messageModel = new ApplicationMessageDataModel();
   public ConsentCount: number = 0;
@@ -68,6 +70,7 @@ export class StudentPlacementConsentComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.btn_SearchClick();
     await this.GetStudentConsentCount();
+    //await this.GetStudentLatestResume();
   }
   //async GetMasterData() {
   //  try {
@@ -158,70 +161,141 @@ export class StudentPlacementConsentComponent {
     this.CampusValidationListData = [];
   }
 
-    public file!: File;
-    async onFilechange(event: any, Type: string) {
-      try {
-        debugger;
-        this.file = event.target.files[0];
-        if (this.file) {
-          if (this.file.type == 'application/pdf') {
-            //size validation
-            if (this.file.size > 2000000) {
-              this.toastr.error('Select less then 2MB File')
-              return
-            }
+  //public file!: File;
+  //async onFilechange(event: any, Type: string) {
+  //    try {
+  //      debugger;
+  //      this.file = event.target.files[0];
+  //      if (this.file) {
+  //        if (this.file.type == 'application/pdf') {
+  //          //size validation
+  //          if (this.file.size > 2000000) {
+  //            this.toastr.error('Select less then 2MB File')
+  //            return
+  //          }
+  //        }
+  //        else {
+  //          this.toastr.error('Select Only pdf file')
+  //          return
+  //        }
+  //        // upload to server folder
+  //        this.loaderService.requestStarted();
+  //        // console.log(this.selectedSuspendedPost);
+  
+  //        await this.commonMasterService.UploadDocument(this.file)
+  //          .then((data: any) => {
+  //            data = JSON.parse(JSON.stringify(data));
+  //            this.State = data['State'];
+  //            this.Message = data['Message'];
+  //            this.ErrorMessage = data['ErrorMessage'];
+  
+  //            if (this.State == EnumStatus.Success) {
+  //              if (Type == "Photo") {
+  //                // if(this.selectedSuspendedPost.Status = 'Suspend'){
+  
+  //                // }
+  //                // else{
+  //                  this.Request.Dis_UploadedResume = data['Data'][0]["Dis_FileName"];
+  //                  this.Request.UploadedResume = data['Data'][0]["FileName"];
+  //                // }
+  
+  //              }
+  //              //else if (Type == "Sign") {
+  //              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+  //              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+  //              //}
+  //              /*              item.FilePath = data['Data'][0]["FilePath"];*/
+  //              event.target.value = null;
+  //            }
+  //            if (this.State == EnumStatus.Error) {
+  //              this.toastr.error(this.ErrorMessage)
+  //            }
+  //            else if (this.State == EnumStatus.Warning) {
+  //              this.toastr.warning(this.ErrorMessage)
+  //            }
+  //          });
+  //      }
+  //    }
+  //    catch (Ex) {
+  //      console.log(Ex);
+  //    }
+  //    finally {
+  //      /*setTimeout(() => {*/
+  //      this.loaderService.requestEnded();
+  //      /*  }, 200);*/
+  //    }
+  //  }
+
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    debugger;
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        // Type validation
+        if (['application/pdf'].includes(this.file.type)) {
+          // Size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less than 2MB File');
+            return;
           }
-          else {
-            this.toastr.error('Select Only pdf file')
-            return
-          }
-          // upload to server folder
-          this.loaderService.requestStarted();
-          // console.log(this.selectedSuspendedPost);
-  
-          await this.commonMasterService.UploadDocument(this.file)
-            .then((data: any) => {
-              data = JSON.parse(JSON.stringify(data));
-              this.State = data['State'];
-              this.Message = data['Message'];
-              this.ErrorMessage = data['ErrorMessage'];
-  
-              if (this.State == EnumStatus.Success) {
-                if (Type == "Photo") {
-                  // if(this.selectedSuspendedPost.Status = 'Suspend'){
-  
-                  // }
-                  // else{
-                    this.Request.Dis_UploadedResume = data['Data'][0]["Dis_FileName"];
-                    this.Request.UploadedResume = data['Data'][0]["FileName"];
-                  // }
-  
-                }
-                //else if (Type == "Sign") {
-                //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-                //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
-                //}
-                /*              item.FilePath = data['Data'][0]["FilePath"];*/
-                event.target.value = null;
-              }
-              if (this.State == EnumStatus.Error) {
-                this.toastr.error(this.ErrorMessage)
-              }
-              else if (this.State == EnumStatus.Warning) {
-                this.toastr.warning(this.ErrorMessage)
-              }
-            });
         }
+        else {
+          this.toastr.error('Select Only pdf file');
+         // this.Uploadfile = '';
+          //this.BudgetModel.RequestFileName = '';
+          event.target.value = null;
+          return;
+        }
+
+        //upload model
+        let uploadModel = new UploadFileModel();
+        uploadModel.FileExtention = this.file.type ?? "";
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = this._GlobalConstants.DepartmentBterFolder +this._GlobalConstants.StudentPlacementResumes;
+        uploadModel.FileName = this.FileFormatName ?? '';
+        uploadModel.Flag = 'IsForStudentconsent';
+
+        //UploadDocument
+        //Upload to server folder
+        await this.commonMasterService.UploadBTERDocument(this.file, uploadModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            if (this.State === EnumStatus.Success) {
+              if (Type == "Photo") {
+                const fileName = data['Data'][0]["Dis_FileName"];;
+                const actualFile = data['Data'][0]["FileName"];
+                this.Request.Dis_UploadedResume = fileName;
+                this.Request.UploadedResume = actualFile;
+              }
+              //const fileName = data['Data'][0]["Dis_FileName"];
+              //const actualFile = data['Data'][0]["FileName"];
+
+              //this.Uploadfile = data['Data'][0]["FileName"];
+              //this.BudgetModel.RequestFileName = this.Uploadfile;
+              //this.BudgetModel.DocFileName = this.Uploadfile;
+              event.target.value = null;
+            }
+
+            if (data.State === EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage);
+
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            }
+          });
       }
-      catch (Ex) {
-        console.log(Ex);
-      }
-      finally {
-        /*setTimeout(() => {*/
-        this.loaderService.requestEnded();
-        /*  }, 200);*/
-      }
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
     }
+  }
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -337,7 +411,39 @@ export class StudentPlacementConsentComponent {
       await this.placementservice.GetStudentConsentCount(this.sSOLoginDataModel.StudentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
+         // debugger;
           this.ConsentCount = data['Data'][0]['ConsentCount'];
+          this.FileFormatName = data['Data'][0]['FileFormatName'];
+          //if (data['Data'][0]['UploadedResume'] != '') {
+          //  this.Request.Dis_UploadedResume = data['Data'][0]['Dis_UploadedResume'];
+          //  this.Request.UploadedResume = data['Data'][0]['UploadedResume'];
+          //}
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetStudentLatestResume() {
+    //debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.placementservice.GetStudentLatestResume(this.sSOLoginDataModel.StudentID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          debugger;
+         // this.ConsentCount = data['Data'][0]['ConsentCount'];
+          if (data['Data'][0]['UploadedResume'] != '') {
+            this.Request.Dis_UploadedResume = data['Data'][0]['Dis_UploadedResume'];
+            this.Request.UploadedResume = data['Data'][0]['UploadedResume'];            
+          }
         }, (error: any) => console.error(error)
         );
     }
@@ -382,6 +488,10 @@ export class StudentPlacementConsentComponent {
 
       debugger;
 
+      if (!this.validateEmailAndMobile()) {
+        return;
+      }
+
       if (PostID == 0) {
         PostID = this.Request.PostID;
       }
@@ -404,7 +514,7 @@ export class StudentPlacementConsentComponent {
 
       // Interest Validation
       if (this.Request.InterestedStatus == 0) {
-        this.Swal2.Warning("Please select interest status");
+        this.Swal2.Warning("Please select Consent Status");
         return;
       }
 
@@ -496,7 +606,7 @@ export class StudentPlacementConsentComponent {
 
       await this.GetCampusSMSDataByID(PostID);    
       this.messageModel.CampusID = this.StudentSMSData[0].CampusID;
-      //this.messageModel.MobileNo = this.sSOLoginDataModel.Mobileno;
+      this.messageModel.MobileNo = this.StudentSMSData[0].MobileNo;
       this.messageModel.EnrollmentNo = this.StudentSMSData[0].EnrollmentNo;
       this.messageModel.RegNo = this.StudentSMSData[0].RegNo;
       this.messageModel.MessageType = EnumMessageType.Bter_StudentConsent;
@@ -539,6 +649,7 @@ export class StudentPlacementConsentComponent {
       }, 200);
     }
   }
+
   async UploadCotent(
     content: any,
     ID: number,
@@ -551,13 +662,37 @@ export class StudentPlacementConsentComponent {
   ) {
 
     // Reset Model
-  
 
+    if (ConsentID == 0) {
+      await this.GetStudentLatestResume();
+    }
+
+    if (UploadedResume != '') {
+      this.Request.UploadedResume = UploadedResume;
+      this.Request.Dis_UploadedResume = Dis_UploadedResume;
+    }
+  
+    debugger
     // Assign Values
     this.Request.PostID = ID;
 
-    this.Request.InterestedStatus =
-      Number(InterestedStatus || 0);
+    if (this.Request.UploadedResume != '') {
+      this.Request.InterestedStatus =
+        Number(InterestedStatus || 1);
+    }
+    else {
+      this.Request.InterestedStatus =
+        Number(InterestedStatus || 0);
+
+      this.Request.UploadedResume =
+        UploadedResume || '';
+
+      this.Request.Dis_UploadedResume =
+        Dis_UploadedResume || '';
+    }
+
+    //this.Request.InterestedStatus =
+    //  Number(InterestedStatus || 1);
 
     this.Request.Remarks =
       Remarks || '';
@@ -565,11 +700,11 @@ export class StudentPlacementConsentComponent {
     this.Request.ConsentID =
       Number(ConsentID || 0);
 
-    this.Request.UploadedResume =
-      UploadedResume || '';
+    //this.Request.UploadedResume =
+    //  UploadedResume || '';
 
-    this.Request.Dis_UploadedResume =
-      Dis_UploadedResume || '';
+    //this.Request.Dis_UploadedResume =
+    //  Dis_UploadedResume || '';
 
     this.TrainingName =
       TrainingName || '';
@@ -590,6 +725,35 @@ export class StudentPlacementConsentComponent {
 
     });
 
+  }
+
+
+  validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  validateEmailAndMobile(): boolean {
+
+    // Email Validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!this.Request.EmailId || !emailPattern.test(this.Request.EmailId.trim())) {
+      this.toastr.warning('Please enter a valid Email Address');
+      return false;
+    }
+
+    // Mobile Validation (10 digits, starts with 6-9 for Indian numbers)
+    const mobilePattern = /^[6-9]\d{9}$/;
+
+    if (!this.Request.MobileNo || !mobilePattern.test(this.Request.MobileNo.toString())) {
+      this.toastr.warning('Please enter a valid Mobile Number');
+      return false;
+    }
+
+    return true;
   }
 
 

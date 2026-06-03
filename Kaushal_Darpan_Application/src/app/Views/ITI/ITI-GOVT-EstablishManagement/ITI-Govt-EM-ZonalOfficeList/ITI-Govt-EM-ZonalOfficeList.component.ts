@@ -660,17 +660,31 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
     const exportData = this.ZonalList.map((row: any, index: number) => ({
       'Sr. No.': index + 1,
-      'Name / SSO ID': `${row.Name || ''} (${row.SSOID || ''})`,
-      'Mobile / Email': `${row.MobileNo || ''} (${row.EmailID || ''})`,
-      'Level Name or Office Name': `${row.LevelName || ''} ${row.OfficeName ? 'or ' + row.OfficeName : ''}`,
-      'Institute Name': row.InstituteName || '',
-      'District Name': row.DistrictName || '',
-      'Staff Type or Post Name': `${row.StaffTypeName || ''} ${row.PostName ? '\n' + row.PostName : ''}`,
-      'Role': row.RoleName || '',
+
+      'Employee ID / Name':
+        `${row.Name || ''} (${row.SSOID || ''})`,
+
+      'Service Category':
+        row.ServiceName || '',
+
+      'Mobile / Email':
+        `${row.MobileNo || ''} (${row.EmailID || ''})`,
+
+      'Designation':
+        `${row.StaffTypeName || ''}${row.PostName ? ' / ' + row.PostName : ''}`,
+
+      'Level Name or Office Name':
+        `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
+
+      'Post Deployed':
+        row.PostName || '',
+
       'Profile Status (Remark)':
         `${row.ProfileStatus === 'Approve' ? 'Approved' : (row.ProfileStatus || '')}` +
         `${row.Remark ? ' (' + row.Remark + ')' : ''}`,
-      'Is Hod': row.IsHod || ''
+
+      'Is HOD':
+        row.IsHod || ''
     }));
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
@@ -686,9 +700,9 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     ws['!cols'] = colWidths;
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Staff List');
+    XLSX.utils.book_append_sheet(wb, ws, 'ITI Govt Office List');
 
-    XLSX.writeFile(wb, 'StaffList.xlsx');
+    XLSX.writeFile(wb, 'ITI_Govt_Office_Employee_List.xlsx');
   }
 
   CloseModalPopup() {
@@ -957,12 +971,14 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
  
 
 
-  async getInstituteMasterList() {
+  async getInstituteMasterList(currentInstitute?: string) {
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDLList = data.Data;
+         this.InstituteMasterDDLList = data.Data.filter(
+          (x: any) => x.InstituteName !== currentInstitute
+        );
       })
     } catch (error) {
       console.error(error);
@@ -1210,7 +1226,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.text(
-      'ITI Govt Office List',
+      'ITI Govt Office Employee List',
       pageWidth / 2,
       10,
       { align: 'center' }
@@ -1218,31 +1234,29 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
     const body = this.ZonalList.map((row: any, index: number) => [
       index + 1,
-      `${row.Name} (${row.SSOID})`,
-      `${row.MobileNo} (${row.EmailID})`,
-      `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
-      row.InstituteName,
-      row.DistrictName,
+      `${row.Name || ''} (${row.SSOID || ''})`,
+      row.ServiceName || '',
+      `${row.MobileNo || ''} (${row.EmailID || ''})`,
       `${row.StaffTypeName || ''}${row.PostName ? ' / ' + row.PostName : ''}`,
-      row.RoleName,
-      `${row.ProfileStatus === 'Approve' ? 'Approved' : row.ProfileStatus || ''}${row.Remark ? ' (' + row.Remark + ')' : ''
+      `${row.LevelName || ''}${row.OfficeName ? ' / ' + row.OfficeName : ''}`,
+      row.PostName || '',
+      `${row.ProfileStatus === 'Approve' ? 'Approved' : (row.ProfileStatus || '')}${row.Remark ? ' (' + row.Remark + ')' : ''
       }`,
-      row.IsHod
+      row.IsHod || ''
     ]);
 
     autoTable(doc, {
       startY: 18,
 
       head: [[
-        'Sr No',
-        'Name / SSO ID',
+        'Sr. No.',
+        'Employee ID / Name',
+        'Service Category',
         'Mobile / Email',
-        'Level / Office',
-        'Institute',
-        'District',
-        'Staff Type / Post',
-        'Role',
-        'Profile Status',
+        'Designation',
+        'Level Name / Office Name',
+        'Post Deployed',
+        'Profile Status (Remark)',
         'Is HOD'
       ]],
 
@@ -1265,7 +1279,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
       }
     });
 
-    doc.save('ITI_Govt_Office_List.pdf');
+    doc.save('ITI_Govt_Office_Employee_List.pdf');
   }
   async GetGovtITI() {
     try {
@@ -1352,6 +1366,7 @@ async openTransferModal(content: any, row: any) {
     size: 'lg',
     backdrop: 'static'
   });
+  await this.getInstituteMasterList(row.InstituteName);
 }
 
 closeTransferModal() {
@@ -1370,11 +1385,11 @@ const formData = this.TransferFormGroup.getRawValue();
   const request = {
 
     UserID: this.TransferRequest.StaffUserID,
-    OfficeID: 0,
+    OfficeID: 11,
     PostID: formData.PostID,
     DepartmentID:this.sSOLoginDataModel.DepartmentID,
     LevelID:this.TransferRequest.LevelID,
-    DesignationID:this.TransferRequest.DesignationID,
+    DesignationID:formData.PostID,
     InstituteID: formData.InstituteID,
     StaffPostTypeID: formData.StaffPostTypeID,
     CreatedBy: this.sSOLoginDataModel.UserID,
@@ -1385,20 +1400,77 @@ const formData = this.TransferFormGroup.getRawValue();
 
   console.log('post data',request);
 
-  try {
-       this.ITIGovtEMStaffMasterService.ITI_IsAdditionUserOfficeSave(request).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success){
-          this.StaffServiceDetailsDataList = data.Data;
-        } else {
-          this.StaffServiceDetailsDataList = [];
-        }
-      })
-    } catch (error) {
-      console.error
-    }
+  // try {
+  //      this.ITIGovtEMStaffMasterService.ITI_IsAdditionUserOfficeSave(request).then(async (data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       if(data.State === EnumStatus.Success){
+  //         this.StaffServiceDetailsDataList = data.Data;
+  //          this.toastr.success('Record Saved Successfully');
+  //       }
+  //       else if(data.State === EnumStatus.Warning){
+  //         this.StaffServiceDetailsDataList = data.Data;
+  //          this.toastr.success('Record Already exist');
+  //       }
+  //       else {
+  //          this.toastr.success(this.SuccessMessage)
+  //          this.toastr.success('Some Error Occured');
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.error
+  //   }
 
-this.closeTransferModal();
+
+  try {
+
+  this.ITIGovtEMStaffMasterService
+    .ITI_IsAdditionUserOfficeSave(request)
+    .then((data: any) => {
+
+      if (data.State === EnumStatus.Success) {
+
+        this.toastr.success(
+          data.Message || 'Record Saved Successfully'
+        );
+
+        this.closeTransferModal();
+
+      }
+      else if (data.State === EnumStatus.Warning) {
+
+        this.toastr.warning(
+          data.ErrorMessage || 'Duplicate record already exists.'
+        );
+
+      }
+      else {
+
+        this.toastr.error(
+          data.ErrorMessage || 'Some error occurred.'
+        );
+
+      }
+
+    })
+    .catch((error) => {
+
+      console.error(error);
+
+      this.toastr.error(
+        'Some error occurred while communicating with server.'
+      );
+
+    });
+
+}
+catch (error) {
+
+  console.error(error);
+
+  this.toastr.error('Some error occurred.');
+
+}
+//this.closeTransferModal();
   
 }
 

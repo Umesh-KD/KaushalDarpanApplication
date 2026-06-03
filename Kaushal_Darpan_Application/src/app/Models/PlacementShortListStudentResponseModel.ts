@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "./RequestBaseModel";
+
 export class PlacementShortListStudentResponseModel {
   public Selected: boolean = false;
   public StudentID: number = 0;
@@ -59,13 +61,15 @@ export class PlacementShortListStudentResponseModel {
   public UploadedResume: string = ''
 }
 
-export class PlacementShortlistedStuSearch {
+export class PlacementShortlistedStuSearch extends RequestBaseModel {
   public RoleId: number = 0;
   public UserId: number = 0;
   public BranchID: number = 0;
-  public DepartmentID: number = 0;
-  public Eng_NonEng: number = 0;
+  //public DepartmentID: number = 0;
+  //public Eng_NonEng: number = 0;
   public CampusPostID: number = 0;
-  public InstituteId: number = 0;
+  //public InstituteId: number = 0;
   public HiringRoleID: number = 0;
+
+  public NotifyStatus?: string = '';
 }

@@ -114,7 +114,9 @@
             </th>
             <th>Campus</th>
             <!--<th class="text-left">Hiring Role</th>-->
+            <th class="text-left">Company Name </th>
             <th class="text-left">Student Name </th>
+            <th class="text-left">Student RegistrationNo. </th>
             <th class="text-left">Email Address</th>
             <th class="text-left">Father's Name</th>
             <th class="text-left">DOB  </th>
@@ -122,11 +124,12 @@
             <th class="text-left">Gender   </th>
             <th class="text-left">Mobile   </th>
             <!--<th class="text-left">Home District</th>-->
-            <th class="text-left">State</th>
+            <!--<th class="text-left">State</th>-->
             <th class="text-left">Institute Name   </th>
             <th class="text-left">Institute Type</th>
             <th class="text-left">Enrollment No</th>
             <th class="text-left">Uploaded Resume</th>
+            <th class="text-left">Notify Status</th>
           </tr>
         </thead>
         <tbody>
@@ -138,16 +141,18 @@
             </td>
 
             <!--<td class="text-left">
-              <select style="min-width:200px !important;" class="form-select" id="ddlHiringRoleID" [(ngModel)]="row.HiringRole">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of HiringRoleMasterList" [value]="item.HiringRoleID">{{item.HiringRoleName}}</option>
-              </select>
-              <div *ngIf="row.Marked && row.HiringRole === 0" class="invalid-feedback text-danger">
-                Please select Hiring Role!
-              </div>
-            </td>-->
+    <select style="min-width:200px !important;" class="form-select" id="ddlHiringRoleID" [(ngModel)]="row.HiringRole">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of HiringRoleMasterList" [value]="item.HiringRoleID">{{item.HiringRoleName}}</option>
+    </select>
+    <div *ngIf="row.Marked && row.HiringRole === 0" class="invalid-feedback text-danger">
+      Please select Hiring Role!
+    </div>
+  </td>-->
             <td class="text-center">{{row.PostNo}}</td>
+            <td class="text-left">{{row.CompanyName}} </td>
             <td class="text-left">{{row.StudentName}} </td>
+            <td class="text-left">{{row.RegistrationNo}} </td>
             <td class="text-left">{{row.Email}}</td>
             <td class="text-left">{{row.FatherName}}</td>
             <td class="text-left">{{row.DOB}}</td>
@@ -156,7 +161,7 @@
             <td class="text-left">{{row.MobileNo}}</td>
 
             <!--<td class="text-left">{{row.DistrictName}}</td>-->
-            <td class="text-left">{{row.StateName}}</td>
+            <!--<td class="text-left">{{row.StateName}}</td>-->
             <td class="text-left">{{row.InstituteName}}</td>
             <td class="text-left">{{row.InstitutionManagementType}}</td>
             <td class="text-left">{{row.EnrollmentNo}}</td>
@@ -176,7 +181,7 @@
                 <span class="text-muted">Not Uploaded</span>
               </ng-template>
             </td>
-
+            <td class="text-left">{{row.NotifyStatus=='Shortlist'? 'Notified':'Pending'}}</td>
           </tr>
         </tbody>
       </table>

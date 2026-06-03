@@ -1,2 +1,7 @@
-
-
+.action-request-column .btn {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  white-space: nowrap;
+  min-width: 150px;
+}
