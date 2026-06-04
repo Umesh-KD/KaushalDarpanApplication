@@ -29,6 +29,7 @@ import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 import { THTE_DropdownDataModel } from '../../Models/TeacherHigherEducationApplicationDataModel';
 import { StudentDetailsModel } from '../../Models/StudentDetailsModel';
 import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
+import { ITI_Relieving_joining_CheckVacantPostModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
 
 
 @Injectable({
@@ -546,9 +547,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetExamName() {
+  public async GetExamName(Eng_NonEng:number=0) {
 
-    return await this.http.get(this.APIUrl + '/GetExamName/', this.headersOptions)
+    return await this.http.get(this.APIUrl + '/GetExamName/' + Eng_NonEng, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -2471,4 +2472,23 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async joining_VacantPostEmployee(model: ITI_Relieving_joining_CheckVacantPostModel) {
+    const body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/joining_VacantPostEmployee`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetUserManualByRoleId(roleId: number) {
+
+    debugger
+  return await this.http
+    .get(this.APIUrl + '/GetUserManualByRoleId/' + roleId, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
 }

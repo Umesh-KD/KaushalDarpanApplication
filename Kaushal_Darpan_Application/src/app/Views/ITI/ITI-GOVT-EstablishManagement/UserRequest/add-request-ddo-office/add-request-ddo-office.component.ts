@@ -19,7 +19,7 @@ import { UserRequestService } from '../../../../../Services/UserRequest/user-req
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { ItiSanctionOrderList } from '../../../../../Models/ITI/ItiReportDataModel';
 import { HiringRoleMasterService } from '../../../../../Services/HiringRoleMaster/hiring-role-master.service';
-import { ITI_Govt_EM_NodalSearchDataModel } from '../../../../../Models/ITIGovtEMStaffMasterDataModel';
+import { ITI_Govt_EM_NodalSearchDataModel, ITI_Relieving_joining_CheckVacantPostModel } from '../../../../../Models/ITIGovtEMStaffMasterDataModel';
 
 @Component({
   selector: 'app-add-request-ddo-office',
@@ -45,7 +45,7 @@ export class AddRequestDDOOfficeComponent {
   public ordersearchRequest = new ItiSanctionOrderList()
   public NodalsearchRequest = new ITI_Govt_EM_NodalSearchDataModel();
   public formData = new ITI_EM_StaffDetails_Curr_DataModel();
-
+  requestCheckVacantPost = new ITI_Relieving_joining_CheckVacantPostModel();
   public _EnumRole = EnumRole;
   
   public isSubmitted: boolean = false;
@@ -86,6 +86,7 @@ export class AddRequestDDOOfficeComponent {
  
   public getstatuId:number=0;
   public TodayDate:string='';
+  public PostMessage:string='';
 
   constructor(
     private fb: FormBuilder,
@@ -99,7 +100,8 @@ export class AddRequestDDOOfficeComponent {
     public appsettingConfig: AppsettingService,
     private  ITIGovtEMStaffMaster: ITIGovtEMStaffMaster,
     private Swal2: SweetAlert2,
-    private ScholarshipService: HiringRoleMasterService,
+    private ScholarshipService: HiringRoleMasterService
+   
   ) { }
 
   async ngOnInit() {
@@ -253,6 +255,7 @@ export class AddRequestDDOOfficeComponent {
         OfficeID: this.request.OfficeID,
         InstituteID: this.request.InstituteID,
         NodalDistrictID: this.request.NodalDistrictID,
+        Action:'Reliveing_DDL_VacantPostMaster'
       }
       await this.commonMasterService.GetItiVacantPost(obj)
         .then((data: any) => {
@@ -361,7 +364,11 @@ export class AddRequestDDOOfficeComponent {
       return
     }
     debugger
-    this.Swal2.Confirmation("Are you sure you want to make transfer request ?",
+
+    await this.GetRelieving_joining_CheckVacantPostModel();
+
+
+    this.Swal2.Confirmation(this.PostMessage,
       async (result: any) => {
         //confirmed
         if (result.isConfirmed) {
@@ -923,6 +930,32 @@ export class AddRequestDDOOfficeComponent {
     catch (ex) {
       console.log(ex);
     }
-  } 
+  }
+
+
+  async GetRelieving_joining_CheckVacantPostModel() {
+    try {
+      debugger
+      this.requestCheckVacantPost.Action = "Relieving_CheckVacantPost";
+      this.requestCheckVacantPost.OfficeID = this.request.OfficeID;
+      this.requestCheckVacantPost.InstituteID = this.request.InstituteID;
+      this.requestCheckVacantPost.StaffTypeID = this.request.StaffTypeID;
+      this.requestCheckVacantPost.DesignationID = this.request.PostID;
+      await this.ITIGovtEMStaffMaster.Relieving_joining_CheckVacantPostModel(this.requestCheckVacantPost).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.PostMessage = "Are you sure you want to make transfer request";
+        }
+        else if (data.State === EnumStatus.Warning) {
+          this.PostMessage = data.Message;
+        }
+        else {
+          this.PostMessage = data.Message;
+        }
+      })
+    } catch (error) {
+      console.error
+    }
+  }
 
 }
