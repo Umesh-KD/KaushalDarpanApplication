@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PlacementShortlistedStudentsService } from '../../../Services/PlacementShortlistedStudents/placement-shortlisted-students.service';
 import { PlacementShortlistedStuSearch, PlacementShortListStudentResponseModel } from '../../../Models/PlacementShortListStudentResponseModel';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import { EnumMessageType, EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumMessageType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
@@ -37,6 +37,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   public UserID: number = 0;
   public AllSelect: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public _GlobalConstants: any = GlobalConstants;
 
   public PlacedStudentsCountList: any[] = [];
   public CampusMasterList: any[] = [];
