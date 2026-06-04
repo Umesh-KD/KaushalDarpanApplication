@@ -29,6 +29,7 @@ import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 import { THTE_DropdownDataModel } from '../../Models/TeacherHigherEducationApplicationDataModel';
 import { StudentDetailsModel } from '../../Models/StudentDetailsModel';
 import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
+import { ITI_Relieving_joining_CheckVacantPostModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
 
 
 @Injectable({
@@ -2460,6 +2461,21 @@ export class CommonFunctionService {
 
   public async GetAlreadyAssignedOptionalSubject(StudentExamID: number) {
     return await this.http.get(`${this.APIUrl}/GetAlreadyAssignedOptionalSubject/${StudentExamID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetUFMCategoryTypeList() {
+    return await this.http.get(this.APIUrl + '/GetUFMCategoryTypeList/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async joining_VacantPostEmployee(model: ITI_Relieving_joining_CheckVacantPostModel) {
+    const body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/joining_VacantPostEmployee`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

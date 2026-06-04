@@ -558,6 +558,7 @@ export class RequestUpdateStatus {
   OnHoldDoc: string = '';
   Dis_OnHoldDoc: string = '';
   RoleID: number = 0;
+  EmployeeID: number = 0;
 }
 
 export class ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel {
@@ -833,3 +834,12 @@ export class UserOfficePostDataModel {
   public Division: string = '';
   public CurrentPost: string = '';
 }
+
+export class ITI_Relieving_joining_CheckVacantPostModel {
+  public Action: string = '';
+  public OfficeID: number = 0;
+  public InstituteID?: number = 0;
+  public StaffTypeID?: number = 0;
+  public DesignationID?: number = 0;
+}
+

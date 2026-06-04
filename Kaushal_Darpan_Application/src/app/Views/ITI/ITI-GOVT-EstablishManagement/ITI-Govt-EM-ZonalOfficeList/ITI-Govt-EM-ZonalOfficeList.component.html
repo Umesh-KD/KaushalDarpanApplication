@@ -1140,12 +1140,18 @@
                  (change)="onPostTypeChange()">
 
               </ng-select>
+
+                <div class="text-danger"
+                   *ngIf="isTransferSubmitted &&
+                          _TransferFormGroup.StaffPostTypeID.errors">
+                StaffPostTypeID is required
+              </div>
             </div>
             <!-- Post -->
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Post
+                Post 
               </label>
 
               <ng-select
@@ -1160,6 +1166,12 @@
                          >
 
               </ng-select>
+
+                <div class="text-danger"
+                   *ngIf="isTransferSubmitted &&
+                          _TransferFormGroup.PostID.errors">
+                PostID is required
+              </div>
             </div>
 
             <!-- Remark -->

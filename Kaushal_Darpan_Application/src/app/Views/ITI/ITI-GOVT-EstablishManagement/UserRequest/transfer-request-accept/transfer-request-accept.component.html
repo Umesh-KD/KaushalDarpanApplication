@@ -203,32 +203,37 @@
             <td align="left">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <!-- Principal Approval -->
-                <a href="javascript:void(0);" title="VRS Approve By Principal" 
-                  *ngIf="row.StaffRequestType != 'Transfer'  && row.RelievingStatusId != 247 && row.RequestTypeID == 2" 
-                  (click)="onSubmitModel_VRS(MyModel_VRS, row)"><i class="ti ti-check"></i>
+                <!-- Principal Approval -->
+                <a href="javascript:void(0);" title="VRS Approve By Principal"
+                   *ngIf="row.StaffRequestType != 'Transfer'  && row.RelievingStatusId != 247 && row.RequestTypeID == 2"
+                   (click)="onSubmitModel_VRS(MyModel_VRS, row)">
+                  <i class="ti ti-check"></i>
                 </a>
 
                 <!-- <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 1  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Staff Request" (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a> -->
-                <a  href="javascript:void(0);" title="Joining Request" 
-                  *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 && 
-                    (row.RequestStatusId ==_EnumTransferStatus_ITI_EM.Request_for_Join || row.RequestStatusId==_EnumTransferStatus_ITI_EM.On_Hold)"
-                  (click)="onSubmitJoiningRequest(MyModel_ReplayQueryJoining, row)"><i class="ti ti-check"></i>
+                <!--*ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 &&
+                (row.RequestStatusId ==_EnumTransferStatus_ITI_EM.Request_for_Join || row.RequestStatusId==_EnumTransferStatus_ITI_EM.On_Hold)"-->
+                <a href="javascript:void(0);" title="Joining Request"
+                   (click)="onSubmitJoiningRequest(MyModel_ReplayQueryJoining, row)">
+                  <i class="ti ti-check"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="History"
-                  *ngIf="RequestTypeSHowID === 1"  
-                  (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i>
+                   *ngIf="RequestTypeSHowID === 1"
+                   (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)">
+                  <i class="ti ti-history"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="Relieving Letter"
-                  *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247"  
-                  (click)="RelievingLetter(row.ServiceRequestId)"><i class="ti ti-download"></i>
+                   *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247"
+                   (click)="RelievingLetter(row.ServiceRequestId)">
+                  <i class="ti ti-download"></i>
                 </a>
 
                 <a href="javascript:void(0);" title="Joining Letter"
-                  *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1"  
-                  (click)="JoiningLetter(row.ServiceRequestId)"><i class="ti ti-download"></i>
+                   *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1"
+                   (click)="JoiningLetter(row.ServiceRequestId)">
+                  <i class="ti ti-download"></i>
                 </a>
 
               </div>
@@ -584,7 +589,7 @@
 
             <div *ngIf="RequestUpdateStatus.StatusIDs==_EnumTransferStatus_ITI_EM.On_Hold">
               <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="OnHoldDoc">Upload Document</label>
-              
+
               <div class="flex fileUploader">
                 <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                        id="OnHoldDoc" type="file" formControlName="Upload" (change)="onFilechange($event,'OnHoldDoc')">
@@ -598,6 +603,25 @@
                 </div>
               </div>
             </div>
+
+
+
+            <div *ngIf=" this.PostCheckValue == 3 && RequestUpdateStatus.StatusIDs==_EnumTransferStatus_ITI_EM.Approve">
+              <span *ngIf="this.PostCheckValue == 3"> {{PostMessage}} </span>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="RequestUpdateStatus.EmployeeID" formControlName="EmployeeID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of VacantPostEmployeeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <!--<div *ngIf="isSubmitted&&groupForm.EmployeeID.errors" class="text-danger">
+                <p *ngIf="!groupForm.EmployeeID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>-->
+            </div>
+
+
 
           </div>
         </div> <!-- Close this div here for card-body -->

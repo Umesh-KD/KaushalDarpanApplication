@@ -174,6 +174,8 @@ export class PlacementSelectedStudentsComponent implements OnInit {
       this.searchRequest.HiringRoleID = this.HiringRoleID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.NotifyStatus = 'Selected';
+      this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       //
       await this.placementShortListStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
@@ -434,6 +436,12 @@ export class PlacementSelectedStudentsComponent implements OnInit {
       EnrollmentNo: student.EnrollmentNo,
       MobileNo: student.MobileNo,
       MessageType: EnumMessageType.Bter_StudentShortList,
+      UserID: this.sSOLoginDataModel.UserID,
+      StudentName: student.StudentName,
+      NotifyFor: 'Selected',
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+      RegistrationNo: student.RegistrationNo
     }));
     //debugger
     // call

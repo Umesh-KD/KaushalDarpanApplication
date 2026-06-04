@@ -107,6 +107,7 @@ export class CampusValidationComponent {
   get FormAction() { return this.formAction.controls; }
   async GetMasterData() {
     try {
+      //debugger
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
@@ -159,13 +160,13 @@ export class CampusValidationComponent {
   }
 
   async btn_SearchClick() {
+    debugger
     try {
       this.loaderService.requestStarted();
-      this.InstituteID = this.sSOLoginDataModel.InstituteID;
-      if (this.sSOLoginDataModel.RoleID != 6) {
-        this.InstituteID = 0;
+      //this.InstituteID = this.sSOLoginDataModel.InstituteID;
+      if (this.sSOLoginDataModel.RoleID != 5) {
+        this.InstituteID = this.sSOLoginDataModel.InstituteID;
       }
-
 
      
       await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,

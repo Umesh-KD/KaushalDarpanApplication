@@ -35,5 +35,8 @@ export class CampusStudentConsentModel {
   public ModifyBy: number = 0;
   public UploadedResume: string = '';
   public Dis_UploadedResume: string = '';
+
+  public MobileNo?: string = '';
+  public EmailId?: string = '';
   
 }
