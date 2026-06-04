@@ -1767,6 +1767,7 @@ const routes: Routes = [
       { path: 'StaffTrainingConsent', loadChildren: () => import('./Views/staff-training-consent/staff-training-consent.module').then(m => m.StaffTrainingConsentModule) },
       { path: 'itiPendingCollegeFee', loadChildren: () => import('./Views/Student/itiPendingCollegeFee/itiPendingCollegeFee.module').then(m => m.itiPendingCollegeFeeModule) },
       { path: 'TransferRequestReport/:id', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
+      { path: 'usermanual', loadChildren: () => import('./Views/usermanual/usermanual.module').then(m => m.UsermanualModule) },
     ]
   },
 

@@ -255,6 +255,7 @@ export class AddRequestDDOOfficeComponent {
         OfficeID: this.request.OfficeID,
         InstituteID: this.request.InstituteID,
         NodalDistrictID: this.request.NodalDistrictID,
+        Action:'Reliveing_DDL_VacantPostMaster'
       }
       await this.commonMasterService.GetItiVacantPost(obj)
         .then((data: any) => {
