@@ -2480,4 +2480,15 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetUserManualByRoleId(roleId: number) {
+
+    debugger
+  return await this.http
+    .get(this.APIUrl + '/GetUserManualByRoleId/' + roleId, this.headersOptions)
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
 }
