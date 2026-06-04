@@ -1370,6 +1370,14 @@ async openTransferModal(content: any, row: any) {
 }
 
 closeTransferModal() {
+    this.TransferFormGroup.patchValue({
+    InstituteID: 0,
+    StaffPostTypeID: 0,
+    PostID: 0,
+    Remark: ''
+  });
+
+  this.PostList = [];
   this.modalService.dismissAll();
 }
 
@@ -1520,7 +1528,15 @@ async getITICollege() {
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
+   this.TransferFormGroup.value.PostID = 0;   
+   this.PostList=[];
+      debugger
+      var obj = {
+        OfficeID: 0,
+        InstituteID: this.formData.InstituteID,
+      }
+      await this.commonMasterService.GetItiVacantPost(obj)
+      //await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
@@ -1538,9 +1554,14 @@ async getITICollege() {
 
   async onPostTypeChange() {
 
+
+     this.TransferFormGroup.patchValue({
+    PostID: 0
+  });
+  this.PostList = [];
   this.formData.StaffPostTypeID =
       this.TransferFormGroup.value.StaffPostTypeID;
-
+  this.formData.InstituteID =  this.TransferFormGroup.value.InstituteID;
   await this.GetPostListnew();
 }
 
