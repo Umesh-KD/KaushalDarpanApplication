@@ -547,9 +547,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetExamName() {
+  public async GetExamName(Eng_NonEng:number=0) {
 
-    return await this.http.get(this.APIUrl + '/GetExamName/', this.headersOptions)
+    return await this.http.get(this.APIUrl + '/GetExamName/' + Eng_NonEng, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
