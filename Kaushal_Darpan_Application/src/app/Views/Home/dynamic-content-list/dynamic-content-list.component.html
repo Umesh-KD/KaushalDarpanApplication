@@ -28,14 +28,19 @@
               <tbody>
                 <tr *ngFor="let row of DynamicUploadContentList | tableSearchFilter:Table_SearchText; let idx=index;">
                   <!--<td></td>-->
-                  @if(row.docFile == '')
-                  {
-                    <td>{{row.Title}}</td>
-                  }
-                  else
-                  {
-                    <td><a href="{{appsettingConfig.StaticFileRootPathURL}}{{row.docFile}}" target="_blank">{{row.Title}}</a></td>
-                  }
+
+                  <td>
+                    <ng-container *ngIf="row.docFile; else noFile">
+                      <a [href]="appsettingConfig.StaticFileRootPathURL + row.docFile"  target="_blank">
+                        {{ row.Title }}
+                      </a>
+                    </ng-container>
+
+                    <ng-template #noFile>
+                      <span>{{ row.Title }}</span>
+                    </ng-template>
+                  </td>
+
                   <td>{{row.CreateDates}}</td>
                 </tr>
               </tbody>
