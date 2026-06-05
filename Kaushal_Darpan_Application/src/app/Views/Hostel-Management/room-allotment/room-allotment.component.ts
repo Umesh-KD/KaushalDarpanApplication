@@ -638,9 +638,11 @@ export class RoomAllotmentComponent {
         try {
           this.DetailsBox = false;
           this.TradeBox = true;
+         await this.AllotmentCancelData();
+          
+         await this.GetAllData();
           this.CloseModal();
-          this.GetAllData();
-          this.AllotmentCancelData();
+         
 
           //this.GetTradeListByCollege();
 
