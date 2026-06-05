@@ -745,7 +745,7 @@ export class CommonFunctionService {
 
 
   //end document
-  public async GetCommonMasterDDLByType(type: string) {
+  public async GetCommonMasterDDLByType(type: string='') {
 
     return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByType/${type}`, this.headersOptions)
       .pipe(

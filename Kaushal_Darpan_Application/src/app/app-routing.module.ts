@@ -1768,6 +1768,8 @@ const routes: Routes = [
       { path: 'itiPendingCollegeFee', loadChildren: () => import('./Views/Student/itiPendingCollegeFee/itiPendingCollegeFee.module').then(m => m.itiPendingCollegeFeeModule) },
       { path: 'TransferRequestReport/:id', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
       { path: 'usermanual', loadChildren: () => import('./Views/usermanual/usermanual.module').then(m => m.UsermanualModule) },
+      { path: 'ViewContentList', loadChildren: () => import('./Views/view-content-list/view-content-list.module').then(m => m.ViewContentListModule) },
+
     ]
   },
 
@@ -1888,7 +1890,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
-  
+
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 
 ];

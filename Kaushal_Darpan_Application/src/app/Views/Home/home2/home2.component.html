@@ -185,36 +185,64 @@
 
               <div *ngFor="let item of ITIList" class="mb-3">
 
-                <!-- Normal notification -->
-                <div *ngIf="!item.linkname" class="notification-card d-flex align-items-center">
-                  <img src="/assets/KD5/images/pdf.png" class="icon me-2">
-                  <div>
-                    <div class="title">{{item.Title}}</div>
-                    <div class="date">{{item.CreateDates}}</div>
+                <!-- Normal Notification -->
+                <div *ngIf="!item.linkname"
+                     class="notification-card"
+                     (click)="OpenDocument(item)"
+                     style="cursor:pointer;">
+
+                  <div class="d-flex align-items-center">
+                    <img src="/assets/KD5/images/pdf.png"
+                         class="icon me-3">
+
+                    <div class="flex-grow-1">
+                      <div class="title">
+                        {{item.Title}}
+                      </div>
+
+                      <div class="date">
+                        <i class="ti ti-calendar"></i>
+                        {{item.CreateDates}}
+                      </div>
+                    </div>
+
+                    <div class="view-btn">
+                      <i class="ti ti-eye"></i>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Highlighted ITI Result -->
-                <div *ngIf="item.linkname" class="result-highlight d-flex align-items-center justify-content-between">
+                <!-- ITI Result Highlight -->
+                <div *ngIf="item.linkname"
+                     class="result-highlight">
 
-                  <div class="d-flex align-items-center">
-                    <div class="result-icon me-3">
-                      🎓
-                    </div>
+                  <div class="d-flex align-items-center justify-content-between">
 
-                    <div>
-                      <div class="result-title">
-                        {{item.Title}}
-                        <span class="badge-new">NEW</span>
+                    <div class="d-flex align-items-center">
+
+                      <div class="result-icon me-3">
+                        🎓
                       </div>
-                      <div class="result-sub">ITI Examination Result Declared</div>
-                    </div>
-                  </div>
 
-                  <button class="btn-result"
-                          [routerLink]="item.linkname">
-                    👉 Click Here
-                  </button>
+                      <div>
+                        <div class="result-title">
+                          {{item.Title}}
+                          <span class="badge-new">NEW</span>
+                        </div>
+
+                        <div class="result-sub">
+                          ITI Examination Result Declared
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <button class="btn-result"
+                            [routerLink]="item.linkname">
+                      Click Here
+                    </button>
+
+                  </div>
 
                 </div>
 

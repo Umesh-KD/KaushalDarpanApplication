@@ -1,26 +1,26 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { LoaderService } from '../../../Services/Loader/loader.service';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
+import { LoaderService } from '../../Services/Loader/loader.service';
+import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
+import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { ToastrService } from 'ngx-toastr';
-import { WebsiteSettingDataModel } from '../../../Models/BTER/WebsiteSettingsDataModel';
-import { WebsiteSettingsService } from '../../../Services/BTER/WebsiteSettings/website-settings.service';
-import { EnumDepartment, EnumRole, EnumStatus, EnumWS_DepartmentSub } from '../../../Common/GlobalConstants';
-import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import { RequestBaseModel } from '../../../Models/RequestBaseModel';
-import { AppsettingService } from '../../../Common/appsetting.service';
+import { WebsiteSettingDataModel } from '../../Models/BTER/WebsiteSettingsDataModel';
+import { WebsiteSettingsService } from '../../Services/BTER/WebsiteSettings/website-settings.service';
+import { EnumDepartment, EnumRole, EnumStatus, EnumWS_DepartmentSub } from '../../Common/GlobalConstants';
+import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
+import { RequestBaseModel } from '../../Models/RequestBaseModel';
+import { AppsettingService } from '../../Common/appsetting.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MatSort } from '@angular/material/sort';
 
 @Component({
-  selector: 'app-highlights',
+  selector: 'app-view-content-list',
   standalone: false,
-  templateUrl: './highlights.component.html',
-  styleUrl: './highlights.component.css'
+  templateUrl: './view-content-list.component.html',
+  styleUrl: './view-content-list.component.css'
 })
-export class HighlightsComponent {
+export class ViewContentListComponent {
   HighlightsFromGroup!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
   isFormSubmitted: boolean = false
@@ -138,7 +138,7 @@ export class HighlightsComponent {
   }
 
   async SaveData() {
-    
+
     this.isFormSubmitted = true;
     if (this.sSOLoginDataModel.RoleID == 212) {
       this.HighlightsFromGroup.controls['DepartmentSubID'].clearValidators()
@@ -165,7 +165,7 @@ export class HighlightsComponent {
       this.HighlightsFromGroup.controls['Start_Date'].clearValidators()
       this.HighlightsFromGroup.controls['End_Date'].clearValidators()
     } else {
-    
+
       this.HighlightsFromGroup.controls['Start_Date']
         .setValidators([Validators.required]);
       this.HighlightsFromGroup.controls['End_Date']
@@ -191,7 +191,7 @@ export class HighlightsComponent {
     this.HighlightsFromGroup.controls['StaffTypeID'].updateValueAndValidity()
     this.HighlightsFromGroup.controls['DesignationID'].updateValueAndValidity()
 
-    if(this.HighlightsFromGroup.invalid){
+    if (this.HighlightsFromGroup.invalid) {
       this.toastr.error("Please Fill Required Fields")
       return
     }
@@ -231,12 +231,12 @@ export class HighlightsComponent {
           this.toastr.error(data.ErrorMessage);
         }
       })
-      
+
     } catch (error) {
       console.log(error);
-    } 
+    }
   }
-    
+
   async GetDynamicUploadTypeDDL() {
     try {
       await this.websiteSettingsService.GetDynamicUploadTypeDDL(this.requestBaseModel).then((data: any) => {
@@ -247,10 +247,10 @@ export class HighlightsComponent {
           this.toastr.error(data.ErrorMessage);
         }
       })
-      
+
     } catch (error) {
       console.log(error);
-    } 
+    }
   }
 
   async GetLateralCourse() {
@@ -321,10 +321,10 @@ export class HighlightsComponent {
 
             if (data.State == EnumStatus.Success) {
               if (Type == 'Photo') {
-                this.request.FileName =data['Data'][0]['FileName'];
-                this.request.Dis_FileName =data['Data'][0]['Dis_FileName'];
+                this.request.FileName = data['Data'][0]['FileName'];
+                this.request.Dis_FileName = data['Data'][0]['Dis_FileName'];
               }
-              
+
               event.target.value = null;
             }
             if (data.State == EnumStatus.Error) {
@@ -336,32 +336,33 @@ export class HighlightsComponent {
       }
     } catch (Ex) {
       console.log(Ex);
-    } 
+    }
   }
 
   async GetAllData() {
-    
+
     try {
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.Searchrequest.UserID = this.sSOLoginDataModel.UserID
       if (this.sSOLoginDataModel.RoleID == 212) {
-        this.Searchrequest.DepartmentSubID=6
+        this.Searchrequest.DepartmentSubID = 6
       }
-      await this.websiteSettingsService.GetAllData(this.Searchrequest).then((data: any) => {
+      await this.websiteSettingsService.GetAllDataOrders(this.Searchrequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        
-          this.DynamicContentData = data.Data
-       
+
+        this.DynamicContentData = data.Data
+
 
       })
-      
+
     } catch (error) {
       console.log(error);
-    } 
+    }
   }
 
-  async onDelete(row: any) {  
+  async onDelete(row: any) {
 
     this.Swal2.Confirmation("Are you sure you want to delete this ?",
       async (result: any) => {
@@ -394,7 +395,7 @@ export class HighlightsComponent {
       });
   }
 
-  async onEdit(row: any, content:any) {
+  async onEdit(row: any, content: any) {
     try {
 
 
@@ -435,7 +436,7 @@ export class HighlightsComponent {
 
 
             this.HighlightsFromGroup.patchValue({
-            
+
 
               DesignationID: this.request.DesignationID
                 ? this.request.DesignationID.split(',').map(Number)
@@ -458,7 +459,7 @@ export class HighlightsComponent {
   }
 
   onToggleChange(row: any) {
-    
+
     this.Swal2.Confirmation("Are you sure you want to Change Status ?",
       async (result: any) => {
         if (result.isConfirmed) {
@@ -561,7 +562,7 @@ export class HighlightsComponent {
   CloseModal() {
 
     this.modalService.dismissAll()
- 
+
 
     this.request = new WebsiteSettingDataModel()
     this.HighlightsFromGroup.reset()
