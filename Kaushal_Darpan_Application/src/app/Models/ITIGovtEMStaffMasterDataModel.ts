@@ -303,6 +303,7 @@ export class ITI_Govt_EM_ZonalOFFICERSSearchDataModel {
   RoleId:number = 0;
   InstituteID:number = 0;
   DistrictID:number = 0;
+  ProfileStatus:number = -1;
 }
 
 export class ITI_Govt_EM_ZonalOFFICERSDataModel {

@@ -51,6 +51,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public Districtlist: any[] = [];
   public ItiDDLlist: any[] = [];
   public UserOfficePostDetails: any[] = [];
+  public StaffProfileStatusList: any[] = [];
   
   public ITIGovtEMOFFICERSList: any[] = [];
   public StaffTypeList: any[] = []
@@ -116,6 +117,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public TransferRequest: any = {};
   public ListITICollegeByManagement: any = [];
   public StaffPostTypeList: any = [];
+  public ProfileStatus: number = -1;
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -190,6 +192,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.ProfileStatus = Number(this.activatedRoute.snapshot.queryParamMap.get("id")?.toString());
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
 
     this.QueryReqFormGroup = this.formBuilder.group({
@@ -202,10 +205,9 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     //});
     //this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID
    
-   
-
     await this.GetStatusList();
-    await this.GetZonalList();
+    await this.GetStaffProfileStatusList();
+    
     await this.GetLevelList();
     await this.GetStaffTypeData(); 
     await this.GetRoleMasterData();
@@ -216,6 +218,12 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
     await this.getItiNameAndCode();   
     await this.GetDistrictMaster();   
+
+    if(this.ProfileStatus>= 0 ){
+      this.searchRequest.ProfileStatus = this.ProfileStatus
+    }
+
+    await this.GetZonalList();
 
     //this.filteredStatusList = [
     //  { ID: 1, Name: 'Approved' },
@@ -260,6 +268,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
     this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID
+    
     if (this.searchRequest.OfficeID != 11) {
       this.searchRequest.InstituteID = 0
       this.searchRequest.DistrictID=0
@@ -1344,9 +1353,42 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   }
 
 
+// async openTransferModal(content: any, row: any) {
+
+//   this.TransferRequest = row;
+
+//   await this.GetStaffPostTypeList();
+
+//   this.TransferFormGroup.patchValue({
+//     Name: row.Name,
+//     SSOID: row.SSOID,
+//     MobileNo: row.MobileNo,
+//     EmailID: row.EmailID,
+
+//     CurrentInstitute: row.InstituteName,
+//     ServiceName: row.ServiceName,
+//     PostName: row.PostName,
+
+//     InstituteID: 0,
+//     StaffPostTypeID: 0,
+//     PostID: 0,
+//     Remark: ''
+//   });
+
+//   this.modalReference = this.modalService.open(content, {
+//     size: 'xl',
+//     backdrop: 'static'
+//   });
+//   await this.getInstituteMasterList(row.InstituteName);
+// }
+
 async openTransferModal(content: any, row: any) {
 
   this.TransferRequest = row;
+
+  // store current values
+  this.TransferRequest.CurrentServiceId = row.ServiceId;
+  this.TransferRequest.CurrentDesignationID = row.DesignationID;
 
   await this.GetStaffPostTypeList();
 
@@ -1355,7 +1397,6 @@ async openTransferModal(content: any, row: any) {
     SSOID: row.SSOID,
     MobileNo: row.MobileNo,
     EmailID: row.EmailID,
-
     CurrentInstitute: row.InstituteName,
     ServiceName: row.ServiceName,
     PostName: row.PostName,
@@ -1370,6 +1411,7 @@ async openTransferModal(content: any, row: any) {
     size: 'xl',
     backdrop: 'static'
   });
+
   await this.getInstituteMasterList(row.InstituteName);
 }
 
@@ -1537,7 +1579,12 @@ async getITICollege() {
       debugger
       var obj = {
         OfficeID: 0,
-        InstituteID: this.formData.InstituteID,
+        // InstituteID: this.formData.InstituteID,
+        // Serviceid: this.formData.StaffPostTypeID
+
+         InstituteID: this.TransferFormGroup.value.InstituteID,
+         Serviceid: this.TransferFormGroup.value.StaffPostTypeID,
+         Action:'Reliveing_DDL_VacantPostMaster'
       }
       await this.commonMasterService.GetItiVacantPost(obj)
       //await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
@@ -1557,16 +1604,115 @@ async getITICollege() {
   }
 
   async onPostTypeChange() {
+debugger
 
+      this.TransferFormGroup.patchValue({
+      PostID: 0
+    });
+    this.PostList = [];
+    this.formData.StaffPostTypeID =
+        this.TransferFormGroup.value.StaffPostTypeID;
+    this.formData.InstituteID =  this.TransferFormGroup.value.InstituteID;
+    await this.GetPostListnew();
+  }
 
-     this.TransferFormGroup.patchValue({
-    PostID: 0
+  async GetStaffProfileStatusList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('ITIvtARRStauts').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffProfileStatusList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+async onInstituteChange() {
+
+  // Existing code
+ // await this.GetPostListnew();
+
+  // ==========================
+  // Auto Select Service Type
+  // ==========================
+
+  const serviceMatch = this.StaffPostTypeList.find(
+    (x: any) =>
+      Number(x.ID) === Number(this.TransferRequest.CurrentServiceId)
+  );
+
+  this.TransferFormGroup.patchValue({
+    StaffPostTypeID: serviceMatch ? serviceMatch.ID : 0
   });
-  this.PostList = [];
-  this.formData.StaffPostTypeID =
-      this.TransferFormGroup.value.StaffPostTypeID;
-  this.formData.InstituteID =  this.TransferFormGroup.value.InstituteID;
+
   await this.GetPostListnew();
+  // ==========================
+  // Auto Select Post
+  // ==========================
+
+  const postMatch = this.PostList.find(
+    (x: any) =>
+      Number(x.ID) === Number(this.TransferRequest.CurrentDesignationID)
+  );
+
+  this.TransferFormGroup.patchValue({
+    PostID: postMatch ? postMatch.ID : 0
+  });
 }
 
+// async onPostChange() {
+
+//   const selectedPostId = this.TransferFormGroup.get('PostID')?.value;
+
+//   const selectedPost = this.PostList.find(
+//     (x: any) => x.ID == selectedPostId
+//   );
+
+//   const remainingSeatID = selectedPost?.RemainingSeatID ?? 0;
+
+// if(remainingSeatID == 0){
+//   //this.toastr.error('Remaining Seat is not available');
+//   alert('Remaining Seat is not available');
+// }else{
+//   //this.toastr.success('Remaining Seat is available');
+//   alert('Remaining Seat is available');
+// }
+
+//   console.log('RemainingSeatID:', remainingSeatID);
+
+//   // store if needed
+
+// }
+
+async onPostChange() {
+
+  const selectedPostId = this.TransferFormGroup.get('PostID')?.value;
+
+  const selectedPost = this.PostList.find(
+    (x: any) => x.ID == selectedPostId
+  );
+
+  const remainingSeatID = selectedPost?.RemainingSeatID ?? 0;
+
+  const message =
+    remainingSeatID == 0
+      ? 'Remaining Seat is not available. Do you want to continue?'
+      : 'Remaining Seat is available. Do you want to continue?';
+
+  this.Swal2.Confirmation(
+    message,
+    (result: any) => {
+
+      if (result.isConfirmed) {
+        this.saveTransfer();
+      }
+
+    }
+  );
+}
 }

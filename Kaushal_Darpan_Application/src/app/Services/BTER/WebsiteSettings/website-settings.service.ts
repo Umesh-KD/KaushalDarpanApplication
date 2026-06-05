@@ -47,6 +47,16 @@ export class WebsiteSettingsService {
       ).toPromise();
   }
 
+
+  public async GetAllDataOrders(request: WebsiteSettingDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllDataOrders`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async DeleteDataByID(request: WebsiteSettingDataModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/DeleteDataByID`, body, this.headersOptions)
