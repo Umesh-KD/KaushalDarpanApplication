@@ -196,6 +196,40 @@ export class UFMStudentReportComponent {
     }
   }
 
+  async PDFDownload() {
+    try {
+      //session
+      debugger
+      let request = {
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        RoleID: this.sSOLoginDataModel.RoleID,
+        FinancialYearID: this.sSOLoginDataModel.FinancialYearID
+        //DepartmentID: this.sSOLoginDataModel.DepartmentID
+      };
+
+      await this.reportService.UFMCategoryReportPdf_BTER(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.commonFunctionHelper.downloadBase64OfPdf(data.Data, 'UFMCategoryReport.pdf');
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.error(data.Message);
+          }
+          else {
+            this.toastr.error(data.Message);
+            console.log(data.ErrorMessage);
+          }
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
 
   async GetAllData() {
     try {

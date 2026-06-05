@@ -239,7 +239,9 @@ export enum EnumRole {
 
   IIPAdmin = 265,
   IIPIncharge = 266,
- 
+
+  ITI_Instructor = 222,
+
 
 }
 

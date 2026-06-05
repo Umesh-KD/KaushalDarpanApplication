@@ -50,6 +50,7 @@
            ||this.sSOLoginDataModel.RoleID == _EnumRole.BterStaff
            ||this.sSOLoginDataModel.RoleID == _EnumRole.GuestFaculty
            ||this.sSOLoginDataModel.RoleID == _EnumRole.ShikshaSambal
+
                      "></app-staff-dashboard>
 <!--||this.sSOLoginDataModel.RoleID == _EnumRole.HOD_Eng-->
 <!--||this.sSOLoginDataModel.RoleID == _EnumRole.223-->
@@ -78,6 +79,9 @@
 <app-practical-examiner-dashboard *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.ITi_PracticalExaminer"></app-practical-examiner-dashboard>
 
 <app-iip-dashboard *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.IIPAdmin || this.sSOLoginDataModel.RoleID== _EnumRole.IIPIncharge"></app-iip-dashboard>
+
+<app-instructor-dashboard  *ngIf="this.sSOLoginDataModel.RoleID== _EnumRole.ITI_Instructor" ></app-instructor-dashboard>
+
 
 
 
