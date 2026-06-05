@@ -502,7 +502,7 @@ export class OfficeVacancyListComponent {
       { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
     );
 
-    saveAs(data, 'Office_Vacancy_Report.xlsx');
+    // saveAs(data, 'Office_Vacancy_Report.xlsx');
   }
 
 
