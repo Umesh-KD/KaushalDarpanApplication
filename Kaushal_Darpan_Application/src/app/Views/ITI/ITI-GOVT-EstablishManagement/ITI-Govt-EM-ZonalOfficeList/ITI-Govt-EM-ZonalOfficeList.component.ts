@@ -179,6 +179,8 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
       MobileNo: [{ value: '', disabled: true }],
       EmailID: [{ value: '', disabled: true }],
       CurrentInstitute: [{ value: '', disabled: true }],
+      ServiceName: [{ value: '', disabled: true }],
+      PostName: [{ value: '', disabled: true }],
       //CurrentInstitute: [''],
       InstituteID: [0, [DropdownValidators]],
       //PostID: [0],
@@ -1355,6 +1357,8 @@ async openTransferModal(content: any, row: any) {
     EmailID: row.EmailID,
 
     CurrentInstitute: row.InstituteName,
+    ServiceName: row.ServiceName,
+    PostName: row.PostName,
 
     InstituteID: 0,
     StaffPostTypeID: 0,
@@ -1363,7 +1367,7 @@ async openTransferModal(content: any, row: any) {
   });
 
   this.modalReference = this.modalService.open(content, {
-    size: 'lg',
+    size: 'xl',
     backdrop: 'static'
   });
   await this.getInstituteMasterList(row.InstituteName);

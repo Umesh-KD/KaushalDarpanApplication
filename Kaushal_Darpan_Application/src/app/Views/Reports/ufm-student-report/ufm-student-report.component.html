@@ -20,9 +20,13 @@
       <a *ngIf="this.UFMExtraInfoFilled==0" href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="OpenGetUFMExtraInfo(modal_UFMStudentExtraInfo)">
         <i class="ti ti-download"></i> Fill UFM Letter
       </a>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()">
-        <i class="ti ti-download"></i> Export Excel
-      </a>
+
+      <div>
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="PDFDownload()"><i class="ti ti-download"></i> Download UFMCategory PDF</a>
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()">
+            <i class="ti ti-download"></i> Export Excel
+          </a>
+      </div>
     </div>
 
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
