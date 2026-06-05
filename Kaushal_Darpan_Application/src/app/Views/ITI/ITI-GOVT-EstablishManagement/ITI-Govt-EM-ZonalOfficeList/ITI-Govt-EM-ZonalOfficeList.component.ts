@@ -1353,9 +1353,42 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   }
 
 
+// async openTransferModal(content: any, row: any) {
+
+//   this.TransferRequest = row;
+
+//   await this.GetStaffPostTypeList();
+
+//   this.TransferFormGroup.patchValue({
+//     Name: row.Name,
+//     SSOID: row.SSOID,
+//     MobileNo: row.MobileNo,
+//     EmailID: row.EmailID,
+
+//     CurrentInstitute: row.InstituteName,
+//     ServiceName: row.ServiceName,
+//     PostName: row.PostName,
+
+//     InstituteID: 0,
+//     StaffPostTypeID: 0,
+//     PostID: 0,
+//     Remark: ''
+//   });
+
+//   this.modalReference = this.modalService.open(content, {
+//     size: 'xl',
+//     backdrop: 'static'
+//   });
+//   await this.getInstituteMasterList(row.InstituteName);
+// }
+
 async openTransferModal(content: any, row: any) {
 
   this.TransferRequest = row;
+
+  // store current values
+  this.TransferRequest.CurrentServiceId = row.ServiceId;
+  this.TransferRequest.CurrentDesignationID = row.DesignationID;
 
   await this.GetStaffPostTypeList();
 
@@ -1364,7 +1397,6 @@ async openTransferModal(content: any, row: any) {
     SSOID: row.SSOID,
     MobileNo: row.MobileNo,
     EmailID: row.EmailID,
-
     CurrentInstitute: row.InstituteName,
     ServiceName: row.ServiceName,
     PostName: row.PostName,
@@ -1379,6 +1411,7 @@ async openTransferModal(content: any, row: any) {
     size: 'xl',
     backdrop: 'static'
   });
+
   await this.getInstituteMasterList(row.InstituteName);
 }
 
@@ -1546,7 +1579,12 @@ async getITICollege() {
       debugger
       var obj = {
         OfficeID: 0,
-        InstituteID: this.formData.InstituteID,
+        // InstituteID: this.formData.InstituteID,
+        // Serviceid: this.formData.StaffPostTypeID
+
+         InstituteID: this.TransferFormGroup.value.InstituteID,
+         Serviceid: this.TransferFormGroup.value.StaffPostTypeID,
+         Action:'Reliveing_DDL_VacantPostMaster'
       }
       await this.commonMasterService.GetItiVacantPost(obj)
       //await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
@@ -1566,7 +1604,7 @@ async getITICollege() {
   }
 
   async onPostTypeChange() {
-
+debugger
 
       this.TransferFormGroup.patchValue({
       PostID: 0
@@ -1594,4 +1632,87 @@ async getITICollege() {
     }
   }
 
+async onInstituteChange() {
+
+  // Existing code
+ // await this.GetPostListnew();
+
+  // ==========================
+  // Auto Select Service Type
+  // ==========================
+
+  const serviceMatch = this.StaffPostTypeList.find(
+    (x: any) =>
+      Number(x.ID) === Number(this.TransferRequest.CurrentServiceId)
+  );
+
+  this.TransferFormGroup.patchValue({
+    StaffPostTypeID: serviceMatch ? serviceMatch.ID : 0
+  });
+
+  await this.GetPostListnew();
+  // ==========================
+  // Auto Select Post
+  // ==========================
+
+  const postMatch = this.PostList.find(
+    (x: any) =>
+      Number(x.ID) === Number(this.TransferRequest.CurrentDesignationID)
+  );
+
+  this.TransferFormGroup.patchValue({
+    PostID: postMatch ? postMatch.ID : 0
+  });
+}
+
+// async onPostChange() {
+
+//   const selectedPostId = this.TransferFormGroup.get('PostID')?.value;
+
+//   const selectedPost = this.PostList.find(
+//     (x: any) => x.ID == selectedPostId
+//   );
+
+//   const remainingSeatID = selectedPost?.RemainingSeatID ?? 0;
+
+// if(remainingSeatID == 0){
+//   //this.toastr.error('Remaining Seat is not available');
+//   alert('Remaining Seat is not available');
+// }else{
+//   //this.toastr.success('Remaining Seat is available');
+//   alert('Remaining Seat is available');
+// }
+
+//   console.log('RemainingSeatID:', remainingSeatID);
+
+//   // store if needed
+
+// }
+
+async onPostChange() {
+
+  const selectedPostId = this.TransferFormGroup.get('PostID')?.value;
+
+  const selectedPost = this.PostList.find(
+    (x: any) => x.ID == selectedPostId
+  );
+
+  const remainingSeatID = selectedPost?.RemainingSeatID ?? 0;
+
+  const message =
+    remainingSeatID == 0
+      ? 'Remaining Seat is not available. Do you want to continue?'
+      : 'Remaining Seat is available. Do you want to continue?';
+
+  this.Swal2.Confirmation(
+    message,
+    (result: any) => {
+
+      if (result.isConfirmed) {
+        this.saveTransfer();
+      }
+
+    }
+  );
+}
 }
