@@ -841,5 +841,6 @@ export class ITI_Relieving_joining_CheckVacantPostModel {
   public InstituteID?: number = 0;
   public StaffTypeID?: number = 0;
   public DesignationID?: number = 0;
+  public TradeID?: number = 0;
 }
 

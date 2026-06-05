@@ -211,9 +211,9 @@
                 </a>
 
                 <!-- <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 1  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Staff Request" (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a> -->
-                <!--*ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 &&
-                (row.RequestStatusId ==_EnumTransferStatus_ITI_EM.Request_for_Join || row.RequestStatusId==_EnumTransferStatus_ITI_EM.On_Hold)"-->
-                <a href="javascript:void(0);" title="Joining Request"
+                
+                <a href="javascript:void(0);" title="Joining Request" *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 &&
+(row.RequestStatusId ==_EnumTransferStatus_ITI_EM.Request_for_Join || row.RequestStatusId==_EnumTransferStatus_ITI_EM.On_Hold)"
                    (click)="onSubmitJoiningRequest(MyModel_ReplayQueryJoining, row)">
                   <i class="ti ti-check"></i>
                 </a>
@@ -613,12 +613,12 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of VacantPostEmployeeList" [value]="item.ID">{{item.Name}}</option>
               </select>
-              <!--<div *ngIf="isSubmitted&&groupForm.EmployeeID.errors" class="text-danger">
+              <div *ngIf="isSubmitted&&groupForm.EmployeeID.errors" class="text-danger">
                 <p *ngIf="!groupForm.EmployeeID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
                 </p>
-              </div>-->
+              </div>
             </div>
 
 

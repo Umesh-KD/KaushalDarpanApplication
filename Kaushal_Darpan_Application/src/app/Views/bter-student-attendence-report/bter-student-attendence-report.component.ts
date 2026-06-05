@@ -652,7 +652,7 @@ export class BterStudentAttendenceReportComponent {
     debugger
     this.isSubmitted = true;
 
-    this.GetStudentAttandanceTimeDDL();
+
     this.GetStaffLeaveAllData();
 
    
