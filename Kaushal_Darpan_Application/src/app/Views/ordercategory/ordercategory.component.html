@@ -1,0 +1,141 @@
+<!-- Page Title -->
+<div class="flex items-center justify-between mb-6">
+  <h4 class="text-lg font-medium">Order Category Master</h4>
+
+  <button class="btn bg-info text-white"
+          (click)="ViewandUpdate(MyModel_addOrderCategory)">
+    Add Category
+  </button>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full">
+        <thead>
+          <tr>
+            <th>Sr No</th>
+            <th>Category Name</th>
+            <th>Create Date</th>
+            <th>Status</th>
+            <th width="150">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of OrderCategoryList; let i = index">
+
+            <td>{{ i + 1 }}</td>
+            <td>{{ row.CategoryName }}</td>
+            <td>{{ row.CreatedDate }}</td>
+
+            <td align="left">
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+
+                  <input class="sr-only peer"
+                         type="checkbox"
+                         [checked]="row.IsActive"
+                         (change)="onToggleChange(row.OrderCategoryID, row.IsActive)">
+
+                  <span class="toggleIcon">
+                    <span class="toggleTitle"></span>
+                  </span>
+
+                </label>
+
+              </div>
+            </td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+
+                <a href="javascript:void(0)"
+                   title="Edit"
+                   (click)="ViewandUpdate(MyModel_addOrderCategory,row.OrderCategoryID)">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <a href="javascript:void(0)"
+                   title="Delete"
+                   (click)="Delete(row.OrderCategoryID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<ng-template #MyModel_addOrderCategory let-modal>
+
+  <div class="card p-4 modal-card" style="max-width:55%; margin:auto;">
+    <div class="card-header flex justify-between  items-center">
+      <b><i class="fa fa-plus"></i>&nbsp; {{ selectedID > 0 ? 'Edit Category' : 'Add Category' }}</b>
+      <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+    </div>
+    <!--<h4 class="mb-3">
+      {{ selectedID > 0 ? 'Edit Category' : 'Add Category' }}
+    </h4>-->
+
+    <form [formGroup]="form" (ngSubmit)="onSave()">
+
+      <div class="form-field row">
+
+        <label class="block mb-1">
+          Category Name <span class="text-danger">*</span>
+        </label>
+
+        <input type="text"
+               class="form-control w-full"
+               formControlName="CategoryName"
+               placeholder="Enter Category Name" />
+
+        <small class="text-danger"
+               *ngIf="form.get('CategoryName')?.touched &&
+                     form.get('CategoryName')?.invalid">
+          Category Name is required.
+        </small>
+
+      </div>
+
+      <div class="form-field mt-3">
+
+        <label>
+          <input type="checkbox"
+                 formControlName="IsActive" />
+          Active
+        </label>
+
+      </div>
+
+      <div class="mt-4 flex gap-2">
+
+        <button type="submit"
+                class="btn bg-success text-white"
+                [disabled]="form.invalid">
+          Save
+        </button>
+
+        <button type="button"
+                class="btn bg-danger text-white"
+                (click)="CloseModalPopup()">
+          Cancel
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</ng-template>
