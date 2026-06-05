@@ -40,6 +40,7 @@ export class RequestSearchModel {
   public RoleID?: number = 0;
   public RelievingTimeID?: number = 0;
   public OrderID :number=0
+  public RequestStatus? :number=0
 
 
   public EmployeeNumber: string = '';
