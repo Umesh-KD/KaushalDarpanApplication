@@ -471,4 +471,39 @@ export class OfficeVacancyListComponent {
 
     doc.save('OfficeVacancyList.pdf');
   }
+
+  exportToExcel() {
+    const excelData = this.OfficeVacancyList.map((item: any, index: number) => ({
+      'S.No': index + 1,
+      'Office Name': item.OfficeName,
+      'Service Category(Cadre)': item.StaffTypeName,
+      'Institute Name': item.InstituteName,
+      'Name of Post': item.DesignationName,
+      'No. of Post Sanctioned': item.TotalSeatID,
+      'Deployed Post': item.PostedSeat,
+      'Vacant Seat': item.RemainingSeatID,
+      'Order No': item.OrderName,
+      'Comments': item.Comments
+    }));
+
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Office Vacancy': worksheet },
+      SheetNames: ['Office Vacancy']
+    };
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array'
+    });
+
+    const data = new Blob(
+      [excelBuffer],
+      { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+    );
+
+    saveAs(data, 'Office_Vacancy_Report.xlsx');
+  }
+
+
 }
