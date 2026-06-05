@@ -152,7 +152,7 @@
             <td class="text-left">{{row.EnrollmentNo}}</td>
             <td class="text-left">
               <ng-container *ngIf="row.UploadedResume && row.UploadedResume?.trim() !== ''; else notUploaded">
-                <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.UploadedResume}}"
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}BTER/StudentPlacementResumes/{{row.UploadedResume}}"
                    class="btn bg-primary text-white m-0"
                    target="_blank">
                   <i class="ti ti-eye"></i>

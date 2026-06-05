@@ -320,10 +320,11 @@
                       : Request.Dis_UploadedResume
                   }}
                 </span>
-
+                <!--"BTER",
+                "StudentPlacementResumes"-->
                 <!-- View Button -->
                 <a *ngIf="Request.UploadedResume != '' && Request.UploadedResume != null"
-                   [href]="appsettingConfig.StaticFileRootPathURL + DepartmentBterFolder+ StudentPlacementResumes + Request.UploadedResume"
+                   [href]="appsettingConfig.StaticFileRootPathURL + '/BTER'+ '/StudentPlacementResumes/' + Request.UploadedResume"
                    target="_blank"
                    class="ml-3 inline-flex items-center justify-center h-9 w-9 rounded-lg bg-cyan-500 text-white hover:bg-cyan-600 transition">
 
