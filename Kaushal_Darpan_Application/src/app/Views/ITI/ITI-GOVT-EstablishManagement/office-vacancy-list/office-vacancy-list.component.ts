@@ -15,7 +15,8 @@ import { DropdownValidators } from '../../../../Services/CustomValidators/custom
 import { ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 @Component({
@@ -360,5 +361,114 @@ export class OfficeVacancyListComponent {
       }, 200);
     }
   }
-   
+  exportToPDF(): void {
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+
+    doc.text(
+      'Office Vacancy List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.OfficeVacancyList.map((row: any, index: number) => [
+      index + 1,
+      row.OfficeName || '',
+      row.StaffTypeName || '',
+      row.InstituteName || '',
+      row.DesignationName || '',
+      row.TotalSeatID || '',
+      row.PostedSeat || '',
+      row.RemainingSeatID || '',
+      row.OrderName || '',
+      row.Comments || ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'S No',
+        'Office Name',
+        'Service Category(Cadre)',
+        'Institute Name',
+        'Name of Post',
+        'No. of Post Sanctioned',
+        'Deployed Post',
+        'Vacant Seat',
+        'Order No',
+        'Comments'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        cellPadding: 1.5,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1,
+        overflow: 'linebreak'
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+      columnStyles: {
+        1: { cellWidth: 35 },
+        2: { cellWidth: 25 },
+        3: { cellWidth: 40 },
+        4: { cellWidth: 25 },
+        9: { cellWidth: 35 }
+      },
+
+      didDrawPage: function () {
+        const pageSize = doc.internal.pageSize;
+        const pageHeight = pageSize.height || pageSize.getHeight();
+
+        const today = new Date().toLocaleString('en-IN', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        doc.setFontSize(8);
+
+        // Bottom Left
+        doc.text(
+          `Generated On: ${today}`,
+          10,
+          pageHeight - 5
+        );
+
+        // Bottom Right - Page Number
+        doc.text(
+          `Page ${doc.getCurrentPageInfo().pageNumber}`,
+          pageSize.getWidth() - 20,
+          pageHeight - 5
+        );
+      }
+    });
+
+    doc.save('OfficeVacancyList.pdf');
+  }
 }
