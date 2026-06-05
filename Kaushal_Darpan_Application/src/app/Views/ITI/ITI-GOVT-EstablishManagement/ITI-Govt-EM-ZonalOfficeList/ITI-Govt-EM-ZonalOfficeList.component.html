@@ -106,6 +106,16 @@
           </select>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Profile Status:
+          </label>
+          <select class="form-select" id="ProfileStatus" [(ngModel)]="searchRequest.ProfileStatus">
+            <option value="-1">Choose Option</option>
+            <option *ngFor="let item of StaffProfileStatusList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetZonalList()">Search</button>
