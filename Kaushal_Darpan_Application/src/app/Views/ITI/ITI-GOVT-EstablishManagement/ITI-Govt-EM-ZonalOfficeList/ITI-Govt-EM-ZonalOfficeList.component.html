@@ -1138,7 +1138,7 @@
                 <span class="StarMarking">*</span>
               </label>
 
-              <ng-select
+              <!-- <ng-select
                   [items]="InstituteMasterDDLList"
                   bindLabel="InstituteName"
                   bindValue="InstituteID"
@@ -1147,7 +1147,15 @@
                   placeholder="Search Institute"
                   formControlName="InstituteID">
 
-              </ng-select>
+              </ng-select> -->
+
+              <ng-select
+    [items]="InstituteMasterDDLList"
+    bindLabel="InstituteName"
+    bindValue="InstituteID"
+    formControlName="InstituteID"
+    (change)="onInstituteChange()">
+</ng-select>
 
               <div class="text-danger"
                    *ngIf="isTransferSubmitted &&
@@ -1185,7 +1193,6 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Post 
               </label>
-
               <ng-select
                   [items]="PostList"
                   bindLabel="Name"
@@ -1195,6 +1202,7 @@
                   placeholder="Search Post"
                   formControlName="PostID"
                             appendTo="body"
+                            
                          >
 
               </ng-select>
@@ -1224,7 +1232,7 @@
           <div class="text-center mt-5">
             <button type="button"
                     class="btn bg-info text-white"
-                    (click)="saveTransfer()">
+                    (click)="onPostChange()">
               Save
             </button>
 

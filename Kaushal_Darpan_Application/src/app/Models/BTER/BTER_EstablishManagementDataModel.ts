@@ -16,6 +16,7 @@ export class BTER_EM_StaffListSearchModel {
   status?:number=0;
   Eng_NonEng?:number=0;
   GuestHouseID?: string = "";
+  InstitutionManagementTypeID?: number = 0;
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {

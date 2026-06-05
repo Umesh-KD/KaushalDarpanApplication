@@ -11,15 +11,16 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Dynamic Content</b>
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Enter Search Criteria </b>
+      <a (click)="AddStaffData(MyModel_EdiDetailsStaff)" class="inline-flex items-center btn bg-success text-white btn-sm"><i class="ti ti-chevron-left"></i>Add</a>
     </div>
     <div class="overflow-x-auto mt-3 mb-3">
-      <form [formGroup]="HighlightsFromGroup">
+
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
           <div *ngIf="sSOLoginDataModel.RoleID!=212">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department Type</label><span class="StarMarking">*</span>
-            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.DepartmentSubID" formControlName="DepartmentSubID">
+            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.DepartmentSubID">
               <option value="0">--Select--</option>
               <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
               <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
@@ -36,93 +37,93 @@
 
 
             </select>
-            <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.DepartmentSubID.errors" class="text-danger">
-              <p *ngIf="!_HighlightsFromGroup.DepartmentSubID.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This field is required .!
-              </p>
-            </div>
+           
           </div>
+
+
+          <div *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document Category</label>
+            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.DocCategoryID" >
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of DocumentCategory" [value]="item.ID">{{item.Name}}</option>
+            </select>
+           
+          </div>
+
+
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Notification Type</label>
-            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.TypeID" formControlName="TypeID">
+            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.TypeID" >
               <option value="0">--Select--</option>
               <option *ngFor="let item of GetDynamicUploadTypeDDL_Data" [value]="item.Id">{{item.TypeName}}</option>
             </select>
-            <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.TypeID.errors" class="text-danger">
-              <p *ngIf="!_HighlightsFromGroup.TypeID.errors.DropdownValidators">
+           
+          </div>
+
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip</label>
+            <ng-select appendTo="body" formControlName="ViewTypeIDs" [items]="ViewTypeDDL" bindLabel="Name"
+                       bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                       placeholder="--Select Branch--">
+              <ng-template ng-option-tmp let-item="item" let-item$="item$">
+                <input type="checkbox" [checked]="item$.selected" class="me-2" />
+                {{ item.Name }}
+              </ng-template>
+            </ng-select>
+            <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.ViewTypeIDs.errors" class="text-danger">
+              <p *ngIf="!_HighlightsFromGroup.ViewTypeIDs.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
-          </div>
+          </div>-->
+
+
 
           <div>
-            <label>Title:</label><span class="StarMarking">*</span>
-            <input type="text" class="form-input" id="Title" placeholder="Title" formControlName="Title"
-                   [(ngModel)]="request.Title" />
-            <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Title.errors" class="text-danger">
-              <p *ngIf="_HighlightsFromGroup.Title.errors.required">
-                <i aria-hidden="true"></i>This field is required.!
-              </p>
-            </div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip<span class="StarMarking">*</span></label>
+            <ng-select appendTo="body"  [(ngModel)]="Searchrequest.ViewTypeIDs" [clearable]="false">
+              <ng-option value="">--Select--</ng-option>
+              @for (item of ViewTypeDDL; track item.ID) {
+              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              }
+            </ng-select>
+          
           </div>
 
-          <div>
-            <label>Upload Document:</label>
+    
 
-            <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="document1" type="file" (change)="onFilechange($event,'Photo')">
-              <label for="document1">
-                <span>Choose File</span>
-                {{request.FileName === '' ? 'No File Choosen' : request.Dis_FileName}}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}" *ngIf="request.FileName !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+          <!--<div  *ngIf="request.ViewTypeIDs=='10366'">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="request.DesignationID" formControlName="DesignationID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>-->
 
-              </div>
-            </div>
-          </div>
 
-          <div>
-            <label>Start Date:</label>
-            <input type="datetime-local" class="form-input" id="Start_Date" placeholder="Start_Date" formControlName="Start_Date"
-                   [(ngModel)]="request.Start_Date" [min]="todayDate" />
-            <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Start_Date.errors" class="text-danger">
-              <p *ngIf="_HighlightsFromGroup.Start_Date.errors.required">
-                <i aria-hidden="true"></i>This field is required.!
-              </p>
-            </div>
-          </div>
+      
 
-          <div>
-            <label>End Date:</label>
-            <input type="datetime-local" class="form-input" id="End_Date" placeholder="End_Date" formControlName="End_Date"
-                   [(ngModel)]="request.End_Date" [min]="request.Start_Date" />
-            <div *ngIf="isFormSubmitted && _HighlightsFromGroup.End_Date.errors" class="text-danger">
-              <p *ngIf="_HighlightsFromGroup.End_Date.errors.required">
-                <i aria-hidden="true"></i>This field is required.!
-              </p>
-            </div>
-          </div>
 
-          <div class="flex flex-col justify-end mb-4 ms-4">
+
+         
+          <!--<div class="flex flex-col justify-end mb-4 ms-4">
             <label class="me-2 ms-4">
               <input type="checkbox" value="1" id="Box8THForm" (click)="onClickCheckbox()"
                      [checked]="IsPrivate" [(ngModel)]="request.IsPrivate" formControlName="IsPrivate" />
               Is order is private and will only be visible to selected users.
             </label>
-          </div>
+          </div>-->
 
           <div>
             <div class="pt-5">
-              <button class="bg-success btn text-white" (click)="SaveData()"> Save</button>
+              <button class="bg-success btn text-white" (click)="GetAllData()"> Search</button>
               <button class="bg-danger btn text-white" (click)="ResetControls()"> Cancel</button>
             </div>
           </div>
         </div>
-      </form>
+ 
     </div>
 
     <div class="flex justify-between flex-wrap  mb-3 p-3 py-2 bg-light">
@@ -154,8 +155,12 @@
             <th width="80px" align="left">Sr. No.</th>
             <th class="text-left">Session</th>
             <th *ngIf="sSOLoginDataModel.RoleID!=212" class="text-left">Department</th>
+            <th class="text-left">Document Category</th>
             <th class="text-left">Type</th>
+            <th class="text-left">Target ViewerShip</th>
             <th class="text-left">Title</th>
+            <th class="text-left">Staff Type</th>
+            <th class="text-left">Designation</th>
             <th class="text-left">File</th>
             <th class="text-left">Start Date</th>
             <th class="text-left">End Date</th>
@@ -169,9 +174,13 @@
 
             <td>{{idx+1}}</td>
             <td>{{row.FinancialYearName}}</td>
-            <td *ngIf="sSOLoginDataModel.RoleID!=212" align="left">{{row.subcategory}}</td>
+            <td *ngIf="sSOLoginDataModel.RoleID!=212" align="left">{{row.SubCategory}}</td>
+            <td align="left">{{row.DocCategoryName}}</td>
             <td align="left">{{row.TypeName}}</td>
+            <td align="left">{{row.TargetViewership}}</td>
             <td align="left">{{row.Title}}</td>
+            <td align="left">{{row.PostTypeName}}</td>
+            <td align="left">{{row.DesignationNames}}</td>
 
             <td align="left">
               <a title="View File Details" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}" *ngIf="row.FileName !=''"
@@ -196,7 +205,7 @@
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
 
                 <div class="flex">
-                  <a href="javascript:void(0);" title="Edit" (click)=" onEdit(row)">
+                  <a href="javascript:void(0);" title="Edit" (click)=" onEdit(row,MyModel_EdiDetailsStaff)">
                     <i class="ti ti-pencil"></i>
                   </a>
                   <a href="javascript:void(0);" title="Delete" (click)=" onDelete(row)">
@@ -218,3 +227,235 @@
 
   </div>
 </div>
+
+
+
+
+<ng-template #MyModel_EdiDetailsStaff let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="HighlightsFromGroup" id="formEditDataFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Add-Dynamic Content</b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div *ngIf="sSOLoginDataModel.RoleID!=212">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department Type</label><span class="StarMarking">*</span>
+              <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.DepartmentSubID" formControlName="DepartmentSubID">
+                <option value="0">--Select--</option>
+                <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
+                <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
+
+                <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT">ITI NCVT</option>
+                <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT</option>
+
+                <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Planing">T1 PLANING</option>
+                <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Establishment">T2 ESTABLISHMENT</option>
+                <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Purchase">T3 PURCHASE</option>
+
+
+
+
+
+              </select>
+              <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.DepartmentSubID.errors" class="text-danger">
+                <p *ngIf="!_HighlightsFromGroup.DepartmentSubID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document Category</label>
+              <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.DocCategoryID" formControlName="DocCategoryID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DocumentCategory" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.DocCategoryID.errors" class="text-danger">
+                <p *ngIf="!_HighlightsFromGroup.DocCategoryID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Notification Type</label>
+              <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.TypeID" formControlName="TypeID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of GetDynamicUploadTypeDDL_Data" [value]="item.Id">{{item.TypeName}}</option>
+              </select>
+              <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.TypeID.errors" class="text-danger">
+                <p *ngIf="!_HighlightsFromGroup.TypeID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip</label>
+        <ng-select appendTo="body" formControlName="ViewTypeIDs" [items]="ViewTypeDDL" bindLabel="Name"
+                   bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                   placeholder="--Select Branch--">
+          <ng-template ng-option-tmp let-item="item" let-item$="item$">
+            <input type="checkbox" [checked]="item$.selected" class="me-2" />
+            {{ item.Name }}
+          </ng-template>
+        </ng-select>
+        <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.ViewTypeIDs.errors" class="text-danger">
+          <p *ngIf="!_HighlightsFromGroup.ViewTypeIDs.errors.required">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
+      </div>-->
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip<span class="StarMarking">*</span></label>
+              <ng-select appendTo="body" formControlName="ViewTypeIDs" [(ngModel)]="request.ViewTypeIDs" [clearable]="false">
+                <ng-option value="">--Select--</ng-option>
+                @for (item of ViewTypeDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.ViewTypeIDs.errors" class="text-danger">
+                <p *ngIf="_HighlightsFromGroup.ViewTypeIDs.errors.required">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="request.ViewTypeIDs=='10366'">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+              <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="request.StaffTypeID" (change)="fillupDesignation()">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.StaffTypeID.errors" class="text-danger">
+                <p *ngIf="!_HighlightsFromGroup.StaffTypeID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <!--<div  *ngIf="request.ViewTypeIDs=='10366'">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+        <select class="form-select" [(ngModel)]="request.DesignationID" formControlName="DesignationID">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+        </select>
+      </div>-->
+
+
+            <div *ngIf="request.ViewTypeIDs=='10366'">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post</label>
+              <ng-select appendTo="body" formControlName="DesignationID" [items]="PostList" bindLabel="Name"
+                         bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                         placeholder="--Select Branch--">
+                <ng-template ng-option-tmp let-item="item" let-item$="item$">
+                  <input type="checkbox" [checked]="item$.selected" class="me-2" />
+                  {{ item.Name }}
+                </ng-template>
+              </ng-select>
+              <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.DesignationID.errors" class="text-danger">
+                <p *ngIf="_HighlightsFromGroup.DesignationID.errors.required">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+
+
+
+            <div>
+              <label>Title:</label><span class="StarMarking">*</span>
+              <input type="text" class="form-input" id="Title" placeholder="Title" formControlName="Title"
+                     [(ngModel)]="request.Title" />
+              <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Title.errors" class="text-danger">
+                <p *ngIf="_HighlightsFromGroup.Title.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label>Upload Document:</label>
+
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="document1" type="file" (change)="onFilechange($event,'Photo')">
+                <label for="document1">
+                  <span>Choose File</span>
+                  {{request.FileName === '' ? 'No File Choosen' : request.Dis_FileName}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}" *ngIf="request.FileName !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="request.ViewTypeIDs=='10363'">
+              <label>Start Date:</label>
+              <input type="datetime-local" class="form-input" id="Start_Date" placeholder="Start_Date" formControlName="Start_Date"
+                     [(ngModel)]="request.Start_Date" [min]="todayDate" />
+              <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Start_Date.errors" class="text-danger">
+                <p *ngIf="_HighlightsFromGroup.Start_Date.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="request.ViewTypeIDs=='10363'">
+              <label>End Date:</label>
+              <input type="datetime-local" class="form-input" id="End_Date" placeholder="End_Date" formControlName="End_Date"
+                     [(ngModel)]="request.End_Date" [min]="request.Start_Date" />
+              <div *ngIf="isFormSubmitted && _HighlightsFromGroup.End_Date.errors" class="text-danger">
+                <p *ngIf="_HighlightsFromGroup.End_Date.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+            </div>
+
+            <!--<div class="flex flex-col justify-end mb-4 ms-4">
+        <label class="me-2 ms-4">
+          <input type="checkbox" value="1" id="Box8THForm" (click)="onClickCheckbox()"
+                 [checked]="IsPrivate" [(ngModel)]="request.IsPrivate" formControlName="IsPrivate" />
+          Is order is private and will only be visible to selected users.
+        </label>
+      </div>-->
+
+            <div>
+              <div class="pt-5">
+                <button class="bg-success btn text-white" (click)="SaveData()"> Save</button>
+                <button class="bg-danger btn text-white" (click)="ResetControls()"> Cancel</button>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+
+
+        <div class="card-footer"></div>
+
+        </div>
+</form>
+
+
+  </div>
+
+</ng-template>

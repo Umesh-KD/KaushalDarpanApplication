@@ -116,7 +116,7 @@ export class Home2Component implements AfterViewInit {
 
   async GetDynamicUploadContentNotificationITI() {
     try {
-      this.searchRequest.DynamicUploadTypeID = 5; // Only Notifications List For Home Page (DTE,BTER, ITI)
+      this.searchRequest.DynamicUploadTypeID = 0; // Only Notifications List For Home Page (DTE,BTER, ITI)
       this.searchRequest.DepartmentSubID = 243; 
       this.searchRequest.Key = 'DynamicUploadShortList';
       this.loaderService.requestStarted();
@@ -139,7 +139,7 @@ export class Home2Component implements AfterViewInit {
   async GetDynamicUploadContentNotificationApprenticeshipList() {
     try {
       this.searchRequest.DynamicUploadTypeID = 6; // Only Notifications List For Home Page (DTE,BTER, ITI)
-      this.searchRequest.DepartmentSubID = 243; 
+      this.searchRequest.DepartmentSubID = 248; 
       this.searchRequest.Key = 'DynamicUploadShortList';
       this.loaderService.requestStarted();
       await this.home2Service.GetDynamicUploadContent(this.searchRequest)
@@ -1095,5 +1095,13 @@ export class Home2Component implements AfterViewInit {
       this.AdmissionPerByInstitute.destroy();
     }
   }
+  OpenDocument(item: any) {
 
+    const fileUrl =
+      this.appsettingConfig.StaticFileRootPathURL +
+      '/' +
+      item.DocFile;
+
+    window.open(fileUrl, '_blank');
+  }
 }
