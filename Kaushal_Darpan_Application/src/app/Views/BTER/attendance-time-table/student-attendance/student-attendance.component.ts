@@ -669,9 +669,9 @@ export class StudentAttendanceComponent implements OnInit {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.streamId,  
-        SectionID: this.TableForm.value.SectionID,
+        SectionID: this.TableForm.getRawValue().SectionID,
         SubjectID: this.subjectId,
-        TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
+        TimeDDLID: this.TableForm.getRawValue().AttandanceTimeID || 0,
       };
 
       this.AttendanceMarkingDataList = [];
@@ -1014,7 +1014,7 @@ export class StudentAttendanceComponent implements OnInit {
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID,
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-        RosterID: this.TableForm.value.AttandanceTimeID,
+        RosterID: this.TableForm.getRawValue().AttandanceTimeID,
         Date: x.date.replace(/\(.*?\)\s*/g, '').trim(),
         IsLocked: x.locked,
         IsMarked: x.marked
@@ -1036,7 +1036,7 @@ export class StudentAttendanceComponent implements OnInit {
         InstituteID: this.sSOLoginDataModel.InstituteID,
         AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID,
         StaffID: this.StaffID,
-        RosterID: this.TableForm.value.AttandanceTimeID
+        RosterID: this.TableForm.getRawValue().AttandanceTimeID
       };
 
       saveAttendanceData.forEach(item => {

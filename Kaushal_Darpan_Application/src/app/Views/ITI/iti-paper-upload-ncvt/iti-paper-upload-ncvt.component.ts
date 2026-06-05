@@ -23,12 +23,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from "../../../Common/SweetAlert2";
 
 @Component({
-  selector: 'app-iti-paper-upload',
+  selector: 'app-iti-paper-upload-ncvt',
   standalone: false,
-  templateUrl: './iti-paper-upload.component.html',
-  styleUrl: './iti-paper-upload.component.css'
+  templateUrl: './iti-paper-upload-ncvt.component.html',
+  styleUrl: './iti-paper-upload-ncvt.component.css'
 })
-export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
+export class ItiPaperUploadNcvtComponent {
   examForm!: FormGroup;
   PaperUploadTypesList!: any[];
   InstituteMasterList!: any[];
@@ -57,7 +57,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   isAllSelected = false;   // new addded 18062025
-  public PaperID:number=0
+  public PaperID: number = 0
 
   CenterListPaperWise: any[] = [];
   constructor(private fb: FormBuilder,
@@ -76,8 +76,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
   }
 
-  async ngOnInit()
-  {
+  async ngOnInit() {
     if (this.sSOLoginDataModel.RoleID == 7) {
       this.displayedColumns.push('Password');
       this.displayedColumns.push('Download');
@@ -91,7 +90,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       SemesterID: ['', Validators.required],
       Password: ['', [Validators.required]],
       PaperID: ['0', Validators.required],
-    
+
       FileName: [''],
       PaperDate: ['', Validators.required],
       //CenterCode: [''],   // new comment addded 18062025
@@ -106,7 +105,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     });
 
 
-   
+
 
     this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
       .then((data: any) => {
@@ -128,7 +127,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
 
 
-    
+
 
     this.menuService.GetAcedmicYearList()
       .then((AcedmicYear: any) => {
@@ -137,21 +136,19 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         //this.loaderService.requestEnded();
       }, error => console.error(error));
 
-    await this.commonMasterService.GetExamName(this.sSOLoginDataModel.Eng_NonEng).then((data: any) =>
-    {
+    await this.commonMasterService.GetExamName(this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ExamList = data.Data;
     })
 
 
-     this.onExamChange(this.examForm.get("ExamID")?.value);
+    this.onExamChange(this.examForm.get("ExamID")?.value);
 
     this.searchRequestPaper.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequestPaper.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.searchRequestPaper.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.commonMasterService.GetCenterMasterDDL(this.searchRequestPaper)
-      .then((data: any) =>
-      {
+      .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.CenterMasterList = data['Data'];
       }, (error: any) => console.error(error));
@@ -173,7 +170,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       this.getRecordByID(this.PaperID);
       this.examForm.get('Password')?.disable()
     }
-   
+
   }
 
   ngAfterViewInit(): void {
@@ -249,18 +246,16 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async GetTradeWisePapers(StreamID:number)
-  {
+  async GetTradeWisePapers(StreamID: number) {
 
-    if (StreamID == 0)
-    {
+    if (StreamID == 0) {
       this.examForm.get('PaperID')?.reset('0');
     }
 
     const formData = this.examForm.value as PaperUpload;
     let obj =
     {
-      Action:"_getPapersList",
+      Action: "_getPapersList",
       EndTermID: this.sSOLoginDataModel.EndTermID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
@@ -268,14 +263,12 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       TradeID: StreamID,
 
     };
-    try
-    {
-      await this.apiService.GetTradeWisePapers(obj).then((data: any) =>
-      {
+    try {
+      await this.apiService.GetTradeWisePapers(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.PaperMasterList = data.Data;
-        console.log("Ravi Data",this.PaperMasterList)
-      
+        console.log("Ravi Data", this.PaperMasterList)
+
       });
     } catch (error) {
       console.error(error);
@@ -295,14 +288,15 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
 
     const sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    if (this.examForm.valid)
-    {
+    if (this.examForm.valid) {
       this.examForm.get('Password')?.enable();
       const formData = this.examForm.value as PaperUpload;
       debugger;
       const Pcode = this.PaperMasterList
         .find(f => f.PaperID == formData.PaperID)
         ?.SubjectCode;
+
+      debugger
 
       let obj =
       {
@@ -327,8 +321,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         ModifyDate: new Date(),
         PaperCode: Pcode
       };
-      try
-      {
+      try {
         await this.apiService.SavePaperUploadData(obj).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.Data == 1 || data.Data == 2) {
@@ -390,9 +383,9 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
                 Dis_FileName: this.documentDetails[0].Dis_FileName
               })
               //reset file type
-         
+
               event.target.value = null;
- 
+
 
             }
             if (data.State == EnumStatus.Error) {
@@ -496,8 +489,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     const selected = event.value;
     const allIDs = this.CenterMasterList.map((item: { ID: any; }) => item.ID);
 
-    if (selected.includes('ALL'))
-    {
+    if (selected.includes('ALL')) {
       if (this.isAllSelected) {
         // Unselect all
         this.examForm.get('CenterCode')?.setValue([]);
@@ -511,29 +503,24 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       this.isAllSelected = selected.length === allIDs.length;
     }
   }
-  togglePassword()
-  {
+  togglePassword() {
     this.showPassword = !this.showPassword;
   }
 
-  getSteram(event: any): void
-  {
+  getSteram(event: any): void {
     this.examForm.get('StreamID')?.setValue(0);
     this.examForm.get('PaperID')?.setValue(0);
 
-    if (event > 0)
-    {
+    if (event > 0) {
       this.getTradeList(event);
     }
-    else
-    {
+    else {
       this.StreamMasterList = [];
     }
   }
 
 
-  getTradeList(semesterid: number)
-  {
+  getTradeList(semesterid: number) {
 
     this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, 0, 0, semesterid)
       .then((data: any) => {
@@ -551,37 +538,32 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     this.isAllSelected = false;
     const selected = event;
     const allIDs = this.CenterMasterList.map((item: { ID: any; }) => item.ID);
-    if (selected=="0")
-    {
+    if (selected == "0") {
       if (this.isAllSelected) {
         // Unselect all
         this.examForm.get('CenterCode')?.setValue([]);
         this.isAllSelected = false;
       }
-      else
-      {
+      else {
         // Select all
         this.examForm.get('CenterCode')?.setValue(allIDs);
         this.isAllSelected = true;
       }
-    } else
-    {
+    } else {
       this.examForm.get('CenterCode')?.setValue([]);
       this.isAllSelected = false;
     }
   }
 
 
-  async GetCenterDatapaperWise(PaperID: number)
-  {
+  async GetCenterDatapaperWise(PaperID: number) {
     const formData = this.examForm.value as PaperUpload;
     debugger;
 
     if (formData.StreamID == 0) {
       return;
     }
-    if (PaperID > 0)
-    {
+    if (PaperID > 0) {
 
       let obj =
       {
@@ -603,23 +585,19 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         console.error(error);
       }
     }
-    else
-    {
+    else {
       this.examForm.get('CenterCode')?.setValue([]);
     }
   }
 
-  selectCenterAcordigntoPapers()
-  {
+  selectCenterAcordigntoPapers() {
 
     debugger;
     const allIDs = this.CenterListPaperWise.map((item: { CenterID: any; }) => item.CenterID);
-    if (allIDs.length>0)
-    {
-        this.examForm.get('CenterCode')?.setValue(allIDs);
-      
-    } else
-    {
+    if (allIDs.length > 0) {
+      this.examForm.get('CenterCode')?.setValue(allIDs);
+
+    } else {
       this.examForm.get('CenterCode')?.setValue([]);
 
     }
@@ -627,7 +605,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   }
 
   getSelectedCenterNames() {
-  
+
     const selectedIds = this.examForm.get('CenterCode')?.value || [];
     console.log()
 
@@ -640,9 +618,8 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       });
   }
 
-  async getRecordByID(PaperUploadID: number)
-  {
-   
+  async getRecordByID(PaperUploadID: number) {
+
 
     let obj =
     {
@@ -650,8 +627,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       PaperUploadID: PaperUploadID
     };
     try {
-      await this.apiService.GetTradeWisePapers(obj).then((data: any) =>
-      {
+      await this.apiService.GetTradeWisePapers(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.fillEditData(data.Data[0]);
         debugger
@@ -660,7 +636,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         }
 
         this.documentDetails[0].FileName = data?.Data?.[0]?.FileName ?? '';
-      
+
         console.log(this.documentDetails[0].FileName)
       });
     } catch (error) {
@@ -668,27 +644,27 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     }
   }
 
-async  fillEditData(editData: any) {
+  async fillEditData(editData: any) {
 
 
     this.examForm.patchValue({
       SemesterID: editData.SemesterID
     });
-  this.getSteram(editData.SemesterID);
+    this.getSteram(editData.SemesterID);
 
-  this.examForm.patchValue({
-    StreamID: editData.StreamID,
-  });
+    this.examForm.patchValue({
+      StreamID: editData.StreamID,
+    });
 
-   await this.GetTradeWisePapers(editData.StreamID);
-  await this.seletDeselectCenters(editData.StreamID)
+    await this.GetTradeWisePapers(editData.StreamID);
+    await this.seletDeselectCenters(editData.StreamID)
 
 
-  this.examForm.patchValue({
-    PaperID: editData.PaperID
-  });
+    this.examForm.patchValue({
+      PaperID: editData.PaperID
+    });
 
-  this.GetCenterDatapaperWise(editData.PaperID)
+    this.GetCenterDatapaperWise(editData.PaperID)
 
     this.examForm.patchValue({
       PaperUploadID: editData.PaperUploadID,

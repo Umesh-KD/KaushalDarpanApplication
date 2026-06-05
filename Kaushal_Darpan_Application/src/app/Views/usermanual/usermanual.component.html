@@ -1,0 +1,64 @@
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">
+        <i class="ti ti-list"></i> User Manuals
+      </b>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto">
+
+        <thead class="bg-light/40 border-b border-gray-100 h-10">
+          <tr>
+            <th>Sr No</th>
+            <th>Title</th>
+            <th>Description</th>
+            <!-- <th>Display Order</th> -->
+            <th>Updated Date</th>
+            <th>Manual</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngIf="UserManualList.length == 0">
+            <td colspan="6" class="text-center">
+              No Record Found
+            </td>
+          </tr>
+
+          <tr *ngFor="let row of UserManualList; let i=index">
+
+            <td>{{i+1}}</td>
+
+            <td>{{row.Title}}</td>
+
+            <td>{{row.Description}}</td>
+
+            <!-- <td>{{row.DisplayOrder}}</td> -->
+
+            <td>{{row.CreatedDate | date:'dd/MM/yyyy'}}</td>
+
+            <td>
+              <a
+                href="{{appsettingConfig.StaticFileRootPathURL +'UserManual/'+ row.FilePath}}"
+                target="_blank"
+                class="btn bg-success btn-sm text-white">
+                <i class="ti ti-eye"></i>
+                <!-- <i class="ti ti-download"></i> -->
+                View
+
+              </a>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>

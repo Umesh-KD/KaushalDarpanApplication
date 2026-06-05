@@ -18,9 +18,11 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
       <a *ngIf="this.UFMExtraInfoFilled==0" href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="OpenGetUFMExtraInfo(modal_UFMStudentExtraInfo)">
-      <i class="ti ti-download"></i> Fill UFM Letter </a>
+        <i class="ti ti-download"></i> Fill UFM Letter
+      </a>
       <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()">
-      <i class="ti ti-download"></i> Export Excel</a>
+        <i class="ti ti-download"></i> Export Excel
+      </a>
     </div>
 
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
@@ -44,7 +46,6 @@
 
     <div class="overflow-x-auto mt-3">
 
-
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
@@ -54,6 +55,7 @@
             <th class="text-left">Name</th>
             <th class="text-left">CIC</th>
             <th class="text-left">CCode</th>
+            <th class="text-left">UFM Category</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -65,16 +67,20 @@
             <td>{{ item.Name }}</td>
             <td>{{ item.CIC}}</td>
             <td>{{ item.CCode}}</td>
+            <td>{{ item.UFMCategory}}</td>
             <td>
               <!-- Ufm Letter download -->
-              <a *ngIf="item.UFMExtraInfoID>0"
-                 (click)="GetUFMLetter(item)"
-                 class="me-2 btn-outline-warning m-1"
-                 target="_blank"
-                 title="Download UFM Letter">
-                <i class="fa fa-download"></i>
-              </a>
-            </td>
+              <div class="d-flex align-items-center gap-8">
+                <a *ngIf="item.UFMExtraInfoID>0"
+                   (click)="GetUFMLetter(item)"
+                   class="me-2 btn-outline-warning m-1 ms-4"
+                   target="_blank"
+                   title="Download UFM Letter">
+                  <i class="fa fa-download"></i>
+                </a>
+                <a href="javascript:void(0);" (click)="openModalCategory(modal_Opens,item.StudentExamID)" class="me-3 btn-outline-warning m-1 ms-2" id="btnEdit" title="Update"> <i class="ti ti-check" style="font-size: 18px; font-weight: 500;"></i></a>
+              </div>
+              </td>
           </tr>
         </tbody>
       </table>
@@ -164,5 +170,37 @@
       </form>
 
     </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #modal_Opens let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Update Details</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopupCategory()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-8">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <!-- <div>-->
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Category Type:
+            </label>
+            <select class="form-select" id="ddlCategoryType" [(ngModel)]="CategoryID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of CategoryTypeList" [value]="item.CodeID">{{item.Name}}</option>
+            </select>
+          </div>
+          <!-- </div> -->
+          <div class=" text-center">
+            <button type="button" class="btn bg-success text-white" (click)="UpdateUFMCategoryData()">Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </ng-template>

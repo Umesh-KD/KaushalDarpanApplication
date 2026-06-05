@@ -62,5 +62,11 @@ export class PlacementStudentService {
       ).toPromise();
   }
 
+  public async GetStudentLatestResume(StudentID: number = 0) {
+    return await this.http.get(this.APIUrl + "/GetStudentLatestResume/" + StudentID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 

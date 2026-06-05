@@ -110,19 +110,22 @@
                      #checkboxSeletedAll (change)="checkboxthView_checkboxchange(checkboxSeletedAll.checked)">
             </th>
             <th class="text-left">Student Name </th>
+            <th class="text-left">Registration No.</th>
+            <th class="text-left">Company Name</th>
             <th class="text-left">Hiring Role</th>
             <th class="text-left">Email Address</th>
             <th class="text-left">Father's Name</th>
             <th class="text-left">DOB  </th>
             <th class="text-left">Age  </th>
             <th class="text-left">Gender   </th>
-            <th class="text-left">Mobile   </th>
+            <!--<th class="text-left">Mobile   </th>
 
-            <th class="text-left">State</th>
+            <th class="text-left">State</th>-->
             <th class="text-left">Institute Name   </th>
             <th class="text-left">Institute Type</th>
             <th class="text-left">Enrollment No</th>
             <th class="text-left">Uploaded Resume</th>
+            <th class="text-left">Notify Status</th>
           </tr>
         </thead>
         <tbody>
@@ -133,21 +136,23 @@
                      [(ngModel)]="row.Marked" />
             </td>
             <td class="text-left">{{row.StudentName}} </td>
+            <td class="text-left">{{row.RegistrationNo}} </td>
+            <td class="text-left">{{row.CompanyName}} </td>
             <td class="text-left">{{row.HiringRoleName}} </td>
             <td class="text-left">{{row.Email}}</td>
             <td class="text-left">{{row.FatherName}}</td>
             <td class="text-left">{{row.DOB}}</td>
             <td class="text-left">{{row.Age}}</td>
             <td class="text-left">{{row.Dis_Gender}}</td>
-            <td class="text-left">{{row.MobileNo}}</td>
+            <!--<td class="text-left">{{row.MobileNo}}</td>
 
-            <td class="text-left">{{row.StateName}}</td>
+            <td class="text-left">{{row.StateName}}</td>-->
             <td class="text-left">{{row.InstituteName}}</td>
             <td class="text-left">{{row.InstitutionManagementType}}</td>
             <td class="text-left">{{row.EnrollmentNo}}</td>
             <td class="text-left">
               <ng-container *ngIf="row.UploadedResume && row.UploadedResume?.trim() !== ''; else notUploaded">
-                <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.UploadedResume}}"
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}BTER/StudentPlacementResumes/{{row.UploadedResume}}"
                    class="btn bg-primary text-white m-0"
                    target="_blank">
                   <i class="ti ti-eye"></i>
@@ -157,6 +162,7 @@
                 <span class="text-muted">Not Uploaded</span>
               </ng-template>
             </td>
+            <td class="text-left">{{row.NotifyStatus=='Selected'?'Notified':'Pending'}}</td>
           </tr>
         </tbody>
       </table>

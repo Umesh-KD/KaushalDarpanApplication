@@ -971,12 +971,14 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
  
 
 
-  async getInstituteMasterList() {
+  async getInstituteMasterList(currentInstitute?: string) {
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDLList = data.Data;
+         this.InstituteMasterDDLList = data.Data.filter(
+          (x: any) => x.InstituteName !== currentInstitute
+        );
       })
     } catch (error) {
       console.error(error);
@@ -1364,9 +1366,18 @@ async openTransferModal(content: any, row: any) {
     size: 'lg',
     backdrop: 'static'
   });
+  await this.getInstituteMasterList(row.InstituteName);
 }
 
 closeTransferModal() {
+    this.TransferFormGroup.patchValue({
+    InstituteID: 0,
+    StaffPostTypeID: 0,
+    PostID: 0,
+    Remark: ''
+  });
+
+  this.PostList = [];
   this.modalService.dismissAll();
 }
 
@@ -1382,7 +1393,7 @@ const formData = this.TransferFormGroup.getRawValue();
   const request = {
 
     UserID: this.TransferRequest.StaffUserID,
-    OfficeID: 0,
+    OfficeID: 11,
     PostID: formData.PostID,
     DepartmentID:this.sSOLoginDataModel.DepartmentID,
     LevelID:this.TransferRequest.LevelID,
@@ -1517,7 +1528,15 @@ async getITICollege() {
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
+   this.TransferFormGroup.value.PostID = 0;   
+   this.PostList=[];
+      debugger
+      var obj = {
+        OfficeID: 0,
+        InstituteID: this.formData.InstituteID,
+      }
+      await this.commonMasterService.GetItiVacantPost(obj)
+      //await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffPostTypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
@@ -1535,9 +1554,14 @@ async getITICollege() {
 
   async onPostTypeChange() {
 
+
+     this.TransferFormGroup.patchValue({
+    PostID: 0
+  });
+  this.PostList = [];
   this.formData.StaffPostTypeID =
       this.TransferFormGroup.value.StaffPostTypeID;
-
+  this.formData.InstituteID =  this.TransferFormGroup.value.InstituteID;
   await this.GetPostListnew();
 }
 

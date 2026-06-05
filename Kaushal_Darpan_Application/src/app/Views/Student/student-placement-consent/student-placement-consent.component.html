@@ -242,13 +242,13 @@
                    class="w-4 h-4 text-blue-600">
 
             <span class="text-sm font-medium text-gray-700">
-              Interested
+              Give Consent
             </span>
 
           </label>
 
           <!-- Not Interested -->
-          <label class="flex items-center gap-3 border rounded-2xl px-4 py-3 cursor-pointer transition-all"
+          <!--<label class="flex items-center gap-3 border rounded-2xl px-4 py-3 cursor-pointer transition-all"
                  [ngClass]="Request.InterestedStatus == 2
                  ? 'border-red-500 bg-red-50'
                  : 'border-gray-300 hover:border-red-300'">
@@ -264,7 +264,7 @@
               Not Interested
             </span>
 
-          </label>
+          </label>-->
 
         </div>
 
@@ -315,15 +315,16 @@
 
                 <span class="truncate text-sm text-gray-700">
                   {{
- Request.Dis_UploadedResume == '' || Request.Dis_UploadedResume == null
-            ? 'No File Chosen'
-            : Request.Dis_UploadedResume
+                      Request.Dis_UploadedResume == '' || Request.Dis_UploadedResume == null
+                      ? 'No File Chosen'
+                      : Request.Dis_UploadedResume
                   }}
                 </span>
-
+                <!--"BTER",
+                "StudentPlacementResumes"-->
                 <!-- View Button -->
                 <a *ngIf="Request.UploadedResume != '' && Request.UploadedResume != null"
-                   [href]="appsettingConfig.StaticFileRootPathURL + '/' + Request.UploadedResume"
+                   [href]="appsettingConfig.StaticFileRootPathURL + '/BTER'+ '/StudentPlacementResumes/' + Request.UploadedResume"
                    target="_blank"
                    class="ml-3 inline-flex items-center justify-center h-9 w-9 rounded-lg bg-cyan-500 text-white hover:bg-cyan-600 transition">
 
@@ -341,7 +342,24 @@
 
       </div>
 
+      <div class="mb-5">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Email <span class="StarMarking">*</span>
+          </label>
+          <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId"
+                 [(ngModel)]="Request.EmailId">
+        </div>
 
+        <div class="mt-2">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Mobile Number <span class="StarMarking">*</span>
+          </label>
+          <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo"
+                 [(ngModel)]="Request.MobileNo" maxlength="10"
+                 (keypress)="validateNumber($event)">
+        </div>
+      </div>
 
 
 

@@ -51,14 +51,15 @@ export class HighlightsComponent {
       DepartmentSubID: ['', [DropdownValidators]],
       TypeID: ['', [DropdownValidators]],
     });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.todayDate = new Date().toISOString().substring(0, 16);
-    this.GetDynamicUploadTypeDDL();
-    this.GetAllData();
-    debugger
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship || this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship) {
-      debugger
 
+    await this.GetDynamicUploadTypeDDL();
+    await this.GetAllData();
+    //debugger
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship || this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship) {
+      //debugger
       this.request.TypeID = 6
       this.HighlightsFromGroup.get('TypeID')?.disable();
     } else {
@@ -107,13 +108,12 @@ export class HighlightsComponent {
 
 
     try {
-      this.loaderService.requestStarted();
-      await this.websiteSettingsService.SaveData(this.request).then((data: any) => {
+      await this.websiteSettingsService.SaveData(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.ResetControls();
-          this.GetAllData();
+          await this.GetAllData();
         } else {
           this.toastr.error(data.ErrorMessage);
         }
@@ -121,18 +121,11 @@ export class HighlightsComponent {
       
     } catch (error) {
       console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      })
-    }
-    console.log("request",this.request)
+    } 
   }
     
   async GetDynamicUploadTypeDDL() {
-
     try {
-      this.loaderService.requestStarted();
       await this.websiteSettingsService.GetDynamicUploadTypeDDL(this.requestBaseModel).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
@@ -144,12 +137,7 @@ export class HighlightsComponent {
       
     } catch (error) {
       console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      })
-    }
-    console.log("request",this.request)
+    } 
   }
 
   public file!: File;
@@ -173,7 +161,6 @@ export class HighlightsComponent {
           return;
         }
         // upload to server folder
-        this.loaderService.requestStarted();
 
         await this.commonMasterService
           .UploadDocument(this.file)
@@ -197,17 +184,12 @@ export class HighlightsComponent {
       }
     } catch (Ex) {
       console.log(Ex);
-    } finally {
-      /*setTimeout(() => {*/
-      this.loaderService.requestEnded();
-      /*  }, 200);*/
-    }
+    } 
   }
 
   async GetAllData() {
     
     try {
-      this.loaderService.requestStarted();
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
@@ -228,12 +210,7 @@ export class HighlightsComponent {
       
     } catch (error) {
       console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      })
-    }
-    console.log("request",this.request)
+    } 
   }
 
   async onDelete(row: any) {  
@@ -242,7 +219,6 @@ export class HighlightsComponent {
       async (result: any) => {
         if (result.isConfirmed) {
           try {
-            this.loaderService.requestStarted();
             this.request.WS_ID = row.WS_ID;
             this.request.UserID = this.sSOLoginDataModel.UserID
             this.request.DUTC_ID = row.DUTC_ID
@@ -254,7 +230,7 @@ export class HighlightsComponent {
                 if (data.State = EnumStatus.Success) {
                   this.toastr.success(data.Message)
                   this.ResetControls();
-                  this.GetAllData()
+                  await this.GetAllData()
                 }
                 else {
                   this.toastr.error(data.ErrorMessage)
@@ -266,18 +242,12 @@ export class HighlightsComponent {
           catch (ex) {
             console.log(ex);
           }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
         }
       });
   }
 
   async onEdit(row: any) {
     try {
-      this.loaderService.requestStarted();
       this.request.DUTC_ID = row.DUTC_ID
       await this.websiteSettingsService.GetById(this.request)
         .then(async (data: any) => {
@@ -298,11 +268,6 @@ export class HighlightsComponent {
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -326,7 +291,7 @@ export class HighlightsComponent {
                 if (data.State = EnumStatus.Success) {
                   this.toastr.success(data.Message)
                   this.ResetControls();
-                  this.GetAllData()
+                  await this.GetAllData()
                 }
                 else {
                   this.toastr.error(data.ErrorMessage)
@@ -337,11 +302,6 @@ export class HighlightsComponent {
           }
           catch (ex) {
             console.log(ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
           }
         }
       });

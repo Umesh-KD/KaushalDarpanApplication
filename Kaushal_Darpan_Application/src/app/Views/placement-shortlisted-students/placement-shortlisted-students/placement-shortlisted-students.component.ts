@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PlacementShortlistedStudentsService } from '../../../Services/PlacementShortlistedStudents/placement-shortlisted-students.service';
 import { PlacementShortlistedStuSearch, PlacementShortListStudentResponseModel } from '../../../Models/PlacementShortListStudentResponseModel';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import { EnumMessageType, EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumMessageType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { CommonFunctionHelper } from '../../../Common/commonFunctionHelper';
@@ -37,6 +37,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   public UserID: number = 0;
   public AllSelect: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public _GlobalConstants: any = GlobalConstants;
 
   public PlacedStudentsCountList: any[] = [];
   public CampusMasterList: any[] = [];
@@ -160,7 +161,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     if (this.PlacementShortListStudentForm.invalid) {
       return
     }
-
+    //debugger
     this.StudentList = [];
     try {
       this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID;
@@ -171,6 +172,8 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
       this.searchRequest.CampusPostID = this.CampusPostID
       this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID
       this.searchRequest.HiringRoleID = this.HiringRoleID
+      this.searchRequest.NotifyStatus = 'Shortlist';
+      this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
 
       await this.placementShortListStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
@@ -418,7 +421,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
       this.toastr.error('Please select at least one checkbox!');
       return; // Exit the method if no checkbox is selected
     }
-
+    //debugger
     // get the selected students
     const selectedStudents = this.StudentList.filter(student => student.Marked ) ?? [];
     // add in model
@@ -429,6 +432,12 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
       EnrollmentNo: student.EnrollmentNo,
       MobileNo: student.MobileNo,
       MessageType: EnumMessageType.Bter_StudentShortList,
+      UserID: this.sSOLoginDataModel.UserID,
+      StudentName: student.StudentName,
+      NotifyFor: 'Shortlist',
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+      RegistrationNo: student.RegistrationNo
     }));
     //debugger
     // call

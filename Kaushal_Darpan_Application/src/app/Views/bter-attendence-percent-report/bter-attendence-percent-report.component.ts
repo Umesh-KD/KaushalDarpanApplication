@@ -615,7 +615,7 @@ export class BterAttendencePercentReportComponent {
     debugger
     this.isSubmitted = true;
 
-    this.GetStudentAttandanceTimeDDL();
+
     this.GetStaffLeaveAllData();
 
 

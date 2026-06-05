@@ -11,6 +11,7 @@ import { PlacementReportService } from '../../Services/PlacementReport/Placement
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { PlacementReportHistorySearchModels, PlacementReportSearchModels } from '../../Models/PlacementDashReportModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 
 @Component({
   selector: 'app-placement-dash-report',
@@ -33,7 +34,7 @@ export class PlacementDashReportComponent implements OnInit {
   totalPages: number = 0;
   startInTableIndex: number = 1;
   endInTableIndex: number = 10;
-  sSOLoginDataModel: any;
+  sSOLoginDataModel = new SSOLoginDataModel();
   id: any;
   _EnumRole = EnumRole;
   InstituteMasterList: any = [];
@@ -48,7 +49,8 @@ export class PlacementDashReportComponent implements OnInit {
   FromAge:number=0
   ToAge:number=0
   CampusID:number=0
-  FinancialYearID:number=0
+  FinancialYearID: number = 0
+  public InstituteID: number = 0;
 
   constructor(
     private PlacementDashService: PlacementReportService,
@@ -137,11 +139,19 @@ export class PlacementDashReportComponent implements OnInit {
   }
 
   async GetAllData() {
-    //    debugger
+        debugger
+    let collegeId = 0;
+    if (this.sSOLoginDataModel.RoleID != 5) {
+      collegeId = this.sSOLoginDataModel.InstituteID;
+    }
+    else {
+      collegeId = this.InstituteID;
+    }
+
     let requestData: any = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      CollegeID: this.sSOLoginDataModel.InstituteID,
+      CollegeID: collegeId,
       RoleID: this.sSOLoginDataModel.RoleID,
       Id: this.id,
       Gender: '',

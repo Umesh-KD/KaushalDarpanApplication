@@ -10,7 +10,7 @@ import { ReportService } from '../../../Services/Report/report.service';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { AttendanceRpt23DataModel } from '../../../Models/ReportBasedDataModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { EnumRole, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';
 import { ActivatedRoute } from '@angular/router';
 
@@ -46,27 +46,27 @@ export class Report23Component {
     private fb: FormBuilder,
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.Report23Form = this.fb.group({
       ExamDate: ['', Validators.required],
-      ShiftID: ['',[DropdownValidators]],
-      SubjectID: ['',[DropdownValidators]],
-      SemesterID: ['',[DropdownValidators]],
-      StreamID: ['',[DropdownValidators]],
+      ShiftID: ['', [DropdownValidators]],
+      SubjectID: ['', [DropdownValidators]],
+      SemesterID: ['', [DropdownValidators]],
+      StreamID: ['', [DropdownValidators]],
       InstituteID: [''],
     })
-    this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
-    this.CSId = Number( this.activatedRoute.snapshot.queryParamMap.get('csid'));
+    this.CenterId = Number(this.activatedRoute.snapshot.queryParamMap.get('centerid'));
+    this.CSId = Number(this.activatedRoute.snapshot.queryParamMap.get('csid'));
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     this.GetExamShiftData();
     this.getSemesterMasterList();
     this.getStreamMasterList();
     this.getCenterMasterList();
-   
-  } 
+
+  }
 
   get report23Form() { return this.Report23Form.controls; }
 
@@ -151,20 +151,20 @@ export class Report23Component {
   }
 
   async onSubmit() {
-    debugger
+    //debugger
     this.isSubmitted = true;
-    if(this.Report23Form.invalid){
+    if (this.Report23Form.invalid) {
       this.toastr.error("Please fill all the required fields")
       return
     }
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    if(this.sSOLoginDataModel.RoleID == EnumRole.Invigilator || this.sSOLoginDataModel.RoleID == EnumRole.Invigilator_NonEng){
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Invigilator || this.sSOLoginDataModel.RoleID == EnumRole.Invigilator_NonEng) {
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
     }
 
-    if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+    if ((this.sSOLoginDataModel.RoleID === EnumRole.Admin
       || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
       || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
       || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
@@ -175,19 +175,23 @@ export class Report23Component {
       this.request.InstituteID = this.CenterId;
       // this.request.UserID = this.CSId
     }
-    
+
     try {
-      this.loaderService.requestStarted();
-      await this.reportService.Report23(this.request).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.DownloadFile(data.Data)
-      })
+      await this.reportService.Report23(this.request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data["State"] == EnumStatus.Success) {
+            this.DownloadFile(data.Data);
+          } else if (data["State"] == EnumStatus.Warning) {
+            this.toastr.warning(data["Message"]);
+          }
+          else {
+            this.toastr.error(data["Message"]);
+            console.error(data["ErrorMessage"]);
+          }
+        })
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -217,10 +221,10 @@ export class Report23Component {
 
     const [yyyy, mm, dd] = datePart.split('-');
     const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
-    
-    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  
-    const semestercode = this.getSemesterCode(this.request.SemesterID); 
-    const branchCode = this.getBranchCode(this.request.StreamID);    
+
+    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);
+    const semestercode = this.getSemesterCode(this.request.SemesterID);
+    const branchCode = this.getBranchCode(this.request.StreamID);
 
     return `23_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}.${extension}`;
   }
@@ -240,7 +244,7 @@ export class Report23Component {
     const semester = this.SemesterMasterDDLList.find(
       (s: any) => s.SemesterID === Number(semesterId)
     );
-  
+
     // Take first character from "1st Semester", "2nd Semester", etc.
     return semester ? semester.SemesterName.charAt(0) : '';
     // return semester ? semester.SemesterName.match(/\d/)?.[0] ?? '' : '';
@@ -248,9 +252,9 @@ export class Report23Component {
   getBranchCode(streamId?: number): string {
     debugger
     const stream = this.StreamMasterDDLList.find(
-      (s:any) => s.StreamID === Number(streamId)
+      (s: any) => s.StreamID === Number(streamId)
     );
-  
+
     // Extract text inside first ()
     return stream
       ? stream.StreamName.match(/\(([^)]+)\)/)?.[1] ?? ''
@@ -261,5 +265,5 @@ export class Report23Component {
     // Extract text before "-"
     return instituteName.split('-')[0].trim();
   }
-  
+
 }

@@ -544,6 +544,7 @@ const routes: Routes = [
       { path: 'ITIExaminer', loadChildren: () => import('./Views/ITI/iti-examiner/iti-examiner.module').then(m => m.ItiExaminerModule), title: 'ITI Examiner' },
       { path: 'ITIExaminerList', loadChildren: () => import('./Views/ITI/iti-examiner-list/iti-examiner-list.module').then(m => m.ItiExaminerListModule), title: 'ITI Examiner Listing' },
       { path: 'iti-paper-upload', loadChildren: () => import('./Views/ITI/iti-paper-upload/iti-paper-upload.module').then(m => m.ItiPaperUploadModule), title: 'ITI Paper Upload' },
+      { path: 'iti-paper-upload-ncvt', loadChildren: () => import('./Views/ITI/iti-paper-upload-ncvt/iti-paper-upload-ncvt.module').then(m => m.ItiPaperUploadNcvtModule), title: 'ITI Paper Upload NCVT' },
       { path: 'bter-paper-upload', loadChildren: () => import('./Views/BTER/paper-upload/bter-paper-upload.module').then(m => m.BterPaperUploadModule), title: 'BTER Paper Upload' },
 
       { path: 'NodalOfficers', loadChildren: () => import('./Views/NodalOfficer/nodal-list/nodal-list.module').then(m => m.NodalListModule) },
@@ -1766,6 +1767,7 @@ const routes: Routes = [
       { path: 'StaffTrainingConsent', loadChildren: () => import('./Views/staff-training-consent/staff-training-consent.module').then(m => m.StaffTrainingConsentModule) },
       { path: 'itiPendingCollegeFee', loadChildren: () => import('./Views/Student/itiPendingCollegeFee/itiPendingCollegeFee.module').then(m => m.itiPendingCollegeFeeModule) },
       { path: 'TransferRequestReport/:id', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
+      { path: 'usermanual', loadChildren: () => import('./Views/usermanual/usermanual.module').then(m => m.UsermanualModule) },
     ]
   },
 

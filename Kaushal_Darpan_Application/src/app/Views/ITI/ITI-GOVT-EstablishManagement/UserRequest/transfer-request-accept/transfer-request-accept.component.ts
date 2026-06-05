@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel, ITIGovtEMStaffMasterDataModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITI_Govt_EM_OFFICERSDataModel, ITI_Govt_EM_PersonalDetailByUserIDSearchModel, RequestUpdateStatus, RelievingLetterSearchModel, JoiningLetterSearchModel } from '../../../../../Models/ITIGovtEMStaffMasterDataModel';
+import { ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel, ITIGovtEMStaffMasterDataModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITI_Govt_EM_OFFICERSDataModel, ITI_Govt_EM_PersonalDetailByUserIDSearchModel, RequestUpdateStatus, RelievingLetterSearchModel, JoiningLetterSearchModel, ITI_Relieving_joining_CheckVacantPostModel } from '../../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
@@ -38,7 +38,8 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   staffDetailsFormData = new ITIGovtEMStaffMasterDataModel();
   public searchRequestITi = new ITICollegeTradeSearchModel();
   public isLoading: boolean = false;
-
+  requestCheckVacantPost = new ITI_Relieving_joining_CheckVacantPostModel();
+  ddlCheckVacantPost = new ITI_Relieving_joining_CheckVacantPostModel();
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
@@ -67,6 +68,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public ExamOfLevelList: any = [];
   public OfficeList: any = [];
   public LevelList: any = [];
+  public VacantPostEmployeeList: any = [];
   public PostList: any = [];
   public ExamTypeList: any = [];
   public RoleListDDL: any = [];
@@ -104,7 +106,8 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
-
+  public PostMessage: string = '';
+  public PostCheckValue: number = 0;
   constructor(
     private commonMasterService: CommonFunctionService, 
     private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
@@ -132,6 +135,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       txtJoiningDate: [''],
       JoiningRoleID: [0, [DropdownValidators]],
       JoiningTimeID: [0, [DropdownValidators]],
+      EmployeeID: [0],
     });
 
     this.groupFormVRS = this.fb.group({
@@ -279,11 +283,27 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
       if (this.RequestUpdateStatus.StatusIDs == 247) {
         this.groupForm.controls['txtJoiningDate'].setValidators([Validators.required]);
         //lastWorkingDateControl.setValidators(Validators.required);
+
+        await this.GetRelieving_joining_CheckVacantPostModel();
+
+        if (this.PostCheckValue == 3) {
+          this.toastr.warning(this.PostMessage);
+          this.groupForm.controls['EmployeeID'].setValidators([DropdownValidators]);
+          await this.Getjoining_VacantPostEmployee();
+        }
+        else {
+          this.groupForm.controls['EmployeeID'].clearValidators();
+        }
+
       } else {
         this.groupForm.controls['txtJoiningDate'].clearValidators();
       }
 
       this.groupForm.controls['txtJoiningDate'].updateValueAndValidity();
+      this.groupForm.controls['EmployeeID'].updateValueAndValidity();
+
+     
+
 
     }
 
@@ -522,6 +542,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.loaderService.requestStarted();
     this.isLoading = true;
 
+
     this.Swal2.Confirmation("Are you sure you want to update request ?",
       async (result: any) => {
         //confirmed
@@ -535,7 +556,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
 
             await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
               .then(async (data: any) => {
-                
+
                 if (data.State == EnumStatus.Success) {
                   this.toastr.success(data.Message)
                   this.CloseModal();
@@ -559,7 +580,6 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
           }
         }
       });
-    
   }
 
   async onSubmitModel_VRS(model: any, userSubmitData: any) {
@@ -641,10 +661,23 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.isSubmitted = false;
   }
   async onSubmitJoiningRequest(model: any, userSubmitData: any) {
-    
+    debugger
     try {
       this.RowlistData = { ...userSubmitData };
       console.log(this.RequestUpdateStatus, "modal");
+
+      this.requestCheckVacantPost.OfficeID = userSubmitData.OfficeID;
+      this.requestCheckVacantPost.InstituteID = userSubmitData.InstituteID;
+      this.requestCheckVacantPost.StaffTypeID = userSubmitData.StaffTypeID;
+      this.requestCheckVacantPost.DesignationID = userSubmitData.PostID;
+
+
+      this.ddlCheckVacantPost.OfficeID = userSubmitData.OfficeID;
+      this.ddlCheckVacantPost.InstituteID = userSubmitData.InstituteID;
+      this.ddlCheckVacantPost.StaffTypeID = userSubmitData.StaffTypeID;
+      this.ddlCheckVacantPost.DesignationID = userSubmitData.PostID;
+      
+
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
 
       //const txtJoiningDateControl = this.groupForm.get('txtJoiningDate');
@@ -669,6 +702,33 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
 
     } catch (error) {
       console.error('Error fetching data:', error);
+    }
+  }
+
+
+
+  async GetRelieving_joining_CheckVacantPostModel() {
+    try {
+      debugger
+      this.requestCheckVacantPost.Action = "joining_CheckVacantPost";
+      
+      await this.ITIGovtEMStaffMasterService.Relieving_joining_CheckVacantPostModel(this.requestCheckVacantPost).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.PostMessage = "Are you sure you want to update request ?";
+          this.PostCheckValue = 1;
+        }
+        else if (data.State === EnumStatus.Warning) {
+          this.PostMessage = data.Message;
+          this.PostCheckValue = 3;
+        }
+        else {
+          this.PostMessage = data.Message;
+          this.PostCheckValue = 0;
+        }
+      })
+    } catch (error) {
+      console.error
     }
   }
 
@@ -1130,8 +1190,31 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     doc.save('TransferRequests.pdf');
   }
 
+
+  async Getjoining_VacantPostEmployee() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.joining_VacantPostEmployee(this.ddlCheckVacantPost)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.VacantPostEmployeeList = data['Data'];
+          console.log(this.VacantPostEmployeeList, "VacantPostEmployeeList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 }
 function saveAs(blob: any, arg1: string) {
   throw new Error('Function not implemented.');
 }
+
+
 

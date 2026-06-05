@@ -327,6 +327,7 @@ export class BTERStudentProfileUpdateModel {
   public DocumentDetails: DocumentDetailsModel[] = [];
   public CourseTypeID: number = 0;
   public FinancialYearName: string = '';
+
 }
 
 export class ChunksSearchModel {
