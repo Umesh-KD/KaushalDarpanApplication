@@ -137,7 +137,7 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         //this.loaderService.requestEnded();
       }, error => console.error(error));
 
-  await  this.commonMasterService.GetExamName().then((data: any) =>
+    await this.commonMasterService.GetExamName(this.sSOLoginDataModel.Eng_NonEng).then((data: any) =>
     {
       data = JSON.parse(JSON.stringify(data));
       this.ExamList = data.Data;

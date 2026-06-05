@@ -164,15 +164,14 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       //
-      this.loaderService.requestStarted();
       await this.SCAService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.Data[0].IsOpen == 0) {
-            this.toastr.warning(data.Data[0].Message)
+          if (data.Data[0]?.IsOpen == 0) {
+            this.toastr.warning(data.Data[0]?.Message)
           } else {
             this.GradeList = data['Data'];
-            console.log(this.GradeList, "TheoryMarks")
+            //console.log(this.GradeList, "TheoryMarks")
             this.GradeList.forEach((x: any) => {
               if (x.IsSCAChecked == false) {
                 x.IsPresentStudentCenteredActivity = 1
@@ -193,11 +192,6 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 

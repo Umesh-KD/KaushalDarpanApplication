@@ -39,7 +39,8 @@ export class StaffDashboardComponent implements OnInit {
   public _EnumRole = EnumRole;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
 
-  constructor(private StaffDashService: StaffDashService,
+  constructor(
+    private StaffDashService: StaffDashService,
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
