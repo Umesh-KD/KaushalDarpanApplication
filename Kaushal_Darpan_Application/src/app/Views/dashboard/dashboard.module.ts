@@ -59,6 +59,7 @@ import { ITIInspectionDashboardModule } from '../ITI/inspection-dashboard/inspec
 import { ItiExaminationInchargeDashboardModule } from '../ITI/iti-examination-incharge-dashboard/iti-examination-incharge-dashboard.module';
 import { EmployeeDashboardModule } from '../ITI/employee-dashboard/employee-dashboard.module';
 import { IipDashboardModule } from '../IIPCompnyMaster/iip-dashboard/iip-dashboard.module';
+import { InstructorDashboardModule } from '../../../Views/ITI/instructor-dashboard/instructor-dashboard.module';
 
 
 
@@ -120,7 +121,8 @@ import { IipDashboardModule } from '../IIPCompnyMaster/iip-dashboard/iip-dashboa
     ITIInspectionDashboardModule,
     ItiExaminationInchargeDashboardModule,
     EmployeeDashboardModule,
-    IipDashboardModule
+    IipDashboardModule,
+    InstructorDashboardModule
     
   ]
 })

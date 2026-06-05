@@ -51,6 +51,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public Districtlist: any[] = [];
   public ItiDDLlist: any[] = [];
   public UserOfficePostDetails: any[] = [];
+  public StaffProfileStatusList: any[] = [];
   
   public ITIGovtEMOFFICERSList: any[] = [];
   public StaffTypeList: any[] = []
@@ -116,6 +117,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   public TransferRequest: any = {};
   public ListITICollegeByManagement: any = [];
   public StaffPostTypeList: any = [];
+  public ProfileStatus: number = -1;
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -179,6 +181,8 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
       MobileNo: [{ value: '', disabled: true }],
       EmailID: [{ value: '', disabled: true }],
       CurrentInstitute: [{ value: '', disabled: true }],
+      ServiceName: [{ value: '', disabled: true }],
+      PostName: [{ value: '', disabled: true }],
       //CurrentInstitute: [''],
       InstituteID: [0, [DropdownValidators]],
       //PostID: [0],
@@ -188,6 +192,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.ProfileStatus = Number(this.activatedRoute.snapshot.queryParamMap.get("id")?.toString());
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
 
     this.QueryReqFormGroup = this.formBuilder.group({
@@ -200,10 +205,9 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     //});
     //this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID
    
-   
-
     await this.GetStatusList();
-    await this.GetZonalList();
+    await this.GetStaffProfileStatusList();
+    
     await this.GetLevelList();
     await this.GetStaffTypeData(); 
     await this.GetRoleMasterData();
@@ -214,6 +218,12 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
     await this.getItiNameAndCode();   
     await this.GetDistrictMaster();   
+
+    if(this.ProfileStatus>= 0 ){
+      this.searchRequest.ProfileStatus = this.ProfileStatus
+    }
+
+    await this.GetZonalList();
 
     //this.filteredStatusList = [
     //  { ID: 1, Name: 'Approved' },
@@ -258,6 +268,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
     this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID
+    
     if (this.searchRequest.OfficeID != 11) {
       this.searchRequest.InstituteID = 0
       this.searchRequest.DistrictID=0
@@ -1355,6 +1366,8 @@ async openTransferModal(content: any, row: any) {
     EmailID: row.EmailID,
 
     CurrentInstitute: row.InstituteName,
+    ServiceName: row.ServiceName,
+    PostName: row.PostName,
 
     InstituteID: 0,
     StaffPostTypeID: 0,
@@ -1363,7 +1376,7 @@ async openTransferModal(content: any, row: any) {
   });
 
   this.modalReference = this.modalService.open(content, {
-    size: 'lg',
+    size: 'xl',
     backdrop: 'static'
   });
   await this.getInstituteMasterList(row.InstituteName);
@@ -1555,14 +1568,30 @@ async getITICollege() {
   async onPostTypeChange() {
 
 
-     this.TransferFormGroup.patchValue({
-    PostID: 0
-  });
-  this.PostList = [];
-  this.formData.StaffPostTypeID =
-      this.TransferFormGroup.value.StaffPostTypeID;
-  this.formData.InstituteID =  this.TransferFormGroup.value.InstituteID;
-  await this.GetPostListnew();
-}
+      this.TransferFormGroup.patchValue({
+      PostID: 0
+    });
+    this.PostList = [];
+    this.formData.StaffPostTypeID =
+        this.TransferFormGroup.value.StaffPostTypeID;
+    this.formData.InstituteID =  this.TransferFormGroup.value.InstituteID;
+    await this.GetPostListnew();
+  }
+
+  async GetStaffProfileStatusList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('ITIvtARRStauts').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffProfileStatusList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }
