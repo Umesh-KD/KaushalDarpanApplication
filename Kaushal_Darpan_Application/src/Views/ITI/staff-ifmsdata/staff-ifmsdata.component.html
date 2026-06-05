@@ -157,6 +157,50 @@
       </div>
     </div>
 
+    <!-- ================= EducationData ================= -->
+    <div class="bg-light p-3 mb-3 font-semibold">Educational & Academic Qualification Details</div>
+    <ng-container *ngIf="AddedEducationList?.length > 0; else noEducationData">
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr</th>
+              <th class="text-left">Level of Exam</th>
+              <th class="text-left">Name of the Exam</th>
+              <th class="text-left">Type</th>
+              <th class="text-left">Name of the Board/University</th>
+              <th class="text-left">
+                State of the Board/University (Rajasthan/Other than Rajasthan)
+              </th>
+              <th class="text-left">Date of passing</th>
+              <th class="text-left">Subject/Occupation/Branch</th>
+              <th class="text-left">Name of the Institute from where passed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of AddedEducationList; let idx = index">
+              <td>{{ idx + 1 }}</td>
+              <td>{{ row.LevelOfExamName }}</td>
+              <td>{{ row.NameOfTheExam }}</td>
+              <td>{{ row.ExamTypeName }}</td>
+              <td>{{ row.NameOfTheBoard_University }}</td>
+              <td>{{ row.StateOfTheBoard_University }}</td>
+              <td>{{ row.DateOfPassing }}</td>
+              <td>{{ row.Subject_Occupation_Branch }}</td>
+              <td>{{ row.NameOfTheInstituteFromWherePassed }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+
+    <ng-template #noEducationData>
+      <div class="text-center mt-3 p-3 border rounded">
+        No education data found.
+      </div>
+    </ng-template>
+    <br />
+
     <!-- ================= IDENTIFICATION ================= -->
     <div class="mb-6">
       <div class="bg-light p-3 mb-3 font-semibold">Identification Details</div>
@@ -334,9 +378,9 @@
 
     <!-- ACTION -->
     <!-- <div class="text-center">
-      <button class="btn bg-success text-white" (click)="save()">Submit</button>
-      <button class="btn bg-danger text-white ml-2" (click)="reset()">Reset</button>
-    </div> -->
+    <button class="btn bg-success text-white" (click)="save()">Submit</button>
+    <button class="btn bg-danger text-white ml-2" (click)="reset()">Reset</button>
+  </div> -->
 
   </div>
 </div>
@@ -350,46 +394,6 @@
 </ng-template>
 
 
-<div class="bg-light p-3 mb-3 font-semibold">Other Details</div>
-<ng-container *ngIf="AddedEducationList?.length > 0; else noEducationData">
-  <div class="overflow-x-auto mt-3">
-    <table class="table table-border w-full table-auto" cellpadding="5">
-      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-        <tr>
-          <th class="text-left">Sr</th>
-          <th class="text-left">Level of Exam</th>
-          <th class="text-left">Name of the Exam</th>
-          <th class="text-left">Type</th>
-          <th class="text-left">Name of the Board/University</th>
-          <th class="text-left">
-            State of the Board/University (Rajasthan/Other than Rajasthan)
-          </th>
-          <th class="text-left">Date of passing</th>
-          <th class="text-left">Subject/Occupation/Branch</th>
-          <th class="text-left">Name of the Institute from where passed</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of AddedEducationList; let idx = index">
-          <td>{{ idx + 1 }}</td>
-          <td>{{ row.LevelOfExamName }}</td>
-          <td>{{ row.NameOfTheExam }}</td>
-          <td>{{ row.ExamTypeName }}</td>
-          <td>{{ row.NameOfTheBoard_University }}</td>
-          <td>{{ row.StateOfTheBoard_University }}</td>
-          <td>{{ row.DateOfPassing }}</td>
-          <td>{{ row.Subject_Occupation_Branch }}</td>
-          <td>{{ row.NameOfTheInstituteFromWherePassed }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</ng-container>
 
-<ng-template #noEducationData>
-  <div class="text-center mt-3 p-3 border rounded">
-    No education data found.
-  </div>
-</ng-template>
 
 
