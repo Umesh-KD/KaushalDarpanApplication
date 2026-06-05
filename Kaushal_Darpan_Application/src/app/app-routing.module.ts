@@ -555,7 +555,8 @@ const routes: Routes = [
       { path: 'PracticalAssesment', loadChildren: () => import('./Views/ITI/Examination/internal-practical-assesment/internal-practical-assesment.module').then(m => m.InternalPracticalAssesmentModule) },
       { path: 'ItiCenterAllotment', loadChildren: () => import('./Views/Examination/iti-center-allotment/iti-center-allotment.module').then(m => m.ItiCenterAllotmentModule), title: 'ITI-Center-Allotment' },
       { path: 'StudentStatusHistory', loadChildren: () => import('./Views/Student/student-status-history/student-status-history.module').then(m => m.StudentStatusHistoryModule), title: 'Student-Status-History' },
-
+    
+      { path: 'ordercategory', loadChildren: () => import('./Views/ordercategory/ordercategory.module').then(m => m.OrderCategoryModule) },
 
       { path: 'ITIPendingFees', loadChildren: () => import('./Views/Student/itipending-fees/itipending-fees.module').then(m => m.ITIPendingFeesModule) },
       { path: 'ITIGenerateAdmitCard', loadChildren: () => import('./Views/ITI/Examination/iti-generate-admit-card/iti-generate-admit-card.module').then(m => m.ITIGenerateAdmitCardModule) },
@@ -1888,6 +1889,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
+  
   
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 

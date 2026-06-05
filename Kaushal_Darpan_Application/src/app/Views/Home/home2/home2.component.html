@@ -92,7 +92,7 @@
           </div>
           <div class="card-body listUlDivScrollLIst">
 
-            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250"  *ngIf="DteList != null">
+            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250" *ngIf="DteList != null">
               <div *ngFor="let item of DteList">
                 <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
                   <div class="d-flex">
@@ -107,7 +107,7 @@
                 </a>
               </div>
             </marquee>
-            <a href="javascript:void(0);" class="btn btn-outline-warning d-block text-center my-2"  *ngIf="DteList != null">View All</a>
+            <a href="javascript:void(0);" class="btn btn-outline-warning d-block text-center my-2" *ngIf="DteList != null">View All</a>
             <div style="height:310px" *ngIf="DteList == null" class="text-center">No Record Found!!!</div>
           </div>
         </div>
@@ -121,17 +121,36 @@
           <div class="card-body listUlDivScrollLIst">
             <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250" *ngIf="BTERList != null">
               <div *ngFor="let item of BTERList">
-                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
-                  <div class="d-flex">
-                    <span><img src="/assets/KD5/images/pdf.png"></span>
-                    <div class="ms-2">
-                      <p class="mt-0 mb-0">
-                        {{item.Title}}
-                      </p>
-                      <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}}</span>
+
+                <ng-container *ngIf="item.docFile; else noFile">
+                  <a [href]="appsettingConfig.StaticFileRootPathURL + item.docFile"
+                     target="_blank" class="card p-3 py-2 shadow-sm mb-2">
+                    <div class="d-flex">
+                      <span><img src="/assets/KD5/images/pdf.png"></span>
+                      <div class="ms-2">
+                        <p class="mt-0 mb-0">
+                          {{item.Title}}
+                        </p>
+                        <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}}</span>
+                      </div>
                     </div>
-                  </div>
-                </a>
+                  </a>
+                </ng-container>
+
+                <ng-template #noFile>
+                  <a class="card p-3 py-2 shadow-sm mb-2">
+                    <div class="d-flex">
+                      <span><img src="/assets/KD5/images/pdf.png"></span>
+                      <div class="ms-2">
+                        <p class="mt-0 mb-0">
+                          {{item.Title}}
+                        </p>
+                        <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}}</span>
+                      </div>
+                    </div>
+                  </a>
+                </ng-template>
+
               </div>
             </marquee>
             <a routerLink="dynamic-content-list/241/1" class="btn btn-outline-warning d-block text-center my-2" *ngIf="BTERList != null">View All</a>
@@ -147,41 +166,42 @@
           </div>
           <div class="card-body listUlDivScrollLIst">
             <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250" *ngIf="ITIList != null">
+
               <!--<div *ngFor="let item of ITIList">
-    <a *ngIf="item.linkname==''" href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
-      <div class="d-flex">
-        <span><img src="/assets/KD5/images/pdf.png"></span>
-        <div class="ms-2">
-          <p class="mt-0 mb-0">
-            {{item.Title}}
-          </p>-->
+              <a *ngIf="item.linkname==''" href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
+                <div class="d-flex">
+                  <span><img src="/assets/KD5/images/pdf.png"></span>
+                  <div class="ms-2">
+                    <p class="mt-0 mb-0">
+                      {{item.Title}}
+                    </p>-->
               <!--<span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}} - {{item.DeptNames}}</span>-->
               <!--</div>
-      </div>
-    </a>
+                  </div>
+                </a>
 
 
-    <a *ngIf="!item.docFile && item.linkname"
-       [routerLink]="item.linkname"
-       class="card p-3 py-2 shadow-sm mb-2">
+                <a *ngIf="!item.docFile && item.linkname"
+                   [routerLink]="item.linkname"
+                   class="card p-3 py-2 shadow-sm mb-2">
 
-      <div class="d-flex">
-        <span>
-         <img src="/assets/KD5/images/pdf.png">
-        </span>
+                  <div class="d-flex">
+                    <span>
+                     <img src="/assets/KD5/images/pdf.png">
+                    </span>
 
-        <div class="ms-2">
-          <p class="mt-0 mb-0">
-            {{item.Title}}
-          </p>
-          <span class="badge bg-primary">View</span>
-        </div>
-      </div>
+                    <div class="ms-2">
+                      <p class="mt-0 mb-0">
+                        {{item.Title}}
+                      </p>
+                      <span class="badge bg-primary">View</span>
+                    </div>
+                  </div>
 
-    </a>
+                </a>
 
 
-  </div>-->
+              </div>-->
 
               <div *ngFor="let item of ITIList" class="mb-3">
 
@@ -244,6 +264,7 @@
                         {{item.Title}}
                       </p>
                       <!--<span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}} - {{item.DeptNames}}</span>-->
+                     
                     </div>
                   </div>
                 </a>
@@ -454,10 +475,8 @@
 
 <!-- End To Contribute in the School of Your Choice -->
 <!-- Start Engage withus -->
-
 <!-- End Engage withus -->
 <!-- Start Five Section -->
-
 <!-- End Five Section -->
 
 
