@@ -181,12 +181,12 @@ export class InternalPracticalStudentComponent implements OnInit {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
-      this.loaderService.requestStarted();
+      //
       await this.InternalPracticalStudentService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.Data[0].IsOpen == 0) {
-            this.toastr.warning(data.Data[0].Message)
+          if (data.Data[0]?.IsOpen == 0) {
+            this.toastr.warning(data.Data[0]?.Message)
           } else {
             this.TheoryMarksList = data['Data'];
             if (this.InternalPracticalID == 2) {
@@ -221,11 +221,6 @@ export class InternalPracticalStudentComponent implements OnInit {
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 

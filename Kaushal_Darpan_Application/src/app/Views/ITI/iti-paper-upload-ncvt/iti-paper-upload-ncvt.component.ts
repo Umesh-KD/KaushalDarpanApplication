@@ -296,6 +296,8 @@ export class ItiPaperUploadNcvtComponent {
         .find(f => f.PaperID == formData.PaperID)
         ?.SubjectCode;
 
+      debugger
+
       let obj =
       {
         PaperUploadID: formData.PaperUploadID,

@@ -2491,4 +2491,12 @@ export class CommonFunctionService {
     )
     .toPromise();
 }
+
+public async InsertUserManual(model: any) {
+    const body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/InsertUserManual`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
