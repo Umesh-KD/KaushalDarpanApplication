@@ -855,6 +855,14 @@ export class ReportService {
       ).toPromise();
   }
 
+  public async UFM_Collegwise_CategoryReportPdf_BTER(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/UFM_Collegwise_CategoryReportPdf_BTER`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async Report23(request: AttendanceRpt23DataModel) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/Report23`, body, this.headersOptions)

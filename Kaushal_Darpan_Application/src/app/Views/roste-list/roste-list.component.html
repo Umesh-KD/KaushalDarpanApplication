@@ -2,7 +2,7 @@
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>  Roster Display </b>
-      <a routerLink="/roster-display" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      <a routerLink="/roster-display" *ngIf="( _EnumRole.Principal==this.sSOLoginDataModel.RoleID || _EnumRole.PrincipalNon==this.sSOLoginDataModel.RoleID || _EnumRole.HOD_Eng==this.sSOLoginDataModel.RoleID || _EnumRole.HOD_NonEng==this.sSOLoginDataModel.RoleID)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
 
