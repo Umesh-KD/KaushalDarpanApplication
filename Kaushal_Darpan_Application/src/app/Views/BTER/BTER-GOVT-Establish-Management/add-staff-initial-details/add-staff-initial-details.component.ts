@@ -47,6 +47,9 @@ export class AddStaffInitialDetailsComponent {
   public AddedZonalList: any[] = [];
   public InstituteMasterDDL: any[] = [];
   public GuestHouseNameList: any = [];
+  public SactionedPostList: any = [];
+  public PostBudgetHeadList: any = [];
+
   public GetDesignationID: number = 0;
   public State: number = 0;
   public Message: string = '';
@@ -82,7 +85,7 @@ export class AddStaffInitialDetailsComponent {
       ddlPost: ['', [DropdownValidators]],
       Office: ['', [DropdownValidators]],
       BugetHeadID:[''],
-      BugetHeadTypeID:[0]
+      // BugetHeadTypeID:[0]
 
     })
 
@@ -452,6 +455,44 @@ export class AddStaffInitialDetailsComponent {
     }
   }
 
+  async getSactionedPostList() {
+    try {
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.InstituteID = this.formData.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = "GetSanctionedPost";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SactionedPostList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getBudgetHeadPostWise() {
+    try {
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.DesignationID = this.formData.PostID;
+      request.InstituteID = this.formData.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = "GetBudgetHead_PostWise";
+
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostBudgetHeadList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async getITICollege() {}
 
   async ddl_DivisionID_Wise_District() {}
@@ -712,6 +753,7 @@ debugger
     this.formData.EndTermID=this.sSOLoginDataModel.EndTermID;
     this.formData.ParentRoleID = this.sSOLoginDataModel.RoleID;
     this.formData.GuestHouseID = 0 // storing multiple guesthouseids in param named multiGuestHouseIDs
+    this.formData.BugetHeadTypeID = this.PostBudgetHeadList.find((x: any) => x.ID == this.formData.BugetHeadID)?.BudgetTypeID || 0;
     try {
       this.loaderService.requestStarted();
 
@@ -743,6 +785,7 @@ debugger
 
   async StaffTypeChangePost() { 
     await this.GetPostList();
+    await this.getSactionedPostList();
   }
 
 
