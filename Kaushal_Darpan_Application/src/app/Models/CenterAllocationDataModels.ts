@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "./RequestBaseModel";
+
 export class CenterAllocationtDataModels {
 /*  public CenterCollegeID:number=0*/
   public CenterID: number = 0;
@@ -67,8 +69,8 @@ export class ITIAssignPracticaLExaminer {
   public Email: string = ''
   public MobileNumber: string = ''
 
+}
 
-
-
-
+export class CenterSuperintendentOrderStatusModel extends RequestBaseModel {
+  public PDFType: number = 0;
 }
