@@ -46,7 +46,7 @@
             <tr>
               <th class="text-left">#</th>
               <th *ngIf="isShowSelected" class="text-left">Select</th>
-              <th class="text-left">Name</th>
+              <th class="text-left">Name (Father Name)</th>
               <th class="text-left">Trade Name</th>
               <th class="text-left">Semester</th>
               <th class="text-left">Enrollment No.</th>
@@ -64,7 +64,7 @@
               <td *ngIf="isShowSelected">
                 <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected" [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}" name="chk_Selected{{idx+1}}">
               </td>
-              <td>{{row.StudentName}}</td>
+              <td>{{row.StudentName}} ({{row.FatherName}}) </td>
               <td>{{row.StreamName}}</td>
               <td>{{row.Semester}}</td>
               <td>{{row.EnrollmentNo}}</td>
