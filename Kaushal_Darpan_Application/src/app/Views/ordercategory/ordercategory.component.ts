@@ -87,6 +87,7 @@ export class OrderCategoryComponent {
     }
   }
 
+
   async ViewandUpdate(content: any, id: number = 0) {
     debugger
     this.selectedID = id;
