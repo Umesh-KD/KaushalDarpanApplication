@@ -316,6 +316,7 @@ export class BTEREMStaffListComponent {
     this.searchRequest.status=this.searchRequest.status
     this.searchRequest.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng
     this.searchRequest.GuestHouseID = this.sSOLoginDataModel.GuestHouseID;
+    this.searchRequest.InstitutionManagementTypeID = this.searchRequest.InstitutionManagementTypeID
     try {
       this.loaderService.requestStarted();
       await this.bterEstablishManagementService.BTER_EM_GetStaffList(this.searchRequest)

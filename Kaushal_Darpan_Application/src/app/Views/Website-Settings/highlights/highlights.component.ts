@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -11,6 +11,8 @@ import { EnumDepartment, EnumRole, EnumStatus, EnumWS_DepartmentSub } from '../.
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-highlights',
@@ -23,14 +25,22 @@ export class HighlightsComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   isFormSubmitted: boolean = false
   request = new WebsiteSettingDataModel();
+  Searchrequest = new WebsiteSettingDataModel();
   public todayDate: any;
   requestBaseModel = new RequestBaseModel();
   GetDynamicUploadTypeDDL_Data: any = []
+  ViewTypeDDL: any = []
+  PostList: any = []
   _EnumWS_DepartmentSub = EnumWS_DepartmentSub;
   _EnumDepartment = EnumDepartment;
   DynamicContentData: any = [];
+  StaffTypeList: any = [];
+  DocumentCategory: any = [];
   Table_SearchText: string = '';
-  IsPrivate: boolean=false
+  IsPrivate: boolean = false
+  modalReference: NgbModalRef | undefined;
+  @ViewChild(MatSort) sort!: MatSort;
+  closeResult: string | undefined;
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -39,24 +49,32 @@ export class HighlightsComponent {
     private toastr: ToastrService,
     private websiteSettingsService: WebsiteSettingsService,
     public appsettingConfig: AppsettingService,
+    private modalService: NgbModal,
   ) { }
 
   async ngOnInit() {
     this.HighlightsFromGroup = this.formBuilder.group({
       Title: ['', Validators.required],
-    
-      Start_Date: ['',],
-      End_Date: ['',],
-      IsPublic: ['',],
+
+      Start_Date: ['', Validators.required],
+      End_Date: ['', Validators.required],
+
+      ViewTypeIDs: ['', Validators.required],
       DepartmentSubID: ['', [DropdownValidators]],
       TypeID: ['', [DropdownValidators]],
+      DocCategoryID: ['', [DropdownValidators]],
+      StaffTypeID: ['', [DropdownValidators]],
+      DesignationID: ['', Validators.required],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.todayDate = new Date().toISOString().substring(0, 16);
 
     await this.GetDynamicUploadTypeDDL();
+    await this.GetLateralCourse();
+    await this.GetViewTypeDDL();
     await this.GetAllData();
+    await this.GetStaffTypeData();
     //debugger
     if (this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship || this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship) {
       //debugger
@@ -69,8 +87,50 @@ export class HighlightsComponent {
 
   get _HighlightsFromGroup() { return this.HighlightsFromGroup.controls; }
 
+  async GetStaffTypeData() {
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('PostType').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffTypeList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async fillupDesignation() {
+
+
+    await this.GetPostList();
+  }
+  async GetPostList() {
+    try {
+
+      this.loaderService.requestStarted();
+      const data: any = await this.commonMasterService.GetCommonMasterData('PostMaster', this.request.StaffTypeID);
+      this.PostList = data['Data'];
+      //this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
+      // Keep original list for filtering later
+      console.log(this.PostList, "PostList");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   ResetControls() {
     this.request = new WebsiteSettingDataModel();
+    this.Searchrequest = new WebsiteSettingDataModel();
+    this.HighlightsFromGroup.reset()
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID
     this.isFormSubmitted = false
     this.HighlightsFromGroup.controls['DepartmentSubID'].enable();
@@ -90,10 +150,63 @@ export class HighlightsComponent {
     this.HighlightsFromGroup.controls['DepartmentSubID']
       .updateValueAndValidity();
 
+
+    if (this.sSOLoginDataModel.DepartmentID == 1) {
+      this.HighlightsFromGroup.controls['DocCategoryID'].clearValidators()
+    } else {
+      this.HighlightsFromGroup.controls['DocCategoryID']
+        .setValidators([DropdownValidators]);
+
+    }
+    this.HighlightsFromGroup.controls['DocCategoryID'].updateValueAndValidity()
+
+
+    if (this.request.ViewTypeIDs != '10363') {
+      this.HighlightsFromGroup.controls['Start_Date'].clearValidators()
+      this.HighlightsFromGroup.controls['End_Date'].clearValidators()
+    } else {
+    
+      this.HighlightsFromGroup.controls['Start_Date']
+        .setValidators([Validators.required]);
+      this.HighlightsFromGroup.controls['End_Date']
+        .setValidators([Validators.required]);
+
+    }
+    this.HighlightsFromGroup.controls['Start_Date'].updateValueAndValidity()
+    this.HighlightsFromGroup.controls['End_Date'].updateValueAndValidity()
+
+
+    if (this.sSOLoginDataModel.DepartmentID == 1 || this.request.ViewTypeIDs != '10366') {
+      this.HighlightsFromGroup.controls['StaffTypeID'].clearValidators()
+      this.HighlightsFromGroup.controls['DesignationID'].clearValidators()
+      this.request.StaffTypeID = 0
+      this.request.DesignationID = ''
+    } else {
+      this.HighlightsFromGroup.controls['StaffTypeID']
+        .setValidators([DropdownValidators]);
+      this.HighlightsFromGroup.controls['DesignationID']
+        .setValidators([Validators.required]);
+    }
+
+    this.HighlightsFromGroup.controls['StaffTypeID'].updateValueAndValidity()
+    this.HighlightsFromGroup.controls['DesignationID'].updateValueAndValidity()
+
     if(this.HighlightsFromGroup.invalid){
       this.toastr.error("Please Fill Required Fields")
       return
     }
+
+    if (this.request.FileName == '') {
+      this.toastr.warning("Please Upload Document")
+      return
+    }
+
+    if (this.sSOLoginDataModel.DepartmentID == 2 && this.request.ViewTypeIDs == '10366') {
+
+      this.request.DesignationID =
+        this.HighlightsFromGroup.value.DesignationID?.join(',') || '';
+    }
+
 
     this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -112,7 +225,7 @@ export class HighlightsComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
-          this.ResetControls();
+          this.CloseModal();
           await this.GetAllData();
         } else {
           this.toastr.error(data.ErrorMessage);
@@ -139,6 +252,45 @@ export class HighlightsComponent {
       console.log(error);
     } 
   }
+
+  async GetLateralCourse() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('DocumentCategory')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data, 'ggg');
+          this.DocumentCategory = data['Data'];
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async GetViewTypeDDL() {
+    try {
+      await this.commonMasterService.GetCommonMasterDDLByType('ViewType').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.ViewTypeDDL = data.Data
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
 
   public file!: File;
   async onFilechange(event: any, Type: string) {
@@ -190,21 +342,17 @@ export class HighlightsComponent {
   async GetAllData() {
     
     try {
-      this.request.EndTermID = this.sSOLoginDataModel.EndTermID
-      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       if (this.sSOLoginDataModel.RoleID == 212) {
-        this.request.DepartmentSubID=6
+        this.Searchrequest.DepartmentSubID=6
       }
-      await this.websiteSettingsService.GetAllData(this.request).then((data: any) => {
+      await this.websiteSettingsService.GetAllData(this.Searchrequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success)
-        {
+        
           this.DynamicContentData = data.Data
-        } else
-        {
-          this.toastr.error(data.ErrorMessage ?? data.Message);
-        }
+       
 
       })
       
@@ -246,9 +394,30 @@ export class HighlightsComponent {
       });
   }
 
-  async onEdit(row: any) {
+  async onEdit(row: any, content:any) {
     try {
-      this.request.DUTC_ID = row.DUTC_ID
+
+
+      this.modalService.open(content, {
+
+        size: 'xl',
+
+        ariaLabelledBy: 'modal-basic-title',
+
+        backdrop: 'static'
+
+      }).result.then((result) => {
+
+        this.closeResult = `Closed with: ${result}`;
+
+      }, (reason: any) => {
+
+        this.closeResult =
+          `Dismissed ${this.getDismissReason(reason)}`;
+      });
+
+
+      this.request.WS_ID = row.WS_ID
       await this.websiteSettingsService.GetById(this.request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -256,6 +425,23 @@ export class HighlightsComponent {
 
           if (data.State = EnumStatus.Success) {
             this.request = data.Data
+
+            this.GetPostList()
+
+            this.HighlightsFromGroup.patchValue({
+              ViewTypeIDs: this.request.ViewTypeIDs
+            });
+
+
+
+            this.HighlightsFromGroup.patchValue({
+            
+
+              DesignationID: this.request.DesignationID
+                ? this.request.DesignationID.split(',').map(Number)
+                : []
+            });
+
             this.HighlightsFromGroup.controls['DepartmentSubID'].disable();
             this.HighlightsFromGroup.controls['TypeID'].disable();
           }
@@ -315,6 +501,70 @@ export class HighlightsComponent {
     } else {
       this.request.IsPrivate = true
     }
+  }
+
+
+  async AddStaffData(content: any, rowData: any = null) {
+
+
+
+    // ============================
+    // LOAD DROPDOWNS
+    // ============================
+
+
+
+    // ============================
+    // EDIT DATA
+    // ============================
+
+
+
+    // ============================
+    // STREAM LOAD
+    // ============================
+
+
+    // ============================
+    // OPEN MODAL
+    // ============================
+
+    this.modalService.open(content, {
+
+      size: 'xl',
+
+      ariaLabelledBy: 'modal-basic-title',
+
+      backdrop: 'static'
+
+    }).result.then((result) => {
+
+      this.closeResult = `Closed with: ${result}`;
+
+    }, (reason: any) => {
+
+      this.closeResult =
+        `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  CloseModal() {
+
+    this.modalService.dismissAll()
+ 
+
+    this.request = new WebsiteSettingDataModel()
+    this.HighlightsFromGroup.reset()
   }
 
 }
