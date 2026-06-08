@@ -6,6 +6,7 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { HighlightsComponent } from './highlights.component';
 import { HighlightsRoutingModule } from './highlights-routing.module';
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { HighlightsRoutingModule } from './highlights-routing.module';
     FormsModule,
     ReactiveFormsModule,
     TableSearchFilterModule,
-    LoaderModule
+    LoaderModule,
+    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
   ]
 })
 export class HighlightsModule { }

@@ -227,4 +227,12 @@ export class UserRequestService {
       ).toPromise();
   }
 
+  public async GetRelievingJoiningRequestReportData(request: RequestSearchModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetRelievingJoiningRequestReportData', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

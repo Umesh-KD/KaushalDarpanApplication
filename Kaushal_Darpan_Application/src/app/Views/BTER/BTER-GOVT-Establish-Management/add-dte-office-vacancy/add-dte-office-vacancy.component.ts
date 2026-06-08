@@ -406,6 +406,24 @@ export class AddDTEOfficeVacancyComponent {
         Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       }
       this.loaderService.requestStarted();
+
+      
+      
+      debugger
+      const branchControl = this.AddOfficeVacancyForm.get('BranchID');
+      const designationId = Number(this.formData.DesignationID);
+
+      const noBranchRequiredIds = [67, 68, 69, 70, 74, 78, 79, 80, 81];
+
+      if (noBranchRequiredIds.includes(designationId)) {
+        this.AddOfficeVacancyForm.get('BranchID')?.clearValidators();
+      } else {
+        this.AddOfficeVacancyForm.get('BranchID')?.setValidators([DropdownValidators]);
+      }
+
+      this.AddOfficeVacancyForm.get('BranchID')?.updateValueAndValidity();
+     
+
       await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, Eng_NonEng).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDLList = data.Data;

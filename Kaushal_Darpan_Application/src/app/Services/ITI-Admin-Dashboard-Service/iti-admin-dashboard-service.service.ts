@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, catchError } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { ITIAdminDashboardSearchModel } from '../../Models/ITIAdminDashboardDataModel';
+import { ITIAdminDashboardSearchModel, PostPlanningDashboardSearchModel } from '../../Models/ITIAdminDashboardDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -84,15 +84,30 @@ export class ITIAdminDashboardServiceService {
   }
 
   public async GetExaminationCollegeTrade(searchRequest: any) {
-  const body = JSON.stringify(searchRequest);
+    const body = JSON.stringify(searchRequest);
 
-  return await this.http.post(
-    this.APIUrl + "/GetExaminationCollegeTrade",
-    body,
-    this.headersOptions
-  ).pipe(
-    catchError(this.handleErrorObservable)
-  ).toPromise();
-}
+    return await this.http.post(
+      this.APIUrl + "/GetExaminationCollegeTrade",
+      body,
+      this.headersOptions
+    ).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async GetPostPlanningDashboardTableData(searchRequest: PostPlanningDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetPostPlanningDashboardTableData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetPostPlanningDashboardTilesData(searchRequest: PostPlanningDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetPostPlanningDashboardTilesData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 

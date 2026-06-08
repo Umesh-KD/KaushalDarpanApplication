@@ -30,6 +30,7 @@ import { THTE_DropdownDataModel } from '../../Models/TeacherHigherEducationAppli
 import { StudentDetailsModel } from '../../Models/StudentDetailsModel';
 import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ITI_Relieving_joining_CheckVacantPostModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
+import { OrderCategoryMasterModel } from '../../Models/OrderCategoryMasterModel ';
 
 
 @Injectable({
@@ -745,7 +746,7 @@ export class CommonFunctionService {
 
 
   //end document
-  public async GetCommonMasterDDLByType(type: string) {
+  public async GetCommonMasterDDLByType(type: string='') {
 
     return await this.http.get(`${this.APIUrl}/GetCommonMasterDDLByType/${type}`, this.headersOptions)
       .pipe(
@@ -2498,13 +2499,57 @@ export class CommonFunctionService {
       catchError(this.handleErrorObservable)
     )
     .toPromise();
+  }
+  async SaveOrderCategory(request: OrderCategoryMasterModel) {
+    return await this.http.post(
+      `${this.APIUrl}/SaveOrderCategory`,
+      request
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+  async GetAllOrderCategory(request: OrderCategoryMasterModel) {
+    return await this.http.post(
+      `${this.APIUrl}/GetAllOrderCategory`,
+      request
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+  async DeleteOrderCategoryId(orderCategoryID: number, modifyBy: number) {
+    return await this.http.post(
+      `${this.APIUrl}/DeleteOrderCategoryId/${orderCategoryID}/${modifyBy}`,
+      null
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+  async GetOrderCategoryById(orderCategoryID: number) {
+    return await this.http.get(
+      `${this.APIUrl}/GetOrderCategoryById/${orderCategoryID}`
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+  async UpdateOrderCategoryStatus(payload: any) {
+    return await this.http.post(
+      `${this.APIUrl}/UpdateOrderCategoryStatus`,
+      payload
+    )
+      .pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
+    public async InsertUserManual(model: any) {
+        const body = JSON.stringify(model);
+        return await this.http.post(`${this.APIUrl}/InsertUserManual`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+
 }
 
-public async InsertUserManual(model: any) {
-    const body = JSON.stringify(model);
-    return await this.http.post(`${this.APIUrl}/InsertUserManual`, body, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
-  }
-}
