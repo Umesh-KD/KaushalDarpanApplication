@@ -724,6 +724,7 @@ const routes: Routes = [
 
       { path: 'BterReports', loadChildren: () => import('./Views/Reports/bter-reports/bter-reports.module').then(m => m.BterReportsModule) },
       { path: 'bter-result-reports', loadChildren: () => import('./Views/Reports/bter-result-reports/bter-result-reports.module').then(m => m.BterResultReportsModule) },
+      { path: 'bter-ufm-reports', loadChildren: () => import('./Views/Reports/bter-ufm-reports/bter-ufm-reports.module').then(m => m.BterUFMReportsModule) },
       { path: 'group-center-mapping-reports', loadChildren: () => import('./Views/Reports/group-center-mapping-reports/group-center-mapping-reports.module').then(m => m.GroupCenterMappingReportsModule) },
       { path: 'center-daily-reports', loadChildren: () => import('./Views/Reports/center-daily-reports/center-daily-reports.module').then(m => m.CenterDailyReportsModule) },
 

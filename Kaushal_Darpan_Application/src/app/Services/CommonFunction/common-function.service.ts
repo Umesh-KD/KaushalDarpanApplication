@@ -2433,6 +2433,14 @@ export class CommonFunctionService {
       .toPromise();
   }
 
+  public async GetFinYearWiseEndterm(FinancialYearID: number) {
+    return await this.http.get(
+      this.APIUrl + `/GetFinYearWiseEndterm/${FinancialYearID}`,
+      this.headersOptions
+    ).pipe(catchError(this.handleErrorObservable))
+      .toPromise();
+  }
+
 
 
   public async GetCommonMasterDDLByAction1(ActionType: string) {
