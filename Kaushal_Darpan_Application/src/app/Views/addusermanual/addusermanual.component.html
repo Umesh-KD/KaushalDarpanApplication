@@ -6,13 +6,13 @@
         <i class="ti ti-list"></i> User Manuals
       </b>
 
-       <!-- <button
+       <button
     type="button"
     class="btn bg-info text-white"
     (click)="openUserManualModal(UserManualModal)">
     <i class="ti ti-plus"></i>
     Add User Manual
-  </button> -->
+  </button>
     </div>
     <!-- <div>
       <button
@@ -68,6 +68,21 @@
                 View
 
               </a>
+
+                <a href="javascript:void(0)"
+     title="Edit"
+     (click)="openEditUserManualModal(UserManualModal,row)"
+     class="btn bg-success btn-sm text-white">
+    <i class="ti ti-edit"></i>
+    Edit
+  </a>
+
+   <a href="javascript:void(0)"
+   class="btn bg-danger btn-sm text-white ms-2"
+   (click)="DeleteUserManual(row)">
+  <i class="ti ti-trash"></i>
+  Delete
+</a>
             </td>
 
           </tr>
@@ -129,13 +144,21 @@
                 class="form-input"
                 formControlName="RoleId"> -->
             </div>
+<div
+  class="text-danger"
+  *ngIf="
+    isSubmitted &&
+    UserManualForm.get('RoleId')?.hasError('min')
+  ">
 
+  Please select role
+
+</div>
             <!-- Display Order -->
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Display Order
-                <span class="StarMarking">*</span>
               </label>
 
               <input
@@ -160,6 +183,12 @@
 
             </div>
 
+            <div class="text-danger"
+     *ngIf="isSubmitted && UserManualForm.controls['Title'].errors">
+
+  Title is required
+
+</div>
             <!-- Description -->
 
             <div class="col-span-2">
@@ -232,6 +261,15 @@
 
   </div>
 
+  <div
+  class="text-danger mt-1"
+  *ngIf="
+    isSubmitted &&
+    UserManualForm.get('FilePath')?.invalid
+  ">
+  Please upload user manual PDF
+</div>
+
 </div>
           </div>
 
@@ -242,7 +280,7 @@
               class="btn bg-info text-white"
               (click)="SaveUserManual()">
 
-              Save
+              {{ IsEditMode ? 'Update' : 'Save' }}
 
             </button>
 

@@ -16,6 +16,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ViewStaffProfileModalComponent } from '../../BTER-GOVT-Establish-Management/view-staff-profile-modal/view-staff-profile-modal.component';
 import { firstValueFrom } from 'rxjs';
 import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-RelievingTransferRequestReport',
   standalone: false,
@@ -596,4 +598,215 @@ export class RelievingTransferRequestReportComponent {
     );
   }
 
+  exportToPDF() {
+    const doc = new jsPDF('l', 'mm', 'a3');
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Staff Relieving List', pageWidth / 2, 10, {
+      align: 'center'
+    });
+
+    const body = this.EM_TransferProcessList.map((row: any, index: number) => [
+      index + 1,
+      `${row.NAME || ''} (${row.SSOID || ''})`,
+      row.TransferCategory || '',
+      row.ReasonDescription || '',
+      row.CreatedDate || '',
+      row.OLD_OfficeName || '',
+      row.OfficeName || '',
+      row.DesignationName || '',
+      row.DistrictName || '',
+      row.OLD_InstituteName || '',
+      row.InstituteName || '',
+      row.RelievingStatusName || '',
+      row.RelievingRemarks || '',
+      row.RelievingDate || '',
+      row.RelievingTimeID == 1
+        ? 'Forenoon'
+        : row.RelievingTimeID == 2
+          ? 'Afternoon'
+          : ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr',
+        'Name (SSOID)',
+        'Category',
+        'Reason',
+        'App Date',
+        'From Office',
+        'To Office',
+        'Post',
+        'District',
+        'From Institute',
+        'To Institute',
+        'Status',
+        'Remarks',
+        'Relieving Date',
+        'Time'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      tableWidth: 'auto',
+
+      styles: {
+        fontSize: 6,
+        cellPadding: 1.5,
+        overflow: 'linebreak',
+        valign: 'middle',
+        lineWidth: 0.1,
+        textColor: [0, 0, 0]
+      },
+
+      headStyles: {
+        fillColor: [220, 220, 220],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold',
+        halign: 'center',
+        valign: 'middle'
+      },
+
+      columnStyles: {
+        0: { cellWidth: 8 },   // Sr
+        1: { cellWidth: 30 },  // Name
+        2: { cellWidth: 18 },  // Category
+        3: { cellWidth: 30 },  // Reason
+        4: { cellWidth: 18 },  // Date
+        5: { cellWidth: 28 },  // From Office
+        6: { cellWidth: 28 },  // To Office
+        7: { cellWidth: 18 },  // Post
+        8: { cellWidth: 18 },  // District
+        9: { cellWidth: 28 },  // From Institute
+        10: { cellWidth: 28 }, // To Institute
+        11: { cellWidth: 18 }, // Status
+        12: { cellWidth: 28 }, // Remarks
+        13: { cellWidth: 18 }, // Relieving Date
+        14: { cellWidth: 15 }  // Time
+      },
+
+      didDrawPage: () => {
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Staff Relieving List', pageWidth / 2, 10, {
+          align: 'center'
+        });
+      }
+    });
+
+    doc.save('StaffRelievingList.pdf');
+  }
+
+  //exportToPDF() {
+
+  //  const doc = new jsPDF('l', 'mm', 'a3'); // A3 recommended due to many columns
+
+  //  const pageWidth = doc.internal.pageSize.getWidth();
+
+  //  doc.setFontSize(12);
+  //  doc.setFont('helvetica', 'bold');
+  //  doc.text(
+  //    'Staff Relieving List',
+  //    pageWidth / 2,
+  //    10,
+  //    { align: 'center' }
+  //  );
+
+  //  const body = this.EM_TransferProcessList.map((row: any, index: number) => [
+  //    index + 1,
+  //    `${row.NAME ?? ''} (${row.SSOID ?? ''})`,
+  //    row.TransferCategory ?? '',
+  //    row.ReasonDescription ?? '',
+  //    row.CreatedDate ?? '',
+  //    row.OLD_OfficeName ?? '',
+  //    row.OfficeName ?? '',
+  //    row.DesignationName ?? '',
+  //    row.DistrictName ?? '',
+  //    row.OLD_InstituteName ?? '',
+  //    row.InstituteName ?? '',
+  //    row.RelievingStatusName ?? '',
+     
+  //    row.RelievingRemarks ?? '',
+  //    row.RelievingDate ?? '',
+  //    row.RelievingTimeID == 1
+  //      ? 'मध्याह्न पूर्व'
+  //      : row.RelievingTimeID == 2
+  //        ? 'मध्याह्न पश्चात'
+  //        : '',
+      
+  //  ]);
+
+  //  autoTable(doc, {
+  //    startY: 18,
+
+  //    head: [[
+  //      'Sr. No.',
+  //      'Name (SSOID)',
+  //      'Transfer Category',
+  //      'Reason Description',
+  //      'Application Date',
+  //      'From Office',
+  //      'To Office',
+  //      'Post',
+  //      'District',
+  //      'From Institute',
+  //      'To Institute',
+  //      'Status',
+       
+  //      'Relieving Remarks',
+  //      'Relieving Date',
+  //      'Relieving Time',
+        
+  //    ]],
+
+  //    body,
+
+  //    theme: 'grid',
+
+  //    styles: {
+  //      fontSize: 6,
+  //      cellPadding: 2,
+  //      overflow: 'linebreak',
+  //      textColor: [0, 0, 0],
+  //      lineColor: [0, 0, 0],
+  //      lineWidth: 0.1
+  //    },
+
+  //    headStyles: {
+  //      fillColor: [240, 240, 240],
+  //      textColor: [0, 0, 0],
+  //      fontStyle: 'bold',
+  //      halign: 'center'
+  //    },
+
+  //    columnStyles: {
+  //      0: { cellWidth: 12 },
+  //      1: { cellWidth: 35 },
+  //      2: { cellWidth: 25 },
+  //      3: { cellWidth: 35 },
+  //      4: { cellWidth: 25 },
+  //      5: { cellWidth: 30 },
+  //      6: { cellWidth: 30 },
+  //      7: { cellWidth: 25 },
+  //      8: { cellWidth: 25 },
+  //      9: { cellWidth: 25 },
+  //      10: { cellWidth: 25 },
+  //      11: { cellWidth: 25 },
+  //      12: { cellWidth: 25 },
+  //      13: { cellWidth: 35 },
+  //      14: { cellWidth: 25 }
+       
+  //    }
+  //  });
+
+  //  doc.save('StaffRelievingList.pdf');
+  //}
 }

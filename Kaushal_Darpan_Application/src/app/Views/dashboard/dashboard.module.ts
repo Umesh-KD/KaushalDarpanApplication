@@ -61,8 +61,6 @@ import { EmployeeDashboardModule } from '../ITI/employee-dashboard/employee-dash
 import { IipDashboardModule } from '../IIPCompnyMaster/iip-dashboard/iip-dashboard.module';
 import { InstructorDashboardModule } from '../../../Views/ITI/instructor-dashboard/instructor-dashboard.module';
 
-
-
 /// work here 
 
 
@@ -124,6 +122,8 @@ import { InstructorDashboardModule } from '../../../Views/ITI/instructor-dashboa
     IipDashboardModule,
     InstructorDashboardModule
     
+    
   ]
 })
 export class dashboardModule { }
+

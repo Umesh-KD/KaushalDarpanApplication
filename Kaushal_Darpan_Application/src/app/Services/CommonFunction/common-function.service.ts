@@ -2195,6 +2195,14 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetStudentAttandanceDayDDL(StaffID: number, SubjectID: number, StreamID: number = 0, SectionID: number = 0) {
+
+    return await this.http.get(`${this.APIUrl}/GetStudentAttandanceDayDDL/${StaffID}/${SubjectID}/${StreamID}/${SectionID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetStaff_InstituteAndWorkWise(request: any) {
     const body = JSON.stringify(request);
@@ -2490,11 +2498,11 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetUserManualByRoleId(roleId: number) {
-
+  public async GetUserManualByRoleId(model:any) {
+    const body = JSON.stringify(model);
     debugger
   return await this.http
-    .get(this.APIUrl + '/GetUserManualByRoleId/' + roleId, this.headersOptions)
+  .post(`${this.APIUrl}/GetUserManualByRoleId`,body, this.headersOptions)
     .pipe(
       catchError(this.handleErrorObservable)
     )
@@ -2546,6 +2554,22 @@ export class CommonFunctionService {
     public async InsertUserManual(model: any) {
         const body = JSON.stringify(model);
         return await this.http.post(`${this.APIUrl}/InsertUserManual`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+
+      public async UpdateUserManual(model: any) {
+        const body = JSON.stringify(model);
+        return await this.http.post(`${this.APIUrl}/UpdateUserManual`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+
+    public async DeleteUserManual(model: any) {
+        const body = JSON.stringify(model);
+        return await this.http.post(`${this.APIUrl}/DeleteUserManual`, body, this.headersOptions)
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();
