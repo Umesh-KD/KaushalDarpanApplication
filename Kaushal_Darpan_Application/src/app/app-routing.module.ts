@@ -166,7 +166,7 @@ const routes: Routes = [
       { path: 'SubjectMaster', loadChildren: () => import('./Views/subject-master/subject-master-routing.module').then(m => m.SubjectMasterRoutingModule), title: 'Subject Master' },
       { path: 'SubjectCategory', loadChildren: () => import('./Views/subject-category/subject-category.module.ts').then(m => m.SubjectCategoryRoutingModule), title: 'Subject Category' },
       { path: 'PlacementDashboard', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
-      { path: 'BterAttendanceDashboard', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
+      { path: 'BterAttendanceDashboard', loadChildren: () => import('./Views/bter-attendacne-dashboard/bter-attendacne-dashboard.module').then(m => m.BterAttendanceDashboardModule), title: 'Bter Attendance Dashboard' },
       { path: 'PlacementDashboard/:id', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
       { path: 'PlacementDashReport/:id', loadChildren: () => import('./Views/placement-dash-report/placement-dash-report.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Placement Dashboard Report' },
       { path: 'ITIPlacementDashboard', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },

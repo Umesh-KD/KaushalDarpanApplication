@@ -2195,6 +2195,14 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetStudentAttandanceDayDDL(StaffID: number, SubjectID: number, StreamID: number = 0, SectionID: number = 0) {
+
+    return await this.http.get(`${this.APIUrl}/GetStudentAttandanceDayDDL/${StaffID}/${SubjectID}/${StreamID}/${SectionID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetStaff_InstituteAndWorkWise(request: any) {
     const body = JSON.stringify(request);
