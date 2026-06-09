@@ -410,4 +410,13 @@ export class BTEREstablishManagementService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async Bter_EM_GetCommonDropdownData(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/Bter_EM_GetCommonDropdownData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
