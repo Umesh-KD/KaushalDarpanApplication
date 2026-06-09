@@ -9,31 +9,36 @@
   </div>
 </div>
 <!----use for dashboard-->
-
-
 <div class="card" *ngIf="isDashboard">
-  <div class="card-body p-5" *ngIf="isDashboard && listType== 'NewTraining'" >
+  <div class="card-body p-5" *ngIf="isDashboard && listType== 'NewTraining'">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Staff  Details New Training</b>
       <a href="javascript:void(0);" (click)="exportToExcelNew()" class="btn bg-info btn-sm text-white">
         <i class="ti ti-download"></i> Download Execel
       </a>
+      <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"
+         (click)="exportToPDFNew()">
+        <i class="ti ti-download"></i> Download PDF
+      </a>
     </div>
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
-      <div class="">
-        <!-- <select id="ddlConter" class="form-select  couterDropDown">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select> -->
+      
+      <div class=" ">
+        <label>Search By Status </label>
+        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (change)="StaffTrainingDetailsNewTraining_Search(SearchStatus)">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of StaffTrainingStatusSearchList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
       </div>
-      <div class="">
-      </div>
-      <div class="">
-      </div>
-      <div class="">
-        <!--<input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />-->
+
+      <div>
+        <button type="submit"
+                class="btn bg-info mt-5 text-white w-100"
+                (click)="StaffTrainingDetailsNewTraining_Search(this.SearchStatus)">
+          Search
+        </button>
       </div>
     </div>
     <!--{{StaffTrainingDetailsNewTrainingDataList|json}}-->
@@ -114,22 +119,30 @@
       <a href="javascript:void(0);" (click)="exportToExcelCom()" class="btn bg-info btn-sm text-white">
         <i class="ti ti-download"></i> Download Execel
       </a>
+      <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"
+         (click)="exportToPDFCom()">
+        <i class="ti ti-download"></i> Download PDF
+      </a>
     </div>
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
-      <div class="">
-        <!-- <select id="ddlConter" class="form-select  couterDropDown">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select> -->
+      
+
+      <div class=" ">
+        <label>Search By Status </label>
+        <select class="form-select" id="SearchStatus" [(ngModel)]="SearchStatus" name="ddlSearchStatus" (change)="StaffTrainingDetailsCompletedTraining_Search(SearchStatus)">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of StaffTrainingStatusSearchList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
       </div>
-      <div class="">
-      </div>
-      <div class="">
-      </div>
-      <div class="">
-        <!--<input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />-->
+
+      <div>
+        <button type="submit"
+                class="btn bg-info mt-5 text-white w-100"
+                (click)="StaffTrainingDetailsCompletedTraining_Search(this.SearchStatus)">
+          Search
+        </button>
       </div>
     </div>
 
@@ -213,6 +226,10 @@
       <a href="javascript:void(0);" (click)="exportToExcelNew()" class="btn bg-info btn-sm text-white">
         <i class="ti ti-download"></i> Download Execel
       </a>
+      <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"
+         (click)="exportToPDFNew()">
+        <i class="ti ti-download"></i> Download PDF
+      </a>
     </div>
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
       <div class="">
@@ -308,6 +325,10 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i>Staff  Details Completed Training</b>
       <a href="javascript:void(0);" (click)="exportToExcelCom()" class="btn bg-info btn-sm text-white">
         <i class="ti ti-download"></i> Download Execel
+      </a>
+      <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"
+         (click)="exportToPDFCom()">
+        <i class="ti ti-download"></i> Download PDF
       </a>
     </div>
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
@@ -417,6 +438,7 @@
           </div>
         </div>
         <!--{{StaffTrainingHTS_GetDataList|json}}-->
+        au
         <div class="overflow-x-auto mt-3">
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
