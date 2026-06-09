@@ -8,6 +8,7 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { EstablishmentReportITIComponent } from './establishment-report-iti.component';
 import { EstablishmentReportITIRoutingModule } from './establishment-report-iti-routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { EstablishmentReportITIRoutingModule } from './establishment-report-iti-
     LoaderModule,
     TableSearchFilterModule,
     NgMultiSelectDropDownModule.forRoot(),
+    NgSelectModule,
   ]
 })
 export class EstablishmentReportITIModule { }

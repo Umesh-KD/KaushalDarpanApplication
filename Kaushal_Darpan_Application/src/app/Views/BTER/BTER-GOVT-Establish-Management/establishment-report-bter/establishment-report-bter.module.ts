@@ -9,6 +9,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ViewStaffProfileModalModule } from '../view-staff-profile-modal/view-staff-profile-modal.model';
 import { EstablishmentReportBTERComponent } from './establishment-report-bter.component';
 import { EstablishmentReportBTERRoutingModule } from './establishment-report-bter-routing.module';
+import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { EstablishmentReportBTERRoutingModule } from './establishment-report-bte
     TableSearchFilterModule,
     StudentStatusHistoryModule,
     NgMultiSelectDropDownModule.forRoot(),
-    ViewStaffProfileModalModule
+    ViewStaffProfileModalModule,
+    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
   ]
 })
 export class EstablishmentReportBTERModule { }

@@ -10,6 +10,8 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ViewStaffProfileModalComponent } from '../view-staff-profile-modal/view-staff-profile-modal.component';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-establishment-report-bter',
@@ -30,6 +32,10 @@ export class EstablishmentReportBTERComponent {
   public OfficeList: any = [];
   public BugetHeadList: any = [];
   public StaffTypeList: any = [];
+  public InstituteMasterList: any = [];
+  public StaffProfileStatusList: any = [];
+
+  public Table_SearchText: string = '';
 
   //table feature default
   modalReference: NgbModalRef | undefined;
@@ -55,10 +61,14 @@ export class EstablishmentReportBTERComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetDDLMasterData();
+    await this.GetStaffProfileStatusList();
+    await this.getInstituteDataList();
+    await this.BTER_EM_GetStaffList();
   }
 
   async BTER_EM_GetStaffList() {
-    debugger
+     
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID
@@ -66,6 +76,7 @@ export class EstablishmentReportBTERComponent {
     this.searchRequest.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng
     this.searchRequest.GuestHouseID = this.sSOLoginDataModel.GuestHouseID;
     this.searchRequest.InstitutionManagementTypeID = this.searchRequest.InstitutionManagementTypeID
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
     try {
       this.loaderService.requestStarted();
       await this.bterEstablishManagementService.BTER_EM_GetStaffList(this.searchRequest)
@@ -94,7 +105,7 @@ export class EstablishmentReportBTERComponent {
   }
 
   async GetDDLMasterData() {
-    debugger;  
+     ;  
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
@@ -124,6 +135,43 @@ export class EstablishmentReportBTERComponent {
     }
   }
 
+  async getInstituteDataList() {
+    try {
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+            this.InstituteMasterList = data['Data'];
+            this.InstituteMasterList = this.InstituteMasterList.filter((x: any) => { return x.InstituteID == this.sSOLoginDataModel.InstituteID });
+            //console.log(this.sSOLoginDataModel.InstituteID,'ss1')
+            //console.log(this.InstituteMasterList,'ss2')
+          } else {
+            this.InstituteMasterList = data['Data'];
+            //this.request.InstituteID = 0
+          }
+        }, (error: any) => console.error(error));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async GetStaffProfileStatusList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('ITIvtARRStauts').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StaffProfileStatusList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
@@ -147,13 +195,80 @@ export class EstablishmentReportBTERComponent {
   }
 
   async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
-    //debugger
+    // 
     this.childComponentViewStaffProfile.StaffID = StaffID;
     this.childComponentViewStaffProfile.UserID = UserID;
     await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();
   }
 
+  exportToPDF() {
 
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'Employee List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+    
+    const body = this.StaffList.map((row: any, index: number) => [
+      index + 1,
+      row.SSOID ?? '',
+      row.Name ?? '',
+      row.MobileNo ?? '',
+      row.EmailID ?? '',
+      row.InstituteName ?? '',
+      row.StaffTypeName ?? '',
+      row.RoleName ?? '',
+      row.ProfileStatus ?? '',
+      row.Remark ?? '',
+      row.IsNodal ?? ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr. No.',
+        'SSOID',
+        'Name',
+        'Mobile No',
+        'Email ID',
+        'Department/ Institute',
+        'Staff Type',
+        'Role',
+        'Profile Status',
+        'Remark',
+        'Is Nodal',
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      }
+    });
+
+    doc.save('Employee_List.pdf');
+  }
 
 
 

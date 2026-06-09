@@ -51,6 +51,13 @@ export class EstablishmentReportITIComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetLevelList();
+    await this.GetOfficeList();
+    await this.GetStaffProfileStatusList();
+    await this.GetStaffTypeData();
+    await this.GetDistrictMaster();
+    await this.getItiNameAndCode();
+    await this.GetStaffList();
   }
 
   async GetStaffList() {
@@ -104,6 +111,7 @@ export class EstablishmentReportITIComponent {
   }
 
   async GetLevelList() {
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetLevelMaster()
@@ -192,7 +200,8 @@ export class EstablishmentReportITIComponent {
     this.searchRequest.OfficeID = 0;
     this.searchRequest.StaffTypeID = 0;
     this.searchRequest.SSOID = "";
-    this.searchRequest.Name = "";    
+    this.searchRequest.Name = "";
+    this.searchRequest = new ITI_Govt_EM_ZonalOFFICERSSearchDataModel();    
     await this.GetStaffList();
   }
 
