@@ -133,8 +133,8 @@ export class BterUFMReportsComponent implements OnInit {
     })
 
     this.ReportTypelist = [
-      { ID: 1, Name: 'UFM Student Report', URL: 'ufm-student-Report' },
-      { ID: 2, Name: 'CollegWise UFM Report', URL: 'collegwise-ufm-report' },     
+      { ID: 1, Name: 'UFM Student Order', URL: 'ufm-student-Report' },
+      { ID: 2, Name: 'CollegWise UFM Statistics', URL: 'collegwise-ufm-report' },     
     ];
   }
 

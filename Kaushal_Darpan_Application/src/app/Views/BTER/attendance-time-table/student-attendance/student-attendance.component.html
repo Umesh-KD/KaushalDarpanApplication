@@ -192,30 +192,27 @@
               <button *ngIf="column.locked"
                     mat-mini-button color="primary"
                     [disabled]="!column.isMarkOnAttendanceDate">
-              locked
-            </button>
-
+                locked
+              </button>
             </th>
-
             <td mat-cell *matCellDef="let element"
                 [ngClass]="{
-            'present-cell': element[column.name] === 'P',
-            'tl-cell': element[column.name] === 'TL'
-          }">
-
+              'present-cell': element[column.name] === 'P',
+              'tl-cell': element[column.name] === 'TL'
+            }">
               <!-- ✅ Disabled if TL or locked -->
               <mat-slide-toggle [checked]="element[column.name] === 'P'"
                                 [disabled]="isToggleDisabled(element, column.name)"
                                 (change)="onAttendanceChange($event, element, column.name)">
 
                 {{
-            element[column.name] === 'TL'
-              ? 'Leave (TL)'
-              : (element[column.name] === 'H'
-                  ? 'Holiday'
-                  : (element[column.name] === 'P'
-                      ? 'Present'
-                      : 'Absent'))
+                  element[column.name] === 'TL'
+                    ? 'Leave (TL)'
+                    : (element[column.name] === 'H'
+                        ? 'Holiday'
+                        : (element[column.name] === 'P'
+                            ? 'Present'
+                            : 'Absent'))
                 }}
               </mat-slide-toggle>
             </td>
