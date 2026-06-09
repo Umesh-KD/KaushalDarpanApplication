@@ -120,6 +120,15 @@ export class StudentAttendanceComponent implements OnInit {
       DayID: [2]
     });
 
+
+    const todayDayId = new Date().getDay() + 1;
+    console.log('Today DayID => ', todayDayId);
+
+    if (todayDayId) {
+      this.TableForm.get('DayID')?.setValue(todayDayId);
+    }
+
+
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     // Access the route parameters
     this.sectionId = this.route.snapshot.paramMap.get('sectionId') ?? '';
@@ -232,7 +241,9 @@ export class StudentAttendanceComponent implements OnInit {
     // });
 
     //debugger
+   // await this.GetStudentAttandanceDayDDL();
     await this.GetStudentAttandanceTimeDDL();
+
     //  await this.GetStaffLeaveAllData();
 
     //if (this.subjectId) {
@@ -331,7 +342,6 @@ export class StudentAttendanceComponent implements OnInit {
     this.TableForm.get('StaffID')?.setValue(0);
     this.TableForm.get('StaffID')?.setValue(0);
     this.TableForm.get('SectionID')?.setValue(0);
-
   }
 
   async GetStudentAttandanceTimeDDL() {
@@ -347,20 +357,40 @@ export class StudentAttendanceComponent implements OnInit {
       data = JSON.parse(JSON.stringify(data));
       // debugger
       this.StudentAttandanceTimeDDL = data.Data;
-
+      if (this.StudentAttandanceTimeDDL.length > 0) {
+        this.TableForm.get('AttandanceTimeID')?.setValue(this.StudentAttandanceTimeDDL[0]['ID']);
+      }
       if (this.StudentAttandanceTimeDDL && this.StudentAttandanceTimeDDL.length > 0) {
         this.TableForm.get('SubjectID')?.disable();
         // this.TableForm.get('StreamID')?.disable();
         // this.TableForm.get('SemesterID')?.disable();
       }
       //else {
-       // this.TableForm.get('SubjectID')?.enable();
-        // this.TableForm.get('StreamID')?.enable();
-        // this.TableForm.get('SemesterID')?.enable();
+       // this.TableForm.get('SubjectID')?.enable();    
      // }
     })
 
   }
+
+  //async GetStudentAttandanceDayDDL() {
+  //  debugger
+
+  //  await this.commonMasterService.GetStudentAttandanceDayDDL(this.StaffID, this.subjectId, this.streamId, this.TableForm.value.SectionID).then((data: any) => {
+  //    data = JSON.parse(JSON.stringify(data));
+  //    // debugger
+
+  //    //const dayid = data.Data[0]['DayID'];
+  //    const todayDayId = new Date().getDay() +1;
+  //    console.log('Today DayID => ', todayDayId);
+
+  //    if (todayDayId) {
+  //      this.TableForm.get('DayID')?.setValue(todayDayId);
+  //    }
+  //    //this.TableForm.get('DayID')?.setValue(dayid);
+
+  //  })
+
+  //}
 
   async getSubjectMasterDDL(ID: any, SemesterID: any) {
     //debugger
@@ -1093,6 +1123,8 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
 
+
+
   toggleAllAttendance() {
     //debugger
     const attendanceStatus = this.checkedAll ? 'P' : 'A';
@@ -1176,7 +1208,8 @@ export class StudentAttendanceComponent implements OnInit {
   //}
 
   lockColumn(columnName: string) {
-    
+
+    //debugger
     this.swat.Confirmation(
       "Are you sure you want to lock this column?",
       (result: any) => {
@@ -1215,6 +1248,49 @@ export class StudentAttendanceComponent implements OnInit {
 
         this.cdr.detectChanges();
       });
+  }
+
+
+
+  //final submit for lock the attendance
+
+  async finalSubmitAttendance() {
+    this.swat.Confirmation(
+      "Are you sure you want to final submit attendance? Once submitted, marked dates will be locked.",
+      async (result: any) => {
+        if (!result.isConfirmed) {
+          return;
+        }
+        // Lock all marked dates
+        this.markedAttendanceDates.forEach(markedDate => {
+          if (markedDate.marked) {
+            markedDate.locked = true;
+          }
+        });
+
+        // Lock all marked columns in grid
+        this.dynamicColumns.forEach(column => {
+
+          const cleanedDate = column.name.replace(/\(.*?\)\s*/g, '').trim();
+
+          const markedColumn = this.markedAttendanceDates.find(
+            x => x.date === cleanedDate && x.marked
+          );
+
+          if (markedColumn) {
+            column.locked = true;
+            column.isMarkOnAttendanceDate = true;
+          }
+
+        });
+
+        this.dataSource.data = [...this.dataSource.data];
+        this.cdr.detectChanges();
+
+        // Save attendance with locked status
+        await this.saveAttendance();
+      }
+    );
   }
 
   //unlockColumn(columnName: string) {

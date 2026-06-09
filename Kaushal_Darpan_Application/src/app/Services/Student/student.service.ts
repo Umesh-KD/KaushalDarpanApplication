@@ -188,4 +188,12 @@ export class StudentService
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async ResetStudentSsoMapping(searchRequest: StudentSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/ResetStudentSsoMapping`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

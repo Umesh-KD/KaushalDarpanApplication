@@ -301,9 +301,79 @@ export class StudentDashboardComponent implements OnInit {
   }
 
 
+  async resetSSO() {
 
+    this.Swal2.Confirmation(
+      "Are you sure you want to unmap this SSO?",
+      async (result: any) => {
 
-  
-  
+        if (result.isConfirmed) {
+
+          try {
+
+            this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
+            this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
+            this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+            this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
+
+            console.log('Reset Payload:', this.searchRequest);
+
+            this.loaderService.requestStarted();
+
+            await this.studentService.ResetStudentSsoMapping(this.searchRequest)
+              .then((data: any) => {
+
+                data = JSON.parse(JSON.stringify(data));
+
+                if (data.State == EnumStatus.Success) {
+
+                  this.toastr.success(data.Message || 'SSO Unmapped Successfully');
+
+                  this.sSOLoginDataModel.StudentID = 0;
+
+                  localStorage.setItem(
+                    'SSOLoginUser',
+                    JSON.stringify(this.sSOLoginDataModel)
+                  );
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 1000);
+
+                  
+                }
+                else {
+
+                  this.toastr.error(
+                    data.ErrorMessage || 'Unable to unmap student'
+                  );
+
+                }
+
+              }, (error: any) => {
+
+                console.error(error);
+                this.toastr.error('API Error');
+
+              });
+
+          }
+          catch (ex) {
+
+            console.log(ex);
+            this.toastr.error('Something went wrong');
+
+          }
+          finally {
+
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+
+          }
+        }
+      },
+      'Yes'
+    );
+  }
 
 }
