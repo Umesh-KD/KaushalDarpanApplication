@@ -53,8 +53,8 @@
           <ng-select [(ngModel)]="request.SemesterID" (change)="onSemesterChange($event)" formControlName="SemesterID" [clearable]="false">
             <ng-option [value]="0">--Select--</ng-option>
             <ng-option [value]="1">1st, 2nd Semester</ng-option>
-            <ng-option [value]="3">3rd, 4th, 5th Semester</ng-option>
-            <ng-option [value]="6">6th Semester</ng-option>
+            <ng-option [value]="3">3rd, 4th, 5th & 6th Semester</ng-option>
+            <!--<ng-option [value]="6">6th Semester</ng-option>-->
             <!-- @for (item of SemesterMasterDDL; track item.SemesterID) {
             <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
             } -->

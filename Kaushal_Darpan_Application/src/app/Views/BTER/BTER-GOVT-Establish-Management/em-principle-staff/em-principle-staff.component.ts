@@ -75,6 +75,7 @@ export class EMPrincipleStaffComponent {
   _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
   public OfficeList: any = [];
   public OfficeWorkList: any = [];
+  public SactionedPostList: any = [];
   public searchRequest1 = new GuestRoomSeatSearchModel();
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
@@ -570,12 +571,32 @@ async GetTechnicianDll() {
       }, 200);
     }
   }
+
+  async getSactionedPostList() {
+    try {
+      const request: any = {};
+      request.OfficeID = this.formData.OfficeID;
+      request.StaffTypeID = this.formData.StaffTypeID;
+      request.InstituteID = this.formData.InstituteID;
+      request.RoleID = this.sSOLoginDataModel.RoleID;
+      request.UserID = this.sSOLoginDataModel.UserID;
+      request.Action = "GetSanctionedPost";
+      await this.bterEstablishManagementService.Bter_EM_GetCommonDropdownData(request).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SactionedPostList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async StaffLevelType() {
     this.formData.StaffLevelID = 0;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.StaffTypeID = this.formData.StaffTypeID;
 
     await this.GetPostList();
+    await this.getSactionedPostList();
 
     //Teaching=30
     if (this.searchRequest.StaffTypeID == 30) {
@@ -901,7 +922,7 @@ async GetTechnicianDll() {
                 
                 if (data.State == EnumStatus.Success) {
                   this.toastr.success(data.Message)
-                  this.GetAllData()
+                  await this.GetAllData()
                   
                 }
                 else {

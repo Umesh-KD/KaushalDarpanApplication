@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { LoaderModule } from '../Shared/loader/loader.module';
 import { UsermanualComponent } from './usermanual.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { UsermanualComponent } from './usermanual.component';
   imports: [
     CommonModule,
     UsermanualRoutingModule,
-     FormsModule, ReactiveFormsModule, TableSearchFilterModule, LoaderModule
+    FormsModule, ReactiveFormsModule, TableSearchFilterModule, LoaderModule,
+    NgSelectModule
   ]
 })
 export class UsermanualModule { }

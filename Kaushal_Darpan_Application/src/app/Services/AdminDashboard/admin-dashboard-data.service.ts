@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, catchError, BehaviorSubject } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { AdminDashboardSearchModel, AdminDashboardIssueTrackerSearchModel, EM_JDTEDashboardSearchModel } from '../../Models/AdminDashboardDataModel';
+import { AdminDashboardSearchModel, AdminDashboardIssueTrackerSearchModel, EM_JDTEDashboardSearchModel, EM_TransferRelievingDashSearchModel, EM_StaffTrainingDashboardSearchModel } from '../../Models/AdminDashboardDataModel';
 import { ITIsDataModels } from '../../Models/ITIsDataModels';
 
 
@@ -82,5 +82,23 @@ export class AdminDashboardDataService {
         .pipe(
             catchError(this.handleErrorObservable)
         ).toPromise();
-}
+  }
+
+
+  public async GetTransferRelievingDashData(searchRequest: EM_TransferRelievingDashSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetTransferRelievingDashData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetStaffTrainingDashboardData(searchRequest: EM_StaffTrainingDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetStaffTrainingDashboardData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

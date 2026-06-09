@@ -1,7 +1,7 @@
 import { RequestBaseModel } from "../RequestBaseModel";
 
 export class BTER_EM_StaffListSearchModel {
-    ID: number = 0;
+  ID: number = 0;
   OfficeID: number = 0;
   PostID: number = 0;
   DepartmentID: number = 0;
@@ -17,6 +17,8 @@ export class BTER_EM_StaffListSearchModel {
   Eng_NonEng?:number=0;
   GuestHouseID?: string = "";
   InstitutionManagementTypeID?: number = 0;
+  InstituteID?: number = 0;
+  ProfileStatus?: number = -1;
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {

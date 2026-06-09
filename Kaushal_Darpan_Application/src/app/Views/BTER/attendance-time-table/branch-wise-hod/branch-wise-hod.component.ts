@@ -238,6 +238,7 @@ export class BranchWiseHodComponent {
 
   // get detail by id
   async SaveData() {
+    debugger
     try {
       this.isSubmitted = true;
       const formValue = this.IIPMasterFormGroup.value;
@@ -286,7 +287,7 @@ export class BranchWiseHodComponent {
         this.request.SemesterIDs = "1,2";
       }
       else if (this.request.SemesterID == 3) {
-        this.request.SemesterIDs = "3,4,5";
+        this.request.SemesterIDs = "3,4,5,6";
       }
 
 
@@ -484,7 +485,7 @@ export class BranchWiseHodComponent {
       this.request.SemesterIDs = "1,2";
     }
     else if (this.request.SemesterID == 3) {
-      this.request.SemesterIDs = "3,4,5";
+      this.request.SemesterIDs = "3,4,5,6";
     }
 
     if (this.request.SemesterID && this.request.SemesterID != 0) {
@@ -541,7 +542,7 @@ export class BranchWiseHodComponent {
         .split(',')
         .map((id: string) => Number(id.trim()))
       : [];
-    if (rowData.SemesterID == "3,4,5") {
+    if (rowData.SemesterID == "3,4,5,6") {
       rowData.SemesterID = 3
     }
 

@@ -166,6 +166,7 @@ const routes: Routes = [
       { path: 'SubjectMaster', loadChildren: () => import('./Views/subject-master/subject-master-routing.module').then(m => m.SubjectMasterRoutingModule), title: 'Subject Master' },
       { path: 'SubjectCategory', loadChildren: () => import('./Views/subject-category/subject-category.module.ts').then(m => m.SubjectCategoryRoutingModule), title: 'Subject Category' },
       { path: 'PlacementDashboard', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
+      { path: 'BterAttendanceDashboard', loadChildren: () => import('./Views/bter-attendacne-dashboard/bter-attendacne-dashboard.module').then(m => m.BterAttendanceDashboardModule), title: 'Bter Attendance Dashboard' },
       { path: 'PlacementDashboard/:id', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
       { path: 'PlacementDashReport/:id', loadChildren: () => import('./Views/placement-dash-report/placement-dash-report.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Placement Dashboard Report' },
       { path: 'ITIPlacementDashboard', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
@@ -1228,6 +1229,7 @@ const routes: Routes = [
       { path: 'dte-committee-assign', loadChildren: () => import('./Views//BTER/THTE/dte-committee-assign/dte-committee-assign.module').then(m => m.DTECommitteeAssignModule), title: 'DTE Committee Assign' },
       { path: 'institute-committee-list-dte', loadChildren: () => import('./Views//BTER/THTE/institute-committee-list-dte/institute-committee-list-dte.module').then(m => m.InstituteCommitteeListDTEModule), title: 'Institute Committee List' },
       { path: 'Committee-After-PrincipleApplication-verification', loadChildren: () => import('./Views//BTER/THTE/thte-committee-afterprinciple-application-list/thte-committee-afterprinciple-application-list.module').then(m => m.THTECommitteeafterPrincipleApplicationListModule), title: 'Application Verify For Committee After Principle' },
+      { path: 'establishment-report', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/establishment-report-bter/establishment-report-bter.module').then(m => m.EstablishmentReportBTERModule), title: 'Establishment Report' },
       
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, BTER Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
@@ -1235,6 +1237,7 @@ const routes: Routes = [
       { path: 'iti-govt-post', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-Post/ITI-Govt-Post-routing.module').then(m => m.ITIGovtPostRoutingModule), title: 'ITI-Govt-Post' },
       { path: 'ITIGovtEMZonalOfficeMaster', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-ZonalOfficeMaster/ITI-Govt-EM-ZonalOfficeMaster.module').then(m => m.ITIGovtEMZonalOfficeMasterModule), title: 'ITI Govt EM Zonal Office ' },
       { path: 'ITIGovtEMStaffProfile', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-StaffProfile/ITI-Govt-EM-StaffProfile.module').then(m => m.ITIGovtEMStaffProfileModule), title: 'ITI Govt EM StaffProfile' },
+      { path: 'establishment-report-iti', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/establishment-report-iti/establishment-report-iti.module').then(m => m.EstablishmentReportITIModule), title: 'ITI Establishment Report' },
       { path: 'ITIGovtEMZonalOfficeList', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-ZonalOfficeList/ITI-Govt-EM-ZonalOfficeList.module').then(m => m.ITIGovtEMZonalOfficeListModule), title: 'ITI Govt EM Zonal Office ' },
       { path: 'ITIGovtEMEducationalQualification', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-EducationalQualification/ITI-Govt-EM-EducationalQualification.module').then(m => m.ITIGovtEMEducationalQualificationModule), title: 'ITI Govt EM Educational Qualification' },
       { path: 'ITIGovtEMServiceDetailsOfPersonal', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-Govt-EM-ServiceDetailsOfPersonal/ITI-Govt-EM-ServiceDetailsOfPersonal.module').then(m => m.ITIGovtEMServiceDetailsOfPersonalModule), title: 'ITI Govt EM Service Details Of Personal' },
@@ -1769,7 +1772,11 @@ const routes: Routes = [
       { path: 'itiPendingCollegeFee', loadChildren: () => import('./Views/Student/itiPendingCollegeFee/itiPendingCollegeFee.module').then(m => m.itiPendingCollegeFeeModule) },
       { path: 'TransferRequestReport/:id', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
       { path: 'usermanual', loadChildren: () => import('./Views/usermanual/usermanual.module').then(m => m.UsermanualModule) },
+      { path: 'addusermanual', loadChildren: () => import('./Views/addusermanual/addusermanual.module').then(m => m.AddusermanualModule) },
       { path: 'ViewContentList', loadChildren: () => import('./Views/view-content-list/view-content-list.module').then(m => m.ViewContentListModule) },
+      { path: 'TransferRelievingDashboardModule', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRelievingDashboard/TransferRelievingDashboard.module').then(m => m.TransferRelievingDashboardModule) },
+      { path: 'StaffTrainingDashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffTrainingDashboard/StaffTrainingDashboard.module').then(m => m.StaffTrainingDashboardModule) },
+
 
     ]
   },

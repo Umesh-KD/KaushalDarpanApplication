@@ -5,12 +5,29 @@
       <b class="text-1xl-5">
         <i class="ti ti-list"></i> User Manuals
       </b>
+
+       <!-- <button
+    type="button"
+    class="btn bg-info text-white"
+    (click)="openUserManualModal(UserManualModal)">
+    <i class="ti ti-plus"></i>
+    Add User Manual
+  </button> -->
     </div>
+    <!-- <div>
+      <button
+        type="button"
+        class="btn bg-info text-white"
+        (click)="openUserManualModal(UserManualModal)">
+        <i class="ti ti-plus"></i>
+        Add User Manual
+      </button>
+    </div> -->
 
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto">
 
-        <thead class="bg-light/40 border-b border-gray-100 h-10">
+        <thead class="bg-light/40 border-b border-gray-100 h-10 text-left">
           <tr>
             <th>Sr No</th>
             <th>Title</th>
@@ -39,7 +56,7 @@
 
             <!-- <td>{{row.DisplayOrder}}</td> -->
 
-            <td>{{row.CreatedDate | date:'dd/MM/yyyy'}}</td>
+            <td> {{ (row.ModifiedDate ? row.ModifiedDate : row.CreatedDate) | date:'dd/MM/yyyy' }}</td>
 
             <td>
               <a
@@ -62,3 +79,190 @@
 
   </div>
 </div>
+
+
+<ng-template #UserManualModal let-modal>
+
+  <div class="modal-content">
+
+    <div class="card">
+
+      <div class="card-header flex justify-between items-center">
+
+        <b>
+          <i class="ti ti-book"></i>
+          Add User Manual
+        </b>
+
+        <button
+          class="btn bg-danger text-white"
+          (click)="closeUserManualModal()">
+
+          <i class="ti ti-x"></i>
+
+        </button>
+
+      </div>
+
+      <div class="card-body">
+
+        <form [formGroup]="UserManualForm">
+
+          <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-3">
+
+            <!-- Role -->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Role
+                <span class="StarMarking">*</span>
+              </label>
+
+              <ng-select
+                [items]="RoleMasterList"
+                bindLabel="RoleNameEnglish"
+                bindValue="RoleID"
+                formControlName="RoleId">
+              </ng-select>
+              <!-- <input
+                type="number"
+                class="form-input"
+                formControlName="RoleId"> -->
+            </div>
+
+            <!-- Display Order -->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Display Order
+                <span class="StarMarking">*</span>
+              </label>
+
+              <input
+                type="number"
+                class="form-input"
+                formControlName="DisplayOrder">
+            </div>
+
+            <!-- Title -->
+
+            <div class="col-span-2">
+
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Title
+                <span class="StarMarking">*</span>
+              </label>
+
+              <input
+                type="text"
+                class="form-input"
+                formControlName="Title">
+
+            </div>
+
+            <!-- Description -->
+
+            <div class="col-span-2">
+
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Description
+              </label>
+
+              <textarea
+                rows="3"
+                class="form-input"
+                formControlName="Description">
+              </textarea>
+
+            </div>
+
+            <!-- File Path -->
+
+            <!-- <div class="col-span-2">
+
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                File Path
+                <span class="StarMarking">*</span>
+              </label>
+
+              <input
+                type="text"
+                class="form-input"
+                formControlName="FilePath">
+
+            </div> -->
+
+            <div class="col-span-2">
+
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Upload Manual
+    <span class="StarMarking">*</span>
+  </label>
+
+  <div class="flex fileUploader">
+
+    <input
+      id="UserManualUpload"
+      type="file"
+      accept=".pdf"
+      (change)="onUserManualFileChange($event)"
+      class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50">
+
+    <label for="UserManualUpload">
+
+      <span>Choose File</span>
+
+      {{ UserManualDisplayFileName == '' ? 'No File Chosen' : UserManualDisplayFileName }}
+
+    </label>
+
+    <div class="flex">
+
+      <a
+        *ngIf="UserManualFileName != ''"
+        [href]="appsettingConfig.StaticFileRootPathURL + '/UserManual/' + UserManualFileName"
+        target="_blank"
+        class="btn bg-primary text-white m-0">
+
+        <i class="ti ti-eye"></i>
+
+      </a>
+
+    </div>
+
+  </div>
+
+</div>
+          </div>
+
+          <div class="text-center mt-5">
+
+            <button
+              type="button"
+              class="btn bg-info text-white"
+              (click)="SaveUserManual()">
+
+              Save
+
+            </button>
+
+            <button
+              type="button"
+              class="btn bg-danger text-white"
+              (click)="closeUserManualModal()">
+
+              Cancel
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</ng-template>

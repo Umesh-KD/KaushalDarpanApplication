@@ -1,0 +1,306 @@
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">
+        <i class="ti ti-list"></i> User Manuals
+      </b>
+
+       <button
+    type="button"
+    class="btn bg-info text-white"
+    (click)="openUserManualModal(UserManualModal)">
+    <i class="ti ti-plus"></i>
+    Add User Manual
+  </button>
+    </div>
+    <!-- <div>
+      <button
+        type="button"
+        class="btn bg-info text-white"
+        (click)="openUserManualModal(UserManualModal)">
+        <i class="ti ti-plus"></i>
+        Add User Manual
+      </button>
+    </div> -->
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto">
+
+        <thead class="bg-light/40 border-b border-gray-100 h-10 text-left">
+          <tr>
+            <th>Sr No</th>
+            <th>Title</th>
+            <th>Description</th>
+            <!-- <th>Display Order</th> -->
+            <th>Updated Date</th>
+            <th>Manual</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngIf="UserManualList.length == 0">
+            <td colspan="6" class="text-center">
+              No Record Found
+            </td>
+          </tr>
+
+          <tr *ngFor="let row of UserManualList; let i=index">
+
+            <td>{{i+1}}</td>
+
+            <td>{{row.Title}}</td>
+
+            <td>{{row.Description}}</td>
+
+            <!-- <td>{{row.DisplayOrder}}</td> -->
+
+            <td> {{ (row.ModifiedDate ? row.ModifiedDate : row.CreatedDate) | date:'dd/MM/yyyy' }}</td>
+
+            <td>
+              <a
+                href="{{appsettingConfig.StaticFileRootPathURL +'UserManual/'+ row.FilePath}}"
+                target="_blank"
+                class="btn bg-success btn-sm text-white">
+                <i class="ti ti-eye"></i>
+                <!-- <i class="ti ti-download"></i> -->
+                View
+
+              </a>
+
+                <a href="javascript:void(0)"
+     title="Edit"
+     (click)="openEditUserManualModal(UserManualModal,row)"
+     class="btn bg-success btn-sm text-white">
+    <i class="ti ti-edit"></i>
+    Edit
+  </a>
+
+   <a href="javascript:void(0)"
+   class="btn bg-danger btn-sm text-white ms-2"
+   (click)="DeleteUserManual(row)">
+  <i class="ti ti-trash"></i>
+  Delete
+</a>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
+
+
+<ng-template #UserManualModal let-modal>
+
+  <div class="modal-content">
+
+    <div class="card">
+
+      <div class="card-header flex justify-between items-center">
+
+        <b>
+          <i class="ti ti-book"></i>
+          Add User Manual
+        </b>
+
+        <button
+          class="btn bg-danger text-white"
+          (click)="closeUserManualModal()">
+
+          <i class="ti ti-x"></i>
+
+        </button>
+
+      </div>
+
+      <div class="card-body">
+
+        <form [formGroup]="UserManualForm">
+
+          <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-3">
+
+            <!-- Role -->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Role
+                <span class="StarMarking">*</span>
+              </label>
+
+              <ng-select
+                [items]="RoleMasterList"
+                bindLabel="RoleNameEnglish"
+                bindValue="RoleID"
+                formControlName="RoleId">
+              </ng-select>
+              <!-- <input
+                type="number"
+                class="form-input"
+                formControlName="RoleId"> -->
+            </div>
+<div
+  class="text-danger"
+  *ngIf="
+    isSubmitted &&
+    UserManualForm.get('RoleId')?.hasError('min')
+  ">
+
+  Please select role
+
+</div>
+            <!-- Display Order -->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Display Order
+              </label>
+
+              <input
+                type="number"
+                class="form-input"
+                formControlName="DisplayOrder">
+            </div>
+
+            <!-- Title -->
+
+            <div class="col-span-2">
+
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Title
+                <span class="StarMarking">*</span>
+              </label>
+
+              <input
+                type="text"
+                class="form-input"
+                formControlName="Title">
+
+            </div>
+
+            <div class="text-danger"
+     *ngIf="isSubmitted && UserManualForm.controls['Title'].errors">
+
+  Title is required
+
+</div>
+            <!-- Description -->
+
+            <div class="col-span-2">
+
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Description
+              </label>
+
+              <textarea
+                rows="3"
+                class="form-input"
+                formControlName="Description">
+              </textarea>
+
+            </div>
+
+            <!-- File Path -->
+
+            <!-- <div class="col-span-2">
+
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                File Path
+                <span class="StarMarking">*</span>
+              </label>
+
+              <input
+                type="text"
+                class="form-input"
+                formControlName="FilePath">
+
+            </div> -->
+
+            <div class="col-span-2">
+
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Upload Manual
+    <span class="StarMarking">*</span>
+  </label>
+
+  <div class="flex fileUploader">
+
+    <input
+      id="UserManualUpload"
+      type="file"
+      accept=".pdf"
+      (change)="onUserManualFileChange($event)"
+      class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50">
+
+    <label for="UserManualUpload">
+
+      <span>Choose File</span>
+
+      {{ UserManualDisplayFileName == '' ? 'No File Chosen' : UserManualDisplayFileName }}
+
+    </label>
+
+    <div class="flex">
+
+      <a
+        *ngIf="UserManualFileName != ''"
+        [href]="appsettingConfig.StaticFileRootPathURL + '/UserManual/' + UserManualFileName"
+        target="_blank"
+        class="btn bg-primary text-white m-0">
+
+        <i class="ti ti-eye"></i>
+
+      </a>
+
+    </div>
+
+  </div>
+
+  <div
+  class="text-danger mt-1"
+  *ngIf="
+    isSubmitted &&
+    UserManualForm.get('FilePath')?.invalid
+  ">
+  Please upload user manual PDF
+</div>
+
+</div>
+          </div>
+
+          <div class="text-center mt-5">
+
+            <button
+              type="button"
+              class="btn bg-info text-white"
+              (click)="SaveUserManual()">
+
+              {{ IsEditMode ? 'Update' : 'Save' }}
+
+            </button>
+
+            <button
+              type="button"
+              class="btn bg-danger text-white"
+              (click)="closeUserManualModal()">
+
+              Cancel
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</ng-template>

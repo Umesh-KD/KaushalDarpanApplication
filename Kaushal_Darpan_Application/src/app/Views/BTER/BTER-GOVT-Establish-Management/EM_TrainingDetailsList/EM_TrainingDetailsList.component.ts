@@ -40,6 +40,9 @@ export class EM_TrainingDetailsListComponent {
   modalReference: NgbModalRef | undefined;
   public StaffTrainingHTS_GetDataList: any = [];
   isTrainingCom: boolean = false;
+  public ID: number = 0;
+  public listType: string = '';
+  isDashboard: boolean = false;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -60,8 +63,14 @@ export class EM_TrainingDetailsListComponent {
     await this.GetEM_TrainingCourseType();
     await this.StaffTrainingDetailsCompletedTraining_GetData();
     await this.StaffTrainingDetailsNewTraining_GetData();
+    this.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('status'));
+    this.listType = this.activatedRoute.snapshot.queryParamMap.get('ListType') ?? '';
 
-    this.isTrainingCom = true;
+    if (this.ID > 0 && this.listType.trim()) {
+      this.isDashboard = true;
+    } else {
+      this.isDashboard = false;
+    }
   }
 
   get _AddTrainingDetailsFromGroup() { return this.AddTrainingDetailsFromGroup.controls; }
