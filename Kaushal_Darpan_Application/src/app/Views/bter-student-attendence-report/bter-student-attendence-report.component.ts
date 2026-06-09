@@ -73,6 +73,8 @@ export class BterStudentAttendenceReportComponent {
   sevenDaysLater: Date = new Date();
   selectedRange: { start: Date, end: Date } | null = null;
 
+  subjectIDs: string = '0';
+
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -138,7 +140,7 @@ export class BterStudentAttendenceReportComponent {
     });
 
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
-    this.GetStudentAttandanceTimeDDL();
+    //this.GetStudentAttandanceTimeDDL();
     this.GetStaffLeaveAllData();
     this.getstaffmaster();
     this.DayListBind();
@@ -276,12 +278,13 @@ export class BterStudentAttendenceReportComponent {
 
 
   async GetStudentAttandanceTimeDDL() {
-    debugger
-
+   // debugger
+    console.log(this.subjectIDs);
     this.TableForm.get('AttandanceTimeID')?.setValue(0);
+    //this.TableForm.getRawValue().SubjectID,
     //const sectionID = this.TableForm.value.SectionID ? this.sectionId : this.TableForm.value.SectionID;
     // await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
-    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.StaffID, this.TableForm.getRawValue().SubjectID, this.TableForm.getRawValue().StreamID, this.TableForm.value.SectionID, this.TableForm.value.DayID).then((data: any) => {
+    await this.commonMasterService.GetStudentAttandanceTimeDDL_MultipleSub(this.StaffID, this.subjectIDs, this.TableForm.value.StreamID, this.TableForm.value.SectionID, this.TableForm.value.DayID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       // debugger
       this.StudentAttandanceTimeDDL = data.Data;
@@ -523,7 +526,8 @@ export class BterStudentAttendenceReportComponent {
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.TableForm.getRawValue().StreamID,
         SectionID: this.TableForm.getRawValue().SectionID,
-        SubjectID: this.TableForm.getRawValue().SubjectID || 0,
+        // SubjectID: this.TableForm.getRawValue().SubjectID || 0,
+        SubjectIDs: this.subjectIDs || "0",
         AttendanceStartDate: formattedDateStart,
         AttendanceEndDate: formattedDateEnd,
         StaffID: this.StaffID,
@@ -833,30 +837,35 @@ export class BterStudentAttendenceReportComponent {
 
 
   async ChangeSubjectDDL() {
+    //debugger
+    const selectedSubjects = this.TableForm.get('SubjectID')?.value;
 
-    debugger
+    this.subjectIDs = selectedSubjects?.join(',') || '';
+
+    console.log(this.subjectIDs);
+
+
     const GetSemesterID = this.TableForm.get('SemesterID')?.value;
     const GetstreamId = this.TableForm.get('StreamID')?.value;
     const GetSubjectID = this.TableForm.get('SubjectID')?.value;
 
-    debugger
+    //debugger
     let obj = {
       SemesterID: GetSemesterID,
       StreamID: GetstreamId,
-      SubjectID: GetSubjectID,
+     // SubjectID: GetSubjectID,
       StaffID: this.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      InstituteID: this.sSOLoginDataModel.InstituteID
+      InstituteID: this.sSOLoginDataModel.InstituteID,
+      SubjectIDs: this.subjectIDs
     }
-    await this.staffMasterService.GetBranchSectionAcRosterData(obj)
+    await this.staffMasterService.GetBranchSectionAcRosterData_MulitpleSub(obj)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.GetSectionData = data.Data;
-
       }, (error: any) => console.error(error)
       );
-
 
     //let obj = {
     //  Action: "GET_BY_ID",
@@ -872,10 +881,7 @@ export class BterStudentAttendenceReportComponent {
     //  }, (error: any) => console.error(error)
     //);
 
-
-
     this.GetStudentAttandanceTimeDDL()
-
 
   }
 

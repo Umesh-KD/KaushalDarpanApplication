@@ -68,7 +68,8 @@ export class BranchSectionCreateComponent {
   displayedColumns: string[] = [
     'SNo',
     'StreamName',
-    'TotalSections',
+    //'TotalSections',
+    'Semester',
     'LastCreated',
     'actions'
   ];
@@ -262,7 +263,7 @@ export class BranchSectionCreateComponent {
       await this.staffMasterService.AllBranchHOD(this.requestBranchHOD)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          ////debugger
+          //debugger
           this.resBranchHOD = data.Data
           // this.IIPMasterFormGroup.patchValue({
           //   StreamID: this.resBranchHOD[0].StreamID

@@ -172,10 +172,22 @@
         </ng-container>
 
         <!-- Stream ID Column -->
-        <ng-container matColumnDef="TotalSections">
+        <!--<ng-container matColumnDef="Scheme">
+          <th mat-header-cell *matHeaderCellDef> Scheme </th>
+          <td mat-cell *matCellDef="let element" class="text-center"> {{element.TotalSections}} </td>
+        </ng-container>-->
+
+        <!-- Stream ID Column -->
+        <ng-container matColumnDef="Semester">
+          <th mat-header-cell *matHeaderCellDef> Semester </th>
+          <td mat-cell *matCellDef="let element" class="text-center"> {{element.SemesterName}} </td>
+        </ng-container>
+
+        <!-- Stream ID Column -->
+        <!--<ng-container matColumnDef="TotalSections">
           <th mat-header-cell *matHeaderCellDef> Total Sections </th>
           <td mat-cell *matCellDef="let element" class="text-center"> {{element.TotalSections}} </td>
-        </ng-container>
+        </ng-container>-->
 
         <!-- Created Date Column -->
         <ng-container matColumnDef="LastCreated">

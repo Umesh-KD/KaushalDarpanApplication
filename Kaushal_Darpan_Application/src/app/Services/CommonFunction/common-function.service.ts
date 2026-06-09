@@ -2195,6 +2195,15 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetStudentAttandanceTimeDDL_MultipleSub(StaffID: number, SubjectID: string, StreamID: number = 0, SectionID: number = 0, DayID: number = 0) {
+
+    return await this.http.get(`${this.APIUrl}/GetStudentAttandanceTimeDDL_MultipleSub/${StaffID}/${SubjectID}/${StreamID}/${SectionID}/${DayID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   public async GetStudentAttandanceDayDDL(StaffID: number, SubjectID: number, StreamID: number = 0, SectionID: number = 0) {
 
     return await this.http.get(`${this.APIUrl}/GetStudentAttandanceDayDDL/${StaffID}/${SubjectID}/${StreamID}/${SectionID}`, this.headersOptions)

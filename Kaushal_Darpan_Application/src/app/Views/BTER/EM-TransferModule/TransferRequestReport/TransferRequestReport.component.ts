@@ -14,6 +14,8 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-TransferRequestReport',
@@ -323,4 +325,79 @@ export class TransferRequestReportComponent {
       `GenerateTransferRequestReport_${timestamp}.xlsx`
     );
   }
+
+  exportToPDF() {
+
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'Staff Transfer List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.EM_TransferProcessList.map((row: any, index: number) => [
+      index + 1,
+      row.SSOID ?? '',
+      row.Name ?? '',
+      row.TransferCategory ?? '',
+      row.ReasonDescription ?? '',
+      row.CreatedDate ?? '',
+      row.TransferStatusName ?? ''
+      
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr. No.',
+        'SSO ID',
+        'Name',
+        'Transfer Category',
+        'Reason Description',
+        'Application Date',
+        'Status'
+        
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+      columnStyles: {
+        0: { cellWidth: 15 }, // Sr No
+        1: { cellWidth: 30 }, // SSO ID
+        2: { cellWidth: 35 }, // Name
+        3: { cellWidth: 35 }, // Transfer Category
+        4: { cellWidth: 60 }, // Reason Description
+        5: { cellWidth: 30 }, // Application Date
+        6: { cellWidth: 30 } // Status
+        
+      }
+    });
+
+    doc.save('StaffTransferList.pdf');
+  }
+
 }
