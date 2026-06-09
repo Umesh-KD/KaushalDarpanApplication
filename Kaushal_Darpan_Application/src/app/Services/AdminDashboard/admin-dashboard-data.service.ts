@@ -4,6 +4,7 @@ import { throwError, catchError, BehaviorSubject } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { AdminDashboardSearchModel, AdminDashboardIssueTrackerSearchModel, EM_JDTEDashboardSearchModel, EM_TransferRelievingDashSearchModel, EM_StaffTrainingDashboardSearchModel } from '../../Models/AdminDashboardDataModel';
 import { ITIsDataModels } from '../../Models/ITIsDataModels';
+import { TeachearDashboardSearchModel } from '../../Models/StaffMasterDataModel';
 
 
 @Injectable({
@@ -97,6 +98,23 @@ export class AdminDashboardDataService {
   public async GetStaffTrainingDashboardData(searchRequest: EM_StaffTrainingDashboardSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(this.APIUrl + "/GetStaffTrainingDashboardData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetITI_TeacherDashboardNew(searchRequest: TeachearDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetITI_TeacherDashboardNew", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetBter_TeacherDashboardNew(searchRequest: TeachearDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetBter_TeacherDashboardNew", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

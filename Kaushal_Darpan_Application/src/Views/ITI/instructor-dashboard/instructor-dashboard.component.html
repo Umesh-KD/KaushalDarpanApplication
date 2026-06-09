@@ -1,1 +1,163 @@
-<p>instructor-dashboard works!</p>
+
+
+    <div class="dashboard-wrapper">
+
+      <!-- Welcome Header -->
+      <div class="dash-header d-flex align-items-center justify-content-between mb-4 px-1">
+        <div>
+          <h4 class="dash-welcome mb-0">Welcome back, <span class="highlight-name">{{ sSOLoginDataModel?.DisplayName || 'Instructor' }}</span> 👋</h4>
+          <p class="text-muted small mb-0">Here's what's happening with your activities.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge bg-white border text-secondary px-3 py-2 rounded-pill shadow-sm">
+            <i class="bi bi-calendar3 me-1"></i> {{ InstituteName || 'Institute' }}
+          </span>
+        </div>
+      </div>
+      <!-- Filter Bar -->
+      <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+
+        <div class="filter-group">
+          <label class="filter-label">Month</label>
+          <select class="filter-select" [(ngModel)]="searchRequest1.Month" (change)="onFilterChange()">
+            <option *ngFor="let m of monthList" [value]="m.value">{{ m.label }}</option>
+          </select>
+        </div>
+
+        <!--<div class="filter-group">
+          <label class="filter-label">Year</label>
+          <select class="filter-select" [(ngModel)]="searchRequest1.Year" (change)="onFilterChange()">
+            <option *ngFor="let y of yearList" [value]="y">{{ y }}</option>
+          </select>
+        </div>-->
+
+      </div>
+      <!-- TOP CARDS — 4 in a row like the mockup -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3" *ngFor="let item of dashboardData.TOPCARD; let i = index">
+          <div class="dash-topcard shadow-sm" [ngClass]="'topcard-' + i">
+            <div class="d-flex align-items-start justify-content-between">
+              <div class="topcard-icon-wrap" [ngClass]="'icon-wrap-' + i">
+                <i class="bi" [ngClass]="getTopCardIcon(item.icon || item.menuCode)"></i>
+              </div>
+              <span *ngIf="item.statusText" class="badge topcard-status-badge">{{ item.statusText }}</span>
+            </div>
+            <div class="mt-3">
+              <div class="topcard-value">
+                {{ item.totalCount | number:'1.0-0' }}<span *ngIf="item.title === 'Attendance'" class="topcard-unit">%</span>
+              </div>
+              <div class="topcard-label">{{ item.title }}</div>
+            </div>
+            <div class="mt-2" *ngIf="item.url">
+              <a [href]="'/' + item.url" class="topcard-link">View all <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ATTENDANCE SUMMARY + TRANSFER CHART side by side -->
+      <div class="row g-3 mb-4">
+
+        <!-- Attendance Summary -->
+        <div class="col-12 col-lg-6">
+          <div class="dash-card h-100">
+            <div class="dash-card-header">
+              <h6 class="mb-0"><i class="bi bi-clipboard-data me-2 text-primary"></i>Attendance Summary</h6>
+            </div>
+            <div class="dash-card-body">
+              <div class="row g-3">
+                <div class="col-6" *ngFor="let item of dashboardData.ATTENDANCE_SUMMARY; let i = index">
+                  <div class="attendance-box" [ngClass]="'abox-' + i">
+                    <div class="abox-icon-wrap">
+                      <i class="bi" [ngClass]="getAttendanceIcon(item.title)"></i>
+                    </div>
+                    <div class="abox-count">{{ item.totalCount }}</div>
+                    <div class="abox-label">{{ item.title }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transfer Chart -->
+        <!-- TRANSFER CHART + NOTIFICATIONS -->
+        <!-- Transfer + Notifications row -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-lg-6">
+            <div class="dash-card h-100">
+              <div class="dash-card-header d-flex align-items-center justify-content-between">
+                <h6 class="mb-0">
+                  <i class="bi bi-arrow-left-right me-2 text-warning"></i>Transfer / Relieving Requests
+                </h6>
+                <a href="/transfer" class="topcard-link">View all <i class="bi bi-arrow-right"></i></a>
+              </div>
+              <div class="dash-card-body">
+                <div class="d-flex align-items-center gap-4 flex-wrap">
+
+                  <div class="transfer-chart-wrap">
+                    <highcharts-chart *ngIf="transferChartOptions"
+                                      [Highcharts]="Highcharts"
+                                      [options]="transferChartOptions"
+                                      style="width:200px;height:220px;display:block;">
+                    </highcharts-chart>
+                    <div *ngIf="!transferChartOptions" class="text-center py-4 text-muted">
+                      <i class="bi bi-pie-chart fs-1 d-block mb-2 opacity-25"></i>
+                      <small>No data</small>
+                    </div>
+                  </div>
+
+                  <div class="flex-grow-1">
+                    <div *ngFor="let item of dashboardData.TRANSFER_CHART; let i = index"
+                         class="transfer-legend-row d-flex align-items-center justify-content-between mb-3">
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="legend-dot" [ngClass]="'ldot-' + i"></span>
+                        <span class="legend-label">{{ item.title }}</span>
+                      </div>
+                      <div class="d-flex align-items-center gap-3">
+                        <span class="legend-count">{{ item.totalCount }}</span>
+                        <span class="legend-pct">({{ getTransferPercent(item.totalCount) }})</span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-lg-6">
+            <div class="dash-card h-100">
+              <div class="dash-card-header d-flex align-items-center justify-content-between">
+                <h6 class="mb-0">
+                  <i class="bi bi-bell me-2 text-danger"></i>Recent Notifications
+                </h6>
+                <a href="/notifications" class="topcard-link">View all <i class="bi bi-arrow-right"></i></a>
+              </div>
+              <div class="dash-card-body p-0">
+                <div *ngIf="notifications.length > 0">
+                  <div *ngFor="let n of notifications"
+                       class="notif-item d-flex align-items-start gap-3 px-3 py-3 border-bottom">
+                    <div class="notif-icon-wrap">
+                      <i class="bi bi-bell-fill text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <div class="notif-title">{{ n.Title }}</div>
+                      <div class="d-flex align-items-center justify-content-between mt-1">
+                        <small class="text-muted">{{ n.TypeName }}</small>
+                        <small class="notif-time">{{ n.timeAgoText }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="notifications.length === 0" class="text-center py-4 text-muted">
+                  <i class="bi bi-bell-slash fs-2 d-block mb-2 opacity-25"></i>
+                  <small>No notifications</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
