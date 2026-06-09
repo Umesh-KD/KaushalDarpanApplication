@@ -104,7 +104,7 @@ export class BterUFMReportsComponent implements OnInit {
   ngOnInit(): void {
     this.sSOLoginDataModel = this.ssoLoginUser;
     this.filterModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.filterModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.filterModel.EndTermID = 0;
     this.filterModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
 
     this.loadMasterData();
