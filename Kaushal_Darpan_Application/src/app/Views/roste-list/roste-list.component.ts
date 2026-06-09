@@ -13,7 +13,7 @@ import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { StaffMasterService } from '../../Services/StaffMaster/staff-master.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus } from '../../Common/GlobalConstants';
+import { EnumRole,EnumStatus } from '../../Common/GlobalConstants';
 import { BTERSectionAddDataModel } from '../../Models/BTER/BTERSectionAddDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { LoaderService } from '../../Services/Loader/loader.service';
@@ -51,6 +51,8 @@ export class RosteListComponent implements OnInit {
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
+  _EnumRole = EnumRole;
+
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
   _RosterDisplayTimeTableDataModel = new RosterDisplayTimeTableDataModel();

@@ -138,22 +138,6 @@
             </div>
           </div>
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Type<span class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="formData.BugetHeadTypeID" formControlName="BugetHeadTypeID" (change)="GetBudgetList()">
-              <option value="0">--Select--</option>
-              <option value="1">Planned Budget</option>
-              <option value="2">Non-Planned Budget</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="formData.BugetHeadID" formControlName="BugetHeadID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of BugetHeadList" [value]="item.ID">{{item.Name}}</option>
-            </select>
-          </div>
           <!-- *ngIf="this.IsGuestHouseAdmin != true" -->
           <div >
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
@@ -181,19 +165,36 @@
           </div>
 
           <!-- *ngIf="this.IsGuestHouseAdmin != true" -->
-        <div >
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
-            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This
-              field is required .!
-            </p>
+          <div >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost" (change)="getBudgetHeadPostWise()">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of SactionedPostList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
+              <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
           </div>
-        </div>
+
+          <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Type<span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.BugetHeadTypeID" formControlName="BugetHeadTypeID" (change)="GetBudgetList()">
+              <option value="0">--Select--</option>
+              <option value="1">Planned Budget</option>
+              <option value="2">Non-Planned Budget</option>
+            </select>
+          </div> -->
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Head <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.BugetHeadID" formControlName="BugetHeadID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of PostBudgetHeadList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
 
 
         <!-- <div *ngIf="formData.IsGuestStaff==true">

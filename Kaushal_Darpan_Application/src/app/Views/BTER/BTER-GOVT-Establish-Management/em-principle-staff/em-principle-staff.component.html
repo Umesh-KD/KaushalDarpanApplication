@@ -92,7 +92,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
             <option value="0">--Select--</option>
-            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+            <option *ngFor="let item of SactionedPostList" [value]="item.ID">{{item.Name}}</option>
           </select>
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
             <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
@@ -366,27 +366,60 @@
             <td>
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="row.ProfileStatusID == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
-                <a href="javascript:void(0);" *ngIf="row.RoleID != _EnumRole.GuestFaculty && 
-                          row.RoleID != _EnumRole.ShikshaSambal" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
 
-                <a *ngIf="row.RoleID != _EnumRole.GuestFaculty && 
+                <a href="javascript:void(0);" id="btnDelete" title="Delete" 
+                  *ngIf="row.ProfileStatusID == 0 && sSOLoginDataModel.UserID != row.StaffUserID"  
+                  (click)="btnDelete_OnClick(row.StaffUserID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="View" 
+                  *ngIf="row.RoleID != _EnumRole.GuestFaculty && row.RoleID != _EnumRole.ShikshaSambal && sSOLoginDataModel.UserID != row.StaffUserID" 
+                  (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)">
+                  <i class="ti ti-eye"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Approve Profile"
+                  *ngIf="row.RoleID != _EnumRole.GuestFaculty && 
                           row.RoleID != _EnumRole.ShikshaSambal && 
                           row.ProfileStatusID != 247 &&
                           row.ProfileStatusID != 249 &&
                           row.ProfileStatusID != 288 &&
-                          row.ProfileStatusID != 0
-                        " href="javascript:void(0);" title="Approve Profile" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)"><i class="ti ti-check"></i></a>
-                <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
-                <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
-                <a *ngIf="row.RoleID == _EnumRole.HostelWarden" href="javascript:void(0);" title="Edit Hostel" (click)="onEditHostel(Model_EditHostel, row)"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" *ngIf="(row.RoleID == _EnumRole.GuestFaculty || row.RoleID == _EnumRole.ShikshaSambal) && !(row.ProfileStatusID == 0|| row.ProfileStatusID == 288 || row.ProfileStatusID == 429) " title="View" (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
+                          row.ProfileStatusID != 0 && sSOLoginDataModel.UserID != row.StaffUserID"
+
+                  (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)">
+                  <i class="ti ti-check"></i>
+                </a>
+
+                <a href="javascript:void(0);" id="btnDelete" title="Unlock Profile"
+                  *ngIf="row.ProfileStatusID == 289 && sSOLoginDataModel.UserID != row.StaffUserID" 
+                  (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)">
+                  <i class="ti ti-lock-open"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="User Profile Status History" 
+                  (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)">
+                  <i class="ti ti-list"></i>
+                </a>
+
+                <a  href="javascript:void(0);" title="Edit Hostel" 
+                  *ngIf="row.RoleID == _EnumRole.HostelWarden"
+                  (click)="onEditHostel(Model_EditHostel, row)">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="View"
+                  *ngIf="(row.RoleID == _EnumRole.GuestFaculty || row.RoleID == _EnumRole.ShikshaSambal) 
+                        && !(row.ProfileStatusID == 0|| row.ProfileStatusID == 288 || row.ProfileStatusID == 429) 
+                        && sSOLoginDataModel.UserID != row.StaffUserID"  
+                  (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
                   <i class="ti ti-check" *ngIf="(row.ProfileStatusID != 247 ||
                                                 row.ProfileStatusID != 249 ||
                                                 row.ProfileStatusID != 288 ||
                                                 row.ProfileStatusID != 0) "></i>
                   <i class="ti ti-eye" *ngIf="row.ProfileStatusID == 247"></i>
                 </a>
+
               </div>
             </td>
           </tr>

@@ -209,6 +209,8 @@ export class UFMStudentReportComponent {
         //DepartmentID: this.sSOLoginDataModel.DepartmentID
       };
 
+
+      //await this.reportService.UFM_Collegwise_CategoryReportPdf_BTER(request)
       await this.reportService.UFMCategoryReportPdf_BTER(request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

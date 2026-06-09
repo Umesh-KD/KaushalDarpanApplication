@@ -165,11 +165,12 @@ const routes: Routes = [
       { path: 'generate-cc-code', loadChildren: () => import('./Views/CenterAllotment/generate-cc-code/generate-cc-code.module').then(m => m.GenerateCcCodeModule), title: 'Generate CC Code' },
       { path: 'SubjectMaster', loadChildren: () => import('./Views/subject-master/subject-master-routing.module').then(m => m.SubjectMasterRoutingModule), title: 'Subject Master' },
       { path: 'SubjectCategory', loadChildren: () => import('./Views/subject-category/subject-category.module.ts').then(m => m.SubjectCategoryRoutingModule), title: 'Subject Category' },
+      { path: 'PlacementDashboard', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
       { path: 'PlacementDashboard/:id', loadChildren: () => import('./Views/placement-dashboard/placement-dashboard.module').then(m => m.PlacementDashboardModule), title: 'Placement Dashboard' },
       { path: 'PlacementDashReport/:id', loadChildren: () => import('./Views/placement-dash-report/placement-dash-report.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Placement Dashboard Report' },
+      { path: 'ITIPlacementDashboard', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
       { path: 'ITIPlacementDashboard/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
       { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dash-report/placement-dash-report.routing.module').then(m => m.ITIPlacementDashReportModule), title: 'ITI Placement Dashboard Report' },
-
       //{ path: 'rolemenuright/:id', loadChildren: () => import('./Views/role-menu-right/role-menu-right.module').then(m => m.RoleMenuRightModule) },
       { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
       //Old Software Master
@@ -183,7 +184,6 @@ const routes: Routes = [
       { path: 'addbranchesmaster', loadChildren: () => import('./Views/BranchesMaster/add-branches-master/add-branches-master.module').then(m => m.AddBranchesMasterModule), title: 'Add Branch' },
       { path: 'addbranches', loadChildren: () => import('./Views/BranchesMaster/add-branches/add-branches.module').then(m => m.AddBranchesModule), title: 'Add Branch' },
       { path: 'updatebranchesmaster/:id', loadChildren: () => import('./Views/BranchesMaster/add-branches-master/add-branches-master.module').then(m => m.AddBranchesMasterModule), title: 'Update Branch' },
-
 
       { path: 'branchesmaster', loadChildren: () => import('./Views/BranchesMaster/branches-master/branches-master.module').then(m => m.BranchesMasterModule), title: 'Branch Master' },
       { path: 'updatepapersmaster/:id', loadChildren: () => import('./Views/PapersMaster/add-papers-master/add-papers-master.module').then(m => m.AddPapersMasterModule), title: 'Update Paper' },
@@ -715,8 +715,6 @@ const routes: Routes = [
       { path: 'AddSeatMetrix10th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
       { path: 'AddSeatMetrix12th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
 
-
-
       { path: 'StudentJoinStatus/:id', loadChildren: () => import('./Views/student-join-status/student-join-status.module').then(m => m.StudentJoinStatusModule) },
       { path: 'Bterallotmentreporting', loadChildren: () => import('./Views/bter-allotment-reporting/bter-allotment-reporting.module').then(m => m.BterAllotmentReportingModule) },
 
@@ -725,6 +723,7 @@ const routes: Routes = [
 
       { path: 'BterReports', loadChildren: () => import('./Views/Reports/bter-reports/bter-reports.module').then(m => m.BterReportsModule) },
       { path: 'bter-result-reports', loadChildren: () => import('./Views/Reports/bter-result-reports/bter-result-reports.module').then(m => m.BterResultReportsModule) },
+      { path: 'bter-ufm-reports', loadChildren: () => import('./Views/Reports/bter-ufm-reports/bter-ufm-reports.module').then(m => m.BterUFMReportsModule) },
       { path: 'group-center-mapping-reports', loadChildren: () => import('./Views/Reports/group-center-mapping-reports/group-center-mapping-reports.module').then(m => m.GroupCenterMappingReportsModule) },
       { path: 'center-daily-reports', loadChildren: () => import('./Views/Reports/center-daily-reports/center-daily-reports.module').then(m => m.CenterDailyReportsModule) },
 
