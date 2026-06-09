@@ -1771,6 +1771,9 @@ const routes: Routes = [
       { path: 'TransferRequestReport/:id', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRequestReport/TransferRequestReport.module').then(m => m.TransferRequestReportModule) },
       { path: 'usermanual', loadChildren: () => import('./Views/usermanual/usermanual.module').then(m => m.UsermanualModule) },
       { path: 'ViewContentList', loadChildren: () => import('./Views/view-content-list/view-content-list.module').then(m => m.ViewContentListModule) },
+      { path: 'TransferRelievingDashboardModule', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRelievingDashboard/TransferRelievingDashboard.module').then(m => m.TransferRelievingDashboardModule) },
+      { path: 'StaffTrainingDashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffTrainingDashboard/StaffTrainingDashboard.module').then(m => m.StaffTrainingDashboardModule) },
+
 
     ]
   },
