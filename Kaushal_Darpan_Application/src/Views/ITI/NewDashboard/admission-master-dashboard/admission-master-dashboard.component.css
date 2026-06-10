@@ -1,0 +1,29 @@
+.filter-input {
+  color: #0f172a;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: .5rem;
+  outline: none;
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 .875rem;
+  font-size: .875rem;
+  transition: border-color .15s, box-shadow .15s;
+}
+.green-btn-ex {
+  background-color: #00bc7d;
+}
+
+.icon-bg-one {
+  background-image: linear-gradient(180deg, #2473fe, #1654ec);
+}
+.icon-bg-two {
+  background-image: linear-gradient(180deg, #a841ff, #870be0);
+}
+.icon-bg-three {
+  background-image: linear-gradient(180deg, #00b69e, #009d6e);
+}
+
+.icon-bg-four {
+  background-image: linear-gradient(180deg, #ff8300, #f75202);
+}
