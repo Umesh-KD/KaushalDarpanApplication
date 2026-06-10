@@ -89,61 +89,61 @@ export class InstructorDashboardComponent implements OnInit {
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       debugger
         await this.CheckProfileStatus();
-        //if (this.StaffMasterList.length > 0) {
-        //    debugger;
-        //    let status = this.StaffMasterList[0].ProfileStatus;
-        //    if (status == this._EnumEMProfileStatus.Pending || status == this._EnumEMProfileStatus.Completed || status == this._EnumEMProfileStatus.Revert) {
-        //        this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
-        //            if (this.sSOLoginDataModel.DepartmentID == 2) {
-        //                if (this.sSOLoginDataModel.EmTypeId == 2) {
-        //                    window.open("/additiprivatestaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //                else if (this.sSOLoginDataModel.EmTypeId == 1) {
-        //                    if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
-        //                        window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
-        //                    }
+        if (this.StaffMasterList.length > 0) {
+            debugger;
+            let status = this.StaffMasterList[0].ProfileStatus;
+            if (status == this._EnumEMProfileStatus.Pending || status == this._EnumEMProfileStatus.Completed || status == this._EnumEMProfileStatus.Revert) {
+                this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
+                    if (this.sSOLoginDataModel.DepartmentID == 2) {
+                        if (this.sSOLoginDataModel.EmTypeId == 2) {
+                            window.open("/additiprivatestaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+                        }
+                        else if (this.sSOLoginDataModel.EmTypeId == 1) {
+                            if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
+                                window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
+                            }
 
-        //                }
+                        }
 
-        //                else {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //            } else if (this.sSOLoginDataModel.DepartmentID == 1) {
-        //                if (this.sSOLoginDataModel.EmTypeId == 2) {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //                else if (this.sSOLoginDataModel.EmTypeId == 1) {
-        //                    debugger;
+                        else {
+                            window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+                        }
+                    } else if (this.sSOLoginDataModel.DepartmentID == 1) {
+                        if (this.sSOLoginDataModel.EmTypeId == 2) {
+                            window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+                        }
+                        else if (this.sSOLoginDataModel.EmTypeId == 1) {
+                            debugger;
 
-        //                    if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
-        //                        window.open("/bter-em-add-staff-details", "_Self");
-        //                    }
+                            if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
+                                window.open("/bter-em-add-staff-details", "_Self");
+                            }
 
-        //                }
+                        }
 
-        //                else {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //            }
-
-
-        //        }, 'OK', false);
-        //    }
-
-        //    else if ((status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) && this.sSOLoginDataModel.DepartmentID == 2) {
-        //        if (this.sSOLoginDataModel.EmTypeId == 1) {
-
-        //            if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {
-        //                window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
-        //            }
-
-        //        }
+                        else {
+                            window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+                        }
+                    }
 
 
+                }, 'OK', false);
+            }
 
-        //    }
+            else if ((status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) && this.sSOLoginDataModel.DepartmentID == 2) {
+                if (this.sSOLoginDataModel.EmTypeId == 1) {
 
-        //}
+                    if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {
+                        window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
+                    }
+
+                }
+
+
+
+            }
+
+        }
       let instute = this.sSOLoginDataModel.InstituteID;
       this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
