@@ -1,3 +1,4 @@
+
 .filter-input {
   color: #0f172a;
   background: #fff;
@@ -29,4 +30,76 @@
 }
 .main-heading-pg{
     font-weight:600;
+}
+.table-container {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  background-color: #fafafa;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+}
+
+td {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge-gov {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.badge-pvt {
+  background-color: #f5f3ff;
+  color: #7c3aed;
+}
+
+.badge-total {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Highlighted rows or column metrics */
+.text-bold {
+  font-weight: 600;
+}
+
+.row-total {
+  background-color: #f8fafc;
+  font-weight: 700;
+}
+
+.utilization-text {
+  color: var(--success);
+  font-weight: 600;
 }
