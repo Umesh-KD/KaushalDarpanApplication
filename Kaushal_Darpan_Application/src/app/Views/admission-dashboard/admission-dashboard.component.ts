@@ -18,13 +18,15 @@ import { CompanyEventSearchModel } from "../../Models/IndustryInstitutePartnersh
 import { IndustryInstitutePartnershipMasterService } from "../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts";
 import { GuestRoomManagmentService } from "../../Services/GuestRoomManagment/GuestRoomManagment.service";
 import { GuestApplyForGuestRoomSearchModel } from "../../Models/GuestRoom-Management/GuestRoomManagmentDataModel";
+import { ITIAdminDashboardServiceService } from "../../Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service";
+
 @Component({
-  selector: 'app-bter-teacher-dashboard',
+  selector: 'app-admission-dashboard',
   standalone: false,
-  templateUrl: './bter-teacher-dashboard.component.html',
-  styleUrl: './bter-teacher-dashboard.component.css'
+  templateUrl: './admission-dashboard.component.html',
+  styleUrl: './admission-dashboard.component.css'
 })
-export class BterTeacherDashboardComponent {
+export class AdmissionDashboardComponent {
   Highcharts: typeof Highcharts = Highcharts;
   public transferChartOptions: Highcharts.Options | null = null;
   public guestHouseChartOptions: Highcharts.Options | null = null;
@@ -39,7 +41,7 @@ export class BterTeacherDashboardComponent {
     private commonMasterService: CommonFunctionService,
     private staffMasterService: StaffMasterService,
     private sweetAlert2: SweetAlert2,
-    private dashboardservice: AdminDashboardDataService,
+    private dashboardservice: ITIAdminDashboardServiceService,
     private websiteSettingsService: WebsiteSettingsService,
     private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
     private guestRoomManagmentService: GuestRoomManagmentService,
@@ -70,7 +72,7 @@ export class BterTeacherDashboardComponent {
       TOPCARD: [],
       ATTENDANCE_SUMMARY: [],
       TRANSFER_CHART: [],
-      GUESTHOUSE_CHART:[]
+      GUESTHOUSE_CHART: []
     };
   public notifications: any[] = [];
   public CompanyEventsList: any[] = [];
@@ -158,14 +160,14 @@ export class BterTeacherDashboardComponent {
     //}
     let instute = this.sSOLoginDataModel.InstituteID;
     this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDL = data.Data;
-        if (this.InstituteMasterDDL?.length > 0) {
-            let insti = this.InstituteMasterDDL.find(function(x: { InstituteID: number; }) {
-                return x.InstituteID == instute;
-            });
-            this.InstituteName = insti?.InstituteName;
-        }
+      data = JSON.parse(JSON.stringify(data));
+      this.InstituteMasterDDL = data.Data;
+      if (this.InstituteMasterDDL?.length > 0) {
+        let insti = this.InstituteMasterDDL.find(function (x: { InstituteID: number; }) {
+          return x.InstituteID == instute;
+        });
+        this.InstituteName = insti?.InstituteName;
+      }
 
     });
 
@@ -189,7 +191,7 @@ export class BterTeacherDashboardComponent {
   }
   async onFilterChange() {
     await this.getdashdata();
-    this.buildTransferChart();
+/*    this.buildTransferChart();*/
   }
   async CheckProfileStatus() {
     try {
@@ -198,7 +200,7 @@ export class BterTeacherDashboardComponent {
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.CourseTypeId = this.sSOLoginDataModel.Eng_NonEng;
-
+      
       await this.staffMasterService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -224,65 +226,27 @@ export class BterTeacherDashboardComponent {
     try {
       this.loaderService.requestStarted();
 
-      this.searchRequest1.SSOID = this.sSOLoginDataModel.SSOID;
-      this.searchRequest1.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.searchRequest1.UserID = this.sSOLoginDataModel.UserID;
-      this.searchRequest1.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.searchRequest1.StaffID = this.sSOLoginDataModel.StaffID;
-
+      const obj = {
+        RoleID: this.sSOLoginDataModel.RoleID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CollegeID: this.sSOLoginDataModel.InstituteID,
+        UserID: this.sSOLoginDataModel.UserID,
+        FinancialYearID: this.sSOLoginDataModel.FinancialYearID
+      };
       const data: any = await this.dashboardservice
-        .GetBter_TeacherDashboardNew(this.searchRequest1);
+        .GetAdmissionDashboardData(obj);
 
       const result = data?.Data || [];
 
       console.log("RAW API:", result);
 
-      // ✅ RESET CONTAINER
-      this.dashboardData = {
-        TOPCARD: [],
-        ATTENDANCE_SUMMARY: [],
-        TRANSFER_CHART: [],
-        GUESTHOUSE_CHART:[]
-      };
+      this.dashboardData = data?.Data['Table'] 
+  
+      //this.transferChartOptions =
+      //  this.buildPieChart(this.dashboardData.TRANSFER_CHART);
 
-      // ✅ GROUP DATA BY SectionType
-      result.forEach((item: any) => {
-
-        const model = {
-          id: item.ID,
-          title: item.Title,
-          titleHindi: item.TitleHindi,
-          totalCount: Number(item.TotalCount),
-          url: item.URL,
-          icon: item.Icon,
-          menuCode: item.MenuCode,
-          statusText: item.StatusText
-        };
-
-        if (item.SectionType === 'TOPCARD') {
-          this.dashboardData.TOPCARD.push(model);
-        }
-
-        else if (item.SectionType === 'ATTENDANCE_SUMMARY') {
-          this.dashboardData.ATTENDANCE_SUMMARY.push(model);
-        }
-
-        else if (item.SectionType === 'TRANSFER_CHART') {
-          this.dashboardData.TRANSFER_CHART.push(model);
-        }
-
-
-        else if (item.SectionType === 'GuestHouse_CHART') {
-          this.dashboardData.GUESTHOUSE_CHART.push(model);
-        }
-
-
-      });
-      this.transferChartOptions =
-        this.buildPieChart(this.dashboardData.TRANSFER_CHART);
-
-      this.guestHouseChartOptions =
-        this.buildPieChart(this.dashboardData.GUESTHOUSE_CHART);
+      //this.guestHouseChartOptions =
+      //  this.buildPieChart(this.dashboardData.GUESTHOUSE_CHART);
 
       console.log("Mapped Dashboard:", this.dashboardData);
 
@@ -321,61 +285,61 @@ export class BterTeacherDashboardComponent {
   }
 
 
-  buildTransferChart(): void {
-    const chartData = this.dashboardData.TRANSFER_CHART;
-    if (!chartData?.length) return;
+  //buildTransferChart(): void {
+  //  const chartData = this.dashboardData.TRANSFER_CHART;
+  //  if (!chartData?.length) return;
 
-    const colors = ['#22c55e', '#f59e0b', '#ef4444'];
-    const total = chartData.reduce((sum, item) => sum + (item.totalCount || 0), 0);
+  //  const colors = ['#22c55e', '#f59e0b', '#ef4444'];
+  //  const total = chartData.reduce((sum, item) => sum + (item.totalCount || 0), 0);
 
-    // If all zero, show a grey placeholder slice so chart still renders
-    const seriesData = total === 0
-      ? [{ name: 'No Data', y: 1, color: '#e5e7eb' }]
-      : chartData.map((item, i) => ({
-        name: item.title,
-        y: Number(item.totalCount) || 0,
-        color: colors[i % colors.length]
-      }));
+  //  // If all zero, show a grey placeholder slice so chart still renders
+  //  const seriesData = total === 0
+  //    ? [{ name: 'No Data', y: 1, color: '#e5e7eb' }]
+  //    : chartData.map((item, i) => ({
+  //      name: item.title,
+  //      y: Number(item.totalCount) || 0,
+  //      color: colors[i % colors.length]
+  //    }));
 
-    this.transferChartOptions = {
-      chart: {
-        type: 'pie',
-        height: 260,
-        backgroundColor: 'transparent',
-        margin: [10, 10, 10, 10],
-      },
-      title: { text: '' },
-      credits: { enabled: false },
-      legend: { enabled: false },
-      tooltip: {
-        pointFormat: total === 0
-          ? 'No requests yet'
-          : '<b>{point.name}</b>: {point.y} ({point.percentage:.0f}%)'
-      },
-      plotOptions: {
-        pie: {
-          innerSize: '55%',
-          borderWidth: 3,
-          borderColor: '#ffffff',
-          dataLabels: {
-            enabled: total > 0,
-            format: '{point.name}: {point.y}',
-            style: {
-              fontSize: '11px',
-              fontWeight: '500',
-              fontFamily: 'Inter, Segoe UI, sans-serif',
-              textOutline: 'none'
-            }
-          }
-        }
-      },
-      series: [{
-        type: 'pie',
-        name: 'Requests',
-        data: seriesData
-      }]
-    };
-  }
+  //  this.transferChartOptions = {
+  //    chart: {
+  //      type: 'pie',
+  //      height: 260,
+  //      backgroundColor: 'transparent',
+  //      margin: [10, 10, 10, 10],
+  //    },
+  //    title: { text: '' },
+  //    credits: { enabled: false },
+  //    legend: { enabled: false },
+  //    tooltip: {
+  //      pointFormat: total === 0
+  //        ? 'No requests yet'
+  //        : '<b>{point.name}</b>: {point.y} ({point.percentage:.0f}%)'
+  //    },
+  //    plotOptions: {
+  //      pie: {
+  //        innerSize: '55%',
+  //        borderWidth: 3,
+  //        borderColor: '#ffffff',
+  //        dataLabels: {
+  //          enabled: total > 0,
+  //          format: '{point.name}: {point.y}',
+  //          style: {
+  //            fontSize: '11px',
+  //            fontWeight: '500',
+  //            fontFamily: 'Inter, Segoe UI, sans-serif',
+  //            textOutline: 'none'
+  //          }
+  //        }
+  //      }
+  //    },
+  //    series: [{
+  //      type: 'pie',
+  //      name: 'Requests',
+  //      data: seriesData
+  //    }]
+  //  };
+  //}
 
 
 
@@ -403,12 +367,12 @@ export class BterTeacherDashboardComponent {
     }
   }
 
-  getTransferPercent(count: number): string {
-    const total = this.dashboardData.TRANSFER_CHART
-      .reduce((s, i) => s + (i.totalCount || 0), 0);
-    if (total === 0) return '0%';
-    return Math.round((count / total) * 100) + '%';
-  }
+  //getTransferPercent(count: number): string {
+  //  const total = this.dashboardData.TRANSFER_CHART
+  //    .reduce((s, i) => s + (i.totalCount || 0), 0);
+  //  if (total === 0) return '0%';
+  //  return Math.round((count / total) * 100) + '%';
+  //}
   timeAgo(dateStr: string): string {
     if (!dateStr) return '';
     const now = new Date();
@@ -435,7 +399,7 @@ export class BterTeacherDashboardComponent {
       } else {
         this.searchRequest2.StaffID = this.sSOLoginDataModel.StaffID;
       }
-      this.searchRequest2.DepartmentID=1
+      this.searchRequest2.DepartmentID = 1
       debugger
       await this.industryInstitutePartnershipMasterService.GetCompanyEventsStaff(this.searchRequest2)
         .then(async (data: any) => {
@@ -444,7 +408,7 @@ export class BterTeacherDashboardComponent {
             this.CompanyEventsList = (data.Data || []).filter(
               (x: any) => x.InterestedStatus == 1
             );
-           
+
           } else if (data.State === EnumStatus.Warning) {
             this.toastr.warning("Event not found")
           } else {
@@ -473,7 +437,7 @@ export class BterTeacherDashboardComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
-   
+
           this.ErrorMessage = data['ErrorMessage'];
           this.GuestRoomApplyList = data['Data'];
 
@@ -700,5 +664,4 @@ export class BterTeacherDashboardComponent {
         return 'status-secondary';
     }
   }
-
 }

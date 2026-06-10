@@ -166,11 +166,12 @@ th {
   padding: 0;
   margin: 0;
   list-style: none;
-
 }
+
   .notif-scroll-list:hover {
     animation-play-state: paused;
   }
+
 .notif-list-item {
   padding: 10px 0;
   border-bottom: 1px solid #f1f5f9;
@@ -200,6 +201,7 @@ th {
   .notif-scroll-list::-webkit-scrollbar-thumb:hover {
     background: #d1d5db;
   }
+
 @keyframes notifScroll {
   0% {
     transform: translateY(0);
@@ -209,9 +211,11 @@ th {
     transform: translateY(-50%);
   }
 }
+
 .auto-scroll {
   animation: notifScroll 20s linear infinite;
 }
+
 .notif-scroll-container {
   height: 220px;
   overflow: hidden;
@@ -244,6 +248,7 @@ th {
   padding: 10px 0;
   border-bottom: 1px solid #f1f5f9;
 }
+
 .transfer-chart-wrap {
   width: 220px;
   min-width: 220px;
@@ -292,6 +297,7 @@ th {
 .card-chrt {
   min-height: 260px;
 }
+
 .status-success {
   background: #ecfdf5;
   color: #047857;
@@ -309,3 +315,15 @@ th {
   color: #dc2626;
   border: 1px solid #fecaca;
 }
+.icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+  .icon-box span {
+    top: -3px;
+    right: -3px;
+  }

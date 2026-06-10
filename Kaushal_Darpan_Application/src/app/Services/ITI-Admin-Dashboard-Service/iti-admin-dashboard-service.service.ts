@@ -102,6 +102,9 @@ export class ITIAdminDashboardServiceService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
   public async GetPostPlanningDashboardTilesData(searchRequest: PostPlanningDashboardSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(this.APIUrl + "/GetPostPlanningDashboardTilesData", body, this.headersOptions)
@@ -109,5 +112,24 @@ export class ITIAdminDashboardServiceService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetAdmissionMasterDashboard(searchRequest: any)
+  {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetAdmissionMasterDashboard", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetAdmissionDashboardData(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetAdmissionDashboardData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 

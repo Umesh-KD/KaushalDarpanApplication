@@ -263,7 +263,7 @@
 </ng-template>
 
 
-<div *ngIf="sSOLoginDataModel.DepartmentID==_EnumDepartment.BTER"  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+<!-- <div *ngIf="sSOLoginDataModel.DepartmentID==_EnumDepartment.BTER"  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
   <b class="text-1xl-5"><i class="ti ti-list"></i>Enrollment Cancellation Request</b>
 </div>
 <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
@@ -282,6 +282,132 @@
       </div>
     </div>
   </ng-container>
+</div> -->
+
+<!--  -->
+
+<div class="dashboard-bottom-section">
+
+  <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+    <!-- Result & Marksheet -->
+    <div class="xl:col-span-2 lg:col-span-2">
+      <div class="card dashboard-card">
+
+        <div class="dashboard-header">
+          <h4>Result & Marksheet</h4>
+          <a href="javascript:void(0);">View All</a>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="table dashboard-table">
+
+            <thead>
+              <tr>
+                <th >Semester</th>
+                <th >Result Status</th>
+                <th >SGPA / Percentage</th>
+                <th >Result Date</th>
+                <th >Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr *ngFor="let row of StudentMarksheetList">
+
+    <td style="text-align:center;">{{row.Semester}}</td>
+
+    <td style="text-align:center;">
+        <span
+            [ngClass]="row.Result_str == 'Pass'
+                ? 'status-pass'
+                : 'status-fail'">
+
+            {{row.Result_str}}
+        </span>
+    </td>
+
+    <td style="text-align:center;">
+        {{row.CGPA}}
+    </td>
+
+    <td style="text-align:center;">
+        {{row.ResultDate | date:'dd MMM yyyy'}}
+    </td>
+
+    <td style="text-align:center;">
+
+        <a class="btn-marksheet"
+           target="_blank"
+           href="{{appsettingConfig.StaticFileRootPathURL+ row.MarksheetFilePath}}">
+
+            View Marksheet
+
+        </a>
+
+    </td>
+
+</tr>
+
+<tr *ngIf="StudentMarksheetList.length == 0">
+    <td colspan="5" class="text-center">
+        No Result Found
+    </td>
+</tr>
+
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div>
+      <div class="card dashboard-card">
+
+        <div class="dashboard-header">
+          <h4>Recent Activities</h4>
+        </div>
+
+        <ul class="activity-list">
+
+          <li class="activity-item"
+              *ngFor="let item of StudentRecentActivityList">
+
+            <div class="activity-left">
+
+              <div class="activity-icon"
+                   [ngClass]="item.ColorClass || 'bg-soft-blue'">
+
+                <i class="ti ti-bulb"></i>
+
+              </div>
+
+              <div class="activity-text">
+                {{item.Title}}
+              </div>
+
+            </div>
+
+            <div class="activity-time">
+              {{item.Ago}}
+            </div>
+
+          </li>
+
+          <li *ngIf="StudentRecentActivityList?.length == 0"
+              class="text-center p-4">
+            No recent activities found
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+  </div>
+
 </div>
-
-

@@ -105,7 +105,8 @@ export class LeaveValidationComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
-      this.searchRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID_Session;
+      //this.searchRequest.FinancialYearID=this.sSOLoginDataModel.FinancialYearID_Session;
+      this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequest.RoleID=this.sSOLoginDataModel.RoleID;
 
       await this.LeaveService.GetStaffLeaveRequest(this.searchRequest)

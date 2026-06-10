@@ -37,6 +37,8 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   public ITIRemarkList: any = [];
   public SanctionedList: any = [];
   public SeatIntakeDataList: any = [];
+  public DivisionMasterList: any = [];
+
   public Table_SearchText: string = '';
   public SeatIntakeIDnew: number = 0;
   CollegeTypeID: number = 0;
@@ -71,6 +73,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   async ngOnInit() {
     this.SeatIntakeSearchFormGroup = this.formBuilder.group(
       {
+        ddlDivision:[''],
         ddlCollege: [''],
         ddlDistrict: [''],
         ddlCollegeType: [''],
@@ -117,14 +120,20 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   get _SeatIntakeSearchFormGroup() { return this.SeatIntakeSearchFormGroup.controls; }
   get _SeatIntakeSearchFormGroupPopUp() { return this.SeatIntakeSearchFormGroupPopUp.controls; }
 
+
+
+
   async GetDropdownData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonFunctionService.GetDistrictMaster().then((data: any) => {
-        const parsedData = JSON.parse(JSON.stringify(data));
-        this.DistrictList = parsedData.Data;
-        console.log(this.DistrictList, "DistrictList")
-      }, error => console.error(error));
+
+      await this.GetDivisionMasterList();
+
+      //await this.commonFunctionService.GetDistrictMaster().then((data: any) => {
+      //  const parsedData = JSON.parse(JSON.stringify(data));
+      //  this.DistrictList = parsedData.Data;
+      //  console.log(this.DistrictList, "DistrictList")
+      //}, error => console.error(error));
 
       await this.commonFunctionService.GetManagType()
         .then((data: any) => {
@@ -165,6 +174,65 @@ export class SeatIntakesListAdmissionComponent implements OnInit
       }, 200);
     }
   }
+
+  async GetDivisionMasterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.GetDivisionMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.DivisionMasterList = data['Data'];
+        }, error => console.error(error));
+
+      console.log('Division Master List ==>', this.DivisionMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async ddlDivision_Change() {
+    debugger
+    try {
+      this.searchRequest.DistrictID = 0;
+      //const DivisionId = this.SeatIntakeSearchFormGroup.get('ddlDivision')?.value ?? 0;
+      const DivisionId = this.searchRequest.DivisionId ?? 0;
+      this.loaderService.requestStarted();
+      if (this.searchRequest.DivisionId == 0) {
+        await this.commonFunctionService.GetDistrictMaster()
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictList = data['Data'];
+          }, error => console.error(error));
+      }
+      else {
+        await this.commonFunctionService.DistrictMaster_DivisionIDWise(DivisionId)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictList = data['Data'];
+          }, error => console.error(error));
+
+      }
+
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async GetTradeAndColleges() {
     this.tradeSearchRequest.action = '_getAllData'
@@ -266,6 +334,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   async onSearch() {
+    debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;

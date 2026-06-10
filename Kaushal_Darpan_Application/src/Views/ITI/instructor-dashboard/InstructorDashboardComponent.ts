@@ -89,61 +89,61 @@ export class InstructorDashboardComponent implements OnInit {
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       debugger
         await this.CheckProfileStatus();
-        //if (this.StaffMasterList.length > 0) {
-        //    debugger;
-        //    let status = this.StaffMasterList[0].ProfileStatus;
-        //    if (status == this._EnumEMProfileStatus.Pending || status == this._EnumEMProfileStatus.Completed || status == this._EnumEMProfileStatus.Revert) {
-        //        this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
-        //            if (this.sSOLoginDataModel.DepartmentID == 2) {
-        //                if (this.sSOLoginDataModel.EmTypeId == 2) {
-        //                    window.open("/additiprivatestaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //                else if (this.sSOLoginDataModel.EmTypeId == 1) {
-        //                    if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
-        //                        window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
-        //                    }
+        if (this.StaffMasterList.length > 0) {
+            debugger;
+            let status = this.StaffMasterList[0].ProfileStatus;
+            if (status == this._EnumEMProfileStatus.Pending || status == this._EnumEMProfileStatus.Completed || status == this._EnumEMProfileStatus.Revert) {
+                this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
+                    if (this.sSOLoginDataModel.DepartmentID == 2) {
+                        if (this.sSOLoginDataModel.EmTypeId == 2) {
+                            window.open("/additiprivatestaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+                        }
+                        else if (this.sSOLoginDataModel.EmTypeId == 1) {
+                            if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
+                                window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
+                            }
 
-        //                }
+                        }
 
-        //                else {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //            } else if (this.sSOLoginDataModel.DepartmentID == 1) {
-        //                if (this.sSOLoginDataModel.EmTypeId == 2) {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //                else if (this.sSOLoginDataModel.EmTypeId == 1) {
-        //                    debugger;
+                        else {
+                            window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+                        }
+                    } else if (this.sSOLoginDataModel.DepartmentID == 1) {
+                        if (this.sSOLoginDataModel.EmTypeId == 2) {
+                            window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+                        }
+                        else if (this.sSOLoginDataModel.EmTypeId == 1) {
+                            debugger;
 
-        //                    if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
-        //                        window.open("/bter-em-add-staff-details", "_Self");
-        //                    }
+                            if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
+                                window.open("/bter-em-add-staff-details", "_Self");
+                            }
 
-        //                }
+                        }
 
-        //                else {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //            }
-
-
-        //        }, 'OK', false);
-        //    }
-
-        //    else if ((status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) && this.sSOLoginDataModel.DepartmentID == 2) {
-        //        if (this.sSOLoginDataModel.EmTypeId == 1) {
-
-        //            if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {
-        //                window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
-        //            }
-
-        //        }
+                        else {
+                            window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+                        }
+                    }
 
 
+                }, 'OK', false);
+            }
 
-        //    }
+            else if ((status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) && this.sSOLoginDataModel.DepartmentID == 2) {
+                if (this.sSOLoginDataModel.EmTypeId == 1) {
 
-        //}
+                    if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {
+                        window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
+                    }
+
+                }
+
+
+
+            }
+
+        }
       let instute = this.sSOLoginDataModel.InstituteID;
       this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -393,5 +393,54 @@ export class InstructorDashboardComponent implements OnInit {
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 30) return `${diffDays}d ago`;
     return created.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+
+  getCardBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-blue-50',
+      1: 'bg-orange-50',
+      2: 'bg-purple-50',
+      3: 'bg-emerald-50',
+    };
+    return map[i % 4] ?? 'bg-blue-50';
+  }
+
+  getCardIconBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-blue-500',
+      1: 'bg-orange-500',
+      2: 'bg-purple-500',
+      3: 'bg-emerald-500',
+    };
+    return map[i % 4] ?? 'bg-blue-500';
+  }
+
+  getCardTextColor(i: number): string {
+    const map: Record<number, string> = {
+      0: 'text-blue-600',
+      1: 'text-orange-500',
+      2: 'text-purple-600',
+      3: 'text-emerald-600',
+    };
+    return map[i % 4] ?? 'text-blue-600';
+  }
+  getNotifIcon(type: string): string {
+    if (!type) return 'bi-bell-fill';
+    const t = type.toLowerCase();
+    if (t.includes('guest')) return 'bi-house-door-fill';
+    if (t.includes('transfer')) return 'bi-arrow-left-right';
+    if (t.includes('iip') || t.includes('event')) return 'bi-calendar-event-fill';
+    if (t.includes('order') || t.includes('circular')) return 'bi-file-text-fill';
+    return 'bi-bell-fill';
+  }
+  getNotifIconBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-orange-50 text-orange-500',
+      1: 'bg-purple-50 text-purple-600',
+      2: 'bg-emerald-50 text-emerald-600',
+      3: 'bg-blue-50 text-blue-600',
+    };
+    return map[i % 4] ?? 'bg-gray-50 text-gray-500';
   }
 }

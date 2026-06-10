@@ -16,7 +16,8 @@ export class ITIEstablishmentDashboardComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public _EnumRole = EnumRole;
   public DashboardDataList: any[] = [];
-  public viewApplicationCount: any[] = [];
+  public EstablishmentDashboardTiles: any[] = [];
+  public RelievingJoiningDashboardTiles: any[] = [];
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -32,13 +33,17 @@ export class ITIEstablishmentDashboardComponent {
 
   async GetAllData()  {
     try {
-      const searchRequest: any = []
+      const searchRequest: any = {};
       this.loaderService.requestStarted();
+      searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      searchRequest.USerID = this.sSOLoginDataModel.UserID;
+
       await this.ITIAdminDashboardServiceService.GetITIEstablishmentDashboard(searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DashboardDataList = data['Data'];
-          this.viewApplicationCount = this.DashboardDataList.filter(s => s.ListType == 'ApplicationCount');
+          this.EstablishmentDashboardTiles = this.DashboardDataList.filter(s => s.ListType == 'Establishment');
+          this.RelievingJoiningDashboardTiles = this.DashboardDataList.filter(s => s.ListType == 'RelievingJoining');
         }, (error: any) => console.error(error)
         );
     }

@@ -196,4 +196,28 @@ export class StudentService
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetStudentRecentActivity(studentId: number) {
+  return await this.http
+    .get(
+      `${this.APIUrl}/GetStudentRecentActivity/${studentId}`,
+      this.headersOptions
+    )
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
+
+public async GetStudentMarksheetList(studentId: number) {
+  return await this.http
+    .get(
+      `${this.APIUrl}/GetStudentMarksheetList/${studentId}`,
+      this.headersOptions
+    )
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
 }

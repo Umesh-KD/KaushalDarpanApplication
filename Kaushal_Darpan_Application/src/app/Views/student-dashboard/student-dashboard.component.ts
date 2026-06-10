@@ -44,6 +44,9 @@ export class StudentDashboardComponent implements OnInit {
 
   public _EnumDepartment = EnumDepartment;
   public IsShowDashboard: boolean = false;
+  StudentRecentActivityList: any[] = [];
+  StudentMarksheetList: any[] = [];
+
 
 
   
@@ -70,7 +73,7 @@ export class StudentDashboardComponent implements OnInit {
     private Swal2: SweetAlert2, 
     private route: Router,
     private menuService: MenuService,
-    private parent: MasterLayoutComponent
+    private parent: MasterLayoutComponent   
   ) { }
   
   async ngOnInit()
@@ -144,6 +147,8 @@ export class StudentDashboardComponent implements OnInit {
 
     this.parent.InstituteName = this.ProfileLists?.InstituteName;
 
+    await this.GetStudentRecentActivity();
+    await this.GetStudentMarksheetList();
   }
 
 
@@ -376,4 +381,37 @@ export class StudentDashboardComponent implements OnInit {
     );
   }
 
+  async GetStudentRecentActivity() {
+  try {
+
+    const response: any = await this.studentService.GetStudentRecentActivity(52393);
+    if (response?.State === 1 || response?.State === 'Success') {
+      this.StudentRecentActivityList = response.Data || [];
+    } else {
+      this.StudentRecentActivityList = [];
+    }
+
+  } catch (error) {
+    console.error(error);
+    this.StudentRecentActivityList = [];
+  }
+}
+async GetStudentMarksheetList() {
+  try {
+
+    const response: any =
+      await this.studentService.GetStudentMarksheetList(
+        1
+      );
+    if (response?.State === 1 || response?.State === 'Success') {
+      this.StudentMarksheetList = response.Data || [];
+    } else {
+      this.StudentMarksheetList = [];
+    }
+
+  } catch (error) {
+    console.error(error);
+    this.StudentMarksheetList = [];
+  }
+}
 }
