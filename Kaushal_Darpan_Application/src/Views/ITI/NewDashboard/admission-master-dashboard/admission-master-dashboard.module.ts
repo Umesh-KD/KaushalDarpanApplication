@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AdmissionMasterDashboardRoutingModule } from './admission-master-dashboard-routing.module';
 import { AdmissionMasterDashboardComponent } from './admission-master-dashboard.component';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { AdmissionMasterDashboardComponent } from './admission-master-dashboard.
   ],
   imports: [
     CommonModule,
-    AdmissionMasterDashboardRoutingModule
+    AdmissionMasterDashboardRoutingModule,
+    HighchartsChartModule
   ]
 })
 export class AdmissionMasterDashboardModule { }
