@@ -219,9 +219,9 @@ export class BterUFMReportsComponent implements OnInit {
   getReportFileName(action: string): string {
     switch (action) {
       case 'ufm-student-Report':
-        return 'UFM_Student_Report.pdf';
+        return 'UFM_Student_Order.pdf';
       case 'collegwise-ufm-report':
-        return 'CollegWise_UFM_Report.pdf';
+        return 'CollegWise_UFM_Statitics_Report.pdf';
       default:
         return 'Downloaded_Report.pdf';
     }
