@@ -60,6 +60,8 @@ import { ItiExaminationInchargeDashboardModule } from '../ITI/iti-examination-in
 import { EmployeeDashboardModule } from '../ITI/employee-dashboard/employee-dashboard.module';
 import { IipDashboardModule } from '../IIPCompnyMaster/iip-dashboard/iip-dashboard.module';
 import { InstructorDashboardModule } from '../../../Views/ITI/instructor-dashboard/instructor-dashboard.module';
+import { PostPlanningDashboardITIComponent } from '../ITI/post-planning-dashboard-iti/post-planning-dashboard-iti.component';
+import { PostPlanningDashboardITIModule } from '../ITI/post-planning-dashboard-iti/post-planning-dashboard-iti.module';
 
 /// work here 
 
@@ -120,7 +122,8 @@ import { InstructorDashboardModule } from '../../../Views/ITI/instructor-dashboa
     ItiExaminationInchargeDashboardModule,
     EmployeeDashboardModule,
     IipDashboardModule,
-    InstructorDashboardModule
+    InstructorDashboardModule,
+    PostPlanningDashboardITIModule
     
     
   ]
