@@ -1,3 +1,5 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 /*
 Template Name: FlexAdmin - Tailwind CSS 3 Admin Layout & UI Kit Template
 Version: 1.0
@@ -54,6 +56,7 @@ html,
 body {
   margin: 0; /* 1 */
   line-height: inherit; /* 2 */
+  font-family: "Open Sans", sans-serif !important;
 }
 /*
 1. Add the correct height in Firefox.
@@ -8027,3 +8030,25 @@ span.main-heading {
 .upload-input-man a {
   border-radius: 0 5px 5px 0 !important;
 }
+
+.new-card-header {
+  padding: 16px 16px 0;
+}
+  .new-card-header .box-heading-mange {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+  }
+
+.main-data-box {
+  border: 1px solid #e7e7e7;
+  box-shadow: 0 1px 3px 0 var(--tw-shadow-color,oklch(20% .04 265/.04)), 0 1px 2px -1px var(--tw-shadow-color,oklch(20% .04 265/.04));
+}
+
+
+.card-box-new {
+  border: 1px solid #e7e7e7;
+}
+  .card-box-new .new-card-header {
+    padding: 0;
+    margin-bottom: 20px !important;
+  }

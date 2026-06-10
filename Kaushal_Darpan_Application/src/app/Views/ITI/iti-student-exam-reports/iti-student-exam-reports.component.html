@@ -27,7 +27,7 @@
       </div>
       <div>
         <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
-        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedInstitute" >
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedInstitute">
           <option value="all">--All--</option>
           <option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</option>
         </select>
@@ -52,12 +52,30 @@
         <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-download"></i> Export Execl
         </a>
+
+        <a href="javascript:void(0);" (click)="SaveTrn_ITI_StudentExamsFeeMark()" class="btn bg-info btn-sm text-white" *ngIf="id == '55'">
+          <i class="ti ti-arrow-back-up"></i> Update Status
+        </a>
       </div>
     </div>
-
+    <!--{{viewAdminDashboardList|json}}-->
     <div class="mat-elevation-z8 table-responsive">
       <table mat-table [dataSource]="dataSource" matSort class="table table-border w-full table-auto" cellpadding="5">
         <!-- Sr. No Column -->
+        <ng-container matColumnDef="select" *ngIf="id == '55'">
+          <th mat-header-cell *matHeaderCellDef>
+            <input type="checkbox"
+                   (change)="toggleAll($event)"
+                   [checked]="allSelected">
+          </th>
+          <!--*ngIf="id == '55' && row.IsDashboard == 1"-->
+          <td mat-cell *matCellDef="let row" >
+            <input type="checkbox" *ngIf="id == '55' && row.IsDashboard == 1"
+                   [(ngModel)]="row.selected"
+                   (change)="updateSelectAll()">
+          </td>
+        </ng-container>
+
         <ng-container matColumnDef="SrNo">
           <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
           <!--<td mat-cell *matCellDef="let element; let i = index" width="80px">{{ currentPage + 1 }}</td>-->
@@ -124,26 +142,26 @@
       </table>
       <div class="overflow-x-auto mt-3">
         <!--<table class="table table-border w-full table-auto" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-              <tr>
-                <th class="text-left cursorHand">SrNo</th>
-                <th class="text-left cursorHand">Student</th>
-                <th class="text-left cursorHand">Father</th>
-                <th class="text-left cursorHand">Institute</th>
-                <th class="text-left cursorHand">Branch</th>
-                <th class="text-left cursorHand">Semester</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of dataSource.data;let i=index">
-                <td align="left">{{i+1}}</td>
-                <td align="left">{{item.StudentName}}</td>
-                <td align="left">{{item.FatherName}}</td>
-                <td align="left">{{item.InstituteName}}</td>
-                <td align="left">{{item.BranchName}}</td>
-                <td align="left">{{item.SemesterName}}</td>
-              </tr>
-          </table>-->
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left cursorHand">SrNo</th>
+              <th class="text-left cursorHand">Student</th>
+              <th class="text-left cursorHand">Father</th>
+              <th class="text-left cursorHand">Institute</th>
+              <th class="text-left cursorHand">Branch</th>
+              <th class="text-left cursorHand">Semester</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of dataSource.data;let i=index">
+              <td align="left">{{i+1}}</td>
+              <td align="left">{{item.StudentName}}</td>
+              <td align="left">{{item.FatherName}}</td>
+              <td align="left">{{item.InstituteName}}</td>
+              <td align="left">{{item.BranchName}}</td>
+              <td align="left">{{item.SemesterName}}</td>
+            </tr>
+        </table>-->
         <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
           No Record Found
         </div>

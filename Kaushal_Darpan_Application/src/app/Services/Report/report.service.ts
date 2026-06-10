@@ -1982,6 +1982,16 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async SaveTrn_ITI_StudentExamsFeeMark(request: string='') {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/SaveTrn_ITI_StudentExamsFeeMark`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
 }
 
 

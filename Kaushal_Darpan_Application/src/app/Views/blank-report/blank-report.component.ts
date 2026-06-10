@@ -43,12 +43,12 @@ export class BlankReportComponent {
   public SemesterMasterList: any = []
   public StreamMasterList: any = []
   public ExamTypeList: any = []
-  public sSOLoginDataModel = new SSOLoginDataModel(); 
+  public sSOLoginDataModel = new SSOLoginDataModel();
   public SubjectMasterList: any[] = [];
   public ExamShiftList: any = []
   public BlankReportList: any = []
   public StreamTypeList: any = []
-  public ExamCategoryList: any = []      
+  public ExamCategoryList: any = []
   public ExamMasterID: number | null = null;
   public ExamFormGroup!: FormGroup;
   filteredSemesterList = [...this.SemesterMasterList];
@@ -74,7 +74,7 @@ export class BlankReportComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   //end table feature default
-  
+
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
     private examMasterService: ExamMasterService,
@@ -95,25 +95,25 @@ export class BlankReportComponent {
   get _ExamFormGroup() { return this.ExamFormGroup.controls; }
   async ngOnInit() {
     this.ExamFormGroup = this.fb.group({
-        ddlBranch: ['', [DropdownValidators]],
-        DateID: [''],
-        StudentExamYear: ['', [DropdownValidators]],
-        TimetableTime: ['', [DropdownValidators]],
-        ddlSubject: ['', [DropdownValidators]],
-        ddlExamCategoryID: ['', [DropdownValidators]]
+      ddlBranch: ['', [DropdownValidators]],
+      DateID: [''],
+      StudentExamYear: ['', [DropdownValidators]],
+      TimetableTime: ['', [DropdownValidators]],
+      ddlSubject: ['', [DropdownValidators]],
+      ddlExamCategoryID: ['', [DropdownValidators]]
 
-      })
+    })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.CenterId = Number( this.activatedRoute.snapshot.queryParamMap.get('centerid'));
-    this.CSId = Number( this.activatedRoute.snapshot.queryParamMap.get('csid'));
+    this.CenterId = Number(this.activatedRoute.snapshot.queryParamMap.get('centerid'));
+    this.CSId = Number(this.activatedRoute.snapshot.queryParamMap.get('csid'));
+    await this.GetTradeDDL();// branch
+    await this.GetMasterData();// semester
     await this.GetExamShift();
-    await this.GetMasterData();
-    this.loadDropdownData('Branch');
-    this.loadDropdownData('Semester');
-    this.loadDropdownData('ResultExamType');
-    await this.GetTradeDDL();
+    //this.loadDropdownData('Branch');
+    //this.loadDropdownData('Semester');
+    await this.loadDropdownData('ResultExamType');
 
-    if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+    if ((this.sSOLoginDataModel.RoleID === EnumRole.Admin
       || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
       || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
       || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
@@ -165,12 +165,12 @@ export class BlankReportComponent {
     }
   }
 
-  loadDropdownData(MasterCode: string): void {
-    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+  async loadDropdownData(MasterCode: string) {
+    await this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
       switch (MasterCode) {
         case 'ResultExamType':
           this.ExamCategoryList = data['Data'];
-          this.ExamCategoryList =this.ExamCategoryList.filter((item: any) => item.ID == 77 || item.ID == 78);
+          this.ExamCategoryList = this.ExamCategoryList.filter((item: any) => item.ID == 77 || item.ID == 78);
           break;
         default:
           break;
@@ -179,23 +179,17 @@ export class BlankReportComponent {
   }
   async GetMasterData() {
     try {
-      this.loaderService.requestStarted();
 
       await this.commonMasterService.SemesterMaster()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.SemesterMasterList = data['Data'];
-          this.SemesterMasterList = this.SemesterMasterList.filter((item: any) => ![7, 8, 9].includes(item.SemesterID));
+          //this.SemesterMasterList = this.SemesterMasterList.filter((item: any) => ![7, 8, 9].includes(item.SemesterID));
         }, (error: any) => console.error(error));
 
     }
     catch (Ex) {
       console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -233,8 +227,8 @@ export class BlankReportComponent {
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.loaderService.requestStarted();
-      
-      if((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0){
+
+      if ((this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon) && this.CenterId > 0) {
         this.request.InstituteID = this.CenterId;
       }
 
@@ -286,7 +280,7 @@ export class BlankReportComponent {
     const semester = this.SemesterMasterList.find(
       (s: any) => s.SemesterID === Number(semesterId)
     );
-  
+
     // Take first character from "1st Semester", "2nd Semester", etc.
     return semester ? semester.SemesterName.charAt(0) : '';
     // return semester ? semester.SemesterName.match(/\d/)?.[0] ?? '' : '';
@@ -294,9 +288,9 @@ export class BlankReportComponent {
   getBranchCode(streamId: number): string {
     debugger
     const stream = this.BranchDDLList.find(
-      (s:any) => s.StreamID === Number(streamId)
+      (s: any) => s.StreamID === Number(streamId)
     );
-  
+
     // Extract text inside first ()
     return stream
       ? stream.StreamName.match(/\(([^)]+)\)/)?.[1] ?? ''
@@ -307,7 +301,7 @@ export class BlankReportComponent {
     // Extract text before "-"
     return instituteName.split('-')[0].trim();
   }
-  
+
 
   generateFileName(extension: string): string {
     // const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
@@ -318,23 +312,23 @@ export class BlankReportComponent {
     // const dd = String(today.getDate()).padStart(2, '0');
     // const mm = String(today.getMonth() + 1).padStart(2, '0');
     // const yyyy = today.getFullYear();
-  
+
     // const formattedDate = `${dd}${mm}${yyyy}`; // 22012026
 
-      if (!this.request.ExamDate) {
-        this.toastr.error('Exam Date not selected');
-        return '';
-      }
+    if (!this.request.ExamDate) {
+      this.toastr.error('Exam Date not selected');
+      return '';
+    }
 
-      const datePart = this.request.ExamDate.split('T')[0]; // "2025-12-16
+    const datePart = this.request.ExamDate.split('T')[0]; // "2025-12-16
 
-      const [yyyy, mm, dd] = datePart.split('-');
-      const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
-      
-    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);  
-    const semestercode = this.getSemesterCode(this.request.SemesterID); 
-    const branchCode = this.getBranchCode(this.request.BranchID);    
-  
+    const [yyyy, mm, dd] = datePart.split('-');
+    const formattedDate = `${dd}${mm}${yyyy}`; // 16122025
+
+    const instituteCode = this.getInstituteCode(this.sSOLoginDataModel.InstituteName);
+    const semestercode = this.getSemesterCode(this.request.SemesterID);
+    const branchCode = this.getBranchCode(this.request.BranchID);
+
     return `13A_${formattedDate}_${instituteCode}_${semestercode}_${branchCode}.${extension}`;
   }
 
@@ -354,7 +348,7 @@ export class BlankReportComponent {
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
 
-    if((this.sSOLoginDataModel.RoleID === EnumRole.Admin
+    if ((this.sSOLoginDataModel.RoleID === EnumRole.Admin
       || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon
       || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_Eng
       || this.sSOLoginDataModel.RoleID === EnumRole.JDConfidential_NonEng
@@ -366,13 +360,13 @@ export class BlankReportComponent {
       this.searchRequest.InstituteId = this.CenterId
       this.searchRequest.InvigilatorAppointmentID = this.CSId
     }
-    
+
     try {
       this.loaderService.requestStarted();
 
       await this.setExamAttendanceService.GetBlankReportData_Admin(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success){
+        if (data.State === EnumStatus.Success) {
           this.BlankReportDataList_admin = data.Data
           this.loadInTable();
         } else {
