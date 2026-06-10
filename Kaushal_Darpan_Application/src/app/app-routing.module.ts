@@ -1266,6 +1266,7 @@ const routes: Routes = [
       { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
       { path: 'OfficeVacancyList', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/office-vacancy-list/office-vacancy-list.module').then(m => m.OfficeVacancyListModule) },
       { path: 'relieving-joining-request-report', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/relieving-joining-request-report/relieving-joining-request-report.module').then(m => m.RelievingJoiningRequestReportModule), title: 'Relieving Joining Request Report' },
+      { path: 'iti-establishment-dashboard', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/iti-establishment-dashboard/iti-establishment-dashboard.module').then(m => m.ITIEstablishmentDashboardModule), title: 'ITI Establishment Dashboard' },
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, ITI Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
       { path: 'PaperSetterProfessorDashboard', loadChildren: () => import('./Views/ITI/itipapper-setter/itipaper-setter-professor-dashboard/itipaper-setter-professor-dashboard.module').then(m => m.ITIPaperSetterProfessorDashboardModule) },
@@ -1778,7 +1779,7 @@ const routes: Routes = [
       { path: 'StaffTrainingDashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffTrainingDashboard/StaffTrainingDashboard.module').then(m => m.StaffTrainingDashboardModule) },
       { path: 'BterTeacherDashboard', loadChildren: () => import('./Views/bter-teacher-dashboard/bter-teacher-dashboard.module').then(m => m.BterTeacherDashboardModule) },
 
-
+      { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule) },
     ]
   },
 
@@ -1899,6 +1900,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
+  
  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 
