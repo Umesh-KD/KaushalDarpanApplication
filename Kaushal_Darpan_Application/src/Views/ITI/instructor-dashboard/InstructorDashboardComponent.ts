@@ -394,4 +394,53 @@ export class InstructorDashboardComponent implements OnInit {
     if (diffDays < 30) return `${diffDays}d ago`;
     return created.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   }
+
+
+  getCardBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-blue-50',
+      1: 'bg-orange-50',
+      2: 'bg-purple-50',
+      3: 'bg-emerald-50',
+    };
+    return map[i % 4] ?? 'bg-blue-50';
+  }
+
+  getCardIconBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-blue-500',
+      1: 'bg-orange-500',
+      2: 'bg-purple-500',
+      3: 'bg-emerald-500',
+    };
+    return map[i % 4] ?? 'bg-blue-500';
+  }
+
+  getCardTextColor(i: number): string {
+    const map: Record<number, string> = {
+      0: 'text-blue-600',
+      1: 'text-orange-500',
+      2: 'text-purple-600',
+      3: 'text-emerald-600',
+    };
+    return map[i % 4] ?? 'text-blue-600';
+  }
+  getNotifIcon(type: string): string {
+    if (!type) return 'bi-bell-fill';
+    const t = type.toLowerCase();
+    if (t.includes('guest')) return 'bi-house-door-fill';
+    if (t.includes('transfer')) return 'bi-arrow-left-right';
+    if (t.includes('iip') || t.includes('event')) return 'bi-calendar-event-fill';
+    if (t.includes('order') || t.includes('circular')) return 'bi-file-text-fill';
+    return 'bi-bell-fill';
+  }
+  getNotifIconBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-orange-50 text-orange-500',
+      1: 'bg-purple-50 text-purple-600',
+      2: 'bg-emerald-50 text-emerald-600',
+      3: 'bg-blue-50 text-blue-600',
+    };
+    return map[i % 4] ?? 'bg-gray-50 text-gray-500';
+  }
 }

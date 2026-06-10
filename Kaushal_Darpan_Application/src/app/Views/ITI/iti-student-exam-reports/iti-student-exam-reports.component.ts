@@ -6,11 +6,13 @@ import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { StudentExamDetails } from '../../../Models/DashboardCardModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { enumExamStudentStatus, EnumRole } from '../../../Common/GlobalConstants';
+import { enumExamStudentStatus, EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ReportService } from '../../../Services/Report/report.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
+import { SelectionModel } from '@angular/cdk/collections';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-iti-student-exam-reports',
@@ -24,6 +26,7 @@ export class ItiStudentExamReportsComponent
   ErrorMessage: string = '';
   State: boolean = false;
   viewAdminDashboardList: StudentExamDetails[] = [];
+  
   displayedColumns: string[] = ['SrNo', 'SemesterName', 'StudentName', 'EnrollmentNo', 'FatherName', 'InstituteName', 'BranchName'];
   dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
   totalRecords: number = 0;
@@ -42,13 +45,21 @@ export class ItiStudentExamReportsComponent
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
   filterForm!: FormGroup;
   ReportNameTitle: string = 'Student for Examination';
+  selection = new SelectionModel<any>(true, []);
+  allSelected = false;
+  ConfirmationText: string = 'Are you sure you want to mark the selected records as processed?';
+  requestData: string = '';
+
   constructor(
     private AdminReportsService: ReportService,
     private loaderService: LoaderService,
     private activatedRoute: ActivatedRoute,
     private commonMasterService: CommonFunctionService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private Swal2: SweetAlert2,
+    private toastr: ToastrService
   ) {
+    debugger
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.activatedRoute.paramMap.subscribe((params) => {
@@ -56,6 +67,9 @@ export class ItiStudentExamReportsComponent
       this.instituteId = params.get('instituteId');
     });
 
+    if (this.id === '55' && !this.displayedColumns.includes('select')) {
+      this.displayedColumns.unshift('select');
+    }
     if (this.id == enumExamStudentStatus.EligibleForExamination)
     {
 
@@ -245,5 +259,68 @@ export class ItiStudentExamReportsComponent
     this.applyFilter(this.filterForm?.value);
 
   }
+
+  toggleAll(event: any) {
+    this.allSelected = event.target.checked;
+
+    this.dataSource.data.forEach((row: any) => {
+      row.selected = this.allSelected;
+    });
+  }
+
+  updateSelectAll() {
+    this.allSelected = this.dataSource.data.every(
+      (row: any) => row.selected
+    );
+  }
+
+  async SaveTrn_ITI_StudentExamsFeeMark() {
+    debugger
+    const selectedRows = this.viewAdminDashboardList
+      .filter((item: any) => item.selected == true);
+
+    if (selectedRows.length == 0) {
+      this.toastr.warning("Please select a record!");
+      return;
+    }
+
+    const studentExamIDs = selectedRows
+      .map((x: any) => x.StudentExamID)
+      .join(',');
+
+    this.Swal2.Confirmation(this.ConfirmationText,
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            //Show Loading
+            this.loaderService.requestStarted();
+            this.requestData = studentExamIDs;
+            await this.AdminReportsService
+              .SaveTrn_ITI_StudentExamsFeeMark(this.requestData)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State === EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                } else {
+                  this.toastr.error(data.ErrorMessage);
+                }
+              });
+
+          }
+          catch (ex) {
+            console.log(ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+        }
+      });
+
+  }
+
+
 }
 

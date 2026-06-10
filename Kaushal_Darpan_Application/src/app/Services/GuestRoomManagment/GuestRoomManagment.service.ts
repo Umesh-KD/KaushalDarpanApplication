@@ -158,7 +158,7 @@ export class GuestRoomManagmentService {
       ).toPromise();
   }
 
-  public async GetAllGuestApplyForGuestRoomList(searchRequest: GuestApplyForGuestRoomSearchModel) {
+  public async GetAllGuestApplyForGuestRoomList(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllGuestApplyForGuestRoomList`, body, this.headersOptions)
       .pipe(
