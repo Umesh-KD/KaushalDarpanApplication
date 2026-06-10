@@ -104,7 +104,7 @@ export class BterUFMReportsComponent implements OnInit {
   ngOnInit(): void {
     this.sSOLoginDataModel = this.ssoLoginUser;
     this.filterModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.filterModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.filterModel.EndTermID = 0;
     this.filterModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
 
     this.loadMasterData();
@@ -133,8 +133,8 @@ export class BterUFMReportsComponent implements OnInit {
     })
 
     this.ReportTypelist = [
-      { ID: 1, Name: 'UFM Student Report', URL: 'ufm-student-Report' },
-      { ID: 2, Name: 'CollegWise UFM Report', URL: 'collegwise-ufm-report' },     
+      { ID: 1, Name: 'UFM Student Order', URL: 'ufm-student-Report' },
+      { ID: 2, Name: 'CollegWise UFM Statistics', URL: 'collegwise-ufm-report' },     
     ];
   }
 
@@ -219,9 +219,9 @@ export class BterUFMReportsComponent implements OnInit {
   getReportFileName(action: string): string {
     switch (action) {
       case 'ufm-student-Report':
-        return 'UFM_Student_Report.pdf';
+        return 'UFM_Student_Order.pdf';
       case 'collegwise-ufm-report':
-        return 'CollegWise_UFM_Report.pdf';
+        return 'CollegWise_UFM_Statitics_Report.pdf';
       default:
         return 'Downloaded_Report.pdf';
     }

@@ -301,6 +301,7 @@
                   mark-sheet will be issued after declaration of Revaluation result.
                 </div>
                 <div style="margin-bottom: 10px;" *ngIf="resultSearchReq.ResultType == _enumResultType.RevaluationResult">
+                  <div *ngIf="StudentData?.ResultDeclarationDate_Reval!=''" style="margin-bottom: 15px;">Date Of Issue: {{StudentData?.ResultDeclarationDate_Reval}}</div>
                   <strong>NOTE:</strong> Student appeared as Ex student in * marked
                   subject in current session.
                 </div>

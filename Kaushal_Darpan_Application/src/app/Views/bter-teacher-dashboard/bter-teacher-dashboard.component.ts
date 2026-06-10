@@ -14,27 +14,26 @@ import { SweetAlert2 } from "../../../app/Common/SweetAlert2";
 import Highcharts from 'highcharts';
 import { AdminDashboardDataService } from "../../../app/Services/AdminDashboard/admin-dashboard-data.service";
 import { WebsiteSettingsService } from "../../../app/Services/BTER/WebsiteSettings/website-settings.service";
-
 @Component({
-    selector: 'app-instructor-dashboard',
-    standalone: false,
-    templateUrl: './instructor-dashboard.component.html',
-    styleUrl: './instructor-dashboard.component.css'
+  selector: 'app-bter-teacher-dashboard',
+  standalone: false,
+  templateUrl: './bter-teacher-dashboard.component.html',
+  styleUrl: './bter-teacher-dashboard.component.css'
 })
-export class InstructorDashboardComponent implements OnInit {
+export class BterTeacherDashboardComponent {
   Highcharts: typeof Highcharts = Highcharts;
   public transferChartOptions: Highcharts.Options | null = null;
-    constructor(
-        private toastr: ToastrService,
-        private loaderService: LoaderService,
-        private formBuilder: FormBuilder,
-        private activatedRoute: ActivatedRoute,
-        private routers: Router,
-        private commonMasterService: CommonFunctionService,
-        private staffMasterService: StaffMasterService,
-      private sweetAlert2: SweetAlert2,
-      private dashboardservice: AdminDashboardDataService,
-      private websiteSettingsService: WebsiteSettingsService
+  constructor(
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private routers: Router,
+    private commonMasterService: CommonFunctionService,
+    private staffMasterService: StaffMasterService,
+    private sweetAlert2: SweetAlert2,
+    private dashboardservice: AdminDashboardDataService,
+    private websiteSettingsService: WebsiteSettingsService
   ) { }
 
   public monthList = [
@@ -63,105 +62,105 @@ export class InstructorDashboardComponent implements OnInit {
       TRANSFER_CHART: []
     };
   public notifications: any[] = [];
-    public viewPlacementDashboardList: any = [];
+  public viewPlacementDashboardList: any = [];
   public DynamicContentData: any = [];
-    public Table_SearchText: string = "";
-    public searchRequest = new StaffMasterSearchModel();
+  public Table_SearchText: string = "";
+  public searchRequest = new StaffMasterSearchModel();
   public searchRequest1 = new TeachearDashboardSearchModel();
-    public sSOLoginDataModel = new SSOLoginDataModel();
-    public State: number = 0;
-    public SuccessMessage: string = '';
-    public ErrorMessage: string = '';
-    public StaffMasterList: any = [];
-    public InstituteMasterDDL: any = [];
-    public InstituteName: any;
-    public staffDashSearchReq = new StaffDashboardSearchModel();
-    public _EnumRole = EnumRole;
+  public sSOLoginDataModel = new SSOLoginDataModel();
+  public State: number = 0;
+  public SuccessMessage: string = '';
+  public ErrorMessage: string = '';
+  public StaffMasterList: any = [];
+  public InstituteMasterDDL: any = [];
+  public InstituteName: any;
+  public staffDashSearchReq = new StaffDashboardSearchModel();
+  public _EnumRole = EnumRole;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
 
 
 
 
 
-    async ngOnInit() {
+  async ngOnInit() {
 
 
-      this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-      debugger
-        await this.CheckProfileStatus();
-        //if (this.StaffMasterList.length > 0) {
-        //    debugger;
-        //    let status = this.StaffMasterList[0].ProfileStatus;
-        //    if (status == this._EnumEMProfileStatus.Pending || status == this._EnumEMProfileStatus.Completed || status == this._EnumEMProfileStatus.Revert) {
-        //        this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
-        //            if (this.sSOLoginDataModel.DepartmentID == 2) {
-        //                if (this.sSOLoginDataModel.EmTypeId == 2) {
-        //                    window.open("/additiprivatestaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //                else if (this.sSOLoginDataModel.EmTypeId == 1) {
-        //                    if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
-        //                        window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
-        //                    }
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    debugger
+    await this.CheckProfileStatus();
+    //if (this.StaffMasterList.length > 0) {
+    //    debugger;
+    //    let status = this.StaffMasterList[0].ProfileStatus;
+    //    if (status == this._EnumEMProfileStatus.Pending || status == this._EnumEMProfileStatus.Completed || status == this._EnumEMProfileStatus.Revert) {
+    //        this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
+    //            if (this.sSOLoginDataModel.DepartmentID == 2) {
+    //                if (this.sSOLoginDataModel.EmTypeId == 2) {
+    //                    window.open("/additiprivatestaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+    //                }
+    //                else if (this.sSOLoginDataModel.EmTypeId == 1) {
+    //                    if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
+    //                        window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
+    //                    }
 
-        //                }
+    //                }
 
-        //                else {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //            } else if (this.sSOLoginDataModel.DepartmentID == 1) {
-        //                if (this.sSOLoginDataModel.EmTypeId == 2) {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //                else if (this.sSOLoginDataModel.EmTypeId == 1) {
-        //                    debugger;
+    //                else {
+    //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+    //                }
+    //            } else if (this.sSOLoginDataModel.DepartmentID == 1) {
+    //                if (this.sSOLoginDataModel.EmTypeId == 2) {
+    //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+    //                }
+    //                else if (this.sSOLoginDataModel.EmTypeId == 1) {
+    //                    debugger;
 
-        //                    if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
-        //                        window.open("/bter-em-add-staff-details", "_Self");
-        //                    }
+    //                    if (this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Pending || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed) {
+    //                        window.open("/bter-em-add-staff-details", "_Self");
+    //                    }
 
-        //                }
+    //                }
 
-        //                else {
-        //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
-        //                }
-        //            }
-
-
-        //        }, 'OK', false);
-        //    }
-
-        //    else if ((status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) && this.sSOLoginDataModel.DepartmentID == 2) {
-        //        if (this.sSOLoginDataModel.EmTypeId == 1) {
-
-        //            if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {
-        //                window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
-        //            }
-
-        //        }
+    //                else {
+    //                    window.open("/addstaffmaster?id=" + this.StaffMasterList[0].StaffID, "_Self");
+    //                }
+    //            }
 
 
+    //        }, 'OK', false);
+    //    }
 
-        //    }
+    //    else if ((status == this._EnumEMProfileStatus.Completed || this._EnumEMProfileStatus.Revert) && this.sSOLoginDataModel.DepartmentID == 2) {
+    //        if (this.sSOLoginDataModel.EmTypeId == 1) {
 
-        //}
-      let instute = this.sSOLoginDataModel.InstituteID;
-      this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.InstituteMasterDDL = data.Data;
-          if (this.InstituteMasterDDL?.length > 0) {
-              let insti = this.InstituteMasterDDL.find(function(x: { InstituteID: number; }) {
-                  return x.InstituteID == instute;
-              });
-              this.InstituteName = insti?.InstituteName;
-          }
+    //            if (this.sSOLoginDataModel.ProfileID == 0 || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Completed || this.sSOLoginDataModel.ProfileID == this._EnumEMProfileStatus.Revert) {
+    //                window.open("/ITIGOVTEMPersonalDetailsApplicationTab", "_Self");
+    //            }
+
+    //        }
+
+
+
+    //    }
+
+    //}
+    let instute = this.sSOLoginDataModel.InstituteID;
+    this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDL = data.Data;
+        if (this.InstituteMasterDDL?.length > 0) {
+            let insti = this.InstituteMasterDDL.find(function(x: { InstituteID: number; }) {
+                return x.InstituteID == instute;
+            });
+            this.InstituteName = insti?.InstituteName;
+        }
 
     });
 
-    this.initFilters() 
+    this.initFilters()
 
-      await this.getdashdata()
-      await this.GetAllData()
-   this.buildTransferChart();      // ← then build chart()
+    await this.getdashdata()
+    await this.GetAllData()
+    this.buildTransferChart();      // ← then build chart()
   }
 
   // Call this in ngOnInit to build year list and set defaults
@@ -171,7 +170,7 @@ export class InstructorDashboardComponent implements OnInit {
     this.searchRequest1.Year = current.getFullYear();
 
     // Show last 5 years up to current
-   
+
   }
   async onFilterChange() {
     await this.getdashdata();
@@ -214,9 +213,10 @@ export class InstructorDashboardComponent implements OnInit {
       this.searchRequest1.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest1.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest1.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest1.StaffID = this.sSOLoginDataModel.StaffID;
 
       const data: any = await this.dashboardservice
-        .GetITI_TeacherDashboardNew(this.searchRequest1);
+        .GetBter_TeacherDashboardNew(this.searchRequest1);
 
       const result = data?.Data || [];
 
@@ -357,6 +357,7 @@ export class InstructorDashboardComponent implements OnInit {
       this.searchRequest1.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest1.UserID = this.sSOLoginDataModel.UserID;
+      this.searchRequest1.StaffID = this.sSOLoginDataModel.StaffID;
 
       await this.websiteSettingsService.GetAllDataOrders(this.searchRequest1).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));

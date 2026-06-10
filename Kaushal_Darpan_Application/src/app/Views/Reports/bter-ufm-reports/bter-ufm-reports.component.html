@@ -21,7 +21,7 @@
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Reports Type</label>
         <select class="form-select" [(ngModel)]="filterModel.Action" name="Type" (change)="onTypeChange($event.target.value)">
-         <!-- <option [value]="2">CollegWise UFM Report</option>-->
+          <option [value]="0">---Select---</option>
           <option *ngFor="let item of ReportTypelist" [value]="item.URL">{{ item.Name }}</option>
         </select>
       </div>

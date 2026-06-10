@@ -165,7 +165,21 @@ export class AddStaffBasicDetailDataModel extends RequestBaseModel {
 
   
 }
-
+export class TeachearDashboardSearchModel {
+  public DepartmentID!: number;
+  public EndTermID!: number;
+  public Eng_NonEng!: number;
+  public FinancialYearID!: number;
+  public RoleID!: number;
+  public CommonID!: number;
+  public UserID!: number;
+  public StaffID!: number;
+  public IsYearly!: number;
+  public Month!: number;
+  public Year!: number;
+  public InstituteID!: number;
+  public SSOID?: string;
+}
 export class StaffMasterSearchModel {
   public StaffID: number = 0
   public StaffTypeID: number = 0;

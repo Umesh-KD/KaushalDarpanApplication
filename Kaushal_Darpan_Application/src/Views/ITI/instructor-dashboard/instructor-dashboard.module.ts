@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { InstructorDashboardRoutingModule } from './instructor-dashboard-routing.module';
 import { InstructorDashboardComponent } from './InstructorDashboardComponent';
+import { FormsModule } from '@angular/forms';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 
 @NgModule({
@@ -11,7 +13,9 @@ import { InstructorDashboardComponent } from './InstructorDashboardComponent';
   ],
   imports: [
     CommonModule,
-    InstructorDashboardRoutingModule
+    InstructorDashboardRoutingModule,
+    FormsModule,
+    HighchartsChartModule
   ],
   exports: [InstructorDashboardComponent]
 })

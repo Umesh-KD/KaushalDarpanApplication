@@ -190,11 +190,11 @@
                 <input tabindex="{{idx}}" class="form-input" style="width:100px" type="text"
                        (keydown.tab)="onTabPress($event, idx)"
                        (keydown)="allowOnlyPositiveNumbers($event)"
-                       [disabled]="!row.Marked || row.IsPresentInternalAssisment!=1"
+                       [disabled]="!row.Marked || row.IsPresentInternalAssisment!=1 || row.MaxInternalAssisment == 0"
                        id="txtObtainedInternalAssisment"
                        [ngModel]="row.ObtainedInternalAssisment == 0 && row.IsInternalAssesmentCheckecd==false ? '' : row.ObtainedInternalAssisment"
                        (ngModelChange)="row.ObtainedInternalAssisment = $event == '' ? 0 : $event"
-                       [readonly]="row.IsPresentInternalAssisment!=1"
+                       [readonly]="row.IsPresentInternalAssisment!=1 || row.MaxInternalAssisment == 0"
                        title="11">
                 <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
               </div>

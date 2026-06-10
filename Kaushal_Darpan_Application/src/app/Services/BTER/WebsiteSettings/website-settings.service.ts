@@ -48,7 +48,7 @@ export class WebsiteSettingsService {
   }
 
 
-  public async GetAllDataOrders(request: WebsiteSettingDataModel) {
+  public async GetAllDataOrders(request: any) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetAllDataOrders`, body, this.headersOptions)
       .pipe(
