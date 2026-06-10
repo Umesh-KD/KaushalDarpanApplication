@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { EnumRole, EnumEMProfileStatus } from "../../../app/Common/GlobalConstants";
+import { EnumRole, EnumEMProfileStatus, EnumStatus } from "../../../app/Common/GlobalConstants";
 import { SSOLoginDataModel } from "../../../app/Models/SSOLoginDataModel";
 import { StaffDashboardSearchModel } from "../../../app/Models/StaffDashboardDataModel";
 
@@ -14,6 +14,10 @@ import { SweetAlert2 } from "../../../app/Common/SweetAlert2";
 import Highcharts from 'highcharts';
 import { AdminDashboardDataService } from "../../../app/Services/AdminDashboard/admin-dashboard-data.service";
 import { WebsiteSettingsService } from "../../../app/Services/BTER/WebsiteSettings/website-settings.service";
+import { CompanyEventSearchModel } from "../../Models/IndustryInstitutePartnershipMasterDataModel";
+import { IndustryInstitutePartnershipMasterService } from "../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts";
+import { GuestRoomManagmentService } from "../../Services/GuestRoomManagment/GuestRoomManagment.service";
+import { GuestApplyForGuestRoomSearchModel } from "../../Models/GuestRoom-Management/GuestRoomManagmentDataModel";
 @Component({
   selector: 'app-bter-teacher-dashboard',
   standalone: false,
@@ -23,6 +27,9 @@ import { WebsiteSettingsService } from "../../../app/Services/BTER/WebsiteSettin
 export class BterTeacherDashboardComponent {
   Highcharts: typeof Highcharts = Highcharts;
   public transferChartOptions: Highcharts.Options | null = null;
+  public guestHouseChartOptions: Highcharts.Options | null = null;
+  public searchRequest2 = new CompanyEventSearchModel();
+  @ViewChild('notifList') notifList!: ElementRef;
   constructor(
     private toastr: ToastrService,
     private loaderService: LoaderService,
@@ -33,7 +40,9 @@ export class BterTeacherDashboardComponent {
     private staffMasterService: StaffMasterService,
     private sweetAlert2: SweetAlert2,
     private dashboardservice: AdminDashboardDataService,
-    private websiteSettingsService: WebsiteSettingsService
+    private websiteSettingsService: WebsiteSettingsService,
+    private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
+    private guestRoomManagmentService: GuestRoomManagmentService,
   ) { }
 
   public monthList = [
@@ -55,14 +64,18 @@ export class BterTeacherDashboardComponent {
   dashboardData: {
     TOPCARD: any[],
     ATTENDANCE_SUMMARY: any[],
-    TRANSFER_CHART: any[]
+    TRANSFER_CHART: any[],
+    GUESTHOUSE_CHART: any[]
   } = {
       TOPCARD: [],
       ATTENDANCE_SUMMARY: [],
-      TRANSFER_CHART: []
+      TRANSFER_CHART: [],
+      GUESTHOUSE_CHART:[]
     };
   public notifications: any[] = [];
+  public CompanyEventsList: any[] = [];
   public viewPlacementDashboardList: any = [];
+  public GuestRoomApplyList: any = [];
   public DynamicContentData: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new StaffMasterSearchModel();
@@ -159,8 +172,10 @@ export class BterTeacherDashboardComponent {
     this.initFilters()
 
     await this.getdashdata()
+    await this.GetCompanyEvents()
+    await this.GetGuestRoomApplyList()
     await this.GetAllData()
-    this.buildTransferChart();      // ← then build chart()
+
   }
 
   // Call this in ngOnInit to build year list and set defaults
@@ -226,7 +241,8 @@ export class BterTeacherDashboardComponent {
       this.dashboardData = {
         TOPCARD: [],
         ATTENDANCE_SUMMARY: [],
-        TRANSFER_CHART: []
+        TRANSFER_CHART: [],
+        GUESTHOUSE_CHART:[]
       };
 
       // ✅ GROUP DATA BY SectionType
@@ -254,7 +270,19 @@ export class BterTeacherDashboardComponent {
         else if (item.SectionType === 'TRANSFER_CHART') {
           this.dashboardData.TRANSFER_CHART.push(model);
         }
+
+
+        else if (item.SectionType === 'GuestHouse_CHART') {
+          this.dashboardData.GUESTHOUSE_CHART.push(model);
+        }
+
+
       });
+      this.transferChartOptions =
+        this.buildPieChart(this.dashboardData.TRANSFER_CHART);
+
+      this.guestHouseChartOptions =
+        this.buildPieChart(this.dashboardData.GUESTHOUSE_CHART);
 
       console.log("Mapped Dashboard:", this.dashboardData);
 
@@ -351,6 +379,7 @@ export class BterTeacherDashboardComponent {
 
 
 
+
   async GetAllData() {
     try {
       this.searchRequest1.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -394,5 +423,237 @@ export class BterTeacherDashboardComponent {
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 30) return `${diffDays}d ago`;
     return created.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  async GetCompanyEvents() {
+    try {
+      this.CompanyEventsList = [];
+
+      this.searchRequest2.RoleID = this.sSOLoginDataModel.RoleID;
+      if (this.sSOLoginDataModel.RoleID == 3) {
+        this.searchRequest2.StaffID = this.sSOLoginDataModel.StudentID;
+      } else {
+        this.searchRequest2.StaffID = this.sSOLoginDataModel.StaffID;
+      }
+
+      debugger
+      await this.industryInstitutePartnershipMasterService.GetCompanyEventsStaff(this.searchRequest2)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.CompanyEventsList = data.Data
+          } else if (data.State === EnumStatus.Warning) {
+            this.toastr.warning("Event not found")
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
+  async GetGuestRoomApplyList() {
+    try {
+      this.loaderService.requestStarted();
+      this.GuestRoomApplyList = [];
+
+      const obj = {
+        RoleID: this.sSOLoginDataModel.RoleID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CollegeID: this.sSOLoginDataModel.InstituteID,
+        UserID: this.sSOLoginDataModel.UserID,
+        IsForSelf: true
+      };
+      await this.guestRoomManagmentService.GetAllGuestApplyForGuestRoomList(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+   
+          this.ErrorMessage = data['ErrorMessage'];
+          this.GuestRoomApplyList = data['Data'];
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  getCardBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-blue-50',
+      1: 'bg-orange-50',
+      2: 'bg-purple-50',
+      3: 'bg-emerald-50',
+    };
+    return map[i % 4] ?? 'bg-blue-50';
+  }
+
+  getCardIconBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-blue-500',
+      1: 'bg-orange-500',
+      2: 'bg-purple-500',
+      3: 'bg-emerald-500',
+    };
+    return map[i % 4] ?? 'bg-blue-500';
+  }
+
+  getCardTextColor(i: number): string {
+    const map: Record<number, string> = {
+      0: 'text-blue-600',
+      1: 'text-orange-500',
+      2: 'text-purple-600',
+      3: 'text-emerald-600',
+    };
+    return map[i % 4] ?? 'text-blue-600';
+  }
+  getCurrentMonthYear(): string {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const m = (this.searchRequest1.Month || new Date().getMonth() + 1) - 1;
+    const y = this.searchRequest1.Year || new Date().getFullYear();
+    return `${months[m]} ${y}`;
+  }
+
+  getNotifIconBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-orange-50 text-orange-500',
+      1: 'bg-purple-50 text-purple-600',
+      2: 'bg-emerald-50 text-emerald-600',
+      3: 'bg-blue-50 text-blue-600',
+    };
+    return map[i % 4] ?? 'bg-gray-50 text-gray-500';
+  }
+
+  getNotifIcon(type: string): string {
+    if (!type) return 'bi-bell-fill';
+    const t = type.toLowerCase();
+    if (t.includes('guest')) return 'bi-house-door-fill';
+    if (t.includes('transfer')) return 'bi-arrow-left-right';
+    if (t.includes('iip') || t.includes('event')) return 'bi-calendar-event-fill';
+    if (t.includes('order') || t.includes('circular')) return 'bi-file-text-fill';
+    return 'bi-bell-fill';
+  }
+
+  getAttendanceBg(i: number): string {
+    const map: Record<number, string> = {
+      0: 'bg-emerald-50',
+      1: 'bg-red-50',
+      2: 'bg-amber-50',
+      3: 'bg-blue-50',
+    };
+    return map[i % 4] ?? 'bg-gray-50';
+  }
+
+  getAttendanceIconClass(title: string, i: number): string {
+    const colorMap: Record<number, string> = {
+      0: 'text-emerald-600',
+      1: 'text-red-500',
+      2: 'text-amber-500',
+      3: 'text-blue-600',
+    };
+    const iconMap: Record<string, string> = {
+      'Present Days': 'bi-person-check-fill',
+      'Absent Days': 'bi-person-x-fill',
+      'Leave Days': 'bi-person-dash-fill',
+      'Working Days': 'bi-calendar2-week-fill',
+    };
+    const color = colorMap[i % 4] ?? 'text-gray-500';
+    const icon = iconMap[title] ?? 'bi-circle-fill';
+    return `${icon} ${color}`;
+  }
+
+  buildPieChart(data: any[]): Highcharts.Options | null {
+
+    if (!data?.length) return null;
+
+    const colors = ['#22c55e', '#f59e0b', '#ef4444'];
+
+    const total = data.reduce(
+      (sum, item) => sum + (item.totalCount || 0),
+      0
+    );
+
+    const seriesData = total === 0
+      ? [{
+        name: 'No Data',
+        y: 1,
+        color: '#e5e7eb'
+      }]
+      : data.map((item, i) => ({
+        name: item.title,
+        y: Number(item.totalCount) || 0,
+        color: colors[i % colors.length]
+      }));
+
+    return {
+      chart: {
+        type: 'pie',
+        height: 260,
+        backgroundColor: 'transparent',
+        margin: [10, 10, 10, 10]
+      },
+
+      title: { text: '' },
+
+      credits: {
+        enabled: false
+      },
+
+      legend: {
+        enabled: false
+      },
+
+      tooltip: {
+        pointFormat: total === 0
+          ? 'No data available'
+          : '<b>{point.name}</b>: {point.y} ({point.percentage:.0f}%)'
+      },
+
+      plotOptions: {
+        pie: {
+          innerSize: '55%',
+          borderWidth: 3,
+          borderColor: '#ffffff',
+
+          dataLabels: {
+            enabled: total > 0,
+            format: '{point.name}: {point.y}',
+            style: {
+              fontSize: '11px',
+              fontWeight: '500',
+              textOutline: 'none'
+            }
+          }
+        }
+      },
+
+      series: [{
+        type: 'pie',
+        name: 'Requests',
+        data: seriesData
+      }]
+    };
+  }
+  getGuestHousePercent(count: number): string {
+
+    const total = this.dashboardData.GUESTHOUSE_CHART
+      .reduce((s, i) => s + (i.totalCount || 0), 0);
+
+    if (total === 0) {
+      return '0%';
+    }
+
+    return Math.round((count / total) * 100) + '%';
   }
 }
