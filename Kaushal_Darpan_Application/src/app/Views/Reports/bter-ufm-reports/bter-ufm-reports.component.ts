@@ -178,6 +178,7 @@ export class BterUFMReportsComponent implements OnInit {
 
 
   async GetAllData(): Promise<void> {
+    debugger
     this.ActionDynamic = this.filterModel.Action;
     this.ReportsListData = [];
     debugger
@@ -232,11 +233,9 @@ export class BterUFMReportsComponent implements OnInit {
 
     this.http.get(fileUrl, { responseType: 'blob', observe: 'response' }).subscribe(response => {
       const blob = response.body as Blob;
-
       // Try to get filename from Content-Disposition header (optional)
       const contentDisposition = response.headers.get('Content-Disposition');
       let actualFileName = fileName; // Default to filename from server response
-
       if (contentDisposition) {
         const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
         if (match && match[1]) {
