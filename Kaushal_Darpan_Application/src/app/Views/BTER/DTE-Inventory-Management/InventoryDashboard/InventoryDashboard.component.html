@@ -1,0 +1,96 @@
+
+<main class="content">
+  <!-- KPI Cards -->
+  <div class="grid  xl:grid-cols-{{RowBoxlength}} lg:grid-cols-{{RowBoxlength}} md:grid-cols-3 grid-cols-1 gap-3 mb-5" >
+    <div *ngFor="let item of viewDashboard; let i = index">
+      <div [class]="item.ClassClourTop1">
+        <div [class]="item.ClassClourTop2"> <i [class]="item.SRC"></i></div>
+        <div class="kpi-title">{{item.TotalText}}</div>
+        <div [class]="item.ClassClourTop3" class="m-0">{{item.TotalCount}}</div>
+        <div class="kpi-sub">All Categories</div>
+      </div>
+    </div>
+    <!--<div class="col-6 col-md-4 col-xl-2">
+      <div class="kpi kpi-tile-green">
+        <div class="kpi-icon ic-green"><i class="bi bi-boxes"></i></div>
+        <div class="kpi-title">Total No Of Item</div>
+        <div class="kpi-value val-green">4,562</div>
+        <div class="kpi-sub">All Items</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="kpi kpi-tile-check">
+        <div class="kpi-icon ic-check"><i class="bi bi-check-lg"></i></div>
+        <div class="kpi-title">No Of Working Item</div>
+        <div class="kpi-value val-green">3,210</div>
+        <div class="kpi-sub">70.37% of Total Items</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="kpi kpi-tile-red">
+        <div class="kpi-icon ic-red"><i class="bi bi-x"></i></div>
+        <div class="kpi-title">No Of Not-Working Item</div>
+        <div class="kpi-value val-red">1,352</div>
+        <div class="kpi-sub">29.63% of Total Items</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="kpi kpi-tile-purple">
+        <div class="kpi-icon ic-purple"><i class="bi bi-hammer"></i></div>
+        <div class="kpi-title">Total No Of Auctions Item</div>
+        <div class="kpi-value val-purple">842</div>
+        <div class="kpi-sub">18.45% of Total Items</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-xl-2">
+      <div class="kpi kpi-tile-orange">
+        <div class="kpi-icon ic-orange"><i class="bi bi-hammer"></i></div>
+        <div class="kpi-title">Total No Of SR-5 Item</div>
+        <div class="kpi-value val-orange">612</div>
+        <div class="kpi-sub">13.41% of Total Items</div>
+      </div>
+    </div>-->
+  </div>
+
+
+  <!-- Tables -->
+  <div class="row g-3">
+    <div class="col-12 col-lg-12">
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">Recent Auction Items</h2>
+          <div class="flex items-center gap-2">
+            <!-- Search Box -->
+            <div class="position-relative">
+              <input type="text" class="form-control form-control-sm ps-4" placeholder="Search..."
+                     style="width:220px;">
+              <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"></i>
+            </div>
+
+            <!-- PDF Export -->
+            <button class="btn btn-sm btn-outline-danger" title="Export PDF">
+              <i class="bi bi-file-earmark-pdf-fill"></i>
+            </button>
+
+            <!-- Excel Export -->
+            <button class="btn btn-sm btn-outline-success" title="Export Excel">
+              <i class="bi bi-file-earmark-excel-fill"></i>
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="tbl">
+            <thead><tr><th>Item Name</th><th>Category</th><th>Auction Date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Generator 25 KVA</td><td>Electrical</td><td>May 25, 2025</td><td><span class="badge-soft b-upcoming">Upcoming</span></td></tr>
+              <tr><td>Office Chairs (20)</td><td>Furniture</td><td>May 22, 2025</td><td><span class="badge-soft b-upcoming">Upcoming</span></td></tr>
+              <tr><td>Air Conditioner (10)</td><td>Electrical</td><td>May 20, 2025</td><td><span class="badge-soft b-ongoing">Ongoing</span></td></tr>
+              <tr><td>Metal Scrap Lot</td><td>Miscellaneous</td><td>May 18, 2025</td><td><span class="badge-soft b-completed">Completed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>

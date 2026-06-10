@@ -1777,7 +1777,7 @@ const routes: Routes = [
       { path: 'TransferRelievingDashboardModule', loadChildren: () => import('./Views/BTER/EM-TransferModule/TransferRelievingDashboard/TransferRelievingDashboard.module').then(m => m.TransferRelievingDashboardModule) },
       { path: 'StaffTrainingDashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffTrainingDashboard/StaffTrainingDashboard.module').then(m => m.StaffTrainingDashboardModule) },
       { path: 'BterTeacherDashboard', loadChildren: () => import('./Views/bter-teacher-dashboard/bter-teacher-dashboard.module').then(m => m.BterTeacherDashboardModule) },
-
+      { path: 'InventoryDashboard', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/InventoryDashboard/InventoryDashboard.module').then(m => m.InventoryDashboardModule) },
 
     ]
   },
