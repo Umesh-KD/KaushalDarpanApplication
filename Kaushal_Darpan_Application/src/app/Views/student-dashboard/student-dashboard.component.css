@@ -69,3 +69,292 @@
   font-size: 20px;
   line-height: 1;
 }
+
+/* ===========================
+   Dashboard Bottom Section
+=========================== */
+
+.dashboard-bottom-section,
+.dashboard-bottom-section * {
+    font-family: Inter, "Segoe UI", sans-serif;
+}
+
+/* Card */
+
+.dashboard-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, .05);
+    transition: all .3s ease;
+    height: 100%;
+}
+
+.dashboard-card:hover {
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+}
+
+/* Header */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #fff;
+}
+
+.dashboard-header h4 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e3a8a;
+    line-height: 1.3;
+}
+
+.dashboard-header a {
+    text-decoration: none;
+    color: #2563eb;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.dashboard-header a:hover {
+    color: #1d4ed8;
+}
+
+/* ===========================
+   Table
+=========================== */
+
+.dashboard-table {
+    margin: 0;
+    width: 100%;
+}
+
+.dashboard-table thead th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 18px 20px;
+    white-space: nowrap;
+}
+
+.dashboard-table tbody td {
+    padding: 18px 20px;
+    vertical-align: middle;
+    border-bottom: 1px solid #eef2f7;
+    font-size: 15px;
+    font-weight: 500;
+    color: #334155;
+}
+
+.dashboard-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.dashboard-table tbody tr:hover {
+    background: #fafcff;
+}
+
+/* Result Status */
+
+.status-pass {
+    color: #16a34a;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.status-published {
+    color: #14b8a6;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.status-fail {
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+/* Marksheet Button */
+
+.btn-marksheet {
+    border: 1.5px solid #2563eb;
+    background: #fff;
+    color: #2563eb;
+    border-radius: 10px;
+    padding: 10px 18px;
+    min-width: 170px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.btn-marksheet:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* ===========================
+   Recent Activity
+=========================== */
+
+.activity-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 18px 24px;
+    border-bottom: 1px solid #eef2f7;
+    transition: .3s;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item:hover {
+    background: #fafcff;
+}
+
+.activity-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+}
+
+/* Activity Icon */
+
+.activity-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.activity-icon i {
+    font-size: 18px;
+}
+
+/* Activity Text */
+
+.activity-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: #334155;
+    line-height: 1.5;
+}
+
+/* Activity Time */
+
+.activity-time {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+/* ===========================
+   Activity Colors
+=========================== */
+
+.bg-soft-red {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.bg-soft-orange {
+    background: #ffedd5;
+    color: #f97316;
+}
+
+.bg-soft-green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.bg-soft-blue {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.bg-soft-purple {
+    background: #f3e8ff;
+    color: #9333ea;
+}
+
+.bg-soft-teal {
+    background: #ccfbf1;
+    color: #0f766e;
+}
+
+/* ===========================
+   Empty State
+=========================== */
+
+.no-data {
+    padding: 40px 20px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media (max-width: 991px) {
+
+    .activity-item {
+        flex-wrap: wrap;
+    }
+
+    .activity-time {
+        margin-left: 58px;
+    }
+}
+
+@media (max-width: 767px) {
+
+    .dashboard-header {
+        padding: 18px;
+    }
+
+    .dashboard-header h4 {
+        font-size: 18px;
+    }
+
+    .dashboard-table thead th,
+    .dashboard-table tbody td {
+        padding: 14px 12px;
+    }
+
+    .btn-marksheet {
+        min-width: 140px;
+        font-size: 13px;
+    }
+
+    .activity-item {
+        padding: 16px 18px;
+    }
+
+    .activity-text {
+        font-size: 14px;
+    }
+}
