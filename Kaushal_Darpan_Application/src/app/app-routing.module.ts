@@ -1780,6 +1780,9 @@ const routes: Routes = [
       { path: 'BterTeacherDashboard', loadChildren: () => import('./Views/bter-teacher-dashboard/bter-teacher-dashboard.module').then(m => m.BterTeacherDashboardModule) },
 
       { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule) },
+      { path: 'InventoryDashboard', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/InventoryDashboard/InventoryDashboard.module').then(m => m.InventoryDashboardModule) },
+
+      { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule) },
     ]
   },
 
@@ -1900,6 +1903,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
+
   
  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },

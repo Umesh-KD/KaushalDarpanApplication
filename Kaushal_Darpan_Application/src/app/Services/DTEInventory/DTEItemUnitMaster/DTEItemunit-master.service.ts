@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTEItemUnitModel } from '../../../Models/DTEInventory/DTEItemUnitModel';
+import { DashboardRequestModel, DTEItemUnitModel } from '../../../Models/DTEInventory/DTEItemUnitModel';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +57,15 @@ export class DteItemUnitMasterService {
       ).toPromise();
   }
 
+  public async GetBter_InventoryDashboard(request: DashboardRequestModel) {
 
 
+    const body = JSON.stringify(request);
+
+    return await this.http.post(this.APIUrl + '/GetBter_InventoryDashboard', request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+ 
 }
