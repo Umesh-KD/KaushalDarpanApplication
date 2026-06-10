@@ -109,5 +109,14 @@ export class ITIAdminDashboardServiceService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetAdmissionDashboardData(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetAdmissionDashboardData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
