@@ -202,7 +202,7 @@
     <div class="bg-card rounded-xl ring-1 ring-border shadow-soft p-5 card-box-new d-flex flex-column" style="height:100%;">
       <div class="flex items-center justify-between new-card-header mb-4">
         <h3 class="font-semibold box-heading-mange m-0">Recent Notifications</h3>
-        <a href="/notifications" class="inline-flex items-center gap-1 text-xs font-medium text-primary px-2.5 py-1.5 rounded-md border border-primary/20 hover:bg-primary/5 transition-colors">
+        <a href="/ViewContentList" class="inline-flex items-center gap-1 text-xs font-medium text-primary px-2.5 py-1.5 rounded-md border border-primary/20 hover:bg-primary/5 transition-colors">
           View all
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -559,7 +559,7 @@
           Transfer / Relieving Requests
         </h6>
 
-        <a href="/TransferList"
+        <a href="/TransferRequestList"
            class="inline-flex items-center gap-1 text-xs font-medium text-primary px-2.5 py-1.5 rounded-md border border-primary/20 hover:bg-primary/5 transition-colors">
           View all <i class="bi bi-arrow-right"></i>
         </a>
@@ -651,34 +651,23 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-              <td class="px-5 py-3.5 font-medium">GH/2026/05/12</td>
-              <td class="px-3 py-3.5">Jaipur</td>
-              <td class="px-3 py-3.5 text-muted-foreground">15-May-2026</td>
-              <td class="px-3 py-3.5 text-muted-foreground">16-May-2026</td>
-              <td class="px-3 py-3.5">Official Work</td>
+            <tr *ngFor="let item of GuestRoomApplyList; let i = index" class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
+              <td class="px-5 py-3.5 font-medium">{{item.RequestName}}</td>
+              <td class="px-3 py-3.5">{{item.InstituteName}}</td>
+              <td class="px-3 py-3.5 text-muted-foreground">{{ item.FromDate }} {{ item.FromTime }}</td>
+              <td class="px-3 py-3.5 text-muted-foreground">{{ item.ToDate }} {{ item.ToTime }}</td>
+              <td class="px-3 py-3.5">{{item.Purpose_str}}</td>
               <td class="px-5 py-3.5">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Approved</span>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium"
+                      [ngClass]="getStatusClass(item.StatusName)">
+                  {{item.StatusName}}
+                </span>
               </td>
             </tr>
-            <tr class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-              <td class="px-5 py-3.5 font-medium">GH/2026/05/18</td>
-              <td class="px-3 py-3.5">Delhi</td>
-              <td class="px-3 py-3.5 text-muted-foreground">22-May-2026</td>
-              <td class="px-3 py-3.5 text-muted-foreground">24-May-2026</td>
-              <td class="px-3 py-3.5">Training Program</td>
-              <td class="px-5 py-3.5">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-amber-50 text-amber-700 ring-1 ring-amber-200">Pending</span>
-              </td>
-            </tr>
-            <tr class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-              <td class="px-5 py-3.5 font-medium">GH/2026/05/25</td>
-              <td class="px-3 py-3.5">Udaipur</td>
-              <td class="px-3 py-3.5 text-muted-foreground">30-May-2026</td>
-              <td class="px-3 py-3.5 text-muted-foreground">31-May-2026</td>
-              <td class="px-3 py-3.5">Seminar</td>
-              <td class="px-5 py-3.5">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-amber-50 text-amber-700 ring-1 ring-amber-200">Pending</span>
+            <tr *ngIf="!GuestRoomApplyList || GuestRoomApplyList.length === 0">
+              <td colspan="6" class="text-center py-5 text-muted">
+                <i class="bi bi-inbox d-block fs-3 mb-2 opacity-50"></i>
+                No Record Found
               </td>
             </tr>
           </tbody>
@@ -687,7 +676,7 @@
     </div>
     <div class="bg-card rounded-xl ring-1 ring-border shadow-soft p-5 card-box-new card-box-new">
       <div class="flex items-center justify-between mb-0 new-card-header">
-        <h3 class="m-0 box-heading-mange">IIP Events &amp; My Consent</h3><a href="#"
+        <h3 class="m-0 box-heading-mange">IIP Events &amp; My Consent</h3><a href="StaffTrainingConsent"
                                                                              class="inline-flex items-center gap-1 text-xs font-medium text-primary px-2.5 py-1.5 rounded-md border border-primary/20 hover:bg-primary/5 transition-colors">
           View
           all <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -710,30 +699,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-              <td class="px-5 py-3.5 font-medium">Annual Training Program</td>
-              <td class="px-3 py-3.5 text-muted-foreground">10-Jun-2026</td>
-              <td class="px-3 py-3.5">Bikaner</td>
+            <tr *ngFor="let item of CompanyEventsList; let i = index" class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
+              <td class="px-5 py-3.5 font-medium">{{item.EventName}}</td>
+              <td class="px-3 py-3.5 text-muted-foreground">{{item.EventSchedule}}</td>
+              <td class="px-3 py-3.5">{{item.VenueName}}</td>
               <td class="px-5 py-3.5">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Given</span>
+                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium"
+                      [ngClass]="getConsentStatusClass(item.StatusName)">
+                  {{ item.StatusName }}
+                </span>
               </td>
             </tr>
-            <tr class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-              <td class="px-5 py-3.5 font-medium">Teaching Workshop</td>
-              <td class="px-3 py-3.5 text-muted-foreground">20-Jun-2026</td>
-              <td class="px-3 py-3.5">Jaipur</td>
-              <td class="px-5 py-3.5">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-amber-50 text-amber-700 ring-1 ring-amber-200">Pending</span>
-              </td>
-            </tr>
-            <tr class="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
-              <td class="px-5 py-3.5 font-medium">Digital Learning Session</td>
-              <td class="px-3 py-3.5 text-muted-foreground">25-Jun-2026</td>
-              <td class="px-3 py-3.5">Online</td>
-              <td class="px-5 py-3.5">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Given</span>
-              </td>
-            </tr>
+
           </tbody>
         </table>
       </div>
