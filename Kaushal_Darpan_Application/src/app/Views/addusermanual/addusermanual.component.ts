@@ -427,17 +427,36 @@ else {
         return;
       }
   
-      if (this.file.type !== 'application/pdf') {
+      // if (this.file.type !== 'application/pdf') {
   
-        this.toastr.error('Select PDF file only');
-        return;
-      }
+      //   this.toastr.error('Select PDF file only');
+      //   return;
+      // }
   
-      if (this.file.size > 2000000) {
+      // if (this.file.size > 2000000) {
   
-        this.toastr.error('Select less than 2 MB file');
-        return;
-      }
+      //   this.toastr.error('Select less than 2 MB file');
+      //   return;
+      // }
+
+      const allowedTypes = [
+  'application/pdf', // PDF
+  'application/msword', // DOC
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // DOCX
+  'application/vnd.ms-powerpoint', // PPT
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation' // PPTX
+];
+
+if (!allowedTypes.includes(this.file.type)) {
+  this.toastr.error('Select PDF, Word or PowerPoint file only');
+  return;
+}
+
+// 50 MB = 50 * 1024 * 1024
+if (this.file.size > 50 * 1024 * 1024) {
+  this.toastr.error('Select file less than 50 MB');
+  return;
+}
   
       const uploadModel = new UploadFileModel();
   
@@ -470,6 +489,21 @@ else {
   
             this.toastr.success('File uploaded successfully');
           }
+          else {
+
+      this.toastr.error(
+        data['ErrorMessage'] || data['Message'] || 'File upload failed'
+      );
+
+      // Optional: clear file input values
+      this.UserManualFileName = '';
+      this.UserManualDisplayFileName = '';
+
+      this.UserManualForm.patchValue({
+        FilePath: '',
+        Dis_FilePath: ''
+      });
+    }
         });
   
     }

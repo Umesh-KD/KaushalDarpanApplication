@@ -435,13 +435,16 @@ export class BterTeacherDashboardComponent {
       } else {
         this.searchRequest2.StaffID = this.sSOLoginDataModel.StaffID;
       }
-
+      this.searchRequest2.DepartmentID=1
       debugger
       await this.industryInstitutePartnershipMasterService.GetCompanyEventsStaff(this.searchRequest2)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
-            this.CompanyEventsList = data.Data
+            this.CompanyEventsList = (data.Data || []).filter(
+              (x: any) => x.InterestedStatus == 1
+            );
+           
           } else if (data.State === EnumStatus.Warning) {
             this.toastr.warning("Event not found")
           } else {
@@ -656,4 +659,46 @@ export class BterTeacherDashboardComponent {
 
     return Math.round((count / total) * 100) + '%';
   }
+
+  getStatusClass(status: string): string {
+
+    switch ((status || '').trim().toLowerCase()) {
+
+      case 'approved':
+      case 'approved by admin':
+      case 'check-in':
+      case 'check-out':
+      case 'reserved':
+        return 'status-success';
+
+      case 'pending':
+      case 'waiting list':
+        return 'status-warning';
+
+      case 'reject':
+      case 'rejected':
+        return 'status-danger';
+
+      default:
+        return 'status-success';
+    }
+  }
+  getConsentStatusClass(status: string): string {
+
+    switch ((status || '').toLowerCase()) {
+
+      case 'approved':
+        return 'status-success';
+
+      case 'pending':
+        return 'status-warning';
+
+      case 'rejected':
+        return 'status-danger';
+
+      default:
+        return 'status-secondary';
+    }
+  }
+
 }

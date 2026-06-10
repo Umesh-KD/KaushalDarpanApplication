@@ -1266,6 +1266,7 @@ const routes: Routes = [
       { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
       { path: 'OfficeVacancyList', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/office-vacancy-list/office-vacancy-list.module').then(m => m.OfficeVacancyListModule) },
       { path: 'relieving-joining-request-report', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/relieving-joining-request-report/relieving-joining-request-report.module').then(m => m.RelievingJoiningRequestReportModule), title: 'Relieving Joining Request Report' },
+      { path: 'iti-establishment-dashboard', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/iti-establishment-dashboard/iti-establishment-dashboard.module').then(m => m.ITIEstablishmentDashboardModule), title: 'ITI Establishment Dashboard' },
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, ITI Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
       { path: 'PaperSetterProfessorDashboard', loadChildren: () => import('./Views/ITI/itipapper-setter/itipaper-setter-professor-dashboard/itipaper-setter-professor-dashboard.module').then(m => m.ITIPaperSetterProfessorDashboardModule) },

@@ -48,6 +48,7 @@ export class SeatIntakeSearchModel {
   public TradeCode: string = '';
   public Action: string = '';
 
+  public DivisionId?: number = 0;
 
 }
 
