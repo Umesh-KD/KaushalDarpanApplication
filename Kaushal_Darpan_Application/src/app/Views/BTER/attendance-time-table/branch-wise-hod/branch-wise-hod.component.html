@@ -25,7 +25,6 @@
             <input formControlName="SSOID" class="form-input" placeholder="Enter  Staff SSOID" (blur)="CheckUserExists($event)" aria-describedby="basic-addon3 basic-addon4" />
             <span *ngIf="SSOIDExists != null" class="input-group-text {{SSOIDExists?'text-success':'text-danger'}}"><i class="fa {{SSOIDExists?'fa-check':'fa-close'}}"></i></span>
           </div>
-
           <!--<div *ngIf="isSubmit && _SSOIDFormGroup.SSOID.errors" class="form-text text-danger">
             <p *ngIf="_SSOIDFormGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>-->

@@ -104,7 +104,7 @@ export class BterUFMReportsComponent implements OnInit {
   ngOnInit(): void {
     this.sSOLoginDataModel = this.ssoLoginUser;
     this.filterModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.filterModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.filterModel.EndTermID = 0;
     this.filterModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
 
     this.loadMasterData();
@@ -178,6 +178,7 @@ export class BterUFMReportsComponent implements OnInit {
 
 
   async GetAllData(): Promise<void> {
+    debugger
     this.ActionDynamic = this.filterModel.Action;
     this.ReportsListData = [];
     debugger
@@ -219,9 +220,9 @@ export class BterUFMReportsComponent implements OnInit {
   getReportFileName(action: string): string {
     switch (action) {
       case 'ufm-student-Report':
-        return 'UFM_Student_Report.pdf';
+        return 'UFM_Student_Order.pdf';
       case 'collegwise-ufm-report':
-        return 'CollegWise_UFM_Report.pdf';
+        return 'CollegWise_UFM_Statitics_Report.pdf';
       default:
         return 'Downloaded_Report.pdf';
     }
@@ -232,11 +233,9 @@ export class BterUFMReportsComponent implements OnInit {
 
     this.http.get(fileUrl, { responseType: 'blob', observe: 'response' }).subscribe(response => {
       const blob = response.body as Blob;
-
       // Try to get filename from Content-Disposition header (optional)
       const contentDisposition = response.headers.get('Content-Disposition');
       let actualFileName = fileName; // Default to filename from server response
-
       if (contentDisposition) {
         const match = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
         if (match && match[1]) {
