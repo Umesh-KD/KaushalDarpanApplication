@@ -76,6 +76,7 @@ export class AdmissionDashboardComponent {
     };
   public notifications: any[] = [];
   public CompanyEventsList: any[] = [];
+  public GUESTHOUSE_CHART: any[] = [];
   public viewPlacementDashboardList: any = [];
   public GuestRoomApplyList: any = [];
   public DynamicContentData: any = [];
@@ -351,6 +352,7 @@ export class AdmissionDashboardComponent {
       this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest1.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest1.StaffID = this.sSOLoginDataModel.StaffID;
+      this.searchRequest1.RoleID = this.sSOLoginDataModel.RoleID
 
       await this.websiteSettingsService.GetAllDataOrders(this.searchRequest1).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
