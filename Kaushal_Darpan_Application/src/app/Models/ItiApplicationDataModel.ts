@@ -49,6 +49,11 @@ export class ItiDashApplicationSearchModel {
   public TradeCode: string = '';
   public PaymentReciept: string = '';
 
+  public AadharNo?: string = '';
+
+  public MaxRange?: number = 0;
+  public MinRange?: number = 0;
+
 
 }
 

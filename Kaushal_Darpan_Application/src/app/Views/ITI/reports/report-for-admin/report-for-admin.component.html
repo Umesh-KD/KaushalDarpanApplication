@@ -17,44 +17,73 @@
   <div class="card">
     <div class="card-body p-5">
       <div class="mb-8">
-        <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        </div>-->
+        </div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-          <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Level:</label>
-            <select class="form-select" [(ngModel)]="searchRequest.TradeLevelID">
-              <option value="0">--Choose Option--</option>
-              <option value="8">8th</option>
-              <option value="10">10th</option>
-              <option value="12">12th</option>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application No.</label>
+            <input type="text" class="form-input" placeholder="Application ID" id="ApplicationID" [(ngModel)]="searchRequest.ApplicationID">
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By State Registration No.</label>
+            <input type="text" class="form-input" placeholder="StateRegNo" id="StateRegNo" [(ngModel)]="searchRequest.StateRegNo">
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By State PRN No.</label>
+            <input type="text" class="form-input" placeholder="PrnNo" id="PrnNo" [(ngModel)]="searchRequest.PrnNo">
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By PRN Status</label>
+            <select class="form-select" [(ngModel)]="searchRequest.PRNStatus">
+              <option value="0">--Select--</option>
+              <option value="1">Generated</option>
+              <option value="2">Not Generated</option>
             </select>
-          </div>-->
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Management Type:</label>
+            <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId">
+              <option value="0">All</option>
+              <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
 
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Type:</label>
-            <select class="form-select" [(ngModel)]="searchRequest.TradeTypeID">
-              <option value="0">--Choose Option--</option>
-              <option value="1">Eng</option>
-              <option value="2">Non-Eng</option>
-            </select>
-          </div>-->
-
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Level:</label>
+    <select class="form-select" [(ngModel)]="searchRequest.TradeLevelID">
+      <option value="0">--Choose Option--</option>
+      <option value="8">8th</option>
+      <option value="10">10th</option>
+      <option value="12">12th</option>
+    </select>
+  </div>-->
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Trade:
-            </label>
-            <select class="form-select w-full" [(ngModel)]="searchRequest.TradeId">
-              <option value="0" disabled selected hidden>--Choose Option--</option>
-              <option *ngFor="let item of ItiTradeList" [value]="item.Id">{{item.TradeName}}</option>
-            </select>
-          </div>-->
-
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Type:</label>
+    <select class="form-select" [(ngModel)]="searchRequest.TradeTypeID">
+      <option value="0">--Choose Option--</option>
+      <option value="1">Eng</option>
+      <option value="2">Non-Eng</option>
+    </select>
+  </div>-->
           <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By Trade:
+    </label>
+    <select class="form-select w-full" [(ngModel)]="searchRequest.TradeId">
+      <option value="0" disabled selected hidden>--Choose Option--</option>
+      <option *ngFor="let item of ItiTradeList" [value]="item.Id">{{item.TradeName}}</option>
+    </select>
+  </div>-->
+          <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllotedSeatByCollegeList()">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Reset</button>
-          </div>-->
+          </div>
 
         </div>
 
@@ -101,9 +130,12 @@
               <th class="text-left" rowspan="2">Shift</th>
               <th class="text-left" rowspan="2">Unit</th>
               <th class="text-left" rowspan="2">Scheme</th>
+              <th class="text-left" rowspan="2">Management_Type</th>
               <th class="text-left" rowspan="2">Phase</th>
               <th class="text-left" rowspan="2">ReportingTime</th>
               <th class="text-left" rowspan="2">State_Reg_no</th>
+              <th class="text-left" rowspan="2">Gender</th>
+              <th class="text-left" rowspan="2">PRN Status</th>
             </tr>
 
           </thead>
@@ -120,9 +152,12 @@
               <td>{{ item.Shift }}</td>
                <td>{{ item.Unit }}</td>
                <td>{{ item.Scheme }}</td>
+               <td>{{ item.InstitutionManagementType }}</td>
               <td>{{ item.Phase}}</td>
               <td>{{ item.ReportingTime }}</td>
               <td>{{ item.State_Reg_no }}</td>
+              <td>{{ item.StudentGender }}</td>
+              <td>{{ item.PRNStatus }}</td>
             </tr>
           </tbody>
         </table>

@@ -46,7 +46,9 @@
                 <div>{{request.MotherNameHindi}}</div>
 
                 <div><b>आधार नंबर  (Aadhar Number):</b></div>
-                <div>{{request.AadharNo}}</div>
+                <!--<div>{{request.AadharNo ? 'XXXXXXXX' + request.AadharNo.slice(-4) : '' }}</div>-->
+              <div>{{request.AadharNo  ? 'XXXX-XXXX-' + request.AadharNo.slice(-4) : ''  }}</div>
+
 
                 <div><b>लिंग (Gender):</b></div>
                 <div>{{request.Gender}}</div>
@@ -67,7 +69,7 @@
                 <div>{{request.Email}}</div>
 
                 <div><b>मोबाइल नंबर (Mobile Number):</b></div>
-                <div>{{request.MobileNo}}</div>
+                <div>{{request.MobileNo? 'XXXXXX' + request.MobileNo.slice(-4) : ''}}</div>
 
                 <div>
                   <b>श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC):</b>
