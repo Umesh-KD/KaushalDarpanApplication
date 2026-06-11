@@ -278,10 +278,12 @@
       </div>
 
       <!-- Empty state -->
-      <div [hidden]="notifications.length > 0" ...>
-        class="flex flex-col items-center justify-center py-8 text-muted-foreground">
+      <div [hidden]="notifications.length > 0"
+           class="flex flex-col items-center justify-center py-8 text-muted-foreground">
+
         <i class="bi bi-bell-slash text-3xl mb-2 opacity-30"></i>
-        <p class="text-xs">No notifications</p>
+        <p class="text-xs mb-0">No notifications</p>
+
       </div>
     </div>
 
@@ -486,7 +488,7 @@
     </div>
   </section>-->
   <section class="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-5">
-    <div class="dash-card h-100">
+    <div class="dash-card h-100 bg-card rounded-xl ring-1 ring-border shadow-soft p-5 card-box-new">
       <div class="dash-card-header new-card-header flex items-center justify-between">
         <h6 class="mb-0 box-heading-mange">
           Guest House Requests
@@ -514,7 +516,7 @@
           </div>
 
           <!-- Legend -->
-          <div class="flex-grow-1">
+          <div class="flex-grow-1 w-full">
 
             <div *ngFor="let item of dashboardData.GUESTHOUSE_CHART; let i = index"
                  class="transfer-legend-row flex items-center justify-between mb-3">
@@ -551,7 +553,7 @@
 
       </div>
     </div>
-    <div class="dash-card h-100">
+    <div class="dash-card h-100 bg-card rounded-xl ring-1 ring-border shadow-soft p-5 card-box-new">
 
       <div class="dash-card-header new-card-header flex items-center justify-between">
 
@@ -582,7 +584,7 @@
           </div>
 
           <!-- Legend -->
-          <div class="flex-grow-1">
+          <div class="flex-grow-1 w-full">
 
             <div *ngFor="let item of dashboardData.TRANSFER_CHART; let i = index"
                  class="transfer-legend-row flex items-center justify-between mb-3">

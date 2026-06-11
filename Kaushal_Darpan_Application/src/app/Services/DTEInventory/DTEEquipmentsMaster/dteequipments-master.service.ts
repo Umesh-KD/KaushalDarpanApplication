@@ -66,7 +66,13 @@ export class DTEEquipmentsMasterService {
       ).toPromise();
   }
 
-
+  public async GetDynamicReportData(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetDynamicReportData', request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
  
 
 }

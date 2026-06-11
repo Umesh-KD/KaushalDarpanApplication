@@ -7,3 +7,11 @@ export class DTEItemUnitModel {
   public ModifyBy: number = 0;
   public DepartmentID: number = 0;
 }
+export class DashboardRequestModel {
+  public Action: string = '';
+  public RoleID: number = 0;
+  public DepartmentID: number = 0;
+  public Status: number = 0;
+  public UserID: number = 0;
+  public InstituteID: number = 0;
+}

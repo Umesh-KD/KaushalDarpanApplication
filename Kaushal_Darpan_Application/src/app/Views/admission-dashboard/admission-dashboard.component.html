@@ -1,0 +1,319 @@
+<main class="flex-1 p-6 space-y-6">
+
+
+
+
+  <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+    <div *ngFor="let item of dashboardData; let i = index">
+
+      <div class="rounded-xl p-5 ring-1 ring-black/[0.03] shadow-soft hover:shadow-card transition-shadow main-data-box"
+           [ngClass]="getCardBg(i)">
+        <div class="flex items-start gap-4">
+          <div class="text-white w-12 h-12 rounded-xl flex items-center justify-center shadow-sm flex-shrink-0"
+               [ngClass]="getCardIconBg(i)">
+            <i class="bi text-lg" [ngClass]="getTopCardIcon(item.icon || item.menuCode)"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-foreground leading-tight m-0">{{ item.title }}</p>
+            <p class="text-3xl font-bold mt-1" [ngClass]="getCardTextColor(i)">
+              {{ item.TotalCount | number:'1.0-0' }}<span *ngIf="item.Type === 'SeatMetrix'" class="text-lg">%</span>
+            </p>
+            <p class="text-xs text-muted-foreground mt-1">
+              {{ item.SubTitle || 'This Month' }}
+            </p>
+          </div>
+        </div>
+        <div class="mt-3 grid grid-cols-2 gap-2">
+          <div class="rounded-xl bg-muted/60 px-3 py-2.5 border border-border/60">
+            <div class="text-[10.5px] font-semibold  tracking-wider text-muted-foreground">{{item.SubTitle1}}</div><div class="text-[15px] font-bold mt-0.5 ">
+              {{item.SubCount1 | number:'1.0-0'}}
+              <span *ngIf="item.Type === 'SeatMetrix'" class="text-lg">%</span>
+            </div>
+          </div><div class="rounded-xl bg-muted/60 px-3 py-2.5 border border-border/60">
+            <div class="text-[10.5px] font-semibold  tracking-wider text-muted-foreground">{{item.SubTitle2}} </div>
+            <div class="text-[15px] font-bold mt-0.5 ">{{item.SubCount2 | number:'1.0-0' }} <span *ngIf="item.Type === 'SeatMetrix'" class="text-lg">%</span></div>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-black/5 text-xs">
+          <a *ngIf="item.url" [href]="'/' + item.url"
+             class="inline-flex items-center gap-1 font-medium hover:underline"
+             [ngClass]="getCardTextColor(i)">
+            View all <i class="bi bi-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <section class="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-5">
+
+    <!-- Recent Notifications -->
+    <div class="bg-card rounded-xl ring-1 ring-border shadow-soft p-5 card-box-new d-flex flex-column" style="height:100%;">
+      <div class="xl:col-span-3">
+        <div class="card-elevated card-elevated-hover h-full">
+          <div class="flex items-start justify-between gap-3">
+            <div class="new-card-header ">
+              <h3 class="box-heading-mange text-[15px] font-bold tracking-tight m-0">Real-Time Registration Funnel</h3>
+              <p class="text-[12px] text-muted-foreground mt-0.5">Stage-wise conversion across the admissions journey</p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full text-primary bg-primary/10">
+              <span class="h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></span>
+              Live
+            </span>
+          </div>
+          <div class="mt-6 grid grid-cols-5 gap-2 sm:gap-3">
+            <div class="relative flex flex-col items-center text-center">
+              <div class="h-14 w-14 rounded-2xl grid place-items-center text-white shadow-lg relative icon-box" style="background:linear-gradient(135deg, #2563EBcc, #2563EB);box-shadow:0 10px 24px -10px #2563EB99">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-users h-5 w-5" aria-hidden="true">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+                <span class="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-white text-[10px] font-bold grid place-items-center border border-border" style="color:#2563EB">1</span>
+              </div>
+              <div class="mt-3 text-[11.5px] font-semibold text-foreground">Registered</div>
+              <div class="mt-1 text-[16px] font-bold tracking-tight">3,12,456</div>
+              <div class="text-[11px] font-semibold text-primary">100.00<!-- -->%</div>
+            </div>
+            <div class="relative flex flex-col items-center text-center">
+              <div class="h-14 w-14 rounded-2xl grid place-items-center text-white shadow-lg relative icon-box" style="background:linear-gradient(135deg, #06B6D4cc, #06B6D4);box-shadow:0 10px 24px -10px #06B6D499">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text h-5 w-5" aria-hidden="true">
+                  <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path>
+                  <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                  <path d="M10 9H8"></path>
+                  <path d="M16 13H8"></path>
+                  <path d="M16 17H8"></path>
+                </svg>
+                <span class="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-white text-[10px] font-bold grid place-items-center border border-border" style="color:#06B6D4">2</span>
+              </div>
+              <div class="mt-3 text-[11.5px] font-semibold text-foreground">Form Submitted</div>
+              <div class="mt-1 text-[16px] font-bold tracking-tight">2,45,678</div>
+              <div class="text-[11px] font-semibold text-primary">78.67<!-- -->%</div>
+            </div>
+            <div class="relative flex flex-col items-center text-center">
+              <div class="h-14 w-14 rounded-2xl grid place-items-center text-white shadow-lg relative icon-box"
+                   style="background:linear-gradient(135deg, #16A34Acc, #16A34A);box-shadow:0 10px 24px -10px #16A34A99">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet h-5 w-5" aria-hidden="true">
+                  <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path>
+                  <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path>
+                </svg>
+                <span class="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-white text-[10px] font-bold grid place-items-center border border-border" style="color:#16A34A">3</span>
+              </div>
+              <div class="mt-3 text-[11.5px] font-semibold text-foreground">Fees Submitted</div>
+              <div class="mt-1 text-[16px] font-bold tracking-tight">2,15,432</div>
+              <div class="text-[11px] font-semibold text-primary">68.99<!-- -->%</div>
+            </div><div class="relative flex flex-col items-center text-center">
+              <div class="h-14 w-14 rounded-2xl grid place-items-center text-white shadow-lg relative icon-box"
+                   style="background:linear-gradient(135deg, #F59E0Bcc, #F59E0B);box-shadow:0 10px 24px -10px #F59E0B99">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-id-card h-5 w-5" aria-hidden="true">
+                  <path d="M16 10h2"></path>
+                  <path d="M16 14h2"></path>
+                  <path d="M6.17 15a3 3 0 0 1 5.66 0"></path>
+                  <circle cx="9" cy="11" r="2"></circle>
+                  <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                </svg>
+                <span class="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-white text-[10px] font-bold grid place-items-center border border-border" style="color:#F59E0B">4</span>
+              </div><div class="mt-3 text-[11.5px] font-semibold text-foreground">PRN Generated</div>
+              <div class="mt-1 text-[16px] font-bold tracking-tight">2,03,456</div>
+              <div class="text-[11px] font-semibold text-primary">65.14<!-- -->%</div>
+            </div><div class="relative flex flex-col items-center text-center">
+              <div class="h-14 w-14 rounded-2xl grid place-items-center text-white shadow-lg relative icon-box"
+                   style="background:linear-gradient(135deg, #7C3AEDcc, #7C3AED);box-shadow:0 10px 24px -10px #7C3AED99">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                     class="lucide lucide-shield-check h-5 w-5" aria-hidden="true">
+                  <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1
+                                                                                   1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                  <path d="m9 12 2 2 4-4"></path>
+                </svg><span class="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-white text-[10px] font-bold grid place-items-center border border-border"
+                            style="color:#7C3AED">5</span>
+              </div>
+              <div class="mt-3 text-[11.5px] font-semibold text-foreground">Choice Filled</div>
+              <div class="mt-1 text-[16px] font-bold tracking-tight">1,85,672</div>
+              <div class="text-[11px] font-semibold text-primary">59.43<!-- -->%</div>
+            </div>
+          </div>
+          <div class="mt-5 h-2.5 rounded-full bg-muted overflow-hidden relative">
+            <div class="absolute top-0 bottom-0" style="left:0%;width:26.865110281277705%;background:#2563EB;opacity:0.85"></div>
+            <div class="absolute top-0 bottom-0" style="left:26.865110281277705%;width:21.13478225828117%;background:#06B6D4;opacity:0.85"></div>
+            <div class="absolute top-0 bottom-0" style="left:47.99989253955887%;width:18.534239583053484%;background:#16A34A;opacity:0.85"></div>
+            <div class="absolute top-0 bottom-0" style="left:66.53413212261236%;width:17.499932837224296%;background:#F59E0B;opacity:0.85"></div>
+            <div class="absolute top-0 bottom-0" style="left:84.03406495983667%;width:15.96593504016334%;background:#7C3AED;opacity:0.85"></div>
+          </div><div class="mt-4 flex items-center justify-between text-[12px] text-muted-foreground">
+            <div class="inline-flex items-center gap-2">
+              <span class="h-2 w-6 rounded-full bg-primary"></span> Conversion rate (%)
+            </div>
+            <div class="font-semibold text-foreground">
+              Overall: <span class="text-primary">59.43%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-card rounded-xl ring-1 ring-border shadow-soft p-5 card-box-new d-flex flex-column" style="height:100%;">
+      <div class="flex items-center justify-between new-card-header mb-4">
+        <h3 class="font-semibold box-heading-mange m-0">Recent Notifications</h3>
+        <a href="/ViewContentList" class="inline-flex items-center gap-1 text-xs font-medium text-primary px-2.5 py-1.5 rounded-md border border-primary/20 hover:bg-primary/5 transition-colors">
+          View all
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+               stroke-linejoin="round" class="lucide lucide-arrow-up-right w-3.5 h-3.5">
+            <path d="M7 7h10v10"></path>
+            <path d="M7 17 17 7"></path>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Scrollable list -->
+      <!-- Scrollable list -->
+      <div class="notif-scroll-container"
+           [hidden]="notifications.length === 0">
+
+        <div class="notif-scroll-content">
+
+          <ng-container *ngFor="let n of notifications; let i = index">
+
+            <div class="notif-list-item flex items-start gap-3">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                   [ngClass]="getNotifIconBg(i)">
+                <i class="bi text-sm"
+                   [ngClass]="getNotifIcon(n.TypeName || n.title)">
+                </i>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium leading-snug m-0">
+                  {{ n.Title }}
+                </p>
+                <p class="text-xs text-muted-foreground m-0">
+                  {{ n.TypeName }}
+                </p>
+              </div>
+
+              <span class="text-xs text-muted-foreground">
+                {{ n.timeAgoText }}
+              </span>
+            </div>
+
+          </ng-container>
+
+          <!-- duplicate -->
+          <ng-container *ngFor="let n of notifications; let i = index">
+
+            <div class="notif-list-item flex items-start gap-3">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                   [ngClass]="getNotifIconBg(i)">
+                <i class="bi text-sm"
+                   [ngClass]="getNotifIcon(n.TypeName || n.title)">
+                </i>
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium leading-snug m-0">
+                  {{ n.Title }}
+                </p>
+                <p class="text-xs text-muted-foreground m-0">
+                  {{ n.TypeName }}
+                </p>
+              </div>
+
+              <span class="text-xs text-muted-foreground">
+                {{ n.timeAgoText }}
+              </span>
+            </div>
+
+          </ng-container>
+
+        </div>
+
+      </div>
+
+      <!-- Empty state -->
+      <div [hidden]="notifications.length > 0"
+           class="flex flex-col items-center justify-center py-8 text-muted-foreground">
+
+        <i class="bi bi-bell-slash text-3xl mb-2 opacity-30"></i>
+        <p class="text-xs mb-0">No notifications</p>
+
+      </div>
+    </div>
+
+    <!-- Attendance Summary -->
+
+
+  </section>
+
+  <section class="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 gap-5">
+    <div class="dash-card h-100 bg-card rounded-xl ring-1 ring-border shadow-soft p-5 card-box-new">
+      <div class="dash-card-header new-card-header flex items-center justify-between">
+        <h6 class="mb-0 box-heading-mange">
+          Reservation Quota Distribution
+
+        </h6>
+
+        <a href="/UserRequestList"
+           class="inline-flex items-center gap-1 text-xs font-medium text-primary px-2.5 py-1.5 rounded-md border border-primary/20 hover:bg-primary/5 transition-colors">
+          View all <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="dash-card-body card-chrt">
+
+        <div class="flex items-center gap-4">
+
+          <!-- Chart -->
+          <div class="transfer-chart-wrap">
+
+            <highcharts-chart *ngIf="guestHouseChartOptions"
+                              [Highcharts]="Highcharts"
+                              [options]="guestHouseChartOptions"
+                              style="width:220px;height:220px;display:block;">
+            </highcharts-chart>
+
+          </div>
+
+          <!-- Legend -->
+          <div class="flex-grow-1 w-full">
+
+            <div *ngFor="let item of GUESTHOUSE_CHART; let i = index"
+                 class="transfer-legend-row flex items-center justify-between mb-3">
+
+              <div class="flex items-center gap-2">
+
+                <span class="legend-dot"
+                      [ngClass]="'ldot-' + i">
+                </span>
+
+                <span class="legend-label">
+                  {{item.title}}
+                </span>
+
+              </div>
+
+              <div class="flex items-center gap-3">
+
+                <span class="legend-count">
+                  {{item.totalCount}}
+                </span>
+
+                <span class="legend-pct">
+                  ({{getGuestHousePercent(item.totalCount)}})
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+  </section>
+</main>

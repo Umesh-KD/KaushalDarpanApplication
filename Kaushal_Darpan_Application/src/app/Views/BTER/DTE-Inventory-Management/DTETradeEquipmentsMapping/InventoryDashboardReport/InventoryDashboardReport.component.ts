@@ -22,15 +22,17 @@ import { DTEItemsSearchModel, itemStatusRevertModel } from '../../../../../Model
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 @Component({
-  selector: 'app-dtetrade-equipments-mapping-list',
-  templateUrl: './dtetrade-equipments-mapping-list.component.html',
-  styleUrls: ['./dtetrade-equipments-mapping-list.component.css'],
+  selector: 'app-InventoryDashboardReport',
+  templateUrl: './InventoryDashboardReport.component.html',
+  styleUrls: ['./InventoryDashboardReport.component.css'],
   standalone: false
 })
-export class DteTradeEquipmentsMappingListComponent {
+export class InventoryDashboardReportComponent {
   public Searchrequest = new DTESearchTradeEquipmentsMapping()
   public SearchItemReq = new DTEItemsSearchModel()
   public isLoading: boolean = false;
@@ -57,6 +59,8 @@ export class DteTradeEquipmentsMappingListComponent {
   public searchTradeRequest = new ITITradeSearchModel();
   public request = new DTETradeEquipmentsMappingData()
   public Revertrequest = new itemStatusRevertModel();
+  public DynamicColumns: string[] = [];
+  public DynamicRows: any[] = [];
 
   constructor(
     private toastr: ToastrService,
@@ -85,7 +89,8 @@ export class DteTradeEquipmentsMappingListComponent {
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
-    await this.GetAllData();
+    /*await this.GetAllData();*/
+    await this.LoadDynamicReport();
     await this.GetTradeDDL();
     await this.GetEquipmentDDL();
     await this.GetCategoryDDL();
@@ -207,7 +212,8 @@ export class DteTradeEquipmentsMappingListComponent {
   async ResetControl() {
     this.isSubmitted = false;
     this.Searchrequest = new DTESearchTradeEquipmentsMapping();
-    await this.GetAllData();
+    // await this.GetAllData();
+    await this.LoadDynamicReport();
     //this.SearchRequestFormGroup.reset({
     //  EquipmentId: 0,
     //  TradeId: 0,
@@ -316,24 +322,7 @@ debugger;
         }
       });
   }
-  exportToExcel(): void {
-    this.MappingList1 = this.MappingList1.map((item: any) => {
-      const updatedItem = {
-        InstituteName: item.InstituteName ?? "BTER",
-        ItemCategoryName: item.ItemCategoryName,
-        EquipmentsName: item.EquipmentsName,
-        Quantity: item.Quantity,
-        EquipmentsStatus: item.EquipmentsStatus
-      }
-
-      return updatedItem;
-    });
-
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.MappingList1);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Inventory_Reports.xlsx');
-  }
+ 
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;
@@ -369,9 +358,7 @@ debugger;
 
     try {
 
-
       if (this.Ids) {
-
 
         if (this.Revertrequest.Remark == '') {
           this.toastr.warning('Please Fill Remark');
@@ -416,15 +403,99 @@ debugger;
 
       }, 200);
     }
-
-
-  }
+    }
 
   CloseModal() {
     this.modalService.dismissAll();
     this.modalReference?.close();
     this.Revertrequest.Remark = '';
     this.isSubmitted = false;
+  }
+
+  async LoadDynamicReport() {
+    try {
+      debugger
+      this.loaderService.requestStarted();
+
+      let request = new DTETradeEquipmentsMappingData();
+
+      request.CategoryId = this.Searchrequest.CategoryId;
+      request.EquipmentId = this.Searchrequest.EquipmentId;
+
+      await this.tradeEquipmentsMappingService
+        .GetDynamicReportData(request)
+        .then((data: any) => {
+
+          data = JSON.parse(JSON.stringify(data));
+
+          this.State = data.State;
+
+          if (this.State == EnumStatus.Success) {
+            if (data.Data && data.Data.Table) {
+
+              this.MappingList = data.Data.Table;
+
+              this.DynamicColumns = Object.keys(this.MappingList[0]);
+
+              console.log(this.MappingList);
+              console.log(this.DynamicColumns);
+            
+            }
+          }
+        });
+
+    } catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
+  exportToExcel(): void {
+
+    if (!this.MappingList || this.MappingList.length === 0) {
+      this.toastr.warning('No data available for export');
+      return;
+    }
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.MappingList);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      wb,
+      ws,
+      'Inventory Dashboard Report'
+    );
+
+    XLSX.writeFile(
+      wb,
+      'InventoryDashBoard_Report.xlsx'
+    );
+  }
+
+
+  exportToPDF(): void {
+
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    const headers = [['Sr. No.', ...this.DynamicColumns]];
+
+    const body = this.MappingList.map((row: any, index: number) => [
+      index + 1,
+      ...this.DynamicColumns.map(col => row[col] ?? '')
+    ]);
+
+    autoTable(doc, {
+      head: headers,
+      body: body,
+      startY: 20,
+      theme: 'grid'
+    });
+
+    doc.save('InventoryDashBoard_Report.pdf');
   }
 
 }
