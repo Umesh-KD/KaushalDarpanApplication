@@ -76,6 +76,8 @@ export class ITIsComponent implements OnInit {
   public SemesterDetails: any[] = [];//copy of main data
   ManagementTypeId: number = 0;
   IsCampus: number = 0;
+  flag: number = 0;
+  key: number = 0;
   //end table feature default
 
   constructor(
@@ -90,7 +92,8 @@ export class ITIsComponent implements OnInit {
     private modalService: NgbModal,
     private Swal2: SweetAlert2, private renderer: Renderer2,
     private appsettingConfig: AppsettingService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   async ngOnInit() {
@@ -109,7 +112,9 @@ export class ITIsComponent implements OnInit {
       check10th: [false],
       check12th: [false]
     });
-    
+
+    this.flag = Number(this.activatedRoute.snapshot.queryParamMap.get('flag')?.toString());
+    this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());
 
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchrequest.FeeStatus = -1;
@@ -144,6 +149,18 @@ export class ITIsComponent implements OnInit {
         this.searchrequest.IsCampus = isCampus;
       }
     });
+
+    if (this.key != 0) {
+      if (this.flag == 1 && this.key == 1) {
+        this.searchrequest.ITItypeID = 1;
+      }
+      else if (this.flag == 1 && this.key == 5) {
+        this.searchrequest.ITItypeID = 5;
+      }
+      else if (this.flag == 2 && this.key == 1) {
+        this.searchrequest.Status = 1;
+      }
+    }
     await this.GetAllData();
 
 

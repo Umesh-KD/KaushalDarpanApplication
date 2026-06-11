@@ -47,6 +47,8 @@ export class ListItiTradeComponent {
   public totalInTableRecord: number = 0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   TradeTypeId: number = 0;
+  flag: number = 0;
+  key: number = 0;
   //end table feature default
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -58,7 +60,10 @@ export class ListItiTradeComponent {
     private routers: ActivatedRoute,
     private modalService: NgbModal,
     private Swal2: SweetAlert2
-    , private route: ActivatedRoute) {
+    , private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute
+
+  ) {
   }
 
   async ngOnInit()
@@ -73,6 +78,10 @@ export class ListItiTradeComponent {
     await this.GetTradeListDDL();
 
 
+    this.flag = Number(this.activatedRoute.snapshot.queryParamMap.get('flag')?.toString());
+    this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());
+
+
     this.route.queryParams.subscribe(params => {
       this.TradeTypeId = +params['TradeTypeId']; 
 
@@ -80,6 +89,15 @@ export class ListItiTradeComponent {
         this.searchRequest.TradeTypeId = this.TradeTypeId;
       }
     });
+
+    if (this.key != 0) {
+      if (this.flag == 4 && this.key == 1) {
+        this.searchRequest.TradeTypeId = 1;
+      }
+      else if (this.flag == 4 && this.key == 2) {
+        this.searchRequest.TradeTypeId = 2;
+      }
+    }
     await this.getTradeList()
 
   }
