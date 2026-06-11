@@ -20,6 +20,10 @@ import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { OTPModalComponent } from '../../../../otpmodal/otpmodal.component';
+
+
+
 @Component({
   selector: 'app-transfer-request-accept',
   standalone: false,
@@ -47,6 +51,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public UserRequestList: any[] = [];
   public filteredStatusList: any[] = [];
   public DesignationMasterList: any[] = [];
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public ITIGovtEMOFFICERSList: any[] = [];
   public StaffTypeList: any[] = []
@@ -108,6 +113,8 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public totalInTableRecord: number = 0;
   public PostMessage: string = '';
   public PostCheckValue: number = 0;
+
+
   constructor(
     private commonMasterService: CommonFunctionService, 
     private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
@@ -494,6 +501,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   }
 
   async refreshValidators() {
+    debugger
     if(this.RequestUpdateStatus.StatusIDs!=247) {
       this.groupForm.get('txtJoiningDate')?.clearValidators();
       this.groupForm.get('JoiningTimeID')?.clearValidators();
@@ -511,6 +519,9 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   }
   async UserRequestJoiningApprove_ITI_EM() {
     debugger
+
+   
+
     await this.refreshValidators();
     this.isSubmitted = true;
     this.groupForm.get('txtLastworkingDate')?.clearValidators();
@@ -543,43 +554,77 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.isLoading = true;
 
 
-    this.Swal2.Confirmation("Are you sure you want to update request ?",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
-            this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-            this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
-            this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
-            this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno;
 
-            await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
-              .then(async (data: any) => {
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+    // await OTP verification
+    await this.childComponent.waitForVerification();
 
-                if (data.State == EnumStatus.Success) {
-                  this.toastr.success(data.Message)
-                  this.CloseModal();
-                  this.getlist();
-                  this.RequestUpdateStatus = new RequestUpdateStatus();
-                }
-                else if (data.State == EnumStatus.Warning) {
-                  this.toastr.warning(data.Message)
-                }
-                else {
-                  this.toastr.error(data.ErrorMessage)
-                }
-              })
-          }
-          catch (ex) { console.log(ex) }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-              this.isLoading = false;
-            }, 200);
-          }
+
+    this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+    this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+    this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+    this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+
+    await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
+      .then(async (data: any) => {
+
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message)
+          this.CloseModal();
+          this.getlist();
+          this.RequestUpdateStatus = new RequestUpdateStatus();
+        }
+        else if (data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+        }
+        else {
+          this.toastr.error(data.ErrorMessage)
         }
       });
+
+
+   /* --------------------*/
+
+    //this.Swal2.Confirmation("Are you sure you want to update request ?",
+    //  async (result: any) => {
+    //    //confirmed
+    //    if (result.isConfirmed) {
+    //      try {
+    //        this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+    //        this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    //        this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+    //        this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+    //        this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+
+    //        await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
+    //          .then(async (data: any) => {
+
+    //            if (data.State == EnumStatus.Success) {
+    //              this.toastr.success(data.Message)
+    //              this.CloseModal();
+    //              this.getlist();
+    //              this.RequestUpdateStatus = new RequestUpdateStatus();
+    //            }
+    //            else if (data.State == EnumStatus.Warning) {
+    //              this.toastr.warning(data.Message)
+    //            }
+    //            else {
+    //              this.toastr.error(data.ErrorMessage)
+    //            }
+    //          })
+    //      }
+    //      catch (ex) { console.log(ex) }
+    //      finally {
+    //        setTimeout(() => {
+    //          this.loaderService.requestEnded();
+    //          this.isLoading = false;
+    //        }, 200);
+    //      }
+    //    }
+    //  });
   }
 
   async onSubmitModel_VRS(model: any, userSubmitData: any) {

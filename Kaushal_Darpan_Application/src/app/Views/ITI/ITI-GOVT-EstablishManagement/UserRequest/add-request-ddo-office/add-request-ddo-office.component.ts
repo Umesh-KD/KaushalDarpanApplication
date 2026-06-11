@@ -368,7 +368,7 @@ export class AddRequestDDOOfficeComponent {
     await this.GetRelieving_joining_CheckVacantPostModel();
 
 
-    this.Swal2.Confirmation(this.PostMessage,
+    this.Swal2.Confirmation("Are you sure you want to make transfer request",
       async (result: any) => {
         //confirmed
         if (result.isConfirmed) {
