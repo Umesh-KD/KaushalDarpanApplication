@@ -16,6 +16,9 @@ export class StaffIFMSDataComponent implements OnInit {
   AddedEducationList: ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel[] = [];
   public educationDetailsRequest = new ITI_Govt_EM_PersonalDetailByUserIDSearchModel();
   public ssoid: string = '';
+  public StaffUserID: number = 0;
+  public ServiceDetailsList: any[] = [];
+
   async ngOnInit() 
   {
     
@@ -23,11 +26,16 @@ export class StaffIFMSDataComponent implements OnInit {
      this.route.queryParams.subscribe(params => {
 
         this.ssoid = params['ssoid'];
+        this.StaffUserID = params['StaffUserID']; 
 
        if (this.ssoid) {
          this.GetIFMSDATA(this.ssoid);
          this.GetEducationDetails();
     }
+
+      if (this.StaffUserID > 0) {
+    this.GetServiceDetails();
+  }
 
   });
   }
@@ -155,4 +163,33 @@ async GetIFMSDATA(SSOID: any) {
     }
 
   }
+
+  async GetServiceDetails() {
+  try {
+    this.loaderService.requestStarted();
+
+    const request = {
+      Action: 'ServiceDetailsOfPersonnel',
+      StaffUserID: this.StaffUserID
+    };
+
+    await this.ITIGovtEMStaffMasterService.GetServiceDetailIFMS(request)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+
+        if (data.State === EnumStatus.Success) {
+          this.ServiceDetailsList = data.Data || [];
+        } else {
+          this.ServiceDetailsList = [];
+        }
+      }, error => console.error(error));
+
+  } catch (ex) {
+    console.log(ex);
+  } finally {
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+  }
+}
 }

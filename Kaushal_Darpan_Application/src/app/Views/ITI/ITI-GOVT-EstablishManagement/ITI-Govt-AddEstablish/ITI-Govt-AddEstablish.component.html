@@ -495,7 +495,7 @@
       </a> -->
 
                 <a target="_blank" [routerLink]="['/StaffIFMSData']"
-                   [queryParams]="{ ssoid: row.SSOID }"
+                   [queryParams]="{ ssoid: row.SSOID,StaffUserID:row.StaffUserID }"
                    title="Assign Status" *ngIf="row.IsFromIFMS == 1">
 
                   <i class="ti ti-eye"></i>
