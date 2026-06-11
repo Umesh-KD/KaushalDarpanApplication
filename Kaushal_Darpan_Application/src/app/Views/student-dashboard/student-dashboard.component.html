@@ -338,9 +338,16 @@
 
     <td style="text-align:center;">
 
-        <a class="btn-marksheet"
+        <!-- <a class="btn-marksheet"
            target="_blank"
            href="{{appsettingConfig.StaticFileRootPathURL+ row.MarksheetFilePath}}">
+
+            View Marksheet
+
+        </a> -->
+          <a class="btn-marksheet"
+           target="_blank"
+           (click)="DownloadMarksheet(row)">
 
             View Marksheet
 

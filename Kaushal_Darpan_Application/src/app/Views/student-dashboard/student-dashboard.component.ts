@@ -16,6 +16,9 @@ import { EncryptionService } from '../../Services/EncryptionService/encryption-s
 import { MenuByUserAndRoleWiseModel } from '../../Models/MenuByUserAndRoleWiseModel';
 import { MenuService } from '../../Services/Menu/menu.service';
 import { MasterLayoutComponent } from '../Shared/master-layout/master-layout.component';
+import { DownloadMarksheetSearchModel } from '../../Models/DownloadMarksheetDataModel';
+import { ReportService } from '../../Services/Report/report.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -46,6 +49,7 @@ export class StudentDashboardComponent implements OnInit {
   public IsShowDashboard: boolean = false;
   StudentRecentActivityList: any[] = [];
   StudentMarksheetList: any[] = [];
+  public downloadReq = new DownloadMarksheetSearchModel();
 
 
 
@@ -73,7 +77,10 @@ export class StudentDashboardComponent implements OnInit {
     private Swal2: SweetAlert2, 
     private route: Router,
     private menuService: MenuService,
-    private parent: MasterLayoutComponent   
+    private parent: MasterLayoutComponent,
+    private reportService: ReportService,  
+    private http: HttpClient,
+     
   ) { }
   
   async ngOnInit()
@@ -414,4 +421,63 @@ async GetStudentMarksheetList() {
     this.StudentMarksheetList = [];
   }
 }
+
+async DownloadMarksheet(row: any) {
+    debugger
+    //debugger
+    try {
+      this.downloadReq.DepartmentID = row.DepartmentID;
+      this.downloadReq.Eng_NonEngID = row.Eng_NonEng;
+      //this.downloadReq.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.downloadReq.EndTermID = row.EndTermID;
+      
+      this.downloadReq.StudentID = row.StudentID;
+      this.downloadReq.SemesterID = row.SemesterID;
+      this.downloadReq.ResultTypeID = row.ResultTypeID;
+      this.downloadReq.IsRevised = row.IsRevised;
+      this.downloadReq.IsReval = row.IsReval;
+      console.log(JSON.stringify(this.downloadReq),'SearchRequestData')
+      const requestArray = [this.downloadReq];
+      this.loaderService.requestStarted();
+
+      await this.reportService.DownloadMarksheet(this.downloadReq)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data, "Data");
+          if (data.State == EnumStatus.Success) {
+            this.DownloadFile(data.Data, row.RollNo);
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+            //    data.ErrorMessage
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  DownloadFile(FileName: string, DownloadfileName: any): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('pdf', DownloadfileName); 
+      downloadLink.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+  generateFileName(extension: string, name: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    return `Marksheet_${name}_${timestamp}.${extension}`;
+  }
 }
