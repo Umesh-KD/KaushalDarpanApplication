@@ -356,23 +356,45 @@
       </div>-->
 
 
-            <div *ngIf="request.ViewTypeIDs=='10366'">
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post</label>
-              <ng-select appendTo="body" formControlName="DesignationID" [items]="PostList" bindLabel="Name"
-                         bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
-                         placeholder="--Select Branch--">
-                <ng-template ng-option-tmp let-item="item" let-item$="item$">
-                  <input type="checkbox" [checked]="item$.selected" class="me-2" />
-                  {{ item.Name }}
-                </ng-template>
-              </ng-select>
-              <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.DesignationID.errors" class="text-danger">
-                <p *ngIf="_HighlightsFromGroup.DesignationID.errors.required">
-                  <i aria-hidden="true"></i>This field is required .!
-                </p>
-              </div>
-            </div>
+          <div *ngIf="request.ViewTypeIDs=='10366'">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Post
+            </label>
 
+            <ng-select appendTo="body"
+                       formControlName="DesignationID"
+                       [items]="PostList"
+                       bindLabel="Name"
+                       bindValue="ID"
+                       [multiple]="true"
+                       [closeOnSelect]="false"
+                       [searchable]="true"
+                       placeholder="--Select Post--">
+
+              <ng-template ng-header-tmp>
+                <div class="px-2 py-2 border-bottom">
+                  <input type="checkbox"
+                         [checked]="isAllSelected()"
+                         (change)="toggleSelectAll($event)"
+                         class="me-2" />
+                  <span>Select All</span>
+                </div>
+              </ng-template>
+
+              <ng-template ng-option-tmp let-item="item" let-item$="item$">
+                <input type="checkbox" [checked]="item$.selected" class="me-2" />
+                {{ item.Name }}
+              </ng-template>
+
+            </ng-select>
+
+            <div *ngIf="isFormSubmitted && _HighlightsFromGroup.DesignationID.errors"
+                 class="text-danger">
+              <p *ngIf="_HighlightsFromGroup.DesignationID.errors.required">
+                This field is required .!
+              </p>
+            </div>
+          </div>
 
 
 

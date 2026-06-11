@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
 import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
@@ -37,7 +37,7 @@ export class SeatIntakePlanningComponent {
   public SeatIntakeDataList: any = [];
   public Table_SearchText: string = '';
   public SeatIntakeIDnew: number = 0;
-
+  public _enumrole = EnumRole
   State: any;
   Message: any;
   ErrorMessage: any;

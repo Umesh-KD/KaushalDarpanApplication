@@ -566,5 +566,29 @@ export class HighlightsComponent {
     this.request = new WebsiteSettingDataModel()
     this.HighlightsFromGroup.reset()
   }
+  toggleSelectAll(event: any): void {
+    const checked = event.target.checked;
 
+    if (checked) {
+      const allIds = this.PostList.map((x: any) => x.ID);
+
+      this.HighlightsFromGroup.patchValue({
+        DesignationID: allIds
+      });
+    } else {
+      this.HighlightsFromGroup.patchValue({
+        DesignationID: []
+      });
+    }
+  }
+
+  isAllSelected(): boolean {
+    const selected =
+      this.HighlightsFromGroup.get('DesignationID')?.value || [];
+
+    return (
+      this.PostList?.length > 0 &&
+      selected.length === this.PostList.length
+    );
+  }
 }
