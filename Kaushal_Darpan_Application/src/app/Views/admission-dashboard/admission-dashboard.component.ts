@@ -32,6 +32,21 @@ export class AdmissionDashboardComponent {
   public guestHouseChartOptions: Highcharts.Options | null = null;
   public searchRequest2 = new CompanyEventSearchModel();
   @ViewChild('notifList') notifList!: ElementRef;
+  reservationColors = [
+    '#2563EB', // GEN
+    '#06B6D4', // SC
+    '#16A34A', // ST
+    '#F59E0B', // OBC
+    '#7C3AED', // EWS
+    '#EC4899', // MBC
+    '#EF4444', // Minority
+    '#14B8A6', // TSP
+    '#84CC16', // SAH
+    '#F97316', // DEV
+    '#6366F1', // PH
+    '#DC2626', // EX
+    '#8B5CF6'  // WID_DIV
+  ];
   constructor(
     private toastr: ToastrService,
     private loaderService: LoaderService,
@@ -76,6 +91,8 @@ export class AdmissionDashboardComponent {
     };
   public notifications: any[] = [];
   public CompanyEventsList: any[] = [];
+  public GUESTHOUSE_CHART: any[] = [];
+  public FunnelDataa: any[] = [];
   public viewPlacementDashboardList: any = [];
   public GuestRoomApplyList: any = [];
   public DynamicContentData: any = [];
@@ -241,12 +258,13 @@ export class AdmissionDashboardComponent {
       console.log("RAW API:", result);
 
       this.dashboardData = data?.Data['Table'] 
-  
+      this.FunnelDataa = data?.Data['Table1']
+      this.GUESTHOUSE_CHART = data?.Data['Table2']
       //this.transferChartOptions =
       //  this.buildPieChart(this.dashboardData.TRANSFER_CHART);
 
-      //this.guestHouseChartOptions =
-      //  this.buildPieChart(this.dashboardData.GUESTHOUSE_CHART);
+      this.guestHouseChartOptions =
+        this.buildPieChart(this.GUESTHOUSE_CHART);
 
       console.log("Mapped Dashboard:", this.dashboardData);
 
@@ -351,6 +369,7 @@ export class AdmissionDashboardComponent {
       this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest1.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest1.StaffID = this.sSOLoginDataModel.StaffID;
+      this.searchRequest1.RoleID = this.sSOLoginDataModel.RoleID
 
       await this.websiteSettingsService.GetAllDataOrders(this.searchRequest1).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -410,7 +429,7 @@ export class AdmissionDashboardComponent {
             );
 
           } else if (data.State === EnumStatus.Warning) {
-            this.toastr.warning("Event not found")
+           /* this.toastr.warning("Event not found")*/
           } else {
             this.toastr.error(data.ErrorMessage)
           }
@@ -540,38 +559,35 @@ export class AdmissionDashboardComponent {
     return `${icon} ${color}`;
   }
 
-  buildPieChart(data: any[]): Highcharts.Options | null {
-
-    if (!data?.length) return null;
-
-    const colors = ['#22c55e', '#f59e0b', '#ef4444'];
-
-    const total = data.reduce(
-      (sum, item) => sum + (item.totalCount || 0),
-      0
-    );
-
-    const seriesData = total === 0
-      ? [{
-        name: 'No Data',
-        y: 1,
-        color: '#e5e7eb'
-      }]
-      : data.map((item, i) => ({
-        name: item.title,
-        y: Number(item.totalCount) || 0,
-        color: colors[i % colors.length]
-      }));
+  buildPieChart(data: any[]): Highcharts.Options {
 
     return {
+
       chart: {
         type: 'pie',
-        height: 260,
-        backgroundColor: 'transparent',
-        margin: [10, 10, 10, 10]
+        height: 320,
+        backgroundColor: 'transparent'
       },
 
-      title: { text: '' },
+      title: {
+        text: this.getTotalSeats().toLocaleString(),
+        verticalAlign: 'middle',
+        y: 12,
+        style: {
+          fontSize: '34px',
+          fontWeight: '700'
+        }
+      },
+
+      subtitle: {
+        text: 'TOTAL SEATS',
+        verticalAlign: 'middle',
+        y: -15,
+        style: {
+          fontSize: '12px',
+          color: '#64748b'
+        }
+      },
 
       credits: {
         enabled: false
@@ -581,34 +597,24 @@ export class AdmissionDashboardComponent {
         enabled: false
       },
 
-      tooltip: {
-        pointFormat: total === 0
-          ? 'No data available'
-          : '<b>{point.name}</b>: {point.y} ({point.percentage:.0f}%)'
-      },
-
       plotOptions: {
         pie: {
-          innerSize: '55%',
-          borderWidth: 3,
-          borderColor: '#ffffff',
-
+          innerSize: '72%',
+          borderWidth: 5,
+          borderColor: '#fff',
           dataLabels: {
-            enabled: total > 0,
-            format: '{point.name}: {point.y}',
-            style: {
-              fontSize: '11px',
-              fontWeight: '500',
-              textOutline: 'none'
-            }
+            enabled: false
           }
         }
       },
 
       series: [{
         type: 'pie',
-        name: 'Requests',
-        data: seriesData
+        data: data.map((item, i) => ({
+          name: item.Category,
+          y: Number(item.TotalSeats),
+          color: this.reservationColors[i]
+        }))
       }]
     };
   }
@@ -663,5 +669,79 @@ export class AdmissionDashboardComponent {
       default:
         return 'status-secondary';
     }
+  }
+
+  get overallPercent(): number {
+    if (!this.FunnelDataa?.length) return 0;
+
+    return Number(
+      this.FunnelDataa[this.FunnelDataa.length - 1].TotalPercent
+    );
+  }
+
+  get totalPercentSum(): number {
+    return this.FunnelDataa?.reduce(
+      (sum: number, item: any) => sum + Number(item.TotalPercent),
+      0
+    ) || 0;
+  }
+
+  getWidth(percent: number): number {
+    return this.totalPercentSum > 0
+      ? (Number(percent) / this.totalPercentSum) * 100
+      : 0;
+  }
+
+  getLeft(index: number): number {
+    let left = 0;
+
+    for (let i = 0; i < index; i++) {
+      left += this.getWidth(this.FunnelDataa[i].TotalPercent);
+    }
+
+    return left;
+  }
+  getSegmentWidth(item: any): number {
+    const total = this.FunnelDataa.reduce(
+      (sum: number, x: any) => sum + Number(x.TotalCount),
+      0
+    );
+
+    return total > 0 ? (item.TotalCount * 100) / total : 0;
+  }
+
+  getSegmentLeft(index: number): number {
+    let left = 0;
+
+    for (let i = 0; i < index; i++) {
+      left += this.getSegmentWidth(this.FunnelDataa[i]);
+    }
+
+    return left;
+  }
+
+  getOverallPercent(): number {
+    return this.FunnelDataa?.length
+      ? this.FunnelDataa[this.FunnelDataa.length - 1].TotalPercent
+      : 0;
+  }
+
+ 
+  getTotalSeats(): number {
+    return this.GUESTHOUSE_CHART?.reduce(
+      (sum, x) => sum + (+x.TotalSeats || 0),
+      0
+    ) || 0;
+  }
+
+  getSeatPercent(count: number): string {
+
+    const total = this.getTotalSeats();
+
+    if (!total) {
+      return '0%';
+    }
+
+    return ((count / total) * 100).toFixed(2) + '%';
   }
 }

@@ -17,7 +17,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a routerLink="/AddSeatIntakesMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+        <a *ngIf="SSOLoginDataModel.RoleID==16" routerLink="/AddSeatIntakesMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
       </div>
       <form [formGroup]="SeatIntakeSearchFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -256,7 +256,7 @@
 
             <!--<th class="text-left">Active/Inactive Remark</th>-->
             <!--<th class="text-left">Status</th>-->
-            <th style="width: 80px;">Action</th>
+            <th *ngIf="SSOLoginDataModel.RoleID==16" style="width: 80px;">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -291,7 +291,7 @@
               </div>
             </td>-->
 
-            <td>
+            <td *ngIf="SSOLoginDataModel.RoleID==16">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="Edit" [routerLink]="'/AddSeatIntakesMaster'" [queryParams]="{id:row.SeatIntakeID}"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.SeatIntakeID)"><i class="ti ti-trash"></i></a>

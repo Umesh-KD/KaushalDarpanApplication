@@ -23,6 +23,7 @@ import * as XLSX from 'xlsx';
 import { ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
 import { ReportCollegeModel } from '../../../../Models/StudentsJoiningStatusMarksDataMedels';
 import { ITIAllotmentService } from '../../../../Services/ITI/ITIAllotment/itiallotment.service';
+import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 
 @Component({
   selector: 'app-report-for-admin',
@@ -56,6 +57,7 @@ export class ReportedStudentReportComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public filteredStatusList: any[] = [];
+  public ListITIManagementType: any = [];
   public Table_SearchText: string = "";
   public isSubmitted: boolean = false;
   public isVisibleList: boolean = false;
@@ -67,6 +69,7 @@ export class ReportedStudentReportComponent {
     private loaderService: LoaderService,
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
+    private ITICollegeTradeService: ItiSeatIntakeService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private routers: Router,
@@ -84,13 +87,41 @@ export class ReportedStudentReportComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetAllotedSeatByCollegeList();
     await this.GetTradeListDDL();
-
+    await this.MasterFilterList();
   }
 
-  async GetAllotedSeatByCollegeList() {
-debugger
-    this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
+  async MasterFilterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.ITICollegeTradeService.ITIManagementType()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ListITIManagementType = data['Data'];
+          console.log(this.ListITIManagementType, "ListBTERManagementType")
+        }, error => console.error(error));
 
+      //await this.ITICollegeTradeService.ITITradeScheme()
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.ListITITradeScheme = data['Data'];
+      //    console.log(this.ListITITradeScheme, "ListBTERTradeScheme")
+      //  }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetAllotedSeatByCollegeList() {
+  debugger
+    this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
     try {
       this.loaderService.requestStarted();
       const response = await this.ReportService.ReportedStudentReport(this.searchRequest);
@@ -191,28 +222,19 @@ debugger
   //}
 
 
-
-
-
-  //Reset() {
-  //  this.searchRequest.TradeId = 0;
-  //  this.searchRequest.TradeLevelID = 0;
-  //  this.searchRequest.TradeTypeID = 0;
-  //  this.GetAllotedSeatByCollegeList();
-  //}
+  Reset() {
+    //this.searchRequest.TradeId = 0;
+    //this.searchRequest.TradeLevelID = 0;
+    //this.searchRequest.TradeTypeID = 0;
+    this.searchRequest = new ReportedStudentReport();
+    this.GetAllotedSeatByCollegeList();
+  }
 
   loadInTable() {
     this.resetInTableValiable();
     this.calculateInTableTotalPage();
     this.updateInTablePaginatedData();
   }
-
-
-
-
-
-
-
 
   searchTimeout: any;
 

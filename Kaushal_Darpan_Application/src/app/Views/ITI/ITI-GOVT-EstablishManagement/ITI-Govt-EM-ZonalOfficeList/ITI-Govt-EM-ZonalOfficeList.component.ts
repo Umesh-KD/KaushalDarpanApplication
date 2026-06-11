@@ -187,6 +187,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
       InstituteID: [0, [DropdownValidators]],
       //PostID: [0],
       Remark: [''],
+      EmployeeType: ['', [Validators.required]],
       StaffPostTypeID: [0, [DropdownValidators]],
       PostID:[0,[DropdownValidators]]
     });
@@ -1449,6 +1450,7 @@ const formData = this.TransferFormGroup.getRawValue();
     CreatedBy: this.sSOLoginDataModel.UserID,
     IsAdditionPost: true,
     Remark: formData.Remark,
+    EmployeeType: formData.EmployeeType
 };
 
 
