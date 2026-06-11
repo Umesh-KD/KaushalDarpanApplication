@@ -218,7 +218,7 @@ export class InternalPracticalStudentComponent implements OnInit {
             }
 
             // all checked
-            var isfinalsubmit = this.TheoryMarksList.every(x => x.isFinalSubmit == true); 
+            this.isfinalsubmit = this.TheoryMarksList.every(x => x.isFinalSubmit == true); 
 
           }
           //table feature load
