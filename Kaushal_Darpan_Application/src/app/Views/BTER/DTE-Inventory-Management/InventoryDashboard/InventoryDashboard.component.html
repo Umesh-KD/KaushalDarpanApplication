@@ -1,7 +1,8 @@
 
 <main class="content">
   <!-- KPI Cards -->
-  <div class="grid  xl:grid-cols-{{RowBoxlength}} lg:grid-cols-{{RowBoxlength}} md:grid-cols-3 grid-cols-1 gap-3 mb-5" >
+  <!--{{viewDashboard|json}}-->
+  <div class="grid  xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-3 mb-5">
     <div *ngFor="let item of viewDashboard; let i = index">
       <div [class]="item.ClassClourTop1">
         <div [class]="item.ClassClourTop2"> <i [class]="item.SRC"></i></div>
