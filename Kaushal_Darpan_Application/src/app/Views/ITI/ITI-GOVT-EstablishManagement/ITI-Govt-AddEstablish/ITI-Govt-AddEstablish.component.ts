@@ -104,7 +104,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       ddlStatus: [0, [DropdownValidators]],
       txtRemark: ['', Validators.required],
       /*DesignationID: [0, [DropdownValidators]],*/
-      DesignationID: [{ value: '', disabled: true }, [DropdownValidators]],
+      DesignationID: [{ value: 0, disabled: true }, [DropdownValidators]],
       WorkOfficeID: [0, [DropdownValidators]],
       IsExtraWorking: ['false'],
       IsEmpWorkingOnPost: [false],

@@ -8,6 +8,7 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ITIEstablishmentDashboardComponent } from './iti-establishment-dashboard.component';
 import { ITIEstablishmentDashboardRoutingModule } from './iti-establishment-dashboard-routing.module';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ITIEstablishmentDashboardRoutingModule } from './iti-establishment-dash
     LoaderModule,
     TableSearchFilterModule,
     NgMultiSelectDropDownModule.forRoot(),
+    HighchartsChartModule,
   ]
 })
 export class ITIEstablishmentDashboardModule { }

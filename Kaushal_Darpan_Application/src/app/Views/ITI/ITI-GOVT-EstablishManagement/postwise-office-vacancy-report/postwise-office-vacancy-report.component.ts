@@ -1,0 +1,187 @@
+import { Component } from '@angular/core';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { ToastrService } from 'ngx-toastr';
+import { ITIOfficeVacancyModel } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
+import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
+
+@Component({
+  selector: 'app-postwise-office-vacancy-report',
+  standalone: false,
+  templateUrl: './postwise-office-vacancy-report.component.html',
+  styleUrl: './postwise-office-vacancy-report.component.css'
+})
+export class PostwiseOfficeVacancyReportComponent {
+  public sSOLoginDataModel = new SSOLoginDataModel(); 
+  public SearchData = new ITIOfficeVacancyModel();
+
+  OfficeVacancyList: ITIOfficeVacancyModel[] = [];
+
+  constructor(
+    private ITIGovtEMStaffMaster: ITIGovtEMStaffMaster, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+  ) { }
+
+  async ngOnInit() {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetVacancyReportPostWise();
+  }
+
+  async GetVacancyReportPostWise() {
+    try {
+      const searchRequest: any = {};
+      await this.ITIGovtEMStaffMaster.GetVacancyReportPostWise(searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.OfficeVacancyList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  exportToExcel() {
+    const excelData = this.OfficeVacancyList.map((item: any, index: number) => ({
+      'S.No': index + 1,
+      'Office Name': item.OfficeName,
+      'Service Category(Cadre)': item.StaffTypeName,
+      'Institute Name': item.InstituteName,
+      'Name of Post': item.DesignationName,
+      'No. of Post Sanctioned': item.TotalSeatID,
+      'Deployed Post': item.PostedSeat,
+      'Vacant Seat': item.RemainingSeatID,
+      'Order No': item.OrderName,
+      'Comments': item.Comments
+    }));
+
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { 'Office Vacancy': worksheet },
+      SheetNames: ['Office Vacancy']
+    };
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array'
+    });
+
+    const data = new Blob(
+      [excelBuffer],
+      { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
+    );
+  }
+
+  exportToPDF(): void {
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+
+    doc.text(
+      'Office Vacancy List',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    const body = this.OfficeVacancyList.map((row: any, index: number) => [
+      index + 1,
+      row.OfficeName || '',
+      row.StaffTypeName || '',
+      row.InstituteName || '',
+      row.DesignationName || '',
+      row.TotalSeatID || '',
+      row.PostedSeat || '',
+      row.RemainingSeatID || '',
+      row.OrderName || '',
+      row.Comments || ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'S No',
+        'Office Name',
+        'Service Category(Cadre)',
+        'Institute Name',
+        'Name of Post',
+        'No. of Post Sanctioned',
+        'Deployed Post',
+        'Vacant Seat',
+        'Order No',
+        'Comments'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        cellPadding: 1.5,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1,
+        overflow: 'linebreak'
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+      columnStyles: {
+        1: { cellWidth: 35 },
+        2: { cellWidth: 25 },
+        3: { cellWidth: 40 },
+        4: { cellWidth: 25 },
+        9: { cellWidth: 35 }
+      },
+
+      didDrawPage: function () {
+        const pageSize = doc.internal.pageSize;
+        const pageHeight = pageSize.height || pageSize.getHeight();
+
+        const today = new Date().toLocaleString('en-IN', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+
+        doc.setFontSize(8);
+
+        // Bottom Left
+        doc.text(
+          `Generated On: ${today}`,
+          10,
+          pageHeight - 5
+        );
+
+        // Bottom Right - Page Number
+        doc.text(
+          `Page ${doc.getCurrentPageInfo().pageNumber}`,
+          pageSize.getWidth() - 20,
+          pageHeight - 5
+        );
+      }
+    });
+
+    doc.save('OfficeVacancyList.pdf');
+  }
+}
