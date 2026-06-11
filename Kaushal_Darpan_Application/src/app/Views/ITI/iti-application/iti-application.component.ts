@@ -176,7 +176,7 @@ export class ItiApplicationComponent {
     }
   }
   async GetAllData(i: any) {
-
+    debugger
     console.log("i", i);
     if (i == 1) {
       this.pageNo = 1;
@@ -223,6 +223,13 @@ export class ItiApplicationComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
     }
   }
 

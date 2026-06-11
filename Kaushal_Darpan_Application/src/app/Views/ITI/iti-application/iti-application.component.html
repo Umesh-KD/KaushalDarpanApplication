@@ -30,13 +30,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Applicant Name</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Candidate Name</label>
           <input type="text" class="form-input" placeholder="Applicant Name" id="StudentName" [(ngModel)]="searchRequest.StudentName">
         </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Mobile Number</label>
-          <input type="text" class="form-input" placeholder="Mobile Number" id="MobileNo" minlength="10" maxlength="10" [(ngModel)]="searchRequest.MobileNumber">
+          <input type="text" class="form-input" placeholder="Mobile Number" id="MobileNo" minlength="10" maxlength="10" (keypress)="validateNumber($event)" [(ngModel)]="searchRequest.MobileNumber">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Aadhar No</label>
+          <input type="text" class="form-input" placeholder="Aadhar No." id="AadharNo" [(ngModel)]="searchRequest.AadharNo">
         </div>
 
         <div>
@@ -92,13 +97,28 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Admission Type:</label>
           <select class="form-select" [(ngModel)]="searchRequest.AdmissionType">
-          <!-- <select class="form-select" > -->
+            <!-- <select class="form-select" > -->
             <option value="-1">Choose Option</option>
             <option value="0">Online Admission</option>
             <option value="1">Direct Admission</option>
             <option value="181">Jail Admission</option>
           </select>
         </div>
+
+
+        <!--min merit range-->
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Min. Merit Range</label>
+    <input type="text" class="form-input" placeholder="Min Merit Range" id="MinRange" maxlength="100" minlength="0" (keypress)="validateNumber($event)" [(ngModel)]="searchRequest.MinRange">
+  </div>-->
+        <!--max merit range-->
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Max. Merit Range</label>
+    <input type="text" class="form-input" placeholder="Max Merit Range" id="MaxRange" maxlength="100" minlength="0" (keypress)="validateNumber($event)" [(ngModel)]="searchRequest.MaxRange">
+  </div>-->
+
+
+
         <!--<div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category D:</label>
     <select class="form-select" [(ngModel)]="searchRequest.CategoryD">
@@ -160,10 +180,10 @@
             </th>
 
 
-            <th class="text-left cursorHand {{sortColumn=='MotherName' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('MotherName')">
+            <!--<th class="text-left cursorHand {{sortColumn=='MotherName' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('MotherName')">
               Mother Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>
+            </th>-->
 
             <th class="text-left cursorHand {{sortColumn=='DOB' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('DOB')">
               DOB
@@ -176,32 +196,35 @@
             </th>
             <th class="text-left">Mobile No</th>
             <th class="text-left cursorHand {{sortColumn=='CategoryA' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryA')">
-              Cat.A
+              Category A
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Gender'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
 
-            <th class="text-left cursorHand {{sortColumn=='CategoryB' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryB')">
+            <!--<th class="text-left cursorHand {{sortColumn=='CategoryB' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryB')">
               Cat.B
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Gender'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>
+            </th>-->
 
-            <th class="text-left cursorHand {{sortColumn=='CategoryC' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryC')">
+            <!--<th class="text-left cursorHand {{sortColumn=='CategoryC' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryC')">
               Cat.C
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Gender'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>
-            <th class="text-left">Pay Reciept</th>
+            </th>-->
+
+            <!--<th class="text-left">Pay Reciept</th>-->
+
             <!--<th class="text-left">Cat.D</th>-->
             <th class="text-left cursorHand {{sortColumn=='Gender' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('StatusLabel')">
               Status
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StatusLabel'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
-            <th class="text-left cursorHand {{sortColumn=='LastUpdated' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('LastUpdated')">
+            <!--<th class="text-left cursorHand {{sortColumn=='LastUpdated' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('LastUpdated')">
               Last Modified
               <span class="shortingSpan" *ngIf="sortInTableColumn=='LastUpdated'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>
+            </th>-->
 
-            <th class="text-center">View</th>
-            <th class="text-center">Download</th>
+            <th class="text-center">Action</th>
+            <!--<th class="text-center">Download</th>-->
+
           </tr>
         </thead>
         <tbody>
@@ -210,29 +233,30 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StudentName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.FatherName}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MotherName}}</td>
+            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MotherName}}</td>-->
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Gender}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MobileNo}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryA}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryB}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryC}}</td>
+            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryB}}</td>-->
+            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryC}}</td>-->
             <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryE}}  </td>-->
-            <td>{{row.PayReciept}}</td>
+            <!--<td>{{row.PayReciept}}</td>-->
             <td>{{row.StatusLabel}}</td>
-            <td>{{row.LastUpdated}}</td>
+            <!--<td>{{row.LastUpdated}}</td>-->
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="Download" (click)="openViewApplicationPopup(row.ApplicationID,row.SSOID)"><i class="ti ti-eye"></i></a>
+                <a *ngIf="row.IsFinalSubmit==2" href="javascript:void(0);" title="Download" (click)="DownloadApplicationForm(row.ApplicationID)"><i class="ti ti-download"></i></a>
               </div>
 
             </td>
 
-            <td>
+            <!--<td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="row.IsFinalSubmit==2" href="javascript:void(0);" title="Download" (click)="DownloadApplicationForm(row.ApplicationID)"><i class="ti ti-download"></i></a>
               </div>
-            </td>
+            </td>-->
 
 
           </tr>

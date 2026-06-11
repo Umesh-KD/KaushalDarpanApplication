@@ -17,6 +17,19 @@ export class AdmissionMasterDashboardComponent implements OnInit
   public governmentITI: any;
   public privateITI: any;
   public TotalITI: any;
+
+  public Engineering: any;
+  public NonEngineering: any;
+  public TotalActiveIntake: any;
+
+
+  public EngineeringTrades: any;
+  public NonEngineeringTrades: any;
+  public TotalTrades: any;
+
+
+
+
   public AffiliatedInstitutes: any;
   
   public affiliatedInstitutes: any;
@@ -67,9 +80,29 @@ export class AdmissionMasterDashboardComponent implements OnInit
           this.AffiliatedInstitutes = datas.AffiliatedInstitutes;
 
 
-          this.affiliatedInstitutes = datas.AffiliatedInstitutes;
+
 
           this._barChartData = data.Data.Table1;
+
+          //intake details
+          const intake = data.Data.Table2[0];
+          this.Engineering = intake.Engineering;
+          this.NonEngineering = intake.NonEngineering;
+          this.TotalActiveIntake = intake.Total;
+
+          //intake details
+          const Trades = data.Data.Table3[0];
+          this.EngineeringTrades = Trades.EngineeringTrades;
+          this.NonEngineering = Trades.NonEngineeringTrades;
+          this.TotalTrades = Trades.TotalTrades;
+
+
+
+
+
+
+
+
           console.log(this._barChartData, "_barChartData");
 
  

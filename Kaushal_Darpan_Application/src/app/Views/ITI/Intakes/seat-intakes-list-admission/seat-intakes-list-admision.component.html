@@ -31,7 +31,7 @@
   </div>-->
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Division</label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone</label>
             <select (change)="ddlDivision_Change()" formControlName="ddlDivision" [(ngModel)]="searchRequest.DivisionId" class="form-select" id="DivisionId">
               <option value="0">--Select--</option>
               <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>

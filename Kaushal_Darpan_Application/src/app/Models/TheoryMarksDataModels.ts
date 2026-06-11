@@ -264,6 +264,13 @@ export class ApplicantReportForAdmin {
 export class ReportedStudentReport {
   public AcademicYearID: number = 0;
 
+  public ApplicationID?: number = 0;
+  public ManagementTypeId?: number = 0;
+  public StateRegNo?: string = '';
+  public PRNStatus?: string = '0';
+  public PrnNo?: string = '';
+
+
 }
 
 
