@@ -217,11 +217,8 @@ export class InternalPracticalStudentComponent implements OnInit {
               })
             }
 
-
-            var isfinalsubmit = this.TheoryMarksList.filter(x => x.isFinalSubmit == true)
-            if (isfinalsubmit.length > 0) {
-              this.isfinalsubmit = true
-            }
+            // all checked
+            var isfinalsubmit = this.TheoryMarksList.every(x => x.isFinalSubmit == true); 
 
           }
           //table feature load
@@ -262,7 +259,7 @@ export class InternalPracticalStudentComponent implements OnInit {
     this.Swal2.Confirmation("Are you sure? <br> Once Submitted, It can't be edited anymore.",
       async (result: any) => {
         if (result.isConfirmed) {
-          this.OnSubmit(StudentExamPaperMarksID, isFinalSubmit);
+          await this.OnSubmit(StudentExamPaperMarksID, isFinalSubmit);
         }
       });
   }
@@ -293,6 +290,7 @@ export class InternalPracticalStudentComponent implements OnInit {
 
     // Iterate over each filtered item for validation
     for (let x of filtered) {
+      // Internal Assesment
       if (this.searchRequest.InternalPracticalID == 2) {
         // Validate for UFM and document upload
         if (x.IsPresentInternalAssisment == 4 && !x.UFMDocument) {
@@ -334,6 +332,7 @@ export class InternalPracticalStudentComponent implements OnInit {
         }
       }
 
+      // Practical
       if (this.searchRequest.InternalPracticalID == 1) {
         // Validate for practical and document upload
         if (x.IsPresentPractical == 4 && !x.UFMDocument) {
@@ -342,7 +341,7 @@ export class InternalPracticalStudentComponent implements OnInit {
         }
 
         // Other validations (absent, present, etc.)
-        if (x.IsPresentPractical == 0 && x.IsDetain == false && x.MaxPractical !== 0 && x.ObtainedPractical !== 0) {
+        if (x.IsPresentPractical == 0 && x.IsDetain == false && x.MaxPractical != 0 && x.ObtainedPractical != 0) {
           this.toastr.error('For absent students, marks must be 0.');
           return;
         }
@@ -396,11 +395,11 @@ export class InternalPracticalStudentComponent implements OnInit {
     if (this.fullMarksStudents.length > 0) {
       this.Swal2.Confirmation(`Are you sure you want to enter Full Marks for Roll Number:<br> ${this.fullMarksStudents.map((x: any) => x.RollNo + ' (' + x.SubjectName + ')').join(', <br>')}`, async (result: any) => {
         if (result.isConfirmed) {
-          this.SaveData(filtered);
+          await this.SaveData(filtered);
         }
       });
     } else {
-      this.SaveData(filtered);
+      await this.SaveData(filtered);
     }
   }
 
