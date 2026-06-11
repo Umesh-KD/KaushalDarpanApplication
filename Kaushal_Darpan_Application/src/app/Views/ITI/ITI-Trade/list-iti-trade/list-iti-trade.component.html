@@ -130,7 +130,7 @@
             <!--<th class="text-left">Entry Qualification</th>-->
             <!--<th class="text-left">Status</th>-->
             <!--<th class="text-left">Active/Inactive Remark</th>-->
-            <th class="text-center">Action</th>
+            <th  *ngIf="sSOLoginDataModel.RoleID==16"  class="text-center">Action</th>
           </tr>
         </thead>
         <!--{{paginatedInTableData | json}}-->
@@ -149,7 +149,7 @@
             <!--<td>{{item.QualificationDetails}}</td>-->
             <!--<td>{{item.ActiveStatus}}</td>-->
             <!--<td>1</td>-->
-            <td>
+            <td  *ngIf="sSOLoginDataModel.RoleID==16" >
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a [routerLink]="'/ititrade'" [queryParams]="{TradeId:item.TradeId}" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" (click)=" btnDeleteOnClick(item.TradeId)" title="Delete"><i class="ti ti-trash"></i></a>

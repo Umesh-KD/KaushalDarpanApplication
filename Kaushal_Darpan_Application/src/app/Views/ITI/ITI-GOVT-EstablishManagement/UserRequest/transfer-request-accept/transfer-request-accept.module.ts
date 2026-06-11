@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../../../Shared/loader/loader.module';
 import { TransferRequestAcceptComponent } from './transfer-request-accept.component';
 import { TransferRequestAcceptRoutingModule } from './transfer-request-accept-routing.module';
+import { OTPModalModule } from '../../../../otpmodal/otpmodal.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { TransferRequestAcceptRoutingModule } from './transfer-request-accept-ro
     TransferRequestAcceptRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    LoaderModule
+    LoaderModule,
+    OTPModalModule
   ]
 })
 export class TransferRequestAcceptModule { }

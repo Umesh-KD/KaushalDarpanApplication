@@ -565,7 +565,7 @@
                 <option value="1">First Half</option>
                 <option value="2">Second Half</option>
               </select>
-              <div *ngIf="isSubmitted&&groupForm.JoiningTimeID.errors" class="text-danger">
+              <div *ngIf="isSubmitted && groupForm.controls.JoiningTimeID.errors" class="text-danger">
                 <p *ngIf="!groupForm.JoiningTimeID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
@@ -579,7 +579,7 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of RoleListDDL" [value]="item.RoleID">{{item.RoleNameEnglish}}</option>
               </select>
-              <div *ngIf="isSubmitted&&groupForm.JoiningRoleID.errors" class="text-danger">
+              <div *ngIf="isSubmitted && groupForm.controls.JoiningRoleID.errors" class="text-danger">
                 <p *ngIf="!groupForm.JoiningRoleID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
@@ -613,7 +613,7 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of VacantPostEmployeeList" [value]="item.ID">{{item.Name}}</option>
               </select>
-              <div *ngIf="isSubmitted&&groupForm.EmployeeID.errors" class="text-danger">
+              <div *ngIf="isSubmitted && groupForm.controls.EmployeeID.errors" class="text-danger">
                 <p *ngIf="!groupForm.EmployeeID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
@@ -634,3 +634,6 @@
     </div>
   </div>
 </ng-template>
+
+
+<app-otpmodal #otpModal></app-otpmodal>
