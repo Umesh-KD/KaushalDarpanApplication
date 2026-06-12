@@ -253,6 +253,14 @@ export class ITIsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async getbankguaranteeByID(Id: number) {
+
+    return await this.http.get(this.APIUrl + "/getbankguaranteeByID/" + Id + "/", this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
   public async ITIPlanningBankGuaranteeReport(searchRequest: ITIPlanningBankGuarantee) {
     var body = JSON.stringify(searchRequest);
