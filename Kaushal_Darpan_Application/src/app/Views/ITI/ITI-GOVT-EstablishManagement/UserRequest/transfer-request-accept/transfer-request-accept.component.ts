@@ -13,7 +13,7 @@ import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatus
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntakeDataModel';
-import { RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
+import { Iti_Update_Relieved_RevertModel, RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
@@ -89,6 +89,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public _EnumProfileStatus = EnumProfileStatus;
   public type: string=''
   public RequestUpdateStatus = new RequestUpdateStatus();
+  public RevertModel = new Iti_Update_Relieved_RevertModel();
   public RowlistData  = new RequestUpdateStatus;
   public searchRequestRelieving = new RelievingLetterSearchModel();
   public searchRequestJoining = new JoiningLetterSearchModel();
@@ -421,6 +422,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.RequestUpdateStatus.JoiningTimeID = 0;
     this.RequestUpdateStatus.JoiningRoleID = 0;
     this.isSubmitted = false;
+     this.RevertModel = new Iti_Update_Relieved_RevertModel();
   }
 
   async updateReqStatus() {
@@ -1254,6 +1256,44 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async onSubmitRelieved_Revert(model: any, userSubmitData: any) {
+    try {
+      debugger
+      this.RowlistData = { ...userSubmitData };
+      console.log(this.RequestUpdateStatus, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
+  async updateRelieved_Revert() {
+    try {
+      debugger
+      this.RevertModel.ActionBy = this.sSOLoginDataModel.UserID;
+      this.RevertModel.ServiceRequestId = this.RowlistData.ServiceRequestId;
+      if (!this.RevertModel.Remarks || this.RevertModel.Remarks.trim() === '') {
+        this.toastr.warning('Please Enter Remark!');
+        return;
+      }
+      await this.userRequestService.Iti_Update_Relieved_Revert(this.RevertModel)
+        .then(async (data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success('Staff relieved status has been reverted successfully.')
+            this.CloseModal();
+            this.RevertModel = new Iti_Update_Relieved_RevertModel();
+          }
+          else (data.State == EnumStatus.Error)
+          {
+            this.toastr.warning('Failed to revert the staff relieved status. Please try again.')
+          }
+          
+        })
+    }
+    catch (ex) { console.log(ex) }
   }
 
 }
