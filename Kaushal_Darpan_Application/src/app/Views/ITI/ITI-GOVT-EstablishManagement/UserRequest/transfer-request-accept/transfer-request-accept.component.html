@@ -211,7 +211,7 @@
                 </a>
 
                 <!-- <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 1  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Staff Request" (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a> -->
-                
+
                 <a href="javascript:void(0);" title="Joining Request" *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 &&
 (row.RequestStatusId ==_EnumTransferStatus_ITI_EM.Request_for_Join || row.RequestStatusId==_EnumTransferStatus_ITI_EM.On_Hold)"
                    (click)="onSubmitJoiningRequest(MyModel_ReplayQueryJoining, row)">
@@ -235,6 +235,13 @@
                    (click)="JoiningLetter(row.ServiceRequestId)">
                   <i class="ti ti-download"></i>
                 </a>
+                <!--row.RequestStatusId !== 10367 && -->
+                <a href="javascript:void(0);" title="Relieved Revert"
+                   *ngIf=" row.RequestStatusId != 10367 && row.RequestTypeID == 1 && (row.JoiningDate == null || row.JoiningDate == '')"
+                   (click)="onSubmitRelieved_Revert(MyModel_Update_Relieved_Revert, row)">
+                  <i class="ti ti-arrow-back-up"></i>
+                </a>
+
 
               </div>
 
@@ -565,7 +572,7 @@
                 <option value="1">First Half</option>
                 <option value="2">Second Half</option>
               </select>
-              <div *ngIf="isSubmitted&&groupForm.JoiningTimeID.errors" class="text-danger">
+              <div *ngIf="isSubmitted && groupForm.controls.JoiningTimeID.errors" class="text-danger">
                 <p *ngIf="!groupForm.JoiningTimeID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
@@ -579,7 +586,7 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of RoleListDDL" [value]="item.RoleID">{{item.RoleNameEnglish}}</option>
               </select>
-              <div *ngIf="isSubmitted&&groupForm.JoiningRoleID.errors" class="text-danger">
+              <div *ngIf="isSubmitted && groupForm.controls.JoiningRoleID.errors" class="text-danger">
                 <p *ngIf="!groupForm.JoiningRoleID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
@@ -613,7 +620,7 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of VacantPostEmployeeList" [value]="item.ID">{{item.Name}}</option>
               </select>
-              <div *ngIf="isSubmitted&&groupForm.EmployeeID.errors" class="text-danger">
+              <div *ngIf="isSubmitted && groupForm.controls.EmployeeID.errors" class="text-danger">
                 <p *ngIf="!groupForm.EmployeeID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
@@ -631,6 +638,38 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<app-otpmodal #otpModal></app-otpmodal>
+
+<ng-template #MyModel_Update_Relieved_Revert let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">Relieved Revert(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input w-full resize-none"
+                        rows="4"
+                        [(ngModel)]="RevertModel.Remarks"
+                        placeholder="Enter your remarks here..."></textarea>
+            </div>
+          </div>
+        </div> 
+        <div class="card-footer text-right">
+          <button type="button" (click)="updateRelieved_Revert()" class="btn bg-success text-white btn-sm">
+            Submit 
+          </button>
+        </div>
     </div>
   </div>
 </ng-template>

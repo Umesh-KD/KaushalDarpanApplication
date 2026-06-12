@@ -3,7 +3,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { UserRequestModel } from '../../Models/UserRequestDataModel';
-import { BterRequestSearchModel, RequestSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_EM_UnlockProfileDataModel } from '../../Models/ITI/UserRequestModel';
+import { BterRequestSearchModel, RequestSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_EM_UnlockProfileDataModel, Iti_Update_Relieved_RevertModel } from '../../Models/ITI/UserRequestModel';
 import { Bter_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, BTERRequestUpdateStatus, BterStaffUserRequestReportSearchModel, RequestUpdateStatus, } from '../../Models/ITIGovtEMStaffMasterDataModel';
 import { BTER_EM_UnlockProfileDataModel } from '../../Models/BTER/BTER_EstablishManagementDataModel';
 
@@ -230,6 +230,17 @@ export class UserRequestService {
   public async GetRelievingJoiningRequestReportData(request: RequestSearchModel) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/GetRelievingJoiningRequestReportData', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async Iti_Update_Relieved_Revert(request: Iti_Update_Relieved_RevertModel) {
+
+    const headers = { 'content-type': 'application/json' }
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/Iti_Update_Relieved_Revert', body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

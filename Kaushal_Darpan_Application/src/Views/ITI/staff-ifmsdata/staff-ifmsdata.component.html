@@ -201,6 +201,12 @@
     </ng-template>
     <br />
 
+
+  
+
+
+
+<br />
     <!-- ================= IDENTIFICATION ================= -->
     <div class="mb-6">
       <div class="bg-light p-3 mb-3 font-semibold">Identification Details</div>
@@ -393,7 +399,60 @@
   </div>
 </ng-template>
 
+  <!-- ================= SERVICE DETAILS ================= -->
+<div class="bg-light p-3 mb-3 font-semibold mt-4">
+  Service Details of Personnel
+</div>
+
+<ng-container *ngIf="ServiceDetailsList?.length > 0; else noServiceData">
+
+  <div class="overflow-x-auto mt-3">
+    <table class="table table-border w-full table-auto">
+      <thead class="bg-light/40 border-b border-gray-100 h-10">
+        <tr>
+          <th class="text-left">Sr.</th>
+          <th class="text-left">From Date</th>
+          <th class="text-left">To Date</th>
+          <th class="text-left">Original Position</th>
+          <th class="text-left">Core Business</th>
+          <th class="text-left">District</th>
+          <th class="text-left">Block</th>
+          <th class="text-left">Gram Panchayat</th>
+          <th class="text-left">Revenue Village</th>
+          <th class="text-left">Institution / Office</th>
+          <th class="text-left">City / Village</th>
+          <th class="text-left">Posting Type</th>
+          <th class="text-left">Cadre</th>
+          <th class="text-left">Confirmation Date</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let row of ServiceDetailsList; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ row.FromDate }}</td>
+          <td>{{ row.ToDate }}</td>
+          <td>{{ row.OriginalPositionName }}</td>
+          <td>{{ row.CoreBusinessName }}</td>
+          <td>{{ row.DistrictName }}</td>
+          <td>{{ row.BlockName }}</td>
+          <td>{{ row.GramPanchayatName }}</td>
+          <td>{{ row.NameOfRevenueVillage }}</td>
+          <td>{{ row.NameAndLocationOfTheInstitution_Office }}</td>
+          <td>{{ row.City_Village }}</td>
+          <td>{{ row.PostingDirectRecruitment_Promotion }}</td>
+          <td>{{ row.CasteName }}</td>
+          <td>{{ row.ConfirmationDate }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</ng-container>
 
 
-
-
+<ng-template #noServiceData>
+  <div class="text-center mt-3 p-3 border rounded">
+    No service details found.
+  </div>
+</ng-template>

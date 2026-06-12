@@ -8,6 +8,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-establishment-report-iti',
@@ -27,8 +28,11 @@ export class EstablishmentReportITIComponent {
   public ITICollegeList: any = [];
   public StaffTypeList: any = [];
   public StaffProfileStatusList: any = [];
+  public PostList: any = [];
 
   public Table_SearchText: string = "";
+  public postid: number = 0;
+  public isAdditional: number = 0;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -47,10 +51,16 @@ export class EstablishmentReportITIComponent {
     private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster, 
     private toastr: ToastrService, 
     private loaderService: LoaderService, 
+    private activatedroute: ActivatedRoute,
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.postid = Number(this.activatedroute.snapshot.queryParamMap.get('pid')) || 0;
+    this.isAdditional = Number(this.activatedroute.snapshot.queryParamMap.get('isAdditional')) || -1;
+    this.searchRequest.PostID = this.postid
+    this.searchRequest.IsAdditionalStaff = this.isAdditional
+    await this.GetPostList();
     await this.GetLevelList();
     await this.GetOfficeList();
     await this.GetStaffProfileStatusList();
@@ -60,19 +70,17 @@ export class EstablishmentReportITIComponent {
     await this.GetStaffList();
   }
 
-  async GetStaffList() {
-    
+  async GetStaffList() {    
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
-    this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID
-    
+    this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID        
     if (this.searchRequest.OfficeID != 11) {
       this.searchRequest.InstituteID = 0
       this.searchRequest.DistrictID=0
     }
     try {
       this.loaderService.requestStarted();
-      await this.ITIGovtEMStaffMasterService.ITIGovtEM_Govt_AdminT2Zonal_GetAllData(this.searchRequest)
+      await this.ITIGovtEMStaffMasterService.GetITIEstablishmentReportData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ZonalList = data['Data'];
@@ -111,7 +119,6 @@ export class EstablishmentReportITIComponent {
   }
 
   async GetLevelList() {
-    debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetLevelMaster()
@@ -186,6 +193,21 @@ export class EstablishmentReportITIComponent {
         data = JSON.parse(JSON.stringify(data));
         this.StaffProfileStatusList = data.Data;
       });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetPostList() {
+    try {
+
+      this.loaderService.requestStarted();
+      const data: any = await this.commonMasterService.GetCommonMasterData('PostMaster');
+      this.PostList = data['Data'];
     } catch (error) {
       console.error(error);
     } finally {

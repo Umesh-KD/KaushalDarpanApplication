@@ -169,6 +169,7 @@ export class ITIPlanningBankGuarantee {
   public OrderNo?: number = 0;
   public Orderdate?: string = '';
 
+  public GauranteeNo?: string = '';
 
 
   

@@ -726,7 +726,33 @@ export class ITIGovtEMStaffMaster {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetVacancyReportPostWise(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetVacancyReportPostWise', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetITIEstablishmentReportData(searchRequest: ITI_Govt_EM_ZonalOFFICERSSearchDataModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetITIEstablishmentReportData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
+   public async GetServiceDetailIFMS(request: any) {
+    debugger
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/GetServiceDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 

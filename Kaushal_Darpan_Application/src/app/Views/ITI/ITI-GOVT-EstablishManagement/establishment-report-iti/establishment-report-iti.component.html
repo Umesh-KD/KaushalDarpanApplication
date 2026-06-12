@@ -98,13 +98,22 @@
           </select>
         </div>
 
-
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetStaffList()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post</label>
+
+          <ng-select
+              [(ngModel)]="searchRequest.PostID"
+              [clearable]="false">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-option *ngFor="let item of PostList;"
+                      [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
         </div>
       </div>
-
+      <div class="flex justify-center flex-wrap items-center">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetStaffList()"><i class="bi bi-search"></i>Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+      </div>
 
     </div>
 
@@ -152,8 +161,8 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th width="80px" align="left">Sr. No.</th>
-            <!--<th align="left">SSO ID</th>-->
-            <th align="left">Employee ID/Name</th>
+            <th align="left">SSO ID</th>
+            <th align="left">Name</th>
             <th align="left">Service Category</th>
             <th align="left">Mobile/Email</th>
             <th class="left">Designation</th>
@@ -174,8 +183,8 @@
         <tbody>
           <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
             <td>{{idx+1}}</td>
-            <!--<td>{{row.SSOID}}</td>-->
-            <td>{{row.Name}} ({{row.SSOID}})</td>
+            <td>{{row.SSOID}}</td>
+            <td>{{row.Name}}</td>
             <td>{{row.ServiceName}}</td>
             <td>{{row.MobileNo}} ({{row.EmailID}})</td>
             <td>{{row.StaffTypeName}} <br> {{row.PostName}}</td>

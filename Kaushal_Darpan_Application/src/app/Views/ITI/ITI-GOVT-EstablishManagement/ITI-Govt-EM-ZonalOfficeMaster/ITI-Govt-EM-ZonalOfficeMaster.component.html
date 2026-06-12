@@ -98,13 +98,18 @@
             </p>
           </div>
         </div>
+
         <div *ngIf="formData.LevelID==2 && formData.OfficeID== 11">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span
-              class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="ddlITICollegeTrade">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of ItiCollegesListAll" [value]="item.CollegeID">{{item.Name}}</option>
-          </select>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute <span class="StarMarking">*</span></label>
+
+          <ng-select
+              [(ngModel)]="formData.InstituteID" 
+              formControlName="ddlITICollegeTrade"
+              [clearable]="false">
+            <ng-option [value]="0">--Choose Option--</ng-option>
+            <ng-option *ngFor="let item of ItiCollegesListAll;"
+                      [value]="item.CollegeID">{{item.Name}}</ng-option>
+          </ng-select>
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlITICollegeTrade.errors" class="text-danger">
             <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlITICollegeTrade.errors.DropdownValidators">
               <i aria-hidden="true"></i>This
@@ -112,15 +117,32 @@
             </p>
           </div>
         </div>
+        
+        
+        <!-- <div *ngIf="formData.LevelID==2 && formData.OfficeID== 11">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span
+              class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="ddlITICollegeTrade">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ItiCollegesListAll" [value]="item.CollegeID">{{item.Name}}</option>
+          </select>
+          
+        </div> -->
+
         <!--{{OldNodalDistrictID|json}}-->
         <div *ngIf="formData.LevelID==2 && formData.OfficeID== 15 && OldNodalDistrictID==0">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             District:<span class="StarMarking">*</span>
           </label>
-          <select class="form-select" [(ngModel)]="formData.DistrictID" formControlName="ddlDistrictID">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
-          </select>
+
+          <ng-select
+              [(ngModel)]="formData.DistrictID" 
+              formControlName="ddlDistrictID"
+              [clearable]="false">
+            <ng-option [value]="0">--Choose Option--</ng-option>
+            <ng-option *ngFor="let item of DistrictList;"
+                      [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
 
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlDistrictID.errors" class="text-danger">
             <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlDistrictID.errors.DropdownValidators">
@@ -180,10 +202,16 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span
               class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
-          </select>
+
+          <ng-select
+              [(ngModel)]="formData.PostID" 
+              formControlName="ddlPost"
+              [clearable]="false">
+            <ng-option [value]="0">--Choose Option--</ng-option>
+            <ng-option *ngFor="let item of PostList;"
+                      [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
+
           <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
             <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
               <i aria-hidden="true"></i>This

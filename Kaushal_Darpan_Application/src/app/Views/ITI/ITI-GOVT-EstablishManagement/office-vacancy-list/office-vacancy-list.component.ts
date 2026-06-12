@@ -60,7 +60,7 @@ export class OfficeVacancyListComponent {
   ) { }
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    
   
     this.groupForm = this.formBuilder.group({
       OfficeID: [0, []],
@@ -69,7 +69,7 @@ export class OfficeVacancyListComponent {
       DesignationID: [0, []],     
       StaffTypeID: [0, []],     
     });
-
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     // if(this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
     //   this.formData.OfficeID = 11;
@@ -391,6 +391,7 @@ export class OfficeVacancyListComponent {
       row.TotalSeatID || '',
       row.PostedSeat || '',
       row.RemainingSeatID || '',
+      row.AdditionalPost || '',
       row.OrderName || '',
       row.Comments || ''
     ]);
@@ -406,7 +407,8 @@ export class OfficeVacancyListComponent {
         'Name of Post',
         'No. of Post Sanctioned',
         'Deployed Post',
-        'Vacant Seat',
+        'Vacant Post',
+        'Additional Post',
         'Order No',
         'Comments'
       ]],
@@ -473,6 +475,7 @@ export class OfficeVacancyListComponent {
   }
 
   exportToExcel() {
+    debugger
     const excelData = this.OfficeVacancyList.map((item: any, index: number) => ({
       'S.No': index + 1,
       'Office Name': item.OfficeName,
@@ -482,6 +485,7 @@ export class OfficeVacancyListComponent {
       'No. of Post Sanctioned': item.TotalSeatID,
       'Deployed Post': item.PostedSeat,
       'Vacant Seat': item.RemainingSeatID,
+      'Additional Seat': item.AdditionalPost,
       'Order No': item.OrderName,
       'Comments': item.Comments
     }));

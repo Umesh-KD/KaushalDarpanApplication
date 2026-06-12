@@ -13,13 +13,17 @@ import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatus
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntakeDataModel';
-import { RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
+import { Iti_Update_Relieved_RevertModel, RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { OTPModalComponent } from '../../../../otpmodal/otpmodal.component';
+
+
+
 @Component({
   selector: 'app-transfer-request-accept',
   standalone: false,
@@ -47,6 +51,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public UserRequestList: any[] = [];
   public filteredStatusList: any[] = [];
   public DesignationMasterList: any[] = [];
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public ITIGovtEMOFFICERSList: any[] = [];
   public StaffTypeList: any[] = []
@@ -84,6 +89,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public _EnumProfileStatus = EnumProfileStatus;
   public type: string=''
   public RequestUpdateStatus = new RequestUpdateStatus();
+  public RevertModel = new Iti_Update_Relieved_RevertModel();
   public RowlistData  = new RequestUpdateStatus;
   public searchRequestRelieving = new RelievingLetterSearchModel();
   public searchRequestJoining = new JoiningLetterSearchModel();
@@ -108,6 +114,8 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   public totalInTableRecord: number = 0;
   public PostMessage: string = '';
   public PostCheckValue: number = 0;
+
+
   constructor(
     private commonMasterService: CommonFunctionService, 
     private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
@@ -414,6 +422,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.RequestUpdateStatus.JoiningTimeID = 0;
     this.RequestUpdateStatus.JoiningRoleID = 0;
     this.isSubmitted = false;
+     this.RevertModel = new Iti_Update_Relieved_RevertModel();
   }
 
   async updateReqStatus() {
@@ -494,6 +503,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   }
 
   async refreshValidators() {
+    debugger
     if(this.RequestUpdateStatus.StatusIDs!=247) {
       this.groupForm.get('txtJoiningDate')?.clearValidators();
       this.groupForm.get('JoiningTimeID')?.clearValidators();
@@ -511,6 +521,9 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
   }
   async UserRequestJoiningApprove_ITI_EM() {
     debugger
+
+   
+
     await this.refreshValidators();
     this.isSubmitted = true;
     this.groupForm.get('txtLastworkingDate')?.clearValidators();
@@ -543,43 +556,77 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
     this.isLoading = true;
 
 
-    this.Swal2.Confirmation("Are you sure you want to update request ?",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
-            this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-            this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
-            this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
-            this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno;
 
-            await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
-              .then(async (data: any) => {
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+    // await OTP verification
+    await this.childComponent.waitForVerification();
 
-                if (data.State == EnumStatus.Success) {
-                  this.toastr.success(data.Message)
-                  this.CloseModal();
-                  this.getlist();
-                  this.RequestUpdateStatus = new RequestUpdateStatus();
-                }
-                else if (data.State == EnumStatus.Warning) {
-                  this.toastr.warning(data.Message)
-                }
-                else {
-                  this.toastr.error(data.ErrorMessage)
-                }
-              })
-          }
-          catch (ex) { console.log(ex) }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-              this.isLoading = false;
-            }, 200);
-          }
+
+    this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+    this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+    this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+    this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+
+    await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
+      .then(async (data: any) => {
+
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message)
+          this.CloseModal();
+          this.getlist();
+          this.RequestUpdateStatus = new RequestUpdateStatus();
+        }
+        else if (data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+        }
+        else {
+          this.toastr.error(data.ErrorMessage)
         }
       });
+
+
+   /* --------------------*/
+
+    //this.Swal2.Confirmation("Are you sure you want to update request ?",
+    //  async (result: any) => {
+    //    //confirmed
+    //    if (result.isConfirmed) {
+    //      try {
+    //        this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+    //        this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    //        this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+    //        this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+    //        this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+
+    //        await this.userRequestService.UserRequestJoiningApprove_ITI_EM(this.RequestUpdateStatus)
+    //          .then(async (data: any) => {
+
+    //            if (data.State == EnumStatus.Success) {
+    //              this.toastr.success(data.Message)
+    //              this.CloseModal();
+    //              this.getlist();
+    //              this.RequestUpdateStatus = new RequestUpdateStatus();
+    //            }
+    //            else if (data.State == EnumStatus.Warning) {
+    //              this.toastr.warning(data.Message)
+    //            }
+    //            else {
+    //              this.toastr.error(data.ErrorMessage)
+    //            }
+    //          })
+    //      }
+    //      catch (ex) { console.log(ex) }
+    //      finally {
+    //        setTimeout(() => {
+    //          this.loaderService.requestEnded();
+    //          this.isLoading = false;
+    //        }, 200);
+    //      }
+    //    }
+    //  });
   }
 
   async onSubmitModel_VRS(model: any, userSubmitData: any) {
@@ -1209,6 +1256,50 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async onSubmitRelieved_Revert(model: any, userSubmitData: any) {
+    try {
+      debugger
+      this.RowlistData = { ...userSubmitData };
+      console.log(this.RequestUpdateStatus, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
+  async updateRelieved_Revert() {
+    try {
+      debugger
+      this.RevertModel.ActionBy = this.sSOLoginDataModel.UserID;
+      this.RevertModel.ServiceRequestId = this.RowlistData.ServiceRequestId;
+      if (!this.RevertModel.Remarks || this.RevertModel.Remarks.trim() === '') {
+        this.toastr.warning('Please Enter Remark!');
+        return;
+      }
+
+      this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno;
+      await this.childComponent.OpenOTPPopup();
+      await this.childComponent.waitForVerification();
+
+      await this.userRequestService.Iti_Update_Relieved_Revert(this.RevertModel)
+        .then(async (data: any) => {
+          debugger
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success('Staff relieved status has been reverted successfully.')
+            this.CloseModal();
+            this.RevertModel = new Iti_Update_Relieved_RevertModel();
+          }
+          else 
+          {
+            this.toastr.warning('Failed to revert the staff relieved status. Please try again.')
+          }
+          
+        })
+    }
+    catch (ex) { console.log(ex) }
   }
 
 }

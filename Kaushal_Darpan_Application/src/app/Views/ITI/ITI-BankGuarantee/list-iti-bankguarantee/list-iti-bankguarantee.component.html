@@ -22,6 +22,12 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Gaurantee No.</label>
+          <input type="text" class="form-input" placeholder=" Bank Gaurantee No." id="GauranteeNo" [(ngModel)]="searchRequest.GauranteeNo">
+        </div>
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Status
@@ -36,14 +42,14 @@
         </div>
 
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
-          <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollageId">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of CollegeMasterList" [value]="item.ID">
-              {{item.Name}}
-            </option>
-          </select>
-        </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
+    <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollageId">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of CollegeMasterList" [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>
+  </div>-->
 
 
 
@@ -116,7 +122,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">#</th>
-            <th class="text-left">College  Name</th>
+            <th class="text-left">Inst_Code and Name</th>
             <th class="text-left">Bank Name</th>
             <th class="text-left">Bank Guarantee No</th>
             <th class="text-left" width="8%">Date Of Issue</th>
