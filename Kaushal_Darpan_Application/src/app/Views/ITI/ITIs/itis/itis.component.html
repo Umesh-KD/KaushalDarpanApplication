@@ -242,7 +242,8 @@
             <th class="text-left">S No</th>
             <!--<th class="text-left">Name</th>-->
             <th class="text-left">ITI Name and Code Campus</th>
-            <th class="text-left">DGET Code</th>
+            <th class="text-left">Inst_Code_DGET</th>
+            <th class="text-left">District Name</th>
             <!--<th class="text-left">Campus</th>-->
             <th *ngIf="sSOLoginDataModel.RoleID!=_EnumRole.DTETraing">Roll List / Admit Card</th>
             <!--<th class="text-left">Fee Status</th>-->
@@ -259,6 +260,7 @@
             <!--<td align="left">{{ iti.CollegeName }}</td>-->
           <td align="left">{{iti.Name}}</td>
           <td align="left">{{iti.DgetCode}}</td>
+          <td align="left">{{iti.DistrictNameEnglish}}</td>
           <!--<td align="left">{{ iti.campusName }}</td>-->
             <td align="center" *ngIf="sSOLoginDataModel.RoleID!=_EnumRole.DTETraing">
               <div class="flex">

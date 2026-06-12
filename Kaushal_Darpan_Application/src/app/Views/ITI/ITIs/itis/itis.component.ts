@@ -150,6 +150,7 @@ export class ITIsComponent implements OnInit {
       }
     });
 
+    this.searchrequest.Status = 1;
     if (this.key != 0) {
       if (this.flag == 1 && this.key == 1) {
         this.searchrequest.ITItypeID = 1;
@@ -158,6 +159,9 @@ export class ITIsComponent implements OnInit {
         this.searchrequest.ITItypeID = 5;
       }
       else if (this.flag == 2 && this.key == 1) {
+        this.searchrequest.Status = 1;
+      }
+      else {
         this.searchrequest.Status = 1;
       }
     }

@@ -173,6 +173,7 @@ export class listitibankguaranteeComponent {
     this.searchRequest.status = 0
     this.searchRequest.dayWise = 0
     this.searchRequest.CollageId = 0
+    this.searchRequest.GauranteeNo=''
   }
 
   onResetCancel(): void
