@@ -96,6 +96,7 @@ export class ApprenticeshipDirectorNCVTDashboardComponent {
     try {
       
       this.itiSearchRequest.Key = 'DynamicUploadShortList';
+      this.itiSearchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.loaderService.requestStarted();
       await this.home2Service.GetDynamicUploadContentApprenticeship(this.itiSearchRequest)
         .then((data: any) => {

@@ -201,6 +201,26 @@
             </p>
           </div>
         </div>
+
+        <div  *ngIf="formData.StaffLevelID == _ITIGovtEM_EnumStaffLevel.TeachingRole && formData.StaffTypeID !=_ITIGovtEM_EnumStaffType.NonTeaching">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift / Unit <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.SeatIntakeID" formControlName="Shift" [ngModelOptions]="{standalone: true}" (change)="onShiftChange()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of shiftddl" [value]="item.ID">
+              {{ item.Name }}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.Shift.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.Shift.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+
+
+
+
         <!--<div *ngIf="formData.BranchID !=0 && HOD_DDlList.length > 0">
     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Hod`S</label>
     <select class="form-select" name="SearchByHODs" id="SearchByHODs" [ngModelOptions]="{standalone: true}"

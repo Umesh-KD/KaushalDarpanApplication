@@ -146,6 +146,7 @@ export class ITIGovtEMAddStaffBasicDetailDataModel extends RequestBaseModel {
   public StatusOfStaff: number = 0;
   public CreatedBy: number = 0
   public StaffPostTypeID?: number = 0
+  public SeatIntakeid?: number = 0
 
 
   // New Work  18-02-2025
