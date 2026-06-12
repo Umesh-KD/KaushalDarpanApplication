@@ -139,7 +139,7 @@
 
 
 
-  <div class="bg-white rounded-2xl border border-slate-200/70 p-0 " >
+  <div class="bg-white rounded-2xl border border-slate-200/70 p-0 ">
     <div class="table-container">
       <table>
         <thead>
@@ -188,8 +188,8 @@
     </div>
   </div>
   <div class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm">
- 
-    <div  >
+
+    <div>
       <div id="apexchartsnif5h6h6" class="apexcharts-canvas apexchartsnif5h6h6 apexcharts-theme-light">
 
         <highcharts-chart [Highcharts]="Highcharts"
@@ -402,5 +402,10 @@
       </div>
     </div>
   </div>
-
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 ">
+    <highcharts-chart [Highcharts]="Highcharts"
+                      [options]="pieChartOptions"
+                      style="width:100%; height:400px; display:block;">
+    </highcharts-chart>
+  </div>
 </main>

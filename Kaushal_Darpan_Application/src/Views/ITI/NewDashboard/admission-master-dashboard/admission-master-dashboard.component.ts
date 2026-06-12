@@ -3,6 +3,7 @@ import Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ITIAdminDashboardServiceService } from '../../../../app/Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
 import { LoaderService } from '../../../../app/Services/Loader/loader.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admission-master-dashboard',
@@ -14,6 +15,9 @@ export class AdmissionMasterDashboardComponent implements OnInit
 {
 
   public _barChartData: any[] = [];
+  public _pieChartData: any[] = [];
+
+
   public governmentITI: any;
   public privateITI: any;
   public TotalITI: any;
@@ -37,10 +41,12 @@ export class AdmissionMasterDashboardComponent implements OnInit
   updateFlag = false;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions!: Highcharts.Options;
+  pieChartOptions: Highcharts.Options = {};
 
   constructor(
     private _ITIAdminDashboardServiceService: ITIAdminDashboardServiceService,
     private loaderService: LoaderService,
+    private router: Router
 
   )
   {
@@ -49,8 +55,11 @@ export class AdmissionMasterDashboardComponent implements OnInit
 
   async ngOnInit(): Promise<void>
   {
+    this.loadPieChart();
     this.FillBarChart();
-   await this.GetAllData();
+    await this.GetAllData();
+
+
  
   }
 
@@ -96,8 +105,7 @@ export class AdmissionMasterDashboardComponent implements OnInit
           this.NonEngineering = Trades.NonEngineeringTrades;
           this.TotalTrades = Trades.TotalTrades;
 
-
-
+          this._pieChartData = data.Data.Table4;
 
 
 
@@ -108,6 +116,8 @@ export class AdmissionMasterDashboardComponent implements OnInit
  
           this.FillBarChart();
 
+          this.loadPieChart
+            ();
         }, (error: any) => console.error(error)
         );
 
@@ -182,6 +192,57 @@ export class AdmissionMasterDashboardComponent implements OnInit
     };
     this.updateFlag = true;
     console.log(this.chartOptions);
+  }
+
+
+
+  loadPieChart(): void {
+    debugger;
+
+    this.pieChartOptions = {
+      chart: {
+        type: 'pie'
+      },
+      title: {
+        text: 'Bank Guarantee Status'
+      },
+      tooltip: {
+        pointFormat: '<b>{point.y}</b> ({point.percentage:.1f}%)'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '{point.name}: {point.y}'
+          },
+          point: {
+            events: {
+              click: (event) => {
+                console.log('Clicked slice:', event.point.name);
+                console.log('Value:', event.point.y);
+
+                // Call your method
+                this.onPieSliceClick(event.point);
+              }
+            }
+          }
+        }
+      },
+      series: [
+        {
+          type: 'pie',
+          name: 'Applications',
+          data: this._pieChartData
+        }
+      ]
+    };
+  }
+
+  onPieSliceClick(point: any)
+  {
+     this.router.navigate(['/iti-bank-guarantee-list']);
   }
 
 }
