@@ -734,6 +734,15 @@ export class ITIGovtEMStaffMaster {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetITIEstablishmentReportData(searchRequest: ITI_Govt_EM_ZonalOFFICERSSearchDataModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetITIEstablishmentReportData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
 }
 

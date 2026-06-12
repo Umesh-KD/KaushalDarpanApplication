@@ -34,6 +34,11 @@ export class PostwiseOfficeVacancyReportComponent {
   async GetVacancyReportPostWise() {
     try {
       const searchRequest: any = {};
+      searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      searchRequest.UserID = this.sSOLoginDataModel.UserID;
+      searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      searchRequest.OfficeID = this.sSOLoginDataModel.OfficeID;
       await this.ITIGovtEMStaffMaster.GetVacancyReportPostWise(searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.OfficeVacancyList = data['Data'];
@@ -46,15 +51,10 @@ export class PostwiseOfficeVacancyReportComponent {
   exportToExcel() {
     const excelData = this.OfficeVacancyList.map((item: any, index: number) => ({
       'S.No': index + 1,
-      'Office Name': item.OfficeName,
-      'Service Category(Cadre)': item.StaffTypeName,
-      'Institute Name': item.InstituteName,
-      'Name of Post': item.DesignationName,
-      'No. of Post Sanctioned': item.TotalSeatID,
-      'Deployed Post': item.PostedSeat,
-      'Vacant Seat': item.RemainingSeatID,
-      'Order No': item.OrderName,
-      'Comments': item.Comments
+      'Service Category(Cadre)': item.ServiceCategory,
+      'Name of Post': item.NameOfPost,
+      'Deployed Post': item.DeployedPost,
+      'Additional Post': item.AdditionalPostCount,
     }));
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
@@ -97,15 +97,10 @@ export class PostwiseOfficeVacancyReportComponent {
 
     const body = this.OfficeVacancyList.map((row: any, index: number) => [
       index + 1,
-      row.OfficeName || '',
-      row.StaffTypeName || '',
-      row.InstituteName || '',
-      row.DesignationName || '',
-      row.TotalSeatID || '',
-      row.PostedSeat || '',
-      row.RemainingSeatID || '',
-      row.OrderName || '',
-      row.Comments || ''
+      row.ServiceCategory || '',
+      row.NameOfPost || '',
+      row.DeployedPost || '',
+      row.AdditionalPostCount || ''
     ]);
 
     autoTable(doc, {
@@ -113,15 +108,10 @@ export class PostwiseOfficeVacancyReportComponent {
 
       head: [[
         'S No',
-        'Office Name',
         'Service Category(Cadre)',
-        'Institute Name',
         'Name of Post',
-        'No. of Post Sanctioned',
         'Deployed Post',
-        'Vacant Seat',
-        'Order No',
-        'Comments'
+        'Additional Post'
       ]],
 
       body,

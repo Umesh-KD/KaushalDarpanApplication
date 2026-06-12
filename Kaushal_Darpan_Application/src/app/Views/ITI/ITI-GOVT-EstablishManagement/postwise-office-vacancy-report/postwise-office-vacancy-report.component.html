@@ -21,31 +21,27 @@
         <thead>
           <tr>
             <th>S.No</th>
-            <th>Office Name</th>
             <th>Service Category(Cadre)</th>
-            <th>Institute Name</th>
             <th>Name of Post</th>
-            <th>No. of Post Sanctioned</th>
-            <th>Deployed Post</th>
-            <th>Vacant Post</th>
+            <th>Total Deployed Post</th>
             <th>Additional Post</th>
-            <th>Order No</th>
-            <th>Comments</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let leave of OfficeVacancyList;  let idx = index">
+          <tr *ngFor="let row of OfficeVacancyList;  let idx = index">
             <td class="text-center">{{idx+1}}</td>
-            <td>{{ leave.OfficeName }}</td>
-            <td>{{ leave.StaffTypeName }}</td>
-            <td>{{ leave.InstituteName }}</td>
-            <td>{{ leave.DesignationName }}</td>
-            <td>{{ leave.TotalSeatID }}</td>
-            <td>{{ leave.PostedSeat }}</td>
-            <td>{{ leave.RemainingSeatID }}</td>
-            <td>{{ leave.AdditionalPost }}</td>
-            <td>{{ leave.OrderName }}</td>
-            <td>{{ leave.Comments }}</td>
+            <td>{{ row.ServiceCategory }}</td>
+            <td>{{ row.NameOfPost }}</td>
+            <td>
+                <a [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID }" >
+                    {{ row.DeployedPost }}
+                </a>
+            </td>
+            <td>
+                <a [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID, isAdditional: 1 }" >
+                    {{ row.AdditionalPostCount }}
+                </a>
+            </td>
           </tr>
         </tbody>
       </table>

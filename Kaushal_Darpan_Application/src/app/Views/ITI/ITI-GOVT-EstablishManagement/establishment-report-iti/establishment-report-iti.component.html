@@ -98,13 +98,22 @@
           </select>
         </div>
 
-
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetStaffList()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post</label>
+
+          <ng-select
+              [(ngModel)]="searchRequest.PostID"
+              [clearable]="false">
+            <ng-option [value]="0">--All--</ng-option>
+            <ng-option *ngFor="let item of PostList;"
+                      [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
         </div>
       </div>
-
+      <div class="flex justify-center flex-wrap items-center">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetStaffList()"><i class="bi bi-search"></i>Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+      </div>
 
     </div>
 
