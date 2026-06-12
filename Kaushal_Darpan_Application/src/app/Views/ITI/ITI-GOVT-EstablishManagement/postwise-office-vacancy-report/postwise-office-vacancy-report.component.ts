@@ -99,7 +99,9 @@ export class PostwiseOfficeVacancyReportComponent {
       'S.No': index + 1,
       'Service Category(Cadre)': item.ServiceCategory,
       'Name of Post': item.NameOfPost,
+      'No. of Post Sanctioned': item.TotalSanctionedPost,
       'Deployed Post': item.DeployedPost,
+      'Vacant Post': item.VacantPost,
       'Additional Post': item.AdditionalPostCount,
     }));
 
@@ -145,7 +147,9 @@ export class PostwiseOfficeVacancyReportComponent {
       index + 1,
       row.ServiceCategory || '',
       row.NameOfPost || '',
+      row.TotalSanctionedPost || '',
       row.DeployedPost || '',
+      row.VacantPost || '',
       row.AdditionalPostCount || ''
     ]);
 
@@ -156,7 +160,9 @@ export class PostwiseOfficeVacancyReportComponent {
         'S No',
         'Service Category(Cadre)',
         'Name of Post',
+        'No. of Post Sanctioned',
         'Deployed Post',
+        'Vacant Post',
         'Additional Post'
       ]],
 

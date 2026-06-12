@@ -66,6 +66,7 @@ updatePlanningFlag = false;
   {
     this.loadPieChart();
     this.FillBarChart();
+    this.loadPlanningChart();
     await this.GetAllData();
     await this.GetDTEDashboard();
 
@@ -438,8 +439,8 @@ console.log( 'chart data in load planning',this.planningChartData);
       enabled: false
     }
   };
-    console.log(this.planningChartOptions);
-
+    console.log('planning chart options',this.planningChartOptions);
+debugger
   this.updatePlanningFlag = true;
 }
 

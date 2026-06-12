@@ -244,10 +244,10 @@
       </div>
       <!--end pagination-->
 
-    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3" *ngIf="GradeList.length>0">
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3" *ngIf="GradeList?.length>0">
       <div *ngIf="!isfinalsubmit" class="flex text-center justify-center">
         <button type="button" class="btn bg-success text-white me-2" (click)="OnSubmit()">Save All</button>
-        <button *ngIf="AllInTableSelect==true" type="button" class="btn bg-success text-white me-2" (click)="LockAndSubmit(0,1)">Lock & Submit</button>
+        <button *ngIf="AllInTableSelect==true && ![_EnumRole.HOD_Eng, _EnumRole.HOD_NonEng].includes(sSOLoginDataModel.RoleID)" type="button" class="btn bg-success text-white me-2" (click)="LockAndSubmit(0,1)">Lock & Submit</button>
         <!-- <button type="button" class="btn bg-danger text-white" (click)="ResetControl()">Cancel</button> -->
       </div>
     </div>

@@ -35,7 +35,7 @@ export class BterTeacherDashboardComponent {
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
-    private routers: Router,
+    private routers: Router, 
     private commonMasterService: CommonFunctionService,
     private staffMasterService: StaffMasterService,
     private sweetAlert2: SweetAlert2,
@@ -101,6 +101,7 @@ export class BterTeacherDashboardComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     debugger
     await this.CheckProfileStatus();
+
     //if (this.StaffMasterList.length > 0) {
     //    debugger;
     //    let status = this.StaffMasterList[0].ProfileStatus;

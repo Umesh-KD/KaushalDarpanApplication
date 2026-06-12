@@ -151,7 +151,7 @@ export class HighlightsComponent {
       .updateValueAndValidity();
 
 
-    if (this.sSOLoginDataModel.DepartmentID == 1) {
+    if (this.sSOLoginDataModel.DepartmentID == 1 || this.sSOLoginDataModel.RoleID==212) {
       this.HighlightsFromGroup.controls['DocCategoryID'].clearValidators()
     } else {
       this.HighlightsFromGroup.controls['DocCategoryID']
@@ -346,7 +346,7 @@ export class HighlightsComponent {
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       if (this.sSOLoginDataModel.RoleID == 212) {
-        this.Searchrequest.DepartmentSubID=6
+        this.Searchrequest.TypeID = 6
       }
       await this.websiteSettingsService.GetAllData(this.Searchrequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -369,7 +369,7 @@ export class HighlightsComponent {
           try {
             this.request.WS_ID = row.WS_ID;
             this.request.UserID = this.sSOLoginDataModel.UserID
-            this.request.DUTC_ID = row.DUTC_ID
+            this.request.DUTC_ID = row.WS_ID
             await this.websiteSettingsService.DeleteDataByID(this.request)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));

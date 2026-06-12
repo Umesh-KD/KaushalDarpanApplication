@@ -36,7 +36,6 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
           <ng-select [(ngModel)]="UnlockInternalMarksRequest.InstituteID"
-                     
                      [clearable]="false">
             <ng-option [value]="0" selected>--All--</ng-option>
             <ng-container *ngFor="let item of InstituteMasterList;">
@@ -57,82 +56,83 @@
       </div>
 
 
-     
+
     </div>
 
 
 
 
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
-        <div class="flex justify-end flex-wrap items-center">
-          <!--<button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="ScholarshipAPI Data">
-            <i class="fa fa-download"></i> Download
-          </button>-->
-        </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <!--<button type="button" class="btn bg-success btn-sm text-white" style="margin-left:auto;" title="ScholarshipAPI Data">
+          <i class="fa fa-download"></i> Download
+        </button>-->
       </div>
+    </div>
 
-     
 
 
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div class="">
-          <select id="ddlConter" class="form-select  couterDqropDown">
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="500">500</option>
-            <option value="1000">1000</option>
-          </select>
-        </div>
-        <div class=""></div>
-        <div class=""></div>
 
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDqropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
       </div>
-      <div class="overflow-x-auto mt-3">
-        <table class="table table-border w-full table-auto" cellpadding="5">
-          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-            <tr>
-              <th width="80px" align="left">Sr. No.</th>
-              <th class="text-left">Institute Code</th>
-              <th class="text-left">Institute Name</th>
-              <th class="text-left">Institution Management Type</th>
-              <th class="text-left">Email </th>
-              <th class="text-left">SSOID</th>
-              <th class="text-left" style="width:330px">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let row of UnlockInternalMarksList  let idx=index;">
-              <td>{{idx+1}}</td>
-              <td align="left">{{row.InstituteCode}}</td>
-              <td align="left">{{row.InstituteName}}</td>
-              <td align="left">{{row.InstitutionManagementType}}</td>
-              <td align="left">{{row.Email}}</td>
-              <td align="left">{{row.SSOID}}</td>
+      <div class=""></div>
+      <div class=""></div>
 
-              <td>
-                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Institute Code</th>
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">Institution Management Type</th>
+            <th class="text-left">Email </th>
+            <th class="text-left">SSOID</th>
+            <th class="text-left" style="width:330px">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of UnlockInternalMarksList  let idx=index;">
+            <td>{{idx+1}}</td>
+            <td align="left">{{row.InstituteCode}}</td>
+            <td align="left">{{row.InstituteName}}</td>
+            <td align="left">{{row.InstitutionManagementType}}</td>
+            <td align="left">{{row.Email}}</td>
+            <td align="left">{{row.SSOID}}</td>
 
-                  <button type="button" class="bg-success btn text-white btn-sm" (click)="SCAMarkUnlock(row, 2, 'IA Mark')">
-                    IA Mark Unlock
-                  </button>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
-                  <button type="button" class="bg-success btn text-white btn-sm" (click)="SCAMarkUnlock(row, 1, 'Practical Mark')">
-                    Practical Mark Unlock
-                  </button>
+                <button type="button" [ngClass]="IsAllFinalSubmit(row, 2) ? 'bg-danger' : 'bg-success'" class="btn text-white btn-sm" (click)="SCAMarkUnlock(row, 2, 'IA Mark')">
+                  IA Mark Unlock
+                </button>
 
-                  <button type="button" class="bg-success btn text-white btn-sm" (click)="SCAMarkUnlock(row, 3, 'SCA Mark')">
-                    SCA Mark Unlock
-                  </button>
-                </div>
-              </td>
-            </tr>
+                <button type="button" [ngClass]="IsAllFinalSubmit(row, 1) ? 'bg-danger' : 'bg-success'" class="btn text-white btn-sm" (click)="SCAMarkUnlock(row, 1, 'Practical Mark')">
+                  Practical Mark Unlock
+                </button>
 
-          </tbody>
-        </table>
-      </div>
+                <button type="button" [ngClass]="IsAllFinalSubmit(row, 3) ? 'bg-danger' : 'bg-success'" class="btn text-white btn-sm" style="color:white !important;" (click)="SCAMarkUnlock(row, 3, 'SCA Mark')">
+                  SCA Mark Unlock
+                </button>
+
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
     </div>
   </div>
+</div>
 
 
 
