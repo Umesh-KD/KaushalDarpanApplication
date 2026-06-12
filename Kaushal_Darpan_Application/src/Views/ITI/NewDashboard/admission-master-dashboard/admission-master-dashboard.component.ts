@@ -81,31 +81,32 @@ export class AdmissionMasterDashboardComponent implements OnInit
         .then((data: any) =>
         {
           data = JSON.parse(JSON.stringify(data));
+          const datas = data?.Data?.Table?.[0] || {};
 
-          const datas = data.Data.Table[0];
-          this.governmentITI = datas.GovernmentITI;
-          this.privateITI = datas.PrivateITI;
-          this.TotalITI = datas.TotalITI;
-          this.AffiliatedInstitutes = datas.AffiliatedInstitutes;
+          this.governmentITI = datas.GovernmentITI || 0;
+          this.privateITI = datas.PrivateITI || 0;
+          this.TotalITI = datas.TotalITI || 0;
+          this.AffiliatedInstitutes = datas.AffiliatedInstitutes || 0;
 
+          // Bar Chart Data
+          this._barChartData = data?.Data?.Table1 || [];
 
+          // Intake Details
+          const intake = data?.Data?.Table2?.[0] || {};
 
+          this.Engineering = intake.Engineering || 0;
+          this.NonEngineering = intake.NonEngineering || 0;
+          this.TotalActiveIntake = intake.Total || 0;
 
-          this._barChartData = data.Data.Table1;
+          // Trade Details
+          const trades = data?.Data?.Table3?.[0] || {};
 
-          //intake details
-          const intake = data.Data.Table2[0];
-          this.Engineering = intake.Engineering;
-          this.NonEngineering = intake.NonEngineering;
-          this.TotalActiveIntake = intake.Total;
+          this.EngineeringTrades = trades.EngineeringTrades || 0;
+          this.NonEngineeringTrades = trades.NonEngineeringTrades || 0;
+          this.TotalTrades = trades.TotalTrades || 0;
 
-          //intake details
-          const Trades = data.Data.Table3[0];
-          this.EngineeringTrades = Trades.EngineeringTrades;
-          this.NonEngineering = Trades.NonEngineeringTrades;
-          this.TotalTrades = Trades.TotalTrades;
-
-          this._pieChartData = data.Data.Table4;
+          // Pie Chart Data
+          this._pieChartData = data?.Data?.Table4 || [];
 
 
 
@@ -143,6 +144,55 @@ export class AdmissionMasterDashboardComponent implements OnInit
     const privateData = this._barChartData.map((x: any) => Number(x.PrivateITI));
 
 
+    //this.chartOptions = {
+    //  chart: {
+    //    type: 'column'
+    //  },
+
+    //  title: {
+    //    text: 'District Institutional Split'
+    //  },
+
+    //  xAxis: {
+    //    categories: categories,
+    //    title: {
+    //      text: 'District'
+    //    }
+    //  },
+
+    //  yAxis: {
+    //    min: 0,
+    //    title: {
+    //      text: ''
+    //    }
+    //  },
+
+    //  plotOptions: {
+    //    column: {
+    //      stacking: 'normal'
+    //    }
+    //  },
+
+    //  series: [
+    //    {
+    //      type: 'column',
+    //      name: 'Government ITIs',
+    //      data: governmentData
+    //    } as Highcharts.SeriesColumnOptions, 
+    //    {
+    //      type: 'column',
+    //      name: 'Private ITIs',
+    //      data: privateData
+    //    } as Highcharts.SeriesColumnOptions,
+    //  ],
+
+    //  credits: {
+    //    enabled: false
+    //  }
+    
+    //};
+
+
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -162,13 +212,15 @@ export class AdmissionMasterDashboardComponent implements OnInit
       yAxis: {
         min: 0,
         title: {
-          text: ''
+          text: 'Total ITIs'
         }
       },
 
       plotOptions: {
         column: {
-          stacking: 'normal'
+          grouping: true,
+          pointPadding: 0.1,
+          borderWidth: 0
         }
       },
 
@@ -177,19 +229,21 @@ export class AdmissionMasterDashboardComponent implements OnInit
           type: 'column',
           name: 'Government ITIs',
           data: governmentData
-        } as Highcharts.SeriesColumnOptions, 
+        },
         {
           type: 'column',
           name: 'Private ITIs',
           data: privateData
-        } as Highcharts.SeriesColumnOptions,
+        }
       ],
 
       credits: {
         enabled: false
       }
-    
     };
+
+
+
     this.updateFlag = true;
     console.log(this.chartOptions);
   }
