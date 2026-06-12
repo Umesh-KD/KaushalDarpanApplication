@@ -1,5 +1,8 @@
 <div class="modal-content">
   <div class="card">
+    <div class="card-body p-5">
+
+    
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Post Wise Office Vacancy Report</b>
       <div>
@@ -15,6 +18,31 @@
           <i class="ti ti-file-type-pdf"></i> Download PDF
         </a>
       </div>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-6">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Service Category(Cadre): </label>
+          <select class="form-select" [(ngModel)]="SearchData.StaffTypeID" (change)="GetPostList()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: </label>
+
+          <ng-select
+              [(ngModel)]="SearchData.DesignationID" 
+              [clearable]="false">
+            <ng-option [value]="0">--Choose Option--</ng-option>
+            <ng-option *ngFor="let item of PostList;"
+                      [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
+        </div>
+        <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetVacancyReportPostWise()"><i class="bi bi-search"></i>Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
     </div>
     <div class="overflow-x-auto mt-4">
       <table class="table table-bordered" *ngIf="OfficeVacancyList.length > 0">
@@ -45,6 +73,7 @@
           </tr>
         </tbody>
       </table>
+    </div>
     </div>
   </div>
 </div>
