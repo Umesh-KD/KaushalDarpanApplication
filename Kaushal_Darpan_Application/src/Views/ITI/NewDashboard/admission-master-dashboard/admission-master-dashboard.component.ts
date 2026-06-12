@@ -278,7 +278,7 @@ export class AdmissionMasterDashboardComponent implements OnInit
                 console.log('Value:', event.point.y);
 
                 // Call your method
-                this.onPieSliceClick(event.point);
+                this.onPieSliceClick(event.point.name);
               }
             }
           }
@@ -296,7 +296,34 @@ export class AdmissionMasterDashboardComponent implements OnInit
 
   onPieSliceClick(point: any)
   {
-     this.router.navigate(['/iti-bank-guarantee-list']);
+    let status = 0;
+    debugger;
+    if (point == 'Active')
+    {
+      status = 1;
+    }
+    else if (point == 'Due') {
+      status = 3;
+    }
+    else if (point == 'Returned')
+    {
+      status = 2;
+    }
+    else {
+      status = 0;
+    }
+
+
+
+    this.router.navigate(
+      ['/iti-bank-guarantee-list'],
+      {
+        queryParams: {
+          status: status
+        }
+      }
+    );
+
   }
 
 }
