@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -20,7 +20,7 @@ import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { ItiSanctionOrderList } from '../../../../../Models/ITI/ItiReportDataModel';
 import { HiringRoleMasterService } from '../../../../../Services/HiringRoleMaster/hiring-role-master.service';
 import { ITI_Govt_EM_NodalSearchDataModel, ITI_Relieving_joining_CheckVacantPostModel } from '../../../../../Models/ITIGovtEMStaffMasterDataModel';
-
+import { OTPModalComponent } from '../../../../otpmodal/otpmodal.component';
 @Component({
   selector: 'app-add-request-ddo-office',
   standalone: false,
@@ -62,7 +62,7 @@ export class AddRequestDDOOfficeComponent {
   public ITIRemarkList: any = [];
   public StaffListDDL: any = [];
   public RoleListDDL: any = [];
-
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public Id: number | null = null;
 
   public OfficeList: any = [];
@@ -367,50 +367,90 @@ export class AddRequestDDOOfficeComponent {
 
     await this.GetRelieving_joining_CheckVacantPostModel();
 
+    this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
+    this.isLoading = true;
+    this.loaderService.requestStarted();
+    this.request.UserId = this.sSOLoginDataModel.UserID;
+    this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
+    this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
+    this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
 
-    this.Swal2.Confirmation("Are you sure you want to make transfer request",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno;
+    await this.childComponent.OpenOTPPopup();
+    await this.childComponent.waitForVerification();
 
-          this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
+    try {
+      this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
 
-          console.log()
-          this.loaderService.requestStarted();
-          this.isLoading = true;
-          this.request.UserId = this.sSOLoginDataModel.UserID;
-          this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
-          this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
+      console.log("request", this.request)
+      await this.userRequestService.UserRequest(this.request).then((data: any) => {
+        if (data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.router.navigate(['/transfer-request-accept'])
+          setTimeout(() => {
+            this.groupForm.reset();
+          }, 2000);
+        }
+        else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        }
 
-          try {
-            this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
-          
-            console.log( "request",this.request)
-            await this.userRequestService.UserRequest(this.request).then((data: any) => {
-              if (data.State === EnumStatus.Success) {
-                this.toastr.success(data.Message);
-                this.router.navigate(['/transfer-request-accept'])
-                setTimeout(() => {
-                  this.groupForm.reset();
-                }, 2000);
-              }
-              else if (data.State === EnumStatus.Warning) {
-                this.toastr.warning(data.Message);
-              }
-
-              else {
-                this.toastr.error(data.ErrorMessage);
-              }
-            });
-          } catch (error) {
-            console.error(error);
-            this.toastr.error("An error occurred while saving the data.");
-          } finally {
-            this.loaderService.requestEnded();
-            this.isLoading = false;
-          }
+        else {
+          this.toastr.error(data.ErrorMessage);
         }
       });
+    } catch (error) {
+      console.error(error);
+      this.toastr.error("An error occurred while saving the data.");
+    } finally {
+      this.loaderService.requestEnded();
+      this.isLoading = false;
+    }
+
+
+    //this.Swal2.Confirmation("Are you sure you want to make transfer request",
+    //  async (result: any) => {
+    //    //confirmed
+    //    if (result.isConfirmed) {
+
+    //      this.request.RequestedUserID = this.StaffListDDL.find((x: any) => x.StaffID == this.request.StaffID).UserID
+
+    //      console.log()
+    //      this.loaderService.requestStarted();
+    //      this.isLoading = true;
+    //      this.request.UserId = this.sSOLoginDataModel.UserID;
+    //      this.request.RequestCreatedRoleID = this.sSOLoginDataModel.RoleID;
+    //      this.request.RequestCreatedInstituteID = this.sSOLoginDataModel.InstituteID;
+
+    //      try {
+    //        this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
+          
+    //        console.log( "request",this.request)
+    //        await this.userRequestService.UserRequest(this.request).then((data: any) => {
+    //          if (data.State === EnumStatus.Success) {
+    //            this.toastr.success(data.Message);
+    //            this.router.navigate(['/transfer-request-accept'])
+    //            setTimeout(() => {
+    //              this.groupForm.reset();
+    //            }, 2000);
+    //          }
+    //          else if (data.State === EnumStatus.Warning) {
+    //            this.toastr.warning(data.Message);
+    //          }
+
+    //          else {
+    //            this.toastr.error(data.ErrorMessage);
+    //          }
+    //        });
+    //      } catch (error) {
+    //        console.error(error);
+    //        this.toastr.error("An error occurred while saving the data.");
+    //      } finally {
+    //        this.loaderService.requestEnded();
+    //        this.isLoading = false;
+    //      }
+    //    }
+    //  });
     
   }
 
@@ -789,21 +829,47 @@ export class AddRequestDDOOfficeComponent {
     }
   }
 
-  async GetStaffDetailsByStaffID(StaffID: number) {
-    if(!StaffID){
+  //async GetStaffDetailsByStaffID(StaffID: number) {
+  //  if(!StaffID){
+  //    return;
+  //  }
+  //  try {
+  //    debugger
+  //    const request: any = {};
+  //    request.UserID = StaffID;
+  //    request.Action = 'StaffDetailsByStaffID'
+  //    await this.ITIGovtEMStaffMaster.ITI_EM_DropdownGetData(request).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      this.formData = data.Data[0];
+  //    })
+  //  } catch (error) {
+  //    console.error(error);
+  //  }
+  //}
+
+  async GetStaffDetailsByStaffID(StaffID: number): Promise<void> {
+    if (!StaffID) {
+      this.formData = new ITI_EM_StaffDetails_Curr_DataModel();
       return;
     }
-    try {
 
-      const request: any = {};
-      request.UserID = StaffID;
-      request.Action = 'StaffDetailsByStaffID'
-      await this.ITIGovtEMStaffMaster.ITI_EM_DropdownGetData(request).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.formData = data.Data[0];
-      })
+    try {
+      const request = {
+        UserID: StaffID,
+        Action: 'StaffDetailsByStaffID'
+      };
+
+      const response: any = await this.ITIGovtEMStaffMaster.ITI_EM_DropdownGetData(request);
+
+      if (response?.Data?.length > 0) {
+        this.formData = response.Data[0];
+      } else {
+        this.formData = new ITI_EM_StaffDetails_Curr_DataModel();
+      }
+
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching staff details:', error);
+      this.formData = new ITI_EM_StaffDetails_Curr_DataModel();
     }
   }
 

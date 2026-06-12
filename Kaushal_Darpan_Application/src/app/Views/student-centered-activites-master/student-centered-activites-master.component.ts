@@ -5,18 +5,14 @@ import { ToastrService } from 'ngx-toastr';
 import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
-import { TheoryMarksSearchModel, TheoryMarksDataModels } from '../../Models/TheoryMarksDataModels';
-import { StreamMasterService } from '../../Services/BranchesMaster/branches-master.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { StudentCenteredActivitesService } from '../../Services/Student Centered Activites/student-centered-activites.service';
 import { StudentCenteredActivitesModels, StudentCenteredActivitesSearchModel } from '../../Models/StudentCenteredActivitesModel';
 import * as XLSX from 'xlsx';
-import { UploadFileModel } from '../../Models/UploadFileModel';
-import { DeleteDocumentDetailsModel } from '../../Models/DeleteDocumentDetailsModel';
-import { DocumentDetailsService } from '../../Common/document-details';
 import { DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
-import { AppsettingService } from '../../Common/appsetting.service';
+import { AdminUserSearchModel } from '../../Models/AdminUserDataModel';
+import { AdminUserService } from '../../Services/BTERAdminUser/admin-user.service';
 
 @Component({
   selector: 'app-student-centered-activites-master',
@@ -67,14 +63,21 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   public InstituteMasterDDLList: any = []
   //end table feature default
 
-  constructor(private commonMasterService: CommonFunctionService,
-    private SCAService: StudentCenteredActivitesService, private toastr: ToastrService,
-    private loaderService: LoaderService, private router: ActivatedRoute,
-    private route: Router,
+  public HodBranchlist: any[] = [];
+  public hodRequestModel = new AdminUserSearchModel();
 
-    private modalService: NgbModal, private Swal2: SweetAlert2, private streamMasterService: StreamMasterService, private appsettingConfig: AppsettingService,
-    private documentDetailsService: DocumentDetailsService, private cdr: ChangeDetectorRef,
-    private activatedRoute: ActivatedRoute,) {
+  constructor(private commonMasterService: CommonFunctionService,
+    private SCAService: StudentCenteredActivitesService,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private router: ActivatedRoute,
+    private route: Router,
+    private modalService: NgbModal,
+    private Swal2: SweetAlert2,
+    private cdr: ChangeDetectorRef,
+    private activatedRoute: ActivatedRoute,
+    private adminUserService: AdminUserService
+  ) {
   }
 
 
@@ -93,7 +96,8 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       this.route.navigate(['/scactivities']);
     }
 
-
+    // load
+    await this.GetHodStreams();
     await this.GetMasterData();
     await this.GetGradeList();
 
@@ -101,11 +105,18 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
 
   async GetMasterData() {
     try {
-      this.loaderService.requestStarted();
       await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.Branchlist = data['Data'];
+
+          // set only show assigned streams to hod
+          if ([this._EnumRole.HOD_Eng, this._EnumRole.HOD_NonEng].includes(this.sSOLoginDataModel.RoleID)) {
+            this.Branchlist = this.Branchlist.filter(x =>
+              this.HodBranchlist.some(h => h.StreamID == x.StreamID)
+            );// filter
+          }
+
         }, error => console.error(error));
       await this.commonMasterService.SemesterMaster()
         .then((data: any) => {
@@ -113,19 +124,14 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
           this.SemesterMasterList = data['Data'];
         }, error => console.error(error));
 
-      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.InstituteMasterDDLList = data.Data;
-        console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
-      })
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.InstituteMasterDDLList = data.Data;
+        });
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -326,7 +332,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID','UFMDocument','Dis_UFMDocument','rowclass'
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID', 'UFMDocument', 'Dis_UFMDocument', 'rowclass'
     ];
     const filteredData = this.GradeList.map((item: any) => {
       const filteredItem: any = {};
@@ -547,4 +553,25 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     return this.GradeList?.every(item => item.IsSCAChecked == true);
   }
 
+  async GetHodStreams() {
+    try {
+
+      this.hodRequestModel.UserID = this.sSOLoginDataModel.UserID
+      this.hodRequestModel.UserAdditionID = 0;
+      this.hodRequestModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.hodRequestModel.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.hodRequestModel.RoleID = this.sSOLoginDataModel.RoleID;
+      this.hodRequestModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      // get
+      await this.adminUserService.GetHodBranch(this.hodRequestModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.HodBranchlist = data['Data']
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+  }
 }

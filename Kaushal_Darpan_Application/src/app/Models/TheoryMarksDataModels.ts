@@ -276,7 +276,7 @@ export class ReportedStudentReport {
 
 
 
-export class UnlockInternalMarksModel {
+export class UnlockInternalMarksModel extends RequestBaseModel {
   public InstituteID = 0;
   public InstituteCode?: string;
   public InstitutionDGTCode?: string;
@@ -287,10 +287,13 @@ export class UnlockInternalMarksModel {
   public FaxNumber?: string;
   public TypeID = 0;
   public InstituteID_Old?: number;
-  public DepartmentID = 0;
-  public FinancialYearID = 0;
   public Capacity = 0;
-
+  public PracticalTotalPaperCount?: number = 0;
+  public PracticalFinalSubmitPaperCount?: number = 0;
+  public IATotalPaperCount?: number = 0;
+  public IAFinalSubmitPaperCount?: number = 0;
+  public SCATotalPaperCount?: number = 0;
+  public SCAFinalSubmitPaperCount?: number = 0;
 }
 
 export class updateUnlockInternalMarksModel {

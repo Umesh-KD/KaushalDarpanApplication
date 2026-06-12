@@ -369,7 +369,7 @@ export class HighlightsComponent {
           try {
             this.request.WS_ID = row.WS_ID;
             this.request.UserID = this.sSOLoginDataModel.UserID
-            this.request.DUTC_ID = row.DUTC_ID
+            this.request.DUTC_ID = row.WS_ID
             await this.websiteSettingsService.DeleteDataByID(this.request)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));

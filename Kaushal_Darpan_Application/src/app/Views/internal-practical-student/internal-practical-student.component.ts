@@ -12,6 +12,8 @@ import { StreamMasterService } from '../../Services/BranchesMaster/branches-mast
 import { EnumRole, EnumStatus } from '../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
 import { AppsettingService } from '../../Common/appsetting.service';
+import { AdminUserService } from '../../Services/BTERAdminUser/admin-user.service';
+import { AdminUserSearchModel } from '../../Models/AdminUserDataModel';
 
 @Component({
   selector: 'app-internal-practical-student',
@@ -26,7 +28,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public SemesterMasterList: any = [];
-  public Branchlist: any = [];
+  public Branchlist: any[] = [];
   public InternalPracticalID: number | null = null;
   /*public TheoryMarksList: any = [];*/
   @ViewChildren('markInput') markInputs!: QueryList<ElementRef>;
@@ -68,6 +70,9 @@ export class InternalPracticalStudentComponent implements OnInit {
 
   public isAnyUFMSelected: boolean = false;
 
+  public HodBranchlist: any[] = [];
+  public hodRequestModel = new AdminUserSearchModel();
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private activatedRoute: ActivatedRoute,
@@ -78,8 +83,7 @@ export class InternalPracticalStudentComponent implements OnInit {
     private router: ActivatedRoute,
     private modalService: NgbModal,
     private Swal2: SweetAlert2,
-    private streamMasterService: StreamMasterService,
-    private appsettingConfig: AppsettingService
+    private adminUserService: AdminUserService
   ) { }
 
 
@@ -103,18 +107,28 @@ export class InternalPracticalStudentComponent implements OnInit {
       this.IsView = false;
     }
     this.searchRequest.InternalPracticalID = this.InternalPracticalID;
+
     //load
+    await this.GetHodStreams();
     await this.GetMasterData();
     await this.GetTheoryMarksList();
   }
 
   async GetMasterData() {
     try {
-      this.loaderService.requestStarted();
+      
       await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.Branchlist = data['Data'];
+
+          // set only show assigned streams to hod
+          if ([this._EnumRole.HOD_Eng, this._EnumRole.HOD_NonEng].includes(this.sSOLoginDataModel.RoleID)) {
+            this.Branchlist = this.Branchlist.filter(x =>
+              this.HodBranchlist.some(h => h.StreamID == x.StreamID)
+            );// filter
+          }
+
         }, error => console.error(error));
       await this.commonMasterService.SemesterMaster()
         .then((data: any) => {
@@ -128,20 +142,9 @@ export class InternalPracticalStudentComponent implements OnInit {
         console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
       })
 
-      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.StreamMasterDDL = data.Data;
-        //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
-        // split
-      })
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -197,10 +200,10 @@ export class InternalPracticalStudentComponent implements OnInit {
                 }
 
                 // added by Ramesh on 09-06-2026 as MaxInternalAssisment == 0 then should show Pass||Fail
-                if(x.IsInternalAssesmentCheckecd == false && x.MaxInternalAssisment == 0) {
+                if (x.IsInternalAssesmentCheckecd == false && x.MaxInternalAssisment == 0) {
                   x.ObtainedInternalAssisment = "Pass";
-                } else if(x.IsInternalAssesmentCheckecd == true && x.MaxInternalAssisment == 0) {
-                  if(x.IsPresentInternalAssisment == 1) {
+                } else if (x.IsInternalAssesmentCheckecd == true && x.MaxInternalAssisment == 0) {
+                  if (x.IsPresentInternalAssisment == 1) {
                     x.ObtainedInternalAssisment = "Pass";
                   } else {
                     x.ObtainedInternalAssisment = "Fail";
@@ -218,7 +221,7 @@ export class InternalPracticalStudentComponent implements OnInit {
             }
 
             // all checked
-            this.isfinalsubmit = this.TheoryMarksList.every(x => x.isFinalSubmit == true); 
+            this.isfinalsubmit = this.TheoryMarksList.every(x => x.isFinalSubmit == true);
 
           }
           //table feature load
@@ -408,7 +411,7 @@ export class InternalPracticalStudentComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       array.forEach((x: any) => {
-        if(x.ObtainedInternalAssisment == "Pass" || x.ObtainedInternalAssisment == "Fail") {
+        if (x.ObtainedInternalAssisment == "Pass" || x.ObtainedInternalAssisment == "Fail") {
           x.ObtainedInternalAssisment = 0
         }
       })
@@ -424,8 +427,8 @@ export class InternalPracticalStudentComponent implements OnInit {
                 x.Marked = this.AllInTableSelect;
 
                 // Added By Ramesh 
-                if(x.MaxInternalAssisment == 0) {
-                  if(x.IsPresentInternalAssisment == 1) {
+                if (x.MaxInternalAssisment == 0) {
+                  if (x.IsPresentInternalAssisment == 1) {
                     x.ObtainedInternalAssisment = "Pass";
                   } else {
                     x.ObtainedInternalAssisment = "Fail";
@@ -476,7 +479,7 @@ export class InternalPracticalStudentComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID','UFMDocument','Dis_UFMDocument','rowclass'
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'GroupCode', 'InstituteID', 'UFMDocument', 'Dis_UFMDocument', 'rowclass'
     ];
     const filteredData = this.TheoryMarksList.map((item: any) => {
       const filteredItem: any = {};
@@ -619,9 +622,9 @@ export class InternalPracticalStudentComponent implements OnInit {
     }
 
     // added by Ramesh on 09-06-2026 as MaxInternalAssisment == 0 then should show Pass||Fail
-    if(dOC.Marked && dOC.IsPresentInternalAssisment == 1 && dOC.MaxInternalAssisment == 0) {
+    if (dOC.Marked && dOC.IsPresentInternalAssisment == 1 && dOC.MaxInternalAssisment == 0) {
       dOC.ObtainedInternalAssisment = "Pass";
-    } else if(dOC.Marked && dOC.IsPresentInternalAssisment != 1 && dOC.MaxInternalAssisment == 0) {
+    } else if (dOC.Marked && dOC.IsPresentInternalAssisment != 1 && dOC.MaxInternalAssisment == 0) {
       dOC.ObtainedInternalAssisment = "Fail";
     }
 
@@ -758,6 +761,28 @@ export class InternalPracticalStudentComponent implements OnInit {
     }
 
     event.preventDefault();
+  }
+
+  async GetHodStreams() {
+    try {
+
+      this.hodRequestModel.UserID = this.sSOLoginDataModel.UserID
+      this.hodRequestModel.UserAdditionID = 0;
+      this.hodRequestModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.hodRequestModel.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.hodRequestModel.RoleID = this.sSOLoginDataModel.RoleID;
+      this.hodRequestModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      // get
+      await this.adminUserService.GetHodBranch(this.hodRequestModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.HodBranchlist = data['Data']
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
   }
 
 }
