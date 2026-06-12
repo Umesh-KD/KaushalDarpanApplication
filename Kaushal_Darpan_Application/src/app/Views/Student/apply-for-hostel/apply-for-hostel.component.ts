@@ -869,7 +869,7 @@ export class ApplyForHostelComponent {
         if (this.State == 0) {
           if (Type == "Document") {
             this.request.AffidavitDocument = '';
-            this.request.dis_AffidavitDocument = '';
+            this.request.AffidavitDocument = '';
           }
           if (Type == "Document") {
             this.request.SupportingDocument = '';

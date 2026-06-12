@@ -1,0 +1,36 @@
+.bank-guarantee-card {
+  max-width: 700px;
+  margin: 20px auto;
+  border-radius: 12px;
+}
+
+  .bank-guarantee-card mat-card-header {
+    background-color: #1976d2;
+    color: #fff;
+    padding: 16px;
+    margin: -16px -16px 16px -16px;
+    border-radius: 12px 12px 0 0;
+  }
+
+.detail-row {
+  display: flex;
+  padding: 14px 0;
+  border-bottom: 1px solid #e0e0e0;
+  align-items: center;
+}
+
+.last-row {
+  border-bottom: none;
+}
+
+.detail-label {
+  width: 220px;
+  font-weight: 600;
+  color: #424242;
+}
+
+.detail-value {
+  flex: 1;
+  color: #212121;
+  word-break: break-word;
+}
