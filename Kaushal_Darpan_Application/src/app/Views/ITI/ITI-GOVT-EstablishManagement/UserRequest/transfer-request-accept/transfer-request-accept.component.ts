@@ -1290,6 +1290,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
           if (data.State == EnumStatus.Success) {
             this.toastr.success('Staff relieved status has been reverted successfully.')
             this.CloseModal();
+            this.getlist();
             this.RevertModel = new Iti_Update_Relieved_RevertModel();
           }
           else 
