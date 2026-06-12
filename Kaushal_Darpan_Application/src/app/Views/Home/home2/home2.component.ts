@@ -139,12 +139,13 @@ export class Home2Component implements AfterViewInit {
   async GetDynamicUploadContentNotificationApprenticeshipList() {
     try {
       this.searchRequest.DynamicUploadTypeID = 6; // Only Notifications List For Home Page (DTE,BTER, ITI)
-      this.searchRequest.DepartmentSubID = 248; 
-      this.searchRequest.Key = 'DynamicUploadShortList';
+      this.searchRequest.DepartmentSubID = 0; 
+      this.searchRequest.Key = 'DynamicUploadShortListApperentishifp';
       this.loaderService.requestStarted();
       await this.home2Service.GetDynamicUploadContent(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
+          debugger
           this.ApprenticeshipList = data.Data;
         }, (error: any) => console.error(error)
         );

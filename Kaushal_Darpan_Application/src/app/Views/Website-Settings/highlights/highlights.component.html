@@ -16,113 +16,117 @@
     </div>
     <div class="overflow-x-auto mt-3 mb-3">
 
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-          <div *ngIf="sSOLoginDataModel.RoleID!=212">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department Type</label><span class="StarMarking">*</span>
-            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.DepartmentSubID">
-              <option value="0">--Select--</option>
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
+        <div *ngIf="sSOLoginDataModel.RoleID!=212">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department Type</label><span class="StarMarking">*</span>
+          <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.DepartmentSubID">
+            <option value="0">--Select--</option>
+            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
+            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
 
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT">ITI NCVT</option>
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT</option>
+            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT">ITI NCVT</option>
+            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT</option>
 
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Planing">T1 PLANING</option>
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Establishment">T2 ESTABLISHMENT</option>
-              <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Purchase">T3 PURCHASE</option>
-
-
+            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Planing">T1 PLANING</option>
+            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Establishment">T2 ESTABLISHMENT</option>
+            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_Purchase">T3 PURCHASE</option>
 
 
 
-            </select>
-           
-          </div>
 
 
-          <div *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document Category</label>
-            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.DocCategoryID" >
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of DocumentCategory" [value]="item.ID">{{item.Name}}</option>
-            </select>
-           
-          </div>
+          </select>
+
+        </div>
 
 
+        <div *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI && sSOLoginDataModel.RoleID!=212 ">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document Category</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.DocCategoryID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DocumentCategory" [value]="item.ID">{{item.Name}}</option>
+          </select>
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Notification Type</label>
-            <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.TypeID" >
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of GetDynamicUploadTypeDDL_Data" [value]="item.Id">{{item.TypeName}}</option>
-            </select>
-           
-          </div>
-
-
-          <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip</label>
-            <ng-select appendTo="body" formControlName="ViewTypeIDs" [items]="ViewTypeDDL" bindLabel="Name"
-                       bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
-                       placeholder="--Select Branch--">
-              <ng-template ng-option-tmp let-item="item" let-item$="item$">
-                <input type="checkbox" [checked]="item$.selected" class="me-2" />
-                {{ item.Name }}
-              </ng-template>
-            </ng-select>
-            <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.ViewTypeIDs.errors" class="text-danger">
-              <p *ngIf="!_HighlightsFromGroup.ViewTypeIDs.errors.required">
-                <i aria-hidden="true"></i>This field is required .!
-              </p>
-            </div>
-          </div>-->
+        </div>
 
 
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip<span class="StarMarking">*</span></label>
-            <ng-select appendTo="body"  [(ngModel)]="Searchrequest.ViewTypeIDs" [clearable]="false">
-              <ng-option value="">--Select--</ng-option>
-              @for (item of ViewTypeDDL; track item.ID) {
-              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
-              }
-            </ng-select>
-          
-          </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Notification Type</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="Searchrequest.TypeID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GetDynamicUploadTypeDDL_Data" [value]="item.Id">{{item.TypeName}}</option>
+          </select>
 
-    
-
-          <!--<div  *ngIf="request.ViewTypeIDs=='10366'">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
-            <select class="form-select" [(ngModel)]="request.DesignationID" formControlName="DesignationID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
-            </select>
-          </div>-->
+        </div>
 
 
-      
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip</label>
+    <ng-select appendTo="body" formControlName="ViewTypeIDs" [items]="ViewTypeDDL" bindLabel="Name"
+               bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+               placeholder="--Select Branch--">
+      <ng-template ng-option-tmp let-item="item" let-item$="item$">
+        <input type="checkbox" [checked]="item$.selected" class="me-2" />
+        {{ item.Name }}
+      </ng-template>
+    </ng-select>
+    <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.ViewTypeIDs.errors" class="text-danger">
+      <p *ngIf="!_HighlightsFromGroup.ViewTypeIDs.errors.required">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+  </div>-->
 
 
 
-         
-          <!--<div class="flex flex-col justify-end mb-4 ms-4">
-            <label class="me-2 ms-4">
-              <input type="checkbox" value="1" id="Box8THForm" (click)="onClickCheckbox()"
-                     [checked]="IsPrivate" [(ngModel)]="request.IsPrivate" formControlName="IsPrivate" />
-              Is order is private and will only be visible to selected users.
-            </label>
-          </div>-->
+        <div *ngIf="sSOLoginDataModel.RoleID!=212">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip<span class="StarMarking">*</span></label>
+          <ng-select appendTo="body" [(ngModel)]="Searchrequest.ViewTypeIDs" [clearable]="false">
+            <ng-option value="">--Select--</ng-option>
+            @for (item of ViewTypeDDL; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
 
-          <div>
-            <div class="pt-5">
-              <button class="bg-success btn text-white" (click)="GetAllData()"> Search</button>
-              <button class="bg-danger btn text-white" (click)="ResetControls()"> Cancel</button>
-            </div>
+        </div>
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID==212">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip<span class="StarMarking">*</span></label>
+          <ng-select appendTo="body" [(ngModel)]="Searchrequest.ViewTypeIDs" [clearable]="false">
+            <ng-option value="">--Select--</ng-option>
+            <ng-option [value]="10363">Public</ng-option>
+            <ng-option [value]="10364">All Employees</ng-option>
+            <ng-option [value]="1">Zonal</ng-option>
+            <ng-option [value]="2">Nodal</ng-option>
+          </ng-select>
+
+        </div>
+
+        <!--<div  *ngIf="request.ViewTypeIDs=='10366'">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+    <select class="form-select" [(ngModel)]="request.DesignationID" formControlName="DesignationID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div>-->
+        <!--<div class="flex flex-col justify-end mb-4 ms-4">
+    <label class="me-2 ms-4">
+      <input type="checkbox" value="1" id="Box8THForm" (click)="onClickCheckbox()"
+             [checked]="IsPrivate" [(ngModel)]="request.IsPrivate" formControlName="IsPrivate" />
+      Is order is private and will only be visible to selected users.
+    </label>
+  </div>-->
+
+        <div>
+          <div class="pt-5">
+            <button class="bg-success btn text-white" (click)="GetAllData()"> Search</button>
+            <button class="bg-danger btn text-white" (click)="ResetControls()"> Cancel</button>
           </div>
         </div>
+      </div>
  
     </div>
 
@@ -271,7 +275,7 @@
             </div>
 
 
-            <div *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI">
+            <div *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI && sSOLoginDataModel.RoleID!=212 ">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document Category</label>
               <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.DocCategoryID" formControlName="DocCategoryID">
                 <option value="0">--Select--</option>
@@ -301,25 +305,25 @@
 
 
             <!--<div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip</label>
-        <ng-select appendTo="body" formControlName="ViewTypeIDs" [items]="ViewTypeDDL" bindLabel="Name"
-                   bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
-                   placeholder="--Select Branch--">
-          <ng-template ng-option-tmp let-item="item" let-item$="item$">
-            <input type="checkbox" [checked]="item$.selected" class="me-2" />
-            {{ item.Name }}
-          </ng-template>
-        </ng-select>
-        <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.ViewTypeIDs.errors" class="text-danger">
-          <p *ngIf="!_HighlightsFromGroup.ViewTypeIDs.errors.required">
-            <i aria-hidden="true"></i>This field is required .!
-          </p>
-        </div>
-      </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip</label>
+    <ng-select appendTo="body" formControlName="ViewTypeIDs" [items]="ViewTypeDDL" bindLabel="Name"
+               bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+               placeholder="--Select Branch--">
+      <ng-template ng-option-tmp let-item="item" let-item$="item$">
+        <input type="checkbox" [checked]="item$.selected" class="me-2" />
+        {{ item.Name }}
+      </ng-template>
+    </ng-select>
+    <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.ViewTypeIDs.errors" class="text-danger">
+      <p *ngIf="!_HighlightsFromGroup.ViewTypeIDs.errors.required">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+  </div>-->
 
 
 
-            <div>
+            <div *ngIf="sSOLoginDataModel.RoleID!=212">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip<span class="StarMarking">*</span></label>
               <ng-select appendTo="body" formControlName="ViewTypeIDs" [(ngModel)]="request.ViewTypeIDs" [clearable]="false">
                 <ng-option value="">--Select--</ng-option>
@@ -333,6 +337,21 @@
                 </p>
               </div>
             </div>
+
+
+
+            <div *ngIf="sSOLoginDataModel.RoleID==212">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Target ViewerShip<span class="StarMarking">*</span></label>
+              <ng-select appendTo="body"  formControlName="ViewTypeIDs"  [(ngModel)]="request.ViewTypeIDs" [clearable]="false">
+                <ng-option value="">--Select--</ng-option>
+                <ng-option [value]="10363">Public</ng-option>
+                <ng-option [value]="10364">All Employees</ng-option>
+                <ng-option [value]="1">Zonal</ng-option>
+                <ng-option [value]="2">Nodal</ng-option>
+              </ng-select>
+
+            </div>
+
 
             <div *ngIf="request.ViewTypeIDs=='10366'">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
@@ -348,53 +367,53 @@
             </div>
 
             <!--<div  *ngIf="request.ViewTypeIDs=='10366'">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
-        <select class="form-select" [(ngModel)]="request.DesignationID" formControlName="DesignationID">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-      </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+    <select class="form-select" [(ngModel)]="request.DesignationID" formControlName="DesignationID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div>-->
 
 
-          <div *ngIf="request.ViewTypeIDs=='10366'">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Post
-            </label>
+            <div *ngIf="request.ViewTypeIDs=='10366'">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Post
+              </label>
 
-            <ng-select appendTo="body"
-                       formControlName="DesignationID"
-                       [items]="PostList"
-                       bindLabel="Name"
-                       bindValue="ID"
-                       [multiple]="true"
-                       [closeOnSelect]="false"
-                       [searchable]="true"
-                       placeholder="--Select Post--">
+              <ng-select appendTo="body"
+                         formControlName="DesignationID"
+                         [items]="PostList"
+                         bindLabel="Name"
+                         bindValue="ID"
+                         [multiple]="true"
+                         [closeOnSelect]="false"
+                         [searchable]="true"
+                         placeholder="--Select Post--">
 
-              <ng-template ng-header-tmp>
-                <div class="px-2 py-2 border-bottom">
-                  <input type="checkbox"
-                         [checked]="isAllSelected()"
-                         (change)="toggleSelectAll($event)"
-                         class="me-2" />
-                  <span>Select All</span>
-                </div>
-              </ng-template>
+                <ng-template ng-header-tmp>
+                  <div class="px-2 py-2 border-bottom">
+                    <input type="checkbox"
+                           [checked]="isAllSelected()"
+                           (change)="toggleSelectAll($event)"
+                           class="me-2" />
+                    <span>Select All</span>
+                  </div>
+                </ng-template>
 
-              <ng-template ng-option-tmp let-item="item" let-item$="item$">
-                <input type="checkbox" [checked]="item$.selected" class="me-2" />
-                {{ item.Name }}
-              </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$">
+                  <input type="checkbox" [checked]="item$.selected" class="me-2" />
+                  {{ item.Name }}
+                </ng-template>
 
-            </ng-select>
+              </ng-select>
 
-            <div *ngIf="isFormSubmitted && _HighlightsFromGroup.DesignationID.errors"
-                 class="text-danger">
-              <p *ngIf="_HighlightsFromGroup.DesignationID.errors.required">
-                This field is required .!
-              </p>
+              <div *ngIf="isFormSubmitted && _HighlightsFromGroup.DesignationID.errors"
+                   class="text-danger">
+                <p *ngIf="_HighlightsFromGroup.DesignationID.errors.required">
+                  This field is required .!
+                </p>
+              </div>
             </div>
-          </div>
 
 
 
@@ -450,12 +469,12 @@
             </div>
 
             <!--<div class="flex flex-col justify-end mb-4 ms-4">
-        <label class="me-2 ms-4">
-          <input type="checkbox" value="1" id="Box8THForm" (click)="onClickCheckbox()"
-                 [checked]="IsPrivate" [(ngModel)]="request.IsPrivate" formControlName="IsPrivate" />
-          Is order is private and will only be visible to selected users.
-        </label>
-      </div>-->
+    <label class="me-2 ms-4">
+      <input type="checkbox" value="1" id="Box8THForm" (click)="onClickCheckbox()"
+             [checked]="IsPrivate" [(ngModel)]="request.IsPrivate" formControlName="IsPrivate" />
+      Is order is private and will only be visible to selected users.
+    </label>
+  </div>-->
 
             <div>
               <div class="pt-5">

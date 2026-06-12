@@ -262,8 +262,7 @@ export class AssignHodComponent {
   //GetHodBranch
   async GetById() {
     try {
-      
-      this.loaderService.requestStarted();
+
       this.searchRequest.UserID = this.AddParent.UserID;
       this.searchRequest.UserAdditionID = this.AddParent.UserAdditionalID;
       this.searchRequest.Eng_NonEng = this.AddParent.CourseTypeID;
@@ -271,6 +270,7 @@ export class AssignHodComponent {
 
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      // get
       await this.adminUserService.GetHodBranch(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -289,11 +289,6 @@ export class AssignHodComponent {
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 

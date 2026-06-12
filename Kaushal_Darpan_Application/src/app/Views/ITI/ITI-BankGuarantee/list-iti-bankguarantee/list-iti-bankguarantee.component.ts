@@ -33,6 +33,7 @@ export class listitibankguaranteeComponent {
   searchText: string = '';
   public CollegeTypeList: any[] = [];
   public BankGuaranteeList: any[] = [];
+  public BankGuaranteeListByID: any[] = [];
   public TradeTypesList: any = [];
   public TradeData: ITITradeSearchModel[] = [];
   request = new ITITradeDataModels()
@@ -423,6 +424,49 @@ export class listitibankguaranteeComponent {
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
 
   }
+
+  async ViewBankGuranteeDetails(content: any, item: any) {
+    debugger
+    this.requestById.BankGuaranteeID = item.BankGuaranteeID
+    await this.getbankguaranteeByID();
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+
+  }
+
+  async getbankguaranteeByID() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequest.BankGuaranteeID = 0;
+      //   this.searchRequest.CollageId = this.id;
+
+      if (!this.searchRequest.CollageId) {
+        this.searchRequest.CollageId = 0; // fallback to All
+      }
+
+      await this.campusPostService.ITIPlanningBankGuaranteeGetByID(this.requestById.BankGuaranteeID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.BankGuaranteeListByID = data['Data'];
+
+          this.loadInTable();
+
+          console.log('Bank Gaurentee ===>', this.BankGuaranteeList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async statusUpdateById() {
     debugger

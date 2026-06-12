@@ -573,7 +573,7 @@ export class AdmissionDashboardComponent {
       title: {
         text: this.getTotalSeats().toLocaleString(),
         verticalAlign: 'middle',
-        y: 12,
+        y: 25,
         style: {
           fontSize: '34px',
           fontWeight: '700'
@@ -581,7 +581,7 @@ export class AdmissionDashboardComponent {
       },
 
       subtitle: {
-        text: 'TOTAL SEATS',
+        // text: 'TOTAL SEATS',
         verticalAlign: 'middle',
         y: -15,
         style: {

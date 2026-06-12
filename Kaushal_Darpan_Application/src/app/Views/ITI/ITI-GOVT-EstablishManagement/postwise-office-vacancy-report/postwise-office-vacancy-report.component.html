@@ -1,20 +1,48 @@
 <div class="modal-content">
   <div class="card">
+    <div class="card-body p-5">
+
+    
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Post Wise Office Vacancy Report</b>
       <div>
         <a href="javascript:void(0);"
-           class="btn bg-info text-white me-1"
+           class="btn bg-success text-white me-1"
            (click)="exportToExcel()">
-          <i class="ti ti-download"></i> Download Excel
+          <i class="bi bi-file-earmark-excel"></i>
         </a>
 
         <a href="javascript:void(0);"
            class="btn bg-danger text-white"
            (click)="exportToPDF()">
-          <i class="ti ti-file-type-pdf"></i> Download PDF
+          <i class="bi bi-filetype-pdf"></i>
         </a>
       </div>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-6">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Service Category(Cadre): </label>
+          <select class="form-select" [(ngModel)]="SearchData.StaffTypeID" (change)="GetPostList()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: </label>
+
+          <ng-select
+              [(ngModel)]="SearchData.DesignationID" 
+              [clearable]="false">
+            <ng-option [value]="0">--Choose Option--</ng-option>
+            <ng-option *ngFor="let item of PostList;"
+                      [value]="item.ID">{{item.Name}}</ng-option>
+          </ng-select>
+        </div>
+        <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetVacancyReportPostWise()"><i class="bi bi-search"></i>Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
     </div>
     <div class="overflow-x-auto mt-4">
       <table class="table table-bordered" *ngIf="OfficeVacancyList.length > 0">
@@ -23,7 +51,9 @@
             <th>S.No</th>
             <th>Service Category(Cadre)</th>
             <th>Name of Post</th>
+            <th>No. of Post Sanctioned</th>
             <th>Total Deployed Post</th>
+            <th>Vacant Post</th>
             <th>Additional Post</th>
           </tr>
         </thead>
@@ -32,19 +62,24 @@
             <td class="text-center">{{idx+1}}</td>
             <td>{{ row.ServiceCategory }}</td>
             <td>{{ row.NameOfPost }}</td>
+            <td>{{ row.TotalSanctionedPost }}</td>
             <td>
-                <a [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID }" >
+                <a class="text-md font-semibold text-dark"
+                    [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID }" >
                     {{ row.DeployedPost }}
                 </a>
             </td>
+            <td>{{ row.VacantPost }}</td>
             <td>
-                <a [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID, isAdditional: 1 }" >
+                <a class="text-md font-semibold text-dark"
+                    [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID, isAdditional: 1 }" >
                     {{ row.AdditionalPostCount }}
                 </a>
             </td>
           </tr>
         </tbody>
       </table>
+    </div>
     </div>
   </div>
 </div>

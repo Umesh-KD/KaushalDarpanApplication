@@ -5,6 +5,7 @@ import { LoaderModule } from '../../../../Shared/loader/loader.module';
 import { AddRequestDDOOfficeComponent } from './add-request-ddo-office.component';
 import { AddRequestDDOOfficeRoutingModule } from './add-request-ddo-office-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { OTPModalModule } from '../../../../otpmodal/otpmodal.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ReactiveFormsModule,
     LoaderModule,
     NgSelectModule,
+    OTPModalModule
   ]
 })
 export class AddRequestDDOOfficeModule { }

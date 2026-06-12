@@ -8,6 +8,7 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
 import { MaterialModule } from '../../../../material.module';
 import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MatCardModule } from '@angular/material/card';
 
 
 
@@ -25,6 +26,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     MaterialModule,
     NgMultiSelectDropDownModule.forRoot(),
     NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
+    MatCardModule 
   ]
 })
 export class ITIsModule { }

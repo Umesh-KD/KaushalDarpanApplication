@@ -42,6 +42,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   public DesignationMasterList: any[] = [];
 
   public StaffMasterList: any = [];
+  shiftddl: any[] = [];
   public StaffTypeList: any[] = []
   public sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
@@ -135,6 +136,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       ddlHostel: [''],
       ddlPost: [{ value: ''  }, [DropdownValidators]],
       StaffPostTypeID: [{ value: 0 }, [DropdownValidators]],
+      Shift:['']
     })
 
     this.QueryReqFormGroup = this.formBuilder.group({
@@ -275,12 +277,15 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
     if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
       this.AddStaffBasicDetailFromGroup.controls['ddlTrade'].setValidators([DropdownValidators]);
+      this.AddStaffBasicDetailFromGroup.controls['Shift'].setValidators([DropdownValidators]);
 
     } else {
       this.AddStaffBasicDetailFromGroup.controls['ddlTrade'].clearValidators();
+      this.AddStaffBasicDetailFromGroup.controls['Shift'].clearValidators();
 
     }
     this.AddStaffBasicDetailFromGroup.controls['ddlTrade'].updateValueAndValidity();
+    this.AddStaffBasicDetailFromGroup.controls['Shift'].updateValueAndValidity();
 
   }
 
@@ -562,6 +567,10 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       {
         this.formData.OfficeID = this.sSOLoginDataModel.OfficeID;
       }
+
+
+      
+
       /* alert('save data chek vaildation');*/
       //save
       await this.Staffservice.SaveStaffBasicDetails(this.formData)
@@ -639,6 +648,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     if (this.searchRequest.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
       this.formData.StaffLevelID = this._ITIGovtEM_EnumStaffLevel.TeachingRole;
       this.formData.BranchID = 0;
+      this.formData.SeatIntakeID=0
       await this.GetBranchesMasterData();
       this.formData.HostelID = 0;
       await this.StaffLevelChild();
@@ -770,9 +780,10 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.AddValidationStaffLevelNon();
 
     try {
-      this.formData
+      this.formData.SeatIntakeID=0
       /* await this.GetHOD_DDL();*/
       await this.StaffLevelChild();
+      await this.ItiShiftUnitDDL();
 
     }
     catch (ex) {
@@ -1743,6 +1754,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
     this.formData.StaffPostTypeID = item.StaffPostTypeID;
     this.formData.OfficeID = item.OfficeID;
+
     //await this.GetPostList();
     await new Promise(resolve => setTimeout(resolve, 100));
     this.formData.DesignationID = item.DesignationID;
@@ -1761,6 +1773,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 /*    this.formData.StaffLevelID = item.StaffLevelID;*/
     this.formData.BranchID = item.TradeID;
     await this.GetChange();
+    this.formData.SeatIntakeID = item.SeatIntakeID
 
     this.formData.TechnicianID = item.TechnicianID;
 
@@ -1899,4 +1912,25 @@ export class ITIGovtAddEstablishComponent implements OnInit {
         return '';
     }
   }
+
+
+
+  async ItiShiftUnitDDL(ID: number = 0) {
+
+    debugger;
+
+    try {
+      debugger
+      await this.commonMasterService.ItiShiftUnitDDL(this.formData.BranchID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.shiftddl = data.Data;
+      })
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+
 }

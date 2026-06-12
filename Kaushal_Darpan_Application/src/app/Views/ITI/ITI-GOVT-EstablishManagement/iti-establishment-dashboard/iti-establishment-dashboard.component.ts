@@ -129,8 +129,14 @@ export class ITIEstablishmentDashboardComponent {
     this.TotalPostTypeStaffCount = this.dashboardData?.PostTypeStaff?.reduce((s, i) => s + (i.TotalCount || 0), 0);
   }
 
+  getTotalPost(): number {
+    return this.dashboardData.PostTypeStaff?.reduce(
+      (sum, x) => sum + (+x.TotalCount || 0),
+      0
+    ) || 0;
+  }
+
   buildPieChart(data: any[]): Highcharts.Options | null {
-    debugger;
     if (!data?.length) return null;
 
     const colors = ['#0d6efd', '#6c757d', '#198754', '#ffc107'];
@@ -160,10 +166,29 @@ export class ITIEstablishmentDashboardComponent {
         margin: [10, 10, 10, 10]
       },
 
-      title: { text: '' },
+      // title: { text: '' },
+      title: {
+        text: this.getTotalPost().toLocaleString(),
+        verticalAlign: 'middle',
+        y: 25,
+        style: {
+          fontSize: '34px',
+          fontWeight: '700'
+        }
+      },
 
       credits: {
         enabled: false
+      },
+
+      subtitle: {
+        // text: 'TOTAL SEATS',
+        verticalAlign: 'middle',
+        y: -15,
+        style: {
+          fontSize: '12px',
+          color: '#64748b'
+        }
       },
 
       legend: {

@@ -42,14 +42,14 @@
         </div>
 
         <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
-    <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollageId">
-      <option value="0">Choose Option</option>
-      <option *ngFor="let item of CollegeMasterList" [value]="item.ID">
-        {{item.Name}}
-      </option>
-    </select>
-  </div>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
+          <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollageId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CollegeMasterList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>-->
 
 
 
@@ -125,7 +125,7 @@
             <th class="text-left">Inst_Code and Name</th>
             <th class="text-left">Bank Name</th>
             <th class="text-left">Bank Guarantee No</th>
-            <th class="text-left" width="8%">Date Of Issue</th>
+            <!--<th class="text-left" width="8%">Date Of Issue</th>-->
             <th class="text-left" width="8%">Maturity Date</th>
             <th class="text-left">Duration Years</th>
             <th class="text-left">Amount</th>
@@ -141,7 +141,7 @@
             <td class="text-left">{{item.BankName}}</td>
             <td class="text-left">{{item.BankGuaranteeNumber}}</td>
 
-            <td class="text-left">{{item.DateOfIssue}}</td>
+            <!--<td class="text-left">{{item.DateOfIssue}}</td>-->
             <td class="text-left">{{item.Maturitydate}}</td>
             <td class="text-left">{{item.Duration}}</td>
             <td class="text-left">{{item.Amount}}</td>
@@ -174,6 +174,7 @@
                 </a>
                 <a *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="Edit" (click)="EditInfo(item.BankGuaranteeID)"><i class="ti ti-pencil"></i></a>
                 <a *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="Delete" (click)="btnDeleteOnClick(item)"><i class="ti ti-trash"></i></a>
+                <a *ngIf="this.sSOLoginDataModel.RoleID == 16" href="javascript:void(0);" title="View" (click)="ViewBankGuranteeDetails(MyModel_ViewTrades, item)"><i class="ti ti-eye"></i></a>
               </div>
             </td>
           </tr>
@@ -221,7 +222,7 @@
             Order No:
           </label>
           <input type="number" class="form-input" id="OrderNo" formControlName="OrderNo" (keypress)="numberOnly($event)"
-                 [(ngModel)]="requestById.OrderNo" placeholder="Please Enter Order No" >
+                 [(ngModel)]="requestById.OrderNo" placeholder="Please Enter Order No">
           <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.OrderNo.errors" class="text-danger">
             <p *ngIf="_bankGuaranteeFormGroup.OrderNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
@@ -230,11 +231,11 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Order date:
           </label>
-          <input type="date" class="form-input" id="Orderdate" formControlName="Orderdate" 
+          <input type="date" class="form-input" id="Orderdate" formControlName="Orderdate"
                  [(ngModel)]="requestById.Orderdate"
-                    min="1980-01-01"
-       max="2099-01-01">
-                 
+                 min="1980-01-01"
+                 max="2099-01-01">
+
           <div *ngIf="isSubmitted&&_bankGuaranteeFormGroup.Orderdate.errors" class="text-danger">
             <p *ngIf="_bankGuaranteeFormGroup.Orderdate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
@@ -250,7 +251,7 @@
             <option value="Return at Maturity">Return on maturity </option>
             <option value="Return on insitute closed">Return on insitute closed</option>
           </select>
-  
+
           <div *ngIf="isSubmitted && _bankGuaranteeFormGroup.Remarks.errors" class="text-danger">
             <p *ngIf="!_bankGuaranteeFormGroup.Remarks.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
           </div>
@@ -269,3 +270,87 @@
   </div>
 </ng-template>
 
+
+<ng-template #MyModel_ViewTrades let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card shadow-lg rounded-lg overflow-hidden">
+
+      <!-- Header -->
+      <div class="card-header bg-info text-white flex justify-between items-center px-4 py-3">
+        <b>
+          <i class="fa fa-university mr-2"></i>
+          Bank Guarantee Details
+        </b>
+
+        <button class="btn btn-sm bg-white text-info"
+                (click)="CloseModalPopup()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body p-4" *ngIf="BankGuaranteeListByID?.length > 0">
+
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto bank-details-table">
+
+            <thead>
+              <tr>
+                <th width="35%" class="font-bold">Title</th>
+                <th class="font-bold">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngIf="BankGuaranteeListByID[0]?.BankName">
+                <td><b>Bank Name</b></td>
+                <td>{{ BankGuaranteeListByID[0]?.BankName }}</td>
+              </tr>
+
+              <tr>
+                <td><b>Bank Guarantee No</b></td>
+                <td>{{ BankGuaranteeListByID[0]?.BankGuaranteeNumber }}</td>
+              </tr>
+
+              <tr>
+                <td><b>Date Of Issue</b></td>
+                <td>
+                  {{ BankGuaranteeListByID[0]?.DateOfIssue | date:'yyyy-MM-dd' }}
+                </td>
+              </tr>
+
+              <tr>
+                <td><b>Amount in Lakhs</b></td>
+                <td>
+                  {{ BankGuaranteeListByID[0]?.Amount / 100000 | number:'1.0-3' }}
+                  Lakh
+                </td>
+              </tr>
+
+              <tr>
+                <td><b>Updated On</b></td>
+                <td>
+                  {{ BankGuaranteeListByID[0]?.ModifyDate | date:'yyyy-MM-dd HH:mm:ss' }}
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="card-footer bg-light flex justify-end px-4 py-3">
+        <!--<button class="btn btn-secondary"
+                (click)="CloseModalPopup()">
+          <i class="ti ti-x mr-1"></i>
+          Close
+        </button>-->
+      </div>
+
+    </div>
+  </div>
+</ng-template>

@@ -60,6 +60,10 @@ export class ItiCollegeApprovedContractRPTComponent {
     })
    
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    if(this.sSOLoginDataModel.RoleID == 212) {
+      this.CollegeApprovedContractForm.get('DivisionID')?.enable();
+      this.CollegeApprovedContractForm.get('DistrictID')?.enable();
+    }
     await this.GetFinancialYear();
     await this.GetDivisionMaster();
     this.request.DistrictID = this.sSOLoginDataModel.DistrictID
@@ -146,16 +150,35 @@ async GetFinancialYear(){
       console.log(error);
     } 
   }
-    exportToExcel(): void {
-      const unwantedColumns = [
-       'InstituteID'
-      ]; 
-      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.Institutelist);
-      // Create a new Excel workbook this.PreExamStudentData
-      const wb: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // exportToExcel(): void {
+    //   const unwantedColumns = [
+    //    'InstituteID'
+    //   ]; 
+    //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.Institutelist);
+    //   // Create a new Excel workbook this.PreExamStudentData
+    //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
   
-      // Export the Excel file
-      XLSX.writeFile(wb, 'ITICollegeApprovedContractReport.xlsx');
-    }
+    //   // Export the Excel file
+    //   XLSX.writeFile(wb, 'ITICollegeApprovedContractReport.xlsx');
+    // }
+  exportToExcel(): void {
+    const unwantedColumns = [
+      'InstituteID', 'AcademicYearID'
+    ];
+    const filteredData = this.Institutelist.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    const timestamp = new Date().getTime();
+    XLSX.writeFile(wb, `ITICollegeApprovedContractReport-${timestamp}.xlsx`);
+  }
 }

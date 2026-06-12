@@ -108,73 +108,73 @@
                             <td class="text-left">{{ row.FinancialYear }}</td>
                             <td class="text-left">
                                 <ng-container *ngIf="row.Jan > 0; else nrmlJan">
-                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 1]">{{ row.Jan }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 1, row.AcademicYearID]">{{ row.Jan }}</a>
                                 </ng-container>
                                 <ng-template #nrmlJan>{{ row.Jan }}</ng-template> 
                             </td>
                             <td class="text-left">
                                 <ng-container *ngIf="row.Feb > 0; else nrmlFeb">
-                                <a href="javascript:void(0)">{{ row.Feb }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 2, row.AcademicYearID]">{{ row.Feb }}</a>
                                 </ng-container>
                                 <ng-template #nrmlFeb>{{ row.Feb }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Mar > 0; else nrmlMar">
-                                <a href="javascript:void(0)">{{ row.Mar }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 3, row.AcademicYearID]">{{ row.Mar }}</a>
                                 </ng-container>
                                 <ng-template #nrmlMar>{{ row.Mar }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Apr > 0; else nrmlApr">
-                                <a href="javascript:void(0)">{{ row.Apr }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 4, row.AcademicYearID]">{{ row.Apr }}</a>
                                 </ng-container>
                                 <ng-template #nrmlApr>{{ row.Apr }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.May > 0; else nrmlMay">
-                                <a href="javascript:void(0)">{{ row.May }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 5, row.AcademicYearID]">{{ row.May }}</a>
                                 </ng-container>
                                 <ng-template #nrmlMay>{{ row.May }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Jun > 0; else nrmlJun">
-                                <a href="javascript:void(0)">{{ row.Jun }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 6, row.AcademicYearID]">{{ row.Jun }}</a>
                                 </ng-container>
                                 <ng-template #nrmlJun>{{ row.Jun }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Jul > 0; else nrmlJul">
-                                <a href="javascript:void(0)">{{ row.Jul }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 7, row.AcademicYearID]">{{ row.Jul }}</a>
                                 </ng-container>
                                 <ng-template #nrmlJul>{{ row.Jul }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Aug > 0; else nrmlAug">
-                                <a href="javascript:void(0)">{{ row.Aug }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 8, row.AcademicYearID]">{{ row.Aug }}</a>
                                 </ng-container>
                                 <ng-template #nrmlAug>{{ row.Aug }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Sep > 0; else nrmlSep">
-                                <a href="javascript:void(0)">{{ row.Sep }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 9, row.AcademicYearID]">{{ row.Sep }}</a>
                                 </ng-container>
                                 <ng-template #nrmlSep>{{ row.Sep }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Oct > 0; else nrmlOct">
-                                <a href="javascript:void(0)">{{ row.Oct }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 10, row.AcademicYearID]">{{ row.Oct }}</a>
                                 </ng-container>
                                 <ng-template #nrmlOct>{{ row.Oct }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Nov > 0; else nrmlNov">
-                                <a href="javascript:void(0)">{{ row.Nov }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 11, row.AcademicYearID]">{{ row.Nov }}</a>
                                 </ng-container>
                                 <ng-template #nrmlNov>{{ row.Nov }}</ng-template> 
                             </td> 
                             <td class="text-left">
                                 <ng-container *ngIf="row.Dec > 0; else nrmlDec">
-                                <a href="javascript:void(0)">{{ row.Dec }}</a>
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 12, row.AcademicYearID]">{{ row.Dec }}</a>
                                 </ng-container>
                                 <ng-template #nrmlDec>{{ row.Dec }}</ng-template> 
                             </td>  
