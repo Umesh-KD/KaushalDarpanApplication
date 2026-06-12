@@ -527,7 +527,8 @@ export class BterResultReportsComponent implements OnInit {
       DepartmentID: this.ssoLoginUser.DepartmentID,
       //Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
       Eng_NonEng: this.ssoLoginUser.Eng_NonEng,
-      EndTermID: this.ssoLoginUser.EndTermID
+      EndTermID: this.ssoLoginUser.EndTermID,
+      ResultType: this.filterModel.ResultType,
     }
     try {
       this.loaderService.requestStarted();
