@@ -3,6 +3,7 @@ import Highcharts from 'highcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { ITIAdminDashboardServiceService } from '../../../../app/Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
 import { LoaderService } from '../../../../app/Services/Loader/loader.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admission-master-dashboard',
@@ -14,6 +15,9 @@ export class AdmissionMasterDashboardComponent implements OnInit
 {
 
   public _barChartData: any[] = [];
+  public _pieChartData: any[] = [];
+
+
   public governmentITI: any;
   public privateITI: any;
   public TotalITI: any;
@@ -37,10 +41,12 @@ export class AdmissionMasterDashboardComponent implements OnInit
   updateFlag = false;
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions!: Highcharts.Options;
+  pieChartOptions: Highcharts.Options = {};
 
   constructor(
     private _ITIAdminDashboardServiceService: ITIAdminDashboardServiceService,
     private loaderService: LoaderService,
+    private router: Router
 
   )
   {
@@ -49,8 +55,11 @@ export class AdmissionMasterDashboardComponent implements OnInit
 
   async ngOnInit(): Promise<void>
   {
+    this.loadPieChart();
     this.FillBarChart();
-   await this.GetAllData();
+    await this.GetAllData();
+
+
  
   }
 
@@ -72,32 +81,32 @@ export class AdmissionMasterDashboardComponent implements OnInit
         .then((data: any) =>
         {
           data = JSON.parse(JSON.stringify(data));
+          const datas = data?.Data?.Table?.[0] || {};
 
-          const datas = data.Data.Table[0];
-          this.governmentITI = datas.GovernmentITI;
-          this.privateITI = datas.PrivateITI;
-          this.TotalITI = datas.TotalITI;
-          this.AffiliatedInstitutes = datas.AffiliatedInstitutes;
+          this.governmentITI = datas.GovernmentITI || 0;
+          this.privateITI = datas.PrivateITI || 0;
+          this.TotalITI = datas.TotalITI || 0;
+          this.AffiliatedInstitutes = datas.AffiliatedInstitutes || 0;
 
+          // Bar Chart Data
+          this._barChartData = data?.Data?.Table1 || [];
 
+          // Intake Details
+          const intake = data?.Data?.Table2?.[0] || {};
 
+          this.Engineering = intake.Engineering || 0;
+          this.NonEngineering = intake.NonEngineering || 0;
+          this.TotalActiveIntake = intake.Total || 0;
 
-          this._barChartData = data.Data.Table1;
+          // Trade Details
+          const trades = data?.Data?.Table3?.[0] || {};
 
-          //intake details
-          const intake = data.Data.Table2[0];
-          this.Engineering = intake.Engineering;
-          this.NonEngineering = intake.NonEngineering;
-          this.TotalActiveIntake = intake.Total;
+          this.EngineeringTrades = trades.EngineeringTrades || 0;
+          this.NonEngineeringTrades = trades.NonEngineeringTrades || 0;
+          this.TotalTrades = trades.TotalTrades || 0;
 
-          //intake details
-          const Trades = data.Data.Table3[0];
-          this.EngineeringTrades = Trades.EngineeringTrades;
-          this.NonEngineering = Trades.NonEngineeringTrades;
-          this.TotalTrades = Trades.TotalTrades;
-
-
-
+          // Pie Chart Data
+          this._pieChartData = data?.Data?.Table4 || [];
 
 
 
@@ -108,6 +117,8 @@ export class AdmissionMasterDashboardComponent implements OnInit
  
           this.FillBarChart();
 
+          this.loadPieChart
+            ();
         }, (error: any) => console.error(error)
         );
 
@@ -133,6 +144,55 @@ export class AdmissionMasterDashboardComponent implements OnInit
     const privateData = this._barChartData.map((x: any) => Number(x.PrivateITI));
 
 
+    //this.chartOptions = {
+    //  chart: {
+    //    type: 'column'
+    //  },
+
+    //  title: {
+    //    text: 'District Institutional Split'
+    //  },
+
+    //  xAxis: {
+    //    categories: categories,
+    //    title: {
+    //      text: 'District'
+    //    }
+    //  },
+
+    //  yAxis: {
+    //    min: 0,
+    //    title: {
+    //      text: ''
+    //    }
+    //  },
+
+    //  plotOptions: {
+    //    column: {
+    //      stacking: 'normal'
+    //    }
+    //  },
+
+    //  series: [
+    //    {
+    //      type: 'column',
+    //      name: 'Government ITIs',
+    //      data: governmentData
+    //    } as Highcharts.SeriesColumnOptions, 
+    //    {
+    //      type: 'column',
+    //      name: 'Private ITIs',
+    //      data: privateData
+    //    } as Highcharts.SeriesColumnOptions,
+    //  ],
+
+    //  credits: {
+    //    enabled: false
+    //  }
+    
+    //};
+
+
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -152,13 +212,15 @@ export class AdmissionMasterDashboardComponent implements OnInit
       yAxis: {
         min: 0,
         title: {
-          text: ''
+          text: 'Total ITIs'
         }
       },
 
       plotOptions: {
         column: {
-          stacking: 'normal'
+          grouping: true,
+          pointPadding: 0.1,
+          borderWidth: 0
         }
       },
 
@@ -167,21 +229,101 @@ export class AdmissionMasterDashboardComponent implements OnInit
           type: 'column',
           name: 'Government ITIs',
           data: governmentData
-        } as Highcharts.SeriesColumnOptions, 
+        },
         {
           type: 'column',
           name: 'Private ITIs',
           data: privateData
-        } as Highcharts.SeriesColumnOptions,
+        }
       ],
 
       credits: {
         enabled: false
       }
-    
     };
+
+
+
     this.updateFlag = true;
     console.log(this.chartOptions);
+  }
+
+
+
+  loadPieChart(): void {
+    debugger;
+
+    this.pieChartOptions = {
+      chart: {
+        type: 'pie'
+      },
+      title: {
+        text: 'Bank Guarantee Status'
+      },
+      tooltip: {
+        pointFormat: '<b>{point.y}</b> ({point.percentage:.1f}%)'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '{point.name}: {point.y}'
+          },
+          point: {
+            events: {
+              click: (event) => {
+                console.log('Clicked slice:', event.point.name);
+                console.log('Value:', event.point.y);
+
+                // Call your method
+                this.onPieSliceClick(event.point.name);
+              }
+            }
+          }
+        }
+      },
+      series: [
+        {
+          type: 'pie',
+          name: 'Applications',
+          data: this._pieChartData
+        }
+      ]
+    };
+  }
+
+  onPieSliceClick(point: any)
+  {
+    let status = 0;
+    debugger;
+    if (point == 'Active')
+    {
+      status = 1;
+    }
+    else if (point == 'Due') {
+      status = 3;
+    }
+    else if (point == 'Returned')
+    {
+      status = 2;
+    }
+    else {
+      status = 0;
+    }
+
+
+
+    this.router.navigate(
+      ['/iti-bank-guarantee-list'],
+      {
+        queryParams: {
+          status: status
+        }
+      }
+    );
+
   }
 
 }

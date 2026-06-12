@@ -145,3 +145,9 @@ export class ITI_EM_StaffDetails_Curr_DataModel {
   public OfficeID: number = 0
   public IsZonalOffice: number = 0
 }
+
+export class Iti_Update_Relieved_RevertModel {
+  public ServiceRequestId: number = 0;
+  public ActionBy: number = 0;
+  public Remarks: string = '';
+ }

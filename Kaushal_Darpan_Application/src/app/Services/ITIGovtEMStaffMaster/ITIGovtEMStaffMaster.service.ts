@@ -744,6 +744,15 @@ export class ITIGovtEMStaffMaster {
       ).toPromise();
   }
   
+   public async GetServiceDetailIFMS(request: any) {
+    debugger
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/GetServiceDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 
