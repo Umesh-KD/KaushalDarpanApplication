@@ -508,7 +508,7 @@
             <div class="flex"
                  *ngIf="this.request.AffidavitDocument !=''">
 
-              <a href="{{appsettingConfig.StaticFileRootPathURL + request.dis_AffidavitDocument}}"
+              <a href="{{appsettingConfig.StaticFileRootPathURL + request.AffidavitDocument}}"
                  class="btn bg-primary text-white m-0"
                  target="_blank">
 
@@ -539,12 +539,13 @@
 
           </button>
 
-          <button type="button"
-                  class="btn bg-danger text-white mt-6">
+          <!--<button type="button"
+          class="btn bg-danger text-white mt-6">
 
-            Cancel
+    Cancel
 
-          </button>
+  </button>-->
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
 
         </div>
 
