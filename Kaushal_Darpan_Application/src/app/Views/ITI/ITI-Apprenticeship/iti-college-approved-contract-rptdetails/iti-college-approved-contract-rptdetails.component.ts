@@ -22,6 +22,7 @@ import * as XLSX from 'xlsx';
 export class ItiCollegeApprovedContractRptdetailsComponent {
   public InstituteID: number=0;
   public MonthID: number=0;
+  public YearID: number=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request : any = {};
   public Institutelist: any = [];
@@ -43,6 +44,7 @@ export class ItiCollegeApprovedContractRptdetailsComponent {
 async ngOnInit() {
   this.InstituteID = Number(this.activatedRoute.snapshot.paramMap.get('instituteId') ?? 0);
   this.MonthID = Number(this.activatedRoute.snapshot.paramMap.get('monthId') ?? 0); 
+  this.YearID = Number(this.activatedRoute.snapshot.paramMap.get('yearId') ?? 0); 
   this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
   await this.GetInstituteMaster();
 }
@@ -52,7 +54,7 @@ async GetInstituteMaster() {
       request.DistrictID = this.sSOLoginDataModel.DistrictID;
       request.EndTermID = this.sSOLoginDataModel.EndTermID;
       request.MonthID = this.MonthID;
-      request.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
+      request.AcademicYearID = this.YearID;
       request.action = "GetByID";
       request.instituteId=this.InstituteID;
       await this.apprenticeshipService.GetITI_InstituteList_ApprenticeshipRPT(request).then(async (data: any) => {
