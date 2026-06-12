@@ -559,7 +559,8 @@ export class AdmissionDashboardComponent {
     return `${icon} ${color}`;
   }
 
-  buildPieChart(data: any[]): Highcharts.Options {
+  buildPieChart(data: any[]): Highcharts.Options
+  {
 
     return {
 
@@ -618,6 +619,8 @@ export class AdmissionDashboardComponent {
       }]
     };
   }
+
+
   getGuestHousePercent(count: number): string {
 
     const total = this.dashboardData.GUESTHOUSE_CHART

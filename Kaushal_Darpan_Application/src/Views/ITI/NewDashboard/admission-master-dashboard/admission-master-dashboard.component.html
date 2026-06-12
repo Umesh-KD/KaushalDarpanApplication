@@ -18,7 +18,12 @@
         <i class="bi bi-buildings"></i>
       </div>
       <div class="text-sm font-medium text-blue-600">Total Registered ITIs</div>
-      <div class="text-3xl font-bold text-slate-900 mt-1">{{TotalITI  | number:'1.0-0'}}</div>
+      <!--<div class="text-3xl font-bold text-slate-900 mt-1">{{TotalITI  | number:'1.0-0'}} </div>-->
+      <!--<div class="text-3xl font-bold text-slate-900 mt-1">-->
+        <a [routerLink]="'/ITICollegeMaster'" [queryParams]="{flag:1,key:0}" class="text-3xl font-bold text-slate-900 mt-1">{{TotalITI  | number:'1.0-0'}}</a>
+        <!--<a [routerLink]="'/ITICollegeMaster'" [queryParams]="{}"></a>-->
+      <!--</div>-->
+      <!--<a [routerLink]="'/AddCompany'" [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
 
       <div class="flex-1 mt-5">
         <div class="space-y-2 text-sm">
@@ -26,13 +31,17 @@
             <span>
               Government
               ITIs
-            </span><span>{{governmentITI  | number:'1.0-0'}}</span>
+            </span>
+            <a [routerLink]="'/ITICollegeMaster'" [queryParams]="{flag:1,key:1}" > <span>{{governmentITI  | number:'1.0-0'}}</span></a>
+           
           </div>
           <div class="flex justify-between text-slate-600">
             <span>
               Private
               ITIs
-            </span><span>{{privateITI  | number:'1.0-0' }}</span>
+            </span>
+            <a [routerLink]="'/ITICollegeMaster'" [queryParams]="{flag:1,key:5}"> <span>{{privateITI  | number:'1.0-0' }}</span></a>
+           
           </div>
           <div class="border-t border-slate-100 pt-2">
             <div class="flex justify-between font-semibold text-slate-900">
@@ -49,7 +58,8 @@
         <i class="bi bi-building-check"></i>
       </div>
       <div class="text-sm font-medium text-orange-600">Affiliated Institutes</div>
-      <div class="text-3xl font-bold text-slate-900 mt-1">{{AffiliatedInstitutes  | number:'1.0-0' }}</div>
+      <!--<div class="text-3xl font-bold text-slate-900 mt-1">{{AffiliatedInstitutes  | number:'1.0-0' }}</div>-->
+       <a [routerLink]="'/ITICollegeMaster'" [queryParams]="{flag:2,key:1}" class="text-3xl font-bold text-slate-900 mt-1">{{AffiliatedInstitutes  | number:'1.0-0' }}</a>
 
       <div class="flex-1 mt-5">
         <div class="mt-2">
@@ -102,18 +112,24 @@
         <i class="bi bi-grid-3x3-gap"></i>
       </div>
       <div class="text-sm font-medium text-teal-600">Total Trade</div>
-      <div class="text-3xl font-bold text-slate-900 mt-1">{{TotalTrades  | number:'1.0-0'}}</div>
+      <!--<div class="text-3xl font-bold text-slate-900 mt-1">{{TotalTrades  | number:'1.0-0'}}</div>-->
+    <a [routerLink]="'/ititradelist'" [queryParams]="{flag:4,key:0}" class="text-3xl font-bold text-slate-900 mt-1">{{TotalTrades  | number:'1.0-0'}}</a>
+
+
       <div class="flex-1 mt-5">
         <div class="space-y-2 text-sm">
           <div class="flex justify-between text-slate-600">
             <span>
               Engineering Trades
-            </span><span>{{EngineeringTrades  | number:'1.0-0'}}</span>
+            </span>
+            <a [routerLink]="'/ititradelist'" [queryParams]="{flag:4,key:1}"> <span>{{EngineeringTrades  | number:'1.0-0'}}</span></a>
+          
           </div>
           <div class="flex justify-between text-slate-600">
             <span>
               Non Engineering Trades
-            </span><span>{{NonEngineering  | number:'1.0-0' }}</span>
+            </span>
+            <a [routerLink]="'/ititradelist'" [queryParams]="{flag:4,key:2}">  <span>{{NonEngineering  | number:'1.0-0' }}</span></a>           
           </div>
           <div class="border-t border-slate-100 pt-2">
             <div class="flex justify-between font-semibold text-slate-900">
@@ -139,7 +155,7 @@
 
 
 
-  <div class="bg-white rounded-2xl border border-slate-200/70 p-0 " >
+  <div class="bg-white rounded-2xl border border-slate-200/70 p-0 ">
     <div class="table-container">
       <table>
         <thead>
@@ -188,8 +204,8 @@
     </div>
   </div>
   <div class="bg-white rounded-2xl border border-slate-200/70 p-6 shadow-sm">
- 
-    <div  >
+
+    <div>
       <div id="apexchartsnif5h6h6" class="apexcharts-canvas apexchartsnif5h6h6 apexcharts-theme-light">
 
         <highcharts-chart [Highcharts]="Highcharts"
@@ -402,5 +418,10 @@
       </div>
     </div>
   </div>
-
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 ">
+    <highcharts-chart [Highcharts]="Highcharts"
+                      [options]="pieChartOptions"
+                      style="width:100%; height:400px; display:block;">
+    </highcharts-chart>
+  </div>
 </main>

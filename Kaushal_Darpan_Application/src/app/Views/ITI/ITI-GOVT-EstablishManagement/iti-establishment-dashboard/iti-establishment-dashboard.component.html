@@ -1,26 +1,11 @@
 <div class="">
-
-  <!-- Header -->
   <div class="flex justify-between items-center mb-4">
     <div>
       <h2 class="dashboard-title mb-0">Dashboard</h2>
       <small class="text-muted">DTE - T2</small>
     </div>
-
-    <!-- <div class="flex gap-2">
-            <select class="form-select">
-                <option>23 May 2025</option>
-            </select>
-
-            <button class="btn btn-outline-secondary">
-                <i class="bi bi-funnel"></i> Filter
-            </button>
-        </div> -->
   </div>
-
-  <!-- Top Cards -->
   <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 gap-5">
-<!-- {{dashboardData?.Establishment | json}} -->
     <div class=" " *ngFor="let row of dashboardData?.Establishment; let i = index">
       <div class="card top-card" [ngClass]="row.bgClass">
         <div class="card-body flex justify-between items-center">
@@ -33,7 +18,9 @@
                 <p>{{row.TotalText}}</p>
               </div>
               <div class="big-count blue fs-1">
-                <h2 class="big-count blue fs-1">{{row.TotalCount}}</h2>
+                <a [routerLink]="['/',row.URL]" [queryParams]="{act: row.Action }" >
+                  <h2 class="big-count fs-1" [ngClass]="row.countTextColor">{{row.TotalCount}}</h2>
+                </a>
               </div>
             </div>
           </div>
@@ -41,122 +28,25 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class=" ">
-            <div class="card top-card green-bg">
-                <div class="card-body flex justify-between items-center">
-                    <div class="flex gap-3 items-center">
-                        <div class="icon-box bg-white green">
-                            <i class="bi bi-geo-alt-fill"></i>
-                        </div>
-                        <div>
-                            <div>
-                              <p>Total No of Staff At Zone</p>
-                            </div>
-                            <div >
-                              <h2 class="big-count green fs-1">5,678</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <i class="bi bi-people-fill fs-1 text-success opacity-25"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class=" ">
-            <div class="card top-card purple-bg">
-                <div class="card-body flex justify-between items-center">
-                    <div class="flex gap-3 items-center">
-                        <div class="icon-box bg-white purple">
-                            <i class="bi bi-house-door-fill"></i>
-                        </div>
-                        <div>
-                            <div>
-                              <p>Total No of Staff At ITI Level</p>
-                            </div>
-                            <div >
-                              <h2 class="big-count purple fs-1">12,389</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <i class="bi bi-people-fill fs-1 text-secondary opacity-25"></i>
-                </div>
-            </div>
-        </div> -->
-
   </div>
 
-  <!-- Request Cards -->
   <div class="grid grid-cols-1 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 gap-5 mt-5 mb-5">
 
-    <div class=" ">
+    <div class=" " *ngFor="let row of dashboardData?.RelievingJoining; let i = index">
       <div class="card mini-card">
         <div class="card-body h-100">
           <div class=" ">
-            <div><i class="bi bi-people-fill fs-1 text-secondary opacity-25"></i></div>
-            <div>Relieving Request pending At HQ</div>
-            <div class="count orange mt-2">36</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card mini-card">
-      <div class="card-body h-100">
-        <div class=" ">
-          <div><i class="bi bi-people-fill fs-1 text-secondary opacity-25"></i></div>
-          <div>Joining Request pending At HQ</div>
-          <div class="count green mt-2">28</div>
-        </div>
-      </div>
-    </div>
-
-    <div class=" ">
-      <div class="card mini-card">
-        <div class="card-body h-100">
-          <div class="row h-100">
-            <div class=" ">
-              <div>Relieving Request pending At Zone</div>
-              <div class="count orange mt-2">142</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class=" ">
-      <div class="card mini-card">
-        <div class="card-body h-100">
-          <div class=" ">
-            <div>Joining Request pending At Zone</div>
-            <div class="count green mt-2">98</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class=" ">
-      <div class="card mini-card">
-        <div class="card-body h-100">
-          <div class="    ">
-            <div>Relieving Request pending At ITI level</div>
-            <div class="count orange mt-2">312</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class=" ">
-      <div class="card mini-card">
-        <div class="card-body h-100">
-          <div class=" ">
-            <div>Joining Request pending At ITI level</div>
-            <div class="count green mt-2">205</div>
+            <div><i [ngClass]="[row.SRC, row.bgClassIcon]"></i></div>
+            <div>{{row.TotalText}}</div>
+            <a [routerLink]="['/',row.URL]" [queryParams]="{act: row.Action }" >
+              <div class="count mt-2" [ngClass]="row.countTextColor">{{row.TotalCount}}</div>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Category Section -->
   <div class="card summary-card">
     <div class="card-body p-4">
 
@@ -164,65 +54,35 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 gap-5">
 
-        <!-- Donut Chart -->
-        <div class=" ">
-          <div class="donut-wrapper mx-auto"></div>
+          <div class="transfer-chart-wrap">
+
+            <highcharts-chart *ngIf="PostTypeStaffChartOptions"
+                              [Highcharts]="Highcharts"
+                              [options]="PostTypeStaffChartOptions"
+                              style="width:420px;height:420px;display:block;">
+            </highcharts-chart>
+
+          </div>
+
+        <div class=" mt-6">
+
+          <div class="flex justify-between mb-3" *ngFor="let item of dashboardData?.PostTypeStaff; let i = index">
+            <div>
+              <span [class]="item.bgClassIcon"></span>
+              {{item.TotalText}}
+            </div>
+            <strong>{{item.TotalCount}}</strong>
+            <span class="text-muted">{{PostTypeStaffPercentage(item.TotalCount)}}</span>
+          </div>
         </div>
 
-        <!-- Legend -->
-        <div class=" ">
-
-          <div class="flex justify-between mb-3">
-            <div>
-              <span class="legend-dot bg-primary"></span>
-              State Services
-            </div>
-            <strong>5,214</strong>
-            <span class="text-muted">24.7%</span>
-          </div>
-
-          <div class="flex justify-between mb-3">
-            <div>
-              <span class="legend-dot bg-success"></span>
-              Sub Ordinate Services
-            </div>
-            <strong>4,289</strong>
-            <span class="text-muted">20.4%</span>
-          </div>
-
-          <div class="flex justify-between mb-3">
-            <div>
-              <span class="legend-dot bg-warning"></span>
-              Ministerial Services
-            </div>
-            <strong>2,736</strong>
-            <span class="text-muted">12.9%</span>
-          </div>
-
-          <div class="flex justify-between">
-            <div>
-              <span class="legend-dot" style="background:#8b5cf6;"></span>
-              Class IV Services
-            </div>
-            <strong>9,073</strong>
-            <span class="text-muted">42.9%</span>
-          </div>
-
-        </div>
-
-        <!-- Total Staff -->
         <div class=" ">
           <div class="total-staff-box">
             <i class="bi bi-people-fill"></i>
             <h4 class="mt-3 text-primary">Total Staff</h4>
-            <div class="big-count text-primary">21,312</div>
+            <div class="big-count text-primary">{{TotalPostTypeStaffCount}}</div>
           </div>
         </div>
-
-      </div>
-
-      <div class="mt-3 sub-text">
-        Note: All numbers are as on selected date.
       </div>
 
     </div>

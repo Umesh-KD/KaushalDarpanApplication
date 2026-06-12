@@ -177,11 +177,10 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
                 x.IsPresentStudentCenteredActivity = 1
               }
             })
-            var isfinalsubmit = this.GradeList.filter(x => x.isFinalSubmit == true)
-            if (isfinalsubmit.length > 0) {
-              this.isfinalsubmit = true
-              this.AllInTableSelect = false
-            }
+
+            // all
+            this.isfinalsubmit = this.GradeList.every(x => x.isFinalSubmit == true);
+
           }
           //table feature load
           this.loadInTable();
@@ -199,7 +198,7 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
     this.Swal2.Confirmation("Are you sure? <br> Once Submitted, It can't be edited anymore.",
       async (result: any) => {
         if (result.isConfirmed) {
-          this.OnSubmit(StudentExamPaperMarksID, isFinalSubmit);
+          await this.OnSubmit(StudentExamPaperMarksID, isFinalSubmit);
         }
       });
   }

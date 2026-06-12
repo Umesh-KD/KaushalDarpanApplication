@@ -1266,6 +1266,7 @@ const routes: Routes = [
       { path: 'PostPlanning', loadChildren: () => import('./Views/ITI/post-planning/post-planning.module').then(m => m.PostPlanningModule) },
       { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
       { path: 'OfficeVacancyList', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/office-vacancy-list/office-vacancy-list.module').then(m => m.OfficeVacancyListModule) },
+      { path: 'postwise-office-vacancy-report', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/postwise-office-vacancy-report/postwise-office-vacancy-report.module').then(m => m.PostwiseOfficeVacancyReportModule), title: 'Postwise Office Vacancy Report' },
       { path: 'relieving-joining-request-report', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/UserRequest/relieving-joining-request-report/relieving-joining-request-report.module').then(m => m.RelievingJoiningRequestReportModule), title: 'Relieving Joining Request Report' },
       { path: 'iti-establishment-dashboard', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/iti-establishment-dashboard/iti-establishment-dashboard.module').then(m => m.ITIEstablishmentDashboardModule), title: 'ITI Establishment Dashboard' },
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, ITI Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

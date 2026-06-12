@@ -2,26 +2,27 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
-import { ITIGovtAddEstablishRoutingModule } from './ITI-Govt-AddEstablish-routing.module';
-import { ITIGovtAddEstablishComponent } from './ITI-Govt-AddEstablish.component';
 import { TableSearchFilterPipe } from '../../../../Pipes/table-search-filter.pipe';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 import { NgSelectModule } from '@ng-select/ng-select';
+import { PostwiseOfficeVacancyReportComponent } from './postwise-office-vacancy-report.component';
+import { PostwiseOfficeVacancyReportRoutingModule } from './postwise-office-vacancy-report-routing.module';
 
 @NgModule({
   declarations: [
-    ITIGovtAddEstablishComponent
+    PostwiseOfficeVacancyReportComponent
   ],
   imports: [
     CommonModule,
-    ITIGovtAddEstablishRoutingModule,
+    PostwiseOfficeVacancyReportRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     LoaderModule,
     TableSearchFilterModule,
     NgMultiSelectDropDownModule.forRoot(),
-    NgSelectModule,
+    NgSelectModule
   ]
 })
-export class ITIGovtAddEstablishModule { }
+export class PostwiseOfficeVacancyReportModule { }

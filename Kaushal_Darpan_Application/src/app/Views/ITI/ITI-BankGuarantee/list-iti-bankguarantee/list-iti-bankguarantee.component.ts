@@ -89,8 +89,21 @@ export class listitibankguaranteeComponent {
 
     });
 
+    this.routers.queryParams.subscribe(params => {
+      this.searchRequest.status = params['status'] != null
+        ? Number(params['status'])
+        : 0;
+  
+    });
+
+
+
+
+
     this.getbankguaranteeList()
     await this.GetPrivateITICollege();
+
+
 
     
 
@@ -160,6 +173,7 @@ export class listitibankguaranteeComponent {
     this.searchRequest.status = 0
     this.searchRequest.dayWise = 0
     this.searchRequest.CollageId = 0
+    this.searchRequest.GauranteeNo=''
   }
 
   onResetCancel(): void
