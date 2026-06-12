@@ -7,15 +7,15 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i>Post Wise Office Vacancy Report</b>
       <div>
         <a href="javascript:void(0);"
-           class="btn bg-info text-white me-1"
+           class="btn bg-success text-white me-1"
            (click)="exportToExcel()">
-          <i class="ti ti-download"></i> Download Excel
+          <i class="bi bi-file-earmark-excel"></i>
         </a>
 
         <a href="javascript:void(0);"
            class="btn bg-danger text-white"
            (click)="exportToPDF()">
-          <i class="ti ti-file-type-pdf"></i> Download PDF
+          <i class="bi bi-filetype-pdf"></i>
         </a>
       </div>
     </div>
@@ -51,7 +51,9 @@
             <th>S.No</th>
             <th>Service Category(Cadre)</th>
             <th>Name of Post</th>
+            <th>No. of Post Sanctioned</th>
             <th>Total Deployed Post</th>
+            <th>Vacant Post</th>
             <th>Additional Post</th>
           </tr>
         </thead>
@@ -60,13 +62,17 @@
             <td class="text-center">{{idx+1}}</td>
             <td>{{ row.ServiceCategory }}</td>
             <td>{{ row.NameOfPost }}</td>
+            <td>{{ row.TotalSanctionedPost }}</td>
             <td>
-                <a [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID }" >
+                <a class="text-md font-semibold text-dark"
+                    [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID }" >
                     {{ row.DeployedPost }}
                 </a>
             </td>
+            <td>{{ row.VacantPost }}</td>
             <td>
-                <a [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID, isAdditional: 1 }" >
+                <a class="text-md font-semibold text-dark"
+                    [routerLink]="['/establishment-report-iti']" [queryParams]="{pid: row.DesignationID, isAdditional: 1 }" >
                     {{ row.AdditionalPostCount }}
                 </a>
             </td>
