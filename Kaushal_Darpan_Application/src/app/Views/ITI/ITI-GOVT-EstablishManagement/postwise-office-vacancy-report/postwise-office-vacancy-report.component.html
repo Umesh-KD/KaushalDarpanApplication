@@ -1,0 +1,54 @@
+<div class="modal-content">
+  <div class="card">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Post Wise Office Vacancy Report</b>
+      <div>
+        <a href="javascript:void(0);"
+           class="btn bg-info text-white me-1"
+           (click)="exportToExcel()">
+          <i class="ti ti-download"></i> Download Excel
+        </a>
+
+        <a href="javascript:void(0);"
+           class="btn bg-danger text-white"
+           (click)="exportToPDF()">
+          <i class="ti ti-file-type-pdf"></i> Download PDF
+        </a>
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-4">
+      <table class="table table-bordered" *ngIf="OfficeVacancyList.length > 0">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Office Name</th>
+            <th>Service Category(Cadre)</th>
+            <th>Institute Name</th>
+            <th>Name of Post</th>
+            <th>No. of Post Sanctioned</th>
+            <th>Deployed Post</th>
+            <th>Vacant Post</th>
+            <th>Additional Post</th>
+            <th>Order No</th>
+            <th>Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of OfficeVacancyList;  let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td>{{ leave.OfficeName }}</td>
+            <td>{{ leave.StaffTypeName }}</td>
+            <td>{{ leave.InstituteName }}</td>
+            <td>{{ leave.DesignationName }}</td>
+            <td>{{ leave.TotalSeatID }}</td>
+            <td>{{ leave.PostedSeat }}</td>
+            <td>{{ leave.RemainingSeatID }}</td>
+            <td>{{ leave.AdditionalPost }}</td>
+            <td>{{ leave.OrderName }}</td>
+            <td>{{ leave.Comments }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

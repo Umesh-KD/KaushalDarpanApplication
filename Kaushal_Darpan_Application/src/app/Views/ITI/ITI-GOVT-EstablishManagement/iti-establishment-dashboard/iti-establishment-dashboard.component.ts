@@ -21,18 +21,18 @@ export class ITIEstablishmentDashboardComponent {
   public RelievingJoiningDashboardTiles: any[] = [];
 
   Highcharts: typeof Highcharts = Highcharts;
-  public transferChartOptions: Highcharts.Options | null = null;
-  public guestHouseChartOptions: Highcharts.Options | null = null;
+  public PostTypeStaffChartOptions: Highcharts.Options | null = null;
 
+  public TotalPostTypeStaffCount: number = 0;
 
   dashboardData: {
     Establishment: any[],
     RelievingJoining: any[],
-    Staff_Charf: any[]
+    PostTypeStaff: any[]
   } = {
       Establishment: [],
       RelievingJoining: [],
-      Staff_Charf: [],
+      PostTypeStaff: [],
     };
 
   constructor(
@@ -62,7 +62,7 @@ export class ITIEstablishmentDashboardComponent {
           this.dashboardData = {
             Establishment: [],
             RelievingJoining: [],
-            Staff_Charf: [],
+            PostTypeStaff: [],
           };
 
           this.DashboardDataList.forEach((item: any) => {
@@ -79,7 +79,8 @@ export class ITIEstablishmentDashboardComponent {
               bgClass: item.bgClass,
               bgClassIcon: item.bgClassIcon,
               Action: item.Action,
-              bottomIcon: item.bottomIcon
+              bottomIcon: item.bottomIcon,
+              countTextColor: item.countTextColor,
             };
 
             if (item.ListType == 'Establishment') {
@@ -89,8 +90,14 @@ export class ITIEstablishmentDashboardComponent {
             else if (item.ListType === 'RelievingJoining') {
               this.dashboardData.RelievingJoining.push(model);
             }
-          })
+            
+            else if (item.ListType === 'PostTypeStaff') {
+              this.dashboardData.PostTypeStaff.push(model);
+            }
 
+          })
+          this.getTotalPostTypeStaff();
+          this.PostTypeStaffChartOptions = this.buildPieChart(this.dashboardData.PostTypeStaff);
           
           
           // this.EstablishmentDashboardTiles = this.DashboardDataList.filter(s => s.ListType == 'Establishment');
@@ -106,5 +113,92 @@ export class ITIEstablishmentDashboardComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  PostTypeStaffPercentage(count: number): string {
+
+    const total = this.dashboardData.PostTypeStaff
+      .reduce((s, i) => s + (i.TotalCount || 0), 0);
+    if (total === 0) {
+      return '0%';
+    }
+    return Math.round((count / total) * 100) + '%';
+  }
+
+  getTotalPostTypeStaff() {
+    this.TotalPostTypeStaffCount = this.dashboardData?.PostTypeStaff?.reduce((s, i) => s + (i.TotalCount || 0), 0);
+  }
+
+  buildPieChart(data: any[]): Highcharts.Options | null {
+    debugger;
+    if (!data?.length) return null;
+
+    const colors = ['#0d6efd', '#6c757d', '#198754', '#ffc107'];
+
+    const total = data.reduce(
+      (sum, item) => sum + (item.TotalCount || 0),
+      0
+    );
+
+    const seriesData = total === 0
+      ? [{
+        name: 'No Data',
+        y: 1,
+        color: '#e5e7eb'
+      }]
+      : data.map((item, i) => ({
+        name: item.TotalText,
+        y: Number(item.TotalCount) || 0,
+        color: colors[i % colors.length]
+      }));
+
+    return {
+      chart: {
+        type: 'pie',
+        height: 260,
+        backgroundColor: 'transparent',
+        margin: [10, 10, 10, 10]
+      },
+
+      title: { text: '' },
+
+      credits: {
+        enabled: false
+      },
+
+      legend: {
+        enabled: false
+      },
+
+      tooltip: {
+        pointFormat: total === 0
+          ? 'No data available'
+          : '<b>{point.name}</b>: {point.y} ({point.percentage:.0f}%)'
+      },
+
+      plotOptions: {
+        pie: {
+          innerSize: '55%',
+          borderWidth: 3,
+          borderColor: '#ffffff',
+
+          dataLabels: {
+            enabled: total > 0,
+            format: '{point.name}: {point.y}',
+            style: {
+              fontSize: '11px',
+              fontWeight: '500',
+              textOutline: 'none'
+            }
+          }
+        }
+      },
+
+      series: [{
+        type: 'pie',
+        name: 'Requests',
+        data: seriesData
+      }]
+    };
   }
 }
