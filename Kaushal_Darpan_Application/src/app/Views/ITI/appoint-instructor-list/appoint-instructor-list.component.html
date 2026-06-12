@@ -259,7 +259,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift / Unit <span class="StarMarking">*</span></label>
-              <select class="form-select" [(ngModel)]="formData.Shift" formControlName="Shift" [ngModelOptions]="{standalone: true}" (change)="onShiftChange()">
+              <select class="form-select" [(ngModel)]="formData.SeatIntakeid" formControlName="Shift" [ngModelOptions]="{standalone: true}" (change)="onShiftChange()">
                 <option value="0">--Choose Option--</option>
                 <option *ngFor="let item of shiftddl" [value]="item.ID">
                   {{ item.Name }}

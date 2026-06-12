@@ -235,9 +235,9 @@
                    (click)="JoiningLetter(row.ServiceRequestId)">
                   <i class="ti ti-download"></i>
                 </a>
-
-                <a href="javascript:void(0);" title="Relieved Revert" 
-                   *ngIf="row.RequestStatus !== 10367 && row.RequestTypeID==1 && (row.JoiningDate == null || row.JoiningDate == '')"
+                <!--row.RequestStatusId !== 10367 && -->
+                <a href="javascript:void(0);" title="Relieved Revert"
+                   *ngIf=" row.RequestStatusId != 10367 && row.RequestTypeID == 1 && (row.JoiningDate == null || row.JoiningDate == '')"
                    (click)="onSubmitRelieved_Revert(MyModel_Update_Relieved_Revert, row)">
                   <i class="ti ti-arrow-back-up"></i>
                 </a>

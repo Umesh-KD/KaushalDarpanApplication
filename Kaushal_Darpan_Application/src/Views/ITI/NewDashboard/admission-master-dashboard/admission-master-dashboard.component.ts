@@ -4,6 +4,9 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { ITIAdminDashboardServiceService } from '../../../../app/Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
 import { LoaderService } from '../../../../app/Services/Loader/loader.service';
 import { Router } from '@angular/router';
+import { ItiTradeService } from '../../../../app/Services/iti-trade/iti-trade.service';
+import { SSOLoginDataModel } from '../../../../app/Models/SSOLoginDataModel';
+import { EnumStatus } from '../../../../app/Common/GlobalConstants';
 
 @Component({
   selector: 'app-admission-master-dashboard',
@@ -13,7 +16,7 @@ import { Router } from '@angular/router';
 })
 export class AdmissionMasterDashboardComponent implements OnInit
 {
-
+  sSOLoginDataModel = new SSOLoginDataModel();
   public _barChartData: any[] = [];
   public _pieChartData: any[] = [];
 
@@ -43,10 +46,16 @@ export class AdmissionMasterDashboardComponent implements OnInit
   chartOptions!: Highcharts.Options;
   pieChartOptions: Highcharts.Options = {};
 
+    public DashboardCountList: any = []
+
+  public planningChartData: any[] = [];
+planningChartOptions: Highcharts.Options = {};
+updatePlanningFlag = false;
   constructor(
     private _ITIAdminDashboardServiceService: ITIAdminDashboardServiceService,
     private loaderService: LoaderService,
-    private router: Router
+    private router: Router,
+    private itiTradeService: ItiTradeService
 
   )
   {
@@ -57,8 +66,9 @@ export class AdmissionMasterDashboardComponent implements OnInit
   {
     this.loadPieChart();
     this.FillBarChart();
+    this.loadPlanningChart();
     await this.GetAllData();
-
+    await this.GetDTEDashboard();
 
  
   }
@@ -325,6 +335,115 @@ export class AdmissionMasterDashboardComponent implements OnInit
     );
 
   }
+
+  async GetDTEDashboard() {
+  const d = {
+    FinancialYearID: this.sSOLoginDataModel.FinancialYearID
+  };
+
+  try {
+    this.loaderService.requestStarted();
+
+    await this.itiTradeService.GetDashboardData(d)
+      .then((data: any) => {
+
+        data = JSON.parse(JSON.stringify(data));
+
+        if (data.State == EnumStatus.Success) {
+
+          this.DashboardCountList = data.Data || [];
+
+          this.planningChartData = this.DashboardCountList
+            .filter((f: any) => f.TileType === 'Planing')
+            .map((x: any) => ({
+              name: x.TradeName,
+              y: Number(x.TradeCount),
+              routeValue: x.RouteValue
+            }));
+
+          console.log('Planning Chart Data', this.planningChartData);
+
+          this.loadPlanningChart();
+        }
+
+      }, (error: any) => console.error(error));
+
+  }
+  catch (ex) {
+    console.log(ex);
+  }
+  finally {
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+  }
+}
+
+loadPlanningChart(): void {
+
+  console.log('loadPlanningChart called');
+console.log( 'chart data in load planning',this.planningChartData);
+  this.planningChartOptions = {
+    chart: {
+      type: 'pie'
+    },
+
+    title: {
+      text: 'Planning Status'
+    },
+
+    tooltip: {
+      pointFormat: '<b>{point.y}</b> ({point.percentage:.1f}%)'
+    },
+
+    plotOptions: {
+      pie: {
+        innerSize: '60%',   // Makes it Donut
+        allowPointSelect: true,
+        cursor: 'pointer',
+
+        dataLabels: {
+          enabled: true,
+          format: '{point.name}: {point.y}'
+        },
+
+        point: {
+          events: {
+            click: (event: any) => {
+
+              const routeValue = event.point.options.routeValue;
+
+              this.router.navigate(
+                ['/ItiPlanningList'],
+                {
+                  queryParams: {
+                    status: routeValue
+                  }
+                }
+              );
+            }
+          }
+        }
+      }
+    },
+
+    series: [
+      {
+        type: 'pie',
+        name: 'Planning',
+        data: this.planningChartData
+      }
+    ],
+
+    credits: {
+      enabled: false
+    }
+  };
+    console.log('planning chart options',this.planningChartOptions);
+debugger
+  this.updatePlanningFlag = true;
+}
+
 
 }
 

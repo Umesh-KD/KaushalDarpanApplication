@@ -282,24 +282,113 @@
             <b>Apprenticeship</b>
           </div>
           <div class="card-body listUlDivScrollLIst">
-            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250" *ngIf="ITIList != null">
-              <div *ngFor="let item of ApprenticeshipList">
-                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
-                  <div class="d-flex">
-                    <span><img src="/assets/KD5/images/pdf.png"></span>
-                    <div class="ms-2">
-                      <p class="mt-0 mb-0">
+            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250" *ngIf="ApprenticeshipList != null">
+
+              <!--<div *ngFor="let item of ITIList">
+      <a *ngIf="item.linkname==''" href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
+        <div class="d-flex">
+          <span><img src="/assets/KD5/images/pdf.png"></span>
+          <div class="ms-2">
+            <p class="mt-0 mb-0">
+              {{item.Title}}
+            </p>-->
+              <!--<span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}} - {{item.DeptNames}}</span>-->
+              <!--</div>
+          </div>
+        </a>
+
+
+        <a *ngIf="!item.docFile && item.linkname"
+           [routerLink]="item.linkname"
+           class="card p-3 py-2 shadow-sm mb-2">
+
+          <div class="d-flex">
+            <span>
+             <img src="/assets/KD5/images/pdf.png">
+            </span>
+
+            <div class="ms-2">
+              <p class="mt-0 mb-0">
+                {{item.Title}}
+              </p>
+              <span class="badge bg-primary">View</span>
+            </div>
+          </div>
+
+        </a>
+
+
+      </div>-->
+
+              <div *ngFor="let item of ApprenticeshipList" class="mb-3">
+
+                <!-- Normal Notification -->
+                <div *ngIf="!item.linkname"
+                     class="notification-card"
+                     (click)="OpenDocument(item)"
+                     style="cursor:pointer;">
+
+                  <div class="d-flex align-items-center">
+                    <img src="/assets/KD5/images/pdf.png"
+                         class="icon me-3">
+
+                    <div class="flex-grow-1">
+                      <div class="title">
                         {{item.Title}}
-                      </p>
-                      <!--<span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}} - {{item.DeptNames}}</span>-->
-                     
+                      </div>
+
+                      <div class="date">
+                        <i class="ti ti-calendar"></i>
+                        {{item.CreateDates}}
+                      </div>
+                    </div>
+
+                    <div class="view-btn">
+                      <i class="ti ti-eye"></i>
                     </div>
                   </div>
-                </a>
+                </div>
+
+                <!-- ITI Result Highlight -->
+                <div *ngIf="item.linkname"
+                     class="result-highlight">
+
+                  <div class="d-flex align-items-center justify-content-between">
+
+                    <div class="d-flex align-items-center">
+
+                      <div class="result-icon me-3">
+                        🎓
+                      </div>
+
+                      <div>
+                        <div class="result-title">
+                          {{item.Title}}
+                          <span class="badge-new">NEW</span>
+                        </div>
+
+                        <div class="result-sub">
+                          ITI Examination Result Declared
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <button class="btn-result"
+                            [routerLink]="item.linkname">
+                      Click Here
+                    </button>
+
+                  </div>
+
+                </div>
+
               </div>
+
+
             </marquee>
-            <a routerLink="dynamic-content-list/212/1" class="btn btn-outline-warning d-block text-center my-2" *ngIf="ITIList != null">View All</a>
-            <div style="height:310px" *ngIf="ITIList == null" class="text-center">No Record Found!!!</div>
+            <a href="javascript:void(0);" class="btn btn-outline-warning d-block text-center my-2" *ngIf="ITIList != null">View All</a>
+            <div style="height:310px" *ngIf="ApprenticeshipList == null" class="text-center">No Record Found!!!</div>
           </div>
         </div>
       </div>

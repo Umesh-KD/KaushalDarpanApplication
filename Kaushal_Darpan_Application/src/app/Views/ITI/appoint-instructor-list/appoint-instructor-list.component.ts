@@ -925,7 +925,7 @@ export class AppointInstructorListComponent {
     } catch (error) {
       console.error(error);
     }
-  }
+  } 
 
 
 

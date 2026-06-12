@@ -151,7 +151,7 @@ export class HighlightsComponent {
       .updateValueAndValidity();
 
 
-    if (this.sSOLoginDataModel.DepartmentID == 1) {
+    if (this.sSOLoginDataModel.DepartmentID == 1 || this.sSOLoginDataModel.RoleID==212) {
       this.HighlightsFromGroup.controls['DocCategoryID'].clearValidators()
     } else {
       this.HighlightsFromGroup.controls['DocCategoryID']
@@ -346,7 +346,7 @@ export class HighlightsComponent {
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       if (this.sSOLoginDataModel.RoleID == 212) {
-        this.Searchrequest.DepartmentSubID=6
+        this.Searchrequest.TypeID = 6
       }
       await this.websiteSettingsService.GetAllData(this.Searchrequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
