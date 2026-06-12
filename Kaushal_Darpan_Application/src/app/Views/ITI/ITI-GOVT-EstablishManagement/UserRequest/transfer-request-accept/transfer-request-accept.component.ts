@@ -1279,14 +1279,20 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
         this.toastr.warning('Please Enter Remark!');
         return;
       }
+
+      this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno;
+      await this.childComponent.OpenOTPPopup();
+      await this.childComponent.waitForVerification();
+
       await this.userRequestService.Iti_Update_Relieved_Revert(this.RevertModel)
         .then(async (data: any) => {
+          debugger
           if (data.State == EnumStatus.Success) {
             this.toastr.success('Staff relieved status has been reverted successfully.')
             this.CloseModal();
             this.RevertModel = new Iti_Update_Relieved_RevertModel();
           }
-          else (data.State == EnumStatus.Error)
+          else 
           {
             this.toastr.warning('Failed to revert the staff relieved status. Please try again.')
           }
