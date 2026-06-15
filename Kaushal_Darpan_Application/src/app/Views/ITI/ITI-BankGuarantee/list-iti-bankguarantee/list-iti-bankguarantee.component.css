@@ -1,0 +1,38 @@
+.bank-details-table {
+  border-collapse: collapse;
+}
+
+  .bank-details-table thead th {
+    background-color: #f3f4f6;
+    color: #374151;
+    font-weight: 600;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+  }
+
+  .bank-details-table tbody td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+  }
+
+  .bank-details-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+  }
+
+  .bank-details-table tbody tr:hover {
+    background-color: #eef6ff;
+    transition: 0.2s;
+  }
+
+.card {
+  border: none;
+  border-radius: 12px;
+}
+
+.card-header {
+  font-size: 18px;
+}
+
+.card-footer {
+  border-top: 1px solid #dee2e6;
+}

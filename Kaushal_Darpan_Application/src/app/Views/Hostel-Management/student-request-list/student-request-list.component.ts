@@ -354,7 +354,7 @@ export class StudentRequestListComponent {
 
 
   exportToExcel(): void {
-    const unwantedColumns = ['InstituteId', 'InstituteId',	'ApplicationId',	'StudentId'	,'SemesterId'	,'AllotmentStatus'	,'BrachId'	,'AllotmentStatus1'	,'EndTermID'
+    const unwantedColumns = ['InstituteId', 'InstituteId', 'ApplicationId', 'StudentId', 'SemesterId', 'AllotmentStatus', 'BrachId', 'AllotmentStatus1', 'EndTermID', 'AnyWorningForShortOfAttendance','AnyWarningForInvovementAgainstDiscipline'
 ];
     const filteredData = this.StudentReqListList.map((item: any) => {
       const filteredItem: any = {};

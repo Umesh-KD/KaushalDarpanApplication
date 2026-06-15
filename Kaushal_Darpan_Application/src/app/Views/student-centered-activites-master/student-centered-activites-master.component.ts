@@ -169,6 +169,9 @@ export class StudentCenteredActivitesMasterComponent implements OnInit {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+
       //
       await this.SCAService.GetAllData(this.searchRequest)
         .then((data: any) => {

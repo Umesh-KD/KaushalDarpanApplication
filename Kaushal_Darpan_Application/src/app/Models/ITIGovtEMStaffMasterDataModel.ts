@@ -306,6 +306,7 @@ export class ITI_Govt_EM_ZonalOFFICERSSearchDataModel {
   DistrictID:number = 0;
   ProfileStatus:number = -1;
   IsAdditionalStaff:number = -1;
+  act:string = '';
 }
 
 export class ITI_Govt_EM_ZonalOFFICERSDataModel {
