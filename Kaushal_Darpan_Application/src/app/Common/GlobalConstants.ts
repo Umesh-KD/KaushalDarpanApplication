@@ -695,7 +695,13 @@ export enum ITIPEM_EnumStaffLevelChild {
   GuestRoomWarden = 17,
 }
 
-
+export enum Enum_ITI_EM_StaffPostType {
+  State_Services = 1,
+  Sub_Ordinate_Services = 2,
+  Ministerial_Services = 3,
+  ClassIV_Services = 4,
+  Re_Employed = 5,
+}
 
 export enum ITIGovtEM_EnumStaffType {
   Teaching = 5354,
