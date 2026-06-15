@@ -16,6 +16,7 @@ import { AdminDashboardSearchModel, EM_JDTEDashboardSearchModel, EM_TransferReli
 import { AdminDashboardDataService } from '../../../../Services/AdminDashboard/admin-dashboard-data.service';
 import { DteItemUnitMasterService } from '../../../../Services/DTEInventory/DTEItemUnitMaster/DTEItemunit-master.service';
 import { DashboardRequestModel } from '../../../../Models/DTEInventory/DTEItemUnitModel';
+import { ITIAdminDashboardServiceService } from '../../../../Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
 
 @Component({
   selector: 'app-ITICommanDashboard',
@@ -28,6 +29,9 @@ export class ITI_CommanDashboardComponent {
   public InventoryList: any = [];
   public Table_SearchText: string = "";
   public viewDashboard: any[] = [];
+  public PlanningDashboard: any[] = [];
+  public InstructorDashboard: any[] = [];
+  public AttendanceDashboard: any[] = [];
   public viewTransferDashboard: any[] = [];
   public viewRelievingDashboard: any[] = [];
   public StaffMasterList: any[] = [];
@@ -49,7 +53,7 @@ export class ITI_CommanDashboardComponent {
     private sweetAlert2: SweetAlert2,
     private staffMasterService: StaffMasterService,
     private router: Router,
-    private AdminDashDataService: AdminDashboardDataService,
+    private AdminDashDataService: ITIAdminDashboardServiceService,
     private dteItemUnitMasterService: DteItemUnitMasterService,
   ) { }
 
@@ -62,24 +66,26 @@ export class ITI_CommanDashboardComponent {
  
   async GetDashboardData() {
     debugger
-    this.searchRequest.Action = "";
-    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-    this.searchRequest.UserID=this.sSOLoginDataModel.UserID;
-    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-    this.searchRequest.Status = 0;
+    const obj = {
+      RoleID: this.sSOLoginDataModel.RoleID,
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      CollegeID: this.sSOLoginDataModel.InstituteID,
+      UserID: this.sSOLoginDataModel.UserID,
+      FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+      EndTermID: this.sSOLoginDataModel.EndTermID
+    };
     try {
-      this.loaderService.requestStarted();
-      await this.dteItemUnitMasterService.GetBter_InventoryDashboard(this.searchRequest)
+      this.loaderService.requestStarted 
+      await this.AdminDashDataService.GetAllItidashboard(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           debugger
-          this.viewDashboard = data['Data'];
-          if (this.viewDashboard && this.viewDashboard.length > 0) {
-            this.RowBoxlength = this.viewDashboard.length;
-          } else {
-            this.RowBoxlength = 0;
-          }
+          this.PlanningDashboard = data['Data']['Table'];
+          this.InstructorDashboard = data['Data']['Table1'];
+          this.AttendanceDashboard = data['Data']['Table2'];
+         
+  
+          
           //this.viewTransferDashboard = this.viewDashboard.filter(s => s.ListType === 'Transfer');
           //this.viewRelievingDashboard = this.viewDashboard.filter(s => s.ListType === 'Relieving');
         }, (error: any) => console.error(error)

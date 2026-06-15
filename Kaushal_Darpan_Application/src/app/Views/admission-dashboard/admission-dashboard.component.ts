@@ -251,7 +251,7 @@ export class AdmissionDashboardComponent {
         FinancialYearID: this.sSOLoginDataModel.FinancialYearID
       };
       const data: any = await this.dashboardservice
-        .GetAdmissionDashboardData(obj);
+        .GetAllItidashboard(obj);
 
       const result = data?.Data || [];
 
