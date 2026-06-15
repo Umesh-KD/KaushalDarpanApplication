@@ -176,7 +176,7 @@ export class ReportedStudentReportComponent {
   }
 
   async ViewReportedStudentDetails(content: any, item: any) {
-   // debugger
+    debugger
     //this.requestById.BankGuaranteeID = item.BankGuaranteeID
     var ApplicationID = item.ApplicationID;
     await this.getReportedStudentDataByID(ApplicationID);
@@ -184,7 +184,7 @@ export class ReportedStudentReportComponent {
 
   }
   async getReportedStudentDataByID(ApplicationID:number) {
-    //debugger
+    debugger
     try {
       this.loaderService.requestStarted();
       //this.searchRequest.BankGuaranteeID = 0;
