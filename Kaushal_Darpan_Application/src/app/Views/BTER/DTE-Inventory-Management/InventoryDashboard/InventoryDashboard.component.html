@@ -1,5 +1,8 @@
 
-<main class="content">
+<main class="">
+  <div class="page-heading">
+    <h2>Inventory Dashboard</h2>
+  </div>
   <!-- KPI Cards -->
   <!--{{viewDashboard|json}}-->
   <div class="grid  xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-3 mb-5">
@@ -8,7 +11,12 @@
         <div [class]="item.ClassClourTop2"> <i [class]="item.SRC"></i></div>
         <div class="kpi-title">{{item.TotalText}}</div>
         <div [class]="item.ClassClourTop3" class="m-0">{{item.TotalCount}}</div>
-        <div class="kpi-sub">All Categories</div>
+        <div class="kpi-sub">
+          <a [routerLink]="['/',item.URL]">
+            {{item.TitelName}}
+            <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
       </div>
     </div>
     <!--<div class="col-6 col-md-4 col-xl-2">
