@@ -1,0 +1,136 @@
+<div class="dashboard container-fluid">
+  <!-- Row 1 -->
+  <div class="grid  xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+    <div >
+      <div class="section">
+        <div class="section-header planning"><i class="bi bi-building-fill"></i> Planning &amp; Building</div>
+        <div class="section-body">
+
+
+          <!--<div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-attendance">
+    <div *ngFor="let i of PlanningDashboard">
+      <div class="item-card">
+        <i [ngClass]="['icon', i.Icon, i.color]"></i>
+        <div class="label" [innerHTML]="i.Title"></div>
+        <div class="number" *ngIf="i.Total">{{i.Total}}</div>
+        <a class="view" [routerLink]="'/' + i.url">View Details</a>
+      </div>
+    </div>
+  </div>-->
+
+          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-attendance">
+            <div *ngFor="let i of PlanningDashboard">
+              <div class="item-card">
+                <i class="icon {{i.Icon}} icon-blue"></i>
+                <div class="label" [innerHTML]="i.Title"></div>
+                <div class="number" *ngIf="i.Total">{{i.Total}}</div>
+                <a class="view" [routerLink]="'/' + i.url">View Details</a>
+              </div>
+            </div>
+          </div>
+
+
+       
+         
+
+        </div>
+      </div>
+    </div>
+
+    <div class= "">
+      <div class="section">
+        <div class="section-header establishment"><i class="bi bi-people-fill"></i> Establishment</div>
+        <div class="section-body">
+          <div class="grid  xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-attendance">
+            <div class="4"><div class="item-card"><i class="icon bi bi-people-fill icon-green"></i><div class="label">Department Office Staff</div><div class="number">256</div><a class="view" href="#">View Details</a></div></div>
+            <div class=""><div class="item-card"><i class="icon bi bi-border-style icon-green"></i><div class="label">Office Vacancy List</div><div class="number">78</div><a class="view" href="#">View Details</a></div></div>
+            <div class=""><div class="item-card"><i class="icon bi bi-arrow-repeat icon-cyan"></i><div class="label">DDO Relieving &amp; Joining</div><div class="number">34</div><a class="view" href="#">View Details</a></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2 -->
+  <div class="grid  xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+    <div class=" ">
+      <div class="section">
+        <div class="section-header placement"><i class="bi bi-briefcase-fill"></i> Placement</div>
+        <div class="section-body">
+          <div class="row g-3 theme-placement">
+            <div class="col-12"><div class="item-card"><i class="icon bi bi-bar-chart-line-fill icon-purple"></i><div class="label">Placement Dashboard</div><a class="view" href="#">View Details</a></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="section">
+        <div class="section-header instructor">
+          <i class="bi bi-person-workspace"></i> Instructor
+        </div>
+        <div class="section-body">
+          <div class="flex flex-wrap justify-center gap-3 mb-5 theme-instructor">
+            <div *ngFor="let i of InstructorDashboard" style="width: 30%;">
+              <div class="item-card">
+                <i class="icon {{i.Icon}} {{i.color}}"></i>
+                <div class="label" [innerHTML]="i.Title"></div>
+                <div class="number" *ngIf="i.Total">{{i.Total}}</div>
+                <a class="view" [routerLink]="'/' + i.url">View Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="section">
+        <div class="section-header inspection"><i class="bi bi-search"></i> Inspection</div>
+        <div class="section-body">
+          <div class="grid  xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5 theme-inspection">
+            <div class=""><div class="item-card"><i class="icon bi bi-clipboard2-data-fill icon-pink"></i><div class="label">Inspection Details</div><div class="number">12</div><a class="view" href="#">View Details</a></div></div>
+            <div class=""><div class="item-card"><i class="icon bi bi-bag-check-fill icon-pink"></i><div class="label">Consent Details</div><div class="number">08</div><a class="view" href="#">View Details</a></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="section">
+        <div class="section-header attendance">
+          <i class="bi bi-calendar-week-fill"></i> Attendance
+        </div>
+        <div class="section-body">
+          <div class="grid  xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-attendance">
+            <div *ngFor="let i of AttendanceDashboard" class="w-full md:w-[48%] xl:w-[30%]">
+              <div class="item-card">
+                <i class="icon {{i.Icon}} {{i.color}}"></i>
+                <div class="label" [innerHTML]="i.Title"></div>
+                <div class="number" *ngIf="i.Total">{{i.Total}}</div>
+                <a class="view" [routerLink]="'/' + i.url">View Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 3 -->
+  <div class="row g-3 mt-1">
+    <div class="col-12">
+      <div class="section">
+        <div class="section-header inventory"><i class="bi bi-diagram-2-fill"></i> Inventory</div>
+        <div class="section-body">
+          <div class="grid  xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 grid-cols-1 gap-3 mb-5 theme-inventory">
+            <div class=" "><div class="item-card"><i class="icon bi bi-puzzle-fill icon-cyan"></i><div class="label">Stock Register</div><div class="number">1,248</div><a class="view" href="#">View Details</a></div></div>
+            <div class=" "><div class="item-card"><i class="icon bi bi-clipboard2-minus-fill icon-teal"></i><div class="label">Consolidated Item Report</div><div class="number">320</div><a class="view" href="#">View Details</a></div></div>
+            <div class= ""><div class="item-card"><span class="sr-badge">SR5<br>SR6</span><div class="label">SR5 &amp; SR6 Register</div><div class="number">68</div><a class="view" href="#">View Details</a></div></div>
+            <div class=" "><div class="item-card"><i class="icon bi bi-archive-fill icon-orange"></i><div class="label">Auction List</div><div class="number">15</div><a class="view" href="#">View Details</a></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

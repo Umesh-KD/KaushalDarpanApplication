@@ -131,5 +131,17 @@ export class ITIAdminDashboardServiceService {
       ).toPromise();
   }
 
+
+  public async GetAllItidashboard(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetAllItidashboard", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+
 }
 
