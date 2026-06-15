@@ -89,6 +89,9 @@ const routes: Routes = [
         path: 'singlepost', loadChildren: () => import('./Views/Home/single-post/single-post.module').then(m => m.SinglePostModule), title: 'Campus Details'
       },
       {
+        path: 'singleIIPDetails', loadChildren: () => import('./Views/Home/single-iip-details/single-iip-details.module').then(m => m.SingleIIPDetailsModule), title: 'IIP Event Details'
+      },
+      {
         path: 'ViewplacedStudent', loadChildren: () => import('./Views/Home/view-placed-student/view-placed-student.routing.module').then(m => m.ViewPlacedStudentRoutingModule), title: 'Placed Student Details'
       },
       {

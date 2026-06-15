@@ -24,6 +24,7 @@ import { ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
 import { ReportCollegeModel } from '../../../../Models/StudentsJoiningStatusMarksDataMedels';
 import { ITIAllotmentService } from '../../../../Services/ITI/ITIAllotment/itiallotment.service';
 import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
+import { ITIsService } from '../../../../Services/ITIs/itis.service';
 
 @Component({
   selector: 'app-report-for-admin',
@@ -58,15 +59,18 @@ export class ReportedStudentReportComponent {
   public totalInTableRecord: number = 0;
   public filteredStatusList: any[] = [];
   public ListITIManagementType: any = [];
+  public ITIReportedStudentByIDList: any = [];
   public Table_SearchText: string = "";
   public isSubmitted: boolean = false;
   public isVisibleList: boolean = false;
   public selectedITIGcode: string = "";
   public selectedCollegeId: number = 0;
   public collegeSearchRequest: any = {};
+  modalReference: NgbModalRef | undefined;
 
   constructor(
     private loaderService: LoaderService,
+    private ITIsService: ITIsService,
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
     private ITICollegeTradeService: ItiSeatIntakeService,
@@ -171,6 +175,51 @@ export class ReportedStudentReportComponent {
     XLSX.writeFile(wb, fileName);
   }
 
+  async ViewReportedStudentDetails(content: any, item: any) {
+   // debugger
+    //this.requestById.BankGuaranteeID = item.BankGuaranteeID
+    var ApplicationID = item.ApplicationID;
+    await this.getReportedStudentDataByID(ApplicationID);
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+
+  }
+  async getReportedStudentDataByID(ApplicationID:number) {
+    //debugger
+    try {
+      this.loaderService.requestStarted();
+      //this.searchRequest.BankGuaranteeID = 0;
+      //   this.searchRequest.CollageId = this.id;
+
+      //if (!ApplicationID) {
+      //  this.searchRequest.CollageId = 0; // fallback to All
+      //}
+
+      await this.ITIsService.ITIReportedStudentGetByID(ApplicationID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.ITIReportedStudentByIDList = data['Data'];
+
+          this.loadInTable();
+
+          console.log('ITI Reported Student ByIDList ===>', this.ITIReportedStudentByIDList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+  }
 
 
   //async downloadAllotedCollegePDF() {
