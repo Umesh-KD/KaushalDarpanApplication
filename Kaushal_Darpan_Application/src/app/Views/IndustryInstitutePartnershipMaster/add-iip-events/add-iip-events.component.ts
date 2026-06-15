@@ -76,6 +76,7 @@ public ReturnUrl: string = '';
         EventName: ['', Validators.required],
         EventTypeID: ['', [DropdownValidators]],
         Event: ['', [DropdownValidators]],
+        EventURL:[''],
         EventStartDate: ['', Validators.required],
         EventEndDate: ['', Validators.required],
         EventForID: ['', Validators.required],
@@ -176,6 +177,26 @@ if (this.PageMode == 'view') {
         }, (error: any) => console.error(error));
 
       await this.commonMasterService.Stream_InstituteIdWise(this.sSOLoginDataModel.DepartmentID,1,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID,this.sSOLoginDataModel.FinancialYearID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetStreamDataList() {
+    try {
+      //debugger
+      this.loaderService.requestStarted();      
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, 1, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StreamMasterList = data['Data'];
@@ -342,6 +363,7 @@ semesterControl?.updateValueAndValidity();
   public file!: File;
   async onFilechange(event: any, Type: string) {
     try {
+      //debugger
       this.file = event.target.files[0];
       if (this.file) {
         if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type == 'application/pdf') {
@@ -372,10 +394,9 @@ semesterControl?.updateValueAndValidity();
 
             if (this.State == EnumStatus.Success) {
               if (Type == "Photo") {
-                //this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-                this.request.FileUpload = data['Data'][0]["FileName"];
-                this.request.Dis_FileUpload = data['Data'][0]["Dis_FileName"];
-
+                  //this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+                  this.request.FileUpload = data['Data'][0]["FileName"];
+                  this.request.Dis_FileUpload = data['Data'][0]["Dis_FileName"];
               }
               //else if (Type == "Sign") {
               //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
@@ -402,6 +423,71 @@ semesterControl?.updateValueAndValidity();
       /*  }, 200);*/
     }
   }
+
+
+  public file1!: File;
+  async onFilechangeEvent(event: any, Type: string) {
+    try {
+      //debugger
+      this.file1 = event.target.files[0];
+      if (this.file1) {
+        if (this.file1.type == 'image/jpeg' || this.file1.type == 'image/jpg' || this.file1.type == 'image/png' || this.file1.type == 'application/pdf') {
+          //size validation
+          if (this.file1.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+          //if (this.file.size < 100000) {
+          //  this.toastr.error('Select more then 100kb File')
+          //  return
+          //}
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png file')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file1)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "Photo") {
+                  this.request.UploadEventPosterFile = data['Data'][0]["FileName"];
+                  this.request.Dis_UploadEventPosterFile = data['Data'][0]["Dis_FileName"];
+              }
+              //else if (Type == "Sign") {
+              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+              //}
+              /*              item.FilePath = data['Data'][0]["FilePath"];*/
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+
 
   async GetEventMasterData() {
   try {
@@ -436,6 +522,13 @@ semesterControl?.updateValueAndValidity();
 onEventTypeChange(event: any) {
   const selectedValue = event.target.value;
 
+  if (this.request.EventTypeID == 1) {
+    this.EventFormGroup.get('EventURL')?.setValidators([Validators.required, Validators.pattern('https?://.+')]);
+  }
+  else {
+    this.EventFormGroup.get('EventURL')?.clearValidators();
+  }
+  this.EventFormGroup.get('EventURL')?.updateValueAndValidity();
   // ⚠️ IMPORTANT: check using CODE or NAME
   this.isOJTSelected = selectedValue == 3; // if Code = 3 for OJT
 }
@@ -465,8 +558,8 @@ async GetDivisionMasterList() {
 
   async onEventLevelChange(event: any) {
 
+   // debugger
   const selectedValue = Number(event.target.value);
-
   this.isInstituteLevel = false;
   this.isDivisionLevel = false;
 
@@ -480,6 +573,7 @@ async GetDivisionMasterList() {
 
     // clear division
     this.request.DivisionID = 0;
+    await this.GetMasterData();
   }
 
   // Division Level
@@ -492,12 +586,12 @@ async GetDivisionMasterList() {
 
     // load division list
     await this.GetDivisionMasterList();
+    await this.GetStreamDataList();
   }
-
   else {
-
     this.request.InstituteID = 0;
     this.request.DivisionID = 0;
+    await this.GetStreamDataList();
   }
 }
 

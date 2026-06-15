@@ -36,26 +36,28 @@
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
 
-           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Title<span
-                class="StarMarking">*</span></label>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Event Title<span class="StarMarking">*</span>
+            </label>
             <input type="text" class="form-input" [(ngModel)]="request.EventName" formControlName="EventName">
           </div>
-           <div *ngIf="isSubmitted &&_EventFormGroup.EventName.errors" class="text-danger">
-              <p *ngIf="!_EventFormGroup.EventName.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This field is required .!
-              </p>
-            </div>
+          <div *ngIf="isSubmitted &&_EventFormGroup.EventName.errors" class="text-danger">
+            <p *ngIf="!_EventFormGroup.EventName.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Type<span
-                class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Event Type<span class="StarMarking">*</span>
+            </label>
             <!-- <select class="form-select" id="PlacementCompanyID" [(ngModel)]="request.EventTypeID"
-              formControlName="EventTypeID">
-              <option value="0">--Select--</option>
-              <option value="1">Online</option>
-              <option value="2">Offline</option>
-              <option value="3">OJT</option>
-            </select> -->
+      formControlName="EventTypeID">
+      <option value="0">--Select--</option>
+      <option value="1">Online</option>
+      <option value="2">Offline</option>
+      <option value="3">OJT</option>
+    </select> -->
             <select class="form-select" [(ngModel)]="request.EventTypeID" formControlName="EventTypeID" (change)="onEventTypeChange($event)">
               <option value="0">--Select--</option>
               <option *ngFor="let item of EventTypeList" [value]="item.Code">
@@ -69,9 +71,24 @@
             </div>
           </div>
 
+
+          <div *ngIf="request.EventTypeID==1 ">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Event URL:
+            </label>
+            <input formControlName="EventURL" class="form-input" maxlength="200" placeholder="Event URL"
+                   type="text" id="EventURL" [(ngModel)]="request.EventURL">
+            <div *ngIf="isSubmitted &&_EventFormGroup.EventURL.errors" class="text-danger">
+              <p *ngIf="!_EventFormGroup.EventURL.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event<span
-                class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Event<span class="StarMarking">*</span>
+            </label>
             <select class="form-select" [(ngModel)]="request.Event" formControlName="Event">
               <option value="0">--Select--</option>
               <option *ngFor="let item of EventList" [value]="item.Code">
@@ -90,7 +107,7 @@
               Event Level<span class="StarMarking">*</span>
             </label>
             <select class="form-select" [(ngModel)]="request.EventLevelID" formControlName="EventLevelID"
-              (change)="onEventLevelChange($event)">
+                    (change)="onEventLevelChange($event)">
               <option value="0">--Select--</option>
               <option *ngFor="let item of EventLevelList" [value]="item.Code">
                 {{item.NameEng}}
@@ -105,59 +122,60 @@
           </div>
 
           <!-- Show Institute Field -->
-<div *ngIf="isInstituteLevel">
-  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-    Institute
-  </label>
+          <div *ngIf="isInstituteLevel">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Institute
+            </label>
 
-  <input type="text"
-         class="form-input"
-         [value]="sSOLoginDataModel.InstituteName"
-         readonly>
-</div>
+            <input type="text"
+                   class="form-input"
+                   [value]="sSOLoginDataModel.InstituteName"
+                   readonly>
+          </div>
 
-<!-- Show Division Dropdown -->
-<div *ngIf="isDivisionLevel">
-  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-    Division
-  </label>
+          <!-- Show Division Dropdown -->
+          <div *ngIf="isDivisionLevel">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Division
+            </label>
 
-  <select class="form-select"
-          [(ngModel)]="request.DivisionID"
-          formControlName="DivisionID">
+            <select class="form-select"
+                    [(ngModel)]="request.DivisionID"
+                    formControlName="DivisionID">
 
-    <option value="0">--Select--</option>
+              <option value="0">--Select--</option>
 
-    <option *ngFor="let item of DivisionMasterList"
-            [value]="item.ID">
+              <option *ngFor="let item of DivisionMasterList"
+                      [value]="item.ID">
 
-      {{item.Name}}
-    </option>
-  </select>
-</div>
+                {{item.Name}}
+              </option>
+            </select>
+          </div>
 
           <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
-            <select class="form-select" id="SemesterID" formControlName="SemesterID"
-                    [(ngModel)]="request.SemesterID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
-            </select>
-            <div *ngIf="isSubmitted &&_EventFormGroup.SemesterID.errors" class="text-danger">
-              <p *ngIf="!_EventFormGroup.SemesterID.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This field is required .!
-              </p>
-            </div>
-          </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+    <select class="form-select" id="SemesterID" formControlName="SemesterID"
+            [(ngModel)]="request.SemesterID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+    </select>
+    <div *ngIf="isSubmitted &&_EventFormGroup.SemesterID.errors" class="text-danger">
+      <p *ngIf="!_EventFormGroup.SemesterID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+  </div> -->
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event For<span
-                class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Event For<span class="StarMarking">*</span>
+            </label>
             <!-- <select class="form-select" [(ngModel)]="request.EventForID" formControlName="EventForID"> -->
-              <select class="form-select"
-        [(ngModel)]="request.EventForID"
-        formControlName="EventForID"
-        (change)="onEventForChange($event)">
+            <select class="form-select"
+                    [(ngModel)]="request.EventForID"
+                    formControlName="EventForID"
+                    (change)="onEventForChange($event)">
               <option value="0">--Select--</option>
               <option *ngFor="let item of EventForList" [value]="item.Code">
                 {{item.NameEng}}
@@ -173,7 +191,7 @@
           <div>
             <label>From Date</label>
             <input type="datetime-local" class="form-input" name="Date" id="txtFromDate"
-              formControlName="EventStartDate" [(ngModel)]="request.EventStartDate" [min]="todayDate" />
+                   formControlName="EventStartDate" [(ngModel)]="request.EventStartDate" [min]="todayDate" />
             <div *ngIf="isSubmitted && _EventFormGroup.EventStartDate.errors" class="text-danger">
               <p *ngIf="_EventFormGroup.EventStartDate.errors.required">
                 <i aria-hidden="true"></i>This field is required.!
@@ -183,7 +201,7 @@
           <div>
             <label>To Date</label>
             <input type="datetime-local" class="form-input" name="ToDate" id="EventEndDate"
-              formControlName="EventEndDate" [(ngModel)]="request.EventEndDate" [min]="request.EventStartDate" />
+                   formControlName="EventEndDate" [(ngModel)]="request.EventEndDate" [min]="request.EventStartDate" />
             <div *ngIf="isSubmitted && _EventFormGroup.EventEndDate.errors" class="text-danger">
               <p *ngIf="_EventFormGroup.EventEndDate.errors.required">
                 <i aria-hidden="true"></i>This field is required.!
@@ -194,35 +212,35 @@
           <div class="mb-8">
             <label>Branch<span class="text-danger">*</span></label>
             <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'" [settings]="settingsMultiselect"
-              [data]="StreamMasterList" [(ngModel)]="request.Branchlist" [disabled]="false"
-              (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
-              (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
-              (onDeSelectAll)="onDeSelectAll($event)" formControlName="Branchlist"  [disabled]="IsViewMode">
+                                     [data]="StreamMasterList" [(ngModel)]="request.Branchlist" [disabled]="false"
+                                     (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
+                                     (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                     (onDeSelectAll)="onDeSelectAll($event)" formControlName="Branchlist" [disabled]="IsViewMode">
             </ng-multiselect-dropdown>
-             <div *ngIf="isSubmitted && _EventFormGroup.Branchlist.errors" class="text-danger">
-    <p *ngIf="_EventFormGroup.Branchlist.errors.required">
-      This field is required.!
-    </p>
-  </div>
+            <div *ngIf="isSubmitted && _EventFormGroup.Branchlist.errors" class="text-danger">
+              <p *ngIf="_EventFormGroup.Branchlist.errors.required">
+                This field is required.!
+              </p>
+            </div>
           </div>
 
           <div class="mb-8 h-full">
             <!-- <label>Semester<span class="text-danger">*</span></label> -->
-             <label>
-    Semester
-    <span class="text-danger" *ngIf="!isFacultySelected">*</span>
-  </label>
+            <label>
+              Semester
+              <span class="text-danger" *ngIf="!isFacultySelected">*</span>
+            </label>
             <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'" [settings]="settingsMultiselectSem"
-              [data]="SemesterMasterList" [(ngModel)]="request.Semesterlist" [disabled]="false"
-              (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
-              (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
-              (onDeSelectAll)="onDeSelectAll($event)" formControlName="Semesterlist"  [disabled]="IsViewMode">
+                                     [data]="SemesterMasterList" [(ngModel)]="request.Semesterlist" [disabled]="false"
+                                     (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
+                                     (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                     (onDeSelectAll)="onDeSelectAll($event)" formControlName="Semesterlist" [disabled]="IsViewMode">
             </ng-multiselect-dropdown>
             <div *ngIf="isSubmitted && _EventFormGroup.Semesterlist.errors" class="text-danger">
-  <p *ngIf="_EventFormGroup.Semesterlist.errors.required">
-    This field is required.!
-  </p>
-</div>
+              <p *ngIf="_EventFormGroup.Semesterlist.errors.required">
+                This field is required.!
+              </p>
+            </div>
           </div>
 
           <div>
@@ -230,34 +248,62 @@
               Upload File :
             </label>
             <div class="flex fileUploader">
-              <input
-                class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                id="eventFileUpload" type="file" (change)="onFilechange($event,'Photo')" *ngIf="!IsViewMode">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="eventFileUpload" type="file" (change)="onFilechange($event,'Photo')" *ngIf="!IsViewMode">
               <label for="eventFileUpload">
                 <span>Choose File</span>
                 {{request.Dis_FileUpload === '' ? 'No File Choosen' : request.Dis_FileUpload}}
               </label>
               <div class="flex">
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileUpload}}"
-                  *ngIf="this.request.FileUpload !=''" class="btn bg-primary text-white m-0" target="_blank"><i
-                    class="ti ti-eye"></i></a>
+                   *ngIf="this.request.FileUpload !=''" class="btn bg-primary text-white m-0" target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
 
                 <!--<a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
-                 *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+        *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
                 <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-                 (click)="DeleteImage(request.Dis_JobDiscription,'Photo')" *ngIf="this.request.Dis_JobDiscription !=''">
-                <i class="ti ti-trash"></i>
-              </a>-->
+           (click)="DeleteImage(request.Dis_JobDiscription,'Photo')" *ngIf="this.request.Dis_JobDiscription !=''">
+          <i class="ti ti-trash"></i>
+        </a>-->
               </div>
             </div>
           </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="eventFileUpload">
+              Upload Event Poster :
+            </label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="eventFileUpload1" type="file" (change)="onFilechangeEvent($event,'Photo')" *ngIf="!IsViewMode">
+              <label for="eventFileUpload1">
+                <span>Choose File</span>
+                {{request.Dis_UploadEventPosterFile === '' ? 'No File Choosen' : request.Dis_UploadEventPosterFile}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.UploadEventPosterFile}}"
+                   *ngIf="this.request.UploadEventPosterFile !=''" class="btn bg-primary text-white m-0" target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
+
+                <!--<a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
+        *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+           (click)="DeleteImage(request.Dis_JobDiscription,'Photo')" *ngIf="this.request.Dis_JobDiscription !=''">
+          <i class="ti ti-trash"></i>
+        </a>-->
+              </div>
+            </div>
+          </div>
+
 
           <div class="col-span-1 md:col-span-2 lg:col-span-3">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Remark
             </label>
             <textarea class="form-input" rows="3" placeholder="Enter remark..." [(ngModel)]="request.Remark"
-              formControlName="Remark">
+                      formControlName="Remark">
             </textarea>
           </div>
 
@@ -266,22 +312,22 @@
             <input type="text" class="form-input" [(ngModel)]="request.AreaOfDomain" formControlName="AreaOfDomain">
           </div>
           <!-- <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                   for="fileStudentCompany">Company Document</label>
-            <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="fileStudentCompany" type="file" (change)="onFilechangeCompany($event,'CompanyDocument')">
-              <label for="fileStudentCompany">
-                <span>Choose File</span>
-                {{request.Dis_DocName === '' ? 'No File Choosen' : request.Dis_DocName}}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyDocument}}"
-                   *ngIf="this.request.Dis_DocName !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-              </div>
-            </div>
-          </div> -->
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+           for="fileStudentCompany">Company Document</label>
+    <div class="flex fileUploader">
+      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+             id="fileStudentCompany" type="file" (change)="onFilechangeCompany($event,'CompanyDocument')">
+      <label for="fileStudentCompany">
+        <span>Choose File</span>
+        {{request.Dis_DocName === '' ? 'No File Choosen' : request.Dis_DocName}}
+      </label>
+      <div class="flex">
+        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyDocument}}"
+           *ngIf="this.request.Dis_DocName !=''"
+           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+      </div>
+    </div>
+  </div> -->
 
 
         </div>
