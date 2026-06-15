@@ -134,7 +134,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       txtMobileNo: [{ value: '', disabled: true }],
       txtEmailID: [{ value: '', disabled: true }],
       ddlHostel: [''],
-      ddlPost: [{ value: ''  }, [DropdownValidators]],
+      ddlPost: [0, [DropdownValidators]],
       StaffPostTypeID: [{ value: 0 }, [DropdownValidators]],
       Shift:['']
     })
@@ -1931,6 +1931,10 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     }
   }
 
-
+  onPostChange(selectedValue: any) {
+    debugger
+    console.log(this.AddStaffBasicDetailFromGroup.get('ddlPost')?.value)
+    this.formData.DesignationID = selectedValue;
+  }
 
 }
