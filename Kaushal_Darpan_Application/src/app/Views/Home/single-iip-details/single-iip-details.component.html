@@ -102,25 +102,19 @@
   <div *ngFor="let item of EventDetail" class="mb-4">
 
     <div class="card border-0 shadow event-card">
-
       <div class="row g-0 align-items-stretch">
-
         <!-- Poster -->
         <div class="col-lg-2 col-md-4 d-flex justify-content-center align-items-center">
-
           <img *ngIf="item.UploadEventPosterFile"
                [src]="appsettingConfig.StaticFileRootPathURL + '/' + item.UploadEventPosterFile"
                class="event-poster"
                alt="Event Poster">
-
           <div *ngIf="!item.UploadEventPosterFile"
                class="event-poster-placeholder">
             <i class="fa fa-image fa-3x"></i>
             <!--<span>No Poster</span>-->
             <span>Event Details</span>
-
           </div>
-
         </div>
 
         <!-- Details -->
@@ -137,6 +131,11 @@
                 <h5 class="mb-0 text-secondary">
                   <i class="fa fa-building me-2"></i>
                   {{ item.CompanyName }}
+                </h5>
+
+                <h5 class="mb-0 mt-1 text-secondary">
+                  <i class="fa fa-id-card  me-2"></i>
+                  {{ item.UniqueEventID }}
                 </h5>
 
               </div>
