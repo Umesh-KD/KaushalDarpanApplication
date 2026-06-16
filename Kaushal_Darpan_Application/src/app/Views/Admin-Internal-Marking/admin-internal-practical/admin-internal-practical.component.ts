@@ -197,6 +197,18 @@ export class AdminInternalPracticalComponent {
               if (x.IsInternalAssesmentCheckecd == false) {
                 x.IsPresentInternalAssisment = 1
               }
+
+              // added by Ramesh on 16-06-2026 as MaxInternalAssisment == 0 then should show Pass||Fail
+              if (x.IsInternalAssesmentCheckecd == false && x.MaxInternalAssisment == 0) {
+                x.ObtainedInternalAssisment = "Pass";
+              } else if (x.IsInternalAssesmentCheckecd == true && x.MaxInternalAssisment == 0) {
+                if (x.IsPresentInternalAssisment == 1) {
+                  x.ObtainedInternalAssisment = "Pass";
+                } else {
+                  x.ObtainedInternalAssisment = "Fail";
+                }
+              }
+              //------------------
             })
           } else if (this.InternalPracticalID == 1) {
             this.TheoryMarksList.forEach((x: any) => {
@@ -208,10 +220,8 @@ export class AdminInternalPracticalComponent {
           }
 
 
-          var isfinalsubmit = this.TheoryMarksList.filter(x => x.isFinalSubmit == true)
-          if (isfinalsubmit.length > 0) {
-            this.isfinalsubmit = true
-          }
+          // all checked
+          this.isfinalsubmit = this.TheoryMarksList.every(x => x.isFinalSubmit == true);
 
           //table feature load
           this.loadInTable();
@@ -390,6 +400,11 @@ export class AdminInternalPracticalComponent {
   async SaveData(array: any) {
     try {
       this.loaderService.requestStarted();
+      array.forEach((x: any) => {
+        if (x.ObtainedInternalAssisment == "Pass" || x.ObtainedInternalAssisment == "Fail") {
+          x.ObtainedInternalAssisment = 0
+        }
+      })
       await this.InternalPracticalStudentService.UpdateSaveDataInternal_Admin(array, this.searchRequest.InternalPracticalID)
         .then(async (data: any) => {
 
@@ -400,6 +415,16 @@ export class AdminInternalPracticalComponent {
             } else {
               array.forEach((x: any) => {
                 x.Marked = this.AllInTableSelect;
+
+                // Added By Ramesh 
+                if (x.MaxInternalAssisment == 0) {
+                  if (x.IsPresentInternalAssisment == 1) {
+                    x.ObtainedInternalAssisment = "Pass";
+                  } else {
+                    x.ObtainedInternalAssisment = "Fail";
+                  }
+                }
+                //------------------
               }
               )
             }
@@ -586,6 +611,13 @@ export class AdminInternalPracticalComponent {
 
     if (isGetAll == false && dOC.IsPresentInternalAssisment != 1) {
       dOC.ObtainedInternalAssisment = 0;
+    }
+
+    // added by Ramesh on 16-06-2026 as MaxInternalAssisment == 0 then should show Pass||Fail
+    if (dOC.Marked && dOC.IsPresentInternalAssisment == 1 && dOC.MaxInternalAssisment == 0) {
+      dOC.ObtainedInternalAssisment = "Pass";
+    } else if (dOC.Marked && dOC.IsPresentInternalAssisment != 1 && dOC.MaxInternalAssisment == 0) {
+      dOC.ObtainedInternalAssisment = "Fail";
     }
     /*  this.Isremarkshow = this.request.VerificationDocumentDetailList.some((x: any) => x.Status == EnumVerificationAction.Revert);*/
   }

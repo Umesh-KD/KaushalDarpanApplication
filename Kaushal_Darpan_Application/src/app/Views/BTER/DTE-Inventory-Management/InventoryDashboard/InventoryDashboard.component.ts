@@ -80,7 +80,7 @@ export class InventoryDashboardComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetDashboardData();
-    await this.LoadDynamicReport();
+    await this.LoadDynamicReport('CategoryLIST');
     await this.GetEquipmentDDL();
     await this.GetCategoryDDL();
   }
@@ -174,63 +174,58 @@ export class InventoryDashboardComponent {
   }
 
 
- 
-  async LoadDynamicReport() {
+
+  async LoadDynamicReport(action: string = 'CategoryLIST') {
     try {
-      debugger
       this.loaderService.requestStarted();
 
-      let request = new ItemsDataModel();
+      const request = new ItemsDataModel();
 
-      request.Action = 'CategoryLIST';
+      request.Action = action || 'CategoryLIST';
       request.CategoryId = this.Searchrequest.CategoryId;
       request.EquipmentId = this.Searchrequest.EquipmentId;
       request.RoleId = this.sSOLoginDataModel.RoleID;
+      request.InstituteId = this.sSOLoginDataModel.InstituteID;
 
-      await this.tradeEquipmentsMappingService
-        .GetDynamicReportData(request)
-        .then((response: any) => {
+      const response: any =
+        await this.tradeEquipmentsMappingService.GetDynamicReportData(request);
 
-          console.log('API Response:', response);
+      console.log('API Response:', response);
 
-          this.State = response.State;
+      this.State = response.State;
 
-          if (this.State == EnumStatus.Success) {
+      if (this.State === EnumStatus.Success) {
 
-         
-            if (request.Action == 'CategoryLIST') {
-              this.MappingList = response.Data.CategoryList || [];
-            }
+        switch (request.Action) {
+          case 'CategoryLIST':
+            this.MappingList = response?.Data?.CategoryList || [];
+            break;
 
-           
-            else if (request.Action == 'ItemEquipmentsLIST') {
-              this.MappingList = response.Data.EquipmentList || [];
-            }
+          case 'ItemEquipmentsLIST':
+            this.MappingList = response?.Data?.EquipmentList || [];
+            break;
 
-            if (this.MappingList && this.MappingList.length > 0) {
-              this.DynamicColumns = Object.keys(this.MappingList[0]);
-            }
-            else {
-              this.DynamicColumns = [];
-            }
-
-            console.log('MappingList:', this.MappingList);
-            console.log('DynamicColumns:', this.DynamicColumns);
-          }
-          else {
+          default:
             this.MappingList = [];
-            this.DynamicColumns = [];
-            
-          }
-        });
+            break;
+        }
 
-    }
-    catch (ex) {
-      console.error(ex);
+        this.DynamicColumns =
+          this.MappingList.length > 0
+            ? Object.keys(this.MappingList[0])
+            : [];
+
+        console.log('MappingList:', this.MappingList);
+        console.log('DynamicColumns:', this.DynamicColumns);
+      } else {
+        this.MappingList = [];
+        this.DynamicColumns = [];
+      }
+    } catch (error) {
+      console.error(error);
       this.MappingList = [];
       this.DynamicColumns = [];
-    }
-    finally {
+    } finally {
       this.loaderService.requestEnded();
     }
   }

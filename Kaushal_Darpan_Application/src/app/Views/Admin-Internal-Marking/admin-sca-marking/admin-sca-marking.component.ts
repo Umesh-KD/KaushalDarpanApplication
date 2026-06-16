@@ -158,11 +158,10 @@ export class AdminSCAMarkingComponent {
               x.IsPresentStudentCenteredActivity = 1
             }
           })
-          var isfinalsubmit = this.GradeList.filter(x => x.isFinalSubmit == true)
-          if (isfinalsubmit.length > 0) {
-            this.isfinalsubmit = true
-            this.AllInTableSelect = false
-          } 
+
+          // all checked
+          this.isfinalsubmit = this.GradeList.every(x => x.isFinalSubmit == true);
+          
           //table feature load
           this.loadInTable();
           //end table feature load

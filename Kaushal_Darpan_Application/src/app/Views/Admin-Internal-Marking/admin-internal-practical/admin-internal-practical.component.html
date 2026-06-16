@@ -168,8 +168,11 @@
 
             <td *ngIf="IsView" align="left">
               <div class="flex">
-                <input tabindex="{{idx}}" (keydown)="onTabPress($event, idx)" class="form-input" style="width:100px" type="text" [disabled]="!row.Marked || row.IsPresentInternalAssisment!=1" id="txtObtainedInternalAssisment"
-                 [(ngModel)]="row.ObtainedInternalAssisment"  [readonly]="row.IsPresentInternalAssisment!=1" title="11">
+                <input tabindex="{{idx}}" class="form-input" style="width:100px" type="text" id="txtObtainedInternalAssisment"
+                  [disabled]="!row.Marked || row.IsPresentInternalAssisment!=1 || row.MaxInternalAssisment == 0" 
+                  (keydown)="onTabPress($event, idx)"
+                  [(ngModel)]="row.ObtainedInternalAssisment"  
+                  [readonly]="row.IsPresentInternalAssisment!=1 || row.MaxInternalAssisment == 0" title="11">
                 <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
               </div>
             </td>

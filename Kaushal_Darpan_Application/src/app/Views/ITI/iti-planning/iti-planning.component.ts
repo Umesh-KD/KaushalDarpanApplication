@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDatamodel, BterSearchmodel } from '../../../Models/ApplicationFormDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -91,8 +91,11 @@ export class ItiPlanningComponent {
   public Collegeid: number = 0
   public Type: number = 0
   public ButtonText: string = 'Submit';
+  CampusRemoveForm!: FormGroup;
+  selectedCollegeId: number = 0;
 
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
+  @ViewChild('campusRemoveModal')campusRemoveModal!: TemplateRef<any>;
   public StudentHistoryModelList: any = [];
   constructor(
     private formBuilder: FormBuilder,
@@ -116,6 +119,13 @@ export class ItiPlanningComponent {
 
   async ngOnInit() {
 
+    this.CampusRemoveForm = this.formBuilder.group({
+    CampusRemovedOrderNo: ['', Validators.required],
+    CampusRemovedOrderDate: ['', Validators.required],
+    CampusRemovedRemark: ['', Validators.required],
+    CampusRemovedFilePath: [''],
+    CampusRemovedDisFilePath: ['']
+  });
     this.ReportForm = this.formBuilder.group(
       {
         txtName: [{ value: '', disabled: true }, Validators.required],
@@ -2067,6 +2077,110 @@ export class ItiPlanningComponent {
    
   }
 
+async onCampusFileChange(event: any) {
 
+  const file = event.target.files[0];
 
+  if (!file) return;
+
+  await this.commonMasterService
+    .UploadDocument(file)
+    .then((data: any) => {
+
+      if (data.State == EnumStatus.Success) {
+
+        this.CampusRemoveForm.patchValue({
+
+          CampusRemovedFilePath:
+            data.Data[0].FileName,
+
+          CampusRemovedDisFilePath:
+            data.Data[0].Dis_FileName
+
+        });
+
+      }
+    });
+}
+
+openCampusRemoveModal(id: number) {
+
+  debugger
+  this.selectedCollegeId =  Number(this.activatedRoute.snapshot.queryParamMap.get('id'));
+
+  this.CampusRemoveForm.reset();
+
+  this.modalService.open(
+    this.campusRemoveModal,
+    {
+      size: 'lg',
+      backdrop: 'static'
+    }
+  );
+}
+
+async SaveCampusStatus() {
+  if (this.CampusRemoveForm.invalid) {
+
+    this.CampusRemoveForm.markAllAsTouched();
+    return;
+  }
+
+  const model = {
+
+    Id: this.sSOLoginDataModel.InstituteID,
+
+    ModifyBy: this.sSOLoginDataModel.UserID,
+
+    CampusRemovedRemark:
+      this.CampusRemoveForm.value.CampusRemovedRemark,
+
+    CampusRemovedOrderNo:
+      this.CampusRemoveForm.value.CampusRemovedOrderNo,
+
+    CampusRemovedOrderDate:
+      this.CampusRemoveForm.value.CampusRemovedOrderDate,
+
+    CampusRemovedFilePath:
+      this.CampusRemoveForm.value.CampusRemovedFilePath,
+
+    CampusRemovedDisFilePath:
+      this.CampusRemoveForm.value.CampusRemovedDisFilePath
+
+  };
+
+  this.loaderService.requestStarted();
+
+  try {
+    this.isSubmitted = true;
+
+debugger
+    await this.ApplicationService
+      .UpdateCampusStatusByID(model)
+      .then((res: any) => {
+
+        if (res.State == EnumStatus.Success) {
+
+          this.toastr.success(res.Message);
+
+          this.modalService.dismissAll();
+
+        }
+        else {
+
+          this.toastr.error(res.ErrorMessage);
+        }
+
+      });
+
+  }
+  finally {
+
+    this.loaderService.requestEnded();
+  }
+}
+
+get CampusForm() {
+  return this.CampusRemoveForm.controls;
+}
 }
