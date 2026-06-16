@@ -75,3 +75,12 @@ export class DTEEquipmentVerificationsDataModel {
 //  public ItemDetailsId: number = 0;
 //  public Status: number = 0;
 //}
+
+
+export class ItemsDataModel {
+  public Action: string = '';
+  public CategoryId: number = 0;
+  public EquipmentId: number = 0;
+  public InstituteId: number = 0;
+  public RoleId: number = 0;
+}

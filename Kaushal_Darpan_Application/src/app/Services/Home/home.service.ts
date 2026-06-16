@@ -86,4 +86,16 @@ export class HomeService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetAllIIPEventDetailsForWeb(CompanyId: number = 0,DepartmentID:number=0) {
+    debugger
+    //const params = new HttpParams()
+    //  .set('CompanyId', CompanyId)
+    //  .set('DepartmentID', DepartmentID);
+
+    return await this.http.get(`${this.APIUrl}/GetAllIIPEventDetailsForWeb/${CompanyId}/${DepartmentID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

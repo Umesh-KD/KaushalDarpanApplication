@@ -131,6 +131,7 @@ export class AddSanctionOrderComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.request = data['Data'];
+          this.GetOrderList()
         }, (error: any) => console.error(error)
         );
     }
