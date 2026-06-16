@@ -16,7 +16,7 @@ import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
 import { DteTradeEquipmentsMappingService } from '../../../../../Services/DTEInventory/DTETradeEquipmentsMapping/dtetrade-equipments-mapping.service';
 import { DTEEquipmentsMasterService } from '../../../../../Services/DTEInventory/DTEEquipmentsMaster/dteequipments-master.service';
 import { DTEItemCategoriesMasterService } from '../../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
-import { DTESearchTradeEquipmentsMapping, DTETradeEquipmentsMappingData } from '../../../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
+import { DTESearchTradeEquipmentsMapping, DTETradeEquipmentsMappingData, ItemsDataModel } from '../../../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 import { DTEItemsSearchModel, itemStatusRevertModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
@@ -412,46 +412,107 @@ debugger;
     this.isSubmitted = false;
   }
 
+  //async LoadDynamicReport() {
+  //  try {
+  //    debugger
+  //    this.loaderService.requestStarted();
+  //    this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+
+  //    let request = new ItemsDataModel();
+  //    request.Action = 'CategoryLIST';
+  //    request.CategoryId = this.Searchrequest.CategoryId;
+  //    request.EquipmentId = this.Searchrequest.EquipmentId;
+  //    request.RoleId = this.sSOLoginDataModel.RoleID;
+
+  //    await this.tradeEquipmentsMappingService
+  //      .GetDynamicReportData(request)
+  //      .then((data: any) => {
+
+  //        data = JSON.parse(JSON.stringify(data));
+
+  //        this.State = data.State;
+
+  //        if (this.State == EnumStatus.Success) {
+  //          if (data.Data && data.Data.Table) {
+
+  //            this.MappingList = data.Data.Table;
+
+  //            this.DynamicColumns = Object.keys(this.MappingList[0]);
+
+  //            console.log(this.MappingList);
+  //            console.log(this.DynamicColumns);
+            
+  //          }
+  //        }
+  //      });
+
+  //  } catch (ex) {
+  //    console.log(ex);
+  //  }
+  //  finally {
+  //    this.loaderService.requestEnded();
+  //  }
+  //}
   async LoadDynamicReport() {
     try {
       debugger
       this.loaderService.requestStarted();
 
-      let request = new DTETradeEquipmentsMappingData();
+      let request = new ItemsDataModel();
 
+      request.Action = 'CategoryLIST';
       request.CategoryId = this.Searchrequest.CategoryId;
       request.EquipmentId = this.Searchrequest.EquipmentId;
+      request.RoleId = this.sSOLoginDataModel.RoleID;
 
       await this.tradeEquipmentsMappingService
         .GetDynamicReportData(request)
-        .then((data: any) => {
+        .then((response: any) => {
 
-          data = JSON.parse(JSON.stringify(data));
+          console.log('API Response:', response);
 
-          this.State = data.State;
+          this.State = response.State;
 
           if (this.State == EnumStatus.Success) {
-            if (data.Data && data.Data.Table) {
 
-              this.MappingList = data.Data.Table;
-
-              this.DynamicColumns = Object.keys(this.MappingList[0]);
-
-              console.log(this.MappingList);
-              console.log(this.DynamicColumns);
-            
+            // For Category List
+            if (request.Action == 'CategoryLIST') {
+              this.MappingList = response.Data.CategoryList || [];
             }
+
+            // For Equipment List
+            else if (request.Action == 'ItemEquipmentsLIST') {
+              this.MappingList = response.Data.EquipmentList || [];
+            }
+
+            // Generate Dynamic Columns
+            if (this.MappingList && this.MappingList.length > 0) {
+              this.DynamicColumns = Object.keys(this.MappingList[0]);
+            }
+            else {
+              this.DynamicColumns = [];
+            }
+
+            console.log('MappingList:', this.MappingList);
+            console.log('DynamicColumns:', this.DynamicColumns);
+          }
+          else {
+            this.MappingList = [];
+            this.DynamicColumns = [];
+
           }
         });
 
-    } catch (ex) {
-      console.log(ex);
+    }
+    catch (ex) {
+      console.error(ex);
+      this.MappingList = [];
+      this.DynamicColumns = [];
     }
     finally {
       this.loaderService.requestEnded();
     }
   }
-
 
   exportToExcel(): void {
 
