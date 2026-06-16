@@ -126,7 +126,9 @@ export class MarksheetDownloadComponent {
     }
     try {
       this.loaderService.requestStarted();
-      this.searchRequest.EndTermID = this.searchRequest.EndTermID
+     // this.searchRequest.EndTermID = this.searchRequest.EndTermID
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+
       //this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
       this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
