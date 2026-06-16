@@ -323,6 +323,15 @@ export class ITIInventoryService {
       ).toPromise();
   }
 
+  public async GetAllItemsMasterReport(searchRequest: DTEItemsSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllItemsMasterReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async GetAllAuctionList(searchRequest: DTEItemsSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllAuctionList`, body, this.headersOptions)

@@ -32,6 +32,8 @@ export class DTEItemsSearchModel {
   public StaffID?: number = 0;
   public TradeId?: number = 0;
   public ItemId?: number = 0;
+  public ConditionID?: number = 0;
+  public IsAuction?: number = 0;
 }
 
 export class DTEItemsSearchModel1 {
