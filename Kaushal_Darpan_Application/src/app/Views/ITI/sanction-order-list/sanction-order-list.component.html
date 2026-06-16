@@ -19,7 +19,7 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <div  class="flex justify-end flex-wrap items-center">
-          <a routerLink="/AddSanctionOrder" class="btn bg-info btn-sm text-white me-2">
+          <a *ngIf="sSOLoginDataModel.RoleID==_enumrole.ITIPlanningAdmin || sSOLoginDataModel.RoleID== _enumrole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==_enumrole.DTE_TrainingT2_establishment " routerLink="/AddSanctionOrder" class="btn bg-info btn-sm text-white me-2">
             <i class="ti ti-plus"></i>Add
           </a>
           <!--<a routerLink="/ChangeExaminer" class="btn bg-info btn-sm text-white">
@@ -145,8 +145,8 @@
             <td>
               <div  class="flex align-center justify-center actionBtns w-auto"
                    style="width:auto !important">
-                <a [routerLink]="'/AddSanctionOrder'" [queryParams]="{SanctionID:row.SanctionID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
-                <a  *ngIf="row.Eid==0 || row.Eid==null" href="javascript:void(0);" title="Remove"
+                <a *ngIf="sSOLoginDataModel.RoleID==_enumrole.ITIPlanningAdmin || sSOLoginDataModel.RoleID==_enumrole.DTE_TrainingT2_establishment || sSOLoginDataModel.RoleID== _enumrole.ITIBuildingAdmin " [routerLink]="'/AddSanctionOrder'" [queryParams]="{SanctionID:row.SanctionID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+                <a  *ngIf="(row.Eid==0 || row.Eid==null) && (sSOLoginDataModel.RoleID==_enumrole.ITIPlanningAdmin || sSOLoginDataModel.RoleID== _enumrole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==_enumrole.DTE_TrainingT2_establishment )  " href="javascript:void(0);" title="Remove"
                    (click)="btnDelete_OnClick(row.SanctionID)"><i class="ti ti-trash"></i></a>
                 <div *ngIf="row.OrderCopy" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <a download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.OrderCopy}}" title="Download"><i class="ti ti-download"></i></a>
