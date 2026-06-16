@@ -18,10 +18,13 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
 import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { ITIDateConfigurationComponent } from './date-configuration/iti-date-configuration.component';
 import { ITISignatureMasterComponent } from './signature/iti-signature.component';
+import { ContentVisiblityConfigurationComponent } from './content-visiblity-configuration/content-visiblity-configuration.component';
 
 
 @NgModule({
-  declarations: [ITIMasterConfigurationComponent, ITIDateConfigurationComponent, ITIFeeConfigurationComponent, ITISerialMasterComponent, ITISessionConfigurationComponent, ITISignatureMasterComponent],
+  declarations: [ITIMasterConfigurationComponent, ITIDateConfigurationComponent, ITIFeeConfigurationComponent, 
+    ITISerialMasterComponent, ITISessionConfigurationComponent, ITISignatureMasterComponent,
+    ContentVisiblityConfigurationComponent],
   imports: [
     CommonModule,
     ITIMasterConfigurationRoutingModule,
