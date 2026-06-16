@@ -41,11 +41,13 @@ export class RequestSearchModel {
   public RelievingTimeID?: number = 0;
   public OrderID :number=0
   public RequestStatus? :number=0
+  public oldInstitute? :number=0
 
 
   public EmployeeNumber: string = '';
   public EmployeeDesignation: string = '';
   public LastworkingDate?: string = '';
+  public act?: string = '';
 }
 
 
@@ -150,4 +152,11 @@ export class Iti_Update_Relieved_RevertModel {
   public ServiceRequestId: number = 0;
   public ActionBy: number = 0;
   public Remarks: string = '';
- }
+}
+
+export class ReliveingCheckInstituteModel {
+  public OfficeID: number = 0;
+  public InstituteID: number = 0;
+  public StaffId: number = 0;
+}
+  

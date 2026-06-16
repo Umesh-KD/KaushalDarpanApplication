@@ -1,153 +1,91 @@
-<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
-  <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2"> Establish Management Report</h4>
-    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Establish Management Report</a>
+<div class="">
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <h2 class="dashboard-title mb-0">Dashboard</h2>
+      <small class="text-muted">DTE - T2</small>
     </div>
   </div>
-</div>
-
-<div class="card">
-  <div class="card-body p-5">
-    <div class="mb-8">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-      </div>
-
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
-        <div>
-          <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">SSO ID:</label>
-          <input type="text" class="form-input" placeholder="Enter SSO ID" id="txtSSOID" name="txtSSOID" [(ngModel)]="searchRequest.SSOID">
-        </div>
-        <div>
-          <label for="txtName" class="text-gray-800 text-sm font-medium inline-block mb-2">Name:</label>
-          <input type="text" class="form-input" placeholder="Enter Name" id="txtName" name="txtName" [(ngModel)]="searchRequest.Name">
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office:</label>
-          <select class="form-select" id="ddlOfficeID" [(ngModel)]="searchRequest.OfficeID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type:</label>
-          <select class="form-select" id="ddlStaffTypeID" [(ngModel)]="searchRequest.StaffTypeID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Institution Type:
-          </label>
-          <select class="form-select" id="ddlInstitutionType" [(ngModel)]="searchRequest.InstitutionManagementTypeID">
-            <option [value]="0">Choose Option</option>
-            <option [value]="1">Government</option>
-            <option [value]="2">Private</option>
-          </select>
-        </div>
-
-      </div>
-      <div class="flex justify-center">
-        <button type="button" class="btn bg-info text-white mt-6" (click)="BTER_EM_GetStaffList()">Search</button>
-        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
-      </div>
-
-    </div>
-
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>Office List</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" 
-        (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel
-    </a>
-    </div>
-    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
-      <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select>
-      </div>
-      <div class="">
-      </div>
-      <div class="">
-      </div>
-      <div class="">
-        <input class="form-input" placeholder="Search..."/>
-      </div>
-    </div>
-
-    <div class="overflow-auto mt-3">
-      <table class="table table-border w-full" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-          <tr>
-            <th width="80px" align="left">Sr. No.</th>
-            <th align="left">SSO ID</th>
-            <th align="left">Name</th>
-            <th align="left">Mobile</th>
-            <th align="left">Email</th>
-            <!-- <th align="left">Level Name</th> -->
-            <!--<th align="left">Office Name</th>-->
-            <th align="left">Department Name</th>
-            <!--<th align="left">District Name</th>-->
-            <th class="left">Staff Type</th>
-            <!-- <th class="left">Post Name</th> -->
-            <th align="left">Role</th>
-            <th align="left">Profile Status</th>
-            <th align="left">Remark</th>
-            <th align="left">Is Nodal</th>
-            <th class="text-left">View Profile</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
-            <td>{{idx+1}}</td>
-            <td>{{row.SSOID}}</td>
-            <td>{{row.Name}}</td>
-            <td>{{row.MobileNo}}</td>
-            <td>{{row.EmailID}}</td>
-            <!-- <td>{{row.LevelName}}</td> -->
-            <!--<td>{{row.OfficeName}}</td>-->
-            <td>{{row.InstituteName}}</td>
-            <!--<td>{{row.DistrictName}}</td>-->
-            <td>{{row.StaffTypeName}}</td>
-            <!-- <td>{{row.PostName}}</td> -->
-            <td>{{row.RoleName}}</td>
-            <td>{{row.ProfileStatus}}</td>
-            <td>{{row.Remark}}</td>
-            <td>{{row.IsNodal}}</td>
-            <td align="left">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a (click)="OpenStaffProfileViewModal(row.StaffID,row.UserID)" title="View Profile"><i class="ti ti-eye"></i></a>
+  <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 gap-5">
+    <div class=" " *ngFor="let row of dashboardData?.Establishment; let i = index">
+      <div class="card top-card" [ngClass]="row.bgClass">
+        <div class="card-body flex justify-between items-center">
+          <div class="flex gap-3 items-center">
+            <div class="icon-box bg-white" [ngClass]="row.bgClassIcon">
+              <i [ngClass]="row.SRC"></i>
+            </div>
+            <div>
+              <div>
+                <p>{{row.TotalText}}</p>
               </div>
-            </td>
-            
-          </tr>
-        </tbody>
-      </table>
+              <div class="big-count blue fs-1">
+                <a [routerLink]="['/',row.URL]" [queryParams]="{act: row.Action }" >
+                  <h2 class="big-count fs-1" [ngClass]="row.countTextColor">{{row.TotalCount}}</h2>
+                </a>
+              </div>
+            </div>
+          </div>
+          <i [ngClass]="row.bottomIcon"></i>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="p-3 paginationBox flex items-center justify-end w-full">
-    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
-    <div class="paginationBoxItems flex items-center">
-      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
-      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
-      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
-             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
-      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
-      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
-      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
-    </div>
-  </div>
-</div>
 
-<app-view-staff-profile-modal #Modal_StaffDetailsViewModal></app-view-staff-profile-modal>
+  <div class="grid grid-cols-1 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 gap-5 mt-5 mb-5">
+
+    <div class=" " *ngFor="let row of dashboardData?.RelievingJoining; let i = index">
+      <div class="card mini-card">
+        <div class="card-body h-100">
+          <div class=" ">
+            <div><i [ngClass]="[row.SRC, row.bgClassIcon]"></i></div>
+            <div>{{row.TotalText}}</div>
+            <a [routerLink]="['/',row.URL]" [queryParams]="{act: row.Action }" >
+              <div class="count mt-2" [ngClass]="row.countTextColor">{{row.TotalCount}}</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card summary-card">
+    <div class="card-body p-4">
+
+      <h4 class="mb-4">Category Wise Staff Count</h4>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 gap-5">
+
+          <div class="transfer-chart-wrap">
+
+            <highcharts-chart *ngIf="PostTypeStaffChartOptions"
+                              [Highcharts]="Highcharts"
+                              [options]="PostTypeStaffChartOptions"
+                              style="width:220px;height:220px;display:relative;">
+            </highcharts-chart>
+
+          </div>
+
+        <div class=" mt-6">
+
+          <div class="flex justify-between mb-3" *ngFor="let item of dashboardData?.PostTypeStaff; let i = index">
+            <div>
+              <span [class]="item.bgClassIcon"></span>
+              {{item.TotalText}}
+            </div>
+            <strong>{{item.TotalCount}}</strong>
+            <span class="text-muted">{{PostTypeStaffPercentage(item.TotalCount)}}</span>
+          </div>
+        </div>
+
+        <div class=" ">
+          <div class="total-staff-box">
+            <i class="bi bi-people-fill"></i>
+            <h4 class="mt-3 text-primary">Total Staff</h4>
+            <div class="big-count text-primary">{{TotalPostTypeStaffCount}}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

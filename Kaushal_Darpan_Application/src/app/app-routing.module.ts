@@ -1234,6 +1234,7 @@ const routes: Routes = [
       { path: 'institute-committee-list-dte', loadChildren: () => import('./Views//BTER/THTE/institute-committee-list-dte/institute-committee-list-dte.module').then(m => m.InstituteCommitteeListDTEModule), title: 'Institute Committee List' },
       { path: 'Committee-After-PrincipleApplication-verification', loadChildren: () => import('./Views//BTER/THTE/thte-committee-afterprinciple-application-list/thte-committee-afterprinciple-application-list.module').then(m => m.THTECommitteeafterPrincipleApplicationListModule), title: 'Application Verify For Committee After Principle' },
       { path: 'establishment-report', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/establishment-report-bter/establishment-report-bter.module').then(m => m.EstablishmentReportBTERModule), title: 'Establishment Report' },
+      { path: 'bter-establishment-dashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/establishment-dashboard-bter/establishment-dashboard-bter.module').then(m => m.EstablishmentDashboardBTERModule), title: 'Establishment Dashboard' },
       
       // ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, BTER Establishment END ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 
@@ -1789,6 +1790,9 @@ const routes: Routes = [
       { path: 'ITICommanDashboard', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI_CommanDashboard/ITI_CommanDashboard.module').then(m => m.ITI_CommanDashboardModule) },
 
       { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule) },
+      { path: 'InventoryItemReport', loadChildren: () => import('./Views/ITI/inventory-item-report/inventory-item-report.module').then(m => m.InventoryItemReportModule) },
+
+
     ]
   },
 
@@ -1910,7 +1914,6 @@ const routes: Routes = [
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
 
-  
  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },
 

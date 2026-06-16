@@ -57,8 +57,18 @@
       <div class="section">
         <div class="section-header placement"><i class="bi bi-briefcase-fill"></i> Placement</div>
         <div class="section-body">
-          <div class="row g-3 theme-placement">
-            <div class="col-12"><div class="item-card"><i class="icon bi bi-bar-chart-line-fill icon-purple"></i><div class="label">Placement Dashboard</div><a class="view" href="#">View Details</a></div></div>
+          <!--<div class="row g-3 theme-placement">
+    <div class="col-12"><div class="item-card"><i class="icon bi bi-bar-chart-line-fill icon-purple"></i><div class="label">Placement Dashboard</div><a class="view" href="#">View Details</a></div></div>
+  </div>-->
+          <div class="flex flex-wrap justify-center gap-3 mb-5 theme-instructor">
+            <div *ngFor="let i of PlacementdashboardList" style="width: 30%;">
+              <div class="item-card">
+                <i class="icon {{i.Icon}} {{i.color}}"></i>
+                <div class="label" [innerHTML]="i.Title"></div>
+                <div class="number" *ngIf="i.Total">{{i.Total}}</div>
+                <a class="view" [routerLink]="'/' + i.url">View Details</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -123,11 +133,19 @@
       <div class="section">
         <div class="section-header inventory"><i class="bi bi-diagram-2-fill"></i> Inventory</div>
         <div class="section-body">
-          <div class="grid  xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 grid-cols-1 gap-3 mb-5 theme-inventory">
-            <div class=" "><div class="item-card"><i class="icon bi bi-puzzle-fill icon-cyan"></i><div class="label">Stock Register</div><div class="number">1,248</div><a class="view" href="#">View Details</a></div></div>
-            <div class=" "><div class="item-card"><i class="icon bi bi-clipboard2-minus-fill icon-teal"></i><div class="label">Consolidated Item Report</div><div class="number">320</div><a class="view" href="#">View Details</a></div></div>
-            <div class= ""><div class="item-card"><span class="sr-badge">SR5<br>SR6</span><div class="label">SR5 &amp; SR6 Register</div><div class="number">68</div><a class="view" href="#">View Details</a></div></div>
-            <div class=" "><div class="item-card"><i class="icon bi bi-archive-fill icon-orange"></i><div class="label">Auction List</div><div class="number">15</div><a class="view" href="#">View Details</a></div></div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 grid-cols-1 gap-3 mb-5 theme-inventory">
+            <div *ngFor="let i of InventoryList" class="w-full md:w-[48%] xl:w-[23%]">
+              <div class="item-card">
+                <i class="icon {{i.Icon}} icon-success"></i>
+                <div class="label" [innerHTML]="i.Title"></div>
+                <div class="number" *ngIf="i.Total">{{i.Total}}</div>
+                <a class="view"
+                   [routerLink]="'/' + i.url"
+                   [queryParams]="parseParams(i.Params)">
+                  View Details
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

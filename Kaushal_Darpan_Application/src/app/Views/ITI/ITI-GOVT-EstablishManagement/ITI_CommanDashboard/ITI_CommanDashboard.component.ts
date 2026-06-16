@@ -35,6 +35,7 @@ export class ITI_CommanDashboardComponent {
   public viewTransferDashboard: any[] = [];
   public viewRelievingDashboard: any[] = [];
   public StaffMasterList: any[] = [];
+  public PlacementdashboardList: any[] = [];
   public sSOLoginDataModel = new SSOLoginDataModel();
   public State: number = 0;
   public SuccessMessage: string = '';
@@ -69,10 +70,11 @@ export class ITI_CommanDashboardComponent {
     const obj = {
       RoleID: this.sSOLoginDataModel.RoleID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      CollegeID: this.sSOLoginDataModel.InstituteID,
+      InstituteID: this.sSOLoginDataModel.InstituteID,
       UserID: this.sSOLoginDataModel.UserID,
       FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
       EndTermID: this.sSOLoginDataModel.EndTermID
+
     };
     try {
       this.loaderService.requestStarted 
@@ -83,6 +85,8 @@ export class ITI_CommanDashboardComponent {
           this.PlanningDashboard = data['Data']['Table'];
           this.InstructorDashboard = data['Data']['Table1'];
           this.AttendanceDashboard = data['Data']['Table2'];
+          this.InventoryList = data['Data']['Table3'];
+          this.PlacementdashboardList = data['Data']['Table4'];
          
   
           
@@ -100,6 +104,13 @@ export class ITI_CommanDashboardComponent {
       }, 200);
     }
   }
-
+  parseParams(params: string): any {
+    if (!params) return {};
+    return params.split('&').reduce((acc: any, pair: string) => {
+      const [key, value] = pair.split('=');
+      acc[key] = value;
+      return acc;
+    }, {});
+  }
  
 }
