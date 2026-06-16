@@ -42,14 +42,26 @@
         <!--semester-->
 
 
-        <div>
+        <div class="mt-2">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI</label>
-          <select class="form-select" id="SubjectID" [disabled]="sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 43" [(ngModel)]="searchRequest.InstituteID">
+          <!--<select class="form-select" id="SubjectID" [disabled]="sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 43" [(ngModel)]="searchRequest.InstituteID">
             <option value="0">--All--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.ID">
               {{item.Name}}
             </option>
-          </select>
+          </select>-->
+
+        <ng-select [items]="InstituteMasterDDLList"
+                   bindLabel="Name"
+                   bindValue="ID"
+                   placeholder="--Select--"
+                   [ngModel]="searchRequest.InstituteID == 0 ? null : searchRequest.InstituteID"
+                   (ngModelChange)="searchRequest.InstituteID = $event ?? 0"
+                   [disabled]="sSOLoginDataModel.RoleID == 20 || sSOLoginDataModel.RoleID == 43"
+                   [searchable]="true"
+                   [clearable]="true">
+        </ng-select>
+
         </div>
 
         <div *ngIf="sSOLoginDataModel.RoleID != 20 && sSOLoginDataModel.RoleID != 43">
