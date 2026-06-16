@@ -1394,8 +1394,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       await this.refreshRemoveRejectRevertValidators();
     }
 
-    debugger
-
     this.isSubmitted = true;
     if (this.StaffMasterFormGroup.invalid) {
       const invalidControls = this.getInvalidControls(this.StaffMasterFormGroup);
@@ -1457,7 +1455,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   }
 
   async onUserProfileStatusHistorylist(model: any, StaffUserID: number) {
-    debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequestUserProfileStatus.StaffUserID = StaffUserID;
@@ -1577,7 +1574,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   }
 
   async refreshValidators() {
-    debugger;
 
     // Remove validators based on conditions
     if (this.approveRequest?.IsEmpWorkingOnDeputationFromOther === false || this.approveRequest?.IsEmpWorkingOnDeputationFromOther == null) {
@@ -1614,7 +1610,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
 
   async refreshRemoveRejectRevertValidators() {
-    debugger;
 
     this.StaffMasterFormGroup.get('DesignationID')?.removeValidators(DropdownValidators);
     this.StaffMasterFormGroup.get('WorkOfficeID')?.removeValidators(DropdownValidators);
@@ -1634,7 +1629,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   }
 
   onEmpWorkingChange(value: boolean) {
-    debugger;
     this.approveRequest.IsEmpWorkingOnPost = value;
 
     if (value === true) {
@@ -1647,7 +1641,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   }
 
   onSalaryDrawnChange(value: boolean) {
-    debugger;
     this.approveRequest.IsSalaryDrawnFromSamePost = value;
 
     if (value === true) {
@@ -1660,7 +1653,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   }
 
   WorkAccordingonSalaryDrawnChange(value: boolean) {
-    debugger;
     /*this.approveRequest.IsSalaryDrawnFromSamePost = value;*/
 
     if (value === true) {
@@ -1725,7 +1717,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       }
 
       await this.commonMasterService.CommonMasterDataByAction(request).then((data: any) => {
-        debugger;
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
           this.isSSOVisible = true;
@@ -1751,8 +1742,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   }
   async onEdit(item: any)
   {
-    debugger;
-
     this.isSSOVisible = true;
     this.formData.Displayname = item.Name;
     this.formData.MobileNo = item.MobileNumber;
@@ -1926,11 +1915,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
 
   async ItiShiftUnitDDL(ID: number = 0) {
-
-    debugger;
-
     try {
-      debugger
       await this.commonMasterService.ItiShiftUnitDDL(this.formData.BranchID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.shiftddl = data.Data;
@@ -1942,7 +1927,6 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   }
 
   onPostChange(selectedValue: any) {
-    debugger
     console.log(this.AddStaffBasicDetailFromGroup.get('ddlPost')?.value)
     this.formData.DesignationID = selectedValue;
   }

@@ -90,7 +90,7 @@
             <th class="text-left">Trade</th>
             <th class="text-left">Shift</th>
             <th class="text-left">Unit</th>
-            <th class="text-left">Status</th> 
+            <th *ngIf="sSOLoginDataModel.RoleID==16||sSOLoginDataModel.RoleID==20|| sSOLoginDataModel.RoleID==43" class="text-left">Status</th> 
           </tr>
         </thead>
         <tbody>
@@ -106,7 +106,7 @@
             <td>{{ item.TradeName }}</td>
             <td>{{ item.Shift }}</td>
             <td>{{ item.UnitNo }}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+            <td *ngIf="sSOLoginDataModel.RoleID==16||sSOLoginDataModel.RoleID==20|| sSOLoginDataModel.RoleID==43" class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
                 <!--<label class="block">Status</label>-->
                 <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">

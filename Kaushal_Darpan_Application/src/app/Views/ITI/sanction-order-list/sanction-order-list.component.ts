@@ -29,7 +29,7 @@ export class SanctionOrderListComponent {
   public ExamList: any[] = [];
   public GroupMasterDDLList: any[] = [];
   public Table_SearchText: any = '';
-
+  public _enumrole = EnumRole
   public isSubmitted: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new ItiSanctionOrderList();
@@ -40,7 +40,7 @@ export class SanctionOrderListComponent {
 
   public CommonSubjectYesNo: number = 1;
   public CommonSubjectDDLList: any[] = [];
-  public _enumrole = EnumRole
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private ScholarshipService: HiringRoleMasterService,
