@@ -3,7 +3,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { UserRequestModel } from '../../Models/UserRequestDataModel';
-import { BterRequestSearchModel, RequestSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_EM_UnlockProfileDataModel, Iti_Update_Relieved_RevertModel } from '../../Models/ITI/UserRequestModel';
+import { BterRequestSearchModel, RequestSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_EM_UnlockProfileDataModel, Iti_Update_Relieved_RevertModel, ReliveingCheckInstituteModel } from '../../Models/ITI/UserRequestModel';
 import { Bter_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, BTERRequestUpdateStatus, BterStaffUserRequestReportSearchModel, RequestUpdateStatus, } from '../../Models/ITIGovtEMStaffMasterDataModel';
 import { BTER_EM_UnlockProfileDataModel } from '../../Models/BTER/BTER_EstablishManagementDataModel';
 
@@ -245,5 +245,15 @@ export class UserRequestService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async ReliveingCheckInstitute(request: ReliveingCheckInstituteModel) {
+    const headers = { 'content-type': 'application/json' }
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/ReliveingCheckInstitute', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }

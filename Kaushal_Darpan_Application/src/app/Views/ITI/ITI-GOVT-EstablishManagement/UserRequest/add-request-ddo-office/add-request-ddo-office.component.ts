@@ -11,7 +11,7 @@ import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
 import { ItiTradeSearchModel } from '../../../../../Models/CommonMasterDataModel';
 import { ITICollegeTradeSearchModel } from '../../../../../Models/ITI/SeatIntakeDataModel';
-import { ITI_EM_StaffDetails_Curr_DataModel, ITI_EM_UnlockProfileDataModel, RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
+import { ITI_EM_StaffDetails_Curr_DataModel, ITI_EM_UnlockProfileDataModel, ReliveingCheckInstituteModel, RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { ITISeatIntakesModel, ITIsSearchModel } from '../../../../../Models/ITIsDataModels';
 import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITIGovtEMStaffMaster } from '../../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
@@ -86,7 +86,9 @@ export class AddRequestDDOOfficeComponent {
  
   public getstatuId:number=0;
   public TodayDate:string='';
-  public PostMessage:string='';
+  public PostMessage: string = '';
+
+  public CheckInstituteModel = new ReliveingCheckInstituteModel();
 
   constructor(
     private fb: FormBuilder,
@@ -262,6 +264,27 @@ export class AddRequestDDOOfficeComponent {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
         }, error => console.error(error));
+
+      if (this.request.InstituteID != 0) {
+        debugger
+        this.CheckInstituteModel.StaffId = this.request.StaffID??0;
+        this.CheckInstituteModel.OfficeID = this.request.OfficeID;
+        this.CheckInstituteModel.InstituteID = this.request.InstituteID;
+        await this.userRequestService.ReliveingCheckInstitute(this.CheckInstituteModel).then((data: any) => {
+          if (data.State === EnumStatus.Success) {
+              
+          }
+          else if (data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+            this.request.InstituteID = 0;
+          }
+          else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        });
+
+      }
+
     }
     catch (Ex) {
       console.log(Ex);
@@ -383,6 +406,7 @@ export class AddRequestDDOOfficeComponent {
       this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
 
       console.log("request", this.request)
+      this.searchRequest.oldInstitute = this.sSOLoginDataModel.InstituteID;
       await this.userRequestService.UserRequest(this.request).then((data: any) => {
         if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
@@ -466,6 +490,7 @@ export class AddRequestDDOOfficeComponent {
       this.searchRequest.PageSize = 0
       this.searchRequest.Action = "GetByID";
       this.searchRequest.ServiceRequestId = Id;
+      this.searchRequest.oldInstitute = this.sSOLoginDataModel.InstituteID;
       this.loaderService.requestStarted();
       await this.userRequestService.UserRequest(this.searchRequest)
         .then(async (data: any) => {

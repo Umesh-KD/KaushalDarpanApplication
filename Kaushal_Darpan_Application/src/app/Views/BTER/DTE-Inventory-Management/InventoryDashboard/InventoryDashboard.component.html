@@ -13,7 +13,7 @@
         <div [class]="item.ClassClourTop3" class="m-0">{{item.TotalCount}}</div>
         <div class="kpi-sub">
 
-          <a [routerLink]="['/', item.URL]"
+          <a [routerLink]="['/', item.URL]"  [queryParams]="{status: item.Status}"
              *ngIf="item.ListType != 'CategoryLIST' && item.ListType != 'ItemEquipmentsLIST'">
             {{ item.TitelName }}
             <i class="ti ti-chevron-right"></i>
@@ -100,7 +100,12 @@
     </div>
 
     <div>
-      <button type="button" class="btn bg-info text-white mt-6" (click)="LoadDynamicReport()">Search</button>
+      <!--<button type="button" class="btn bg-info text-white mt-6" (click)="LoadDynamicReport()">Search</button>-->
+      <button type="button"
+              class="btn bg-info text-white mt-6"
+              (click)="LoadDynamicReport(CurrentAction)">
+        Search
+      </button>
       <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
     </div>
   </div>
