@@ -12,10 +12,27 @@
         <div class="kpi-title">{{item.TotalText}}</div>
         <div [class]="item.ClassClourTop3" class="m-0">{{item.TotalCount}}</div>
         <div class="kpi-sub">
-          <a [routerLink]="['/',item.URL]">
-            {{item.TitelName}}
+
+          <a [routerLink]="['/', item.URL]"
+             *ngIf="item.ListType != 'CategoryLIST' && item.ListType != 'ItemEquipmentsLIST'">
+            {{ item.TitelName }}
             <i class="ti ti-chevron-right"></i>
           </a>
+
+          <a *ngIf="item.ListType == 'CategoryLIST'"
+             href="javascript:void(0)"
+             (click)="LoadDynamicReport('CategoryLIST')">
+            {{ item.TitelName }}
+            <i class="ti ti-chevron-right"></i>
+          </a>
+
+          <a *ngIf="item.ListType == 'ItemEquipmentsLIST'"
+             href="javascript:void(0)"
+             (click)="LoadDynamicReport('ItemEquipmentsLIST')">
+            {{ item.TitelName }}
+            <i class="ti ti-chevron-right"></i>
+          </a>
+
         </div>
       </div>
     </div>
