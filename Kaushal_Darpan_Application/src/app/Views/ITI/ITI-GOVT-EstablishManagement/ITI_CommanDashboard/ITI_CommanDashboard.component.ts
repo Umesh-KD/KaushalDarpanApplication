@@ -69,10 +69,11 @@ export class ITI_CommanDashboardComponent {
     const obj = {
       RoleID: this.sSOLoginDataModel.RoleID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      CollegeID: this.sSOLoginDataModel.InstituteID,
+      InstituteID: this.sSOLoginDataModel.InstituteID,
       UserID: this.sSOLoginDataModel.UserID,
       FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
       EndTermID: this.sSOLoginDataModel.EndTermID
+
     };
     try {
       this.loaderService.requestStarted 
