@@ -90,6 +90,7 @@ export class IIPWebAllPostComponent {
   }
 
   async GetAllData() {
+    //debugger
     this.eventSearchRequest.DepartmentID = EnumDepartment.BTER;
     try {
       this.loaderService.requestStarted();

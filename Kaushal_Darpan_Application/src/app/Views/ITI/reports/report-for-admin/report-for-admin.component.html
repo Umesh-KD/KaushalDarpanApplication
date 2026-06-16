@@ -12,169 +12,264 @@
     </div>
 
   </div>
-  </div>
+</div>
 
-  <div class="card">
-    <div class="card-body p-5">
-      <div class="mb-8">
-        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        </div>
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application No.</label>
-            <input type="text" class="form-input" placeholder="Application ID" id="ApplicationID" [(ngModel)]="searchRequest.ApplicationID">
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By State Registration No.</label>
-            <input type="text" class="form-input" placeholder="StateRegNo" id="StateRegNo" [(ngModel)]="searchRequest.StateRegNo">
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By State PRN No.</label>
-            <input type="text" class="form-input" placeholder="PrnNo" id="PrnNo" [(ngModel)]="searchRequest.PrnNo">
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By PRN Status</label>
-            <select class="form-select" [(ngModel)]="searchRequest.PRNStatus">
-              <option value="0">--Select--</option>
-              <option value="1">Generated</option>
-              <option value="2">Not Generated</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Management Type:</label>
-            <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId">
-              <option value="0">All</option>
-              <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
-            </select>
-          </div>
-
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Level:</label>
-    <select class="form-select" [(ngModel)]="searchRequest.TradeLevelID">
-      <option value="0">--Choose Option--</option>
-      <option value="8">8th</option>
-      <option value="10">10th</option>
-      <option value="12">12th</option>
-    </select>
-  </div>-->
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Type:</label>
-    <select class="form-select" [(ngModel)]="searchRequest.TradeTypeID">
-      <option value="0">--Choose Option--</option>
-      <option value="1">Eng</option>
-      <option value="2">Non-Eng</option>
-    </select>
-  </div>-->
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Search By Trade:
-    </label>
-    <select class="form-select w-full" [(ngModel)]="searchRequest.TradeId">
-      <option value="0" disabled selected hidden>--Choose Option--</option>
-      <option *ngFor="let item of ItiTradeList" [value]="item.Id">{{item.TradeName}}</option>
-    </select>
-  </div>-->
-          <div>
-            <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllotedSeatByCollegeList()">Search</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Reset</button>
-          </div>
-
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application No.</label>
+          <input type="text" class="form-input" placeholder="Application ID" id="ApplicationID" [(ngModel)]="searchRequest.ApplicationID">
         </div>
 
-      </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By State Registration No.</label>
+          <input type="text" class="form-input" placeholder="StateRegNo" id="StateRegNo" [(ngModel)]="searchRequest.StateRegNo">
+        </div>
 
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
-        <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="AllotedSeatByCollegeExportToExcel()"><i class="ti ti-download"></i> Export Excel</a>
-        <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadAllotedCollegePDF()"><i class="ti ti-download"></i> Download PDF</a>-->
-      </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By State PRN No.</label>
+          <input type="text" class="form-input" placeholder="PrnNo" id="PrnNo" [(ngModel)]="searchRequest.PrnNo">
+        </div>
 
-      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
-        <div class="">
-          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
-            <option value="50">50</option>
-            <option value="100">100</option>
-            <option value="500">500</option>
-            <option value="1000">1000</option>
-            <option value="{{totalInTableRecord}}">Max</option>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By PRN Status</label>
+          <select class="form-select" [(ngModel)]="searchRequest.PRNStatus">
+            <option value="0">--Select--</option>
+            <option value="1">Generated</option>
+            <option value="2">Not Generated</option>
           </select>
         </div>
-        <div class="">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Management Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId">
+            <option value="0">All</option>
+            <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
+          </select>
         </div>
-        <div class="">
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Level:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeLevelID">
+            <option value="0">--Choose Option--</option>
+            <option value="8">8th</option>
+            <option value="10">10th</option>
+            <option value="12">12th</option>
+          </select>
+        </div>-->
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeTypeID">
+            <option value="0">--Choose Option--</option>
+            <option value="1">Eng</option>
+            <option value="2">Non-Eng</option>
+          </select>
+        </div>-->
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Trade:
+          </label>
+          <select class="form-select w-full" [(ngModel)]="searchRequest.TradeId">
+            <option value="0" disabled selected hidden>--Choose Option--</option>
+            <option *ngFor="let item of ItiTradeList" [value]="item.Id">{{item.TradeName}}</option>
+          </select>
+        </div>-->
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllotedSeatByCollegeList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Reset</button>
         </div>
-        <div class="">
-          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" (change)="onSearchChange()"  />
-        </div>
+
       </div>
 
-      <!--Table-->
-      <div class="overflow-x-auto mt-3">
-        <table class="table table-border w-full table-auto" cellpadding="5">
-          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-            <tr>
-              <th class="text-left" rowspan="2">#</th>
-              <!-- <th class="text-left" rowspan="2">Application ID</th>
-  <th class="text-left" rowspan="2">Reporting Date and Time</th>
-  <th class="text-left" rowspan="2">State Registration Number</th>
-  <th class="text-left" rowspan="2">Status</th> -->
-              <th class="text-left" rowspan="2">Application_Number</th>
-              <th class="text-left" rowspan="2">Inst_Code</th>
-              <th class="text-left" rowspan="2">Trade_Code</th>
-              <th class="text-left" rowspan="2">Shift</th>
-              <th class="text-left" rowspan="2">Unit</th>
-              <th class="text-left" rowspan="2">Trade_Scheme</th>
-              <th class="text-left" rowspan="2">ManagementType</th>
-              <th class="text-left" rowspan="2">Phase</th>
-              <th class="text-left" rowspan="2">ReportingTime</th>
-              <th class="text-left" rowspan="2">State_Reg_no</th>
-              <th class="text-left" rowspan="2">Gender</th>
-              <th class="text-left" rowspan="2">PRN Status</th>
-            </tr>
+    </div>
 
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
-              <td>{{ (startInTableIndex+1) + idx }}</td>
-              <!-- <td>{{ item.ApplicationID }}</td>
-              <td>{{ item.ReportingDate | date:'dd-MM-yyyy , HH:mm:ss' }}</td>
-              <td>{{ item.StateRegistrationNumber }}</td>
-              <td>{{ item.Status }}</td> -->
-               <td>{{ item.App_No }}</td>
-              <td>{{ item.Inst_Code }}</td>
-              <td>{{ item.T_Code }}</td>
-              <td>{{ item.Shift }}</td>
-               <td>{{ item.Unit }}</td>
-               <td>{{ item.Scheme }}</td>
-               <td>{{ item.InstitutionManagementType }}</td>
-              <td>{{ item.Phase}}</td>
-              <td>{{ item.ReportingTime }}</td>
-              <td>{{ item.State_Reg_no }}</td>
-              <td>{{ item.StudentGender }}</td>
-              <td>{{ item.PRNStatus }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="AllotedSeatByCollegeExportToExcel()"><i class="ti ti-download"></i> Export Excel</a>
+      <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadAllotedCollegePDF()"><i class="ti ti-download"></i> Download PDF</a>-->
+    </div>
+
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+          <option value="{{totalInTableRecord}}">Max</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" (change)="onSearchChange()" />
       </div>
     </div>
 
-    <!--Pagination-->
-    <div class="p-3 paginationBox flex items-center justify-end w-full">
-      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
-      <div class="paginationBoxItems flex items-center">
-        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
-        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
-        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
-               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
-        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
-        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
-        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
-      </div>
+    <!--Table-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" rowspan="2">#</th>
+            <!-- <th class="text-left" rowspan="2">Application ID</th>
+            <th class="text-left" rowspan="2">Reporting Date and Time</th>
+            <th class="text-left" rowspan="2">State Registration Number</th>
+            <th class="text-left" rowspan="2">Status</th> -->
+            <th class="text-left" rowspan="2">Application_Number</th>
+            <th class="text-left" rowspan="2">Inst_Code</th>
+            <th class="text-left" rowspan="2">Trade_Code</th>
+            <th class="text-left" rowspan="2">Shift</th>
+            <th class="text-left" rowspan="2">Unit</th>
+            <th class="text-left" rowspan="2">Trade_Scheme</th>
+            <th class="text-left" rowspan="2">ManagementType</th>
+            <th class="text-left" rowspan="2">Phase</th>
+            <th class="text-left" rowspan="2">ReportingTime</th>
+            <th class="text-left" rowspan="2">State_Reg_no</th>
+            <th class="text-left" rowspan="2">Gender</th>
+            <th class="text-left" rowspan="2">PRN Status</th>
+            <th class="text-left" rowspan="2">Action</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{ (startInTableIndex+1) + idx }}</td>
+            <!-- <td>{{ item.ApplicationID }}</td>
+            <td>{{ item.ReportingDate | date:'dd-MM-yyyy , HH:mm:ss' }}</td>
+            <td>{{ item.StateRegistrationNumber }}</td>
+            <td>{{ item.Status }}</td> -->
+            <td>{{ item.App_No }}</td>
+            <td>{{ item.Inst_Code }}</td>
+            <td>{{ item.T_Code }}</td>
+            <td>{{ item.Shift }}</td>
+            <td>{{ item.Unit }}</td>
+            <td>{{ item.Scheme }}</td>
+            <td>{{ item.InstitutionManagementType }}</td>
+            <td>{{ item.Phase}}</td>
+            <td>{{ item.ReportingTime }}</td>
+            <td>{{ item.State_Reg_no }}</td>
+            <td>{{ item.StudentGender }}</td>
+            <td>{{ item.PRNStatus }}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="View" (click)="ViewReportedStudentDetails(MyModel_ViewData, item)"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
+  <!--Pagination-->
+  <div class="p-3 paginationBox flex items-center justify-end w-full">
+    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+    <div class="paginationBoxItems flex items-center">
+      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #MyModel_ViewData let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card shadow-lg rounded-lg overflow-hidden">
+
+      <!-- Header -->
+      <div class="card-header bg-info text-white flex justify-between items-center px-4 py-3">
+        <b>
+          <i class="fa fa-university mr-2"></i>
+          Reported Student Details
+        </b>
+
+        <button class="btn btn-sm bg-white text-info"
+                (click)="CloseModalPopup()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body p-4" *ngIf="ITIReportedStudentByIDList?.length > 0">
+
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto bank-details-table">
+
+            <thead>
+              <tr>
+                <th width="35%" class="font-bold">Title</th>
+                <th class="font-bold">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngIf="ITIReportedStudentByIDList[0]?.PRNNumber">
+                <td><b>PRN Number</b></td>
+                <td>{{ ITIReportedStudentByIDList[0]?.PRNNumber }}</td>
+              </tr>
+              <tr *ngIf="!ITIReportedStudentByIDList[0]?.PRNNumber">
+                <td><b>PRN Number</b></td>
+                <td>PRN Number Not Generated Yet</td>
+              </tr>
+
+              <tr>
+                <td><b>Inserted On</b></td>
+                <td>{{ ITIReportedStudentByIDList[0]?.CreatedDate | date:'yyyy-MM-dd' }}</td>
+              </tr>
+
+              <!--<tr>
+    <td><b>Date Of Issue</b></td>
+    <td>
+      {{ ITIReportedStudentByIDList[0]?.DateOfIssue | date:'yyyy-MM-dd' }}
+    </td>
+  </tr>-->
+              <!--<tr>
+    <td><b>Updated On</b></td>
+    <td>
+      {{ ITIReportedStudentByIDList[0]?.ModifyDate / 100000 | number:'1.0-3' }}
+      Lakh
+    </td>
+  </tr>-->
+
+              <tr>
+                <td><b>Updated On</b></td>
+                <td>
+                  {{ ITIReportedStudentByIDList[0]?.ModifyDate | date:'yyyy-MM-dd HH:mm:ss' }}
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="card-footer bg-light flex justify-end px-4 py-3">
+        <!--<button class="btn btn-secondary"
+                (click)="CloseModalPopup()">
+          <i class="ti ti-x mr-1"></i>
+          Close
+        </button>-->
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+
