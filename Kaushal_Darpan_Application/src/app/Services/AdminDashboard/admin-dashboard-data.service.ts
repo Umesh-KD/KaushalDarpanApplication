@@ -119,4 +119,12 @@ export class AdminDashboardDataService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetBTEREstablishmentDashboard(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetBTEREstablishmentDashboard", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
