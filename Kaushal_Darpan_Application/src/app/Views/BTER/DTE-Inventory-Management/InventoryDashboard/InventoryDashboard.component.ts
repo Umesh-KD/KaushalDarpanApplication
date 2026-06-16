@@ -59,6 +59,8 @@ export class InventoryDashboardComponent {
   public EquipmentsDDLList: any = [];
   public CategoryDDLList: any = [];
   public SearchItemReq = new DTEItemsSearchModel()
+  CurrentAction: string = 'CategoryLIST';
+
   constructor(
     private StaffDashService: StaffDashService,
     private toastr: ToastrService,
@@ -125,7 +127,8 @@ export class InventoryDashboardComponent {
     //this.Searchrequest = new DTESearchTradeEquipmentsMapping
     this.Searchrequest = new ItemsDataModel();
     // await this.GetAllData();
-    await this.LoadDynamicReport();
+    //await this.LoadDynamicReport();
+    await this.LoadDynamicReport(this.CurrentAction);
     
   }
 
@@ -175,13 +178,82 @@ export class InventoryDashboardComponent {
 
 
 
+  //async LoadDynamicReport(action: string = 'CategoryLIST') {
+  //  this.CurrentAction = action;
+  //  try {
+  //    this.loaderService.requestStarted();
+
+  //    const request = new ItemsDataModel();
+  //    request.Action = action;
+  //   /* request.Action = action || 'CategoryLIST';*/
+  //    request.CategoryId = this.Searchrequest.CategoryId;
+  //    request.EquipmentId = this.Searchrequest.EquipmentId;
+  //    request.RoleId = this.sSOLoginDataModel.RoleID;
+  //    request.InstituteId = this.sSOLoginDataModel.InstituteID;
+
+  //    const response: any =
+  //      await this.tradeEquipmentsMappingService.GetDynamicReportData(request);
+
+  //    console.log('API Response:', response);
+
+  //    this.State = response.State;
+
+  //    if (this.State === EnumStatus.Success) {
+
+  //      switch (request.Action) {
+  //        case 'CategoryLIST':
+  //          this.MappingList = response?.Data?.CategoryList || [];
+  //          break;
+
+  //        case 'ItemEquipmentsLIST':
+  //          this.MappingList = response?.Data?.EquipmentList || [];
+  //          break;
+
+  //        default:
+  //          this.MappingList = [];
+  //          break;
+  //      }
+
+  //      this.DynamicColumns =
+  //        this.MappingList.length > 0
+  //          ? Object.keys(this.MappingList[0])
+  //          : [];
+
+  //      console.log('MappingList:', this.MappingList);
+  //      console.log('DynamicColumns:', this.DynamicColumns);
+  //    } else {
+  //      this.MappingList = [];
+  //      this.DynamicColumns = [];
+  //    }
+  //  } catch (error) {
+  //    console.error(error);
+  //    this.MappingList = [];
+  //    this.DynamicColumns = [];
+  //  } finally {
+  //    this.loaderService.requestEnded();
+  //  }
+  //}
+
   async LoadDynamicReport(action: string = 'CategoryLIST') {
+
+    
+    if (this.CurrentAction !== action) {
+
+      this.Searchrequest.CategoryId = 0;
+      this.Searchrequest.EquipmentId = 0;
+      this.Table_SearchText = '';
+
+    }
+
+    this.CurrentAction = action;
+
     try {
+
       this.loaderService.requestStarted();
 
       const request = new ItemsDataModel();
 
-      request.Action = action || 'CategoryLIST';
+      request.Action = action;
       request.CategoryId = this.Searchrequest.CategoryId;
       request.EquipmentId = this.Searchrequest.EquipmentId;
       request.RoleId = this.sSOLoginDataModel.RoleID;
@@ -197,6 +269,7 @@ export class InventoryDashboardComponent {
       if (this.State === EnumStatus.Success) {
 
         switch (request.Action) {
+
           case 'CategoryLIST':
             this.MappingList = response?.Data?.CategoryList || [];
             break;
@@ -215,18 +288,30 @@ export class InventoryDashboardComponent {
             ? Object.keys(this.MappingList[0])
             : [];
 
+        console.log('Current Action:', this.CurrentAction);
         console.log('MappingList:', this.MappingList);
         console.log('DynamicColumns:', this.DynamicColumns);
+
       } else {
+
         this.MappingList = [];
         this.DynamicColumns = [];
+
       }
-    } catch (error) {
+
+    }
+    catch (error) {
+
       console.error(error);
+
       this.MappingList = [];
       this.DynamicColumns = [];
-    } finally {
+
+    }
+    finally {
+
       this.loaderService.requestEnded();
+
     }
   }
 
@@ -258,12 +343,11 @@ export class InventoryDashboardComponent {
 
     const doc = new jsPDF('l', 'mm', 'a4');
 
-    const headers = [['Sr. No.', ...this.DynamicColumns]];
+    const headers = [this.DynamicColumns];
 
-    const body = this.MappingList.map((row: any, index: number) => [
-      index + 1,
-      ...this.DynamicColumns.map(col => row[col] ?? '')
-    ]);
+    const body = this.MappingList.map((row: any) =>
+      this.DynamicColumns.map(col => row[col] ?? '')
+    );
 
     autoTable(doc, {
       head: headers,

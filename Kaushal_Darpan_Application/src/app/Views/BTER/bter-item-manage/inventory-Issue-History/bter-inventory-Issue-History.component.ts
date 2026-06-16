@@ -43,6 +43,7 @@ export class bterinventoryIssueHistoryComponent {
   public UserID: number = 0;
   public today: Date = new Date();
   closeResult: string | undefined;
+  public DashboardStatus: number = 0;
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
@@ -62,11 +63,17 @@ export class bterinventoryIssueHistoryComponent {
     // Check if the current route is 'bter-staff-inventory-details'
     
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    this.DashboardStatus = Number(
+      this.activatedRoute.snapshot.queryParamMap.get('status') || 0
+    );
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
     await this.GetTradeDDL();
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
+    if (this.DashboardStatus > 0) {
+      this.Searchrequest.status = this.DashboardStatus;
+    }
     await this.GetAllData();
     
   }
