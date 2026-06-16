@@ -83,6 +83,7 @@ export class ITI_CommanDashboardComponent {
           this.PlanningDashboard = data['Data']['Table'];
           this.InstructorDashboard = data['Data']['Table1'];
           this.AttendanceDashboard = data['Data']['Table2'];
+          this.InventoryList = data['Data']['Table3'];
          
   
           
@@ -100,6 +101,13 @@ export class ITI_CommanDashboardComponent {
       }, 200);
     }
   }
-
+  parseParams(params: string): any {
+    if (!params) return {};
+    return params.split('&').reduce((acc: any, pair: string) => {
+      const [key, value] = pair.split('=');
+      acc[key] = value;
+      return acc;
+    }, {});
+  }
  
 }
