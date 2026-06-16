@@ -43,6 +43,7 @@ export class RelievingJoiningRequestReportComponent {
   public UserRequestHistoryList: any[] = [];
   public PostList: any = [];
   public TransferStatusList: any = [];
+  public act: string = '';
 
   public DepartmentID: number = 0;
   public RequestStatus: number = 0;
@@ -76,7 +77,8 @@ export class RelievingJoiningRequestReportComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.RequestStatus = Number(this.activatedRoute.snapshot.queryParamMap.get("id")?.toString());
+    this.RequestStatus = Number(this.activatedRoute.snapshot.queryParamMap.get("id")?.toString()) || 0;
+    this.act = this.activatedRoute.snapshot.queryParamMap.get("act")?.toString() || '';
 
     await this.GetStatusList();
     await this.GetTransferStatusList();
@@ -214,6 +216,7 @@ export class RelievingJoiningRequestReportComponent {
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.searchRequest.UserId = this.sSOLoginDataModel.UserID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.act = this.act;
       // this.searchRequest.OfficeID = this.sSOLoginDataModel.OfficeID;
 
       this.loaderService.requestStarted();
