@@ -115,7 +115,7 @@
   <span class="qa-label t-red">Pay Fees</span>
 </a>
 
-<a class="qa-card" [routerLink]="['/ApplyForHostel']"  [queryParams]="{ id: 1 }">
+<a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/ApplyForHostel']"  [queryParams]="{ id: 1 }">
   <span class="qa-ico c-green">
     <i class="ti ti-bed"></i>
   </span>
@@ -129,7 +129,7 @@
   <span class="qa-label t-blue">Placement Registration</span>
 </a>
 
-<a class="qa-card" [routerLink]="['/StaffTrainingConsent']">
+<a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/StaffTrainingConsent']">
   <span class="qa-ico c-purple">
     <i class="ti ti-school"></i>
   </span>
