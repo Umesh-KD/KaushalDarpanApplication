@@ -318,4 +318,11 @@ export class ITIsService {
     ).toPromise();
 }
 
+ public async UpdateCampusStatusByID(model: any) {
+    var body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/UpdateCampusStatusByID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
