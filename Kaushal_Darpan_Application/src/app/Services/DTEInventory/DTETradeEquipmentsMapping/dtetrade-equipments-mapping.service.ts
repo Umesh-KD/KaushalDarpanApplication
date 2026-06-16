@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTESearchTradeEquipmentsMapping, DTETradeEquipmentsMappingData } from '../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
+import { DTESearchTradeEquipmentsMapping, DTETradeEquipmentsMappingData, ItemsDataModel } from '../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
 import { DTEItemCategoriesDataModels } from '../../../Models/DTEInventory/DTEItemCategoriesDataModels';
+
 
 @Injectable({
   providedIn: 'root'
@@ -120,7 +121,7 @@ export class DteTradeEquipmentsMappingService {
       ).toPromise();
   }
 
-  public async GetDynamicReportData(request: DTETradeEquipmentsMappingData) {
+  public async GetDynamicReportData(request: ItemsDataModel) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + '/GetDynamicReportData', request, this.headersOptions)
       .pipe(

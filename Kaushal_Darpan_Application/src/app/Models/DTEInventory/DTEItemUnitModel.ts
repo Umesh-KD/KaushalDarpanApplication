@@ -14,4 +14,6 @@ export class DashboardRequestModel {
   public Status: number = 0;
   public UserID: number = 0;
   public InstituteID: number = 0;
+  public CategoryId: number = 0;
+  public EquipmentId: number = 0;
 }

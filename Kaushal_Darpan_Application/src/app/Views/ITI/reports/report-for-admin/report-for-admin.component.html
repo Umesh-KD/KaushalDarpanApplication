@@ -136,7 +136,7 @@
             <th class="text-left" rowspan="2">State_Reg_no</th>
             <th class="text-left" rowspan="2">Gender</th>
             <th class="text-left" rowspan="2">PRN Status</th>
-            <!--<th class="text-left" rowspan="2">Action</th>-->
+            <th class="text-left" rowspan="2">Action</th>
           </tr>
 
         </thead>
@@ -159,11 +159,11 @@
             <td>{{ item.State_Reg_no }}</td>
             <td>{{ item.StudentGender }}</td>
             <td>{{ item.PRNStatus }}</td>
-            <!--<td>
+            <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="View" (click)="ViewReportedStudentDetails(MyModel_ViewData, item)"><i class="ti ti-eye"></i></a>
               </div>
-            </td>-->
+            </td>
           </tr>
         </tbody>
       </table>
@@ -205,7 +205,7 @@
       </div>
 
       <!-- Body -->
-      <div class="card-body p-4" *ngIf="BankGuaranteeListByID?.length > 0">
+      <div class="card-body p-4" *ngIf="ITIReportedStudentByIDList?.length > 0">
 
         <div class="overflow-x-auto">
           <table class="table table-border w-full table-auto bank-details-table">
@@ -218,35 +218,38 @@
             </thead>
             <tbody>
 
-              <tr *ngIf="BankGuaranteeListByID[0]?.BankName">
-                <td><b>Bank Name</b></td>
-                <td>{{ BankGuaranteeListByID[0]?.BankName }}</td>
+              <tr *ngIf="ITIReportedStudentByIDList[0]?.PRNNumber">
+                <td><b>PRN Number</b></td>
+                <td>{{ ITIReportedStudentByIDList[0]?.PRNNumber }}</td>
+              </tr>
+              <tr *ngIf="!ITIReportedStudentByIDList[0]?.PRNNumber">
+                <td><b>PRN Number</b></td>
+                <td>PRN Number Not Generated Yet</td>
               </tr>
 
               <tr>
-                <td><b>Bank Guarantee No</b></td>
-                <td>{{ BankGuaranteeListByID[0]?.BankGuaranteeNumber }}</td>
+                <td><b>Inserted On</b></td>
+                <td>{{ ITIReportedStudentByIDList[0]?.CreatedDate | date:'yyyy-MM-dd' }}</td>
               </tr>
 
-              <tr>
-                <td><b>Date Of Issue</b></td>
-                <td>
-                  {{ BankGuaranteeListByID[0]?.DateOfIssue | date:'yyyy-MM-dd' }}
-                </td>
-              </tr>
-
-              <tr>
-                <td><b>Amount in Lakhs</b></td>
-                <td>
-                  {{ BankGuaranteeListByID[0]?.Amount / 100000 | number:'1.0-3' }}
-                  Lakh
-                </td>
-              </tr>
+              <!--<tr>
+    <td><b>Date Of Issue</b></td>
+    <td>
+      {{ ITIReportedStudentByIDList[0]?.DateOfIssue | date:'yyyy-MM-dd' }}
+    </td>
+  </tr>-->
+              <!--<tr>
+    <td><b>Updated On</b></td>
+    <td>
+      {{ ITIReportedStudentByIDList[0]?.ModifyDate / 100000 | number:'1.0-3' }}
+      Lakh
+    </td>
+  </tr>-->
 
               <tr>
                 <td><b>Updated On</b></td>
                 <td>
-                  {{ BankGuaranteeListByID[0]?.ModifyDate | date:'yyyy-MM-dd HH:mm:ss' }}
+                  {{ ITIReportedStudentByIDList[0]?.ModifyDate | date:'yyyy-MM-dd HH:mm:ss' }}
                 </td>
               </tr>
 
