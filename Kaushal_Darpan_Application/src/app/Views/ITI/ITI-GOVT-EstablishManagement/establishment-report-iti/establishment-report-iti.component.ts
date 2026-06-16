@@ -31,6 +31,7 @@ export class EstablishmentReportITIComponent {
   public PostList: any = [];
 
   public Table_SearchText: string = "";
+  public action: string = "";
   public postid: number = 0;
   public isAdditional: number = 0;
 
@@ -58,6 +59,8 @@ export class EstablishmentReportITIComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.postid = Number(this.activatedroute.snapshot.queryParamMap.get('pid')) || 0;
     this.isAdditional = Number(this.activatedroute.snapshot.queryParamMap.get('isAdditional')) || -1;
+    this.action = this.activatedroute.snapshot.queryParamMap.get('act') || '';
+
     this.searchRequest.PostID = this.postid
     this.searchRequest.IsAdditionalStaff = this.isAdditional
     await this.GetPostList();
@@ -74,10 +77,14 @@ export class EstablishmentReportITIComponent {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
     this.searchRequest.RoleId = this.sSOLoginDataModel.RoleID        
+
     if (this.searchRequest.OfficeID != 11) {
       this.searchRequest.InstituteID = 0
       this.searchRequest.DistrictID=0
     }
+
+    this.searchRequest.act = this.action;
+
     try {
       this.loaderService.requestStarted();
       await this.ITIGovtEMStaffMasterService.GetITIEstablishmentReportData(this.searchRequest)

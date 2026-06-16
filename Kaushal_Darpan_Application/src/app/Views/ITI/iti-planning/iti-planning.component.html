@@ -33,12 +33,48 @@
     <div class="card-body p-5">
       <form [formGroup]="ReportForm" id="HrMasterFormGroup" class="form-horizontal">
         <div class="mb-8">
-          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <!-- <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Details</b>
-            <!---->
+            
+            <a  (click)="openCampusRemoveModal(Collegeid)" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Campus Removed</a>
+            
             <a *ngIf=" request.Status == 3  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="Get_ITIsPlanningData_ByIDReport()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>
+             
+          
             <a *ngIf="sSOLoginDataModel.RoleID == _enumrole.DTETraing" href="/ItiPlanningList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
-          </div>
+          </div> -->
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+
+    <!-- Left Side -->
+    <b class="text-1xl-5">
+        <i class="ti ti-plus"></i> Institute Details
+    </b>
+
+    <!-- Right Side -->
+    <div class="flex items-center gap-2 ml-auto">
+
+        <a (click)="openCampusRemoveModal(Collegeid)"
+           href="javascript:void(0);"
+           class="btn bg-warning btn-sm text-white">
+            <i class="ti ti-building"></i> Campus Removed
+        </a>
+
+        <a *ngIf="request.Status == 3 && sSOLoginDataModel.RoleID != _enumrole.DTETraing"
+           (click)="Get_ITIsPlanningData_ByIDReport()"
+           href="javascript:void(0);"
+           class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Download Pdf
+        </a>
+
+        <a *ngIf="sSOLoginDataModel.RoleID == _enumrole.DTETraing"
+           href="/ItiPlanningList"
+           class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class="ti ti-chevron-left"></i> Back
+        </a>
+
+    </div>
+
+</div>
           <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
             <div>
               <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name</label>
@@ -1771,6 +1807,156 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
           </div>
         </div>
       </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #campusRemoveModal let-modal>
+  <div class="modal-content">
+    <form [formGroup]="CampusRemoveForm" class="form-horizontal">
+
+      <div class="card">
+
+        <div class="card-header flex justify-between items-center">
+          <b>
+            <i class="fa fa-plus"></i>
+            Campus Removal Details
+          </b>
+
+          <button type="button"
+                  class="btn bg-info text-white"
+                  (click)="modal.dismiss()">
+            <i class="ti ti-x"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <!-- Order No -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Order No <span class="StarMarking">*</span>
+              </label>
+
+              <input type="text"
+                     class="form-input"
+                     formControlName="CampusRemovedOrderNo"
+                     placeholder="Enter Order No">
+
+              <div *ngIf="isSubmitted && CampusRemoveForm.controls['CampusRemovedOrderNo'].errors"
+                   class="text-danger">
+                This field is required .!
+              </div>
+            </div>
+
+            <!-- Order Date -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Order Date <span class="StarMarking">*</span>
+              </label>
+
+              <input type="date"
+                     class="form-input"
+                     formControlName="CampusRemovedOrderDate">
+
+              <div *ngIf="isSubmitted && CampusRemoveForm.controls['CampusRemovedOrderDate'].errors"
+                   class="text-danger">
+                This field is required .!
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Remark -->
+          <div class="grid grid-cols-1 gap-3 mt-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+
+              <textarea rows="3"
+                        class="form-input"
+                        formControlName="CampusRemovedRemark"
+                        placeholder="Enter Remark">
+              </textarea>
+
+              <div *ngIf="isSubmitted && CampusRemoveForm.controls['CampusRemovedRemark'].errors"
+                   class="text-danger">
+                This field is required .!
+              </div>
+            </div>
+
+          </div>
+
+          <!-- File Upload -->
+          <div class="grid grid-cols-1 gap-3 mt-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Upload Order Copy <span class="StarMarking">*</span>
+              </label>
+
+              <div class="flex fileUploader">
+
+                <input
+                  class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer"
+                  id="CampusRemovedFile"
+                  type="file"
+                  (change)="onCampusFileChange($event)" />
+
+                <label for="CampusRemovedFile">
+                  <span>Choose File</span>
+                  {{
+                    CampusRemoveForm.value.CampusRemovedDisFilePath
+                    ? CampusRemoveForm.value.CampusRemovedDisFilePath
+                    : 'No File Chosen'
+                  }}
+                </label>
+
+                <div class="flex"
+                     *ngIf="CampusRemoveForm.value.CampusRemovedFilePath">
+
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + CampusRemoveForm.value.CampusRemovedFilePath}}"
+                     target="_blank"
+                     class="btn bg-primary text-white m-0">
+                    <i class="ti ti-eye"></i>
+                  </a>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Buttons -->
+          <div class="grid grid-cols-1 gap-3 mt-5">
+
+            <div class="text-center">
+
+              <button type="button"
+                      class="btn bg-success text-white"
+                      (click)="SaveCampusStatus()">
+                Submit
+              </button>
+
+              <button type="button"
+                      class="btn bg-danger text-white ms-2"
+                      (click)="modal.dismiss()">
+                Cancel
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </form>
   </div>
 </ng-template>

@@ -1,5 +1,8 @@
 
-<main class="content">
+<main class="">
+  <div class="page-heading">
+    <h2>Inventory Dashboard</h2>
+  </div>
   <!-- KPI Cards -->
   <!--{{viewDashboard|json}}-->
   <div class="grid  xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-3 mb-5">
@@ -8,7 +11,12 @@
         <div [class]="item.ClassClourTop2"> <i [class]="item.SRC"></i></div>
         <div class="kpi-title">{{item.TotalText}}</div>
         <div [class]="item.ClassClourTop3" class="m-0">{{item.TotalCount}}</div>
-        <div class="kpi-sub">All Categories</div>
+        <div class="kpi-sub">
+          <a [routerLink]="['/',item.URL]">
+            {{item.TitelName}}
+            <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
       </div>
     </div>
     <!--<div class="col-6 col-md-4 col-xl-2">
@@ -52,6 +60,33 @@
       </div>
     </div>-->
   </div>
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Search By Category: <span class="StarMarking">*</span>
+      </label>
+      <select class="form-select" id="CategoryId" [(ngModel)]="Searchrequest.CategoryId">
+        <option value="0">Choose Option</option>
+        <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">{{item.Name}}</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Search By Equipment: <span class="StarMarking">*</span>
+      </label>
+      <select class="form-select" id="EquipmentId" [(ngModel)]="Searchrequest.EquipmentId">
+        <option value="0">Choose Option</option>
+        <option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{item.Name}}</option>
+      </select>
+    </div>
+
+    <div>
+      <button type="button" class="btn bg-info text-white mt-6" (click)="LoadDynamicReport()">Search</button>
+      <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+    </div>
+  </div>
 
 
   <!-- Tables -->
@@ -59,39 +94,64 @@
     <div class="col-12 col-lg-12">
       <div class="panel">
         <div class="panel-head">
-          <h2 class="panel-title">Recent Auction Items</h2>
+          <div class="">
+            <select id="ddlConter" class="form-select  couterDropDown">
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+            </select>
+          </div>
           <div class="flex items-center gap-2">
             <!-- Search Box -->
-            <div class="position-relative">
-              <input type="text" class="form-control form-control-sm ps-4" placeholder="Search..."
-                     style="width:220px;">
-              <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"></i>
+            <div class="">
+              <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
             </div>
 
             <!-- PDF Export -->
-            <button class="btn btn-sm btn-outline-danger" title="Export PDF">
+            <button class="btn btn-sm btn-outline-danger"
+                    title="Export PDF"
+                    (click)="exportToPDF()">
               <i class="bi bi-file-earmark-pdf-fill"></i>
             </button>
 
             <!-- Excel Export -->
-            <button class="btn btn-sm btn-outline-success" title="Export Excel">
+            <button class="btn btn-sm btn-outline-success"
+                    title="Export Excel"
+                    (click)="exportToExcel()">
               <i class="bi bi-file-earmark-excel-fill"></i>
             </button>
           </div>
         </div>
-        <div class="table-responsive">
-          <table class="tbl">
-            <thead><tr><th>Item Name</th><th>Category</th><th>Auction Date</th><th>Status</th></tr></thead>
-            <tbody>
-              <tr><td>Generator 25 KVA</td><td>Electrical</td><td>May 25, 2025</td><td><span class="badge-soft b-upcoming">Upcoming</span></td></tr>
-              <tr><td>Office Chairs (20)</td><td>Furniture</td><td>May 22, 2025</td><td><span class="badge-soft b-upcoming">Upcoming</span></td></tr>
-              <tr><td>Air Conditioner (10)</td><td>Electrical</td><td>May 20, 2025</td><td><span class="badge-soft b-ongoing">Ongoing</span></td></tr>
-              <tr><td>Metal Scrap Lot</td><td>Miscellaneous</td><td>May 18, 2025</td><td><span class="badge-soft b-completed">Completed</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <div class="overflow-x-auto mt-4"
+             *ngIf="MappingList && MappingList.length > 0">
 
+          <table class="table table-border w-full table-auto">
+
+            <thead>
+              <tr>
+                <th *ngFor="let col of DynamicColumns">
+                  {{ col }}
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let row of MappingList | tableSearchFilter:Table_SearchText;let idx=index;">
+              <!--<tr *ngFor="let row of MappingList; let idx=index">-->
+
+                <td *ngFor="let col of DynamicColumns">
+                  {{ row[col] }}
+                </td>
+
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
     </div>
   </div>
 </main>

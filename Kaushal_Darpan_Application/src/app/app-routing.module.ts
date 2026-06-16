@@ -89,6 +89,9 @@ const routes: Routes = [
         path: 'singlepost', loadChildren: () => import('./Views/Home/single-post/single-post.module').then(m => m.SinglePostModule), title: 'Campus Details'
       },
       {
+        path: 'singleIIPDetails', loadChildren: () => import('./Views/Home/single-iip-details/single-iip-details.module').then(m => m.SingleIIPDetailsModule), title: 'IIP Event Details'
+      },
+      {
         path: 'ViewplacedStudent', loadChildren: () => import('./Views/Home/view-placed-student/view-placed-student.routing.module').then(m => m.ViewPlacedStudentRoutingModule), title: 'Placed Student Details'
       },
       {
@@ -1783,6 +1786,7 @@ const routes: Routes = [
 
       { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule) },
       { path: 'InventoryDashboard', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/InventoryDashboard/InventoryDashboard.module').then(m => m.InventoryDashboardModule) },
+      { path: 'ITICommanDashboard', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI_CommanDashboard/ITI_CommanDashboard.module').then(m => m.ITI_CommanDashboardModule) },
 
       { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule) },
     ]

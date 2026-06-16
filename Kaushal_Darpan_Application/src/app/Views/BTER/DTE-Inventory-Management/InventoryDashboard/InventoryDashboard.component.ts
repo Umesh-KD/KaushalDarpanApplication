@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StaffDashboardSearchModel } from '../../../../Models/StaffDashboardDataModel';
 import { CollegeMasterService } from '../../../../Services/CollegeMaster/college-master.service';
-import { EnumEMProfileStatus, EnumRole } from '../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { StaffMasterSearchModel } from '../../../../Models/StaffMasterDataModel';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
@@ -16,6 +16,15 @@ import { AdminDashboardSearchModel, EM_JDTEDashboardSearchModel, EM_TransferReli
 import { AdminDashboardDataService } from '../../../../Services/AdminDashboard/admin-dashboard-data.service';
 import { DteItemUnitMasterService } from '../../../../Services/DTEInventory/DTEItemUnitMaster/DTEItemunit-master.service';
 import { DashboardRequestModel } from '../../../../Models/DTEInventory/DTEItemUnitModel';
+import { DteTradeEquipmentsMappingService } from '../../../../Services/DTEInventory/DTETradeEquipmentsMapping/dtetrade-equipments-mapping.service';
+import { DTEEquipmentsMasterService } from '../../../../Services/DTEInventory/DTEEquipmentsMaster/dteequipments-master.service';
+import { DTEItemCategoriesMasterService } from '../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
+import { DTEItemsSearchModel, itemStatusRevertModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+
+import { ItemsDataModel } from '../../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
 
 @Component({
   selector: 'app-InventoryDashboard',
@@ -36,11 +45,20 @@ export class InventoryDashboardComponent {
   public SuccessMessage: string = '';
   public ErrorMessage: string = '';
   public searchRequest = new DashboardRequestModel();
-  
+  //public Searchrequest = new DTESearchTradeEquipmentsMapping()
   public staffSearchRequest = new StaffMasterSearchModel();
+  public Searchrequest = new ItemsDataModel();
 
   isProfileComplete: boolean = false;
-  RowBoxlength: number=0
+  RowBoxlength: number = 0
+  public DynamicColumns: string[] = [];
+  public DynamicRows: any[] = [];
+  public MappingList: any = [];
+  EnumRole = EnumRole;
+  public isSubmitted: boolean = false;
+  public EquipmentsDDLList: any = [];
+  public CategoryDDLList: any = [];
+  public SearchItemReq = new DTEItemsSearchModel()
   constructor(
     private StaffDashService: StaffDashService,
     private toastr: ToastrService,
@@ -51,17 +69,25 @@ export class InventoryDashboardComponent {
     private router: Router,
     private AdminDashDataService: AdminDashboardDataService,
     private dteItemUnitMasterService: DteItemUnitMasterService,
+    private tradeEquipmentsMappingService: DteTradeEquipmentsMappingService,
+   
+    private equipmentsService: DTEEquipmentsMasterService,
+    private itemCategoriesService: DTEItemCategoriesMasterService,
+
   ) { }
 
   async ngOnInit() {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetDashboardData();
+    await this.LoadDynamicReport();
+    await this.GetEquipmentDDL();
+    await this.GetCategoryDDL();
   }
 
  
   async GetDashboardData() {
-    debugger
+   
     this.searchRequest.Action = "";
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
@@ -73,7 +99,7 @@ export class InventoryDashboardComponent {
       await this.dteItemUnitMasterService.GetBter_InventoryDashboard(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger
+         
           this.viewDashboard = data['Data'];
           if (this.viewDashboard && this.viewDashboard.length > 0) {
             this.RowBoxlength = this.viewDashboard.length;
@@ -94,6 +120,164 @@ export class InventoryDashboardComponent {
       }, 200);
     }
   }
+  async ResetControl() {
+    this.isSubmitted = false;
+    //this.Searchrequest = new DTESearchTradeEquipmentsMapping
+    this.Searchrequest = new ItemsDataModel();
+    // await this.GetAllData();
+    await this.LoadDynamicReport();
+    
+  }
+
+  async GetEquipmentDDL() {
+    try {
+      this.loaderService.requestStarted();
+      this.SearchItemReq.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.SearchItemReq.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.SearchItemReq.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.SearchItemReq.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.SearchItemReq.RoleID = this.sSOLoginDataModel.RoleID;
+      await this.equipmentsService.GetAllData(this.SearchItemReq)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.EquipmentsDDLList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetCategoryDDL() {
+    try {
+      this.loaderService.requestStarted();
+      await this.itemCategoriesService.GetAllData()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CategoryDDLList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
  
+  async LoadDynamicReport() {
+    try {
+      debugger
+      this.loaderService.requestStarted();
+
+      let request = new ItemsDataModel();
+
+      request.Action = 'CategoryLIST';
+      request.CategoryId = this.Searchrequest.CategoryId;
+      request.EquipmentId = this.Searchrequest.EquipmentId;
+      request.RoleId = this.sSOLoginDataModel.RoleID;
+
+      await this.tradeEquipmentsMappingService
+        .GetDynamicReportData(request)
+        .then((response: any) => {
+
+          console.log('API Response:', response);
+
+          this.State = response.State;
+
+          if (this.State == EnumStatus.Success) {
+
+         
+            if (request.Action == 'CategoryLIST') {
+              this.MappingList = response.Data.CategoryList || [];
+            }
+
+           
+            else if (request.Action == 'ItemEquipmentsLIST') {
+              this.MappingList = response.Data.EquipmentList || [];
+            }
+
+            if (this.MappingList && this.MappingList.length > 0) {
+              this.DynamicColumns = Object.keys(this.MappingList[0]);
+            }
+            else {
+              this.DynamicColumns = [];
+            }
+
+            console.log('MappingList:', this.MappingList);
+            console.log('DynamicColumns:', this.DynamicColumns);
+          }
+          else {
+            this.MappingList = [];
+            this.DynamicColumns = [];
+            
+          }
+        });
+
+    }
+    catch (ex) {
+      console.error(ex);
+      this.MappingList = [];
+      this.DynamicColumns = [];
+    }
+    finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  exportToExcel(): void {
+
+    if (!this.MappingList || this.MappingList.length === 0) {
+      this.toastr.warning('No data available for export');
+      return;
+    }
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.MappingList);
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      wb,
+      ws,
+      'Inventory Dashboard Report'
+    );
+
+    XLSX.writeFile(
+      wb,
+      'InventoryDashBoard_Report.xlsx'
+    );
+  }
+
+
+  exportToPDF(): void {
+
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    const headers = [['Sr. No.', ...this.DynamicColumns]];
+
+    const body = this.MappingList.map((row: any, index: number) => [
+      index + 1,
+      ...this.DynamicColumns.map(col => row[col] ?? '')
+    ]);
+
+    autoTable(doc, {
+      head: headers,
+      body: body,
+      startY: 20,
+      theme: 'grid'
+    });
+
+    doc.save('InventoryDashBoard_Report.pdf');
+  }
+
 }

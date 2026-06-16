@@ -1,0 +1,228 @@
+<!--<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+  <h3 class="mt-0 text-white">Event Details</h3>
+</div>
+
+<div class="container-fluid AboutSection position-relative py-5" style="background: #deebff !important;">
+  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
+  <div class="container-xl position-relative" style="z-index:50">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="EventDetail!=null">
+        <div class="card ">
+          <div class="card-body">
+
+            <div class="row">-->
+              <!--<div class="col-md-6">
+                <img src="/assets/home/img/job-interview-conversation.jpg" class="img-fluid img-thumbnail" />
+              </div>-->
+              <!--<div class="col-md-12">-->
+
+                <!--<div class="d-flex justify-content-between w-100 flex-wrap">
+                  <span>No. of Vacancy: <i class="fa fa-user-o"></i>&nbsp;40</span>
+                  <span>Campus Orgnize Date: <i class="fa fa-calendar-o"></i>&nbsp;10-10-2024 09:00AM</span>
+                </div>-->
+                <!--<a href="https://sso.rajasthan.gov.in/" target="_blank" class="btn btn-sm btn-info text-white p-1 pull-right">Give Consent</a>
+                <div class="table-responsive">
+
+                  <table class="table table-border w-full mb-0" cellpadding="5">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                      <tr>
+                        <th>Company Info</th>
+                        <th>Requirement</th>
+                        <th>Eligibility</th>
+                        <th>Job Description</th>
+                        <th>Date / Venue</th>
+                        <th>Venue Location</th>
+                        <th>Shortlist(S) / Final Result </th>
+                        <th>Campus Mode</th>
+                        <th>File JobDescription</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3" valign="top">
+                          <div>
+                            <b>{{EventDetail.CompanyName}}</b>-->
+                            <!--<p>Post: {{EventDetail.PostNo}}</p>-->
+                          <!--<p style="border-color: #b4cedf;" width="140px">
+                            Post: {{ ('2025-26')+ '-' + (EventDetail.InstituteCode | number:'3.0') + '-' + EventDetail.Dis_PostId }}
+                          </p>
+                            <p>Total No.of Vacancy: {{EventDetail.TotalPositions}}</p>
+                            <a href="{{EventDetail.Website}}" target="_blank">
+                              <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{EventDetail.Logo}}" />
+                            </a>
+                          </div>
+                        </td>
+                        <td><span [innerHtml]="EventDetail.Requirement"></span></td>
+                        <td><span [innerHtml]="EventDetail.Eligibility"></span></td>
+                        <td><span [innerHtml]="EventDetail.JobDescription"></span></td>
+                        <td>{{EventDetail.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{EventDetail.CampusAddress}}</td>
+                        <td>-->
+                          <!--{{EventDetail.CampusVenueLocation|json}}-->
+                          <!--<div>
+                            <a [href]="getSanitizedUrl(EventDetail.CampusVenueLocation)" target="_blank">
+                              Get Location
+                            </a>
+                          </div>
+                        </td>
+                        <td>
+                          <a [routerLink]="'/ViewplacedStudent'" [queryParams]="{post:EventDetail.PostID,key:2}" class="btn btn-outline-primary btn-sm d-block mb-2" *ngIf="EventDetail.IsShortListed==true"><i class="fa fa-eye"></i>&nbsp;First Shortlist Candidates</a>
+                          <a [routerLink]="'/ViewplacedStudent'" [queryParams]="{post:EventDetail.PostID,key:3}" class="btn btn-outline-primary btn-sm d-block" *ngIf="EventDetail.IsPlaced==true"><i class="fa fa-eye"></i>&nbsp;Final Candidates</a>
+                        </td>
+                        <td> {{EventDetail.CampusModeType}}</td>
+                        <td>-->
+                          <!--{{EventDetail.JobDiscription|json}}-->
+                          <!--<a href="{{appsettingConfig.StaticFileRootPathURL}}/{{EventDetail.StaticFiles}}/{{EventDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a>-->
+                          <!--<a href="{{appsettingConfig.StaticFileRootPathURL}}/{{EventDetail.StaticFiles}}/{{EventDetail.JobDiscription}}" class="btn bg-primary text-white m-4 mt-0 d-block " target="_blank"><i class="ti ti-download"></i></a>-->
+                          <!--<a href="javascript:void(0)" (click)="openModalUnsignedDocList(MyModel_EdiDetails,element)" class="btn bg-primary text-white m-4 d-block" id="btnEdit"  title="Upload Signed copy of Document"><i class="fa fa-eye"></i></a>-->
+                          <!-- <a href="javascript:void(0);" (click)="openModalUnsignedDocList(modal_Opens,row.PostID)" id="btnEdit" *ngIf="(row.Status =='Suspend' && GetRoleID != 6)" title="Upload Signed copy of Document"><i class="fa fa-eye"></i></a> -->
+                          <!-- <a href="javascript:void(0)" (click)="openModalUnsignedDocList(MyModel_EdiDetails,element)" class="btn-sm btn-primary d-block" title="Upload Signed copy of Document"><i class="ti ti-eye"></i> </a> -->
+                        <!--</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>-->
+
+
+
+
+<div class="container py-4">
+
+  <div *ngFor="let item of EventDetail" class="mb-4">
+
+    <div class="card border-0 shadow event-card">
+
+      <div class="row g-0 align-items-stretch">
+
+        <!-- Poster -->
+        <div class="col-lg-2 col-md-4 d-flex justify-content-center align-items-center">
+
+          <img *ngIf="item.UploadEventPosterFile"
+               [src]="appsettingConfig.StaticFileRootPathURL + '/' + item.UploadEventPosterFile"
+               class="event-poster"
+               alt="Event Poster">
+
+          <div *ngIf="!item.UploadEventPosterFile"
+               class="event-poster-placeholder">
+            <i class="fa fa-image fa-3x"></i>
+            <!--<span>No Poster</span>-->
+            <span>Event Details</span>
+
+          </div>
+
+        </div>
+
+        <!-- Details -->
+        <div class="col-lg-10 col-md-9">
+
+          <div class="p-4 h-100 d-flex flex-column">
+            <!-- Header -->
+            <div class="d-flex justify-content-between flex-wrap mb-3">
+              <div>
+                <h3 class="fw-bold text-primary mb-2">
+                  {{ item.Event }}
+                </h3>
+
+                <h5 class="mb-0 text-secondary">
+                  <i class="fa fa-building me-2"></i>
+                  {{ item.CompanyName }}
+                </h5>
+
+              </div>
+
+              <span class="badge fs-6 px-3 py-2 align-self-start"
+                    [ngClass]="{
+                      'bg-success': item.EventStatus === 'Approved',
+                      'bg-warning text-dark': item.EventStatus !== 'Approved'
+                    }">
+                {{ item.EventStatus }}
+              </span>
+
+            </div>
+
+            <!-- Details -->
+            <div class="row gy-3 mb-4">
+
+              <div class="col-lg-6">
+                <strong>Event Type:</strong>
+                <span class="ms-2">{{ item.EventType }}</span>
+              </div>
+
+              <div class="col-lg-6">
+                <strong>Event For:</strong>
+                <span class="ms-2">{{ item.EventFor }}</span>
+              </div>
+
+              <div class="col-lg-6">
+                <strong>Start Date:</strong>
+                <span class="ms-2">
+                  {{ item.EventStartDate | date:'dd MMM yyyy, hh:mm a' }}
+                </span>
+              </div>
+
+              <div class="col-lg-6">
+                <strong>End Date:</strong>
+                <span class="ms-2">
+                  {{ item.EventEndDate | date:'dd MMM yyyy, hh:mm a' }}
+                </span>
+              </div>
+
+              <div class="col-12">
+                <strong>Branches:</strong>
+                <span class="ms-2">
+                  {{ item.BranchName?.replaceAll('|', ', ') }}
+                </span>
+              </div>
+
+              <div class="col-12">
+                <strong>Semesters:</strong>
+                <span class="ms-2">
+                  {{ item.SemesterName?.replaceAll('|', ', ') }}
+                </span>
+              </div>
+
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="mt-auto d-flex gap-2 flex-wrap">
+              <a *ngIf="item.EventURL"
+                 [href]="item.EventURL"
+                 target="_blank"
+                 class="btn btn-primary">
+                <i class="fa fa-external-link me-2"></i>
+                Join Event
+              </a>
+              <a *ngIf="item.FileUpload"
+                 [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.FileUpload"
+                 target="_blank"
+                 class="btn btn-outline-primary">
+                <i class="fa fa-eye me-2"></i>
+                View Attachment
+              </a>
+
+              <a href="https://sso.rajasthan.gov.in/" target="_blank" class="btn btn-info text-white ">Give Consent</a>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

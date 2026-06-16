@@ -14,16 +14,6 @@
   </div>
 </div>
 
-<div class="flex items-center justify-between flex-wrap gap-2 mb-6" *ngIf="GetRoleID==_EnumRole.ITIPrincipal || GetRoleID==_EnumRole.ITIPrincipal">
-  <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Govt Establish Info  Details</h4>
-    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-    </div>
-  </div>
-</div>
-
 <!-- Page Title End -->
 <div class="card">
   <div class="card-body p-5">
@@ -151,7 +141,7 @@
               [(ngModel)]="formData.DesignationID" 
               formControlName="ddlPost"
               [clearable]="false">
-            <ng-option value="0">--Choose Option--</ng-option>
+            <ng-option [value]="0">--Choose Option--</ng-option>
             <ng-option *ngFor="let item of PostList;"
                       [value]="item.ID">{{item.Name}}</ng-option>
           </ng-select>
@@ -195,8 +185,8 @@
             </p>
           </div>
         </div>
-
-        <div *ngIf="formData.StaffLevelID == _ITIGovtEM_EnumStaffLevel.TeachingRole && formData.StaffTypeID !=_ITIGovtEM_EnumStaffType.NonTeaching">
+        <div *ngIf="formData.StaffPostTypeID == _Enum_ITI_EM_StaffPostType.Sub_Ordinate_Services
+                    && formData.StaffTypeID == _ITIGovtEM_EnumStaffType.Teaching">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade <span class="StarMarking">*</span></label>
 
           <select class="form-select" name="SearchByBranchs" id="SearchByBranchs" formControlName="ddlTrade" [ngModelOptions]="{standalone: true}"
@@ -214,9 +204,10 @@
           </div>
         </div>
 
-        <div  *ngIf="formData.StaffLevelID == _ITIGovtEM_EnumStaffLevel.TeachingRole && formData.StaffTypeID !=_ITIGovtEM_EnumStaffType.NonTeaching">
+        <div *ngIf="formData.StaffPostTypeID == _Enum_ITI_EM_StaffPostType.Sub_Ordinate_Services
+                    && formData.StaffTypeID == _ITIGovtEM_EnumStaffType.Teaching">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift / Unit <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.SeatIntakeID" formControlName="Shift" [ngModelOptions]="{standalone: true}" (change)="onShiftChange()">
+          <select class="form-select" [(ngModel)]="formData.SeatIntakeID" formControlName="Shift" [ngModelOptions]="{standalone: true}">
             <option value="0">--Choose Option--</option>
             <option *ngFor="let item of shiftddl" [value]="item.ID">
               {{ item.Name }}

@@ -278,6 +278,14 @@ export class ITIsService {
       ).toPromise();
   }
 
+  public async ITIReportedStudentGetByID(Id: number) {
+
+    return await this.http.get(this.APIUrl + "/ITIReportedStudentGetByID/" + Id + "/", this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async ITIPlanningBankGuaranteeReturn(searchRequestReturn: ITIPlanningBankGuaranteeReturn) {
     var body = JSON.stringify(searchRequestReturn);
     return await this.http.post(`${this.APIUrl}/ITIPlanningBankGuaranteeReturn`, body, this.headersOptions)
@@ -310,4 +318,11 @@ export class ITIsService {
     ).toPromise();
 }
 
+ public async UpdateCampusStatusByID(model: any) {
+    var body = JSON.stringify(model);
+    return await this.http.post(`${this.APIUrl}/UpdateCampusStatusByID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
