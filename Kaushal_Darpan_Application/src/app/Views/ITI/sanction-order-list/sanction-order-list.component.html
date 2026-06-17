@@ -149,7 +149,7 @@
                 <a  *ngIf="(row.Eid==0 || row.Eid==null) && (sSOLoginDataModel.RoleID==_enumrole.ITIPlanningAdmin || sSOLoginDataModel.RoleID== _enumrole.ITIBuildingAdmin || sSOLoginDataModel.RoleID==_enumrole.DTE_TrainingT2_establishment )  " href="javascript:void(0);" title="Remove"
                    (click)="btnDelete_OnClick(row.SanctionID)"><i class="ti ti-trash"></i></a>
                 <div *ngIf="row.OrderCopy" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <a download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.OrderCopy}}" title="Download"><i class="ti ti-download"></i></a>
+                  <a download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.OrderCopy}}" title="View"><i class="ti ti-eye"></i></a>
                 </div>
               </div>
             </td>
