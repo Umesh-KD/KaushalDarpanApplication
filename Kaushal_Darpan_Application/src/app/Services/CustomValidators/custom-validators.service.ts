@@ -74,5 +74,13 @@ export function notZeroValidator(): ValidatorFn {
   };
 }
 
+  export function notDefaultValueValidator(defaultValue: string | number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.value == defaultValue
+        ? { defaultValue: true }
+        : null;
+    };//'defaultValue'
+}
+
 
 
