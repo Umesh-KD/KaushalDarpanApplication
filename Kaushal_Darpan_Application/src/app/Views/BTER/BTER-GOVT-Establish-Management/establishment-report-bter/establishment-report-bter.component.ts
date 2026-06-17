@@ -12,6 +12,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-establishment-report-bter',
@@ -36,6 +37,7 @@ export class EstablishmentReportBTERComponent {
   public StaffProfileStatusList: any = [];
 
   public Table_SearchText: string = '';
+  public act: string = '';
 
   //table feature default
   modalReference: NgbModalRef | undefined;
@@ -57,10 +59,13 @@ export class EstablishmentReportBTERComponent {
     private Swal2: SweetAlert2,
     private toastr: ToastrService,
     private modalService: NgbModal,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.act = this.activatedRoute.snapshot.queryParamMap.get("act")?.toString() || '';
+
     await this.GetDDLMasterData();
     await this.GetStaffProfileStatusList();
     await this.getInstituteDataList();
@@ -68,7 +73,7 @@ export class EstablishmentReportBTERComponent {
   }
 
   async BTER_EM_GetStaffList() {
-     
+    this.searchRequest.act = this.act;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
     this.searchRequest.UserID = this.sSOLoginDataModel.UserID
@@ -79,7 +84,7 @@ export class EstablishmentReportBTERComponent {
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
     try {
       this.loaderService.requestStarted();
-      await this.bterEstablishManagementService.BTER_EM_GetStaffList(this.searchRequest)
+      await this.bterEstablishManagementService.GetEstablishmentReportData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
         
