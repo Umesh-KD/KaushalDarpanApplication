@@ -498,7 +498,7 @@ async onSubmit() {
   }
 
   async OnOrderDateChange(type: number) {
-
+    debugger
     if (type == 1) {
 
       this.filteredAcademicOrderNoList = this.AcademicOrderNoList.filter(
