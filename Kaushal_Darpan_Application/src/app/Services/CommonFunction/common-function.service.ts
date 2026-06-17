@@ -2584,5 +2584,22 @@ export class CommonFunctionService {
             ).toPromise();
     }
 
+  public async GetEndTermVisibilitySettings(endTermID: number) {
+  return await this.http.get(
+    `${this.APIUrl}/GetEndTermVisibilitySettings/${endTermID}`
+  )
+    .pipe(catchError(this.handleErrorObservable))
+    .toPromise();
+}
+
+async UpdateContentVisibilitySettings(request: any) {
+  return await this.http.post(
+    `${this.APIUrl}/UpdateContentVisibilitySettings`,
+    request,
+    this.headersOptions
+  )
+    .pipe(catchError(this.handleErrorObservable))
+    .toPromise();
+}
 }
 

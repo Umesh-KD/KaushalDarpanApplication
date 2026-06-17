@@ -12,6 +12,7 @@ import { ITIFeeConfigurationComponent } from './fee-configuration/iti-fee-config
 import { ITISerialMasterComponent } from './serial-master/iti-serial-master.component';
 import { ITIDateConfigurationComponent } from './date-configuration/iti-date-configuration.component';
 import { ITISignatureMasterComponent } from './signature/iti-signature.component';
+import { ContentVisiblityConfigurationComponent } from './content-visiblity-configuration/content-visiblity-configuration.component';
 
 
 @Component({
@@ -33,7 +34,9 @@ export class ITIMasterConfigurationComponent {
     { TabName: 'Fee Configuration', TabIcon: 'fa fa-inr', component: ITIFeeConfigurationComponent },
     { TabName: 'Serial Master', TabIcon: 'fa fa-list-ol', component: ITISerialMasterComponent },
    { TabName: 'Date Configuration', TabIcon: 'ti ti-calendar', component: ITIDateConfigurationComponent },
-    { TabName: 'Signature Configuration', TabIcon: 'ti ti-writing-sign', component: ITISignatureMasterComponent }
+    { TabName: 'Signature Configuration', TabIcon: 'ti ti-writing-sign', component: ITISignatureMasterComponent },
+    { TabName: 'Content Visibility Configuration', TabIcon: 'ti ti-writing-sign', component: ContentVisiblityConfigurationComponent }
+
    // { TabName: 'Admission Calendar ', TabIcon: 'ti ti-calendar', component: AllotmentConfigurationComponent }
   ] as { TabName: string; TabIcon: string; component: Type<any> }[];
   constructor(

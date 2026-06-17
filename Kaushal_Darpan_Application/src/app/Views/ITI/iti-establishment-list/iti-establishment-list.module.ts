@@ -5,6 +5,7 @@ import { ItiEstablishmentListRoutingModule } from './iti-establishment-list-rout
 import { ItiEstablishmentListComponent } from './iti-establishment-list.component';
 import { FormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
     CommonModule,
     ItiEstablishmentListRoutingModule,
     FormsModule,
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    NgSelectModule
   ]
 })
 export class ItiEstablishmentListModule { }
