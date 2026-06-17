@@ -49,6 +49,8 @@ export class MarksheetDownloadComponent {
   public totalInTableRecord: number = 0;
   //end table feature default
   public FinYearList: any = [];
+  buttonGroups: any[] = [];
+
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
     private loaderService: LoaderService,
@@ -65,19 +67,18 @@ export class MarksheetDownloadComponent {
   }
 
   async ngOnInit() {
-    await this.GetMasterDDL();
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.YearDropdownData();
+
+    // load
+    await this.GetMasterDDL();
+    await this.YearDropdownData();
   }
 
   async GetMasterDDL() {
     try {
-      this.loaderService.requestStarted();
-
       await this.commonFunctionService.GetCommonMasterData('ResultType_New')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          console.log('ffff', data)
           this.ResultTypeList = data['Data'];
         }, (error: any) => console.error(error)
       );
@@ -96,11 +97,6 @@ export class MarksheetDownloadComponent {
     }
     catch (ex) {
       console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
     }
   }
 
@@ -126,8 +122,8 @@ export class MarksheetDownloadComponent {
     }
     try {
       this.loaderService.requestStarted();
-     // this.searchRequest.EndTermID = this.searchRequest.EndTermID
-      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.searchRequest.EndTermID = this.searchRequest.EndTermID
+      //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
 
       //this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
       this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng
@@ -251,6 +247,7 @@ export class MarksheetDownloadComponent {
     }
   }
 
+
   //table feature
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
@@ -350,8 +347,6 @@ export class MarksheetDownloadComponent {
   // end table feature
 
 
-
-
   async YearDropdownData() {
     try {
       this.loaderService.requestStarted();
@@ -379,7 +374,6 @@ export class MarksheetDownloadComponent {
     return item.FinancialYearID;
   }
 
-  buttonGroups: any[] = [];
   async createDynamicButtons(studentList: any[]) {
     debugger
     if (!studentList || studentList.length === 0) return;

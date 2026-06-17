@@ -35,6 +35,7 @@ export class ITI_CommanDashboardComponent {
   public viewTransferDashboard: any[] = [];
   public viewRelievingDashboard: any[] = [];
   public StaffMasterList: any[] = [];
+  public PlacementdashboardList: any[] = [];
   public sSOLoginDataModel = new SSOLoginDataModel();
   public State: number = 0;
   public SuccessMessage: string = '';
@@ -85,6 +86,7 @@ export class ITI_CommanDashboardComponent {
           this.InstructorDashboard = data['Data']['Table1'];
           this.AttendanceDashboard = data['Data']['Table2'];
           this.InventoryList = data['Data']['Table3'];
+          this.PlacementdashboardList = data['Data']['Table4'];
          
   
           

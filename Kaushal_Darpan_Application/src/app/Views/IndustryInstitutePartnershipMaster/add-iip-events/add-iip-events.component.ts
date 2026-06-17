@@ -225,6 +225,7 @@ if (this.PageMode == 'view') {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
       this.request.UserID = this.sSOLoginDataModel.UserID;
+      this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
       debugger
       await this.industryInstitutePartnershipMasterService.SaveData_IIP_Events(this.request)
         .then(async (data: any) => {
@@ -269,7 +270,8 @@ if (this.PageMode == 'view') {
   // }
 
   async GetEvent_ById() {
-  try {
+    try {
+   // debugger
     await this.industryInstitutePartnershipMasterService.GetEvent_ById(this.searchRequest)
       .then(async (data: any) => {
 
@@ -280,18 +282,18 @@ if (this.PageMode == 'view') {
           this.request = data.Data;
           this.isFacultySelected = Number(this.request.EventForID) == 2;
 
-const semesterControl = this.EventFormGroup.get('Semesterlist');
+          const semesterControl = this.EventFormGroup.get('Semesterlist');
 
-if (this.isFacultySelected) {
+          if (this.isFacultySelected) {
 
-  semesterControl?.clearValidators();
+            semesterControl?.clearValidators();
 
-} else {
+          } else {
 
-  semesterControl?.setValidators([Validators.required]);
-}
+            semesterControl?.setValidators([Validators.required]);
+          }
 
-semesterControl?.updateValueAndValidity();
+          semesterControl?.updateValueAndValidity();
 
 
           this.SelectedBranchList = this.request.Branchlist;
@@ -310,11 +312,15 @@ semesterControl?.updateValueAndValidity();
             this.isInstituteLevel = true;
           }
 
-          if (this.request.EventLevelID == 3) {
+          else if (this.request.EventLevelID == 3) {
 
             this.isDivisionLevel = true;
 
             await this.GetDivisionMasterList();
+            await this.GetStreamDataList();
+          }
+          else {
+            await this.GetStreamDataList();
           }
 
           // =========================

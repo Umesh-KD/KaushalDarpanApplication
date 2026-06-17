@@ -70,12 +70,12 @@ export class AddIntakePlanningComponent {
        /* ddlRemark: ['', [DropdownValidators]],*/
         ddlTradeScheme: ['', [DropdownValidators]],
         txtUnitNo: ['', Validators.required],
-        FinancialOrderDate: [{ value: '', disabled: true }],
-        AdminOrderDate: [{ value: '', disabled: true }],
+        FinancialOrderDate: [{ value: '', disabled: false }],
+        AdminOrderDate: [{ value: '', disabled: false }],
 
 
-        ddlAdminSanctionedID: ['', [DropdownValidators]],
-        ddlFinancialSanctionID:['',[DropdownValidators]],
+        ddlAdminSanctionedID: ['', ],
+        ddlFinancialSanctionID:['',],
        /* ddlSanctioned: ['', [DropdownValidators]],*/
       /*  OrderDate: ['', Validators.required],*/
     /*    OrderNo: ['', Validators.required],*/
