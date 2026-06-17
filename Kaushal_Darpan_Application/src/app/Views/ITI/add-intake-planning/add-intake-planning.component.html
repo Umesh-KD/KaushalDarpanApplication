@@ -149,31 +149,31 @@
             <!-- academic order no: start -->
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Administrative Order No :<span class="StarMarking">*</span>
+                Administrative Order No :
               </label>
               <select class="form-select" formControlName="ddlAdminSanctionedID" (change)="OnOrderChange(1)" [(ngModel)]="request.AdminSanctionedID">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of AcademicOrderNoList" value="{{item.ID}}">{{item.OrderNo}}</option>
               </select>
-              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlAdminSanctionedID.errors" class="text-danger">
+              <!-- <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlAdminSanctionedID.errors" class="text-danger">
                 <p *ngIf="!_SeatIntakeFormGroup.ddlAdminSanctionedID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This field is required .!
                 </p>
-              </div>
+              </div> -->
             </div>
 
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Administrative Sanction Date: <span class="StarMarking">*</span>
+                Administrative Sanction Date: 
               </label>
               <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
-              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.AdminOrderDate.errors" class="text-danger">
+              <!-- <div *ngIf="isSubmitted && _SeatIntakeFormGroup.AdminOrderDate.errors" class="text-danger">
                 <p *ngIf="_SeatIntakeFormGroup.AdminOrderDate.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
                 </p>
-              </div>
+              </div> -->
             </div>
 
 
@@ -198,32 +198,32 @@
             <!-- financial order no: start -->
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Financial Order No: <span class="StarMarking">*</span>
+                Financial Order No: 
               </label>
               <!-- [(ngModel)]="request.FinancialSanctionID" -->
               <select class="form-select" formControlName="ddlFinancialSanctionID" (change)="OnOrderChange(2)" [(ngModel)]="request.FinancialSanctionID">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of FinancialOrderNoList" value="{{item.ID}}">{{item.OrderNo}}</option>
               </select>
-              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlFinancialSanctionID.errors" class="text-danger">
+              <!-- <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlFinancialSanctionID.errors" class="text-danger">
                 <p *ngIf="!_SeatIntakeFormGroup.ddlFinancialSanctionID.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This field is required .!
                 </p>
-              </div>
+              </div> -->
             </div>
 
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Financial Sanction  Date: <span class="StarMarking">*</span>
+                Financial Sanction  Date: 
               </label>
               <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="FinancialOrderDate" [(ngModel)]="request.FinancialOrderDate">
-              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.FinancialOrderDate.errors" class="text-danger">
+              <!-- <div *ngIf="isSubmitted && _SeatIntakeFormGroup.FinancialOrderDate.errors" class="text-danger">
                 <p *ngIf="_SeatIntakeFormGroup.FinancialOrderDate.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
                 </p>
-              </div>
+              </div> -->
             </div>
 
 
