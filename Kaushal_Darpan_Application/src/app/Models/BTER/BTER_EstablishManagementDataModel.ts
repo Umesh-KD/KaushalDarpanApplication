@@ -19,6 +19,7 @@ export class BTER_EM_StaffListSearchModel {
   InstitutionManagementTypeID?: number = 0;
   InstituteID?: number = 0;
   ProfileStatus?: number = -1;
+  act?: string = ''
 }
 
 export class BTER_EM_AddStaffDataModel extends RequestBaseModel {

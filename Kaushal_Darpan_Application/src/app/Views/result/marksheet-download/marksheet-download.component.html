@@ -13,93 +13,121 @@
 
 <div class="card">
   <div class="card-body p-5">
-    <div class="mb-8">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+    <form [formGroup]="downLoadFG">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+            <select class="form-select" [(ngModel)]="searchRequest.SemesterID" name="SemesterID" formControlName="SemesterID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+            </select>
+
+            <div *ngIf="isSubmitted && downLoadFG.get('SemesterID')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+            <select class="form-select" [(ngModel)]="searchRequest.InstituteID" name="InstituteID" formControlName="InstituteID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
+            </select>
+          </div>
+
+          <div *ngIf="isSubmitted && downLoadFG.get('InstituteID')?.hasError('defaultValue')" class="text-danger">
+            This field is required!
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Revised
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.IsRevised" name="IsRevised" formControlName="IsRevised">
+              <option value="-1">--Select--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+
+            <div *ngIf="isSubmitted && downLoadFG.get('IsRevised')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Bridge
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.IsBridge" name="IsBridge" formControlName="IsBridge">
+              <option value="-1">--Select--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+
+            <div *ngIf="isSubmitted && downLoadFG.get('IsBridge')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Result Type
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.ResultTypeID" name="ResultTypeID" formControlName="ResultTypeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of ResultTypeList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+
+            <div *ngIf="isSubmitted && downLoadFG.get('ResultTypeID')?.hasError('defaultValue')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+
+          <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Academic Year
+    </label>
+    <select [(ngModel)]="searchRequest.EndTermID"
+            class="form-select">
+
+      <option [ngValue]="0">--Select--</option>
+      <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+              [ngValue]="item.EndTermID">
+
+        {{ item.EndTermName }}
+      </option>
+    </select>
+  </div> -->
+
+
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
+          <div class="flex justify-center flex-wrap items-center mb-3 p-3 py-2 text-center" style="background:#fffdce">
+            <b class="text-1xl-5">OR</b>
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Roll Number
+            </label>
+            <input type="text"
+                   class="form-input"
+                   [(ngModel)]="searchRequest.RollNo"
+                   placeholder="Enter Roll Number"
+                   name="RollNo" formControlName="RollNo" />
+
+            <div *ngIf="isSubmitted && downLoadFG.get('RollNo')?.hasError('required')" class="text-danger">
+              This field is required!
+            </div>
+          </div>
+          <div>
+            <button type="submit" class="btn bg-info text-white mt-6" id="searchButton" (click)="getAllData()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" id="cancelButton">Cancel</button>
+          </div>
+        </div>
       </div>
-      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
-          <select class="form-select" [(ngModel)]="searchRequest.SemesterID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-          <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Revised
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.IsRevised">
-            <option value="-1">--Select--</option>
-            <option value="0">All</option>
-            <option value="1">Revised Only</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Bridge
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.IsBridge">
-            <option value="0">All</option>
-            <option value="1">Bridge Only</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Result Type
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.ResultTypeID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of ResultTypeList" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
-        </div>
-
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Academic Year
-          </label>
-          <select [(ngModel)]="searchRequest.EndTermID"
-                  class="form-select">
-
-            <option [ngValue]="0">--Select--</option>
-            <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
-                    [ngValue]="item.EndTermID">
-
-              {{ item.EndTermName }}
-            </option>
-          </select>
-        </div>-->
-
-
-      </div>
-      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
-        <div class="flex justify-center flex-wrap items-center mb-3 p-3 py-2 text-center" style="background:#fffdce">
-          <b class="text-1xl-5">OR</b>
-        </div>
-      </div>
-      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Roll Number
-          </label>
-          <input type="text"
-                 class="form-input"
-                 [(ngModel)]="searchRequest.RollNo"
-                 placeholder="Enter Roll Number" />
-        </div>
-        <div>
-          <button type="button" class="btn bg-info text-white mt-6" id="searchButton" (click)="getAllData()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" id="cancelButton">Cancel</button>
-        </div>
-      </div>
-    </div>
+    </form>
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
@@ -119,9 +147,9 @@
       <div class="">
         <!-- <div *ngIf="buttonGroups?.length > 0">
           <div class="flex items-center flex-wrap gap-2 flex-row">
-            <a href="javascript:void(0);" 
+            <a href="javascript:void(0);"
               *ngFor="let group of buttonGroups"
-              (click)="DownloadBulkMarksheet(group.startIndex, group.endIndex)" 
+              (click)="DownloadBulkMarksheet(group.startIndex, group.endIndex)"
               class="btn bg-info btn-sm text-white">
               <i class="ti ti-download"></i> Download Marksheet ({{ group.label }})
             </a>
@@ -148,15 +176,15 @@
             <td align="left">{{row.FatherName}}</td>
             <td align="left">{{row.RollNo}}</td>
             <td align="left">{{row.StreamID}}</td>
-            <td align="left" >
+            <td align="left">
               <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
-                *ngIf="row.MarksheetFile == ''" 
-                (click)="DownloadMarksheet(row)">
+                 *ngIf="row.MarksheetFile == ''"
+                 (click)="DownloadMarksheet(row)">
                 <i class="ti ti-download"></i> Download Marksheet
               </a>
               <a class="btn bg-info btn-sm text-white" style="cursor: pointer;"
-                *ngIf="row.MarksheetFile != ''" 
-                (click)="downloadFile_existing(row)">
+                 *ngIf="row.MarksheetFile != ''"
+                 (click)="downloadFile_existing(row)">
                 <i class="ti ti-download"></i> Download Marksheet
               </a>
             </td>

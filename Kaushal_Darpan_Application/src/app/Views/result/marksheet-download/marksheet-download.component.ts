@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -15,11 +15,12 @@ import { ReportService } from '../../../Services/Report/report.service';
 import { EnumCourseType, EnumDepartment, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
 import { MenuService } from '../../../Services/Menu/menu.service';
+import { notDefaultValueValidator } from '../../../Services/CustomValidators/custom-validators.service';
 @Component({
-    selector: 'app-marksheet-download',
-    templateUrl: './marksheet-download.component.html',
-    styleUrls: ['./marksheet-download.component.css'],
-    standalone: false
+  selector: 'app-marksheet-download',
+  templateUrl: './marksheet-download.component.html',
+  styleUrls: ['./marksheet-download.component.css'],
+  standalone: false
 })
 export class MarksheetDownloadComponent {
   public InstituteMasterList: any = [];
@@ -31,12 +32,12 @@ export class MarksheetDownloadComponent {
   public downloadReq = new DownloadMarksheetSearchModel();
   public StudentList: any = []
   public StudentData: any[] = []
-  public  State: any;
-  public  Message: any;
-  public  ErrorMessage: any;
-  public  CenterMasterList: any;
+  public State: any;
+  public Message: any;
+  public ErrorMessage: any;
+  public CenterMasterList: any;
 
-    //table feature default
+  //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
   public pageInTableSize: string = "50";
@@ -50,23 +51,33 @@ export class MarksheetDownloadComponent {
   //end table feature default
   public FinYearList: any = [];
   buttonGroups: any[] = [];
+  downLoadFG!: FormGroup;
 
   constructor(private commonFunctionService: CommonFunctionService,
     private marksheetDownloadService: MarksheetDownloadService,
     private loaderService: LoaderService,
     private modalService: NgbModal,
-    private formBuilder: FormBuilder,
+    private fb: FormBuilder,
     private toastr: ToastrService,
     private Swal2: SweetAlert2,
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     private reportService: ReportService,
     private http: HttpClient,
-    private menuService: MenuService
+    private menuService: MenuService,
   ) {
   }
 
   async ngOnInit() {
+    this.downLoadFG = this.fb.group({
+      InstituteID: ['', Validators.required],
+      SemesterID: ['0', [Validators.required, notDefaultValueValidator('0')]],
+      IsBridge: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
+      ResultTypeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
+      IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
+      RollNo: ['', Validators.required],
+    });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     // load
@@ -81,7 +92,7 @@ export class MarksheetDownloadComponent {
           data = JSON.parse(JSON.stringify(data));
           this.ResultTypeList = data['Data'];
         }, (error: any) => console.error(error)
-      );
+        );
 
       await this.commonFunctionService.GetCommonMasterData('Institute')
         .then((data: any) => {
@@ -100,15 +111,20 @@ export class MarksheetDownloadComponent {
     }
   }
 
-  
+
   async getAllData() {
     //debugger
 
-    if(this.searchRequest.RollNo == undefined || this.searchRequest.RollNo == null || this.searchRequest.RollNo == 0){
-      if(this.searchRequest.SemesterID == undefined || this.searchRequest.SemesterID == null || this.searchRequest.SemesterID == 0){
+    this.isSubmitted = true;
+    if (this.downLoadFG.invalid) {
+      return;
+    }
+
+    if (this.searchRequest.RollNo == undefined || this.searchRequest.RollNo == null || this.searchRequest.RollNo == 0) {
+      if (this.searchRequest.SemesterID == undefined || this.searchRequest.SemesterID == null || this.searchRequest.SemesterID == 0) {
         this.toastr.error("Semester is required");
         return;
-      } 
+      }
       // else if (this.searchRequest.InstituteID == undefined || this.searchRequest.InstituteID == null || this.searchRequest.InstituteID == 0) {
       //   this.toastr.error("Institute is required");
       //   return;
@@ -121,9 +137,8 @@ export class MarksheetDownloadComponent {
       // }
     }
     try {
-      this.loaderService.requestStarted();
-      this.searchRequest.EndTermID = this.searchRequest.EndTermID
-      //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      // this.searchRequest.EndTermID = this.searchRequest.EndTermID
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
 
       //this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
       this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng
@@ -131,41 +146,36 @@ export class MarksheetDownloadComponent {
       await this.marksheetDownloadService.GetAllData(this.searchRequest)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if(data.State == EnumStatus.Success){
+          if (data.State == EnumStatus.Success) {
             this.StudentList = data['Data'];
             await this.createDynamicButtons(this.StudentList);
             //table feature load
             this.loadInTable();
             //end table feature load
           }
-          
+
         }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
   }
 
   async DownloadMarksheet(row: any) {
-    
+
     //debugger
     try {
       this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.downloadReq.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
       //this.downloadReq.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.downloadReq.EndTermID = this.searchRequest.EndTermID;
-      
+
       this.downloadReq.StudentID = row.StudentID;
       this.downloadReq.SemesterID = row.SemesterID;
       this.downloadReq.ResultTypeID = row.ResultTypeID;
       this.downloadReq.IsRevised = row.IsRevised;
       this.downloadReq.IsReval = row.IsReval;
-      console.log(JSON.stringify(this.downloadReq),'SearchRequestData')
+      console.log(JSON.stringify(this.downloadReq), 'SearchRequestData')
       const requestArray = [this.downloadReq];
       this.loaderService.requestStarted();
 
@@ -200,7 +210,7 @@ export class MarksheetDownloadComponent {
       const downloadLink = document.createElement('a');
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = this.generateFileName('pdf', DownloadfileName); 
+      downloadLink.download = this.generateFileName('pdf', DownloadfileName);
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
@@ -222,7 +232,7 @@ export class MarksheetDownloadComponent {
       });
 
       this.loaderService.requestStarted();
-    
+
       await this.reportService.DownloadMarksheetBulk(this.StudentList)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -414,7 +424,7 @@ export class MarksheetDownloadComponent {
       });
 
       this.loaderService.requestStarted();
-    
+
       await this.reportService.StudentMarksheetDownloadChunk(StudentList)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -441,7 +451,7 @@ export class MarksheetDownloadComponent {
 
   downloadFile_existing(row: any) {
     const url = `${this.appsettingConfig.StaticFileRootPathURL}/Students/BTER/Marksheet/${row.MarksheetFilePath}`;
-    
+
     fetch(url)
       .then(response => response.blob())
       .then(blob => {

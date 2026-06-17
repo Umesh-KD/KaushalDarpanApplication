@@ -1,11 +1,11 @@
 <div class="">
   <div class="flex justify-between items-center mb-4">
     <div>
-      <h2 class="dashboard-title mb-0">Dashboard</h2>
-      <small class="text-muted">DTE - T2</small>
+      <h2 class="dashboard-title mb-0"> Establishment Dashboard</h2>
+      <!-- <small class="text-muted">DTE - T2</small> -->
     </div>
   </div>
-  <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 gap-5">
+  <div class="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-5">
     <div class=" " *ngFor="let row of dashboardData?.Establishment; let i = index">
       <div class="card top-card" [ngClass]="row.bgClass">
         <div class="card-body flex justify-between items-center">

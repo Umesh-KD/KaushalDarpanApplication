@@ -311,7 +311,7 @@ export class ItiCollegeReportComponent {
     //this.request.DepartmentID = EnumDepartment.BTER;
     this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
     this.TypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('TypeID')?.toString());
-
+    this.request.IsNewCollege=1
 
 
     //await this.loadDropdownData('Board')
@@ -503,7 +503,7 @@ export class ItiCollegeReportComponent {
       }
 
     }
-    /*    this.request.IsNewCollege=1*/
+     this.request.IsNewCollege=1
     await this.GetGovtITI()
     /*    await this.GetParliamentITI()*/
     await this.GetDivisionMasterList()
@@ -1061,7 +1061,7 @@ export class ItiCollegeReportComponent {
 
       ];
 
-      requiredControls.forEach(controlName => {
+      requiredControls.forEach((controlName: any) => {
         const control = this.ReportForm.get(controlName);
         if (control) {
           control.setValidators(Validators.required);
