@@ -29,7 +29,10 @@ export class AddIntakePlanningComponent {
 
   public OrderNoList: any = [];
   public AcademicOrderNoList:any=[];
-  public FinancialOrderNoList:any=[];
+  public FinancialOrderNoList: any = [];
+
+  public filteredAcademicOrderNoList:any=[];
+  public filteredFinancialOrderNoList:any=[];
 
   public ItiTradeListAll: any = [];
   public ItiCollegesListAll: any = [];
@@ -491,6 +494,33 @@ async onSubmit() {
       );
 
       this.request.FinancialOrderDate = item?.OrderDate ?? '';
+    }
+  }
+
+  async OnOrderDateChange(type: number) {
+
+    if (type == 1) {
+
+      this.filteredAcademicOrderNoList = this.AcademicOrderNoList.filter(
+        (e: any) => e.OrderDate === this.request.AdminOrderDate
+      );
+
+      this.request.AdminSanctionedID =
+        this.filteredAcademicOrderNoList.length === 1
+          ? this.filteredAcademicOrderNoList[0].ID
+          : 0;
+    }
+
+    if (type == 2) {
+
+      this.filteredFinancialOrderNoList = this.FinancialOrderNoList.filter(
+        (e: any) => e.OrderDate === this.request.FinancialOrderDate
+      );
+
+      this.request.FinancialSanctionID =
+        this.filteredFinancialOrderNoList.length === 1
+          ? this.filteredFinancialOrderNoList[0].ID
+          : 0;
     }
   }
 

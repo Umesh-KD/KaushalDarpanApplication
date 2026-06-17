@@ -28,20 +28,21 @@
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute: <span class="StarMarking">*</span></label>
               <!--<select class="form-select" formControlName="ddlCollege" [(ngModel)]="request.PlanningID" (change)="GetOrderDetailsList()">
-    <option value="0">Choose Option</option>
-    <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
-  </select>-->
-            <ng-select [items]="ItiCollegesListAll"
-                       bindLabel="Name"
-                       bindValue="ID"
-                       placeholder="-----Search College-----"
-                       formControlName="ddlCollege"
-                       [(ngModel)]="request.PlanningID"
-                       [searchable]="true"
-                       [clearable]="true">
-              <!--<ng-option [value]="0">Choose College</ng-option>-->
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
+    </select>-->
+              <ng-select [items]="ItiCollegesListAll"
+                         bindLabel="Name"
+                         bindValue="ID"
+                         placeholder="-----Search College-----"
+                         formControlName="ddlCollege"
+                         [(ngModel)]="request.PlanningID"
+                         (change)="GetOrderDetailsList()"
+                         [searchable]="true"
+                         [clearable]="true">
+                <!--<ng-option [value]="0">Choose College</ng-option>-->
 
-            </ng-select>
+              </ng-select>
 
               <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlCollege.errors" class="text-danger">
                 <p *ngIf="!_SeatIntakeFormGroup.ddlCollege.errors.DropdownValidators">
@@ -66,9 +67,12 @@
                 Trade:<span class="StarMarking">*</span>
               </label>
               <!-- <select class="form-select" formControlName="ddlTrade" [(ngModel)]="request.TradeID">
-    <option value="0">Choose Option</option>
-    <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
-  </select> -->
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
+    </select> -->
+              
+
+              te
               <ng-select [items]="ItiTradeListAll"
                          bindLabel="TradeName"
                          bindValue="Id"
@@ -127,11 +131,12 @@
               </div>
             </div>
 
+            <!--(change)="GetOrderDetailsList_ByDate(1)"-->
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Administrative Sanction Date:
               </label>
-              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" (change)="GetOrderDetailsList_ByDate(1)" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
+              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"  (change)="OnOrderDateChange(1)" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
               <!-- <div *ngIf="isSubmitted && _SeatIntakeFormGroup.AdminOrderDate.errors" class="text-danger">
       <p *ngIf="_SeatIntakeFormGroup.AdminOrderDate.errors.required">
         <i aria-hidden="true"></i> This field is
@@ -142,11 +147,12 @@
 
 
             <!-- academic order no: start -->
+            <!--(change)="OnOrderChange(1)"-->
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Administrative Order No :
               </label>
-              <select class="form-select" formControlName="ddlAdminSanctionedID" (change)="OnOrderChange(1)" [(ngModel)]="request.AdminSanctionedID">
+              <select class="form-select" formControlName="ddlAdminSanctionedID" [(ngModel)]="request.AdminSanctionedID">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of AcademicOrderNoList" value="{{item.ID}}">{{item.OrderNo}}</option>
               </select>
@@ -177,7 +183,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Financial Sanction  Date:
               </label>
-              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" (change)="GetOrderDetailsList_ByDate(2)" formControlName="FinancialOrderDate" [(ngModel)]="request.FinancialOrderDate">
+              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate"  (change)="OnOrderDateChange(2)" formControlName="FinancialOrderDate" [(ngModel)]="request.FinancialOrderDate">
               <!-- <div *ngIf="isSubmitted && _SeatIntakeFormGroup.FinancialOrderDate.errors" class="text-danger">
       <p *ngIf="_SeatIntakeFormGroup.FinancialOrderDate.errors.required">
         <i aria-hidden="true"></i> This field is
@@ -188,12 +194,13 @@
 
 
             <!-- financial order no: start -->
+            <!--(change)="OnOrderChange(2)"-->
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Financial Order No:
               </label>
               <!-- [(ngModel)]="request.FinancialSanctionID" -->
-              <select class="form-select" formControlName="ddlFinancialSanctionID" (change)="OnOrderChange(2)" [(ngModel)]="request.FinancialSanctionID">
+              <select class="form-select" formControlName="ddlFinancialSanctionID" [(ngModel)]="request.FinancialSanctionID">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of FinancialOrderNoList" value="{{item.ID}}">{{item.OrderNo}}</option>
               </select>
@@ -250,11 +257,11 @@
               </select>
 
               <!--<div *ngIf="isSubmitted && _SeatIntakeFormGroup.txtUnitNo.errors" class="text-danger">
-    <p *ngIf="_SeatIntakeFormGroup.txtUnitNo.errors.required">
-      <i aria-hidden="true"></i> This field is
-      required.!
-    </p>
-  </div>-->
+      <p *ngIf="_SeatIntakeFormGroup.txtUnitNo.errors.required">
+        <i aria-hidden="true"></i> This field is
+        required.!
+      </p>
+    </div>-->
             </div>
 
 
