@@ -21,7 +21,7 @@
       </div>
       <form [formGroup]="SeatIntakeSearchFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
+<!-- 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
             <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID" (change)="GetTradeAndColleges()">
@@ -38,7 +38,42 @@
               <option value="0">---Choose College---</option>
               <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
             </select>
-          </div>
+          </div> -->
+
+          <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Search By District:
+    </label>
+
+    <ng-select
+        [items]="DistrictList"
+        bindLabel="Name"
+        bindValue="ID"
+        placeholder="---Choose District---"
+        formControlName="ddlDistrict"
+        [(ngModel)]="searchRequest.DistrictID"
+        (change)="GetTradeAndColleges()"
+        [searchable]="true"
+        [clearable]="true">
+    </ng-select>
+</div>
+
+<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Search By College:
+    </label>
+
+    <ng-select
+        [items]="ItiCollegesListAll"
+        bindLabel="Name"
+        bindValue="Id"
+        placeholder="---Choose College---"
+        formControlName="ddlCollege"
+        [(ngModel)]="searchRequest.CollegeID"
+        [searchable]="true"
+        [clearable]="true">
+    </ng-select>
+</div>
          
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -49,7 +84,7 @@
               <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
             </select>
           </div>
-          <div>
+          <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Search By Trade Scheme:
             </label>
@@ -57,7 +92,7 @@
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
-          </div>
+          </div> -->
           <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Search By Remark:
@@ -82,14 +117,14 @@
          
      
 
-          <div>
+          <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
             <input type="text" class="form-input" formControlName="CollegeCode" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
             <input type="text" class="form-input" formControlName="TradeCode" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
-          </div>
+          </div> -->
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch() ">Search</button>
@@ -146,9 +181,8 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">#</th>
-            <th class="text-left">College Name</th>
+            <th class="text-left">Institute Name</th>
             <th class="text-left">Trade Name</th>
-            <th class="text-left">Trade Scheme</th>
      
             <!--<th class="text-left">Only For Women</th>-->
             <!--<th class="text-left">Min Percentage In Science</th>
@@ -157,15 +191,13 @@
               Shift
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Shift'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>-->
-            <th class="text-left">Unit Number</th>
-            <th class="text-left">Administrative Order No</th>
-            <th class="text-left">Administrative Order Date</th>
-            <th class="text-left">Financial Order No</th>
-            <th class="text-left">Financial Order Date</th>
+            <th class="text-left">Number Of Unit</th>
+            <th class="text-left">Administrative Order No (Order Date)</th>
+            <th class="text-left">Financial Order No(Order Date)</th>
             <!--<th class="text-left">Sanctioned</th>-->
             <!--<th class="text-left">Last Session</th>
             <th class="text-left">Duration</th>-->
-            <th class="text-left">Seat In Unit</th>
+            <th class="text-left">Number Of Seat</th>
             <!--<th class="text-left">Sanction No</th>
             <th class="text-left">Sanction Date</th>-->
             <!--<th class="text-left">Last Updated</th>-->
@@ -180,18 +212,16 @@
             <td align="left">{{(startInTableIndex+1)+idx}}</td>
             <td align="left">{{row.CollegeName}}</td>
             <td align="left">{{row.TradeName}}</td>
-            <td align="left">{{row.TradeScheme}}</td>
             <!--<td align="left">{{row.Remark}}</td>-->
             <!--<td align="left">{{row.OnlyForWomen}}</td>-->
             <!--<td align="left">{{row.MinPercentageInScience}}</td>
   <td align="left">{{row.MinPercentageInMath}}</td>-->
             <!--<td align="left">{{row.Shift}}</td>-->
             <td align="left">{{row.Unit_no}}</td>
-            <td align="left">{{row.AdminOrderNo}}</td>
-            <td align="left">{{row.AdmSanctionDate}}</td>
+            <td align="left"><a href="javascript:void(0);">{{row.AdminOrderNo}}({{row.AdmSanctionDate}})</a></td>
 
-            <td align="left">{{row.FinancialOrderNo}}</td>
-            <td align="left">{{row.FinancialOrderDate}}</td>
+            <td align="left"><a href="javascript:void(0);">{{row.FinancialOrderNo}}({{row.FinancialOrderDate}})</a></td>
+            
             <!--<td align="left">{{row.Sanctioned}}</td>
   <td align="left">{{row.LastSessionStr}}</td>
   <td align="left">{{row.DurationYear}}</td>-->
