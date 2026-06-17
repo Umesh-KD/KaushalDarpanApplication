@@ -26,7 +26,7 @@
         <form [formGroup]="SeatIntakeFormGroup">
           <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute: <span class="StarMarking">*</span></label>
               <!--<select class="form-select" formControlName="ddlCollege" [(ngModel)]="request.PlanningID" (change)="GetOrderDetailsList()">
     <option value="0">Choose Option</option>
     <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
@@ -37,7 +37,6 @@
                        placeholder="-----Search College-----"
                        formControlName="ddlCollege"
                        [(ngModel)]="request.PlanningID"
-                       (change)="GetOrderDetailsList()"
                        [searchable]="true"
                        [clearable]="true">
               <!--<ng-option [value]="0">Choose College</ng-option>-->
@@ -132,7 +131,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Administrative Sanction Date:
               </label>
-              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
+              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" (change)="GetOrderDetailsList_ByDate(1)" formControlName="AdminOrderDate" [(ngModel)]="request.AdminOrderDate">
               <!-- <div *ngIf="isSubmitted && _SeatIntakeFormGroup.AdminOrderDate.errors" class="text-danger">
       <p *ngIf="_SeatIntakeFormGroup.AdminOrderDate.errors.required">
         <i aria-hidden="true"></i> This field is
@@ -178,7 +177,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Financial Sanction  Date:
               </label>
-              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="FinancialOrderDate" [(ngModel)]="request.FinancialOrderDate">
+              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" (change)="GetOrderDetailsList_ByDate(2)" formControlName="FinancialOrderDate" [(ngModel)]="request.FinancialOrderDate">
               <!-- <div *ngIf="isSubmitted && _SeatIntakeFormGroup.FinancialOrderDate.errors" class="text-danger">
       <p *ngIf="_SeatIntakeFormGroup.FinancialOrderDate.errors.required">
         <i aria-hidden="true"></i> This field is
@@ -245,8 +244,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Status: <span class="StarMarking">*</span>
               </label>
-
-              <select class="form-select" formControlName="ddlStatus" [(ngModel)]="request.IntakeStatus">
+              <select class="form-select" formControlName="ddlStatus" [(ngModel)]="request.Status">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of StatusTypeList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
