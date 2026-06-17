@@ -234,7 +234,6 @@
                 Trade Scheme: <span class="StarMarking">*</span>
               </label>
               <select class="form-select" formControlName="ddlTradeScheme" [(ngModel)]="request.TradeSchemeID">
-
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
