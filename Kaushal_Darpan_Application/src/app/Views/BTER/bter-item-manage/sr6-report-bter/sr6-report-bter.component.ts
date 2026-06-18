@@ -107,16 +107,26 @@ export class SR6ReportBTERComponent {
       }
       await this.bterInventoryService.Get_SR6_ReportData(this.Searchrequest)
         .then((data: any) => {
-          if (data) {
-            this.State = data.State;
-            this.Message = data.Message;
-            this.ErrorMessage = data.ErrorMessage;
-            this.ItemMasterList = data.Data || [];
-            this.ItemMasterList1 = data.Data || [];
+
+          this.State = data?.State;
+          this.Message = data?.Message;
+          this.ErrorMessage = data?.ErrorMessage;
+
+          if (data?.Data?.length > 0) {
+            this.ItemMasterList = data.Data;
+            this.ItemMasterList1 = data.Data;
           } else {
-            console.error("No data returned from API");
+            this.ItemMasterList = [];
+            this.ItemMasterList1 = [];
+            console.log(this.ErrorMessage || "No records found.");
           }
-        }, error => console.error(error));
+
+        })
+        .catch(error => {
+          console.error(error);
+          this.ItemMasterList = [];
+          this.ItemMasterList1 = [];
+        });
       console.log('Item Master List ',this.ItemMasterList)
     }
     catch (Ex) {
