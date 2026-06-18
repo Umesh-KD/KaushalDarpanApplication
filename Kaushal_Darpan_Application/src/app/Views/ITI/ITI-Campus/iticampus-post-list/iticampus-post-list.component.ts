@@ -10,7 +10,7 @@ import { ItiCampusPostService } from '../../../../Services/ITI/ITICampusPost/iti
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import { ITIPlacementStudentService } from '../../../../Services/ITI/ITIPlacementStudent/iti-placement-student.service';
 import { ActivatedRoute } from '@angular/router';
 import * as XLSX from 'xlsx';
@@ -46,6 +46,8 @@ export class ItiCampusPostListComponent {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public TodayDate = new Date()
+
+  _EnumRole = EnumRole
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ItiCampusPostService, private loaderService: LoaderService,
     private modalService: NgbModal,private route: ActivatedRoute, private formBuilder: FormBuilder, private toastr: ToastrService, private Swal2: SweetAlert2, private placemenrservice: ITIPlacementStudentService) {

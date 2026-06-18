@@ -14,17 +14,18 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { DTELaboratoryMasterService } from '../../../../Services/DTEInventory/DTELaboratoryMaster/dtelaboratory-master.service';
+import { notWorkingItemModel } from '../../../../Models/DTEInventory/NotWorkingItemModel';
 import { DTEItemCategoriesMasterService } from '../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
 
 
 @Component({
-  selector: 'app-bter-inventory-Issue-History',
-  templateUrl: './bter-inventory-Issue-History.component.html',
-  styleUrls: ['./bter-inventory-Issue-History.component.css'],
+  selector: 'app-NotWorkingItemReportComponent',
+  templateUrl: './NotWorkingItemReport.component.html',
+  styleUrls: ['./NotWorkingItemReport.component.css'],
   standalone: false
 })
-export class bterinventoryIssueHistoryComponent {
-  public Searchrequest = new inventoryIssueHistorySearchModel()
+export class NotWorkingItemReportComponent {
+  public Searchrequest = new notWorkingItemModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public State: number = 0;
@@ -58,7 +59,7 @@ export class bterinventoryIssueHistoryComponent {
     private modalService: NgbModal,
     private commonMasterService: CommonFunctionService,
     private LaboratoryMasterService: DTELaboratoryMasterService,
-    private itemCategoriesService: DTEItemCategoriesMasterService
+    private itemCategoriesService: DTEItemCategoriesMasterService,
   ) { }
 
   async ngOnInit() {
@@ -86,12 +87,12 @@ export class bterinventoryIssueHistoryComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
-      
+      this.Searchrequest.CategoryId = this.Searchrequest.CategoryId;
       if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge){
         this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
         this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       }
-      await this.bterInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
+      await this.bterInventoryService.GetAllNotWorkingItemReport(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
@@ -217,38 +218,8 @@ export class bterinventoryIssueHistoryComponent {
     }
   }
 
-  //async GetCategoryDDL() {
-  //  debugger
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-  //    this.Searchrequest.TypeName = 'ItemList';
-
-  //    const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
-
-  //    if (data && data.State === EnumStatus.Success) {
-  //      this.CategoryDDLList = [
-  //        { ItemId: 0, ItemCategoryName: 'Choose Category' },
-  //        ...data.Data
-  //      ];
-
-  //      this.Searchrequest.ItemId = 0;
-  //      //console.log('category list ==>', this.CategoryDDLList);
-  //    } else {
-  //      this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
-  //      this.Searchrequest.ItemId = 0;
-  //      this.toastr.error(data?.ErrorMessage || 'No category found.');
-  //    }
-  //  } catch (Ex) {
-  //    console.log('Error in GetCategoryDDL:', Ex);
-  //  } finally {
-  //    setTimeout(() => this.loaderService.requestEnded(), 200);
-  //  }
-  //}
-
   async GetCategoryDDL() {
     try {
-      debugger
       this.loaderService.requestStarted();
       await this.itemCategoriesService.GetAllData()
         .then((data: any) => {
@@ -266,9 +237,10 @@ export class bterinventoryIssueHistoryComponent {
     }
   }
 
+    
   async ResetControl() {
     this.isSubmitted = false;
-    this.Searchrequest = new inventoryIssueHistorySearchModel();
+    this.Searchrequest = new notWorkingItemModel();
     await this.GetAllData();
   }
 

@@ -82,6 +82,7 @@ export class PassoutRegistrationReportComponent {
   public IsNull: boolean = false;
   public UpdateEditID: number = 0;
   public IsUpdateCase: boolean = false;
+  public flag: any = 0;
   constructor(
     private fb: FormBuilder,
     private ITITimeTableService: ApprenticeReportServiceService,
@@ -107,16 +108,22 @@ export class PassoutRegistrationReportComponent {
     this.ITITimeTableForm = this.fb.group({
       InstituteID: ['', [DropdownValidators]],
       RegDate: ['', Validators.required],
-      FileNameDoc: ['', Validators.required],
+      FileNameDoc: [''],
       RegCount: ['', Validators.required],
       Remarks: ['', Validators.required],
     });
     const Editid = sessionStorage.getItem('PaasoutRegistrationReportPKID');
-    if (Editid != undefined && parseInt(Editid) > 0) {
+     this.flag = sessionStorage.getItem('flag');
+    if (Editid != undefined && parseInt(Editid) > 0 && this.flag != undefined && parseInt(this.flag) == 0) {
       this.GetReportDatabyID(parseInt(Editid));
       debugger;
       console.log(Editid);
       this.ITITimeTableForm.disable();
+    } else if (Editid != undefined && parseInt(Editid) > 0 && this.flag != undefined && parseInt(this.flag) == 1) {
+      this.GetReportDatabyID(parseInt(Editid));
+      debugger;
+      console.log(Editid);
+      this.ITITimeTableForm.enable();
     }
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -184,12 +191,19 @@ export class PassoutRegistrationReportComponent {
               Remarks: data.Data['0'].Remarks
 
             })
+            this.request.ID = ReportID;
             console.log(data.Data)
             this.request.FileName= data.Data['0'].FileName,
               this.request.Dis_FilePath= data.Data['0'].Dis_FilePath
-            this.IsUpdateCase = true;
+            
             this.UpdateEditID = ReportID;
-            this.ITITimeTableForm.disable();
+            if(this.flag != undefined && parseInt(this.flag) == 1){
+              this.IsUpdateCase = false;
+              this.ITITimeTableForm.enable();
+            }else if(this.flag != undefined && parseInt(this.flag) == 0){
+              this.IsUpdateCase = true;
+              this.ITITimeTableForm.disable();
+            }
           }
           else {
             // this.DataList = [];
@@ -221,6 +235,8 @@ export class PassoutRegistrationReportComponent {
     this.loaderService.requestStarted();
 
     try {
+
+      this.request.PKID = this.UpdateEditID;
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;

@@ -207,9 +207,10 @@ export class PassoutRegistrationReportListComponent {
   }
 
 
-  EditData(id: number) {
+  EditData(id: number,flag:number) {
     debugger;
     sessionStorage.setItem('PaasoutRegistrationReportPKID', id.toString());
+    sessionStorage.setItem('flag', flag.toString());
     this.routers.navigate(['/PaasoutRegistrationReport']);
     console.log(sessionStorage);
 

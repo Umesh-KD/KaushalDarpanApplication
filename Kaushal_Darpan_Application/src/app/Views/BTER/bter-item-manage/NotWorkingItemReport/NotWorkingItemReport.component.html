@@ -22,7 +22,7 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff :</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
           <!--<select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
             (change)="GetTradeDDL()">
       <option *ngFor="let item of staffDDLList" [value]="item.staffID">
@@ -45,42 +45,23 @@
       </option>
     </select>
   </div>-->
-        <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category :</label>
-    <select class="form-select" id="ItemId" [(ngModel)]="Searchrequest.ItemId">
-      <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
-        {{ item.Name }}
-      </option>
-    </select>
-  </div>-->
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Category :
+            Search By Category: <span class="StarMarking">*</span>
           </label>
-          <select class="form-select" id="ItemId" [(ngModel)]="Searchrequest.ItemId">
+          <select class="form-select" id="CategoryId" [(ngModel)]="Searchrequest.CategoryId">
             <option value="0">Choose Option</option>
-            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
-              {{ item.Name }}
-            </option>
-          </select>
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Equipment Status:</label>
-          <select class="form-select" id="status" [(ngModel)]="Searchrequest.status" (change)="GetAllData()">
-            <option value="0">--- All ---</option>
-            <option value="1">Serviceable</option>
-            <option value="2">Unserviceable</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">{{item.Name}}</option>
           </select>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issue Status:</label>
-          <select class="form-select" id="IssueStatus" [(ngModel)]="Searchrequest.IssueStatus" (change)="GetAllData()">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Equipment Status:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.status" (change)="GetAllData()">
             <option value="0">--- All ---</option>
-            <option value="1">Pending for Approve</option>
-            <option value="2">Approved</option>
-            <option value="3">Reject</option>
-            <option value="4">Returned</option>
+            <option value="1">Serviceable</option>
+            <option value="2">Unserviceable</option>
           </select>
         </div>
 
@@ -147,7 +128,7 @@
             <th class="text-left">Return Date</th>
             <th class="text-left">Equipment Status on Return</th>
             <th class="text-left">Issue Document </th>
-            <th class="text-left">Status</th>
+            <!--<th class="text-left">Status</th>-->
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -187,7 +168,7 @@
 
             </td>
 
-            <td align="left">
+            <!--<td align="left">-->
               <!-- <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
                        'InvStatus-issued': item.IssueStatus === 2,
                        'InvStatus-reject': item.IssueStatus === 3,
@@ -195,14 +176,14 @@
                      }">
       {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' : item.IssueStatus ===4 ? 'Returned' : 'Unknown' }}
     </span> -->
-              <span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
+              <!--<span [ngClass]="{ 'InvStatus-pending': item.IssueStatus === 1,
                                  'InvStatus-issued': item.IssueStatus === 2 && item.ReturnStatus === 0,
                                  'InvStatus-reject': item.IssueStatus === 3,
                                  'InvStatus-returned': item.IssueStatus === 2 && item.ReturnStatus === 1
                                }">
                 {{ item.IssueStatus === 1 ? 'Pending for approve' : item.IssueStatus ===2  && item.ReturnStatus === 0 ? 'Issued' : item.IssueStatus ===3 ? 'Reject by store incharge' :  item.IssueStatus ===2  && item.ReturnStatus === 1  ? 'Returned' : 'Unknown' }}
               </span>
-            </td>
+            </td>-->
 
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">

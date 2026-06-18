@@ -38,7 +38,8 @@ export class AddSeatIntakesMasterComponent implements OnInit {
   public currentDate = new Date();
 
   isEditMode: boolean = false;
-
+public orderNoLabel: string = 'Sanction No';
+public orderDateLabel: string = 'Sanction Date';
   constructor(
     private commonFunctionService: CommonFunctionService,
     private formBuilder: FormBuilder,
@@ -248,6 +249,8 @@ export class AddSeatIntakesMasterComponent implements OnInit {
         console.log(this.request, "request")
         this.OnTradeSchemechange()
         this.request.TradeSchemeID = data['Data']['TradeSchemeID']
+      // Set labels when editing
+      this.onSanctionedChange();
       });
     } catch (error) {
       console.error(error);
@@ -271,4 +274,24 @@ export class AddSeatIntakesMasterComponent implements OnInit {
     }
   }
 
+  onSanctionedChange() {
+  switch (Number(this.request.SanctionedID)) {
+
+    case 115: // Close
+      this.orderNoLabel = 'Close No';
+      this.orderDateLabel = 'Close Date';
+      break;
+
+    case 116: // Running
+      this.orderNoLabel = 'Running No';
+      this.orderDateLabel = 'Running Date';
+      break;
+
+    case 117: // Sanctioned
+    default:
+      this.orderNoLabel = 'Sanction No';
+      this.orderDateLabel = 'Sanction Date';
+      break;
+  }
+}
 }

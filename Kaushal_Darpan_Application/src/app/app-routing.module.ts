@@ -175,6 +175,7 @@ const routes: Routes = [
       { path: 'ITIPlacementDashboard', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
       { path: 'ITIPlacementDashboard/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
       { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dash-report/placement-dash-report.routing.module').then(m => m.ITIPlacementDashReportModule), title: 'ITI Placement Dashboard Report' },
+      { path: 'StudentAllotmentReport', loadChildren: () => import('./Views/ITI/student-allotment-report/student-allotment-report.routing.module').then(m => m.ITIStudentAllotmentReportModule), title: 'ITI Student Allotment Report' },
       //{ path: 'rolemenuright/:id', loadChildren: () => import('./Views/role-menu-right/role-menu-right.module').then(m => m.RoleMenuRightModule) },
       { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
       //Old Software Master
@@ -675,6 +676,7 @@ const routes: Routes = [
       { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
       { path: 'bter-lab-item-return', loadChildren: () => import('./Views/BTER/bter-item-manage/return-lab-item/return-lab-item.module').then(m => m.ReturnLabItemModule) },
       { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
+      { path: 'NotWorkingItemReport', loadChildren: () => import('./Views/BTER/bter-item-manage/NotWorkingItemReport/NotWorkingItemReport.module').then(m => m.NotWorkingItemReportModule) },
       { path: 'bter-inventory_Issue-report', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-INV_Issue-report/bter-INV_Issue-report.module').then(m => m.bterINVIssuereportModule) },
       { path: 'bter-staff-inventory-details', loadChildren: () => import('./Views/BTER/bter-item-manage/staff-inventory-details/staff-inventory-details.module').then(m => m.StaffInventoryDetailsModule), title: 'Staff Inventory Details' },
       { path: 'approve-issued-items', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/approve-issued-items/approve-issued-items.module').then(m => m.ApproveIssuedItemsModule), title: 'Approve Issued Items' },

@@ -200,9 +200,10 @@ export class fresherRegistrationReportListComponent {
   }
 
 
-  EditData(id: number) {
+  EditData(id: number,flag:number) {
     debugger;
     sessionStorage.setItem('fresherRegistrationReportPKID', id.toString());
+    sessionStorage.setItem('flag', flag.toString());
     this.routers.navigate(['/fresherRegistrationReport']);
     console.log(sessionStorage);
   }
