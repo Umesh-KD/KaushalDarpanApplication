@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ItiCompanyMasterService } from '../../../../Services/ITI/ItiCompanyMaster/iticompany-master.service.ts';
+import { EnumRole } from '../../../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-iticompany-master',
@@ -19,7 +20,7 @@ export class ItiCompanyMasterComponent implements OnInit {
   public searchRequest = new ItiCompanyMasterSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
-
+  _EnumRole = EnumRole
   constructor(private commonMasterService: CommonFunctionService, private companyMasterService: ItiCompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2) {
 

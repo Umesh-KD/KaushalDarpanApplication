@@ -1,25 +1,26 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { SeatIntakeDataModel, SeatIntakePopUpSearchModel, SeatIntakeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
-import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { SeatIntakeDataModel, SeatIntakePopUpSearchModel, SeatIntakeSearchModel } from '../../../Models/ITI/SeatIntakeDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
-import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
-import { SweetAlert2 } from '../../../../Common/SweetAlert2';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
+import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
-import { ActivatedRoute } from '@angular/router';
+import { AppsettingService } from '../../../Common/appsetting.service';
+
 
 @Component({
-  selector: 'app-seat-intakes-list-master',
-  templateUrl: './seat-intakes-list-master.component.html',
-  styleUrls: ['./seat-intakes-list-master.component.css'],
-  standalone: false
+  selector: 'app-consolated-iti-trade',
+  standalone: false,
+  templateUrl: './consolated-iti-trade.component.html',
+  styleUrl: './consolated-iti-trade.component.css'
 })
-export class SeatIntakesListMasterComponent implements OnInit {
+export class ConsolatedItiTradeComponent {
   public SSOLoginDataModel = new SSOLoginDataModel();
   public SeatIntakeSearchFormGroup!: FormGroup;
   public SeatIntakeSearchFormGroupPopUp!: FormGroup;
@@ -38,7 +39,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
   public SeatIntakeDataList: any = [];
   public Table_SearchText: string = '';
   public SeatIntakeIDnew: number = 0;
-  CollegeTypeID: number = 0;
+  public _enumrole = EnumRole
   State: any;
   Message: any;
   ErrorMessage: any;
@@ -64,7 +65,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
     private ItiSeatIntakeService: ItiSeatIntakeService,
     private Swal2: SweetAlert2,
     private modalService: NgbModal,
-    private route: ActivatedRoute
+    private appsettingConfig: AppsettingService
   ) { }
 
   async ngOnInit() {
@@ -93,42 +94,12 @@ export class SeatIntakesListMasterComponent implements OnInit {
         OrderNo: ['']
       });
 
-    this.route.queryParams.subscribe(params => {
 
-      const collegeId = Number(params['CollegeID'] || 0);
-      const tradeId = Number(params['TradeID'] || 0);
-      const sanctionedId = Number(params['SanctionedID'] || 0);
-
-      console.log(collegeId, tradeId, sanctionedId);
-
-      if (collegeId > 0) {
-        this.searchRequest.CollegeID = collegeId;
-      }
-
-      if (tradeId > 0) {
-        this.searchRequest.TradeID = tradeId;
-      }
-
-      if (sanctionedId > 0) {
-        this.searchRequest.SanctionedID = sanctionedId;
-      }
-
-
-    });
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
-
-
-    this.route.queryParams.subscribe(params => {
-      this.CollegeTypeID = +params['ManagementTypeId'];
-
-      if (this.CollegeTypeID) {
-        this.searchRequest.CollegeTypeID = this.CollegeTypeID;
-      }
-    });
     this.onSearch();
   }
   get _SeatIntakeSearchFormGroup() { return this.SeatIntakeSearchFormGroup.controls; }
@@ -187,6 +158,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
     this.tradeSearchRequest.action = '_getAllData'
     try {
       this.loaderService.requestStarted();
+      this.tradeSearchRequest.CollegeID = this.searchRequest.CollegeID
       await this.commonFunctionService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiTradeListAll = data.Data
@@ -197,6 +169,10 @@ export class SeatIntakesListMasterComponent implements OnInit {
       //console.log("selectedCollegeTypeID", selectedCollegeTypeID);
       this.collegeSearchRequest.action = '_getAllData'
       this.collegeSearchRequest.ManagementTypeID = selectedCollegeTypeID;
+      if (this.collegeSearchRequest.ManagementTypeID == null) {
+        this.collegeSearchRequest.ManagementTypeID = 0
+      }
+      this.collegeSearchRequest.DistrictID = this.searchRequest.DistrictID
       await this.commonFunctionService.ItiCollegesGetAllData(this.collegeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiCollegesListAll = data.Data
@@ -253,7 +229,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
-      await this.ItiSeatIntakeService.GetAllDataMasterList(this.searchRequest)
+      await this.ItiSeatIntakeService.GetAllDataPlanning(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State = EnumStatus.Success) {
@@ -413,36 +389,20 @@ export class SeatIntakesListMasterComponent implements OnInit {
   // end table feature.
 
   exportToExcel(): void {
-    const wantedColumns = [
-      'CollegeCode', 'CollegeName', 'TradeCode', 'TradeName', 'Shift', 'Unit_no', 'NCVT_SCVT',
-      'Sanctioned', 'Sanction_Order', 'OrderDate', 'Remark', 'NoOfSanctionedSeats',
-      'aff_date', 'wef_aff', 'file_ref', 'deaff_order', 'deaff_date', 'de_aff_wef', 'Key'
-    ];
-
+    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress'];
     const filteredData = this.SeatIntakeDataList.map((item: any) => {
-      const obj: any = {};
-      wantedColumns.forEach(col => obj[col] = item[col] ?? '');
-      return obj;
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
     });
-
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
-
-    // 🔥 Auto-fit column width
-    ws['!cols'] = wantedColumns.map(col => {
-      const maxLen = Math.max(
-        col.length,
-        ...filteredData.map((row:any) => String(row[col]).length)
-      );
-
-      return {
-        wch: Math.min(maxLen + 3, 40) // auto + limit width
-      };
-    });
-
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    XLSX.writeFile(wb, `SeatIntakeDetails_${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
   }
 
   @ViewChild('ModalStatusActiveInactive') ModalStatusActiveInactive!: TemplateRef<any>;
@@ -563,18 +523,4 @@ export class SeatIntakesListMasterComponent implements OnInit {
       }, 200);
     }
   }
-
-  onSearchChange() {
-    debugger
-
-    if (this.Table_SearchText == '') {
-      this.pageInTableSize = "50"; // reset pagination
-      this.loadInTable();
-    }
-    else {
-      this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
-      this.loadInTable();
-    }
-  }
-
 }
