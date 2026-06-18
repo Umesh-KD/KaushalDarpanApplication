@@ -181,6 +181,9 @@ export class ITIsComponent implements OnInit {
     // Heading
     const pageWidth = doc.internal.pageSize.getWidth();
 
+    const today = new Date().toLocaleDateString('en-GB');
+
+
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.text(
@@ -198,18 +201,26 @@ export class ITIsComponent implements OnInit {
       { align: 'right' }
     );
 
+    //doc.setFontSize(9);
+    //doc.setFont('helvetica', 'normal');
+    //doc.text(
+    //  `Date: ${today}`,
+    //  pageWidth - 15,
+    //  10,
+    //  { align: 'right' }
+    //);
 
     const body = this.itiList.map((row: any, index: number) => [
       index + 1,
       //`${row.Code || ''} (${row.Name || ''})`,  //concate in one column
-      row.Code || '',
+      //row.CollegeName || '',
       row.Name || '',
-      row.DistrictNameEnglish || '',
-      row.Phone || '',
-      row.Email || '',
       row.DgetCode || '',
-      row.campusName || '',
-      row.ActiveStatus ? 'Active' : 'Inactive'
+      row.DistrictNameEnglish || '',
+      row.RemarkForStatus || '',
+      //row.DgetCode || '',
+      //row.campusName || '',
+      //row.ActiveStatus ? 'Active' : 'Inactive'
     ]);
 
     autoTable(doc, {
@@ -217,14 +228,14 @@ export class ITIsComponent implements OnInit {
 
       head: [[
         'Sr No',
-        'College Code',
-        'College Name',
-        'District',
-        'Phone',
-        'Email',
-        'DGET Code',
-        'Campus Name',
-        'Status'
+        'ITI Name and Code Campus',
+        'Inst_Code_DGET',
+        'District Name',
+        //'Roll List / Admit Card',
+        'Active/Inactive Remark',
+        //'DGET Code',
+        //'Campus Name',
+        //'Status'
       ]],
 
       body,
@@ -245,18 +256,34 @@ export class ITIsComponent implements OnInit {
         fontStyle: 'bold'
       },
 
-      //columnStyles: {
-      //  0: { cellWidth: 12 },
-      //  1: { cellWidth: 20 },
-      //  2: { cellWidth: 70 },
-      //  3: { cellWidth: 25 },
-      //  4: { cellWidth: 25 },
-      //  5: { cellWidth: 45 },
-      //  6: { cellWidth: 25 },
-      //  7: { cellWidth: 55 },
-      //  8: { cellWidth: 18 }
-      //},
     });
+
+
+    //(Page X of Y) : show pages at footer
+    const totalPages = doc.getNumberOfPages();
+
+    for (let i = 1; i <= totalPages; i++) {
+
+      doc.setPage(i);
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      doc.setFontSize(8);
+
+      doc.text(
+        `Page ${i} of ${totalPages}`,
+        pageWidth / 2,
+        pageHeight - 5,
+        { align: 'center' }
+      );
+
+      doc.text(
+        `Generated On: ${today}`,
+        10,
+        pageHeight - 5
+      );
+    }
 
     doc.save('ITI College List.pdf');
   }
