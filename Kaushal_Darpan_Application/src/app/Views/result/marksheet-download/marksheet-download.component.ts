@@ -114,35 +114,22 @@ export class MarksheetDownloadComponent {
 
   async getAllData() {
     //debugger
-
+    // refresh
+    this.refreshValidationOfRollNoOnly(parseInt(this.downLoadFG.get('RollNo')?.value || 0) > 0 ? true : false);
+    //
     this.isSubmitted = true;
     if (this.downLoadFG.invalid) {
       return;
     }
 
-    if (this.searchRequest.RollNo == undefined || this.searchRequest.RollNo == null || this.searchRequest.RollNo == 0) {
-      if (this.searchRequest.SemesterID == undefined || this.searchRequest.SemesterID == null || this.searchRequest.SemesterID == 0) {
-        this.toastr.error("Semester is required");
-        return;
-      }
-      // else if (this.searchRequest.InstituteID == undefined || this.searchRequest.InstituteID == null || this.searchRequest.InstituteID == 0) {
-      //   this.toastr.error("Institute is required");
-      //   return;
-      // } else if(this.searchRequest.ResultTypeID == undefined || this.searchRequest.ResultTypeID == null || this.searchRequest.ResultTypeID == 0){
-      //   this.toastr.error("Result Type is required");
-      //   return;
-      // } else if(this.searchRequest.EndTermID == undefined || this.searchRequest.EndTermID == null || this.searchRequest.EndTermID == 0){
-      //   this.toastr.error("Academic Year is required");
-      //   return;
-      // }
-    }
     try {
       // this.searchRequest.EndTermID = this.searchRequest.EndTermID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
-
       //this.searchRequest.FianancialYearID = this.searchRequest.FianancialYearID;
       this.searchRequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+
+      // get
       await this.marksheetDownloadService.GetAllData(this.searchRequest)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -463,5 +450,33 @@ export class MarksheetDownloadComponent {
         window.URL.revokeObjectURL(link.href);
       })
       .catch(() => console.error('Download failed. Check CORS settings on the server.'));
+  }
+
+  refreshValidationOfRollNoOnly(isVaidateRollNoOnly: boolean) {
+    // clear
+    this.downLoadFG.get('InstituteID')?.clearValidators();
+    this.downLoadFG.get('SemesterID')?.clearValidators();
+    this.downLoadFG.get('IsBridge')?.clearValidators();
+    this.downLoadFG.get('ResultTypeID')?.clearValidators();
+    this.downLoadFG.get('IsRevised')?.clearValidators();
+    this.downLoadFG.get('RollNo')?.clearValidators();
+    // set
+    if (isVaidateRollNoOnly) {
+      this.downLoadFG.get('RollNo')?.setValidators(Validators.required);
+    }
+    else {
+      this.downLoadFG.get('InstituteID')?.setValidators(Validators.required);
+      this.downLoadFG.get('SemesterID')?.setValidators([Validators.required, notDefaultValueValidator('0')]);
+      this.downLoadFG.get('IsBridge')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
+      this.downLoadFG.get('ResultTypeID')?.setValidators([Validators.required, notDefaultValueValidator('0')]);
+      this.downLoadFG.get('IsRevised')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
+    }
+    // update
+    this.downLoadFG.get('InstituteID')?.updateValueAndValidity();
+    this.downLoadFG.get('SemesterID')?.updateValueAndValidity();
+    this.downLoadFG.get('IsBridge')?.updateValueAndValidity();
+    this.downLoadFG.get('ResultTypeID')?.updateValueAndValidity();
+    this.downLoadFG.get('IsRevised')?.updateValueAndValidity();
+    this.downLoadFG.get('RollNo')?.updateValueAndValidity();
   }
 }
