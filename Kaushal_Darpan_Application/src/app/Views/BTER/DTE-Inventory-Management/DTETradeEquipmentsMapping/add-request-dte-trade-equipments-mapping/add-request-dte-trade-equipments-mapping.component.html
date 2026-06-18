@@ -131,12 +131,13 @@
             </div>
           </div>
         </div>
-         <div class="text-center">
-            <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
-            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
-              <i class="ti ti-refresh"></i> Reset
-            </button>
-          </div>
+        <div class="text-center">
+          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+          <!--<button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+    <i class="ti ti-refresh"></i> Reset
+  </button>-->
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
         <!-- <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
          
         </div> -->

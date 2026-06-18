@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTEItemsSaveModel, DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTELabMasterModel, ApproveIssuedItemsDataModel, DTEItemsSearchModel4Lab } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel, DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTELabMasterModel, ApproveIssuedItemsDataModel, DTEItemsSearchModel4Lab, AuctionListSearchModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -55,7 +55,14 @@ export class DteItemsMasterService {
   }
 
 
-  public async GetAllAuctionList(searchRequest: DTEItemsSearchModel) {
+  //public async GetAllAuctionList(searchRequest: DTEItemsSearchModel) {
+  //  var body = JSON.stringify(searchRequest);
+  //  return await this.http.post(`${this.APIUrl}/GetAllAuctionList`, body, this.headersOptions)
+  //    .pipe(
+  //      catchError(this.handleErrorObservable)
+  //    ).toPromise();
+  //}
+  public async GetAllAuctionList(searchRequest: AuctionListSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAllAuctionList`, body, this.headersOptions)
       .pipe(

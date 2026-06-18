@@ -11,6 +11,7 @@ import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
+import { AppsettingService } from '../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-seat-intake-planning',
@@ -62,7 +63,8 @@ export class SeatIntakePlanningComponent {
     private loaderService: LoaderService,
     private ItiSeatIntakeService: ItiSeatIntakeService,
     private Swal2: SweetAlert2,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private appsettingConfig: AppsettingService
   ) { }
 
   async ngOnInit() {

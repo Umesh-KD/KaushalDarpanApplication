@@ -419,4 +419,13 @@ export class BTEREstablishManagementService {
       ).toPromise();
   }
 
+  public async GetEstablishmentReportData(searchRequest: BTER_EM_StaffListSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    
+    return await this.http.post(`${this.APIUrl}/GetEstablishmentReportData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

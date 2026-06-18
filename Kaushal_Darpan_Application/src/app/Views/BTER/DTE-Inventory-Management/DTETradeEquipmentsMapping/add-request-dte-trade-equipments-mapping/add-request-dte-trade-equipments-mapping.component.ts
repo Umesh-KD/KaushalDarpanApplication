@@ -316,19 +316,43 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
     this.CategoriesRequestFormGroup.reset();
     this.TradegroupForm.reset();
     this.EquipmentsRequestFormGroup.reset();
+    this.Searchrequest = new DTESearchTradeEquipmentsMapping();
+   
+    await this.GetAllData();
+   
+  
+
   }
 
-  async GetCategoryDDL() {
+  //async GetCategoryDDL() {
 
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.itemCategoriesService.GetAllData()
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        const selectOption = { ItemCategoryID: 0, Name: '--Select--' };
+  //        this.CategoryddlList = [selectOption, ...data['Data']];
+  //        console.log(this.CategoryddlList, 'test data categoryList');
+  //        //this.CategoryddlList = data['Data'];
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+  async GetCategoryDDL() {
     try {
       this.loaderService.requestStarted();
       await this.itemCategoriesService.GetAllData()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          const selectOption = { ItemCategoryID: 0, Name: '--Select--' };
-          this.CategoryddlList = [selectOption, ...data['Data']];
-          console.log(this.CategoryddlList, 'test data categoryList');
-          //this.CategoryddlList = data['Data'];
+          this.CategoryddlList = data['Data'];
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -341,26 +365,50 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
     }
   }
 
-  async GetEquipmentDDL() {
 
+  //async GetEquipmentDDL() {
+
+  //  try {
+  //    this.loaderService.requestStarted();
+
+  //    this.SearchItemReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //    this.SearchItemReq.CollegeId = this.sSOLoginDataModel.InstituteID;
+  //    this.SearchItemReq.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+  //    this.SearchItemReq.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    this.SearchItemReq.RoleID = this.sSOLoginDataModel.RoleID;
+
+  //    await this.equipmentsMasterService.GetAllData(this.SearchItemReq)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        const selectOption = { EquipmentsId: 0, Name: '--Select--' };
+  //        const filtered = data['Data'].filter(
+  //          (item: any) => item.ItemCategoryID == this.request.CategoryId
+  //        );
+
+  //        this.EquipmentddlList = [selectOption, ...filtered];
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+  async GetEquipmentDDL() {
     try {
       this.loaderService.requestStarted();
-
-      this.SearchItemReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.SearchItemReq.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.SearchItemReq.CollegeId = this.sSOLoginDataModel.InstituteID;
       this.SearchItemReq.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.SearchItemReq.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.SearchItemReq.RoleID = this.sSOLoginDataModel.RoleID;
-
-      await this.equipmentsMasterService.GetAllData(this.SearchItemReq)
+      await this.equipmentsService.GetAllData(this.SearchItemReq)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          const selectOption = { EquipmentsId: 0, Name: '--Select--' };
-          const filtered = data['Data'].filter(
-            (item: any) => item.ItemCategoryID == this.request.CategoryId
-          );
-
-          this.EquipmentddlList = [selectOption, ...filtered];
+          this.EquipmentddlList = data['Data'];
         }, error => console.error(error));
     }
     catch (Ex) {

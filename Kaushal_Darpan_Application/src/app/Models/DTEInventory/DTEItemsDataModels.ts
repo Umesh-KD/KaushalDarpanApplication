@@ -278,3 +278,14 @@ export class DTEItemsSearchModel4Lab {
   public UserId?: number = 0;
 
 }
+export class AuctionListSearchModel
+{
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public RoleID: number = 0;
+  public InstituteID: number = 0;
+  public EquipmentsId: number = 0;
+  public CategoryId: number = 0;
+  public CollegeId: number = 0;
+}
