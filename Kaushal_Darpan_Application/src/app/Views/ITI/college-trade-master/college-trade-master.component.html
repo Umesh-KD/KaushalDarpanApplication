@@ -79,7 +79,7 @@
                      [clearable]="false">
             <ng-option [value]="0">Choose Option</ng-option>
             <ng-container *ngFor="let item of ListITITrade">
-              <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+              <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
             </ng-container>
           </ng-select>
         </div>
@@ -94,14 +94,7 @@
             <option *ngFor="let item of ListITITradeScheme" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">College Code:</label>
-          <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="College Code:">
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Code:</label>
-          <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Trade Code">
-        </div>
+      
         <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Fee Status:
@@ -165,8 +158,11 @@
             <!--<th class="text-left">Min Percentage In Science</th>
             <th class="text-left">Min Percentage In Math</th>-->
             <th class="text-left">Total Unit</th>
+            <th class="text-left">Total Sanctioned</th>
+            <th class="text-left">Total Running</th>
+            <th class="text-left">Total Close</th>
             <!--<th class="text-left">Original Seats</th>-->
-            <th class="text-left">Last Year Admission</th>
+            <!--<th class="text-left">Last Year Admission</th>-->
             <th class="text-left">Duration</th>
             <!--<th class="text-left">IMC Fees Per Annum</th>-->
             <!--<th align="left">TotalSeats</th>
@@ -198,7 +194,7 @@
             <th align="left">IMC_OBC   </th>
             <th align="left">IMC_GEN   </th>-->
 
-            <th align="center">Action</th>
+            <!--<th align="center">Action</th>-->
           </tr>
         </thead>
         <tbody>
@@ -208,59 +204,50 @@
             <td align="left">{{item.TradeName}}</td>
             <td align="left">{{item.TradeSchemeName}}</td>
             <!--<td align="left">{{item.MinPercentageInScience}}</td>
-            <td align="left">{{item.MinPercentageInMath}}</td>-->
-            <td align="left">{{item.Unit_n}}</td>
-            <!--<td align="left" >{{item.OriginalSeat}}</td>-->
-            <td align="left">{{item.LastYearStatus}}</td>
-            <td align="left">{{item.DurationYear}}</td>
-            <!--<td align="left">{{item.ImcFee}}</td>-->
-            <!--<td align="left" class="{{item.SeatNotAvailable}}">{{item.TotalSeats }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.GEN        }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.GEN_F      }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.SC         }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.SC_F       }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.ST         }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.ST_F       }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.TSP        }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.TSP_F      }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.SAH        }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.SAH_F      }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.OBC        }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.OBC_F      }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.MIN        }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.MIN_F      }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.EWS        }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.EWS_F      }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.MBC        }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.MBC_F      }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.DEV        }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.DEV_F      }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.WID_DIV    }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.EX         }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.PH         }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.IMC_SC     }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.IMC_ST     }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.IMC_OBC    }}</td>
-            <td align="left" class="{{item.SeatNotAvailable}}">{{item.IMC_GEN    }}</td>-->
-
-
-            <td class="">
-              <div *ngIf="item.IsAllow==1" class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
-                <!--<label class="block">Status</label>-->
-                <label class="inline-flex items-right cursor-pointer toggleCheckBox Active statusActiveInActive">
-                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="item.IsAdmission == 1" (click)="onToggleChange($event , item.ID, item.IsAdmission)">
-                  <span class="toggleIcon">
-                    <span class="toggleTitle">{{ item.IsAdmission == 1 ? '' : '' }}</span>
-                  </span>
-                </label>
-              </div>
+  <td align="left">{{item.MinPercentageInMath}}</td>-->
+            <td align="left">{{item.TotalUnits}}</td>
+            <td align="left">
+              <a href="javascript:void(0)"
+                 (click)="openSeatIntake(item,117)">
+                {{item.TotalSanctioned}}
+              </a>
             </td>
 
-              <!--<td>
-                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <a href="javascript:void(0)" (click)="openViewSeatDetails(MyModel_ViewSeatDetails, item.CollegeTradeId, item.Collegename, item.TradeName, item.TradeSchemeName)" title="View"><i class="ti ti-eye"></i></a>
-                </div>
-              </td>-->
+            <td align="left">
+              <a href="javascript:void(0)"
+                 (click)="openSeatIntake(item,116)">
+                {{item.TotalRunning}}
+              </a>
+            </td>
+
+            <td align="left">
+              <a href="javascript:void(0)"
+                 (click)="openSeatIntake(item,115)">
+                {{item.TotalClosed}}
+              </a>
+            </td>
+            <!--<td align="left" >{{item.OriginalSeat}}</td>-->
+
+            <td align="left">{{item.DurationYear}}</td>
+
+
+
+            <!--<td class="">
+    <div *ngIf="item.IsAllow==1" class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
+            <!--<label class="block">Status</label>-->
+            <!--<label class="inline-flex items-right cursor-pointer toggleCheckBox Active statusActiveInActive">
+        <input class="sr-only peer" type="checkbox" id="Active" [checked]="item.IsAdmission == 1" (click)="onToggleChange($event , item.ID, item.IsAdmission)">
+        <span class="toggleIcon">
+          <span class="toggleTitle">{{ item.IsAdmission == 1 ? '' : '' }}</span>
+        </span>
+      </label>
+    </div>
+  </td>-->
+            <!--<td>
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <a href="javascript:void(0)" (click)="openViewSeatDetails(MyModel_ViewSeatDetails, item.CollegeTradeId, item.Collegename, item.TradeName, item.TradeSchemeName)" title="View"><i class="ti ti-eye"></i></a>
+    </div>
+  </td>-->
           </tr>
 
         </tbody>
