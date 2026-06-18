@@ -168,15 +168,17 @@ export class ApprenticeshipRegistrationReportList {
     }
   }
 
-  EditData(id: number) {
+  EditData(id: number,Flag:number=0) {
 
     sessionStorage.setItem('ApprenticeshipRegistrationReportPKID', id.toString());
+    sessionStorage.setItem('Flag', Flag.toString());
     this.routers.navigate(['/ApprenticeshipRegistrationReport']);
     console.log(sessionStorage);
   }
 
   GoToReportEntryPage() {
     sessionStorage.setItem('ApprenticeshipRegistrationReportPKID', '0');
+    sessionStorage.setItem('Flag', '0');
     this.routers.navigate(['/ApprenticeshipRegistrationReport']);
   }
 

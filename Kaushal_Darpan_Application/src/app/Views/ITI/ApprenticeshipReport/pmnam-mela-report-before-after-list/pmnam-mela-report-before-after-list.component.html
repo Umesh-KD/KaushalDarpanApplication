@@ -196,16 +196,16 @@
 
           <td>
             <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-              <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-pencil"></i></a>-->
+              <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID,1)"><i class="ti ti-pencil"></i></a>
               <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="View" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
-              <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
+              <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
               <a *ngIf="SSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
             </div>
           </td>
 
         </tr>
-        <tr class="font-bold bg-gray-100">
-          <td colspan="3" class="text-center">Total</td>
+        <tr *ngIf="DataList.length>0" class="font-bold bg-gray-100">
+          <td colspan="2" class="text-center">Total</td>
 
           <td *ngFor="let key of Object.keys(totals)">
             {{ totals[key] === 0 ? '' : totals[key] }}

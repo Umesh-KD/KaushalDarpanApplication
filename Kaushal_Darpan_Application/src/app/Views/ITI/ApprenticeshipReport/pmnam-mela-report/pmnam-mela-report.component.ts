@@ -32,6 +32,7 @@ export class PmnamMelaReportComponent {
   public DistrictID: number = 0;
   public FinancialYearID: number = 0;
   public BeforeMonth: number = 0;
+  public isedit:boolean=false
   public id: number = 0;
   public totals: any = [];
   public DataList: any = [];
@@ -362,8 +363,15 @@ export class PmnamMelaReportComponent {
       }, 200);
     }
   }
-  async EditData(row : any) {
+  async EditData(row : any,FLAG:number=0) {
     debugger;
+
+    if (FLAG > 0) {
+      this.isedit = true
+
+    } else {
+      this.isedit = false
+    }
     this.obj.PoliticalEstablishmentscontactedNo = row.PoliticalEstablishmentscontactedNo;
     this.obj.PrivateEstablishmentscontactedNo = row.PrivateEstablishmentscontactedNo;
     this.obj.PoliticalEstablishmentspartNo = row.PoliticalEstablishmentspartNo;
@@ -378,6 +386,7 @@ export class PmnamMelaReportComponent {
     this.obj.PmnamMelaDate = row.PmnamMelaDate;
     this.obj.FinancialYearID = row.FinancialYearID;
     this.obj.BeforeMonth = String(row.MonthID);
+
 
     if (this.obj.ID > 0) {
       this.OpenModalPopup(this.MyModel_ViewDetails);

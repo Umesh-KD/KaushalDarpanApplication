@@ -83,14 +83,21 @@ export class WorkshopProgressReportComponent {
 
 
     const Editid = sessionStorage.getItem('WorkshopProgressReportPKID');
+    const Flag = Number(sessionStorage.getItem('Flag'))??0;
     if (Editid != undefined && parseInt(Editid) > 0) {
-      this.IsDisable = true
+      if (Flag > 0) {
+        this.IsDisable = false
+      } else {
+        this.IsDisable = true
+        this.WrokshopReportFormGroup.disable(); 
+      }
+    
       this.GetReportDatabyID(parseInt(Editid));
-      this.WrokshopReportFormGroup.disable(); 
+
       console.log(Editid);
     }
 
-    if (this.SSOLoginDataModel.RoleID != 97)
+    if (this.SSOLoginDataModel.RoleID != 97 )
     {
       this.WrokshopReportFormGroup.disable(); // Disables all form controls
     }

@@ -87,13 +87,19 @@ export class NodalWorkshopReportComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     const Editid = sessionStorage.getItem('WorkshopID');
+    const flag = Number(sessionStorage.getItem('flag'))??0;
     debugger
     this.ID = Number(Editid)
     if (Editid != undefined && parseInt(Editid) > 0) {
       this.GetById(parseInt(Editid));
       this.GetByAAA(parseInt(Editid));
       console.log(Editid);
-      this.ScholarshipFormGroup.disable();
+      if (flag > 0) {
+        this.ScholarshipFormGroup.enable();
+      } else {
+        this.ScholarshipFormGroup.disable();
+      }
+    
     }
     if (
       this.sSOLoginDataModel.RoleID != 100

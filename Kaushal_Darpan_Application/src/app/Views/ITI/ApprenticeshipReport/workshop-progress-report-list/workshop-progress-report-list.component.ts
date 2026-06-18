@@ -181,15 +181,17 @@ export class WorkshopProgressReportListComponent {
     }
   }
 
-  EditData(id: number) {
+  EditData(id: number,Flag:number=0) {
 
     sessionStorage.setItem('WorkshopProgressReportPKID', id.toString());
+    sessionStorage.setItem('Flag', Flag.toString());
     this.routers.navigate(['/Workshop-progressReport']);
     console.log(sessionStorage);
   }
 
   GoToReportEntryPage() {
     sessionStorage.setItem('WorkshopProgressReportPKID', '0');
+    sessionStorage.setItem('Flag', '0');
     this.routers.navigate(['/Workshop-progressReport']);
   }
 

@@ -85,7 +85,7 @@ export class QuaterWorkshopReportComponent {
     await this.GetDistrictMatserDDL()
    await this.GetReportAllData();
     this.YearDropdownData('FinancialYear_IIP');
-    await this.calculateDynamicTotals(this.DataList);
+   /* await this.calculateDynamicTotals(this.DataList);*/
 
   }
 
@@ -98,6 +98,7 @@ export class QuaterWorkshopReportComponent {
       this.totals[key] = 0;
     });
 
+    
     // Sum values
     data.forEach(row => {
       this.includedKeys.forEach(key => {
@@ -113,6 +114,7 @@ export class QuaterWorkshopReportComponent {
   async GetReportAllData() {
 
     try {
+      this.DataList = [];
       // this.loaderService.requestStarted();
       var UserID: number = 0
       var DistrictID: number = 0
@@ -144,7 +146,7 @@ export class QuaterWorkshopReportComponent {
           debugger;
           if (data.Data.length > 0) {
             this.DataList = data.Data
-            this.calculateDynamicTotals(this.DataList);
+             this.calculateDynamicTotals(this.DataList);
           }
           else {
             this.DataList = [];
@@ -163,9 +165,10 @@ export class QuaterWorkshopReportComponent {
     }
   }
 
-  EditData(id: number) {
+  EditData(id: number,flag:number=0) {
       
     sessionStorage.setItem('WorkshopID', id.toString());
+    sessionStorage.setItem('flag', flag.toString());
     this.routers.navigate(['/NodalWorkshopReport']);
     console.log(sessionStorage);
   }
@@ -249,6 +252,7 @@ export class QuaterWorkshopReportComponent {
 
   GoToReportEntryPage() {
     sessionStorage.setItem('WorkshopID', '0');
+    sessionStorage.setItem('flag', '0');
     this.routers.navigate(['/NodalWorkshopReport']);
   }
 
