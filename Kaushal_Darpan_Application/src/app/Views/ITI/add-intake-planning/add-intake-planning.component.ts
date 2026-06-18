@@ -29,7 +29,10 @@ export class AddIntakePlanningComponent {
 
   public OrderNoList: any = [];
   public AcademicOrderNoList:any=[];
-  public FinancialOrderNoList:any=[];
+  public FinancialOrderNoList: any = [];
+
+  public filteredAcademicOrderNoList:any=[];
+  public filteredFinancialOrderNoList:any=[];
 
   public ItiTradeListAll: any = [];
   public ItiCollegesListAll: any = [];
@@ -37,6 +40,7 @@ export class AddIntakePlanningComponent {
   public ITIRemarkList: any = [];
   public SanctionedList: any = [];
   public FinancialYearList: any = [];
+  public StatusTypeList: any = [];
   public SeatIntakeID: number | null = null;
   public isCollege: boolean = false;
   public isTrade: boolean = false;
@@ -60,22 +64,24 @@ export class AddIntakePlanningComponent {
   ) { }
 
   async ngOnInit() {
+
     this.SeatIntakeFormGroup = this.formBuilder.group(
       {
         ddlCollege: ['', [DropdownValidators]],
-        ddlTradeLevel: ['', [DropdownValidators]],
+        //ddlTradeLevel: ['', [DropdownValidators]],
         ddlTrade: ['', [DropdownValidators]],
         // txtShift: ['', Validators.required],
         ddlLastSession: [''],
        /* ddlRemark: ['', [DropdownValidators]],*/
-        ddlTradeScheme: ['', [DropdownValidators]],
+        //ddlTradeScheme: ['', [DropdownValidators]],
+        ddlTradeScheme: [{ value: '', disabled: true }, [DropdownValidators]],
         txtUnitNo: ['', Validators.required],
         FinancialOrderDate: [{ value: '', disabled: false }],
         AdminOrderDate: [{ value: '', disabled: false }],
 
-
         ddlAdminSanctionedID: ['', ],
-        ddlFinancialSanctionID:['',],
+        ddlFinancialSanctionID: ['',],
+        ddlStatus:['0']
        /* ddlSanctioned: ['', [DropdownValidators]],*/
       /*  OrderDate: ['', Validators.required],*/
     /*    OrderNo: ['', Validators.required],*/
@@ -91,7 +97,9 @@ export class AddIntakePlanningComponent {
     console.log("SSOLoginDataModel", this.SSOLoginDataModel)
     await this.GetTradeAndColleges()
     await this.GetMasterDataForDDL()
+    this.request.TradeSchemeID = 2
     await this.GetCollegesListAll()
+    await this.GetMasterData();
 /*    await this.GetOrderDetailsList();*/
 
     this.SeatIntakeID = Number(this.route.snapshot.queryParamMap.get('id')?.toString());
@@ -182,6 +190,20 @@ export class AddIntakePlanningComponent {
     }
   }
 
+
+  async GetMasterData() {
+    try {
+      await this.commonFunctionService.GetCommonMasterDDLByType('Sanctioned')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StatusTypeList = data['Data'];          
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
   // async onSubmit() {
   //   debugger
 
@@ -251,6 +273,7 @@ async onSubmit() {
     this.request.DepartmentID = this.SSOLoginDataModel.DepartmentID;
     this.request.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
     this.request.CreatedBy = this.SSOLoginDataModel.UserID;
+    //this.request.TradeSchemeID
 
     this.request.CollegeID = this.ItiCollegesListAll.find(
       (e: any) => e.ID === Number(this.request.PlanningID)
@@ -362,7 +385,7 @@ async onSubmit() {
         this.request = data.Data;
       // this.request.TradeSchemeID = data.data['TradeSchemeID']
         this.SeatIntakeFormGroup.get('ddlCollege')?.disable();
-        this.SeatIntakeFormGroup.get('ddlTradeLevel')?.disable();
+        //this.SeatIntakeFormGroup.get('ddlTradeLevel')?.disable();
         this.SeatIntakeFormGroup.get('ddlTrade')?.disable();
         this.GetOrderDetailsList()
         this.request.TradeSchemeID = data.data['TradeSchemeID']
@@ -419,6 +442,42 @@ async onSubmit() {
   }
 
 
+  async GetOrderDetailsList_ByDate(type: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      var SelectedDate = this.request.AdminOrderDate;
+      if (type == 1) {
+        SelectedDate = this.request.AdminOrderDate;
+      }
+      else {
+        SelectedDate = this.request.FinancialOrderDate;
+      }
+      this.ItiSanctionOrderList.InstituteID = this.request.PlanningID
+      this.ItiSanctionOrderList.SelectedDate = SelectedDate
+      this.ItiSanctionOrderList.TypeID = type
+
+      await this.ScholarshipService.GetOrderDetailsList_ByDate(this.ItiSanctionOrderList).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        // this.request = data.Data[0];
+        this.OrderNoList = data.Data;
+        this.AcademicOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 1);
+        this.FinancialOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 2);
+
+        console.log(this.OrderNoList, "orderlist");
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
   async OnOrderChange( type: number) {
     debugger
     if (type == 1) {
@@ -435,6 +494,33 @@ async onSubmit() {
       );
 
       this.request.FinancialOrderDate = item?.OrderDate ?? '';
+    }
+  }
+
+  async OnOrderDateChange(type: number) {
+    debugger
+    if (type == 1) {
+
+      this.filteredAcademicOrderNoList = this.AcademicOrderNoList.filter(
+        (e: any) => e.OrderDate === this.request.AdminOrderDate
+      );
+
+      this.request.AdminSanctionedID =
+        this.filteredAcademicOrderNoList.length === 1
+          ? this.filteredAcademicOrderNoList[0].ID
+          : 0;
+    }
+
+    if (type == 2) {
+
+      this.filteredFinancialOrderNoList = this.FinancialOrderNoList.filter(
+        (e: any) => e.OrderDate === this.request.FinancialOrderDate
+      );
+
+      this.request.FinancialSanctionID =
+        this.filteredFinancialOrderNoList.length === 1
+          ? this.filteredFinancialOrderNoList[0].ID
+          : 0;
     }
   }
 
