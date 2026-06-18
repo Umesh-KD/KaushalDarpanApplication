@@ -14,6 +14,7 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { DTELaboratoryMasterService } from '../../../../Services/DTEInventory/DTELaboratoryMaster/dtelaboratory-master.service';
+import { DTEItemCategoriesMasterService } from '../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
 
 
 @Component({
@@ -57,6 +58,7 @@ export class bterinventoryIssueHistoryComponent {
     private modalService: NgbModal,
     private commonMasterService: CommonFunctionService,
     private LaboratoryMasterService: DTELaboratoryMasterService,
+    private itemCategoriesService: DTEItemCategoriesMasterService
   ) { }
 
   async ngOnInit() {
@@ -215,35 +217,55 @@ export class bterinventoryIssueHistoryComponent {
     }
   }
 
+  //async GetCategoryDDL() {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+  //    this.Searchrequest.TypeName = 'ItemList';
+
+  //    const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+
+  //    if (data && data.State === EnumStatus.Success) {
+  //      this.CategoryDDLList = [
+  //        { ItemId: 0, ItemCategoryName: 'Choose Category' },
+  //        ...data.Data
+  //      ];
+
+  //      this.Searchrequest.ItemId = 0;
+  //      //console.log('category list ==>', this.CategoryDDLList);
+  //    } else {
+  //      this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
+  //      this.Searchrequest.ItemId = 0;
+  //      this.toastr.error(data?.ErrorMessage || 'No category found.');
+  //    }
+  //  } catch (Ex) {
+  //    console.log('Error in GetCategoryDDL:', Ex);
+  //  } finally {
+  //    setTimeout(() => this.loaderService.requestEnded(), 200);
+  //  }
+  //}
+
   async GetCategoryDDL() {
-    
     try {
+      debugger
       this.loaderService.requestStarted();
-      this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequest.TypeName = 'ItemList';
-
-      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
-
-      if (data && data.State === EnumStatus.Success) {
-        this.CategoryDDLList = [
-          { ItemId: 0, ItemCategoryName: 'Choose Category' }, 
-          ...data.Data
-        ];
-
-        this.Searchrequest.ItemId = 0;
-        //console.log('category list ==>', this.CategoryDDLList);
-      } else {
-        this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
-        this.Searchrequest.ItemId = 0;
-        this.toastr.error(data?.ErrorMessage || 'No category found.');
-      }
-    } catch (Ex) {
-      console.log('Error in GetCategoryDDL:', Ex);
-    } finally {
-      setTimeout(() => this.loaderService.requestEnded(), 200);
+      await this.itemCategoriesService.GetAllData()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CategoryDDLList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
-    
+
   async ResetControl() {
     this.isSubmitted = false;
     this.Searchrequest = new inventoryIssueHistorySearchModel();

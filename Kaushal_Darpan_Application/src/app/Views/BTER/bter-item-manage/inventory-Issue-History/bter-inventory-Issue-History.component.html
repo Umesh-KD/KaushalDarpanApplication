@@ -22,13 +22,13 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff :</label>
           <!--<select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-                  (change)="GetTradeDDL()">
-            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-              {{ item.staffName }}
-            </option>
-          </select>-->
+            (change)="GetTradeDDL()">
+      <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+        {{ item.staffName }}
+      </option>
+    </select>-->
           <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
@@ -37,27 +37,36 @@
         </div>
 
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
-          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
-                  (change)="GetCategoryDDL()">
-            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
-              {{ item.TradeName }}
-            </option>
-          </select>
-        </div>-->
-
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
+    <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
+            (change)="GetCategoryDDL()">
+      <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+        {{ item.TradeName }}
+      </option>
+    </select>
+  </div>-->
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category :</label>
+    <select class="form-select" id="ItemId" [(ngModel)]="Searchrequest.ItemId">
+      <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
+        {{ item.Name }}
+      </option>
+    </select>
+  </div>-->
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
-            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
-              {{ item.ItemCategoryName }}
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Category :
+          </label>
+          <select class="form-select" id="ItemId" [(ngModel)]="Searchrequest.ItemId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
+              {{ item.Name }}
             </option>
           </select>
         </div>
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Equipment Status:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.status" (change)="GetAllData()">
+          <select class="form-select" id="status" [(ngModel)]="Searchrequest.status" (change)="GetAllData()">
             <option value="0">--- All ---</option>
             <option value="1">Serviceable</option>
             <option value="2">Unserviceable</option>
@@ -66,7 +75,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issue Status:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.IssueStatus" (change)="GetAllData()">
+          <select class="form-select" id="IssueStatus" [(ngModel)]="Searchrequest.IssueStatus" (change)="GetAllData()">
             <option value="0">--- All ---</option>
             <option value="1">Pending for Approve</option>
             <option value="2">Approved</option>

@@ -61,3 +61,9 @@ export class ITIAAA_SSODetailsModel {
 
 }
 
+
+export class ITIStudentAllotmentReportModel extends RequestBaseModel{
+
+  public InstituteID: string = '';
+
+}

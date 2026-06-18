@@ -10,6 +10,7 @@ import { ApprenticeshipEntry, ApprenticeshipReportEntity, ApprenticeshipSubmissi
 //import { ApprenticeshipReportEntity } from '../../../Models/ITI/ApprenticeshipReportModel';
 import { ITIApprenticeshipRegPassOutModel, ITIApprenticeshipWorkshopModel } from '../../../Models/ITI/ITIApprenticeshipWorkshopDataModel';
 import { ITITimeTableSearchModel } from '../../../Models/ITI/ITITimeTableModels';
+import { RequestBaseModel } from '../../../Models/RequestBaseModel';
 
 
 @Injectable({
@@ -305,5 +306,14 @@ export class ApprenticeReportServiceService {
       ).toPromise();
   }
 
+
+  public async GetITIStudentAllotmentReport(searchRequest: RequestBaseModel) {
+    const body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetITIStudentAllotmentReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }
