@@ -35,7 +35,7 @@ export class ITIMasterConfigurationComponent {
     { TabName: 'Serial Master', TabIcon: 'fa fa-list-ol', component: ITISerialMasterComponent },
    { TabName: 'Date Configuration', TabIcon: 'ti ti-calendar', component: ITIDateConfigurationComponent },
     { TabName: 'Signature Configuration', TabIcon: 'ti ti-writing-sign', component: ITISignatureMasterComponent },
-    { TabName: 'Content Visibility Configuration', TabIcon: 'ti ti-writing-sign', component: ContentVisiblityConfigurationComponent }
+    { TabName: 'Content Visibility Configuration', TabIcon: 'ti ti-clipboard-check', component: ContentVisiblityConfigurationComponent }
 
    // { TabName: 'Admission Calendar ', TabIcon: 'ti ti-calendar', component: AllotmentConfigurationComponent }
   ] as { TabName: string; TabIcon: string; component: Type<any> }[];

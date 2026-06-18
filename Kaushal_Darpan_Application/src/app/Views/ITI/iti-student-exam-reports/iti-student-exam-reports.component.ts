@@ -49,6 +49,7 @@ export class ItiStudentExamReportsComponent
   allSelected = false;
   ConfirmationText: string = 'Are you sure you want to mark the selected records as processed?';
   requestData: string = '';
+  isDashboardFlag = false;
 
   constructor(
     private AdminReportsService: ReportService,
@@ -67,9 +68,7 @@ export class ItiStudentExamReportsComponent
       this.instituteId = params.get('instituteId');
     });
 
-    if (this.id === '55' && !this.displayedColumns.includes('select')) {
-      this.displayedColumns.unshift('select');
-    }
+    
     if (this.id == enumExamStudentStatus.EligibleForExamination)
     {
 
@@ -190,11 +189,27 @@ export class ItiStudentExamReportsComponent
           data = JSON.parse(JSON.stringify(data));
           debugger;
           this.viewAdminDashboardList = data['Data'];
+
+          
+
           this.dataSource = new MatTableDataSource(this.viewAdminDashboardList);
           this.dataSource.sort = this.sort;
           this.totalRecords = this.viewAdminDashboardList.length;
           this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
           this.updateTable();
+         
+          if (this.viewAdminDashboardList.length > 0) {
+            const hasDashboard = this.viewAdminDashboardList.some(
+              (item: any) => Number(item.IsDashboard) === 1
+            );
+
+            this.isDashboardFlag = hasDashboard;
+          } else {
+            this.isDashboardFlag = false;
+          }
+          if (this.isDashboardFlag && this.id === '55' && !this.displayedColumns.includes('select')) {
+            this.displayedColumns.unshift('select');
+          }
         }, (error: any) => console.error(error)
         );
     }

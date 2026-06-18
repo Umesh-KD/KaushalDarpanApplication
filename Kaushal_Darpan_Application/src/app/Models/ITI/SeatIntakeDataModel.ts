@@ -27,7 +27,7 @@ export class SeatIntakeDataModel {
   public FinancialSanctionID: number = 0;
   public AdminSanctionedID: number = 0;
 
-  public IntakeStatus?: number = 0;
+  public Status?: number = 0;
 }
 
 export class SeatIntakeSearchModel {

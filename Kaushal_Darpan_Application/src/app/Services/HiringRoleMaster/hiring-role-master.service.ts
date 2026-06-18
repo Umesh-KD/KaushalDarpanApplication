@@ -129,6 +129,15 @@ export class HiringRoleMasterService {
       ).toPromise();
   }
 
+  public async GetOrderDetailsList_ByDate(searchRequest: ItiSanctionOrderList) {
+    var body = JSON.stringify(searchRequest);
+    debugger;
+    return await this.http.post(`${this.APIUrl}/GetOrderDetailsList_ByDate`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetsanctionOrderNotAssign(searchRequest: ItiSanctionOrderList) {
     var body = JSON.stringify(searchRequest);
     debugger;

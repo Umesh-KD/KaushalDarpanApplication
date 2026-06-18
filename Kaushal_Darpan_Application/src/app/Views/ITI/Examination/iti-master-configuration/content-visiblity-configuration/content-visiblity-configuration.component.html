@@ -4,7 +4,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5">
         <i class="ti ti-settings"></i>
-        Session Configuration
+        Visibility Configuration
       </b>
     </div>
 
@@ -13,8 +13,8 @@
         <thead class="bg-light/40">
           <tr>
             <th style="text-align:left;" width="80">Sr. No.</th>
+            <th style="text-align:left;">End Term Name</th>
             <th style="text-align:left;">Configuration Name</th>
-            <th style="text-align:left;">End Term</th>
             <th style="text-align:left;" width="150">Status</th>
           </tr>
         </thead>
@@ -24,11 +24,12 @@
             <td>{{i+1}}</td>
 
             <td>
-              {{row.SettingName}}
-            </td>
-            <td>
               {{row.EndTermName}}
             </td>
+            <td>
+              {{row.SettingName}}
+            </td>
+
 
             <td>
               <label class="inline-flex items-center cursor-pointer toggleCheckBox">
