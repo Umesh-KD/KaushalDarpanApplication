@@ -14,11 +14,25 @@
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Category: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="CategoryId" [(ngModel)]="Searchrequest.CategoryId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">{{item.Name}}</option>
+          </select>
+        </div>-->
+
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Equipment: <!--<span class="StarMarking">*</span>-->
           </label>
+          <!--<select class="form-select" id="EquipmentsId" [(ngModel)]="Searchrequest.EquipmentsId">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{item.Name}}</option>
+    </select>-->
           <select class="form-select" id="EquipmentsId" [(ngModel)]="Searchrequest.EquipmentsId">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{item.Name}}</option>

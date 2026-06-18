@@ -152,4 +152,8 @@ export class ItiSanctionOrderList {
   public OrderCopy: string = ''
 
 
+  public SelectedDate?: string = ''
+  public TypeID?: number = 0
 }
+
+
