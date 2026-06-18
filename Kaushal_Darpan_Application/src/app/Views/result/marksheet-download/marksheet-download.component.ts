@@ -115,7 +115,7 @@ export class MarksheetDownloadComponent {
   async getAllData() {
     //debugger
     // refresh
-    this.refreshValidationOfRollNoOnly(parseInt(this.downLoadFG.get('RollNo')?.value || 0) > 0 ? true : false);
+    this.refreshValidationOfRollNoOnly((this.searchRequest.RollNo ?? 0) > 0 ? true : false);
     //
     this.isSubmitted = true;
     if (this.downLoadFG.invalid) {
@@ -372,7 +372,7 @@ export class MarksheetDownloadComponent {
   }
 
   async createDynamicButtons(studentList: any[]) {
-    debugger
+    //debugger
     if (!studentList || studentList.length === 0) return;
     const totalStudents = studentList.length;
     const chunkSize = studentList[0].ChunkSize || 50; // Fallback to 50
