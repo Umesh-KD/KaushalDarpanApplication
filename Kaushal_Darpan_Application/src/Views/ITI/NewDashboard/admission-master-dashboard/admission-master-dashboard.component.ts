@@ -209,7 +209,7 @@ updatePlanningFlag = false;
       },
 
       title: {
-        text: 'District Institutional Split'
+        text: 'District Wise Institutions'
       },
 
       xAxis: {
@@ -222,7 +222,7 @@ updatePlanningFlag = false;
       yAxis: {
         min: 0,
         title: {
-          text: 'Total ITIs'
+          text: 'No of ITIs'
         }
       },
 
