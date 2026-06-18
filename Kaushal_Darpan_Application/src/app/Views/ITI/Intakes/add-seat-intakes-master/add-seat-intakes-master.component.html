@@ -178,7 +178,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Sanctioned (For Office Use Only):<span class="StarMarking">*</span>
               </label>
-              <select class="form-select" formControlName="ddlSanctioned" [(ngModel)]="request.SanctionedID">
+              <select class="form-select" formControlName="ddlSanctioned" [(ngModel)]="request.SanctionedID" (change)="onSanctionedChange()">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of SanctionedList" value="{{item.ID}}">{{item.Name}}</option>
               </select>
@@ -211,8 +211,11 @@
   </div>-->
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              <!-- <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Sanction No: <span class="StarMarking">*</span>
+              </label> -->
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+               {{orderNoLabel}}: <span class="StarMarking">*</span>
               </label>
               <input type="text" class="form-input" placeholder="Enter Unit No" formControlName="OrderNo" [(ngModel)]="request.OrderNo">
               <div *ngIf="isSubmitted && _SeatIntakeFormGroup.OrderNo.errors" class="text-danger">
@@ -227,8 +230,11 @@
 
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              <!-- <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Sanction  Date: <span class="StarMarking">*</span>
+              </label> -->
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+               {{orderDateLabel}}: <span class="StarMarking">*</span>
               </label>
               <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="OrderDate" [(ngModel)]="request.OrderDate">
               <div *ngIf="isSubmitted && _SeatIntakeFormGroup.OrderDate.errors" class="text-danger">
