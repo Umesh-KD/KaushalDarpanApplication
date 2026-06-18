@@ -5,7 +5,7 @@ import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-boo
 import { ToastrService } from 'ngx-toastr';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { DTEItemsSearchModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { AuctionListSearchModel, DTEItemsSearchModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -31,6 +31,7 @@ import { HttpClient } from '@angular/common/http';
 
 export class AuctionListComponent {
   public Searchrequest = new DTEItemsSearchModel()
+  public searchrequest = new AuctionListSearchModel()
   public request = new AuctionDetailsModel()
   public searchTradeRequest = new ITITradeSearchModel();
   public isLoading: boolean = false;
@@ -109,7 +110,7 @@ export class AuctionListComponent {
 
     await this.GetAllData();
     await this.GetEquipmentDDL();
-   /* await this.GetCategoryDDL();*/
+    await this.GetCategoryDDL();
     //await this.GetTradeDDL();
     //await this.GetCollegeDDL();
   }
@@ -174,32 +175,12 @@ export class AuctionListComponent {
     }
   }
 
-  //async GetEquipmentDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.equipmentsService.GetAllData(this.Searchrequest)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.State = data['State'];
-  //        this.Message = data['Message'];
-  //        this.ErrorMessage = data['ErrorMessage'];
-  //        this.EquipmentsDDLList = data['Data'];
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
+ 
   async GetEquipmentDDL() {
    
     try {
       this.loaderService.requestStarted();
-      this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -219,24 +200,24 @@ export class AuctionListComponent {
       }, 200);
     }
   }
-  //async GetCategoryDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.itemCategoriesService.GetAllData()
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.CategoryDDLList = data['Data'];
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
+  async GetCategoryDDL() {
+    try {
+      this.loaderService.requestStarted();
+      await this.itemCategoriesService.GetAllData()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CategoryDDLList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
   async ViewandUpdate(content: any, item:any) {
@@ -321,11 +302,11 @@ export class AuctionListComponent {
     debugger
     try {
       this.loaderService.requestStarted();
-      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
-      this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID;
-     /* this.Searchrequest.CategoryId = this.Searchrequest.CategoryId;*/
-      this.Searchrequest.EquipmentsId = this.Searchrequest.EquipmentsId;
-      await this.dteItemsMasterService.GetAllAuctionList(this.Searchrequest)
+      this.searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.searchrequest.CategoryId = this.searchrequest.CategoryId;
+      this.searchrequest.EquipmentsId = this.searchrequest.EquipmentsId;
+      await this.dteItemsMasterService.GetAllAuctionList(this.searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -372,8 +353,9 @@ export class AuctionListComponent {
 
   async ResetControl() {
     this.isSubmitted = false;
-    this.Searchrequest = new DTEItemsSearchModel();
+    this.searchrequest = new AuctionListSearchModel();
     this.ID = 0;
+    await this.GetAllData();
   }
 
   async btnDelete_OnClick(Id: number) {
