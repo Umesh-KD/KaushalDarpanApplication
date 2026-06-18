@@ -675,6 +675,7 @@ const routes: Routes = [
       { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
       { path: 'bter-lab-item-return', loadChildren: () => import('./Views/BTER/bter-item-manage/return-lab-item/return-lab-item.module').then(m => m.ReturnLabItemModule) },
       { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
+      { path: 'NotWorkingItemReport', loadChildren: () => import('./Views/BTER/bter-item-manage/NotWorkingItemReport/NotWorkingItemReport.module').then(m => m.NotWorkingItemReportModule) },
       { path: 'bter-inventory_Issue-report', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-INV_Issue-report/bter-INV_Issue-report.module').then(m => m.bterINVIssuereportModule) },
       { path: 'bter-staff-inventory-details', loadChildren: () => import('./Views/BTER/bter-item-manage/staff-inventory-details/staff-inventory-details.module').then(m => m.StaffInventoryDetailsModule), title: 'Staff Inventory Details' },
       { path: 'approve-issued-items', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/approve-issued-items/approve-issued-items.module').then(m => m.ApproveIssuedItemsModule), title: 'Approve Issued Items' },
