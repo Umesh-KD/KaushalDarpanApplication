@@ -373,7 +373,7 @@ public AddStaffBasicDetailFromGroup!: FormGroup;
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('PostMaster', -1)
+      await this.commonMasterService.GetCommonMasterData('PostMaster', 2)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];

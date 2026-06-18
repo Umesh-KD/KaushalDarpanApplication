@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/internal/operators/catchError';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { DTEItemsSaveModel, DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTELabMasterModel, ApproveIssuedItemsDataModel, DTEItemsSearchModel4Lab, AuctionListSearchModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
+import { notWorkingItemModel } from '../../../Models/DTEInventory/NotWorkingItemModel';
 
 @Injectable({
   providedIn: 'root'
@@ -379,6 +380,14 @@ export class DteItemsMasterService {
   public async MarkAuctionedItems_SR6(request: AuctionDetailsModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/MarkAuctionedItems_SR6`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllNotWorkingItemReport(searchRequest: notWorkingItemModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllNotWorkingItemReport`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
