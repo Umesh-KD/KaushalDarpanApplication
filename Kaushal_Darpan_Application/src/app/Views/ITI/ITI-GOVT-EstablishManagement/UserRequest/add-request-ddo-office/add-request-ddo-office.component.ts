@@ -881,7 +881,8 @@ export class AddRequestDDOOfficeComponent {
     try {
       const request = {
         UserID: StaffID,
-        Action: 'StaffDetailsByStaffID'
+        Action: 'StaffDetailsByStaffID',
+        InstituteID: this.sSOLoginDataModel.InstituteID
       };
 
       const response: any = await this.ITIGovtEMStaffMaster.ITI_EM_DropdownGetData(request);

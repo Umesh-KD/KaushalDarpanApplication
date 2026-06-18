@@ -12,6 +12,7 @@ import { EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service'; 
+import { ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
 
 @Component({
   selector: 'app-college-trade-master',
@@ -25,6 +26,7 @@ export class CollegeTradeMasterComponent {
   groupForm!: FormGroup;
   public Message: any = [];
   public popUpsearchRequest = new SeatIntakePopUpSearchModel();
+  public tradeSearchRequest = new ItiTradeSearchModel()
   public ErrorMessage: any = [];
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -70,6 +72,7 @@ export class CollegeTradeMasterComponent {
     private Swal2: SweetAlert2,
     private route: ActivatedRoute,
     private modalService: NgbModal,
+    private router: Router
   ) { }
 
 
@@ -140,14 +143,13 @@ export class CollegeTradeMasterComponent {
 
     try {
       this.searchRequest.TradeID = 0
-      this.searchRequest.Action = "_ITITrade";
+      this.tradeSearchRequest.action = "_getAllData";
       this.loaderService.requestStarted();
-      await this.ITICollegeTradeService.GetTradeCollegesMaster(this.searchRequest)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.ListITITrade = data['Data'];
-          console.log(this.ListITITrade, "ListITITrade")
-        }, error => console.error(error));
+      await this.commonFunctionService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.ListITITrade = data.Data
+        console.log(this.ListITITrade, "ItiTradeListAll")
+      })
     }
     catch (Ex) {
       console.log(Ex);
@@ -462,5 +464,13 @@ export class CollegeTradeMasterComponent {
     }
 
   }
-
+  openSeatIntake(item: any, sanctionedId: number): void {
+    this.router.navigate(['/SeatIntakesMasterList'], {
+      queryParams: {
+        CollegeID: item.CollegeID,
+        TradeID: item.TradeID,
+        SanctionedID: sanctionedId
+      }
+    });
+  }
 }

@@ -174,8 +174,8 @@ export class ApplyDuplicateDocComponent implements OnInit {
       }, 200);
     }
   }
-  FeeAmount(MasterCode: string): void {
-    debugger
+  FeeAmount(MasterCode: string):void {
+   // debugger
     // 1336 ->marksheet 
     //1337 -> migration
     
@@ -189,17 +189,19 @@ export class ApplyDuplicateDocComponent implements OnInit {
       this.isMigration=true;
     }
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
-      
+      //debugger
       switch (MasterCode) {
         case 'DuplicateDocStudentWise':
           this.FeesAmount = data['Data'];
-          this.request.FeeAmount = this.FeesAmount[0].FeeAmount;
-          // this.request.ApplicationNo=this.FeesAmount[0].ApplicationNo;
-          // this.request.SemesterID=this.FeesAmount[0].SemesterID;
-          this.request.ConfigurationTypeID=this.FeesAmount[0].TypeID;
-          // this.GrievanceFormGroup.get('FeeAmount')?.setValue(this.FeesAmount[0].FeeAmount);
-          // this.GrievanceFormGroup.get('ApplicationNo')?.setValue(this.FeesAmount[0].ApplicationNo);
-          // this.GrievanceFormGroup.get('SemesterID')?.setValue(this.FeesAmount[0].SemesterID);
+          if (this.FeesAmount && this.FeesAmount.length > 0 ) {
+            this.request.FeeAmount = this.FeesAmount[0].FeeAmount || 0;
+            // this.request.ApplicationNo=this.FeesAmount[0].ApplicationNo;
+            // this.request.SemesterID=this.FeesAmount[0].SemesterID;
+            this.request.ConfigurationTypeID = this.FeesAmount[0].TypeID || 0;
+            // this.GrievanceFormGroup.get('FeeAmount')?.setValue(this.FeesAmount[0].FeeAmount);
+            // this.GrievanceFormGroup.get('ApplicationNo')?.setValue(this.FeesAmount[0].ApplicationNo);
+            // this.GrievanceFormGroup.get('SemesterID')?.setValue(this.FeesAmount[0].SemesterID);
+          }
           break;
         default:
           break;
@@ -280,7 +282,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
 }
 
     async VerifyOTP() {
-        debugger
+       // debugger
         if (this.OTP.length > 0) {
           if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
     
@@ -329,11 +331,9 @@ export class ApplyDuplicateDocComponent implements OnInit {
                   });
                 return  
               }
-    
-    
+        
               const formValues = this.GrievanceFormGroup.value;
-  
-    
+              
               this.isLoading = true;
               this.loaderService.requestStarted();
               await this.PayApplicationFees();
@@ -359,8 +359,6 @@ export class ApplyDuplicateDocComponent implements OnInit {
     async SendOTP(isResend?: boolean) {
     try {
       //category validation
-
-
       this.GeneratedOTP = "";
       await this.sMSMailService.SendMessage(this.MobileNo, "OTP")
         .then((data: any) => {
@@ -508,6 +506,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
 
   async GetStudentApplyDuplicateDocumentList() {
+   // debugger
     try {
       this.request.StudentID= this.sSOLoginDataModel.StudentID;
       this.loaderService.requestStarted();
@@ -594,11 +593,12 @@ export class ApplyDuplicateDocComponent implements OnInit {
     //Set Parameters for emitra
     this.emitraRequest.Amount = Number(this.request.FeeAmount);
     this.emitraRequest.ApplicationIdEnc = this.request.ApplicationID.toString();
-    this.emitraRequest.ServiceID ="2920";
+    this.emitraRequest.ServiceID = (this.request.ServiceID).toString();  //"2920";
     // -- this.request.ServiceID.toString();
     this.emitraRequest.ID = this.request?.UniqueServiceID ?? 0;
     this.emitraRequest.UserName = this.request.StudentName;
-    this.emitraRequest.MobileNo = this.request.MobileNo;
+    //this.emitraRequest.MobileNo = this.request.MobileNo;
+    this.emitraRequest.MobileNo = GlobalConstants.DefaultMobileNo; //this.sSOLoginDataModel.Mobileno;
     this.emitraRequest.StudentID = this.request.StudentID;
     this.emitraRequest.SemesterID = this.GrievanceFormGroup.value.SemesterID;
     this.emitraRequest.ExamStudentStatus = 0;
@@ -647,7 +647,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
 
   RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any) {
-    
+    //debugger
     var form = document.createElement("form");
     form.setAttribute("method", "post");
     form.setAttribute("action", pServiceURL);
