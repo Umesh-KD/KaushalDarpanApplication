@@ -8,7 +8,7 @@
       <a routerLink="/ItiCampusPostList" class="text-sm font-medium text-slate-700" aria-current="page">Campus Post List</a>
     </div>
   </div>
-  <a routerLink="/AddItiCampusPost" class="btn bg-info text-white btn-sm">Add New Campus Post</a>
+  <a *ngIf="_EnumRole.ITI_Placement_TPO==this.sSOLoginDataModel.RoleID || _EnumRole.ITI_Placement_Admin==this.sSOLoginDataModel.RoleID" routerLink="/AddItiCampusPost" class="btn bg-info text-white btn-sm">Add New Campus Post</a>
 </div>
 <!-- Page Title End -->
 <div class="card">
