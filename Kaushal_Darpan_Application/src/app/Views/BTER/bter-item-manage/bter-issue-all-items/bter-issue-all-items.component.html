@@ -11,12 +11,95 @@
 <div class="card">
   <div class="card-body p-5">
 
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5">
-        <i class="ti ti-list"></i> List of Issued Items
-      </b>
+    <!-- Search Filter -->
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">
+          <i class="ti ti-search"></i> Enter Search Criteria
+        </b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Category : <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ItemId" [(ngModel)]="Searchrequests.ItemId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
+              {{ item.Name }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Equipment: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="EquipmentsId" [(ngModel)]="Searchrequests.EquipmentsId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button"
+                  class="btn bg-info text-white mt-6"
+                  (click)="GetAllDataIssuedItems()">
+            Search
+          </button>
+
+          <button type="button"
+                  class="btn bg-danger text-white mt-6 ms-2"
+                  (click)="ResetControl()">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+      </div>
     </div>
 
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+
+      <b class="text-1xl-5">
+        <i class="ti ti-list"></i> Search Results
+      </b>
+
+      <div class="flex gap-2">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>
+
+      </div>
+
+      <div class="flex gap-2">
+        <a href="javascript:void(0);"
+           (click)="exportToPdf()"
+           class="btn bg-danger btn-sm text-white">
+          <i class="ti ti-file-type-pdf"></i> Export PDF
+        </a>
+      </div>
+
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+ 
     <div class="overflow-x-auto">
       <table class="table table-border w-full table-auto">
 
@@ -33,58 +116,37 @@
             <th>Issue Date</th>
             <th>Indent No</th>
             <th>Return Date</th>
-            <th>Equipment Status On Return</th>
+            <th>Equipment Status</th>
             <th>Issue Document</th>
             <th>Status</th>
-            <th>Approval Status</th>
           </tr>
         </thead>
 
         <tbody>
 
-          <tr *ngFor="let item of ItemMasterList; let idx=index">
-
-            <td>{{idx + 1}}</td>
-
+          <!--<tr *ngFor="let item of ItemMasterList; let idx=index">-->
+          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td>{{idx+1}}</td>
             <td>{{item.Name}}</td>
 
             <td>
-              <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
-                {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+              <span [ngClass]="item.IsConsumable==1 ? 'badge-consumable' : 'badge-permanent'">
+                {{item.IsConsumable==1 ? 'Consumable' : 'Permanent'}}
               </span>
             </td>
 
             <td>{{item.ItemCategoryName}}</td>
-
             <td>{{item.EquipmentName}}</td>
-
             <td>{{item.ItemCode}}</td>
-
             <td>{{item.EquipmentsCode}}</td>
-
             <td>{{item.Quantity}}</td>
-
-            <td>
-              {{item.IssueDate | date:'dd-MM-yyyy'}}
-            </td>
-
+            <td>{{item.IssueDate | date:'dd-MM-yyyy'}}</td>
             <td>{{item.IndentNo}}</td>
+            <td>{{item.ReturnDate | date:'dd-MM-yyyy'}}</td>
 
             <td>
-              {{item.ReturnDate | date:'dd-MM-yyyy'}}
-            </td>
-
-            <td>
-              <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0
-                ? 'badge-working'
-                : 'badge-notworking'">
-
-                {{
-                item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0
-                ? 'Working'
-                : 'Not Working'
-                }}
-
+              <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'badge-working':'badge-notworking'">
+                {{item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working':'Not Working'}}
               </span>
             </td>
 
@@ -93,49 +155,23 @@
                  [href]="appsettingConfig.StaticFileRootPathURL + '/Students/' + item.IssueItemDocument"
                  target="_blank"
                  class="btn bg-primary text-white btn-sm">
-
                 <i class="ti ti-eye"></i>
               </a>
             </td>
 
             <td>
               <span [ngClass]="{
-                  'InvStatus-issued': item.InvStatus === 0,
-                  'InvStatus-returned': item.InvStatus === 1
-                }">
-
-                {{
-                item.InvStatus === 0
-                ? 'Issued'
-                : item.InvStatus === 1
-                ? 'Returned'
-                : 'Unknown'
-                }}
-
-              </span>
-            </td>
-
-            <td>
-              <span [ngClass]="{
-                  'InvStatus-issued': item.IssueStatus === 1,
-                  'InvStatus-returned': item.IssueStatus === 2
-                }">
-
-                {{
-                item.IssueStatus === 1
-                ? 'Pending at Store Incharge'
-                : item.IssueStatus === 2
-                ? 'Approved'
-                : 'Unknown'
-                }}
-
+                'InvStatus-issued': item.InvStatus===0,
+                'InvStatus-returned': item.InvStatus===1
+              }">
+                {{item.InvStatus===0 ? 'Issued' : 'Returned'}}
               </span>
             </td>
 
           </tr>
 
-          <tr *ngIf="ItemMasterList?.length == 0">
-            <td colspan="15" class="text-center">
+          <tr *ngIf="ItemMasterList?.length==0">
+            <td colspan="14" class="text-center">
               No Record Found
             </td>
           </tr>

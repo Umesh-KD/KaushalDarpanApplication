@@ -57,7 +57,6 @@ export class StaffTrainingDashboardComponent {
 
  
   async GetAllData() {
-    debugger
     this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -77,9 +76,6 @@ export class StaffTrainingDashboardComponent {
           this.viewNewStaffTrainingDashboard = this.viewDashboard.filter(s => s.ListType === 'NewTraining');
         }, (error: any) => console.error(error)
         );
-
-
-
     }
     catch (ex) {
       console.log(ex);
