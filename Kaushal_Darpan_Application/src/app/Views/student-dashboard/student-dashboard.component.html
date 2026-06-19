@@ -108,54 +108,63 @@
 
   <div class="qa-scroll">
 
-   <a class="qa-card" [routerLink]="['/StudentPaidFees']" [queryParams]="{ status: 'PaidFees',filter: 1 }"]>
-  <span class="qa-ico c-red">
-    <i class="ti ti-receipt"></i>
-  </span>
-  <span class="qa-label t-red">Pay Fees</span>
-</a>
+    <a class="qa-card" [routerLink]="['/StudentPaidFees']" [queryParams]="{ status: 'PaidFees',filter: 1 }" ]>
+      <span class="qa-ico c-red">
+        <i class="ti ti-receipt"></i>
+      </span>
+      <span class="qa-label t-red">Pay Fees</span>
+    </a>
 
-<a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/ApplyForHostel']"  [queryParams]="{ id: 1 }">
-  <span class="qa-ico c-green">
-    <i class="ti ti-bed"></i>
-  </span>
-  <span class="qa-label t-green">Apply Hostel</span>
-</a>
+    <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/ApplyForHostel']" [queryParams]="{ id: 1 }">
+      <span class="qa-ico c-green">
+        <i class="ti ti-bed"></i>
+      </span>
+      <span class="qa-label t-green">Apply Hostel</span>
+    </a>
 
-<a class="qa-card" [routerLink]="['/studentplacementconsent']">
-  <span class="qa-ico c-blue">
-    <i class="ti ti-briefcase"></i>
-  </span>
-  <span class="qa-label t-blue">Placement Registration</span>
-</a>
+    <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/studentplacementconsent']">
+      <span class="qa-ico c-blue">
+        <i class="ti ti-briefcase"></i>
+      </span>
+      <span class="qa-label t-blue">Placement Registration</span>
+    </a>
 
-<a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/StaffTrainingConsent']">
-  <span class="qa-ico c-purple">
-    <i class="ti ti-school"></i>
-  </span>
-  <span class="qa-label t-purple">IIP Registration</span>
-</a>
+    <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" class="qa-card" [routerLink]="['/itistudentplacementconsent']">
+      <span class="qa-ico c-blue">
+        <i class="ti ti-briefcase"></i>
+      </span>
+      <span class="qa-label t-blue">Placement Registration</span>
+    </a>
 
-<a class="qa-card">
-  <span class="qa-ico c-orange">
-    <i class="ti ti-edit-circle"></i>
-  </span>
-  <span class="qa-label t-orange">Revaluation Apply</span>
-</a>
+    <a *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/StaffTrainingConsent']">
+      <span class="qa-ico c-purple">
+        <i class="ti ti-school"></i>
+      </span>
+      <span class="qa-label t-purple">IIP Registration</span>
+    </a>
 
-<a class="qa-card" [routerLink]="['/StudentEnrollmentCancelation']">
-  <span class="qa-ico c-teal">
-    <i class="ti ti-file-x"></i>
-  </span>
-  <span class="qa-label t-teal">Enrollment Cancellation</span>
-</a>
+    <a class="qa-card">
+      <span class="qa-ico c-orange">
+        <i class="ti ti-edit-circle"></i>
+      </span>
+      <span class="qa-label t-orange">Revaluation Apply</span>
+    </a>
 
-<a class="qa-card">
-  <span class="qa-ico c-indigo">
-    <i class="ti ti-file-text"></i>
-  </span>
-  <span class="qa-label t-indigo">View Result</span>
-</a>
+    <a  *ngIf="this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" class="qa-card" [routerLink]="['/StudentEnrollmentCancelation']">
+      <span class="qa-ico c-teal">
+        <i class="ti ti-file-x"></i>
+      </span>
+      <span class="qa-label t-teal">Enrollment Cancellation</span>
+    </a>
+
+
+
+    <a class="qa-card">
+      <span class="qa-ico c-indigo">
+        <i class="ti ti-file-text"></i>
+      </span>
+      <span class="qa-label t-indigo">View Result</span>
+    </a>
 
   </div>
 </div>
