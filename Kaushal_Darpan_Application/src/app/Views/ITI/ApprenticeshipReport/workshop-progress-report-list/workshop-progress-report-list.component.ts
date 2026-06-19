@@ -345,8 +345,26 @@ export class WorkshopProgressReportListComponent {
 
   async DownloadWorkshopProgressReport() {
     try {
+
+      if (this.SSOLoginDataModel.RoleID == 97) {
+        this.DistrictID = this.SSOLoginDataModel.DistrictID
+      }
+
+      let obj = {
+        EndTermID: this.SSOLoginDataModel.EndTermID,
+        DepartmentID: this.SSOLoginDataModel.DepartmentID,
+        RoleID: this.SSOLoginDataModel.RoleID,
+        Createdby: this._Userid,
+        SearchDistrictID: this.DistrictID,
+        FinancialYearID: this.FinancialYearID,
+        BeforeMonth: this.BeforeMonth || 0,
+        ZoneID: this.ZoneID
+      };
+
+
+
       this.loaderService.requestStarted();
-      await this.reportService.GetWorkshopProgress(this.searchRequest)
+      await this.reportService.GetWorkshopProgress(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log("DownloadWorkshopProgressReport", data)

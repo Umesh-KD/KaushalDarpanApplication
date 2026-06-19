@@ -433,13 +433,10 @@ export class PmnamMelaReportComponent {
     try {
       debugger;
       var UserID: number = 0
-      
-      if (this.ssoLoginDataModel.RoleID === 97) {
-        UserID = this.ssoLoginDataModel.UserID;   
-      } else if (this.ssoLoginDataModel.RoleID === 212) {
-        UserID = 0;   
+      if (this.ssoLoginDataModel.RoleID != 97) {
+        UserID = 0
       } else {
-        UserID = 0;   
+        UserID = this.ssoLoginDataModel.UserID
       }
 
       let obj = {
@@ -447,6 +444,10 @@ export class PmnamMelaReportComponent {
         DepartmentID: this.ssoLoginDataModel.DepartmentID,
         RoleID: this.ssoLoginDataModel.RoleID,
         UserID: UserID,
+        DistrictID: this.DistrictID,
+        FinancialYearID: this.FinancialYearID,
+        BeforeMonth: this.BeforeMonth,
+        ZoneID: this.obj.ZoneID
       };
 
       this.loaderService.requestStarted();
