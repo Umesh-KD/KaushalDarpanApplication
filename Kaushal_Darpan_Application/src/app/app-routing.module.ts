@@ -672,6 +672,7 @@ const routes: Routes = [
       { path: 'DTELabInchargeStockRegister', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/dteitems-master/dte-lab-incharge-stock-register/dte-lab-incharge-stock-register-module').then(m => m.DTELabInchargeStockRegisterModule) },
 
       { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
+      { path: 'bter-issue-all-items', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-all-items/bter-issue-all-items.module').then(m => m.AddBterIssueAllItemModule) },
       { path: 'bter-lab-master', loadChildren: () => import('./Views/BTER/bter-item-manage/dtelaboratory-master/dtelaboratory-master-module').then(m => m.DteLaboratoryMasterModule) },
       { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
       { path: 'bter-lab-item-return', loadChildren: () => import('./Views/BTER/bter-item-manage/return-lab-item/return-lab-item.module').then(m => m.ReturnLabItemModule) },
@@ -1787,11 +1788,11 @@ const routes: Routes = [
       { path: 'StaffTrainingDashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffTrainingDashboard/StaffTrainingDashboard.module').then(m => m.StaffTrainingDashboardModule) },
       { path: 'BterTeacherDashboard', loadChildren: () => import('./Views/bter-teacher-dashboard/bter-teacher-dashboard.module').then(m => m.BterTeacherDashboardModule) },
 
-      { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule) },
+      { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule), title:'Master Dashboard' },
       { path: 'InventoryDashboard', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/InventoryDashboard/InventoryDashboard.module').then(m => m.InventoryDashboardModule) },
       { path: 'ITICommanDashboard', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI_CommanDashboard/ITI_CommanDashboard.module').then(m => m.ITI_CommanDashboardModule) },
 
-      { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule) },
+      { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule), title: 'Admission Dashboard' },
       { path: 'InventoryItemReport', loadChildren: () => import('./Views/ITI/inventory-item-report/inventory-item-report.module').then(m => m.InventoryItemReportModule) },
       { path: 'ConsolatedTradeReport', loadChildren: () => import('./Views/ITI/consolated-iti-trade/consolated-iti-trade.module').then(m => m.ConsolatedItiTradeModule) },
 

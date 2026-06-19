@@ -38,6 +38,7 @@ export class EstablishmentReportBTERComponent {
 
   public Table_SearchText: string = '';
   public act: string = '';
+  public status: number = 0;
 
   //table feature default
   modalReference: NgbModalRef | undefined;
@@ -65,6 +66,7 @@ export class EstablishmentReportBTERComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.act = this.activatedRoute.snapshot.queryParamMap.get("act")?.toString() || '';
+    this.status = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString()) || 0;
 
     await this.GetDDLMasterData();
     await this.GetStaffProfileStatusList();
@@ -82,6 +84,11 @@ export class EstablishmentReportBTERComponent {
     this.searchRequest.GuestHouseID = this.sSOLoginDataModel.GuestHouseID;
     this.searchRequest.InstitutionManagementTypeID = this.searchRequest.InstitutionManagementTypeID
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+
+    if(this.status>0) {
+      this.searchRequest.OfficeID = this.status;
+    }
+
     try {
       this.loaderService.requestStarted();
       await this.bterEstablishManagementService.GetEstablishmentReportData(this.searchRequest)

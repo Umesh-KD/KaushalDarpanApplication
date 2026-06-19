@@ -793,6 +793,7 @@ export class EM_TransferSystemSearchModel {
   public RelievingDate?: string = '';
   public RoleID: number = 0;
   public RelievingTimeID: number = 0;
+  public act?: string = '';
 }
   
 

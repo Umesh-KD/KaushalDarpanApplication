@@ -32,15 +32,20 @@ export class ITI_CommanDashboardComponent {
   public PlanningDashboard: any[] = [];
   public InstructorDashboard: any[] = [];
   public AttendanceDashboard: any[] = [];
+  public InspectionDashboard: any[] = [];
   public viewTransferDashboard: any[] = [];
   public viewRelievingDashboard: any[] = [];
   public StaffMasterList: any[] = [];
   public PlacementdashboardList: any[] = [];
+  public adminInspectionDashboard: any[] = [];
+  public principalInspectionDashboard: any[] = [];
   public sSOLoginDataModel = new SSOLoginDataModel();
   public State: number = 0;
   public SuccessMessage: string = '';
   public ErrorMessage: string = '';
   public searchRequest = new DashboardRequestModel();
+
+  _EnumRole = EnumRole
   
   public staffSearchRequest = new StaffMasterSearchModel();
 
@@ -61,6 +66,7 @@ export class ITI_CommanDashboardComponent {
   async ngOnInit() {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    
     await this.GetDashboardData();
   }
 
@@ -87,9 +93,18 @@ export class ITI_CommanDashboardComponent {
           this.AttendanceDashboard = data['Data']['Table2'];
           this.InventoryList = data['Data']['Table3'];
           this.PlacementdashboardList = data['Data']['Table4'];
-         
-  
-          
+          this.InspectionDashboard = data['Data']['Table5'];
+
+
+
+          this.adminInspectionDashboard =
+            this.InspectionDashboard.filter(
+              (x: any) => x.TYPE === 'ItiInspectionDetailAdmin'
+            );
+          this.principalInspectionDashboard =
+            this.InspectionDashboard.filter(
+              (x: any) => x.TYPE === 'ItiInspectionDetailPrinciple'
+            );
           //this.viewTransferDashboard = this.viewDashboard.filter(s => s.ListType === 'Transfer');
           //this.viewRelievingDashboard = this.viewDashboard.filter(s => s.ListType === 'Relieving');
         }, (error: any) => console.error(error)
@@ -104,6 +119,9 @@ export class ITI_CommanDashboardComponent {
       }, 200);
     }
   }
+
+
+
   parseParams(params: string): any {
     if (!params) return {};
     return params.split('&').reduce((acc: any, pair: string) => {

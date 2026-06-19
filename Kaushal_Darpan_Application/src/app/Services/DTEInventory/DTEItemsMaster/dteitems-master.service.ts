@@ -392,4 +392,12 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetInventoryAllIssueItemList(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInventoryAllIssueItemList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

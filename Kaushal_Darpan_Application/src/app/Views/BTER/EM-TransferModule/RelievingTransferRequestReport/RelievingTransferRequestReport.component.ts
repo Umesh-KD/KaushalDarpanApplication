@@ -82,6 +82,7 @@ export class RelievingTransferRequestReportComponent {
   EnumTransferSystemStatus = EnumTransferSystemStatus;
   public isShowDate: boolean = false;
   public RelievingTimeID: number = 0;
+  public act: string = '';
   @ViewChild('Modal_StaffDetailsViewModal') childComponentViewStaffProfile!: ViewStaffProfileModalComponent;
   todayDate: string = new Date(
     new Date().getTime() - new Date().getTimezoneOffset() * 60000
@@ -103,7 +104,6 @@ export class RelievingTransferRequestReportComponent {
   ) { }
 
   async ngOnInit() {
-    debugger
     this.AddTrainingDetailsFromGroup = this.formBuilder.group({
       OrganizinglnstituteName: ['', [Validators.required]],
       CourseType: ['', [DropdownValidators1]],
@@ -123,7 +123,10 @@ export class RelievingTransferRequestReportComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.ID = Number(
       this.activatedRoute.snapshot.queryParamMap.get('status')
-    );
+    ) || 0;
+
+    this.act = this.activatedRoute.snapshot.queryParamMap.get('act') || '';
+
     this.Status = "0";
 
     if (this.sSOLoginDataModel.RoleID == this._EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == this._EnumRole.Principal) {
@@ -205,7 +208,6 @@ export class RelievingTransferRequestReportComponent {
   }
 
   async EM_TransferSystem_GetData() {
-    debugger
     try {
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID
       // this.searchRequest.Action = "EM_TransferProcessListmain";
@@ -213,6 +215,8 @@ export class RelievingTransferRequestReportComponent {
       this.searchRequest.CategoryID = this.SearchCategoryID;
       this.searchRequest.EmployeeType = this.SearchEmployeeType;
       this.searchRequest.InstituteID = this.SearchInstituteID;
+      this.searchRequest.act = this.act;
+
       await this.staffServiceDetailsService.GetRelievingTransferRequestList(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
@@ -285,8 +289,6 @@ export class RelievingTransferRequestReportComponent {
 
   async onRetievingAction(model: any, TransferSystemID: number, StaffID: number) {
     try {
-      debugger
-
       this.modelTsId = TransferSystemID;
       this.modelStaffId = StaffID;
       this.loaderService.requestStarted();
@@ -312,7 +314,6 @@ export class RelievingTransferRequestReportComponent {
 
 
   async TransferSystemRetievingUpdateStatus() {
-    debugger
     try {
 
       if (!this.updateStatus || this.updateStatus == 0) {
@@ -394,7 +395,6 @@ export class RelievingTransferRequestReportComponent {
 
 
   async onFilechange(event: any, Name: any) {
-    debugger
     try {
       this.file = event.target.files[0];
       if (this.file) {
@@ -460,7 +460,6 @@ export class RelievingTransferRequestReportComponent {
   }
 
   checkApproveStatus() {
-    debugger
     this.isAnyApproved = this.EM_TransferSystemEXTList?.some(
       (item: any) => item.FinalApproveStatus == EnumTransferSystemStatus.Approved
     );
@@ -486,7 +485,6 @@ export class RelievingTransferRequestReportComponent {
 
   async RelievingLetter(TransferSystemID: number) {
     try {
-      debugger
       this.searchRequest.TransferSystemID = TransferSystemID;
       this.loaderService.requestStarted();
 
@@ -530,7 +528,6 @@ export class RelievingTransferRequestReportComponent {
 
 
   async OpenStaffProfileViewModal(StaffID: number, UserID: number) {
-    debugger
     this.childComponentViewStaffProfile.StaffID = StaffID;
     this.childComponentViewStaffProfile.UserID = UserID;
     await this.childComponentViewStaffProfile.OpenStaffProfileViewModal();

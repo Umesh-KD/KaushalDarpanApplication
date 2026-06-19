@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { EnumDeploymentStatus, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumDeploymentStatus, EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionSearchModel, ConsentModel, CenterMasterDDLDataModel, UpdateConsentModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -40,6 +40,8 @@ export class ITIConsentUpdateComponent {
   public consentDeploy = new ConsentModel();
   public UpdateConsentRequest = new UpdateConsentModel();
   emitraRequest = new EmitraRequestDetails();
+  _EnumRole = EnumRole;
+
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';

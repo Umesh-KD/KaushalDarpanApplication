@@ -220,3 +220,53 @@
 .section-body {
   padding: 14px;
 }
+
+.item-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  padding: 14px 10px;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  min-height: 170px;
+}
+
+  .item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border-color: #cbd5e1;
+  }
+
+  .item-card .icon {
+    font-size: 32px;
+    margin-top: 4px;
+  }
+
+  .item-card .label {
+    font-size: 13px;
+    line-height: 1.25;
+    color: #374151;
+    font-weight: 500;
+  }
+
+  .item-card .number {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .item-card .view {
+    color: #2563eb;
+    font-size: 12px;
+    text-decoration: none;
+    margin-top: auto;
+  }
+
+    .item-card .view:hover {
+      text-decoration: underline;
+    }
