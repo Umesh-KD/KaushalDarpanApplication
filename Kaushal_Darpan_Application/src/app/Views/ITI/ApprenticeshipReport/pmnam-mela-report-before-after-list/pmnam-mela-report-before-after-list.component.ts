@@ -369,11 +369,18 @@ export class PMNAMMelaReportBeforeAfterListComponent {
   async DownloadPmnamMelaReport() {
     try {
       debugger;
+      if (this.SSOLoginDataModel.RoleID == 97) {
+        this.request.DistrictID = this.SSOLoginDataModel.DistrictID
+      }
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
         DepartmentID: this.SSOLoginDataModel.DepartmentID,
         RoleID: this.SSOLoginDataModel.RoleID,
         Createdby: this._Userid,
+        DistrictID: this.request.DistrictID,
+        FinancialYearID: this.request.FinancialYearID,
+        BeforeMonth: this.request.BeforeMonth || 0,
+        ZoneID: this.request.ZoneID
       };
       this.loaderService.requestStarted();
       await this.reportService.GetPmnamMela(obj)

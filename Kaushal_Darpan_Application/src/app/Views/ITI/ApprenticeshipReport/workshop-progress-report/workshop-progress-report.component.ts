@@ -70,7 +70,7 @@ export class WorkshopProgressReportComponent {
       establishmentAddress: ['', Validators.required],
       representativeName: ['', Validators.required],
       representativedesignation: ['', Validators.required],
-      representativeMobile: ['', Validators.required ],
+      representativeMobile: ['', [Validators.required, Validators.pattern( GlobalConstants.MobileNumberPattern)]],
       Remars: ['', Validators.required],
       workProgressDocument: [''],
 

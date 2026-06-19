@@ -206,8 +206,32 @@ export class QuaterWorkshopReportComponent {
 
   async DownloadQuarterlyProgressReport() {
     try {
+
+      var UserID: number = 0
+      var DistrictID: number = 0
+      if (this.SSOLoginDataModel.RoleID != 97) {
+        UserID = 0
+        DistrictID = this.request.DistrictID
+
+      } else {
+        UserID = 0
+        DistrictID = this.SSOLoginDataModel.DistrictID
+
+      }
+      let obj = {
+        EndTermID: this.SSOLoginDataModel.EndTermID,
+        DepartmentID: this.SSOLoginDataModel.DepartmentID,
+        RoleID: this.SSOLoginDataModel.RoleID,
+        ZoneID: this.request.ZoneID,
+        Createdby: UserID,
+        DistrictID: DistrictID,
+        QuaterID: this.request.QuaterID,
+        FinancialYearID: this.request.FinancialYearID
+      };
+
+
       this.loaderService.requestStarted();
-      await this.reportService.GetQuarterlyProgress(this.searchRequest)
+      await this.reportService.GetQuarterlyProgress(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log("DownloadQuarterlyProgressReport", data);

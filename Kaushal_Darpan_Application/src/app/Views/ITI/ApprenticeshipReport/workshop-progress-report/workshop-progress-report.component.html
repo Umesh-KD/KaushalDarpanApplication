@@ -84,10 +84,31 @@
               </div>
             </div>
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला मे भाग लेने वाले प्रतिनिधि का मोबाइल नंबर: <span class="StarMarking">*</span></label>
-              <input type="text" class="form-input" placeholder="Enter representative's Mobile Number" maxlength="10" minlength="10" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" formControlName="representativeMobile">
-              <div class="text-danger" *ngIf="WrokshopReportFormGroup.get('representativeMobile')?.hasError('required') && WrokshopReportFormGroup.get('representativeMobile')?.touched">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                कार्यशाला मे भाग लेने वाले प्रतिनिधि का मोबाइल नंबर:
+                <span class="StarMarking">*</span>
+              </label>
+
+              <input type="text"
+                     class="form-input"
+                     placeholder="Enter representative's Mobile Number"
+                     maxlength="10"
+                     onkeypress="if (isNaN(String.fromCharCode(event.keyCode)) || event.keyCode == 32) return false;"
+                     formControlName="representativeMobile">
+
+              <!-- Required Validation -->
+              <div class="text-danger"
+                   *ngIf="WrokshopReportFormGroup.get('representativeMobile')?.hasError('required') &&
+              WrokshopReportFormGroup.get('representativeMobile')?.touched">
                 This field is required
+              </div>
+
+              <!-- Mobile Pattern Validation -->
+              <div class="text-danger"
+                   *ngIf="!WrokshopReportFormGroup.get('representativeMobile')?.hasError('required') &&
+              WrokshopReportFormGroup.get('representativeMobile')?.hasError('pattern') &&
+              WrokshopReportFormGroup.get('representativeMobile')?.touched">
+                Please enter a valid 10-digit mobile number
               </div>
             </div>
             <div>
@@ -126,7 +147,7 @@
 
 
             <div>
-              <button type="submit" *ngIf="!IsUpdateCase && SSOLoginDataModel.RoleID == 97 && !IsDisable" class="btn bg-info text-white mt-6" [disabled]="!WrokshopReportFormGroup.valid">Add More</button>
+              <button type="submit" *ngIf="!IsUpdateCase && SSOLoginDataModel.RoleID == 97 && !IsDisable" class="btn bg-info text-white mt-6">Add More</button>
             </div>
 
           </div>

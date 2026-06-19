@@ -215,8 +215,28 @@ export class ApprenticeshipRegistrationReportList {
 
   async DownloadApprenticeshipReport() {
     try {
+
+      if (this.ssoLoginDataModel.RoleID == 97) {
+        this.DistrictID = this.ssoLoginDataModel.DistrictID
+      }
+
+      let obj = {
+        EndTermID: this.ssoLoginDataModel.EndTermID,
+        DepartmentID: this.ssoLoginDataModel.DepartmentID,
+        RoleID: this.ssoLoginDataModel.RoleID,
+        Createdby: this._Userid,
+        FinancialYearID: this.FinancialYearID,
+        MonthID: this.MonthID,
+        TypeID: this.TypeID,
+        ZoneID: this.ZoneID,
+        DistrictID: this.DistrictID,
+
+
+      };
+
+
       this.loaderService.requestStarted();
-      await this.reportService.GetApprenticeship(this.searchRequest)
+      await this.reportService.GetApprenticeship(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log("DownloadApprenticeshipReport", data)
