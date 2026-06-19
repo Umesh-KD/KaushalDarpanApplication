@@ -75,10 +75,9 @@ export class ReturnLabItemComponent {
   }
 
   async GetAllData() {
-    ;
+    debugger
     try {
       this.loaderService.requestStarted();
-
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
       if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge) {
