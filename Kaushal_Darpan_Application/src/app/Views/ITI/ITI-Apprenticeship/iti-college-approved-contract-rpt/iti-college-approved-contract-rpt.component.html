@@ -65,6 +65,10 @@
                         </select>
                     </div>
                 </div>
+                <div class="flex justify-center">
+                    <button type="button" class="btn bg-info text-white mt-6" (click)="GetInstituteMaster()">Search</button>
+                    <!-- <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button> -->
+                </div>
             </form>
             <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" style="margin-top:35px !important;" *ngIf="Institutelist?.length > 0">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>

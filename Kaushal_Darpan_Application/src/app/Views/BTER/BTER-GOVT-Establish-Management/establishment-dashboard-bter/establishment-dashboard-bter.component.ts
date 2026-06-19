@@ -5,6 +5,7 @@ import { EnumRole } from '../../../../Common/GlobalConstants';
 import { ITIPrincipalDashboardServiceService } from '../../../../Services/ITI-Principal-Dashboard-Service/iti-principal-dashboard-service.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { AdminDashboardDataService } from '../../../../Services/AdminDashboard/admin-dashboard-data.service';
+import { EM_StaffTrainingDashboardSearchModel } from '../../../../Models/AdminDashboardDataModel';
 
 @Component({
   selector: 'app-establishment-dashboard-bter',
@@ -14,11 +15,13 @@ import { AdminDashboardDataService } from '../../../../Services/AdminDashboard/a
 })
 export class EstablishmentDashboardBTERComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public searchRequest = new EM_StaffTrainingDashboardSearchModel();
 
   public _EnumRole = EnumRole;
   public DashboardDataList: any[] = [];
   public EstablishmentDashboardTiles: any[] = [];
   public RelievingJoiningDashboardTiles: any[] = [];
+  public STC_DashboardTiles: any[] = [];
 
   Highcharts: typeof Highcharts = Highcharts;
   public PostTypeStaffChartOptions: Highcharts.Options | null = null;
@@ -95,102 +98,41 @@ export class EstablishmentDashboardBTERComponent {
           // }
 
         })
-        // this.getTotalPostTypeStaff();
-        this.PostTypeStaffChartOptions = this.buildPieChart(this.dashboardData.PostTypeStaff);
       })
     } catch (error) {
       console.error(error);
     }
   }
 
-  buildPieChart(data: any[]): Highcharts.Options | null {
-    if (!data?.length) return null;
+  async GetStaffTrainingDashboardData() {
+    this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+    this.searchRequest.UserID=this.sSOLoginDataModel.UserID;
+    this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    try {
 
-    const colors = ['#0d6efd', '#6c757d', '#198754', '#ffc107'];
-
-    const total = data.reduce(
-      (sum, item) => sum + (item.TotalCount || 0),
-      0
-    );
-
-    const seriesData = total === 0
-      ? [{
-        name: 'No Data',
-        y: 1,
-        color: '#e5e7eb'
-      }]
-      : data.map((item, i) => ({
-        name: item.TotalText,
-        y: Number(item.TotalCount) || 0,
-        color: colors[i % colors.length]
-      }));
-
-    return {
-      chart: {
-        type: 'pie',
-        height: 260,
-        backgroundColor: 'transparent',
-        margin: [10, 10, 10, 10]
-      },
-
-      // title: { text: '' },
-      title: {
-        // text: this.getTotalPost().toLocaleString(),
-        verticalAlign: 'middle',
-        y: 25,
-        style: {
-          fontSize: '34px',
-          fontWeight: '700'
-        }
-      },
-
-      credits: {
-        enabled: false
-      },
-
-      subtitle: {
-        // text: 'TOTAL SEATS',
-        verticalAlign: 'middle',
-        y: -15,
-        style: {
-          fontSize: '12px',
-          color: '#64748b'
-        }
-      },
-
-      legend: {
-        enabled: false
-      },
-
-      tooltip: {
-        pointFormat: total === 0
-          ? 'No data available'
-          : '<b>{point.name}</b>: {point.y} ({point.percentage:.0f}%)'
-      },
-
-      plotOptions: {
-        pie: {
-          innerSize: '55%',
-          borderWidth: 3,
-          borderColor: '#ffffff',
-
-          dataLabels: {
-            enabled: total > 0,
-            format: '{point.name}: {point.y}',
-            style: {
-              fontSize: '11px',
-              fontWeight: '500',
-              textOutline: 'none'
-            }
-          }
-        }
-      },
-
-      series: [{
-        type: 'pie',
-        name: 'Requests',
-        data: seriesData
-      }]
-    };
+      this.loaderService.requestStarted();
+      await this.AdminDashDataService.GetStaffTrainingDashboardData(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.STC_DashboardTiles = data['Data'];
+          // this.viewCompletedStaffTrainingDashboard = this.viewDashboard.filter(s => s.ListType === 'CompletedTraining');
+          // this.viewNewStaffTrainingDashboard = this.viewDashboard.filter(s => s.ListType === 'NewTraining');
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
+  
 }
