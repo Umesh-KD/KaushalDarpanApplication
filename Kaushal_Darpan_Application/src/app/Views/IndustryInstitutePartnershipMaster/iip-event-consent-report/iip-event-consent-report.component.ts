@@ -10,6 +10,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { EventConsentActionDataModel, EventConsentSearchModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-iip-event-consent-report',
@@ -96,7 +97,7 @@ export class IIPEventConsentReportComponent {
       request.Event = this.searchRequest.Event;
       request.RoleID = this.sSOLoginDataModel.RoleID;
       request.EventTypeID = this.searchRequest.EventTypeID;
-
+      debugger
       await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -130,6 +131,7 @@ export class IIPEventConsentReportComponent {
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID; 
       this.searchRequest.Action = "GetAllConsentData";
+      debugger
       await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(this.searchRequest)
         .then(async (data: any) => {
 
@@ -254,4 +256,29 @@ export class IIPEventConsentReportComponent {
     this.AllInTableSelect = this.EventConsentDataList.every((r: any) => r.Selected);
   }
   // end table feature
+
+  exportToExcel(): void {
+    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'InspectionTeamID', 'ZoneID', 'DistrictID', 'InstituteID', 'EndTermID', 'FinancialYearID', 'CompanyID', 'EventID', 'InterestedStatus', 'ConsentID', 'ConsentID1', 'IsHost', 'Status','CompanyStatus'];
+    const filteredData = this.EventConsentDataList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('en-GB').split('/').join('-');
+
+    const fileName = `EventConsentReport_${dateStr}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+  }
+
+
 }

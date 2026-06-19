@@ -133,37 +133,60 @@ export class ITIConsentUpdateComponent {
   }
 
   exportToExcel(): void {
-    const wantedColumns = [
-      'CollegeCode', 'CollegeName', 'TradeCode', 'TradeName', 'Shift', 'Unit_no', 'NCVT_SCVT',
-      'Sanctioned', 'Sanction_Order', 'OrderDate', 'Remark', 'NoOfSanctionedSeats',
-      'aff_date', 'wef_aff', 'file_ref', 'deaff_order', 'deaff_date', 'de_aff_wef', 'Key'
-    ];
-
+    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'InspectionTeamID', 'ZoneID', 'DistrictID', 'InstituteID', 'EndTermID', 'FinancialYearID',];
     const filteredData = this.ConsentData.map((item: any) => {
-      const obj: any = {};
-      wantedColumns.forEach(col => obj[col] = item[col] ?? '');
-      return obj;
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
     });
-
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
-
-    // 🔥 Auto-fit column width
-    ws['!cols'] = wantedColumns.map(col => {
-      const maxLen = Math.max(
-        col.length,
-        ...filteredData.map((row: any) => String(row[col]).length)
-      );
-
-      return {
-        wch: Math.min(maxLen + 3, 40) // auto + limit width
-      };
-    });
-
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-    XLSX.writeFile(wb, `SeatIntakeDetails_${new Date().toISOString().split('T')[0]}.xlsx`);
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('en-GB').split('/').join('-');
+
+    const fileName = `ConsentDetails_${dateStr}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
   }
+
+  //exportToExcel(): void {
+  //  const wantedColumns = [
+  //    'CollegeCode', 'CollegeName', 'TradeCode', 'TradeName', 'Shift', 'Unit_no', 'NCVT_SCVT',
+  //    'Sanctioned', 'Sanction_Order', 'OrderDate', 'Remark', 'NoOfSanctionedSeats',
+  //    'aff_date', 'wef_aff', 'file_ref', 'deaff_order', 'deaff_date', 'de_aff_wef', 'Key'
+  //  ];
+
+  //  const filteredData = this.ConsentData.map((item: any) => {
+  //    const obj: any = {};
+  //    wantedColumns.forEach(col => obj[col] = item[col] ?? '');
+  //    return obj;
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+  //  // 🔥 Auto-fit column width
+  //  ws['!cols'] = wantedColumns.map(col => {
+  //    const maxLen = Math.max(
+  //      col.length,
+  //      ...filteredData.map((row: any) => String(row[col]).length)
+  //    );
+
+  //    return {
+  //      wch: Math.min(maxLen + 3, 40) // auto + limit width
+  //    };
+  //  });
+
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //  XLSX.writeFile(wb, `SeatIntakeDetails_${new Date().toISOString().split('T')[0]}.xlsx`);
+  //}
 
 
   async GetById_Consent(InspectionConsentID: number) {
