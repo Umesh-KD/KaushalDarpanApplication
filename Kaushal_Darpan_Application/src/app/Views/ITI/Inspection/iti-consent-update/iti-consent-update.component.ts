@@ -18,6 +18,7 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 import { EmitraRequestDetails } from '../../../../Models/PaymentDataModel';
 import { EmitraPaymentService } from '../../../../Services/EmitraPayment/emitra-payment.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-iti-consent-update',
@@ -130,6 +131,40 @@ export class ITIConsentUpdateComponent {
       }, 200)
     }
   }
+
+  exportToExcel(): void {
+    const wantedColumns = [
+      'CollegeCode', 'CollegeName', 'TradeCode', 'TradeName', 'Shift', 'Unit_no', 'NCVT_SCVT',
+      'Sanctioned', 'Sanction_Order', 'OrderDate', 'Remark', 'NoOfSanctionedSeats',
+      'aff_date', 'wef_aff', 'file_ref', 'deaff_order', 'deaff_date', 'de_aff_wef', 'Key'
+    ];
+
+    const filteredData = this.ConsentData.map((item: any) => {
+      const obj: any = {};
+      wantedColumns.forEach(col => obj[col] = item[col] ?? '');
+      return obj;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    // 🔥 Auto-fit column width
+    ws['!cols'] = wantedColumns.map(col => {
+      const maxLen = Math.max(
+        col.length,
+        ...filteredData.map((row: any) => String(row[col]).length)
+      );
+
+      return {
+        wch: Math.min(maxLen + 3, 40) // auto + limit width
+      };
+    });
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    XLSX.writeFile(wb, `SeatIntakeDetails_${new Date().toISOString().split('T')[0]}.xlsx`);
+  }
+
 
   async GetById_Consent(InspectionConsentID: number) {
     try {

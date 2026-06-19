@@ -28,11 +28,11 @@
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Zone: </label>
                         <select class="form-select"
                                 name="DivisionID"
-                                [(ngModel)]="this.request.DivisionID"
+                                [(ngModel)]="request.DivisionID"
                                 (change)="GetDistictData()"
                                 formControlName="DivisionID">
-                            <option [ngValue]="0">Choose option</option>
-                            <option *ngFor="let item of Divisionlist" [ngValue]="item.ID">
+                            <option [value]="0">Choose option</option>
+                            <option *ngFor="let item of Divisionlist" [value]="item.ID">
                             {{ item.Name }}
                             </option>
                         </select>
@@ -41,7 +41,7 @@
                     <div>
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: </label>
                         <select class="form-select "
-                                [(ngModel)]="this.request.DistrictID"
+                                [(ngModel)]="request.DistrictID"
                                 formControlName="DistrictID"
                                 (change)="onChange()">
                             <option value="0">Choose option</option>
@@ -55,7 +55,7 @@
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Financial Year: </label>
                         <select class="form-select"
                                 name="FinancialYearID"
-                                [(ngModel)]="this.request.FinancialYearID"
+                                [(ngModel)]="request.FinancialYearID"
                                 (change)="GetInstituteMaster()"
                                 formControlName="FinancialYearID">
                             <option [ngValue]="0">Choose option</option>
