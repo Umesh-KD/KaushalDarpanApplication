@@ -168,14 +168,12 @@ updatePlanningFlag = false;
           text: 'District'
         }
       },
-
       yAxis: {
         min: 0,
         title: {
           text: 'No of ITIs'
         }
       },
-
       plotOptions: {
         column: {
           grouping: true,
@@ -183,7 +181,6 @@ updatePlanningFlag = false;
           borderWidth: 0
         }
       },
-
       series: [
         {
           type: 'column',
@@ -202,13 +199,8 @@ updatePlanningFlag = false;
       }
     };
 
-
-
     this.updateFlag = true;
- 
   }
-
-
 
   loadPieChart(): void {
     debugger;
