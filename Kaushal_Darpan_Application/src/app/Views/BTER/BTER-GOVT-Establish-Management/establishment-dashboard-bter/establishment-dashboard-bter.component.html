@@ -5,7 +5,7 @@
       <!-- <small class="text-muted">DTE - T2</small> -->
     </div>
   </div>
-  <div class="grid grid-cols-2 lg:grid-cols-4 md:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 gap-5">
+  <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-4 gap-5">
     <div class=" " *ngFor="let row of dashboardData?.Establishment; let i = index">
       <div class="card top-card" [ngClass]="row.bgClass">
         <div class="card-body flex justify-between items-center">
@@ -18,7 +18,7 @@
                 <p>{{row.TotalText}}</p>
               </div>
               <div class="big-count blue fs-1">
-                <a [routerLink]="['/',row.URL]" [queryParams]="{act: row.Action }" >
+                <a [routerLink]="['/',row.URL]" [queryParams]="{status: row.Status, act: row.Action }" >
                   <h2 class="big-count fs-1" [ngClass]="row.countTextColor">{{row.TotalCount}}</h2>
                 </a>
               </div>
@@ -30,34 +30,44 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 gap-5 mt-5 mb-5">
-
-    <div class=" " *ngFor="let row of dashboardData?.RelievingJoining; let i = index">
-      <div class="card mini-card">
-        <div class="card-body h-100">
-          <div class=" ">
-            <div><i [ngClass]="[row.SRC, row.bgClassIcon]"></i></div>
-            <div>{{row.TotalText}}</div>
-            <a [routerLink]="['/',row.URL]" [queryParams]="{act: row.Action }" >
-              <div class="count mt-2" [ngClass]="row.countTextColor">{{row.TotalCount}}</div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid  xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+  <div class="grid  xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 2xl:grid-cols-1 gap-3 mb-5 mt-6">
     <div >
       <div class="section">
         <div class="section-header planning"><i class="bi bi-building-fill"></i> Relieving &amp; Joining</div>
         <div class="section-body">
+          <div class="grid grid-cols-1 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 gap-5 mt-5 mb-5">
+
+            <div class=" " *ngFor="let row of dashboardData?.RelievingJoining; let i = index">
+              <div class="card mini-card">
+                <div class="card-body h-100">
+                  <div class=" ">
+                    <div><i [ngClass]="[row.SRC, row.bgClassIcon]"></i></div>
+                    <div>{{row.TotalText}}</div>
+                    <a [routerLink]="['/',row.URL]" [queryParams]="{status:row.Status, act: row.Action }" >
+                      <div class="count mt-2" [ngClass]="row.countTextColor">{{row.TotalCount}}</div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>    
+  </div>
+  
+
+  <!-- <div class="grid  xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+    <div >
+      <div class="section">
+        <div class="section-header planning"><i class="bi bi-building-fill"></i> Short-term Training Course</div>
+        <div class="section-body">
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-attendance">
             <div *ngFor="let i of dashboardData?.RelievingJoining">
               <div class="item-card">
-                <i class="icon {{i.Menu}} icon-blue"></i>
+                <i class="icon {{i.SRC}} icon-blue"></i>
                 <div class="label" [innerHTML]="i.TotalText"></div>
-                <div class="number" *ngIf="i.Total">{{i.TotalCount}}</div>
+                <div class="number" *ngIf="i.TotalCount">{{i.TotalCount}}</div>
                 <a class="view" [routerLink]="'/' + i.URL">View Details</a>
               </div>
             </div>
@@ -68,7 +78,7 @@
 
     <div class= "">
       <div class="section">
-        <div class="section-header establishment"><i class="bi bi-people-fill"></i> Establishment</div>
+        <div class="section-header establishment"><i class="bi bi-people-fill"></i> Higher Technical Education</div>
         <div class="section-body">
           <div class="grid  xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-attendance">
             <div class="4"><div class="item-card"><i class="icon bi bi-people-fill icon-green"></i><div class="label">Department Office Staff</div><div class="number">256</div><a class="view" href="#">View Details</a></div></div>
@@ -78,6 +88,6 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
 </div>
