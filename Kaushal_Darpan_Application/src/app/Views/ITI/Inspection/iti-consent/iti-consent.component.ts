@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnumInspectionDeploymentType, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumInspectionDeploymentType, EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import {
          InspectionMemberDetailsDataModel, ITI_InspectionDataModel,
@@ -35,7 +35,7 @@ export class ITIConsentComponent {
   // public consentDeploy = new ConsentModel();
   modalReference: NgbModalRef | undefined;
   _EnumInspectionDeploymentType = EnumInspectionDeploymentType;
-
+  _EnumRole = EnumRole;
 
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';

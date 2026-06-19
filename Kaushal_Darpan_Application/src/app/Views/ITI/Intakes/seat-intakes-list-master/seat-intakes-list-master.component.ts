@@ -34,6 +34,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
   public InstituteCategoryList: any = [];
   public ITITradeSchemeList: any = [];
   public ITIRemarkList: any = [];
+  public CourseTypeList: any = [];
   public SanctionedList: any = [];
   public SeatIntakeDataList: any = [];
   public Table_SearchText: string = '';
@@ -54,6 +55,8 @@ export class SeatIntakesListMasterComponent implements OnInit {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  flag: number = 0;
+  key: number = 0;
   //end table feature default
 
   constructor(
@@ -65,12 +68,14 @@ export class SeatIntakesListMasterComponent implements OnInit {
     private Swal2: SweetAlert2,
     private modalService: NgbModal,
     private route: ActivatedRoute
+
   ) { }
 
   async ngOnInit() {
     this.SeatIntakeSearchFormGroup = this.formBuilder.group(
       {
         ddlCollege: [''],
+        ddlCourseType: [''],
         ddlDistrict: [''],
         ddlCollegeType: [''],
         ddlInstitutionCategory: [''],
@@ -101,6 +106,10 @@ export class SeatIntakesListMasterComponent implements OnInit {
 
       console.log(collegeId, tradeId, sanctionedId);
 
+      this.flag = Number(this.route.snapshot.queryParamMap.get('flag')?.toString());
+      this.key = Number(this.route.snapshot.queryParamMap.get('key')?.toString());
+
+
       if (collegeId > 0) {
         this.searchRequest.CollegeID = collegeId;
       }
@@ -112,8 +121,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
       if (sanctionedId > 0) {
         this.searchRequest.SanctionedID = sanctionedId;
       }
-
-
+     
     });
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -129,10 +137,30 @@ export class SeatIntakesListMasterComponent implements OnInit {
         this.searchRequest.CollegeTypeID = this.CollegeTypeID;
       }
     });
+
+    debugger
+    console.log(this.CourseTypeList);
+    this.searchRequest.CourseTypeID = 0;
+    if (this.key != 0) {
+      if (this.flag == 3 && this.key == 1) {
+        this.searchRequest.CourseTypeID = 1;
+        //this.searchRequest.Status = -1;
+      }
+      else if (this.flag == 3 && this.key == 2) {
+        this.searchRequest.CourseTypeID = 2;
+        //this.searchRequest.Status = -1;
+      }
+      else {
+        this.searchRequest.CourseTypeID = 0;
+      }
+    }
+
+
     this.onSearch();
   }
   get _SeatIntakeSearchFormGroup() { return this.SeatIntakeSearchFormGroup.controls; }
   get _SeatIntakeSearchFormGroupPopUp() { return this.SeatIntakeSearchFormGroupPopUp.controls; }
+
 
   async GetDropdownData() {
     try {
@@ -173,6 +201,13 @@ export class SeatIntakesListMasterComponent implements OnInit {
         this.ITIRemarkList = parsedData.Data;
         console.log(this.ITIRemarkList, "ITIRemarkList")
       }, error => console.error(error));
+
+      await this.commonFunctionService.GetCommonMasterData('GetCourseTypemaster', 2,0,0)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.CourseTypeList = data['Data'];
+          }, (error: any) => console.error(error)
+          );
 
     } catch (error) {
       console.error(error);

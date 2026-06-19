@@ -14,7 +14,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a routerLink="/iti-add-consent" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Consent</a>
+        <a *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.TITDTETraining" routerLink="/iti-add-consent" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Consent</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>

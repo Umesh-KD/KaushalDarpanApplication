@@ -1788,11 +1788,11 @@ const routes: Routes = [
       { path: 'StaffTrainingDashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffTrainingDashboard/StaffTrainingDashboard.module').then(m => m.StaffTrainingDashboardModule) },
       { path: 'BterTeacherDashboard', loadChildren: () => import('./Views/bter-teacher-dashboard/bter-teacher-dashboard.module').then(m => m.BterTeacherDashboardModule) },
 
-      { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule) },
+      { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule), title:'Master Dashboard' },
       { path: 'InventoryDashboard', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/InventoryDashboard/InventoryDashboard.module').then(m => m.InventoryDashboardModule) },
       { path: 'ITICommanDashboard', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI_CommanDashboard/ITI_CommanDashboard.module').then(m => m.ITI_CommanDashboardModule) },
 
-      { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule) },
+      { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule), title: 'Admission Dashboard' },
       { path: 'InventoryItemReport', loadChildren: () => import('./Views/ITI/inventory-item-report/inventory-item-report.module').then(m => m.InventoryItemReportModule) },
       { path: 'ConsolatedTradeReport', loadChildren: () => import('./Views/ITI/consolated-iti-trade/consolated-iti-trade.module').then(m => m.ConsolatedItiTradeModule) },
 

@@ -51,6 +51,7 @@ export class SeatIntakeSearchModel {
   public Action: string = '';
 
   public DivisionId?: number = 0;
+  public CourseTypeID?: number = 0;
 
 }
 
