@@ -672,6 +672,7 @@ const routes: Routes = [
       { path: 'DTELabInchargeStockRegister', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/dteitems-master/dte-lab-incharge-stock-register/dte-lab-incharge-stock-register-module').then(m => m.DTELabInchargeStockRegisterModule) },
 
       { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
+      { path: 'bter-issue-all-items', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-all-items/bter-issue-all-items.module').then(m => m.AddBterIssueAllItemModule) },
       { path: 'bter-lab-master', loadChildren: () => import('./Views/BTER/bter-item-manage/dtelaboratory-master/dtelaboratory-master-module').then(m => m.DteLaboratoryMasterModule) },
       { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
       { path: 'bter-lab-item-return', loadChildren: () => import('./Views/BTER/bter-item-manage/return-lab-item/return-lab-item.module').then(m => m.ReturnLabItemModule) },
