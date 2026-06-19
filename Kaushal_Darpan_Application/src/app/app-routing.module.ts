@@ -175,6 +175,7 @@ const routes: Routes = [
       { path: 'ITIPlacementDashboard', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
       { path: 'ITIPlacementDashboard/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
       { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dash-report/placement-dash-report.routing.module').then(m => m.ITIPlacementDashReportModule), title: 'ITI Placement Dashboard Report' },
+      { path: 'StudentAllotmentReport', loadChildren: () => import('./Views/ITI/student-allotment-report/student-allotment-report.routing.module').then(m => m.ITIStudentAllotmentReportModule), title: 'ITI Student Allotment Report' },
       //{ path: 'rolemenuright/:id', loadChildren: () => import('./Views/role-menu-right/role-menu-right.module').then(m => m.RoleMenuRightModule) },
       { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
       //Old Software Master
@@ -675,6 +676,7 @@ const routes: Routes = [
       { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
       { path: 'bter-lab-item-return', loadChildren: () => import('./Views/BTER/bter-item-manage/return-lab-item/return-lab-item.module').then(m => m.ReturnLabItemModule) },
       { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
+      { path: 'NotWorkingItemReport', loadChildren: () => import('./Views/BTER/bter-item-manage/NotWorkingItemReport/NotWorkingItemReport.module').then(m => m.NotWorkingItemReportModule) },
       { path: 'bter-inventory_Issue-report', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-INV_Issue-report/bter-INV_Issue-report.module').then(m => m.bterINVIssuereportModule) },
       { path: 'bter-staff-inventory-details', loadChildren: () => import('./Views/BTER/bter-item-manage/staff-inventory-details/staff-inventory-details.module').then(m => m.StaffInventoryDetailsModule), title: 'Staff Inventory Details' },
       { path: 'approve-issued-items', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/approve-issued-items/approve-issued-items.module').then(m => m.ApproveIssuedItemsModule), title: 'Approve Issued Items' },
@@ -1785,13 +1787,13 @@ const routes: Routes = [
       { path: 'StaffTrainingDashboard', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffTrainingDashboard/StaffTrainingDashboard.module').then(m => m.StaffTrainingDashboardModule) },
       { path: 'BterTeacherDashboard', loadChildren: () => import('./Views/bter-teacher-dashboard/bter-teacher-dashboard.module').then(m => m.BterTeacherDashboardModule) },
 
-      { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule) },
+      { path: 'AdmissionMasterDashboard', loadChildren: () => import('../Views/ITI/NewDashboard/admission-master-dashboard/admission-master-dashboard.module').then(m => m.AdmissionMasterDashboardModule), title:'Master Dashboard' },
       { path: 'InventoryDashboard', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/InventoryDashboard/InventoryDashboard.module').then(m => m.InventoryDashboardModule) },
       { path: 'ITICommanDashboard', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI_CommanDashboard/ITI_CommanDashboard.module').then(m => m.ITI_CommanDashboardModule) },
 
-      { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule) },
+      { path: 'AdmissionDashboard', loadChildren: () => import('./Views/admission-dashboard/admission-dashboard.module').then(m => m.AdmissionDashboardModule), title: 'Admission Dashboard' },
       { path: 'InventoryItemReport', loadChildren: () => import('./Views/ITI/inventory-item-report/inventory-item-report.module').then(m => m.InventoryItemReportModule) },
-
+      { path: 'ConsolatedTradeReport', loadChildren: () => import('./Views/ITI/consolated-iti-trade/consolated-iti-trade.module').then(m => m.ConsolatedItiTradeModule) },
 
     ]
   },
@@ -1913,6 +1915,7 @@ const routes: Routes = [
   
   { path: 'json-encryptor', loadChildren: () => import('./Views/config-encryptor/config-encryptor.module').then(m => m.ConfigEncryptorModule) },
   { path: 'Views\ITI\EmployeeDashboard', loadChildren: () => import('./Views/ITI/employee-dashboard/employee-dashboard.module').then(m => m.EmployeeDashboardModule) },
+ 
 
  
   { path: '**', loadComponent: () => import('./Views/errors/page-not-found/page-not-found.component').then(c => c.PageNotFoundComponent), title: '404 - Page not found' },

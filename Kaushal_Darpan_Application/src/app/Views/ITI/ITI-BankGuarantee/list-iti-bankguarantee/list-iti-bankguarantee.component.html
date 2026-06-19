@@ -4,7 +4,7 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Bank Guarantee List</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a routerLink="/AdmissionMasterDashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/iti-bank-guarantee-list" class="text-sm font-medium text-slate-700" aria-current="page">ITI Bank Guarantee List</a>
     </div>
@@ -96,7 +96,11 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-between flex-wrap items-center">
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
-
+        <a href="javascript:void(0);"
+           class="btn bg-danger text-white"
+           (click)="exportToPDF()">
+          <i class="ti ti-file-type-pdf"></i> Download PDF
+        </a>
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">

@@ -184,15 +184,15 @@
             <td> {{ row.PmnamMelaDate }}</td>
             <td>
               <div class="flex align-center justify-center actionBtns">
-                <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="Edit"><i class="ti ti-pencil"></i></a>-->
+                <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row,1)" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="view"><i class="ti ti-eye"></i></a>
                 <a *ngIf="ssoLoginDataModel.RoleID != 97" (click)="EditData(row)" title="view"><i class="ti ti-eye"></i></a>
-                <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="DeleteData(row)" title="Delete"><i class="ti ti-trash"></i></a>-->
+                <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="DeleteData(row)" title="Delete"><i class="ti ti-trash"></i></a>
               </div>
 
             </td>
           </tr>
-          <tr class="font-bold bg-gray-100">
+          <tr *ngIf="DataList.length>0" class="font-bold bg-gray-100">
             <td colspan="3" class="text-center">Total</td>
 
             <td *ngFor="let key of Object.keys(totals)">
@@ -241,7 +241,7 @@
                 <label class="text-gray-700 text-xs font-medium mb-1 block">
                   वित्तीय वर्ष <span class="StarMarking">*</span>
                 </label>
-                <select [(ngModel)]="obj.FinancialYearID" class="form-select" [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 ">
+                <select [(ngModel)]="obj.FinancialYearID" class="form-select" [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit ">
                   <option [ngValue]="0">Choose Option</option>
                   <option *ngFor="let item of FinYearList"
                           [ngValue]="item.FinancialYearID">
@@ -254,7 +254,7 @@
                 <label class="text-gray-700 text-xs font-medium mb-1 block">
                   महीना <span class="StarMarking">*</span>
                 </label>
-                <select class="form-select" [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 "
+                <select class="form-select" [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit "
                         [(ngModel)]="obj.BeforeMonth">
                   <option value="">Choose Option</option>
                   <option value="1">जनवरी</option>
@@ -282,12 +282,12 @@
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">राजकीय <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 " value="" type="number" placeholder="राजकीय संख्या" class="form-input ng-untouched ng-pristine ng-invalid"
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit  " value="" type="number" placeholder="राजकीय संख्या" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" class="form-input ng-untouched ng-pristine ng-invalid"
                        [(ngModel)]="obj.PoliticalEstablishmentspartNo" name="PoliticalEstablishmentspartNo">
               </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">निजी <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PrivateEstablishmentspartNo" name="PrivateEstablishmentspartNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PrivateEstablishmentspartNo" name="PrivateEstablishmentspartNo">
               </div>
             </div>
           </div>
@@ -296,11 +296,11 @@
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">राजकीय <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="राजकीय संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PoliticalEstablishmentscontactedNo" name="PoliticalEstablishmentscontactedNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number" placeholder="राजकीय संख्या"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PoliticalEstablishmentscontactedNo" name="PoliticalEstablishmentscontactedNo">
               </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">निजी <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PrivateEstablishmentscontactedNo" name="PrivateEstablishmentscontactedNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number" placeholder="निजी संख्या"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PrivateEstablishmentscontactedNo" name="PrivateEstablishmentscontactedNo">
               </div>
             </div>
           </div>
@@ -309,11 +309,11 @@
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">पुरुष <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="पुरुष संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatespresentMaleNo" name="CandidatespresentMaleNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number" placeholder="पुरुष संख्या"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatespresentMaleNo" name="CandidatespresentMaleNo">
               </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">महिला <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatespresentFemaleNo" name="CandidatespresentFemaleNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number" placeholder="महिला संख्या"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatespresentFemaleNo" name="CandidatespresentFemaleNo">
               </div>
             </div>
           </div>
@@ -322,12 +322,12 @@
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">पुरुष <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="पुरुष संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatessselectedMaleNo" name="CandidatessselectedMaleNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number" placeholder="पुरुष संख्या"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatessselectedMaleNo" name="CandidatessselectedMaleNo">
               </div>
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">महिला <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number"
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="number"  onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;"
                        placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid"
                        [(ngModel)]="obj.CandidatessselectedFemaleNo" name="CandidatessselectedFemaleNo">
               </div>
@@ -371,7 +371,7 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">दिनांक <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="date" class="form-input ng-untouched ng-pristine ng-invalid"
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 && !isedit" type="date" class="form-input ng-untouched ng-pristine ng-invalid"
                        [(ngModel)]="obj.PmnamMelaDate" name="PmnamMelaDate">
               </div>
 
@@ -379,7 +379,7 @@
           </div>
         </div>
       </div>
-        <div *ngIf="ssoLoginDataModel.RoleID == 97 && obj.ID==0" class="modal-footer text-center pb-4">
+        <div *ngIf="ssoLoginDataModel.RoleID == 97 && obj.ID==0 || isedit " class="modal-footer text-center pb-4">
         <button (click)="SaveData()" class="inline-flex items-center btn bg-dark text-white btn-lg">Submit</button>
         <button (click)="ClearAll()" class="inline-flex items-center btn bg-light text-dark btn-lg">Clear</button>
       </div>

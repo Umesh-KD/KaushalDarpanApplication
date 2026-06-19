@@ -22,13 +22,13 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff :</label>
           <!--<select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-                  (change)="GetTradeDDL()">
-            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-              {{ item.staffName }}
-            </option>
-          </select>-->
+            (change)="GetTradeDDL()">
+      <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+        {{ item.staffName }}
+      </option>
+    </select>-->
           <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
@@ -37,27 +37,36 @@
         </div>
 
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
-          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
-                  (change)="GetCategoryDDL()">
-            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
-              {{ item.TradeName }}
-            </option>
-          </select>
-        </div>-->
-
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
+    <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
+            (change)="GetCategoryDDL()">
+      <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+        {{ item.TradeName }}
+      </option>
+    </select>
+  </div>-->
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category :</label>
+    <select class="form-select" id="ItemId" [(ngModel)]="Searchrequest.ItemId">
+      <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
+        {{ item.Name }}
+      </option>
+    </select>
+  </div>-->
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
-            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
-              {{ item.ItemCategoryName }}
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Category :
+          </label>
+          <select class="form-select" id="ItemId" [(ngModel)]="Searchrequest.ItemId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">
+              {{ item.Name }}
             </option>
           </select>
         </div>
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Equipment Status:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.status" (change)="GetAllData()">
+          <select class="form-select" id="status" [(ngModel)]="Searchrequest.status" (change)="GetAllData()">
             <option value="0">--- All ---</option>
             <option value="1">Serviceable</option>
             <option value="2">Unserviceable</option>
@@ -66,7 +75,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issue Status:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.IssueStatus" (change)="GetAllData()">
+          <select class="form-select" id="IssueStatus" [(ngModel)]="Searchrequest.IssueStatus" (change)="GetAllData()">
             <option value="0">--- All ---</option>
             <option value="1">Pending for Approve</option>
             <option value="2">Approved</option>
@@ -89,12 +98,12 @@
           <i class="ti ti-excel"></i> Export Excel
         </a>
 
-        <a href="javascript:void(0);"
+        <!--<a href="javascript:void(0);"
            (click)="MarkForAuction()"
            class="btn bg-info btn-sm text-white"
            *ngIf="Searchrequest.status == 2">
           <i class="ti ti-excel"></i> Mark for auction
-        </a>
+        </a>-->
 
       </div>
     </div>
@@ -120,9 +129,9 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left" *ngIf="Searchrequest.status == 2">
+            <!--<th class="text-left" *ngIf="Searchrequest.status == 2">
               <input type="checkbox" (change)="toggleAll($event)" />
-            </th>
+            </th>-->
             <th class="text-left">SNO</th>
             <th class="text-left">Issued to</th>
             <th class="text-left">Item Code</th>
@@ -144,9 +153,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td align="left" *ngIf="Searchrequest.status == 2">
+            <!--<td align="left" *ngIf="Searchrequest.status == 2">
               <input type="checkbox" [(ngModel)]="item.Selected" *ngIf="item.IsOption == false" />
-            </td>
+            </td>-->
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCode}}</td>

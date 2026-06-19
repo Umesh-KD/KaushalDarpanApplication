@@ -133,6 +133,7 @@ export class ListItiTradeComponent {
       //this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
       //const roleId = this.sSOLoginDataModel?.RoleID ?? 0;
       //this.searchRequest.IsAddmission = roleId === 16;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       await this.ItiTradeService.getTradeList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

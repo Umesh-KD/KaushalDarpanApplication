@@ -37,7 +37,9 @@ export class ITITradeSearchModel {
   public ActiveStatus: boolean = true;
   public CourseTypeID?: number = 0;
   public IsAddmission: boolean = false;
-  public action: string = ''
+  public action: string = '';
+  public RoleID: number = 0;
+
 
 
 }

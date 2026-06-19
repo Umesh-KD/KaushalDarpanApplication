@@ -38,7 +38,7 @@ export class AddPublicInfoComponent implements OnInit {
   public SeatIntakeID: number | null = null;
   public branchSearchRequest = new BranchStreamTypeWiseSearchModel()
   public BranchID: number = 0
-  public request = new PublicInfoDataModel()
+  public request = new PublicInfoDataModel();
   public State: number = 0;
   public key: number = 0;
   public Message: string = '';
@@ -211,7 +211,7 @@ export class AddPublicInfoComponent implements OnInit {
   
   async onReset() {
     this.isSubmitted = false;
-    //this.request = new BTERCollegeBranchModel()
+    this.request = new PublicInfoDataModel();
   }
 
 

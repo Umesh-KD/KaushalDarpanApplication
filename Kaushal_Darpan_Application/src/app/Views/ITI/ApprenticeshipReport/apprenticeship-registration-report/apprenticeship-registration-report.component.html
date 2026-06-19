@@ -198,7 +198,7 @@
           </tbody>
         </table>
       </div>
-      <div class="mt-5 text-center">
+      <div *ngIf="!disable" class="mt-5 text-center">
         <button class="btn bg-success text-white" *ngIf="!IsUpdateCase &&  ApprenticeshipRows.length > 0 &&  ssoLoginDataModel.RoleID == 97 " (click)="onFinalSubmit()" [disabled]="ApprenticeshipRows.length === 0">
           Submit All
         </button>

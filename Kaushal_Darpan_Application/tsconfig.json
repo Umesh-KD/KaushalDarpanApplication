@@ -39,8 +39,6 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": false,
     "strictNullChecks": false,
-    "fullTemplateTypeCheck": false,
-    "compilationMode": "full",
-    "enableIvy": false
+    "compilationMode": "full"
   }
 }

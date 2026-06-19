@@ -15,6 +15,8 @@ import { DropdownValidators } from '../../../Services/CustomValidators/custom-va
 import { NgSelectModule } from '@ng-select/ng-select';
 import * as XLSX from 'xlsx';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-iti-planning-list',
@@ -592,6 +594,120 @@ export class ItiPlanningListComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+
+  exportToPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    const today = new Date().toLocaleDateString('en-GB');
+
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'ITI Planning List Report',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    doc.setFontSize(9);
+    doc.text(
+      `Total Records : ${this.CampusValidationListData.length}`,
+      pageWidth - 20,
+      10,
+      { align: 'right' }
+    );
+
+    //doc.setFontSize(9);
+    //doc.setFont('helvetica', 'normal');
+    //doc.text(
+    //  `Date: ${today}`,
+    //  pageWidth - 15,
+    //  10,
+    //  { align: 'right' }
+    //);
+
+    const body = this.CampusValidationListData.map((row: any, index: number) => [
+      index + 1,
+      //`${row.Code || ''} (${row.Name || ''})`,  //concate in one column
+      row.CollegeName || '',
+      row.Email || '',
+      row.PrincipalMobile || '',
+      row.ModifyDate || '',
+      row.StatusName || '',
+      //row.DgetCode || '',
+      //row.campusName || '',
+      //row.ActiveStatus ? 'Active' : 'Inactive'
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr No',
+        'College Name',
+        'Email',
+        'Mobile No',
+        'Modify Date',
+        'Status',
+        //'DGET Code',
+        //'Campus Name',
+        //'Status'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+    });
+
+
+    //(Page X of Y) : show pages at footer
+    const totalPages = doc.getNumberOfPages();
+
+    for (let i = 1; i <= totalPages; i++) {
+
+      doc.setPage(i);
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      doc.setFontSize(8);
+
+      doc.text(
+        `Page ${i} of ${totalPages}`,
+        pageWidth / 2,
+        pageHeight - 5,
+        { align: 'center' }
+      );
+
+      doc.text(
+        `Generated On: ${today}`,
+        10,
+        pageHeight - 5
+      );
+    }
+
+    doc.save('ITI Planning List.pdf');
   }
 
 }

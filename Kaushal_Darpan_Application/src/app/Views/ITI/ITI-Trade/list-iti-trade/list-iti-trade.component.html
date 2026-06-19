@@ -6,7 +6,16 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">Trades</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+
+      @if (sSOLoginDataModel.RoleID==16)
+      {
+      <a routerLink="/AdmissionMasterDashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      }
+      @else
+      {
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      }
+
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/ititradelist" class="text-sm font-medium text-slate-700" aria-current="page">Trades</a>
     </div>
@@ -57,7 +66,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Type:</label>
-          <select [disabled]="sSOLoginDataModel.RoleID!=16" class="form-select" [(ngModel)]="searchRequest.TradeTypeId">
+          <select  class="form-select" [(ngModel)]="searchRequest.TradeTypeId">
             <option value="0">Choose Option</option>
             <option value="1">Eng</option>
             <option value="2">Non Eng</option>

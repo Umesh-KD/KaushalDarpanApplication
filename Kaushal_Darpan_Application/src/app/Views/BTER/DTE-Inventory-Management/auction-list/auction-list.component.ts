@@ -5,7 +5,7 @@ import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-boo
 import { ToastrService } from 'ngx-toastr';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { DTEItemsSearchModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { AuctionListSearchModel, DTEItemsSearchModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -16,6 +16,7 @@ import { ItiTradeService } from '../../../../Services/iti-trade/iti-trade.servic
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import { DTEItemCategoriesMasterService } from '../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
 
 import * as XLSX from 'xlsx';
 import { jsPDF } from 'jspdf';
@@ -30,6 +31,7 @@ import { HttpClient } from '@angular/common/http';
 
 export class AuctionListComponent {
   public Searchrequest = new DTEItemsSearchModel()
+  public searchrequest = new AuctionListSearchModel()
   public request = new AuctionDetailsModel()
   public searchTradeRequest = new ITITradeSearchModel();
   public isLoading: boolean = false;
@@ -69,7 +71,7 @@ export class AuctionListComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   //end table feature default
-
+  public CategoryDDLList: any = [];
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
 
   @ViewChild('AuctionItems_Modal') MyModel_AuctionItem: ElementRef | any;
@@ -85,6 +87,8 @@ export class AuctionListComponent {
     private activatedRoute: ActivatedRoute,
     private routers: Router,
     private Swal2: SweetAlert2,
+    private itemCategoriesService: DTEItemCategoriesMasterService,
+
     private modalService: NgbModal) { }
 
   async ngOnInit() {
@@ -106,6 +110,7 @@ export class AuctionListComponent {
 
     await this.GetAllData();
     await this.GetEquipmentDDL();
+    await this.GetCategoryDDL();
     //await this.GetTradeDDL();
     //await this.GetCollegeDDL();
   }
@@ -170,15 +175,19 @@ export class AuctionListComponent {
     }
   }
 
+ 
   async GetEquipmentDDL() {
+   
     try {
       this.loaderService.requestStarted();
+      this.searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       await this.equipmentsService.GetAllData(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.EquipmentsDDLList = data['Data'];
         }, error => console.error(error));
     }
@@ -191,6 +200,25 @@ export class AuctionListComponent {
       }, 200);
     }
   }
+  async GetCategoryDDL() {
+    try {
+      this.loaderService.requestStarted();
+      await this.itemCategoriesService.GetAllData()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CategoryDDLList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async ViewandUpdate(content: any, item:any) {
     this.isSubmitted = false;
@@ -271,11 +299,14 @@ export class AuctionListComponent {
   }
 
   async GetAllData() {
+    debugger
     try {
       this.loaderService.requestStarted();
-      this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
-      this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID;
-      await this.dteItemsMasterService.GetAllAuctionList(this.Searchrequest)
+      this.searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.searchrequest.CategoryId = this.searchrequest.CategoryId;
+      this.searchrequest.EquipmentsId = this.searchrequest.EquipmentsId;
+      await this.dteItemsMasterService.GetAllAuctionList(this.searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -284,7 +315,10 @@ export class AuctionListComponent {
 
           this.ItemMasterList = data['Data'];
           if (this.Searchrequest.EquipmentsId != 0) {
-            this.ItemMasterList = this.ItemMasterList.flter((item: any) => item.EquipmentsId == this.Searchrequest.EquipmentsId);
+            /* this.ItemMasterList = this.ItemMasterList.flter((item: any) => item.EquipmentsId == this.Searchrequest.EquipmentsId);*/
+            this.ItemMasterList = this.ItemMasterList.filter(
+              (item: any) => item.EquipmentsId == this.Searchrequest.EquipmentsId
+            );
           } else {
             this.ItemMasterList = data['Data'];
           }
@@ -292,7 +326,10 @@ export class AuctionListComponent {
           this.loadInTable();
           this.ItemMasterList1 = data['Data'];
           if (this.Searchrequest.EquipmentsId != 0) {
-            this.ItemMasterList1 = this.ItemMasterList1.flter((item: any) => item.EquipmentsId == this.Searchrequest.EquipmentsId);
+            /*this.ItemMasterList1 = this.ItemMasterList1.flter((item: any) => item.EquipmentsId == this.Searchrequest.EquipmentsId);*/
+            this.ItemMasterList1 = this.ItemMasterList1.filter(
+              (item: any) => item.EquipmentsId == this.Searchrequest.EquipmentsId
+            );
           } else {
             this.ItemMasterList1 = data['Data'];
           }
@@ -316,8 +353,9 @@ export class AuctionListComponent {
 
   async ResetControl() {
     this.isSubmitted = false;
-    this.Searchrequest = new ItemsSearchModel();
+    this.searchrequest = new AuctionListSearchModel();
     this.ID = 0;
+    await this.GetAllData();
   }
 
   async btnDelete_OnClick(Id: number) {

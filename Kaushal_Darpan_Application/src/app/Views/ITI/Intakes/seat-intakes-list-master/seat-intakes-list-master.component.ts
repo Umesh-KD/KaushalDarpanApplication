@@ -93,7 +93,28 @@ export class SeatIntakesListMasterComponent implements OnInit {
         OrderNo: ['']
       });
 
+    this.route.queryParams.subscribe(params => {
 
+      const collegeId = Number(params['CollegeID'] || 0);
+      const tradeId = Number(params['TradeID'] || 0);
+      const sanctionedId = Number(params['SanctionedID'] || 0);
+
+      console.log(collegeId, tradeId, sanctionedId);
+
+      if (collegeId > 0) {
+        this.searchRequest.CollegeID = collegeId;
+      }
+
+      if (tradeId > 0) {
+        this.searchRequest.TradeID = tradeId;
+      }
+
+      if (sanctionedId > 0) {
+        this.searchRequest.SanctionedID = sanctionedId;
+      }
+
+
+    });
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")

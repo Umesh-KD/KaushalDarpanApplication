@@ -16,6 +16,8 @@ import { ITIsService } from '../../../../Services/ITIs/itis.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ItiCollegesSearchModel } from '../../../../Models/CommonMasterDataModel';
 import { DropdownValidatorsString, DropdownValidatorsString1 } from '../../../../Services/CustomValidators/custom-validators.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-list-iti-bankguarantee',
   templateUrl: './list-iti-bankguarantee.component.html',
@@ -97,16 +99,8 @@ export class listitibankguaranteeComponent {
   
     });
 
-
-
-
-
     this.getbankguaranteeList()
     await this.GetPrivateITICollege();
-
-
-
-    
 
   }
   get _bankGuaranteeFormGroup() { return this.bankGuaranteeFormGroup.controls; }
@@ -588,5 +582,124 @@ export class listitibankguaranteeComponent {
     return true;
 
   }
+
+  exportToPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    const today = new Date().toLocaleDateString('en-GB');
+
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'Bank Guarantee Report',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    doc.setFontSize(9);
+    doc.text(
+      `Total Records : ${this.BankGuaranteeList.length}`,
+      pageWidth - 20,
+      10,
+      { align: 'right' }
+    );
+
+    //doc.setFontSize(9);
+    //doc.setFont('helvetica', 'normal');
+    //doc.text(
+    //  `Date: ${today}`,
+    //  pageWidth - 15,
+    //  10,
+    //  { align: 'right' }
+    //);
+
+    const body = this.BankGuaranteeList.map((row: any, index: number) => [
+      index + 1,
+      row.CollegeName || '',
+      row.BankName || '',
+      row.BankGuaranteeNumber || '',
+      //row.DateOfIssue || '',
+      row.Maturitydate || '',
+      row.Duration || '',
+      row.Amount ? Number(row.Amount).toLocaleString('en-IN') : '0',
+      row.Remarks || '',
+      row.StatusName || ''
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr No',
+        'Inst_Code and Name',
+        'Bank Name',
+        'Bank Gurantee Number',
+       // 'Issue Date',
+        'Maturity Date',
+        'Duration Years',
+        'Amount',
+        'Remarks',
+        'Status'
+
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 8,
+        cellPadding: 2,
+        overflow: 'linebreak',
+        valign: 'middle',
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+    });
+
+
+    //(Page X of Y) : show pages at footer
+    const totalPages = doc.getNumberOfPages();
+
+    for (let i = 1; i <= totalPages; i++) {
+
+      doc.setPage(i);
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      doc.setFontSize(8);
+
+      doc.text(
+        `Page ${i} of ${totalPages}`,
+        pageWidth / 2,
+        pageHeight - 5,
+        { align: 'center' }
+      );
+
+      doc.text(
+        `Generated On: ${today}`,
+        10,
+        pageHeight - 5
+      );
+    }
+
+    doc.save('ITI Bank Guarantee List.pdf');
+  }
+
 
 }

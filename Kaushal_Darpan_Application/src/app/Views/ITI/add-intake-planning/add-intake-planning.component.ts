@@ -29,7 +29,10 @@ export class AddIntakePlanningComponent {
 
   public OrderNoList: any = [];
   public AcademicOrderNoList:any=[];
-  public FinancialOrderNoList:any=[];
+  public FinancialOrderNoList: any = [];
+
+  public filteredAcademicOrderNoList:any=[];
+  public filteredFinancialOrderNoList:any=[];
 
   public ItiTradeListAll: any = [];
   public ItiCollegesListAll: any = [];
@@ -439,31 +442,40 @@ async onSubmit() {
   }
 
 
-  //async GetOrderDetailsList_ByDate(type: number) {
-  //  debugger
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    this.ItiSanctionOrderList.InstituteID = this.request.PlanningID
+  async GetOrderDetailsList_ByDate(type: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      var SelectedDate = this.request.AdminOrderDate;
+      if (type == 1) {
+        SelectedDate = this.request.AdminOrderDate;
+      }
+      else {
+        SelectedDate = this.request.FinancialOrderDate;
+      }
+      this.ItiSanctionOrderList.InstituteID = this.request.PlanningID
+      this.ItiSanctionOrderList.SelectedDate = SelectedDate
+      this.ItiSanctionOrderList.TypeID = type
 
-  //    await this.ScholarshipService.GetsanctionOrder(this.ItiSanctionOrderList).then((data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      // this.request = data.Data[0];
-  //      this.OrderNoList = data.Data;
-  //      this.AcademicOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 1);
-  //      this.FinancialOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 2);
+      await this.ScholarshipService.GetOrderDetailsList_ByDate(this.ItiSanctionOrderList).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        // this.request = data.Data[0];
+        this.OrderNoList = data.Data;
+        this.AcademicOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 1);
+        this.FinancialOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID == 2);
 
-  //      console.log(this.OrderNoList, "orderlist");
-  //    });
-  //  }
-  //  catch (error) {
-  //    console.error(error);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
+        console.log(this.OrderNoList, "orderlist");
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
   async OnOrderChange( type: number) {
@@ -482,6 +494,33 @@ async onSubmit() {
       );
 
       this.request.FinancialOrderDate = item?.OrderDate ?? '';
+    }
+  }
+
+  async OnOrderDateChange(type: number) {
+    debugger
+    if (type == 1) {
+
+      this.filteredAcademicOrderNoList = this.AcademicOrderNoList.filter(
+        (e: any) => e.OrderDate === this.request.AdminOrderDate
+      );
+
+      this.request.AdminSanctionedID =
+        this.filteredAcademicOrderNoList.length === 1
+          ? this.filteredAcademicOrderNoList[0].ID
+          : 0;
+    }
+
+    if (type == 2) {
+
+      this.filteredFinancialOrderNoList = this.FinancialOrderNoList.filter(
+        (e: any) => e.OrderDate === this.request.FinancialOrderDate
+      );
+
+      this.request.FinancialSanctionID =
+        this.filteredFinancialOrderNoList.length === 1
+          ? this.filteredFinancialOrderNoList[0].ID
+          : 0;
     }
   }
 
