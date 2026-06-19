@@ -1,0 +1,149 @@
+<app-loader></app-loader>
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">
+      List of Issued Items
+    </h4>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">
+        <i class="ti ti-list"></i> List of Issued Items
+      </b>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table table-border w-full table-auto">
+
+        <thead class="bg-light/40 border-b border-gray-100 h-10">
+          <tr>
+            <th>SNO</th>
+            <th>Name</th>
+            <th>Item Type</th>
+            <th>Item Name</th>
+            <th>Equipment Name</th>
+            <th>Item Code</th>
+            <th>Equipment Code</th>
+            <th>Qty</th>
+            <th>Issue Date</th>
+            <th>Indent No</th>
+            <th>Return Date</th>
+            <th>Equipment Status On Return</th>
+            <th>Issue Document</th>
+            <th>Status</th>
+            <th>Approval Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let item of ItemMasterList; let idx=index">
+
+            <td>{{idx + 1}}</td>
+
+            <td>{{item.Name}}</td>
+
+            <td>
+              <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
+                {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+              </span>
+            </td>
+
+            <td>{{item.ItemCategoryName}}</td>
+
+            <td>{{item.EquipmentName}}</td>
+
+            <td>{{item.ItemCode}}</td>
+
+            <td>{{item.EquipmentsCode}}</td>
+
+            <td>{{item.Quantity}}</td>
+
+            <td>
+              {{item.IssueDate | date:'dd-MM-yyyy'}}
+            </td>
+
+            <td>{{item.IndentNo}}</td>
+
+            <td>
+              {{item.ReturnDate | date:'dd-MM-yyyy'}}
+            </td>
+
+            <td>
+              <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0
+                ? 'badge-working'
+                : 'badge-notworking'">
+
+                {{
+                item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0
+                ? 'Working'
+                : 'Not Working'
+                }}
+
+              </span>
+            </td>
+
+            <td>
+              <a *ngIf="item.IssueItemDocument"
+                 [href]="appsettingConfig.StaticFileRootPathURL + '/Students/' + item.IssueItemDocument"
+                 target="_blank"
+                 class="btn bg-primary text-white btn-sm">
+
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+
+            <td>
+              <span [ngClass]="{
+                  'InvStatus-issued': item.InvStatus === 0,
+                  'InvStatus-returned': item.InvStatus === 1
+                }">
+
+                {{
+                item.InvStatus === 0
+                ? 'Issued'
+                : item.InvStatus === 1
+                ? 'Returned'
+                : 'Unknown'
+                }}
+
+              </span>
+            </td>
+
+            <td>
+              <span [ngClass]="{
+                  'InvStatus-issued': item.IssueStatus === 1,
+                  'InvStatus-returned': item.IssueStatus === 2
+                }">
+
+                {{
+                item.IssueStatus === 1
+                ? 'Pending at Store Incharge'
+                : item.IssueStatus === 2
+                ? 'Approved'
+                : 'Unknown'
+                }}
+
+              </span>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="ItemMasterList?.length == 0">
+            <td colspan="15" class="text-center">
+              No Record Found
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>
