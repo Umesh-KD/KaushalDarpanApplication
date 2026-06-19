@@ -76,18 +76,24 @@
         <i class="bi bi-card-list"></i>
       </div>
       <div class="text-sm font-medium text-purple-600">Active Seat Intake</div>
-      <div class="text-3xl font-bold text-slate-900 mt-1">{{TotalActiveIntake  | number:'1.0-0'}}</div>
+      <!--<div class="text-3xl font-bold text-slate-900 mt-1">{{TotalActiveIntake  | number:'1.0-0'}}</div>-->
+    <a [routerLink]="'/SeatIntakesMasterList'" [queryParams]="{flag:3,key:0}" class="text-3xl font-bold text-slate-900 mt-1">{{TotalActiveIntake  | number:'1.0-0'}}</a>
+
       <div class="flex-1 mt-5">
         <div class="space-y-2 text-sm">
           <div class="flex justify-between text-slate-600">
             <span>
               Engineering
-            </span><span>{{Engineering  | number:'1.0-0'}}</span>
+            </span>
+            <!--<span>{{Engineering  | number:'1.0-0'}}</span>-->
+            <a [routerLink]="'/SeatIntakesMasterList'" [queryParams]="{flag:3,key:1}"> <span>{{Engineering  | number:'1.0-0'}}</span></a>
           </div>
           <div class="flex justify-between text-slate-600">
             <span>
               Non Engineering
-            </span><span>{{NonEngineering  | number:'1.0-0' }}</span>
+            </span>
+            <!--<span>{{NonEngineering  | number:'1.0-0' }}</span>-->
+            <a [routerLink]="'/SeatIntakesMasterList'" [queryParams]="{flag:3,key:2}"> <span>{{NonEngineering  | number:'1.0-0' }}</span></a>
           </div>
           <div class="border-t border-slate-100 pt-2">
             <div class="flex justify-between font-semibold text-slate-900">

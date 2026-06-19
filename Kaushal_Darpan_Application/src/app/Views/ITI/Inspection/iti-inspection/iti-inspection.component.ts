@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { EnumDeploymentStatus, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumDeploymentStatus, EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionSearchModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -41,6 +41,8 @@ export class ITIInspectionComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
+
+  _EnumRole = EnumRole
  // private modalService = inject(NgbModal);
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -59,8 +61,7 @@ export class ITIInspectionComponent {
 
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));    
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.GetAllData()
