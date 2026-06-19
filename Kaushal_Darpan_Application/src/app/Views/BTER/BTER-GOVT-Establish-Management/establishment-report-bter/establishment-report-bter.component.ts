@@ -84,6 +84,11 @@ export class EstablishmentReportBTERComponent {
     this.searchRequest.GuestHouseID = this.sSOLoginDataModel.GuestHouseID;
     this.searchRequest.InstitutionManagementTypeID = this.searchRequest.InstitutionManagementTypeID
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+
+    if(this.status>0) {
+      this.searchRequest.OfficeID = this.status;
+    }
+
     try {
       this.loaderService.requestStarted();
       await this.bterEstablishManagementService.GetEstablishmentReportData(this.searchRequest)
