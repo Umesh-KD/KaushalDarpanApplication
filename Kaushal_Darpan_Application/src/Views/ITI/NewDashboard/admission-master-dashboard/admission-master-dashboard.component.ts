@@ -69,12 +69,7 @@ updatePlanningFlag = false;
     this.loadPlanningChart();
     await this.GetAllData();
     await this.GetDTEDashboard();
-
- 
   }
-
-
-
 
   async GetAllData()
   {
@@ -82,7 +77,6 @@ updatePlanningFlag = false;
     var d =
     {
       ActionName: 'DashboardCounts'
-
     };
     try
     {

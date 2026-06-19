@@ -594,6 +594,7 @@ export class AddCollegeMasterComponent implements OnInit {
   async ddlDistrict_Change() {
     try {
       this.loaderService.requestStarted();
+      this.request.DistrictID = this.instituteForm.get('districtID')?.value;
       await this.commonMasterService.TehsilMaster_DistrictIDWise(this.request.DistrictID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
