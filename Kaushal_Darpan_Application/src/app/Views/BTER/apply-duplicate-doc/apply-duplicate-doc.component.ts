@@ -600,7 +600,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     //this.emitraRequest.MobileNo = this.request.MobileNo;
     this.emitraRequest.MobileNo = GlobalConstants.DefaultMobileNo; //this.sSOLoginDataModel.Mobileno;
     this.emitraRequest.StudentID = this.request.StudentID;
-    this.emitraRequest.SemesterID = this.GrievanceFormGroup.value.SemesterID;
+    this.emitraRequest.SemesterID = this.GrievanceFormGroup.value.SemesterID?? 0;
     this.emitraRequest.ExamStudentStatus = 0;
     this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
     this.emitraRequest.DepartmentID =  1// this.request.DepartmentID;

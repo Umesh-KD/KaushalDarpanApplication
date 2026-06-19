@@ -41,7 +41,7 @@ export class ApprenticeshipRegistrationReport {
   public Message: any = [];
   public ErrorMessage: any = [];
   public CollegeList: any = [];
-  
+  disable:boolean=false
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -73,9 +73,17 @@ export class ApprenticeshipRegistrationReport {
     await this.GetITICollege();
     this.request.FileName = '';
     const Editid = sessionStorage.getItem('ApprenticeshipRegistrationReportPKID');
+    const Flag = Number(sessionStorage.getItem('Flag'));
     if (Editid != undefined && parseInt(Editid) > 0) {
+      if (Flag > 0) {
+        this.ApprenticeshipReportFormGroup.enable(); // Disables all form controls
+        this.disable=false
+      } else {
+        this.ApprenticeshipReportFormGroup.disable(); // Disables all form controls
+        this.disable = true
+      }
       await this.GetReportDatabyID(parseInt(Editid));
-      this.ApprenticeshipReportFormGroup.disable(); // Disables all form controls
+
       console.log(Editid);
     }
     if (this.ssoLoginDataModel.RoleID != 97) {

@@ -67,12 +67,14 @@ export class PMNAMMelaReportBeforeAfterComponent {
   {
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     const Editid = sessionStorage.getItem('PMNAM_BeforeAfterRPTEditId');
+    const ISEDIT = Number(sessionStorage.getItem('ISEDIT'))??0
+
     if (Editid != undefined && parseInt(Editid) > 0) {
       this.GetReportDatabyID(parseInt(Editid));
       console.log(Editid);
       this.buttonLabel = 'Update';
     }
-    if (this.SSOLoginDataModel.RoleID != 97 || Number(Editid)>0) {
+    if (this.SSOLoginDataModel.RoleID != 97 || Number(Editid) > 0 && ISEDIT==0) {
       this.IsDisable = true;
     }
     else {

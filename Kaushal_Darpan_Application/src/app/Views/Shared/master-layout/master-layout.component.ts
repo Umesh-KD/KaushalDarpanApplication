@@ -478,9 +478,11 @@ export class MasterLayoutComponent implements OnInit {
     if (menuTextSpan) {
       const text = menuTextSpan.textContent?.trim();
 
-      if (this.sSOLoginDataModel.RoleID == EnumRole.DTETraing) {
-        if (text === "Master") {
-          this.router.navigate(['/Iti-Dashboard']);
+      if (this.sSOLoginDataModel.RoleID == EnumRole.DTETraing)
+      {
+        if (text === "Master")
+        {
+          this.router.navigate(['/AdmissionMasterDashboard']);
         }
       }
     }

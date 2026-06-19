@@ -108,16 +108,24 @@ export class fresherRegistrationReportComponent {
     this.ITITimeTableForm = this.fb.group({
       InstituteID: ['', [DropdownValidators]],
       RegDate: ['', Validators.required],
-      FileNameDoc: ['', Validators.required],
+      FileNameDoc: [''],
       RegCount: ['', Validators.required],
       Remarks: ['', Validators.required],
     });
     const Editid = sessionStorage.getItem('fresherRegistrationReportPKID');
-    if (Editid != undefined && parseInt(Editid) > 0) {
+    const flag = sessionStorage.getItem('flag');
+    if (Editid != undefined && parseInt(Editid) > 0 && flag != undefined && parseInt(flag) == 0) {
       this.GetReportDatabyID(parseInt(Editid));
       this.ITITimeTableForm.disable()
       this.isdisable=true
       console.log(Editid);
+    }
+    else if(Editid != undefined && parseInt(Editid) > 0 && flag != undefined && parseInt(flag) == 1) {
+      this.GetReportDatabyID(parseInt(Editid));
+      this.ITITimeTableForm.enable()
+      this.isdisable=false
+      console.log(Editid);
+      
     }
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));

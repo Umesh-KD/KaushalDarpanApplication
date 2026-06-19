@@ -17,6 +17,8 @@ import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
 import { CollegeMasterDataModels, CollegeMasterSearchModel } from '../../../../Models/CollegeMasterDataModels';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
     selector: 'app-itis',
@@ -154,9 +156,11 @@ export class ITIsComponent implements OnInit {
     if (this.key != 0) {
       if (this.flag == 1 && this.key == 1) {
         this.searchrequest.ITItypeID = 1;
+        this.searchrequest.Status = -1;
       }
       else if (this.flag == 1 && this.key == 5) {
         this.searchrequest.ITItypeID = 5;
+        this.searchrequest.Status = -1;
       }
       else if (this.flag == 2 && this.key == 1) {
         this.searchrequest.Status = 1;
@@ -171,7 +175,119 @@ export class ITIsComponent implements OnInit {
 
   }
 
- 
+  exportToPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4');
+
+    // Heading
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    const today = new Date().toLocaleDateString('en-GB');
+
+
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text(
+      'ITI College List Report',
+      pageWidth / 2,
+      10,
+      { align: 'center' }
+    );
+
+    doc.setFontSize(9);
+    doc.text(
+      `Total Records : ${this.itiList.length}`,
+      pageWidth - 20,
+      10,
+      { align: 'right' }
+    );
+
+    //doc.setFontSize(9);
+    //doc.setFont('helvetica', 'normal');
+    //doc.text(
+    //  `Date: ${today}`,
+    //  pageWidth - 15,
+    //  10,
+    //  { align: 'right' }
+    //);
+
+    const body = this.itiList.map((row: any, index: number) => [
+      index + 1,
+      //`${row.Code || ''} (${row.Name || ''})`,  //concate in one column
+      //row.CollegeName || '',
+      row.Name || '',
+      row.DgetCode || '',
+      row.DistrictNameEnglish || '',
+      row.RemarkForStatus || '',
+      //row.DgetCode || '',
+      //row.campusName || '',
+      //row.ActiveStatus ? 'Active' : 'Inactive'
+    ]);
+
+    autoTable(doc, {
+      startY: 18,
+
+      head: [[
+        'Sr No',
+        'ITI Name and Code Campus',
+        'Inst_Code_DGET',
+        'District Name',
+        //'Roll List / Admit Card',
+        'Active/Inactive Remark',
+        //'DGET Code',
+        //'Campus Name',
+        //'Status'
+      ]],
+
+      body,
+
+      theme: 'grid',
+
+      styles: {
+        fontSize: 7,
+        textColor: [0, 0, 0],
+        fillColor: [255, 255, 255],
+        lineColor: [0, 0, 0],
+        lineWidth: 0.1
+      },
+
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: 'bold'
+      },
+
+    });
+
+
+    //(Page X of Y) : show pages at footer
+    const totalPages = doc.getNumberOfPages();
+
+    for (let i = 1; i <= totalPages; i++) {
+
+      doc.setPage(i);
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      doc.setFontSize(8);
+
+      doc.text(
+        `Page ${i} of ${totalPages}`,
+        pageWidth / 2,
+        pageHeight - 5,
+        { align: 'center' }
+      );
+
+      doc.text(
+        `Generated On: ${today}`,
+        10,
+        pageHeight - 5
+      );
+    }
+
+    doc.save('ITI College List.pdf');
+  }
+
 
   async GetInstituteCategoryList() {
     try {

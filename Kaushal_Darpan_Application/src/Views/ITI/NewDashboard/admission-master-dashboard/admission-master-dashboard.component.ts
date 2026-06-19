@@ -120,6 +120,11 @@ updatePlanningFlag = false;
 
 
 
+          this.DashboardCountList = data?.Data?.Table5 || [];
+
+
+
+
 
 
           console.log(this._barChartData, "_barChartData");
@@ -209,7 +214,7 @@ updatePlanningFlag = false;
       },
 
       title: {
-        text: 'District Institutional Split'
+        text: 'District Wise Institutions'
       },
 
       xAxis: {
@@ -222,7 +227,7 @@ updatePlanningFlag = false;
       yAxis: {
         min: 0,
         title: {
-          text: 'Total ITIs'
+          text: 'No of ITIs'
         }
       },
 
@@ -344,14 +349,8 @@ updatePlanningFlag = false;
   try {
     this.loaderService.requestStarted();
 
-    await this.itiTradeService.GetDashboardData(d)
-      .then((data: any) => {
+ 
 
-        data = JSON.parse(JSON.stringify(data));
-
-        if (data.State == EnumStatus.Success) {
-
-          this.DashboardCountList = data.Data || [];
 
           this.planningChartData = this.DashboardCountList
             .filter((f: any) => f.TileType === 'Planing')
@@ -364,9 +363,9 @@ updatePlanningFlag = false;
           console.log('Planning Chart Data', this.planningChartData);
 
           this.loadPlanningChart();
-        }
+        
 
-      }, (error: any) => console.error(error));
+      
 
   }
   catch (ex) {

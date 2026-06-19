@@ -23,7 +23,7 @@ import { ITIApprenticeshipWorkshopModel } from '../../../../Models/ITI/ITIAppren
   styleUrl: './pmnam-mela-report-before-after-list.component.css'
 })
 export class PMNAMMelaReportBeforeAfterListComponent {
-
+  public isedit:boolean=false
   public DataList: any = []
   public Table_SearchText: string = '';
   public DistrictList: any = []
@@ -245,9 +245,10 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     }
   }
 
-  EditData(id: number) {
+  EditData(id: number,Flag:number=0) {
 
     sessionStorage.setItem('PMNAM_BeforeAfterRPTEditId', id.toString());
+    sessionStorage.setItem('ISEDIT', Flag.toString());
     this.routers.navigate(['/PMNAM-MelaReportBeforeAfter']);
     console.log(sessionStorage);
   }
@@ -368,11 +369,18 @@ export class PMNAMMelaReportBeforeAfterListComponent {
   async DownloadPmnamMelaReport() {
     try {
       debugger;
+      if (this.SSOLoginDataModel.RoleID == 97) {
+        this.request.DistrictID = this.SSOLoginDataModel.DistrictID
+      }
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
         DepartmentID: this.SSOLoginDataModel.DepartmentID,
         RoleID: this.SSOLoginDataModel.RoleID,
         Createdby: this._Userid,
+        DistrictID: this.request.DistrictID,
+        FinancialYearID: this.request.FinancialYearID,
+        BeforeMonth: this.request.BeforeMonth || 0,
+        ZoneID: this.request.ZoneID
       };
       this.loaderService.requestStarted();
       await this.reportService.GetPmnamMela(obj)
