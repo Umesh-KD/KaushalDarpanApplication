@@ -4,9 +4,7 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Trades</h4>
-
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-
       @if (sSOLoginDataModel.RoleID==16)
       {
       <a routerLink="/AdmissionMasterDashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
@@ -15,7 +13,6 @@
       {
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       }
-
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/ititradelist" class="text-sm font-medium text-slate-700" aria-current="page">Trades</a>
     </div>
@@ -31,7 +28,6 @@
         <a *ngIf="sSOLoginDataModel.RoleID==16" routerLink="/ititrade" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Trade</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
         <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name:</label>
           <input type="text" class="form-input" placeholder="Tr ade Name" [(ngModel)]="searchRequest.TradeName">
@@ -40,8 +36,6 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Code:</label>
           <input type="text" class="form-input" placeholder="Trade Code" [(ngModel)]="searchRequest.TradeCode">
         </div>-->
-
-
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
