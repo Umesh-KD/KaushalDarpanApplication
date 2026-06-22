@@ -101,6 +101,7 @@ export class ITI_PlanningCollegesModel {
   public CourtDate :string=''
   public BuildingPlan :string=''
   public DisBuildingPlan :string=''
+  public IsCampus: boolean = false
 }
 
 export class ItiAffiliationList {

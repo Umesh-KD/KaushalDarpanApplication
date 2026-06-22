@@ -55,6 +55,7 @@ export class SeatIntakePlanningComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   //end table feature default
+  public _OrderNoHendingRoleWise: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -97,6 +98,12 @@ export class SeatIntakePlanningComponent {
 
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
+    
+    if (this.SSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
+      this._OrderNoHendingRoleWise = 'Post-sanctioned';
+    } else {
+      this._OrderNoHendingRoleWise = 'Administrative Order No';
+    }
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
     this.onSearch();
