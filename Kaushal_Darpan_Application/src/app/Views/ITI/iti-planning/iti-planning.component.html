@@ -281,8 +281,11 @@
                placeholder="Remarks">
       </div>-->
           <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-         this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT &&
-         request.InstituteManagementId == 5"
+         this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT
+                &&
+         this.sSOLoginDataModel.RoleID != _enumrole.ITIPlanningAdmin
+               &&
+         request.InstituteManagementId == 5 "
                class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
             <div class="flex items-center justify-between mb-3">
               <div>
@@ -507,6 +510,8 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.TrustMember
 
         <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
          this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+                      &&
+  this.sSOLoginDataModel.RoleID != _enumrole.ITIPlanningAdmin
              class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
           <div class="flex items-center justify-between mb-3">
             <div>
@@ -967,7 +972,11 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AddressStat
 
 
         <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-         this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+         this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT
+
+                      &&
+  this.sSOLoginDataModel.RoleID != _enumrole.ITIPlanningAdmin
+             "
              class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
           <div class="flex items-center justify-between mb-3">
             <div>
@@ -1263,7 +1272,11 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.BankStatus=
         </div>
 
         <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal&&
-        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT && request.InstituteManagementId!=1"
+        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT
+                      &&
+  this.sSOLoginDataModel.RoleID != _enumrole.ITIPlanningAdmin
+
+             && request.InstituteManagementId!=1"
              class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
           <div class="flex items-center justify-between mb-3">
             <div>
@@ -1452,7 +1465,11 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.ElectricalS
 
 
         <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT
+                      &&
+  this.sSOLoginDataModel.RoleID != _enumrole.ITIPlanningAdmin
+
+             "
              class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
           <div class="flex items-center justify-between mb-3">
             <div>
@@ -1643,7 +1660,11 @@ this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && request.AffilationS
 
 
         <div *ngIf="this.sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&
-        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT"
+        this.sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT
+                      &&
+  this.sSOLoginDataModel.RoleID != _enumrole.ITIPlanningAdmin
+
+             "
              class="mt-5 rounded-xl border border-amber-300 bg-amber-50 shadow-sm p-4">
           <div class="flex items-center justify-between mb-3">
             <div>
