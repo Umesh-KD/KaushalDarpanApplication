@@ -69,6 +69,10 @@ export class ItiCollegeApprovedContractRPTComponent {
     this.request.DistrictID = this.sSOLoginDataModel.DistrictID
     await this.DivisionData_ByDistrict();
     await this.GetDistictData();
+
+    this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+
+    await this.GetInstituteMaster();
   }
 
   get _CollegeApprovedContractForm() { return this.CollegeApprovedContractForm.controls; }
@@ -104,14 +108,20 @@ async GetFinancialYear(){
     async GetDistictData() {
     try {
         
+      
       // this.request.DistrictID = 0
       // this.Institutelist = [];
       await this.onChange();
       await this.commonMasterService.DistrictMaster_DivisionIDWise(Number(this.request.DivisionID))
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.Districtlist = data['Data'];
-          this.request.DistrictID = this.sSOLoginDataModel.DistrictID
+          if(data.State === EnumStatus.Success){
+            this.Districtlist = data['Data'];
+            this.request.DistrictID = this.sSOLoginDataModel.DistrictID
+          } else {
+            this.Districtlist = [];
+          }
+          
         }, error => console.error(error));
     }
     catch (Ex) {

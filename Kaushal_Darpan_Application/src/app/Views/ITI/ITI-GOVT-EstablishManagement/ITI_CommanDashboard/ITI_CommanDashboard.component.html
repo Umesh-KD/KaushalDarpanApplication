@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div class= "">
+    <!-- <div class= "">
       <div class="section">
         <div class="section-header establishment"><i class="bi bi-people-fill"></i> Establishment</div>
         <div class="section-body">
@@ -48,18 +48,35 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <!-- Row 2 -->
   <div class="grid  xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+
+    <div class=" ">
+      <div class="section">
+        <div class="section-header establishment"><i class="bi bi-people-fill"></i> Establishment</div>
+        <div class="section-body">
+          <div class="flex flex-wrap justify-center gap-3 mb-5 theme-attendance">
+            <div style="width: 30%;">
+              <div class="item-card">
+                <i class="icon bi bi-people-fill icon-green"></i>
+                <div class="label" [innerHTML]="'ITI Establishment Dashboard'"></div>
+                <!-- <div class="number" *ngIf="i.Total">{{i.Total}}</div> -->
+                <a class="view" [routerLink]="['/iti-establishment-dashboard']">View Details</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <div class=" ">
       <div class="section">
         <div class="section-header placement"><i class="bi bi-briefcase-fill"></i> Placement</div>
         <div class="section-body">
-          <!--<div class="row g-3 theme-placement">
-          <div class="col-12"><div class="item-card"><i class="icon bi bi-bar-chart-line-fill icon-purple"></i><div class="label">Placement Dashboard</div><a class="view" href="#">View Details</a></div></div>
-        </div>-->
+
           <div class="flex flex-wrap justify-center gap-3 mb-5 theme-instructor">
             <div *ngFor="let i of PlacementdashboardList" style="width: 30%;">
               <div class="item-card">

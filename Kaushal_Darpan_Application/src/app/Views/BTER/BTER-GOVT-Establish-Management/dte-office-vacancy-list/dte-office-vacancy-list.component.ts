@@ -33,6 +33,9 @@ export class DTEOfficeVacancyListComponent {
   OfficeVacancy: OfficeVacancyModel[] = [];
   public StreamMasterDDLList: any[] = [];
   public BugetHeadList: any = [];
+  public totalSanctionedPost: number = 0;
+  public totalVacantPost: number = 0;
+  public totalWorkingPost: number = 0;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -115,6 +118,11 @@ export class DTEOfficeVacancyListComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeVacancyList = data['Data'];
+
+          this.totalSanctionedPost = this.OfficeVacancyList.reduce((acc, cur) => acc + cur.TotalSeatID, 0);
+          this.totalVacantPost = this.OfficeVacancyList.reduce((acc, cur) => acc + cur.RemainingSeatID, 0);
+          this.totalWorkingPost = this.OfficeVacancyList.reduce((acc, cur) => acc + cur.PostedSeat, 0);
+
           this.loadInTable();
          
         }, error => console.error(error));
@@ -173,35 +181,86 @@ export class DTEOfficeVacancyListComponent {
     }    
   }
 
-  exportToExcel(): void {
+  // exportToExcel(): void {
+  //   if (!this.OfficeVacancyList || this.OfficeVacancyList.length === 0) {
+  //     this.toastr.warning("No data available to export.");
+  //     return;
+  //   }
+  //   const unwantedColumns = ['ID'];
+
+  //   const columnOrder = [
+  //     'OfficeName', 'InstituteName', 'StaffTypeName' ,'DesignationName' ,'BranchName' ,'BudgetTypeName'
+  //     ,'TotalSeatID' ,'PostedSeat' ,'RemainingSeatID' ,'OrderNumber' ,'OrderDate' ,'Comments' ,'ActiveStatus'
+  //   ];
+
+  //   const filteredData = this.OfficeVacancyList.map((item: any) => {
+  //     const row: any = {};
+  //     columnOrder.forEach(col => {
+  //       if (!unwantedColumns.includes(col)) {
+  //         row[col] = item[col] ?? ''; // fallback if value missing
+  //       }
+  //     });
+
+  //     return row;
+  //   });
+
+  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+
+  //   const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+  //   XLSX.writeFile(wb, `office_vacancy_list_${timestamp}.xlsx`);
+  // }
+
+  exportToExcel() {
     if (!this.OfficeVacancyList || this.OfficeVacancyList.length === 0) {
-      this.toastr.warning("No data available to export.");
+      this.toastr.warning("No data available to export."); // or console.warn if toastr isn't available
       return;
     }
-    const unwantedColumns = ['ID'];
+    const excelData = this.OfficeVacancyList.map((item: any, index: number) => ({
+      'S.No': index + 1,
+      'Office': item.OfficeName,
+      'Institute': item.InstituteName,
+      'Staff Type': item.StaffTypeName,
+      'Designation': item.DesignationName,
+      'Branch': item.BranchName,
+      'Budget Head': item.BudgetTypeName,
+      'Sanctioned Post': Number(item.TotalSeatID || 0),
+      'Working Post': Number(item.PostedSeat || 0), 
+      'Vacant Post': Number(item.RemainingSeatID || 0),
+      'Order Number': item.OrderNumber,
+      'Order Date': item.OrderDate,
+      'Comments': item.Comments,
+      'Active': item.ActiveStatus,
+    }));
 
-    const columnOrder = [
-      'OfficeName', 'InstituteName', 'StaffTypeName' ,'DesignationName' ,'BranchName' ,'BudgetTypeName'
-      ,'TotalSeatID' ,'PostedSeat' ,'RemainingSeatID' ,'OrderNumber' ,'OrderDate' ,'Comments' ,'ActiveStatus'
-    ];
+    const totalSanctioned = excelData.reduce((sum, item) => sum + item['Sanctioned Post'], 0);
+    const totalWorking = excelData.reduce((sum, item) => sum + item['Working Post'], 0);
+    const totalVacant = excelData.reduce((sum, item) => sum + item['Vacant Post'], 0);
 
-    const filteredData = this.OfficeVacancyList.map((item: any) => {
-      const row: any = {};
-      columnOrder.forEach(col => {
-        if (!unwantedColumns.includes(col)) {
-          row[col] = item[col] ?? ''; // fallback if value missing
-        }
-      });
-
-      return row;
+    excelData.push({
+      'S.No': 0,
+      'Office': 'Total',
+      'Institute': '',
+      'Staff Type': '',
+      'Designation': '',
+      'Branch': '',
+      'Budget Head': '',
+      'Sanctioned Post': totalSanctioned,
+      'Working Post': totalWorking,
+      'Vacant Post': totalVacant,
+      'Order Number': '',
+      'Order Date': '',
+      'Comments': '',
+      'Active': '',
     });
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
 
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Office Vacancy');
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
-    XLSX.writeFile(wb, `office_vacancy_list_${timestamp}.xlsx`);
+    XLSX.writeFile(workbook, `office_vacancy_list_${timestamp}.xlsx`);
   }
 
   //table feature 
