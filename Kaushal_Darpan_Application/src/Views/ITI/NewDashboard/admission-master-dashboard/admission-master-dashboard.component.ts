@@ -375,6 +375,7 @@ console.log( 'chart data in load planning',this.planningChartData);
       enabled: false
     }
   };
+
     console.log('planning chart options',this.planningChartOptions);
 debugger
   this.updatePlanningFlag = true;
