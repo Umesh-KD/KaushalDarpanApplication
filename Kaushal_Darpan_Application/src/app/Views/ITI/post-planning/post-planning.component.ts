@@ -96,6 +96,7 @@ export class PostPlanningComponent
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public IsLockandSubmit: boolean = false;
   public _EnumOffice = EnumOffice;
+  public _OrderNoHendingRoleWise: string = '';
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -140,6 +141,12 @@ export class PostPlanningComponent
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
+    if (this.GetRoleID == EnumRole.ITIPlanningAdmin) {
+      this._OrderNoHendingRoleWise = 'Post-sanctioned';
+    } else {
+      this._OrderNoHendingRoleWise = 'Order No';
+    }
+    
     await this.GetCollegesListAll();
     await this.OfficeVacancyDataList();
     await this.GetOfficeList();

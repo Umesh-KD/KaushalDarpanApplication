@@ -16,7 +16,7 @@
     </div>
 
     <form [formGroup]="AddOfficeVacancyForm">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6"> 
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
@@ -27,46 +27,44 @@
         </div>
 
         <!-- <div *ngIf="formData.OfficeID==_EnumOffice.ITI">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
-          <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID" (change)="GetOrderDetailsList()">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
+    <select class="form-select" formControlName="ddlCollege" [(ngModel)]="formData.PlanningID" (change)="GetOrderDetailsList()">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div> -->
 
         <div *ngIf="formData.OfficeID==_EnumOffice.ITI">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">College: <span class="StarMarking">*</span></label>
 
-          <ng-select
-              [(ngModel)]="formData.PlanningID" 
-              formControlName="ddlCollege"
-              [clearable]="false"
-              (change)="GetOrderDetailsList()">
+          <ng-select [(ngModel)]="formData.PlanningID"
+                     formControlName="ddlCollege"
+                     [clearable]="false"
+                     (change)="GetOrderDetailsList()">
             <ng-option [value]="0">--Choose Option--</ng-option>
             <ng-option *ngFor="let item of ItiCollegesListAll;"
-                      [value]="item.ID">{{item.Name}}</ng-option>
+                       [value]="item.ID">{{item.Name}}</ng-option>
           </ng-select>
         </div>
 
         <!-- <div *ngIf="formData.OfficeID==_EnumOffice.NODAL_OFFICE">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: <span class="StarMarking">*</span></label>
-          <select class="form-select" formControlName="NodalDistrictID" [(ngModel)]="formData.NodalDistrictID" (change)="GetOrderDetailsList()">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: <span class="StarMarking">*</span></label>
+    <select class="form-select" formControlName="NodalDistrictID" [(ngModel)]="formData.NodalDistrictID" (change)="GetOrderDetailsList()">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div> -->
 
         <div *ngIf="formData.OfficeID==_EnumOffice.NODAL_OFFICE">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">District: <span class="StarMarking">*</span></label>
 
-          <ng-select
-              [(ngModel)]="formData.NodalDistrictID" 
-              formControlName="NodalDistrictID"
-              [clearable]="false"
-              (change)="GetOrderDetailsList()">
+          <ng-select [(ngModel)]="formData.NodalDistrictID"
+                     formControlName="NodalDistrictID"
+                     [clearable]="false"
+                     (change)="GetOrderDetailsList()">
             <ng-option [value]="0">--Choose Option--</ng-option>
             <ng-option *ngFor="let item of DistrictList;"
-                      [value]="item.ID">{{item.Name}}</ng-option>
+                       [value]="item.ID">{{item.Name}}</ng-option>
           </ng-select>
         </div>
 
@@ -79,44 +77,42 @@
         </div>
 
         <!-- <div *ngIf="formData.StaffTypeID==2">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
-          <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
+    <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
+    </select>
+  </div> -->
 
         <div *ngIf="formData.StaffTypeID==2">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade: <span class="StarMarking">*</span></label>
 
-          <ng-select
-              [(ngModel)]="formData.TradeID" 
-              formControlName="TradeID"
-              [clearable]="false">
+          <ng-select [(ngModel)]="formData.TradeID"
+                     formControlName="TradeID"
+                     [clearable]="false">
             <ng-option [value]="0">--Choose Option--</ng-option>
             <ng-option *ngFor="let item of TradeList;"
-                      [value]="item.Id">{{item.TradeName}}</ng-option>
+                       [value]="item.Id">{{item.TradeName}}</ng-option>
           </ng-select>
         </div>
 
         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-        </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+    <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div> -->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: <span class="StarMarking">*</span></label>
 
-          <ng-select
-              [(ngModel)]="formData.DesignationID" 
-              formControlName="DesignationID"
-              [clearable]="false">
+          <ng-select [(ngModel)]="formData.DesignationID"
+                     formControlName="DesignationID"
+                     [clearable]="false">
             <ng-option [value]="0">--Choose Option--</ng-option>
             <ng-option *ngFor="let item of PostList;"
-                      [value]="item.ID">{{item.Name}}</ng-option>
+                       [value]="item.ID">{{item.Name}}</ng-option>
           </ng-select>
         </div>
 
@@ -125,26 +121,27 @@
           <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
                  [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
         </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Post Sanction Order No: <span class="StarMarking">*</span>
-          </label>
-          <!-- [(ngModel)]="request.FinancialSanctionID" -->
-          <select class="form-select" formControlName="PostSanctionedID"  (change)="OnOrderChange(1)" [(ngModel)]="formData.PostSanctionedID">
-            <option value="0">--Choose Option--</option>
-            <option *ngFor="let item of AcademicOrderNoList" value="{{item.ID}}">{{item.OrderNo}}</option>
-          </select>         
-        </div>
-
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Post Sanction Date: <span class="StarMarking">*</span>
           </label>
           <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="PostSanctionDate" [(ngModel)]="formData.PostSanctionDate">
         </div>
-      
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Post Sanction Order No: <span class="StarMarking">*</span>
+          </label>
+          <!-- [(ngModel)]="request.FinancialSanctionID" -->
+          <select class="form-select" formControlName="PostSanctionedID" (change)="OnOrderChange(1)" [(ngModel)]="formData.PostSanctionedID">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of AcademicOrderNoList" value="{{item.ID}}">{{item.OrderNo}}</option>
+          </select>
+        </div>
+
+
+
+
         <div class="form-group col-span-3">
           <label for="Comments">Comments:</label>
           <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
