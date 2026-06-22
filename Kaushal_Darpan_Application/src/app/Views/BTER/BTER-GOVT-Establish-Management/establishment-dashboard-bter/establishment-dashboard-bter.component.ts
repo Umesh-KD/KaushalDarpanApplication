@@ -47,6 +47,7 @@ export class EstablishmentDashboardBTERComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     await this.GetBTEREstablishmentDashboard();
+    await this.GetStaffTrainingDashboardData();
   }
 
   async GetBTEREstablishmentDashboard() {

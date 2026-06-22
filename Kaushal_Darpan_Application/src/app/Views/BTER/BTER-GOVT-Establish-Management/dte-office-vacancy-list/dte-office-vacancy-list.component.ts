@@ -225,14 +225,35 @@ export class DTEOfficeVacancyListComponent {
       'Designation': item.DesignationName,
       'Branch': item.BranchName,
       'Budget Head': item.BudgetTypeName,
-      'Sanctioned Post': item.TotalSeatID,
-      'Working Post': item.PostedSeat,
-      'Vacant Post': item.RemainingSeatID,
+      'Sanctioned Post': Number(item.TotalSeatID || 0),
+      'Working Post': Number(item.PostedSeat || 0), 
+      'Vacant Post': Number(item.RemainingSeatID || 0),
       'Order Number': item.OrderNumber,
       'Order Date': item.OrderDate,
       'Comments': item.Comments,
       'Active': item.ActiveStatus,
     }));
+
+    const totalSanctioned = excelData.reduce((sum, item) => sum + item['Sanctioned Post'], 0);
+    const totalWorking = excelData.reduce((sum, item) => sum + item['Working Post'], 0);
+    const totalVacant = excelData.reduce((sum, item) => sum + item['Vacant Post'], 0);
+
+    excelData.push({
+      'S.No': 0,
+      'Office': 'Total',
+      'Institute': '',
+      'Staff Type': '',
+      'Designation': '',
+      'Branch': '',
+      'Budget Head': '',
+      'Sanctioned Post': totalSanctioned,
+      'Working Post': totalWorking,
+      'Vacant Post': totalVacant,
+      'Order Number': '',
+      'Order Date': '',
+      'Comments': '',
+      'Active': '',
+    });
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
 
