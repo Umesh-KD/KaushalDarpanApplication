@@ -138,7 +138,7 @@ export class HiringRoleMasterService {
       ).toPromise();
   }
 
-  public async GetsanctionOrderNotAssign(searchRequest: ItiSanctionOrderList) {
+  public async GetsanctionOrderNotAssign(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
     debugger;
     return await this.http.post(`${this.APIUrl}/GetsanctionOrderNotAssign`, body, this.headersOptions)

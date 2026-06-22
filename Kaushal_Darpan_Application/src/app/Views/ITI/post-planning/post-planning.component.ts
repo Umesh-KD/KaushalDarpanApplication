@@ -21,6 +21,7 @@ import { ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
 import { ItiSanctionOrderList } from '../../../Models/ITI/ItiReportDataModel';
 import { HiringRoleMasterService } from '../../../Services/HiringRoleMaster/hiring-role-master.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { AppsettingService } from '../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-post-planning',
@@ -37,6 +38,7 @@ export class PostPlanningComponent
   public isSubmitted: boolean = false;
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public ItiCollegesListAll: any = [];
+  public filteredAcademicOrderNoList: any = [];
   public OrderNoList: any = [];
   public AcademicOrderNoList: any = [];
   public FinancialOrderNoList: any = [];
@@ -109,6 +111,8 @@ export class PostPlanningComponent
     private Swal2: SweetAlert2,
     private ITICollegeTradeService: ItiSeatIntakeService, 
     private ScholarshipService: HiringRoleMasterService,
+    private HiringRoleMaster: HiringRoleMasterService,
+    private appsettingConfig: AppsettingService
   ) { }
 
   async ngOnInit() {
@@ -805,8 +809,8 @@ export class PostPlanningComponent
         (e: any) => e.ID == this.formData.PostSanctionedID
       );
 
-      this.formData.PostSanctionDate = item?.OrderDate ?? '';
-      this.AddOfficeVacancyForm.controls['PostSanctionDate'].disable()
+      this.formData.PostSanctionDate = item?.OrderDate1 ?? item?.OrderDate;
+   /*   this.AddOfficeVacancyForm.controls['PostSanctionDate'].disable()*/
 
     }
     
@@ -831,4 +835,35 @@ export class PostPlanningComponent
       console.log(Ex);
     }
   }
+
+
+  async OnOrderDateChange(type: number) {
+    debugger
+
+    const obj = {
+      OrderDate: this.formData.PostSanctionDate,
+      ParentID:3
+    }
+
+    try {
+
+      this.loaderService.requestStarted();
+      const data: any = await this.HiringRoleMaster.GetsanctionOrderNotAssign(obj);
+      this.AcademicOrderNoList = data['Data'];
+      //this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
+      // Keep original list for filtering later
+      console.log(this.PostList, "OrderList");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
+
+
 }
+ 
+
