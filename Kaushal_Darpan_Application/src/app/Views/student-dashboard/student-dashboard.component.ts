@@ -391,7 +391,7 @@ export class StudentDashboardComponent implements OnInit {
   async GetStudentRecentActivity() {
   try {
 
-    const response: any = await this.studentService.GetStudentRecentActivity(52393);
+    const response: any = await this.studentService.GetStudentRecentActivity(this.sSOLoginDataModel.StudentID);
     if (response?.State === 1 || response?.State === 'Success') {
       this.StudentRecentActivityList = response.Data || [];
     } else {
@@ -408,7 +408,7 @@ async GetStudentMarksheetList() {
 
     const response: any =
       await this.studentService.GetStudentMarksheetList(
-        1
+        this.sSOLoginDataModel.StudentID
       );
     if (response?.State === 1 || response?.State === 'Success') {
       this.StudentMarksheetList = response.Data || [];
