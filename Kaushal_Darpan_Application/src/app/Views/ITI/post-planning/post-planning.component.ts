@@ -98,6 +98,7 @@ export class PostPlanningComponent
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public IsLockandSubmit: boolean = false;
   public _EnumOffice = EnumOffice;
+  public _OrderNoHendingRoleWise: string = '';
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -144,6 +145,12 @@ export class PostPlanningComponent
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
+    if (this.GetRoleID == EnumRole.ITIPlanningAdmin) {
+      this._OrderNoHendingRoleWise = 'Post-sanctioned';
+    } else {
+      this._OrderNoHendingRoleWise = 'Order No';
+    }
+    
     await this.GetCollegesListAll();
     await this.OfficeVacancyDataList();
     await this.GetOfficeList();
@@ -295,12 +302,12 @@ export class PostPlanningComponent
       await this.ITIGovtEMStaffMaster.Save_M_OfficeVacancy_IU(this.OfficeVacancy).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-
+          debugger
           this.OfficeVacancy = [];
           this.OfficeVacancyDataList();
           this.toastr.success('Data saved successfully!');
 
-          window.location.reload();
+         /* window.location.reload();*/
           // Clear array after successful save
         } else {
           this.toastr.error(data.ErrorMessage);
@@ -720,11 +727,11 @@ export class PostPlanningComponent
 
   async OnfinalSave() {
 
-    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-    // await for open model
-    await this.childComponent.OpenOTPPopup();
-    // await OTP verification
-    await this.childComponent.waitForVerification();
+    //this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    //// await for open model
+    //await this.childComponent.OpenOTPPopup();
+    //// await OTP verification
+    //await this.childComponent.waitForVerification();
     this.SaveData()
   }
 

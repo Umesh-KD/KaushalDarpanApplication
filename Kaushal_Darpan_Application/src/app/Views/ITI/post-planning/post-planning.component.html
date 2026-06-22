@@ -7,6 +7,7 @@
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
     </div>-->
   </div>
+
 </div>
 <div *ngIf="sSOLoginDataModel.RoleID==231" class="card">
   <div class="card-body p-5">
@@ -120,6 +121,12 @@
           <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
                  [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
         </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Post Sanction Date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="PostSanctionDate" [(ngModel)]="formData.PostSanctionDate">
+        </div>
 
 
 
@@ -180,8 +187,8 @@
             <th>District Name</th>
             <th>Post Name</th>
             <th>Total Post</th>
-            <th>Deployed Post</th>
-            <th>Vacant Post</th>
+            <!--<th>Deployed Post</th>-->
+            <!--<th>Vacant Post</th>-->
             <th>Order No</th>
             <th>Additional Post</th>
             <th>Comments</th>
@@ -199,8 +206,9 @@
             <td>{{ leave.NodalDistrictName }}</td>
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.TotalSeatID }}</td>
-            <td>{{ leave.PostedSeat }}</td>
-            <td>{{ leave.RemainingSeatID }}</td>
+            <!--<td>{{ leave.PostedSeat }}</td>-->
+            <!--<td>{{ leave.RemainingSeatID }}</td>-->
+     
             <td align="left"><a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{leave.OrderCopy}}">{{leave.OrderName}}</a></td>
             <td>{{ leave.OrderName }}</td>
             <td>{{ leave.AddPostCount }}</td>
