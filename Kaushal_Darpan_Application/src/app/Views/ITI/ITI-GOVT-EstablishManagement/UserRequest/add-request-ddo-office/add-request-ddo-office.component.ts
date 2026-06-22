@@ -905,7 +905,7 @@ export class AddRequestDDOOfficeComponent {
       this.PostSanctionList = []
 
       var obj = {
-        MasterCode: 'TransferOrderNo',
+        MasterCode: ' ',
         FilterBy: this.OrderDate
 
       }
@@ -934,6 +934,7 @@ export class AddRequestDDOOfficeComponent {
   async getExaminerData() {
     this.ordersearchRequest.SanctionID = this.OrderType
     this.ordersearchRequest.OrderDate = this.OrderDate
+    this.ordersearchRequest.ParentID =4
     this.PostSanctionList = []
     try {
       await this.ScholarshipService.GetsanctionOrderNotAssign(this.ordersearchRequest).then((data: any) => {
