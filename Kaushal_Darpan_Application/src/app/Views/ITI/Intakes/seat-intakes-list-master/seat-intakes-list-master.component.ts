@@ -138,7 +138,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
       }
     });
 
-    debugger
+    //debugger
     console.log(this.CourseTypeList);
     this.searchRequest.CourseTypeID = 0;
     if (this.key != 0) {
@@ -521,7 +521,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
 
 
   async UpdateIntakeStatus() {
-    debugger;
+    //debugger;
     try {
 
       // Show loading indicator
@@ -570,7 +570,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
   }
 
   async SaveDataModal() {
-    debugger;
+    //debugger;
     //alert(this.SeatIntakeIDnew);
     //console.log('testdata', this.popUpsearchRequest)
     try {
@@ -600,7 +600,7 @@ export class SeatIntakesListMasterComponent implements OnInit {
   }
 
   onSearchChange() {
-    debugger
+    //debugger
 
     if (this.Table_SearchText == '') {
       this.pageInTableSize = "50"; // reset pagination

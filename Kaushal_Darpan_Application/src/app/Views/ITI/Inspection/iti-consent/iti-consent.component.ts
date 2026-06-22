@@ -76,7 +76,7 @@ export class ITIConsentComponent {
     this.GetAllData();
   }
   async GetAllData() {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
      
@@ -308,7 +308,7 @@ export class ITIConsentComponent {
     }
   }
   async DownloadPdf(FileName: string) {
-    debugger;
+    //debugger;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; 
     this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
       const downloadLink = document.createElement('a');
@@ -321,7 +321,7 @@ export class ITIConsentComponent {
   }
   
   async getMasterData() {
-    debugger
+    //debugger
     try {
 
       this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId;

@@ -175,10 +175,10 @@ export class ApprenticeReportServiceService {
   }
 
   public Submit_Apprenticeship_data(payload: ApprenticeshipSubmission) {
-    debugger;
+    //debugger;
     const body = JSON.stringify(payload);
     console.log('Submitting:', body);
-    debugger;
+   // debugger;
     const headers = { 'Content-Type': 'application/json' };
 
     return this.http.post(this.APIUrl + "/Submit_Apprenticeship_data", body, { headers })

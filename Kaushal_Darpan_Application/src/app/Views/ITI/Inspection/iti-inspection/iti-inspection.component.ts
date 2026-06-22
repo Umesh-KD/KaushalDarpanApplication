@@ -303,7 +303,7 @@ export class ITIInspectionComponent {
              
               data = JSON.parse(JSON.stringify(data));
               if (data.State === EnumStatus.Success) {
-                debugger;
+                //debugger;
                 const pdfUrl = data.PDFURL; // Assuming your API returns this
                 this.DownloadPdf(pdfUrl); // Download using actual file path
 
@@ -339,7 +339,7 @@ export class ITIInspectionComponent {
   }
 
   async DownloadPdf(FileName: string) {
-    debugger;
+    //debugger;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
     // Fetch the file as a blob
     this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
@@ -404,7 +404,7 @@ export class ITIInspectionComponent {
       async (result: any) => {
         if (result.isConfirmed) {
           try {
-            debugger;
+            //debugger;
             // this.searchRequest.DeploymentID = DeploymentID
             this.loaderService.requestStarted();
             await this.itiInspectionService.RequestApprove(DeplomentId)
