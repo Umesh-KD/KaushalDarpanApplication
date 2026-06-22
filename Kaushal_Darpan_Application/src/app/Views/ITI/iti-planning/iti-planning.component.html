@@ -54,9 +54,11 @@
     <div class="flex items-center gap-2 ml-auto">
 
         <a (click)="openCampusRemoveModal(Collegeid)"
+        *ngIf="(this.sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal ||
+        this.sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT) && this.request.IsCampus == true"
            href="javascript:void(0);"
            class="btn bg-warning btn-sm text-white">
-            <i class="ti ti-building"></i> Campus Removed
+            <i class="ti ti-building"></i> Camp Removed
         </a>
 
         <a *ngIf="request.Status == 3 && sSOLoginDataModel.RoleID != _enumrole.DTETraing"
