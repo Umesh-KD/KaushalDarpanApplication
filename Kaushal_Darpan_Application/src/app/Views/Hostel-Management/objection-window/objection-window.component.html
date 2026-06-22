@@ -99,7 +99,21 @@
                   <i class="ti ti-list"></i>
                 </a>
                 <a href="javascript:void(0);" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.SupportingDocument}}" target="_blank" class="text-success" title="Show Affidavit Details"> <i class="ti ti-download downloadIcon"></i></a>
+                <a *ngIf="item.AffidavitDocument"
+                   [href]="appsettingConfig.StaticFileRootPathURL + item.AffidavitDocument"
+                   target="_blank"
+                   class="text-success"
+                   title="Show Affidavit Details">
+                  <i class="ti ti-download downloadIcon"></i>
+                </a>
+
+                <a *ngIf="item.SupportingDocument"
+                   [href]="appsettingConfig.StaticFileRootPathURL + item.SupportingDocument"
+                   target="_blank"
+                   class="text-success"
+                   title="Show Affidavit Changes Document">
+                  <i class="ti ti-download downloadIcon"></i>
+                </a>
               </div>
             </td>
            
