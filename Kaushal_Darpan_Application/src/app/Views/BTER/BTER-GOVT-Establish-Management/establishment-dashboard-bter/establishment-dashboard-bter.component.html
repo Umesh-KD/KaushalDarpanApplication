@@ -64,8 +64,11 @@
         <div class="section-body">
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-attendance">
             <div *ngFor="let i of STC_DashboardTiles">
-              <div class="item-card">
-                <i class="icon {{i.SRC}} icon-blue"></i>
+              <div class="item-card" [ngClass]="i.bgClass || 'bg-gray-500'">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center"
+                    [ngClass]="i.bgClassIcon || 'bg-gray-100'">
+                  <i class="icon" [ngClass]="[i.SRC || '', i.Menu || 'text-gray-500']"></i>
+                </div>
                 <div class="label" [innerHTML]="i.TotalText"></div>
                 <div class="number">{{i.TotalCount}}</div>
                 <a class="view" [routerLink]="'/' + i.URL">View Details</a>
@@ -76,18 +79,26 @@
       </div>
     </div>
 
-    <!-- <div class= "">
+    <div>
       <div class="section">
         <div class="section-header establishment"><i class="bi bi-people-fill"></i> Higher Technical Education</div>
         <div class="section-body">
-          <div class="grid  xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-attendance">
-            <div class="4"><div class="item-card"><i class="icon bi bi-people-fill icon-green"></i><div class="label">Department Office Staff</div><div class="number">256</div><a class="view" href="#">View Details</a></div></div>
-            <div class=""><div class="item-card"><i class="icon bi bi-border-style icon-green"></i><div class="label">Office Vacancy List</div><div class="number">78</div><a class="view" href="#">View Details</a></div></div>
-            <div class=""><div class="item-card"><i class="icon bi bi-arrow-repeat icon-cyan"></i><div class="label">DDO Relieving &amp; Joining</div><div class="number">34</div><a class="view" href="#">View Details</a></div></div>
+          <div class="grid  xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3 mb-5 theme-establishment">
+            <div *ngFor="let i of HTE_DashboardTiles">
+              <div class="item-card" [ngClass]="i.bgClass || 'bg-gray-500'">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center"
+                    [ngClass]="i.bgClassIcon || 'bg-gray-100'">
+                  <i class="icon" [ngClass]="[i.SRC || '', i.Menu || 'text-gray-500']"></i>
+                </div>
+                <div class="label" [innerHTML]="i.TotalText"></div>
+                <div class="number">{{i.TotalCount}}</div>
+                <a class="view" [routerLink]="['/' + i.URL]" [queryParams]="{id: i.Status}">View Details</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 
 </div>

@@ -6,6 +6,8 @@ import { ITIPrincipalDashboardServiceService } from '../../../../Services/ITI-Pr
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { AdminDashboardDataService } from '../../../../Services/AdminDashboard/admin-dashboard-data.service';
 import { EM_StaffTrainingDashboardSearchModel } from '../../../../Models/AdminDashboardDataModel';
+import { TeacherHigherEducationApplicationComponent } from '../../THTE/teacher-higher-education-application/teacher-higher-education-application.component';
+import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 
 @Component({
   selector: 'app-establishment-dashboard-bter',
@@ -22,6 +24,7 @@ export class EstablishmentDashboardBTERComponent {
   public EstablishmentDashboardTiles: any[] = [];
   public RelievingJoiningDashboardTiles: any[] = [];
   public STC_DashboardTiles: any[] = [];
+  public HTE_DashboardTiles: any[] = [];
 
   Highcharts: typeof Highcharts = Highcharts;
   public PostTypeStaffChartOptions: Highcharts.Options | null = null;
@@ -41,6 +44,7 @@ export class EstablishmentDashboardBTERComponent {
   constructor(
     private loaderService: LoaderService,
     private AdminDashDataService: AdminDashboardDataService,
+    private teacherHigherEducationApplicationService : TeacherHigherEducationApplicationService,
   ){}
 
   async ngOnInit() {
@@ -48,6 +52,7 @@ export class EstablishmentDashboardBTERComponent {
 
     await this.GetBTEREstablishmentDashboard();
     await this.GetStaffTrainingDashboardData();
+    await this.HTE_DashboardTilesGet();
   }
 
   async GetBTEREstablishmentDashboard() {
@@ -115,24 +120,40 @@ export class EstablishmentDashboardBTERComponent {
     this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     try {
-
       this.loaderService.requestStarted();
       await this.AdminDashDataService.GetStaffTrainingDashboardData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.STC_DashboardTiles = data['Data'];
-          // this.viewCompletedStaffTrainingDashboard = this.viewDashboard.filter(s => s.ListType === 'CompletedTraining');
-          // this.viewNewStaffTrainingDashboard = this.viewDashboard.filter(s => s.ListType === 'NewTraining');
         }, (error: any) => console.error(error)
         );
     }
     catch (ex) {
       console.log(ex);
     }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+  }
+
+  async HTE_DashboardTilesGet() {
+
+    const request: any = {};
+    request.UserID = this.sSOLoginDataModel.UserID;
+    request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    request.EndTermID = this.sSOLoginDataModel.EndTermID;
+    request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    request.RoleID = this.sSOLoginDataModel.RoleID;
+    request.UserID=this.sSOLoginDataModel.UserID;
+    request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    try {
+      this.loaderService.requestStarted();
+      await this.teacherHigherEducationApplicationService.HTE_DashboardTilesGet(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.HTE_DashboardTiles = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
     }
   }
   

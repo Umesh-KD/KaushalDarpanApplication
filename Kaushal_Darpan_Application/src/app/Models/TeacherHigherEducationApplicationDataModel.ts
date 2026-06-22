@@ -250,3 +250,15 @@ export class StaffDetailsPreviewDataModel {
   public UserID: number = 0
   public RoleID: number = 0
 }
+
+export class THTE_DashboardTilesDataModel {
+  public DepartmentID: number = 0
+  public UserID: number = 0
+  public RoleID: number = 0
+  public Eng_NonEng: number = 0
+  public EndTermID: number = 0
+  public InstituteID: number = 0
+  public OfficeID: number = 0
+  public NodalDistrictID: number = 0
+  public StatusID: number = 0
+}
