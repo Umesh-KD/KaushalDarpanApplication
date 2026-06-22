@@ -186,15 +186,22 @@
             <td>
               <div class="flex align-center justify-center actionBtns w-auto">
 
-                <a *ngIf="item.AllotmentStatus !== 1 && item.SupportingDocument"
-                   [attr.href]="appsettingConfig.StaticFileRootPathURL + item.SupportingDocument"
+                <a *ngIf="item.AffidavitDocument"
+                   [href]="appsettingConfig.StaticFileRootPathURL + item.AffidavitDocument"
                    target="_blank"
                    class="text-success"
                    title="Show Affidavit Details">
-
                   <i class="ti ti-download downloadIcon"></i>
-
                 </a>
+
+                <a *ngIf="item.SupportingDocument"
+                   [href]="appsettingConfig.StaticFileRootPathURL + item.SupportingDocument"
+                   target="_blank"
+                   class="text-success"
+                   title="Show Affidavit Changes Document">
+                  <i class="ti ti-download downloadIcon"></i>
+                </a>
+
 
               </div>
             </td>
