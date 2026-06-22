@@ -153,55 +153,6 @@ updatePlanningFlag = false;
     const privateData = this._barChartData.map((x: any) => Number(x.PrivateITI));
 
 
-    //this.chartOptions = {
-    //  chart: {
-    //    type: 'column'
-    //  },
-
-    //  title: {
-    //    text: 'District Institutional Split'
-    //  },
-
-    //  xAxis: {
-    //    categories: categories,
-    //    title: {
-    //      text: 'District'
-    //    }
-    //  },
-
-    //  yAxis: {
-    //    min: 0,
-    //    title: {
-    //      text: ''
-    //    }
-    //  },
-
-    //  plotOptions: {
-    //    column: {
-    //      stacking: 'normal'
-    //    }
-    //  },
-
-    //  series: [
-    //    {
-    //      type: 'column',
-    //      name: 'Government ITIs',
-    //      data: governmentData
-    //    } as Highcharts.SeriesColumnOptions, 
-    //    {
-    //      type: 'column',
-    //      name: 'Private ITIs',
-    //      data: privateData
-    //    } as Highcharts.SeriesColumnOptions,
-    //  ],
-
-    //  credits: {
-    //    enabled: false
-    //  }
-    
-    //};
-
-
     this.chartOptions = {
       chart: {
         type: 'column'
@@ -217,14 +168,12 @@ updatePlanningFlag = false;
           text: 'District'
         }
       },
-
       yAxis: {
         min: 0,
         title: {
           text: 'No of ITIs'
         }
       },
-
       plotOptions: {
         column: {
           grouping: true,
@@ -232,7 +181,6 @@ updatePlanningFlag = false;
           borderWidth: 0
         }
       },
-
       series: [
         {
           type: 'column',
@@ -251,13 +199,8 @@ updatePlanningFlag = false;
       }
     };
 
-
-
     this.updateFlag = true;
-    console.log(this.chartOptions);
   }
-
-
 
   loadPieChart(): void {
     debugger;
@@ -432,6 +375,7 @@ console.log( 'chart data in load planning',this.planningChartData);
       enabled: false
     }
   };
+
     console.log('planning chart options',this.planningChartOptions);
 debugger
   this.updatePlanningFlag = true;

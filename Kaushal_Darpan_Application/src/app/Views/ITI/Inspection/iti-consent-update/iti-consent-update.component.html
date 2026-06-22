@@ -14,6 +14,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Consent List</b>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Consent Excel</a>
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -61,7 +62,7 @@
                 Fee Amount
                 <span class="sort-indicator" *ngIf="sortColumn === 'UpdatedDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
               </th>
-              <th>Action</th>
+              <th *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.ITIPrincipal">Action</th>
             </tr>
           </thead>
 
@@ -79,7 +80,7 @@
               <td>{{ row.TentativeDate | date:'dd/MM/yyyy' }}</td>
               <td>{{ row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
               <td>{{ row.Amount }}</td>
-              <td>
+              <td *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.ITIPrincipal">
                 <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
                   <!-- *ngIf="(!(row.status == 1 || row.status == 2) && row.PaymentStatus==0)" -->
                   <a *ngIf="(row.status == 0 )" href="javascript:void(0);" (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">

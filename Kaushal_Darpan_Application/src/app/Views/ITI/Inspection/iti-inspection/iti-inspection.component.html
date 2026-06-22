@@ -16,7 +16,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a routerLink="/add-inspection" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Team</a>
+        <a *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.TITDTETraining" routerLink="/add-inspection" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Team</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -50,6 +50,15 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+       <div class="flex justify-end flex-wrap items-center">
+         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Inspection Excel</a>
+        <a href="javascript:void(0);"
+           class="btn bg-danger text-white"
+           (click)="exportToPDF()">
+          <i class="ti ti-file-type-pdf"></i> Download PDF
+        </a>
+       </div>
+      
       <!-- <a routerLink="/add-center-observer" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Team</a> -->
       <!-- <a *ngIf="searchRequest.SemesterID!=0" class="btn bg-info btn-sm text-white" (click)="DownloadTimeTable()"><i class="ti ti-download"></i>{{searchRequest.SemesterID==1 ?'DownloadSemester':'DownloadYearly'}}</a> -->
     </div>
