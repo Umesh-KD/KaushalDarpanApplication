@@ -14,109 +14,134 @@
 
 <div class="card">
   <div class="card-body p-5">
-    <!--<div class="mb-8">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>-->
-      <!-- <div > -->
-        <!--<form [formGroup]="Searchform" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
-          <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Institute<span class="StarMarking">*</span>
-              </label>-->
-              <!-- <select class="form-select" id="ddlCampusType"
-                       formControlName="CollegeID"  [(ngModel)]="request.CollegeID" >
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of institueList;" [value]="item.InstituteID">{{item.InstituteName}}</option>
-              </select> -->
-              <!--<div [ngStyle]="isInstituteDisabled ? {'pointer-events':'none', 'opacity':'0.6'} : {}">
-                <ng-multiselect-dropdown #multiSelect2 [placeholder]="'Choose Option'"
-                                    [settings]="settingsMultiselect1"
-                                    [data]="institueList"
-                                    [(ngModel)]="SelectedCollegeID"
-                                    [disabled]="false"
-                                    name="SelectedCollegeID"    
-                                    formControlName="InstituteID"                      
-                                    (onFilterChange)="onFilterChange($event)"
-                                    (onDropDownClose)="onDropDownClose($event)"
-                                    [disabled]="isInstituteDisabled" 
-                                    (onSelect)="onItemSelect($event)"
-                                    (onDeSelect)="onDeSelect($event)"
-                                    (onSelectAll)="onSelectAll($event)"
-                                    (onDeSelectAll)="onDeSelectAll($event)">
-                </ng-multiselect-dropdown>
-              </div>
-          </div>
-          <div *ngIf="id==10">
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Trade<span class="StarMarking">*</span>
-              </label>-->
-              <!-- <select formControlName="ddlBranch" class="form-select" id="ddlBranch"
-                      [(ngModel)]="request.TradeID">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of StreamMasterList" [value]="item.ID">{{item.Name}}</option>
-              </select> -->
-              <!--<ng-multiselect-dropdown #multiSelect1 [placeholder]="'Choose Option'"
-                                   [settings]="settingsMultiselect"
-                                   [data]="StreamMasterList"
-                                   [(ngModel)]="SelectedTradeID"
-                                   [disabled]="false"
-                                   name="SelectedTradeID"    
-                                   formControlName="ddlBranch"                      
-                                   (onFilterChange)="onFilterChange($event)"
-                                   (onDropDownClose)="onDropDownClose($event)"
-                                   (onSelect)="onItemSelect($event)"
-                                   (onDeSelect)="onDeSelect($event)"
-                                   (onSelectAll)="onSelectAll($event)"
-                                   (onDeSelectAll)="onDeSelectAll($event)">
-                </ng-multiselect-dropdown>
-          </div>
-          <div *ngIf="id==10">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Company Name: <span class="StarMarking">*</span>
-            </label>-->
-            <!-- <select formControlName="ddlCompanyID" class="form-select" id="ddlCompanyID" 
-                    [(ngModel)]="request.CompanyID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of CompanyMasterList" [value]="item.ID">{{item.Name}}</option>
-            </select> -->
-             <!--<ng-multiselect-dropdown #multiSelect3 [placeholder]="'Choose Option'"
-                                   [settings]="settingsMultiselect3"
-                                   [data]="CompanyMasterList"
-                                   [(ngModel)]="SelectedCompanyID"
-                                   [disabled]="false"
-                                   name="SelectedCompanyID"    
-                                   formControlName="ddlCompanyID"                      
-                                   (onFilterChange)="onFilterChange($event)"
-                                   (onDropDownClose)="onDropDownClose($event)"
-                                   (onSelect)="onItemSelect($event)"
-                                   (onDeSelect)="onDeSelect($event)"
-                                   (onSelectAll)="onSelectAll($event)"
-                                   (onDeSelectAll)="onDeSelectAll($event)">
-                </ng-multiselect-dropdown>
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">EnrollmentNo/Name</label>   
-            <input type="text" class="form-input" placeholder="Name" id="Name" formControlName="StudentName" [(ngModel)]="request.StudentName">
-          </div>-->
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+       <div > 
+         <form [formGroup]="Searchform" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+           <div>
+             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+               Institute
+             </label>
+             <select class="form-select" id="ddlCampusType"
+                     formControlName="CollegeID" [(ngModel)]="request.CollegeID">
+               <option value="0">--Select--</option>
+               <option *ngFor="let item of institueList;" [value]="item.InstituteID">{{item.InstituteName}}</option>
+             </select>
 
-          <!-- <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
-              <i class="ti ti-refresh"></i>
-              Reset
-          </button> -->
-           <!--<div class="flex items-end gap-2">
-              <button type="button"
-                      class="btn bg-info text-white" (click)="GetAllData()">
-                Search
-              </button>
+             <!--<div [ngStyle]="isInstituteDisabled ? {'pointer-events':'none', 'opacity':'0.6'} : {}">
+      <ng-multiselect-dropdown #multiSelect2 [placeholder]="'Choose Option'"
+                          [settings]="settingsMultiselect1"
+                          [data]="institueList"
+                          [(ngModel)]="SelectedCollegeID"
+                          [disabled]="false"
+                          name="SelectedCollegeID"
+                          formControlName="InstituteID"
+                          (onFilterChange)="onFilterChange($event)"
+                          (onDropDownClose)="onDropDownClose($event)"
+                          [disabled]="isInstituteDisabled"
+                          (onSelect)="onItemSelect($event)"
+                          (onDeSelect)="onDeSelect($event)"
+                          (onSelectAll)="onSelectAll($event)"
+                          (onDeSelectAll)="onDeSelectAll($event)">
+      </ng-multiselect-dropdown>
+    </div>-->
 
-              <button type="button"
-                      class="btn bg-danger text-white" (click)="ClearSearchData()">
-                <i class="ti ti-refresh"></i> Reset
-              </button>
-            </div>
-        </form>-->
-      <!-- </div> -->
-    <!--</div>-->
+           </div>
+
+           <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By DGT_Code/<span class="StarMarking">*</span>
+    </label>
+    <select class="form-select" id="ddlCampusType"
+            formControlName="CollegeID" [(ngModel)]="request.CollegeID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of institueList;" [value]="item.InstituteID">{{item.InstituteName}}</option>
+    </select>
+   </div>-->
+           <!--<div *ngIf="id==10">
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Trade<span class="StarMarking">*</span>
+      </label>
+       <select formControlName="ddlBranch" class="form-select" id="ddlBranch"
+              [(ngModel)]="request.TradeID">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of StreamMasterList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+      <ng-multiselect-dropdown #multiSelect1 [placeholder]="'Choose Option'"
+                           [settings]="settingsMultiselect"
+                           [data]="StreamMasterList"
+                           [(ngModel)]="SelectedTradeID"
+                           [disabled]="false"
+                           name="SelectedTradeID"
+                           formControlName="ddlBranch"
+                           (onFilterChange)="onFilterChange($event)"
+                           (onDropDownClose)="onDropDownClose($event)"
+                           (onSelect)="onItemSelect($event)"
+                           (onDeSelect)="onDeSelect($event)"
+                           (onSelectAll)="onSelectAll($event)"
+                           (onDeSelectAll)="onDeSelectAll($event)">
+        </ng-multiselect-dropdown>
+  </div>-->
+           <!--<div *ngIf="id==10">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Company Name: <span class="StarMarking">*</span>
+    </label>
+     <select formControlName="ddlCompanyID" class="form-select" id="ddlCompanyID"
+            [(ngModel)]="request.CompanyID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of CompanyMasterList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+     <ng-multiselect-dropdown #multiSelect3 [placeholder]="'Choose Option'"
+                           [settings]="settingsMultiselect3"
+                           [data]="CompanyMasterList"
+                           [(ngModel)]="SelectedCompanyID"
+                           [disabled]="false"
+                           name="SelectedCompanyID"
+                           formControlName="ddlCompanyID"
+                           (onFilterChange)="onFilterChange($event)"
+                           (onFilterChange)="onFilterChange($event)"
+                           (onDropDownClose)="onDropDownClose($event)"
+                           (onSelect)="onItemSelect($event)"
+                           (onDeSelect)="onDeSelect($event)"
+                           (onSelectAll)="onSelectAll($event)"
+                           (onDeSelectAll)="onDeSelectAll($event)">
+        </ng-multiselect-dropdown>
+  </div>-->
+
+           <div>
+             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+               Search by Trainee Name
+             </label>
+             <input type="text" class="form-input" placeholder="Trainee Name" id="Traine Name" formControlName="StudentName" [(ngModel)]="request.StudentName">
+           </div>
+
+           <div>
+             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+               Search by DGT_Code/Inst_Code/State_Reg_Num
+             </label>
+             <input type="text" class="form-input" placeholder="DGT_Code/Inst_Code/State_Reg_Num" id="srn" formControlName="DGTCode" [(ngModel)]="request.DGTCode">
+           </div>
+
+           <!--<button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>-->
+           <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+      <i class="ti ti-refresh"></i>
+      Reset
+  </button>-->
+
+           <div class="flex items-end gap-2">
+             <button type="button"
+                     class="btn bg-info text-white" (click)="GetAllData()">
+               Search
+             </button>
+
+             <button type="button"
+                     class="btn bg-danger text-white" (click)="ClearSearchData()">
+               <i class="ti ti-refresh"></i> Reset
+             </button>
+           </div>
+         </form>
+       </div> 
+    </div>
 
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
