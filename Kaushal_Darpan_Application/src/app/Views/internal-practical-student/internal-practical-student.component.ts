@@ -302,34 +302,34 @@ export class InternalPracticalStudentComponent implements OnInit {
         }
 
         // Other validations (absent, present, etc.)
-        if (x.IsPresentInternalAssisment == 0 && x.IsDetain == false && x.MaxInternalAssisment !== 0 && x.ObtainedInternalAssisment !== 0) {
+        if (x.IsPresentInternalAssisment == 0 && x.IsDetain == false && x.MaxInternalAssisment !== 0 && Number(x.ObtainedInternalAssisment) !== 0) {
           this.toastr.error('For absent students, marks must be 0.');
           return;
         }
 
         if (x.IsPresentInternalAssisment == 1 && (x.IsDetain == false || x.IsUFM == false)) {
-          if (x.ObtainedInternalAssisment == null || x.ObtainedInternalAssisment == undefined || x.ObtainedInternalAssisment == 0) {
+          if (x.ObtainedInternalAssisment == null || x.ObtainedInternalAssisment == undefined || Number(x.ObtainedInternalAssisment) == 0) {
             this.toastr.error('Please enter marks for the student (Obtained Marks cannot be blank when Present)');
             return;
           }
 
-          if (x.ObtainedInternalAssisment > x.MaxInternalAssisment) {
+          if (Number(x.ObtainedInternalAssisment) > Number(x.MaxInternalAssisment)) {
             this.toastr.error('Max Marks cannot be less than Marks Obtained');
             return;
           }
         }
 
-        if (x.IsPresentInternalAssisment == 3 && x.IsDetain == false && x.MaxInternalAssisment !== 0 && x.ObtainedInternalAssisment !== 0) {
+        if (x.IsPresentInternalAssisment == 3 && x.IsDetain == false && x.MaxInternalAssisment !== 0 && Number(x.ObtainedInternalAssisment) !== 0) {
           this.toastr.error('For Detained students, marks must be 0.');
           return;
         }
 
-        if (x.MaxInternalAssisment < x.ObtainedInternalAssisment) {
+        if (Number(x.MaxInternalAssisment) < Number(x.ObtainedInternalAssisment)) {
           this.toastr.error('Max Marks cannot be less than Marks Obtained');
           return;
         }
 
-        if (x.IsPresentInternalAssisment == 0 && x.ObtainedInternalAssisment > 0) {
+        if (x.IsPresentInternalAssisment == 0 && Number(x.ObtainedInternalAssisment) > 0) {
           this.toastr.error('Please update Status to Present/Absent');
           return;
         }
@@ -389,7 +389,7 @@ export class InternalPracticalStudentComponent implements OnInit {
     });
 
     if (this.searchRequest.InternalPracticalID == 2) {
-      this.fullMarksStudents = filtered.filter(x => x.MaxInternalAssisment == x.ObtainedInternalAssisment);
+      this.fullMarksStudents = filtered.filter(x => Number(x.MaxInternalAssisment) == Number(x.ObtainedInternalAssisment));
     } else if (this.searchRequest.InternalPracticalID == 1) {
       this.fullMarksStudents = filtered.filter(x => x.MaxPractical == x.ObtainedPractical);
     }

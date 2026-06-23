@@ -57,3 +57,11 @@ export class ITIPlacementDashboardModel {
 
 }
 
+export class ITIStudentAllotmentReportSearchModels extends RequestBaseModel{
+  //public Id: number = 0
+  //public Gender: string = ''
+  public StudentName: string = ''
+  public CollegeID: number = 0
+  //public CompanyID?: string = ''
+  public DGTCode?: string = ''
+}

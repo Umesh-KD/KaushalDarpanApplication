@@ -217,7 +217,7 @@ export class AddIipCompanyMasterComponent implements OnInit {
   
     // get detail by id
     async GetById() {
-      debugger
+      //debugger
       try {
   
         this.loaderService.requestStarted();
@@ -288,7 +288,7 @@ export class AddIipCompanyMasterComponent implements OnInit {
   
     // get detail by id
     async SaveData() {
-      debugger
+      //debugger
       try {
         this.isSubmitted = true;
         if (this.CompanyMasterFormGroup.invalid) {
@@ -312,7 +312,7 @@ export class AddIipCompanyMasterComponent implements OnInit {
         this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
   
         //save
-        debugger
+        //debugger
         await this.CompanyMasterService.SaveData(this.request)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));

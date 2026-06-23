@@ -41,7 +41,7 @@ public async GetApplyDuplicateDocumentTypeList() {
 
   public async GetDuplicateDocInstituteWise(searchRequest: DuplicateDocumentSearch) {
     
-    debugger;
+   // debugger;
     var body=JSON.stringify(searchRequest);
     console.log(body);
     return await this.http.post(`${this.APIUrl}/GetDuplicateDocInstituteWise`, body, this.headersOptions)
@@ -53,7 +53,7 @@ public async GetApplyDuplicateDocumentTypeList() {
 
   public async GetApplyDuplicateDocumentList(searchRequest: ApplyDuplicateDocument) {
     
-    debugger;
+  //  debugger;
     
     var body = JSON.stringify(searchRequest);
     console.log(body);
