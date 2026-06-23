@@ -484,7 +484,7 @@ export class ListSeatMetrixComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'SeatMetrix.pdf';
+            link.download = 'SeatMatrix.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
