@@ -14,6 +14,8 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { DTELaboratoryMasterService } from '../../../../Services/DTEInventory/DTELaboratoryMaster/dtelaboratory-master.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-approve-issued-items',
@@ -295,6 +297,99 @@ export class ApproveIssuedItemsComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
   }
+
+  
+
+exportToPdf(): void {
+
+  if(!this.ItemMasterList || this.ItemMasterList.length === 0) {
+  this.toastr.warning("No data available to export.");
+  return;
+}
+
+const unwantedColumns = [
+  'ConditionOnReturn',
+  'IsConsumable',
+  'ItemDetailsId',
+  'InvStatus',
+  'ItemCode',
+  'IsOption',
+  'Name'
+];
+
+const columnOrder = [
+  'IssuedTo',
+  'ItemCategoryName',
+  'ItemType',
+  'EquipmentName',
+  'EquipmentsCode',
+  'IndentNo',
+  'Quantity',
+  'UsedQuantity',
+  'RemainingQuantity',
+  'IssueDate',
+  'ReturnDate'
+];
+
+const filteredData = this.ItemMasterList.map((item: any) => {
+  const row: any = {};
+
+  columnOrder.forEach(col => {
+    if (!unwantedColumns.includes(col)) {
+      row[col] = item[col] ?? '';
+    }
+  });
+
+  return row;
+});
+
+const doc = new jsPDF('landscape', 'mm', 'a4');
+
+autoTable(doc, {
+  head: [[
+    'Issued To',
+    'Category',
+    'Item Type',
+    'Equipment Name',
+    'Equipment Code',
+    'Indent No',
+    'Quantity',
+    'Used Quantity',
+    'Remaining Quantity',
+    'Issue Date',
+    'Return Date'
+  ]],
+  body: filteredData.map((row: any) => [
+    row.IssuedTo,
+    row.ItemCategoryName,
+    row.ItemType,
+    row.EquipmentName,
+    row.EquipmentsCode,
+    row.IndentNo,
+    row.Quantity,
+    row.UsedQuantity,
+    row.RemainingQuantity,
+    row.IssueDate,
+    row.ReturnDate
+  ]),
+  styles: {
+    fontSize: 8,
+    cellPadding: 2
+  },
+  headStyles: {
+    fontStyle: 'bold'
+  },
+  theme: 'grid'
+});
+
+const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+doc.save(`Inventory_Items_Report_${timestamp}.pdf`);
+}
+
+
+
+
+
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;

@@ -109,6 +109,23 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Equipments List</b>
+      <div class="flex gap-2">
+
+        <a href="javascript:void(0);"
+           (click)="exportToExcel()"
+           class="btn bg-info btn-sm text-white"
+           *ngIf="LabMasterList?.length > 0">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>
+
+        <a href="javascript:void(0);"
+           (click)="exportToPdf()"
+           class="btn bg-danger btn-sm text-white"
+           *ngIf="LabMasterList?.length > 0">
+          <i class="ti ti-file-text"></i> Export PDF
+        </a>
+
+      </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">

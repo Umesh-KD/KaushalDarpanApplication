@@ -22,7 +22,8 @@ import { DTEItemsSearchModel, itemStatusRevertModel } from '../../../../../Model
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-dtetrade-equipments-mapping-list',
@@ -334,6 +335,63 @@ debugger;
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Inventory_Reports.xlsx');
   }
+
+
+
+
+exportToPdf(): void {
+
+  if(!this.MappingList1 || this.MappingList1.length === 0) {
+  this.toastr.warning("No data available to export.");
+  return;
+}
+
+const pdfData = this.MappingList1.map((item: any) => ({
+  InstituteName: item.InstituteName ?? "BTER",
+  ItemCategoryName: item.ItemCategoryName,
+  EquipmentsName: item.EquipmentsName,
+  Quantity: item.Quantity,
+  EquipmentsStatus: item.EquipmentsStatus
+}));
+
+const doc = new jsPDF('landscape');
+
+autoTable(doc, {
+  head: [[
+    'Institute Name',
+    'Item Category',
+    'Equipment Name',
+    'Quantity',
+    'Equipment Status'
+  ]],
+  body: pdfData.map((item: any) => [
+    item.InstituteName,
+    item.ItemCategoryName,
+    item.EquipmentsName,
+    item.Quantity,
+    item.EquipmentsStatus
+  ]),
+  styles: {
+    fontSize: 9
+  },
+  headStyles: {
+    fontStyle: 'bold'
+  }
+});
+
+doc.save('Inventory_Reports.pdf');
+}
+
+
+
+
+
+
+
+
+
+
+
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;

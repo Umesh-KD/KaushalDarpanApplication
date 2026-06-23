@@ -74,11 +74,15 @@
         <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-excel"></i> Export Excel
         </a>
-
-        <a href="javascript:void(0);" 
-          (click)="MarkForAuction()" 
-          class="btn bg-info btn-sm text-white"
-          *ngIf="Searchrequest.status == 2">
+        <a href="javascript:void(0);"
+           (click)="exportToPdf()"
+           class="btn bg-danger btn-sm text-white">
+          <i class="ti ti-file-text"></i> Export PDF
+        </a>
+        <a href="javascript:void(0);"
+           (click)="MarkForAuction()"
+           class="btn bg-info btn-sm text-white"
+           *ngIf="Searchrequest.status == 2">
           <i class="ti ti-excel"></i> Mark for auction
         </a>
 

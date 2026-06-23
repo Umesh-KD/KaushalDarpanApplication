@@ -19,8 +19,10 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { DTEItemCategoriesMasterService } from '../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
 
 import * as XLSX from 'xlsx';
-import { jsPDF } from 'jspdf';
+
 import { HttpClient } from '@angular/common/http';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-auction-list',
@@ -427,6 +429,83 @@ export class AuctionListComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     XLSX.writeFile(wb, `Auction_Reports_${timestamp}.xlsx`);
   }
+  exportToPdf(): void {
+
+    this.ItemMasterList1 = this.ItemMasterList1.map((item: any) => {
+      return {
+        CollegeName: item.CollegeName ?? "BTER",
+        ItemCategoryName: item.ItemCategoryName,
+        ItemCode: item.ItemCode,
+        EquipmentsName: item.EquipmentsName,
+        EquipmentsCode: item.EquipmentsCode,
+        EquipmentWorking: item.EquipmentWorking == 1 ? "Working" : "Not Working",
+        IsAuction: item.IsOption,
+        InitialQuantity: item.InitialQuantity,
+        AvailableQuantity: item.AvailableQuantity,
+        PricePerUnit: item.PricePerUnit,
+        TotalPrice: item.TotalPrice,
+        AuctionStatus: item.AuctionStatus == 1 ? "Done" : "Pending"
+      };
+    });
+
+    const doc = new jsPDF('landscape');
+
+    doc.setFontSize(14);
+    doc.text('Auction Reports', 14, 15);
+
+    autoTable(doc, {
+      startY: 25,
+      head: [[
+        'College Name',
+        'Category',
+        'Item Code',
+        'Equipment Name',
+        'Equipment Code',
+        'Working Status',
+        'Auction',
+        'Initial Qty',
+        'Available Qty',
+        'Price/Unit',
+        'Total Price',
+        'Auction Status'
+      ]],
+      body: this.ItemMasterList1.map((item: any) => [
+        item.CollegeName,
+        item.ItemCategoryName,
+        item.ItemCode,
+        item.EquipmentsName,
+        item.EquipmentsCode,
+        item.EquipmentWorking,
+        item.IsAuction,
+        item.InitialQuantity,
+        item.AvailableQuantity,
+        item.PricePerUnit,
+        item.TotalPrice,
+        item.AuctionStatus
+      ]),
+      theme: 'grid',
+      styles: {
+        fontSize: 8
+      },
+      headStyles: {
+        fillColor: [0, 123, 255]
+      }
+    });
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    doc.save(`Auction_Reports_${timestamp}.pdf`);
+  }
+
+
+
+
+
+
+
+
+
+
+
 
   public downloadPDF() {
     const margin = 10;
