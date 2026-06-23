@@ -153,22 +153,27 @@ export class NodalWorkshopReportComponent {
     }
   }
 
-
-
   async GetzonalID() {
     try {
-
       this.loaderService.requestStarted();
       await this.commonMasterService.GetZonalID(this.sSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-         
-          if (this.sSOLoginDataModel.RoleID = 100) {
-            this.request.ZoneID = data['Data'][0]['DivisionID'];
-            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.request.ZoneID)
-            this.GetDistrictMatserDDL()
+
+          if (this.sSOLoginDataModel.RoleID == 100) {
+
+            // Get all ZoneIDs instead of just first one
+            const zoneIDs = data['Data'].map((item: any) => item.DivisionID);
+
+            // Set first one as default selected (optional)
+            this.request.ZoneID = zoneIDs[0];
+
+            // Filter ZoneList for ALL matching zone IDs
+            this.ZoneList = this.ZoneList.filter((e: any) => zoneIDs.includes(e.ID));
+
+            this.GetDistrictMatserDDL();
           }
-          console.log(this.ZoneList)
+          console.log(this.ZoneList);
         }, (error: any) => console.error(error)
         );
     }
@@ -181,6 +186,34 @@ export class NodalWorkshopReportComponent {
       }, 200);
     }
   }
+
+
+  //async GetzonalID() {
+  //  try {
+
+  //    this.loaderService.requestStarted();
+  //    await this.commonMasterService.GetZonalID(this.sSOLoginDataModel.UserID)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+         
+  //        if (this.sSOLoginDataModel.RoleID = 100) {
+  //          this.request.ZoneID = data['Data'][0]['DivisionID'];
+  //          this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.request.ZoneID)
+  //          this.GetDistrictMatserDDL()
+  //        }
+  //        console.log(this.ZoneList)
+  //      }, (error: any) => console.error(error)
+  //      );
+  //  }
+  //  catch (ex) {
+  //    console.log(ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
   get _ScholarshipFormGroup() { return this.ScholarshipFormGroup.controls; }
 
