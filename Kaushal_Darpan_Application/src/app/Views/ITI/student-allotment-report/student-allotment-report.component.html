@@ -81,32 +81,7 @@
                            (onSelectAll)="onSelectAll($event)"
                            (onDeSelectAll)="onDeSelectAll($event)">
         </ng-multiselect-dropdown>
-  </div>-->
-           <!--<div *ngIf="id==10">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Company Name: <span class="StarMarking">*</span>
-    </label>
-     <select formControlName="ddlCompanyID" class="form-select" id="ddlCompanyID"
-            [(ngModel)]="request.CompanyID">
-      <option value="0">--Select--</option>
-      <option *ngFor="let item of CompanyMasterList" [value]="item.ID">{{item.Name}}</option>
-    </select>
-     <ng-multiselect-dropdown #multiSelect3 [placeholder]="'Choose Option'"
-                           [settings]="settingsMultiselect3"
-                           [data]="CompanyMasterList"
-                           [(ngModel)]="SelectedCompanyID"
-                           [disabled]="false"
-                           name="SelectedCompanyID"
-                           formControlName="ddlCompanyID"
-                           (onFilterChange)="onFilterChange($event)"
-                           (onFilterChange)="onFilterChange($event)"
-                           (onDropDownClose)="onDropDownClose($event)"
-                           (onSelect)="onItemSelect($event)"
-                           (onDeSelect)="onDeSelect($event)"
-                           (onSelectAll)="onSelectAll($event)"
-                           (onDeSelectAll)="onDeSelectAll($event)">
-        </ng-multiselect-dropdown>
-  </div>-->
+  </div>-->       
 
            <div>
              <label class="text-gray-800 text-sm font-medium inline-block mb-1">

@@ -258,7 +258,10 @@ export class IIPEventConsentReportComponent {
   // end table feature
 
   exportToExcel(): void {
-    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'InspectionTeamID', 'ZoneID', 'DistrictID', 'InstituteID', 'EndTermID', 'FinancialYearID', 'CompanyID', 'EventID', 'InterestedStatus', 'ConsentID', 'ConsentID1', 'IsHost', 'Status','CompanyStatus'];
+    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate',
+      'IPAddress', 'InspectionTeamID', 'ZoneID', 'DistrictID', 'InstituteID',
+      'EndTermID', 'FinancialYearID', 'CompanyID', 'EventID', 'InterestedStatus',
+      'ConsentID', 'ConsentID1', 'IsHost', 'Status', 'CompanyStatus'];
     const filteredData = this.EventConsentDataList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -271,12 +274,9 @@ export class IIPEventConsentReportComponent {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
     const today = new Date();
     const dateStr = today.toLocaleDateString('en-GB').split('/').join('-');
-
     const fileName = `EventConsentReport_${dateStr}.xlsx`;
-
     XLSX.writeFile(wb, fileName);
   }
 
