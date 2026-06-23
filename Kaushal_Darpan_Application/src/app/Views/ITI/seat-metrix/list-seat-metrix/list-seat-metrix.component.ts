@@ -132,7 +132,8 @@ export class ListSeatMetrixComponent {
     this.AllotmentChange();
     this.imcRequest.AllotmentId = 0;
 
-    this.searchRequest.AllotmentMasterId = 0
+    this.searchRequest.AllotmentMasterId = 1
+    this.GetTradeAndColleges(1);
 
   }
   async GetdateConfigSetting() {
@@ -484,7 +485,7 @@ export class ListSeatMetrixComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'SeatMetrix.pdf';
+            link.download = 'SeatMatrix.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
