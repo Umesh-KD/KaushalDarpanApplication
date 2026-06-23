@@ -176,6 +176,7 @@ export class StudentRequestListComponent {
     this.isSubmitted = false;
     this.Searchrequest = new StudentRequestDataModal();
     this.RequestFormGroup.reset();
+    await this.GetAllData();
   }
   
 

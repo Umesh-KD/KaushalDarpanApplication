@@ -28,6 +28,7 @@ export class SearchRequestRoomAllotment {
   public BrachId: number = 0;
   public AffidavitDoc: number = 0;
   public AllotmentStatus: number = 0;
+  public HostelRequestNo: number = 0;
   public Action: string = '';
 }
 
