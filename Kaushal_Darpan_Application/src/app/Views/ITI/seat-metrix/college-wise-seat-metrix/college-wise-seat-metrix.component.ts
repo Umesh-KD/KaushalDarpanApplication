@@ -462,13 +462,23 @@ export class CollegeWiseSeatMetrixComponent {
               byteNumbers[i] = byteCharacters.charCodeAt(i);
             }
 
+
+            const now = new Date();
+            const dateTimeStr =
+              now.getFullYear() +
+              ('0' + (now.getMonth() + 1)).slice(-2) +
+              ('0' + now.getDate()).slice(-2) + '_' +
+              ('0' + now.getHours()).slice(-2) +
+              ('0' + now.getMinutes()).slice(-2);
+
+
             const byteArray = new Uint8Array(byteNumbers);
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'SeatMetrix' + this.SSOLoginDataModel.InstituteID +'.pdf';
+            link.download = `SeatMetrix_${this.SSOLoginDataModel.InstituteID}_${dateTimeStr}.pdf`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

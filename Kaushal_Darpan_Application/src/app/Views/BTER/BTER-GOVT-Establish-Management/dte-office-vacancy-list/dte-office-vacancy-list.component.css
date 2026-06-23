@@ -194,3 +194,27 @@ textarea {
   gap: 4px;
   align-items: center;
 }
+
+.table-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+.table-footer tr {
+  background: #fff3cd; /* Light yellow */
+  font-weight: 700;
+}
+
+.table-footer td {
+  border-top: 2px solid #ff9800 !important;
+  border-bottom: 2px solid #ff9800 !important;
+  padding: 12px !important;
+}
+
+.total-label {
+  text-align: center;
+  font-size: 16px;
+  color: #d35400;
+  font-weight: bold;
+}

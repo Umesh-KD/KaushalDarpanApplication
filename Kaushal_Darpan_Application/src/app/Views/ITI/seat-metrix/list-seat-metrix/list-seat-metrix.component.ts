@@ -132,7 +132,8 @@ export class ListSeatMetrixComponent {
     this.AllotmentChange();
     this.imcRequest.AllotmentId = 0;
 
-    this.searchRequest.AllotmentMasterId = 0
+    this.searchRequest.AllotmentMasterId = 1
+    this.GetTradeAndColleges(1);
 
   }
   async GetdateConfigSetting() {

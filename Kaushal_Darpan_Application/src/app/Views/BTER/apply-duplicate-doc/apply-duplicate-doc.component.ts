@@ -175,9 +175,9 @@ export class ApplyDuplicateDocComponent implements OnInit {
     }
   }
   FeeAmount(MasterCode: string):void {
-   // debugger
+     // debugger
     // 1336 ->marksheet 
-    //1337 -> migration
+   //1337 -> migration
     
     if(this.request.DocumentID==1336)
     {
@@ -200,7 +200,6 @@ export class ApplyDuplicateDocComponent implements OnInit {
             this.request.ConfigurationTypeID = this.FeesAmount[0].TypeID || 0;
             // this.GrievanceFormGroup.get('FeeAmount')?.setValue(this.FeesAmount[0].FeeAmount);
             // this.GrievanceFormGroup.get('ApplicationNo')?.setValue(this.FeesAmount[0].ApplicationNo);
-            // this.GrievanceFormGroup.get('SemesterID')?.setValue(this.FeesAmount[0].SemesterID);
           }
           break;
         default:

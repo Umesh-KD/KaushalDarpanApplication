@@ -14,13 +14,12 @@ import * as XLSX from 'xlsx';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-seat-intakes-list-admission',
-  templateUrl: './seat-intakes-list-admision.component.html',
-  styleUrls: ['./seat-intakes-list-admision.component.css'],
-  standalone: false
+  selector: 'app-college-seat-intakes-admission-list',
+  standalone: false,
+  templateUrl: './college-seat-intakes-admission-list.component.html',
+  styleUrl: './college-seat-intakes-admission-list.component.css'
 })
-export class SeatIntakesListAdmissionComponent implements OnInit
-{
+export class CollegeSeatIntakesAdmissionListComponent {
   public SSOLoginDataModel = new SSOLoginDataModel();
   public SeatIntakeSearchFormGroup!: FormGroup;
   public SeatIntakeSearchFormGroupPopUp!: FormGroup;
@@ -38,6 +37,8 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   public SanctionedList: any = [];
   public SeatIntakeDataList: any = [];
   public DivisionMasterList: any = [];
+  public uniqueTradeIds: any = [];
+  public filteredTradeList: any = [];
 
   public Table_SearchText: string = '';
   public SeatIntakeIDnew: number = 0;
@@ -71,38 +72,26 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   ) { }
 
   async ngOnInit() {
-    this.SeatIntakeSearchFormGroup = this.formBuilder.group(
-      {
-        ddlDivision:[''],
-        ddlCollege: [''],
-        ddlDistrict: [''],
-        ddlCollegeType: [''],
-        ddlInstitutionCategory: [''],
-        ddlTrade: [''],
-        txtShift: [''],
-        ddlLastSession: [''],
-        ddlRemark: [''],
-        ddlTradeScheme: [''],
-        txtUnitNo: [''],
-        ddlSanctioned: [''],
-        ddlStatus: [''],
-        CollegeCode: [''],
-        TradeCode: ['']
+    this.SeatIntakeSearchFormGroup = this.formBuilder.group({
+      ddlCollege: [{value: '', disabled: true}],
+      ddlTrade: [''],
+      txtShift: [''],
+      ddlRemark: [''],
+      ddlTradeScheme: [''],
+      txtUnitNo: [''],
+      ddlSanctioned: [''],
+    });
 
-      });
-
-    this.SeatIntakeSearchFormGroupPopUp = this.formBuilder.group(
-      {
-        OrderDate: [''],
-        OrderNo: ['']
-      });
-
-
-
+    this.SeatIntakeSearchFormGroupPopUp = this.formBuilder.group({
+      OrderDate: [''],
+      OrderNo: ['']
+    });
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
 
-    this.searchRequest.SanctionedID = 1;
+    if(this.SSOLoginDataModel.InstituteID>0){
+      this.searchRequest.CollegeID = this.SSOLoginDataModel.InstituteID
+    }
+    this.searchRequest.SanctionedID = -2;
 
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
@@ -115,7 +104,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
         this.searchRequest.CollegeTypeID = this.CollegeTypeID;
       }
     });
-    this.onSearch();
+    await this.onSearch();
   }
   get _SeatIntakeSearchFormGroup() { return this.SeatIntakeSearchFormGroup.controls; }
   get _SeatIntakeSearchFormGroupPopUp() { return this.SeatIntakeSearchFormGroupPopUp.controls; }
@@ -199,7 +188,6 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     }
   }
   async ddlDivision_Change() {
-    debugger
     try {
       this.searchRequest.DistrictID = 0;
       //const DivisionId = this.SeatIntakeSearchFormGroup.get('ddlDivision')?.value ?? 0;
@@ -236,6 +224,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
   async GetTradeAndColleges() {
     this.tradeSearchRequest.action = '_getAllData'
+    this.tradeSearchRequest.CollegeID = this.searchRequest.CollegeID
     try {
       this.loaderService.requestStarted();
       await this.commonFunctionService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
@@ -334,7 +323,6 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   async onSearch() {
-    debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
@@ -344,6 +332,16 @@ export class SeatIntakesListAdmissionComponent implements OnInit
           if (data.State = EnumStatus.Success) {
             this.AllInTableSelect = false;
             this.SeatIntakeDataList = data.Data
+
+            // for create trade dropdown
+            this.uniqueTradeIds = [...new Set(this.SeatIntakeDataList.map((item: any) => item.TradeID))];
+
+            const tradeIdSet = new Set(this.uniqueTradeIds);
+
+            this.filteredTradeList = this.ItiTradeListAll.filter((trade: any) => 
+              tradeIdSet.has(trade.Id)
+            );
+
             console.log(this.SeatIntakeDataList, "SeatIntakeDataList")
             //table feature load
             this.loadInTable();
@@ -368,6 +366,8 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
   async onReset() {
     this.searchRequest = new SeatIntakeSearchModel()
+    this.searchRequest.CollegeID = this.SSOLoginDataModel.InstituteID
+    this.searchRequest.SanctionedID = -2;
     this.onSearch()
   }
 
@@ -552,66 +552,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
 
-  // changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
-  // {
-  //   var msg = "Are you sure you want to change status";
-
-  //   if (action == 'ActiveInactiveCollege')
-  //   {
-  //     msg = 'Are you sure you want to change status of </br>' + `<b>${item.CollegeName}</b>`;
-  //   }
-
-  //   this.Swal2.Confirmation(`${msg}`, async (result: any) => {
-  //     if (result.isConfirmed)
-  //     {
-  //       try {
-          
-  //         var request =
-  //         {
-  //           SeatIntakeID: seatIntakeID,
-  //           CollegeID: item.CollegeID,
-  //           ModifyBy: this.SSOLoginDataModel.UserID,
-  //           ActiveStatus: item.ActiveStatus,
-  //           AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
-  //           Action: action,
-  //           TradeId: item.TradeID,
-  //           TradeSchemeId: item.TradeSchemeID
-  //         };
-
-  //         this.loaderService.requestStarted();
-  //         await this.ItiSeatIntakeService.ChangeStatusSeatIntake(request)
-  //           .then(async (data: any) => {
-  //             data = JSON.parse(JSON.stringify(data));
-  //             console.log(data);
-  //             if (data.State == EnumStatus.Success)
-  //             {
-  //               this.toastr.success(data.Message)
-  //               await this.onSearch();
-  //             } else {
-  //               this.toastr.error(data.ErrorMessage)
-  //             }
-  //           }, (error: any) => console.error(error)
-  //           );
-  //       }
-  //       catch (ex) {
-  //         console.log(ex);
-  //       }
-  //       finally {
-  //         setTimeout(() => {
-  //           this.loaderService.requestEnded();
-  //         }, 200);
-  //       }
-
-
-
-
-  //     }
-  //   });
-  // }
-
-
-
- changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
+  changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
   {
     var msg = "Are you sure you want to change status";
 
@@ -620,51 +561,57 @@ export class SeatIntakesListAdmissionComponent implements OnInit
       msg = 'Are you sure you want to change status of </br>' + `<b>${item.CollegeName}</b>`;
     }
 
-   this.Swal2.ConfirmationWithOrderDetails(
-  msg,
-  async (formData: any) => {
-    try {
+    this.Swal2.Confirmation(`${msg}`, async (result: any) => {
+      if (result.isConfirmed)
+      {
+        try {
+          
+          var request =
+          {
+            SeatIntakeID: seatIntakeID,
+            CollegeID: item.CollegeID,
+            ModifyBy: this.SSOLoginDataModel.UserID,
+            ActiveStatus: item.ActiveStatus,
+            AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
+            Action: action,
+            TradeId: item.TradeID,
+            TradeSchemeId: item.TradeSchemeID
+          };
 
-      const request = {
-        SeatIntakeID: seatIntakeID,
-        CollegeID: item.CollegeID,
-        ModifyBy: this.SSOLoginDataModel.UserID,
-        ActiveStatus: item.ActiveStatus,
-        AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
-        Action: action,
-        TradeId: item.TradeID,
-        TradeSchemeId: item.TradeSchemeID,
+          this.loaderService.requestStarted();
+          await this.ItiSeatIntakeService.ChangeStatusSeatIntake(request)
+            .then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              console.log(data);
+              if (data.State == EnumStatus.Success)
+              {
+                this.toastr.success(data.Message)
+                await this.onSearch();
+              } else {
+                this.toastr.error(data.ErrorMessage)
+              }
+            }, (error: any) => console.error(error)
+            );
+        }
+        catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
 
-        // New Fields
-        OrderNo: formData.OrderNo,
-        OrderDate: formData.OrderDate,
-        Remark: formData.Remark
-      };
-      this.loaderService.requestStarted();
 
-      await this.ItiSeatIntakeService.ChangeStatusSeatIntake(request)
-        .then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
 
-          if (data.State == EnumStatus.Success) {
-            this.toastr.success(data.Message);
-            await this.onSearch();
-          } else {
-            this.toastr.error(data.ErrorMessage);
-          }
-        });
 
-    } catch (ex) {
-      console.log(ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  },
-  'Yes'
-);
+      }
+    });
   }
+
+
+
+
 
 
 
@@ -691,7 +638,6 @@ export class SeatIntakesListAdmissionComponent implements OnInit
 
 
   async UpdateIntakeStatus() {
-    debugger;
     try {
 
       // Show loading indicator
@@ -740,7 +686,6 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   async SaveDataModal() {
-    debugger;
     //alert(this.SeatIntakeIDnew);
     //console.log('testdata', this.popUpsearchRequest)
     try {
@@ -770,7 +715,6 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
   onSearchChange() {
-    debugger
 
     if (this.Table_SearchText == '') {
       this.pageInTableSize = "50"; // reset pagination

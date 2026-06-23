@@ -149,36 +149,48 @@ export class DTEOfficeVacancyListComponent {
       this.formData.ID = ID;
       this.formData.ActiveStatus = IsActive;
       this.formData.ModifyBy = this.sSOLoginDataModel.UserID;
-      await this.BTER_EstablishManagementService.OfficeVacancyActiveDeActive(this.formData).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.OfficeVacancyDataList();
-          this.formData = new OfficeVacancyModel();
-          // Clear array after successful save
-        } else {
-          this.toastr.error(data.ErrorMessage);
+      this.Swal2.Confirmation("Are you sure you want to update status ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          await this.BTER_EstablishManagementService.OfficeVacancyActiveDeActive(this.formData).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+              this.toastr.success(data.Message);
+              await this.OfficeVacancyDataList();
+              this.formData = new OfficeVacancyModel();
+              // Clear array after successful save
+            } else {
+              this.toastr.error(data.ErrorMessage);
+            }
+          });
         }
-      });
+      });      
     }
   }
 
   async removeVacancy(ID: number) {
-    try {
-      this.deleteRequest.ID = ID;
-      this.deleteRequest.ModifyBy = this.sSOLoginDataModel.UserID;
-      await this.BTER_EstablishManagementService.DeleteOfficeVacancy(this.deleteRequest).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if (data.State == EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.OfficeVacancyDataList();
-        } else {
-          this.toastr.error(data.ErrorMessage);
+    this.Swal2.Confirmation("Are you sure you want to remove this ?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            this.deleteRequest.ID = ID;
+            this.deleteRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+            await this.BTER_EstablishManagementService.DeleteOfficeVacancy(this.deleteRequest).then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if (data.State == EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                await this.OfficeVacancyDataList();
+              } else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            })
+          } catch (error) {
+            console.log(error);
+          }    
         }
-      })
-    } catch (error) {
-      console.log(error);
-    }    
+      });    
   }
 
   // exportToExcel(): void {
