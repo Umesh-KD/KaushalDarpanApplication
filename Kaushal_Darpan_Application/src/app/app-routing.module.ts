@@ -400,6 +400,7 @@ const routes: Routes = [
 
 
       { path: 'SeatIntakesAdmissionList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-admission/seat-intakes-list-admision.module').then(m => m.SeatIntakesListAdmissionModule), title: 'Seat Intakes List' },
+      { path: 'college-seat-intake-admission-list', loadChildren: () => import('./Views/ITI/Intakes/college-seat-intakes-admission-list/college-seat-intakes-admission-list.module').then(m => m.CollegeSeatIntakesAdmissionListModule), title: 'College Seat Intakes List' },
 
 
       //new pages changes
