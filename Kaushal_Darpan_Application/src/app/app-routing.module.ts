@@ -70,6 +70,9 @@ const routes: Routes = [
       {
         path: 'allpost', loadChildren: () => import('./Views/Home/all-post/all-post.module').then(m => m.AllPostModule), title: 'All Campus List'
       },
+      {
+        path: 'allpostnew', loadChildren: () => import('./Views/Home/allpostnew/allpostnew.module').then(m => m.AllpostnewModule), title: 'All post new'
+      },
       { path: 'iip-allpost', loadChildren: () => import('./Views/Home/iip-web-all-post/iip-web-all-post.module').then(m => m.IIPWebAllPostModule), title: 'IIP Post List' },
       { path: 'iip-event-consent-list-public', loadChildren: () => import('./Views/Home/iip-event-consent-list-public/iip-event-consent-list-public.module').then(m => m.IipEventConsentListPublicModule), title: 'IIP Event Consent List' },
       
