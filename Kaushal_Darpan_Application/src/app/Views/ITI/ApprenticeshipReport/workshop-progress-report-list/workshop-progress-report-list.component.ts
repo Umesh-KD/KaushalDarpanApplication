@@ -107,21 +107,27 @@ export class WorkshopProgressReportListComponent {
   }
 
 
-
   async GetzonalID() {
     try {
-
       this.loaderService.requestStarted();
       await this.commonMasterService.GetZonalID(this.SSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
           if (this.SSOLoginDataModel.RoleID == 100) {
-            this.ZoneID = data['Data'][0]['DivisionID'];
-            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.ZoneID)
-            this.GetDistrictMatserDDL()
+
+            // Get all ZoneIDs instead of just first one
+            const zoneIDs = data['Data'].map((item: any) => item.DivisionID);
+
+            // Set first one as default selected (optional)
+            this.ZoneID = zoneIDs[0];
+
+            // Filter ZoneList for ALL matching zone IDs
+            this.ZoneList = this.ZoneList.filter((e: any) => zoneIDs.includes(e.ID));
+
+            this.GetDistrictMatserDDL();
           }
-          console.log(this.ZoneList)
+          console.log(this.ZoneList);
         }, (error: any) => console.error(error)
         );
     }
@@ -154,7 +160,9 @@ export class WorkshopProgressReportListComponent {
         SearchDistrictID: this.DistrictID,
         FinancialYearID: this.FinancialYearID,
         BeforeMonth: this.BeforeMonth || 0,
-        ZoneID: this.ZoneID
+        ZoneID: this.ZoneID,
+   
+        UserID: this.SSOLoginDataModel.UserID
       };
 
 
@@ -358,8 +366,11 @@ export class WorkshopProgressReportListComponent {
         SearchDistrictID: this.DistrictID,
         FinancialYearID: this.FinancialYearID,
         BeforeMonth: this.BeforeMonth || 0,
-        ZoneID: this.ZoneID
+        ZoneID: this.ZoneID,
+
+        UserID: this.SSOLoginDataModel.UserID
       };
+
 
 
 

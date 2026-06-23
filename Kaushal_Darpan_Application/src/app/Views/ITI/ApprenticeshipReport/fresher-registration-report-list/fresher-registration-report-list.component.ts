@@ -159,7 +159,7 @@ export class fresherRegistrationReportListComponent {
     try {
       // this.loaderService.requestStarted();
       var UserID: number = 0
-      if (this.sSOLoginDataModel.RoleID != 97) {
+      if (this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID!=100) {
         UserID = 0
       } else {
         UserID = this.sSOLoginDataModel.UserID
@@ -253,8 +253,24 @@ export class fresherRegistrationReportListComponent {
 
   async DownloadFresherApprenticeshipReport() {
     try {
+
+      var UserID: number = 0
+      if (this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 100) {
+        UserID = 0
+      } else {
+        UserID = this.sSOLoginDataModel.UserID
+      }
+      let obj = {
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        RoleID: this.sSOLoginDataModel.RoleID,
+        Createdby: this.sSOLoginDataModel.UserID,
+        InstituteID: this.searchRequest.InstituteID,
+        UserID: UserID
+      };
+
       this.loaderService.requestStarted();
-      await this.reportService.GetFresherApprenticeship(this.searchRequest)
+      await this.reportService.GetFresherApprenticeship(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log("DownloadFresherApprenticeshipReport", data)
