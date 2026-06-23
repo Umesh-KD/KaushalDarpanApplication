@@ -1,25 +1,25 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { SeatIntakeDataModel, SeatIntakePopUpSearchModel, SeatIntakeSearchModel } from '../../../Models/ITI/SeatIntakeDataModel';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { SeatIntakeDataModel, SeatIntakePopUpSearchModel, SeatIntakeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from '../../../Services/Loader/loader.service';
-import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
-import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
-import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
-import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
+import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
+import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
+import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
-import { AppsettingService } from '../../../Common/appsetting.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-seat-intake-planning',
+  selector: 'app-college-seat-intakes-admission-list',
   standalone: false,
-  templateUrl: './seat-intake-planning.component.html',
-  styleUrl: './seat-intake-planning.component.css'
+  templateUrl: './college-seat-intakes-admission-list.component.html',
+  styleUrl: './college-seat-intakes-admission-list.component.css'
 })
-export class SeatIntakePlanningComponent {
+export class CollegeSeatIntakesAdmissionListComponent {
   public SSOLoginDataModel = new SSOLoginDataModel();
   public SeatIntakeSearchFormGroup!: FormGroup;
   public SeatIntakeSearchFormGroupPopUp!: FormGroup;
@@ -36,9 +36,13 @@ export class SeatIntakePlanningComponent {
   public ITIRemarkList: any = [];
   public SanctionedList: any = [];
   public SeatIntakeDataList: any = [];
+  public DivisionMasterList: any = [];
+  public uniqueTradeIds: any = [];
+  public filteredTradeList: any = [];
+
   public Table_SearchText: string = '';
   public SeatIntakeIDnew: number = 0;
-  public _enumrole = EnumRole
+  CollegeTypeID: number = 0;
   State: any;
   Message: any;
   ErrorMessage: any;
@@ -55,7 +59,6 @@ export class SeatIntakePlanningComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   //end table feature default
-  public _OrderNoHendingRoleWise: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,60 +68,61 @@ export class SeatIntakePlanningComponent {
     private ItiSeatIntakeService: ItiSeatIntakeService,
     private Swal2: SweetAlert2,
     private modalService: NgbModal,
-    private appsettingConfig: AppsettingService
+    private route: ActivatedRoute
   ) { }
 
   async ngOnInit() {
-    this.SeatIntakeSearchFormGroup = this.formBuilder.group(
-      {
-        ddlCollege: [''],
-        ddlDistrict: [''],
-        ddlCollegeType: [''],
-        ddlInstitutionCategory: [''],
-        ddlTrade: [''],
-        txtShift: [''],
-        ddlLastSession: [''],
-        ddlRemark: [''],
-        ddlTradeScheme: [''],
-        txtUnitNo: [''],
-        ddlSanctioned: [''],
-        ddlStatus: [''],
-        CollegeCode: [''],
-        TradeCode: ['']
+    this.SeatIntakeSearchFormGroup = this.formBuilder.group({
+      ddlCollege: [{value: '', disabled: true}],
+      ddlTrade: [''],
+      txtShift: [''],
+      ddlRemark: [''],
+      ddlTradeScheme: [''],
+      txtUnitNo: [''],
+      ddlSanctioned: [''],
+    });
 
-      });
-
-    this.SeatIntakeSearchFormGroupPopUp = this.formBuilder.group(
-      {
-        OrderDate: [''],
-        OrderNo: ['']
-      });
-
-
-
+    this.SeatIntakeSearchFormGroupPopUp = this.formBuilder.group({
+      OrderDate: [''],
+      OrderNo: ['']
+    });
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
-    
-    if (this.SSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
-      this._OrderNoHendingRoleWise = 'Post-sanctioned';
-    } else {
-      this._OrderNoHendingRoleWise = 'Administrative Order No';
+
+    if(this.SSOLoginDataModel.InstituteID>0){
+      this.searchRequest.CollegeID = this.SSOLoginDataModel.InstituteID
     }
+    this.searchRequest.SanctionedID = -2;
+
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
-    this.onSearch();
+
+
+    this.route.queryParams.subscribe(params => {
+      this.CollegeTypeID = +params['ManagementTypeId'];
+
+      if (this.CollegeTypeID) {
+        this.searchRequest.CollegeTypeID = this.CollegeTypeID;
+      }
+    });
+    await this.onSearch();
   }
   get _SeatIntakeSearchFormGroup() { return this.SeatIntakeSearchFormGroup.controls; }
   get _SeatIntakeSearchFormGroupPopUp() { return this.SeatIntakeSearchFormGroupPopUp.controls; }
 
+
+
+
   async GetDropdownData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonFunctionService.GetDistrictMaster().then((data: any) => {
-        const parsedData = JSON.parse(JSON.stringify(data));
-        this.DistrictList = parsedData.Data;
-        console.log(this.DistrictList, "DistrictList")
-      }, error => console.error(error));
+
+      await this.GetDivisionMasterList();
+
+      //await this.commonFunctionService.GetDistrictMaster().then((data: any) => {
+      //  const parsedData = JSON.parse(JSON.stringify(data));
+      //  this.DistrictList = parsedData.Data;
+      //  console.log(this.DistrictList, "DistrictList")
+      //}, error => console.error(error));
 
       await this.commonFunctionService.GetManagType()
         .then((data: any) => {
@@ -160,11 +164,69 @@ export class SeatIntakePlanningComponent {
     }
   }
 
-  async GetTradeAndColleges() {
-    this.tradeSearchRequest.action = '_getAllData'
+  async GetDivisionMasterList() {
     try {
       this.loaderService.requestStarted();
-      this.tradeSearchRequest.CollegeID = this.searchRequest.CollegeID
+      await this.commonFunctionService.GetDivisionMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.DivisionMasterList = data['Data'];
+        }, error => console.error(error));
+
+      console.log('Division Master List ==>', this.DivisionMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async ddlDivision_Change() {
+    try {
+      this.searchRequest.DistrictID = 0;
+      //const DivisionId = this.SeatIntakeSearchFormGroup.get('ddlDivision')?.value ?? 0;
+      const DivisionId = this.searchRequest.DivisionId ?? 0;
+      this.loaderService.requestStarted();
+      if (this.searchRequest.DivisionId == 0) {
+        await this.commonFunctionService.GetDistrictMaster()
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictList = data['Data'];
+          }, error => console.error(error));
+      }
+      else {
+        await this.commonFunctionService.DistrictMaster_DivisionIDWise(DivisionId)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictList = data['Data'];
+          }, error => console.error(error));
+
+      }
+
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetTradeAndColleges() {
+    this.tradeSearchRequest.action = '_getAllData'
+    this.tradeSearchRequest.CollegeID = this.searchRequest.CollegeID
+    try {
+      this.loaderService.requestStarted();
       await this.commonFunctionService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiTradeListAll = data.Data
@@ -175,10 +237,6 @@ export class SeatIntakePlanningComponent {
       //console.log("selectedCollegeTypeID", selectedCollegeTypeID);
       this.collegeSearchRequest.action = '_getAllData'
       this.collegeSearchRequest.ManagementTypeID = selectedCollegeTypeID;
-      if (this.collegeSearchRequest.ManagementTypeID == null) {
-        this.collegeSearchRequest.ManagementTypeID=0
-      }
-      this.collegeSearchRequest.DistrictID = this.searchRequest.DistrictID
       await this.commonFunctionService.ItiCollegesGetAllData(this.collegeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiCollegesListAll = data.Data
@@ -195,11 +253,13 @@ export class SeatIntakePlanningComponent {
 
 
 
-  ExportActiveSeatIntake(): void {
+  ExportActiveSeatIntake(Action: string ='_getActiveSeatIntake'): void {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
-      this.ItiSeatIntakeService.GetActiveSeatIntake(this.searchRequest)
+      this.searchRequest.Action = Action;
+
+      this.ItiSeatIntakeService.GetActiveSeatIntakeAdmission(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress'];
@@ -212,10 +272,41 @@ export class SeatIntakePlanningComponent {
             });
             return filteredItem;
           });
+          //const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+          //const wb: XLSX.WorkBook = XLSX.utils.book_new();
+          //XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+          //XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
+
+
+          const now = new Date();
+
+          const day = String(now.getDate()).padStart(2, '0');
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const year = String(now.getFullYear()).slice(-2);
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+
+          const second = String(now.getSeconds()).padStart(2, '0');
+
+
+          var filename = 'ActiveSeatIntakeDetails';
+
+          if (Action == '_getActiveSeatIntakeColleges')
+          
+          {
+           filename = 'ActiveSeatCollegeDetails';
+       
+          }
+
+          const fileName = `${filename}_${day}-${month}-${year}_${hours}_${minutes}_${second}.xlsx`;
+
           const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-          XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
+
+          XLSX.writeFile(wb, fileName);
+
+
 
 
         }, (error: any) => console.error(error)
@@ -235,12 +326,22 @@ export class SeatIntakePlanningComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
-      await this.ItiSeatIntakeService.GetAllDataPlanning(this.searchRequest)
+      await this.ItiSeatIntakeService.GetAllDataAdmissionList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State = EnumStatus.Success) {
             this.AllInTableSelect = false;
             this.SeatIntakeDataList = data.Data
+
+            // for create trade dropdown
+            this.uniqueTradeIds = [...new Set(this.SeatIntakeDataList.map((item: any) => item.TradeID))];
+
+            const tradeIdSet = new Set(this.uniqueTradeIds);
+
+            this.filteredTradeList = this.ItiTradeListAll.filter((trade: any) => 
+              tradeIdSet.has(trade.Id)
+            );
+
             console.log(this.SeatIntakeDataList, "SeatIntakeDataList")
             //table feature load
             this.loadInTable();
@@ -265,6 +366,8 @@ export class SeatIntakePlanningComponent {
 
   async onReset() {
     this.searchRequest = new SeatIntakeSearchModel()
+    this.searchRequest.CollegeID = this.SSOLoginDataModel.InstituteID
+    this.searchRequest.SanctionedID = -2;
     this.onSearch()
   }
 
@@ -409,6 +512,22 @@ export class SeatIntakePlanningComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'SeatIntakeDetails.xlsx');
+
+
+    const now = new Date();
+
+    const formattedDateTime = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0') + '_' +
+      String(now.getHours()).padStart(2, '0') + '-' +
+      String(now.getMinutes()).padStart(2, '0') + '-' +
+      String(now.getSeconds()).padStart(2, '0');
+
+    const fileName = `SeatIntakeDetails_${formattedDateTime}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+
+
   }
 
   @ViewChild('ModalStatusActiveInactive') ModalStatusActiveInactive!: TemplateRef<any>;
@@ -433,6 +552,73 @@ export class SeatIntakePlanningComponent {
   }
 
 
+  changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
+  {
+    var msg = "Are you sure you want to change status";
+
+    if (action == 'ActiveInactiveCollege')
+    {
+      msg = 'Are you sure you want to change status of </br>' + `<b>${item.CollegeName}</b>`;
+    }
+
+    this.Swal2.Confirmation(`${msg}`, async (result: any) => {
+      if (result.isConfirmed)
+      {
+        try {
+          
+          var request =
+          {
+            SeatIntakeID: seatIntakeID,
+            CollegeID: item.CollegeID,
+            ModifyBy: this.SSOLoginDataModel.UserID,
+            ActiveStatus: item.ActiveStatus,
+            AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
+            Action: action,
+            TradeId: item.TradeID,
+            TradeSchemeId: item.TradeSchemeID
+          };
+
+          this.loaderService.requestStarted();
+          await this.ItiSeatIntakeService.ChangeStatusSeatIntake(request)
+            .then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              console.log(data);
+              if (data.State == EnumStatus.Success)
+              {
+                this.toastr.success(data.Message)
+                await this.onSearch();
+              } else {
+                this.toastr.error(data.ErrorMessage)
+              }
+            }, (error: any) => console.error(error)
+            );
+        }
+        catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+
+
+
+
+      }
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
   //old
   //onToggleChange(SeatIntakeID: number, ModifyBy: number) {
   //  this.SeatIntakeIDnew = SeatIntakeID;
@@ -452,7 +638,6 @@ export class SeatIntakePlanningComponent {
 
 
   async UpdateIntakeStatus() {
-    debugger;
     try {
 
       // Show loading indicator
@@ -501,7 +686,6 @@ export class SeatIntakePlanningComponent {
   }
 
   async SaveDataModal() {
-    debugger;
     //alert(this.SeatIntakeIDnew);
     //console.log('testdata', this.popUpsearchRequest)
     try {
@@ -529,4 +713,17 @@ export class SeatIntakePlanningComponent {
       }, 200);
     }
   }
+
+  onSearchChange() {
+
+    if (this.Table_SearchText == '') {
+      this.pageInTableSize = "50"; // reset pagination
+      this.loadInTable();
+    }
+    else {
+      this.pageInTableSize = this?.totalInTableRecord?.toString() ?? "50"; // reset pagination
+      this.loadInTable();
+    }
+  }
+
 }

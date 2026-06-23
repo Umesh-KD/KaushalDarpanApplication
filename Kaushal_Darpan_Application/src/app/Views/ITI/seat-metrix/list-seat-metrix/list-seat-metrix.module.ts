@@ -7,6 +7,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { MaterialModule } from '../../../../material.module';
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -19,7 +22,9 @@ import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
     FormsModule,
     LoaderModule,
     ReactiveFormsModule,
-    TableSearchFilterModule, OTPModalModule
+    TableSearchFilterModule, OTPModalModule,
+    NgMultiSelectDropDownModule.forRoot(), MaterialModule,
+        NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent
   ]
 })
 export class ListSeatMetrixModule { }

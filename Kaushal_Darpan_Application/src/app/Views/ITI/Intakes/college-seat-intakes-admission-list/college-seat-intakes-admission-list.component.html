@@ -1,12 +1,12 @@
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Admission Intakes List</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">College Admission Intakes List</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/SeatIntakesAdmissionList" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>
+      <a routerLink="/college-seat-intake-admission-list" class="text-sm font-medium text-slate-700" aria-current="page">College Admission Intakes List</a>
     </div>
   </div>
 </div>
@@ -21,55 +21,7 @@
       </div>
       <form [formGroup]="SeatIntakeSearchFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">District:</label>
-    <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID">
-      <option value="0">---Choose District---</option>
-      <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
-    </select>
-  </div>-->
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone</label>
-            <select (change)="ddlDivision_Change()" formControlName="ddlDivision" [(ngModel)]="searchRequest.DivisionId" class="form-select" id="DivisionId">
-              <option value="0">--Select--</option>
-              <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
-            </select>
-          </div>
-
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District:</label>
-            <ng-select [(ngModel)]="searchRequest.DistrictID"
-                       formControlName="ddlDistrict"
-                       [clearable]="false">
-              <ng-option [value]="0" selected>--All--</ng-option>
-              <ng-container *ngFor="let item of DistrictList;">
-                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
-              </ng-container>
-            </ng-select>
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              College Type:
-            </label>
-            <select (change)="GetTradeAndColleges()" class="form-select" formControlName="ddlCollegeType" [(ngModel)]="searchRequest.CollegeTypeID">
-              <option value="0">---Choose College Type---</option>
-              <option *ngFor="let item of ManagmentTypeList" value="{{item.InstitutionManagementTypeID}}">{{item.InstitutionManagementType}}</option>
-            </select>
-          </div>
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      College:
-    </label>
-    <select class="form-select" formControlName="ddlCollege" [(ngModel)]="searchRequest.CollegeID">
-      <option value="0">---Choose College---</option>
-      <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
-    </select>
-  </div>-->
-
+          
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College:</label>
             <ng-select [(ngModel)]="searchRequest.CollegeID"
@@ -80,49 +32,19 @@
                 <ng-option [value]="item.Id">{{item.Name}}</ng-option>
               </ng-container>
             </ng-select>
-
-
           </div>
-
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Institution Category:
-            </label>
-            <select class="form-select" formControlName="ddlInstitutionCategory" [(ngModel)]="searchRequest.InstituteCategoryID">
-              <option value="0">---Choose Option---</option>
-              <option value="18">Women</option>
-              <option value="19">Co-ed</option>
-              <!--<option *ngFor="let item of InstituteCategoryList" value="{{item.ID}}">{{item.Name}}</option>-->
-            </select>
-          </div>
-
-
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Trade:
-    </label>
-    <select class="form-select" formControlName="ddlTrade" [(ngModel)]="searchRequest.TradeID">
-      <option value="0">Choose Option</option>
-      <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
-    </select>
-  </div>-->
-
-
-
+          
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade:</label>
             <ng-select [(ngModel)]="searchRequest.TradeID"
                        formControlName="ddlTrade"
                        [clearable]="false">
               <ng-option [value]="0" selected>--All--</ng-option>
-              <ng-container *ngFor="let item of ItiTradeListAll;">
+              <ng-container *ngFor="let item of filteredTradeList;">
                 <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
               </ng-container>
             </ng-select>
           </div>
-
-
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Trade Scheme:
@@ -165,31 +87,10 @@
               <option value="0">Inactive</option>
             </select>
           </div>
-          <!--<div>
-  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-    Status:
-  </label>
-  <select class="form-select" formControlName="ddlStatus" [(ngModel)]="searchRequest.StatusID">-->
-          <!--<option value="2">Choose Option</option>-->
-          <!--<option value="2">All</option>
-      <option value="1">Active</option>
-      <option value="0">Inactive</option>
-    </select>
-  </div>-->
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
-    <input type="text" class="form-input" formControlName="CollegeCode" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
-  </div>
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
-    <input type="text" class="form-input" formControlName="TradeCode" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
-  </div>-->
-
-          <div>
-            <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch() ">Search</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
-          </div>
-
+        </div>
+        <div class="flex justify-center flex-wrap items-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch() "><i class="bi bi-search"></i>Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()"><i class="bi bi-arrow-repeat"></i>Reset</button>
         </div>
       </form>
 
@@ -198,10 +99,9 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntakeColleges')"><i class="ti ti-download"></i> Active Colleges For Admission</a>
-        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake('_getActiveSeatIntake')"><i class="ti ti-download"></i> Active Seat Matrix</a>
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Intake Execl</a>
-        <!--<a href="javascript:void(0);" class="btn btn-sm bg-info text-white"><i class="ti ti-download"></i> Export Intake</a>-->
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()">
+            <i class="bi bi-file-earmark-excel-fill"></i> Download Intake Execl
+        </a>
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -246,7 +146,7 @@
 
             <th class="text-left">College Status</th>
             <th class="text-left">Last Updated</th>
-            <th style="width: 80px;">Action</th>
+            <th class="text-left">Remarks</th>
           </tr>
         </thead>
         <tbody>
@@ -275,28 +175,8 @@
                 </td>
 
                 <td align="left">{{row.LastUpdated}}</td>
-                <td>
-                    <button class="dropdown" mat-raised-button [matMenuTriggerFor]="menuAdmit" style="width: 130px; padding: 5px;">
-                        Actions <i class="ti ti-chevron-down"></i>
-                    </button>
-
-                    <mat-menu #menuAdmit="matMenu">
-
-
-                        <!--First Semester-->
-                        <button mat-menu-item
-                                (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveSeat')">
-                            {{row.ActiveStatus==true?'Inactive Seats':'Active Seats'}}
-                        </button>
-                        <!--Second Semester-->
-                        <button mat-menu-item (click)="changeStatus(row.SeatIntakeID, row,'ActiveInactiveCollege')">
-                            {{row.IsActiveColleges==1?'Inactive College':'Active Colleges'}}
-                        </button>
-
-                    </mat-menu>
-
+                <td align="left">{{row.Remark_str}}</td>
                 
-                </td>
             </tr>
         </tbody>
       </table>

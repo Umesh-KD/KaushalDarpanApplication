@@ -112,7 +112,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     await this.GetStudentDataBy_StudID();
 
     await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-     debugger;
+    // debugger;
       data = JSON.parse(JSON.stringify(data));
       console.log(data);
         this.InstituteMasterDDLList = data.Data;
@@ -140,7 +140,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
   ondepartmentChange()
   {
-    debugger;
+    //debugger;
     if(this.request.DepartmentID==2){
       this.request.DepartmentID=this.sSOLoginDataModel.DepartmentID;
       this.departmentFlag='NodalCenter';
@@ -175,9 +175,9 @@ export class ApplyDuplicateDocComponent implements OnInit {
     }
   }
   FeeAmount(MasterCode: string):void {
-   // debugger
+     // debugger
     // 1336 ->marksheet 
-    //1337 -> migration
+   //1337 -> migration
     
     if(this.request.DocumentID==1336)
     {
@@ -200,7 +200,6 @@ export class ApplyDuplicateDocComponent implements OnInit {
             this.request.ConfigurationTypeID = this.FeesAmount[0].TypeID || 0;
             // this.GrievanceFormGroup.get('FeeAmount')?.setValue(this.FeesAmount[0].FeeAmount);
             // this.GrievanceFormGroup.get('ApplicationNo')?.setValue(this.FeesAmount[0].ApplicationNo);
-            // this.GrievanceFormGroup.get('SemesterID')?.setValue(this.FeesAmount[0].SemesterID);
           }
           break;
         default:
@@ -210,7 +209,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
 
   async OnSemChange() {
-    debugger
+    //debugger
     // 1336 ->marksheet 
     //1337 -> migration
     if(this.request.DocumentID==1336)
@@ -245,7 +244,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
 
     async openModalGenerateOTP(content: any, item: ApplyDuplicateDocument) {
-      debugger
+      //debugger
       // this.refreshValidation();// refresh validation
       this.isFormSubmitted = true;
       // if (this.GrievanceFormGroup.invalid) {
@@ -425,7 +424,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     this.modalService.dismissAll();
   }
  async GetDocumentTypeDDL() {
-  debugger;
+  //debugger;
     try {
       this.loaderService.requestStarted();
       await this.applyDuplicateDocService.GetApplyDuplicateDocumentTypeList()
@@ -450,7 +449,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
 
   async GetSemesterMatserDDL() {
-    debugger;
+    //debugger;
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.SemesterMaster()
@@ -472,7 +471,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
 
   async GetStudentDataBy_StudID() {
-    debugger;
+    //debugger;
     try {
       this.studentInfo.StudentID=this.sSOLoginDataModel.StudentID;
       this.studentInfo.DepartmentID=this.sSOLoginDataModel.DepartmentID;
@@ -510,7 +509,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     try {
       this.request.StudentID= this.sSOLoginDataModel.StudentID;
       this.loaderService.requestStarted();
-      debugger;
+      //debugger;
       await this.applyDuplicateDocService.GetApplyDuplicateDocumentList(this.request)
         .then(async (data: any) => {
           console.log(data)
@@ -529,7 +528,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     }
   }
   async proceedToSave() {
-    debugger
+   // debugger
     if(!this.isMigration){
       this.GrievanceFormGroup.get('SemesterID')?.setValidators([DropdownValidators]);
     }
@@ -544,7 +543,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     this.loaderService.requestStarted();
     this.isLoading = true; 
     try {
-        debugger;
+      //  debugger;
        this.request.StudentID= this.sSOLoginDataModel.StudentID;
        this.request.DocumentID= this.GrievanceFormGroup.value.ddlDocumentID;
        this.request.SemesterID= this.GrievanceFormGroup.value.SemesterID;
@@ -561,7 +560,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
        this.request.IsPayment= false; 
       await this.applyDuplicateDocService.SaveDuplicateDocumentDetails(this.request)
         .then(async (data: any) => {
-          debugger;
+          //debugger;
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
           this.Message = data['Message'];
@@ -584,7 +583,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
 
   async PayApplicationFees() {
-    debugger;
+    //debugger;
     await this.proceedToSave();
     if(this.saveFlag == 0){
       return;
@@ -610,21 +609,19 @@ export class ApplyDuplicateDocComponent implements OnInit {
     this.emitraRequest.InstituteIDEnc= this.GrievanceFormGroup.value.ddlInstituteID;
     if (this.sSOLoginDataModel.RoleID == EnumRole.Student || this.sSOLoginDataModel.UserType == EnumUserType.KIOSK) {
       this.emitraRequest.IsKiosk = true;
-    }
-     
-    debugger;
+    }     
+   // debugger;
 
     this.loaderService.requestStarted();
     try {
       await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
         .then(async (data: any) => {
-          debugger;
+         // debugger;
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          if (data.State == EnumStatus.Success) {
-            
+          if (data.State == EnumStatus.Success) {            
             this.PaymentDetailtList = data;
             await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
           }
@@ -635,9 +632,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
         })
     }
     catch (ex) {
-
       console.log(ex)
-
     }
     finally {
       setTimeout(() => {
@@ -718,7 +713,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   // }
 
   async DownloadDuplicateMarksheet(element: any) {
-    debugger;
+    //debugger;
     try {
       this.downloadReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.downloadReq.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;

@@ -390,12 +390,12 @@ export const routes: Routes = [
 
             { path: 'ITISeatMatrix', loadChildren: () => import('./Views/ITI/itiseat-matrix/itiseat-matrix.module').then(m => m.ITISeatMatrixModule) },
 
-            { path: 'AddSeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
-            { path: 'SeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.ListSeatMetrixModule), title: 'ITI Seat Metrix' },
+            { path: 'AddSeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Matrix' },
+            { path: 'SeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.ListSeatMetrixModule), title: 'ITI Seat Matrix' },
             { path: 'ITICollegeAdmission', loadChildren: () => import('./Views/ITI/ITICollegeAdmissions/iticollege-admission/iticollege-admission.module').then(m => m.ITICollegeAdmissionModule) },
 
-            { path: 'AddSeatMetrix8th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
-            { path: 'AddSeatMetrix10th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
+            { path: 'AddSeatMetrix8th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Matrix' },
+            { path: 'AddSeatMetrix10th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Matrix' },
 
 
             { path: 'StudentJoinStatus/:id', loadChildren: () => import('./Views/student-join-status/student-join-status.module').then(m => m.StudentJoinStatusModule) },
@@ -404,14 +404,14 @@ export const routes: Routes = [
             { path: 'BTERSeatMatrix', loadChildren: () => import('./Views/BTER/itiseat-matrix/itiseat-matrix.module').then(m => m.ITISeatMatrixModule) },
             { path: 'BterReports', loadChildren: () => import('./Views/Reports/bter-reports/bter-reports.module').then(m => m.BterReportsModule) },
 
-            { path: 'BTERAddSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Metrix' },
-            { path: 'BTERSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Metrix' },
+            { path: 'BTERAddSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
+            { path: 'BTERSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Matrix' },
 
-            { path: 'BTERAddSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Metrix' },
-            { path: 'BTERSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Metrix' },
+            { path: 'BTERAddSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
+            { path: 'BTERSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Matrix' },
 
-            { path: 'BTERAddSeatMetrixLit/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Metrix' },
-            { path: 'BTERSeatMetrixLit/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Metrix' },
+            { path: 'BTERAddSeatMetrixLit/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
+            { path: 'BTERSeatMetrixLit/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Matrix' },
 
 
             { path: 'ITICollegeTrade8th/:id', loadChildren: () => import('./Views/ITI/iti-collage-trade/iti-collage-trade.module').then(m => m.ITICollageTradeModule) },
@@ -423,8 +423,8 @@ export const routes: Routes = [
 
 
            
-            { path: 'BTERAddSeatMetrix', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Metrix' },
-            /*      { path: 'BTERSeatMetrix', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.ListSeatMetrixModule), title: 'Seat Metrix' },*/
+            { path: 'BTERAddSeatMetrix', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
+            /*      { path: 'BTERSeatMetrix', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.ListSeatMetrixModule), title: 'Seat Matrix' },*/
             { path: 'IMCManagementAllotment', loadChildren: () => import('./Views/BTER/IMC-Allocation-BTER/imc-management-allotment/imc-management-allotment.module').then(m => m.IMCManagementAllotmentModule) },
             { path: 'IMCManagementAllotmentVerify/:id', loadChildren: () => import('./Views/BTER/IMC-Allocation-BTER/imc-management-allotment-verify/imc-management-allotment-verify.module').then(m => m.IMCManagementAllotmentVerifyModule) },
 

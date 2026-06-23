@@ -180,7 +180,134 @@ export class SweetAlert2 {
     }
   }
 
+public async ConfirmationWithOrderDetails(
+  title: string,
+  callback: (data: any) => void,
+  confirmButtonText: string = 'Save'
+) {
+
+  const { value, isConfirmed } = await Swal.fire({
+    title,
+    width: '700px',
+    showCancelButton: true,
+    confirmButtonText,
+    cancelButtonText: 'Cancel',
+    allowOutsideClick: false,
+
+    html: `
+<div style="text-align:left; font-size:13px;">
+
+  <!-- Order No & Order Date -->
+  <div style="display:flex; gap:10px; margin-bottom:10px;">
+
+    <div style="flex:1;">
+      <label style="font-weight:600;">
+        Order No 
+      </label>
+      <input
+        id="OrderNo"
+        placeholder="Enter Order No"
+        style="
+          width:100%;
+          height:34px;
+          padding:6px 10px;
+          margin-top:4px;
+          border:1px solid #d1d5db;
+          border-radius:6px;
+          outline:none;
+          box-sizing:border-box;
+        "
+      />
+    </div>
+
+    <div style="flex:1;">
+      <label style="font-weight:600;">
+        Order Date 
+      </label>
+      <input
+        id="OrderDate"
+        type="date"
+        style="
+          width:100%;
+          height:34px;
+          padding:6px 10px;
+          margin-top:4px;
+          border:1px solid #d1d5db;
+          border-radius:6px;
+          outline:none;
+          box-sizing:border-box;
+        "
+      />
+    </div>
+
+  </div>
+
+  <!-- Remark -->
+  <div>
+    <label style="font-weight:600;">
+      Remark 
+    </label>
+    <textarea
+      id="Remark"
+      placeholder="Enter Remark"
+      style="
+        width:100%;
+        height:80px;
+        padding:6px 10px;
+        margin-top:4px;
+        border:1px solid #d1d5db;
+        border-radius:6px;
+        outline:none;
+        resize:none;
+        box-sizing:border-box;
+      "
+    ></textarea>
+  </div>
+
+</div>
+`,
 
 
+    preConfirm: () => {
+
+      const OrderNo = (
+        document.getElementById('OrderNo') as HTMLInputElement
+      )?.value?.trim();
+
+      const OrderDate = (
+        document.getElementById('OrderDate') as HTMLInputElement
+      )?.value;
+
+      const Remark = (
+        document.getElementById('Remark') as HTMLTextAreaElement
+      )?.value?.trim();
+
+      // if (!OrderNo) {
+      //   Swal.showValidationMessage('Order No is required');
+      //   return false;
+      // }
+
+      // if (!OrderDate) {
+      //   Swal.showValidationMessage('Order Date is required');
+      //   return false;
+      // }
+
+      // if (!Remark) {
+      //   Swal.showValidationMessage('Remark is required');
+      //   return false;
+      // }
+
+      return {
+        OrderNo,
+        OrderDate,
+        Remark
+      };
+    }
+  });
+
+  if (isConfirmed && value) {
+    callback(value);
+  }
+}
 
 }

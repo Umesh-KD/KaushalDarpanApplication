@@ -213,7 +213,7 @@ export class AddCompanyMasterComponent implements OnInit {
 
   // get detail by id
   async GetById() {
-    debugger
+    //debugger
     try {
 
       this.loaderService.requestStarted();
@@ -252,7 +252,7 @@ export class AddCompanyMasterComponent implements OnInit {
 
 
   async AddMoreMembers() {
-      debugger
+      //debugger
       this.isHrFormSubmitted = true;
       if(this.HrMasterFormGroup.invalid) {
         this.toastr.error("Please fill all the required fields of Hr Form")
@@ -281,7 +281,7 @@ export class AddCompanyMasterComponent implements OnInit {
 
   // get detail by id
   async SaveData() {
-    debugger
+    //debugger
     try {
       this.isSubmitted = true;
       if (this.CompanyMasterFormGroup.invalid) {
@@ -305,7 +305,7 @@ export class AddCompanyMasterComponent implements OnInit {
      // this.request.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
 
       //save
-      debugger
+      //debugger
       await this.CompanyMasterService.SaveData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

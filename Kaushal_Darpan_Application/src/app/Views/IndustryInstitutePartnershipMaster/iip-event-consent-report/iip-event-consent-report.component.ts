@@ -61,7 +61,7 @@ export class IIPEventConsentReportComponent {
   ) { }
 
   async ngOnInit() {
-    debugger
+    ////debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Event = Number(this.activatedRoute.snapshot.queryParamMap.get('eid')?.toString()) || 0;
     this.EventTypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('etid')?.toString()) || 0;
@@ -97,7 +97,7 @@ export class IIPEventConsentReportComponent {
       request.Event = this.searchRequest.Event;
       request.RoleID = this.sSOLoginDataModel.RoleID;
       request.EventTypeID = this.searchRequest.EventTypeID;
-      debugger
+     // //debugger
       await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -131,7 +131,7 @@ export class IIPEventConsentReportComponent {
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID; 
       this.searchRequest.Action = "GetAllConsentData";
-      debugger
+     // //debugger
       await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(this.searchRequest)
         .then(async (data: any) => {
 
@@ -258,7 +258,10 @@ export class IIPEventConsentReportComponent {
   // end table feature
 
   exportToExcel(): void {
-    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'InspectionTeamID', 'ZoneID', 'DistrictID', 'InstituteID', 'EndTermID', 'FinancialYearID', 'CompanyID', 'EventID', 'InterestedStatus', 'ConsentID', 'ConsentID1', 'IsHost', 'Status','CompanyStatus'];
+    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate',
+      'IPAddress', 'InspectionTeamID', 'ZoneID', 'DistrictID', 'InstituteID',
+      'EndTermID', 'FinancialYearID', 'CompanyID', 'EventID', 'InterestedStatus',
+      'ConsentID', 'ConsentID1', 'IsHost', 'Status', 'CompanyStatus'];
     const filteredData = this.EventConsentDataList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -271,12 +274,9 @@ export class IIPEventConsentReportComponent {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
     const today = new Date();
     const dateStr = today.toLocaleDateString('en-GB').split('/').join('-');
-
     const fileName = `EventConsentReport_${dateStr}.xlsx`;
-
     XLSX.writeFile(wb, fileName);
   }
 
