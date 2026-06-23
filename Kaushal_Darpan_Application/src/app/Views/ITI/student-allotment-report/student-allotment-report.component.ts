@@ -142,7 +142,7 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
     //  this.displayedColumns= ['SrNo', 'StudentName', 'EnrollmentNo', 'InstituteName', 'InstitutionManagementType', 'Email', 'FatherName', 'DOB', 'Age', 'GenderName'];
     //}
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    debugger;
+    ////debugger;
 
     //await this.GetLoadData();
 
@@ -295,7 +295,7 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
   
 
   async GetAllData() {
-    debugger
+   // //debugger
     console.log(this.request.CollegeID);
      console.log("selected trade ===> ",this.SelectedTradeID);
      console.log("selected institute ===> ",this.SelectedCollegeID);
@@ -369,7 +369,7 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
 
 
     async ClearSearchData() {
-    //  debugger
+    //  //debugger
       if(this.sSOLoginDataModel.RoleID!=this._EnumRole.ITI_Placement_TPO)
       {
         this.request.CollegeID = 0;
@@ -405,7 +405,7 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
   }
 
   onItemSelect(evet:any) {
-    debugger
+    ////debugger
     console.log("on select", evet);
     if (this.isInstituteDisabled) return;
   }

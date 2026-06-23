@@ -266,7 +266,7 @@ export class AddDTEOfficeVacancyComponent {
 
   tempIndex: number = 1;
   async addOfficeVacancy() {
-    debugger;
+    //debugger;
     await this.refreshValidators();
     const formValues = this.AddOfficeVacancyForm.value;
     this.isSubmitted=true;
@@ -409,7 +409,7 @@ export class AddDTEOfficeVacancyComponent {
 
       
       
-      debugger
+      //debugger
       const branchControl = this.AddOfficeVacancyForm.get('BranchID');
       const designationId = Number(this.formData.DesignationID);
 

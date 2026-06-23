@@ -631,7 +631,7 @@ export class AddCollegeMasterComponent implements OnInit {
    
     this.refreshAdminRefValidation();
     this.refreshCourseTypeRefValidation();
-    debugger
+    //debugger
     // Skip form validation only for Admin roles
     //const isAdminRole = this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon;
     //if (!isAdminRole) {
@@ -646,7 +646,7 @@ export class AddCollegeMasterComponent implements OnInit {
     this.isLoading = true;
 
     try {
-      debugger
+      //debugger
       if (this.collegeRequest.InstituteID > 0) {
         this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       } else {
@@ -665,7 +665,7 @@ export class AddCollegeMasterComponent implements OnInit {
       this.State = data['State'];
       this.Message = data['Message'];
       this.ErrorMessage = data['ErrorMessage'];
-      debugger
+      //debugger
       if (this.State === EnumStatus.Success) {
         if (!withPayment && this.collegeRequest.InstituteID > 0) {
           this.toastr.success(this.Message);
@@ -819,7 +819,7 @@ export class AddCollegeMasterComponent implements OnInit {
   }
 
   refreshAdminRefValidation() {
-    debugger
+    //debugger
     // clear
     this.instituteForm.get('CollegeType')?.clearValidators();
     this.instituteForm.get('instituteNameEnglish')?.clearValidators();

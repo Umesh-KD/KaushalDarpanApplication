@@ -116,7 +116,7 @@ export class StudentDashboardComponent implements OnInit {
         }
         else if (this.StudantCourseList?.length == 1)
         {
-          debugger
+        //  debugger
           this.sSOLoginDataModel.StudentID = this.StudantCourseList[0]?.StudentID;
           this.sSOLoginDataModel.DepartmentID = this.StudantCourseList[0]?.DepartmentID;
           localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
@@ -198,7 +198,7 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   async GetStudentDashboard() {
-    debugger
+    //debugger
     this.StudantDashboardList = [];
     try {
 
@@ -228,7 +228,7 @@ export class StudentDashboardComponent implements OnInit {
 
 
   async GetProfileDashboard() {
-    debugger
+   // debugger
     try {
       this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
       this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
@@ -423,7 +423,7 @@ async GetStudentMarksheetList() {
 }
 
 async DownloadMarksheet(row: any) {
-    debugger
+    //debugger
     //debugger
     try {
       this.downloadReq.DepartmentID = row.DepartmentID;

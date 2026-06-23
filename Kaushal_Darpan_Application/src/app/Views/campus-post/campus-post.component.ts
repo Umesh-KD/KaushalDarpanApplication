@@ -527,7 +527,7 @@ export class CampusPostComponent implements OnInit {
       await this.CampusPostService.GetByID(id)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger
+          //debugger
           this.request.PostID = data['Data']["PostID"];
           this.request.PostNo = data['Data']["PostNo"];
           this.request.PostCollegeID = data['Data']["PostCollegeID"];
@@ -1322,7 +1322,7 @@ export class CampusPostComponent implements OnInit {
   }
 
   async GetMinMaxAgeDate() {
-    debugger
+    //debugger
     await this.MinMaxAgeValidate();
     const ageDate = this.request_EligibilityCriteriaModel.AgeCalculationDate;
     const minAge = this.request_EligibilityCriteriaModel.MinimunAge;

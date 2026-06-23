@@ -61,7 +61,7 @@ export class IIPEventConsentReportComponent {
   ) { }
 
   async ngOnInit() {
-    debugger
+    ////debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.Event = Number(this.activatedRoute.snapshot.queryParamMap.get('eid')?.toString()) || 0;
     this.EventTypeID = Number(this.activatedRoute.snapshot.queryParamMap.get('etid')?.toString()) || 0;
@@ -97,7 +97,7 @@ export class IIPEventConsentReportComponent {
       request.Event = this.searchRequest.Event;
       request.RoleID = this.sSOLoginDataModel.RoleID;
       request.EventTypeID = this.searchRequest.EventTypeID;
-      debugger
+     // //debugger
       await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -131,7 +131,7 @@ export class IIPEventConsentReportComponent {
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID; 
       this.searchRequest.Action = "GetAllConsentData";
-      debugger
+     // //debugger
       await this.industryInstitutePartnershipMasterService.GetIIPEventConsentReportData(this.searchRequest)
         .then(async (data: any) => {
 
