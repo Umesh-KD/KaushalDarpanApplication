@@ -127,6 +127,8 @@ export class QuaterWorkshopReportComponent {
         DistrictID = this.SSOLoginDataModel.DistrictID
 
       }
+
+
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
         DepartmentID: this.SSOLoginDataModel.DepartmentID,
@@ -135,7 +137,8 @@ export class QuaterWorkshopReportComponent {
         Createdby: UserID,
         DistrictID: DistrictID,
         QuaterID: this.request.QuaterID,
-        FinancialYearID: this.request.FinancialYearID
+        FinancialYearID: this.request.FinancialYearID,
+        UserID: this.SSOLoginDataModel.UserID
       };
 
 
@@ -218,6 +221,8 @@ export class QuaterWorkshopReportComponent {
         DistrictID = this.SSOLoginDataModel.DistrictID
 
       }
+
+
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
         DepartmentID: this.SSOLoginDataModel.DepartmentID,
@@ -226,7 +231,8 @@ export class QuaterWorkshopReportComponent {
         Createdby: UserID,
         DistrictID: DistrictID,
         QuaterID: this.request.QuaterID,
-        FinancialYearID: this.request.FinancialYearID
+        FinancialYearID: this.request.FinancialYearID,
+        UserID: this.SSOLoginDataModel.UserID
       };
 
 
@@ -342,21 +348,27 @@ export class QuaterWorkshopReportComponent {
   }
 
 
-
   async GetzonalID() {
     try {
-
       this.loaderService.requestStarted();
       await this.commonMasterService.GetZonalID(this.SSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-   
+
           if (this.SSOLoginDataModel.RoleID == 100) {
-            this.request.ZoneID = data['Data'][0]['DivisionID'];
-            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.request.ZoneID)
-             this.GetDistrictMatserDDL()
+
+            // Get all ZoneIDs instead of just first one
+            const zoneIDs = data['Data'].map((item: any) => item.DivisionID);
+
+            // Set first one as default selected (optional)
+            this.request.ZoneID = zoneIDs[0];
+
+            // Filter ZoneList for ALL matching zone IDs
+            this.ZoneList = this.ZoneList.filter((e: any) => zoneIDs.includes(e.ID));
+
+            this.GetDistrictMatserDDL();
           }
-          console.log(this.ZoneList)
+          console.log(this.ZoneList);
         }, (error: any) => console.error(error)
         );
     }
@@ -369,7 +381,6 @@ export class QuaterWorkshopReportComponent {
       }, 200);
     }
   }
-
 
   async openPdfModal(url: string): Promise<void> {
     const ext = url.split('.').pop()?.toLowerCase() || '';

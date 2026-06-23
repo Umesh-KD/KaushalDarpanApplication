@@ -11,6 +11,7 @@ import { ApprenticeshipEntry, ApprenticeshipReportEntity, ApprenticeshipSubmissi
 import { ITIApprenticeshipRegPassOutModel, ITIApprenticeshipWorkshopModel } from '../../../Models/ITI/ITIApprenticeshipWorkshopDataModel';
 import { ITITimeTableSearchModel } from '../../../Models/ITI/ITITimeTableModels';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';
+import { ITIStudentAllotmentReportSearchModels } from '../../../Models/PlacementDashReportModel';
 
 
 @Injectable({
@@ -143,11 +144,11 @@ export class ApprenticeReportServiceService {
   }
 
 
-  public async GetAllData(UserID: number = 0, DistrictID: number = 0, FinancialYearID: number = 0, BeforeMonth: number =0,ZoneID:number=0) {
+  public async GetAllData(UserID: number = 0, DistrictID: number = 0, FinancialYearID: number = 0, BeforeMonth: number =0,ZoneID:number=0,RoleID :number =0) {
     //var body = JSON.stringify(obj);
     // console.log(body);  this.FinancialYearID, this.BeforeMonth
     const headers = { 'content-type': 'application/json' }
-    return await this.http.get(this.APIUrl + "/GetAllData/" + UserID + '/' + DistrictID + '/' + FinancialYearID + '/' + BeforeMonth + '/' + ZoneID, { 'headers': headers })
+    return await this.http.get(this.APIUrl + "/GetAllData/" + UserID + '/' + DistrictID + '/' + FinancialYearID + '/' + BeforeMonth + '/' + ZoneID + '/' + RoleID, { 'headers': headers })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -307,7 +308,7 @@ export class ApprenticeReportServiceService {
   }
 
 
-  public async GetITIStudentAllotmentReport(searchRequest: RequestBaseModel) {
+  public async GetITIStudentAllotmentReport(searchRequest: ITIStudentAllotmentReportSearchModels) {
     const body = JSON.stringify(searchRequest);
 
     return await this.http.post(`${this.APIUrl}/GetITIStudentAllotmentReport`, body, this.headersOptions)

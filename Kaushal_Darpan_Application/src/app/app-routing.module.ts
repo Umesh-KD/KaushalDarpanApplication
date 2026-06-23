@@ -70,6 +70,9 @@ const routes: Routes = [
       {
         path: 'allpost', loadChildren: () => import('./Views/Home/all-post/all-post.module').then(m => m.AllPostModule), title: 'All Campus List'
       },
+      {
+        path: 'allpostnew', loadChildren: () => import('./Views/Home/allpostnew/allpostnew.module').then(m => m.AllpostnewModule), title: 'All post new'
+      },
       { path: 'iip-allpost', loadChildren: () => import('./Views/Home/iip-web-all-post/iip-web-all-post.module').then(m => m.IIPWebAllPostModule), title: 'IIP Post List' },
       { path: 'iip-event-consent-list-public', loadChildren: () => import('./Views/Home/iip-event-consent-list-public/iip-event-consent-list-public.module').then(m => m.IipEventConsentListPublicModule), title: 'IIP Event Consent List' },
       
@@ -400,6 +403,7 @@ const routes: Routes = [
 
 
       { path: 'SeatIntakesAdmissionList', loadChildren: () => import('./Views/ITI/Intakes/seat-intakes-list-admission/seat-intakes-list-admision.module').then(m => m.SeatIntakesListAdmissionModule), title: 'Seat Intakes List' },
+      { path: 'college-seat-intake-admission-list', loadChildren: () => import('./Views/ITI/Intakes/college-seat-intakes-admission-list/college-seat-intakes-admission-list.module').then(m => m.CollegeSeatIntakesAdmissionListModule), title: 'College Seat Intakes List' },
 
 
       //new pages changes
@@ -715,13 +719,13 @@ const routes: Routes = [
 
       { path: 'ITISeatMatrix', loadChildren: () => import('./Views/ITI/itiseat-matrix/itiseat-matrix.module').then(m => m.ITISeatMatrixModule) },
 
-      { path: 'AddSeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
-      { path: 'SeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.ListSeatMetrixModule), title: 'ITI Seat Metrix' },
+      { path: 'AddSeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Matrix' },
+      { path: 'SeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.ListSeatMetrixModule), title: 'ITI Seat Matrix' },
       { path: 'ITICollegeAdmission', loadChildren: () => import('./Views/ITI/ITICollegeAdmissions/iticollege-admission/iticollege-admission.module').then(m => m.ITICollegeAdmissionModule) },
 
-      { path: 'AddSeatMetrix8th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
-      { path: 'AddSeatMetrix10th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
-      { path: 'AddSeatMetrix12th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Metrix' },
+      { path: 'AddSeatMetrix8th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Matrix' },
+      { path: 'AddSeatMetrix10th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Matrix' },
+      { path: 'AddSeatMetrix12th/:id', loadChildren: () => import('./Views/ITI/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'ITI Add Seat Matrix' },
 
       { path: 'StudentJoinStatus/:id', loadChildren: () => import('./Views/student-join-status/student-join-status.module').then(m => m.StudentJoinStatusModule) },
       { path: 'Bterallotmentreporting', loadChildren: () => import('./Views/bter-allotment-reporting/bter-allotment-reporting.module').then(m => m.BterAllotmentReportingModule) },
@@ -735,17 +739,17 @@ const routes: Routes = [
       { path: 'group-center-mapping-reports', loadChildren: () => import('./Views/Reports/group-center-mapping-reports/group-center-mapping-reports.module').then(m => m.GroupCenterMappingReportsModule) },
       { path: 'center-daily-reports', loadChildren: () => import('./Views/Reports/center-daily-reports/center-daily-reports.module').then(m => m.CenterDailyReportsModule) },
 
-      { path: 'BTERAddSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Metrix' },
-      { path: 'BTERSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Metrix' },
-      { path: 'BTERDirectSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/direct-seat-metrix/direct-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Direct Seat Metrix' },
+      { path: 'BTERAddSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
+      { path: 'BTERSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Matrix' },
+      { path: 'BTERDirectSeatMetrixENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/direct-seat-metrix/direct-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Direct Seat Matrix' },
 
-      { path: 'BTERAddSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Metrix' },
-      { path: 'BTERSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Metrix' },
-      { path: 'BTERDirectSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/direct-seat-metrix/direct-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Direct Seat Metrix' },
+      { path: 'BTERAddSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
+      { path: 'BTERSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Matrix' },
+      { path: 'BTERDirectSeatMetrixNonENG/:id', loadChildren: () => import('./Views/BTER/seat-metrix/direct-seat-metrix/direct-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Direct Seat Matrix' },
 
-      { path: 'BTERAddSeatMetrixLit/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Metrix' },
-      { path: 'BTERSeatMetrixLit/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Metrix' },
-      { path: 'BTERDirectSeatMetrix/:id', loadChildren: () => import('./Views/BTER/seat-metrix/direct-seat-metrix/direct-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Direct Seat Metrix' },
+      { path: 'BTERAddSeatMetrixLit/:id', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
+      { path: 'BTERSeatMetrixLit/:id', loadChildren: () => import('./Views/BTER/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Seat Matrix' },
+      { path: 'BTERDirectSeatMetrix/:id', loadChildren: () => import('./Views/BTER/seat-metrix/direct-seat-metrix/direct-seat-metrix.module').then(m => m.BTERSeatMetrixListModule), title: 'Direct Seat Matrix' },
 
       { path: 'ITISeatMetrix', loadChildren: () => import('./Views/ITI/seat-metrix/list-seat-metrix/list-seat-metrix.module').then(m => m.ListSeatMetrixModule) },
 
@@ -762,7 +766,7 @@ const routes: Routes = [
       { path: 'BTERAddSeatIntakes', loadChildren: () => import('./Views/BTER/Intakes/add-seat-intakes/add-seat-intakes.module').then(m => m.AddSeatIntakesModule), title: 'Add Seat Intakes' },
       { path: 'Bridgecourse', loadChildren: () => import('./Views/bridge-course/bridge-course.module').then(m => m.BridgeCourseModule) },
 
-      { path: 'BTERAddSeatMetrix', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Metrix' },
+      { path: 'BTERAddSeatMetrix', loadChildren: () => import('./Views/BTER/seat-metrix/add-seat-metrix/add-seat-metrix.module').then(m => m.AddSeatMetrixModule), title: 'Add Seat Matrix' },
       { path: 'IMCManagementAllotment', loadChildren: () => import('./Views/BTER/IMC-Allocation-BTER/imc-management-allotment/imc-management-allotment.module').then(m => m.IMCManagementAllotmentModule) },
       { path: 'IMCManagementAllotmentVerify/:id', loadChildren: () => import('./Views/BTER/IMC-Allocation-BTER/imc-management-allotment-verify/imc-management-allotment-verify.module').then(m => m.IMCManagementAllotmentVerifyModule) },
 
@@ -1390,7 +1394,7 @@ const routes: Routes = [
       { path: 'StudentPlacementMapping', loadChildren: () => import('./Views/BTER/Student/student-placement-mapping/student-placement-mapping.module').then(m => m.StudentPlacementMappingModule) },
 
 
-      { path: 'college-seat-metrix', loadChildren: () => import('./Views/ITI/seat-metrix/college-wise-seat-metrix/college-wise-seat-metrix.module').then(m => m.CollegeWiseSeatMetrixModule), title: 'ITI Seat Metrix' },
+      { path: 'college-seat-metrix', loadChildren: () => import('./Views/ITI/seat-metrix/college-wise-seat-metrix/college-wise-seat-metrix.module').then(m => m.CollegeWiseSeatMetrixModule), title: 'ITI Seat Matrix' },
 
       { path: 'BTERUpwardList/:id', loadChildren: () => import('./Views/BTER/BTERUpwardList/BTERUpwardList.module').then(m => m.BTERUpwardListModule) },
 
@@ -1635,7 +1639,6 @@ const routes: Routes = [
       { path: 'unlock-examiner-groupcode-reval', loadChildren: () => import('./Views/unlock-examiner-groupcode-reval/unlock-examiner-groupcode-reval.module').then(m => m.UnlockExaminerGroupcodeRevalModule) },
       { path: 'mass-copping-detail-report', loadChildren: () => import('./Views/Reports/mass-copping-detail-report/mass-copping-detail-report.module').then(m => m.MassCoppingDetailReportModule), title: 'MassCoppingDetailReport' },
 
-
       { path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List' },
       { path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details' },
       { path: 'counselling-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/counselling-candidate-list-report/counselling-candidate-list-report.module').then(m => m.CounsellingCandidateListReportModule), title: 'Alloted Candidate List' },
@@ -1655,11 +1658,9 @@ const routes: Routes = [
       { path: 'student-employement-history', loadChildren: () => import('./Views/ITI/AdditionalDetails/employement-history/employement-history.module').then(m => m.StudentEmployementHistoryModule), title: 'Student Employement History' },
       { path: 'add-student-employement', loadChildren: () => import('./Views/ITI/AdditionalDetails/add-self-employement/add-self-employement.module').then(m => m.AddStudentEmployementModule), title: 'Add Student Employement' },
 
-
       { path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation' },
       { path: 'jan-aadhar-detail', loadChildren: () => import('./Views/new-jan-aadhar/new-jan-aadhar.module').then(m => m.JanAadharDetailModule), title: 'Jan AAdhar Detail Details' },
       { path: 'InternalMarksReportCollegeWise', loadChildren: () => import('./Views/InternalMarksReportCollegeWise/InternalMarksReportCollegeWise.module').then(m => m.InternalMarksReportCollegeWiseModule), title: 'InternalMarksReportCollegeWise' },
-
 
       { path: 'ITIChangeShift', loadChildren: () => import('./Views/ITI/iti-change-shift/iti-change-shift.module').then(m => m.ItiChangeShiftModule) },
       

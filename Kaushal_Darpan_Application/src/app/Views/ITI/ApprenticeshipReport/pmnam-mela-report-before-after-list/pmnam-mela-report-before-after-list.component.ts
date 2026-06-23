@@ -139,20 +139,28 @@ export class PMNAMMelaReportBeforeAfterListComponent {
 
 
 
+
   async GetzonalID() {
     try {
-
       this.loaderService.requestStarted();
       await this.commonMasterService.GetZonalID(this.SSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
           if (this.SSOLoginDataModel.RoleID == 100) {
-            this.request.ZoneID = data['Data'][0]['DivisionID'];
-            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.request.ZoneID)
-            this.GetDistrictMatserDDL()
+
+            // Get all ZoneIDs instead of just first one
+            const zoneIDs = data['Data'].map((item: any) => item.DivisionID);
+
+            // Set first one as default selected (optional)
+            this.request.ZoneID = zoneIDs[0];
+
+            // Filter ZoneList for ALL matching zone IDs
+            this.ZoneList = this.ZoneList.filter((e: any) => zoneIDs.includes(e.ID));
+
+            this.GetDistrictMatserDDL();
           }
-          console.log(this.ZoneList)
+          console.log(this.ZoneList);
         }, (error: any) => console.error(error)
         );
     }
@@ -165,6 +173,7 @@ export class PMNAMMelaReportBeforeAfterListComponent {
       }, 200);
     }
   }
+
 
 
   async GetReportAllData() {
@@ -182,7 +191,9 @@ export class PMNAMMelaReportBeforeAfterListComponent {
         DistrictID: this.request.DistrictID,
         FinancialYearID: this.request.FinancialYearID,
         BeforeMonth: this.request.BeforeMonth || 0,
-        ZoneID: this.request.ZoneID
+        ZoneID: this.request.ZoneID,
+        UserID: this.SSOLoginDataModel.UserID,
+  
       };
       await this.ApprenticeShipRPTService.GetPMNAM_BeforeAfterAllData(obj)
         .then((data: any) => {
@@ -380,7 +391,9 @@ export class PMNAMMelaReportBeforeAfterListComponent {
         DistrictID: this.request.DistrictID,
         FinancialYearID: this.request.FinancialYearID,
         BeforeMonth: this.request.BeforeMonth || 0,
-        ZoneID: this.request.ZoneID
+        ZoneID: this.request.ZoneID,
+        UserID: this.SSOLoginDataModel.UserID,
+
       };
       this.loaderService.requestStarted();
       await this.reportService.GetPmnamMela(obj)

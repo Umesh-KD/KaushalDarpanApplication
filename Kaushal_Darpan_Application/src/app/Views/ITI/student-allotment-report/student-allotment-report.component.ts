@@ -8,7 +8,7 @@ import * as XLSX from 'xlsx';
 import { StudentExamDetails } from '../../../Models/DashboardCardModel';
 import { EnumRole } from '../../../Common/GlobalConstants';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { PlacementReportSearchModels } from '../../../Models/PlacementDashReportModel';
+import { ITIStudentAllotmentReportSearchModels, PlacementReportSearchModels } from '../../../Models/PlacementDashReportModel';
 import { ItiCampusPostService } from '../../../Services/ITI/ITICampusPost/iticampus-post.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -48,7 +48,7 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
   public institueList: any = [];
   public StreamMasterList:any =[];
   public CompanyMasterList:any=[];
-  public request =new PlacementReportSearchModels();
+  public request = new ITIStudentAllotmentReportSearchModels();
   public SelectedTradeID:any=[];
   public SelectedCollegeID:any=[];
   public SelectedCompanyID:any=[];
@@ -69,30 +69,33 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
   async ngOnInit(): Promise<void> {
 
     this.Searchform = this.formBuilder.group({
-      InstituteID: [''] , // ✅ disabled here
+      //InstituteID: [''] , // ✅ disabled here
       StudentName: [''],
-      ddlBranch: [''],
-      ddlCompanyID: ['']
+      //ddlBranch: [''],
+      //ddlCompanyID: ['']
+      CollegeID: [0],
+      DGTCode:['']
     });
 
- this.settingsMultiselect = {
-      singleSelection: false,
-      idField: 'ID',
-      textField: 'Name',
-      enableCheckAll: true,
-      selectAllText: 'Select All',
-      unSelectAllText: 'Unselect All',
-      allowSearchFilter: true,
-      limitSelection: -1,
-      clearSearchFilter: true,
-      maxHeight: 197,
-      itemsShowLimit: 10,
-      searchPlaceholderText: 'Search...',
-      noDataAvailablePlaceholderText: 'Not Found',
-      closeDropDownOnSelection: false,
-      showSelectedItemsAtTop: false,
-      defaultOpen: false,
-    };
+    //this.settingsMultiselect = {
+    //  singleSelection: false,
+    //  idField: 'ID',
+    //  textField: 'Name',
+    //  enableCheckAll: true,
+    //  selectAllText: 'Select All',
+    //  unSelectAllText: 'Unselect All',
+    //  allowSearchFilter: true,
+    //  limitSelection: -1,
+    //  clearSearchFilter: true,
+    //  maxHeight: 197,
+    //  itemsShowLimit: 10,
+    //  searchPlaceholderText: 'Search...',
+    //  noDataAvailablePlaceholderText: 'Not Found',
+    //  closeDropDownOnSelection: false,
+    //  showSelectedItemsAtTop: false,
+    //  defaultOpen: false,
+    //};
+
     this.settingsMultiselect1 = {
       singleSelection: false,
       idField: 'InstituteID',
@@ -111,25 +114,6 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
       showSelectedItemsAtTop: false,
       defaultOpen: false,
     };
-    this.settingsMultiselect3 = {
-      singleSelection: false,
-      idField: 'ID',
-      textField: 'Name',
-      enableCheckAll: true,
-      selectAllText: 'Select All',
-      unSelectAllText: 'Unselect All',
-      allowSearchFilter: true,
-      limitSelection: -1,
-      clearSearchFilter: true,
-      maxHeight: 197,
-      itemsShowLimit: 10,
-      searchPlaceholderText: 'Search...',
-      noDataAvailablePlaceholderText: 'Not Found',
-      closeDropDownOnSelection: false,
-      showSelectedItemsAtTop: false,
-      defaultOpen: false,
-    };
-
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.activatedRoute.paramMap.subscribe(params => {
@@ -181,84 +165,48 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
     //}
   
     this.GetAllData();
-
+    this.GetLoadData();
   }
 
-  //async GetLoadData(){
-  //  this.request.StudentName
-  //  try{
-  //    this.loaderService.requestStarted();
-  //    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
-  //    .then((data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      this.InstituteMasterList = data['Data'];
-  //    }, (error: any) => console.error(error));
+  async GetLoadData(){
+    this.request.StudentName
+    try{
+      this.loaderService.requestStarted();
+      //await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+      //.then((data: any) => {
+      //  data = JSON.parse(JSON.stringify(data));
+      //  this.InstituteMasterList = data['Data'];
+      //}, (error: any) => console.error(error));
 
-  //    await this.CampusPostService.Iticollege(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.EndTermID)
-  //        .then((data: any) => {
-  //          data = JSON.parse(JSON.stringify(data));
-  //          this.institueList = data['Data'];
-  //          // this.copyOfinstitueList=data['Data'];
-  //        }, error => console.error(error));
+      await this.CampusPostService.Iticollege(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.EndTermID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.institueList = data['Data'];
+            // this.copyOfinstitueList=data['Data'];
+          }, error => console.error(error));
 
-  //    await this.commonMasterService.SemesterMaster()
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.SemesterMasterList = data['Data'];
-  //      }, (error: any) => console.error(error));
+      //await this.commonMasterService.SemesterMaster()
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.SemesterMasterList = data['Data'];
+      //  }, (error: any) => console.error(error));
 
-  //    await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID,0,0,this.sSOLoginDataModel.InstituteID,0,0)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.StreamMasterList = data['Data'];
-  //      }, error => console.error(error));
+      //await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID,0,0,this.sSOLoginDataModel.InstituteID,0,0)
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.StreamMasterList = data['Data'];
+      //  }, error => console.error(error));      
 
-  //    await this.commonMasterService.ITIPlacementCompanyMaster(this.sSOLoginDataModel.DepartmentID)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        console.log(data['Data']);
-  //        this.CompanyMasterList = data['Data'];
-  //      }, error => console.error(error));
-
-  //    }
-  //    catch (Ex) {
-  //      console.log(Ex);
-  //    }
-  //    finally {
-  //      setTimeout(() => {
-  //        this.loaderService.requestEnded();
-  //      }, 200);
-  //    }
-  //}
-
-
-  // exportToExcel(): void {
-  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.viewStudentAllotmentList);
-  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  //   XLSX.writeFile(wb, 'CollegesWiseReports.xlsx');
-  // }
-
-
-    //exportToExcel(): void {
-    //  const unwantedColumns = [
-    //    'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-    //    'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email'
-    //  ];
-    //  const filteredData = this.viewStudentAllotmentList.map((item: any) => {
-    //    const filteredItem: any = {};
-    //    Object.keys(item).forEach(key => {
-    //      if (!unwantedColumns.includes(key)) {
-    //        filteredItem[key] = item[key];
-    //      }
-    //    });
-    //    return filteredItem;
-    //  });
-    //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
-    //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    //  XLSX.writeFile(wb, 'CollegesWiseReports.xlsx');
-  //}
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+  }
 
   exportToExcel(): void {
     const unwantedColumns = [
@@ -296,23 +244,23 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
 
   async GetAllData() {
    // //debugger
-    console.log(this.request.CollegeID);
-     console.log("selected trade ===> ",this.SelectedTradeID);
-     console.log("selected institute ===> ",this.SelectedCollegeID);
-     console.log("selected institute ===> ",this.SelectedCompanyID);
-      this.request.TradeID=this.SelectedTradeID.length>0?this.SelectedTradeID.map((item:any)=>item.ID).join(','):'0';
-      this.request.InstituteID=this.SelectedCollegeID.length>0?this.SelectedCollegeID.map((item:any)=>item.InstituteID).join(','):'0';
-      this.request.CompanyID=this.SelectedCompanyID.length>0?this.SelectedCompanyID.map((item:any)=>item.ID).join(','):'0';
-      console.log("selected search ==>",this.request.TradeID);
-      console.log("selected search ==>",this.request.InstituteID);
+    //console.log(this.request.CollegeID);
+     //console.log("selected institute ===> ",this.SelectedCollegeID);
+      //this.request.InstituteID=this.SelectedCollegeID.length>0?this.SelectedCollegeID.map((item:any)=>item.InstituteID).join(','):'0';
+      //console.log("selected search ==>",this.request.InstituteID);
       console
-    let requestData: RequestBaseModel = {
-      DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,     
-      RoleID: this.sSOLoginDataModel.RoleID,
-      EndTermID: this.sSOLoginDataModel.EndTermID
-    }
-    await this.ApprenticeReportServiceService.GetITIStudentAllotmentReport(requestData)
+    //let requestData: RequestBaseModel = {
+    //  DepartmentID: this.sSOLoginDataModel.DepartmentID,
+    //  Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,     
+    //  RoleID: this.sSOLoginDataModel.RoleID,
+    //  EndTermID: this.sSOLoginDataModel.EndTermID
+    //}
+    this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.request.RoleID = this.sSOLoginDataModel.RoleID;
+    this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+
+    await this.ApprenticeReportServiceService.GetITIStudentAllotmentReport(this.request)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.viewStudentAllotmentList = data['Data'];
@@ -331,13 +279,11 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
     this.currentPage = event.pageIndex + 1;
     if (this.currentPage < 1) this.currentPage = 1;
     else if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
-
     this.updateTable();
   }
 
   applyFilter(filterValue: string): void {
     filterValue = filterValue.trim().toLowerCase();
-
     if (filterValue === "all" || filterValue === "") {
       this.filteredData = [...this.viewStudentAllotmentList]; // Reset to full dataset
     } else {
@@ -347,7 +293,6 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
         )
       );
     }
-
     this.totalRecords = this.filteredData.length;
     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     this.currentPage = 1; // Reset to first page after filtering
@@ -367,36 +312,19 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
     this.endInTableIndex = Math.min(this.currentPage * this.pageSize, this.totalRecords);
   }
 
-
     async ClearSearchData() {
-    //  //debugger
-      if(this.sSOLoginDataModel.RoleID!=this._EnumRole.ITI_Placement_TPO)
-      {
-        this.request.CollegeID = 0;
-        this.SelectedCollegeID = [];
-      }
-      // else{
-      //   this.request.CollegeID = this.sSOLoginDataModel.InstituteID;
-      // }
-      this.request.TradeID = '';
-      this.SelectedTradeID = [];
-      this.request.CompanyID='';
-
-      this.request.CompanyID='';
       this.SelectedCompanyID = [];
-    this.request.StudentName = '';
+      this.request.StudentName = '';
+      this.request.DGTCode = '';
+      this.request.CollegeID = 0;
     await this.GetAllData();
-  }
-
-  
+  }  
 
   onFilterChange(event: any) {
-    // Handle filtering logic (if needed)
     console.log(event);
   }
 
   onDropDownClose(event: any) {
-    // Handle dropdown close event
     console.log(event);
   }
 
@@ -413,8 +341,6 @@ export class ITIStudentAllotmentReportComponent implements OnInit {
 onDeSelect(event:any) {
 }
 
-// onSelectAll(items: any[], centerID: number) {
-// }
 
 onDeSelectAll(event:any) {
 }

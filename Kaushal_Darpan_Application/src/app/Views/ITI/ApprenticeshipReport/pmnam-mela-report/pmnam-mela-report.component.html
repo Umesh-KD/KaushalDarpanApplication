@@ -74,7 +74,7 @@
 
           <div *ngIf="ssoLoginDataModel.RoleID !=97">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
-              <select [disabled]="ssoLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="obj.ZoneID" (change)="GetDistrictMatserDDL()">
+              <select [disabled]="ssoLoginDataModel.RoleID == 100 && ZoneList?.length==0 " class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="obj.ZoneID" (change)="GetDistrictMatserDDL()">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
 

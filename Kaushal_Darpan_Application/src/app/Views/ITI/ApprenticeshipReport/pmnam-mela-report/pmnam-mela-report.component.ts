@@ -141,21 +141,27 @@ export class PmnamMelaReportComponent {
   }
 
 
-
   async GetzonalID() {
     try {
-
       this.loaderService.requestStarted();
       await this.commonMasterService.GetZonalID(this.ssoLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
           if (this.ssoLoginDataModel.RoleID == 100) {
-            this.obj.ZoneID = data['Data'][0]['DivisionID'];
-            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.obj.ZoneID)
-            this.GetDistrictMatserDDL()
+
+            // Get all ZoneIDs instead of just first one
+            const zoneIDs = data['Data'].map((item: any) => item.DivisionID);
+
+            // Set first one as default selected (optional)
+            this.obj.ZoneID = zoneIDs[0];
+
+            // Filter ZoneList for ALL matching zone IDs
+            this.ZoneList = this.ZoneList.filter((e: any) => zoneIDs.includes(e.ID));
+
+            this.GetDistrictMatserDDL();
           }
-          console.log(this.ZoneList)
+          console.log(this.ZoneList);
         }, (error: any) => console.error(error)
         );
     }
@@ -338,7 +344,7 @@ export class PmnamMelaReportComponent {
     debugger;
     try {
       var UserID: number = 0
-      if (this.ssoLoginDataModel.RoleID != 97) {
+      if (this.ssoLoginDataModel.RoleID != 97 && this.ssoLoginDataModel.RoleID!=100) {
         UserID = 0
       } else {
         UserID = this.ssoLoginDataModel.UserID
@@ -346,7 +352,7 @@ export class PmnamMelaReportComponent {
 
 
       this.loaderService.requestStarted();
-      await this.ApprenticeReportServiceService.GetAllData(UserID, this.DistrictID, this.FinancialYearID, this.BeforeMonth, this.obj.ZoneID).then((data: any) => {
+      await this.ApprenticeReportServiceService.GetAllData(UserID, this.DistrictID, this.FinancialYearID, this.BeforeMonth, this.obj.ZoneID, this.ssoLoginDataModel.RoleID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.Data) {
           this.DataList = data.Data;
@@ -433,7 +439,7 @@ export class PmnamMelaReportComponent {
     try {
       debugger;
       var UserID: number = 0
-      if (this.ssoLoginDataModel.RoleID != 97) {
+      if (this.ssoLoginDataModel.RoleID != 97 && this.ssoLoginDataModel.RoleID!=100) {
         UserID = 0
       } else {
         UserID = this.ssoLoginDataModel.UserID

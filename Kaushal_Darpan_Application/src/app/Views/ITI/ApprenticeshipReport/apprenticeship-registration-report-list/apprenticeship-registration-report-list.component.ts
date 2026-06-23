@@ -139,7 +139,7 @@ export class ApprenticeshipRegistrationReportList {
         TypeID: this.TypeID,
         ZoneID: this.ZoneID,
         DistrictID: this.DistrictID,
-
+        UserID: this.ssoLoginDataModel.UserID
 
       };
 
@@ -230,7 +230,7 @@ export class ApprenticeshipRegistrationReportList {
         TypeID: this.TypeID,
         ZoneID: this.ZoneID,
         DistrictID: this.DistrictID,
-
+        UserID: this.ssoLoginDataModel.UserID
 
       };
 
@@ -352,20 +352,28 @@ export class ApprenticeshipRegistrationReportList {
 
 
 
+
   async GetzonalID() {
     try {
-
       this.loaderService.requestStarted();
       await this.CommonService.GetZonalID(this.ssoLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
           if (this.ssoLoginDataModel.RoleID == 100) {
-            this.ZoneID = data['Data'][0]['DivisionID'];
-            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.ZoneID)
-            this.GetDistrictMatserDDL()
+
+            // Get all ZoneIDs instead of just first one
+            const zoneIDs = data['Data'].map((item: any) => item.DivisionID);
+
+            // Set first one as default selected (optional)
+            this.ZoneID = zoneIDs[0];
+
+            // Filter ZoneList for ALL matching zone IDs
+            this.ZoneList = this.ZoneList.filter((e: any) => zoneIDs.includes(e.ID));
+
+            this.GetDistrictMatserDDL();
           }
-          console.log(this.ZoneList)
+          console.log(this.ZoneList);
         }, (error: any) => console.error(error)
         );
     }

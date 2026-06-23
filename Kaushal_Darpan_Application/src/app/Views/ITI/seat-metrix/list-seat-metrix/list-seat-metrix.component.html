@@ -7,7 +7,7 @@
       <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Trade</a>-->
-      <a [routerLink]="['/ITISeatMetrix']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Seat Metrix</a>
+      <a [routerLink]="['/ITISeatMetrix']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Seat Matrix</a>
     </div>
 
 
@@ -25,7 +25,7 @@
         <!--<a *ngIf="DateConfigSetting[0]['CREATE SEAT MATRIX']==1" routerLink="/AddSeatMetrix{{searchRequest.TradeLevelId }}th/{{searchRequest.TradeLevelId }}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Create Seat Matrix</a>-->
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Level:</label>
           <select class="form-select" [(ngModel)]="searchRequest.TradeLevelId">
             <option value="0">Choose Option</option>
@@ -33,18 +33,57 @@
             <option value="10">10th</option>
             <option value="12">12th</option>
           </select>
-        </div>
-
+        </div> -->
 
         <div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Trade Level:
+  </label>
+
+  <ng-select
+    [(ngModel)]="searchRequest.TradeLevelId"
+    [clearable]="false"
+    [searchable]="true">
+
+    <ng-option [value]="0">Choose Option</ng-option>
+    <ng-option [value]="8">8th</ng-option>
+    <ng-option [value]="10">10th</ng-option>
+    <ng-option [value]="12">12th</ng-option>
+
+  </ng-select>
+</div>
+
+
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Type:</label>
           <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId" (change)="getITICollege()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
           </select>
 
-        </div>
+        </div> -->
         <div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Search By College Type:
+  </label>
+
+  <ng-select
+    [(ngModel)]="searchRequest.ManagementTypeId"
+    (change)="getITICollege()"
+    [clearable]="false"
+    [searchable]="true">
+
+    <ng-option [value]="0">Choose Option</ng-option>
+
+    <ng-container *ngFor="let item of ListITIManagementType">
+      <ng-option [value]="item.ID">
+        {{ item.Name }}
+      </ng-option>
+    </ng-container>
+
+  </ng-select>
+</div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Search By College:
           </label>
@@ -52,9 +91,31 @@
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
           </select>
-        </div>
+        </div> -->
 
         <div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Search By College:
+  </label>
+
+  <ng-select
+    [(ngModel)]="searchRequest.CollegeID"
+    (change)="getITITrade()"
+    [clearable]="false"
+    [searchable]="true">
+
+    <ng-option [value]="0">Choose Option</ng-option>
+
+    <ng-container *ngFor="let item of ListITICollegeByManagement">
+      <ng-option [value]="item.ID">
+        {{ item.Name }}
+      </ng-option>
+    </ng-container>
+
+  </ng-select>
+</div>
+
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Search By Trade:
           </label>
@@ -62,8 +123,31 @@
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</option>
           </select>
-        </div>
+        </div> -->
+
         <div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Search By Trade:
+  </label>
+
+  <ng-select
+    [(ngModel)]="searchRequest.TradeID"
+    [clearable]="false"
+    [searchable]="true">
+
+    <ng-option [value]="0">Choose Option</ng-option>
+
+    <ng-container *ngFor="let item of ListITITrade">
+      <ng-option [value]="item.ID">
+        {{ item.Name }}
+      </ng-option>
+    </ng-container>
+
+  </ng-select>
+</div>
+
+
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Search By Trade Scheme:
           </label>
@@ -71,8 +155,30 @@
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITITradeScheme" [value]="item.ID">{{item.Name}}</option>
           </select>
-        </div>
+        </div> -->
+
         <div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Search By Trade Scheme:
+  </label>
+
+  <ng-select
+    [(ngModel)]="searchRequest.TradeSchemeId"
+    [clearable]="false"
+    [searchable]="true">
+
+    <ng-option [value]="0">Choose Option</ng-option>
+
+    <ng-container *ngFor="let item of ListITITradeScheme">
+      <ng-option [value]="item.ID">
+        {{ item.Name }}
+      </ng-option>
+    </ng-container>
+
+  </ng-select>
+</div>
+
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
           <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
         </div>
@@ -80,9 +186,9 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
           <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
-        </div>
+        </div> -->
 
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Search By Seat Available
           </label>
@@ -91,9 +197,25 @@
             <option value="1">Yes</option>
             <option value="0">No</option>
           </select>
-        </div>
+        </div> -->
+<div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Search By Seat Available
+  </label>
 
-        <div>
+  <ng-select
+    [(ngModel)]="searchRequest.TotalSeatAvailable"
+    (change)="GetTradeAndColleges(1)"
+    [searchable]="true"
+    [clearable]="false">
+
+    <ng-option [value]="2">Choose Option</ng-option>
+    <ng-option [value]="1">Yes</ng-option>
+    <ng-option [value]="0">No</ng-option>
+
+  </ng-select>
+</div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Alltmet Type
           </label>
@@ -101,8 +223,28 @@
             <option value="0">Choose Option</option>
             <option *ngFor="let item of AllotmentTypeList" [value]="item.AllotmentId">{{item.Name}}</option>            
           </select>
-        </div>
+        </div> -->
+<div>
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+    Allotment Type
+  </label>
 
+  <ng-select
+    [(ngModel)]="searchRequest.AllotmentMasterId"
+    (change)="AllotmentChange()"
+    [searchable]="true"
+    [clearable]="false">
+
+    <ng-option [value]="0">Choose Option</ng-option>
+
+    <ng-container *ngFor="let item of AllotmentTypeList">
+      <ng-option [value]="item.AllotmentId">
+        {{ item.Name }}
+      </ng-option>
+    </ng-container>
+
+  </ng-select>
+</div>
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetTradeAndColleges(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Reset</button>
@@ -295,7 +437,7 @@
         <div class="card">
           <div class="card-header flex justify-between  items-center">
             <b>
-              <i class="fa fa-comment"></i>&nbsp; OTP verification for Publish Seat Metrix
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for Publish Seat Matrix
             </b>
             <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
           </div>
