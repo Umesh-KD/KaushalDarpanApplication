@@ -66,7 +66,6 @@ export class EstablishmentDashboardBTERComponent {
       await this.AdminDashDataService.GetBTEREstablishmentDashboard(request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DashboardDataList = data.Data;
-        debugger
         this.dashboardData = {
           Establishment: [],
           RelievingJoining: [],
