@@ -213,7 +213,7 @@ if (this.PageMode == 'view') {
   }
 
   async SaveEventData() {
-    debugger
+    //debugger
     console.log("branch", this.SelectedBranchList)
     console.log("semester", this.SelectedSemesterList)
     this.isSubmitted = true;
@@ -226,7 +226,7 @@ if (this.PageMode == 'view') {
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
-      debugger
+      //debugger
       await this.industryInstitutePartnershipMasterService.SaveData_IIP_Events(this.request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -500,9 +500,9 @@ if (this.PageMode == 'view') {
     this.loaderService.requestStarted();
 
     // ✅ Event Type
-    debugger
+    //debugger
     const eventTypeRes: any = await this.commonMasterService.GetEventCommonMaster('EventType');
-    debugger
+    //debugger
     this.EventTypeList = eventTypeRes.Data;
     console.log(this.EventTypeList);
 
@@ -540,7 +540,7 @@ onEventTypeChange(event: any) {
 }
 
 async GetDivisionMasterList() {
-    debugger;
+    //debugger;
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetDivisionMaster()

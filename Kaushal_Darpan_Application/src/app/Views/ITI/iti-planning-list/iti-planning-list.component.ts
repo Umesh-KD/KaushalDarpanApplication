@@ -118,7 +118,7 @@ export class ItiPlanningListComponent {
 
 
   async btn_SearchClick() {
-    debugger;
+    //debugger;
 
     try {
    
@@ -501,7 +501,7 @@ export class ItiPlanningListComponent {
           this.ErrorMessage = data['ErrorMessage'];
 
           data = JSON.parse(JSON.stringify(data));
-          debugger;
+          //debugger;
 
           if (data && data.Data) {
 

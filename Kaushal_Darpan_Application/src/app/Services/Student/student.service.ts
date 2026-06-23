@@ -182,7 +182,7 @@ export class StudentService
 
   public async ReAssignTeacherForSaveLC(searchRequest: ReAssignTeacherSaveModel) {
     var body = JSON.stringify(searchRequest);
-    debugger
+    //debugger
     return await this.http.post(`${this.APIUrl}/ReAssignTeacherForSaveLC`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

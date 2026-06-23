@@ -153,7 +153,7 @@ export class DuplicateDocumentComponent implements OnInit {
   }
 
   async GetDuplicateDocInstituteWise(i:any) {
-    debugger
+   // debugger
     console.log(i);
     if(i==1){
       this.pageNo=1;
@@ -214,7 +214,7 @@ export class DuplicateDocumentComponent implements OnInit {
   }
 
   async SaveData_Issuance() {
-    debugger;
+   // debugger;
     this.isSubmitted = true;
 
     if (this.formAction.invalid) {
@@ -308,7 +308,7 @@ export class DuplicateDocumentComponent implements OnInit {
   // pagination start
 
   async OnAction(content: any, item: any) {
-    debugger;
+    //debugger;
     this.requestAction.ID = item.ID;
     this.requestAction.DocumentID=item.Document_ID;
     this.requestAction.StudentID=item.Student_Id;
@@ -370,7 +370,7 @@ export class DuplicateDocumentComponent implements OnInit {
       // ---------------------------------------------------------------------------------------------------------
 
       async DownloadDuplicateMarksheet(element: any) {
-        debugger;
+       // debugger;
         try {
           this.searchRequestMarksheet.DepartmentID = this.sSOLoginDataModel.DepartmentID;
           this.searchRequestMarksheet.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;

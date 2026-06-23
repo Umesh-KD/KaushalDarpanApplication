@@ -248,7 +248,7 @@ export class AadharVerifyDetailComponent implements OnInit {
   minimumAgeValidator(minYears: number) {
     return (control: AbstractControl) => {
       if (!control.value) return null;
-      debugger
+      //debugger
       const inputDate = new Date(control.value);
       const baseDate = new Date(this.FromDate); // reference date (e.g., admission date)
 
@@ -450,7 +450,7 @@ export class AadharVerifyDetailComponent implements OnInit {
   //}
 
   async VerifyOTP(index: any, janaadharid: any, janaadharmember: any, ENR_ID:any,AadharID:any) {
-    debugger
+    //debugger
     this.OTP ='9464'
     if (this.OTP.length > 0) {
       try {
@@ -464,7 +464,7 @@ export class AadharVerifyDetailComponent implements OnInit {
      
         await this.StudentJanAadharDetailService.VerifyOTP(this.ResposeOTPModel)
           .then(async (data: any) => {
-            debugger
+            //debugger
             data = JSON.parse(JSON.stringify(data));
             console.log(data);
             if (this.State == EnumStatus.Success) {
@@ -1003,7 +1003,7 @@ export class AadharVerifyDetailComponent implements OnInit {
 
   async FillMemberDetails() {
     try {
-      debugger
+      //debugger
       console.log(this.janaadharMemberDetails, "hhh")
       this.model.StudentName = this.janaadharMemberDetails.nameEng;
       this.model.FatherName = this.janaadharMemberDetails.fnameEng;
@@ -1236,7 +1236,7 @@ export class AadharVerifyDetailComponent implements OnInit {
 
      this.BTERCollegeTradeService.SampleImportExcelFile(file)
       .then((data: any) => {
-        debugger;
+        //debugger;
         data = JSON.parse(JSON.stringify(data));
         this.State = data['State'];
         this.Message = data['Message'];
