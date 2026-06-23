@@ -166,7 +166,7 @@ export class NodalWorkshopReportComponent {
             const zoneIDs = data['Data'].map((item: any) => item.DivisionID);
 
             // Set first one as default selected (optional)
-            this.request.ZoneID = zoneIDs[0];
+          
 
             // Filter ZoneList for ALL matching zone IDs
             this.ZoneList = this.ZoneList.filter((e: any) => zoneIDs.includes(e.ID));
@@ -270,7 +270,7 @@ export class NodalWorkshopReportComponent {
           }, (error: any) => console.error(error)
           );
       } else {
-        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.request.ZoneID)
+        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.request.ZoneID, this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.RoleID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.DistrictLisrt = data['Data'];
