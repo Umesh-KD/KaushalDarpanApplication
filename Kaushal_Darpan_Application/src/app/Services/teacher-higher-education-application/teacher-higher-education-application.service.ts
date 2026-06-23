@@ -223,4 +223,20 @@ export class TeacherHigherEducationApplicationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async HTE_DashboardTilesGet(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/HTE_DashboardTilesGet`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetApplicationReportData_THTE(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetApplicationReportData_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

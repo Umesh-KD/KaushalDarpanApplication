@@ -11,6 +11,7 @@ import { ApprenticeshipEntry, ApprenticeshipReportEntity, ApprenticeshipSubmissi
 import { ITIApprenticeshipRegPassOutModel, ITIApprenticeshipWorkshopModel } from '../../../Models/ITI/ITIApprenticeshipWorkshopDataModel';
 import { ITITimeTableSearchModel } from '../../../Models/ITI/ITITimeTableModels';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';
+import { ITIStudentAllotmentReportSearchModels } from '../../../Models/PlacementDashReportModel';
 
 
 @Injectable({
@@ -175,10 +176,10 @@ export class ApprenticeReportServiceService {
   }
 
   public Submit_Apprenticeship_data(payload: ApprenticeshipSubmission) {
-    debugger;
+    //debugger;
     const body = JSON.stringify(payload);
     console.log('Submitting:', body);
-    debugger;
+   // debugger;
     const headers = { 'Content-Type': 'application/json' };
 
     return this.http.post(this.APIUrl + "/Submit_Apprenticeship_data", body, { headers })
@@ -307,7 +308,7 @@ export class ApprenticeReportServiceService {
   }
 
 
-  public async GetITIStudentAllotmentReport(searchRequest: RequestBaseModel) {
+  public async GetITIStudentAllotmentReport(searchRequest: ITIStudentAllotmentReportSearchModels) {
     const body = JSON.stringify(searchRequest);
 
     return await this.http.post(`${this.APIUrl}/GetITIStudentAllotmentReport`, body, this.headersOptions)

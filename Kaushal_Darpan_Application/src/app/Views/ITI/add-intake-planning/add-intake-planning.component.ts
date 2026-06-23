@@ -416,7 +416,7 @@ async onSubmit() {
   }
 
   async GetOrderDetailsList(){
-    debugger
+    //debugger
     try{
       this.loaderService.requestStarted();
       this.ItiSanctionOrderList.InstituteID = this.request.PlanningID
@@ -443,7 +443,7 @@ async onSubmit() {
 
 
   async GetOrderDetailsList_ByDate(type: number) {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       var SelectedDate = this.request.AdminOrderDate;
@@ -479,7 +479,7 @@ async onSubmit() {
 
 
   async OnOrderChange( type: number) {
-    debugger
+    //debugger
     if (type == 1) {
       const item = this.AcademicOrderNoList.find(
         (e: any) => e.ID == this.request.AdminSanctionedID
@@ -498,7 +498,7 @@ async onSubmit() {
   }
 
   async OnOrderDateChange(type: number) {
-    debugger
+    //debugger
     if (type == 1) {
 
       this.filteredAcademicOrderNoList = this.AcademicOrderNoList.filter(

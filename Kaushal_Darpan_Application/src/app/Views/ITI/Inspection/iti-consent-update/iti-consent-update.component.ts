@@ -220,7 +220,7 @@ export class ITIConsentUpdateComponent {
 
   async ViewandUpdate(content: any, InspectionConsentID: number) {
 
-    debugger
+    //debugger
     try {
       this.InspectionConsentID = InspectionConsentID;
 
@@ -271,7 +271,7 @@ export class ITIConsentUpdateComponent {
   }
 
   async ViewForPayment( InspectionConsentID: number) {
-    debugger
+    //debugger
     try {
       this.InspectionConsentID = InspectionConsentID;
 
@@ -363,9 +363,9 @@ export class ITIConsentUpdateComponent {
   }
 
   async onSubmitConsent(status:any) {
-    debugger
+    //debugger
     this.isSubmitted = true;
-    debugger;
+    //debugger;
     console.log(status);
     if (status==1 && (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '')) {
       this.toastr.error('Please upload the required document.');
@@ -552,7 +552,7 @@ export class ITIConsentUpdateComponent {
 
 
   async openOTPModal1(InspectionConsentID:number) {
-   // debugger;
+   // //debugger;
     this.Swal2.Confirmation(`Are you sure you want to Pay ?`,
       async (result: any) => {
         if (result.isConfirmed) {
@@ -594,7 +594,7 @@ export class ITIConsentUpdateComponent {
 
   async submitPayment(InspectionConsentID:number) {
     await this.ViewForPayment(InspectionConsentID);
-    debugger
+    //debugger
     this.totalAmount = this.UpdateConsentRequest.Amount ?? 0;
     this.emitraRequest = new EmitraRequestDetails();
     // this.studentDetailsModel = new StudentDetailsModel()
