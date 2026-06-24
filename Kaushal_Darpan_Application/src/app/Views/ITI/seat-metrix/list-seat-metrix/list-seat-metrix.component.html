@@ -1,13 +1,13 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Collage Trade Seat Matrix</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Seat Distribution</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
       <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Trade</a>-->
-      <a [routerLink]="['/ITISeatMetrix']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Seat Matrix</a>
+      <a [routerLink]="['/ITISeatMetrix']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Seat Distribution</a>
     </div>
 
 
@@ -35,23 +35,21 @@
           </select>
         </div> -->
 
-        <div>
-  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-    Trade Level:
-  </label>
 
-  <ng-select
-    [(ngModel)]="searchRequest.TradeLevelId"
-    [clearable]="false"
-    [searchable]="true">
-
-    <ng-option [value]="0">Choose Option</ng-option>
-    <ng-option [value]="8">8th</ng-option>
-    <ng-option [value]="10">10th</ng-option>
-    <ng-option [value]="12">12th</ng-option>
-
-  </ng-select>
-</div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Trade Level:
+          </label>
+          <ng-select
+            [(ngModel)]="searchRequest.TradeLevelId"
+            [clearable]="false"
+            [searchable]="true">
+            <ng-option [value]="0">Choose Option</ng-option>
+            <ng-option [value]="8">8th</ng-option>
+            <ng-option [value]="10">10th</ng-option>
+            <ng-option [value]="12">12th</ng-option>
+          </ng-select>
+        </div>-->
 
 
         <!-- <div>

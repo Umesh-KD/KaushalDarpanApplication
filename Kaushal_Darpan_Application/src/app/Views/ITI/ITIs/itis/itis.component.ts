@@ -156,11 +156,11 @@ export class ITIsComponent implements OnInit {
     if (this.key != 0) {
       if (this.flag == 1 && this.key == 1) {
         this.searchrequest.ITItypeID = 1;
-        this.searchrequest.Status = -1;
+        this.searchrequest.Status = 1;
       }
       else if (this.flag == 1 && this.key == 5) {
         this.searchrequest.ITItypeID = 5;
-        this.searchrequest.Status = -1;
+        this.searchrequest.Status = 1;
       }
       else if (this.flag == 2 && this.key == 1) {
         this.searchrequest.Status = 1;
