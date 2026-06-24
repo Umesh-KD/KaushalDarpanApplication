@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumConfigurationType, EnumFeeFor, EnumRole, EnumStatus, EnumUserType, GlobalConstants } from '../../../Common/GlobalConstants';
+import { DuplicateDocumentType, EnumConfigurationType, EnumFeeFor, EnumRole, EnumStatus, EnumUserType, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { GrievanceDataModel, GrivienceReopenModelsDataModel, GrivienceSearchModel, GrivienceResponseDataModel } from '../../../Models/GrievanceData/GrievanceDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -67,6 +67,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   public isMigration:boolean=false;
   public downloadReq = new DownloadMarksheetSearchModel();
 
+  _DuplicateDocumentType = DuplicateDocumentType
 
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -93,18 +94,19 @@ export class ApplyDuplicateDocComponent implements OnInit {
         ddlDocumentID: ['', [DropdownValidators]],
         // SemesterID: ['', [DropdownValidators]],
         SemesterID: [''],
-        ddlDepartmentID: ['', [DropdownValidators]],
+        ddlDepartmentTypeID: ['', [DropdownValidators]],
         ApplicationNo: [{value:'',disabled:true}],  
         // ApplicationNo: [{ value: '', disabled: true }]
         FeeAmount: [ { value: '', disabled: true }],
         ddlInstituteID: ['', [DropdownValidators]],
-        ddlSessionID:['']
+        ddlSessionID: [''],
+        ddlFeesTypeID:['']
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.StudentName = this.sSOLoginDataModel.DisplayName
     this.request.StudentID = this.sSOLoginDataModel.StudentID
     this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
-    this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.request.DepartmentTypeID = 1
 
     //this.loadDropdownData('QueryFor');
     await this.GetDocumentTypeDDL();
@@ -137,28 +139,31 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
 
 
-
   ondepartmentChange()
   {
-    //debugger;
-    if(this.request.DepartmentID==2){
-      this.request.DepartmentID=this.sSOLoginDataModel.DepartmentID;
-      this.departmentFlag='NodalCenter';
-      this.GetInstituteMatserDDL(this.request.DepartmentID);
+    debugger;
+    if (this.request.DepartmentTypeID == this._DuplicateDocumentType.NodalCenter_DepartmentID){
+      //this.request.DepartmentID=this.sSOLoginDataModel.DepartmentID;
+      this.departmentFlag = 'NodalCenter';
+      this.GetInstituteMatserDDL(this.sSOLoginDataModel.DepartmentID);
       this.GrievanceFormGroup.get('ddlInstituteID')?.setValidators([DropdownValidators]);
+      this.GrievanceFormGroup.patchValue({
+        ddlFeesTypeID: 1
+      }); // Reset the value of ddlInstituteID
+      this.GrievanceFormGroup.get('ddlFeesTypeID')?.disable();
     }
     else{
       this.departmentFlag='BTER';
       this.GrievanceFormGroup.get('ddlInstituteID')?.clearValidators();
       this.GrievanceFormGroup.get('ddlInstituteID')?.reset();
+      this.GrievanceFormGroup.get('ddlFeesTypeID')?.enable();
     }
-
     this.GrievanceFormGroup.get('ddlInstituteID')?.updateValueAndValidity();
   }
   async GetInstituteMatserDDL(DeptId: number) {
     try {
       this.loaderService.requestStarted();
-     await this.commonMasterService.InstituteMaster(DeptId, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+     await this.commonMasterService.InstituteMaster(DeptId, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID,1).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.InstituteMasterDDLList = data.Data;
@@ -176,10 +181,23 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
   FeeAmount(MasterCode: string):void {
      // debugger
-    // 1336 ->marksheet 
-   //1337 -> migration
-    
-    if(this.request.DocumentID==1336)
+    // 3 ->marksheet
+    //4 -> migration
+    if (this.request.DocumentID == this._DuplicateDocumentType.Provisional_Diploma
+      || this.request.DocumentID == this._DuplicateDocumentType.Final_Diploma
+      || this.request.DocumentID == this._DuplicateDocumentType.Migration_Certificate
+    ) {
+      this.GrievanceFormGroup.patchValue({
+        ddlDepartmentTypeID: this._DuplicateDocumentType.BTER_DepartmentTypeID
+      })
+      this.GrievanceFormGroup.get('ddlDepartmentTypeID')?.disable();
+    }
+    else {
+      this.GrievanceFormGroup.get('ddlDepartmentTypeID')?.enable();
+    }
+    this.GrievanceFormGroup.get('ddlDepartmentTypeID')?.updateValueAndValidity();
+
+    if (this.request.DocumentID == this._DuplicateDocumentType.Duplicate_Marksheet)
     {
       this.isMarksheet=true;
       this.isMigration=false;
@@ -210,9 +228,9 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
   async OnSemChange() {
     //debugger
-    // 1336 ->marksheet 
-    //1337 -> migration
-    if(this.request.DocumentID==1336)
+    // 3 ->marksheet 
+    //4 -> migration
+    if (this.request.DocumentID == this._DuplicateDocumentType.Duplicate_Marksheet)
     {
       this.isMarksheet=true;
       this.GrievanceFormGroup.get('ddlSessionID')?.setValidators([DropdownValidators]);
@@ -298,8 +316,8 @@ export class ApplyDuplicateDocComponent implements OnInit {
             try {
               console.log(this.GrievanceFormGroup.value);
 
-              if(this.departmentFlag=='NodalCenter'){            
-                this.GetInstituteMatserDDL(this.request.DepartmentID);
+              if (this.departmentFlag == 'NodalCenter') {
+                this.GetInstituteMatserDDL(this.sSOLoginDataModel.DepartmentID);
                 this.GrievanceFormGroup.get('ddlInstituteID')?.setValidators([DropdownValidators]);
               }
               else{
@@ -553,7 +571,8 @@ export class ApplyDuplicateDocComponent implements OnInit {
        this.request.FeeAmount= this.request.FeeAmount; //this.GrievanceFormGroup.value.FeeAmount;
        this.request.createdBy= this.sSOLoginDataModel.UserID;
        this.request.modifyBy= this.sSOLoginDataModel.UserID;
-       this.request.EndTermID=this.sSOLoginDataModel.EndTermID;
+      this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+
       //  this.request.SessionID=
        this.request.IsActive= true;
        this.request.IsDelete= false;
@@ -602,7 +621,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     this.emitraRequest.SemesterID = this.GrievanceFormGroup.value.SemesterID?? 0;
     this.emitraRequest.ExamStudentStatus = 0;
     this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
-    this.emitraRequest.DepartmentID =  1// this.request.DepartmentID;
+    this.emitraRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID// this.request.DepartmentID;
     this.emitraRequest.CourseTypeID =  1 //this.request.CourseTypeID;
     this.emitraRequest.TypeID = EnumConfigurationType.DuplicateDocument;
     this.emitraRequest.FeeFor = EnumFeeFor.DuplicateDocument;

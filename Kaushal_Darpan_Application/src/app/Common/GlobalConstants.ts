@@ -242,7 +242,15 @@ export enum EnumRole {
 
   ITI_Instructor = 222,
 
+}
 
+export enum DuplicateDocumentType {
+  BTER_DepartmentTypeID = 1,
+  NodalCenter_DepartmentID = 2,
+  Provisional_Diploma = 1,
+  Final_Diploma = 2,
+  Duplicate_Marksheet = 3,
+  Migration_Certificate = 4
 }
 
 export enum enumExamStudentStatus {

@@ -26,37 +26,36 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
           <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Document <span class="StarMarking">*</span>
-            </label>
-            <select class="form-select" [(ngModel)]="request.DocumentID" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
-               <option value=0>--Choose Option--</option>
-              <option *ngFor="let item of DocumentTypeList" [value]="item.DocumentID">{{item.DocumentName}}</option>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Document <span class="StarMarking">*</span>
+    </label>
+    <select class="form-select" [(ngModel)]="request.DocumentID" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
+       <option value=0>--Choose Option--</option>
+      <option *ngFor="let item of DocumentTypeList" [value]="item.DocumentID">{{item.DocumentName}}</option>
+    </select>
+    <div *ngIf="isSubmitted&&form.ddlDocumentID.errors" class="text-danger">
+      <p *ngIf="!form.ddlDocumentID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required
+        .!
+      </p>
+    </div>
+  </div> -->
+          <!-- [(ngModel)]="request.DocumentID" -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Document <span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="ddlDocumentID" [(ngModel)]="request.DocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of DocumentTypeList1" [value]="item.DocumentID">{{item.DocumentName}}</option>
             </select>
             <div *ngIf="isSubmitted&&form.ddlDocumentID.errors" class="text-danger">
               <p *ngIf="!form.ddlDocumentID.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This field is required
-                .!
+                <i aria-hidden="true"></i>This
+                field is required .!
               </p>
             </div>
-          </div> -->
+          </div>
 
-          <!-- [(ngModel)]="request.DocumentID" -->
-            <div >
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Document <span class="StarMarking">*</span></label>
-              <select class="form-select"  formControlName="ddlDocumentID" [(ngModel)]="request.DocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of DocumentTypeList1" [value]="item.DocumentID">{{item.DocumentName}}</option>
-              </select>
-              <div *ngIf="isSubmitted&&form.ddlDocumentID.errors" class="text-danger">
-                <p *ngIf="!form.ddlDocumentID.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>This
-                  field is required .!
-                </p>
-              </div>
-            </div>
 
-            
 
           <div *ngIf="!isMigration">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
@@ -75,36 +74,53 @@
 
           <div *ngIf="isMarksheet">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Session <span class="StarMarking">*</span></label>
-            <select class="form-select"  formControlName="ddlSessionID" [(ngModel)]="request.RequestEndTerm">
+            <select class="form-select" formControlName="ddlSessionID" [(ngModel)]="request.RequestEndTerm">
               <option value="0">--Select--</option>
               <option *ngFor="let item of SessionList" [value]="item.SessionID">{{item.SessionName}}</option>
             </select>
             <!-- <div *ngIf="isSubmitted&&form.ddlSessionID.errors" class="text-danger">
-              <p *ngIf="!form.ddlSessionID.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This
-                field is required .!
-              </p>
-            </div> -->
+      <p *ngIf="!form.ddlSessionID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This
+        field is required .!
+      </p>
+    </div> -->
           </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Department <span class="StarMarking">*</span>
             </label>
-            <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID" (change)="ondepartmentChange()">
+            <select class="form-select" [(ngModel)]="request.DepartmentTypeID" formControlName="ddlDepartmentTypeID" (change)="ondepartmentChange()">
               <!-- <select class="form-select" formControlName="ddlDepartmentID" (change)="ondepartmentChange()">  -->
               <option value=0 selected>--Choose Option--</option>
               <option value=1 selected>BTER</option>
               <option value=2 selected>Nodal Center</option>
             </select>
-            <div *ngIf="isSubmitted&&form.ddlDepartmentID.errors" class="text-danger">
-              <p *ngIf="!form.ddlDepartmentID.errors.DropdownValidators">
+            <div *ngIf="isSubmitted&&form.ddlDepartmentTypeID.errors" class="text-danger">
+              <p *ngIf="!form.ddlDepartmentTypeID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required.!
               </p>
             </div>
           </div>
 
-          
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Fees Type <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" [(ngModel)]="request.FeesTypeID" formControlName="ddlFeesTypeID" >
+              <!-- <select class="form-select" formControlName="ddlDepartmentID" (change)="ondepartmentChange()">  -->
+              <option value=0 selected>--Choose Option--</option>
+              <option value=1 selected>Urgent</option>
+              <option value=2 selected>By Post</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlFeesTypeID.errors" class="text-danger">
+              <p *ngIf="!form.ddlFeesTypeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+
           <div *ngIf="this.departmentFlag == 'NodalCenter'">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
             <select class="form-select" id="InstituteID" formControlName="ddlInstituteID" [(ngModel)]="request.InstituteID">
@@ -130,37 +146,34 @@
             <!-- <input type="text" [disabled]="true" class="form-input" formControlName="FeeAmount"> -->
           </div>
 
-           <!-- <div>
-            <label>Type</label><span class="StarMarking">*</span>
-            <select class="form-select" name="TypeID" id="ddlType" formControlName="ddlType"
-                    [(ngModel)]="request.TypeID" (change)="GetAllData()">
-              <option value="0">Choose Type</option>
-              @for (item of TypeMasterDDL; track item) {
-              <option [value]="item.ID">
-                {{item.Name}}
-              </option>
-              }
-            </select>
-            @if (isFormSubmitted && _FeeConfigurationFromGroup.ddlType.errors) {
-            <div class="text-danger">
-              @if (!_FeeConfigurationFromGroup.ddlType.errors.DropdownValidators) {
-              <p>
-                <i aria-hidden="true"></i>This field is required.!
-              </p>
-              }
-            </div>
-            }
-          </div> -->
-
-
+          <!-- <div>
+    <label>Type</label><span class="StarMarking">*</span>
+    <select class="form-select" name="TypeID" id="ddlType" formControlName="ddlType"
+            [(ngModel)]="request.TypeID" (change)="GetAllData()">
+      <option value="0">Choose Type</option>
+      @for (item of TypeMasterDDL; track item) {
+      <option [value]="item.ID">
+        {{item.Name}}
+      </option>
+      }
+    </select>
+    @if (isFormSubmitted && _FeeConfigurationFromGroup.ddlType.errors) {
+    <div class="text-danger">
+      @if (!_FeeConfigurationFromGroup.ddlType.errors.DropdownValidators) {
+      <p>
+        <i aria-hidden="true"></i>This field is required.!
+      </p>
+      }
+    </div>
+    }
+  </div> -->
           <!-- <div></div> -->
           <!-- <div></div> -->
-
           <!-- class="card-footer text-center" -->
           <div class="mt-6">
             <!-- <button type="button" class="btn bg-primary text-white" (click)="PayApplicationFees() " ><i class="ti ti-currency-rupee"></i> Pay Now</button> -->
-            <button type="button" class="btn bg-primary text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,request)" ><i class="ti ti-currency-rupee"></i> Pay Now </button>
-          
+            <button type="button" class="btn bg-primary text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,request)"><i class="ti ti-currency-rupee"></i> Pay Now </button>
+
           </div>
 
         </div>

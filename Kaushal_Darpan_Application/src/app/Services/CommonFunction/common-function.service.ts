@@ -184,9 +184,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async InstituteMaster(DepartmentID: number = 0, Eng_NonEng: number = 0, EndTermId: number = 0,) {
+  public async InstituteMaster(DepartmentID: number = 0, Eng_NonEng: number = 0, EndTermId: number = 0,ManagementTypeID:number=0) {
 
-    return await this.http.get(this.APIUrl + '/InstituteMaster/' + DepartmentID + '/' + Eng_NonEng + '/' + EndTermId, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/InstituteMaster/' + DepartmentID + '/' + Eng_NonEng + '/' + EndTermId + '/' + ManagementTypeID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

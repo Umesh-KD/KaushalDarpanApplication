@@ -1,8 +1,10 @@
-export class ApplyDuplicateDocument {
+import { RequestBaseModel } from "../RequestBaseModel";
+
+export class ApplyDuplicateDocument extends RequestBaseModel {
   public ID: number = 0;
   public DocumentID: number = 0;
   public SemesterID: number = 0;
-  public DepartmentID: number = 0;
+  public DepartmentTypeID: number = 0;
   public FeeAmount: number = 0;
   public ServiceID: number = 5442;
   public StudentID: number = 0;
@@ -21,8 +23,9 @@ export class ApplyDuplicateDocument {
 
   public ConfigurationTypeID?: number =0;
   // public SessionID?:number=0;
-  public EndTermID:number=0;
-  public RequestEndTerm:number=0;
+  public RequestEndTerm: number = 0;
+
+  public FeesTypeID: number = 0;
 }
 
 
