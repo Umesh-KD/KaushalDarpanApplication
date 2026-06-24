@@ -460,6 +460,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
     this.isSubmitted = false;
     this.Searchrequest = new StudentRequestDataModal();
     this.RequestFormGroup.reset();
+    await this.GetAllPrincipalstudentmeritlist();
   }
   
 

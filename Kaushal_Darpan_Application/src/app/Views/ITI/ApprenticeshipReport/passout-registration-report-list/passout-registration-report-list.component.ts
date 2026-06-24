@@ -165,7 +165,7 @@ export class PassoutRegistrationReportListComponent {
     try {
       // this.loaderService.requestStarted();
       var UserID: number = 0
-      if (this.sSOLoginDataModel.RoleID != 97) {
+      if (this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID!=100) {
         UserID = 0
       } else {
         UserID = this.sSOLoginDataModel.UserID
@@ -299,9 +299,8 @@ export class PassoutRegistrationReportListComponent {
 
   async DownloadPassoutApprenticeshipReport() {
     try {
-
       var UserID: number = 0
-      if (this.sSOLoginDataModel.RoleID != 97) {
+      if (this.sSOLoginDataModel.RoleID != 97 && this.sSOLoginDataModel.RoleID != 100) {
         UserID = 0
       } else {
         UserID = this.sSOLoginDataModel.UserID

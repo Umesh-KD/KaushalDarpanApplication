@@ -239,6 +239,7 @@ export class HostelStudentMeritListWardenViewComponent {
     this.isSubmitted = false;
     this.Searchrequest = new StudentRequestDataModal();
     this.RequestFormGroup.reset();
+    await this.GetAllPrincipalstudentmeritlist();
   }
 
 

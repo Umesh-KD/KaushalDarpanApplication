@@ -21,7 +21,8 @@ import { DTEEquipmentsMasterService } from '../../../../Services/DTEInventory/DT
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-dteitems-master',
@@ -352,7 +353,7 @@ export class DteItemsMasterComponent {
     }
     const unwantedColumns = ['ConditionOnReturn', 'IsConsumable', 'ItemDetailsId', 'InvStatus', 'ItemCode', 'IsOption', 'Code', 'Working', 'NotWorking'];
 
-    const columnOrder = ['CollegeName', 'ItemCategoryName', 'EquipmentsName', 'CampanyName',
+    const columnOrder = ['InstituteName', 'ItemCategoryName', 'EquipmentsName', 'CampanyName',
       'batchId', 'VoucherNumber', 'IdentificationMark', 'PricePerUnit', 'TotalPrice', 'InitialQuantity',
       'Auctioned', 'AvailableQuantity', 'QuantityIssued', 'Status'
     ];
@@ -375,6 +376,83 @@ export class DteItemsMasterComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
   }
+
+exportToPdf(): void {
+
+  if(!this.ItemMasterList1 || this.ItemMasterList1.length === 0) {
+  this.toastr.warning("No data available to export.");
+  return;
+}
+
+const unwantedColumns = [
+  'ConditionOnReturn',
+  'IsConsumable',
+  'ItemDetailsId',
+  'InvStatus',
+  'ItemCode',
+  'IsOption',
+  'Code',
+  'Working',
+  'NotWorking'
+];
+
+const columnOrder = [
+  'InstituteName',
+  'ItemCategoryName',
+  'EquipmentsName',
+  'CampanyName',
+  'batchId',
+  'VoucherNumber',
+  'IdentificationMark',
+  'PricePerUnit',
+  'TotalPrice',
+  'InitialQuantity',
+  'Auctioned',
+  'AvailableQuantity',
+  'QuantityIssued',
+  'Status'
+];
+
+const filteredData = this.ItemMasterList1.map((item: any) => {
+  const row: any = {};
+
+  columnOrder.forEach(col => {
+    if (!unwantedColumns.includes(col)) {
+      row[col] = item[col] ?? '';
+    }
+  });
+
+  return row;
+});
+
+const doc = new jsPDF('landscape');
+
+autoTable(doc, {
+  head: [columnOrder],
+  body: filteredData.map((row: any) =>
+    columnOrder.map(col => row[col])
+  ),
+  styles: {
+    fontSize: 8
+  },
+  headStyles: {
+    fontStyle: 'bold'
+  }
+});
+
+const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+doc.save(`Inventory_Items_Report_${timestamp}.pdf`);
+}
+
+
+
+
+
+
+
+
+
+
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;

@@ -95,7 +95,7 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
-      <a *ngIf="sSOLoginDataModel.RoleID == 97 || sSOLoginDataModel.RoleID == 212" (click)="DownloadPassoutApprenticeshipReport()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+      <a (click)="DownloadPassoutApprenticeshipReport()" class="inline-flex items-center btn bg-dark text-white btn-sm">
         <i class=""></i>
         Download Report
       </a>

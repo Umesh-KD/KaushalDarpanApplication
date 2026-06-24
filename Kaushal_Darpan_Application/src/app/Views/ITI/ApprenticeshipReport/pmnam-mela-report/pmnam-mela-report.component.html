@@ -74,7 +74,7 @@
 
           <div *ngIf="ssoLoginDataModel.RoleID !=97">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
-              <select [disabled]="ssoLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="obj.ZoneID" (change)="GetDistrictMatserDDL()">
+              <select [disabled]="ssoLoginDataModel.RoleID == 100 && ZoneList?.length==0 " class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="obj.ZoneID" (change)="GetDistrictMatserDDL()">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
 
@@ -114,10 +114,10 @@
         <b *ngIf="ssoLoginDataModel.RoleID == 97" class="text-1xl-5">
           <i class="ti ti-list"></i> PMNUM Mela Report
         </b>
-        <div *ngIf="ssoLoginDataModel.RoleID == 97" class="inline-flex items-center text-white btn-sm">
+        <div *ngIf="ssoLoginDataModel.RoleID == 97 ||  ssoLoginDataModel.RoleID == 100" class="inline-flex items-center text-white btn-sm">
 
           <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
-          <a *ngIf="ssoLoginDataModel.RoleID == 97 ||ssoLoginDataModel.RoleID == 212" (click)="DownloadPMNAMReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
+          <a *ngIf="ssoLoginDataModel.RoleID == 97 ||ssoLoginDataModel.RoleID == 212 || ssoLoginDataModel.RoleID == 100" (click)="DownloadPMNAMReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
         </div>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">

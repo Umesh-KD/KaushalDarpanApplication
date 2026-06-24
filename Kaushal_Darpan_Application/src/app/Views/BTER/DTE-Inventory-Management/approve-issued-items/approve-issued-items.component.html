@@ -59,7 +59,11 @@
         <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-excel"></i> Export Excel
         </a>
-
+        <a href="javascript:void(0);"
+           (click)="exportToPdf()"
+           class="btn bg-danger btn-sm text-white">
+          <i class="ti ti-file-text"></i> Export PDF
+        </a>
         <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
           <option value="50">50</option>
           <option value="100">100</option>

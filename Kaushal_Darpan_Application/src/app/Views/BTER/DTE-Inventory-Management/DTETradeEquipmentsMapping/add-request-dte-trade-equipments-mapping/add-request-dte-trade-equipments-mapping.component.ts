@@ -30,6 +30,8 @@ import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
 import { DeleteDocumentDetailsModel } from '../../../../../Models/DeleteDocumentDetailsModel';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-add-request-dte-trade-equipments-mapping',
@@ -655,7 +657,8 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
         ItemCategoryName: item.ItemCategoryName,
         EquipmentsName: item.EquipmentsName,
         Quantity: item.Quantity,
-        EquipmentsStatus: item.EquipmentsStatus == 1 ? "Approved" : "Pending"
+        /* EquipmentsStatus: item.EquipmentsStatus == 1 ? "Approved" : "Pending"*/
+        EquipmentsStatus: item.PrincipalStatus
       }
 
       return updatedItem;
@@ -666,6 +669,39 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Inventory_Request_Reports.xlsx');
   }
+
+  exportToPdf(): void {
+
+    const pdfData = this.MappingList1.map((item: any) => ({
+      InstituteName: item.InstituteName ?? "BTER",
+      ItemCategoryName: item.ItemCategoryName,
+      EquipmentsName: item.EquipmentsName,
+      Quantity: item.Quantity,
+      EquipmentsStatus: item.PrincipalStatus
+    }));
+
+    const doc = new jsPDF('landscape');
+
+    autoTable(doc, {
+      head: [[
+        'InstituteName',
+        'ItemCategoryName',
+        'EquipmentsName',
+        'Quantity',
+        'EquipmentsStatus'
+      ]],
+      body: pdfData.map((item: any) => [
+        item.InstituteName,
+        item.ItemCategoryName,
+        item.EquipmentsName,
+        item.Quantity,
+        item.EquipmentsStatus
+      ])
+    });
+
+    doc.save('Inventory_Request_Reports.pdf');
+  }
+
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;
@@ -845,4 +881,5 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
     }
 
   }
+  
 }

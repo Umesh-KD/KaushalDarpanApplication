@@ -15,6 +15,10 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import * as XLSX from 'xlsx';
 import { AuctionDetailsModel } from '../../../../Models/ItemsDataModels';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+
 
 @Component({
   selector: 'app-sr6-report-bter',
@@ -256,6 +260,62 @@ export class SR6ReportBTERComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
   }
+
+  
+exportToPdf(): void {
+
+  if(!this.ItemMasterList || this.ItemMasterList.length === 0) {
+  this.toastr.warning("No data available to export.");
+  return;
+}
+
+const unwantedColumns = [
+  'ConditionOnReturn',
+  'IsConsumable',
+  'ItemDetailsId',
+  'InvStatus',
+  'AuctionStatus',
+  'IsOption'
+];
+
+const filteredData = this.ItemMasterList.map((item: any) => {
+  const filteredItem: any = {};
+
+  Object.keys(item).forEach(key => {
+    if (!unwantedColumns.includes(key)) {
+      filteredItem[key] = item[key];
+    }
+  });
+
+  return filteredItem;
+});
+
+const headers = Object.keys(filteredData[0]);
+
+const doc = new jsPDF('landscape', 'mm', 'a3');
+
+autoTable(doc, {
+  head: [headers],
+  body: filteredData.map((row: any) =>
+    headers.map(header => row[header] ?? '')
+  ),
+  styles: {
+    fontSize: 5,
+    cellPadding: 1
+  },
+  headStyles: {
+    fontStyle: 'bold'
+  },
+  theme: 'grid',
+  margin: { top: 10 }
+});
+
+const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+doc.save(`Inventory_Items_Report_${timestamp}.pdf`);
+}
+
+
+
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;

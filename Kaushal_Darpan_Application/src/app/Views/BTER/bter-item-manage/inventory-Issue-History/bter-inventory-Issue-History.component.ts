@@ -15,7 +15,8 @@ import { ToastrService } from 'ngx-toastr';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { DTELaboratoryMasterService } from '../../../../Services/DTEInventory/DTELaboratoryMaster/dtelaboratory-master.service';
 import { DTEItemCategoriesMasterService } from '../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-bter-inventory-Issue-History',
@@ -302,6 +303,77 @@ export class bterinventoryIssueHistoryComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
   }
+
+
+
+exportToPdf(): void {
+
+  if(!this.ItemMasterList || this.ItemMasterList.length === 0) {
+  this.toastr.warning("No data available to export.");
+  return;
+}
+
+const unwantedColumns = [
+  'ConditionOnReturn',
+  'IsConsumable',
+  'ItemDetailsId',
+  'InvStatus',
+  'IsOption',
+  'Name'
+];
+
+const columnOrder = [
+  'IssuedTo',
+  'ItemCategoryName',
+  'ItemCode',
+  'ItemType',
+  'EquipmentName',
+  'EquipmentsCode',
+  'IndentNo',
+  'Quantity',
+  'UsedQuantity',
+  'RemainingQuantity',
+  'IssueDate',
+  'ReturnDate'
+];
+
+const filteredData = this.ItemMasterList.map((item: any) => {
+  const row: any = {};
+
+  columnOrder.forEach(col => {
+    if (!unwantedColumns.includes(col)) {
+      row[col] = item[col] ?? '';
+    }
+  });
+
+  return row;
+});
+
+const doc = new jsPDF('landscape', 'mm', 'a4');
+
+autoTable(doc, {
+  head: [columnOrder],
+  body: filteredData.map((row: any) =>
+    columnOrder.map(col => row[col])
+  ),
+  styles: {
+    fontSize: 8,
+    cellPadding: 2
+  },
+  headStyles: {
+    fontStyle: 'bold'
+  },
+  theme: 'grid'
+});
+
+const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+doc.save(`Inventory_Items_Report_${timestamp}.pdf`);
+}
+
+
+
+
+
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;

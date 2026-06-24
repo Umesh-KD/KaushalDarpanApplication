@@ -17,6 +17,10 @@ import { DTEItemCategoriesMasterService} from '../../../../Services/DTEInventory
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { DTEItemsSaveModel, DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1, DTELabMasterModel, } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+
 @Component({
   selector: 'app-dtelaboratory-master',
   templateUrl: './dtelaboratory-master.component.html',
@@ -391,4 +395,72 @@ export class DteLaboratoryMasterComponent {
         }
       });
   }
+
+  exportToExcel(): void {
+
+    if (!this.LabMasterList || this.LabMasterList.length === 0) {
+      this.toastr.warning("No data available to export.");
+      return;
+    }
+
+    const exportData = this.LabMasterList.map((item: any, index: number) => ({
+      'Sr. No.': index + 1,
+      'Institute': item.InstituteName,
+      'Stream': item.StreamName,
+      'Laboratory': item.Lab_Name,
+      'Lab Incharge': item.StaffName,
+      'Is Active': item.Lab_ActiveStatus ? 'Active' : 'Inactive'
+    }));
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Lab Master');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Lab_Master_Report_${timestamp}.xlsx`);
+  }
+
+ 
+
+exportToPdf(): void {
+
+  if(!this.LabMasterList || this.LabMasterList.length === 0) {
+  this.toastr.warning("No data available to export.");
+  return;
+}
+
+const doc = new jsPDF('landscape');
+
+autoTable(doc, {
+  head: [[
+    'Sr. No.',
+    'Institute',
+    'Stream',
+    'Laboratory',
+    'Lab Incharge',
+    'Is Active'
+  ]],
+  body: this.LabMasterList.map((item: any, index: number) => [
+    index + 1,
+    item.InstituteName,
+    item.StreamName,
+    item.Lab_Name,
+    item.StaffName,
+    item.Lab_ActiveStatus ? 'Active' : 'Inactive'
+  ]),
+  styles: {
+    fontSize: 9
+  },
+  headStyles: {
+    fontStyle: 'bold'
+  },
+  theme: 'grid'
+});
+
+const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+doc.save(`Lab_Master_Report_${timestamp}.pdf`);
+}
+
+
 }

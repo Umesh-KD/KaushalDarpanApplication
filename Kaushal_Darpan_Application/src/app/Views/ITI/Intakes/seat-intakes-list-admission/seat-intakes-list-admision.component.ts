@@ -102,7 +102,7 @@ export class SeatIntakesListAdmissionComponent implements OnInit
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
 
-    this.searchRequest.SanctionedID = -2;
+    this.searchRequest.SanctionedID = 1;
 
     await this.GetDropdownData()
     await this.GetTradeAndColleges()
@@ -552,7 +552,66 @@ export class SeatIntakesListAdmissionComponent implements OnInit
   }
 
 
-  changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
+  // changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
+  // {
+  //   var msg = "Are you sure you want to change status";
+
+  //   if (action == 'ActiveInactiveCollege')
+  //   {
+  //     msg = 'Are you sure you want to change status of </br>' + `<b>${item.CollegeName}</b>`;
+  //   }
+
+  //   this.Swal2.Confirmation(`${msg}`, async (result: any) => {
+  //     if (result.isConfirmed)
+  //     {
+  //       try {
+          
+  //         var request =
+  //         {
+  //           SeatIntakeID: seatIntakeID,
+  //           CollegeID: item.CollegeID,
+  //           ModifyBy: this.SSOLoginDataModel.UserID,
+  //           ActiveStatus: item.ActiveStatus,
+  //           AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
+  //           Action: action,
+  //           TradeId: item.TradeID,
+  //           TradeSchemeId: item.TradeSchemeID
+  //         };
+
+  //         this.loaderService.requestStarted();
+  //         await this.ItiSeatIntakeService.ChangeStatusSeatIntake(request)
+  //           .then(async (data: any) => {
+  //             data = JSON.parse(JSON.stringify(data));
+  //             console.log(data);
+  //             if (data.State == EnumStatus.Success)
+  //             {
+  //               this.toastr.success(data.Message)
+  //               await this.onSearch();
+  //             } else {
+  //               this.toastr.error(data.ErrorMessage)
+  //             }
+  //           }, (error: any) => console.error(error)
+  //           );
+  //       }
+  //       catch (ex) {
+  //         console.log(ex);
+  //       }
+  //       finally {
+  //         setTimeout(() => {
+  //           this.loaderService.requestEnded();
+  //         }, 200);
+  //       }
+
+
+
+
+  //     }
+  //   });
+  // }
+
+
+
+ changeStatus(seatIntakeID: number, item: any, action: string = 'ActiveInactiveSeat')
   {
     var msg = "Are you sure you want to change status";
 
@@ -561,57 +620,51 @@ export class SeatIntakesListAdmissionComponent implements OnInit
       msg = 'Are you sure you want to change status of </br>' + `<b>${item.CollegeName}</b>`;
     }
 
-    this.Swal2.Confirmation(`${msg}`, async (result: any) => {
-      if (result.isConfirmed)
-      {
-        try {
-          
-          var request =
-          {
-            SeatIntakeID: seatIntakeID,
-            CollegeID: item.CollegeID,
-            ModifyBy: this.SSOLoginDataModel.UserID,
-            ActiveStatus: item.ActiveStatus,
-            AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
-            Action: action,
-            TradeId: item.TradeID,
-            TradeSchemeId: item.TradeSchemeID
-          };
+   this.Swal2.ConfirmationWithOrderDetails(
+  msg,
+  async (formData: any) => {
+    try {
 
-          this.loaderService.requestStarted();
-          await this.ItiSeatIntakeService.ChangeStatusSeatIntake(request)
-            .then(async (data: any) => {
-              data = JSON.parse(JSON.stringify(data));
-              console.log(data);
-              if (data.State == EnumStatus.Success)
-              {
-                this.toastr.success(data.Message)
-                await this.onSearch();
-              } else {
-                this.toastr.error(data.ErrorMessage)
-              }
-            }, (error: any) => console.error(error)
-            );
-        }
-        catch (ex) {
-          console.log(ex);
-        }
-        finally {
-          setTimeout(() => {
-            this.loaderService.requestEnded();
-          }, 200);
-        }
+      const request = {
+        SeatIntakeID: seatIntakeID,
+        CollegeID: item.CollegeID,
+        ModifyBy: this.SSOLoginDataModel.UserID,
+        ActiveStatus: item.ActiveStatus,
+        AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
+        Action: action,
+        TradeId: item.TradeID,
+        TradeSchemeId: item.TradeSchemeID,
 
+        // New Fields
+        OrderNo: formData.OrderNo,
+        OrderDate: formData.OrderDate,
+        Remark: formData.Remark
+      };
+      this.loaderService.requestStarted();
 
+      await this.ItiSeatIntakeService.ChangeStatusSeatIntake(request)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
 
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            await this.onSearch();
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        });
 
-      }
-    });
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  },
+  'Yes'
+);
   }
-
-
-
-
 
 
 

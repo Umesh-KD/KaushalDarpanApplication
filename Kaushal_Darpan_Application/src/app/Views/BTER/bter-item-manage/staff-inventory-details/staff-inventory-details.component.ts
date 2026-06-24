@@ -10,6 +10,8 @@ import { inventoryIssueHistorySearchModel } from '../../../../Models/DTEInventor
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-staff-inventory-details',
@@ -215,6 +217,62 @@ export class StaffInventoryDetailsComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
   }
+
+
+
+exportToPdf(): void {
+
+  if(!this.ItemMasterList || this.ItemMasterList.length === 0) {
+  this.toastr.warning("No data available to export.");
+  return;
+}
+
+const unwantedColumns = [
+  'ConditionOnReturn',
+  'IsConsumable',
+  'ItemDetailsId',
+  'InvStatus'
+];
+
+const filteredData = this.ItemMasterList.map((item: any) => {
+  const filteredItem: any = {};
+
+  Object.keys(item).forEach(key => {
+    if (!unwantedColumns.includes(key)) {
+      filteredItem[key] = item[key];
+    }
+  });
+
+  return filteredItem;
+});
+
+const headers = Object.keys(filteredData[0]);
+
+const doc = new jsPDF('landscape');
+
+autoTable(doc, {
+  head: [headers],
+  body: filteredData.map((row: any) =>
+    headers.map(header => row[header])
+  ),
+  styles: {
+    fontSize: 8
+  },
+  headStyles: {
+    fontStyle: 'bold'
+  }
+});
+
+const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+doc.save(`Inventory_Items_Report_${timestamp}.pdf`);
+}
+
+
+
+
+
+
+
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;
