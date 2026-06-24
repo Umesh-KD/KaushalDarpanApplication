@@ -131,7 +131,7 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 
 <!--BTER END-->
 <!--ITI START-->
-<app-admin-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.DTETraing || this.sSOLoginDataModel.RoleID == 216 || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER "></app-admin-dashboard-iti>
+<app-admin-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == 216 || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER "></app-admin-dashboard-iti>
 <app-college-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.IITCollegeNodal"></app-college-dashboard-iti>
 <app-principal-dashboard-iti *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal  || this.sSOLoginDataModel.RoleID == _EnumRole.Principal_NCVT
 || this.sSOLoginDataModel.RoleID == _EnumRole.AdmissionIncharges || this.sSOLoginDataModel.RoleID == _EnumRole.ExamInchargeSCVT ||
