@@ -636,9 +636,11 @@ export class SeatIntakesListAdmissionComponent implements OnInit
         TradeSchemeId: item.TradeSchemeID,
 
         // New Fields
-        OrderNo: formData.OrderNo,
-        OrderDate: formData.OrderDate,
-        Remark: formData.Remark
+        // OrderNo: formData.OrderNo,
+        // OrderDate: formData.OrderDate,
+        Remark: formData.Remark?formData.Remark: null,
+        OrderNo: formData.OrderNo ? formData.OrderNo: null,
+        OrderDate: formData.OrderDate || null,
       };
       this.loaderService.requestStarted();
 
