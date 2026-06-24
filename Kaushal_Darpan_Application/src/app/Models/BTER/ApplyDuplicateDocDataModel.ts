@@ -26,6 +26,7 @@ export class ApplyDuplicateDocument extends RequestBaseModel {
   public RequestEndTerm: number = 0;
 
   public FeesTypeID: number = 0;
+  public FeeID?: number = 0;
 }
 
 

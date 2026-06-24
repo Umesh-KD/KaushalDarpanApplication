@@ -35,10 +35,28 @@
             </div>
             }
           </div>
+
+
         </div>
 
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3"
-          *ngIf="request.TypeID != _EnumConfigurationType.RemunerationExaminerFee">
+             *ngIf="request.TypeID != _EnumConfigurationType.RemunerationExaminerFee">
+
+          <!--for duplicate document start-->
+          <div *ngIf="request.TypeID==_EnumConfigurationType.DuplicateDocument">
+            <label>Deliver Type</label><span class="StarMarking">*</span>
+            <select class="form-select" id="DeliverTypeID" formControlName="ddlDeliverTypeID" [(ngModel)]="request.DeliverTypeID">
+              <option value="0" selected>---Select---</option>
+              <option value="1"> Urgent </option>
+              <option value="2"> By Post </option>
+            </select>
+            <div *ngIf="isFormSubmitted && _FeeConfigurationFromGroup.ddlDeliverTypeID.errors" class="text-danger">
+              <p *ngIf="!_FeeConfigurationFromGroup.ddlDeliverTypeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          <!--fduplicate document end-->
 
           <div *ngIf="!ShowValidColumn()">
             <label>Semester</label><span class="StarMarking">*</span>
@@ -69,8 +87,7 @@
             </div>
           </div>
 
-          <div
-            *ngIf="(request?.TypeID==5 ||request?.TypeID==_EnumConfigurationType.BackFee || _EnumConfigurationType.BackFeeYearly) && !ShowValidColumn()">
+          <div *ngIf="(request?.TypeID==5 ||request?.TypeID==_EnumConfigurationType.BackFee || _EnumConfigurationType.BackFeeYearly) && !ShowValidColumn()">
             <label>Stream</label><span class="StarMarking">*</span>
             <select class="form-select" id="ddlStream" formControlName="ddlStream" [(ngModel)]="request.StreamID">
               <option value="0">ALL</option>
@@ -90,23 +107,23 @@
             <label>Category</label><span class="StarMarking">*</span>
 
             <!--<ng-multiselect-dropdown [placeholder]="'Choose Category'"
-                                   [data]="CategoryList"
-                                   bindLabel="CasteCategoryName"
-                                   bindValue="CasteCategoryID"
-                                   [settings]="settingsMultiselect"
-                                   [formControlName]="'ddlCategory'"
-                                   [disabled]="isEditMode"
-                                   (onSelect)="onItemSelect($event)"
-                                   (onDeSelect)="onDeSelect($event)"
-                                   (onSelectAll)="onSelectAll($event)"
-                                   (onDeSelectAll)="onDeSelectAll($event)">
-          </ng-multiselect-dropdown>-->
+                             [data]="CategoryList"
+                             bindLabel="CasteCategoryName"
+                             bindValue="CasteCategoryID"
+                             [settings]="settingsMultiselect"
+                             [formControlName]="'ddlCategory'"
+                             [disabled]="isEditMode"
+                             (onSelect)="onItemSelect($event)"
+                             (onDeSelect)="onDeSelect($event)"
+                             (onSelectAll)="onSelectAll($event)"
+                             (onDeSelectAll)="onDeSelectAll($event)">
+    </ng-multiselect-dropdown>-->
 
             <ng-multiselect-dropdown [placeholder]="'Choose Category'" [data]="CategoryList"
-              bindLabel="CasteCategoryName" bindValue="CasteCategoryID" [settings]="settingsMultiselect"
-              [formControl]="FeeConfigurationFromGroup.controls['ddlCategory']" [disabled]="isEditMode"
-              (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
-              (onDeSelectAll)="onDeSelectAll($event)">
+                                     bindLabel="CasteCategoryName" bindValue="CasteCategoryID" [settings]="settingsMultiselect"
+                                     [formControl]="FeeConfigurationFromGroup.controls['ddlCategory']" [disabled]="isEditMode"
+                                     (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                     (onDeSelectAll)="onDeSelectAll($event)">
             </ng-multiselect-dropdown>
             @if (isFormSubmitted && _FeeConfigurationFromGroup.ddlCategory.errors)
             {
@@ -123,7 +140,7 @@
           <div>
             <label>Fee</label><span class="StarMarking">*</span>
             <input type="number" class="form-input" id="txtFeeAmount" placeholder="Fee Amount"
-              formControlName="feeAmount" [(ngModel)]="request.FeeAmount" />
+                   formControlName="feeAmount" [(ngModel)]="request.FeeAmount" />
             @if (isFormSubmitted && _FeeConfigurationFromGroup.feeAmount.errors)
             {
             <div class="text-danger">
@@ -138,13 +155,13 @@
           <div *ngIf="!ShowValidColumn()">
             <label>
               <input type="checkbox" class="form-checkbox" id="cbIsLateFeeApplicable"
-                formControlName="cbIsLateFeeApplicable" [(ngModel)]="request.IsLateFeeApplicable" />
+                     formControlName="cbIsLateFeeApplicable" [(ngModel)]="request.IsLateFeeApplicable" />
               Is late fee applicable?
             </label>
             @if (request.IsLateFeeApplicable)
             {
             <input type="text" class="form-input" id="txtLateFeeAmount" formControlName="lateFeeAmount"
-              placeholder="Late Fee Amount" [(ngModel)]="request.LateFeeAmount" />
+                   placeholder="Late Fee Amount" [(ngModel)]="request.LateFeeAmount" />
             }
           </div>
           @if (request.TypeID==_EnumConfigurationType.BackFee || request.TypeID==_EnumConfigurationType.BackFeeYearly)
@@ -152,8 +169,8 @@
           <div>
             <label>Back Subject Count</label><span class="StarMarking">*</span>
             <input type="text" class="form-input" id="txtBackSubjectCount" maxlength="2"
-              formControlName="BackSubjectCount" placeholder="Back Subject Count"
-              [(ngModel)]="request.BackSubjectCount" />
+                   formControlName="BackSubjectCount" placeholder="Back Subject Count"
+                   [(ngModel)]="request.BackSubjectCount" />
             <div *ngIf="isFormSubmitted && _FeeConfigurationFromGroup.BackSubjectCount.errors" class="text-danger">
               <p *ngIf="!_FeeConfigurationFromGroup.BackSubjectCount.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required.!
@@ -164,7 +181,7 @@
           <div>
             <label>Fixed Back Fee Amount</label><span class="StarMarking">*</span>
             <input type="number" class="form-input" id="txtBackFeeAmount" formControlName="BackFeeAmount"
-              placeholder="Back Fee Amount" [(ngModel)]="request.BackFeeAmount" />
+                   placeholder="Back Fee Amount" [(ngModel)]="request.BackFeeAmount" />
             <div *ngIf="isFormSubmitted && _FeeConfigurationFromGroup.BackFeeAmount.errors" class="text-danger">
               <p *ngIf="!_FeeConfigurationFromGroup.BackFeeAmount.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required.!
@@ -175,7 +192,7 @@
           <div>
             <label>Remark</label>
             <input type="text" class="form-input" id="txtRemark" placeholder="Remark" formControlName="txtRemark"
-              [(ngModel)]="request.Remark" />
+                   [(ngModel)]="request.Remark" />
           </div>
 
         </div>
@@ -273,12 +290,14 @@
             <th class="text-left" *ngIf="request.TypeID == _EnumConfigurationType.Revaluation_Fee">Scheme</th>
 
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('CasteCategoryName')">
-              <span
-                *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Admin || this.sSOLoginDataModel.RoleID==_EnumRole.AdminNon">Stream
-                Name </span>
-              <span
-                *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.DTE || this.sSOLoginDataModel.RoleID==_EnumRole.DTENON  || this.sSOLoginDataModel.RoleID==_EnumRole.DTETraing">Caste
-                Category</span>
+              <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Admin || this.sSOLoginDataModel.RoleID==_EnumRole.AdminNon">
+                Stream
+                Name
+              </span>
+              <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.DTE || this.sSOLoginDataModel.RoleID==_EnumRole.DTENON  || this.sSOLoginDataModel.RoleID==_EnumRole.DTETraing">
+                Caste
+                Category
+              </span>
               @if (sortInTableColumn=='CasteCategoryName')
               {
               <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>
@@ -292,6 +311,14 @@
               }
             </th>
 
+            <th class="text-left cursorHand" *ngIf="request.TypeID == _EnumConfigurationType.DuplicateDocument" title="Click to sorting" (click)="sortInTableData('DeliverTypeID')">
+              Deliver Type
+              @if (sortInTableColumn=='DeliverTypeID') {
+              <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>
+              }
+            </th>
+
+            <!--<th class="text-left" *ngIf="request.TypeID == _EnumConfigurationType.DuplicateDocument">Delivery Type</th>-->
 
             <th class="text-left" *ngIf="!ShowValidColumn()">Remark</th>
 
@@ -323,11 +350,16 @@
               {{row.FeeAmount | currency:'₹ '}} @if (row.LateFeeAmount>0) {
               <span>(Late Fee: {{row.LateFeeAmount | currency:'₹ '}})</span>
               }@if(row.TypeID==_EnumConfigurationType.BackFee || row.TypeID==_EnumConfigurationType.BackFeeYearly ){
-              <span>(Fixed Back Fee: <b>{{row.BackFeeAmount | currency:'₹ '}} </b> ,After Subject Count:
-                <b>{{row.BackSubjectCount}}+</b> )</span>
+              <span>
+                (Fixed Back Fee: <b>{{row.BackFeeAmount | currency:'₹ '}} </b> ,After Subject Count:
+                <b>{{row.BackSubjectCount}}+</b> )
+              </span>
               }
             </td>
+
+            <td>{{row.DeliverTypeID==1? 'Urgent':'By Post'}}</td>
             <td>{{row.Remark}}</td>
+
             <td>
               <div class="flex items-end justify-end actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="Edit" (click)="btnEdit_OnClick(row.FeeID)">

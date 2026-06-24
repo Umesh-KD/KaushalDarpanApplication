@@ -139,7 +139,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   }
 
 
-  ondepartmentChange()
+  async ondepartmentChange()
   {
     debugger;
     if (this.request.DepartmentTypeID == this._DuplicateDocumentType.NodalCenter_DepartmentID){
@@ -159,6 +159,8 @@ export class ApplyDuplicateDocComponent implements OnInit {
       this.GrievanceFormGroup.get('ddlFeesTypeID')?.enable();
     }
     this.GrievanceFormGroup.get('ddlInstituteID')?.updateValueAndValidity();
+
+    await this.FeeAmount('DuplicateDocStudentWise');
   }
   async GetInstituteMatserDDL(DeptId: number) {
     try {
@@ -180,7 +182,8 @@ export class ApplyDuplicateDocComponent implements OnInit {
     }
   }
   FeeAmount(MasterCode: string):void {
-     // debugger
+    debugger
+    this.request.FeeAmount = 0;
     // 3 ->marksheet
     //4 -> migration
     if (this.request.DocumentID == this._DuplicateDocumentType.Provisional_Diploma
@@ -206,13 +209,20 @@ export class ApplyDuplicateDocComponent implements OnInit {
       this.isMarksheet=false;
       this.isMigration=true;
     }
-    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+
+    this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+    this.request.EndTermID = this.sSOLoginDataModel.EndTermID;    
+
+    //this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+    this.applyDuplicateDocService.GetDuplicateDocFeeAmount(this.request).then((data: any) => {
       //debugger
       switch (MasterCode) {
         case 'DuplicateDocStudentWise':
           this.FeesAmount = data['Data'];
           if (this.FeesAmount && this.FeesAmount.length > 0 ) {
             this.request.FeeAmount = this.FeesAmount[0].FeeAmount || 0;
+            this.request.FeeID = this.FeesAmount[0].FeeID || 0;
             // this.request.ApplicationNo=this.FeesAmount[0].ApplicationNo;
             // this.request.SemesterID=this.FeesAmount[0].SemesterID;
             this.request.ConfigurationTypeID = this.FeesAmount[0].TypeID || 0;
@@ -259,12 +269,18 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
     }
 
+    await this.FeeAmount('DuplicateDocStudentWise');
+
   }
 
     async openModalGenerateOTP(content: any, item: ApplyDuplicateDocument) {
       //debugger
       // this.refreshValidation();// refresh validation
       this.isFormSubmitted = true;
+      if (this.request.FeeAmount == 0) {
+        this.toastr.error("Currently You Cannot Apply for this document type");
+        return;
+      }
       // if (this.GrievanceFormGroup.invalid) {
       //   return
       // }
@@ -449,7 +465,6 @@ export class ApplyDuplicateDocComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DocumentTypeList1 = data['Data'];
-
           console.log("docyment",this.DocumentTypeList);
         }, (error: any) => console.error(error)
         );

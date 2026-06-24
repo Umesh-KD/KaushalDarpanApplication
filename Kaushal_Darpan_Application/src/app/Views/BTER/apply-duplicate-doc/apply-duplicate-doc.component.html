@@ -107,7 +107,7 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Fees Type <span class="StarMarking">*</span>
             </label>
-            <select class="form-select" [(ngModel)]="request.FeesTypeID" formControlName="ddlFeesTypeID" >
+            <select class="form-select" [(ngModel)]="request.FeesTypeID" formControlName="ddlFeesTypeID" (change)="FeeAmount('DuplicateDocStudentWise')">
               <!-- <select class="form-select" formControlName="ddlDepartmentID" (change)="ondepartmentChange()">  -->
               <option value=0 selected>--Choose Option--</option>
               <option value=1 selected>Urgent</option>
@@ -206,7 +206,7 @@
           <tr>
             <th class="text-left" style="width:100px">S.No</th>
             <th class="text-left">Student Name</th>
-            <th class="text-left">Student ID</th>
+            <!--<th class="text-left">Student ID</th>-->
             <th class="text-left">Semester</th>
             <th class="text-left">EnrollmentNo / Application No</th>
             <th class="text-left">Request Session</th>
@@ -224,7 +224,7 @@
           <tr *ngFor="let item of DocumentTypeList let idx=index;">
             <td>{{idx+1}}</td>
             <td align="left">{{item.UserName}}</td>
-            <td align="left">{{item.Student_Id}}</td>
+            <!--<td align="left">{{item.Student_Id}}</td>-->
 
             <td align="left">{{item.SemesterName}}</td>
             <td align="left">{{item.EnrollmentNo}}</td>
