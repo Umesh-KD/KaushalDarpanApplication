@@ -354,13 +354,13 @@ export class ITICollageTradeComponent {
 
   onCancel(): void {
     this.searchRequest.PageSize = 10;
-    this.searchRequest.CollegeCode = '';
-    this.searchRequest.TradeCode = '';
+    //this.searchRequest.CollegeCode = '';
+    //this.searchRequest.TradeCode = '';
     this.searchRequest.ManagementTypeId = 0;
     this.searchRequest.CollegeID = 0;
     this.searchRequest.TradeID = 0;
     this.searchRequest.TradeSchemeId = 0;
-    this.searchRequest.TradeLevelId = '0'; 
+    //this.searchRequest.TradeLevelId = '0'; 
     this.GetTradeAndColleges(1);
   }
 

@@ -25,15 +25,15 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade level:</label>
           <select class="form-select" [(ngModel)]="searchRequest.TradeLevelId" (change)="getITITrade()">
             <option value="0">Choose Option</option>
             <option value="8">8th</option>
-            <option value="10">10th</option>
+            <option value="10">10th</option>-->
             <!--<option value="12">12th</option>-->
-          </select>
-        </div>
+          <!--</select>
+        </div>-->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">College Type:</label>
@@ -94,14 +94,19 @@
             <option *ngFor="let item of ListITITradeScheme" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
-        <div>
+
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">College Code:</label>
           <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="College Code:">
-        </div>
-        <div>
+        </div>-->
+
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Code:</label>
           <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Trade Code">
-        </div>
+        </div>-->
+
+
+
         <!--<div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1">
       Fee Status:

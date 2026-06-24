@@ -422,8 +422,9 @@ export class ListSeatMetrixComponent {
             const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
             const wb: XLSX.WorkBook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-            XLSX.writeFile(wb, 'ItiCollageTradeList.xlsx');
-
+            //XLSX.writeFile(wb, 'ItiCollageTradeList.xlsx');
+            XLSX.writeFile(wb, `ItiSeatDistributionList_${new Date().toISOString().split('T')[0]}.xlsx`);
+            //`SeatIntakeDetails_${new Date().toISOString().split('T')[0]}.xlsx`
             //this.searchRequest = new ItiMeritSearchModel()
           } else {
             this.toastr.error(data.ErrorMessage);
@@ -485,7 +486,8 @@ export class ListSeatMetrixComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'SeatMatrix.pdf';
+            //link.download = 'SeatMatrix.pdf';
+            link.download = `ITI_Seat_DistributionList_${new Date().toISOString().split('T')[0]}.xlsx`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
