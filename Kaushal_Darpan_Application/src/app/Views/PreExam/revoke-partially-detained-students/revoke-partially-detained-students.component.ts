@@ -8,6 +8,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-revoke-partially-detained-students',
@@ -50,6 +51,7 @@ export class RevokePartiallyDetainedStudentsComponent {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
+    private Swal2: SweetAlert2,
   ){ }
 
   async ngOnInit() {
@@ -258,6 +260,63 @@ export class RevokePartiallyDetainedStudentsComponent {
           this.toastr.error(data.ErrorMessage);
         }
       })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // 1. Checks if all items in the list are checked
+  isAllSelected(): boolean {
+    if (!this.StudentPapersList || this.StudentPapersList.length === 0) {
+      return false;
+    }
+    return this.StudentPapersList.every((row: any) => row.Selected);
+  }
+
+  // 2. Toggles all rows based on the header checkbox state
+  toggleAll(event: any): void {
+    const isChecked = event.target.checked;
+    this.StudentPapersList.forEach((row: any) => row.Selected = isChecked);
+  }
+
+  // 3. Helper method to extract data when you need to process selected rows (e.g., on a button click)
+  getSelectedRows() {
+    const selectedPapers = this.StudentPapersList.filter((row: any) => row.Selected);
+    console.log('Selected Papers:', selectedPapers);
+  }
+
+  async RevokePartiallyDetainedStudents() {
+    
+    try {
+      const anySelected = this.StudentPapersList.some((row: any) => row.Selected);
+      if (!anySelected) {
+        this.toastr.error('Please select at least one paper to revoke.');
+        return;
+      }
+
+      this.Swal2.Confirmation("Are you sure to revoke partially detained student selected papers?", async (result: any) => {
+        if (result.isConfirmed) {
+          const selectedPapers = this.StudentPapersList.filter((row: any) => row.Selected);
+          console.log('Selected Papers:', selectedPapers);
+
+          selectedPapers.forEach((row: any) => {
+            row.UserID = this.sSOLoginDataModel.UserID;
+          });
+
+          await this.preExamStudentExaminationService.RevokePartiallyDetainedStudent(selectedPapers).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State == EnumStatus.Success) {
+              this.toastr.success(data.Message);
+              this.closeModalStudentPaperList();
+              await this.GetPartiallyDetainedStudentList();
+            }
+            else {
+              this.toastr.error(data.ErrorMessage);
+            }
+          })
+        }
+      });
+      
     } catch (error) {
       console.error(error);
     }
