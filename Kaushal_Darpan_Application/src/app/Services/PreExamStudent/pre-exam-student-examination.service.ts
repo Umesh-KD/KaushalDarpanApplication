@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../Models/StudentMasterModels';
-import { AnnexureDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
+import { AnnexureDataModel, GetPartiallyDetainedStudentDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
 import { CommonSubjectDetailsMasterModel } from '../../Models/CommonSubjectDetailsMasterModel';
 import { ViewStudentDetailsRequestModel } from '../../Models/ViewStudentDetailsRequestModel';
 
@@ -266,6 +266,16 @@ export class PreExamStudentExaminationService {
 
   public async UpdateOptionalSubjectAfterEligibleStudent(request: OptionalSubjectRequestModel) {
     return this.http.post(this.APIUrl + '/UpdateOptionalSubjectAfterEligibleStudent', request, this.headersOptions)
+      .pipe(
+        catchError(error => {
+          console.error('Error:', error);
+          return throwError(error);
+        })
+      ).toPromise();
+  }
+
+  public async GetPartiallyDetainedStudentList(request: GetPartiallyDetainedStudentDataModel) {
+    return this.http.post(this.APIUrl + '/GetPartiallyDetainedStudentList', request, this.headersOptions)
       .pipe(
         catchError(error => {
           console.error('Error:', error);

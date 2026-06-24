@@ -70,4 +70,13 @@ export class AnnexureDataModel {
   public InstitueID: number = 0;
 }
 
-
+export class GetPartiallyDetainedStudentDataModel extends RequestBaseModel {
+  public Name: string = '';
+  public EnrollmentNo: string = '';
+  public Action: string = '';
+  public InstituteID: number = 0;
+  public Year_SemID: number = 0;
+  public BranchID: number = 0;
+  public UserID: number = 0;
+  public StudentExamID: number = 0;
+}

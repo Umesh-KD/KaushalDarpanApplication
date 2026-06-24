@@ -333,6 +333,7 @@ const routes: Routes = [
       { path: 'ItiStudentEnrollment', loadChildren: () => import('./Views/ITI/Examination/iti-student-enrollment/iti-student-enrollment.module').then(m => m.ItiStudentEnrollmentModule), title: 'Student Enrollment' },
       { path: 'studentenrollmentreport', loadChildren: () => import('./Views/Reports/student-enrollment-Report/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'Student Enrollment Report' },
       { path: 'studentexaminationreport', loadChildren: () => import('./Views/Reports/pre-exam-student-examination-report/pre-exam-student-examination-report.module').then(m => m.PreExamStudentExaminationReportModule), title: 'Pre Exam Student Examination Report' },
+      { path: 'revoke-partially-detained-student', loadChildren: () => import('./Views/PreExam/revoke-partially-detained-students/revoke-partially-detained-students.module').then(m => m.RevokePartiallyDetainedStudentsModule), title: 'Revoke Partially Detained Students' },
 
       //{ path: 'studentenrollment/:id', loadChildren: () => import('./Views/reports/studentenrollmentreport/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'ITI Student Enrollment' },
       //{ path: 'studentenrollment/:id', loadChildren: () => import('./Views/reports/studentenrollmentreport/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'Student Enrollment' },
