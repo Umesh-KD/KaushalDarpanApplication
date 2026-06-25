@@ -917,7 +917,7 @@ const routes: Routes = [
 
       { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule), title: "Live Result" },
 
-
+      
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
 
       { path: 'AddItiCompanyMaster', loadChildren: () => import('./Views/ITI/ITICompanyMaster/additi-company-master/additi-company-module').then(m => m.ItiCompanyMasterModule) },
