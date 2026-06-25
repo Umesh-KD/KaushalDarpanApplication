@@ -445,51 +445,105 @@ export class MiscellaneousReportComponent implements OnInit {
   }
 
 
+  //exportToExcelstaticType90(): void {
+  //  debugger
+  //  const wantedColumns = this.GetfilteredColumnlist;
+
+  //  // Create data with columns in the exact order of wantedColumns
+  //  const orderedData = this.GetfilteredList.map((row: any) => {
+  //    const orderedRow: any = {};
+
+  //    wantedColumns.forEach((col: string) => {
+  //      orderedRow[col] = row[col];
+  //    });
+
+  //    return orderedRow;
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+  //    this.GetfilteredList,
+  //    {
+  //      header: wantedColumns
+  //    }
+  //  );
+
+
+  //  const colWidths = wantedColumns.map((col: string) => {
+  //    const maxLength = Math.max(
+  //      col.length,
+  //      ...this.GetfilteredList.map((row: any) =>
+  //        row[col] ? row[col].toString().length : 0
+  //      )
+  //    );
+
+  //    return { wch: maxLength + 2 };
+  //  });
+
+  //  ws['!cols'] = colWidths;
+
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //  const todayDate = new Date().toISOString().split('T')[0];
+
+  //  const fileName =
+  //    `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`;
+
+  //  XLSX.writeFile(wb, fileName);
+  //}
+
   exportToExcelstaticType90(): void {
-    debugger
-    const wantedColumns = this.GetfilteredColumnlist;
 
-    // Create data with columns in the exact order of wantedColumns
-    const orderedData = this.GetfilteredList.map((row: any) => {
-      const orderedRow: any = {};
+    let wantedColumns: string[] = [];
 
-      wantedColumns.forEach((col: string) => {
-        orderedRow[col] = row[col];
-      });
+    if (
+      this.GetfilteredColumnlist &&
+      this.GetfilteredColumnlist.length > 0 &&
+      this.GetfilteredColumnlist[0].ColumnNames
+    ) {
+      wantedColumns =
+        this.GetfilteredColumnlist[0].ColumnNames.split(',');
+    } else {
+      return;
+    }
 
-      return orderedRow;
-    });
+    const excelData: any[][] = [];
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-      this.GetfilteredList,
-      {
-        header: wantedColumns
-      }
-    );
+    // Header row
+    excelData.push([...wantedColumns]);
 
-
-    const colWidths = wantedColumns.map((col: string) => {
-      const maxLength = Math.max(
-        col.length,
-        ...this.GetfilteredList.map((row: any) =>
-          row[col] ? row[col].toString().length : 0
+    // Data rows
+    this.GetfilteredList.forEach((row: any) => {
+      excelData.push(
+        wantedColumns.map((col: string) =>
+          row[col] == null ? '' : row[col]
         )
       );
-
-      return { wch: maxLength + 2 };
     });
 
-    ws['!cols'] = colWidths;
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(excelData);
+
+    // Force header order again
+    wantedColumns.forEach((col, index) => {
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: index });
+      ws[cellAddress] = { t: 's', v: col };
+    });
+
+    ws['!ref'] = XLSX.utils.encode_range({
+      s: { r: 0, c: 0 },
+      e: { r: excelData.length - 1, c: wantedColumns.length - 1 }
+    });
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
     const todayDate = new Date().toISOString().split('T')[0];
 
-    const fileName =
-      `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`;
-
-    XLSX.writeFile(wb, fileName);
+    XLSX.writeFile(
+      wb,
+      `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`
+    );
   }
-  
+
+
 }
