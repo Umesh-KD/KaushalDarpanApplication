@@ -25,6 +25,8 @@ export class FeeConfigurationBterModel {
   public BackSubjectCount: number = 0;
   public CasteCatogaryList: CasteCatogaryBterList[] = [];
   public SchemeID?: number = 0;
+
+  public DeliverTypeID?: number = 0;
 }
 
 export class CasteCatogaryBterList {

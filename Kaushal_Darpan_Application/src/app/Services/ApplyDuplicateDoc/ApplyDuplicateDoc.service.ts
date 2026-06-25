@@ -73,6 +73,20 @@ public async GetApplyDuplicateDocumentTypeList() {
       ).toPromise();
   }
 
+
+  public async GetDuplicateDocFeeAmount(searchRequest: ApplyDuplicateDocument) {
+
+    //  debugger;
+
+    var body = JSON.stringify(searchRequest);
+    console.log(body);
+    return await this.http.post(`${this.APIUrl}/GetDuplicateDocFeeAmount`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async SaveDuplicateDocumentDetails(data: ApplyDuplicateDocument) { 
     var body = JSON.stringify(data); 
     return await this.http.post(`${this.APIUrl}/SaveDuplicateDocumentDetails`, body, this.headersOptions)

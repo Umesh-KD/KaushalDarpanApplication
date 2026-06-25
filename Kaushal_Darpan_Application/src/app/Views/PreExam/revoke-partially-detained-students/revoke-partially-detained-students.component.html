@@ -163,9 +163,9 @@
             <td align="left">{{ row.StudentExamStatus }}</td>
             <td align="left">
                 <div class="flex actionBtns w-auto" style="width:auto !important">
-                    <a href="javascript:void(0);" title="View Student Details"
+                    <a href="javascript:void(0);" title="Revoke Detain"
                         (click)="openDetainedSubjectDetails(StudentPaperList_Modal, row.StudentID,row.StudentExamID)">
-                        <i class="ti ti-eye" aria-hidden="true"></i>
+                        <i class="bi bi-arrow-repeat"></i>
                     </a>
                 </div>
             </td>
@@ -206,6 +206,9 @@
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
+                <th class="text-left w-12">
+                  <input type="checkbox" (change)="toggleAll($event)" [checked]="isAllSelected()"/>
+                </th>
                 <th class="text-left">S No</th>
                 <th class="text-left">Student Name</th>
                 <th class="text-left">Branch</th>
@@ -216,6 +219,9 @@
             </thead>
             <tbody>
               <tr *ngFor="let row of StudentPapersList; let idx=index;  ">
+                <td align="left">
+                  <input type="checkbox" [(ngModel)]="row.Selected"/>
+                </td>
                 <td align="left">{{idx+1}}</td>
                 <td align="left">{{ row.StudentName }}</td>
                 <td align="left">{{ row.BranchName }}</td>
@@ -228,6 +234,13 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="text-center flex items-center justify-center mt-6 gap-2">
+          <button type="button" id="btnSave" (click)="RevokePartiallyDetainedStudents()"
+                  class="btn bg-info text-white">
+            <i class="ti ti-device-floppy"></i> Revoke
+          </button>
+          <button type="button" (click)="closeModalStudentPaperList()" class="btn bg-danger text-white">Cancel</button>
         </div>
       </div>
     </div>

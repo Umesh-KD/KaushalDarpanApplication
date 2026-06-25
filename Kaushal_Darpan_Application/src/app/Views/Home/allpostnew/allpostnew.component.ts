@@ -144,6 +144,9 @@ export class AllpostnewComponent implements OnInit {
           
           data = JSON.parse(JSON.stringify(data));
           this.CampusPostList = data['Data'];
+          this.CampusPostList.forEach(item => {
+  item.RoleList = this.parseRoles(item.JobDescription);
+});
           console.log('Campus Post List ==>',this.CampusPostList)
         }, (error: any) => console.error(error)
         );
@@ -309,5 +312,32 @@ export class AllpostnewComponent implements OnInit {
 
   }
 
+  parseRoles(jobDescription: string) {
+  if (!jobDescription) return [];
+
+  const roles = jobDescription
+    .split(/\d+\s*\.\s*/)
+    .filter(x => x.trim());
+
+  return roles.map(roleText => {
+
+    const getValue = (label: string) => {
+      const regex = new RegExp(`<b>${label}\\s*<\\/b>:(.*?)(\\||<br|$)`, 'i');
+      const match = roleText.match(regex);
+      return match ? match[1].trim() : '';
+    };
+
+    return {
+      role: getValue('Role'),
+      positions: getValue('No of Positions'),
+      ctc: getValue('CTC'),
+      campusType: getValue('Campus Type'),
+      interviewType: getValue('Interview Type'),
+      branch: getValue('Branch Name'),
+      appointmentLocation: getValue('Appointment Location'),
+      benefits: getValue('Other Benefit')
+    };
+  });
+}
 
 }

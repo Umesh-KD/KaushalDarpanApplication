@@ -283,5 +283,15 @@ export class PreExamStudentExaminationService {
         })
       ).toPromise();
   }
+
+  public async RevokePartiallyDetainedStudent(request: any[]) {
+    return this.http.post(this.APIUrl + '/RevokePartiallyDetainedStudent', request, this.headersOptions)
+      .pipe(
+        catchError(error => {
+          console.error('Error:', error);
+          return throwError(error);
+        })
+      ).toPromise();
+  }
     
 }

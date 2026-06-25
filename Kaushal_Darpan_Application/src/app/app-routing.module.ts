@@ -600,8 +600,6 @@ const routes: Routes = [
       { path: 'iti-rpt-admission-seatoffered', loadChildren: () => import('./Views/iti-rpt-admission-seat-offered/iti-rpt-admission-seat-offered.module').then(m => m.ITIRPTAdmissionSeatOfferedModule), title: 'ITI-RPT-Admission-SeatOffered' },
       { path: 'iti-rpt-statistics', loadChildren: () => import('./Views/iti-rpt-statistics/iti-rpt-statistics.module').then(m => m.ItiRptStatisticsModule), title: 'ITI-RPT-statistics' },
 
-
-
       /*ITI-Inventory-Management-START*/
       { path: 'iti-items-master-list', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-items-master/iti-items-master.module').then(m => m.ITIItemsMasterModule) },
       { path: 'iti-items-master-list-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-items-master/iti-items-master-report/iti-items-master-report.module').then(m => m.ITIItemsMasterReportModule) },

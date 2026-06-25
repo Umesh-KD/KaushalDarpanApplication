@@ -125,6 +125,8 @@ export class FeeConfigurationBTERComponent implements OnInit {
       cbIsLateFeeApplicable: [false],
       txtRemark: [''],
 
+      ddlDeliverTypeID: ['0', [DropdownValidators]],
+
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -141,13 +143,10 @@ export class FeeConfigurationBTERComponent implements OnInit {
     await this.nonItiValidator();
   }
 
-
-
   //async GetDataUpadate(ID: number) {
   //  
   //  var Model = new FeeConfigurationModel()
   //  if (ID > 0) {
-
   //    Model = this.FeeConfigList.find((x: any) => x.TypeID == ID)
   //    console.log(Model)
   //    if (Model != undefined && Model.FeeID != 0) {
@@ -156,13 +155,7 @@ export class FeeConfigurationBTERComponent implements OnInit {
   //      this.request.FeeID = 0
   //      this.request.FeeAmount = 0
   //      this.request.IsLateFeeApplicable = false
-
   //      this.request.LateFeeAmount = 0
-
-
-
-
-
   //    }
   //    console.log(this.request, "request")
   //  }
@@ -193,7 +186,7 @@ export class FeeConfigurationBTERComponent implements OnInit {
           const selectedCategories = formValues.ddlCategory;
           this.request.CasteCatogaryList = selectedCategories;
           //alert(JSON.stringify(this.request.CasteCatogaryList));
-
+          debugger
           this.isLoading = true;
           this.loaderService.requestStarted();
           await this.mstConfigService.SaveFeeData(this.request)
@@ -292,8 +285,9 @@ export class FeeConfigurationBTERComponent implements OnInit {
 
   async openModalGenerateOTP(content: any, item: FeeConfigurationBterModel) {
     debugger
-    this.refreshValidation();// refresh validation
     this.isFormSubmitted = true;
+    this.refreshValidation();// refresh validation
+
     if (this.FeeConfigurationFromGroup.invalid) {
       return
     }
@@ -795,6 +789,11 @@ export class FeeConfigurationBTERComponent implements OnInit {
       //set
       this.FeeConfigurationFromGroup.controls['ddlCategory'].setValidators(Validators.required);
     }
+    if (this.request.TypeID != this._EnumConfigurationType.DuplicateDocument) {
+      this.FeeConfigurationFromGroup.get('ddlDeliverTypeID')?.clearValidators();
+      this.FeeConfigurationFromGroup.get('ddlDeliverTypeID')?.updateValueAndValidity();
+    }
+
     //update
     this.FeeConfigurationFromGroup.controls['ddlCategory'].updateValueAndValidity();
 
