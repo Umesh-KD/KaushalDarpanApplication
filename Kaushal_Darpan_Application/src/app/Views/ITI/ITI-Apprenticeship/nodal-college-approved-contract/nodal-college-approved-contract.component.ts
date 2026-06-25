@@ -1,4 +1,4 @@
-import { Component,NgModule } from '@angular/core';
+import { Component, NgModule } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -19,12 +19,12 @@ import { DocumentDetailsService } from '../../../../Common/document-details';
   templateUrl: './nodal-college-approved-contract.component.html',
   styleUrl: './nodal-college-approved-contract.component.css'
 })
- 
+
 export class NodalCollegeApprovedContractComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public request : any = {};
+  public request: any = {};
 
-  CollegeApprovedContractForm!: FormGroup; 
+  CollegeApprovedContractForm!: FormGroup;
   public Divisionlist: any = [];
   public Districtlist: any = [];
   public Institutelist: any = [];
@@ -33,15 +33,15 @@ export class NodalCollegeApprovedContractComponent {
   _enumRole = EnumRole;
   months = MONTH_LIST;
   //deletedContracts: number[] = [];
-deletedContracts: any[] = [];
-minDate: string = '';
-maxDate: string = '';
- public Message: string = '';
- public ErrorMessage: string = '';
- public State: any = false;
- public EntryExists: number = 0;
+  deletedContracts: any[] = [];
+  minDate: string = '';
+  maxDate: string = '';
+  public Message: string = '';
+  public ErrorMessage: string = '';
+  public State: any = false;
+  public EntryExists: number = 0;
 
-constructor(
+  constructor(
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
     private loaderService: LoaderService,
@@ -60,19 +60,19 @@ constructor(
       DistrictID: [{ value: '', disabled: true }, [DropdownValidators]],
       MonthID: ['', [DropdownValidators]],
     })
-   
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetDivisionMaster();
     this.request.DistrictID = this.sSOLoginDataModel.DistrictID
     await this.DivisionData_ByDistrict();
     await this.GetDistictData();
-    
+
     // await this.GetInstituteMaster(this.request.DistrictID);
   }
 
   get _CollegeApprovedContractForm() { return this.CollegeApprovedContractForm.controls; }
 
-  async GetDivisionMaster() {   
+  async GetDivisionMaster() {
     try {
       await this.commonMasterService.GetDivisionMaster().then((data: any) => {
         this.Divisionlist = data.Data;
@@ -91,7 +91,7 @@ constructor(
 
   async GetDistictData() {
     try {
-        
+
       // this.request.DistrictID = 0
       // this.Institutelist = [];
       await this.onChange();
@@ -115,7 +115,7 @@ constructor(
         this.request.MonthID = 0;
         this.toastr.error('Please select correct month as You cannot select future or present month');
         return;
-      } 
+      }
       const month = this.request.MonthID;
       const year = new Date().getFullYear(); // or your selected AcademicYear
 
@@ -141,25 +141,25 @@ constructor(
         rows.forEach((r: any) => {
           if (!grouped[r.InstituteID]) {
             grouped[r.InstituteID] = {
-            InstituteID: r.InstituteID,
-            Name: r.Name,
-            allowZero: r.allowZero,
-            contracts: []
+              InstituteID: r.InstituteID,
+              Name: r.Name,
+              allowZero: r.allowZero,
+              contracts: []
             };
           }
           if (r.ContractDate) {
-             let fileUrl = null;
-             let base64= null;
-            if (r.fileName) { 
-              fileUrl =  r.fileUrl
-              console.log("File Name :"+r.fileName);
+            let fileUrl = null;
+            let base64 = null;
+            if (r.fileName) {
+              fileUrl = r.fileUrl
+              console.log("File Name :" + r.fileName);
             }
             grouped[r.InstituteID].contracts.push({
-            date: r.ContractDate.split('T')[0],  // remove time part
-            count: r.No_Of_Contract,
-            //fileUrl: r.FileUrl || null,          // add file URL from backend
-            fileUrl:fileUrl,
-            fileName: r.fileName || null         // add file name from backend
+              date: r.ContractDate.split('T')[0],  // remove time part
+              count: r.No_Of_Contract,
+              //fileUrl: r.FileUrl || null,          // add file URL from backend
+              fileUrl: fileUrl,
+              fileName: r.fileName || null         // add file name from backend
             });
           }
         });
@@ -167,12 +167,12 @@ constructor(
       })
     } catch (error) {
       console.log(error);
-    } 
+    }
   }
 
   async DivisionData_ByDistrict() {
     try {
-        
+
       await this.commonMasterService.DivisionData_ByDistrict(Number(this.request.DistrictID))
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -186,12 +186,12 @@ constructor(
   }
 
   async SaveData() {
-    if(this.CollegeApprovedContractForm.invalid) {
+    if (this.CollegeApprovedContractForm.invalid) {
       this.toastr.error('Please fill all the required fields');
       return
     }
 
-    if(this.Institutelist?.length == 0) {
+    if (this.Institutelist?.length == 0) {
       this.toastr.error('there is no institute');
       return
     }
@@ -209,9 +209,9 @@ constructor(
 
       await this.apprenticeshipService.SaveCollegeApprovedContract_Appr(this.Institutelist).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
+        if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
-        } else if(data.State === EnumStatus.Warning) {
+        } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
           this.toastr.error(data.ErrorMessage);
@@ -221,94 +221,110 @@ constructor(
       console.log(error);
     }
   }
-async SaveDataNew() {
-  if (this.CollegeApprovedContractForm.invalid) {
-    this.toastr.error('Please fill all the required fields');
-    return;
-  }
+  async SaveDataNew() {
+    debugger
+    if (this.CollegeApprovedContractForm.invalid) {
+      this.toastr.error('Please fill all the required fields');
+      return;
+    }
 
-  if (!this.Institutelist?.length) {
-    this.toastr.error('There is no institute');
-    return;
-  } 
-  const payload: any[] = [];
- 
-  // Add modified rows
-  this.Institutelist.forEach((inst:any) => {
-    inst.contracts
-      .filter((c:any) => inst.allowZero || c.count > 0)
-      .forEach((c:any) => {
-        
-        payload.push({
-          InstituteID: inst.InstituteID,
-          MonthID: this.request.MonthID,
-          ZoneID: this.request.DivisionID,
-          DistrictID: this.request.DistrictID,
-          No_Of_Contract: c.count,
-          ContractDate: c.date,
-          AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
-          DepartmentID: this.sSOLoginDataModel.DepartmentID,
-          EndTermID: this.sSOLoginDataModel.EndTermID,
-          UserID: this.sSOLoginDataModel.UserID,
-           // FILE DATA (SAFE FOR JSON)
-          FileBase64: c.fileBase64 || null,
-          FileName: c.fileName || null,
-          FileUrls: c.fileUrl || null,
-          allowZero:((inst.allowZero) ? 1 : 0)
-        });
-      });
-  });
+    if (!this.Institutelist?.length) {
+      this.toastr.error('There is no institute');
+      return;
+    }
+    const payload: any[] = [];
 
-  // Add deleted rows so SQL can deactivate them
-  payload.push(...this.deletedContracts);
-  console.log("Payload:", payload);
-  debugger;
-  if (payload.length === 0) {
-    this.toastr.warning("No contract entries to save.");
-    return;
-  }
-  console.log("Payload:", payload);
-  // if (!confirm("Are you sure you want to save these contract entries?")) {
-  //   return;
-  // }
-    this.Swal2.Confirmation("Are you sure? <br/> you want to save these contract entries.",
-    async (result: any) => {
-      if (!result.isConfirmed) { 
-        return;
-      }
-      else{
-        try {
-            await this.apprenticeshipService.SaveCollegeApprovedContract_Appr(payload).then((data: any) => {
-            data = JSON.parse(JSON.stringify(data));
-            if(data.State === EnumStatus.Success) {
-              this.toastr.success(data.Message);
-            } 
-            else if(data.State === EnumStatus.Warning) {
-              this.toastr.warning(data.Message);
-            } 
-            else {
-              this.toastr.error(data.ErrorMessage);
-            }
+    // Add modified rows
+    this.Institutelist.forEach((inst: any) => {
+      inst.contracts
+        .filter((c: any) => inst.allowZero || c.count > 0)
+        .forEach((x: any) => {
+
+          payload.push({
+            InstituteID: inst.InstituteID,
+            MonthID: this.request.MonthID,
+            ZoneID: this.request.DivisionID,
+            DistrictID: this.request.DistrictID,
+            No_Of_Contract: x.count,
+            ContractDate: x.date,
+            AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
+            DepartmentID: this.sSOLoginDataModel.DepartmentID,
+            EndTermID: this.sSOLoginDataModel.EndTermID,
+            UserID: this.sSOLoginDataModel.UserID,
+            // FILE DATA (SAFE FOR JSON)
+            FileBase64: x.fileBase64 || null,
+            FileName: x.fileName || null,
+            FileUrls: x.fileUrl || null,
+            allowZero: ((x.allowZero) ? 1 : 0)
           });
-        } catch (err) {
-        console.log(err);
-        }
-      }
+        });
     });
- 
-}
+
+    // Add deleted rows so SQL can deactivate them
+    payload.push(...this.deletedContracts);
+    console.log("Payload:", payload);
+
+    const hasInvalidRecord = payload.some((c: any) => {
+      if (c.No_Of_Contract === 0 && c.allowZero === 0) {
+        this.toastr.warning(
+          `No of Contract cannot be 0 for ${c.InstituteName} on ${c.ContractDate}`
+        );
+        return true;
+      }
+      return false;
+    });
+
+    if (hasInvalidRecord) {
+      return;
+    }
+
+    if (payload.length == 0) {
+      this.toastr.warning("No contract entries to save.");
+      return;
+    }
+    console.log("Payload:", payload);
+
+    // if (!confirm("Are you sure you want to save these contract entries?")) {
+    //   return;
+    // }
+    this.Swal2.Confirmation("Are you sure? <br/> you want to save these contract entries.",
+      async (result: any) => {
+        if (!result.isConfirmed) {
+          return;
+        }
+        else {
+          try {
+            await this.apprenticeshipService.SaveCollegeApprovedContract_Appr(payload).then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if (data.State === EnumStatus.Success) {
+                this.toastr.success(data.Message);
+              }
+              else if (data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              }
+              else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      });
+
+  }
 
   async onChange() {
     this.Institutelist = [];
     this.request.MonthID = 0;
   }
- onContractChange(contract: ContractEntry, row: Institute, inputRef: HTMLInputElement) {
-  const value = Number(contract.count);
+  onContractChange(contract: ContractEntry, row: Institute, inputRef: HTMLInputElement) {
+    const value = Number(contract.count);
     // Block zero value
     if (value === 0) {
       this.toastr.warning("No of Contract' cannot be 0.");
       contract.count = null;        // Clear the value 
-      inputRef.value = '';  
+      inputRef.value = '';
       return;
     }
 
@@ -316,142 +332,145 @@ async SaveDataNew() {
     if (value < 0) {
       this.toastr.warning("Value cannot be negative.");
       contract.count = null;
-      inputRef.value = '';  
+      inputRef.value = '';
     }
-}
-onDateChange(selectedDate: string, row: any) {
-  if (!selectedDate) return;
-  // 1️⃣ Check if date already exists
-  row.date = selectedDate; 
-  const existing = row.contracts.find((c: ContractEntry) => c.date === selectedDate);
-
-  // 👉 If user selects SAME DATE → allow it, but DO NOT add new row
-  if (existing) { 
-    this.toastr.warning("Date Already Selected.");
-    return;  
   }
+  onDateChange(selectedDate: string, row: any) {
+    debugger
+    if (!selectedDate) return;
+    // 1️⃣ Check if date already exists
+    row.date = selectedDate;
+    const existing = row.contracts.find((c: ContractEntry) => c.date === selectedDate);
 
-// 1️⃣ Check if last contract entry exists AND its count is empty
-  if (row.contracts.length > 0) {
-    const last = row.contracts[row.contracts.length - 1];
-    if (last.count === null || last.count === undefined || last.count === '') { 
-      this.toastr.warning("Please enter 'No of Contract' before selecting a new date.");
-      return; // ❌ Stop adding new entry
-    }
-    if (Number(last.count) === 0) { 
-      this.toastr.warning("'No of Contract' cannot be 0. Please enter a valid value.");
+    // 👉 If user selects SAME DATE → allow it, but DO NOT add new row
+    if (existing) {
+      this.toastr.warning("Date Already Selected.");
       return;
     }
-  }
-  // Check if date already exists
-  const exists = row.contracts.some((c: ContractEntry) => c.date === selectedDate);
-  if (exists) return;
-  row.contracts.push({
-    date: selectedDate,
-    count: null
-  });
-} 
-onAllowZeroChange(row: any, event: any) {
-  // If checkbox is checked but date is NOT selected
-  if (event.target.checked && (!row.date || row.date === "")) {
-    this.toastr.error("Please select date first.");
 
-    // Uncheck checkbox
-    row.allowZero = false;
-
-    return;
-  }
-
-  // If date exists and checkbox is checked → set counts to 0
-  if (row.allowZero) {
-    row.contracts.forEach((c: any) => {
-      c.count = 0;
+    // 1️⃣ Check if last contract entry exists AND its count is empty
+    // if (row.contracts.length > 0) {
+    //   const last = row.contracts[row.contracts.length - 1];
+    //   if (last.count === null || last.count === undefined || last.count === '') {
+    //     this.toastr.warning("Please enter 'No of Contract' before selecting a new date.");
+    //     return; // ❌ Stop adding new entry
+    //   }
+    //   if (Number(last.count) === 0) {
+    //     this.toastr.warning("'No of Contract' cannot be 0. Please enter a valid value.");
+    //     return;
+    //   }
+    // }
+    // Check if date already exists
+    const exists = row.contracts.some((c: ContractEntry) => c.date === selectedDate);
+    if (exists) return;
+    row.contracts.push({
+      date: selectedDate,
+      count: null
     });
   }
-  else{
-     row.contracts.forEach((c: any) => {
-      c.count = null;
-    });
-  }
-}
-removeContract(row: any, index: number) {
-  // if (!confirm("Are you sure you want to remove this contract?")) {
-  //   return; // ❌ User cancelled
-  // }
-  this.Swal2.Confirmation("Are you sure? <br/> you want to remove this contract.",
-  async (result: any) => {
-    if (!result.isConfirmed) { 
+  onAllowZeroChange(row: any, event: any) {
+    // If checkbox is checked but date is NOT selected
+    debugger
+    if (event.target.checked && (!row.date || row.date == "")) {
+      this.toastr.error("Please select date first.");
+
+      // Uncheck checkbox
+      row.allowZero = false;
+
       return;
     }
-  });
-  const removed = row.contracts[index]; 
 
-  if (removed) {
-    this.deletedContracts.push({
-      InstituteID: row.InstituteID,
-      ContractDate: removed.date,
-      MonthID: this.request.MonthID,
-      AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
-      UserID: this.sSOLoginDataModel.UserID,
-      DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      EndTermID: this.sSOLoginDataModel.EndTermID,
-      ZoneID: this.request.DivisionID,
-      DistrictID: this.request.DistrictID,
-      No_Of_Contract: 0  // mark as 0 so SQL knows this is deleted
-    });
-  }
-  row.contracts.splice(index, 1);
-}
-onFileSelect(event: any, contract: any) {
-  const file = event.target.files[0];
-  if (!file) return;
-  console.log("file.name:"+file.name);
-   this.UploadDocument(event, file.name, file.name,contract).then((res: any) => {
-  }); 
- 
-}
-async UploadDocument(event: any, FileName: any, Dis_FileName:any, contract: any) {
-  debugger;
-  try {
-    let uploadModel: UploadFileModel = {
-      FileName: FileName ?? "",
-      FileExtention: "",
-      MinFileSize: "20kb",
-      MaxFileSize: "50mb",
-      FolderName:"CollegeAprrovedContract",
- 
-    }
-    await this.documentDetailsService.UploadDocument(event, uploadModel)
-      .then((data: any) => { 
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          //
-          console.log("Upload Document Data:"+JSON.stringify(data));
-      
-
-          debugger;
-          if (this.State == EnumStatus.Success) {
-          console.log("File Path: "+this.appsettingConfig.StaticFileRootPathURL+'/'+data.Data[0].FilePath);
-          console.log("File Name: "+data.Data[0].FileName);
-           contract.fileUrl = this.appsettingConfig.StaticFileRootPathURL+'/'+data.Data[0].FilePath;
-           contract.fileName = data.Data[0].FileName;
-          event.target.value = null;
-          }
-          if (this.State == EnumStatus.Error) {
-          this.toastr.error(this.ErrorMessage)
-          }
-          else if (this.State == EnumStatus.Warning) {
-          this.toastr.warning(this.ErrorMessage)
-          }
+    // If date exists and checkbox is checked → set counts to 0
+    if (row.allowZero) {
+      row.contracts.forEach((c: any) => {
+        if(c.date == row.date){
+          c.count = 0;
+          c.IsDisable = true;
+          c.allowZero = true;
+          c.fileName = '';
+          c.fileUrl = '';
+        }
       });
+    } else {
+      row.contracts.forEach((c: any) => {
+        if(c.date == row.date){
+          c.count = null;
+          c.IsDisable = false;
+          c.allowZero = false;
+          c.fileName = '';
+        }
+      });
+    }
   }
-  catch (Ex) {
-    console.log(Ex);
+  removeContract(row: any, index: number) {
+    // if (!confirm("Are you sure you want to remove this contract?")) {
+    //   return; // ❌ User cancelled
+    // }
+    debugger
+    this.Swal2.Confirmation("Are you sure? <br/> you want to remove this contract.",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          const removed = row.contracts[index];
+          if (removed) {
+            this.deletedContracts.push({
+              InstituteID: row.InstituteID,
+              ContractDate: removed.date,
+              MonthID: this.request.MonthID,
+              AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
+              UserID: this.sSOLoginDataModel.UserID,
+              DepartmentID: this.sSOLoginDataModel.DepartmentID,
+              EndTermID: this.sSOLoginDataModel.EndTermID,
+              ZoneID: this.request.DivisionID,
+              DistrictID: this.request.DistrictID,
+              No_Of_Contract: 0  // mark as 0 so SQL knows this is deleted
+            });
+          }
+          row.contracts.splice(index, 1);
+        }
+      });
+
   }
-} 
+  onFileSelect(event: any, contract: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+    console.log("file.name:" + file.name);
+    this.UploadDocument(event, file.name, file.name, contract).then((res: any) => {
+    });
+
+  }
+  async UploadDocument(event: any, FileName: any, Dis_FileName: any, contract: any) {
+    debugger;
+    try {
+      let uploadModel: UploadFileModel = {
+        FileName: FileName ?? "",
+        FileExtention: "",
+        MinFileSize: "20kb",
+        MaxFileSize: "50mb",
+        FolderName: "CollegeAprrovedContract",
+
+      }
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          if (data.State == EnumStatus.Success) {
+
+            contract.fileUrl = this.appsettingConfig.StaticFileRootPathURL + '/' + data.Data[0].FilePath;
+            contract.fileName = data.Data[0].FileName;
+            event.target.value = null;
+          }
+          if (data.State == EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage)
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 }
- 
+
 interface ContractEntry {
   date: string;
   count: number | null;
