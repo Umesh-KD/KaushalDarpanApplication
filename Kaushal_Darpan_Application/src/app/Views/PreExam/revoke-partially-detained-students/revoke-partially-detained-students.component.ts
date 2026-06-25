@@ -249,6 +249,8 @@ export class RevokePartiallyDetainedStudentsComponent {
 
       const paperReq: any = {};
       paperReq.StudentExamID = StudentExamID;
+      paperReq.RoleID = this.sSOLoginDataModel.RoleID
+      paperReq.UserID = this.sSOLoginDataModel.UserID
       paperReq.Action = "GetStudentPaperDetails";
 
       await this.preExamStudentExaminationService.GetPartiallyDetainedStudentList(paperReq).then(async (data: any) => {
