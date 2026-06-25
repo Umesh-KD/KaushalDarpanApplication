@@ -1,0 +1,201 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">
+            Bank Guarantee Consolidated Report
+        </h4>
+
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a routerLink="/dashboard"
+               class="text-sm font-medium text-slate-700">
+                Dashboard
+            </a>
+
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">
+                chevron_right
+            </i>
+
+            <span class="text-sm font-medium text-slate-700">
+                Bank Guarantee Consolidated Report
+            </span>
+        </div>
+    </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+    <div class="card-body p-5">
+
+        <!-- Search Criteria -->
+        <div class="mb-8">
+
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">
+                    <i class="ti ti-search"></i>
+                    Enter Search Criteria
+                </b>
+            </div>
+
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+               
+
+                <!-- College -->
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                        College Name
+                    </label>
+
+                    <ng-select [(ngModel)]="searchRequest.id"
+                               [clearable]="true">
+
+                        <ng-option [value]="0">
+                            -- All Colleges --
+                        </ng-option>
+
+                        <ng-option *ngFor="let item of CollegeList"
+                                   [value]="item.ID">
+                            {{item.Name}}
+                        </ng-option>
+
+                    </ng-select>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex items-end gap-2">
+
+                    <button type="button"
+                            class="btn bg-info text-white"
+                            (click)="GetBankGuaranteeConsolidatedReport()">
+
+                        <i class="ti ti-search"></i>
+                        Search
+
+                    </button>
+
+                    <button type="button"
+                            class="btn bg-danger text-white"
+                            (click)="ResetFilters()">
+
+                        <i class="ti ti-refresh"></i>
+                        Reset
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+       
+
+        <!-- Report Table -->
+        <div class="overflow-x-auto">
+
+            <table class="table table-border w-full table-auto">
+
+                <thead class="bg-light/40 border-b border-gray-100 h-10">
+
+                    <tr>
+                        <th>#</th>
+                        <th>College Name</th>
+                        <th class="text-right">Amount Available</th>
+                        <th class="text-right">Amount Required</th>
+                        <th class="text-right">Difference</th>
+                        <th>Is Court Case</th>
+                        <th>Writ No</th>
+                        <th>Court Date</th>
+                        <th>High Court</th>
+                        <th>Document</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr *ngFor="let row of reportList; let i=index">
+
+                        <td>{{i+1}}</td>
+
+                        <td>{{row.CollegeName}}</td>
+
+                        <td class="text-right">
+                            {{row.AmountAvailable | number:'1.0-0'}}
+                        </td>
+
+                        <td class="text-right">
+                            {{row.AmountRequired | number:'1.0-0'}}
+                        </td>
+
+                        <td class="text-right">
+
+                            <span class="font-semibold"
+                                  [ngClass]="row.AmountDifference > 0 ? 'text-success' : 'text-danger'">
+
+                                {{row.AmountDifference | number:'1.0-0'}}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+                            <span class="px-2 py-1 rounded text-xs font-semibold"
+                                  [ngClass]="row.IsCourt ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+
+                                {{row.IsCourt ? 'Yes' : 'No'}}
+
+                            </span>
+                        </td>
+
+                        <td>{{row.WritNo}}</td>
+
+                        <td>
+                            {{row.CourtDate | date:'dd-MM-yyyy'}}
+                        </td>
+
+                        <td>{{row.HighCourtName}}</td>
+
+                        <td>
+
+                            <a *ngIf="row.CourtDocumernt"
+                               [href]="appsettingConfig.StaticFileRootPathURL + '/' + row.CourtDocumernt"
+                               target="_blank"
+                               class="btn bg-primary btn-sm text-white"
+                               title="View Document">
+
+                                <i class="ti ti-eye"></i>
+
+                            </a>
+
+                        </td>
+                        <td>
+
+                            <a [routerLink]="['/iti-bank-guarantee-list']"
+   [queryParams]="{ id: row.Id }"
+   class="btn bg-primary btn-sm text-white"
+   title="Bank Guarantee List">
+
+    <i class="ti ti-eye"></i>
+
+</a>
+
+                        </td>
+
+                    </tr>
+
+                    <tr *ngIf="reportList.length == 0">
+                        <td colspan="10" class="text-center py-4">
+                            No Record Found
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+     
+    </div>
+</div>

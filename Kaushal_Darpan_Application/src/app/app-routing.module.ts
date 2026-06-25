@@ -917,7 +917,7 @@ const routes: Routes = [
 
       { path: 'iti-Live-Result', loadChildren: () => import('./Views/ITI/Iti-Live-Result/Iti-Live-Result.module').then(m => m.ItiLiveResultModule), title: "Live Result" },
 
-
+      
       { path: 'optional-format-report', loadChildren: () => import('./Views/Reports/download-optional-format-report/download-optional-format-report.module').then(m => m.DownloadOptionalFormatReportModule), title: 'Paper-Count-Report' },
 
       { path: 'AddItiCompanyMaster', loadChildren: () => import('./Views/ITI/ITICompanyMaster/additi-company-master/additi-company-module').then(m => m.ItiCompanyMasterModule) },
@@ -1155,6 +1155,7 @@ const routes: Routes = [
       { path: 'add-public-info', loadChildren: () => import('./Views/PublicInfo/add-public-info/add-public-info.module').then(m => m.AddPublicInfoModule) },
       { path: 'public-info-list', loadChildren: () => import('./Views/PublicInfo/list-public-info/list-public-info.module').then(m => m.ListPublicInfoModule) },
       { path: 'ItiPlanning', loadChildren: () => import('./Views/ITI/iti-planning/iti-planning.module').then(m => m.ItiPlanningModule) },
+      { path: 'BankGuaranteeConsolidatedReport', loadChildren: () => import('./Views/ITI/bank-guarantee-consolidated-report/bank-guarantee-consolidated-report.module').then(m => m.BankGuaranteeConsolidatedReportModule) },
       { path: 'admin-sca-marking', loadChildren: () => import('./Views/Admin-Internal-Marking/admin-sca-marking/admin-sca-marking.module').then(m => m.AdminSCAMarkingModule) },
       { path: 'admin-internal-marking', loadChildren: () => import('./Views/Admin-Internal-Marking/admin-internal-practical/admin-internal-practical.module').then(m => m.AdminInternalPracticalModule) },
 

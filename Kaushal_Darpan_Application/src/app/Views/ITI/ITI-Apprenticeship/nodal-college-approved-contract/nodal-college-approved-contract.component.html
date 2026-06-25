@@ -113,8 +113,6 @@
                 </tbody> -->
                 <tbody>
                     <ng-container *ngFor="let row of Institutelist; let idx = index;">
-
-                        <!-- ROW 1 : Sr No | Name | Date -->
                         <tr>
                             <td class="text-left">{{ idx + 1 }}</td>
                             <td class="text-left">{{ row.Name }}</td>
@@ -127,69 +125,71 @@
                                     No Contract
                                 </label>
                             </td>
-
-                            <!-- Empty cell to align table -->
-                            <!-- <td></td> -->
                         </tr>
                         <tr *ngIf="row.contracts?.length > 0">
-                            <td></td>
-                            <td colspan="2" style="background-color: lavender;">
-                                <!-- Contract Labels Row -->
-                                <div *ngIf="row.contracts?.length > 0"
-                                    class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 font-semibold mb-2">
-                                    <div>Date</div>
-                                    <div style="margin-left: 100px !important;">No of Contract</div>
-                                    <div style="margin-left: 100px !important;">Upload Document</div>
-                                    <div style="margin-left: 100px !important;">Download Document</div>
-                                    <div style="margin-left: 100px !important;">Action</div>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- ROW 2 : No of Contracts (full row below Name + Date) -->
-                        <tr *ngIf="row.contracts?.length > 0">
-                            <td></td> <!-- blank for Sr No alignment -->
-                            <td colspan="2">
+                            <td></td> 
+                            <td colspan="2" class="p-0">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr style="background-color: lavender;" class="font-semibold text-sm text-left h-10 border-b border-gray-200">
+                                        <th class="px-4 py-2 w-1/4">Date</th>
+                                        <th class="px-4 py-2 w-1/4">No of Contract</th>
+                                        <th class="px-4 py-2 w-1/4">Upload Document</th>
+                                        <th class="px-4 py-2 w-1/4 text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let c of row.contracts; let i = index" class="border-none last:border-0 hover:bg-gray-50/50">
+                                        
+                                        <td class="px-4 py-3 align-middle">
+                                            <span class="text-sm text-gray-700">{{ c.date }}</span>
+                                        </td>
 
-                                <div *ngFor="let c of row.contracts; let i = index"
-                                    class="flex items-center gap-2 mb-2">
-                                    <div
-                                        class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-                                        <div>
-                                            <span class="text-sm">{{ c.date }}</span>
-                                        </div>
-                                        <div>
-                                            <input type="number" #cnt [(ngModel)]="c.count"
-                                                name="contract_{{ row.InstituteID }}_{{ i }}" min="0" step="0.01"
-                                                class="form-control" (ngModelChange)="onContractChange(c, row, cnt)"
-                                                placeholder="No of Contract" style="margin-left:100px !important;" />
-                                        </div>
-                                        <div>
-                                            <!-- FILE UPLOAD CONTROL (ADDED HERE) -->
-                                            <input type="file"
-                                                class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
-                                                (change)="onFileSelect($event, c, row)" accept=".pdf,.jpg,.jpeg,.png"
-                                                style="margin-left:100px !important;width:200px !important;" />
-                                        </div>
-                                        <div class="flex align-center justify-center actionBtns w-auto"
-                                            style="width:auto !important">
-                                            <!-- class="w-8 h-8 flex items-center justify-center rounded-full border border-white text-white bg-blue-500 text-white hover:bg-blue-500" -->
-                                            <a *ngIf="c?.fileUrl" [href]="c.fileUrl" target="_blank"
-                                                style="margin-left:100px !important;border:1px blue !important;" 
-                                                class="w-8 h-8 flex items-center justify-center rounded-full border border-white text-white bg-blue-500 hover:bg-blue-600">
-                                                <i class="ti ti-download" style="color:white !important;"></i>
-                                            </a>
-                                        </div>
-                                        <div class="flex align-center justify-center actionBtns w-auto"
-                                            style="width:auto !important">
-                                            <button type="button"
-                                                class="w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-500"
-                                                (click)="removeContract(row, i)"
-                                                style="margin-left:100px !important;"><i
-                                                    class="ti ti-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
+                                        <td class="px-4 py-3 align-middle">
+                                            <input 
+                                            type="number" 
+                                            #cnt 
+                                            [(ngModel)]="c.count" 
+                                            [disabled]="c.IsDisable"
+                                            name="contract_{{ row.InstituteID }}_{{ i }}" 
+                                            min="0" 
+                                            step="0.01"
+                                            class="form-control w-full border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500" 
+                                            (ngModelChange)="onContractChange(c, row, cnt)"
+                                            placeholder="No of Contract" 
+                                            />
+                                        </td>
 
+                                        <td class="px-4 py-3 align-middle">
+                                            <div>
+                                                <div class="flex fileUploader">
+                                                    <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                                        id="doc_{{ row.InstituteID }}_{{ i }}" type="file" (change)="onFileSelect($event, c, row)"  [disabled]="c.IsDisable">
+                                                    <label for="doc_{{ row.InstituteID }}_{{ i }}">
+                                                    <span>Choose File</span>
+                                                    {{(c.fileName === '' || c.fileName == null || c.fileName == undefined) ? 'No File Choosen' : c.fileName}}
+                                                    </label>
+                                                    <div class="flex">
+                                                    <a [href]="c.fileUrl"
+                                                        *ngIf="c.fileName!='' || c.fileName != null || c.fileName != undefined " class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td class="px-4 py-3 align-middle text-center">
+                                            <button 
+                                            type="button"
+                                            class="w-8 h-8 inline-flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors shadow-sm"
+                                            (click)="removeContract(row, i)"
+                                            title="Delete Contract">
+                                            <i class="ti ti-trash"></i>
+                                            </button>
+                                        </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </td>
                         </tr>
 
@@ -198,8 +198,7 @@
             </table>
         </div>
         <div class="flex justify-center">
-            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveDataNew()"
-                *ngIf="EntryExists == 0">Submit
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveDataNew()">Submit
             </button>
             <!-- <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white mt-6 me-1">
                 <i class="ti ti-refresh"></i> Reset
