@@ -445,52 +445,7 @@ export class MiscellaneousReportComponent implements OnInit {
   }
 
 
-  //exportToExcelstaticType90(): void {
-  //  debugger
-  //  const wantedColumns = this.GetfilteredColumnlist;
-
-  //  // Create data with columns in the exact order of wantedColumns
-  //  const orderedData = this.GetfilteredList.map((row: any) => {
-  //    const orderedRow: any = {};
-
-  //    wantedColumns.forEach((col: string) => {
-  //      orderedRow[col] = row[col];
-  //    });
-
-  //    return orderedRow;
-  //  });
-
-  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
-  //    this.GetfilteredList,
-  //    {
-  //      header: wantedColumns
-  //    }
-  //  );
-
-
-  //  const colWidths = wantedColumns.map((col: string) => {
-  //    const maxLength = Math.max(
-  //      col.length,
-  //      ...this.GetfilteredList.map((row: any) =>
-  //        row[col] ? row[col].toString().length : 0
-  //      )
-  //    );
-
-  //    return { wch: maxLength + 2 };
-  //  });
-
-  //  ws['!cols'] = colWidths;
-
-  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-  //  const todayDate = new Date().toISOString().split('T')[0];
-
-  //  const fileName =
-  //    `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`;
-
-  //  XLSX.writeFile(wb, fileName);
-  //}
+  
 
   exportToExcelstaticType90(): void {
 
