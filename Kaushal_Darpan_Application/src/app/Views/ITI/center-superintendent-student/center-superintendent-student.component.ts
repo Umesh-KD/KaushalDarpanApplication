@@ -150,6 +150,48 @@ export class CenterSuperintendentStudentComponent {
   }
 
 
+  async downloadsample() {
+    try {
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.CenterID = this.sSOLoginDataModel.InstituteID;
+
+      this.loaderService.requestStarted();
+
+      const blob: Blob = await this.reportService.GetCenterStudents(this.searchRequest);
+
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `ScoreSheet_${new Date().toISOString().slice(0, 10)}.pdf`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      window.URL.revokeObjectURL(url);
+
+    } catch (ex) {
+      console.error(ex);
+
+    } finally {
+      setTimeout(() => this.loaderService.requestEnded(), 200);
+    }
+  }
+  // ── Timestamp helper ──────────────────────────────────────────────────
+
+  // ── Helper: formatted timestamp for filename ──────────────────────────
+  private getFormattedDate(): string {
+    const now = new Date();
+    return now.getFullYear().toString()
+      + (now.getMonth() + 1).toString().padStart(2, '0')
+      + now.getDate().toString().padStart(2, '0')
+      + now.getHours().toString().padStart(2, '0')
+      + now.getMinutes().toString().padStart(2, '0')
+      + now.getSeconds().toString().padStart(2, '0');
+  }
+
+
 
   async PDFDownload() {
     try {

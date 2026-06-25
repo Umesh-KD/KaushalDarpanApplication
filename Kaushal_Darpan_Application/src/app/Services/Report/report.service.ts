@@ -1840,9 +1840,10 @@ export class ReportService {
   public async GetMiscellaneousReport(searchRequest: any) {
     const body = JSON.stringify(searchRequest);
 
-    return await this.http.post(`${this.APIUrl}/GetMiscellaneousReport`, body, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/ `, body, this.headersOptions)
       .pipe(catchError(this.handleErrorObservable)
       ).toPromise();
+
 
   }
 
@@ -1991,6 +1992,17 @@ export class ReportService {
       ).toPromise();
   }
 
+  public async GetCenterStudents(model: CenterStudentSearchModel): Promise<any> {
+    return this.http.post(`${this.APIUrl}/GetCenterStudents`, model, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('authtoken')
+      }),
+      responseType: 'blob'
+    }).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
 }
 
 
