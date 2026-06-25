@@ -135,7 +135,8 @@ export class MiscellaneousReportComponent implements OnInit {
       { ID: 4, Name: 'Download Examiners With Group Code And Marking report' },
       { ID: 5, Name: 'Download Grace Marks Student report' },
       { ID: 6, Name: 'Download Detain Marks Student report' },
-      { ID: 7, Name: '(Reval) Download Examiners With Group Code And Marking report' }
+      { ID: 7, Name: '(Reval) Download Examiners With Group Code And Marking report' },
+      { ID: 8, Name: '90 And Above Sessional Marks Institute Wise, Semester Wise report' }
     ];
   }
   get form() { return this.groupForm.controls; }
