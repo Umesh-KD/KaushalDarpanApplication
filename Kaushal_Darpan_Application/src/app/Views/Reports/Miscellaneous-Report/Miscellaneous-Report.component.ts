@@ -48,6 +48,7 @@ export class MiscellaneousReportComponent implements OnInit {
   //public requestData = new CustomizeReportCoulmnSearchModel();
   public requestData = new MiscellaneousModel();
   public GetfilteredList: any[] = [];
+  public GetfilteredColumnlist: any[] = [];
   public selectedNames: string[] = [];
   ssoLoginUser = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
@@ -142,7 +143,7 @@ export class MiscellaneousReportComponent implements OnInit {
   get form() { return this.groupForm.controls; }
 
   async SubmitData() {
-    //debugger;
+    debugger;
     this.CustomizeReportCoulmnDataPush = [];
     try {
 
@@ -165,32 +166,72 @@ export class MiscellaneousReportComponent implements OnInit {
       }
 
       try {
-        await this.reportService.GetMiscellaneousReport(this.requestData)
-          .then((data: any) => {
-            // message
-            if (data.State == EnumStatus.Warning) {
-              this.toastr.warning(data.Message);
-            }
-            else if (data.State == EnumStatus.Success) {
-              this.GetfilteredList = data["Data"];// list
-              if (this.requestData.Type == 4 || this.requestData.Type == 7) {
-                this.exportToExcelstaticType();
+        if (this.requestData.Type == 8) {
+          this.requestData.Action = 'Heading';
+          await this.reportService.GetMiscellaneousReport(this.requestData)
+            .then((data: any) => {
+              // message
+              if (data.State == EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
               }
-              else if (this.requestData.Type == 5) {
-                this.exportToExcelTpye5();
-              }
-              else if (this.requestData.Type == 6) {
-                this.exportToExcelTpye6();
+              else if (data.State == EnumStatus.Success) {
+                this.GetfilteredColumnlist = data["Data"];// list
               }
               else {
-                this.exportToExcelTpye2();
+                this.toastr.error(data.Message);
+                console.log(data.ErrorMessage);
               }
-            }
-            else {
-              this.toastr.error(data.Message);
-              console.log(data.ErrorMessage);
-            }
-          }, (error: any) => console.error(error));
+            }, (error: any) => console.error(error));
+
+          this.requestData.Action = 'ViewData';
+          await this.reportService.GetMiscellaneousReport(this.requestData)
+            .then((data: any) => {
+              // message
+              if (data.State == EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              }
+              else if (data.State == EnumStatus.Success) {
+                debugger
+                this.GetfilteredList = data["Data"];// list
+                this.exportToExcelstaticType90();
+              }
+              else {
+                this.toastr.error(data.Message);
+                console.log(data.ErrorMessage);
+              }
+            }, (error: any) => console.error(error));
+
+
+        } else {
+          await this.reportService.GetMiscellaneousReport(this.requestData)
+            .then((data: any) => {
+              // message
+              if (data.State == EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              }
+              else if (data.State == EnumStatus.Success) {
+                this.GetfilteredList = data["Data"];// list
+                if (this.requestData.Type == 4 || this.requestData.Type == 7) {
+                  this.exportToExcelstaticType();
+                }
+                else if (this.requestData.Type == 5) {
+                  this.exportToExcelTpye5();
+                }
+                else if (this.requestData.Type == 6) {
+                  this.exportToExcelTpye6();
+                }
+                else {
+                  this.exportToExcelTpye2();
+                }
+              }
+              else {
+                this.toastr.error(data.Message);
+                console.log(data.ErrorMessage);
+              }
+            }, (error: any) => console.error(error));
+        }
+
+       
       } catch (ex) {
         console.log(ex);
       }
@@ -401,6 +442,54 @@ export class MiscellaneousReportComponent implements OnInit {
 
       const fileName = `Download_Detain_Marks_Student_reportreport_${todayDate}.xlsx`;
       XLSX.writeFile(wb, fileName);
-    }
+  }
 
+
+  exportToExcelstaticType90(): void {
+    debugger
+    const wantedColumns = this.GetfilteredColumnlist;
+
+    // Create data with columns in the exact order of wantedColumns
+    const orderedData = this.GetfilteredList.map((row: any) => {
+      const orderedRow: any = {};
+
+      wantedColumns.forEach((col: string) => {
+        orderedRow[col] = row[col];
+      });
+
+      return orderedRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(
+      this.GetfilteredList,
+      {
+        header: wantedColumns
+      }
+    );
+
+
+    const colWidths = wantedColumns.map((col: string) => {
+      const maxLength = Math.max(
+        col.length,
+        ...this.GetfilteredList.map((row: any) =>
+          row[col] ? row[col].toString().length : 0
+        )
+      );
+
+      return { wch: maxLength + 2 };
+    });
+
+    ws['!cols'] = colWidths;
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    const todayDate = new Date().toISOString().split('T')[0];
+
+    const fileName =
+      `90AndAboveSessionalMarksInstituteWiseSemesterWisereport_${todayDate}.xlsx`;
+
+    XLSX.writeFile(wb, fileName);
+  }
+  
 }
