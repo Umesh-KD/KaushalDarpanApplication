@@ -42,8 +42,9 @@
   </div> -->
           <!-- [(ngModel)]="request.DocumentID" -->
           <div>
+            <!--(change)="FeeAmount('DuplicateDocStudentWise')"-->
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Document <span class="StarMarking">*</span></label>
-            <select class="form-select" formControlName="ddlDocumentID" [(ngModel)]="request.DocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
+            <select class="form-select" formControlName="ddlDocumentID" [(ngModel)]="request.DocumentID" (change)="OnDocChange()">
               <option value="0">--Select--</option>
               <option *ngFor="let item of DocumentTypeList1" [value]="item.DocumentID">{{item.DocumentName}}</option>
             </select>

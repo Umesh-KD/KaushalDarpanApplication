@@ -184,6 +184,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   FeeAmount(MasterCode: string):void {
     debugger
     this.request.FeeAmount = 0;
+
     // 3 ->marksheet
     //4 -> migration
     if (this.request.DocumentID == this._DuplicateDocumentType.Provisional_Diploma
@@ -565,8 +566,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     if(!this.isMigration){
       this.GrievanceFormGroup.get('SemesterID')?.setValidators([DropdownValidators]);
     }
-    else{
-     
+    else{     
       this.GrievanceFormGroup.get('SemesterID')?.clearValidators();
       this.GrievanceFormGroup.get('SemesterID')?.reset();
     }
@@ -855,4 +855,24 @@ export class ApplyDuplicateDocComponent implements OnInit {
   //  }
   //}
 
+
+  async OnDocChange() {
+    this.request.RequestEndTerm = 0;
+    this.request.SemesterID = 0;
+    this.request.RequestEndTerm = 0;
+    this.request.FeesTypeID = 0;
+    this.request.InstituteID = 0;
+    this.request.FeeAmount = 0;
+
+    if (this.request.DocumentID == this._DuplicateDocumentType.Duplicate_Marksheet) {
+      this.isMarksheet = true;
+      this.isMigration = false;
+    }
+    else {
+      this.isMarksheet = false;
+      this.isMigration = true;
+    }
+  }
+
+  
 }

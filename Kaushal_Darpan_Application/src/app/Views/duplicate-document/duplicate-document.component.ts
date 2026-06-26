@@ -8,7 +8,7 @@ import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompan
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
+import { EnumDuplicateDocumentType, EnumRole, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { ITIStudentEnrollmentService } from '../../Services/ITI/ITIstudentenrollment/itistudent-enrollment.service';
 import { ItiDataMasterService } from '../../Services/ITI/ITIDataMaster/iti-datamaster.service';
 import { ITIStudentCorrectionMasterSearchModel } from '../../Models/StudentMasterModels';
@@ -21,6 +21,7 @@ import { DownloadMarksheetSearchModel } from '../../Models/DownloadMarksheetData
 import { ReportService } from '../../Services/Report/report.service';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
+import { BterCertificateReportDataModel, BterDuplicateCertificateReportDataModel } from '../../Models/BTER/BterCertificateReportDataModel';
 
 @Component({
     selector: 'duplicate-document',
@@ -35,6 +36,8 @@ export class DuplicateDocumentComponent implements OnInit {
   public Table_SearchText: string = "";
   // public searchRequest = new ITIStudentCorrectionMasterSearchModel();
   public searchRequest = new DuplicateDocumentSearch();
+  public searchRequest1 = new BterDuplicateCertificateReportDataModel();
+
   public requestAction=new DuplicateDoc_Action();
   // public downloadReq = new DownloadMarksheetSearchModel();
   public searchRequestMarksheet = new DownloadMarksheetSearchModel();
@@ -43,6 +46,7 @@ export class DuplicateDocumentComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
   _EnumRole = EnumRole;
+  _EnumDuplicateDocumentType = EnumDuplicateDocumentType;
 
   // public isIssued:boolean=false;
   public isSubmitted:boolean=false;
@@ -370,7 +374,7 @@ export class DuplicateDocumentComponent implements OnInit {
       // ---------------------------------------------------------------------------------------------------------
 
       async DownloadDuplicateMarksheet(element: any) {
-       // debugger;
+        debugger;
         try {
           this.searchRequestMarksheet.DepartmentID = this.sSOLoginDataModel.DepartmentID;
           this.searchRequestMarksheet.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
@@ -382,24 +386,37 @@ export class DuplicateDocumentComponent implements OnInit {
           this.searchRequestMarksheet.ResultTypeID =1// element.ResultTypeID;
           this.searchRequestMarksheet.IsRevised = 0 //element.IsRevised;
           this.searchRequestMarksheet.IsReval = false //element.IsReval;
-          this.searchRequestMarksheet.FianancialYearID=this.sSOLoginDataModel.FinancialYearID
-
+          this.searchRequestMarksheet.FianancialYearID = this.sSOLoginDataModel.FinancialYearID
+          this.searchRequestMarksheet.DocumentID = element.Document_ID;
 
           this.loaderService.requestStarted();
+
+          if (this.searchRequestMarksheet.DocumentID == this._EnumDuplicateDocumentType.Duplicate_Marksheet) {
+            await this.reportService.DownloadDuplicateMarksheet(this.searchRequestMarksheet)
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                console.log(data, "Data");
+                if (data.State == EnumStatus.Success) {
+                  this.DownloadFile(data.Data);
+                }
+                else {
+                  this.toastr.error(data.ErrorMessage)
+                  //    data.ErrorMessage
+                }
+              }, (error: any) => console.error(error)
+              );
+          }
+          else if (this.searchRequestMarksheet.DocumentID == this._EnumDuplicateDocumentType.Migration) {
+            await this.CertificateDownload(element);
+          }
+          else if (this.searchRequestMarksheet.DocumentID == this._EnumDuplicateDocumentType.Provisional_Diploma) {
+            await this.CertificateDownload(element);
+          }
+          else if (this.searchRequestMarksheet.DocumentID == this._EnumDuplicateDocumentType.Final_Diploma) {
+            await this.CertificateDownload(element);
+          }
     
-          await this.reportService.DownloadDuplicateMarksheet(this.searchRequestMarksheet)
-            .then((data: any) => {
-              data = JSON.parse(JSON.stringify(data));
-              console.log(data, "Data");
-              if (data.State == EnumStatus.Success) {
-                this.DownloadFile(data.Data);
-              }
-              else {
-                this.toastr.error(data.ErrorMessage)
-                //    data.ErrorMessage
-              }
-            }, (error: any) => console.error(error)
-            );
+         
         }
         catch (ex) {
           console.log(ex);
@@ -409,8 +426,39 @@ export class DuplicateDocumentComponent implements OnInit {
             this.loaderService.requestEnded();
           }, 200);
         }
+  }
+
+  async CertificateDownload(element: any): Promise<void> {
+     try {
+          debugger
+          this.loaderService.requestStarted();
+       if (element.Document_ID == this._EnumDuplicateDocumentType.Migration) {
+            this.searchRequest1.Action = "duplicate-migration-certificate";
+          }
+       else if (element.Document_ID == this._EnumDuplicateDocumentType.Provisional_Diploma) {
+            this.searchRequest1.Action = "duplicate-provisional-certificate";
+       }
+       else if (element.Document_ID == this._EnumDuplicateDocumentType.Final_Diploma) {
+         this.searchRequest1.Action = "duplicate-diploma-report";
+       }
+
+       this.searchRequest1.StudentID = element.Student_Id;
+       this.searchRequest1.EndTermID = element.EndTerm;
+       this.searchRequest1.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+       this.searchRequest1.Document_ID = element.Document_ID;
+       this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+          const data = await this.reportService.BterDuplicateCertificateDownload(this.searchRequest1);
+          if (data && data.Data) {
+            this.downloadBase64PDF(data.Data, `${this.searchRequest1.Action}.pdf`);
+          } else {
+            this.toastr.error('Data not found');
+          }
+        } catch (ex) {
+          console.error(ex);
+        } finally {
+          this.loaderService.requestEnded();
+        }
       }
-    
     
       DownloadFile(fileName: string): void {
         const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${fileName}`;
@@ -429,6 +477,23 @@ export class DuplicateDocumentComponent implements OnInit {
         return `file_${timestamp}.${extension}`;
       }
 
+
+  downloadBase64PDF(base64: string, filename: string): void {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  }
 
   // sortData(sortColumn: string) {
   //   this.sortColumn = sortColumn;

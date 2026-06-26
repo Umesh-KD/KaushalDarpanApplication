@@ -74,6 +74,7 @@
             <th class="text-left">Fees Amount</th>
             <th class="text-left">Apply For</th>
             <th class="text-left">Payment Status</th>
+            <th class="text-left">Action Status</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -90,14 +91,25 @@
             <td align="left">{{item.FeeAmount}}</td>
             <td align="left">{{item.Name}}</td>
             <td align="left"> {{ item.paymentstatus === 0 ? 'Pending' : 'Success' }}</td>
+            <td align="left">
+              <span  [ngClass]="{
+                      'text-success fw-bold': item.Action === 'Approved',
+                      'text-danger fw-bold': item.Action === 'Rejected',
+                      'text-warning fw-bold': item.Action === 'Hold',
+                      'text-secondary fw-bold': !item.Action || item.Action === 'Pending'
+                    }"
+                    style="font-weight:600"
+               >
+                {{ item.Action || 'Pending' }}
+              </span>
+            </td>
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.StateRegNumber}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Name}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherGuardianName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DateOfBirth | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.UIDNumber}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.ErrorDescription}}</td> -->
-            <td align="center" class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-            
+            <td align="center" class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">            
               @if(item.paymentstatus==0)
               {
               <p class="text-center text-warning"><b>Payment Is Pending</b></p>
@@ -109,10 +121,10 @@
                 <a [routerLink]="" [queryParams]="{ID:item.StudentID, key:1}" title="Edit"><i class="ti ti-pencil"></i></a>
               </div> -->
                 <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                  <a href="javascript:void(0);" title="Action" *ngIf="(item.paymentstatus==1 && (item.Action!='Approved'))" (click)="OnAction(MyModel_Action,item)"><i class="ti ti-check"></i></a>
-                  <a href="javascript:void(0);" *ngIf="(item.Action=='Approved')" title="Download Marksheet" (click)="DownloadDuplicateMarksheet(item)"><i class="ti ti-download"></i></a>
-                  
-                  <!-- <p *ngIf="(item.paymentstatus==1 && item.Action=='Approved')" class="text-center text-success fw-bold">Issued</p>               -->
+                  <a href="javascript:void(0);" title="Action" *ngIf="(item.paymentstatus==1 && (item.Action!='Rejected' && item.Action!='Approved'))" (click)="OnAction(MyModel_Action,item)"><i class="ti ti-check"></i></a>
+                  <a href="javascript:void(0);" *ngIf="(item.Action=='Approved')" title="Download Marksheet" (click)="DownloadDuplicateMarksheet(item)"><i class="ti ti-download"></i></a>                  
+
+  <!-- <p *ngIf="(item.paymentstatus==1 && item.Action=='Approved')" class="text-center text-success fw-bold">Issued</p>               -->
                   <!--<a href="javascript:void(0);" title="View & Update Company" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,company.ID)"><i class="ti ti-eye"></i></a>-->
                   <!-- <a [routerLink]="" [queryParams]="{CompanyID:company.ID,key:3}" title="View & Update Company"> <i class="ti ti-download"></i></a> -->
                 </div>   
