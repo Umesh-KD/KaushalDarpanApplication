@@ -96,6 +96,10 @@ export class listitibankguaranteeComponent {
       this.searchRequest.status = params['status'] != null
         ? Number(params['status'])
         : 0;
+
+       this.searchRequest.CollageId = params['id'] != null
+        ? Number(params['id'])
+        : 0; 
   
     });
 

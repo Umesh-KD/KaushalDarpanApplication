@@ -91,17 +91,13 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
+        <a *ngIf="sSOLoginDataModel.Eng_NonEng==1" href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadsample()"><i class="ti ti-download"></i> Download Sample ScoreSheet</a>
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>
-        <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select>
+       
       </div>
     </div>
 
-    <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
         <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
           <option value="50">50</option>
@@ -112,9 +108,9 @@
       </div>
       <div class="">
       </div>
-      <div class="">
+
       </div>
-      <div class="">-->
+      <!--<div class="">-->
         <!-- <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " /> -->
       <!--</div>
     </div>-->

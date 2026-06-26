@@ -325,4 +325,19 @@ export class ITIsService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetBankGuaranteeConsolidatedReport(model: any) {
+  const body = JSON.stringify(model);
+
+  return await this.http
+    .post(
+      `${this.APIUrl}/GetBankGuaranteeConsolidatedReport`,
+      body,
+      this.headersOptions
+    )
+    .pipe(
+      catchError(this.handleErrorObservable)
+    )
+    .toPromise();
+}
 }
