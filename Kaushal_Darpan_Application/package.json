@@ -32,7 +32,6 @@
     "crypto-js": "^4.2.0",
     "highcharts": "^12.2.0",
     "highcharts-angular": "^4.0.1",
-    "html-to-image": "^1.11.13",
     "i": "^0.3.7",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^5.0.2",

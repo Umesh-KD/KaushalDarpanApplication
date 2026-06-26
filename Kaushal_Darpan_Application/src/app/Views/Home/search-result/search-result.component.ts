@@ -11,7 +11,6 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import * as htmlToImage from 'html-to-image';
 
 @Component({
   selector: 'app-search-result',
@@ -194,62 +193,27 @@ export class SearchResultComponent implements OnInit {
   //   });
   // }
 
-  // downloadPDF() {
-  //   const element = document.getElementById('resultContent');
-
-  //   if (!element) return;
-  //   // Add PDF mode class
-  //   element?.classList.add('pdf-mode');
-
-  //   html2canvas(element, {
-  //     scale: 2
-  //   }).then(canvas => {
-
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const pdf = new jsPDF();
-
-  //     const imgWidth = 210; // A4 width in mm
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  //     pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-  //     pdf.save(`result_${this.resultSearchReq.RollNo}.pdf`);
-
-  //     // Remove class after PDF generation
-  //     element.classList.remove('pdf-mode');
-  //   });
-  // }
-
   downloadPDF() {
     const element = document.getElementById('resultContent');
+
     if (!element) return;
+    // Add PDF mode class
+    element?.classList.add('pdf-mode');
 
-    // Optional: Add your pdf mode layout adjustments if needed
-    element.classList.add('pdf-mode');
+    html2canvas(element, {
+      scale: 2
+    }).then(canvas => {
 
-    // html-to-image handles oklch flawlessly using the browser's own engine
-    htmlToImage.toPng(element, { 
-      quality: 1, 
-      pixelRatio: 2 // Keeps text sharp (Retina resolution)
-    })
-    .then((dataUrl) => {
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210; // A4 Page width in mm
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF();
 
-      // Create a temporary image object to dynamically calculate aspect ratio height
-      const img = new Image();
-      img.src = dataUrl;
-      img.onload = () => {
-        const imgHeight = (img.height * imgWidth) / img.width;
-        
-        pdf.addImage(dataUrl, 'PNG', 0, 0, imgWidth, imgHeight);
-        pdf.save(`result_${this.resultSearchReq?.RollNo || 'doc'}.pdf`);
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        // Clean up class after generation
-        element.classList.remove('pdf-mode');
-      };
-    })
-    .catch((error) => {
-      console.error('PDF Generation failed:', error);
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(`result_${this.resultSearchReq.RollNo}.pdf`);
+
+      // Remove class after PDF generation
       element.classList.remove('pdf-mode');
     });
   }
