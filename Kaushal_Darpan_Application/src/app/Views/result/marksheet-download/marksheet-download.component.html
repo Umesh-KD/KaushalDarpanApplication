@@ -60,14 +60,10 @@
               Bridge
             </label>
             <select class="form-select" [(ngModel)]="searchRequest.IsBridge" name="IsBridge" formControlName="IsBridge">
-              <option value="-1">--Select--</option>
+              <option value="-1">--All--</option>
               <option value="1">Yes</option>
               <option value="0">No</option>
             </select>
-
-            <div *ngIf="isSubmitted && downLoadFG.get('IsBridge')?.hasError('defaultValue')" class="text-danger">
-              This field is required!
-            </div>
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
