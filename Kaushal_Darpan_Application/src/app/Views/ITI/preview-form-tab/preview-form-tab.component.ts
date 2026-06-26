@@ -48,6 +48,8 @@ export class PreviewFormTabComponent implements OnInit {
   public _GlobalConstants: any = GlobalConstants;
   public Options8thLevel: any =[]
   public Options10thLevel: any = []
+  public Options10thLevelCheck: any = []
+  public Options8thLevelCheck: any = []
   public Options12thLevel: any = []
   public transactionStatusDataModel = new TransactionStatusDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -165,11 +167,11 @@ export class PreviewFormTabComponent implements OnInit {
 
               this.Options10thLevel.push(option)
               
-              //if(option.TradeLevel == 8) {
-              //  this.Options8thLevel.push(option)
-              //} else if(option.TradeLevel == 10) {
-              //  this.Options10thLevel.push(option)
-              //}
+              if (option.TradeLevel == 8) {
+                this.Options8thLevelCheck.push(option)
+              } else if (option.TradeLevel == 10) {
+                this.Options10thLevelCheck.push(option)
+              }
               //else if (option.TradeLevel == 12) {
               //  this.Options12thLevel.push(option)
               //}
@@ -711,7 +713,9 @@ export class PreviewFormTabComponent implements OnInit {
 
     var result = true;
 
-    if (this.Options10thLevel.length > 0 && this.request.QualificationViewDetails.filter(function (x: any) { return x.QualificationID == 10 }).length== 0)
+
+    debugger
+    if (this.Options10thLevelCheck.length > 0 && this.request.QualificationViewDetails.filter(function (x: any) { return x.QualificationID == 10 }).length== 0)
     {
       this.Swal2.Info('Please enter your 10th class educational details, as you have selected trades that require 10th-level qualification');
       result = false;
@@ -724,8 +728,8 @@ export class PreviewFormTabComponent implements OnInit {
     {
       await this.calculatePercentages10thsubject()
     
-      if (this.Options10thLevel.filter((choice: any) => { return this.sciencePercentage < choice.MinPercentageInScience }).length > 0) {
-        var dataScience = this.Options10thLevel.filter((choice: any) => { return this.sciencePercentage < choice.MinPercentageInScience })[0];
+      if (this.Options10thLevelCheck.filter((choice: any) => { return this.sciencePercentage < choice.MinPercentageInScience }).length > 0) {
+        var dataScience = this.Options10thLevelCheck.filter((choice: any) => { return this.sciencePercentage < choice.MinPercentageInScience })[0];
 
         var msg = 'In the selected trade ' + dataScience.TradeName + ', the minimum required percentage in Science is ' + dataScience.MinPercentageInScience + '%, but your percentage is ' + this.sciencePercentage + '%. Please remove this trade or choose another one.'
 
@@ -739,8 +743,8 @@ export class PreviewFormTabComponent implements OnInit {
         result=false;
       }
 
-      if (this.Options10thLevel.filter((choice: any) => { return this.mathPercentage < choice.MinPercentageInMath }).length > 0) {
-        var dataMaths = this.Options10thLevel.filter((choice: any) => { return this.mathPercentage < choice.MinPercentageInMath })[0];
+      if (this.Options10thLevelCheck.filter((choice: any) => { return this.mathPercentage < choice.MinPercentageInMath }).length > 0) {
+        var dataMaths = this.Options10thLevelCheck.filter((choice: any) => { return this.mathPercentage < choice.MinPercentageInMath })[0];
                
         var msgM = 'In the selected trade ' + dataMaths.TradeName + ', the minimum required percentage in Maths is ' + dataMaths.MinPercentageInScience + '%, but your percentage is ' + this.mathPercentage +'%. Please remove this trade or choose another one.'
 
