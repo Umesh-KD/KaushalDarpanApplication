@@ -102,10 +102,12 @@
                         <th>College Name</th>
                         <th class="text-right">Amount Available</th>
                         <th class="text-right">Amount Required</th>
-                        <th class="text-right">Difference</th>
+                        <th class="text-right">Due</th>
                         <th>Is Court Case</th>
                         <th>Writ No</th>
-                        <th>Court Date</th>
+                        <!-- <th>Court Date</th> -->
+                        <th>Status</th>
+                        <th>Remarks</th>
                         <th>High Court</th>
                         <th>Document</th>
                         <th>Action</th>
@@ -151,10 +153,11 @@
 
                         <td>{{row.WritNo}}</td>
 
-                        <td>
+                        <!-- <td>
                             {{row.CourtDate | date:'dd-MM-yyyy'}}
-                        </td>
-
+                        </td> -->
+                        <td>{{row.BankStatus}}</td>
+                        <td>{{row.BankRemark}}</td>
                         <td>{{row.HighCourtName}}</td>
 
                         <td>
