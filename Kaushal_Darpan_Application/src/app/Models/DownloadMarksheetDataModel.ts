@@ -19,6 +19,7 @@ export class DownloadMarksheetSearchModel {
   public IsRWHResult?: boolean = false
   public IsLateral?: boolean = false
   public FianancialYearID?:number=0
+  public DocumentID?:number=0
 }
 
 

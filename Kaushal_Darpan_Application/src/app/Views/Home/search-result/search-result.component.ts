@@ -228,4 +228,38 @@ export class SearchResultComponent implements OnInit {
       console.log(Ex);
     }
   }
+
+  async DownloadStudentResult_Public() {
+    try {
+      await this.marksheetDownloadService.DownloadStudentResult_Public(this.resultSearchReq).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.downloadBase64PDF(data.Data, `result_${this.resultSearchReq?.RollNo || 'doc'}.pdf`);
+        } else if(data.State === EnumStatus.Warning){ 
+          this.toastr.error(data.Message);
+        } else {
+          this.toastr.error(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  downloadBase64PDF(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  }
 }

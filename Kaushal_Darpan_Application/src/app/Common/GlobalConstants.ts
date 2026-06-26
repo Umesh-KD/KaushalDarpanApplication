@@ -67,6 +67,13 @@ export enum EnumStatus {
   Error = 2,
   Warning = 3
 }
+export enum EnumDuplicateDocumentType {
+  Provisional_Diploma = 1,
+  Final_Diploma = 2,
+  Duplicate_Marksheet = 3,
+  Migration = 4
+}
+
 export enum EnumRole {
   Guest = 0,
   Developer = 1,

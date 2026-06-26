@@ -57,4 +57,12 @@ export class MarksheetDownloadService {
       ).toPromise();
   }
 
+  public async DownloadStudentResult_Public(searchRequest: StudentResultSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadStudentResult_Public`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
