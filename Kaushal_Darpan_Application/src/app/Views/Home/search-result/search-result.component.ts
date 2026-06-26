@@ -11,6 +11,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import * as htmlToImage from 'html-to-image';
 
 @Component({
   selector: 'app-search-result',
@@ -193,27 +194,62 @@ export class SearchResultComponent implements OnInit {
   //   });
   // }
 
+  // downloadPDF() {
+  //   const element = document.getElementById('resultContent');
+
+  //   if (!element) return;
+  //   // Add PDF mode class
+  //   element?.classList.add('pdf-mode');
+
+  //   html2canvas(element, {
+  //     scale: 2
+  //   }).then(canvas => {
+
+  //     const imgData = canvas.toDataURL('image/png');
+  //     const pdf = new jsPDF();
+
+  //     const imgWidth = 210; // A4 width in mm
+  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  //     pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+  //     pdf.save(`result_${this.resultSearchReq.RollNo}.pdf`);
+
+  //     // Remove class after PDF generation
+  //     element.classList.remove('pdf-mode');
+  //   });
+  // }
+
   downloadPDF() {
     const element = document.getElementById('resultContent');
-
     if (!element) return;
-    // Add PDF mode class
-    element?.classList.add('pdf-mode');
 
-    html2canvas(element, {
-      scale: 2
-    }).then(canvas => {
+    // Optional: Add your pdf mode layout adjustments if needed
+    element.classList.add('pdf-mode');
 
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF();
+    // html-to-image handles oklch flawlessly using the browser's own engine
+    htmlToImage.toPng(element, { 
+      quality: 1, 
+      pixelRatio: 2 // Keeps text sharp (Retina resolution)
+    })
+    .then((dataUrl) => {
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210; // A4 Page width in mm
 
-      const imgWidth = 210; // A4 width in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      // Create a temporary image object to dynamically calculate aspect ratio height
+      const img = new Image();
+      img.src = dataUrl;
+      img.onload = () => {
+        const imgHeight = (img.height * imgWidth) / img.width;
+        
+        pdf.addImage(dataUrl, 'PNG', 0, 0, imgWidth, imgHeight);
+        pdf.save(`result_${this.resultSearchReq?.RollNo || 'doc'}.pdf`);
 
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save(`result_${this.resultSearchReq.RollNo}.pdf`);
-
-      // Remove class after PDF generation
+        // Clean up class after generation
+        element.classList.remove('pdf-mode');
+      };
+    })
+    .catch((error) => {
+      console.error('PDF Generation failed:', error);
       element.classList.remove('pdf-mode');
     });
   }
@@ -227,5 +263,39 @@ export class SearchResultComponent implements OnInit {
     } catch (Ex) {
       console.log(Ex);
     }
+  }
+
+  async DownloadStudentResult_Public() {
+    try {
+      await this.marksheetDownloadService.DownloadStudentResult_Public(this.resultSearchReq).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.downloadBase64PDF(data.Data, `result_${this.resultSearchReq?.RollNo || 'doc'}.pdf`);
+        } else if(data.State === EnumStatus.Warning){ 
+          this.toastr.error(data.Message);
+        } else {
+          this.toastr.error(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  downloadBase64PDF(base64: string, filename: string) {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
   }
 }

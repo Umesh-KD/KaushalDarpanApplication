@@ -80,3 +80,17 @@ select.form-select {
 .pdf-mode p {
   font-size: 12px !important;
 }
+
+/* Force standard RGB/HEX fallback colors when rendering the PDF */
+.pdf-mode {
+  background-color: #ffffff !important;
+  color: #111827 !important; /* Standard HEX instead of oklch text-gray-900 */
+}
+
+.pdf-mode .form-control {
+  border-color: #d1d5db !important; /* Fallback for gray-300 */
+}
+
+.pdf-mode th {
+  background-color: #e6e6fa !important; /* Lavender HEX fallback */
+}
