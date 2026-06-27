@@ -673,7 +673,7 @@ if (maxMarks != 0 && marksObtained != 0) {
       await this.calculatePercentages10thsubject()
       const tradeLevel10Choices = this.AddedChoices.filter((choice: any) => choice.TradeLevel == 10);
 
-      if (tradeLevel10Choices.filter((choice: any) => { return this.sciencePercentage < choice.MinPercentageInScience }).length > 0) {
+      if (tradeLevel10Choices.filter((choice: any) => { return parseFloat(this.sciencePercentage) < parseFloat(choice.MinPercentageInScience) }).length > 0) {
         var dataScience = tradeLevel10Choices.filter((choice: any) => { return this.sciencePercentage < choice.MinPercentageInScience })[0];
         var msg = 'In the selected trade ' + dataScience.TradeName + ', the minimum required percentage in Science is ' + dataScience.MinPercentageInScience + '%, but your percentage is ' + this.sciencePercentage + '%. Please remove this trade or choose another one.'
 
@@ -729,8 +729,9 @@ if (maxMarks != 0 && marksObtained != 0) {
         }
       }
 
+      debugger
 
-      if (tradeLevel10Choices.filter((choice: any) => { return this.mathPercentage < choice.MinPercentageInMath }).length > 0) {
+      if (tradeLevel10Choices.filter((choice: any) => { return parseFloat(this.mathPercentage) < parseFloat(choice.MinPercentageInMath) }).length > 0) {
         var dataMaths = tradeLevel10Choices.filter((choice: any) => { return this.mathPercentage < choice.MinPercentageInMath })[0];
         var msgM = 'In the selected trade ' + dataMaths.TradeName + ', the minimum required percentage in Maths is ' + dataMaths.MinPercentageInScience + '%, but your percentage is ' + this.mathPercentage + '%. Please remove this trade or choose another one.'
         var msgMHi = 'चयनित ट्रेड ' + dataMaths.TradeName + ' में, गणित में न्यूनतम आवश्यक प्रतिशत ' + dataMaths.MinPercentageInScience + '% है, लेकिन आपका प्रतिशत ' + this.mathPercentage + '% है। कृपया इस ट्रेड को हटा दें या कोई दूसरा ट्रेड चुनें।';
