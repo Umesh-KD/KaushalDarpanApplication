@@ -962,7 +962,8 @@ export class StudentJanAadharDetailComponent implements OnInit {
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
       this.searchRequest.DepartmentID = this.DepartmentID;
       this.searchRequest.Action = Action
-      this.searchRequest.JanAadharMemberId = this.janaadharMemberDetails.janmemid;
+      debugger
+      this.searchRequest.JanAadharMemberId = this.janMember.SRDR_MID??'';
 
       if (this.IsDirectAdmission && this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI) {
         this.searchRequest.RoleID = EnumRole.ITIPrincipal
