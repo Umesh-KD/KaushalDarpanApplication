@@ -287,6 +287,7 @@ export class QualificationTabComponent implements OnInit {
     }
   }
   calculatePercentageHigh(): void {
+    debugger
     if (this.formData.MarksTypeIDHigh == 84) {
       this.formData.MaxMarksHigh = 10
       this.HighQualificationForm.get('txtMaxMarks')?.disable();
@@ -314,7 +315,7 @@ export class QualificationTabComponent implements OnInit {
           this.formData.MarksObtainedHigh = 0;
         }
       }
-    } else if (this.formData.MarksTypeIDHigh == 83 && marksObtained <= maxMarks) {
+    } else if (this.formData.MarksTypeIDHigh == 83) {
       if (maxMarks > 0 && marksObtained > 0 && marksObtained <= maxMarks) {
         const percentage = (marksObtained / maxMarks) * 100;
         if (percentage <= 33) {

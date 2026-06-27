@@ -413,7 +413,24 @@ export class DuplicateDocumentComponent implements OnInit {
             await this.CertificateDownload(element);
           }
           else if (this.searchRequestMarksheet.DocumentID == this._EnumDuplicateDocumentType.Final_Diploma) {
-            await this.CertificateDownload(element);
+            this.searchRequest1.StudentID = element.Student_Id;
+            this.searchRequest1.EndTermID = element.EndTerm;
+            this.searchRequest1.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+            this.searchRequest1.Document_ID = element.Document_ID;
+            this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+            await this.reportService.GetDuplicateDiplomaCertificate(this.searchRequest1)
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                console.log(data, "Data");
+                if (data.State == EnumStatus.Success) {
+                  this.DownloadFile(data.Data);
+                }
+                else {
+                  this.toastr.error(data.ErrorMessage)
+                  //    data.ErrorMessage
+                }
+              }, (error: any) => console.error(error)
+              );
           }
     
          

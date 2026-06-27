@@ -27,7 +27,7 @@ import { ITIDetailListReportModel, ITISearchModel } from '../../Models/ITI-Searc
 import { ITITheorySearchModel } from '../../Models/ITI/ItiInvigilatorDataModel';
 import { CenterStudentSearchModel } from '../../Models/ITITheoryMarksDataModel';
 import { CampusPostMasterModel, CampusPostQRDetail } from '../../Models/CampusPostDataModel';
-import { BterCertificateReportDataModel } from '../../Models/BTER/BterCertificateReportDataModel';
+import { BterCertificateReportDataModel, BterDuplicateCertificateReportDataModel } from '../../Models/BTER/BterCertificateReportDataModel';
 import { MarksheetLetterSearchModel } from '../../Models/MarksheetLetterDataModel';
 import { RelievingLetterSearchModel } from '../../Models/ITI/UserRequestModel';
 import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataModels';
@@ -1699,6 +1699,15 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetDuplicateDiplomaCertificate(request: BterDuplicateCertificateReportDataModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetDuplicateDiplomaCertificate`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async BterDuplicateProvisionalCertificateDownload(request: any): Promise<any> {
     const body = JSON.stringify(request);
     const api = this.http.post(`${this.APIUrl}/BterDuplicateProvisionalCertificateDownload`, body, this.headersOptions)

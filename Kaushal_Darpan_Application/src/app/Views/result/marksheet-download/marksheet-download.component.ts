@@ -72,7 +72,7 @@ export class MarksheetDownloadComponent {
     this.downLoadFG = this.fb.group({
       InstituteID: ['', Validators.required],
       SemesterID: ['0', [Validators.required, notDefaultValueValidator('0')]],
-      IsBridge: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
+      IsBridge: ['-1'],
       ResultTypeID: ['0', [Validators.required, notDefaultValueValidator('0')]],
       IsRevised: ['-1', [Validators.required, notDefaultValueValidator('-1')]],
       RollNo: ['', Validators.required],
@@ -450,13 +450,12 @@ export class MarksheetDownloadComponent {
         window.URL.revokeObjectURL(link.href);
       })
       .catch(() => console.error('Download failed. Check CORS settings on the server.'));
-  }
+  } 
 
   refreshValidationOfRollNoOnly(isVaidateRollNoOnly: boolean) {
     // clear
     this.downLoadFG.get('InstituteID')?.clearValidators();
     this.downLoadFG.get('SemesterID')?.clearValidators();
-    this.downLoadFG.get('IsBridge')?.clearValidators();
     this.downLoadFG.get('ResultTypeID')?.clearValidators();
     this.downLoadFG.get('IsRevised')?.clearValidators();
     this.downLoadFG.get('RollNo')?.clearValidators();
@@ -467,14 +466,12 @@ export class MarksheetDownloadComponent {
     else {
       this.downLoadFG.get('InstituteID')?.setValidators(Validators.required);
       this.downLoadFG.get('SemesterID')?.setValidators([Validators.required, notDefaultValueValidator('0')]);
-      this.downLoadFG.get('IsBridge')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
       this.downLoadFG.get('ResultTypeID')?.setValidators([Validators.required, notDefaultValueValidator('0')]);
       this.downLoadFG.get('IsRevised')?.setValidators([Validators.required, notDefaultValueValidator('-1')]);
     }
     // update
     this.downLoadFG.get('InstituteID')?.updateValueAndValidity();
     this.downLoadFG.get('SemesterID')?.updateValueAndValidity();
-    this.downLoadFG.get('IsBridge')?.updateValueAndValidity();
     this.downLoadFG.get('ResultTypeID')?.updateValueAndValidity();
     this.downLoadFG.get('IsRevised')?.updateValueAndValidity();
     this.downLoadFG.get('RollNo')?.updateValueAndValidity();
