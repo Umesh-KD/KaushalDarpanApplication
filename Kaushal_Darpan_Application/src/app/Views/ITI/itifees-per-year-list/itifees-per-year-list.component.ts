@@ -58,6 +58,8 @@ export class ITIFeesPerYearListComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public IsShowGenerate: boolean = false
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+   public ISEligiblecollege: boolean = true
+  public ISEligiblecollegeRemark: string = ''
   
   //end table feature default
 
@@ -83,7 +85,7 @@ export class ITIFeesPerYearListComponent {
       await this.CheckProfileStatus();
       if (this.isprofile == 0) {
         this.sweetAlert2.Confirmation("Your Profile Is not completed please create your profile?", async (result: any) => {
-          window.open("/ITIUpdateCollegeProfile?id=" + this.sSOLoginDataModel.InstituteID, "_Self")
+          window.open("/ItiPlanning?id=" + this.sSOLoginDataModel.InstituteID, "_Self")
         }, 'OK', false);
 
       }
@@ -432,6 +434,8 @@ export class ITIFeesPerYearListComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.isprofile = data['Data'][0]['IsProfile'];
+          this.ISEligiblecollegeRemark = data['Data'][0]['ISEligiblecollegeRemark'];
+          this.ISEligiblecollege = data['Data'][0]['ISEligiblecollege'];
 
           
         }, (error: any) => console.error(error)

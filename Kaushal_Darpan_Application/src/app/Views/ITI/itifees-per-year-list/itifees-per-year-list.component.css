@@ -1,0 +1,15 @@
+.dashboard-marquee {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 6px;
+  color: #d32f2f;
+  font-weight: 600;
+  font-size: 25px;
+}
+
+  .dashboard-marquee marquee {
+    width: 100%;
+  }

@@ -1,4 +1,11 @@
 <!-- Page Title Start -->
+<!-- Marquee -->
+<div *ngIf="sSOLoginDataModel.RoleID == 20 && !ISEligiblecollege"
+     class="dashboard-marquee">
+  <marquee behavior="scroll" direction="left" scrollamount="6">
+    {{ ISEligiblecollegeRemark }}
+  </marquee>
+</div>
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
