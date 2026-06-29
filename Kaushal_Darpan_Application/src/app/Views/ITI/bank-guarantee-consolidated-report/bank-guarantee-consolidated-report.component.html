@@ -29,60 +29,80 @@
         <!-- Search Criteria -->
         <div class="mb-8">
 
-            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-                <b class="text-1xl-5">
-                    <i class="ti ti-search"></i>
-                    Enter Search Criteria
-                </b>
-            </div>
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">
+              <i class="ti ti-search"></i>
+              Enter Search Criteria
+            </b>
+            <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="reportList && reportList.length > 0">
+              <i class="ti ti-excel"></i> Export Excel
+            </a>
+          </div>
 
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-               
 
-                <!-- College -->
-                <div>
-                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                        College Name
-                    </label>
 
-                    <ng-select [(ngModel)]="searchRequest.id"
-                               [clearable]="true">
+              <!-- College -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  College Name
+                </label>
 
-                        <ng-option [value]="0">
-                            -- All Colleges --
-                        </ng-option>
+                <ng-select [(ngModel)]="searchRequest.id"
+                           [clearable]="true">
 
-                        <ng-option *ngFor="let item of CollegeList"
-                                   [value]="item.ID">
-                            {{item.Name}}
-                        </ng-option>
+                  <ng-option [value]="0">
+                    -- All Colleges --
+                  </ng-option>
 
-                    </ng-select>
-                </div>
+                  <ng-option *ngFor="let item of CollegeList"
+                             [value]="item.ID">
+                    {{item.Name}}
+                  </ng-option>
 
-                <!-- Buttons -->
-                <div class="flex items-end gap-2">
+                </ng-select>
+              </div>
 
-                    <button type="button"
-                            class="btn bg-info text-white"
-                            (click)="GetBankGuaranteeConsolidatedReport()">
 
-                        <i class="ti ti-search"></i>
-                        Search
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Status 
+                </label>
+                <select class="form-select" [(ngModel)]="searchRequest.status">
+                  <option value="">-- Select Status --</option>
+                  <option value="0">All</option>
+                  <option value="2">Bank Guarantee Due</option>
+                  <option value="3">Bank Guarantee Not Due</option>
+                  <option value="4">Court Case</option>
 
-                    </button>
+                </select> 
+              </div>
 
-                    <button type="button"
-                            class="btn bg-danger text-white"
-                            (click)="ResetFilters()">
+             
 
-                        <i class="ti ti-refresh"></i>
-                        Reset
+              <!-- Buttons -->
+              <div class="flex items-end gap-2">
 
-                    </button>
+                <button type="button"
+                        class="btn bg-info text-white"
+                        (click)="GetBankGuaranteeConsolidatedReport()">
 
-                </div>
+                  <i class="ti ti-search"></i>
+                  Search
+
+                </button>
+
+                <button type="button"
+                        class="btn bg-danger text-white"
+                        (click)="ResetFilters()">
+
+                  <i class="ti ti-refresh"></i>
+                  Reset
+
+                </button>
+
+              </div>
 
             </div>
 
@@ -97,96 +117,110 @@
 
                 <thead class="bg-light/40 border-b border-gray-100 h-10">
 
-                    <tr>
-                        <th>#</th>
-                        <th>College Name</th>
-                        <th class="text-right">Amount Available</th>
-                        <th class="text-right">Amount Required</th>
-                        <th class="text-right">Due</th>
-                        <th>Is Court Case</th>
-                        <th>Writ No</th>
-                        <!-- <th>Court Date</th> -->
-                        <th>Status</th>
-                        <th>Remarks</th>
-                        <th>High Court</th>
-                        <th>Document</th>
-                        <th>Action</th>
-                    </tr>
+                  <tr>
+                    <th>#</th>
+                    <th>College Name</th>
+                    <th>Number Of Unit</th>
+                    <th class="text-right">Bank Guarantee Required </th>
+                    <th class="text-right">Bank Guarantee Available</th>
+                    <th class="text-right"> Due Amount</th>
+                    <!--<th>Is Court Case</th>-->
+                    <!-- <th>Court Date</th> -->
+                    <th>Status</th>
+                    <th>Writ No</th>
+                    <!--<th>WritNoDate</th>-->
+                    <!--<th>Remarks</th>-->
+                    <!--<th>High Court</th>-->
+                    <!--<th>Document</th>-->
+                    <th>Action</th>
+                  </tr>
 
                 </thead>
 
                 <tbody>
 
-                    <tr *ngFor="let row of reportList; let i=index">
+                  <tr *ngFor="let row of reportList; let i=index">
 
-                        <td>{{i+1}}</td>
+                    <td>{{i+1}}</td>
 
-                        <td>{{row.CollegeName}}</td>
+                    <td>{{row.CollegeName}}</td>
+                    <td>{{row.NumberOfUnit}}</td>
 
-                        <td class="text-right">
-                            {{row.AmountAvailable | number:'1.0-0'}}
-                        </td>
 
-                        <td class="text-right">
-                            {{row.AmountRequired | number:'1.0-0'}}
-                        </td>
+                    <td class="text-right">
+                      {{row.AmountRequired | number:'1.0-0'}}
+                    </td>
 
-                        <td class="text-right">
+                    <td class="text-right">
+                      {{row.AmountAvailable | number:'1.0-0'}}
+                    </td>
 
-                            <span class="font-semibold"
-                                  [ngClass]="row.AmountDifference > 0 ? 'text-success' : 'text-danger'">
 
-                                {{row.AmountDifference | number:'1.0-0'}}
 
-                            </span>
+                    <td class="text-right">
 
-                        </td>
+                      <span class="font-semibold"
+                            [ngClass]="row.AmountDifference > 0 ? 'text-success' : 'text-danger'">
 
-                        <td>
-                            <span class="px-2 py-1 rounded text-xs font-semibold"
-                                  [ngClass]="row.IsCourt ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+                        {{row.AmountDifference | number:'1.0-0'}}
 
-                                {{row.IsCourt ? 'Yes' : 'No'}}
+                      </span>
 
-                            </span>
-                        </td>
+                    </td>
 
-                        <td>{{row.WritNo}}</td>
+                    <!--<td>
+      <span class="px-2 py-1 rounded text-xs font-semibold"
+            [ngClass]="row.IsCourt ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
 
-                        <!-- <td>
-                            {{row.CourtDate | date:'dd-MM-yyyy'}}
-                        </td> -->
-                        <td>{{row.BankStatus}}</td>
-                        <td>{{row.BankRemark}}</td>
-                        <td>{{row.HighCourtName}}</td>
+          {{row.IsCourt ? 'Yes' : 'No'}}
 
-                        <td>
+      </span>
+  </td>-->
+                    <!-- <td>
+      {{row.CourtDate | date:'dd-MM-yyyy'}}
+  </td> -->
+                    <td>{{row.BankStatus}}</td>
+                    <td>
+                      <!--{{row.WritNo}}-->
+                      <a *ngIf="row.CourtDocumernt"
+                         [href]="appsettingConfig.StaticFileRootPathURL + '/' + row.CourtDocumernt"
+                         target="_blank"
+                         class="text-primary text-decoration-underline">
+                        {{ row.WritNo }}  <span *ngIf="row.WritNo && row.WritNo.length > 0">
+                          - ({{ row.WritNoDate }})
+                        </span>
+                      </a>
+                    </td>
+                    <!--<td>{{row.WritNoDate}}</td>-->
+                    <!--<td>{{row.BankRemark}}</td>
+  <td>{{row.HighCourtName}}</td>-->
+                    <!--<td>
 
-                            <a *ngIf="row.CourtDocumernt"
-                               [href]="appsettingConfig.StaticFileRootPathURL + '/' + row.CourtDocumernt"
-                               target="_blank"
-                               class="btn bg-primary btn-sm text-white"
-                               title="View Document">
+    <a *ngIf="row.CourtDocumernt"
+       [href]="appsettingConfig.StaticFileRootPathURL + '/' + row.CourtDocumernt"
+       target="_blank"
+       class="btn bg-primary btn-sm text-white"
+       title="View Document">
 
-                                <i class="ti ti-eye"></i>
+      <i class="ti ti-eye"></i>
 
-                            </a>
+    </a>
 
-                        </td>
-                        <td>
+  </td>-->
+                    <td>
 
-                            <a [routerLink]="['/iti-bank-guarantee-list']"
-   [queryParams]="{ id: row.Id }"
-   class="btn bg-primary btn-sm text-white"
-   title="Bank Guarantee List">
+                      <a [routerLink]="['/iti-bank-guarantee-list']"
+                         [queryParams]="{ id: row.Id }"
+                         class="btn bg-primary btn-sm text-white"
+                         title="Bank Guarantee List">
 
-    <i class="ti ti-eye"></i>
+                        <i class="ti ti-eye"></i>
 
-</a>
+                      </a>
 
-                        </td>
+                    </td>
 
-                    </tr>
+                  </tr>
 
                     <tr *ngIf="reportList.length == 0">
                         <td colspan="10" class="text-center py-4">

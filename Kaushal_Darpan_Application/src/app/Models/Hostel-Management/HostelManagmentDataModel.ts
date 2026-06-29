@@ -240,3 +240,11 @@ export class HostelFeeListModel {
   public Cautionfee: number = 0;
   public HostelFee: number = 0;
 }
+
+
+export class VerifyStudentHostelEligibilityModel {
+  public StudentID: number = 0;
+  public EndTermId: number = 0;
+  public DepartmentID: number = 0;
+
+  }

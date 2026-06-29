@@ -20,6 +20,7 @@ import { RoleListRequestModel } from '../../../Models/RoleMasterDataModel';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';  // new added 05082025
 import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
 import { MenuFreezeService } from '../../../Services/menu-freeze/menu-freeze.service';
+import { ITIAdminDashboardServiceService } from '../../../Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
 declare var window: any;
 
 
@@ -52,6 +53,8 @@ export class MasterLayoutComponent implements OnInit {
   public EndTermID: number = 0;
   public TermPart: number = 0;
   public DepartmentID: number = 0
+  public ISEligiblecollege: boolean = true
+  public ISEligiblecollegeRemark:string=''
   //Manage Session
   idleState = 'Not started.';
   timedOut = false;
@@ -81,7 +84,7 @@ export class MasterLayoutComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver, private el: ElementRef, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private loaderService: LoaderService,
     private sanitizer: DomSanitizer, location: PlatformLocation, private idle: Idle, private modalService: NgbModal, private commonFunctionService: CommonFunctionService,
     private cookieService: CookieService, private menuService: MenuService, private http: HttpClient, private appsettingConfig: AppsettingService, private renderer: Renderer2,
-    private ssologin: SSOLoginService,private menuFreeze: MenuFreezeService
+    private ssologin: SSOLoginService, private menuFreeze: MenuFreezeService, private ITIAdminDashboardService: ITIAdminDashboardServiceService
 
   ) {
     location.onPopState(() => {
@@ -237,6 +240,8 @@ export class MasterLayoutComponent implements OnInit {
 
 
     await this.checkJailCollege()
+    debugger
+    await this.CheckProfileStatus()
     // Subscribe to the sSOLoginDataModel$ observable
     //this.userDataSubscription = this.commonFunctionService.sSOLoginDataModel$.subscribe(
     //  (data) => {
@@ -287,6 +292,31 @@ export class MasterLayoutComponent implements OnInit {
     //});
   }
 
+
+  async CheckProfileStatus() {
+    try {
+      this.loaderService.requestStarted();
+      await this.ITIAdminDashboardService.GetProfileStatus(this.sSOLoginDataModel.InstituteID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          this.ISEligiblecollegeRemark = data['Data'][0]['ISEligiblecollegeRemark'];
+          this.ISEligiblecollege = data['Data'][0]['ISEligiblecollege'];
+
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  
   reloadRoute() {
     const currentUrl = this.router.url;
 

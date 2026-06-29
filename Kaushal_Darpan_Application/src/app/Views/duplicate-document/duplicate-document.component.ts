@@ -192,7 +192,8 @@ export class DuplicateDocumentComponent implements OnInit {
       
       // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-        this.searchRequest.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
         //this.searchRequest.UIDNumber
         this.searchRequest.action="_GetDocInstituteWise";
       // }
@@ -388,6 +389,7 @@ export class DuplicateDocumentComponent implements OnInit {
           this.searchRequestMarksheet.IsReval = false //element.IsReval;
           this.searchRequestMarksheet.FianancialYearID = this.sSOLoginDataModel.FinancialYearID
           this.searchRequestMarksheet.DocumentID = element.Document_ID;
+          this.searchRequestMarksheet.ReqId = element.RequestID;
 
           this.loaderService.requestStarted();
 
@@ -413,11 +415,14 @@ export class DuplicateDocumentComponent implements OnInit {
             await this.CertificateDownload(element);
           }
           else if (this.searchRequestMarksheet.DocumentID == this._EnumDuplicateDocumentType.Final_Diploma) {
+            this.searchRequest1.Action = "duplicate-diploma-report";
             this.searchRequest1.StudentID = element.Student_Id;
             this.searchRequest1.EndTermID = element.EndTerm;
             this.searchRequest1.DepartmentID = this.sSOLoginDataModel.DepartmentID;
             this.searchRequest1.Document_ID = element.Document_ID;
             this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+            this.searchRequest1.ReqId = element.RequestID;
+
             await this.reportService.GetDuplicateDiplomaCertificate(this.searchRequest1)
               .then((data: any) => {
                 data = JSON.parse(JSON.stringify(data));
@@ -464,6 +469,7 @@ export class DuplicateDocumentComponent implements OnInit {
        this.searchRequest1.DepartmentID = this.sSOLoginDataModel.DepartmentID;
        this.searchRequest1.Document_ID = element.Document_ID;
        this.searchRequest1.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+       this.searchRequest1.ReqId = element.RequestID;
           const data = await this.reportService.BterDuplicateCertificateDownload(this.searchRequest1);
           if (data && data.Data) {
             this.downloadBase64PDF(data.Data, `${this.searchRequest1.Action}.pdf`);

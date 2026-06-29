@@ -51,7 +51,9 @@ export class PrincipalDashboardITIComponent implements OnInit
   public Isdynamicpop: boolean = false
   public DynamicText:string=''
   public DynamicRoute:string=''
-  public ExamMessage:string=''
+  public ExamMessage: string = ''
+  public ISEligiblecollege: boolean = true
+  public ISEligiblecollegeRemark: string = ''
   constructor(private ITIAdminDashboardServiceService: ITIPrincipalDashboardServiceService, private ITIAdminDashboardService: ITIAdminDashboardServiceService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private encryptionService: EncryptionService,
     private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private sweetAlert2: SweetAlert2) {
@@ -104,9 +106,11 @@ export class PrincipalDashboardITIComponent implements OnInit
           window.open(this.DynamicRoute, "_Self");
         }, 'OK', false);
 
+       
 
 
       }
+   
 
 
       else {
@@ -136,6 +140,8 @@ export class PrincipalDashboardITIComponent implements OnInit
           this.Isdynamicpop = data['Data'][0]['Isdynamicpop'];
           this.DynamicText = data['Data'][0]['DynamicText'];
           this.DynamicRoute = data['Data'][0]['DynamicRoute'];
+          this.ISEligiblecollegeRemark = data['Data'][0]['ISEligiblecollegeRemark'];
+          this.ISEligiblecollege = data['Data'][0]['ISEligiblecollege'];
       
           if (this.Ishowpopup == true) {
             this.sweetAlert2.Info(`${this.ExamMessage}`)
